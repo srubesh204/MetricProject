@@ -5,6 +5,7 @@ const router = express.Router();
 
 
 router.get("/getDesignation", designationController.getAllDesignation)
+router.post("/createDesignation", designationController.createDesignation)
 
 
 
