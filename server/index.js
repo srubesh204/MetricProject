@@ -3,7 +3,10 @@ const express = require("express");
 const mongoose = require("mongoose");
 const cors = require('cors');
 const bodyParser = require('body-parser');
-const departmentController = require("./controllers/departmentController")
+const departmentRoute = require("./routes/departmentRoute")
+const designationRoute = require("./routes/designationRoute")
+const employeeRoute = require("./routes/employeeRoute")
+const generalRoute = require("./routes/generalRoute")
 //
 mongoose.connect('mongodb://localhost/metric',{
     useNewUrlParser: true, 
@@ -15,12 +18,12 @@ const app = express();
 app.use(cors());
 app.use(bodyParser.json());
 
-app.get('/department/getAllDepartments', departmentController.getDepartment);
-app.post('/department/createDepartment', departmentController.createDepartment);
+app.use('/epartment', departmentRoute);
+app.use('/designations', designationRoute);
+app.use('/employee', employeeRoute);
+app.use('/stateAndCity', generalRoute);
 
-
-
-const port = 3001;
+const port = 8080;
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
 });
