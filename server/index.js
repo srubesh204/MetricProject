@@ -4,8 +4,8 @@ const mongoose = require("mongoose");
 const cors = require('cors');
 const bodyParser = require('body-parser');
 
-const designationRoute = require("./routes/designationRoute")
-const departmentRoute = require("./routes/departmentRoute")
+const designationRoute = require("./routes/designationRoute");
+const departmentRoute = require("./routes/departmentRoute");
 //
 mongoose.connect('mongodb://localhost/metric',{
     useNewUrlParser: true, 
