@@ -18,7 +18,7 @@ const app = express();
 app.use(cors());
 app.use(bodyParser.json());
 
-app.use('/epartment', departmentRoute);
+app.use('/department', departmentRoute);
 app.use('/designations', designationRoute);
 app.use('/employee', employeeRoute);
 app.use('/stateAndCity', generalRoute);
