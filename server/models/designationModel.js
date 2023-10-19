@@ -1,16 +1,9 @@
 const mongoose = require('mongoose');
 
 const designationSchema = new mongoose.Schema({
-<<<<<<< HEAD
  
   designation: String,  
 });
 
-module.exports = mongoose.model('designations', designationSchema);
+module.exports = mongoose.model('designation', designationSchema);
 
-=======
-  designation: String
-});
-
-module.exports = mongoose.model('designations', designationSchema);
->>>>>>> origin

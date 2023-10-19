@@ -19,11 +19,11 @@ app.use(cors());
 app.use(bodyParser.json());
 
 app.use('/department', departmentRoute);
-app.use('/designations', designationRoute);
+app.use('/designation', designationRoute);
 app.use('/employee', employeeRoute);
 app.use('/stateAndCity', generalRoute);
 
-const port = 8080;
+const port = 3001;
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
 });
