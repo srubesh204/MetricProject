@@ -10,7 +10,7 @@ function App() {
         
         <Routes>
           
-          <Route path="/department" element={<Department />} />
+          <Route path="/desDep" element={<Department />} />
           
         </Routes>
       </BrowserRouter>

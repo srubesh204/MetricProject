@@ -15,6 +15,9 @@ const departmentControllers = {
        
         try {
           const { department, area, placeOfUsage } = req.body;
+          if (!department || !area || !placeOfUsage) {
+            return res.status(400).json({ error: 'All fields must be provided' });
+          }
           const departmentResult = new departmentModel({ department, area, placeOfUsage });
           await departmentResult.save();
           res.status(201).json(departmentResult);
