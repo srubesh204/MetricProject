@@ -3,7 +3,7 @@ const generalModel = require("../models/generalModel")
 const generalController = {
     getAllStateAndCity: async (req, res) => {
         try {
-          const generalResult = await generalModel.find().sort({state :1});
+          const generalResult = await generalModel.find().sort({state :1}).distinct("state");
           res.status(203).json(generalResult);
           //res.status(200).json(employees);
         } catch (err) {
