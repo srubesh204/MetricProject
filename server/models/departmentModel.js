@@ -6,4 +6,4 @@ const departmentSchema = new mongoose.Schema({
   placeOfUsage: String
 });
 
-module.exports = mongoose.model('departments', departmentSchema);
+module.exports = mongoose.model('Department', departmentSchema);
