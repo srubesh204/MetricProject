@@ -380,6 +380,7 @@ const Department = () => {
                   type="button"
                   className="btn btn-warning text-end me-3"
                   onClick={() => updateDesignation(desStateId)}
+                  disabled={!desStateId}
                 >
                   Modify
                 </button>
@@ -387,6 +388,7 @@ const Department = () => {
                   type="button"
                   className="btn btn-warning text-end"
                   onClick={DesignationSubmit}
+
                 >
                   <i className="bi bi-plus"></i>Add Designation
                 </button>
