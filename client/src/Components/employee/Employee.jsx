@@ -211,7 +211,18 @@ const Employee = () => {
                                 <th>Designation</th>
                                 <th>Department</th>
                                 <th>Report To</th>
+                                <th>Delete</th>
 
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td><button className='btn btn-danger '><i class="bi bi-trash-fill"></i></button></td>
                             </tr>
                         </tbody>
 
