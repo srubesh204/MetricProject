@@ -21,7 +21,7 @@ app.use(bodyParser.json());
 app.use('/department', departmentRoute);
 app.use('/designation', designationRoute);
 app.use('/employee', employeeRoute);
-app.use('/stateAndCity', generalRoute);
+app.use('/general', generalRoute);
 
 const port = 3001;
 app.listen(port, () => {

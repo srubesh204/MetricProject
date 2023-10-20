@@ -14,8 +14,8 @@ const employeeController = {
       createEmployee: async (req, res) => {
        
         try {
-          const { empCode, title, firstName, lastName, dob, address, city, state, contactNumber, designation, department, maidId, doj, employmentStatus, reportTo} = req.body;
-          const employeeResult = new employeeModel({ empCode, title, firstName, lastName, dob, address, city, state, contactNumber, designation, department, maidId, doj, employmentStatus, reportTo });
+          const { employeeCode, title, firstName, lastName, dob, address, city, state, contactNumber, designation, department, maidId, doj, employmentStatus, reportTo} = req.body;
+          const employeeResult = new employeeModel({ employeeCode, title, firstName, lastName, dob, address, city, state, contactNumber, designation, department, maidId, doj, employmentStatus, reportTo });
           await employeeResult.save();
           res.status(202).json({result :employeeResult, status: 1});
         } catch (error) {
