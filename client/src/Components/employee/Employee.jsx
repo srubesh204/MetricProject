@@ -5,6 +5,7 @@ import axios from 'axios';
 const Employee = () => {
 
     const [employeeList, setEmployeeList] = useState([]);
+    const [empDataId, setEmpDataId] = useState(null)
     const empFetch = async () => {
         try {
             const response = await axios.get(
@@ -39,8 +40,9 @@ const Employee = () => {
 
     const handleSetEmp = (emp) => {
         setEmployeeData(emp)
+        setEmpDataId(emp._id)
     }
-
+    console.log(empDataId)
     //State and City
     const [AllStates, setAllStates] = useState([]);
     const [StateName, setStateName] = useState(null)
@@ -125,7 +127,7 @@ const Employee = () => {
 
 
 
-    const [empDataId, setEmpDataId] = useState(null)
+    
 
 
 
