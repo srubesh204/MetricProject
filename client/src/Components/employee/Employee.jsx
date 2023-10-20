@@ -4,7 +4,8 @@ const Employee = () => {
     const uploadCss = {
         uploadButton:{
             display: "block",
-           
+            width: "70px",
+            maxWidth: "300px",
             backgroundColor: "slateblue",
             borderRadius: "5px",
             fontSize: "1em",
@@ -14,7 +15,7 @@ const Employee = () => {
         inUploadButton : {
             border: "0",
             clip:"rect(1px, 1px, 1px, 1px)",
-            
+           
             overflow: "hidden",
             padding: "0",
             position: "absolute",
@@ -23,6 +24,7 @@ const Employee = () => {
         
 
         }
+        
         
        
 
@@ -140,26 +142,33 @@ const Employee = () => {
                     </div>
                 </div>
                 <div className="row g-2" >
-                    <div className="col mb-2">
-                        <button type="button" className='btn btn-success'>ADD</button>
-                    </div>
-                    <div className="col">
+                    <div className="col d-flex ">
+                    <div className='me-2' >
                         <label style={uploadCss.uploadButton}>
                             <input style={uploadCss.inUploadButton} className="form-control" type="file" id="uploadExcel" />Upload
                         </label>
                     </div>
-                    <div className="col">
+                    <div >
                         <label style={uploadCss.uploadButton}>
                         <input className="form-control" type="file" id="uploadExcel" style={uploadCss.inUploadButton} />Download
                         </label>
                     </div>
-                    <div className="col mb-2">
-                        <button type="button" className='btn btn-warning'>Modify</button>
                     </div>
-                    <div className="col mb-2">
-                        <button type="button" className='btn btn-danger'>Delete</button>
+               
+                    <div className='col d-flex justify-content-end'>
+                    <div className='me-2' >
+                        <button type="button" className='btn btn-secondary'>Modify</button>
+                    </div>
+                    
+                    <div>
+                        <button type="button" className='btn btn-warning'>+ Add Employee</button>
+                    </div>
+                   
                     </div>
 
+           
+                
+               
                 </div>
                 <h3 className='text-center'>Employee List</h3>
                 <div className='row g-2'>
