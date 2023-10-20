@@ -1,8 +1,10 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+
 
 const Employee = () => {
     const uploadCss = {
-        uploadButton:{
+        uploadButton: {
             display: "block",
             width: "70px",
             maxWidth: "300px",
@@ -12,32 +14,78 @@ const Employee = () => {
             linHeight: "2.42em",
             textAlign: "center"
         },
-        inUploadButton : {
+        inUploadButton: {
             border: "0",
-            clip:"rect(1px, 1px, 1px, 1px)",
-           
+            clip: "rect(1px, 1px, 1px, 1px)",
+
             overflow: "hidden",
             padding: "0",
             position: "absolute",
             width: "1px",
         }
-        
 
+
+    }
+
+    //Department and Designation 
+    const [departmentList, setDepartmentList] = useState([]);
+    const depFetchData = async () => {
+        try {
+          const response = await axios.get(
+            `${process.env.REACT_APP_PORT}/department/getAllDepartments`
+          );
+          setDepartmentList(response.data);
+        } catch (err) {
+          console.log(err);
         }
-        
-        
-       
+      };
+      useEffect(() => {
+        depFetchData();
+      }, []);
+      console.log(departmentList)
 
-        
-    
-    
+
+    const [designationList, setDesignationList] = useState([]);
+
+
+    //
+
+    // Employee Datas
+
+    const [employeeList, setEmployeeList] = useState([]);
+    const [employeeData, setEmployeeData] = useState({
+        employeeCode: "",
+        title: "",
+        firstName: "",
+        lastName: "",
+        dob: "",
+        address: "",
+        city: "",
+        state: "",
+        contactNumber: "",
+        designation: "",
+        department: "",
+        mailId: "",
+        doj: "",
+        employmentStatus: "",
+        reportTo: ""
+    });
+
+    const [empDataId , setEmpDataId] = useState(null)
+
+
+
+
+
+
+
     return (
         <div>
             <form action="">
                 <h1 className='text-center'>Employee Database</h1>
                 <div className='row g-2'>
                     <div className="form-floating mb-3 col">
-                        <input type="text" className="form-control" id="empCodeId" name="empCode" placeholder="empCode"  />
+                        <input type="text" className="form-control" id="empCodeId" name="empCode" placeholder="empCode" />
                         <label htmlFor="empCodeId">Emp.code</label>
                     </div>
                     <div class="form-floating md-3 col">
@@ -50,15 +98,15 @@ const Employee = () => {
                         <label htmlFor="titleId">Title</label>
                     </div>
                     <div className="form-floating mb-3 col">
-                        <input type="text" className="form-control" id="firstNameId" name="firstName" placeholder="firstName"  />
+                        <input type="text" className="form-control" id="firstNameId" name="firstName" placeholder="firstName" />
                         <label htmlFor="firstNameId">First Name</label>
                     </div>
                     <div className="form-floating mb-3 col">
-                        <input type="text" className="form-control" id="lastNameId" name="lastName" placeholder="lastName"  />
+                        <input type="text" className="form-control" id="lastNameId" name="lastName" placeholder="lastName" />
                         <label htmlFor="lastNameId">Last Name</label>
                     </div>
                     <div className="form-floating mb-3 col">
-                        <input type="date" className="form-control" id="dateOfBirthId" name="dateOfBirth" placeholder="dateOfBirth"  />
+                        <input type="date" className="form-control" id="dateOfBirthId" name="dateOfBirth" placeholder="dateOfBirth" />
                         <label htmlFor="dateOfBirthId">Date Of Birth</label>
                     </div>
 
@@ -89,7 +137,7 @@ const Employee = () => {
                         <label htmlFor="CityId">City</label>
                     </div>
                     <div class="form-floating md-3 col">
-                        <select className="form-select" id="designationId"  name="designation" aria-label="Floating label select example">
+                        <select className="form-select" id="designationId" name="designation" aria-label="Floating label select example">
                             <option selected>Designation</option>
                             <option value="1">One</option>
                             <option value="2">Two</option>
@@ -98,7 +146,7 @@ const Employee = () => {
                         <label htmlFor="designationId">Designation</label>
                     </div>
                     <div className="form-floating mb-3 col">
-                        <input type="date" className="form-control" id="dateOfJoiningId" name="dateOfJoining" placeholder="dateOfJoining"  />
+                        <input type="date" className="form-control" id="dateOfJoiningId" name="dateOfJoining" placeholder="dateOfJoining" />
                         <label htmlFor="dateOfJoiningId">Date Of joining</label>
                     </div>
                     <div class="form-floating md-3 col">
@@ -143,32 +191,32 @@ const Employee = () => {
                 </div>
                 <div className="row g-2" >
                     <div className="col d-flex ">
-                    <div className='me-2' >
-                        <label style={uploadCss.uploadButton}>
-                            <input style={uploadCss.inUploadButton} className="form-control" type="file" id="uploadExcel" />Upload
-                        </label>
-                    </div>
-                    <div >
-                        <label style={uploadCss.uploadButton}>
-                        <input className="form-control" type="file" id="uploadExcel" style={uploadCss.inUploadButton} />Download
-                        </label>
-                    </div>
-                    </div>
-               
-                    <div className='col d-flex justify-content-end'>
-                    <div className='me-2' >
-                        <button type="button" className='btn btn-secondary'>Modify</button>
-                    </div>
-                    
-                    <div>
-                        <button type="button" className='btn btn-warning'>+ Add Employee</button>
-                    </div>
-                   
+                        <div className='me-2' >
+                            <label style={uploadCss.uploadButton}>
+                                <input style={uploadCss.inUploadButton} className="form-control" type="file" id="uploadExcel" />Upload
+                            </label>
+                        </div>
+                        <div >
+                            <label style={uploadCss.uploadButton}>
+                                <input className="form-control" type="file" id="uploadExcel" style={uploadCss.inUploadButton} />Download
+                            </label>
+                        </div>
                     </div>
 
-           
-                
-               
+                    <div className='col d-flex justify-content-end'>
+                        <div className='me-2' >
+                            <button type="button" className='btn btn-secondary'>Modify</button>
+                        </div>
+
+                        <div>
+                            <button type="button" className='btn btn-warning'>+ Add Employee</button>
+                        </div>
+
+                    </div>
+
+
+
+
                 </div>
                 <h3 className='text-center'>Employee List</h3>
                 <div className='row g-2'>
@@ -190,7 +238,7 @@ const Employee = () => {
                         </select>
                         <label htmlFor="DepartmentId">Department</label>
                     </div>
-                     <div class="form-floating md-3 col">
+                    <div class="form-floating md-3 col">
                         <select className="form-select" id="reportToId" name="reportTo" aria-label="Floating label select example">
                             <option selected>Report To</option>
                             <option value="1">One</option>
@@ -226,14 +274,14 @@ const Employee = () => {
                             </tr>
                         </tbody>
 
-                        
+
                     </table>
                 </div>
 
-                
-               
-                    
-                
+
+
+
+
 
 
 
