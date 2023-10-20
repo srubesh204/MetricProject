@@ -66,7 +66,7 @@ const Employee = () => {
     const cityFetch = async () => {
         try {
             const response = await axios.get(
-                `${process.env.REACT_APP_PORT}/general/getCityByStateName/${StateName}`
+                `${process.env.REACT_APP_PORT}/general/getCityByStateName/${employeeData.state}`
             );
             setCityByState(response.data);
         } catch (err) {
@@ -75,9 +75,9 @@ const Employee = () => {
     };
     //get Designations
     useEffect(() => {
-        if (employeeData.state !== "") {
+        
             cityFetch();
-        }
+       
     }, [employeeData.state]);
     console.log(StateName)
     console.log(cityByState)
