@@ -2,12 +2,12 @@
 	display: block;
 	width: 90px;
 	max-width: 300px;
-	
-	background-color: blueviolet;
+	background-color: #e6e6e6;
 	border-radius: 5px;
 	font-size: 1em;
 	line-height: 2.42em;
 	text-align: center;
+	font-weight: bold;
 }
 
 .uplable:hover {
@@ -25,12 +25,24 @@
     margin: -1px;
     overflow: hidden;
     padding: 0;
-    
     position: absolute;
     width: 1px;
+	background-color: #e6e6e6;  
 }
 
 .table-responsive {
     max-height:400px;
 	cursor: pointer;
+}
+
+table tr {
+	
+	padding: 0;
+}
+td{
+	padding: 2px !important;
+}
+
+.hover:hover{
+	background-color: cornflowerblue !important;
 }

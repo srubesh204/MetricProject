@@ -5,8 +5,8 @@ import "../styles/employee.css";
 const Department = () => {
   const [departmentData, setDepartmentData] = useState({
     department: "",
-    area: "",
-    placeOfUsage: "",
+    area: "N/A",
+    placeOfUsage: "N/A",
   });
   const [selectedDepartment, setSelectedDepartment] = useState(null);
   const [depStateId, setDepStateId] = useState(null)
@@ -184,8 +184,9 @@ const Department = () => {
   console.log(designationList);
 
   const body = {
-    padding: "3rem",
-    margin: "4rem",
+    padding: "1rem",
+    paddingTop: "10px",
+    margin: "2rem",
   };
 
   const bodyCards = {
@@ -221,7 +222,7 @@ const Department = () => {
       <form>
         <div className="row">
           <div className="col" style={bodyCards}>
-            <h1 className="text-center">Departments</h1>
+            <h2 className="text-center">Departments</h2>
             <div className="row g-2">
               <div className="form-floating mb-3 col">
                 <input
@@ -276,7 +277,7 @@ const Department = () => {
                 <div>
                   <lable
                     className="uplable"
-                    style={{ backgroundColor: "yellow" }}
+                    
                   >
                     <input type="file" className="downlable" />
                     Download
@@ -287,16 +288,18 @@ const Department = () => {
               <div className="text-end col">
                 <button
                   type="button"
-                  className="btn btn-warning text-end me-3"
+                  style={{backgroundColor: "#e6e6e6", color: "black", fontWeight: "bolder"}}
+                  className="btn text-end me-3 hover"
                   onClick={() => updateDepartment(depStateId)}
-                  disabled={!depStateId}
+                //   disabled={!depStateId}
                 >
                   Modify
                 </button>
 
                 <button
                   type="button"
-                  className="btn btn-warning text-end"
+                  style={{backgroundColor: "#e6e6e6", color: "black", fontWeight: "bolder"}}
+                  className="btn text-end hover"
                   onClick={DepartmentSubmit}
                   
                 >
@@ -306,6 +309,7 @@ const Department = () => {
             </div>
 
             <hr />
+            
             <h4 className="text-center mb-3">Department List</h4>
             <div className="table-responsive">
               <table className="table table-bordered text-center table-hover">
@@ -319,8 +323,8 @@ const Department = () => {
                     <th>Delete</th>
                   </tr>
                   {departmentList.map((item, index) => (
-                    <tr key={item._id} onClick={() => handleDepRowClick(item)}>
-                      <td>{index + 1}</td>
+                    <tr key={item._id} onClick={() => handleDepRowClick(item)} className="p-0">
+                      <td >{index + 1}</td>
                       <td>{item.department}</td>
                       <td>{item.area}</td>
                       <td>{item.placeOfUsage}</td>
@@ -328,7 +332,7 @@ const Department = () => {
                       <td>
                         <button
                           type="button"
-                          className="btn btn-danger"
+                          className="btn btn-sm btn-danger"
                           onClick={() => deleteDepartment(item._id)}
                         >
                           <i className="bi bi-trash"></i>
@@ -341,7 +345,7 @@ const Department = () => {
             </div>
           </div>
           <div className="col" style={bodyCards}>
-            <h1 className="text-center">Designation</h1>
+            <h2 className="text-center">Designation</h2>
 
             <div className="form-floating mb-3">
               <input
@@ -367,7 +371,7 @@ const Department = () => {
                 <div>
                   <lable
                     className="uplable"
-                    style={{ backgroundColor: "yellow" }}
+                    
                   >
                     <input type="file" className="downlable" />
                     Download
@@ -378,24 +382,24 @@ const Department = () => {
               <div className="text-end col">
               <button
                   type="button"
-                  className="btn btn-warning text-end me-3"
+                  className="btn text-end me-3 hover"
                   onClick={() => updateDesignation(desStateId)}
-                  disabled={!desStateId}
+                  style={{backgroundColor: "#e6e6e6", color: "black", fontWeight: "bolder"}}
                 >
                   Modify
                 </button>
                 <button
                   type="button"
-                  className="btn btn-warning text-end"
+                  className="btn text-end hover"
                   onClick={DesignationSubmit}
-
+                  style={{backgroundColor: "#e6e6e6", color: "black", fontWeight: "bolder"}}
                 >
                   <i className="bi bi-plus"></i>Add Designation
                 </button>
               </div>
             </div>
             <hr />
-            <h4 className="text-center mb-3">Designation List</h4>
+            <h4 className="mb-3">Designation List</h4>
             <div className="table-responsive">
               <table className="table table-bordered text-center table-hover">
                 <tbody>
@@ -409,7 +413,7 @@ const Department = () => {
                       <td>{index + 1}</td>
                       <td>{item.designation}</td>
                       <td>
-                        <button type="button" className="btn btn-danger" onClick={() => deleteDesignation(item._id)}>
+                        <button type="button" className="btn btn-sm btn-danger" onClick={() => deleteDesignation(item._id)}>
                           <i className="bi bi-trash"></i>
                         </button>
                       </td>
