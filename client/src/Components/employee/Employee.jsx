@@ -170,9 +170,9 @@ const Employee = () => {
                     <div class="form-floating  col-1">
                         <select onChange={handleChange} value={employeeData.title} className="form-select" id="titleId" name="title" >
                             <option selected>Title</option>
-                            <option value="1">One</option>
-                            <option value="2">Two</option>
-                            <option value="3">Three</option>
+                            <option value="1">Mr.</option>
+                            <option value="2">Ms.</option>
+                            
                         </select>
                         <label htmlFor="titleId">Title</label>
                     </div>
@@ -261,7 +261,7 @@ const Employee = () => {
                         </select>
                         <label htmlFor="departmentId">Department</label>
                     </div>
-                    <div class="form-floating md-3 col-5">
+                    <div class="form-floating md-3 col-6">
                         <select onChange={handleChange} value={employeeData.reportTo} className="form-select" id="reportToId" name="reportTo" >
                             <option selected>Department</option>
                             <option value="1">One</option>
@@ -301,7 +301,7 @@ const Employee = () => {
 
                 </div>
                 <h3 className='text-center'>Employee List</h3>
-                <div className='row g-2'>
+                <div className='row g-2 mb-3'>
                     <div class="form-floating md-3 col">
                         <select className="form-select" id="EmploymentStatusToId" name="EmploymentStatusTo" >
                             <option selected>Select Status</option>
@@ -311,7 +311,7 @@ const Employee = () => {
                         </select>
                         <label htmlFor="EmploymentStatusToId">Employment Status To</label>
                     </div>
-                    <div class="form-floating md-3 col">
+                    <div class="form-floating col">
                         <select className="form-select" id="DepartmentId" name="Department" >
                             <option selected>Department</option>
                             {departmentList.map((item) => (
@@ -322,7 +322,7 @@ const Employee = () => {
                         </select>
                         <label htmlFor="DepartmentId">Department</label>
                     </div>
-                    <div class="form-floating md-3 col">
+                    <div class="form-floating col">
                         <select className="form-select" id="reportToId" name="reportTo" >
                             <option selected>Report To</option>
                             <option value="1">One</option>

@@ -3,6 +3,12 @@ import axios from "axios";
 
 
 const Department = () => {
+  const emptyDepartmentData = {
+    department: "",
+    area: "N/A",
+    placeOfUsage: "N/A"
+  }
+
   const [departmentData, setDepartmentData] = useState({
     department: "",
     area: "N/A",
@@ -13,6 +19,7 @@ const Department = () => {
   const [desStateId, setDesStateId] = useState(null)
 
 
+
   const [departmentList, setDepartmentList] = useState([]);
 
 
@@ -21,17 +28,17 @@ const Department = () => {
   });
   const handleDepRowClick = (item) => {
     setDepartmentData(item);
-    setDepStateId(item._id)
+    setDepStateId(item._id);
   };
 
   const handleDesRowClick = (item) => {
     setDesignationData(item);
-    setDesStateId(item._id)
+    setDesStateId(item._id);
   };
- 
+
   console.log(depStateId)
   const [designationList, setDesignationList] = useState([]);
-  
+
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -60,16 +67,13 @@ const Department = () => {
   const DepartmentSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post(
+      const response = await axios.post(
         `${process.env.REACT_APP_PORT}/department/createDepartment`,
         departmentData
       );
+      console.log(response.data.message)
       depFetchData();
-      setDepartmentData({
-        department: "",
-        area: "",
-        placeOfUsage: "",
-      });
+      setDepartmentData(emptyDepartmentData);
     } catch (err) {
       console.log(err);
       alert(err);
@@ -82,11 +86,8 @@ const Department = () => {
         "http://localhost:3001/department/updateDepartment/" + id, departmentData
       );
       depFetchData();
-      setDepartmentData({
-        department: "",
-        area: "",
-        placeOfUsage: "",
-      });
+      setDepartmentData(emptyDepartmentData);
+      setDepStateId(null)
       console.log("Department Updated Successfully");
     } catch (err) {
       console.log(err);
@@ -99,11 +100,7 @@ const Department = () => {
         "http://localhost:3001/department/deleteDepartment/" + id
       );
       depFetchData();
-      setDepartmentData({
-        department: "",
-        area: "",
-        placeOfUsage: "",
-      });
+      setDepartmentData(emptyDepartmentData);
       console.log("Department Deleted Successfully");
     } catch (err) {
       console.log(err);
@@ -138,7 +135,7 @@ const Department = () => {
       );
       desFetchData();
       setDesignationData({
-       designation: ""
+        designation: ""
       });
     } catch (err) {
       console.log(err);
@@ -154,15 +151,15 @@ const Department = () => {
       desFetchData();
       setDesignationData({
         designation: ""
-       });
+      });
       console.log("Designation Updated Successfully");
     } catch (err) {
       console.log(err);
     }
   };
- 
 
-  
+
+
 
   const deleteDesignation = async (id) => {
     try {
@@ -172,7 +169,7 @@ const Department = () => {
       desFetchData();
       setDesignationData({
         designation: ""
-       });
+      });
       console.log("Designation Deleted Successfully");
     } catch (err) {
       console.log(err);
@@ -263,7 +260,7 @@ const Department = () => {
                 />
                 <label for="placeOfUsage">Place Of Usage</label>
               </div>
-             
+
             </div>
 
             <div className="row">
@@ -277,7 +274,7 @@ const Department = () => {
                 <div>
                   <lable
                     className="uplable"
-                    
+
                   >
                     <input type="file" className="downlable" />
                     Download
@@ -286,30 +283,40 @@ const Department = () => {
               </div>
 
               <div className="text-end col">
-                <button
-                  type="button"
-                  style={{backgroundColor: "#e6e6e6", color: "black", fontWeight: "bolder"}}
-                  className="btn text-end me-3 hover"
-                  onClick={() => updateDepartment(depStateId)}
-                //   disabled={!depStateId}
-                >
-                  Modify
-                </button>
 
-                <button
+                {depStateId ? (<div>
+                  <button
+                    type="button"
+                    style={{ backgroundColor: "#e6e6e6", color: "black", fontWeight: "bolder" }}
+                    className="btn text-end me-3 hover"
+                    onClick={() => updateDepartment(depStateId)}
+                  //   disabled={!depStateId}
+                  >
+                    Modify
+                  </button >
+                  <button type="button" onMouseEnter={(e) => {e.target.style.background = 'red'}} onMouseOut={(e) => {e.target.style.background = '#e6e6e6'}}
+                    style={{ backgroundColor: "#e6e6e6", color: "black", fontWeight: "bolder" }}
+                    className="btn text-end me-3"
+                    onClick={() => {setDepStateId(null); setDepartmentData(emptyDepartmentData) }}
+                  >Cancel</button>
+                </div>) : <button
                   type="button"
-                  style={{backgroundColor: "#e6e6e6", color: "black", fontWeight: "bolder"}}
+                  style={{ backgroundColor: "#e6e6e6", color: "black", fontWeight: "bolder" }}
                   className="btn text-end hover"
                   onClick={DepartmentSubmit}
-                  
+
                 >
                   <i className="bi bi-plus"></i>Add Department
-                </button>
+                </button>}
+
+
+
+
               </div>
             </div>
 
             <hr />
-            
+
             <h4 className="text-center mb-3">Department List</h4>
             <div className="table-responsive">
               <table className="table table-bordered text-center table-hover">
@@ -371,7 +378,7 @@ const Department = () => {
                 <div>
                   <lable
                     className="uplable"
-                    
+
                   >
                     <input type="file" className="downlable" />
                     Download
@@ -380,11 +387,11 @@ const Department = () => {
               </div>
 
               <div className="text-end col">
-              <button
+                <button
                   type="button"
                   className="btn text-end me-3 hover"
                   onClick={() => updateDesignation(desStateId)}
-                  style={{backgroundColor: "#e6e6e6", color: "black", fontWeight: "bolder"}}
+                  style={{ backgroundColor: "#e6e6e6", color: "black", fontWeight: "bolder" }}
                 >
                   Modify
                 </button>
@@ -392,7 +399,7 @@ const Department = () => {
                   type="button"
                   className="btn text-end hover"
                   onClick={DesignationSubmit}
-                  style={{backgroundColor: "#e6e6e6", color: "black", fontWeight: "bolder"}}
+                  style={{ backgroundColor: "#e6e6e6", color: "black", fontWeight: "bolder" }}
                 >
                   <i className="bi bi-plus"></i>Add Designation
                 </button>
