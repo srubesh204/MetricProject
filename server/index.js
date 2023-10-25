@@ -9,6 +9,7 @@ const employeeRoute = require("./routes/employeeRoute")
 const generalRoute = require("./routes/generalRoute")
 const unitRoute = require("./routes/unitRoute")
 const partRoute = require("./routes/partRoute")
+const vendorRoute = require("./routes/vendorRoute")
 //
 mongoose.connect('mongodb://localhost/metric',{
     useNewUrlParser: true, 
@@ -26,6 +27,7 @@ app.use('/employee', employeeRoute);
 app.use('/stateAndCity', generalRoute);
 app.use('/unit', unitRoute);
 app.use('/part', partRoute);
+app.use('/vendor', vendorRoute);
 
 const port = 3001;
 app.listen(port, () => {

@@ -15,9 +15,6 @@ const departmentControllers = {
        
         try {
           const { department, area, placeOfUsage } = req.body;
-          if (!department) {
-            return res.status(200).json({ message: "Department Should not be empty", status: 0 });
-          }
           const departmentResult = new departmentModel({ department, area, placeOfUsage });
           await departmentResult.save();
           res.status(200).json({message: "Department Data Successfully Saved",status: 1});

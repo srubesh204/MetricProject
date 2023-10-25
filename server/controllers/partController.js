@@ -15,9 +15,7 @@ const partController = {
 
         try {
             const { partNo, partName, customer, operationNo } = req.body;
-            if (!partNo || !partName || !customer || !operationNo) {
-                return res.status(400).json({ error: 'All fields must be provided' });
-            }
+          
             const partResult = new partModel({ partNo, partName, customer, operationNo });
             await partResult.save();
             res.status(200).json({ message: "Part Data Successfully Saved", status: 1 });
