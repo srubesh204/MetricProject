@@ -14,10 +14,10 @@ const employeeController = {
       createEmployee: async (req, res) => {
        
         try {
-          const { empCode, title, firstName, lastName, dob, address, city, state, contactNumber, designation, department, maidId, doj, employmentStatus, reportTo} = req.body;
-          const employeeResult = new employeeModel({ empCode, title, firstName, lastName, dob, address, city, state, contactNumber, designation, department, maidId, doj, employmentStatus, reportTo });
+          const { employeeCode, title, firstName, lastName, dob, address, city, state, contactNumber, designation, department, maidId, doj, employmentStatus, reportTo} = req.body;
+          const employeeResult = new employeeModel({ employeeCode, title, firstName, lastName, dob, address, city, state, contactNumber, designation, department, maidId, doj, employmentStatus, reportTo });
           await employeeResult.save();
-          res.status(202).json({result :employeeResult, status: 1});
+          res.status(202).json({message: "Employee Data Successfully Saved",status: 1});
         } catch (error) {
           console.log(error)
           res.status(500).json({ error: 'Internal server error on Employee' , status: 0});
@@ -67,7 +67,7 @@ const employeeController = {
             return res.status(404).json({ error: 'Employee detail not found' });
           }
       
-          res.status(200).json({ message: 'Employee detail deleted successfully' });
+          res.status(202).json({ message: 'Employee detail deleted successfully' });
         } catch (error) {
           console.error(error);
           res.status(500).send('Internal Server Error');

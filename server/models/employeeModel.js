@@ -17,4 +17,4 @@ const employeeSchema = new mongoose.Schema({
     reportTo : String
 });
 
-module.exports = mongoose.model('employees', employeeSchema);
+module.exports = mongoose.model('employee', employeeSchema);
