@@ -15,7 +15,6 @@ function App() {
           <Route path="/" element={<Dashboard />} />
           <Route path="/desdep" element={<Department />} />
           <Route path="/employee" element={<Employee />} />
-
         </Routes>
       </BrowserRouter>
     </div>

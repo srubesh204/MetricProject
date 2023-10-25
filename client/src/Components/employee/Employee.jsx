@@ -75,9 +75,9 @@ const Employee = () => {
     };
     //get Designations
     useEffect(() => {
-        
-            cityFetch();
-       
+
+        cityFetch();
+
     }, [employeeData.state]);
     console.log(StateName)
     console.log(cityByState)
@@ -120,6 +120,14 @@ const Employee = () => {
     }, []);
     console.log(departmentList)
 
+    const bodyStyle = {
+        borderRadius: "10px",
+
+        padding: "2rem",
+        margin: "1rem",
+        boxShadow: "0px 0px 25px 10px",
+    };
+
 
     //
 
@@ -127,7 +135,7 @@ const Employee = () => {
 
 
 
-    
+
 
 
 
@@ -172,7 +180,7 @@ const Employee = () => {
                             <option selected>Title</option>
                             <option value="1">Mr.</option>
                             <option value="2">Ms.</option>
-                            
+
                         </select>
                         <label htmlFor="titleId">Title</label>
                     </div>
@@ -271,7 +279,7 @@ const Employee = () => {
                         <label htmlFor="reportToId">Report To</label>
                     </div>
                 </div>
-                <div className="row g-2" >
+                
                     <div className="col d-flex ">
                         <div className='me-2' >
                             <label className='uplable'>
@@ -283,88 +291,188 @@ const Employee = () => {
                                 <input className="form-control downlable" type="file" id="uploadExcel" />Download
                             </label>
                         </div>
-                    </div>
-
-                    <div className='col d-flex justify-content-end'>
-                        <div className='me-2' >
-                            <button type="button" className='btn btn-secondary' >Modify</button>
+                        <div className="form-floating  col">
+                            <input type="text" className="form-control" id="firstNameId" name="firstName" placeholder="firstName" />
+                            <label htmlFor="firstNameId">First Name</label>
+                        </div>
+                        <div className="form-floating  col">
+                            <input type="text" className="form-control" id="lastNameId" name="lastName" placeholder="lastName" />
+                            <label htmlFor="lastNameId">Last Name</label>
+                        </div>
+                        <div className="form-floating  col-2">
+                            <input type="date" className="form-control" id="dateOfBirthId" name="dateOfBirth" placeholder="dateOfBirth" />
+                            <label htmlFor="dateOfBirthId">Date Of Birth</label>
                         </div>
 
-                        <div>
-                            <button onClick={EmployeeSubmit} type="button" className='btn btn-warning'>+ Add Employee</button>
+
+                    </div>
+                    <div className='row g-2 mb-2'>
+                        <div className="form-floating col-4">
+                            <input type="text" className="form-control" id="addressId" placeholder="address" name='address' />
+                            <label htmlFor="addressId">Address</label>
+                        </div>
+                        <div className="form-floating col-2">
+                            <input type="number" className="form-control" id="contactNumberId" placeholder="contactNumber" name='contactNumber' />
+                            <label htmlFor="contactNumberId">Contact Number</label>
+                        </div>
+                        <div className="form-floating col-6">
+                            <input type="text" className="form-control" id="mailid" placeholder="name@example.com" name='mailId' />
+                            <label htmlFor="mailId">Mail Id</label>
+                        </div>
+                    </div>
+                    <div className='row g-2 mb-2'>
+                        <div class="form-floating col-4">
+                            <select className="form-select" id="CityId" name="City" aria-label="Floating label select example">
+                                <option selected>City</option>
+                                <option value="1">One</option>
+                                <option value="2">Two</option>
+                                <option value="3">Three</option>
+                            </select>
+                            <label htmlFor="CityId">City</label>
+                        </div>
+                        <div class="form-floating col-2">
+                            <select className="form-select" id="designationId" name="designation" aria-label="Floating label select example">
+                                <option selected>Designation</option>
+                                <option value="1">One</option>
+                                <option value="2">Two</option>
+                                <option value="3">Three</option>
+                            </select>
+                            <label htmlFor="designationId">Designation</label>
+                        </div>
+                        <div className="form-floating col-3">
+                            <input type="date" className="form-control" id="dateOfJoiningId" name="dateOfJoining" placeholder="dateOfJoining" />
+                            <label htmlFor="dateOfJoiningId">Date Of joining</label>
+                        </div>
+                        <div class="form-floating col-3">
+                            <select className="form-select" id="employmentStatusId" name="employmentStatus" aria-label="Floating label select example">
+                                <option selected>Employment Status</option>
+                                <option value="1">One</option>
+                                <option value="2">Two</option>
+                                <option value="3">Three</option>
+                            </select>
+                            <label htmlFor="employmentStatusId">Employment Status</label>
+                            <div>
+                                <button onClick={EmployeeSubmit} type="button" className='btn btn-warning'>+ Add Employee</button>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div className='row g-2 mb-2'>
+                        <div class="form-floating md-3 col-4">
+                            <select className="form-select" id="stateId" name="state" aria-label="Floating label select example">
+                                <option selected>State</option>
+                                <option value="1">One</option>
+                                <option value="2">Two</option>
+                                <option value="3">Three</option>
+                            </select>
+                            <label htmlFor="stateId">State</label>
+                        </div>
+                        <div class="form-floating md-3 col-2">
+                            <select className="form-select" id="departmentId" name="department" aria-label="Floating label select example">
+                                <option selected>Select department</option>
+                                {departmentList.map((item) => (
+                                    <option>{item.department}</option>
+                                ))
+
+                                }
+                            </select>
+                            <label htmlFor="departmentId">Department</label>
+                        </div>
+                        <div class="form-floating md-3 col-5">
+                            <select className="form-select" id="reportToId" name="reportTo" aria-label="Floating label select example">
+                                <option selected>Report To</option>
+                                <option value="1">One</option>
+                                <option value="2">Two</option>
+                                <option value="3">Three</option>
+                            </select>
+                            <label htmlFor="reportToId">Report To</label>
+                        </div>
+                    </div>
+                    <div className="row g-2" >
+                        <div className="col d-flex ">
+                            <div className='me-2' >
+                                <label className='uplable'>
+                                    <input className="form-control downlable" type="file" id="uploadExcel" />Upload
+                                </label>
+                            </div>
+                            <div >
+                                <label className='uplable'>
+                                    <input className="form-control downlable" type="file" id="uploadExcel" />Download
+                                </label>
+                            </div>
                         </div>
 
+                        <div className='col d-flex justify-content-end'>
+                            <div className='me-2' >
+                                <button type="button" className='btn btn-secondary' >Modify</button>
+                            </div>
+
+                            <div>
+                                <button type="button" className='btn btn-warning'>+ Add Employee</button>
+                            </div>
+
+                        </div>
+
+
+
+
                     </div>
-
-
-
-
-                </div>
-                <h3 className='text-center'>Employee List</h3>
-                <div className='row g-2 mb-3'>
-                    <div class="form-floating md-3 col">
-                        <select className="form-select" id="EmploymentStatusToId" name="EmploymentStatusTo" >
-                            <option selected>Select Status</option>
-                            <option value="1">Active</option>
-                            <option value="2">InActive</option>
-                            <option value="3">Relieved</option>
-                        </select>
-                        <label htmlFor="EmploymentStatusToId">Employment Status To</label>
+                    <h3 className='text-center'>Employee List</h3>
+                    <div className='row g-2'>
+                        <div class="form-floating md-3 col">
+                            <select className="form-select" id="EmploymentStatusToId" name="EmploymentStatusTo" aria-label="Floating label select example">
+                                <option selected>Employment Status To</option>
+                                <option value="1">One</option>
+                                <option value="2">Two</option>
+                                <option value="3">Three</option>
+                            </select>
+                            <label htmlFor="EmploymentStatusToId">Employment Status To</label>
+                        </div>
+                        <div class="form-floating md-3 col">
+                            <select className="form-select" id="DepartmentId" name="Department" aria-label="Floating label select example">
+                                <option selected>Department</option>
+                                <option value="1">One</option>
+                                <option value="2">Two</option>
+                                <option value="3">Three</option>
+                            </select>
+                            <label htmlFor="DepartmentId">Department</label>
+                        </div>
+                        <div class="form-floating md-3 col">
+                            <select className="form-select" id="reportToId" name="reportTo" aria-label="Floating label select example">
+                                <option selected>Report To</option>
+                                <option value="1">One</option>
+                                <option value="2">Two</option>
+                                <option value="3">Three</option>
+                            </select>
+                            <label htmlFor="reportToId">Report To</label>
+                        </div>
                     </div>
-                    <div class="form-floating col">
-                        <select className="form-select" id="DepartmentId" name="Department" >
-                            <option selected>Department</option>
-                            {departmentList.map((item) => (
-                                <option key={item._id} value={item.department}>{item.department}</option>
-                            ))
+                    <div>
+                        <table className='table table-bordered'>
+                            <tbody>
+                                <tr>
+                                    <th>Emp.Code</th>
+                                    <th>Emp.Name</th>
+                                    <th>Contact Number</th>
+                                    <th>Mail Id</th>
+                                    <th>Designation</th>
+                                    <th>Department</th>
+                                    <th>Report To</th>
+                                    <th>Delete</th>
 
-                            }
-                        </select>
-                        <label htmlFor="DepartmentId">Department</label>
-                    </div>
-                    <div class="form-floating col">
-                        <select className="form-select" id="reportToId" name="reportTo" >
-                            <option selected>Report To</option>
-                            <option value="1">One</option>
-                            <option value="2">Two</option>
-                            <option value="3">Three</option>
-                        </select>
-                        <label htmlFor="reportToId">Report To</label>
-                    </div>
-                </div>
-                <div>
-                    <table className='table table-bordered'>
-                        <tbody>
-                            <tr>
-                                <th>Emp.Code</th>
-                                <th>Emp.Name</th>
-                                <th>Contact Number</th>
-                                <th>Mail Id</th>
-                                <th>Designation</th>
-                                <th>Department</th>
-                                <th>Report To</th>
-                                <th>Delete</th>
-
-                            </tr>
-                            {employeeList.map((emp, index) => (
-                                <tr key={emp._id} onClick={() => handleSetEmp(emp)}>
-                                    <td>{emp.employeeCode}</td>
-                                    <td>{emp.firstName + emp.lastName}</td>
-                                    <td>{emp.contactNumber}</td>
-                                    <td>{emp.mailId}</td>
-                                    <td>{emp.designation}</td>
-                                    <td>{emp.department}</td>
-                                    <td>{emp.reportTo}</td>
-                                    <td><button className='btn btn-danger'><i className="bi bi-trash"></i></button></td>
                                 </tr>
-                            ))}
+                                {
+                                    <tr>
+
+                                        <td><button className='btn btn-danger '><i class="bi bi-trash-fill"></i></button></td>
+                                    </tr>
+                                }
+
+                            </tbody>
 
 
-                        </tbody>
-
-
-                    </table>
-                </div>
+                        </table>
+                    </div>
 
 
 
@@ -376,9 +484,9 @@ const Employee = () => {
 
 
             </form>
-
-
         </div>
+
+        
     )
 }
 
