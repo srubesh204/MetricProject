@@ -5,5 +5,5 @@ const designationSchema = new mongoose.Schema({
   designation: String,  
 });
 
-module.exports = mongoose.model('designations', designationSchema);
+module.exports = mongoose.model('designation', designationSchema);
 

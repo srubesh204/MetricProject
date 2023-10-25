@@ -1,7 +1,7 @@
 const departmentModel = require("../models/departmentModel")
 
 const departmentControllers = {
-    getDepartment: async (req, res) => {
+    getAllDepartment: async (req, res) => {
         try {
           const departmentResult = await departmentModel.find();
           res.status(200).json(departmentResult);
@@ -17,10 +17,10 @@ const departmentControllers = {
           const { department, area, placeOfUsage } = req.body;
           const departmentResult = new departmentModel({ department, area, placeOfUsage });
           await departmentResult.save();
-          res.status(201).json(departmentResult);
+          res.status(200).json({message: "Department Data Successfully Saved",status: 1});
         } catch (error) {
           console.log(error)
-          res.status(500).json({ error: 'Internal server error on Department' });
+          res.status(500).json({ error: 'Internal server error on Department',status: 0});
         }
       },
       updateDepartment: async (req, res) => {
@@ -72,7 +72,7 @@ const departmentControllers = {
           console.error(error);
           res.status(500).send('Internal Server Error');
         }
-      }
+      },
       }
 
 
