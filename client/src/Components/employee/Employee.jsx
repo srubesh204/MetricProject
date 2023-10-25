@@ -12,6 +12,7 @@ const Employee = () => {
                 `${process.env.REACT_APP_PORT}/employee/getAllEmployee`
             );
             setEmployeeList(response.data.result);
+            setFilteredData(response.data.result);
         } catch (err) {
             console.log(err);
         }
@@ -19,6 +20,35 @@ const Employee = () => {
     useEffect(() => {
         empFetch();
     }, []);
+
+    console.log(employeeList)
+    const [filteredData, setFilteredData] = useState([])
+    
+    const handleFilterChange = (e) => {
+        const { name, value } = e.target;
+        if(value === "all"){
+            setFilteredData(employeeList)
+        }else{
+            if (name === "departmentFilter") {
+                const departmentFilter = employeeList.filter((item) => (item.department === value))
+                setFilteredData(departmentFilter)
+            }
+            if(name === "employementStatusFilter"){
+                const statusFilter = employeeList.filter((item) => (item.employementStatus === value))
+                setFilteredData(statusFilter)
+            }
+            if(name === "reportToFilter"){
+                const reportFilter = employeeList.filter((item) => (item.reportTo === value))
+                setFilteredData(reportFilter)
+            }
+        }
+        
+        
+    };
+    
+    
+
+
 
     const [employeeData, setEmployeeData] = useState({
         employeeCode: "",
@@ -156,6 +186,7 @@ const Employee = () => {
     };
 
 
+
     console.log(employeeData)
     console.log(employeeList)
     return (
@@ -164,7 +195,7 @@ const Employee = () => {
                 <h1 className='text-center'>Employee Database</h1>
                 <div className='row mb-2 g-2'>
                     <div className="form-floating  col-2">
-                        <input onChange={handleChange} value={employeeData.employeeCode} type="text" className="form-control" id="employeeCodeId" name="employeeCode" placeholder="employeeCode" />
+                        <input onChange={handleChange}  value={employeeData.employeeCode} type="text" className="form-control" id="employeeCodeId" name="employeeCode" placeholder="employeeCode" />
                         <label htmlFor="employeeCodeId">Emp.code</label>
                     </div>
                     <div class="form-floating  col-1">
@@ -177,11 +208,11 @@ const Employee = () => {
                         <label htmlFor="titleId">Title</label>
                     </div>
                     <div className="form-floating  col">
-                        <input onChange={handleChange} value={employeeData.firstName} type="text" className="form-control" id="firstNameId" name="firstName" placeholder="firstName" />
+                        <input onChange={handleChange} style={{textTransform: "capitalize"}} value={employeeData.firstName} type="text" className="form-control" id="firstNameId" name="firstName" placeholder="firstName" />
                         <label htmlFor="firstNameId">First Name</label>
                     </div>
                     <div className="form-floating  col">
-                        <input onChange={handleChange} value={employeeData.lastName} type="text" className="form-control" id="lastNameId" name="lastName" placeholder="lastName" />
+                        <input onChange={handleChange} style={{textTransform: "capitalize"}} value={employeeData.lastName} type="text" className="form-control" id="lastNameId" name="lastName" placeholder="lastName" />
                         <label htmlFor="lastNameId">Last Name</label>
                     </div>
                     <div className="form-floating  col-2">
@@ -193,7 +224,7 @@ const Employee = () => {
                 </div>
                 <div className='row g-2 mb-2'>
                     <div className="form-floating col-4">
-                        <input onChange={handleChange} value={employeeData.address} type="text" className="form-control" id="addressId" placeholder="naddress" name='address' />
+                        <input onChange={handleChange} style={{textTransform: "capitalize"}} value={employeeData.address} type="text" className="form-control" id="addressId" placeholder="naddress" name='address' />
                         <label htmlFor="addressId">Address</label>
                     </div>
                     <div className="form-floating col-2">
@@ -303,33 +334,33 @@ const Employee = () => {
                 <h3 className='text-center'>Employee List</h3>
                 <div className='row g-2 mb-3'>
                     <div class="form-floating md-3 col">
-                        <select className="form-select" id="EmploymentStatusToId" name="EmploymentStatusTo" >
-                            <option selected>Select Status</option>
+                        <select className="form-select" id="employementStatusFilterId" name="employementStatusFilter" onChange={handleFilterChange}>
+                            <option selected value="all">All</option>
                             <option value="1">Active</option>
                             <option value="2">InActive</option>
                             <option value="3">Relieved</option>
                         </select>
-                        <label htmlFor="EmploymentStatusToId">Employment Status To</label>
+                        <label htmlFor="employementStatusFilterId">Employment Status To</label>
                     </div>
                     <div class="form-floating col">
-                        <select className="form-select" id="DepartmentId" name="Department" >
-                            <option selected>Department</option>
+                        <select className="form-select" id="departmentFilterId" name="departmentFilter" onChange={handleFilterChange}>
+                            <option selected value="all">All</option>
                             {departmentList.map((item) => (
                                 <option key={item._id} value={item.department}>{item.department}</option>
                             ))
 
                             }
                         </select>
-                        <label htmlFor="DepartmentId">Department</label>
+                        <label htmlFor="departmentFilterId">Department</label>
                     </div>
                     <div class="form-floating col">
-                        <select className="form-select" id="reportToId" name="reportTo" >
-                            <option selected>Report To</option>
+                        <select className="form-select" id="reportToFilterId" name="reportToFilter" onChange={handleFilterChange}>
+                            <option selected value="all">All</option>
                             <option value="1">One</option>
                             <option value="2">Two</option>
                             <option value="3">Three</option>
                         </select>
-                        <label htmlFor="reportToId">Report To</label>
+                        <label htmlFor="reportToFilterId">Report To</label>
                     </div>
                 </div>
                 <div>
@@ -346,7 +377,7 @@ const Employee = () => {
                                 <th>Delete</th>
 
                             </tr>
-                            {employeeList.map((emp, index) => (
+                            {filteredData.map((emp, index) => (
                                 <tr key={emp._id} onClick={() => handleSetEmp(emp)}>
                                     <td>{emp.employeeCode}</td>
                                     <td>{emp.firstName + emp.lastName}</td>
