@@ -1,5 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import Button from '@mui/material/Button';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
+import Alert from '@mui/material/Alert';
+import Stack from '@mui/material/Stack';
+import Snackbar from '@mui/material/Snackbar';
+import MuiAlert from '@mui/material/Alert';
 
 
 const Employee = () => {
@@ -9,7 +19,7 @@ const Employee = () => {
     const empFetch = async () => {
         try {
             const response = await axios.get(
-                `${process.env.REACT_APP_PORT}/employee/getAllEmployee`
+                `${process.env.REACT_APP_PORT}/employee/getAllEmployees`
             );
             setEmployeeList(response.data.result);
             setFilteredData(response.data.result);
@@ -23,30 +33,46 @@ const Employee = () => {
 
     console.log(employeeList)
     const [filteredData, setFilteredData] = useState([])
-    
+
     const handleFilterChange = (e) => {
         const { name, value } = e.target;
-        if(value === "all"){
+        if (value === "all") {
             setFilteredData(employeeList)
-        }else{
+        } else {
             if (name === "departmentFilter") {
                 const departmentFilter = employeeList.filter((item) => (item.department === value))
                 setFilteredData(departmentFilter)
             }
-            if(name === "employementStatusFilter"){
+            if (name === "employementStatusFilter") {
                 const statusFilter = employeeList.filter((item) => (item.employementStatus === value))
                 setFilteredData(statusFilter)
             }
-            if(name === "reportToFilter"){
+            if (name === "reportToFilter") {
                 const reportFilter = employeeList.filter((item) => (item.reportTo === value))
                 setFilteredData(reportFilter)
             }
         }
-        
-        
+
+
     };
-    
-    
+
+    const initialEmpData = {
+        employeeCode: "",
+        title: "",
+        firstName: "",
+        lastName: "",
+        dob: "",
+        address: "",
+        city: "",
+        state: "",
+        contactNumber: "",
+        designation: "",
+        department: "",
+        mailId: "",
+        doj: "",
+        employmentStatus: "",
+        reportTo: ""
+    }
 
 
 
@@ -73,6 +99,29 @@ const Employee = () => {
         setEmpDataId(emp._id)
     }
     console.log(empDataId)
+    const Alert = React.forwardRef(function Alert(props, ref) {
+        return <MuiAlert elevation={6} ref={ref} variant="filled"  {...props} />;
+    });
+    const [open, setOpen] = useState(false)
+    const [snackBarOpen, setSnackBarOpen] = useState(false)
+    //open Modal
+    const handleClickOpen = () => {
+        setOpen(true);
+    };
+
+    const handleClose = () => {
+        setOpen(false);
+    };
+
+    const handleSnackClose = (event, reason) => {
+        if (reason === 'clickaway') {
+            return;
+        }
+
+        setSnackBarOpen(false);
+    }
+
+    //
     //State and City
     const [AllStates, setAllStates] = useState([]);
     const [StateName, setStateName] = useState(null)
@@ -150,19 +199,15 @@ const Employee = () => {
     }, []);
     console.log(departmentList)
 
-    const bodyStyle = {
-        borderRadius: "10px",
-
-        padding: "2rem",
-        margin: "1rem",
-        boxShadow: "0px 0px 25px 10px",
-    };
-
 
     //
 
     // Employee Datas
-
+    const [errorhandler, setErrorHandler] = useState({
+        status: 0,
+        message: "This works Correctly",
+        code: ""
+    })
 
 
 
@@ -182,14 +227,36 @@ const Employee = () => {
     const EmployeeSubmit = async (e) => {
         e.preventDefault();
         try {
-            await axios.post(
+            const response = await axios.post(
                 `${process.env.REACT_APP_PORT}/employee/createEmployee`, employeeData
             );
+            setErrorHandler({ status: response.data.status, message: response.data.message, code: "success" })
+            setSnackBarOpen(true)
             empFetch();
             console.log("Employee Created Successfully")
         } catch (err) {
+            setErrorHandler({ status: 0, message: "Error Creating Emplopyee", code: "error" })
+            setSnackBarOpen(true)
             console.log(err);
-            alert(err);
+
+        }
+    };
+    console.log(empDataId)
+    const EmployeeUpdate = async (e) => {
+        e.preventDefault();
+        try {
+            const response = await axios.put(
+                `${process.env.REACT_APP_PORT}/employee/updateEmployee/${empDataId}`, employeeData
+            );
+            empFetch();
+            setErrorHandler({ status: response.data.status, message: response.data.message, code: "success" })
+            console.log("Employee Updated Successfully")
+            setSnackBarOpen(true)
+
+        } catch (err) {
+            console.log(err);
+            setErrorHandler({ status: 0, message: "Error Updating Employee", code: "error" })
+            setSnackBarOpen(true)
         }
     };
 
@@ -203,7 +270,7 @@ const Employee = () => {
                 <h1 className='text-center'>Employee Database</h1>
                 <div className='row mb-2 g-2'>
                     <div className="form-floating  col-2">
-                        <input onChange={handleChange}  value={employeeData.employeeCode} type="text" className="form-control" id="employeeCodeId" name="employeeCode" placeholder="employeeCode" />
+                        <input onChange={handleChange} value={employeeData.employeeCode} type="text" className="form-control" id="employeeCodeId" name="employeeCode" placeholder="employeeCode" />
                         <label htmlFor="employeeCodeId">Emp.code</label>
                     </div>
                     <div class="form-floating  col-1">
@@ -216,11 +283,11 @@ const Employee = () => {
                         <label htmlFor="titleId">Title</label>
                     </div>
                     <div className="form-floating  col">
-                        <input onChange={handleChange} style={{textTransform: "capitalize"}} value={employeeData.firstName} type="text" className="form-control" id="firstNameId" name="firstName" placeholder="firstName" />
+                        <input onChange={handleChange} value={employeeData.firstName} type="text" className="form-control" id="firstNameId" name="firstName" placeholder="firstName" />
                         <label htmlFor="firstNameId">First Name</label>
                     </div>
                     <div className="form-floating  col">
-                        <input onChange={handleChange} style={{textTransform: "capitalize"}} value={employeeData.lastName} type="text" className="form-control" id="lastNameId" name="lastName" placeholder="lastName" />
+                        <input onChange={handleChange} value={employeeData.lastName} type="text" className="form-control" id="lastNameId" name="lastName" placeholder="lastName" />
                         <label htmlFor="lastNameId">Last Name</label>
                     </div>
                     <div className="form-floating  col-2">
@@ -232,7 +299,7 @@ const Employee = () => {
                 </div>
                 <div className='row g-2 mb-2'>
                     <div className="form-floating col-4">
-                        <input onChange={handleChange} style={{textTransform: "capitalize"}} value={employeeData.address} type="text" className="form-control" id="addressId" placeholder="naddress" name='address' />
+                        <input onChange={handleChange} value={employeeData.address} type="text" className="form-control" id="addressId" placeholder="naddress" name='address' />
                         <label htmlFor="addressId">Address</label>
                     </div>
                     <div className="form-floating col-2">
@@ -310,7 +377,7 @@ const Employee = () => {
                         <label htmlFor="reportToId">Report To</label>
                     </div>
                 </div>
-                
+                <div className="row g-2" >
                     <div className="col d-flex ">
                         <div className='me-2' >
                             <label className='uplable'>
@@ -322,127 +389,80 @@ const Employee = () => {
                                 <input className="form-control downlable" type="file" id="uploadExcel" />Download
                             </label>
                         </div>
-                        <div className="form-floating  col">
-                            <input type="text" className="form-control" id="firstNameId" name="firstName" placeholder="firstName" />
-                            <label htmlFor="firstNameId">First Name</label>
-                        </div>
-                        <div className="form-floating  col">
-                            <input type="text" className="form-control" id="lastNameId" name="lastName" placeholder="lastName" />
-                            <label htmlFor="lastNameId">Last Name</label>
-                        </div>
-                        <div className="form-floating  col-2">
-                            <input type="date" className="form-control" id="dateOfBirthId" name="dateOfBirth" placeholder="dateOfBirth" />
-                            <label htmlFor="dateOfBirthId">Date Of Birth</label>
-                        </div>
+                    </div>
+                    {empDataId ? <Dialog
+                        open={open}
+                        onClose={handleClose}
+                        aria-labelledby="alert-dialog-title"
+                        aria-describedby="alert-dialog-description"
+                    >
+                        <DialogTitle id="alert-dialog-title">
+                            {"Update Confirmation"}
+                        </DialogTitle>
+                        <DialogContent>
+                            <DialogContentText id="alert-dialog-description">
+                                Are you sure to Update a Employee
+                            </DialogContentText>
+                        </DialogContent>
+                        <DialogActions>
+                            <Button onClick={handleClose}>Cancel</Button>
+                            <Button onClick={(e) => { EmployeeUpdate(e); handleClose(); }} autoFocus>
+                                Update
+                            </Button>
+                        </DialogActions>
+                    </Dialog> : <Dialog
+                        open={open}
+                        onClose={handleClose}
+                        aria-labelledby="alert-dialog-title"
+                        aria-describedby="alert-dialog-description"
+                    >
+                        <DialogTitle id="alert-dialog-title">
+                            {"Create Confirmation"}
+                        </DialogTitle>
+                        <DialogContent>
+                            <DialogContentText id="alert-dialog-description">
+                                Are you sure to Create the Employee
+                            </DialogContentText>
+                        </DialogContent>
+                        <DialogActions>
+                            <Button onClick={handleClose}>Cancel</Button>
+                            <Button onClick={(e) => { EmployeeSubmit(e); handleClose(); }} autoFocus>
+                                Submit
+                            </Button>
+                        </DialogActions>
+                    </Dialog>}
+
+                    {/* <Stack sx={{ width: '50%' }} spacing={2}>
+                        <Alert severity="error">This is an error alert — check it out!</Alert>
+                        <Alert severity="warning">This is a warning alert — check it out!</Alert>
+                        <Alert severity="info">This is an info alert — check it out!</Alert>
+                        <Alert severity="success">This is a success alert — check it out!</Alert>
+                    </Stack> */}
+                    <Snackbar anchorOrigin={{ vertical: "top", horizontal: "right" }} open={snackBarOpen} autoHideDuration={6000} onClose={handleSnackClose}>
+                        <Alert onClose={handleSnackClose} severity={errorhandler.code} sx={{ width: '25%' }}>
+                            {errorhandler.message}
+                        </Alert>
+                    </Snackbar>
 
 
-                    </div>
-                    <div className='row g-2 mb-2'>
-                        <div className="form-floating col-4">
-                            <input type="text" className="form-control" id="addressId" placeholder="address" name='address' />
-                            <label htmlFor="addressId">Address</label>
-                        </div>
-                        <div className="form-floating col-2">
-                            <input type="number" className="form-control" id="contactNumberId" placeholder="contactNumber" name='contactNumber' />
-                            <label htmlFor="contactNumberId">Contact Number</label>
-                        </div>
-                        <div className="form-floating col-6">
-                            <input type="text" className="form-control" id="mailid" placeholder="name@example.com" name='mailId' />
-                            <label htmlFor="mailId">Mail Id</label>
-                        </div>
-                    </div>
-                    <div className='row g-2 mb-2'>
-                        <div class="form-floating col-4">
-                            <select className="form-select" id="CityId" name="City" aria-label="Floating label select example">
-                                <option selected>City</option>
-                                <option value="1">One</option>
-                                <option value="2">Two</option>
-                                <option value="3">Three</option>
-                            </select>
-                            <label htmlFor="CityId">City</label>
-                        </div>
-                        <div class="form-floating col-2">
-                            <select className="form-select" id="designationId" name="designation" aria-label="Floating label select example">
-                                <option selected>Designation</option>
-                                <option value="1">One</option>
-                                <option value="2">Two</option>
-                                <option value="3">Three</option>
-                            </select>
-                            <label htmlFor="designationId">Designation</label>
-                        </div>
-                        <div className="form-floating col-3">
-                            <input type="date" className="form-control" id="dateOfJoiningId" name="dateOfJoining" placeholder="dateOfJoining" />
-                            <label htmlFor="dateOfJoiningId">Date Of joining</label>
-                        </div>
-                        <div class="form-floating col-3">
-                            <select className="form-select" id="employmentStatusId" name="employmentStatus" aria-label="Floating label select example">
-                                <option selected>Employment Status</option>
-                                <option value="1">One</option>
-                                <option value="2">Two</option>
-                                <option value="3">Three</option>
-                            </select>
-                            <label htmlFor="employmentStatusId">Employment Status</label>
-                            <div>
-                                <button onClick={EmployeeSubmit} type="button" className='btn btn-warning'>+ Add Employee</button>
-                            </div>
-
-                        </div>
-                    </div>
-                    <div className='row g-2 mb-2'>
-                        <div class="form-floating md-3 col-4">
-                            <select className="form-select" id="stateId" name="state" aria-label="Floating label select example">
-                                <option selected>State</option>
-                                <option value="1">One</option>
-                                <option value="2">Two</option>
-                                <option value="3">Three</option>
-                            </select>
-                            <label htmlFor="stateId">State</label>
-                        </div>
-                        <div class="form-floating md-3 col-2">
-                            <select className="form-select" id="departmentId" name="department" aria-label="Floating label select example">
-                                <option selected>Select department</option>
-                                {departmentList.map((item) => (
-                                    <option>{item.department}</option>
-                                ))
-
-                                }
-                            </select>
-                            <label htmlFor="departmentId">Department</label>
-                        </div>
-                        <div class="form-floating md-3 col-5">
-                            <select className="form-select" id="reportToId" name="reportTo" aria-label="Floating label select example">
-                                <option selected>Report To</option>
-                                <option value="1">One</option>
-                                <option value="2">Two</option>
-                                <option value="3">Three</option>
-                            </select>
-                            <label htmlFor="reportToId">Report To</label>
-                        </div>
-                    </div>
-                    <div className="row g-2" >
-                        <div className="col d-flex ">
+                    <div className='col d-flex justify-content-end'>
+                        {empDataId ? <div className='col d-flex justify-content-end'>
                             <div className='me-2' >
-                                <label className='uplable'>
-                                    <input className="form-control downlable" type="file" id="uploadExcel" />Upload
-                                </label>
+                                <button type="button" onClick={handleClickOpen} className='btn btn-secondary' >Modify</button>
                             </div>
-                            <div >
-                                <label className='uplable'>
-                                    <input className="form-control downlable" type="file" id="uploadExcel" />Download
-                                </label>
-                            </div>
-                        </div>
-
-                        <div className='col d-flex justify-content-end'>
                             <div className='me-2' >
-                                <button type="button" className='btn btn-secondary' >Modify</button>
+                                <button type="button" className='btn btn-danger' onClick={() => { setEmpDataId(null); setEmployeeData(initialEmpData) }} >Cancel</button>
                             </div>
-
+                        </div> :
                             <div>
-                                <button type="button" className='btn btn-warning'>+ Add Employee</button>
+                                <button onClick={handleClickOpen} type="button" className='btn btn-warning'>+ Add Employee</button>
                             </div>
+                        }
 
-                        </div>
+
+
+
+                    </div>
 
 
 
@@ -492,49 +512,6 @@ const Employee = () => {
                                 <th>Department</th>
                                 <th>Report To</th>
                                 <th>Delete</th>
-                    </div>
-                    <h3 className='text-center'>Employee List</h3>
-                    <div className='row g-2'>
-                        <div class="form-floating md-3 col">
-                            <select className="form-select" id="EmploymentStatusToId" name="EmploymentStatusTo" aria-label="Floating label select example">
-                                <option selected>Employment Status To</option>
-                                <option value="1">One</option>
-                                <option value="2">Two</option>
-                                <option value="3">Three</option>
-                            </select>
-                            <label htmlFor="EmploymentStatusToId">Employment Status To</label>
-                        </div>
-                        <div class="form-floating md-3 col">
-                            <select className="form-select" id="DepartmentId" name="Department" aria-label="Floating label select example">
-                                <option selected>Department</option>
-                                <option value="1">One</option>
-                                <option value="2">Two</option>
-                                <option value="3">Three</option>
-                            </select>
-                            <label htmlFor="DepartmentId">Department</label>
-                        </div>
-                        <div class="form-floating md-3 col">
-                            <select className="form-select" id="reportToId" name="reportTo" aria-label="Floating label select example">
-                                <option selected>Report To</option>
-                                <option value="1">One</option>
-                                <option value="2">Two</option>
-                                <option value="3">Three</option>
-                            </select>
-                            <label htmlFor="reportToId">Report To</label>
-                        </div>
-                    </div>
-                    <div>
-                        <table className='table table-bordered'>
-                            <tbody>
-                                <tr>
-                                    <th>Emp.Code</th>
-                                    <th>Emp.Name</th>
-                                    <th>Contact Number</th>
-                                    <th>Mail Id</th>
-                                    <th>Designation</th>
-                                    <th>Department</th>
-                                    <th>Report To</th>
-                                    <th>Delete</th>
 
                             </tr>
                             {filteredData.map((emp, index) => (
@@ -546,23 +523,16 @@ const Employee = () => {
                                     <td>{emp.designation}</td>
                                     <td>{emp.department}</td>
                                     <td>{emp.reportTo}</td>
-                                    <td><button className='btn btn-danger'><i className="bi bi-trash"></i></button></td>
+                                    <td><button type='button' className='btn btn-danger'><i className="bi bi-trash"></i></button></td>
                                 </tr>
                             ))}
 
-                                </tr>
-                                {
-                                    <tr>
 
-                                        <td><button className='btn btn-danger '><i class="bi bi-trash-fill"></i></button></td>
-                                    </tr>
-                                }
-
-                            </tbody>
+                        </tbody>
 
 
-                        </table>
-                    </div>
+                    </table>
+                </div>
 
 
 
@@ -574,9 +544,9 @@ const Employee = () => {
 
 
             </form>
-        </div>
 
-        
+
+        </div>
     )
 }
 
