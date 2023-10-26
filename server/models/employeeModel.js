@@ -24,8 +24,8 @@ const employeeSchema = new mongoose.Schema({
     department : String,
     mailId : {
         type: String,
-        unique: true,
-        required: true
+        unique: [true, "Email should be unique"],
+        required: [true, "Email Required"]
     },
     doj : String,
     employmentStatus : String,
