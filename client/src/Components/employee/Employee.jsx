@@ -10,6 +10,7 @@ import Alert from '@mui/material/Alert';
 import Stack from '@mui/material/Stack';
 import Snackbar from '@mui/material/Snackbar';
 import MuiAlert from '@mui/material/Alert';
+import TextField from '@mui/material/TextField';
 
 
 const Employee = () => {
@@ -203,42 +204,68 @@ const Employee = () => {
     //
 
     // Employee Datas
-    const [errorhandler, setErrorHandler] = useState({
-        status: 0,
-        message: "This works Correctly",
-        code: ""
-    })
+    const [errorhandler, setErrorHandler] = useState({})
 
 
 
 
-
+    const [phoneMsg, setPhoneMsg] = useState(1)
 
     console.log(StateName)
 
     const handleChange = (e) => {
         const { name, value } = e.target;
-        setEmployeeData((prev) => ({ ...prev, [name]: value }));
+
         if (name === "state") {
             setStateName(value);
         }
+        if (name === "contactNumber") {
+            if (value.length >= 10 && value.length <= 10) {
+                setPhoneMsg(true)
+            } else {
+                setPhoneMsg(false)
+            }
+        }
+
+        setEmployeeData((prev) => ({ ...prev, [name]: value }));
+
     };
 
+    console.log(phoneMsg)
     const EmployeeSubmit = async (e) => {
         e.preventDefault();
         try {
             const response = await axios.post(
                 `${process.env.REACT_APP_PORT}/employee/createEmployee`, employeeData
             );
-            setErrorHandler({ status: response.data.status, message: response.data.message, code: "success" })
+
             setSnackBarOpen(true)
             empFetch();
             console.log("Employee Created Successfully")
+            setErrorHandler({ status: response.data.status, message: response.data.message, code: "success" })
         } catch (err) {
-            setErrorHandler({ status: 0, message: "Error Creating Emplopyee", code: "error" })
-            setSnackBarOpen(true)
-            console.log(err);
 
+            setSnackBarOpen(true)
+
+
+
+
+            if (err.response && err.response.status === 400) {
+                // Handle validation errors
+                const errorData400 = err.response.data.errors;
+                const errorMessages400 = Object.values(errorData400).join(', ');
+                console.log(errorMessages400)
+                setErrorHandler({ status: 0, message: errorMessages400, code: "error" });
+            } else if (err.response && err.response.status === 500) {
+                // Handle other errors
+                const errorData500 = err.response.data.error;
+                const errorMessages500 = Object.values(errorData500).join(', ');
+                console.log(errorMessages500)
+                setErrorHandler({ status: 0, message: errorMessages500, code: "error" });
+            } else {
+                console.log(err.response.data.error)
+                setErrorHandler({ status: 0, message: "An error occurred", code: "error" });
+            }
         }
     };
     console.log(empDataId)
@@ -249,7 +276,7 @@ const Employee = () => {
                 `${process.env.REACT_APP_PORT}/employee/updateEmployee/${empDataId}`, employeeData
             );
             empFetch();
-            setErrorHandler({ status: response.data.status, message: response.data.message, code: "success" })
+            setErrorHandler(response.data.errors)
             console.log("Employee Updated Successfully")
             setSnackBarOpen(true)
 
@@ -303,11 +330,13 @@ const Employee = () => {
                         <label htmlFor="addressId">Address</label>
                     </div>
                     <div className="form-floating col-2">
-                        <input onChange={handleChange} value={employeeData.contactNumber} type="number" className="form-control" id="contactNumberId" placeholder="contactNumber" name='contactNumber' />
+                        <input onChange={handleChange} value={employeeData.contactNumber} type="number" maxLength={10} className={phoneMsg ? `form-control is-valid` : `form-control is-invalid`} id="contactNumberId" placeholder="contactNumber" name='contactNumber' />
                         <label htmlFor="contactNumberId">Contact Number</label>
+                        {phoneMsg ? "" : <div className='invalid-feedback'>Contact must be in 10 digits</div>}
                     </div>
+
                     <div className="form-floating col-6">
-                        <input onChange={handleChange} value={employeeData.mailId} type="text" className="form-control" id="mailid" placeholder="name@example.com" name='mailId' />
+                        <input onChange={handleChange} style={{ textTransform: "lowercase" }} value={employeeData.mailId} type="text" className="form-control" id="mailid" placeholder="name@example.com" name='mailId' />
                         <label htmlFor="mailId">Mail Id</label>
                     </div>
                 </div>
@@ -532,6 +561,9 @@ const Employee = () => {
 
 
                     </table>
+                    {/* <TextField id="outlined-basic" label="Outlined" variant="outlined" />
+                    <TextField id="filled-basic" label="Filled" variant="filled" />
+                    <TextField id="standard-basic" label="Standard" variant="standard" /> */}
                 </div>
 
 

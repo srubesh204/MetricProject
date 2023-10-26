@@ -3,8 +3,8 @@ const uniqueValidator = require('mongoose-unique-validator')
 const employeeSchema = new mongoose.Schema({
     employeeCode : {
         type: String,
-        unique: true,
-        required: true
+        unique: [true, "Employee Code should be unique"],
+        required: [true, "Employee Code Required"]
     },
     title : String,
     firstName : String,
@@ -13,7 +13,13 @@ const employeeSchema = new mongoose.Schema({
     address : String,
     city : String,
     state : String,
-    contactNumber : String,
+    contactNumber : {
+        type: String,
+        required: [true, "Phone number is must"],
+        minLength: [10, "Phone should be within 10 digits"],
+        maxLength: [10, "Phone should not more than 10 digits"]
+          
+    },
     designation : String,
     department : String,
     mailId : {
