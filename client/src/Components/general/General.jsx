@@ -1,9 +1,37 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
+import axios from 'axios'
 
 const UnitDataBase = () => {
     const [unitData, setUnitData] = useState({
         unitName: "",
     })
+    console.log(unitData)
+
+
+    const [uintDataList, setUnitDataList] = useState([])
+    const unitFetchData = async () => {
+        try {
+            const response = await axios.get(
+                `${process.env.REACT_APP_PORT}/unit/getAllUnits`
+            );
+            setUnitDataList(response.data);
+        } catch (err) {
+            console.log(err);
+        }
+    };
+    useEffect(() => {
+        unitFetchData();
+    }, []);
+    console.log(uintDataList)
+
+
+    const handleUnitDataBaseChange = (e) => {
+        const { name, value } = e.target;
+        setUnitData((prev) => ({ ...prev, [name]: value }));
+
+    };
+
+
     const bodycss = {
         borderRadius: "10px",
 
@@ -23,7 +51,7 @@ const UnitDataBase = () => {
                             <label htmlFor="unitDbId">Auto Sr.No.</label>
                         </div>
                         <div className="form-floating col-6 ">
-                            <input type="text" className="form-control" id="unitNameId" name="unitName" value={unitData.unitName} placeholder="unitName" />
+                            <input type="text" className="form-control" id="unitNameId" name="unitName" value={unitData.unitName} onChange={handleUnitDataBaseChange} placeholder="unitName" />
                             <label htmlFor="unitNameId">Unit Name</label>
                         </div>
                     </div>
@@ -39,18 +67,20 @@ const UnitDataBase = () => {
 
                     <div>
                         <h3 className='text-center'>Unit List</h3>
-                        <table className='table table-bordered'>
+                        <table className='table table-bordered text-center'>
                             <tbody>
                                 <tr>
                                     <th>Sr.No</th>
                                     <th>Unit Name</th>
                                     <th>Delete</th>
                                 </tr>
-                                <tr>
-                                    <td></td>
-                                    <td></td>
-                                    <td><button className='btn btn-danger '><i class="bi bi-trash-fill"></i></button></td>
-                                </tr>
+                                {uintDataList.map((item, index) => (
+                                    <tr>
+                                        <td>{index+1}</td>
+                                        <td>{item.unitName}</td>
+                                        <td><button className='btn btn-danger'><i class="bi bi-trash-fill"></i></button></td>
+                                    </tr>
+                                ))}
                             </tbody>
                         </table>
                     </div>
@@ -68,7 +98,33 @@ const PartDataBase = () => {
         customer: "",
         operationNo: ""
     })
-    const bodyModel={
+    console.log(partData)
+
+
+    const [partDataList, setPartDataList] = useState([])
+    const partFetchData = async () => {
+        try {
+            const response = await axios.get(
+                `${process.env.REACT_APP_PORT}/part/getAllParts`
+            );
+            setPartDataList(response.data);
+        } catch (err) {
+            console.log(err);
+        }
+    };
+    useEffect(() => {
+        partFetchData();
+    }, []);
+
+    console.log(partDataList)
+
+
+    const handlePartDataBaseChange = (e) => {
+        const { name, value } = e.target;
+        setPartData((prev) => ({ ...prev, [name]: value }));
+
+    };
+    const bodyModel = {
         borderRadius: "10px",
         padding: "2rem",
         margin: "1rem",
@@ -77,68 +133,70 @@ const PartDataBase = () => {
     return (
 
         <div className='container'>
-        <div style={bodyModel}>
-            <form>
-                <h1 className='text-center'>Part DataBase</h1>
-                <div>
-                    <div className="form-floating  mb-2 g-2">
-                        <input type="text" className="form-control" id="partDbId" name="partDb" placeholder="partDb" />
-                        <label htmlFor="partDbId">Auto Sr.No.</label>
-                    </div>
-                    <div className="form-floating mb-2 g-2">
-                        <input type="text" className="form-control" id="partNoId" name="partNo" value={partData.partNo} placeholder="partNo" />
-                        <label htmlFor="partNoId">Part No</label>
-                    </div>
-                    <div className="form-floating mb-2 g-2">
-                        <input type="text" className="form-control" id="partNameId" name="partName" value={partData.partName} placeholder="partName" />
-                        <label htmlFor="partNameId">Part Name</label>
-                    </div>
-                    <div className="form-floating mb-2 g-2">
-                        <input type="text" className="form-control" id="partNameId" name="customer" value={partData.customer} placeholder="customer" />
-                        <label htmlFor="customerId">Customer</label>
-                    </div>
-                    <div className="form-floating mb-2 g-2">
-                        <input type="text" className="form-control" id="operationNoId" name="operationNo" value={partData.operationNo} placeholder="operationNo" />
-                        <label htmlFor="operationNoId">Operation No</label>
-                    </div>
-
-                </div>
-                <div className='col d-flex justify-content-end mb-2' >
-                    <div className='me-2'>
-                        <button type="button" className='btn btn-secondary'>Modify</button>
-                    </div>
+            <div style={bodyModel}>
+                <form>
+                    <h1 className='text-center'>Part DataBase</h1>
                     <div>
-                        <button type="button" className='btn btn-warning'>+ Add PartDataBase</button>
+                        <div className="form-floating  mb-2 g-2">
+                            <input type="text" className="form-control" id="partDbId" name="partDb" placeholder="partDb" />
+                            <label htmlFor="partDbId">Auto Sr.No.</label>
+                        </div>
+                        <div className="form-floating mb-2 g-2">
+                            <input type="text" className="form-control" id="partNoId" name="partNo" value={partData.partNo} onChange={handlePartDataBaseChange} placeholder="partNo" />
+                            <label htmlFor="partNoId">Part No</label>
+                        </div>
+                        <div className="form-floating mb-2 g-2">
+                            <input type="text" className="form-control" id="partNameId" name="partName" value={partData.partName} onChange={handlePartDataBaseChange} placeholder="partName" />
+                            <label htmlFor="partNameId">Part Name</label>
+                        </div>
+                        <div className="form-floating mb-2 g-2">
+                            <input type="text" className="form-control" id="partNameId" name="customer" value={partData.customer} onChange={handlePartDataBaseChange} placeholder="customer" />
+                            <label htmlFor="customerId">Customer</label>
+                        </div>
+                        <div className="form-floating mb-2 g-2">
+                            <input type="text" className="form-control" id="operationNoId" name="operationNo" value={partData.operationNo} onChange={handlePartDataBaseChange} placeholder="operationNo" />
+                            <label htmlFor="operationNoId">Operation No</label>
+                        </div>
+
                     </div>
-                </div>
+                    <div className='col d-flex justify-content-end mb-2' >
+                        <div className='me-2'>
+                            <button type="button" className='btn btn-secondary'>Modify</button>
+                        </div>
+                        <div>
+                            <button type="button" className='btn btn-warning'>+ Add PartDataBase</button>
+                        </div>
+                    </div>
 
-                <hr />
+                    <hr />
 
-                <div>
-                <h3 className='text-center'>Part List</h3>
-                    <table className='table table-bordered'>
-                        <tbody>
-                            <tr>
-                                <th>Sr.No</th>
-                                <th>Part No</th>
-                                <th>Part Name</th>
-                                <th>Customer</th>
-                                <th>Status</th>
-                                <th>Delete</th>
-                            </tr>
-                            <tr>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td><button className='btn btn-danger '><i class="bi bi-trash-fill"></i></button></td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </form>
-        </div>
+                    <div>
+                        <h3 className='text-center'>Part List</h3>
+                        <table className='table table-bordered'>
+                            <tbody>
+                                <tr>
+                                    <th>Sr.No</th>
+                                    <th>Part No</th>
+                                    <th>Part Name</th>
+                                    <th>Customer</th>
+                                    <th>Status</th>
+                                    <th>Delete</th>
+                                </tr>
+                                {partDataList.map((item, index) => (
+                                    <tr>
+                                        <td>{index+1}</td>
+                                        <td>{item.partNo}</td>
+                                        <td>{item.partName}</td>
+                                        <td>{item.customer}</td>
+                                        <td>{item.operationNo}</td>
+                                        <td><button className='btn btn-danger'><i class="bi bi-trash-fill"></i></button></td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    </div>
+                </form>
+            </div>
         </div>
     )
 }
