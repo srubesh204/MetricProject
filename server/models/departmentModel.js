@@ -4,11 +4,11 @@ const departmentSchema = new mongoose.Schema({
   department: {
     type: String,
     unique: true,
-    required: true
+    required: true,
+    description: "department must"
   },
   area: String,
   placeOfUsage: String
 });
-
+departmentSchema.plugin(uniqueValidator);
 module.exports = mongoose.model('departments', departmentSchema);
-    

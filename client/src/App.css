@@ -44,7 +44,53 @@
 .download {
 	border: 0;
     clip: rect(1px, 1px, 1px, 1px);
-    height: 1px; 
+    height: 5px; 
+    margin: -1px;
+    overflow: hidden;
+    padding: 0;
+    position: absolute;
+    width: 1px;
+	background-color: #e6e6e6;
+
+}
+.certificateuplod{
+	display: block;
+	width: 150px;
+	max-width: 300px;
+	background-color: #e6e6e6;
+	border-radius: 5px;
+	font-size: 1em;
+	line-height: 2.42em;
+	text-align: center;
+	font-weight: bold;
+	
+}
+.certificatedownlod{
+	border: 0;
+    clip: rect(1px, 1px, 1px, 1px);
+    height: 5px; 
+    margin: -1px;
+    overflow: hidden;
+    padding: 0;
+    position: absolute;
+    width: 1px;
+	background-color: #e6e6e6;
+}
+.itemupload{
+	display: block;
+	width: 200px;
+	max-width: 300px;
+	background-color: #e6e6e6;
+	border-radius: 5px;
+	font-size: 1em;
+	line-height: 2.42em;
+	text-align: center;
+	font-weight: bold;
+}
+.itemdownload{
+	border: 0;
+    clip: rect(1px, 1px, 1px, 1px);
+    height: 5px; 
     margin: -1px;
     overflow: hidden;
     padding: 0;
