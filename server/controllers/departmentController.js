@@ -17,10 +17,10 @@ const departmentControllers = {
           const { department, area, placeOfUsage } = req.body;
           const departmentResult = new departmentModel({ department, area, placeOfUsage });
           await departmentResult.save();
-          res.status(200).json({message: "Department Data Successfully Saved",status: 1});
+          res.status(200).json({message: "Department Created Successfully",status: 1});
         } catch (error) {
           console.log(error)
-          res.status(500).json({ error: 'Internal server error on Department',status: 0});
+          res.status(500).json({ error: error,status: 0});
         }
       },
       updateDepartment: async (req, res) => {
@@ -67,7 +67,7 @@ const departmentControllers = {
             return res.status(404).json({ error: 'Department not found' });
           }
       
-          res.status(200).json({ message: 'Department deleted successfully' });
+          res.status(200).json({ message: 'Department Deleted Successfully' });
         } catch (error) {
           console.error(error);
           res.status(500).send('Internal Server Error');
