@@ -2,6 +2,26 @@ import React, { useState, useEffect } from 'react'
 import axios from 'axios'
 
 const Vendor = () => {
+    const [vendorStateId, setVendorStateId] = useState("")
+    const initialvendorData = {
+
+        vendorCode: "",
+        aliasName: "",
+        fullName: "",
+        dateOfReg: "",
+        address: "",
+        state: "",
+        city: "",
+        ome: "",
+        customer: "",
+        supplier: "",
+        subContractor: "",
+        vendorContacts: [{ name: "", contactNumber: "", mailId: "", vcStatus: "" }],
+        certificate: "",
+        certificateValidity: "",
+        vendorStatus: "",
+    }
+
     const [vendorData, setVendorData] = useState({
         vendorCode: "",
         aliasName: "",
