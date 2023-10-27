@@ -35,7 +35,7 @@ const Employee = () => {
         empFetch();
     }, []);
 
-    console.log(employeeList)
+
     const [filteredData, setFilteredData] = useState([])
 
     const handleFilterChange = (e) => {
@@ -145,7 +145,7 @@ const Employee = () => {
     useEffect(() => {
         StateData();
     }, []);
-    console.log(AllStates)
+
 
     const [cityByState, setCityByState] = useState([])
     const cityFetch = async () => {
@@ -166,8 +166,7 @@ const Employee = () => {
 
 
     }, [employeeData.state]);
-    console.log(StateName)
-    console.log(cityByState)
+
     //
 
 
@@ -187,7 +186,7 @@ const Employee = () => {
     useEffect(() => {
         depFetchData();
     }, []);
-    console.log(departmentList)
+
 
 
     const [designationList, setDesignationList] = useState([]);
@@ -205,7 +204,7 @@ const Employee = () => {
     useEffect(() => {
         desFetchData();
     }, []);
-    console.log(departmentList)
+
 
 
     //
@@ -218,25 +217,23 @@ const Employee = () => {
 
 
 
-    console.log(StateName)
+
 
     const handleChange = (event, newValue) => {
         const { name, value } = event.target;
+        let capitalizedValue = value.toUpperCase()
+        console.log(capitalizedValue)
 
-        if (name === "state") {
-            setStateName(newValue);
-            setEmployeeData((prev) => ({ ...prev, [name]: newValue }));
-        }
         if (name === "firstName") {
-            value = value.toUpperCase()
+            // Convert the input value to uppercase and set it
+
         }
-
-
         setEmployeeData((prev) => ({ ...prev, [name]: value }));
 
     };
 
-   
+
+
 
 
 
@@ -276,7 +273,7 @@ const Employee = () => {
             }
         }
     };
-    console.log(empDataId)
+
     const EmployeeUpdate = async (e) => {
         e.preventDefault();
         try {
@@ -289,6 +286,60 @@ const Employee = () => {
             console.log("Employee Updated Successfully")
             setEmpDataId(null)
             setEmployeeData(initialEmpData)
+
+        } catch (err) {
+            setSnackBarOpen(true)
+            console.log(err)
+            if (err.response && err.response.status === 400) {
+                // Handle validation errors
+                const errorData400 = err.response.data.errors;
+                const errorMessages400 = Object.values(errorData400).join(' / ');
+                
+                console.log(errorMessages400);
+                console.log(err)
+                setErrorHandler({ status: 0, message: errorMessages400, code: "error" });
+            } else if (err.response && err.response.status === 500) {
+                // Handle other errors
+                // const errorData500 = err.response.data.error;
+                // const errorMessages500 = Object.values(errorData500).join(', ');
+                console.log(err)
+                setErrorHandler({ status: 0, message: err.response.data.error, code: "error" });
+            } else {
+                console.log(err)
+                setErrorHandler({ status: 0, message: "An error occurred", code: "error" });
+            }
+
+        }
+    };
+
+    const handleKeyDown = (event) => {
+        const { name, value } = event.target
+        console.log(name)
+        if (event.key === 'Tab') {
+            // Prevent default Tab behavior
+
+            const formattedValue = value.toLowerCase().
+                split(' ')
+                .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+                .join(' ');
+            console.log(formattedValue)
+            // Format the input value (capitalization)
+            setStateName(formattedValue); // Update the state to show the formatted value
+            setEmployeeData((prev) => ({ ...prev, [name]: formattedValue })); // Update the state with the formatted value
+        }
+    };
+
+    const deleteEmployee = async (id) => {
+
+        try {
+            const response = await axios.delete(
+                `${process.env.REACT_APP_PORT}/employee/deleteEmployee/${id}`
+            );
+            console.log(response)
+            empFetch();
+            setSnackBarOpen(true)
+            setErrorHandler({ status: response.data.status, message: `${response.data.result.firstName} ${response.data.result.lastName} ${response.data.message}`, code: "success" })
+            console.log("Employee Deleted Successfully")
 
         } catch (err) {
             setSnackBarOpen(true)
@@ -311,7 +362,7 @@ const Employee = () => {
             }
 
         }
-    };
+    }
 
     // const EmployeeDelete = (id) => {
     //     try{
@@ -325,15 +376,16 @@ const Employee = () => {
     //     }
     // }
 
-    console.log(employeeData)
 
 
-    console.log(AllStates.map(item => item.toString()))
-    console.log(employeeList)
+
+
+
     return (
         <div className='container'>
             <form >
                 <h1 className='text-center'>Employee Database</h1>
+
                 <div className='row mb-2 g-2'>
                     <div className="form-floating  col-2">
                         <input onChange={handleChange} value={employeeData.employeeCode} type="text" className="form-control" id="employeeCodeId" name="employeeCode" placeholder="employeeCode" />
@@ -349,11 +401,11 @@ const Employee = () => {
                         <label htmlFor="titleId">Title</label>
                     </div>
                     <div className="form-floating  col">
-                        <input onChange={handleChange} value={employeeData.firstName} style={{ textTransform: "capitalize" }} type="text" className="form-control" id="firstNameId" name="firstName" placeholder="firstName" />
+                        <input onChange={handleChange} value={employeeData.firstName} onKeyDown={handleKeyDown} type="text" className="form-control" id="firstNameId" name="firstName" placeholder="firstName" />
                         <label htmlFor="firstNameId">First Name</label>
                     </div>
                     <div className="form-floating  col">
-                        <input onChange={handleChange} value={employeeData.lastName} style={{ textTransform: "capitalize" }} type="text" className="form-control" id="lastNameId" name="lastName" placeholder="lastName" />
+                        <input onChange={handleChange} value={employeeData.lastName} onKeyDown={handleKeyDown} type="text" className="form-control" id="lastNameId" name="lastName" placeholder="lastName" />
                         <label htmlFor="lastNameId">Last Name</label>
                     </div>
                     <div className="form-floating  col-2">
@@ -365,7 +417,7 @@ const Employee = () => {
                 </div>
                 <div className='row g-2 mb-2'>
                     <div className="form-floating col-4">
-                        <input onChange={handleChange} value={employeeData.address} style={{ textTransform: "capitalize" }} type="text" className="form-control" id="addressId" placeholder="naddress" name='address' />
+                        <input onChange={handleChange} value={employeeData.address} onKeyDown={handleKeyDown} type="text" className="form-control" id="addressId" placeholder="naddress" name='address' />
                         <label htmlFor="addressId">Address</label>
                     </div>
                     <div className="form-floating col-2">
@@ -385,8 +437,8 @@ const Employee = () => {
                         id="stateId"
                         onChange={(event, newValue) => {
                             setStateName(newValue);
-                            setEmployeeData((prev) => ({...prev, state: newValue}))
-                          }}
+                            setEmployeeData((prev) => ({ ...prev, state: newValue }))
+                        }}
                         // name="state"
                         options={AllStates}
                         sx={{ width: 430 }}
@@ -444,7 +496,7 @@ const Employee = () => {
                         <select onChange={handleChange} value={employeeData.reportTo} className="form-select" id="reportToId" name="reportTo" >
                             <option value="">Select</option>
                             {employeeList.map((item) => (
-                                <option>{item.firstName}</option>
+                                <option value={item.firstName}>{item.firstName}</option>
                             ))}
 
                         </select>
@@ -460,7 +512,7 @@ const Employee = () => {
                         </div>
                         <div >
                             <label className='uplable'>
-                                <input className="form-control downlable" type="file" id="uploadExcel" />Download
+                                <input className="form-control downlable" type="file" id="downloadExcel" />Download
                             </label>
                         </div>
                     </div>
@@ -567,15 +619,15 @@ const Employee = () => {
                     <div className="form-floating col">
                         <select className="form-select" id="reportToFilterId" name="reportToFilter" onChange={handleFilterChange}>
                             <option value="all">All</option>
-                            <option value="1">One</option>
-                            <option value="2">Two</option>
-                            <option value="3">Three</option>
+                            {employeeList.map((item) => (
+                                <option>{item.firstName}</option>
+                            ))}
                         </select>
                         <label htmlFor="reportToFilterId">Report To</label>
                     </div>
                 </div>
                 <div>
-                    <table className='table table-bordered'>
+                    <table className='table table-bordered text-center'>
                         <tbody>
                             <tr>
                                 <th>Emp.Code</th>
@@ -597,7 +649,7 @@ const Employee = () => {
                                     <td>{emp.designation}</td>
                                     <td>{emp.department}</td>
                                     <td>{emp.reportTo}</td>
-                                    <td><button type='button' className='btn btn-danger'><i className="bi bi-trash"></i></button></td>
+                                    <td><button type='button' className='btn btn-danger' onClick={() => deleteEmployee(emp._id)}><i className="bi bi-trash"></i></button></td>
                                 </tr>
                             ))}
 
