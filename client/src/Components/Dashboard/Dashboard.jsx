@@ -17,8 +17,10 @@ import Link from '@mui/material/Link';
 import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import NotificationsIcon from '@mui/icons-material/Notifications';
-
-
+import { mainListItems, secondaryListItems } from './listItems';
+import Chart from './Chart';
+import Deposits from './Deposits';
+import Orders from './Orders'; 
 
 function Copyright(props) {
   return (
@@ -141,9 +143,9 @@ export default function Dashboard() {
           </Toolbar>
           <Divider />
           <List component="nav">
-            
+            {mainListItems}
             <Divider sx={{ my: 1 }} />
-            
+            {secondaryListItems}
           </List>
         </Drawer>
         <Box
@@ -171,7 +173,7 @@ export default function Dashboard() {
                     height: 240,
                   }}
                 >
-                  
+                  <Chart />
                 </Paper>
               </Grid>
               {/* Recent Deposits */}
@@ -184,13 +186,13 @@ export default function Dashboard() {
                     height: 240,
                   }}
                 >
-                  
+                  <Deposits />
                 </Paper>
               </Grid>
               {/* Recent Orders */}
               <Grid item xs={12}>
                 <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column' }}>
-                  
+                  <Orders />
                 </Paper>
               </Grid>
             </Grid>
