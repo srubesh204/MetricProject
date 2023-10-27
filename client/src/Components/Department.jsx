@@ -61,15 +61,14 @@ const Department = () => {
   };
   useEffect(() => {
     depFetchData();
-  }, [departmentData]);
+  }, []);
   //
   //Submit Department
   const DepartmentSubmit = async (e) => {
     e.preventDefault();
     try {
       const response = await axios.post(
-        `${process.env.REACT_APP_PORT}/department/createDepartment`,
-        departmentData
+        `${process.env.REACT_APP_PORT}/department/createDepartment`, departmentData
       );
       console.log(response.data.message)
       depFetchData();

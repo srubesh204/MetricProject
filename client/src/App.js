@@ -7,6 +7,7 @@ import Dashboard from './Components/Dashboard/Dashboard'
 import General from './Components/general/General';
 import Vendor from './Components/vendor/Vendor';
 import ItemMaster from './Components/itemMaster/ItemMaster';
+import Devi from './Components/devi/Devi';
 
 
 
@@ -23,6 +24,7 @@ function App() {
           <Route path="/general" element={<General />} />
           <Route path="/vendor" element={<Vendor/>} />
           <Route path="/itemMaster" element={<ItemMaster/>} />
+          <Route path="/devi" element={<Devi/>} />
         </Routes>
       </BrowserRouter>
     </div>
