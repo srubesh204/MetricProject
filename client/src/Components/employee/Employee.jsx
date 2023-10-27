@@ -150,7 +150,7 @@ const Employee = () => {
     const cityFetch = async () => {
         try {
             const response = await axios.get(
-                `${process.env.REACT_APP_PORT}/general/getCityByStateName/${employeeData.state}`
+                `${process.env.REACT_APP_PORT}/general/getCityByStateName/${StateName}`
             );
             setCityByState(response.data);
         } catch (err) {
@@ -219,20 +219,24 @@ const Employee = () => {
 
     console.log(StateName)
 
-    const handleChange = (e, newValue) => {
-        const { name, value} = e.target;
+    const handleChange = (event, newValue) => {
+        const { name, value } = event.target;
 
         if (name === "state") {
             setStateName(newValue);
+            setEmployeeData((prev) => ({ ...prev, [name]: newValue }));
         }
         if (name === "firstName") {
             value = value.toUpperCase()
         }
 
 
-        setEmployeeData((prev) => ({ ...prev, [name]: newValue }));
+        setEmployeeData((prev) => ({ ...prev, [name]: value }));
 
     };
+
+   
+
 
 
     const EmployeeSubmit = async (e) => {
@@ -320,6 +324,7 @@ const Employee = () => {
     //     }
     // }
 
+    console.log(employeeData)
 
 
     console.log(AllStates.map(item => item.toString()))
@@ -374,20 +379,18 @@ const Employee = () => {
                     </div>
                 </div>
                 <div className='row g-2 mb-2'>
-                    
+
                     <Autocomplete
-                        // disablePortal
                         id="stateId"
-                        name="state"
                         onChange={(event, newValue) => {
                             setStateName(newValue);
                             setEmployeeData((prev) => ({ ...prev, state : newValue }));
-                          }}
+                        }} // Use muiHandleChange as the onChange handler
                         options={AllStates}
-                        sx={{ width: 300 }}
+                        sx={{ width: 430 }}
                         value={employeeData.state}
                         isOptionEqualToValue={(option) => option}
-                        renderInput={(params) => <TextField {...params} label="State" />}
+                        renderInput={(params) => <TextField {...params} label="State" name="state" />} // Set the name attribute to "state"
                     />
 
                     <div className="form-floating col-2">
