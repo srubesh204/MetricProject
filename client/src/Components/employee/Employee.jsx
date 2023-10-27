@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
@@ -16,6 +16,7 @@ import Autocomplete from '@mui/material/Autocomplete';
 
 
 const Employee = () => {
+    const ref0 = useRef();
 
     const [employeeList, setEmployeeList] = useState([]);
     const [empDataId, setEmpDataId] = useState(null)
@@ -384,8 +385,9 @@ const Employee = () => {
                         id="stateId"
                         onChange={(event, newValue) => {
                             setStateName(newValue);
-                            setEmployeeData((prev) => ({ ...prev, state : newValue }));
-                        }} // Use muiHandleChange as the onChange handler
+                            setEmployeeData((prev) => ({...prev, state: newValue}))
+                          }}
+                        // name="state"
                         options={AllStates}
                         sx={{ width: 430 }}
                         value={employeeData.state}
