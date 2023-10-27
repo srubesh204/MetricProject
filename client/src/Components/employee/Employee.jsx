@@ -10,6 +10,7 @@ import Alert from '@mui/material/Alert';
 import Stack from '@mui/material/Stack';
 import Snackbar from '@mui/material/Snackbar';
 import MuiAlert from '@mui/material/Alert';
+import TextField from '@mui/material/TextField';
 
 
 const Employee = () => {
@@ -44,8 +45,10 @@ const Employee = () => {
                 setFilteredData(departmentFilter)
             }
             if (name === "employementStatusFilter") {
-                const statusFilter = employeeList.filter((item) => (item.employementStatus === value))
+                const statusFilter = employeeList.filter((item) => (item.employmentStatus === value))
+                console.log(statusFilter)
                 setFilteredData(statusFilter)
+                console.log(value)
             }
             if (name === "reportToFilter") {
                 const reportFilter = employeeList.filter((item) => (item.reportTo === value))
@@ -154,8 +157,10 @@ const Employee = () => {
     };
     //get Designations
     useEffect(() => {
-
-        cityFetch();
+        if(employeeData.state){
+            cityFetch();
+        }
+        
 
     }, [employeeData.state]);
     console.log(StateName)
@@ -203,42 +208,62 @@ const Employee = () => {
     //
 
     // Employee Datas
-    const [errorhandler, setErrorHandler] = useState({
-        status: 0,
-        message: "This works Correctly",
-        code: ""
-    })
+    const [errorhandler, setErrorHandler] = useState({})
 
 
 
 
-
+   
 
     console.log(StateName)
 
     const handleChange = (e) => {
         const { name, value } = e.target;
-        setEmployeeData((prev) => ({ ...prev, [name]: value }));
+
         if (name === "state") {
             setStateName(value);
         }
+       
+
+        setEmployeeData((prev) => ({ ...prev, [name]: value }));
+
     };
 
+    
     const EmployeeSubmit = async (e) => {
         e.preventDefault();
         try {
             const response = await axios.post(
                 `${process.env.REACT_APP_PORT}/employee/createEmployee`, employeeData
             );
-            setErrorHandler({ status: response.data.status, message: response.data.message, code: "success" })
+
             setSnackBarOpen(true)
             empFetch();
             console.log("Employee Created Successfully")
+            setErrorHandler({ status: response.data.status, message: response.data.message, code: "success" })
         } catch (err) {
-            setErrorHandler({ status: 0, message: "Error Creating Emplopyee", code: "error" })
-            setSnackBarOpen(true)
-            console.log(err);
 
+            setSnackBarOpen(true)
+
+
+
+
+            if (err.response && err.response.status === 400) {
+                // Handle validation errors
+                const errorData400 = err.response.data.errors;
+                const errorMessages400 = Object.values(errorData400).join(', ');
+                console.log(errorMessages400)
+                setErrorHandler({ status: 0, message: errorMessages400, code: "error" });
+            } else if (err.response && err.response.status === 500) {
+                // Handle other errors
+                const errorData500 = err.response.data.error;
+                const errorMessages500 = Object.values(errorData500).join(', ');
+                console.log(errorMessages500)
+                setErrorHandler({ status: 0, message: errorMessages500, code: "error" });
+            } else {
+                console.log(err.response.data.error)
+                setErrorHandler({ status: 0, message: "An error occurred", code: "error" });
+            }
         }
     };
     console.log(empDataId)
@@ -249,16 +274,46 @@ const Employee = () => {
                 `${process.env.REACT_APP_PORT}/employee/updateEmployee/${empDataId}`, employeeData
             );
             empFetch();
+            setSnackBarOpen(true)
             setErrorHandler({ status: response.data.status, message: response.data.message, code: "success" })
             console.log("Employee Updated Successfully")
-            setSnackBarOpen(true)
+            setEmpDataId(null)
+            setEmployeeData(initialEmpData)
 
         } catch (err) {
-            console.log(err);
-            setErrorHandler({ status: 0, message: "Error Updating Employee", code: "error" })
             setSnackBarOpen(true)
+            console.log(err)
+            if (err.response && err.response.status === 400) {
+                // Handle validation errors
+                const errorData400 = err.response.data.errors;
+                const errorMessages400 = Object.values(errorData400).join(', ');
+                console.log(err)
+                setErrorHandler({ status: 0, message: errorMessages400, code: "error" });
+            } else if (err.response && err.response.status === 500) {
+                // Handle other errors
+                // const errorData500 = err.response.data.error;
+                // const errorMessages500 = Object.values(errorData500).join(', ');
+                console.log(err)
+                setErrorHandler({ status: 0, message: err.response.data.error, code: "error" });
+            } else {
+                console.log(err)
+                setErrorHandler({ status: 0, message: "An error occurred", code: "error" });
+            }
+          
         }
     };
+
+    // const EmployeeDelete = (id) => {
+    //     try{
+    //         const response = await axios.delete(
+    //             `${process.env.REACT_APP_PORT}/employee/deleteEmployee/${id}`
+    //         );
+    //         empFetch();
+
+    //     }catch{
+            
+    //     }
+    // }
 
 
 
@@ -273,9 +328,9 @@ const Employee = () => {
                         <input onChange={handleChange} value={employeeData.employeeCode} type="text" className="form-control" id="employeeCodeId" name="employeeCode" placeholder="employeeCode" />
                         <label htmlFor="employeeCodeId">Emp.code</label>
                     </div>
-                    <div class="form-floating  col-1">
+                    <div className="form-floating  col-1">
                         <select onChange={handleChange} value={employeeData.title} className="form-select" id="titleId" name="title" >
-                            <option selected>Title</option>
+                            <option value="">Title</option>
                             <option value="1">Mr.</option>
                             <option value="2">Ms.</option>
 
@@ -303,18 +358,20 @@ const Employee = () => {
                         <label htmlFor="addressId">Address</label>
                     </div>
                     <div className="form-floating col-2">
-                        <input onChange={handleChange} value={employeeData.contactNumber} type="number" className="form-control" id="contactNumberId" placeholder="contactNumber" name='contactNumber' />
+                        <input onChange={handleChange} value={employeeData.contactNumber} type="number" maxLength={10} className={employeeData.contactNumber.length === 10 ? `form-control is-valid` : `form-control is-invalid`} id="contactNumberId" placeholder="contactNumber" name='contactNumber' />
                         <label htmlFor="contactNumberId">Contact Number</label>
+                        {employeeData.contactNumber.length === 10 ? "" : <div className='invalid-feedback'>Contact must be in 10 digits</div>}
                     </div>
+
                     <div className="form-floating col-6">
-                        <input onChange={handleChange} value={employeeData.mailId} type="text" className="form-control" id="mailid" placeholder="name@example.com" name='mailId' />
+                        <input onChange={handleChange} style={{ textTransform: "lowercase" }} value={employeeData.mailId} type="text" className="form-control" id="mailid" placeholder="name@example.com" name='mailId' />
                         <label htmlFor="mailId">Mail Id</label>
                     </div>
                 </div>
                 <div className='row g-2 mb-2'>
-                    <div class="form-floating md-3 col-4">
+                    <div className="form-floating md-3 col-4">
                         <select onChange={handleChange} value={employeeData.state} className="form-select" id="stateId" name="state" >
-                            <option selected>Select State</option>
+                            <option value="">Select State</option>
                             {AllStates.map((item, index) => (
                                 <option key={index} value={item}>{item}</option>
                             ))}
@@ -322,9 +379,9 @@ const Employee = () => {
                         <label htmlFor="stateId">State</label>
                     </div>
 
-                    <div class="form-floating col-2">
+                    <div className="form-floating col-2">
                         <select onChange={handleChange} value={employeeData.designation} className="form-select" id="designationId" name="designation" >
-                            <option selected>Designation</option>
+                            <option value="">Designation</option>
                             {designationList.map((item) => (
                                 <option key={item._id} value={item.designation}>{item.designation}</option>
                             ))}
@@ -335,9 +392,9 @@ const Employee = () => {
                         <input onChange={handleChange} value={employeeData.doj} type="date" className="form-control" id="dojId" name="doj" placeholder="doj" />
                         <label htmlFor="dojId">Date Of joining</label>
                     </div>
-                    <div class="form-floating col-3">
+                    <div className="form-floating col-3">
                         <select onChange={handleChange} value={employeeData.employmentStatus} className="form-select" id="employmentStatusId" name="employmentStatus" >
-                            <option selected>Select Status</option>
+                            <option value="">Select Status</option>
                             <option value="1">Active</option>
                             <option value="2">InActive</option>
                             <option value="3">Relieved</option>
@@ -347,18 +404,18 @@ const Employee = () => {
 
                 </div>
                 <div className='row g-2 mb-2'>
-                    <div class="form-floating col-4">
+                    <div className="form-floating col-4">
                         <select onChange={handleChange} value={employeeData.city} className="form-select" id="cityId" name="city" >
-                            <option selected>City</option>
+                            <option value="">City</option>
                             {cityByState.map((item, index) => (
                                 <option key={item._id} value={item.name}>{item.name}</option>
                             ))}
                         </select>
                         <label htmlFor="cityId">City</label>
                     </div>
-                    <div class="form-floating md-3 col-2">
+                    <div className="form-floating md-3 col-2">
                         <select onChange={handleChange} value={employeeData.department} className="form-select" id="departmentId" name="department" >
-                            <option selected>Select department</option>
+                            <option value="">Select department</option>
                             {departmentList.map((item) => (
                                 <option key={item._id} value={item.department}>{item.department}</option>
                             ))
@@ -367,9 +424,9 @@ const Employee = () => {
                         </select>
                         <label htmlFor="departmentId">Department</label>
                     </div>
-                    <div class="form-floating md-3 col-6">
+                    <div className="form-floating md-3 col-6">
                         <select onChange={handleChange} value={employeeData.reportTo} className="form-select" id="reportToId" name="reportTo" >
-                            <option selected>Department</option>
+                            <option value="">Department</option>
                             <option value="1">One</option>
                             <option value="2">Two</option>
                             <option value="3">Three</option>
@@ -470,18 +527,18 @@ const Employee = () => {
                 </div>
                 <h3 className='text-center'>Employee List</h3>
                 <div className='row g-2 mb-3'>
-                    <div class="form-floating md-3 col">
+                    <div className="form-floating md-3 col">
                         <select className="form-select" id="employementStatusFilterId" name="employementStatusFilter" onChange={handleFilterChange}>
-                            <option selected value="all">All</option>
+                            <option value="all">All</option>
                             <option value="1">Active</option>
                             <option value="2">InActive</option>
                             <option value="3">Relieved</option>
                         </select>
                         <label htmlFor="employementStatusFilterId">Employment Status To</label>
                     </div>
-                    <div class="form-floating col">
+                    <div className="form-floating col">
                         <select className="form-select" id="departmentFilterId" name="departmentFilter" onChange={handleFilterChange}>
-                            <option selected value="all">All</option>
+                            <option value="all">All</option>
                             {departmentList.map((item) => (
                                 <option key={item._id} value={item.department}>{item.department}</option>
                             ))
@@ -490,9 +547,9 @@ const Employee = () => {
                         </select>
                         <label htmlFor="departmentFilterId">Department</label>
                     </div>
-                    <div class="form-floating col">
+                    <div className="form-floating col">
                         <select className="form-select" id="reportToFilterId" name="reportToFilter" onChange={handleFilterChange}>
-                            <option selected value="all">All</option>
+                            <option  value="all">All</option>
                             <option value="1">One</option>
                             <option value="2">Two</option>
                             <option value="3">Three</option>
@@ -532,6 +589,9 @@ const Employee = () => {
 
 
                     </table>
+                    {/* <TextField id="outlined-basic" label="Outlined" variant="outlined" />
+                    <TextField id="filled-basic" label="Filled" variant="filled" />
+                    <TextField id="standard-basic" label="Standard" variant="standard" /> */}
                 </div>
 
 
