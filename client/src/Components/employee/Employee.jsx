@@ -236,7 +236,7 @@ const Employee = () => {
 
     };
 
-   
+
 
 
 
@@ -385,11 +385,11 @@ const Employee = () => {
                         id="stateId"
                         onChange={(event, newValue) => {
                             setStateName(newValue);
-                            setEmployeeData((prev) => ({...prev, state: newValue}))
-                          }}
+                            setEmployeeData((prev) => ({ ...prev, state: newValue }))
+                        }}
                         // name="state"
                         options={AllStates}
-                        sx={{ width: 430 }}
+                        sx={{ width: 370 }}
                         value={employeeData.state}
                         isOptionEqualToValue={(option) => option}
                         renderInput={(params) => <TextField {...params} label="State" name="state" />} // Set the name attribute to "state"
@@ -420,15 +420,22 @@ const Employee = () => {
 
                 </div>
                 <div className='row g-2 mb-2'>
-                    <div className="form-floating col-4">
-                        <select onChange={handleChange} value={employeeData.city} className="form-select" id="cityId" name="city" >
-                            <option value="">City</option>
-                            {cityByState.map((item, index) => (
-                                <option key={item._id} value={item.name}>{item.name}</option>
-                            ))}
-                        </select>
-                        <label htmlFor="cityId">City</label>
-                    </div>
+
+
+                    <Autocomplete
+                        id="cityId"
+                        onChange={(event, newValue) => {
+                            setStateName(newValue);
+                            setEmployeeData((prev) => ({ ...prev, city: newValue }))
+                        }}
+                        // name="state"
+                        options={cityByState.map((item)=> item.name)}
+                        sx={{ width: 370 }}
+                        value={employeeData.state}
+                        isOptionEqualToValue={(option) => option}
+                        renderInput={(params) => <TextField {...params} label="city" name="city" />} // Set the name attribute to "state"
+                    />
+                    
                     <div className="form-floating md-3 col-2">
                         <select onChange={handleChange} value={employeeData.department} className="form-select" id="departmentId" name="department" >
                             <option value="">Select department</option>
