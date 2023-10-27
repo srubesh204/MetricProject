@@ -2,6 +2,14 @@ import React, { useState, useEffect } from 'react'
 import axios from 'axios'
 
 const UnitDataBase = () => {
+
+const [ unitStateId , setUnitStateId] =useState("")
+    const initialUnitData ={
+       
+        unitName: "",
+    }
+
+
     const [unitData, setUnitData] = useState({
         unitName: "",
     })
@@ -30,6 +38,59 @@ const UnitDataBase = () => {
         setUnitData((prev) => ({ ...prev, [name]: value }));
 
     };
+    const unitSubmit = async (e) => {
+        e.preventDefault();
+        try {
+          const response = await axios.post(
+            `${process.env.REACT_APP_PORT}/unit/createUnit`, unitData
+          );
+          {/*console.log(response.data.message)*/}
+          console.log(response)
+            unitFetchData();
+          setUnitData(initialUnitData);
+        } catch (err) {
+          console.log(err);
+          alert(err);
+        }
+      };
+
+      const updateUnitData = async (id) => {
+        try {
+          await axios.put(
+            "http://localhost:3001/unit/updateUnit/" + id, unitData
+          );
+          unitFetchData();
+          setUnitData({
+            unitName: ""
+          });
+          console.log("Unit Updated Successfully");
+        } catch (err) {
+          console.log(err);
+        }
+      };
+      const deleteUnitData = async (id) => {
+        try {
+          await axios.delete(
+            "http://localhost:3001/unit/deleteUnit/" + id, unitData
+          );
+          unitFetchData();
+          setUnitData({
+            unitName: ""
+          });
+          console.log("Unit delete Successfully");
+        } catch (err) {
+          console.log(err);
+        }
+      };
+    
+
+
+
+      const updateUnit = async (item) =>{
+        setUnitData(item)
+        setUnitStateId(item._id)
+      }
+      console.log(unitStateId)
 
 
     const bodycss = {
@@ -47,8 +108,8 @@ const UnitDataBase = () => {
                     <h1 className='text-center'>Unit DataBase</h1>
                     <div className='row g-2 mb-3'>
                         <div className="form-floating col-6 ">
-                            <input type="text" className="form-control" id="unitDbId" name="unitDb" placeholder="unitDb" />
-                            <label htmlFor="unitDbId">Auto Sr.No.</label>
+                            <input type="text" className="form-control" id="unitSiId" name="unitSi" placeholder="unitSi" disabled value={uintDataList.length+1}/>
+                            <label htmlFor="unitSiId">Auto Sr.No.</label>
                         </div>
                         <div className="form-floating col-6 ">
                             <input type="text" className="form-control" id="unitNameId" name="unitName" value={unitData.unitName} onChange={handleUnitDataBaseChange} placeholder="unitName" />
@@ -57,10 +118,10 @@ const UnitDataBase = () => {
                     </div>
                     <div className='col d-flex justify-content-end mb-2'>
                         <div className='me-2' >
-                            <button type="button" className='btn btn-secondary'>Modify</button>
+                            <button type="button" className='btn btn-secondary' onClick={()=> updateUnitData(unitStateId)}>Modify</button>
                         </div>
                         <div>
-                            <button type="button" className='btn btn-warning'>+ Add UnitDataBase</button>
+                            <button type="button" className='btn btn-warning '  onClick={unitSubmit}>+ Add UnitDataBase</button>
                         </div>
                     </div>
                     <hr />
@@ -75,10 +136,10 @@ const UnitDataBase = () => {
                                     <th>Delete</th>
                                 </tr>
                                 {uintDataList.map((item, index) => (
-                                    <tr>
+                                    <tr onClick={()=> updateUnit(item)}>
                                         <td>{index+1}</td>
                                         <td>{item.unitName}</td>
-                                        <td><button className='btn btn-danger'><i class="bi bi-trash-fill"></i></button></td>
+                                        <td><button type='button' className='btn btn-danger' onClick={()=> deleteUnitData(item._id)}><i class="bi bi-trash-fill"></i></button></td>
                                     </tr>
                                 ))}
                             </tbody>
