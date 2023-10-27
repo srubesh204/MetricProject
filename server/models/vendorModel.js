@@ -14,7 +14,9 @@ const vendorSchema = new mongoose.Schema({
   subcontractor: String,
   certificate: String,
   certificateValidity : String,
-  vendorContacts : {name : String, contactNumber : String, mailId : String, status : String}
+  vendorStatus : String,
+  vendorContacts : [{name : String, contactNumber : String, mailId : String, vcStatus : String}]
 });
 
 module.exports = mongoose.model('vendor', vendorSchema);
+
