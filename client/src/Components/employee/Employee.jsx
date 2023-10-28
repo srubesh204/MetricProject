@@ -482,7 +482,7 @@ const Employee = () => {
                         // name="state"
                         options={cityByState.map((item)=> item.name)}
                         sx={{ width: 370 }}
-                        value={employeeData.state}
+                        value={employeeData.city}
                         isOptionEqualToValue={(option) => option}
                         renderInput={(params) => <TextField {...params} label="city" name="city" />} // Set the name attribute to "state"
                     />

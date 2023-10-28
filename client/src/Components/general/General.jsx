@@ -3,14 +3,14 @@ import axios from 'axios'
 
 const UnitDataBase = () => {
 
-    const [unitStateId, setUnitStateId] = useState("")
+    const [unitStateId, setUnitStateId] = useState(null)
     const initialUnitData = {
-
         unitName: "",
     }
 
 
     const [unitData, setUnitData] = useState({
+        autoSerial: "",
         unitName: "",
     })
     console.log(unitData)
@@ -117,12 +117,16 @@ const UnitDataBase = () => {
                         </div>
                     </div>
                     <div className='col d-flex justify-content-end mb-2'>
-                        <div className='me-2' >
+                        {unitStateId ? <div className='d-flex justify-content-end'><div className='me-2' >
                             <button type="button" className='btn btn-secondary' onClick={() => updateUnitData(unitStateId)}>Modify</button>
                         </div>
-                        <div>
+                        <div className='me-2' >
+                            <button type="button" className='btn btn-danger' onClick={() => {setUnitStateId(null); setUnitData(initialUnitData)}}>Cancel</button>
+                        </div></div>: <div>
                             <button type="button" className='btn btn-warning ' onClick={unitSubmit}>+ Add UnitDataBase</button>
-                        </div>
+                        </div>}
+                        
+                        
                     </div>
                     <hr />
 
