@@ -1,7 +1,12 @@
 const mongoose = require('mongoose');
-
+const uniqueValidator = require('mongoose-unique-validator');
 const vendorSchema = new mongoose.Schema({
-  vendorCode: String,
+  vendorCode: {
+    type: String,
+    unique: true,
+    required: [true, "Vendor must"]
+    
+  } ,
   aliasName: String,
   fullName: String,
   dor: String,
@@ -17,6 +22,6 @@ const vendorSchema = new mongoose.Schema({
   vendorStatus : String,
   vendorContacts : [{name : String, contactNumber : String, mailId : String, vcStatus : String}]
 });
-
+vendorSchema.plugin(uniqueValidator);
 module.exports = mongoose.model('vendor', vendorSchema);
 

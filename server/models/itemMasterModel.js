@@ -3,7 +3,11 @@ const mongoose = require('mongoose');
 const itemMasterSchema = new mongoose.Schema({
  
   itemType: String,
-  itemDescription : String,
+  itemDescription : {
+    type: String,
+  unique: true,
+  required: [true, "Item Description must"]
+  },
   itemPrefix : String,
   itemFq : Number,
   cabAlertInDay : Number,
