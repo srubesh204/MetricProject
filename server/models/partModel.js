@@ -4,12 +4,14 @@ const uniqueValidator = require('mongoose-unique-validator');
 const partSchema = new mongoose.Schema({
   partNo: {
     type: String,
-    required: true,
     unique: true,
+    required: [true, "Part must"]
+   
   },
   partName: {
     type: String,
-    required: true
+    unique: true,
+    required: [true, "Part Name must"]
     
   },
   customer: String,

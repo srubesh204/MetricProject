@@ -123,7 +123,7 @@ const employeeController = {
         return res.status(404).json({ error: 'Employee detail not found' });
       }
 
-      res.status(202).json({ message: 'Employee detail deleted successfully' });
+      res.status(202).json({ message: 'Employee detail deleted successfully' ,result: deleteEmployee });
     } catch (error) {
       console.error(error);
       res.status(500).send('Internal Server Error');
@@ -131,4 +131,4 @@ const employeeController = {
   }
 
 }
-module.exports = employeeController;
+module.exports = employeeController; 
