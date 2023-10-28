@@ -3,14 +3,14 @@ import axios from 'axios'
 
 const UnitDataBase = () => {
 
-const [ unitStateId , setUnitStateId] =useState("")
-    const initialUnitData ={
-       
+    const [unitStateId, setUnitStateId] = useState(null)
+    const initialUnitData = {
         unitName: "",
     }
 
 
     const [unitData, setUnitData] = useState({
+        autoSerial: "",
         unitName: "",
     })
     console.log(unitData)
@@ -41,56 +41,56 @@ const [ unitStateId , setUnitStateId] =useState("")
     const unitSubmit = async (e) => {
         e.preventDefault();
         try {
-          const response = await axios.post(
-            `${process.env.REACT_APP_PORT}/unit/createUnit`, unitData
-          );
-          {/*console.log(response.data.message)*/}
-          console.log(response)
+            const response = await axios.post(
+                `${process.env.REACT_APP_PORT}/unit/createUnit`, unitData
+            );
+            {/*console.log(response.data.message)*/ }
+            console.log(response)
             unitFetchData();
-          setUnitData(initialUnitData);
+            setUnitData(initialUnitData);
         } catch (err) {
-          console.log(err);
-          alert(err);
+            console.log(err);
+            alert(err);
         }
-      };
+    };
 
-      const updateUnitData = async (id) => {
+    const updateUnitData = async (id) => {
         try {
-          await axios.put(
-            "http://localhost:3001/unit/updateUnit/" + id, unitData
-          );
-          unitFetchData();
-          setUnitData({
-            unitName: ""
-          });
-          console.log("Unit Updated Successfully");
+            await axios.put(
+                "http://localhost:3001/unit/updateUnit/" + id, unitData
+            );
+            unitFetchData();
+            setUnitData({
+                unitName: ""
+            });
+            console.log("Unit Updated Successfully");
         } catch (err) {
-          console.log(err);
+            console.log(err);
         }
-      };
-      const deleteUnitData = async (id) => {
+    };
+    const deleteUnitData = async (id) => {
         try {
-          await axios.delete(
-            "http://localhost:3001/unit/deleteUnit/" + id, unitData
-          );
-          unitFetchData();
-          setUnitData({
-            unitName: ""
-          });
-          console.log("Unit delete Successfully");
+            await axios.delete(
+                "http://localhost:3001/unit/deleteUnit/" + id, unitData
+            );
+            unitFetchData();
+            setUnitData({
+                unitName: ""
+            });
+            console.log("Unit delete Successfully");
         } catch (err) {
-          console.log(err);
+            console.log(err);
         }
-      };
-    
+    };
 
 
 
-      const updateUnit = async (item) =>{
+
+    const updateUnit = async (item) => {
         setUnitData(item)
         setUnitStateId(item._id)
-      }
-      console.log(unitStateId)
+    }
+    console.log(unitStateId)
 
 
     const bodycss = {
@@ -108,7 +108,7 @@ const [ unitStateId , setUnitStateId] =useState("")
                     <h1 className='text-center'>Unit DataBase</h1>
                     <div className='row g-2 mb-3'>
                         <div className="form-floating col-6 ">
-                            <input type="text" className="form-control" id="unitSiId" name="unitSi" placeholder="unitSi" disabled value={uintDataList.length+1}/>
+                            <input type="text" className="form-control" id="unitSiId" name="unitSi" placeholder="unitSi" disabled value={uintDataList.length + 1} />
                             <label htmlFor="unitSiId">Auto Sr.No.</label>
                         </div>
                         <div className="form-floating col-6 ">
@@ -117,12 +117,16 @@ const [ unitStateId , setUnitStateId] =useState("")
                         </div>
                     </div>
                     <div className='col d-flex justify-content-end mb-2'>
+                        {unitStateId ? <div className='d-flex justify-content-end'><div className='me-2' >
+                            <button type="button" className='btn btn-secondary' onClick={() => updateUnitData(unitStateId)}>Modify</button>
+                        </div>
                         <div className='me-2' >
-                            <button type="button" className='btn btn-secondary' onClick={()=> updateUnitData(unitStateId)}>Modify</button>
-                        </div>
-                        <div>
-                            <button type="button" className='btn btn-warning '  onClick={unitSubmit}>+ Add UnitDataBase</button>
-                        </div>
+                            <button type="button" className='btn btn-danger' onClick={() => {setUnitStateId(null); setUnitData(initialUnitData)}}>Cancel</button>
+                        </div></div>: <div>
+                            <button type="button" className='btn btn-warning ' onClick={unitSubmit}>+ Add UnitDataBase</button>
+                        </div>}
+                        
+                        
                     </div>
                     <hr />
 
@@ -136,10 +140,10 @@ const [ unitStateId , setUnitStateId] =useState("")
                                     <th>Delete</th>
                                 </tr>
                                 {uintDataList.map((item, index) => (
-                                    <tr onClick={()=> updateUnit(item)}>
-                                        <td>{index+1}</td>
+                                    <tr onClick={() => updateUnit(item)}>
+                                        <td>{index + 1}</td>
                                         <td>{item.unitName}</td>
-                                        <td><button type='button' className='btn btn-danger' onClick={()=> deleteUnitData(item._id)}><i class="bi bi-trash-fill"></i></button></td>
+                                        <td><button type='button' className='btn btn-danger' onClick={() => deleteUnitData(item._id)}><i class="bi bi-trash-fill"></i></button></td>
                                     </tr>
                                 ))}
                             </tbody>
@@ -153,6 +157,16 @@ const [ unitStateId , setUnitStateId] =useState("")
 }
 
 const PartDataBase = () => {
+    const [partStateId, setPartStateId] = useState("")
+    const initialPartData = {
+
+        partNo: "",
+        partName: "",
+        customer: "",
+        operationNo: ""
+    }
+
+
     const [partData, setPartData] = useState({
         partNo: "",
         partName: "",
@@ -179,6 +193,69 @@ const PartDataBase = () => {
 
     console.log(partDataList)
 
+
+
+
+    const partSubmit = async (e) => {
+        e.preventDefault();
+        try {
+            const response = await axios.post(
+                `${process.env.REACT_APP_PORT}/part/createPart`, partData
+            );
+            {/*console.log(response.data.message)*/ }
+            console.log(response)
+            partFetchData();
+            setPartData(initialPartData);
+        } catch (err) {
+            console.log(err);
+            alert(err);
+        }
+    };
+    const updatePartData = async (id) => {
+        try {
+            await axios.put(
+                "http://localhost:3001/part/updatePart/" + id, partData
+            );
+            partFetchData();
+            setPartData({
+                partNo: "",
+                partName: "",
+                customer: "",
+                operationNo: ""
+            });
+            console.log("Part Updated Successfully");
+        } catch (err) {
+            console.log(err);
+        }
+    };
+
+    const deletePartData = async (id) => {
+        try {
+            await axios.delete(
+                "http://localhost:3001/part/deletePart/" + id, partData
+            );
+            partFetchData();
+            setPartData({
+                partNo: "",
+                partName: "",
+                customer: "",
+                operationNo: ""
+            });
+            console.log("Part delete Successfully");
+        } catch (err) {
+            console.log(err);
+        }
+    };
+    console.log()
+    
+
+
+
+
+    const updatePart = async (item) => {
+        setPartData(item)
+        setPartStateId(item._id)
+    }
 
     const handlePartDataBaseChange = (e) => {
         const { name, value } = e.target;
@@ -222,10 +299,10 @@ const PartDataBase = () => {
                     </div>
                     <div className='col d-flex justify-content-end mb-2' >
                         <div className='me-2'>
-                            <button type="button" className='btn btn-secondary'>Modify</button>
+                            <button type="button" className='btn btn-secondary' onClick={() => updatePartData(partStateId)}>Modify</button>
                         </div>
                         <div>
-                            <button type="button" className='btn btn-warning'>+ Add PartDataBase</button>
+                            <button type="button" className='btn btn-warning'  onClick={partSubmit}>+ Add PartDataBase</button>
                         </div>
                     </div>
 
@@ -244,13 +321,13 @@ const PartDataBase = () => {
                                     <th>Delete</th>
                                 </tr>
                                 {partDataList.map((item, index) => (
-                                    <tr>
-                                        <td>{index+1}</td>
+                                    <tr onClick={() => updatePart(item)}>
+                                        <td>{index + 1}</td>
                                         <td>{item.partNo}</td>
                                         <td>{item.partName}</td>
                                         <td>{item.customer}</td>
                                         <td>{item.operationNo}</td>
-                                        <td><button className='btn btn-danger'><i class="bi bi-trash-fill"></i></button></td>
+                                        <td><button type="button" className='btn btn-danger'  onClick={() => deletePartData(item._id)}><i class="bi bi-trash-fill"></i></button></td>
                                     </tr>
                                 ))}
                             </tbody>
