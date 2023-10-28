@@ -293,7 +293,7 @@ const Employee = () => {
                 // Handle validation errors
                 const errorData400 = err.response.data.errors;
                 const errorMessages400 = Object.values(errorData400).join(' / ');
-                
+
                 console.log(errorMessages400);
                 console.log(err)
                 setErrorHandler({ status: 0, message: errorMessages400, code: "error" });
@@ -362,6 +362,14 @@ const Employee = () => {
 
         }
     }
+    const currentDate = new Date();
+    console.log(currentDate)
+    const currentDay = currentDate.getDate().toString();
+    const currentMonth = (currentDate.getMonth() + 1).toString();
+    const currentYear = currentDate.getFullYear().toString();
+    const DateFormat = currentYear  + "-" + currentMonth + "-" + currentDay
+
+    console.log(currentDay + "-" + currentMonth + "-" + currentYear)
 
     // const EmployeeDelete = (id) => {
     //     try{
@@ -408,7 +416,7 @@ const Employee = () => {
                         <label htmlFor="lastNameId">Last Name</label>
                     </div>
                     <div className="form-floating  col-2">
-                        <input onChange={handleChange} value={employeeData.dob} type="date" className="form-control" id="dobId" name="dob" placeholder="dob" />
+                        <input onChange={handleChange} value={employeeData.dob} type="date" max={DateFormat}  className="form-control" id="dobId" name="dob" placeholder="dob" />
                         <label htmlFor="dobId">Date Of Birth</label>
                     </div>
 
@@ -440,7 +448,7 @@ const Employee = () => {
                         }}
                         // name="state"
                         options={AllStates}
-                        sx={{ width: 370 }}
+                        sx={{ width: 433 }}
                         value={employeeData.state}
                         isOptionEqualToValue={(option) => option}
                         renderInput={(params) => <TextField {...params} label="State" name="state" />} // Set the name attribute to "state"
@@ -456,7 +464,7 @@ const Employee = () => {
                         <label htmlFor="designationId">Designation</label>
                     </div>
                     <div className="form-floating col-3">
-                        <input onChange={handleChange} value={employeeData.doj} type="date" className="form-control" id="dojId" name="doj" placeholder="doj" />
+                        <input onChange={handleChange} value={employeeData.doj} max={DateFormat} type="date" className="form-control" id="dojId" name="doj" placeholder="doj" />
                         <label htmlFor="dojId">Date Of joining</label>
                     </div>
                     <div className="form-floating col-3">
@@ -480,13 +488,13 @@ const Employee = () => {
                             setEmployeeData((prev) => ({ ...prev, city: newValue }))
                         }}
                         // name="state"
-                        options={cityByState.map((item)=> item.name)}
-                        sx={{ width: 370 }}
+                        options={cityByState.map((item) => item.name)}
+                        sx={{ width: 433 }}
                         value={employeeData.city}
                         isOptionEqualToValue={(option) => option}
                         renderInput={(params) => <TextField {...params} label="city" name="city" />} // Set the name attribute to "state"
                     />
-                    
+
                     <div className="form-floating md-3 col-2">
                         <select onChange={handleChange} value={employeeData.department} className="form-select" id="departmentId" name="department" >
                             <option value="">Select department</option>
