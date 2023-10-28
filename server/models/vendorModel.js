@@ -11,7 +11,7 @@ const vendorSchema = new mongoose.Schema({
   oem: String,
   customer: String,
   supplier: String,
-  subcontractor: String,
+  subContractor: String,
   certificate: String,
   certificateValidity : String,
   vendorStatus : String,
