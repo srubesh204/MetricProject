@@ -37,7 +37,7 @@ const UnitDataBase = ({ style }) => {
             const response = await axios.get(
                 `${process.env.REACT_APP_PORT}/unit/getAllUnits`
             );
-            setUnitDataList(response.data);
+            setUnitDataList(response.data.result);
         } catch (err) {
             console.log(err);
         }
@@ -89,28 +89,51 @@ const UnitDataBase = ({ style }) => {
 
     const updateUnitData = async (id) => {
         try {
-            await axios.put(
+            const response = await axios.put(
                 "http://localhost:3001/unit/updateUnit/" + id, unitData
             );
             unitFetchData();
             setUnitData({
                 unitName: ""
             });
-            console.log("Unit Updated Successfully");
+            setUnitSnackBar(true)
+            setErrorHandler({ status: response.data.status, message: response.data.message, code: "success" })
+            console.log(response);
+            setUnitStateId(null)
         } catch (err) {
-            console.log(err);
+            setUnitSnackBar(true)
+            console.log(err)
+            if (err.response && err.response.status === 400) {
+                // Handle validation errors
+                const errorData400 = err.response.data.errors;
+                const errorMessages400 = Object.values(errorData400).join(' | ');
+                console.log(errorMessages400)
+                setErrorHandler({ status: 0, message: errorMessages400, code: "error" });
+            } else if (err.response && err.response.status === 500) {
+                // Handle other errors
+                const errorData500 = err.response.data.error;
+                const errorMessages500 = Object.values(errorData500).join('');
+                console.log(errorMessages500)
+                setErrorHandler({ status: 0, message: errorMessages500, code: "error" });
+            } else {
+                console.log(err.response.data.error)
+                setErrorHandler({ status: 0, message: "An error occurred", code: "error" });
+            }
         }
     };
     const deleteUnitData = async (id) => {
         try {
-            await axios.delete(
+            const response = await axios.delete(
                 "http://localhost:3001/unit/deleteUnit/" + id, unitData
             );
             unitFetchData();
             setUnitData({
                 unitName: ""
             });
+            setUnitSnackBar(true)
+            setErrorHandler({ status: 0, message: response.data.message , code: "success" });
             console.log("Unit delete Successfully");
+            setUnitStateId(null)
         } catch (err) {
             console.log(err);
         }
@@ -235,7 +258,7 @@ const PartDataBase = ({ style }) => {
             const response = await axios.get(
                 `${process.env.REACT_APP_PORT}/part/getAllParts`
             );
-            setPartDataList(response.data);
+            setPartDataList(response.data.result);
         } catch (err) {
             console.log(err);
         }
@@ -297,6 +320,7 @@ const PartDataBase = ({ style }) => {
             });
             setPartSnackBar(true)
             setErrorHandler({ status: response.data.status, message: response.data.message, code: "success" })
+            setPartStateId(null)
             console.log(response);
         } catch (err) {
             console.log(err);
@@ -489,7 +513,7 @@ const General = () => {
 
     return (
         <div>
-            <Box sx={{ width: '100%', bgcolor: 'background.paper' }}>
+            <Box sx={{ width: '100%', bgcolor: 'inherit',  }}>
                 <Tabs value={value} onChange={handleChange} centered>
                     <Tab label="Unit" />
                     <Tab label="Part" />

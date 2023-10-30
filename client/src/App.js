@@ -14,17 +14,18 @@ import Devi from './Components/devi/Devi';
 function App() {
   return (
     <div className="App">
+      
       <BrowserRouter>
-
+      <Dashboard />
         <Routes>
 
-          <Route path="/" element={<Dashboard />} />
+
           <Route path="/desdep" element={<Department />} />
           <Route path="/employee" element={<Employee />} />
           <Route path="/general" element={<General />} />
-          <Route path="/vendor" element={<Vendor/>} />
-          <Route path="/itemMaster" element={<ItemMaster/>} />
-          <Route path="/devi" element={<Devi/>} />
+          <Route path="/vendor" element={<Vendor />} />
+          <Route path="/itemMaster" element={<ItemMaster />} />
+          <Route path="/devi" element={<Devi />} />
         </Routes>
       </BrowserRouter>
     </div>
