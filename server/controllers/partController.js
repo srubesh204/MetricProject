@@ -73,6 +73,22 @@ const partController = {
             const partUpdate = new partModel(updatePartFields);
 
             const validationError = partUpdate.validateSync();
+            
+            if (validationError) {
+                // Handle validation errors
+                const validationErrors = {};
+        
+                if (validationError.errors) {
+                  // Convert Mongoose validation error details to a more user-friendly format
+                  for (const key in validationError.errors) {
+                    validationErrors[key] = validationError.errors[key].message;
+                  }
+                }
+        
+                return res.status(400).json({
+                  errors: validationErrors
+                });
+              }
            
 
             // Find the designation by desId and update it

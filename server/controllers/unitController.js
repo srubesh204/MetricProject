@@ -15,9 +15,7 @@ const unitController = {
 
     try {
       const { unitName } = req.body;
-      if (!unitName) {
-        return res.status(400).json({ error: 'All fields must be provided' });
-      }
+      
       const unitResult = new unitModel({ unitName });
       const validationError = unitResult.validateSync();
 
@@ -37,18 +35,18 @@ const unitController = {
         });
       }
       await unitResult.save();
-      res.status(200).json({ message: "Unit Data Successfully Saved", status: 1 });
+      res.status(200).json({ message: "Unit Created Successfully", status: 1 });
     } catch (error) {
       console.log(error)
       if (error.errors) {
         const errors500 = {};
         for (const key in error.errors) {
-            errors500[key] = error.errors[key].message;
+          errors500[key] = error.errors[key].message;
         }
         return res.status(500).json({ error: errors500, status: 0 });
-    }
+      }
 
-    return res.status(500).json({ error: 'Internal server error on Part', status: 0 });
+      return res.status(500).json({ error: 'Internal server error on Part', status: 0 });
     }
   },
   updateUnit: async (req, res) => {
@@ -64,6 +62,24 @@ const unitController = {
         unitName: req.body.unitName,  // Example: updating the 'name' field
         // Add more fields as needed
       };
+      const unitUpdate = new unitModel(updateUnitFields);
+      const validationError = unitUpdate.validateSync();
+
+      if (validationError) {
+        // Handle validation errors
+        const validationErrors = {};
+
+        if (validationError.errors) {
+          // Convert Mongoose validation error details to a more user-friendly format
+          for (const key in validationError.errors) {
+            validationErrors[key] = validationError.errors[key].message;
+          }
+        }
+
+        return res.status(400).json({
+          errors: validationErrors
+        });
+      }
 
       // Find the designation by desId and update it
       const updateUnit = await unitModel.findOneAndUpdate(
@@ -75,11 +91,18 @@ const unitController = {
       if (!updateUnit) {
         return res.status(404).json({ error: 'Unit not found' });
       }
-
-      res.status(200).json(updateUnit);
+      console.log(updateUnit)
+      res.status(200).json({result: updateUnit, message: "Unit Updated Successfully"});
     } catch (error) {
       console.error(error);
-      res.status(500).send('Internal Server Error');
+      if (error.code === 11000) {
+        return res.status(500).json({ error: 'Duplicate Value Not Accepted' });
+      }
+      const errors500 = {};
+      for (const key in error.errors) {
+        errors500[key] = error.errors[key].message;
+      }
+      res.status(500).json({ error: errors500, status: 0 });
     }
   },
   deleteUnit: async (req, res) => {
