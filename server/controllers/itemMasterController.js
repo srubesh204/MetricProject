@@ -14,8 +14,8 @@ const itemMasterControllers = {
       createItemMaster: async (req, res) => {
        
         try {
-          const { itemType, itemDescription, itemPrefix, itemFq, cabAlertInDay, wino, unCertainty, unCertaintyUnit, standardRef, itemImage, workInsName} = req.body;
-          const itemMasterResult = new itemMasterModel({ itemType, itemDescription, itemPrefix, itemFq, cabAlertInDay, wino, unCertainty, unCertaintyUnit, standardRef, itemImage, workInsName });
+          const { itemType, itemDescription, itemPrefix, itemFq, cabAlertInDay, wiNo, unCertainty, unCertaintyUnit, standardRef, itemImageName, workInsName, status,calibrationPoints} = req.body;
+          const itemMasterResult = new itemMasterModel({ itemType, itemDescription, itemPrefix, itemFq, cabAlertInDay, wiNo, unCertainty, unCertaintyUnit, standardRef, itemImageName, workInsName, status, calibrationPoints});
           await itemMasterResult.save();
           res.status(200).json({message: "Item Master Data Successfully Saved",status: 1});
         } catch (error) {
@@ -31,7 +31,7 @@ const itemMasterControllers = {
           // }
       
           // Create an object with the fields you want to update
-          const { itemType, itemDescription, itemPrefix, itemFq, cabAlertInDay, wino, unCertainty, unCertaintyUnit, standardRef, itemImage, workInsName } = req.body;
+          const { itemType, itemDescription, itemPrefix, itemFq, cabAlertInDay, wiNo, unCertainty, unCertaintyUnit, standardRef, itemImageName, workInsName, status, calibrationPoints} = req.body;
 
           const updateImFields = {
             itemType,
@@ -39,12 +39,15 @@ const itemMasterControllers = {
             itemPrefix,
             itemFq,
             cabAlertInDay,
-            wino, 
+            wiNo, 
             unCertainty,
             unCertaintyUnit,
             standardRef,
-            itemImage,
+            itemImageName,
             workInsName,
+            status,
+            calibrationPoints
+
 
               // Add more fields as needed
           };

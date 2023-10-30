@@ -4,7 +4,7 @@ const partController = {
     getAllParts: async (req, res) => {
         try {
             const partResult = await partModel.find();
-            res.status(200).json(partResult);
+            res.status(202).json({ result: partResult, status: 1 });
             //res.status(200).json(employees);
         } catch (err) {
             console.error(err);
@@ -17,26 +17,24 @@ const partController = {
             const { partNo, partName, customer, operationNo } = req.body;
 
             const partResult = new partModel({ partNo, partName, customer, operationNo });
-
-         
-
             const validationError = partResult.validateSync();
 
-            if (validationError) {
-                // Handle validation errors
-                const validationErrors = {};
+      if (validationError) {
+        // Handle validation errors
+        const validationErrors = {};
 
-                if (validationError.errors) {
-                    // Convert Mongoose validation error details to a more user-friendly format
-                    for (const key in validationError.errors) {
-                        validationErrors[key] = validationError.errors[key].message;
-                    }
-                }
- 
-                return res.status(400).json({
-                    errors: validationErrors
-                });
-            }
+        if (validationError.errors) {
+          // Convert Mongoose validation error details to a more user-friendly format
+          for (const key in validationError.errors) {
+            validationErrors[key] = validationError.errors[key].message;
+          }
+        }
+
+        return res.status(400).json({
+          errors: validationErrors
+        });
+      }
+      console.log("success")
 
             await partResult.save();
             return res.status(200).json({ message: "Part Data Successfully Saved", status: 1 });
@@ -128,12 +126,12 @@ const partController = {
                 return res.status(404).json({ error: 'Unit not found' });
             }
 
-            res.status(200).json({ message: 'Part Data deleted successfully' });
-        } catch (error) {
-            console.error(error);
-            res.status(500).send('Internal Server Error');
-        }
-    },
+            res.status(202).json({ message: 'Part detail deleted successfully' ,result: deletePart });
+    } catch (error) {
+      console.error(error);
+      res.status(500).send('Internal Server Error');
+    }
+  }
 }
 
 
