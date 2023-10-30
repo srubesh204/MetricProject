@@ -146,7 +146,6 @@ const ItemMaster = () => {
                             </div>
                             <div className='row g-2 mb-2 '>
 
-
                                 <div className="form-floating col">
                                     <input type="text" className="form-control" id="standardRefId" name="standardRef" placeholder="standardRef" value={itemMasterData.standardRef} onChange={handleItemMasterBaseChange} />
                                     <label htmlFor="standardRefId">Standard Ref </label>

@@ -22,7 +22,10 @@ const employeeController = {
       //     status: 0
       //   });
       // }
+     
       const employeeResult = new employeeModel({ employeeCode, title, firstName, lastName, dob, address, city, state, contactNumber, designation, department, mailId, doj, employmentStatus, reportTo });
+
+      //////
       const validationError = employeeResult.validateSync();
 
       if (validationError) {
@@ -43,13 +46,26 @@ const employeeController = {
       console.log("success")
       await employeeResult.save();
       res.status(202).json({ message: "Employee Data Successfully Saved", status: 1 });
+      /////
     } catch (error) {
       console.log(error)
-      const errors500 = {};
-      for (const key in error.errors) {
-        errors500[key] = error.errors[key].message;
+      const validationError = updatedEmployee.validateSync();
+
+      if (validationError) {
+        // Handle validation errors
+        const validationErrors = {};
+
+        if (validationError.errors) {
+          // Convert Mongoose validation error details to a more user-friendly format
+          for (const key in validationError.errors) {
+            validationErrors[key] = validationError.errors[key].message;
+          }
+        }
+
+        return res.status(400).json({
+          errors: validationErrors
+        });
       }
-      res.status(500).json({ error: errors500, status: 0 });
     }
   },
   updateEmployee: async (req, res) => {
