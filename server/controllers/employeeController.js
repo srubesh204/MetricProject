@@ -25,7 +25,7 @@ const employeeController = {
      
       const employeeResult = new employeeModel({ employeeCode, title, firstName, lastName, dob, address, city, state, contactNumber, designation, department, mailId, doj, employmentStatus, reportTo });
 
-      //////
+      
       const validationError = employeeResult.validateSync();
 
       if (validationError) {
@@ -46,28 +46,20 @@ const employeeController = {
       console.log("success")
       await employeeResult.save();
       res.status(202).json({ message: "Employee Data Successfully Saved", status: 1 });
-      /////
+      
     } catch (error) {
       console.log(error)
-      const validationError = updatedEmployee.validateSync();
-
-      if (validationError) {
-        // Handle validation errors
-        const validationErrors = {};
-
-        if (validationError.errors) {
-          // Convert Mongoose validation error details to a more user-friendly format
-          for (const key in validationError.errors) {
-            validationErrors[key] = validationError.errors[key].message;
-          }
+      if (error.errors) {
+        const errors500 = {};
+        for (const key in error.errors) {
+            errors500[key] = error.errors[key].message;
         }
-
-        return res.status(400).json({
-          errors: validationErrors
-        });
-      }
+        return res.status(500).json({ error: errors500, status: 0 });
     }
-  },
+
+    return res.status(500).json({ error: 'Internal server error on Part', status: 0 });
+}
+},
   updateEmployee: async (req, res) => {
     try {
       const empId = req.params.id; // Assuming desId is part of the URL parameter
@@ -85,7 +77,6 @@ const employeeController = {
 
       // Perform synchronous validation on the updatedEmployee
       const validationError = updatedEmployee.validateSync();
-
       if (validationError) {
         // Handle validation errors
         const validationErrors = {};
@@ -104,28 +95,28 @@ const employeeController = {
 
       // Find the designation by desId and update it
       const updateEmployee = await employeeModel.findOneAndUpdate(
-        { _id: empId },
-        updateEmpFields,
-        { new: true } // To return the updated document
+          { _id: empId },
+          updateEmpFields,
+          { new: true } // To return the updated document
       );
 
       if (!updateEmployee) {
-        return res.status(404).json({ error: 'Employee not found' });
+          return res.status(404).json({ error: 'Employee not found' });
       }
-
-      res.status(200).json({ message: "Employee Updated Successfully", result: updateEmployee, status: 1 });
-    } catch (error) {
-      console.log(error.code);
+      console.log("Employee Updated Successfully")
+      res.status(200).json({ result: this.updateEmployee, message: "Employee Updated Successfully" });
+  } catch (error) {
+      console.log(error);
       if (error.code === 11000) {
-        return res.status(500).json({ error: 'Duplicate Value Not Accepted' });
+          return res.status(500).json({ error: 'Duplicate Value Not Accepted' });
       }
       const errors500 = {};
       for (const key in error.errors) {
-        errors500[key] = error.errors[key].message;
+          errors500[key] = error.errors[key].message;
       }
       res.status(500).json({ error: error, status: 0 });
-    }
-  },
+  }
+},
   deleteEmployee: async (req, res) => {
     try {
       const empId = req.params.id; // Assuming id is part of the URL parameter
