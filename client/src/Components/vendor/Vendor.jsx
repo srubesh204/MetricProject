@@ -41,13 +41,14 @@ const Vendor = () => {
         customer: "",
         supplier: "",
         subContractor: "",
-        vendorContacts: [{ name: "", contactNumber: "", mailId: "", vcStatus: "" }],
+        vendorContacts: [{ name: "gdh", contactNumber: "5652", mailId: "gd", vcStatus: "hsdg" }],
         certificate: "",
         certificateValidity: "",
         vendorStatus: "",
 
 
     })
+
 
     const [AllStates, setAllStates] = useState([]);
     const [StateName, setStateName] = useState(null)
@@ -88,6 +89,35 @@ const Vendor = () => {
 
     }, [vendorData.state]);
 
+
+
+    const addVendorDataRow = () => {
+        setVendorData((prevVendorData) => ({
+            ...prevVendorData,
+            vendorContacts: [...prevVendorData.vendorContacts, { name: "" ,contactNumber:"",mailId:"",vcStatus:""}]
+        }))
+    }
+    
+    const deleteVendorRow = (index) => {
+        setVendorData((prevVendorData) => {
+            const updateCP = [...prevVendorData.vendorContacts]
+            updateCP.splice(index, 1);
+            return {
+                ...prevVendorData, vendorContacts: updateCP,
+            };
+        })
+    };
+    const changeVendorRow = (index, name, value) => {
+        setVendorData((prevVendorData) => {
+            const updateCP = [...prevVendorData.vendorContacts]
+            updateCP[index] = {
+                ...updateCP[index], [name] : value,
+            };
+            return {
+                ...prevVendorData, vendorContacts: updateCP,
+            };
+        })
+    };
 
 
 
@@ -303,16 +333,18 @@ const Vendor = () => {
                                             <th>Contact Number</th>
                                             <th>Mail Id</th>
                                             <th>Status</th>
+                                            <th><button type='button' className='btn btn-warning' onClick={addVendorDataRow}>+Add</button></th>
                                         </tr>
-                                        {vendorData.vendorContacts.map((item, index) => (
+                                        {vendorData.vendorContacts ? vendorData.vendorContacts.map((item, index) => (
                                             <tr>
                                                 <td>{index + 1}</td>
-                                                <td><input type="text" className='form-control' id="nameId" name="name" value={vendorData.vendorContacts.name} /></td>
-                                                <td><input type="text" className='form-control' id="contactNumber" name="contactNumber" value={vendorData.vendorContacts.contactNumber} /></td>
-                                                <td><input type="text" className='form-control' id="mailId" name="mailId" value={vendorData.vendorContacts.mailId} /></td>
-                                                <td><input type="text" className='form-control' id="vcStatusId" name="vcStatus" value={vendorData.vendorContacts.vcStatus} /></td>
+                                                <td><input type="text" className='form-control' id="nameId" name="name" value={item.name}  onChange={(e) => changeVendorRow(index, e.target.name, e.target.value)} /></td>
+                                                <td><input type="text" className='form-control' id="contactNumber" name="contactNumber" value={item.contactNumber}  onChange={(e) => changeVendorRow(index, e.target.name, e.target.value)} /></td>
+                                                <td><input type="text" className='form-control' id="mailId" name="mailId" value={item.mailId}   onChange={(e) => changeVendorRow(index, e.target.name, e.target.value)}/></td>
+                                                <td><input type="text" className='form-control' id="vcStatusId" name="vcStatus" value={item.vcStatus} onChange={(e) => changeVendorRow(index, e.target.name, e.target.value)} /></td>
+                                                <td><button type='button' className='btn btn-danger' onClick={()=> deleteVendorRow(index)}><i class="bi bi-trash-fill"></i></button></td>
                                             </tr>
-                                        ))}
+                                        )): <tr></tr>}
                                     </tbody>
                                 </table>
                             </div>
@@ -331,19 +363,19 @@ const Vendor = () => {
                                         <input className="form-control download" type="file" id="download" />Download </label>
                                 </div>
                             </div>
-                            {vendorStateId ? 
-                            <div className='d-flex justify-content-end'>
-                                <div className='me-2' >
-                                    <button type="button" className='btn btn-secondary' onClick={() => updateVendorData(vendorStateId)}>Modify</button>
-                                </div>
-                                <div className='me-2' >
-                                    <button type="button" className='btn btn-secondary' onClick={() => { setVendorStateId(null); setVendorData(initialVendorData) }}>Cancel</button>
-                                </div>
-                            </div>: <div className='col d-flex justify-content-end mb-2'>
-                                <div >
-                                    <button type="button" className='btn btn-warning' onClick={vendorSubmit}>+ Add Vendor</button>
-                                </div>
-                            </div>}
+                            {vendorStateId ?
+                                <div className='d-flex justify-content-end'>
+                                    <div className='me-2' >
+                                        <button type="button" className='btn btn-secondary' onClick={() => updateVendorData(vendorStateId)}>Modify</button>
+                                    </div>
+                                    <div className='me-2' >
+                                        <button type="button" className='btn btn-secondary' onClick={() => { setVendorStateId(null); setVendorData(initialVendorData) }}>Cancel</button>
+                                    </div>
+                                </div> : <div className='col d-flex justify-content-end mb-2'>
+                                    <div >
+                                        <button type="button" className='btn btn-warning' onClick={vendorSubmit}>+ Add Vendor</button>
+                                    </div>
+                                </div>}
 
                         </div>
                     </div>
