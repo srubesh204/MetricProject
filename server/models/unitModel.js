@@ -5,7 +5,7 @@ const unitSchema = new mongoose.Schema({
   unitName: {
     type: String,
     unique: true,
-    required: [true, "Unit is Required"]
+    required: [true, "Unit Name is Required"]
   }  
 });
 unitSchema.plugin(uniqueValidator);
