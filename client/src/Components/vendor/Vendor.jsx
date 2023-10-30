@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import axios from 'axios'
 import Autocomplete from '@mui/material/Autocomplete';
 import TextField from '@mui/material/TextField';
+import { indigo } from '@mui/material/colors';
 
 const Vendor = () => {
 
@@ -131,23 +132,8 @@ const Vendor = () => {
                 "http://localhost:3001/vendor/updateVendor/" + id, vendorData
             );
             vendorFetchData();
-            setVendorData({
-                vendorCode: "",
-                aliasName: "",
-                fullName: "",
-                dateOfReg: "",
-                address: "",
-                state: "",
-                city: "",
-                oem: "",
-                customer: "",
-                supplier: "",
-                subContractor: "",
-                vendorContacts: [{ name: "", contactNumber: "", mailId: "", vcStatus: "" }],
-                certificate: "",
-                certificateValidity: "",
-                vendorStatus: "",
-            });
+            setVendorStateId(null)
+            setVendorData(initialVendorData);
             console.log("Vendor Updated Successfully");
         } catch (err) {
             console.log(err);
@@ -160,23 +146,7 @@ const Vendor = () => {
                 "http://localhost:3001/vendor/deleteVendor/" + id, vendorData
             );
             vendorFetchData();
-            setVendorData({
-                vendorCode: "",
-                aliasName: "",
-                fullName: "",
-                dateOfReg: "",
-                address: "",
-                state: "",
-                city: "",
-                oem: "",
-                customer: "",
-                supplier: "",
-                subContractor: "",
-                vendorContacts: [{ name: "", contactNumber: "", mailId: "", vcStatus: "" }],
-                certificate: "",
-                certificateValidity: "",
-                vendorStatus: "",
-            });
+            setVendorData(initialVendorData);
             console.log("Vendor delete Successfully");
         } catch (err) {
             console.log(err);
@@ -194,9 +164,9 @@ const Vendor = () => {
 
 
     const handleVendorDataBaseChange = (e) => {
-        const { name, checked, type} = e.target;
+        const { name, checked, type } = e.target;
         let value = e.target.value;
-        if(type === "checkbox"){
+        if (type === "checkbox") {
             value = checked ? "1" : "0";
         }
 
@@ -223,19 +193,19 @@ const Vendor = () => {
                         </div>
                         <div className='col  d-flex justify-content-end '>
                             <div class="form-check form-check-inline ">
-                                <input className="form-check-input" type="checkbox"  checked={vendorData.oem === "1"} onChange={handleVendorDataBaseChange} id="oemId" name="oem" />
+                                <input className="form-check-input" type="checkbox" checked={vendorData.oem === "1"} onChange={handleVendorDataBaseChange} id="oemId" name="oem" />
                                 <label className="form-check-label" htmlFor="oemId">OEM</label>
                             </div>
                             <div class="form-check form-check-inline ">
-                                <input className="form-check-input" type="checkbox"  checked={vendorData.customer === "1"} onChange={handleVendorDataBaseChange} id="customerId" name="customer" />
+                                <input className="form-check-input" type="checkbox" checked={vendorData.customer === "1"} onChange={handleVendorDataBaseChange} id="customerId" name="customer" />
                                 <label className="form-check-label" htmlFor="customerId">Customer</label>
                             </div>
                             <div class="form-check form-check-inline ">
-                                <input className="form-check-input" type="checkbox"  checked={vendorData.supplier === "1"} onChange={handleVendorDataBaseChange} id="supplierId" name="supplier" />
+                                <input className="form-check-input" type="checkbox" checked={vendorData.supplier === "1"} onChange={handleVendorDataBaseChange} id="supplierId" name="supplier" />
                                 <label className="form-check-label" htmlFor="supplierId">Supplier</label>
                             </div>
                             <div class="form-check form-check-inline">
-                                <input className="form-check-input" type="checkbox"  checked={vendorData.subContractor === "1"} onChange={handleVendorDataBaseChange} id="subContractorId" name="subContractor" />
+                                <input className="form-check-input" type="checkbox" checked={vendorData.subContractor === "1"} onChange={handleVendorDataBaseChange} id="subContractorId" name="subContractor" />
                                 <label className="form-check-label" htmlFor="subContractorId">SubContractor</label>
                             </div>
                         </div>
@@ -361,14 +331,20 @@ const Vendor = () => {
                                         <input className="form-control download" type="file" id="download" />Download </label>
                                 </div>
                             </div>
-                            <div className='col d-flex justify-content-end mb-2'>
+                            {vendorStateId ? 
+                            <div className='d-flex justify-content-end'>
                                 <div className='me-2' >
                                     <button type="button" className='btn btn-secondary' onClick={() => updateVendorData(vendorStateId)}>Modify</button>
                                 </div>
+                                <div className='me-2' >
+                                    <button type="button" className='btn btn-secondary' onClick={() => { setVendorStateId(null); setVendorData(initialVendorData) }}>Cancel</button>
+                                </div>
+                            </div>: <div className='col d-flex justify-content-end mb-2'>
                                 <div >
                                     <button type="button" className='btn btn-warning' onClick={vendorSubmit}>+ Add Vendor</button>
                                 </div>
-                            </div>
+                            </div>}
+
                         </div>
                     </div>
                     <hr />
@@ -401,13 +377,13 @@ const Vendor = () => {
                                 {vendorDataList.map((item, index) => (
                                     <tr onClick={() => updateVendor(item)}>
                                         <td>{index + 1}</td>
-                                        
+
                                         <td>{item.vendorCode}</td>
                                         <td>{item.fullName}</td>
                                         <td>{item.city}</td>
                                         <td>{item.state}</td>
-                                        <td>{`${item.supplier} ${item.oem} ${item.customer} ${item.subContractor}` }</td>
-                                       
+                                        <td>{`${item.supplier} ${item.oem} ${item.customer} ${item.subContractor}`}</td>
+
                                         <td>{item.vendorStatus}</td>
                                         <td><button type='button' className='btn btn-danger' onClick={() => deleteVendorData(item._id)} ><i class="bi bi-trash-fill"></i></button></td>
                                     </tr>
