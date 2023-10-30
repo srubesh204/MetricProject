@@ -6,7 +6,7 @@ import Box from '@mui/material/Box';
 import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
 
-const UnitDataBase = (unitTableStyle) => {
+const UnitDataBase = ({style}) => {
 
     const [unitStateId, setUnitStateId] = useState(null)
     const initialUnitData = {
@@ -136,7 +136,7 @@ const UnitDataBase = (unitTableStyle) => {
 
                     <div>
                         <h3 className='text-center'>Unit List</h3>
-                        <div style={unitTableStyle.style} className='table-responsive'>
+                        <div style={style} className='table-responsive'>
                             <table className='table table-bordered text-center'>
                                 <tbody>
                                     <tr>
@@ -163,10 +163,20 @@ const UnitDataBase = (unitTableStyle) => {
     )
 }
 
-const PartDataBase = ({style, onDataReceived}) => {
+const PartDataBase = ({ style}) => {
 
-
+   
+    const [errorHandler, setErrorHandler] = useState({})
     const [partStateId, setPartStateId] = useState("")
+    const [snackBarOpen, setSnackBarOpen] = useState(false)
+    const handleSnackClose = (event, reason) => {
+        console.log(reason)
+        if (reason === 'clickaway') {
+            return;
+        }
+
+        setSnackBarOpen(false);
+    }
     const initialPartData = {
 
         partNo: "",
@@ -213,16 +223,20 @@ const PartDataBase = ({style, onDataReceived}) => {
             );
             {/*console.log(response.data.message)*/ }
             console.log(response)
+            setSnackBarOpen(true)
+            setErrorHandler({ status: response.data.status, message: response.data.message, code: "success" })
             partFetchData();
             setPartData(initialPartData);
         } catch (err) {
+            setSnackBarOpen(true)
+            setErrorHandler({ status: "0", message: "", code: "error" })
             console.log(err);
-            alert(err);
+
         }
     };
     const updatePartData = async (id) => {
         try {
-            await axios.put(
+            const response = await axios.put(
                 "http://localhost:3001/part/updatePart/" + id, partData
             );
             partFetchData();
@@ -232,9 +246,31 @@ const PartDataBase = ({style, onDataReceived}) => {
                 customer: "",
                 operationNo: ""
             });
-            console.log("Part Updated Successfully");
+            setSnackBarOpen(true)
+            setErrorHandler({ status: response.data.status, message: response.data.message, code: "success" })
+            console.log(response);
         } catch (err) {
             console.log(err);
+            setSnackBarOpen(true)
+            if (err.response && err.response.status === 400) {
+                // Handle validation errors
+                const errorData400 = err.response.data.errors;
+                const errorMessages400 = Object.values(errorData400).join(' / ');
+
+                console.log(errorMessages400);
+                console.log(err)
+                setErrorHandler({ status: 0, message: errorMessages400, code: "error" });
+            } else if (err.response && err.response.status === 500) {
+                // Handle other errors
+                // const errorData500 = err.response.data.error;
+                // const errorMessages500 = Object.values(errorData500).join(', ');
+                console.log(err)
+                setErrorHandler({ status: 0, message: err.response.data.error, code: "error" });
+            } else {
+                console.log(err)
+                setErrorHandler({ status: 0, message: "An error occurred", code: "error" });
+            }
+            
         }
     };
 
@@ -249,13 +285,30 @@ const PartDataBase = ({style, onDataReceived}) => {
                 partName: "",
                 customer: "",
                 operationNo: ""
-            }); 
+            });
+            setSnackBarOpen(true)
             console.log("Part delete Successfully");
         } catch (err) {
-            console.log(err);
+            setSnackBarOpen(true)
+            if (err.response && err.response.status === 400) {
+                // Handle validation errors
+                const errorData400 = err.response.data.errors;
+                const errorMessages400 = Object.values(errorData400).join(', ');
+                console.log(err)
+                setErrorHandler({ status: 0, message: errorMessages400, code: "error" });
+            } else if (err.response && err.response.status === 500) {
+                // Handle other errors
+                // const errorData500 = err.response.data.error;
+                // const errorMessages500 = Object.values(errorData500).join(', ');
+                console.log(err)
+                setErrorHandler({ status: 0, message: err.response.data.error, code: "error" });
+            } else {
+                console.log(err)
+                setErrorHandler({ status: 0, message: "An error occurred", code: "error" });
+            }
         }
     };
-    console.log()
+    console.log(errorHandler.message)
 
 
 
@@ -278,11 +331,9 @@ const PartDataBase = ({style, onDataReceived}) => {
         boxShadow: "0px 0px 10px 0px",
     }
 
-    const sendDataToParent = () => {
-        const data = "Data to be sent to parent component";
-        onDataReceived(data);
-    };
-    sendDataToParent()
+  
+
+
     return (
 
         <div className='container'>
@@ -319,6 +370,11 @@ const PartDataBase = ({style, onDataReceived}) => {
                         </div>
 
                     </div>
+                    <Snackbar anchorOrigin={{ vertical: "top", horizontal: "right" }} open={snackBarOpen} autoHideDuration={6000} onClose={handleSnackClose}>
+                        <Alert variant="filled" onClose={handleSnackClose} severity={errorHandler.code} sx={{ width: '100%' }}>
+                            {errorHandler.message}
+                        </Alert>
+                    </Snackbar>
                     {partStateId ?
                         <div className="d-flex justify-content-end">
                             <div className='me-2'>
@@ -366,6 +422,7 @@ const PartDataBase = ({style, onDataReceived}) => {
                     </div>
                 </form>
             </div>
+
         </div>
     )
 }
@@ -383,21 +440,15 @@ const General = () => {
         setValue(newValue);
     };
 
-    const [errorhandler, setErrorHandler] = useState({})
-    const [snackBarOpen, setSnackBarOpen] = useState(true)
-    const handleSnackClose = (event, reason) => {
-        if (reason === 'clickaway') {
-            return;
-        }
 
-        setSnackBarOpen(false);
-    }
+
+
     const handleDataReceived = (data) => {
         console.log('Data received from UnitDataBase:', data);
         // You can handle the received data here
     };
     handleDataReceived()
-    
+
 
     return (
         <div>
@@ -409,13 +460,9 @@ const General = () => {
                 </Tabs>
             </Box>
             <div >
-            <Snackbar anchorOrigin={{ vertical: "top", horizontal: "right" }} open={snackBarOpen} autoHideDuration={6000} onClose={handleSnackClose}>
-                        <Alert onClose={handleSnackClose} severity={errorhandler.code} sx={{ width: '25%' }}>
-                            {errorhandler.message}
-                        </Alert>
-                    </Snackbar>
+
                 {value === 0 && <div ><UnitDataBase style={tableStyle} /></div>}
-                {value === 1 && <div ><PartDataBase style={tableStyle} onDataReceived={handleDataReceived}/></div>}
+                {value === 1 && <div ><PartDataBase style={tableStyle} /></div>}
             </div>
 
         </div>
