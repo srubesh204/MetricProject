@@ -129,7 +129,7 @@ const Vendor = () => {
             const response = await axios.get(
                 `${process.env.REACT_APP_PORT}/vendor/getAllVendors`
             );
-            setVendorDataList(response.data);
+            setVendorDataList(response.data.result);
         } catch (err) {
             console.log(err);
         }
@@ -342,7 +342,7 @@ const Vendor = () => {
                                                 <td><input type="text" className='form-control' id="contactNumber" name="contactNumber" value={item.contactNumber}  onChange={(e) => changeVendorRow(index, e.target.name, e.target.value)} /></td>
                                                 <td><input type="text" className='form-control' id="mailId" name="mailId" value={item.mailId}   onChange={(e) => changeVendorRow(index, e.target.name, e.target.value)}/></td>
                                                 <td><input type="text" className='form-control' id="vcStatusId" name="vcStatus" value={item.vcStatus} onChange={(e) => changeVendorRow(index, e.target.name, e.target.value)} /></td>
-                                                <td><button type='button' className='btn btn-danger' onClick={()=> deleteVendorRow(index)}><i class="bi bi-trash-fill"></i></button></td>
+                                                <td><button type='button' className='btn btn-danger' onClick={()=> deleteVendorRow(index)}><i class="bi bi-trash-fill"></i>Delete</button></td>
                                             </tr>
                                         )): <tr></tr>}
                                     </tbody>
