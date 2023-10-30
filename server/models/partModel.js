@@ -5,13 +5,12 @@ const partSchema = new mongoose.Schema({
   partNo: {
     type: String,
     unique: true,
-    required: [true, "Part must"]
-   
+    required: [true, "Part Field is Required"]
   },
   partName: {
     type: String,
     unique: true,
-    required: [true, "Part Name must"]
+    required: [true, "Part Name is required"]
     
   },
   customer: String,

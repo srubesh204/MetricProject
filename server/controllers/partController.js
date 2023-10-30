@@ -15,7 +15,7 @@ const partController = {
 
         try {
             const { partNo, partName, customer, operationNo } = req.body;
-          
+
             const partResult = new partModel({ partNo, partName, customer, operationNo });
             await partResult.save();
             res.status(200).json({ message: "Part Data Successfully Saved", status: 1 });
@@ -42,6 +42,23 @@ const partController = {
                 // Add more fields as needed
             };
 
+            const validationError = updatePartFields.validateSync();
+
+            if (validationError) {
+                // Handle validation errors
+                const validationErrors = {};
+
+                if (validationError.errors) {
+                    // Convert Mongoose validation error details to a more user-friendly format
+                    for (const key in validationError.errors) {
+                        validationErrors[key] = validationError.errors[key].message;
+                    }
+                }
+
+                return res.status(400).json({
+                    errors: validationErrors
+                });
+            }
 
             // Find the designation by desId and update it
             const updatePart = await partModel.findOneAndUpdate(
@@ -54,10 +71,17 @@ const partController = {
                 return res.status(404).json({ error: 'Unit not found' });
             }
 
-            res.status(200).json(updatePart);
+            res.status(200).json({ result: updatePart, message: "Part Updated Successfully" });
         } catch (error) {
-            console.error(error);
-            res.status(500).send('Internal Server Error');
+            console.log(error.code);
+            if (error.code === 11000) {
+                return res.status(500).json({ error: 'Duplicate Value Not Accepted' });
+            }
+            const errors500 = {};
+            for (const key in error.errors) {
+                errors500[key] = error.errors[key].message;
+            }
+            res.status(500).json({ error: error, status: 0 });
         }
     },
     deletePart: async (req, res) => {

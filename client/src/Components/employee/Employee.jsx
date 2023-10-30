@@ -580,7 +580,7 @@ const Employee = () => {
                         <Alert severity="success">This is a success alert — check it out!</Alert>
                     </Stack> */}
                     <Snackbar anchorOrigin={{ vertical: "top", horizontal: "right" }} open={snackBarOpen} autoHideDuration={6000} onClose={handleSnackClose}>
-                        <Alert onClose={handleSnackClose} severity={errorhandler.code} sx={{ width: '25%' }}>
+                        <Alert  onClose={handleSnackClose} severity={errorhandler.code} sx={{ width: '25%' }}>
                             {errorhandler.message}
                         </Alert>
                     </Snackbar>
