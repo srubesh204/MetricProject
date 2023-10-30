@@ -1,27 +1,27 @@
-import React, { useState , useEffect} from 'react'
+import React, { useState, useEffect } from 'react'
 import axios from 'axios'
 
 const ItemMaster = () => {
 
-const [itemMasterData, setItemMasterData] =useState({
-    itemType: "",
-    itemDescription: "",
-    itemPrefix : "",
-    itemFqInMonths : "",
-    calAlertInDay : "",
-  wiNo : "",
-  uncertainty : "",
-  unCertaintyUnit : "",
-  standardRef : "",
-  itemImage : "",
-  workInsName : "",
-  itemTypeShort: "",
-  itemDescriptionShort: "",
-  status: ""
-    
-})
+    const [itemMasterData, setItemMasterData] = useState({
+        itemType: "",
+        itemDescription: "",
+        itemPrefix: "",
+        itemFqInMonths: "",
+        calAlertInDay: "",
+        wiNo: "",
+        uncertainty: "",
+        unCertaintyUnit: "",
+        standardRef: "",
+        itemImage: "",
+        workInsName: "",
+        itemTypeShort: "",
+        itemDescriptionShort: "",
+        status: ""
 
-const [itemMasterDataList, setItemMasterDataList] = useState([])
+    })
+
+    const [itemMasterDataList, setItemMasterDataList] = useState([])
     const itemMasterFetchData = async () => {
         try {
             const response = await axios.get(
@@ -36,11 +36,11 @@ const [itemMasterDataList, setItemMasterDataList] = useState([])
         itemMasterFetchData();
     }, []);
 
-const handleItemMasterBaseChange = (e) => {
-    const { name, value } = e.target;
-    setItemMasterData((prev) => ({ ...prev, [name]: value }));
+    const handleItemMasterBaseChange = (e) => {
+        const { name, value } = e.target;
+        setItemMasterData((prev) => ({ ...prev, [name]: value }));
 
-};
+    };
 
 
 
@@ -96,7 +96,7 @@ const handleItemMasterBaseChange = (e) => {
                                     <input type="number" className="form-control" id="itemFqInMonthsId" name="itemFqInMonths" placeholder="itemFqInMonths" value={itemMasterData.itemFqInMonths} onChange={handleItemMasterBaseChange} />
                                     <label htmlFor="itemFqInMonthsId">Item Fq In Months</label>
                                 </div>
-                                
+
                                 <div className="input-group col">
                                     <div className="form-floating">
                                         <input type="text" className="form-control" id="UncertaintyId" name="Uncertainty" placeholder="Uncertainty" value={itemMasterData.uncertainty} onChange={handleItemMasterBaseChange} />
@@ -115,7 +115,7 @@ const handleItemMasterBaseChange = (e) => {
                             <div className='row g-2 mb-2 '>
 
                                 <div className="form-floating col">
-                                    <input type="number" className="form-control" id="calAlertInDayId" name="calAlertInDay" placeholder="calAlertInDay"  value={itemMasterData.calAlertInDay} onChange={handleItemMasterBaseChange} />
+                                    <input type="number" className="form-control" id="calAlertInDayId" name="calAlertInDay" placeholder="calAlertInDay" value={itemMasterData.calAlertInDay} onChange={handleItemMasterBaseChange} />
                                     <label htmlFor="calAlertInDayId">Calibration Alert In Days</label>
                                 </div>
                                 <div className="form-floating col">
@@ -123,13 +123,13 @@ const handleItemMasterBaseChange = (e) => {
                                     <label htmlFor="standardRefId">Standard Ref </label>
                                 </div>
                                 <div className="form-floating col">
-                                <select className="form-select" id="statusId" name="status" aria-label="Floating label select example" value={itemMasterData.status} onChange={handleItemMasterBaseChange} >
-                                    <option selected>Status</option>
-                                    <option value="Active">Active</option>
-                                    <option value="InActive">InActive</option>
-                                    <option value="Relived">Relived</option>
-                                </select>
-                                <label htmlFor="statusId">Status</label>
+                                    <select className="form-select" id="statusId" name="status" aria-label="Floating label select example" value={itemMasterData.status} onChange={handleItemMasterBaseChange} >
+                                        <option selected>Status</option>
+                                        <option value="Active">Active</option>
+                                        <option value="InActive">InActive</option>
+                                        <option value="Relived">Relived</option>
+                                    </select>
+                                    <label htmlFor="statusId">Status</label>
                                 </div>
 
                             </div>
@@ -217,19 +217,19 @@ const handleItemMasterBaseChange = (e) => {
 
                                     </tr>
                                     {itemMasterDataList.map((item, index) => (
-                                    <tr>
-                                        <td>{index + 1}</td>
+                                        <tr>
+                                            <td>{index + 1}</td>
 
-                                        <td>{item.itemDescription}</td>
-                                        <td>{item.itemPrefix}</td>
-                                        <td>{item.calAlertInDay}</td>
-                                        <td>{item.status}</td>
-                                        <td>{item.vendorStatus}</td>
-                                        <td>{item.vendorStatus}</td>
+                                            <td>{item.itemDescription}</td>
+                                            <td>{item.itemPrefix}</td>
+                                            <td>{item.calAlertInDay}</td>
+                                            <td>{item.status}</td>
+                                            <td>{item.vendorStatus}</td>
+                                            <td>{item.vendorStatus}</td>
 
-                                        <td><button type='button' className='btn btn-danger' ><i class="bi bi-trash-fill"></i></button></td>
-                                    </tr>
-                                ))}
+                                            <td><button type='button' className='btn btn-danger' ><i class="bi bi-trash-fill"></i></button></td>
+                                        </tr>
+                                    ))}
                                 </tbody>
                             </table>
                         </div>
