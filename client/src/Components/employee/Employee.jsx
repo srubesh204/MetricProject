@@ -633,7 +633,7 @@ const Employee = () => {
                     </div>
                     <div className="form-floating col">
                         <select className="form-select" id="reportToFilterId" name="reportToFilter" onChange={handleFilterChange}>
-                            <option value="all">All</option>
+                             <option value="all">All</option>
                             {employeeList.map((item) => (
                                 <option>{item.firstName}</option>
                             ))}
