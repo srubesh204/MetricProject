@@ -1,19 +1,20 @@
 const mongoose = require('mongoose');
+const uniqueValidator = require('mongoose-unique-validator');
 
 const itemMasterSchema = new mongoose.Schema({
  
   itemType: String,
   itemDescription : {
     type: String,
-  unique: true,
-  required: [true, "Item Description must"]
+  unique: [true, "itemDescription Name should be Unique"],
+  required: [true, "Item Description is Required"]
   },
   itemPrefix : String,
-  itemFq : Number,
-  cabAlertInDay : Number,
-  wino : String,
-  unCertainty : Number,
-  unCertaintyUnit : String,
+  itemFqInMonths : Number,
+  calAlertInDay : Number,
+  wiNo : String,
+  uncertainty : Number,
+  uncertaintyUnit : String,
   standardRef : String,
   itemImageName : String,
   workInsName : String,
@@ -22,5 +23,5 @@ const itemMasterSchema = new mongoose.Schema({
 
   
 });
-
-module.exports = mongoose.model('itemmaster', itemMasterSchema);
+itemMasterSchema.plugin(uniqueValidator);
+module.exports = mongoose.model('itemMaster', itemMasterSchema);

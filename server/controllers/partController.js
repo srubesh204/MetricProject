@@ -71,7 +71,6 @@ const partController = {
             const partUpdate = new partModel(updatePartFields);
 
             const validationError = partUpdate.validateSync();
-            
             if (validationError) {
                 // Handle validation errors
                 const validationErrors = {};
@@ -87,7 +86,6 @@ const partController = {
                   errors: validationErrors
                 });
               }
-           
 
             // Find the designation by desId and update it
             const updatePart = await partModel.findOneAndUpdate(
@@ -97,7 +95,7 @@ const partController = {
             );
 
             if (!updatePart) {
-                return res.status(404).json({ error: 'Unit not found' });
+                return res.status(404).json({ error: 'Part not found' });
             }
             console.log("Part Updated Successfully")
             res.status(200).json({ result: updatePart, message: "Part Updated Successfully" });
@@ -123,7 +121,7 @@ const partController = {
             );
 
             if (!deletePart) {
-                return res.status(404).json({ error: 'Unit not found' });
+                return res.status(404).json({ error: 'Part not found' });
             }
 
             res.status(202).json({ message: 'Part detail deleted successfully' ,result: deletePart });

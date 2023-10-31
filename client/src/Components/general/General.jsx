@@ -37,7 +37,7 @@ const UnitDataBase = ({ style }) => {
             const response = await axios.get(
                 `${process.env.REACT_APP_PORT}/unit/getAllUnits`
             );
-            setUnitDataList(response.data);
+            setUnitDataList(response.data.result);
         } catch (err) {
             console.log(err);
         }
@@ -258,7 +258,7 @@ const PartDataBase = ({ style }) => {
             const response = await axios.get(
                 `${process.env.REACT_APP_PORT}/part/getAllParts`
             );
-            setPartDataList(response.data);
+            setPartDataList(response.data.result);
         } catch (err) {
             console.log(err);
         }
