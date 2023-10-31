@@ -22,7 +22,7 @@ const vendorSchema = new mongoose.Schema({
   vendorStatus : String,
   vendorContacts : [{name : String, 
     contactNumber : {
-      type: String,
+      type: Number,
       required: [true, "Vendor Contact number is must"],
       minLength: [10, "Vendor Contact should be within 10 digits"],
       maxLength: [10, "Vendor Contact should not more than 10 digits"]
