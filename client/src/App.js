@@ -3,23 +3,22 @@ import './App.css';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import Department from './Components/Department';
 import Employee from './Components/employee/Employee';
-import Dashboard from './Components/Dashboard/Dashboard'
+
 import General from './Components/general/General';
 import Vendor from './Components/vendor/Vendor';
 import ItemMaster from './Components/itemMaster/ItemMaster';
 import Devi from './Components/devi/Devi';
+import MiniDrawer from './Components/Dashboard/MiniDrawer';
+
 
 
 
 function App() {
   return (
     <div className="App">
-      
       <BrowserRouter>
-      <Dashboard />
+        <MiniDrawer />
         <Routes>
-
-
           <Route path="/desdep" element={<Department />} />
           <Route path="/employee" element={<Employee />} />
           <Route path="/general" element={<General />} />
