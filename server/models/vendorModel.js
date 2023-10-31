@@ -23,14 +23,14 @@ const vendorSchema = new mongoose.Schema({
   vendorContacts : [{name : String, 
     contactNumber : {
       type: String,
-      required: [true, "Phone number is must"],
-      minLength: [10, "Phone should be within 10 digits"],
-      maxLength: [10, "Phone should not more than 10 digits"]
+      required: [true, "Vendor Contact number is must"],
+      minLength: [10, "Vendor Contact should be within 10 digits"],
+      maxLength: [10, "Vendor Contact should not more than 10 digits"]
         
   },
     mailId : {
     type: String,
-    unique: [true, "Email should be unique"],
+    unique: [true, "Vendor Email should be unique"],
     required: [true, "Email Required"]
     
   } , 
