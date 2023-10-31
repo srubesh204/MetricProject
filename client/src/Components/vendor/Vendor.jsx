@@ -223,7 +223,7 @@ const Vendor = () => {
                 // Handle other errors
                 console.log(err);
                 const errorData500 = err.response.data.error;
-                const errorMessages500 = Object.values(errorData500).join(', ');
+                const errorMessages500 = Object.values(errorData500);
                 console.log(errorMessages500)
                 setErrorHandler({ status: 0, message: errorMessages500, code: "error" });
             } else {
