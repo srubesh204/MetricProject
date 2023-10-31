@@ -263,7 +263,7 @@ const ItemMaster = () => {
                                             <tr key={index}>
                                                 <td>{index + 1}</td>
                                                 <td><input type='text' className='form-control' name='calibrationPoint' value={item.calibrationPoint} onChange={(e) => changeCalibrationPointRow(index, e.target.name, e.target.value)} /></td>
-                                                <td><button type='button' onClick={() => deleteCalibrationPointRow(index)}>Delete</button></td>
+                                                <td><button type='button' className='btn btn-danger' onClick={() => deleteCalibrationPointRow(index)}><i class="bi bi-trash-fill"></i></button></td>
                                             </tr>
 
 

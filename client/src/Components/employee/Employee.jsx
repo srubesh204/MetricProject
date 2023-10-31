@@ -6,8 +6,7 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
-import Alert from '@mui/material/Alert';
-import Stack from '@mui/material/Stack';
+
 import Snackbar from '@mui/material/Snackbar';
 import MuiAlert from '@mui/material/Alert';
 import TextField from '@mui/material/TextField';
@@ -179,7 +178,7 @@ const Employee = () => {
             const response = await axios.get(
                 `${process.env.REACT_APP_PORT}/department/getAllDepartments`
             );
-            setDepartmentList(response.data);
+            setDepartmentList(response.data.result);
         } catch (err) {
             console.log(err);
         }
@@ -633,7 +632,7 @@ const Employee = () => {
                     </div>
                     <div className="form-floating col">
                         <select className="form-select" id="reportToFilterId" name="reportToFilter" onChange={handleFilterChange}>
-                            <option value="all">All</option>
+                             <option value="all">All</option>
                             {employeeList.map((item) => (
                                 <option>{item.firstName}</option>
                             ))}

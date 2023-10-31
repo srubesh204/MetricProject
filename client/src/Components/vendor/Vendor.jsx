@@ -2,11 +2,22 @@ import React, { useState, useEffect } from 'react'
 import axios from 'axios'
 import Autocomplete from '@mui/material/Autocomplete';
 import TextField from '@mui/material/TextField';
-import { indigo } from '@mui/material/colors';
-
+import Alert from '@mui/material/Alert';
+import Snackbar from '@mui/material/Snackbar';
 const Vendor = () => {
 
 
+    const [snackBarOpen, setSnackBarOpen] = useState(false)
+    const handleSnackClose = (event, reason) => {
+        if (reason === 'clickaway') {
+            return;
+        }
+
+        setSnackBarOpen(false);
+    }
+
+    const [errorhandler, setErrorHandler] = useState({})
+    console.log(errorhandler)
 
 
     const [vendorStateId, setVendorStateId] = useState("")
@@ -23,7 +34,7 @@ const Vendor = () => {
         customer: "",
         supplier: "",
         subContractor: "",
-        vendorContacts: [{ name: "", contactNumber: "", mailId: "", vcStatus: "" }],
+        vendorContacts: [],
         certificate: "",
         certificateValidity: "",
         vendorStatus: "",
@@ -41,7 +52,7 @@ const Vendor = () => {
         customer: "",
         supplier: "",
         subContractor: "",
-        vendorContacts: [{ name: "gdh", contactNumber: "5652", mailId: "gd", vcStatus: "hsdg" }],
+        vendorContacts: [],
         certificate: "",
         certificateValidity: "",
         vendorStatus: "",
@@ -94,10 +105,10 @@ const Vendor = () => {
     const addVendorDataRow = () => {
         setVendorData((prevVendorData) => ({
             ...prevVendorData,
-            vendorContacts: [...prevVendorData.vendorContacts, { name: "" ,contactNumber:"",mailId:"",vcStatus:""}]
+            vendorContacts: [...prevVendorData.vendorContacts, { name: "", contactNumber: "", mailId: "", vcStatus: "" }]
         }))
     }
-    
+
     const deleteVendorRow = (index) => {
         setVendorData((prevVendorData) => {
             const updateCP = [...prevVendorData.vendorContacts]
@@ -111,7 +122,7 @@ const Vendor = () => {
         setVendorData((prevVendorData) => {
             const updateCP = [...prevVendorData.vendorContacts]
             updateCP[index] = {
-                ...updateCP[index], [name] : value,
+                ...updateCP[index], [name]: value,
             };
             return {
                 ...prevVendorData, vendorContacts: updateCP,
@@ -148,10 +159,34 @@ const Vendor = () => {
             {/*console.log(response.data.message)*/ }
             console.log(response)
             vendorFetchData();
+
             setVendorData(initialVendorData);
+            setSnackBarOpen(true)
+            console.log("Vendor Create successfully");
+            setErrorHandler({ status: response.data.status, message: response.data.message, code: "success" })
         } catch (err) {
+            setSnackBarOpen(true)
+
+            if (err.response && err.response.status === 400) {
+                // Handle validation errors
+                const errorData400 = err.response.data.errors;
+                const errorMessages400 = Object.values(errorData400).join(', ');
+                console.log(errorMessages400)
+                setErrorHandler({ status: 0, message: errorMessages400, code: "error" });
+            } else if (err.response && err.response.status === 500) {
+                // Handle other errors
+                const errorData500 = err.response.data.error;
+                const errorMessages500 = Object.values(errorData500).join(', ');
+                console.log(errorMessages500)
+                setErrorHandler({ status: 0, message: errorMessages500, code: "error" });
+            } else {
+                console.log(err.response.data.error)
+                setErrorHandler({ status: 0, message: "An error occurred", code: "error" });
+            }
+
+
             console.log(err);
-            alert(err);
+
         }
     };
     console.log()
@@ -338,13 +373,13 @@ const Vendor = () => {
                                         {vendorData.vendorContacts ? vendorData.vendorContacts.map((item, index) => (
                                             <tr>
                                                 <td>{index + 1}</td>
-                                                <td><input type="text" className='form-control' id="nameId" name="name" value={item.name}  onChange={(e) => changeVendorRow(index, e.target.name, e.target.value)} /></td>
-                                                <td><input type="text" className='form-control' id="contactNumber" name="contactNumber" value={item.contactNumber}  onChange={(e) => changeVendorRow(index, e.target.name, e.target.value)} /></td>
-                                                <td><input type="text" className='form-control' id="mailId" name="mailId" value={item.mailId}   onChange={(e) => changeVendorRow(index, e.target.name, e.target.value)}/></td>
+                                                <td><input type="text" className='form-control' id="nameId" name="name" value={item.name} onChange={(e) => changeVendorRow(index, e.target.name, e.target.value)} /></td>
+                                                <td><input type="text" className='form-control' id="contactNumber" name="contactNumber" value={item.contactNumber} onChange={(e) => changeVendorRow(index, e.target.name, e.target.value)} /></td>
+                                                <td><input type="text" className='form-control' id="mailId" name="mailId" value={item.mailId} onChange={(e) => changeVendorRow(index, e.target.name, e.target.value)} /></td>
                                                 <td><input type="text" className='form-control' id="vcStatusId" name="vcStatus" value={item.vcStatus} onChange={(e) => changeVendorRow(index, e.target.name, e.target.value)} /></td>
-                                                <td><button type='button' className='btn btn-danger' onClick={()=> deleteVendorRow(index)}><i class="bi bi-trash-fill"></i>Delete</button></td>
+                                                <td><button type='button' className='btn btn-danger' onClick={() => deleteVendorRow(index)}><i class="bi bi-trash-fill"></i></button></td>
                                             </tr>
-                                        )): <tr></tr>}
+                                        )) : <tr></tr>}
                                     </tbody>
                                 </table>
                             </div>
@@ -423,7 +458,11 @@ const Vendor = () => {
                             </tbody>
                         </table>
                     </div>
-
+                    <Snackbar anchorOrigin={{ vertical: "top", horizontal: "right" }} open={snackBarOpen} autoHideDuration={6000} onClose={handleSnackClose}>
+                        <Alert onClose={handleSnackClose} severity={errorhandler.code} sx={{ width: '25%' }}>
+                            {errorhandler.message}
+                        </Alert>
+                    </Snackbar>
 
 
 
