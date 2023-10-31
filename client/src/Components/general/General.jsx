@@ -396,7 +396,7 @@ const PartDataBase = ({ style }) => {
 
     return (
 
-        <div className='container'>
+        <div className='container' >
             <div style={bodyModel}>
                 <form>
                     <h1 className='text-center'>Part DataBase</h1>
@@ -512,7 +512,7 @@ const General = () => {
 
 
     return (
-        <div>
+        <div style={{marginTop: "4rem"}}>
             <Box sx={{ width: '100%', bgcolor: 'inherit',  }}>
                 <Tabs value={value} onChange={handleChange} centered>
                     <Tab label="Unit" />

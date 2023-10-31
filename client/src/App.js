@@ -8,16 +8,14 @@ import General from './Components/general/General';
 import Vendor from './Components/vendor/Vendor';
 import ItemMaster from './Components/itemMaster/ItemMaster';
 import Devi from './Components/devi/Devi';
-import MiniDrawer from './Components/Dashboard/MiniDrawer';
-
-
+import Dashboard from './Components/Dashboard/Dashboard';
 
 
 function App() {
   return (
     <div className="App">
       <BrowserRouter>
-        <MiniDrawer />
+        <Dashboard />
         <Routes>
           <Route path="/desdep" element={<Department />} />
           <Route path="/employee" element={<Employee />} />

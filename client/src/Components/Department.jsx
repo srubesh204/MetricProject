@@ -182,7 +182,8 @@ const Department = () => {
   const body = {
     padding: "1rem",
     paddingTop: "10px",
-    margin: "2rem",
+   
+    marginTop: "4rem"
   };
 
   const bodyCards = {
