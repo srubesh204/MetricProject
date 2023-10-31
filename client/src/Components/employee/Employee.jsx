@@ -327,6 +327,7 @@ const Employee = () => {
             setEmployeeData((prev) => ({ ...prev, [name]: formattedValue })); // Update the state with the formatted value
         }
     };
+    
 
     const deleteEmployee = async (id) => {
 
