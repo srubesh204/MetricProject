@@ -2,11 +2,22 @@ import React, { useState, useEffect } from 'react'
 import axios from 'axios'
 import Autocomplete from '@mui/material/Autocomplete';
 import TextField from '@mui/material/TextField';
-import { indigo } from '@mui/material/colors';
-
+import Alert from '@mui/material/Alert';
+import Snackbar from '@mui/material/Snackbar';
 const Vendor = () => {
 
 
+    const [snackBarOpen, setSnackBarOpen] = useState(false)
+    const handleSnackClose = (event, reason) => {
+        if (reason === 'clickaway') {
+            return;
+        }
+
+        setSnackBarOpen(false);
+    }
+
+    const [errorhandler, setErrorHandler] = useState({})
+    console.log(errorhandler)
 
 
     const [vendorStateId, setVendorStateId] = useState("")
@@ -23,7 +34,7 @@ const Vendor = () => {
         customer: "",
         supplier: "",
         subContractor: "",
-        vendorContacts: [{ name: "", contactNumber: "", mailId: "", vcStatus: "" }],
+        vendorContacts: [],
         certificate: "",
         certificateValidity: "",
         vendorStatus: "",
@@ -41,7 +52,7 @@ const Vendor = () => {
         customer: "",
         supplier: "",
         subContractor: "",
-        vendorContacts: [{ name: "gdh", contactNumber: "5652", mailId: "gd", vcStatus: "hsdg" }],
+        vendorContacts: [],
         certificate: "",
         certificateValidity: "",
         vendorStatus: "",
@@ -94,10 +105,10 @@ const Vendor = () => {
     const addVendorDataRow = () => {
         setVendorData((prevVendorData) => ({
             ...prevVendorData,
-            vendorContacts: [...prevVendorData.vendorContacts, { name: "" ,contactNumber:"",mailId:"",vcStatus:""}]
+            vendorContacts: [...prevVendorData.vendorContacts, { name: "", contactNumber: "", mailId: "", vcStatus: "" }]
         }))
     }
-    
+
     const deleteVendorRow = (index) => {
         setVendorData((prevVendorData) => {
             const updateCP = [...prevVendorData.vendorContacts]
@@ -111,7 +122,7 @@ const Vendor = () => {
         setVendorData((prevVendorData) => {
             const updateCP = [...prevVendorData.vendorContacts]
             updateCP[index] = {
-                ...updateCP[index], [name] : value,
+                ...updateCP[index], [name]: value,
             };
             return {
                 ...prevVendorData, vendorContacts: updateCP,
@@ -147,39 +158,163 @@ const Vendor = () => {
             );
             {/*console.log(response.data.message)*/ }
             console.log(response)
+            setSnackBarOpen(true)
             vendorFetchData();
             setVendorData(initialVendorData);
+            console.log("Vendor Create successfully");
+            setErrorHandler({ status: response.data.status, message: response.data.message, code: "success" })
         } catch (err) {
+           
+           
+           
+            setSnackBarOpen(true)
+
+            if (err.response && err.response.status === 400) {
+                // Handle validation errors
+                console.log(err);
+                const errorData400 = err.response.data.errors;
+                const errorMessages400 = Object.values(errorData400).join(', ');
+                console.log(errorMessages400)
+                setErrorHandler({ status: 0, message: errorMessages400, code: "error" });
+            } else if (err.response && err.response.status === 500) {
+                // Handle other errors
+                console.log(err);
+                const errorData500 = err.response.data.error;
+                const errorMessages500 = Object.values(errorData500).join(', ');
+                console.log(errorMessages500)
+                setErrorHandler({ status: 0, message: errorMessages500, code: "error" });
+            } else {
+                console.log(err);
+                console.log(err.response.data.error)
+                setErrorHandler({ status: 0, message: "An error occurred", code: "error" });
+            }
+
+
             console.log(err);
-            alert(err);
+
         }
     };
     console.log()
 
     const updateVendorData = async (id) => {
         try {
-            await axios.put(
+            const response = await axios.put(
                 "http://localhost:3001/vendor/updateVendor/" + id, vendorData
             );
+            setSnackBarOpen(true)
             vendorFetchData();
+
             setVendorStateId(null)
             setVendorData(initialVendorData);
             console.log("Vendor Updated Successfully");
+            setErrorHandler({ status: response.data.status, message: response.data.message, code: "success" })
         } catch (err) {
+
+            setSnackBarOpen(true)
+                   
+            if (err.response && err.response.status === 400) {
+                // Handle validation errors
+                console.log(err);
+                const errorData400 = err.response.data.errors;
+                const errorMessages400 = Object.values(errorData400).join(', ');
+                console.log(errorMessages400)
+                setErrorHandler({ status: 0, message: errorMessages400, code: "error" });
+            } else if (err.response && err.response.status === 500) {
+                // Handle other errors
+                console.log(err);
+                const errorData500 = err.response.data.error;
+                const errorMessages500 = Object.values(errorData500).join(', ');
+                console.log(errorMessages500)
+                setErrorHandler({ status: 0, message: errorMessages500, code: "error" });
+            } else {
+                console.log(err);
+                console.log(err.response.data.error)
+                setErrorHandler({ status: 0, message: "An error occurred", code: "error" });
+            }
+
+
+
             console.log(err);
         }
     };
 
     const deleteVendorData = async (id) => {
         try {
-            await axios.delete(
+          const response=  await axios.delete(
                 "http://localhost:3001/vendor/deleteVendor/" + id, vendorData
             );
             vendorFetchData();
             setVendorData(initialVendorData);
+            setSnackBarOpen(true)
+            setErrorHandler({ status: response.data.status, message: `${response.data.result.firstName} ${response.data.result.lastName} ${response.data.message}`, code: "success" })
             console.log("Vendor delete Successfully");
         } catch (err) {
+            setSnackBarOpen(true)
+
+            if (err.response && err.response.status === 400) {
+                // Handle validation errors
+                console.log(err);
+                const errorData400 = err.response.data.errors;
+                const errorMessages400 = Object.values(errorData400).join(', ');
+                console.log(errorMessages400)
+                setErrorHandler({ status: 0, message: errorMessages400, code: "error" });
+            } else if (err.response && err.response.status === 500) {
+                // Handle other errors
+                console.log(err);
+                const errorData500 = err.response.data.error;
+                const errorMessages500 = Object.values(errorData500).join(', ');
+                console.log(errorMessages500)
+                setErrorHandler({ status: 0, message: errorMessages500, code: "error" });
+            } else {
+                console.log(err);
+                console.log(err.response.data.error)
+                setErrorHandler({ status: 0, message: "An error occurred", code: "error" });
+            }
+
+
+
             console.log(err);
+        }
+    };
+
+    const handleKeyDown = (event) => {
+        const { name, value } = event.target
+        console.log(name)
+        if (event.key === 'Tab') {
+            // Prevent default Tab behavior
+
+            const formattedValue = value.toLowerCase().
+                split(' ')
+                .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+                .join(' ');
+            console.log(formattedValue)
+            // Format the input value (capitalization)
+             // Update the state to show the formatted value
+            setVendorData((prev) => ({ ...prev, [name]: formattedValue })); // Update the state with the formatted value
+
+           
+        }
+    };
+
+    const handleKeyDownForContacts = (event) => {
+        const { name, value } = event.target
+        console.log(name)
+        if (event.key === 'Tab') {
+            // Prevent default Tab behavior
+
+            const formattedValue = value.toLowerCase().
+                split(' ')
+                .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+                .join(' ');
+            console.log(formattedValue)
+            // Format the input value (capitalization)
+           // Update the state to show the formatted value
+            setVendorData((prevVendorData) => ({
+                ...prevVendorData,
+                vendorContacts: [{...prevVendorData.vendorContacts, [name]: formattedValue}]
+            }))
+
+           
         }
     };
 
@@ -190,7 +325,16 @@ const Vendor = () => {
         setVendorStateId(item._id)
     }
 
+     //Dateformat
 
+    const currentDate = new Date();
+    console.log(currentDate)
+    const currentDay = currentDate.getDate().toString();
+    const currentMonth = (currentDate.getMonth() + 1).toString();
+    const currentYear = currentDate.getFullYear().toString();
+    const DateFormat = currentYear  + "-" + currentMonth + "-" + currentDay
+
+    console.log(currentDay + "-" + currentMonth + "-" + currentYear)
 
 
     const handleVendorDataBaseChange = (e) => {
@@ -210,11 +354,11 @@ const Vendor = () => {
         borderRadius: "10px",
 
         padding: "2rem",
-        margin: "1rem",
+        margin: "4rem 1rem 1rem 1rem",
         boxShadow: "0px 0px 25px 10px",
     }
     return (
-        <div className='container'>
+        <div className='container' >
             <div style={bodyTxt}>
                 <form>
                     <div className='row g-2'>
@@ -246,22 +390,22 @@ const Vendor = () => {
                             <label htmlFor="vendorCodeId">Vendor Code</label>
                         </div>
                         <div className="form-floating  col">
-                            <input type="text" className="form-control" id="aliasNameId" name="aliasName" placeholder="aliasName" value={vendorData.aliasName} onChange={handleVendorDataBaseChange} />
+                            <input type="text" className="form-control" id="aliasNameId" name="aliasName" placeholder="aliasName" value={vendorData.aliasName} onChange={handleVendorDataBaseChange} onKeyDown={handleKeyDown} />
                             <label htmlFor="aliasNameId">Alias Name</label>
                         </div>
                         <div className="form-floating  col">
-                            <input type="text" className="form-control" id="fullNameId" name="fullName" placeholder="fullName" value={vendorData.fullName} onChange={handleVendorDataBaseChange} />
+                            <input type="text" className="form-control" id="fullNameId" name="fullName" placeholder="fullName" value={vendorData.fullName} onChange={handleVendorDataBaseChange} onKeyDown={handleKeyDown} />
                             <label htmlFor="fullNameId">full Name</label>
                         </div>
                         <div className="form-floating  col">
-                            <input type="date" className="form-control" id="dateOfRegId" name="dateOfReg" placeholder="dateOfReg" value={vendorData.dateOfReg} onChange={handleVendorDataBaseChange} />
+                            <input type="date" className="form-control" id="dateOfRegId" name="dateOfReg" placeholder="dateOfReg" max={DateFormat}  value={vendorData.dateOfReg} onChange={handleVendorDataBaseChange} />
                             <label htmlFor="dateOfRegId">Data Of Reg</label>
                         </div>
                     </div>
                     <div className="row g-2">
                         <div className='col-md-6  '>
                             <div class="form-floating mb-2">
-                                <textarea className="form-control" id="addressId" placeholder="address" name="address" value={vendorData.address} style={{ height: "50px" }} onChange={handleVendorDataBaseChange}></textarea>
+                                <textarea className="form-control" id="addressId" placeholder="address" name="address" value={vendorData.address} style={{ height: "50px" }} onKeyDown={handleKeyDown} onChange={handleVendorDataBaseChange}></textarea>
                                 <label htmlFor="addressId">Address</label>
                             </div>
                             <div className='row g-2'>
@@ -338,13 +482,13 @@ const Vendor = () => {
                                         {vendorData.vendorContacts ? vendorData.vendorContacts.map((item, index) => (
                                             <tr>
                                                 <td>{index + 1}</td>
-                                                <td><input type="text" className='form-control' id="nameId" name="name" value={item.name}  onChange={(e) => changeVendorRow(index, e.target.name, e.target.value)} /></td>
-                                                <td><input type="text" className='form-control' id="contactNumber" name="contactNumber" value={item.contactNumber}  onChange={(e) => changeVendorRow(index, e.target.name, e.target.value)} /></td>
-                                                <td><input type="text" className='form-control' id="mailId" name="mailId" value={item.mailId}   onChange={(e) => changeVendorRow(index, e.target.name, e.target.value)}/></td>
+                                                <td><input type="text" className='form-control' id="nameId" name="name" value={item.name} onChange={(e) => changeVendorRow(index, e.target.name, e.target.value)} onKeyDown={handleKeyDownForContacts}  /></td>
+                                                <td><input type="text" className='form-control' id="contactNumber" name="contactNumber" value={item.contactNumber} onChange={(e) => changeVendorRow(index, e.target.name, e.target.value)}  /></td>
+                                                <td><input type="text" className='form-control' id="mailId" name="mailId" value={item.mailId} onChange={(e) => changeVendorRow(index, e.target.name, e.target.value)} /></td>
                                                 <td><input type="text" className='form-control' id="vcStatusId" name="vcStatus" value={item.vcStatus} onChange={(e) => changeVendorRow(index, e.target.name, e.target.value)} /></td>
-                                                <td><button type='button' className='btn btn-danger' onClick={()=> deleteVendorRow(index)}><i class="bi bi-trash-fill"></i>Delete</button></td>
+                                                <td><button type='button' className='btn btn-danger' onClick={() => deleteVendorRow(index)}><i class="bi bi-trash-fill"></i></button></td>
                                             </tr>
-                                        )): <tr></tr>}
+                                        )) : <tr></tr>}
                                     </tbody>
                                 </table>
                             </div>
@@ -423,7 +567,11 @@ const Vendor = () => {
                             </tbody>
                         </table>
                     </div>
-
+                    <Snackbar anchorOrigin={{ vertical: "top", horizontal: "right" }} open={snackBarOpen} autoHideDuration={6000} onClose={handleSnackClose}>
+                        <Alert onClose={handleSnackClose} severity={errorhandler.code} sx={{ width: '100%' }}>
+                            {errorhandler.message}
+                        </Alert>
+                    </Snackbar>
 
 
 
