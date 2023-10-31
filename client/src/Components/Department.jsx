@@ -54,7 +54,7 @@ const Department = () => {
       const response = await axios.get(
         `${process.env.REACT_APP_PORT}/department/getAllDepartments`
       );
-      setDepartmentList(response.data);
+      setDepartmentList(response.data.result);
     } catch (err) {
       console.log(err);
     }
