@@ -11,6 +11,7 @@ const unitRoute = require("./routes/unitRoute")
 const partRoute = require("./routes/partRoute")
 const vendorRoute = require("./routes/vendorRoute")
 const itemMasterRoute = require("./routes/itemMasterRoute")
+const uploadRoute = require('./routes/uploadRoutes')
 //
 mongoose.connect('mongodb://localhost/metric', {
   useNewUrlParser: true,
@@ -51,6 +52,8 @@ app.use('/unit', unitRoute);
 app.use('/part', partRoute);
 app.use('/vendor', vendorRoute);
 app.use('/itemMaster', itemMasterRoute);
+
+app.use('/upload', uploadRoute);
 
 
 const port = 3001;

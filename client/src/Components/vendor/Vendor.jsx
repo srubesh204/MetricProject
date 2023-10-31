@@ -164,9 +164,9 @@ const Vendor = () => {
             console.log("Vendor Create successfully");
             setErrorHandler({ status: response.data.status, message: response.data.message, code: "success" })
         } catch (err) {
-           
-           
-           
+
+
+
             setSnackBarOpen(true)
 
             if (err.response && err.response.status === 400) {
@@ -211,7 +211,7 @@ const Vendor = () => {
         } catch (err) {
 
             setSnackBarOpen(true)
-                   
+
             if (err.response && err.response.status === 400) {
                 // Handle validation errors
                 console.log(err);
@@ -240,7 +240,7 @@ const Vendor = () => {
 
     const deleteVendorData = async (id) => {
         try {
-          const response=  await axios.delete(
+            const response = await axios.delete(
                 "http://localhost:3001/vendor/deleteVendor/" + id, vendorData
             );
             vendorFetchData();
@@ -289,10 +289,10 @@ const Vendor = () => {
                 .join(' ');
             console.log(formattedValue)
             // Format the input value (capitalization)
-             // Update the state to show the formatted value
+            // Update the state to show the formatted value
             setVendorData((prev) => ({ ...prev, [name]: formattedValue })); // Update the state with the formatted value
 
-           
+
         }
     };
 
@@ -308,13 +308,13 @@ const Vendor = () => {
                 .join(' ');
             console.log(formattedValue)
             // Format the input value (capitalization)
-           // Update the state to show the formatted value
+            // Update the state to show the formatted value
             setVendorData((prevVendorData) => ({
                 ...prevVendorData,
-                vendorContacts: [{...prevVendorData.vendorContacts, [name]: formattedValue}]
+                vendorContacts: [{ ...prevVendorData.vendorContacts, [name]: formattedValue }]
             }))
 
-           
+
         }
     };
 
@@ -325,14 +325,14 @@ const Vendor = () => {
         setVendorStateId(item._id)
     }
 
-     //Dateformat
+    //Dateformat
 
     const currentDate = new Date();
     console.log(currentDate)
     const currentDay = currentDate.getDate().toString();
     const currentMonth = (currentDate.getMonth() + 1).toString();
     const currentYear = currentDate.getFullYear().toString();
-    const DateFormat = currentYear  + "-" + currentMonth + "-" + currentDay
+    const DateFormat = currentYear + "-" + currentMonth + "-" + currentDay
 
     console.log(currentDay + "-" + currentMonth + "-" + currentYear)
 
@@ -348,6 +348,32 @@ const Vendor = () => {
 
     };
 
+    const [file, setFile] = useState(null);
+
+    const handleFileChange = (e) => {
+        setFile(e.target.files[0]);
+    
+    };
+    console.log(file)
+    const handleFileUpload = async () => {
+        const formData = new FormData();
+        formData.append('file', file);
+        
+        try {
+            const response = await fetch("http://localhost:3001/upload/VendorCertificateUpload", {
+                method: 'POST',
+                body: formData,
+            });
+            console.log(response)
+            if (response.ok) {
+                console.log('File uploaded successfully');
+                setSnackBarOpen(true);
+                setErrorHandler({ status: 1, message: "Vendor Certificate Uploaded Successfully", code: "success" });
+            }
+        } catch (error) {
+            console.error('Error uploading the file:', error);
+        }
+    };
 
 
     const bodyTxt = {
@@ -398,7 +424,7 @@ const Vendor = () => {
                             <label htmlFor="fullNameId">full Name</label>
                         </div>
                         <div className="form-floating  col">
-                            <input type="date" className="form-control" id="dateOfRegId" name="dateOfReg" placeholder="dateOfReg" max={DateFormat}  value={vendorData.dateOfReg} onChange={handleVendorDataBaseChange} />
+                            <input type="date" className="form-control" id="dateOfRegId" name="dateOfReg" placeholder="dateOfReg" max={DateFormat} value={vendorData.dateOfReg} onChange={handleVendorDataBaseChange} />
                             <label htmlFor="dateOfRegId">Data Of Reg</label>
                         </div>
                     </div>
@@ -461,7 +487,8 @@ const Vendor = () => {
 
                                 <div className='me-2 col'>
                                     <label className='certificateuplod'>
-                                        <input className="form-control certificatedownlod" type="file" id="certificateUpload" />Certificate Upload </label>
+                                        <input onChange={handleFileChange} className="form-control certificatedownlod" type="file" id="certificateUpload" />Certificate Upload </label>
+                                        <button type='button' onClick={handleFileUpload}>Upload</button>
                                 </div>
 
                             </div>
@@ -482,8 +509,8 @@ const Vendor = () => {
                                         {vendorData.vendorContacts ? vendorData.vendorContacts.map((item, index) => (
                                             <tr>
                                                 <td>{index + 1}</td>
-                                                <td><input type="text" className='form-control' id="nameId" name="name" value={item.name} onChange={(e) => changeVendorRow(index, e.target.name, e.target.value)} onKeyDown={handleKeyDownForContacts}  /></td>
-                                                <td><input type="text" className='form-control' id="contactNumber" name="contactNumber" value={item.contactNumber} onChange={(e) => changeVendorRow(index, e.target.name, e.target.value)}  /></td>
+                                                <td><input type="text" className='form-control' id="nameId" name="name" value={item.name} onChange={(e) => changeVendorRow(index, e.target.name, e.target.value)} onKeyDown={handleKeyDownForContacts} /></td>
+                                                <td><input type="text" className='form-control' id="contactNumber" name="contactNumber" value={item.contactNumber} onChange={(e) => changeVendorRow(index, e.target.name, e.target.value)} /></td>
                                                 <td><input type="text" className='form-control' id="mailId" name="mailId" value={item.mailId} onChange={(e) => changeVendorRow(index, e.target.name, e.target.value)} /></td>
                                                 <td><input type="text" className='form-control' id="vcStatusId" name="vcStatus" value={item.vcStatus} onChange={(e) => changeVendorRow(index, e.target.name, e.target.value)} /></td>
                                                 <td><button type='button' className='btn btn-danger' onClick={() => deleteVendorRow(index)}><i class="bi bi-trash-fill"></i></button></td>
