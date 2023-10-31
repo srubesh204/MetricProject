@@ -245,11 +245,11 @@ const Vendor = () => {
         borderRadius: "10px",
 
         padding: "2rem",
-        margin: "1rem",
+        margin: "4rem 1rem 1rem 1rem",
         boxShadow: "0px 0px 25px 10px",
     }
     return (
-        <div className='container'>
+        <div className='container' >
             <div style={bodyTxt}>
                 <form>
                     <div className='row g-2'>

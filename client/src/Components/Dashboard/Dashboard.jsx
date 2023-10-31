@@ -1,4 +1,5 @@
-import React from 'react'
+import React from 'react';
+import { Link } from 'react-router-dom';
 
 const Dashboard = () => {
     return (
@@ -9,7 +10,7 @@ const Dashboard = () => {
                     <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasDarkNavbar" aria-controls="offcanvasDarkNavbar" aria-label="Toggle navigation">
                         <span class="navbar-toggler-icon"></span>
                     </button>
-                    <a class="navbar-brand" href="/">Offcanvas dark navbar</a>
+                    <Link to="/" className='navbar-brand'> Metric </Link>
                     <div class="offcanvas offcanvas-start text-bg-dark" tabindex="-1" id="offcanvasDarkNavbar" aria-labelledby="offcanvasDarkNavbarLabel">
                         <div class="offcanvas-header">
                             <h5 class="offcanvas-title" id="offcanvasDarkNavbarLabel">Dark offcanvas</h5>
@@ -28,14 +29,14 @@ const Dashboard = () => {
                                         Master Database
                                     </a>
                                     <ul class="dropdown-menu dropdown-menu-dark">
-                                        <li><a class="dropdown-item" href="/desdep">Department and Designation</a></li>
+                                        <li><Link className='dropdown-item' to="/desdep">Department and Designation</Link></li>
                                         
                                         <li>
-                                        <a class="dropdown-item" href="#">Employee</a>
+                                        <Link className='dropdown-item' to="/employee">Employee</Link>
                                         </li>
-                                        <li><a class="dropdown-item" href="/general">General</a></li>
-                                        <li><a class="dropdown-item" href="/vendor">Vendor</a></li>
-                                        <li><a class="dropdown-item" href="/itemmaster">Item Master</a></li>
+                                        <li><Link className='dropdown-item' to="/general">General</Link></li>
+                                        <li><Link className='dropdown-item' to="/vendor">Vendor</Link></li>
+                                        <li><Link className='dropdown-item' to="/itemmaster">Item Master</Link></li>
 
                                     </ul>
                                 </li>

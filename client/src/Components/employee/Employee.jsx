@@ -389,9 +389,9 @@ const Employee = () => {
 
 
     return (
-        <div className='container'>
+        <div className='container' style={{marginTop: "4rem"}}>
             <form >
-                <h1 className='text-center'>Employee Database</h1>
+                <h3 className='text-center'>Employee Database</h3>
 
                 <div className='row mb-2 g-2'>
                     <div className="form-floating  col-2">

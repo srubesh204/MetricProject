@@ -160,15 +160,32 @@ const ItemMaster = () => {
 
     };
 
+    //image upload 
+    const [image, setImage] = useState(null);
+
+    const handleImageChange = (e) => {
+        const selectedImage = e.target.files[0];
+        if (selectedImage) {
+            const reader = new FileReader();
+
+            reader.onload = (event) => {
+                setImage(event.target.result);
+            };
+
+            reader.readAsDataURL(selectedImage);
+        }
+    };
+
+    //
+
     const bodyItem = {
         borderRadius: "10px",
-
         padding: "2rem",
         margin: "1rem",
         boxShadow: "0px 0px 25px 10px",
     }
     return (
-        <div className='container'>
+        <div className='container' style={{ marginTop: "4rem" }}>
             <div style={bodyItem}>
                 <form>
                     <h1 className='text-center'>Item Master Database</h1>
@@ -247,9 +264,10 @@ const ItemMaster = () => {
                         </div>
                         <div className='col-md-2'>
                             <div style={{ border: "1px solid", width: "100%", height: "72%", margin: "0 0px 0 0", padding: 0 }}>
-                                <image src="" />
+                                <input type="file" accept="image/*" onChange={handleImageChange} />
+                                {image && <img src={image} alt="Uploaded" style={{ maxWidth: '100%' }} />}
                             </div>
-                            <button className='btn btn-warning mt-2 '>Upload Image</button>                    </div>
+                            <button className='btn btn-warning mt-2 '>Upload Image</button></div>
                         <div className='col-md-3 d-flex justify-content-end mb-2 ps-0 ms-0'>
                             <div className='col-12'>
                                 <table className='table table-bordered text-center align-middle'>
