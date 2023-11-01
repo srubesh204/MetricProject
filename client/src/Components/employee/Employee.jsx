@@ -452,7 +452,7 @@ const Employee = () => {
                         sx={{ width: 433 }}
                         value={employeeData.state}
                         isOptionEqualToValue={(option) => option}
-                        renderInput={(params) => <TextField {...params} label="State" name="state" />} // Set the name attribute to "state"
+                        renderInput={(params) => <TextField {...params} label="State" name="State" />} // Set the name attribute to "state"
                     />
 
                     <div className="form-floating col-2">
@@ -493,7 +493,7 @@ const Employee = () => {
                         sx={{ width: 433 }}
                         value={employeeData.city}
                         isOptionEqualToValue={(option) => option}
-                        renderInput={(params) => <TextField {...params} label="city" name="city" />} // Set the name attribute to "state"
+                        renderInput={(params) => <TextField {...params} label="City" name="City" />} // Set the name attribute to "state"
                     />
 
                     <div className="form-floating md-3 col-2">

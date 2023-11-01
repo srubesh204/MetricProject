@@ -185,8 +185,8 @@ const ItemMaster = () => {
         boxShadow: "0px 0px 25px 10px",
     }
     return (
-        <div className='container' style={{ marginTop: "4rem" }}>
-            <div style={bodyItem}>
+        <div  style={{ marginTop: "4rem" }}>
+            <div >
                 <form>
                     <h1 className='text-center'>Item Master Database</h1>
                     <div className='row mb-2 g-2'>
