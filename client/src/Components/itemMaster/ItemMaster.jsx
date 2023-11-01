@@ -328,7 +328,7 @@ const ItemMaster = () => {
                         <div className='col-md-2'>
                             <div style={{width: "100%", height: "72%", margin: "0 0px 0 0", padding: 0 }}>
                                 <input type="file" accept="image/*" onChange={handleImageChange} />
-                                {image && <img src={image} alt="Uploaded" style={{ maxWidth: '100%' }} />}
+                                {image && <img src={image} width="200px" height="200px" alt="Uploaded" style={{ maxWidth: '100%' }} />}
                             </div>
                             <button className='btn btn-warning me-2 '>Upload Image</button>
                             <button className='btn btn-danger' onClick={()=> setImage(null)}>x</button></div>

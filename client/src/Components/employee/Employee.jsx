@@ -392,7 +392,7 @@ const Employee = () => {
     return (
         <div className='container'>
             <form >
-                <h3 className='text-center'>Employee Database</h3>
+                
 
                 <div className='row mb-2 g-2'>
                     <div className="form-floating  col-2">
