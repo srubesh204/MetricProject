@@ -104,20 +104,28 @@ const defaultTheme = createTheme();
 export default function Dashboard() {
 
   const [fileName, setFileName] = useState({
-    heading : "",
-    file : null
+    name: "Dashboard",
+    file: "",
   });
 
-  const FileNames = {
-    employee: {name: "Employee", file: <Employee />},
-    vendor: {name: "Vendor", file: <Vendor />},
-    itemMaster: {name: "Item Master" ,file: <ItemMaster />}
-  }
+  const FileNames = [
+    { name: "Employee", file: <Employee />, icon: <ContactPageIcon/>  },
+    { name: "Vendor", file: <Vendor />, icon: <ContactPageIcon/> },
+    { name: "Item Master", file: <ItemMaster />, icon: <ContactPageIcon/> }
+  ]
+
+  console.log(fileName)
+
+  const onFileChange = (item) => {
+
+
+    setFileName({
+      name: item.name,
+      file: item.file,
+    });
 
 
 
-  const onFileChange = (key) => {
-    setFileName(FileNames[key]);
   }
   const [togglerOpen, setTogglerOpen] = useState(true);
   const toggleDrawer = () => {
@@ -192,28 +200,26 @@ export default function Dashboard() {
               {open ? <ExpandLess /> : <ExpandMore />}
             </ListItemButton>
             <Collapse in={open} timeout="auto" unmountOnExit>
+
               <List component="div" disablePadding>
-                <ListItemButton sx={{ pl: 4 }} onClick={() => onFileChange("employee")}>
-                  <ListItemIcon>
-                    <BadgeIcon />
-                  </ListItemIcon>
-                  <ListItemText primary="Employee" />
-                </ListItemButton>
-                <ListItemButton sx={{ pl: 4 }} onClick={() => onFileChange("vendor")}>
-                  <ListItemIcon>
-                    <ContactPageIcon />
-                  </ListItemIcon>
-                  <ListItemText primary="Vendor" />
-                </ListItemButton>
-                <ListItemButton sx={{ pl: 4 }} onClick={() => onFileChange("department")}>
-                  <ListItemIcon>
-                    <ContactPageIcon />
-                  </ListItemIcon>
-                  <ListItemText primary="Vendor" />
-                </ListItemButton>
+                {FileNames.map((item) => {
+                  console.log(item)
+                  return (
+                    <ListItemButton sx={{ pl: 4 }} onClick={() => onFileChange(item)}>
+                      <ListItemIcon>
+                        {item.icon}
+                      </ListItemIcon>
+                      <ListItemText primary={item.name} />
+                    </ListItemButton>
+                  )
+                })}
+
               </List>
             </Collapse>
-            
+            <Collapse>
+
+            </Collapse>
+
             {/* {SecondaryListItems()} */}
           </List>
         </Drawer>
@@ -231,7 +237,7 @@ export default function Dashboard() {
         >
           <Toolbar />
           <Paper sx={{ margin: "20px", padding: "10px" }}>
-            {fileName.file ? fileName.file : ""}
+            {fileName.file !== "" ? fileName.file : ""}
           </Paper>
 
 
