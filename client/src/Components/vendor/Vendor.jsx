@@ -4,33 +4,9 @@ import Autocomplete from '@mui/material/Autocomplete';
 import TextField from '@mui/material/TextField';
 import Alert from '@mui/material/Alert';
 import Snackbar from '@mui/material/Snackbar';
-<<<<<<< HEAD
 import RemoveRoundedIcon from '@mui/icons-material/RemoveRounded';
 import AddRoundedIcon from '@mui/icons-material/AddRounded';
 const Vendor = () => {
-=======
-import Paper from '@mui/material/Paper';
-
-const 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-Vendor = () => {
->>>>>>> 6be96f93fd26c081898b5cba2ea38e22af9cf34a
 
 
     const [snackBarOpen, setSnackBarOpen] = useState(false)
@@ -420,24 +396,11 @@ Vendor = () => {
     };
 
 
-<<<<<<< HEAD
-    const bodyTxt = {
-        borderRadius: "10px",
-
-        padding: "2rem",
-        margin: "4rem 2rem 2rem 2rem",
-        boxShadow: "0px 0px 25px 10px",
-    }
-    return (
-        <div >
-            <div >
-=======
     
     return (
         <div className='container' >
             
             <div>
->>>>>>> 6be96f93fd26c081898b5cba2ea38e22af9cf34a
                 <form>
                     <div className='row g-2'>
                         {/* <div className='col'>
@@ -476,13 +439,8 @@ Vendor = () => {
                             <label htmlFor="fullNameId">Full Name</label>
                         </div>
                         <div className="form-floating  col">
-<<<<<<< HEAD
                             <input type="date" className="form-control" id="dorId" name="dor" placeholder="dor" max={DateFormat} value={vendorData.dor} onChange={handleVendorDataBaseChange} />
                             <label htmlFor="dorId">Data Of Reg</label>
-=======
-                            <input type="date" className="form-control" id="dateOfRegId" name="dateOfReg" placeholder="dateOfReg" max={DateFormat} value={vendorData.dateOfReg} onChange={handleVendorDataBaseChange} />
-                            <label htmlFor="dateOfRegId">Data Of Reg</label>
->>>>>>> 6be96f93fd26c081898b5cba2ea38e22af9cf34a
                         </div>
                     </div>
                     <div className="row g-2">
@@ -566,7 +524,6 @@ Vendor = () => {
                                         {vendorData.vendorContacts ? vendorData.vendorContacts.map((item, index) => (
                                             <tr>
                                                 <td>{index + 1}</td>
-<<<<<<< HEAD
                                                 <td><input type="text" className='form-control form-control-sm' id="nameId" name="name" value={item.name} onChange={(e) => changeVendorRow(index, e.target.name, e.target.value)} onKeyDown={handleKeyDownForContacts} /></td>
                                                 <td><input type="text" className='form-control form-control-sm' id="contactNumber" name="contactNumber" value={item.contactNumber} onChange={(e) => changeVendorRow(index, e.target.name, e.target.value)} /></td>
                                                 <td><input type="text" className='form-control form-control-sm' id="mailId" name="mailId" value={item.mailId} onChange={(e) => changeVendorRow(index, e.target.name, e.target.value)} /></td>
@@ -579,13 +536,6 @@ Vendor = () => {
                                                     
                                                 </select></td>
                                                 <td ><button type='button' className='btn btn-danger' onClick={() => deleteVendorRow(index)}><RemoveRoundedIcon /></button></td>
-=======
-                                                <td><input type="text" className='form-control' id="nameId" name="name" value={item.name} onChange={(e) => changeVendorRow(index, e.target.name, e.target.value)} onKeyDown={handleKeyDownForContacts} /></td>
-                                                <td><input type="text" className='form-control' id="contactNumber" name="contactNumber" value={item.contactNumber} onChange={(e) => changeVendorRow(index, e.target.name, e.target.value)} /></td>
-                                                <td><input type="text" className='form-control' id="mailId" name="mailId" value={item.mailId} onChange={(e) => changeVendorRow(index, e.target.name, e.target.value)} /></td>
-                                                <td><input type="text" className='form-control' id="vcStatusId" name="vcStatus" value={item.vcStatus} onChange={(e) => changeVendorRow(index, e.target.name, e.target.value)} /></td>
-                                                <td><button type='button' className='btn btn-danger' onClick={() => deleteVendorRow(index)}><i class="bi bi-trash-fill"></i></button></td>
->>>>>>> 6be96f93fd26c081898b5cba2ea38e22af9cf34a
                                             </tr>
                                         )) : <tr></tr>}
                                     </tbody>
