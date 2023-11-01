@@ -125,7 +125,8 @@ export default function Dashboard() {
       { name: "User List" },
       { name: "Reset Password" }
   
-    ]
+    ],
+    
   }
 
 
@@ -223,6 +224,7 @@ export default function Dashboard() {
             <Collapse in={adminOpen} timeout="auto" unmountOnExit>
 
               <List component="div" disablePadding>
+              
                 <ListItemButton sx={{ pl: 4 }} onClick={handleDatabaseMasterOpen}>
                   <ListItemIcon>
                     <AdminPanelSettingsIcon />
@@ -244,9 +246,12 @@ export default function Dashboard() {
                         </ListItemButton>
                       )
                     })}
+                    
 
                   </List>
                 </Collapse>
+
+                
                 <ListItemButton sx={{ pl: 4 }} onClick={handleSystemOpen}>
                   <ListItemIcon>
                     <AdminPanelSettingsIcon />
@@ -271,6 +276,34 @@ export default function Dashboard() {
 
                   </List>
                 </Collapse>
+                <ListItemButton sx={{ pl: 4 }}>
+                  <ListItemIcon>
+                    <AdminPanelSettingsIcon />
+                  </ListItemIcon>
+                  <ListItemText primary="Company Details" />
+                  
+                </ListItemButton>
+                <ListItemButton sx={{ pl: 4 }}>
+                  <ListItemIcon>
+                    <AdminPanelSettingsIcon />
+                  </ListItemIcon>
+                  <ListItemText primary="Format Number" />
+                  
+                </ListItemButton>
+                <ListItemButton sx={{ pl: 4 }}>
+                  <ListItemIcon>
+                    <AdminPanelSettingsIcon />
+                  </ListItemIcon>
+                  <ListItemText primary="Mail Configuration" />
+                  
+                </ListItemButton>
+                <ListItemButton sx={{ pl: 4 }}>
+                  <ListItemIcon>
+                    <AdminPanelSettingsIcon />
+                  </ListItemIcon>
+                  <ListItemText primary="BackUp" />
+                  
+                </ListItemButton>
 
               </List>
             </Collapse>
@@ -292,7 +325,7 @@ export default function Dashboard() {
                 ? theme.palette.grey[100]
                 : theme.palette.grey[900],
             flexGrow: 1,
-            height: '100%',
+            height: 'inherit',
 
           }}
         >
