@@ -37,8 +37,9 @@ import CategoryIcon from '@mui/icons-material/Category';
 import Vendor from '../vendor/Vendor';
 import Employee from '../employee/Employee'
 import ItemMaster from '../itemMaster/ItemMaster'
-import General from '../general/General'
-
+import {PartDataBase, UnitDataBase} from '../general/General'
+import { Department, Designation } from '../DesDep';
+//
 
 // function Copyright(props) {
 //   return (
@@ -111,11 +112,11 @@ export default function Dashboard() {
 
   const MenuItems = {
     databaseMaster: [
-      { name: "Department", file: <ItemMaster />, icon: <CategoryIcon /> },
-      { name: "Designation", file: <ItemMaster />, icon: <CategoryIcon /> },
+      { name: "Department", file: <Department />, icon: <CategoryIcon /> },
+      { name: "Designation", file: <Designation />, icon: <CategoryIcon /> },
       { name: "Employee", file: <Employee />, icon: <BadgeIcon /> },
-      { name: "Unit", file: <ItemMaster />, icon: <CategoryIcon /> },
-      { name: "Part", file: <ItemMaster />, icon: <CategoryIcon /> },
+      { name: "Unit", file: <UnitDataBase />, icon: <CategoryIcon /> },
+      { name: "Part", file: <PartDataBase />, icon: <CategoryIcon /> },
       { name: "Vendor", file: <Vendor />, icon: <ContactPageIcon /> },
       { name: "Item Master", file: <ItemMaster />, icon: <CategoryIcon /> },
     ],
