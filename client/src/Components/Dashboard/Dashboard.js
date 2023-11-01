@@ -31,13 +31,15 @@ import ExpandMore from '@mui/icons-material/ExpandMore';
 import InboxIcon from '@mui/icons-material/MoveToInbox';
 import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
 import ContactPageIcon from '@mui/icons-material/ContactPage';
+import CategoryIcon from '@mui/icons-material/Category';
 
 //
 import Vendor from '../vendor/Vendor';
 import Employee from '../employee/Employee'
 import ItemMaster from '../itemMaster/ItemMaster'
-import General from '../general/General'
-
+import {PartDataBase, UnitDataBase} from '../general/General'
+import { Department, Designation } from '../DesDep';
+//
 
 // function Copyright(props) {
 //   return (
@@ -52,7 +54,7 @@ import General from '../general/General'
 //   );
 // }
 
-const drawerWidth = 240;
+const drawerWidth = 280;
 
 const AppBar = styled(MuiAppBar, {
   shouldForwardProp: (prop) => prop !== 'open',
@@ -108,33 +110,51 @@ export default function Dashboard() {
     file: "",
   });
 
-  const FileNames = [
-    { name: "Employee", file: <Employee />, icon: <ContactPageIcon/>  },
-    { name: "Vendor", file: <Vendor />, icon: <ContactPageIcon/> },
-    { name: "Item Master", file: <ItemMaster />, icon: <ContactPageIcon/> }
-  ]
+  const MenuItems = {
+    databaseMaster: [
+      { name: "Department", file: <Department />, icon: <CategoryIcon /> },
+      { name: "Designation", file: <Designation />, icon: <CategoryIcon /> },
+      { name: "Employee", file: <Employee />, icon: <BadgeIcon /> },
+      { name: "Unit", file: <UnitDataBase />, icon: <CategoryIcon /> },
+      { name: "Part", file: <PartDataBase />, icon: <CategoryIcon /> },
+      { name: "Vendor", file: <Vendor />, icon: <ContactPageIcon /> },
+      { name: "Item Master", file: <ItemMaster />, icon: <CategoryIcon /> },
+    ],
+    system: [
+      { name: "Version" },
+      { name: "User List" },
+      { name: "Reset Password" }
+  
+    ]
+  }
+
 
   console.log(fileName)
 
   const onFileChange = (item) => {
-
-
     setFileName({
       name: item.name,
       file: item.file,
     });
-
-
-
   }
   const [togglerOpen, setTogglerOpen] = useState(true);
   const toggleDrawer = () => {
     setTogglerOpen(!togglerOpen);
   };
-  const [open, setOpen] = useState(true);
+  const [dataBaseOpen, setDataBaseOpen] = useState(true);
+  const [adminOpen, setAdminOpne] = useState(true);
+  const [systemOpen, setSystemOpen] = useState(true);
 
-  const handleClick = () => {
-    setOpen(!open);
+  const handleDatabaseMasterOpen = () => {
+    setDataBaseOpen(!dataBaseOpen);
+  };
+
+  const handleAdminOpen = () => {
+    setAdminOpne(!adminOpen);
+  };
+
+  const handleSystemOpen = () => {
+    setSystemOpen(!systemOpen);
   };
 
   console.log(fileName)
@@ -166,7 +186,7 @@ export default function Dashboard() {
               variant="h6"
               color="inherit"
               noWrap
-              sx={{ flexGrow: 1 }}
+              sx={{ flexGrow: 1, textAlign: "center" }}
             >
               {fileName.name}
             </Typography>
@@ -191,34 +211,75 @@ export default function Dashboard() {
             </IconButton>
           </Toolbar>
           <Divider />
-          <List component="nav">
-            <ListItemButton onClick={handleClick}>
+          <List component="nav" >
+
+            <ListItemButton onClick={handleAdminOpen}>
               <ListItemIcon>
                 <AdminPanelSettingsIcon />
               </ListItemIcon>
               <ListItemText primary="Admin" />
-              {open ? <ExpandLess /> : <ExpandMore />}
+              {adminOpen ? <ExpandLess /> : <ExpandMore />}
             </ListItemButton>
-            <Collapse in={open} timeout="auto" unmountOnExit>
+            <Collapse in={adminOpen} timeout="auto" unmountOnExit>
 
               <List component="div" disablePadding>
-                {FileNames.map((item) => {
-                  console.log(item)
-                  return (
-                    <ListItemButton sx={{ pl: 4 }} onClick={() => onFileChange(item)}>
-                      <ListItemIcon>
-                        {item.icon}
-                      </ListItemIcon>
-                      <ListItemText primary={item.name} />
-                    </ListItemButton>
-                  )
-                })}
+                <ListItemButton sx={{ pl: 4 }} onClick={handleDatabaseMasterOpen}>
+                  <ListItemIcon>
+                    <AdminPanelSettingsIcon />
+                  </ListItemIcon>
+                  <ListItemText primary="Database Master" />
+                  {dataBaseOpen ? <ExpandLess /> : <ExpandMore />}
+                </ListItemButton>
+                <Collapse in={dataBaseOpen} timeout="auto" unmountOnExit>
+
+                  <List component="div" disablePadding>
+                    {MenuItems.databaseMaster.map((item) => {
+                      console.log(item)
+                      return (
+                        <ListItemButton sx={{ pl: 6 }} onClick={() => onFileChange(item)}>
+                          <ListItemIcon>
+                            {item.icon}
+                          </ListItemIcon>
+                          <ListItemText primary={item.name} />
+                        </ListItemButton>
+                      )
+                    })}
+
+                  </List>
+                </Collapse>
+                <ListItemButton sx={{ pl: 4 }} onClick={handleSystemOpen}>
+                  <ListItemIcon>
+                    <AdminPanelSettingsIcon />
+                  </ListItemIcon>
+                  <ListItemText primary="System" />
+                  {systemOpen ? <ExpandLess /> : <ExpandMore />}
+                </ListItemButton>
+                <Collapse in={systemOpen} timeout="auto" unmountOnExit>
+
+                  <List component="div" disablePadding>
+                    {MenuItems.system.map((item) => {
+                      console.log(item)
+                      return (
+                        <ListItemButton sx={{ pl: 6 }} onClick={() => onFileChange(item)}>
+                          <ListItemIcon>
+
+                          </ListItemIcon>
+                          <ListItemText primary={item.name} />
+                        </ListItemButton>
+                      )
+                    })}
+
+                  </List>
+                </Collapse>
 
               </List>
             </Collapse>
-            <Collapse>
 
-            </Collapse>
+
+
+
+
+
 
             {/* {SecondaryListItems()} */}
           </List>

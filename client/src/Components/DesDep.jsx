@@ -222,20 +222,8 @@ export const Department = () => {
   console.log(departmentList);
   
 
-  const body = {
-    padding: "1rem",
-    paddingTop: "10px",
-
-    marginTop: "4rem"
-  };
-
-  const bodyCards = {
-    borderRadius: "10px",
-
-    padding: "2rem",
-    margin: "1rem",
-    boxShadow: "0px 0px 25px 10px",
-  };
+  
+  
   const uploadLable = {
     display: "block",
     width: "70px",
@@ -260,9 +248,9 @@ export const Department = () => {
   return (
     <div >
       <form>
-        <div className="row " style={{ marginTop: "5rem" }}>
+        <div className="row ">
           <div className="col" >
-            <h2 className="text-center">Departments</h2>
+            
             <div className="row g-2">
               <div className="form-floating mb-3 col">
                 <input
