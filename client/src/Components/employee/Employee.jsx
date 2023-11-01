@@ -390,7 +390,7 @@ const Employee = () => {
 
 
     return (
-        <div className='container' style={{marginTop: "4rem"}}>
+        <div className='container'>
             <form >
                 <h3 className='text-center'>Employee Database</h3>
 

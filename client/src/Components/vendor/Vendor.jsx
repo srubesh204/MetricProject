@@ -4,7 +4,27 @@ import Autocomplete from '@mui/material/Autocomplete';
 import TextField from '@mui/material/TextField';
 import Alert from '@mui/material/Alert';
 import Snackbar from '@mui/material/Snackbar';
-const Vendor = () => {
+import Paper from '@mui/material/Paper';
+
+const 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Vendor = () => {
 
 
     const [snackBarOpen, setSnackBarOpen] = useState(false)
@@ -376,21 +396,16 @@ const Vendor = () => {
     };
 
 
-    const bodyTxt = {
-        borderRadius: "10px",
-
-        padding: "2rem",
-        margin: "4rem 1rem 1rem 1rem",
-        boxShadow: "0px 0px 25px 10px",
-    }
+    
     return (
         <div className='container' >
-            <div style={bodyTxt}>
+            
+            <div>
                 <form>
                     <div className='row g-2'>
-                        <div className='col'>
+                        {/* <div className='col'>
                             <h1 className='text-center'>Vendor DataBase</h1>
-                        </div>
+                        </div> */}
                         <div className='col  d-flex justify-content-end '>
                             <div class="form-check form-check-inline ">
                                 <input className="form-check-input" type="checkbox" checked={vendorData.oem === "1"} onChange={handleVendorDataBaseChange} id="oemId" name="oem" />
@@ -551,7 +566,7 @@ const Vendor = () => {
                         </div>
                     </div>
                     <hr />
-                    <div className='mb-5'>
+                    <div>
                         <h3 className='text-center'>Vendor List</h3>
                         <div className='row mb-2  g-2'>
                             <div class="form-floating-sm  col-2">
@@ -604,6 +619,7 @@ const Vendor = () => {
 
                 </form>
             </div>
+            
         </div>
     )
 }
