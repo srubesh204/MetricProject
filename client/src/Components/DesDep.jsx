@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import Alert from '@mui/material/Alert';
 import Snackbar from '@mui/material/Snackbar';
+import { Container } from "@mui/material";
 
 
 export const Department = () => {
@@ -666,8 +667,9 @@ export const Designation = () => {
 
   return (
     <div >
+      <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
       <form>
-        <div className="row " style={{ marginTop: "5rem" }}>
+        <div className="row ">
           
 
 
@@ -770,6 +772,7 @@ export const Designation = () => {
 
         </div>
       </form>
+      </Container>
     </div>
   );
 };
