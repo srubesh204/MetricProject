@@ -45,13 +45,14 @@ const ItemMaster = () => {
         if (value === "all") {
             setFilteredData(itemMasterDataList)
         } else {
-            if (value === "itemType") {
+            if (name === "itemTypeSort") {
                 const itemType = itemMasterDataList.filter((item) => (item.itemType === value))
                 setFilteredData(itemType)
             }
-            if (value === "itemDescription") {
+            if (name === "itemDescriptionSort") {
                 const itemDescription = itemMasterDataList.filter((item) => (item.itemDescription === value))
                 setFilteredData(itemDescription)
+                console.log(value)
             }
 
 
@@ -139,7 +140,7 @@ const ItemMaster = () => {
             );
             console.log(response.data)
             setItemMasterDataList(response.data.result);
-            setFilteredData(itemMasterDataList)
+            setFilteredData(response.data.result);
         } catch (err) {
             console.log(err);
         }
@@ -329,9 +330,9 @@ const ItemMaster = () => {
                         <div class="form-floating col">
                             <select className="form-select" id="itemTypeId" name="itemType" value={itemMasterData.itemType} onChange={handleItemMasterBaseChange} >
                                 <option selected>Item Type</option>
-                                <option value="1">Attribute</option>
-                                <option value="2">Variable</option>
-                                <option value="2">Reference Standard</option>
+                                <option value="Attribute">Attribute</option>
+                                <option value="Variable">Variable</option>
+                                <option value="Reference Standard">Reference Standard</option>
 
                             </select>
                             <label htmlFor="itemTypeId">Item Type</label>
@@ -388,7 +389,7 @@ const ItemMaster = () => {
                                 </div>
                                 <div className="form-floating col">
                                     <select className="form-select" id="statusId" name="status" aria-label="Floating label select example" value={itemMasterData.status} onChange={handleItemMasterBaseChange} >
-                                        <option selected>Status</option>
+                                        <option selected>All</option>
                                         <option value="Active">Active</option>
                                         <option value="InActive">InActive</option>
                                         <option value="Relived">Relived</option>
@@ -496,17 +497,17 @@ const ItemMaster = () => {
                         <div className='row mb-2 g-2'>
 
                             <div class="form-floating col-3 ">
-                                <select className="form-select" id="itemTypeId" name="itemType" aria-label="Floating label select example" onChange={handleFilterChange}>
+                                <select className="form-select" id="itemTypeId" name="itemTypeSort" aria-label="Floating label select example" onChange={handleFilterChange}>
                                     <option value="all">All</option>
-                                    <option value="attribute">Attribute</option>
-                                    <option value="variable">Variable</option>
-                                    <option value="referenceStandard">Reference Standard</option>
+                                    <option value="Attribute">Attribute</option>
+                                    <option value="Variable">Variable</option>
+                                    <option value="Reference Standard">Reference Standard</option>
                                 </select>
                                 <label htmlFor="itemTypeId">Item Type Sort</label>
                             </div>
                             <div class="form-floating col-3">
-                                <select className="form-select" id="itemDescriptionId" name="itemDescription" aria-label="Floating label select example" onChange={handleFilterChange} >
-                                    <option value="all">All</option>
+                                <select className="form-select" id="itemDescriptionSortId" name="itemDescriptionSort" aria-label="Floating label select example" onChange={handleFilterChange} >
+                                    <option value="all">all</option>
                                     {itemMasterDataList.map((item) => (
                                         <option value={item.itemDescription}>{item.itemDescription}</option>
                                     ))}
@@ -530,7 +531,7 @@ const ItemMaster = () => {
 
 
                                     </tr>
-                                    {itemMasterDataList ? itemMasterDataList.map((item, index) => (
+                                    {filteredData ? filteredData.map((item, index) => (
                                         <tr key={index} onClick={() => updateItemMaster(item)}>
                                             <td>{index + 1}</td>
                                             <td>{item.itemDescription}</td>

@@ -471,9 +471,9 @@ const Employee = () => {
                     <div className="form-floating col-3">
                         <select onChange={handleChange} value={employeeData.employmentStatus} className="form-select" id="employmentStatusId" name="employmentStatus" >
                             <option value="">Select Status</option>
-                            <option value="1">Active</option>
-                            <option value="2">InActive</option>
-                            <option value="3">Relieved</option>
+                            <option value="Active">Active</option>
+                            <option value="InActive">InActive</option>
+                            <option value="Relieved">Relieved</option>
                         </select>
                         <label htmlFor="employmentStatusId">Employment Status</label>
                     </div>
@@ -614,9 +614,9 @@ const Employee = () => {
                     <div className="form-floating md-3 col">
                         <select className="form-select" id="employementStatusFilterId" name="employementStatusFilter" onChange={handleFilterChange}>
                             <option value="all">All</option>
-                            <option value="">Active</option>
-                            <option value="">InActive</option>
-                            <option value="">Relieved</option>
+                            <option value="Active">Active</option>
+                            <option value="InActive">InActive</option>
+                            <option value="Relieved">Relieved</option>
                         </select>
                         <label htmlFor="employementStatusFilterId">Employment Status To</label>
                     </div>
