@@ -330,9 +330,9 @@ export default function Dashboard() {
           }}
         >
           <Toolbar />
-          <Paper sx={{ margin: "20px", padding: "10px" }}>
+          
             {fileName.file !== "" ? fileName.file : ""}
-          </Paper>
+          
 
 
         </Box>

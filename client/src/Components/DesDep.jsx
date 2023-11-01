@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import Alert from '@mui/material/Alert';
 import Snackbar from '@mui/material/Snackbar';
-import { Container } from "@mui/material";
+import { Container, Paper } from "@mui/material";
 
 
 export const Department = () => {
@@ -225,32 +225,33 @@ export const Department = () => {
 
   
   
-  const uploadLable = {
-    display: "block",
-    width: "70px",
-    maxWidth: "300px",
-    backgroundColor: "slateblue",
-    borderRadius: "5px",
-    fontSize: "1em",
-    lineHeight: "2.42em",
-    textAlign: "center",
-  };
-  const downLable = {
-    border: "0",
-    clip: "rect(1px, 1px, 1px, 1px)",
-    height: "1px",
-    margin: "-1px",
-    overflow: "hidden",
-    padding: "0",
-    position: "absolute",
-    width: "1px",
-  };
+  // const uploadLable = {
+  //   display: "block",
+  //   width: "70px",
+  //   maxWidth: "300px",
+  //   backgroundColor: "slateblue",
+  //   borderRadius: "5px",
+  //   fontSize: "1em",
+  //   lineHeight: "2.42em",
+  //   textAlign: "center",
+  // };
+  // const downLable = {
+  //   border: "0",
+  //   clip: "rect(1px, 1px, 1px, 1px)",
+  //   height: "1px",
+  //   margin: "-1px",
+  //   overflow: "hidden",
+  //   padding: "0",
+  //   position: "absolute",
+  //   width: "1px",
+  // };
 
   return (
     <div >
+      <Container maxWidth="lg" sx={{ mt: 4 }}>
       <form>
         <div className="row ">
-          <div className="col" >
+          
             
             <div className="row g-2">
               <div className="form-floating mb-3 col">
@@ -365,7 +366,7 @@ export const Department = () => {
                     <th>Delete</th>
                   </tr>
                   {departmentList.map((item, index) => (
-                    <tr key={item._id} onClick={() => handleDepRowClick(item)} className="p-0">
+                    <tr key={item._id} onClick={() => handleDepRowClick(item)} className={item._id === depStateId ? "table-active" : ""}>
                       <td >{index + 1}</td>
                       <td>{item.department}</td>
                       <td>{item.area}</td>
@@ -390,7 +391,7 @@ export const Department = () => {
                 {errorhandler.message}
               </Alert>
             </Snackbar>
-          </div>
+         
 
 
 
@@ -400,6 +401,7 @@ export const Department = () => {
 
         </div>
       </form>
+      </Container>
     </div>
   );
 };
@@ -550,7 +552,7 @@ export const Designation = () => {
         // Handle other errors
         console.log(err);
         const errorData500 = err.response.data.error;
-        const errorMessages500 = Object.values(errorData500).join(', ');
+        const errorMessages500 = Object.values(errorData500);
         console.log(errorMessages500)
         setErrorHandler({ status: 0, message: errorMessages500, code: "error" });
       } else {
@@ -667,17 +669,16 @@ export const Designation = () => {
 
   return (
     <div >
-      <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
+      <Container maxWidth="lg" sx={{ mt: 4 }}>
       <form>
-        <div className="row ">
-          
-
-
-
-
-
-          <div >
-            <h2 className="text-center">Designation</h2>
+      <Paper
+                  sx={{
+                    p: 4,
+                    display: 'flex',
+                    flexDirection: 'column',
+                    mb: 4
+                  }}
+                >
 
             <div className="form-floating mb-3">
               <input
@@ -738,8 +739,17 @@ export const Designation = () => {
                 }
               </div>
             </div>
-            <hr />
-            <h4 className="mb-3">Designation List</h4>
+            </Paper>
+
+            <Paper
+                  sx={{
+                    p: 4,
+                    display: 'flex',
+                    flexDirection: 'column',
+                    
+                  }}
+                >
+            <h4 className="mb-3 text-center">Designation List</h4>
             <div className="table-responsive">
               <table className="table table-bordered text-center table-hover">
                 <tbody>
@@ -749,7 +759,7 @@ export const Designation = () => {
                     <th>Delete</th>
                   </tr>
                   {designationList.map((item, index) => (
-                    <tr key={item._id} onClick={() => handleDesRowClick(item)}>
+                    <tr key={item._id} onClick={() => handleDesRowClick(item)} className={item._id === desStateId ? "table-active" : ""}>
                       <td>{index + 1}</td>
                       <td>{item.designation}</td>
                       <td>
@@ -762,16 +772,18 @@ export const Designation = () => {
                 </tbody>
               </table>
             </div>
+            
             <Snackbar anchorOrigin={{ vertical: "top", horizontal: "right" }} open={snackBarOpen} autoHideDuration={6000} onClose={handleSnackClose}>
               <Alert variant="filled" onClose={handleSnackClose} severity={errorhandler.code} sx={{ width: '100%' }}>
                 {errorhandler.message}
               </Alert>
             </Snackbar>
+            </Paper>
+          
 
-          </div>
-
-        </div>
+        
       </form>
+      
       </Container>
     </div>
   );
