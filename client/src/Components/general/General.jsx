@@ -158,8 +158,8 @@ const UnitDataBase = ({ style }) => {
     }
     return (
 
-        <div className='container'>
-            <div style={bodycss} >
+        <div >
+            <div  >
                 <form>
                     <h1 className='text-center'>Unit DataBase</h1>
                     <div className='row g-2 mb-3'>
@@ -396,8 +396,8 @@ const PartDataBase = ({ style }) => {
 
     return (
 
-        <div className='container' >
-            <div style={bodyModel}>
+        <div  >
+            <div >
                 <form>
                     <h1 className='text-center'>Part DataBase</h1>
                     <div>
