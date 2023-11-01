@@ -6,7 +6,7 @@ import Box from '@mui/material/Box';
 import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
 
-const UnitDataBase = ({ style }) => {
+ export const UnitDataBase = ({ style }) => {
 
     const [unitStateId, setUnitStateId] = useState(null)
     const initialUnitData = {
@@ -220,7 +220,7 @@ const UnitDataBase = ({ style }) => {
     )
 }
 
-const PartDataBase = ({ style }) => {
+export const PartDataBase = ({ style }) => {
 
 
     const [errorHandler, setErrorHandler] = useState({})
@@ -488,49 +488,3 @@ const PartDataBase = ({ style }) => {
 }
 
 
-const General = () => {
-
-    const tableStyle = {
-        maxHeight: "300px",
-        cursor: "pointer",
-    }
-    const [value, setValue] = useState(0);
-
-    const handleChange = (event, newValue) => {
-        setValue(newValue);
-    };
-
-
-
-
-    const handleDataReceived = (data) => {
-        console.log('Data received from UnitDataBase:', data);
-        // You can handle the received data here
-    };
-    handleDataReceived()
-   
-
-
-    return (
-        <div style={{marginTop: "4rem"}}>
-            <Box sx={{ width: '100%', bgcolor: 'inherit',  }}>
-                <Tabs value={value} onChange={handleChange} centered>
-                    <Tab label="Unit" />
-                    <Tab label="Part" />
-                    {/* <Tab label="Item Three" /> */}
-                </Tabs>
-            </Box>
-            <div >
-
-                {value === 0 && <div ><UnitDataBase style={tableStyle} /></div>}
-                {value === 1 && <div ><PartDataBase style={tableStyle} /></div>}
-            </div>
-
-        </div>
-
-
-
-    )
-}
-
-export default General

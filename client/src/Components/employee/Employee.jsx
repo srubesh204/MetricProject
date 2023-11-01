@@ -614,9 +614,9 @@ const Employee = () => {
                     <div className="form-floating md-3 col">
                         <select className="form-select" id="employementStatusFilterId" name="employementStatusFilter" onChange={handleFilterChange}>
                             <option value="all">All</option>
-                            <option value="1">Active</option>
-                            <option value="2">InActive</option>
-                            <option value="3">Relieved</option>
+                            <option value="">Active</option>
+                            <option value="">InActive</option>
+                            <option value="">Relieved</option>
                         </select>
                         <label htmlFor="employementStatusFilterId">Employment Status To</label>
                     </div>

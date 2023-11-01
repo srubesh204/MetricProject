@@ -21,6 +21,37 @@ const Vendor = () => {
     const [errorhandler, setErrorHandler] = useState({})
     console.log(errorhandler)
 
+    const [filteredData, setFilteredData] = useState([])
+
+    const handleFilterChange = (e) => {
+        const { name, value } = e.target;
+        if (value === "all") {
+            setFilteredData(vendorDataList)
+        } else {
+            if (value === "oem") {
+                const vendorType = vendorDataList.filter((item) => (item.oem === "1"))
+                setFilteredData(vendorType)
+            }
+            if (value === "customer") {
+                const vendorType = vendorDataList.filter((item) => (item.customer === "1"))
+                setFilteredData(vendorType)
+            }
+            if (value === "supplier") {
+                const vendorType = vendorDataList.filter((item) => (item.supplier === "1"))
+                setFilteredData(vendorType)
+            }
+            if (value === "subContractor") {
+                const vendorType = vendorDataList.filter((item) => (item.subContractor === "1"))
+                setFilteredData(vendorType)
+            }
+
+            
+           
+        }
+
+
+    };
+
 
     const [vendorStateId, setVendorStateId] = useState("")
     const initialVendorData = {
@@ -143,6 +174,7 @@ const Vendor = () => {
                 `${process.env.REACT_APP_PORT}/vendor/getAllVendors`
             );
             setVendorDataList(response.data.result);
+            setFilteredData(response.data.result);
         } catch (err) {
             console.log(err);
         }
@@ -320,23 +352,7 @@ const Vendor = () => {
         }
     };
 
-    const [filteredVendorData, setFilteredVendorData] = useState([])
-
-    const handleFilterChange = (e) => {
-        const { name, value } = e.target;
-        if (value === "all") {
-            setFilteredVendorData(vendorDataList)
-        } else {
-            if (name === "departmentFilter") {
-                const departmentFilter = vendorDataList.filter((item) => (item.department === value))
-                setFilteredVendorData(departmentFilter)
-            }
-
-
-        }
-
-
-    };
+    
 
 
 
@@ -577,12 +593,12 @@ const Vendor = () => {
                         <h3 className='text-center'>Vendor List</h3>
                         <div className='row mb-2  g-2'>
                             <div class="form-floating-sm  col-2">
-                                <select className="form-select form-select-sm" id="vendorTypeId" name="vendorType" aria-label="Floating label select example">
-                                    <option selected>Vendor Type</option>
-                                    <option value="1">OEM</option>
-                                    <option value="2">Customer</option>
-                                    <option value="3">Supplier</option>
-                                    <option value="4">SubContractor</option>
+                                <select className="form-select form-select-sm" id="vendorTypeId" name="vendorType" aria-label="Floating label select example" onChange={handleFilterChange} >
+                                    <option value="all">All</option>
+                                    <option value="oem">OEM</option>
+                                    <option value="customer">Customer</option>
+                                    <option value="supplier">Supplier</option>
+                                    <option value="subContractor">SubContractor</option>
                                 </select>
 
                             </div>
@@ -599,7 +615,7 @@ const Vendor = () => {
                                     <th>Status</th>
                                     <th>Delete</th>
                                 </tr>
-                                {vendorDataList.map((item, index) => (
+                                {filteredData.map((item, index) => (
                                     <tr onClick={() => updateVendor(item)}>
                                         <td>{index + 1}</td>
 
