@@ -37,6 +37,34 @@ const ItemMaster = () => {
 
     });
 
+
+    const [filteredData, setFilteredData] = useState([])
+
+    const handleFilterChange = (e) => {
+        const { name, value } = e.target;
+        if (value === "all") {
+            setFilteredData(itemMasterDataList)
+        } else {
+            if (value === "itemType") {
+                const itemType = itemMasterDataList.filter((item) => (item.itemType === value))
+                setFilteredData(itemType)
+            }
+            if (value === "itemDescription") {
+                const itemDescription = itemMasterDataList.filter((item) => (item.itemDescription === value))
+                setFilteredData(itemDescription)
+            }
+
+
+
+
+        }
+
+
+    };
+
+
+
+
     const [itemMasterStateId, setItemMasterStateId] = useState("")
     const initialItemMasterData = {
         itemType: "",
@@ -111,6 +139,7 @@ const ItemMaster = () => {
             );
             console.log(response.data)
             setItemMasterDataList(response.data.result);
+            setFilteredData(itemMasterDataList)
         } catch (err) {
             console.log(err);
         }
@@ -199,15 +228,59 @@ const ItemMaster = () => {
     };
     const deleteItemMasterData = async (id) => {
         try {
-            await axios.delete(
+            const response = await axios.delete(
                 "http://localhost:3001/ItemMaster/deleteItemMaster/" + id, itemMasterData
             );
             itemMasterFetchData();
             setItemMasterData(initialItemMasterData);
             setItemMasterStateId(null);
+            setSnackBarOpen(true)
+            setErrorHandler({ status: response.data.status, message: response.data.message, code: "success" })
             console.log("ItemMaster delete Successfully");
         } catch (err) {
+            setSnackBarOpen(true)
+
+            if (err.response && err.response.status === 400) {
+                // Handle validation errors
+                console.log(err);
+                const errorData400 = err.response.data.errors;
+                const errorMessages400 = Object.values(errorData400).join(', ');
+                console.log(errorMessages400)
+                setErrorHandler({ status: 0, message: errorMessages400, code: "error" });
+            } else if (err.response && err.response.status === 500) {
+                // Handle other errors
+                console.log(err);
+                const errorData500 = err.response.data.error;
+                const errorMessages500 = Object.values(errorData500);
+                console.log(errorMessages500)
+                setErrorHandler({ status: 0, message: errorMessages500, code: "error" });
+            } else {
+                console.log(err);
+                console.log(err.response.data.error)
+                setErrorHandler({ status: 0, message: "An error occurred", code: "error" });
+            }
+
             console.log(err);
+        }
+    };
+
+
+    const handleKeyDown = (event) => {
+        const { name, value } = event.target
+        console.log(name)
+        if (event.key === 'Tab') {
+            // Prevent default Tab behavior
+
+            const formattedValue = value.toLowerCase().
+                split(' ')
+                .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+                .join(' ');
+            console.log(formattedValue)
+            // Format the input value (capitalization)
+            // Update the state to show the formatted value
+            setItemMasterData((prev) => ({ ...prev, [name]: formattedValue })); // Update the state with the formatted value
+
+
         }
     };
 
@@ -248,7 +321,7 @@ const ItemMaster = () => {
         boxShadow: "0px 0px 25px 10px",
     }
     return (
-        <div  style={{ marginTop: "4rem" }}>
+        <div style={{ marginTop: "4rem" }}>
             <div >
                 <form>
                     <h1 className='text-center'>Item Master Database</h1>
@@ -264,7 +337,7 @@ const ItemMaster = () => {
                             <label htmlFor="itemTypeId">Item Type</label>
                         </div>
                         <div className="form-floating col">
-                            <input type="text" className="form-control" id="itemDescriptionId" name="itemDescription" placeholder="itemDescription" value={itemMasterData.itemDescription} onChange={handleItemMasterBaseChange} />
+                            <input type="text" className="form-control" id="itemDescriptionId" name="itemDescription" placeholder="itemDescription" onKeyDown={handleKeyDown} value={itemMasterData.itemDescription} onChange={handleItemMasterBaseChange} />
                             <label htmlFor="itemDescriptionId">Item Description</label>
                         </div>
 
@@ -326,12 +399,12 @@ const ItemMaster = () => {
                             </div>
                         </div>
                         <div className='col-md-2'>
-                            <div style={{width: "100%", height: "72%", margin: "0 0px 0 0", padding: 0 }}>
+                            <div style={{ width: "100%", height: "72%", margin: "0 0px 0 0", padding: 0 }}>
                                 <input type="file" accept="image/*" onChange={handleImageChange} />
                                 {image && <img src={image} alt="Uploaded" style={{ maxWidth: '100%' }} />}
                             </div>
                             <button className='btn btn-warning me-2 '>Upload Image</button>
-                            <button className='btn btn-danger' onClick={()=> setImage(null)}>x</button></div>
+                            <button className='btn btn-danger' onClick={() => setImage(null)}>x</button></div>
                         <div className='col-md-3 d-flex justify-content-end mb-2 ps-0 ms-0'>
                             <div className='col-12'>
                                 <table className='table table-bordered text-center align-middle'>
@@ -423,22 +496,22 @@ const ItemMaster = () => {
                         <div className='row mb-2 g-2'>
 
                             <div class="form-floating col-3 ">
-                                <select className="form-select" id="itemTypeSortId" name="itemTypeSort" aria-label="Floating label select example" onChange={handleItemMasterBaseChange}>
-                                    <option selected>Item Type</option>
-                                    <option value="1">One</option>
-                                    <option value="2">Two</option>
-                                    <option value="3">Three</option>
+                                <select className="form-select" id="itemTypeId" name="itemType" aria-label="Floating label select example" onChange={handleFilterChange}>
+                                    <option value="all">All</option>
+                                    <option value="attribute">Attribute</option>
+                                    <option value="variable">Variable</option>
+                                    <option value="referenceStandard">Reference Standard</option>
                                 </select>
-                                <label htmlFor="itemTypeSortId">Item Type Sort</label>
+                                <label htmlFor="itemTypeId">Item Type Sort</label>
                             </div>
                             <div class="form-floating col-3">
-                                <select className="form-select" id="itemDescriptionSortId" name="itemDescriptionSort" aria-label="Floating label select example" onChange={handleItemMasterBaseChange} >
-                                    <option selected>Item Description</option>
-                                    <option value="1">One</option>
-                                    <option value="2">Two</option>
-                                    <option value="3">Three</option>
+                                <select className="form-select" id="itemDescriptionId" name="itemDescription" aria-label="Floating label select example" onChange={handleFilterChange} >
+                                    <option value="all">All</option>
+                                    {itemMasterDataList.map((item) => (
+                                        <option value={item.itemDescription}>{item.itemDescription}</option>
+                                    ))}
                                 </select>
-                                <label htmlFor="itemDescriptionSortId">Item Description Sort</label>
+                                <label htmlFor="itemDescriptionId">Item Description Sort</label>
                             </div>
 
                         </div>
