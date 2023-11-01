@@ -4,9 +4,33 @@ import Autocomplete from '@mui/material/Autocomplete';
 import TextField from '@mui/material/TextField';
 import Alert from '@mui/material/Alert';
 import Snackbar from '@mui/material/Snackbar';
+<<<<<<< HEAD
 import RemoveRoundedIcon from '@mui/icons-material/RemoveRounded';
 import AddRoundedIcon from '@mui/icons-material/AddRounded';
 const Vendor = () => {
+=======
+import Paper from '@mui/material/Paper';
+
+const 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Vendor = () => {
+>>>>>>> 6be96f93fd26c081898b5cba2ea38e22af9cf34a
 
 
     const [snackBarOpen, setSnackBarOpen] = useState(false)
@@ -225,7 +249,7 @@ const Vendor = () => {
                 // Handle other errors
                 console.log(err);
                 const errorData500 = err.response.data.error;
-                const errorMessages500 = Object.values(errorData500).join(', ');
+                const errorMessages500 = Object.values(errorData500);
                 console.log(errorMessages500)
                 setErrorHandler({ status: 0, message: errorMessages500, code: "error" });
             } else {
@@ -368,8 +392,35 @@ const Vendor = () => {
 
     };
 
+    const [file, setFile] = useState(null);
+
+    const handleFileChange = (e) => {
+        setFile(e.target.files[0]);
+    
+    };
+    console.log(file)
+    const handleFileUpload = async () => {
+        const formData = new FormData();
+        formData.append('file', file);
+        
+        try {
+            const response = await fetch("http://localhost:3001/upload/VendorCertificateUpload", {
+                method: 'POST',
+                body: formData,
+            });
+            console.log(response)
+            if (response.ok) {
+                console.log('File uploaded successfully');
+                setSnackBarOpen(true);
+                setErrorHandler({ status: 1, message: "Vendor Certificate Uploaded Successfully", code: "success" });
+            }
+        } catch (error) {
+            console.error('Error uploading the file:', error);
+        }
+    };
 
 
+<<<<<<< HEAD
     const bodyTxt = {
         borderRadius: "10px",
 
@@ -380,11 +431,18 @@ const Vendor = () => {
     return (
         <div >
             <div >
+=======
+    
+    return (
+        <div className='container' >
+            
+            <div>
+>>>>>>> 6be96f93fd26c081898b5cba2ea38e22af9cf34a
                 <form>
                     <div className='row g-2'>
-                        <div className='col'>
+                        {/* <div className='col'>
                             <h1 className='text-center'>Vendor DataBase</h1>
-                        </div>
+                        </div> */}
                         <div className='col  d-flex justify-content-end '>
                             <div class="form-check form-check-inline ">
                                 <input className="form-check-input" type="checkbox" checked={vendorData.oem === "1"} onChange={handleVendorDataBaseChange} id="oemId" name="oem" />
@@ -418,8 +476,13 @@ const Vendor = () => {
                             <label htmlFor="fullNameId">Full Name</label>
                         </div>
                         <div className="form-floating  col">
+<<<<<<< HEAD
                             <input type="date" className="form-control" id="dorId" name="dor" placeholder="dor" max={DateFormat} value={vendorData.dor} onChange={handleVendorDataBaseChange} />
                             <label htmlFor="dorId">Data Of Reg</label>
+=======
+                            <input type="date" className="form-control" id="dateOfRegId" name="dateOfReg" placeholder="dateOfReg" max={DateFormat} value={vendorData.dateOfReg} onChange={handleVendorDataBaseChange} />
+                            <label htmlFor="dateOfRegId">Data Of Reg</label>
+>>>>>>> 6be96f93fd26c081898b5cba2ea38e22af9cf34a
                         </div>
                     </div>
                     <div className="row g-2">
@@ -481,7 +544,8 @@ const Vendor = () => {
 
                                 <div className='me-2 col'>
                                     <label className='certificateuplod'>
-                                        <input className="form-control certificatedownlod" type="file" id="certificateUpload" />Certificate Upload </label>
+                                        <input onChange={handleFileChange} className="form-control certificatedownlod" type="file" id="certificateUpload" />Certificate Upload </label>
+                                        <button type='button' onClick={handleFileUpload}>Upload</button>
                                 </div>
 
                             </div>
@@ -502,6 +566,7 @@ const Vendor = () => {
                                         {vendorData.vendorContacts ? vendorData.vendorContacts.map((item, index) => (
                                             <tr>
                                                 <td>{index + 1}</td>
+<<<<<<< HEAD
                                                 <td><input type="text" className='form-control form-control-sm' id="nameId" name="name" value={item.name} onChange={(e) => changeVendorRow(index, e.target.name, e.target.value)} onKeyDown={handleKeyDownForContacts} /></td>
                                                 <td><input type="text" className='form-control form-control-sm' id="contactNumber" name="contactNumber" value={item.contactNumber} onChange={(e) => changeVendorRow(index, e.target.name, e.target.value)} /></td>
                                                 <td><input type="text" className='form-control form-control-sm' id="mailId" name="mailId" value={item.mailId} onChange={(e) => changeVendorRow(index, e.target.name, e.target.value)} /></td>
@@ -514,6 +579,13 @@ const Vendor = () => {
                                                     
                                                 </select></td>
                                                 <td ><button type='button' className='btn btn-danger' onClick={() => deleteVendorRow(index)}><RemoveRoundedIcon /></button></td>
+=======
+                                                <td><input type="text" className='form-control' id="nameId" name="name" value={item.name} onChange={(e) => changeVendorRow(index, e.target.name, e.target.value)} onKeyDown={handleKeyDownForContacts} /></td>
+                                                <td><input type="text" className='form-control' id="contactNumber" name="contactNumber" value={item.contactNumber} onChange={(e) => changeVendorRow(index, e.target.name, e.target.value)} /></td>
+                                                <td><input type="text" className='form-control' id="mailId" name="mailId" value={item.mailId} onChange={(e) => changeVendorRow(index, e.target.name, e.target.value)} /></td>
+                                                <td><input type="text" className='form-control' id="vcStatusId" name="vcStatus" value={item.vcStatus} onChange={(e) => changeVendorRow(index, e.target.name, e.target.value)} /></td>
+                                                <td><button type='button' className='btn btn-danger' onClick={() => deleteVendorRow(index)}><i class="bi bi-trash-fill"></i></button></td>
+>>>>>>> 6be96f93fd26c081898b5cba2ea38e22af9cf34a
                                             </tr>
                                         )) : <tr></tr>}
                                     </tbody>
@@ -551,7 +623,7 @@ const Vendor = () => {
                         </div>
                     </div>
                     <hr />
-                    <div className='mb-5'>
+                    <div>
                         <h3 className='text-center'>Vendor List</h3>
                         <div className='row mb-2  g-2'>
                             <div class="form-floating-sm  col-2">
@@ -604,6 +676,7 @@ const Vendor = () => {
 
                 </form>
             </div>
+            
         </div>
     )
 }

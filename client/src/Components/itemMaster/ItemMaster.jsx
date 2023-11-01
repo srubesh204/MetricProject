@@ -6,8 +6,23 @@ import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import Stack from '@mui/material/Stack';
 import FileDownloadIcon from '@mui/icons-material/FileDownload';
 import UploadFileIcon from '@mui/icons-material/UploadFile';
+import Alert from '@mui/material/Alert';
+import Snackbar from '@mui/material/Snackbar';
+
 
 const ItemMaster = () => {
+
+    const [snackBarOpen, setSnackBarOpen] = useState(false)
+    const handleSnackClose = (event, reason) => {
+        if (reason === 'clickaway') {
+            return;
+        }
+
+        setSnackBarOpen(false);
+    }
+
+    const [errorhandler, setErrorHandler] = useState({})
+    console.log(errorhandler)
 
     const VisuallyHiddenInput = styled('input')({
         clip: 'rect(0 0 0 0)',
@@ -105,7 +120,7 @@ const ItemMaster = () => {
     }, []);
     console.log(itemMasterDataList)
 
-    const itemMesterSubmit = async (e) => {
+    const itemMasterSubmit = async (e) => {
         e.preventDefault();
         try {
             const response = await axios.post(
@@ -114,24 +129,71 @@ const ItemMaster = () => {
             {/*console.log(response.data.message)*/ }
             console.log(response)
             itemMasterFetchData();
-
+            setSnackBarOpen(true)
+            setErrorHandler({ status: response.data.status, message: response.data.message, code: "success" })
             setItemMasterData(initialItemMasterData);
         } catch (err) {
+            setSnackBarOpen(true)
+
+            if (err.response && err.response.status === 400) {
+                // Handle validation errors
+                console.log(err);
+                const errorData400 = err.response.data.errors;
+                const errorMessages400 = Object.values(errorData400).join(', ');
+                console.log(errorMessages400)
+                setErrorHandler({ status: 0, message: errorMessages400, code: "error" });
+            } else if (err.response && err.response.status === 500) {
+                // Handle other errors
+                console.log(err);
+                const errorData500 = err.response.data.error;
+                const errorMessages500 = Object.values(errorData500).join(', ');
+                console.log(errorMessages500)
+                setErrorHandler({ status: 0, message: errorMessages500, code: "error" });
+            } else {
+                console.log(err);
+                console.log(err.response.data.error)
+                setErrorHandler({ status: 0, message: "An error occurred", code: "error" });
+            }
+
             console.log(err);
-            alert(err);
+
         }
     };
 
     const updateItemMasterData = async (id) => {
         try {
-            await axios.put(
+            const response = await axios.put(
                 "http://localhost:3001/itemMaster/updateItemMaster/" + id, itemMasterData
             );
             itemMasterFetchData();
             setItemMasterStateId(null)
             setItemMasterData(initialItemMasterData);
+            setSnackBarOpen(true)
+            setErrorHandler({ status: response.data.status, message: response.data.message, code: "success" })
             console.log("ItemMaster Updated Successfully");
         } catch (err) {
+            setSnackBarOpen(true)
+
+            if (err.response && err.response.status === 400) {
+                // Handle validation errors
+                console.log(err);
+                const errorData400 = err.response.data.errors;
+                const errorMessages400 = Object.values(errorData400).join(', ');
+                console.log(errorMessages400)
+                setErrorHandler({ status: 0, message: errorMessages400, code: "error" });
+            } else if (err.response && err.response.status === 500) {
+                // Handle other errors
+                console.log(err);
+                const errorData500 = err.response.data.error;
+                const errorMessages500 = Object.values(errorData500);
+                console.log(errorMessages500)
+                setErrorHandler({ status: 0, message: errorMessages500, code: "error" });
+            } else {
+                console.log(err);
+                console.log(err.response.data.error)
+                setErrorHandler({ status: 0, message: "An error occurred", code: "error" });
+            }
+
             console.log(err);
         }
     };
@@ -142,6 +204,7 @@ const ItemMaster = () => {
             );
             itemMasterFetchData();
             setItemMasterData(initialItemMasterData);
+            setItemMasterStateId(null);
             console.log("ItemMaster delete Successfully");
         } catch (err) {
             console.log(err);
@@ -263,11 +326,12 @@ const ItemMaster = () => {
                             </div>
                         </div>
                         <div className='col-md-2'>
-                            <div style={{ border: "1px solid", width: "100%", height: "72%", margin: "0 0px 0 0", padding: 0 }}>
+                            <div style={{width: "100%", height: "72%", margin: "0 0px 0 0", padding: 0 }}>
                                 <input type="file" accept="image/*" onChange={handleImageChange} />
                                 {image && <img src={image} alt="Uploaded" style={{ maxWidth: '100%' }} />}
                             </div>
-                            <button className='btn btn-warning mt-2 '>Upload Image</button></div>
+                            <button className='btn btn-warning me-2 '>Upload Image</button>
+                            <button className='btn btn-danger' onClick={()=> setImage(null)}>x</button></div>
                         <div className='col-md-3 d-flex justify-content-end mb-2 ps-0 ms-0'>
                             <div className='col-12'>
                                 <table className='table table-bordered text-center align-middle'>
@@ -342,7 +406,7 @@ const ItemMaster = () => {
                                     </div>
                                 </div> : <div className='col d-flex justify-content-end '>
                                     <div >
-                                        <button type="button" className='btn btn-warning' onClick={itemMesterSubmit}>+ Add Item Master</button>
+                                        <button type="button" className='btn btn-warning' onClick={itemMasterSubmit}>+ Add Item Master</button>
                                     </div>
                                 </div>
                             }
@@ -355,7 +419,7 @@ const ItemMaster = () => {
                     <hr />
 
                     <div>
-                        <h3 className='text-center'>Vendor List</h3>
+                        <h3 className='text-center'>Item List</h3>
                         <div className='row mb-2 g-2'>
 
                             <div class="form-floating col-3 ">
@@ -413,6 +477,11 @@ const ItemMaster = () => {
                             </table>
                         </div>
                     </div>
+                    <Snackbar anchorOrigin={{ vertical: "top", horizontal: "right" }} open={snackBarOpen} autoHideDuration={6000} onClose={handleSnackClose}>
+                        <Alert variant="filled" onClose={handleSnackClose} severity={errorhandler.code} sx={{ width: '100%' }}>
+                            {errorhandler.message}
+                        </Alert>
+                    </Snackbar>
 
                 </form>
             </div>
