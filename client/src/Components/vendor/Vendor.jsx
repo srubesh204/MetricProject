@@ -6,6 +6,7 @@ import Alert from '@mui/material/Alert';
 import Snackbar from '@mui/material/Snackbar';
 import RemoveRoundedIcon from '@mui/icons-material/RemoveRounded';
 import AddRoundedIcon from '@mui/icons-material/AddRounded';
+import { Container, Paper } from '@mui/material';
 const Vendor = () => {
 
 
@@ -414,14 +415,20 @@ const Vendor = () => {
 
     
     return (
-        <div className='container' >
-            
-            <div>
-                <form>
+        <div >
+      <Container maxWidth="lg" sx={{ mt: 4 }}>
+      <form>
+      <Paper
+                  sx={{
+                    p: 2,
+                    display: 'flex',
+                    flexDirection: 'column',
+                    mb: 4
+                  }}
+                >
+
                     <div className='row g-2'>
-                        {/* <div className='col'>
-                            <h1 className='text-center'>Vendor DataBase</h1>
-                        </div> */}
+                        
                         <div className='col  d-flex justify-content-end '>
                             <div class="form-check form-check-inline ">
                                 <input className="form-check-input" type="checkbox" checked={vendorData.oem === "1"} onChange={handleVendorDataBaseChange} id="oemId" name="oem" />
@@ -458,7 +465,22 @@ const Vendor = () => {
                             <input type="date" className="form-control" id="dorId" name="dor" placeholder="dor" max={DateFormat} value={vendorData.dor} onChange={handleVendorDataBaseChange} />
                             <label htmlFor="dorId">Data Of Reg</label>
                         </div>
+                        
                     </div>
+                    </Paper>
+
+
+
+
+                    <Paper
+                  sx={{
+                    p: 2,
+                    display: 'flex',
+                    flexDirection: 'column',
+                    
+                  }}
+                >
+
                     <div className="row g-2">
                         <div className='col-md-6  '>
                             <div class="form-floating mb-2">
@@ -560,6 +582,15 @@ const Vendor = () => {
 
                         </div>
                     </div>
+                    </Paper>
+                    <Paper
+                  sx={{
+                    p: 2,
+                    display: 'flex',
+                    flexDirection: 'column',
+                    mb: 5
+                  }}
+                >
                     <div className='row' >
                         <div className='col  d-flex justify-content-end mb-2'>
                             <div className='col  d-flex'>
@@ -588,7 +619,20 @@ const Vendor = () => {
 
                         </div>
                     </div>
-                    <hr />
+                    </Paper>
+
+
+
+
+
+                    <Paper
+                  sx={{
+                    p: 4,
+                    display: 'flex',
+                    flexDirection: 'column',
+                    
+                  }}
+                >
                     <div>
                         <h3 className='text-center'>Vendor List</h3>
                         <div className='row mb-2  g-2'>
@@ -637,14 +681,15 @@ const Vendor = () => {
                             {errorhandler.message}
                         </Alert>
                     </Snackbar>
+                   </Paper>
 
 
 
                 </form>
+                </Container>
             </div>
-            
-        </div>
     )
+    
 }
 
 export default Vendor
