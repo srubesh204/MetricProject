@@ -162,15 +162,20 @@ export const UnitDataBase = ({ style }) => {
     return (
 
         <div >
-            <Container maxWidth="lg" sx={{ mt: 4 }}>
+            
                 <form>
+                <Box sx={{ flexGrow: 1, m: 4 }}>
+                <Grid container spacing={2} >
+
+                  
+                <Grid item xs={6} >
                     <Paper sx={{
                         p: 3,
                         display: 'flex',
                         flexDirection: 'column',
                         mb: 4
                     }} >
-                        <h1 className='text-center'>Unit DataBase</h1>
+                        <h6 className='text-center'>Unit DataBase</h6>
                         <div className='row g-2 mb-3'>
                             <div className="form-floating col-2">
                                 <input type="text" className="form-control" id="unitSiId" name="unitSi" placeholder="unitSi" disabled value={uintDataList.length + 1} />
@@ -199,8 +204,9 @@ export const UnitDataBase = ({ style }) => {
                             </Alert>
                         </Snackbar>
                     </Paper>
+                    </Grid>
 
-
+                    <Grid item xs={5} >
                     <Paper sx={{
                         p: 3,
                         display: 'flex',
@@ -208,7 +214,7 @@ export const UnitDataBase = ({ style }) => {
                         mb: 4
                     }} >
                         <div>
-                            <h3 className='text-center'>Unit List</h3>
+                            <h6 className='text-center'>Unit List</h6>
                             <div style={style} className='table-responsive'>
                                 <table className='table table-bordered text-center'>
                                     <tbody>
@@ -230,9 +236,12 @@ export const UnitDataBase = ({ style }) => {
 
                         </div>
                     </Paper>
+                    </Grid>
 
+                    </Grid>
+                  </Box>
                 </form>
-            </Container>
+            
 
         </div>
     )
@@ -415,21 +424,24 @@ export const PartDataBase = ({ style }) => {
     return (
 
         <div  >
-           <Box sx={{ flexGrow: 1 }}>
-            <Grid container spacing={2} columns={12}>
-                <form>
-                              
-                <Grid xs={6}>
+             <form>
+           <Box sx={{ flexGrow: 1, m: 4 }}>
+          
+            <Grid container spacing={2} >
+               
+
+                <Grid item xs={6} >
                     <Paper sx={{
                         p: 3,
                         display: 'flex',
                         flexDirection: 'column',
                         mb: 4
                     }} >
-                        <h1 className='text-center'>Part DataBase</h1>
+                       
+                       <h6 className='text-center'>Part DataBase</h6>
                         <div>
                             <div className="row g-2 mb-2">
-                                <div className="form-floating col-md-1">
+                                <div className="form-floating col">
                                     <input type="text" className="form-control" id="partDbId" name="partDb" placeholder="partDb" disabled />
                                     <label htmlFor="partDbId">Si.No.</label>
                                 </div>
@@ -481,7 +493,7 @@ export const PartDataBase = ({ style }) => {
 
 
 
-                    <Grid xs={5}>
+                    <Grid item xs={6} >
                     <Paper sx={{
                         p: 3,
                         display: 'flex',
@@ -489,7 +501,7 @@ export const PartDataBase = ({ style }) => {
                         mb: 4
                     }} >
                         <div>
-                            <h3 className='text-center'>Part List</h3>
+                            <h6 className='text-center'>Part List</h6>
                             <div style={style} className='table-responsive'>
                                 <table className='table table-bordered text-center'>
                                     <tbody>
@@ -517,9 +529,11 @@ export const PartDataBase = ({ style }) => {
                         </div>
                     </Paper>
                     </Grid>
-                </form>
+                
 </Grid>
             </Box>
+           
+    </form>
         </div>
     )
 }
