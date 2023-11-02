@@ -5,8 +5,8 @@ const designationSchema = new mongoose.Schema({
  
   designation:{
   type: String,
-    unique: true,
-    required: [true, "Designation must"]
+  unique: [true, " Designation should be Unique"],
+    required: [true, "Designation is Required"]
      
   }
 });
