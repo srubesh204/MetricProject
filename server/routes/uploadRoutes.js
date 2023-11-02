@@ -11,7 +11,7 @@ const VendorCertificateStorage = multer.diskStorage({
   },
 });
 
-const upload = multer({ storage: VendorCertificateStorage });
+const upload = multer ({ storage: VendorCertificateStorage });
 
 router.post('/VendorCertificateUpload', upload.single('file'), (req, res) => {
   res.status(200).json({ message: 'Vendor Cerficate uploaded successfully' });

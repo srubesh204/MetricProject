@@ -14,9 +14,9 @@ const vendorController = {
     createVendor: async (req, res) => {
 
         try {
-            const { vendorCode, aliasName, fullName, dor, address, state, city, oem, customer, supplier, subContractor, certificate, certifacteValidity, vendorStatus, vendorContacts} = req.body;
+            const { vendorCode, aliasName, fullName, dor, address, state, city, oem, customer, supplier, subContractor, certificate, certificateValidity, vendorStatus, vendorContacts} = req.body;
            
-            const vendorResult = new vendorModel({ vendorCode, aliasName, fullName, dor, address, state, city, oem, customer, supplier, subContractor, certificate, certifacteValidity,vendorStatus, vendorContacts });
+            const vendorResult = new vendorModel({ vendorCode, aliasName, fullName, dor, address, state, city, oem, customer, supplier, subContractor, certificate, certificateValidity,vendorStatus, vendorContacts });
 
             const validationError = vendorResult.validateSync();
 
@@ -60,7 +60,7 @@ const vendorController = {
             // }
 
             // Create an object with the fields you want to update
-            const { vendorCode, aliasName, fullName, dor, address, state, city, oem, customer, supplier, subContractor, certificate, certifacteValidity, vendorStatus, vendorContacts } = req.body;
+            const { vendorCode, aliasName, fullName, dor, address, state, city, oem, customer, supplier, subContractor, certificate, certificateValidity, vendorStatus, vendorContacts } = req.body;
 
             const updateVendorFields = {
               vendorCode,
@@ -75,7 +75,7 @@ const vendorController = {
               supplier,
               subContractor,
               certificate,
-              certifacteValidity,
+              certificateValidity,
               vendorStatus,
               vendorContacts
 
@@ -140,7 +140,7 @@ const vendorController = {
                 return res.status(404).json({ error: 'Vendor not found' });
             }
 
-            res.status(202).json({ message: 'Vendor detail deleted successfully' ,result: deleteVendor });
+            res.status(202).json({ message: 'Vendor deleted successfully' ,result: deleteVendor });
     } catch (error) {
       console.error(error);
       res.status(500).send('Internal Server Error');
