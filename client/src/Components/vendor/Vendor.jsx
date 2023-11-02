@@ -4,6 +4,8 @@ import Autocomplete from '@mui/material/Autocomplete';
 import TextField from '@mui/material/TextField';
 import Alert from '@mui/material/Alert';
 import Snackbar from '@mui/material/Snackbar';
+import RemoveRoundedIcon from '@mui/icons-material/RemoveRounded';
+import AddRoundedIcon from '@mui/icons-material/AddRounded';
 const Vendor = () => {
 
 
@@ -19,6 +21,37 @@ const Vendor = () => {
     const [errorhandler, setErrorHandler] = useState({})
     console.log(errorhandler)
 
+    const [filteredData, setFilteredData] = useState([])
+
+    const handleFilterChange = (e) => {
+        const { name, value } = e.target;
+        if (value === "all") {
+            setFilteredData(vendorDataList)
+        } else {
+            if (value === "oem") {
+                const vendorType = vendorDataList.filter((item) => (item.oem === "1"))
+                setFilteredData(vendorType)
+            }
+            if (value === "customer") {
+                const vendorType = vendorDataList.filter((item) => (item.customer === "1"))
+                setFilteredData(vendorType)
+            }
+            if (value === "supplier") {
+                const vendorType = vendorDataList.filter((item) => (item.supplier === "1"))
+                setFilteredData(vendorType)
+            }
+            if (value === "subContractor") {
+                const vendorType = vendorDataList.filter((item) => (item.subContractor === "1"))
+                setFilteredData(vendorType)
+            }
+
+            
+           
+        }
+
+
+    };
+
 
     const [vendorStateId, setVendorStateId] = useState("")
     const initialVendorData = {
@@ -26,7 +59,7 @@ const Vendor = () => {
         vendorCode: "",
         aliasName: "",
         fullName: "",
-        dateOfReg: "",
+        dor: "",
         address: "",
         state: "",
         city: "",
@@ -44,7 +77,7 @@ const Vendor = () => {
         vendorCode: "",
         aliasName: "",
         fullName: "",
-        dateOfReg: "",
+        dor: "",
         address: "",
         state: "",
         city: "",
@@ -141,6 +174,7 @@ const Vendor = () => {
                 `${process.env.REACT_APP_PORT}/vendor/getAllVendors`
             );
             setVendorDataList(response.data.result);
+            setFilteredData(response.data.result);
         } catch (err) {
             console.log(err);
         }
@@ -246,8 +280,8 @@ const Vendor = () => {
             vendorFetchData();
             setVendorData(initialVendorData);
             setSnackBarOpen(true)
-            setErrorHandler({ status: response.data.status, message: `${response.data.result.firstName} ${response.data.result.lastName} ${response.data.message}`, code: "success" })
-            console.log("Vendor delete Successfully");
+            setErrorHandler({ status: response.data.status, message: `${response.data.result.fullName} ${response.data.message}`, code: "success" })
+            console.log(response.data);
         } catch (err) {
             setSnackBarOpen(true)
 
@@ -318,6 +352,8 @@ const Vendor = () => {
         }
     };
 
+    
+
 
 
     const updateVendor = async (item) => {
@@ -376,21 +412,16 @@ const Vendor = () => {
     };
 
 
-    const bodyTxt = {
-        borderRadius: "10px",
-
-        padding: "2rem",
-        margin: "4rem 1rem 1rem 1rem",
-        boxShadow: "0px 0px 25px 10px",
-    }
+    
     return (
         <div className='container' >
-            <div style={bodyTxt}>
+            
+            <div>
                 <form>
                     <div className='row g-2'>
-                        <div className='col'>
+                        {/* <div className='col'>
                             <h1 className='text-center'>Vendor DataBase</h1>
-                        </div>
+                        </div> */}
                         <div className='col  d-flex justify-content-end '>
                             <div class="form-check form-check-inline ">
                                 <input className="form-check-input" type="checkbox" checked={vendorData.oem === "1"} onChange={handleVendorDataBaseChange} id="oemId" name="oem" />
@@ -421,11 +452,11 @@ const Vendor = () => {
                         </div>
                         <div className="form-floating  col">
                             <input type="text" className="form-control" id="fullNameId" name="fullName" placeholder="fullName" value={vendorData.fullName} onChange={handleVendorDataBaseChange} onKeyDown={handleKeyDown} />
-                            <label htmlFor="fullNameId">full Name</label>
+                            <label htmlFor="fullNameId">Full Name</label>
                         </div>
                         <div className="form-floating  col">
-                            <input type="date" className="form-control" id="dateOfRegId" name="dateOfReg" placeholder="dateOfReg" max={DateFormat} value={vendorData.dateOfReg} onChange={handleVendorDataBaseChange} />
-                            <label htmlFor="dateOfRegId">Data Of Reg</label>
+                            <input type="date" className="form-control" id="dorId" name="dor" placeholder="dor" max={DateFormat} value={vendorData.dor} onChange={handleVendorDataBaseChange} />
+                            <label htmlFor="dorId">Data Of Reg</label>
                         </div>
                     </div>
                     <div className="row g-2">
@@ -447,7 +478,7 @@ const Vendor = () => {
                                     sx={{ width: 200 }}
                                     value={vendorData.state}
                                     isOptionEqualToValue={(option) => option}
-                                    renderInput={(params) => <TextField {...params} label="state" name="state" />} // Set the name attribute to "state"
+                                    renderInput={(params) => <TextField {...params} label="State" name="State" />} // Set the name attribute to "state"
                                 />
 
 
@@ -462,18 +493,18 @@ const Vendor = () => {
                                     sx={{ width: 200 }}
                                     value={vendorData.city}
                                     isOptionEqualToValue={(option) => option}
-                                    renderInput={(params) => <TextField {...params} label="city" name="city" />} // Set the name attribute to "state"
+                                    renderInput={(params) => <TextField {...params} label="City" name="City" />} // Set the name attribute to "state"
                                 />
 
                                 <div className="form-floating mb-2 col">
 
                                     <select onChange={handleVendorDataBaseChange} value={vendorData.vendorStatus} className="form-select" id="vendorStatusId" name="vendorStatus" >
-                                        <option value="">vendor Status</option>
+                                        <option value="">-select-</option>
                                         <option value="Active">Active</option>
                                         <option value="InActive">InActive</option>
                                         <option value="Relieved">Relieved</option>
                                     </select>
-                                    <label htmlFor="vendorStatusId">vendor Status</label>
+                                    <label htmlFor="vendorStatusId">Vendor Status</label>
                                 </div>
 
                             </div>
@@ -495,25 +526,32 @@ const Vendor = () => {
 
                         </div>
                         <div className='col-md-6'>
-                            <div>
-                                <table className='table table-bordered table-responsive text-center'>
+                            <div style={{maxHeight: "200px", overflow: "auto"}}>
+                                <table className='table table-sm table-bordered table-responsive text-center align-middle'>
                                     <tbody>
-                                        <tr>
-                                            <th>Si.No</th>
+                                        <tr style={{fontSize: "14px"}}>
+                                            <th width={"5%"}>Si.No</th>
                                             <th>Name</th>
-                                            <th>Contact Number</th>
+                                            <th width={"20%"}>Contact Number</th>
                                             <th>Mail Id</th>
-                                            <th>Status</th>
-                                            <th><button type='button' className='btn btn-warning' onClick={addVendorDataRow}>+Add</button></th>
+                                            <th width={"15%"}>Status</th>
+                                            <th width={"10%"}><button type='button' className='btn btn-warning' onClick={addVendorDataRow}><AddRoundedIcon /></button></th>
                                         </tr>
                                         {vendorData.vendorContacts ? vendorData.vendorContacts.map((item, index) => (
                                             <tr>
                                                 <td>{index + 1}</td>
-                                                <td><input type="text" className='form-control' id="nameId" name="name" value={item.name} onChange={(e) => changeVendorRow(index, e.target.name, e.target.value)} onKeyDown={handleKeyDownForContacts} /></td>
-                                                <td><input type="text" className='form-control' id="contactNumber" name="contactNumber" value={item.contactNumber} onChange={(e) => changeVendorRow(index, e.target.name, e.target.value)} /></td>
-                                                <td><input type="text" className='form-control' id="mailId" name="mailId" value={item.mailId} onChange={(e) => changeVendorRow(index, e.target.name, e.target.value)} /></td>
-                                                <td><input type="text" className='form-control' id="vcStatusId" name="vcStatus" value={item.vcStatus} onChange={(e) => changeVendorRow(index, e.target.name, e.target.value)} /></td>
-                                                <td><button type='button' className='btn btn-danger' onClick={() => deleteVendorRow(index)}><i class="bi bi-trash-fill"></i></button></td>
+                                                <td><input type="text" className='form-control form-control-sm' id="nameId" name="name" value={item.name} onChange={(e) => changeVendorRow(index, e.target.name, e.target.value)} onKeyDown={handleKeyDownForContacts} /></td>
+                                                <td><input type="text" className='form-control form-control-sm' id="contactNumber" name="contactNumber" value={item.contactNumber} onChange={(e) => changeVendorRow(index, e.target.name, e.target.value)} /></td>
+                                                <td><input type="text" className='form-control form-control-sm' id="mailId" name="mailId" value={item.mailId} onChange={(e) => changeVendorRow(index, e.target.name, e.target.value)} /></td>
+                                            
+                                                <td> <select className="form-select form-select-sm" id="vcStatusId" name="vcStatus" value={item.vcStatus}  onChange={(e) => changeVendorRow(index, e.target.name, e.target.value)}  aria-label="Floating label select example">
+                                                    <option selected>-select-</option>
+                                                    <option value="Active">Active</option>
+                                                    <option value="InActive">InActive</option>
+                                                    <option value="Relived">Relived</option>
+                                                    
+                                                </select></td>
+                                                <td ><button type='button' className='btn btn-danger' onClick={() => deleteVendorRow(index)}><RemoveRoundedIcon /></button></td>
                                             </tr>
                                         )) : <tr></tr>}
                                     </tbody>
@@ -537,10 +575,10 @@ const Vendor = () => {
                             {vendorStateId ?
                                 <div className='d-flex justify-content-end'>
                                     <div className='me-2' >
-                                        <button type="button" className='btn btn-secondary' onClick={() => updateVendorData(vendorStateId)}>Modify</button>
+                                        <button type="button" className='btn btn-info' onClick={() => updateVendorData(vendorStateId)}>Modify</button>
                                     </div>
                                     <div className='me-2' >
-                                        <button type="button" className='btn btn-secondary' onClick={() => { setVendorStateId(null); setVendorData(initialVendorData) }}>Cancel</button>
+                                        <button type="button" className='btn btn-danger' onClick={() => { setVendorStateId(null); setVendorData(initialVendorData) }}>Cancel</button>
                                     </div>
                                 </div> : <div className='col d-flex justify-content-end mb-2'>
                                     <div >
@@ -551,16 +589,16 @@ const Vendor = () => {
                         </div>
                     </div>
                     <hr />
-                    <div className='mb-5'>
+                    <div>
                         <h3 className='text-center'>Vendor List</h3>
                         <div className='row mb-2  g-2'>
                             <div class="form-floating-sm  col-2">
-                                <select className="form-select form-select-sm" id="vendorTypeId" name="vendorType" aria-label="Floating label select example">
-                                    <option selected>Vendor Type</option>
-                                    <option value="1">OME</option>
-                                    <option value="2">Customer</option>
-                                    <option value="3">Supplier</option>
-                                    <option value="4">SubContractor</option>
+                                <select className="form-select form-select-sm" id="vendorTypeId" name="vendorType" aria-label="Floating label select example" onChange={handleFilterChange} >
+                                    <option value="all">All</option>
+                                    <option value="oem">OEM</option>
+                                    <option value="customer">Customer</option>
+                                    <option value="supplier">Supplier</option>
+                                    <option value="subContractor">SubContractor</option>
                                 </select>
 
                             </div>
@@ -569,7 +607,7 @@ const Vendor = () => {
                             <tbody>
                                 <tr>
                                     <th>Si.No</th>
-                                    <th>vendor Code</th>
+                                    <th>Vendor Code</th>
                                     <th>Vendor Name</th>
                                     <th>City</th>
                                     <th>State</th>
@@ -577,7 +615,7 @@ const Vendor = () => {
                                     <th>Status</th>
                                     <th>Delete</th>
                                 </tr>
-                                {vendorDataList.map((item, index) => (
+                                {filteredData.map((item, index) => (
                                     <tr onClick={() => updateVendor(item)}>
                                         <td>{index + 1}</td>
 
@@ -604,6 +642,7 @@ const Vendor = () => {
 
                 </form>
             </div>
+            
         </div>
     )
 }

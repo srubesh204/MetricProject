@@ -11,10 +11,16 @@ const VendorCertificateStorage = multer.diskStorage({
   },
 });
 
-const upload = multer ({ storage: VendorCertificateStorage });
+const vendorCertificateUpload = multer({ storage: VendorCertificateStorage });
 
-router.post('/VendorCertificateUpload', upload.single('file'), (req, res) => {
-  res.status(200).json({ message: 'Vendor Cerficate uploaded successfully' });
-});
+router.post('/VendorCertificateUpload', vendorCertificateUpload.single('file'), (req, res) => {
+    if (!req.file) {
+      // No file was provided in the request
+      return res.status(400).json({ error: 'No file selected for upload' });
+    }
+  
+    // File was provided, proceed with processing
+    res.status(200).json({ message: 'Vendor Certificate uploaded successfully' });
+  });
 
 module.exports = router;

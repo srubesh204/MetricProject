@@ -1,10 +1,10 @@
 
 import './App.css';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
-import Department from './Components/Department';
+import {Department,Designation} from './Components/DesDep';
 import Employee from './Components/employee/Employee';
 
-import General from './Components/general/General';
+import {UnitDataBase,PartDataBase} from './Components/general/General';
 import Vendor from './Components/vendor/Vendor';
 import ItemMaster from './Components/itemMaster/ItemMaster';
 import Devi from './Components/devi/Devi';
@@ -18,8 +18,9 @@ function App() {
         <Dashboard />
         <Routes>
           <Route path="/desdep" element={<Department />} />
+          <Route path="/des" element={<Designation />} />
           <Route path="/employee" element={<Employee />} />
-          <Route path="/general" element={<General />} />
+          <Route path="/general" element={<UnitDataBase />} />
           <Route path="/vendor" element={<Vendor />} />
           <Route path="/itemMaster" element={<ItemMaster />} />
           <Route path="/devi" element={<Devi />} />
