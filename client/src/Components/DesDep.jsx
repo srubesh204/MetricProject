@@ -250,9 +250,15 @@ export const Department = () => {
     <div >
       <Container maxWidth="lg" sx={{ mt: 4 }}>
       <form>
-        <div className="row ">
+        
+        {/*<div className="row ">*/}
           
-            
+           <Paper sx={{
+                    p: 4,
+                    display: 'flex',
+                    flexDirection: 'column',
+                    mb: 4
+                  }} >
             <div className="row g-2">
               <div className="form-floating mb-3 col">
                 <input
@@ -350,8 +356,16 @@ export const Department = () => {
 
               </div>
             </div>
+            </Paper> 
+            
 
-            <hr />
+            
+<Paper  sx={{
+                    p: 4,
+                    display: 'flex',
+                    flexDirection: 'column',
+                    mb: 4
+                  }}>
 
             <h4 className="text-center mb-3">Department List</h4>
             <div className="table-responsive">
@@ -391,6 +405,8 @@ export const Department = () => {
                 {errorhandler.message}
               </Alert>
             </Snackbar>
+            </Paper>
+            
          
 
 
@@ -399,7 +415,7 @@ export const Department = () => {
 
          
 
-        </div>
+        {/*</div>*/}
       </form>
       </Container>
     </div>
