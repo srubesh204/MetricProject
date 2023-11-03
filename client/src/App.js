@@ -9,13 +9,14 @@ import Vendor from './Components/vendor/Vendor';
 import ItemMaster from './Components/itemMaster/ItemMaster';
 import Devi from './Components/devi/Devi';
 import Dashboard from './Components/Dashboard/Dashboard';
+import Home from './Components/Dashboard/Home';
 
 
 function App() {
   return (
     <div className="App">
       <BrowserRouter>
-        <Dashboard />
+        {/* <Dashboard /> */}
         <Routes>
           <Route path="/desdep" element={<Department />} />
           <Route path="/des" element={<Designation />} />
@@ -24,6 +25,7 @@ function App() {
           <Route path="/vendor" element={<Vendor />} />
           <Route path="/itemMaster" element={<ItemMaster />} />
           <Route path="/devi" element={<Devi />} />
+          <Route path="/home" element={<Home />} />
         </Routes>
       </BrowserRouter>
     </div>
