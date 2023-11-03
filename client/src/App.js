@@ -11,6 +11,10 @@ import Devi from './Components/devi/Devi';
 import Dashboard from './Components/Dashboard/Dashboard';
 import Home from './Components/Dashboard/Home';
 import ItemAdd from './Components/Items/ItemAdd';
+import '@fontsource/roboto/300.css';
+import '@fontsource/roboto/400.css';
+import '@fontsource/roboto/500.css';
+import '@fontsource/roboto/700.css';
 
 
 function App() {

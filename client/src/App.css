@@ -12,6 +12,7 @@
 
 .uplable:hover {
 	background-color: cornflowerblue;
+	cursor: pointer;
 }
 
 .uplable:active {
@@ -39,6 +40,7 @@
 	line-height: 2.42em;
 	text-align: center;
 	font-weight: bold;
+	cursor: pointer;
 	
 }
 .download {
@@ -51,6 +53,7 @@
     position: absolute;
     width: 1px;
 	background-color: #e6e6e6;
+	cursor: pointer;
 
 }
 .certificateuplod{
@@ -117,6 +120,7 @@ td{
 
 .hover:hover{
 	background-color: cornflowerblue !important;
+	cursor: pointer;
 }
 
 

@@ -142,11 +142,11 @@ export default function Dashboard() {
   const toggleDrawer = () => {
     setTogglerOpen(!togglerOpen);
   };
-  const [dataBaseOpen, setDataBaseOpen] = useState(true);
-  const [adminOpen, setAdminOpne] = useState(true);
-  const [itemOpen, setItemOpen] = useState(true);
-  const [systemOpen, setSystemOpen] = useState(true);
-  const [toolOpen, setToolOpen] = useState(true);
+  const [dataBaseOpen, setDataBaseOpen] = useState(false);
+  const [adminOpen, setAdminOpne] = useState(false);
+  const [itemOpen, setItemOpen] = useState(false);
+  const [systemOpen, setSystemOpen] = useState(false);
+  const [toolOpen, setToolOpen] = useState(false);
 
   const handleDatabaseMasterOpen = () => {
     setDataBaseOpen(!dataBaseOpen);
