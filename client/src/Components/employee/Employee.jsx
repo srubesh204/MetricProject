@@ -458,22 +458,22 @@ const Employee = () => {
 
                             </Grid>
                             <Grid item xs={4}>
-                                {/* <LocalizationProvider dateAdapter={AdapterDayjs}> */}
+                                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                                    
                                         <DatePicker label="DOB"
-                                            // id="dobId"
+                                             id="dobId"
                                             size="small"
-                                            // name="dob"
-                                            // // value={dayjs(employeeData.dob)}
-                                            // onChange={(newValue) => {
-                                            //     if (newValue) {
-                                            //         setEmployeeData((prev) => ({ ...prev, dob: `${newValue.$y}-${newValue.$M + 1}-${newValue.$D}` }))
-                                            //     }
-                                            // }}
-                                            // format='DD/MM/YYYY'
+                                         name="dob"
+                                            value={dayjs(employeeData.dob)}
+                                         onChange={(newValue) => {
+                                              if (newValue) {
+                                                   setEmployeeData((prev) => ({ ...prev, dob: `${newValue.$y}-${newValue.$M + 1}-${newValue.$D}` }))
+                                                }
+                                     }}
+                                         format='DD/MM/YYYY'
                                         ></DatePicker>
                                     
-                                {/* </LocalizationProvider> */}
+                             </LocalizationProvider> 
 
                             </Grid>
 
