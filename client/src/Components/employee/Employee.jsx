@@ -6,14 +6,14 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
-import dayjs from 'dayjs';
+// import dayjs from 'dayjs';
 import Snackbar from '@mui/material/Snackbar';
 import MuiAlert from '@mui/material/Alert';
 import { TextField, MenuItem } from '@mui/material';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
+// import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+// import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+// import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+// import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
 import Autocomplete from '@mui/material/Autocomplete';
 import { Box, Grid, Paper, Container } from '@mui/material';
 
@@ -458,22 +458,7 @@ const Employee = () => {
 
                             </Grid>
                             <Grid item xs={4}>
-                                {/* <LocalizationProvider dateAdapter={AdapterDayjs}> */}
-                                   
-                                        <DatePicker label="DOB"
-                                            // id="dobId"
-                                            size="small"
-                                            // name="dob"
-                                            // // value={dayjs(employeeData.dob)}
-                                            // onChange={(newValue) => {
-                                            //     if (newValue) {
-                                            //         setEmployeeData((prev) => ({ ...prev, dob: `${newValue.$y}-${newValue.$M + 1}-${newValue.$D}` }))
-                                            //     }
-                                            // }}
-                                            // format='DD/MM/YYYY'
-                                        ></DatePicker>
-                                    
-                                {/* </LocalizationProvider> */}
+                               
 
                             </Grid>
 
