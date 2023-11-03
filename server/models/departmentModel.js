@@ -8,7 +8,8 @@ const departmentSchema = new mongoose.Schema({
    
   },
   area: String,
-  placeOfUsage: String
+  placeOfUsage: String,
+  defaultdep: String
 });
 departmentSchema.plugin(uniqueValidator);
 module.exports = mongoose.model('departments', departmentSchema);
