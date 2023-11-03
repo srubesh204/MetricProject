@@ -3,6 +3,7 @@ import axios from "axios";
 import Alert from '@mui/material/Alert';
 import Snackbar from '@mui/material/Snackbar';
 import { Box, Container, Grid, Paper } from "@mui/material";
+import { TextField, MenuItem, FormControl } from '@mui/material';
 
 
 export const Department = () => {
@@ -262,21 +263,19 @@ export const Department = () => {
                 flexDirection: 'column',
                 mb: 4
               }} >
-                <div className="row g-2">
-                  <div className="form-floating mb-3 col">
-                    <input
-                      type="text"
-                      className="form-control"
-                      id="department"
-                      placeholder="name@example.com"
+                <Grid container spacing={1} >
+                  <Grid item xs={4}>
+                    <TextField label="Department"
+                      id="departmentId"
+                      defaultValue=""
+                      fullWidth
+                      size="small"
                       onChange={handleChange}
                       onKeyDown={handleKeyDown}
-                      name="department"
                       value={departmentData.department}
-                      required
-                    />
-                    <label for="department">Department</label>
-                  </div>
+                      name="department" ></TextField>
+                  </Grid>
+                 
                   <div className="form-floating mb-3 col">
                     <input
                       type="text"
@@ -306,7 +305,7 @@ export const Department = () => {
                     <label for="placeOfUsage">Place Of Usage</label>
                   </div>
 
-                </div>
+                </Grid>
 
                 <div className="row">
                   <div className="col d-flex">
