@@ -37,7 +37,7 @@ const partController = {
       console.log("success")
 
             await partResult.save();
-            return res.status(200).json({ message: "Part Data Successfully Saved", status: 1 });
+            return res.status(200).json({ message: "Part  Successfully Saved", status: 1 });
         } catch (error) {
             console.log(error)
             if (error.errors) {
@@ -124,7 +124,7 @@ const partController = {
                 return res.status(404).json({ error: 'Part not found' });
             }
 
-            res.status(202).json({ message: 'Part detail deleted successfully' ,result: deletePart });
+            res.status(202).json({ message: 'Part deleted successfully' ,result: deletePart });
     } catch (error) {
       console.error(error);
       res.status(500).send('Internal Server Error');

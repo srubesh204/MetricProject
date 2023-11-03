@@ -3,7 +3,7 @@ const uniqueValidator = require('mongoose-unique-validator');
 const vendorSchema = new mongoose.Schema({
   vendorCode: {
     type: String,
-    unique: true,
+    unique: [true, "Vendor Code should be unique"],
     required: [true, "Vendor is Required"]
     
   } ,
