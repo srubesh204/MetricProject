@@ -122,6 +122,7 @@ const Employee = () => {
         return <MuiAlert elevation={6} ref={ref} variant="filled"  {...props} />;
     });
     const [open, setOpen] = useState(false)
+    const [deleteOpen, setDeleteOpen] = useState(false)
     const [snackBarOpen, setSnackBarOpen] = useState(false)
     //open Modal
     const handleClickOpen = () => {
@@ -129,6 +130,9 @@ const Employee = () => {
     };
 
     const handleClose = () => {
+        setOpen(false);
+    };
+    const handleDelete = () => {
         setOpen(false);
     };
 
@@ -827,7 +831,7 @@ const Employee = () => {
                                                 <td>{emp.designation}</td>
                                                 <td>{emp.department}</td>
                                                 <td>{emp.reportTo}</td>
-                                                <td><button type='button' className='btn btn-danger' onClick={() => deleteEmployee(emp._id)}><i className="bi bi-trash"></i></button></td>
+                                                <td><button type='button' className='btn btn-danger' ><i className="bi bi-trash"></i></button></td>
                                             </tr>
                                         ))}
 
@@ -836,6 +840,27 @@ const Employee = () => {
 
 
                                 </table>
+                                <Dialog
+                                    open={open}
+                                    onClose={handleClose}
+                                    aria-labelledby="alert-dialog-title"
+                                    aria-describedby="alert-dialog-description"
+                                >
+                                    <DialogTitle id="alert-dialog-title">
+                                        {"Create Confirmation"}
+                                    </DialogTitle>
+                                    <DialogContent>
+                                        <DialogContentText id="alert-dialog-description">
+                                            Are you sure to Create the Employee
+                                        </DialogContentText>
+                                    </DialogContent>
+                                    <DialogActions>
+                                        <Button onClick={handleClose}>Cancel</Button>
+                                        <Button onClick={(e) => { EmployeeSubmit(e); handleClose(); }} autoFocus>
+                                            Submit
+                                        </Button>
+                                    </DialogActions>
+                                </Dialog>
                                 {/* <TextField id="outlined-basic" label="Outlined" variant="outlined" />
                     <TextField id="filled-basic" label="Filled" variant="filled" />
                     <TextField id="standard-basic" label="Standard" variant="standard" /> */}
