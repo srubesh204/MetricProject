@@ -145,6 +145,24 @@ export const UnitDataBase = ({ style }) => {
     };
 
 
+    const handleKeyDown = (event) => {
+        const { name, value } = event.target
+        console.log(name)
+        if (event.key === 'Tab') {
+            // Prevent default Tab behavior
+
+            const formattedValue = value.toLowerCase().
+                split(' ')
+                .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+                .join(' ');
+            console.log(formattedValue)
+            // Format the input value (capitalization)
+            // Update the state to show the formatted value
+            setUnitData((prev) => ({ ...prev, [name]: formattedValue })); // Update the state with the formatted value
+
+
+        }
+    };
 
 
     const updateUnit = async (item) => {
@@ -180,11 +198,22 @@ export const UnitDataBase = ({ style }) => {
                                 <h6 className='text-center'>Unit DataBase</h6>
                                 <div className='row g-2 mb-2'>
                                     <div className="form-floating col-2">
-                                        <input type="text" className="form-control" id="unitSiId" name="unitSi" placeholder="unitSi" disabled value={uintDataList.length + 1} />
-                                        <label htmlFor="unitSiId">Si.No.</label>
-                                    </div>
-                                </div>
+                                    <TextField label="Si.No."
+                                            id="unitSiId"
+                                            defaultValue=""
 
+                                            size="small"
+                                            placeholder="unitSi"
+                                            onChange={handleUnitDataBaseChange}
+                                            //onKeyDown={handleKeyDown}
+                                            disabled 
+                                            value={uintDataList.length + 1}
+                                            name="unitSi" ></TextField>
+                                       
+                                    </div>
+
+
+                                    <div className="form-floating col">
                                 <Grid container spacing={1} className="mb-2" >
                                     <Grid item xs={6}>
                                         <TextField label="Unit Name"
@@ -194,11 +223,14 @@ export const UnitDataBase = ({ style }) => {
                                             size="small"
                                             placeholder="unitName"
                                             onChange={handleUnitDataBaseChange}
-                                            //onKeyDown={handleKeyDown}
+                                            onKeyDown={handleKeyDown}
                                             value={unitData.unitName}
                                             name="unitName" ></TextField>
                                     </Grid>
                                 </Grid>
+                                </div>
+                                </div>
+                               
 
                                 <div className='col d-flex justify-content-end mb-2'>
                                     {unitStateId ? <div className='d-flex justify-content-end'><div className='me-2' >
@@ -412,7 +444,24 @@ export const PartDataBase = ({ style }) => {
     console.log(errorHandler.message)
 
 
+    const handleKeyDown = (event) => {
+        const { name, value } = event.target
+        console.log(name)
+        if (event.key === 'Tab') {
+            // Prevent default Tab behavior
 
+            const formattedValue = value.toLowerCase().
+                split(' ')
+                .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+                .join(' ');
+            console.log(formattedValue)
+            // Format the input value (capitalization)
+            // Update the state to show the formatted value
+            setPartData((prev) => ({ ...prev, [name]: formattedValue })); // Update the state with the formatted value
+
+
+        }
+    };
 
 
     const updatePart = async (item) => {
@@ -456,28 +505,72 @@ export const PartDataBase = ({ style }) => {
                                 <div>
                                     <div className="row g-2 mb-2">
                                         <div className="form-floating col">
-                                            <input type="text" className="form-control" id="partDbId" name="partDb" placeholder="partDb" disabled />
-                                            <label htmlFor="partDbId">Si.No.</label>
+                                        <TextField label="Si.No."
+                                            id="partDbId"
+                                            
+                                            disabled 
+                                            defaultValue=""
+                                            placeholder="partDb"
+                                            size="small"
+                                           onChange={handlePartDataBaseChange}
+                                            onKeyDown={handleKeyDown}
+                                            value={partDataList.length + 1}
+                                            name="partDb" ></TextField>
+                                          
                                         </div>
                                         <div className="form-floating col-md-5">
-                                            <input type="text" className="form-control" id="partNoId" name="partNo" value={partData.partNo} onChange={handlePartDataBaseChange} placeholder="partNo" />
-                                            <label htmlFor="partNoId">Part No</label>
+                                        <TextField label="Part No"
+                                            id="partNoId"
+                                            defaultValue=""
+                                         
+                                            size="small"
+                                            onChange={handlePartDataBaseChange}
+                                            onKeyDown={handleKeyDown}
+                                            value={partData.partNo}
+                                            name="partNo" ></TextField>
+                                           
                                         </div>
                                         <div className="form-floating col">
-                                            <input type="text" className="form-control" id="partNameId" name="partName" value={partData.partName} onChange={handlePartDataBaseChange} placeholder="partName" />
-                                            <label htmlFor="partNameId">Part Name</label>
+                                        <TextField label="Part Name"
+                                            id="partNameId"
+                                            defaultValue=""
+                                         
+                                            size="small"
+                                            onChange={handlePartDataBaseChange}
+                                            onKeyDown={handleKeyDown}
+                                            value={partData.partName}
+                                            name="partName" ></TextField>
+                                           
+                                           
                                         </div>
                                     </div>
 
 
                                     <div className="row mb-2 g-2">
                                         <div className="form-floating col"  >
-                                            <input type="text" className="form-control" id="partNameId" name="customer" value={partData.customer} onChange={handlePartDataBaseChange} placeholder="customer" />
-                                            <label htmlFor="customerId">Customer</label>
+                                        <TextField label="Customer"
+                                            id="partNameId"
+                                            defaultValue=""
+                                            placeholder="customer"
+                                            size="small"
+                                            onChange={handlePartDataBaseChange}
+                                            onKeyDown={handleKeyDown}
+                                            value={partData.customer}
+                                            name="customer" ></TextField>
+                                           
+                                           
                                         </div>
                                         <div className="form-floating col" >
-                                            <input type="text" className="form-control" id="operationNoId" name="operationNo" value={partData.operationNo} onChange={handlePartDataBaseChange} placeholder="operationNo" />
-                                            <label htmlFor="operationNoId">Operation No</label>
+                                        <TextField label="Operation No"
+                                            id="operationNoId"
+                                            defaultValue=""
+                                            placeholder="operationNo" 
+                                            size="small"
+                                            onChange={handlePartDataBaseChange}
+                                            onKeyDown={handleKeyDown}
+                                            value={partData.operationNo}
+                                            name="operationNo" ></TextField>
+                                           
                                         </div>
 
                                     </div>
