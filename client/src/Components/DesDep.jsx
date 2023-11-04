@@ -255,15 +255,15 @@ export const Department = () => {
           <Grid container spacing={2} >
 
 
-            <Grid item xs={4} >
-
-              <Paper sx={{
-                p: 1,
+            <Grid item xs={6} >
+            <Paper sx={{
+                p: 4,
                 display: 'flex',
                 flexDirection: 'column',
-                mb: 2
-              }} >
-                <Grid container spacing={1} className="mb-4" >
+                mb: 4
+              }}>
+             
+              <div className="row g-2 mb-2">
                   <Grid item xs={4}>
                     <TextField label="Department"
                       id="departmentId"
@@ -273,8 +273,92 @@ export const Department = () => {
                       onChange={handleChange}
                       onKeyDown={handleKeyDown}
                       value={departmentData.department}
-                      name="department" ></TextField>
+                      name="department" >
+
+                      </TextField>
                   </Grid>
+
+                  </div>
+                  <div className="table-responsive">
+                  <table className="table table-bordered text-center">
+                      <tbody>
+                      <tr>
+                        <th>Si.No</th>
+                        <th>Department </th>
+                      </tr>
+                      {departmentList.map((item, index) => (
+                        <tr key={item._id} onClick={() => handleDepRowClick(item)} className={item._id === depStateId ? "table-active" : ""}>
+                          <td >{index + 1}</td>
+                          <td>{item.department}</td>
+                          <td>
+                            <button
+                              type="button"
+                              className="btn btn-sm btn-danger"
+                              onClick={() => deleteDepartment(item._id)}
+                            >
+                              <i className="bi bi-trash"></i>
+                            </button>
+                          </td>
+                        </tr>
+                      ))}
+
+
+                      </tbody>
+                    </table>
+                  </div>
+                  <div className="row">
+                  <div className="col d-flex">
+                    <div className="me-3">
+                      <lable className="uplable">
+                        <input type="file" className="downlable" />
+                        Upload
+                      </lable>
+                    </div>
+                    <div>
+                      <lable
+                        className="uplable"
+
+                      >
+                        <input type="file" className="downlable" />
+                        Download
+                      </lable>
+                    </div>
+                  </div>
+
+                  <div className="text-end col">
+
+                    {depStateId ? (<div>
+                      <button
+                        type="button"
+                        style={{ backgroundColor: "#e6e6e6", color: "black", fontWeight: "bolder" }}
+                        className="btn text-end me-3 hover"
+                        onClick={() => updateDepartment(depStateId)}
+                      //   disabled={!depStateId}
+                      >
+                        Modify
+                      </button >
+                      <button type="button" onMouseEnter={(e) => { e.target.style.background = 'red' }} onMouseOut={(e) => { e.target.style.background = '#e6e6e6' }}
+                        style={{ backgroundColor: "#e6e6e6", color: "black", fontWeight: "bolder" }}
+                        className="btn text-end me-3"
+                        onClick={() => { setDepStateId(null); setDepartmentData(emptyDepartmentData) }}
+                      >Cancel</button>
+                    </div>) : <button
+                      type="button"
+                      style={{ backgroundColor: "#e6e6e6", color: "black", fontWeight: "bolder" }}
+                      className="btn text-end hover"
+                      onClick={DepartmentSubmit}
+
+                    >
+                      <i className="bi bi-plus"></i>Add Department
+                    </button>}
+
+
+
+
+                  </div>
+                </div>
+                </Paper>
+
                  
                  
                   <Grid item xs={4}>
@@ -304,7 +388,7 @@ export const Department = () => {
                   </Grid>
                   
 
-                </Grid>
+                
 
                 <div className="row mb-2">
                   <div className="col d-flex">
@@ -357,7 +441,7 @@ export const Department = () => {
 
                   </div>
                 </div>
-              </Paper>
+              
             </Grid>
 
 
