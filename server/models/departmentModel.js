@@ -7,8 +7,7 @@ const departmentSchema = new mongoose.Schema({
     required: [true, "Department is Required"]
    
   },
-  area: String,
-  placeOfUsage: String,
+ 
   defaultdep: String
 });
 departmentSchema.plugin(uniqueValidator);

@@ -360,38 +360,37 @@ export const Department = () => {
                 </Paper>
 
                  
-                  <div className="form-floating mb-3 col">
-                    <input
-                      type="text"
-                      className="form-control"
+                 
+                  <Grid item xs={4}>
+                    <TextField label="Area"
                       id="area"
+                      defaultValue=""
+                      fullWidth
+                      size="small"
                       placeholder="name@example.com"
                       onChange={handleChange}
                       onKeyDown={handleKeyDown}
-                      name="area"
                       value={departmentData.area}
-                      required
-                    />
-                    <label for="area">Area</label>
-                  </div>
-                  <div className="form-floating mb-3 col">
-                    <input
-                      type="text"
-                      className="form-control"
+                       name="area" ></TextField>
+                  </Grid>
+                  
+                  <Grid item xs={4}>
+                    <TextField label="Place Of Usage"
                       id="placeOfUsage"
+                      defaultValue=""
+                      fullWidth
+                      size="small"
                       placeholder="name@example.com"
                       onChange={handleChange}
                       onKeyDown={handleKeyDown}
-                      name="placeOfUsage"
                       value={departmentData.placeOfUsage}
-                      required
-                    />
-                    <label for="placeOfUsage">Place Of Usage</label>
-                  </div>
+                       name="placeOfUsage" ></TextField>
+                  </Grid>
+                  
 
                 
 
-                <div className="row">
+                <div className="row mb-2">
                   <div className="col d-flex">
                     <div className="me-3">
                       <lable className="uplable">
@@ -404,7 +403,7 @@ export const Department = () => {
                         className="uplable"
 
                       >
-                        <input type="file" className="downlable" />
+                        <input type="file" className="downlable" cusor="pointer" />
                         Download
                       </lable>
                     </div>
@@ -448,10 +447,10 @@ export const Department = () => {
 
             <Grid item xs={6} >
               <Paper sx={{
-                p: 4,
+                p: 1,
                 display: 'flex',
                 flexDirection: 'column',
-                mb: 4
+                mb: 2
               }}>
 
                 <h4 className="text-center mb-3">Department List</h4>
@@ -775,21 +774,33 @@ export const Designation = () => {
   return (
     <div >
       <form>
-        <Box sx={{ flexGrow: 1, m: 2 }}>
+        
           <Grid container spacing={2} >
 
 
             <Grid item xs={6} >
               <Paper
                 sx={{
-                  p: 4,
+                  p: 2,
                   display: 'flex',
                   flexDirection: 'column',
-                  mb: 4
+                  mb: 2
                 }}
               >
-
-                <div className="form-floating mb-3">
+                <Grid container spacing={1} className="mb-2" >
+               <Grid item xs={12}>
+                    <TextField label="Designation"
+                      id="designation"
+                      defaultValue=""
+                      fullWidth
+                      size="small"
+                      onChange={handleChange}
+                      onKeyDown={handleKeyDown}
+                      value={designationData.designation}
+                       name="designation" ></TextField>
+                  </Grid>
+                  </Grid>
+               {/* <div className="form-floating mb-3">
                   <input
                     type="text"
                     className="form-control"
@@ -801,9 +812,9 @@ export const Designation = () => {
                     value={designationData.designation}
                   />
                   <label for="designation">Designation</label>
-                </div>
+              </div>*/}
 
-                <div className="row">
+                <div className="row mb-1">
                   <div className="col d-flex">
                     <div className="me-3">
                       <lable className="uplable">
@@ -848,8 +859,10 @@ export const Designation = () => {
                     }
                   </div>
                 </div>
+                
               </Paper>
             </Grid>
+          
 
             <Grid item xs={6} >
               <Paper
@@ -893,7 +906,7 @@ export const Designation = () => {
             </Grid>
 
           </Grid>
-        </Box>
+        
       </form>
 
 
