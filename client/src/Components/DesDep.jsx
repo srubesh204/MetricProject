@@ -4,6 +4,12 @@ import Alert from '@mui/material/Alert';
 import Snackbar from '@mui/material/Snackbar';
 import { Box, Container, Grid, Paper } from "@mui/material";
 import { TextField, MenuItem, FormControl } from '@mui/material';
+import Button from '@mui/material/Button';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
 
 
 export const Department = () => {
@@ -58,7 +64,11 @@ export const Department = () => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setDepartmentData((prev) => ({ ...prev, [name]: value }));
+    const formattedValue = value.toLowerCase().
+      split(' ')
+      .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+      .join(' ');
+    setDepartmentData((prev) => ({ ...prev, [name]: formattedValue }));
 
   };
 
@@ -256,14 +266,14 @@ export const Department = () => {
 
 
             <Grid item xs={6} >
-            <Paper sx={{
+              <Paper sx={{
                 p: 4,
                 display: 'flex',
                 flexDirection: 'column',
                 mb: 4
               }}>
-             
-              <div className="row g-2 mb-2">
+
+                <div className="row g-2 mb-2">
                   <Grid item xs={4}>
                     <TextField label="Department"
                       id="departmentId"
@@ -275,13 +285,13 @@ export const Department = () => {
                       value={departmentData.department}
                       name="department" >
 
-                      </TextField>
+                    </TextField>
                   </Grid>
 
-                  </div>
-                  <div className="table-responsive">
+                </div>
+                <div className="table-responsive">
                   <table className="table table-bordered text-center">
-                      <tbody>
+                    <tbody>
                       <tr>
                         <th>Si.No</th>
                         <th>Department </th>
@@ -303,10 +313,10 @@ export const Department = () => {
                       ))}
 
 
-                      </tbody>
-                    </table>
-                  </div>
-                  <div className="row">
+                    </tbody>
+                  </table>
+                </div>
+                <div className="row">
                   <div className="col d-flex">
                     <div className="me-3">
                       <lable className="uplable">
@@ -357,91 +367,91 @@ export const Department = () => {
 
                   </div>
                 </div>
-                </Paper>
+              </Paper>
 
-                 
-                 
-                  <Grid item xs={4}>
-                    <TextField label="Area"
-                      id="area"
-                      defaultValue=""
-                      fullWidth
-                      size="small"
-                      placeholder="name@example.com"
-                      onChange={handleChange}
-                      onKeyDown={handleKeyDown}
-                      value={departmentData.area}
-                       name="area" ></TextField>
-                  </Grid>
-                  
-                  <Grid item xs={4}>
-                    <TextField label="Place Of Usage"
-                      id="placeOfUsage"
-                      defaultValue=""
-                      fullWidth
-                      size="small"
-                      placeholder="name@example.com"
-                      onChange={handleChange}
-                      onKeyDown={handleKeyDown}
-                      value={departmentData.placeOfUsage}
-                       name="placeOfUsage" ></TextField>
-                  </Grid>
-                  
 
-                
 
-                <div className="row mb-2">
-                  <div className="col d-flex">
-                    <div className="me-3">
-                      <lable className="uplable">
-                        <input type="file" className="downlable" />
-                        Upload
-                      </lable>
-                    </div>
-                    <div>
-                      <lable
-                        className="uplable"
+              <Grid item xs={4}>
+                <TextField label="Area"
+                  id="area"
+                  defaultValue=""
+                  fullWidth
+                  size="small"
+                  placeholder="name@example.com"
+                  onChange={handleChange}
+                  onKeyDown={handleKeyDown}
+                  value={departmentData.area}
+                  name="area" ></TextField>
+              </Grid>
 
-                      >
-                        <input type="file" className="downlable" cusor="pointer" />
-                        Download
-                      </lable>
-                    </div>
+              <Grid item xs={4}>
+                <TextField label="Place Of Usage"
+                  id="placeOfUsage"
+                  defaultValue=""
+                  fullWidth
+                  size="small"
+                  placeholder="name@example.com"
+                  onChange={handleChange}
+                  onKeyDown={handleKeyDown}
+                  value={departmentData.placeOfUsage}
+                  name="placeOfUsage" ></TextField>
+              </Grid>
+
+
+
+
+              <div className="row mb-2">
+                <div className="col d-flex">
+                  <div className="me-3">
+                    <lable className="uplable">
+                      <input type="file" className="downlable" />
+                      Upload
+                    </lable>
                   </div>
-
-                  <div className="text-end col">
-
-                    {depStateId ? (<div>
-                      <button
-                        type="button"
-                        style={{ backgroundColor: "#e6e6e6", color: "black", fontWeight: "bolder" }}
-                        className="btn text-end me-3 hover"
-                        onClick={() => updateDepartment(depStateId)}
-                      //   disabled={!depStateId}
-                      >
-                        Modify
-                      </button >
-                      <button type="button" onMouseEnter={(e) => { e.target.style.background = 'red' }} onMouseOut={(e) => { e.target.style.background = '#e6e6e6' }}
-                        style={{ backgroundColor: "#e6e6e6", color: "black", fontWeight: "bolder" }}
-                        className="btn text-end me-3"
-                        onClick={() => { setDepStateId(null); setDepartmentData(emptyDepartmentData) }}
-                      >Cancel</button>
-                    </div>) : <button
-                      type="button"
-                      style={{ backgroundColor: "#e6e6e6", color: "black", fontWeight: "bolder" }}
-                      className="btn text-end hover"
-                      onClick={DepartmentSubmit}
+                  <div>
+                    <lable
+                      className="uplable"
 
                     >
-                      <i className="bi bi-plus"></i>Add Department
-                    </button>}
-
-
-
-
+                      <input type="file" className="downlable" cusor="pointer" />
+                      Download
+                    </lable>
                   </div>
                 </div>
-              
+
+                <div className="text-end col">
+
+                  {depStateId ? (<div>
+                    <button
+                      type="button"
+                      style={{ backgroundColor: "#e6e6e6", color: "black", fontWeight: "bolder" }}
+                      className="btn text-end me-3 hover"
+                      onClick={() => updateDepartment(depStateId)}
+                    //   disabled={!depStateId}
+                    >
+                      Modify
+                    </button >
+                    <button type="button" onMouseEnter={(e) => { e.target.style.background = 'red' }} onMouseOut={(e) => { e.target.style.background = '#e6e6e6' }}
+                      style={{ backgroundColor: "#e6e6e6", color: "black", fontWeight: "bolder" }}
+                      className="btn text-end me-3"
+                      onClick={() => { setDepStateId(null); setDepartmentData(emptyDepartmentData) }}
+                    >Cancel</button>
+                  </div>) : <button
+                    type="button"
+                    style={{ backgroundColor: "#e6e6e6", color: "black", fontWeight: "bolder" }}
+                    className="btn text-end hover"
+                    onClick={DepartmentSubmit}
+
+                  >
+                    <i className="bi bi-plus"></i>Add Department
+                  </button>}
+
+
+
+
+                </div>
+              </div>
+
             </Grid>
 
 
@@ -525,8 +535,8 @@ export const Designation = () => {
   console.log(errorhandler)
 
 
-
-
+  const [modalOpen, setModalOpen] = useState(false)
+ 
 
 
   const [desStateId, setDesStateId] = useState(null)
@@ -556,7 +566,11 @@ export const Designation = () => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setDesignationData((prev) => ({ ...prev, [name]: value }));
+    const formattedValue = value.toLowerCase().
+      split(' ')
+      .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+      .join(' ');
+    setDesignationData((prev) => ({ ...prev, [name]: formattedValue }));
 
   };
 
@@ -627,10 +641,11 @@ export const Designation = () => {
     }
   };
   //
-  const updateDesignation = async (id) => {
+  const updateDesignation = async () => {
+
     try {
       const response = await axios.put(
-        "http://localhost:3001/designation/updateDesignation/" + id, designationData
+        "http://localhost:3001/designation/updateDesignation/" + desStateId, designationData
       );
       desFetchData();
       setSnackBarOpen(true)
@@ -774,33 +789,33 @@ export const Designation = () => {
   return (
     <div >
       <form>
-        
-          <Grid container spacing={2} >
+
+        <Grid container spacing={2} >
 
 
-            <Grid item xs={6} >
-              <Paper
-                sx={{
-                  p: 2,
-                  display: 'flex',
-                  flexDirection: 'column',
-                  mb: 2
-                }}
-              >
-                <Grid container spacing={1} className="mb-2" >
-               <Grid item xs={12}>
-                    <TextField label="Designation"
-                      id="designation"
-                      defaultValue=""
-                      fullWidth
-                      size="small"
-                      onChange={handleChange}
-                      onKeyDown={handleKeyDown}
-                      value={designationData.designation}
-                       name="designation" ></TextField>
-                  </Grid>
-                  </Grid>
-               {/* <div className="form-floating mb-3">
+          <Grid item xs={6} >
+            <Paper
+              sx={{
+                p: 2,
+                display: 'flex',
+                flexDirection: 'column',
+                mb: 2
+              }}
+            >
+              <Grid container spacing={1} className="mb-2" >
+                <Grid item xs={12}>
+                  <TextField label="Designation"
+                    id="designation"
+                    defaultValue=""
+                    fullWidth
+                    size="small"
+                    onChange={handleChange}
+                    onKeyDown={handleKeyDown}
+                    value={designationData.designation}
+                    name="designation" ></TextField>
+                </Grid>
+              </Grid>
+              {/* <div className="form-floating mb-3">
                   <input
                     type="text"
                     className="form-control"
@@ -814,99 +829,144 @@ export const Designation = () => {
                   <label for="designation">Designation</label>
               </div>*/}
 
-                <div className="row mb-1">
-                  <div className="col d-flex">
-                    <div className="me-3">
-                      <lable className="uplable">
-                        <input type="file" className="downlable" />
-                        Upload
-                      </lable>
-                    </div>
-                    <div>
-                      <lable
-                        className="uplable"
-
-                      >
-                        <input type="file" className="downlable" />
-                        Download
-                      </lable>
-                    </div>
+              <div className="row mb-1">
+                <div className="col d-flex">
+                  <div className="me-3">
+                    <lable className="uplable">
+                      <input type="file" className="downlable" />
+                      Upload
+                    </lable>
                   </div>
+                  <div>
+                    <lable
+                      className="uplable"
 
-                  <div className="text-end col">
+                    >
+                      <input type="file" className="downlable" />
+                      Download
+                    </lable>
+                  </div>
+                </div>
 
-                    {desStateId ? (<div>
-                      <button
-                        type="button"
-                        className="btn text-end me-3 hover"
-                        onClick={() => updateDesignation(desStateId)}
-                        style={{ backgroundColor: "#e6e6e6", color: "black", fontWeight: "bolder" }}
-                      >
-                        Modify
-                      </button>
-                      <button type="button" onMouseEnter={(e) => { e.target.style.background = 'red' }} onMouseOut={(e) => { e.target.style.background = '#e6e6e6' }}
-                        style={{ backgroundColor: "#e6e6e6", color: "black", fontWeight: "bolder" }}
-                        className="btn text-end me-3"
-                        onClick={() => { setDesStateId(null); setDesignationData(initialDesignationData) }}
-                      >Cancel</button>
-                    </div>) : <button
+                <div className="text-end col">
+
+                  {desStateId ? (<div>
+                    <button
                       type="button"
-                      className="btn text-end hover"
-                      onClick={DesignationSubmit}
+                      className="btn text-end me-3 hover"
+                      onClick={() => setModalOpen(true)}
                       style={{ backgroundColor: "#e6e6e6", color: "black", fontWeight: "bolder" }}
                     >
-                      <i className="bi bi-plus"></i>Add Designation</button>
-                    }
-                  </div>
+                      Modify
+                    </button>
+                    <button type="button" onMouseEnter={(e) => { e.target.style.background = 'red' }} onMouseOut={(e) => { e.target.style.background = '#e6e6e6' }}
+                      style={{ backgroundColor: "#e6e6e6", color: "black", fontWeight: "bolder" }}
+                      className="btn text-end me-3"
+                      onClick={() => { setDesStateId(null); setDesignationData(initialDesignationData) }}
+                    >Cancel</button>
+                  </div>) : <button
+                    type="button"
+                    className="btn text-end hover"
+                 
+                    style={{ backgroundColor: "#e6e6e6", color: "black", fontWeight: "bolder" }}
+                    onClick={() => setModalOpen(true)}
+                  >
+                    <i className="bi bi-plus"></i>Add Designation</button>
+                  }
                 </div>
-                
-              </Paper>
-            </Grid>
-          
+                {desStateId? 
+                <Dialog
+                  open={modalOpen}
+                  onClose={()=> setModalOpen(false)}
+                  aria-labelledby="alert-dialog-title"
+                  aria-describedby="alert-dialog-description"
+                >
+                  <DialogTitle id="alert-dialog-title">
+                    {"Update Confirmation?"}
+                  </DialogTitle>
+                  <DialogContent>
+                    <DialogContentText id="alert-dialog-description">
+                     Are you Sure to Update the Designation
+                    </DialogContentText>
+                  </DialogContent>
+                  <DialogActions>
+                    <Button onClick={()=> setModalOpen(false)}>Cancel</Button>
+                    <Button onClick={()=> {updateDesignation(); setModalOpen(false); }} autoFocus>
+                      Update
+                    </Button>
+                  </DialogActions>
+                </Dialog>
+                :
+                <Dialog
+                  open={modalOpen}
+                  onClose={()=> setModalOpen(false)}
+                  aria-labelledby="alert-dialog-title"
+                  aria-describedby="alert-dialog-description"
+                >
+                  <DialogTitle id="alert-dialog-title">
+                    {"Create Confirmation?"}
+                  </DialogTitle>
+                  <DialogContent>
+                    <DialogContentText id="alert-dialog-description">
+                     Are you Sure to Create the Designation
+                    </DialogContentText>
+                  </DialogContent>
+                  <DialogActions>
+                    <Button onClick={()=> setModalOpen(false)}>Cancel</Button>
+                    <Button onClick={(e)=> {DesignationSubmit(e); setModalOpen(false); }} autoFocus>
+                      Add
+                    </Button>
+                  </DialogActions>
+                </Dialog>}
+              </div>
 
-            <Grid item xs={6} >
-              <Paper
-                sx={{
-                  p: 4,
-                  display: 'flex',
-                  flexDirection: 'column',
-
-                }}
-              >
-                <h4 className="mb-3 text-center">Designation List</h4>
-                <div className="table-responsive">
-                  <table className="table table-bordered text-center table-hover">
-                    <tbody>
-                      <tr className="text-center">
-                        <th>S.No</th>
-                        <th width="50%">Designation</th>
-                        <th>Delete</th>
-                      </tr>
-                      {designationList.map((item, index) => (
-                        <tr key={item._id} onClick={() => handleDesRowClick(item)} className={item._id === desStateId ? "table-active" : ""}>
-                          <td>{index + 1}</td>
-                          <td>{item.designation}</td>
-                          <td>
-                            <button type="button" className="btn btn-sm btn-danger" onClick={() => deleteDesignation(item._id)}>
-                              <i className="bi bi-trash"></i>
-                            </button>
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
-
-                <Snackbar anchorOrigin={{ vertical: "top", horizontal: "right" }} open={snackBarOpen} autoHideDuration={6000} onClose={handleSnackClose}>
-                  <Alert variant="filled" onClose={handleSnackClose} severity={errorhandler.code} sx={{ width: '100%' }}>
-                    {errorhandler.message}
-                  </Alert>
-                </Snackbar>
-              </Paper>
-            </Grid>
-
+            </Paper>
           </Grid>
-        
+
+
+          <Grid item xs={6} >
+            <Paper
+              sx={{
+                p: 4,
+                display: 'flex',
+                flexDirection: 'column',
+
+              }}
+            >
+              <h4 className="mb-3 text-center">Designation List</h4>
+              <div className="table-responsive">
+                <table className="table table-bordered text-center table-hover">
+                  <tbody>
+                    <tr className="text-center">
+                      <th>S.No</th>
+                      <th width="50%">Designation</th>
+                      <th>Delete</th>
+                    </tr>
+                    {designationList.map((item, index) => (
+                      <tr key={item._id} onClick={() => handleDesRowClick(item)} className={item._id === desStateId ? "table-active" : ""}>
+                        <td>{index + 1}</td>
+                        <td>{item.designation}</td>
+                        <td>
+                          <button type="button" className="btn btn-sm btn-danger" onClick={() => deleteDesignation(item._id)}>
+                            <i className="bi bi-trash"></i>
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+
+              <Snackbar anchorOrigin={{ vertical: "top", horizontal: "right" }} open={snackBarOpen} autoHideDuration={6000} onClose={handleSnackClose}>
+                <Alert variant="filled" onClose={handleSnackClose} severity={errorhandler.code} sx={{ width: '100%' }}>
+                  {errorhandler.message}
+                </Alert>
+              </Snackbar>
+            </Paper>
+          </Grid>
+
+        </Grid>
+
       </form>
 
 
