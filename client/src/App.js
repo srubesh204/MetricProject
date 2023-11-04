@@ -10,6 +10,7 @@ import ItemMaster from './Components/itemMaster/ItemMaster';
 import Devi from './Components/devi/Devi';
 import Dashboard from './Components/Dashboard/Dashboard';
 import Home from './Components/Dashboard/Home';
+import ItemAdd from './Components/Items/ItemAdd';
 
 
 function App() {
@@ -26,6 +27,8 @@ function App() {
           <Route path="/itemMaster" element={<ItemMaster />} />
           <Route path="/devi" element={<Devi />} />
           <Route path="/home" element={<Home />} />
+          <Route path="/itemAdd" element={<ItemAdd />} />
+          
         </Routes>
       </BrowserRouter>
     </div>

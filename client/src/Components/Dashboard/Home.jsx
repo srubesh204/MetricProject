@@ -1,20 +1,12 @@
-import axios from 'axios';
-import React, { useEffect, useState } from 'react';
-
-
-// import { Chart } from "react-google-charts";
-
-
+import React from 'react'
 
 const Home = () => {
+  return (
+    <div>
 
-    
-
-    return (
-        <div>
-            home
-        </div>
-    )
+      
+    </div>
+  )
 }
 
 export default Home

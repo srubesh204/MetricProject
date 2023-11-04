@@ -18,7 +18,7 @@ import Link from '@mui/material/Link';
 import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import NotificationsIcon from '@mui/icons-material/Notifications';
-import { MainListItems, SecondaryListItems } from './listItems';
+
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
@@ -37,7 +37,7 @@ import CategoryIcon from '@mui/icons-material/Category';
 import Vendor from '../vendor/Vendor';
 import Employee from '../employee/Employee'
 import ItemMaster from '../itemMaster/ItemMaster'
-import {PartDataBase, UnitDataBase} from '../general/General'
+import { PartDataBase, UnitDataBase } from '../general/General'
 import { Department, Designation } from '../DesDep';
 //
 
@@ -124,9 +124,9 @@ export default function Dashboard() {
       { name: "Version" },
       { name: "User List" },
       { name: "Reset Password" }
-  
+
     ],
-    
+
   }
 
 
@@ -144,7 +144,9 @@ export default function Dashboard() {
   };
   const [dataBaseOpen, setDataBaseOpen] = useState(true);
   const [adminOpen, setAdminOpne] = useState(true);
+  const [itemOpen, setItemOpen] = useState(true);
   const [systemOpen, setSystemOpen] = useState(true);
+  const [toolOpen, setToolOpen] = useState(true);
 
   const handleDatabaseMasterOpen = () => {
     setDataBaseOpen(!dataBaseOpen);
@@ -154,8 +156,16 @@ export default function Dashboard() {
     setAdminOpne(!adminOpen);
   };
 
+  const handleItemOpen = () => {
+    setItemOpen(!itemOpen);
+  };
+
+
   const handleSystemOpen = () => {
     setSystemOpen(!systemOpen);
+  };
+  const handleToolOpen = () => {
+    setToolOpen(!toolOpen);
   };
 
   console.log(fileName)
@@ -224,7 +234,7 @@ export default function Dashboard() {
             <Collapse in={adminOpen} timeout="auto" unmountOnExit>
 
               <List component="div" disablePadding>
-              
+
                 <ListItemButton sx={{ pl: 4 }} onClick={handleDatabaseMasterOpen}>
                   <ListItemIcon>
                     <AdminPanelSettingsIcon />
@@ -246,12 +256,12 @@ export default function Dashboard() {
                         </ListItemButton>
                       )
                     })}
-                    
+
 
                   </List>
                 </Collapse>
 
-                
+
                 <ListItemButton sx={{ pl: 4 }} onClick={handleSystemOpen}>
                   <ListItemIcon>
                     <AdminPanelSettingsIcon />
@@ -281,33 +291,99 @@ export default function Dashboard() {
                     <AdminPanelSettingsIcon />
                   </ListItemIcon>
                   <ListItemText primary="Company Details" />
-                  
+
                 </ListItemButton>
                 <ListItemButton sx={{ pl: 4 }}>
                   <ListItemIcon>
                     <AdminPanelSettingsIcon />
                   </ListItemIcon>
                   <ListItemText primary="Format Number" />
-                  
+
                 </ListItemButton>
                 <ListItemButton sx={{ pl: 4 }}>
                   <ListItemIcon>
                     <AdminPanelSettingsIcon />
                   </ListItemIcon>
                   <ListItemText primary="Mail Configuration" />
-                  
+
                 </ListItemButton>
                 <ListItemButton sx={{ pl: 4 }}>
                   <ListItemIcon>
                     <AdminPanelSettingsIcon />
                   </ListItemIcon>
                   <ListItemText primary="BackUp" />
-                  
+
                 </ListItemButton>
 
               </List>
             </Collapse>
+            <ListItemButton onClick={handleItemOpen}>
+              <ListItemIcon>
+                <AdminPanelSettingsIcon />
+              </ListItemIcon>
+              <ListItemText primary="Item Creation" />
+              {itemOpen ? <ExpandLess /> : <ExpandMore />}
+            </ListItemButton>
+            <Collapse in={itemOpen} timeout="auto" unmountOnExit>
+              <List component="div" disablePadding>
+                <ListItemButton sx={{ pl: 4 }} >
+                  <ListItemIcon>
+                    <AdminPanelSettingsIcon />
+                  </ListItemIcon>
+                  <ListItemText primary="Item List" />
 
+                </ListItemButton>
+                <ListItemButton sx={{ pl: 4 }}  >
+                  <ListItemIcon>
+                    <AdminPanelSettingsIcon />
+                  </ListItemIcon>
+                  <ListItemText primary="Item Add" />
+
+                </ListItemButton>
+
+              </List>
+
+            </Collapse>
+            <ListItemButton >
+              <ListItemIcon>
+                <AdminPanelSettingsIcon />
+              </ListItemIcon>
+              <ListItemText primary="Dashboard" />
+
+            </ListItemButton>
+            <ListItemButton >
+              <ListItemIcon>
+                <AdminPanelSettingsIcon />
+              </ListItemIcon>
+              <ListItemText primary="Reports" />
+
+            </ListItemButton>
+            <ListItemButton onClick={handleToolOpen}>
+              <ListItemIcon>
+                <AdminPanelSettingsIcon />
+              </ListItemIcon>
+              <ListItemText primary="Tools" />
+              {toolOpen ? <ExpandLess /> : <ExpandMore />}
+            </ListItemButton>
+            <Collapse in={toolOpen} timeout="auto" unmountOnExit>
+              <List component="div" disablePadding>
+                <ListItemButton sx={{ pl: 4 }} >
+                  <ListItemIcon>
+                    <AdminPanelSettingsIcon />
+                  </ListItemIcon>
+                  <ListItemText primary="Calculator" />
+
+                </ListItemButton>
+                <ListItemButton sx={{ pl: 4 }} >
+                  <ListItemIcon>
+                    <AdminPanelSettingsIcon />
+                  </ListItemIcon>
+                  <ListItemText primary="Any Desk" />
+
+                </ListItemButton>
+
+              </List>
+            </Collapse>
 
 
 
@@ -330,9 +406,9 @@ export default function Dashboard() {
           }}
         >
           <Toolbar />
-          
-            {fileName.file !== "" ? fileName.file : ""}
-          
+
+          {fileName.file !== "" ? fileName.file : ""}
+
 
 
         </Box>
