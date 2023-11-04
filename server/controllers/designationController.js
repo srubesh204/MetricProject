@@ -14,8 +14,8 @@ const designationController = {
   createDesignation: async (req, res) => {
 
     try {
-      const { designation } = req.body;
-      const designationResult = new designationModel({ designation});
+      const { designation, designationStatus } = req.body;
+      const designationResult = new designationModel({ designation, designationStatus});
             const validationError = designationResult.validateSync();
 
       if (validationError) {
@@ -58,11 +58,11 @@ const designationController = {
           // }
 
           // Create an object with the fields you want to update
-          const { designation } = req.body;
+          const { designation, designationStatus } = req.body;
 
           const updateDesFields = {
-              designation
-             
+              designation,
+              designationStatus
               // Add more fields as needed
           };
           const designationUpdate = new designationModel(updateDesFields);

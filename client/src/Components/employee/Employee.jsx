@@ -840,7 +840,7 @@ const Employee = () => {
 
                                         </tr>
                                         {filteredData.map((emp, index) => (
-                                            <tr key={emp._id} onClick={() => handleSetEmp(emp)}>
+                                            <tr key={emp._id} onClick={() => handleSetEmp(emp)} className={empDataId === emp._id ? "table-active" : ""}>
                                                 <td>{emp.employeeCode}</td>
                                                 <td>{emp.firstName + " " + emp.lastName}</td>
                                                 <td>{emp.contactNumber}</td>

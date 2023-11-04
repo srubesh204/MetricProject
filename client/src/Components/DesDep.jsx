@@ -536,7 +536,8 @@ export const Designation = () => {
 
 
   const [modalOpen, setModalOpen] = useState(false)
- 
+  const [deleteModal, setDeleteModal] = useState(false)
+
 
 
   const [desStateId, setDesStateId] = useState(null)
@@ -547,9 +548,11 @@ export const Designation = () => {
 
   const [designationData, setDesignationData] = useState({
     designation: "",
+    designationStatus: ""
   });
   const initialDesignationData = {
     designation: "",
+    designationStatus: ""
   }
 
 
@@ -566,12 +569,18 @@ export const Designation = () => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    const formattedValue = value.toLowerCase().
-      split(' ')
-      .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-      .join(' ');
-    setDesignationData((prev) => ({ ...prev, [name]: formattedValue }));
+    if (name === "designation") {
+      const formattedValue = value.toLowerCase().
+        split(' ')
+        .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+        .join(' ');
+      setDesignationData((prev) => ({ ...prev, [name]: formattedValue }));
 
+    }else{
+      setDesignationData((prev) => ({ ...prev, [name]: value }));
+
+    }
+    
   };
 
   //get Departments
@@ -687,10 +696,10 @@ export const Designation = () => {
 
 
 
-  const deleteDesignation = async (id) => {
+  const deleteDesignation = async () => {
     try {
       const response = await axios.delete(
-        "http://localhost:3001/designation/deleteDesignation/" + id
+        "http://localhost:3001/designation/deleteDesignation/" + desStateId
       );
       desFetchData();
       setSnackBarOpen(true)
@@ -699,6 +708,7 @@ export const Designation = () => {
         designation: ""
       });
       console.log("Designation Deleted Successfully");
+      setDesStateId(null)
     } catch (err) {
       setSnackBarOpen(true)
 
@@ -790,7 +800,7 @@ export const Designation = () => {
     <div >
       <form>
 
-        <Grid container spacing={2} >
+        <Grid container spacing={2} sx={{ p: 2 }} >
 
 
           <Grid item xs={6} >
@@ -799,12 +809,13 @@ export const Designation = () => {
                 p: 2,
                 display: 'flex',
                 flexDirection: 'column',
-                mb: 2
+
               }}
             >
-              <Grid container spacing={1} className="mb-2" >
-                <Grid item xs={12}>
+              <div className="row g-2 mb-2">
+                <div className="col-md-9">
                   <TextField label="Designation"
+
                     id="designation"
                     defaultValue=""
                     fullWidth
@@ -812,24 +823,34 @@ export const Designation = () => {
                     onChange={handleChange}
                     onKeyDown={handleKeyDown}
                     value={designationData.designation}
-                    name="designation" ></TextField>
-                </Grid>
-              </Grid>
-              {/* <div className="form-floating mb-3">
-                  <input
-                    type="text"
-                    className="form-control"
-                    id="designation"
-                    placeholder="designation"
+                    name="designation" >
+
+                  </TextField>
+                </div>
+
+                <div className="col-md-3">
+                  <TextField
+                    label="Status"
+                    select
+                    id="designationStatusId"
+                    // defaultValue="Active"
+                    fullWidth
+                    size="small"
                     onChange={handleChange}
-                    onKeyDown={handleKeyDown}
-                    name="designation"
-                    value={designationData.designation}
-                  />
-                  <label for="designation">Designation</label>
-              </div>*/}
+                    value={designationData.designationStatus}
+                    name="designationStatus" >
+
+                    <MenuItem value="Active">Active</MenuItem>
+                    <MenuItem value="InActive">InActive</MenuItem>
+
+                  </TextField>
+                </div>
+
+              </div>
+
 
               <div className="row mb-1">
+
                 <div className="col d-flex">
                   <div className="me-3">
                     <lable className="uplable">
@@ -867,57 +888,57 @@ export const Designation = () => {
                   </div>) : <button
                     type="button"
                     className="btn text-end hover"
-                 
+
                     style={{ backgroundColor: "#e6e6e6", color: "black", fontWeight: "bolder" }}
                     onClick={() => setModalOpen(true)}
                   >
                     <i className="bi bi-plus"></i>Add Designation</button>
                   }
                 </div>
-                {desStateId? 
-                <Dialog
-                  open={modalOpen}
-                  onClose={()=> setModalOpen(false)}
-                  aria-labelledby="alert-dialog-title"
-                  aria-describedby="alert-dialog-description"
-                >
-                  <DialogTitle id="alert-dialog-title">
-                    {"Update Confirmation?"}
-                  </DialogTitle>
-                  <DialogContent>
-                    <DialogContentText id="alert-dialog-description">
-                     Are you Sure to Update the Designation
-                    </DialogContentText>
-                  </DialogContent>
-                  <DialogActions>
-                    <Button onClick={()=> setModalOpen(false)}>Cancel</Button>
-                    <Button onClick={()=> {updateDesignation(); setModalOpen(false); }} autoFocus>
-                      Update
-                    </Button>
-                  </DialogActions>
-                </Dialog>
-                :
-                <Dialog
-                  open={modalOpen}
-                  onClose={()=> setModalOpen(false)}
-                  aria-labelledby="alert-dialog-title"
-                  aria-describedby="alert-dialog-description"
-                >
-                  <DialogTitle id="alert-dialog-title">
-                    {"Create Confirmation?"}
-                  </DialogTitle>
-                  <DialogContent>
-                    <DialogContentText id="alert-dialog-description">
-                     Are you Sure to Create the Designation
-                    </DialogContentText>
-                  </DialogContent>
-                  <DialogActions>
-                    <Button onClick={()=> setModalOpen(false)}>Cancel</Button>
-                    <Button onClick={(e)=> {DesignationSubmit(e); setModalOpen(false); }} autoFocus>
-                      Add
-                    </Button>
-                  </DialogActions>
-                </Dialog>}
+                {desStateId ?
+                  <Dialog
+                    open={modalOpen}
+                    onClose={() => setModalOpen(false)}
+                    aria-labelledby="alert-dialog-title"
+                    aria-describedby="alert-dialog-description"
+                  >
+                    <DialogTitle id="alert-dialog-title">
+                      {"Update Confirmation?"}
+                    </DialogTitle>
+                    <DialogContent>
+                      <DialogContentText id="alert-dialog-description">
+                        Are you Sure to Update the Designation
+                      </DialogContentText>
+                    </DialogContent>
+                    <DialogActions>
+                      <Button onClick={() => setModalOpen(false)}>Cancel</Button>
+                      <Button onClick={() => { updateDesignation(); setModalOpen(false); }} autoFocus>
+                        Update
+                      </Button>
+                    </DialogActions>
+                  </Dialog>
+                  :
+                  <Dialog
+                    open={modalOpen}
+                    onClose={() => setModalOpen(false)}
+                    aria-labelledby="alert-dialog-title"
+                    aria-describedby="alert-dialog-description"
+                  >
+                    <DialogTitle id="alert-dialog-title">
+                      {"Create Confirmation?"}
+                    </DialogTitle>
+                    <DialogContent>
+                      <DialogContentText id="alert-dialog-description">
+                        Are you Sure to Create the Designation
+                      </DialogContentText>
+                    </DialogContent>
+                    <DialogActions>
+                      <Button onClick={() => setModalOpen(false)}>Cancel</Button>
+                      <Button onClick={(e) => { DesignationSubmit(e); setModalOpen(false); }} autoFocus>
+                        Add
+                      </Button>
+                    </DialogActions>
+                  </Dialog>}
               </div>
 
             </Paper>
@@ -927,27 +948,29 @@ export const Designation = () => {
           <Grid item xs={6} >
             <Paper
               sx={{
-                p: 4,
+                p: 2,
                 display: 'flex',
                 flexDirection: 'column',
 
               }}
             >
-              <h4 className="mb-3 text-center">Designation List</h4>
+              <h5 className="mb-2 text-center">Designation List</h5>
               <div className="table-responsive">
                 <table className="table table-bordered text-center table-hover">
                   <tbody>
                     <tr className="text-center">
                       <th>S.No</th>
                       <th width="50%">Designation</th>
+                      <th width="10%">Status</th>
                       <th>Delete</th>
                     </tr>
                     {designationList.map((item, index) => (
                       <tr key={item._id} onClick={() => handleDesRowClick(item)} className={item._id === desStateId ? "table-active" : ""}>
                         <td>{index + 1}</td>
                         <td>{item.designation}</td>
+                        <td>{item.designationStatus}</td>
                         <td>
-                          <button type="button" className="btn btn-sm btn-danger" onClick={() => deleteDesignation(item._id)}>
+                          <button type="button" className="btn btn-sm btn-danger" onClick={() => setDeleteModal(true)}>
                             <i className="bi bi-trash"></i>
                           </button>
                         </td>
@@ -955,6 +978,28 @@ export const Designation = () => {
                     ))}
                   </tbody>
                 </table>
+
+                <Dialog
+                  open={deleteModal}
+                  onClose={() => setDeleteModal(false)}
+                  aria-labelledby="alert-dialog-title"
+                  aria-describedby="alert-dialog-description"
+                >
+                  <DialogTitle id="alert-dialog-title">
+                    {"Delete Confirmation?"}
+                  </DialogTitle>
+                  <DialogContent>
+                    <DialogContentText id="alert-dialog-description">
+                      Are you Sure to Delete the {designationData.designation}
+                    </DialogContentText>
+                  </DialogContent>
+                  <DialogActions>
+                    <Button onClick={() => setDeleteModal(false)}>Cancel</Button>
+                    <Button onClick={(e) => { deleteDesignation(e); setDeleteModal(false); }} autoFocus>
+                      Delete
+                    </Button>
+                  </DialogActions>
+                </Dialog>
               </div>
 
               <Snackbar anchorOrigin={{ vertical: "top", horizontal: "right" }} open={snackBarOpen} autoHideDuration={6000} onClose={handleSnackClose}>
