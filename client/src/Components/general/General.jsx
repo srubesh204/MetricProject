@@ -7,6 +7,8 @@ import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
 import { Container, Paper } from '@mui/material';
 import Grid from '@mui/material/Unstable_Grid2';
+import { TextField, MenuItem, FormControl } from '@mui/material';
+
 
 
 export const UnitDataBase = ({ style }) => {
@@ -162,86 +164,98 @@ export const UnitDataBase = ({ style }) => {
     return (
 
         <div >
-            
-                <form>
+
+            <form>
                 <Box sx={{ flexGrow: 1, m: 4 }}>
-                <Grid container spacing={2} >
-
-                  
-                <Grid item xs={6} >
-                    <Paper sx={{
-                        p: 3,
-                        display: 'flex',
-                        flexDirection: 'column',
-                        mb: 4
-                    }} >
-                        <h6 className='text-center'>Unit DataBase</h6>
-                        <div className='row g-2 mb-3'>
-                            <div className="form-floating col-2">
-                                <input type="text" className="form-control" id="unitSiId" name="unitSi" placeholder="unitSi" disabled value={uintDataList.length + 1} />
-                                <label htmlFor="unitSiId">Si.No.</label>
-                            </div>
-                            <div className="form-floating col-10">
-                                <input type="text" className="form-control" id="unitNameId" name="unitName" value={unitData.unitName} onChange={handleUnitDataBaseChange} placeholder="unitName" />
-                                <label htmlFor="unitNameId">Unit Name</label>
-                            </div>
-                        </div>
-                        <div className='col d-flex justify-content-end mb-2'>
-                            {unitStateId ? <div className='d-flex justify-content-end'><div className='me-2' >
-                                <button type="button" className='btn btn-secondary' onClick={() => updateUnitData(unitStateId)}>Modify</button>
-                            </div>
-                                <div className='me-2' >
-                                    <button type="button" className='btn btn-danger' onClick={() => { setUnitStateId(null); setUnitData(initialUnitData) }}>Cancel</button>
-                                </div></div> : <div>
-                                <button type="button" className='btn btn-warning ' onClick={unitSubmit}>+ Add UnitDataBase</button>
-                            </div>}
+                    <Grid container spacing={2} >
 
 
-                        </div>
-                        <Snackbar anchorOrigin={{ vertical: "top", horizontal: "right" }} open={unitSnackBar} autoHideDuration={6000} onClose={handleSnackClose}>
-                            <Alert variant="filled" onClose={handleSnackClose} severity={errorHandler.code} sx={{ width: '100%' }}>
-                                {errorHandler.message}
-                            </Alert>
-                        </Snackbar>
-                    </Paper>
+                        <Grid item xs={5} >
+                            <Paper sx={{
+                                p: 1,
+                                display: 'flex',
+                                flexDirection: 'column',
+                                mb: 2
+                            }} >
+                                <h6 className='text-center'>Unit DataBase</h6>
+                                <div className='row g-2 mb-2'>
+                                    <div className="form-floating col-2">
+                                        <input type="text" className="form-control" id="unitSiId" name="unitSi" placeholder="unitSi" disabled value={uintDataList.length + 1} />
+                                        <label htmlFor="unitSiId">Si.No.</label>
+                                    </div>
+                                </div>
+
+                                <Grid container spacing={1} className="mb-2" >
+                                    <Grid item xs={6}>
+                                        <TextField label="Unit Name"
+                                            id="unitNameId"
+                                            defaultValue=""
+
+                                            size="small"
+                                            placeholder="unitName"
+                                            onChange={handleUnitDataBaseChange}
+                                            //onKeyDown={handleKeyDown}
+                                            value={unitData.unitName}
+                                            name="unitName" ></TextField>
+                                    </Grid>
+                                </Grid>
+
+                                <div className='col d-flex justify-content-end mb-2'>
+                                    {unitStateId ? <div className='d-flex justify-content-end'><div className='me-2' >
+                                        <button type="button" className='btn btn-secondary' onClick={() => updateUnitData(unitStateId)}>Modify</button>
+                                    </div>
+                                        <div className='me-2' >
+                                            <button type="button" className='btn btn-danger' onClick={() => { setUnitStateId(null); setUnitData(initialUnitData) }}>Cancel</button>
+                                        </div></div> : <div>
+                                        <button type="button" className='btn btn-warning ' onClick={unitSubmit}>+ Add UnitDataBase</button>
+                                    </div>}
+
+
+                                </div>
+                                <Snackbar anchorOrigin={{ vertical: "top", horizontal: "right" }} open={unitSnackBar} autoHideDuration={6000} onClose={handleSnackClose}>
+                                    <Alert variant="filled" onClose={handleSnackClose} severity={errorHandler.code} sx={{ width: '100%' }}>
+                                        {errorHandler.message}
+                                    </Alert>
+                                </Snackbar>
+                            </Paper>
+                        </Grid>
+
+                        <Grid item xs={5} >
+                            <Paper sx={{
+                                p: 3,
+                                display: 'flex',
+                                flexDirection: 'column',
+                                mb: 4
+                            }} >
+                                <div>
+                                    <h6 className='text-center'>Unit List</h6>
+                                    <div style={style} className='table-responsive'>
+                                        <table className='table table-bordered text-center'>
+                                            <tbody>
+                                                <tr>
+                                                    <th>Sr.No</th>
+                                                    <th>Unit Name</th>
+                                                    <th>Delete</th>
+                                                </tr>
+                                                {uintDataList.map((item, index) => (
+                                                    <tr onClick={() => updateUnit(item)}>
+                                                        <td>{index + 1}</td>
+                                                        <td>{item.unitName}</td>
+                                                        <td><button type='button' className='btn btn-danger' onClick={() => deleteUnitData(item._id)}><i class="bi bi-trash-fill"></i></button></td>
+                                                    </tr>
+                                                ))}
+                                            </tbody>
+                                        </table>
+                                    </div>
+
+                                </div>
+                            </Paper>
+                        </Grid>
+
                     </Grid>
+                </Box>
+            </form>
 
-                    <Grid item xs={5} >
-                    <Paper sx={{
-                        p: 3,
-                        display: 'flex',
-                        flexDirection: 'column',
-                        mb: 4
-                    }} >
-                        <div>
-                            <h6 className='text-center'>Unit List</h6>
-                            <div style={style} className='table-responsive'>
-                                <table className='table table-bordered text-center'>
-                                    <tbody>
-                                        <tr>
-                                            <th>Sr.No</th>
-                                            <th>Unit Name</th>
-                                            <th>Delete</th>
-                                        </tr>
-                                        {uintDataList.map((item, index) => (
-                                            <tr onClick={() => updateUnit(item)}>
-                                                <td>{index + 1}</td>
-                                                <td>{item.unitName}</td>
-                                                <td><button type='button' className='btn btn-danger' onClick={() => deleteUnitData(item._id)}><i class="bi bi-trash-fill"></i></button></td>
-                                            </tr>
-                                        ))}
-                                    </tbody>
-                                </table>
-                            </div>
-
-                        </div>
-                    </Paper>
-                    </Grid>
-
-                    </Grid>
-                  </Box>
-                </form>
-            
 
         </div>
     )
@@ -424,116 +438,116 @@ export const PartDataBase = ({ style }) => {
     return (
 
         <div  >
-             <form>
-           <Box sx={{ flexGrow: 1, m: 4 }}>
-          
-            <Grid container spacing={2} >
-               
+            <form>
+                <Box sx={{ flexGrow: 1, m: 4 }}>
 
-                <Grid item xs={6} >
-                    <Paper sx={{
-                        p: 3,
-                        display: 'flex',
-                        flexDirection: 'column',
-                        mb: 4
-                    }} >
-                       
-                       <h6 className='text-center'>Part DataBase</h6>
-                        <div>
-                            <div className="row g-2 mb-2">
-                                <div className="form-floating col">
-                                    <input type="text" className="form-control" id="partDbId" name="partDb" placeholder="partDb" disabled />
-                                    <label htmlFor="partDbId">Si.No.</label>
-                                </div>
-                                <div className="form-floating col-md-5">
-                                    <input type="text" className="form-control" id="partNoId" name="partNo" value={partData.partNo} onChange={handlePartDataBaseChange} placeholder="partNo" />
-                                    <label htmlFor="partNoId">Part No</label>
-                                </div>
-                                <div className="form-floating col">
-                                    <input type="text" className="form-control" id="partNameId" name="partName" value={partData.partName} onChange={handlePartDataBaseChange} placeholder="partName" />
-                                    <label htmlFor="partNameId">Part Name</label>
-                                </div>
-                            </div>
+                    <Grid container spacing={2} >
 
 
-                            <div className="row mb-2 g-2">
-                                <div className="form-floating col"  >
-                                    <input type="text" className="form-control" id="partNameId" name="customer" value={partData.customer} onChange={handlePartDataBaseChange} placeholder="customer" />
-                                    <label htmlFor="customerId">Customer</label>
-                                </div>
-                                <div className="form-floating col" >
-                                    <input type="text" className="form-control" id="operationNoId" name="operationNo" value={partData.operationNo} onChange={handlePartDataBaseChange} placeholder="operationNo" />
-                                    <label htmlFor="operationNoId">Operation No</label>
-                                </div>
+                        <Grid item xs={6} >
+                            <Paper sx={{
+                                p: 3,
+                                display: 'flex',
+                                flexDirection: 'column',
+                                mb: 4
+                            }} >
 
-                            </div>
-
-                        </div>
-                        <Snackbar anchorOrigin={{ vertical: "top", horizontal: "right" }} open={partSnackBar} autoHideDuration={6000} onClose={handleSnackClose}>
-                            <Alert variant="filled" onClose={handleSnackClose} severity={errorHandler.code} sx={{ width: '100%' }}>
-                                {errorHandler.message}
-                            </Alert>
-                        </Snackbar>
-
-                        {partStateId ?
-                            <div className="d-flex justify-content-end">
-                                <div className='me-2'>
-                                    <button type="button" className='btn btn-secondary' onClick={() => updatePartData(partStateId)}>Modify</button>
-                                </div>
-                                <div className='me-2'>
-                                    <button type="button" className='btn btn-danger' onClick={() => { setPartStateId(null); setPartData(initialPartData) }}>Cancel</button>
-                                </div>
-                            </div> : <div className='col d-flex justify-content-end mb-2' >
+                                <h6 className='text-center'>Part DataBase</h6>
                                 <div>
-                                    <button type="button" className='btn btn-warning' onClick={partSubmit}>+ Add PartDataBase</button>
+                                    <div className="row g-2 mb-2">
+                                        <div className="form-floating col">
+                                            <input type="text" className="form-control" id="partDbId" name="partDb" placeholder="partDb" disabled />
+                                            <label htmlFor="partDbId">Si.No.</label>
+                                        </div>
+                                        <div className="form-floating col-md-5">
+                                            <input type="text" className="form-control" id="partNoId" name="partNo" value={partData.partNo} onChange={handlePartDataBaseChange} placeholder="partNo" />
+                                            <label htmlFor="partNoId">Part No</label>
+                                        </div>
+                                        <div className="form-floating col">
+                                            <input type="text" className="form-control" id="partNameId" name="partName" value={partData.partName} onChange={handlePartDataBaseChange} placeholder="partName" />
+                                            <label htmlFor="partNameId">Part Name</label>
+                                        </div>
+                                    </div>
+
+
+                                    <div className="row mb-2 g-2">
+                                        <div className="form-floating col"  >
+                                            <input type="text" className="form-control" id="partNameId" name="customer" value={partData.customer} onChange={handlePartDataBaseChange} placeholder="customer" />
+                                            <label htmlFor="customerId">Customer</label>
+                                        </div>
+                                        <div className="form-floating col" >
+                                            <input type="text" className="form-control" id="operationNoId" name="operationNo" value={partData.operationNo} onChange={handlePartDataBaseChange} placeholder="operationNo" />
+                                            <label htmlFor="operationNoId">Operation No</label>
+                                        </div>
+
+                                    </div>
+
                                 </div>
-                            </div>}
-                    </Paper>
+                                <Snackbar anchorOrigin={{ vertical: "top", horizontal: "right" }} open={partSnackBar} autoHideDuration={6000} onClose={handleSnackClose}>
+                                    <Alert variant="filled" onClose={handleSnackClose} severity={errorHandler.code} sx={{ width: '100%' }}>
+                                        {errorHandler.message}
+                                    </Alert>
+                                </Snackbar>
+
+                                {partStateId ?
+                                    <div className="d-flex justify-content-end">
+                                        <div className='me-2'>
+                                            <button type="button" className='btn btn-secondary' onClick={() => updatePartData(partStateId)}>Modify</button>
+                                        </div>
+                                        <div className='me-2'>
+                                            <button type="button" className='btn btn-danger' onClick={() => { setPartStateId(null); setPartData(initialPartData) }}>Cancel</button>
+                                        </div>
+                                    </div> : <div className='col d-flex justify-content-end mb-2' >
+                                        <div>
+                                            <button type="button" className='btn btn-warning' onClick={partSubmit}>+ Add PartDataBase</button>
+                                        </div>
+                                    </div>}
+                            </Paper>
+                        </Grid>
+
+
+
+                        <Grid item xs={6} >
+                            <Paper sx={{
+                                p: 3,
+                                display: 'flex',
+                                flexDirection: 'column',
+                                mb: 4
+                            }} >
+                                <div>
+                                    <h6 className='text-center'>Part List</h6>
+                                    <div style={style} className='table-responsive'>
+                                        <table className='table table-bordered text-center'>
+                                            <tbody>
+                                                <tr>
+                                                    <th>Sr.No</th>
+                                                    <th>Part No</th>
+                                                    <th>Part Name</th>
+                                                    <th>Customer</th>
+                                                    <th>Status</th>
+                                                    <th>Delete</th>
+                                                </tr>
+                                                {partDataList.map((item, index) => (
+                                                    <tr onClick={() => updatePart(item)} >
+                                                        <td>{index + 1}</td>
+                                                        <td>{item.partNo}</td>
+                                                        <td>{item.partName}</td>
+                                                        <td>{item.customer}</td>
+                                                        <td>{item.operationNo}</td>
+                                                        <td><button type="button" className='btn btn-danger' onClick={() => deletePartData(item._id)}><i class="bi bi-trash-fill"></i></button></td>
+                                                    </tr>
+                                                ))}
+                                            </tbody>
+                                        </table></div>
+
+                                </div>
+                            </Paper>
+                        </Grid>
+
                     </Grid>
+                </Box>
 
-
-
-                    <Grid item xs={6} >
-                    <Paper sx={{
-                        p: 3,
-                        display: 'flex',
-                        flexDirection: 'column',
-                        mb: 4
-                    }} >
-                        <div>
-                            <h6 className='text-center'>Part List</h6>
-                            <div style={style} className='table-responsive'>
-                                <table className='table table-bordered text-center'>
-                                    <tbody>
-                                        <tr>
-                                            <th>Sr.No</th>
-                                            <th>Part No</th>
-                                            <th>Part Name</th>
-                                            <th>Customer</th>
-                                            <th>Status</th>
-                                            <th>Delete</th>
-                                        </tr>
-                                        {partDataList.map((item, index) => (
-                                            <tr onClick={() => updatePart(item)} >
-                                                <td>{index + 1}</td>
-                                                <td>{item.partNo}</td>
-                                                <td>{item.partName}</td>
-                                                <td>{item.customer}</td>
-                                                <td>{item.operationNo}</td>
-                                                <td><button type="button" className='btn btn-danger' onClick={() => deletePartData(item._id)}><i class="bi bi-trash-fill"></i></button></td>
-                                            </tr>
-                                        ))}
-                                    </tbody>
-                                </table></div>
-
-                        </div>
-                    </Paper>
-                    </Grid>
-                
-</Grid>
-            </Box>
-           
-    </form>
+            </form>
         </div>
     )
 }
