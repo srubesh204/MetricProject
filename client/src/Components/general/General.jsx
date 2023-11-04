@@ -527,7 +527,7 @@ export const PartDataBase = ({ style }) => {
                                             onChange={handlePartDataBaseChange}
                                             onKeyDown={handleKeyDown}
                                             value={partData.partNo}
-                                            name="partNo" ></TextField>
+                                            name="partNo" />
                                            
                                         </div>
                                         <div className="form-floating col">
