@@ -1,22 +1,22 @@
-const departmentModel = require("../models/departmentModel")
+const areaModel = require("../models/areaModel")
 
-const departmentController = {
-    getAllDepartment: async (req, res) => {
+const areaController = {
+    getAllAreas: async (req, res) => {
         try {
-          const departmentResult = await departmentModel.find();
-          res.status(202).json({ result: departmentResult, status: 1 });
+          const areaResult = await areaModel.find();
+          res.status(202).json({ result: areaResult, status: 1 });
           //res.status(200).json(employees);
         } catch (err) {
           console.error(err);
-          res.status(500).send('Error on Department');
+          res.status(500).send('Error on Area');
         }
       },
-      createDepartment: async (req, res) => {
+      createArea: async (req, res) => {
        
         try {
-          const { department, defaultdep} = req.body;
-          const departmentResult = new departmentModel({ department,defaultdep});
-          const validationError = departmentResult.validateSync();
+          const { area} = req.body;
+          const areaResult = new areaModel({ area});
+          const validationError = areaResult.validateSync();
 
           if (validationError) {
             // Handle validation errors
@@ -35,8 +35,8 @@ const departmentController = {
           }
           console.log("success")
     
-                await departmentResult.save();
-                return res.status(200).json({ message: "Department Data Successfully Saved", status: 1 });
+                await areaResult.save();
+                return res.status(200).json({ message: "Area Successfully Saved", status: 1 });
             } catch (error) {
                 console.log(error)
                 if (error.errors) {
@@ -47,28 +47,28 @@ const departmentController = {
                     return res.status(500).json({ error: errors500, status: 0 });
                 }
     
-                return res.status(500).json({ error: 'Internal server error on Department', status: 0 });
+                return res.status(500).json({ error: 'Internal server error on Area', status: 0 });
             }
         },
          
-      updateDepartment: async (req, res) => {
+      updateArea: async (req, res) => {
         try {
-          const depId = req.params.id; // Assuming desId is part of the URL parameter
+          const areaId = req.params.id; // Assuming desId is part of the URL parameter
           // if (isNaN(desId)) {
           //   return res.status(400).json({ error: 'Invalid desId value' });
           // }
       
           // Create an object with the fields you want to update
-          const updateDepFields = {
+          const updateAreaFields = {
             /* Specify the fields and their updated values here */
-            department: req.body.department, defaultdep : req.body.defaultdep, // Example: updating the 'name' field
+             area : req.body.area // Example: updating the 'name' field
             // Add more fields as needed
           };
       
           // Find the designation by desId and update it
-          const departmentUpdate = new departmentModel(updateDepFields);
+          const areaUpdate = new areaModel(updateAreaFields);
 
-          const validationError = departmentUpdate.validateSync();
+          const validationError = areaUpdate.validateSync();
           if (validationError) {
             // Handle validation errors
             const validationErrors = {};
@@ -86,17 +86,17 @@ const departmentController = {
           }
 
           // Find the designation by desId and update it
-          const updateDepartment = await departmentModel.findOneAndUpdate(
-              { _id: depId },
-              updateDepFields,
+          const updateArea = await areaModel.findOneAndUpdate(
+              { _id: areaId },
+              updateAreaFields,
               { new: true } // To return the updated document
           );
 
-          if (!updateDepartment) {
-              return res.status(404).json({ error: 'Department not found' });
+          if (!updateArea) {
+              return res.status(404).json({ error: 'Area not found' });
           }
-          console.log("Department Updated Successfully")
-          res.status(200).json({ result: updateDepartment, message: "Department Updated Successfully" });
+          console.log("Area Updated Successfully")
+          res.status(200).json({ result: updateArea, message: "Area Updated Successfully" });
       } catch (error) {
           console.log(error);
           if (error.code === 11000) {
@@ -109,20 +109,20 @@ const departmentController = {
           res.status(500).json({ error: error, status: 0 });
       }
   },
-  deleteDepartment: async (req, res) => {
+  deleteArea: async (req, res) => {
     try {
-        const depId = req.params.id; // Assuming id is part of the URL parameter
+        const areaId = req.params.id; // Assuming id is part of the URL parameter
 
         // Find the designation by _id and remove it
-        const deleteDepartment = await departmentModel.findOneAndRemove(
-            { _id: depId } // Pass the _id as an object
+        const deleteArea = await areaModel.findOneAndRemove(
+            { _id: areaId } // Pass the _id as an object
         );
 
-        if (!deleteDepartment) {
-            return res.status(404).json({ error: 'Department not found' });
+        if (!deleteArea) {
+            return res.status(404).json({ error: 'Area not found' });
         }
 
-        res.status(202).json({ message: 'Department detail deleted successfully' ,result: deleteDepartment });
+        res.status(202).json({ message: 'Area detail deleted successfully' ,result: deleteArea });
 } catch (error) {
   console.error(error);
   res.status(500).send('Internal Server Error');
@@ -131,4 +131,4 @@ const departmentController = {
 }
 
 
-module.exports = departmentController;
+module.exports = areaController;
