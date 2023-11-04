@@ -163,7 +163,6 @@ const Employee = () => {
             console.log(err);
         }
     };
-    //get Designations
     useEffect(() => {
         if (employeeData.state) {
             cityFetch();
@@ -501,6 +500,7 @@ const Employee = () => {
 
                                         <TextField label="Contact Number "
                                             id="contactNumberId"
+                                            color={employeeData.contactNumber.length !== 10 ? "error": "success"}
                                             defaultValue=""
                                             sx={{ width: "100%" }}
                                             size="small"
