@@ -342,7 +342,7 @@ const Employee = () => {
             );
             console.log(response)
             empFetch();
-            
+
             setSnackBarOpen(true)
             setErrorHandler({ status: response.data.status, message: `${response.data.result.firstName} ${response.data.result.lastName} ${response.data.message}`, code: "success" })
             console.log("Employee Deleted Successfully")
@@ -399,97 +399,106 @@ const Employee = () => {
     return (
         <div>
             <form >
-               
-                    <Container maxWidth="lg" sx={{ mb: 2 }}>
 
-                        <Paper sx={{ p: 1, flexGrow: 1, mb: 1 }} >
-                            
+                <Container maxWidth="lg" sx={{ mb: 2 }}>
 
-                                <Grid container spacing={1} >
-                                    <Grid item xs={2}>
-                                        <TextField label="EmpCode"
-                                            id="employeeCodeId"
-                                            defaultValue=""
-                                            fullWidth
-                                            size="small"
-                                            onChange={handleChange}
-                                            value={employeeData.employeeCode}
-                                            name="employeeCode" ></TextField>
-                                    </Grid>
-                                    <Grid item xs={1}>
-                                        <TextField fullWidth label="Title" onChange={handleChange} value={employeeData.title} className="form-select" select size="small" id="titleId" name="title" defaultValue="" >
-
-                                            <MenuItem value="">Title</MenuItem >
-                                            <MenuItem value="1">Mr.</MenuItem >
-                                            <MenuItem value="2">Ms.</MenuItem >
-
-                                        </TextField>
-
-                                    </Grid>
-                                    <Grid item xs={3}>
-
-                                        <TextField label="First Name"
-                                            id="firstNameId"
-                                            defaultValue=""
-                                            fullWidth
-                                            size="small"
-                                            sx={{ width: "100%" }}
-                                            onChange={handleChange}
-                                            onKeyDown={handleKeyDown}
-                                            value={employeeData.firstName}
-                                            name="firstName" />
+                    <Paper sx={{ p: 1, flexGrow: 1, mb: 1 }} >
 
 
+                        <Grid container spacing={1} className='mb-1' >
+                            <Grid item xs={2}>
+                                <TextField label="EmpCode"
+                                    id="employeeCodeId"
+                                    defaultValue=""
+                                    fullWidth
+                                    size="small"
+                                    onChange={handleChange}
+                                    value={employeeData.employeeCode}
+                                    name="employeeCode" ></TextField>
+                            </Grid>
+                            <Grid item xs={1}>
+                                <TextField fullWidth label="Title" onChange={handleChange} value={employeeData.title} className="form-select" select size="small" id="titleId" name="title" defaultValue="" >
+
+                                    <MenuItem value="">Title</MenuItem >
+                                    <MenuItem value="1">Mr.</MenuItem >
+                                    <MenuItem value="2">Ms.</MenuItem >
+
+                                </TextField>
+
+                            </Grid>
+                            <Grid item xs={3}>
+
+                                <TextField label="First Name"
+                                    id="firstNameId"
+                                    defaultValue=""
+                                    fullWidth
+                                    size="small"
+                                    sx={{ width: "100%" }}
+                                    onChange={handleChange}
+                                    onKeyDown={handleKeyDown}
+                                    value={employeeData.firstName}
+                                    name="firstName" />
+                            </Grid>
+
+                            <Grid item xs={3}>
                                 <TextField label="Last Name"
                                     id="lastNameId"
                                     defaultValue=""
                                     size="small"
+                                    fullWidth
                                     onChange={handleChange}
                                     value={employeeData.lastName}
                                     name="lastName" />
+                            </Grid>
+                            <Grid item xs={3}>
+                                <div className="col">
+                                    <input type="date" className="form-control" id="dobId" max={DateFormat} fullWidth name="dob" value={employeeData.dob} onChange={handleChange} placeholder="DOB" />
+                                </div>
 
                             </Grid>
-                           
-
-                                    
-                                </Grid>
 
 
-                                <Grid container rowSpacing={1} columnSpacing={{ xs: 1 }} className=' g-2 mb-2'>
 
-                                    <Grid item xs={3}>
-                                        <Autocomplete
-                                            id="stateId"
-                                            onChange={(event, newValue) => {
-                                                setStateName(newValue);
-                                                setEmployeeData((prev) => ({ ...prev, state: newValue }))
-                                            }}
-                                            // name="state"
-                                            size='small'
-                                            options={AllStates}
-                                            sx={{ width: 260 }}
-                                            value={employeeData.state}
-                                            isOptionEqualToValue={(option) => option}
-                                            renderInput={(params) => <TextField {...params} label="State" name="State" />} // Set the name attribute to "state"
-                                        />
-                                    </Grid>
-                                    <Grid item xs={3}>
-                                        <Autocomplete
-                                            id="cityId"
-                                            onChange={(event, newValue) => {
-                                                setStateName(newValue);
-                                                setEmployeeData((prev) => ({ ...prev, city: newValue }))
-                                            }}
-                                            size='small'
-                                            // name="state"
-                                            options={cityByState.map((item) => item.name)}
-                                            sx={{ width: 260 }}
-                                            value={employeeData.city}
-                                            isOptionEqualToValue={(option) => option}
-                                            renderInput={(params) => <TextField {...params} label="City" name="City" />} // Set the name attribute to "state"
-                                        />
-                                    </Grid>
-                                    {/*<Grid item xs={3}>
+
+
+                        </Grid>
+
+
+                        <Grid container rowSpacing={1} columnSpacing={{ xs: 1 }} className=' g-2 mb-2'>
+
+                            <Grid item xs={3}>
+                                <Autocomplete
+                                    id="stateId"
+                                    onChange={(event, newValue) => {
+                                        setStateName(newValue);
+                                        setEmployeeData((prev) => ({ ...prev, state: newValue }))
+                                    }}
+                                    // name="state"
+                                    size='small'
+                                    options={AllStates}
+                                    sx={{ width: 275 }}
+                                    value={employeeData.state}
+                                    isOptionEqualToValue={(option) => option}
+                                    renderInput={(params) => <TextField {...params} label="State" name="State" />} // Set the name attribute to "state"
+                                />
+                            </Grid>
+                            <Grid item xs={3}>
+                                <Autocomplete
+                                    id="cityId"
+                                    onChange={(event, newValue) => {
+                                        setStateName(newValue);
+                                        setEmployeeData((prev) => ({ ...prev, city: newValue }))
+                                    }}
+                                    size='small'
+                                    // name="state"
+                                    options={cityByState.map((item) => item.name)}
+                                    sx={{ width: 275}}
+                                    value={employeeData.city}
+                                    isOptionEqualToValue={(option) => option}
+                                    renderInput={(params) => <TextField {...params} label="City" name="City" />} // Set the name attribute to "state"
+                                />
+                            </Grid>
+                            {/*<Grid item xs={3}>
                                         <div className="form-floating ">
                                             <input onChange={handleChange} value={employeeData.contactNumber} type="number" maxLength={10} className={employeeData.contactNumber.length === 10 ? `form-control is-valid` : `form-control is-invalid`} id="contactNumberId" placeholder="contactNumber" name='contactNumber' />
                                             <label htmlFor="contactNumberId">Contact Number</label>
@@ -497,112 +506,112 @@ const Employee = () => {
                                         </div>
                                     </Grid>*/}
 
-                                    <Grid item xs={3}>
+                            <Grid item xs={3}>
 
-                                        <TextField label="Contact Number "
-                                            id="contactNumberId"
-                                            defaultValue=""
-                                            sx={{ width: "100%" }}
-                                            size="small"
-                                            onChange={handleChange}
-                                            value={employeeData.contactNumber}
-                                            name="contactNumber" />
+                                <TextField label="Contact Number "
+                                    id="contactNumberId"
+                                    defaultValue=""
+                                    sx={{ width: "100%" }}
+                                    size="small"
+                                    onChange={handleChange}
+                                    value={employeeData.contactNumber}
+                                    name="contactNumber" />
 
-                                    </Grid>
+                            </Grid>
 
-                                    {/* <Grid item xs={3}>
+                            {/* <Grid item xs={3}>
                                         <div className="form-floating">
                                             <input onChange={handleChange} style={{ textTransform: "lowercase" }} value={employeeData.mailId} type="mail" className="form-control" id="mailid" placeholder="name@example.com" name='mailId' />
                                             <label htmlFor="mailId">Mail Id</label>
                                         </div>
                                     </Grid>*/}
-                                    <Grid item xs={3}>
-                                        <TextField label="MailId "
-                                            id="mailId"
-                                            defaultValue=""
-                                            sx={{ width: "100%" }}
-                                            size="small"
-                                            onChange={handleChange}
-                                            value={employeeData.mailId}
-                                            name="mailId" />
+                            <Grid item xs={3}>
+                                <TextField label="MailId "
+                                    id="mailId"
+                                    defaultValue=""
+                                    sx={{ width: "100%" }}
+                                    size="small"
+                                    onChange={handleChange}
+                                    value={employeeData.mailId}
+                                    name="mailId" />
+
+                            </Grid>
+                        </Grid>
+
+                    </Paper>
+
+
+
+
+                    <Grid container spacing={2} >
+                        <Grid item xs={6}>
+                            <Paper sx={{
+                                p: 1,
+                                display: 'flex',
+                                flexDirection: 'column',
+                                mb: 1
+                            }} >
+                                <Grid container rowSpacing={1} columnSpacing={{ xs: 1 }} className=' g-2 mb-2'>
+
+                                    <Grid item xs={6}>
+                                        <TextField fullWidth label="Designation" onChange={handleChange} value={employeeData.designation} className="form-select" select size="small" id="designationId" name="designation" defaultValue="" >
+
+                                            {designationList.map((item) => (
+                                                <MenuItem key={item._id} value={item.designation}>{item.designation}</MenuItem>
+                                            ))}
+
+                                        </TextField>
+
+                                    </Grid>
+                                    <Grid item xs={6}>
+                                        <TextField fullWidth label="Department" onChange={handleChange} value={employeeData.department} className="form-select" select size="small" id="DepartmentId" name="department" defaultValue="" >
+
+                                            {departmentList.map((item) => (
+                                                <MenuItem key={item._id} value={item.department}>{item.department}</MenuItem>
+                                            ))}
+                                        </TextField>
 
                                     </Grid>
                                 </Grid>
-                            
-                        </Paper>
+                            </Paper>
+                        </Grid>
 
 
+                        <Grid item xs={6}>
+                            <Paper sx={{
+                                p: 1,
+                                display: 'flex',
+                                flexDirection: 'column',
+                                mb: 1
+                            }} >
+                                <Grid container rowSpacing={1} columnSpacing={{ xs: 1 }} className=' g-2 mb-2'>
+                                    <Grid item xs={4}>
+                                        <TextField label="Doj "
+                                            id="dojId"
+                                            defaultValue=""
+                                            sx={{ width: "100%", }}
+                                            size="small"
+                                            onChange={handleChange}
+                                            value={employeeData.doj}
+                                            max={DateFormat}
+                                            name="doj" />
 
-
-                        <Grid container spacing={2} >
-                            <Grid item xs={6}>
-                                <Paper sx={{
-                                    p: 1,
-                                    display: 'flex',
-                                    flexDirection: 'column',
-                                    mb: 1
-                                }} >
-                                    <Grid container rowSpacing={1} columnSpacing={{ xs: 1 }} className=' g-2 mb-2'>
-
-                                        <Grid item xs={6}>
-                                            <TextField fullWidth label="Designation" onChange={handleChange} value={employeeData.designation} className="form-select" select size="small" id="designationId" name="designation" defaultValue="" >
-
-                                                {designationList.map((item) => (
-                                                    <MenuItem key={item._id} value={item.designation}>{item.designation}</MenuItem>
-                                                ))}
-
-                                            </TextField>
-
-                                        </Grid>
-                                        <Grid item xs={6}>
-                                            <TextField fullWidth label="Department" onChange={handleChange} value={employeeData.department} className="form-select" select size="small" id="DepartmentId" name="department" defaultValue="" >
-
-                                                {departmentList.map((item) => (
-                                                    <MenuItem key={item._id} value={item.department}>{item.department}</MenuItem>
-                                                ))}
-                                            </TextField>
-
-                                        </Grid>
                                     </Grid>
-                                </Paper>
-                            </Grid>
-
-
-                            <Grid item xs={6}>
-                                <Paper sx={{
-                                    p: 1,
-                                    display: 'flex',
-                                    flexDirection: 'column',
-                                    mb: 1
-                                }} >
-                                    <Grid container rowSpacing={1} columnSpacing={{ xs: 1 }} className=' g-2 mb-2'>
-                                        <Grid item xs={4}>
-                                            <TextField label="Doj "
-                                                id="dojId"
-                                                defaultValue=""
-                                                sx={{ width: "100%", }}
-                                                size="small"
-                                                onChange={handleChange}
-                                                value={employeeData.doj}
-                                                max={DateFormat}
-                                                name="doj" />
-
-                                        </Grid>
-                                        {/*<div className="form-floating col-6">
+                                    {/*<div className="form-floating col-6">
                                             <input onChange={handleChange} value={employeeData.doj} max={DateFormat} type="date" className="form-control" id="dojId" name="doj" placeholder="doj" />
                                             <label htmlFor="dojId">Date Of joining</label>
                                         </div>*/}
-                                        <Grid item xs={5}>
-                                            <TextField fullWidth label="Employment Status" onChange={handleChange} value={employeeData.employmentStatus} className="form-select" select size="small" id="employmentStatusId" name="employmentStatus" defaultValue="" >
-                                                <MenuItem value="All">All</MenuItem >
-                                                <MenuItem value="Active">Active</MenuItem >
-                                                <MenuItem value="InActive">InActive</MenuItem >
-                                                <MenuItem value="Relieved">Relieved</MenuItem >
+                                    <Grid item xs={5}>
+                                        <TextField fullWidth label="Employment Status" onChange={handleChange} value={employeeData.employmentStatus} className="form-select" select size="small" id="employmentStatusId" name="employmentStatus" defaultValue="" >
+                                            <MenuItem value="All">All</MenuItem >
+                                            <MenuItem value="Active">Active</MenuItem >
+                                            <MenuItem value="InActive">InActive</MenuItem >
+                                            <MenuItem value="Relieved">Relieved</MenuItem >
 
-                                            </TextField>
+                                        </TextField>
 
-                                        </Grid>
-                                        {/* <div className="form-floating col-6">
+                                    </Grid>
+                                    {/* <div className="form-floating col-6">
                                             <select onChange={handleChange} value={employeeData.employmentStatus} className="form-select" id="employmentStatusId" name="employmentStatus" >
                                                 <option value="">Select Status</option>
                                                 <option value="Active">Active</option>
@@ -611,161 +620,161 @@ const Employee = () => {
                                             </select>
                                             <label htmlFor="employmentStatusId">Employment Status</label>
                                         </div>*/}
-                                        <Grid item xs={3}>
-                                            <TextField fullWidth label="Report To" onChange={handleChange} value={employeeData.reportTo} className="form-select" select size="small" id="reportToId" name="reportTo" defaultValue="" >
-
-                                                {employeeList.map((item) => (
-                                                    <MenuItem value={item.firstName}>{item.firstName}</MenuItem>
-                                                ))}
-                                            </TextField>
-                                        </Grid>
-                                    </Grid>
-                                </Paper>
-                            </Grid>
-
-                        </Grid>
-
-
-                        <Grid item xs={6}>
-                            <Paper sx={{
-                                p: 1,
-                                display: 'flex',
-                                flexDirection: 'column',
-                                mb: 1
-                            }} >
-
-                                <div className="row g-2" >
-                                    <div className="col d-flex ">
-                                        <div className='me-2' >
-                                            <label className='uplable'>
-                                                <input className="form-control downlable" type="file" id="uploadExcel" />Upload
-                                            </label>
-                                        </div>
-                                        <div >
-                                            <label className='uplable'>
-                                                <input className="form-control downlable" type="file" id="downloadExcel" />Download
-                                            </label>
-                                        </div>
-                                    </div>
-                                    {empDataId ? <Dialog
-                                        open={open}
-                                        onClose={handleClose}
-                                        aria-labelledby="alert-dialog-title"
-                                        aria-describedby="alert-dialog-description"
-                                    >
-                                        <DialogTitle id="alert-dialog-title">
-                                            {"Update Confirmation"}
-                                        </DialogTitle>
-                                        <DialogContent>
-                                            <DialogContentText id="alert-dialog-description">
-                                                Are you sure to Update a Employee
-                                            </DialogContentText>
-                                        </DialogContent>
-                                        <DialogActions>
-                                            <Button onClick={handleClose}>Cancel</Button>
-                                            <Button onClick={(e) => { EmployeeUpdate(e); handleClose(); }} autoFocus>
-                                                Update
-                                            </Button>
-                                        </DialogActions>
-                                    </Dialog> : <Dialog
-                                        open={open}
-                                        onClose={handleClose}
-                                        aria-labelledby="alert-dialog-title"
-                                        aria-describedby="alert-dialog-description"
-                                    >
-                                        <DialogTitle id="alert-dialog-title">
-                                            {"Create Confirmation"}
-                                        </DialogTitle>
-                                        <DialogContent>
-                                            <DialogContentText id="alert-dialog-description">
-                                                Are you sure to Create the Employee
-                                            </DialogContentText>
-                                        </DialogContent>
-                                        <DialogActions>
-                                            <Button onClick={handleClose}>Cancel</Button>
-                                            <Button onClick={(e) => { EmployeeSubmit(e); handleClose(); }} autoFocus>
-                                                Submit
-                                            </Button>
-                                        </DialogActions>
-                                    </Dialog>}
-
-                                    {/* <Stack sx={{ width: '50%' }} spacing={2}>
-                        <Alert severity="error">This is an error alert — check it out!</Alert>
-                        <Alert severity="warning">This is a warning alert — check it out!</Alert>
-                        <Alert severity="info">This is an info alert — check it out!</Alert>
-                        <Alert severity="success">This is a success alert — check it out!</Alert>
-                    </Stack> */}
-                                    <Snackbar anchorOrigin={{ vertical: "top", horizontal: "right" }} open={snackBarOpen} autoHideDuration={6000} onClose={handleSnackClose}>
-                                        <Alert onClose={handleSnackClose} severity={errorhandler.code} sx={{ width: '25%' }}>
-                                            {errorhandler.message}
-                                        </Alert>
-                                    </Snackbar>
-
-                                    <div className='col d-flex justify-content-end'>
-                                        {empDataId ? <div className='col d-flex justify-content-end'>
-                                            <div className='me-2' >
-                                                <button type="button" onClick={handleClickOpen} className='btn btn-secondary' >Modify</button>
-                                            </div>
-                                            <div className='me-2' >
-                                                <button type="button" className='btn btn-danger' onClick={() => { setEmpDataId(null); setEmployeeData(initialEmpData) }} >Cancel</button>
-                                            </div>
-                                        </div> :
-                                            <div>
-                                                <button onClick={handleClickOpen} type="button" className='btn btn-warning'>+ Add Employee</button>
-                                            </div>
-                                        }
-                                    </div>
-                                </div>
-                            </Paper>
-                        </Grid>
-
-
-                        <Grid item xs={6}>
-                            <Paper sx={{
-                                p: 1,
-                                display: 'flex',
-                                flexDirection: 'column',
-                                mb: 1
-                                
-
-                            }} >
-
-                                <h3 className='text-center'>Employee List</h3>
-                                <Grid container rowSpacing={1} columnSpacing={{ xs: 1 }} className=' g-2 mb-2'>
-
-                                    <Grid item xs={4}>
-                                        <TextField fullWidth label="Employment Status Filter" onChange={handleFilterChange} className="form-select" select size="small" id="employementStatusFilterId" name="employementStatusFilter" defaultValue="" >
-                                            <MenuItem value="all">All</MenuItem >
-                                            <MenuItem value="Active">Active</MenuItem >
-                                            <MenuItem value="InActive">InActive</MenuItem >
-                                            <MenuItem value="Relieved">Relieved</MenuItem >
-
-                                        </TextField>
-
-                                    </Grid>
-                                    <Grid item xs={4}>
-                                        <TextField fullWidth label="Department Filter" onChange={handleFilterChange} className="form-select" select size="small" id="departmentFilterId" name="departmentFilter" defaultValue="" >
-                                            <MenuItem value="all">All</MenuItem>
-                                            {departmentList.map((item) => (
-                                                <MenuItem key={item._id} value={item.department}>{item.department}</MenuItem>
-                                            ))
-
-                                            }
-                                        </TextField>
-                                    </Grid>
-
-
-                                    <Grid item xs={4}>
-                                        <TextField fullWidth label="Report To" onChange={handleFilterChange} className="form-select" select size="small" id="reportToFilterId" name="reportToFilter" defaultValue="" >
-                                            <MenuItem value="all">All</MenuItem>
+                                    <Grid item xs={3}>
+                                        <TextField fullWidth label="Report To" onChange={handleChange} value={employeeData.reportTo} className="form-select" select size="small" id="reportToId" name="reportTo" defaultValue="" >
 
                                             {employeeList.map((item) => (
                                                 <MenuItem value={item.firstName}>{item.firstName}</MenuItem>
                                             ))}
                                         </TextField>
                                     </Grid>
+                                </Grid>
+                            </Paper>
+                        </Grid>
 
-                                    {/* <div className="form-floating col">
+                    </Grid>
+
+
+                    <Grid item xs={6}>
+                        <Paper sx={{
+                            p: 1,
+                            display: 'flex',
+                            flexDirection: 'column',
+                            mb: 1
+                        }} >
+
+                            <div className="row g-2" >
+                                <div className="col d-flex ">
+                                    <div className='me-2' >
+                                        <label className='uplable'>
+                                            <input className="form-control downlable" type="file" id="uploadExcel" />Upload
+                                        </label>
+                                    </div>
+                                    <div >
+                                        <label className='uplable'>
+                                            <input className="form-control downlable" type="file" id="downloadExcel" />Download
+                                        </label>
+                                    </div>
+                                </div>
+                                {empDataId ? <Dialog
+                                    open={open}
+                                    onClose={handleClose}
+                                    aria-labelledby="alert-dialog-title"
+                                    aria-describedby="alert-dialog-description"
+                                >
+                                    <DialogTitle id="alert-dialog-title">
+                                        {"Update Confirmation"}
+                                    </DialogTitle>
+                                    <DialogContent>
+                                        <DialogContentText id="alert-dialog-description">
+                                            Are you sure to Update a Employee
+                                        </DialogContentText>
+                                    </DialogContent>
+                                    <DialogActions>
+                                        <Button onClick={handleClose}>Cancel</Button>
+                                        <Button onClick={(e) => { EmployeeUpdate(e); handleClose(); }} autoFocus>
+                                            Update
+                                        </Button>
+                                    </DialogActions>
+                                </Dialog> : <Dialog
+                                    open={open}
+                                    onClose={handleClose}
+                                    aria-labelledby="alert-dialog-title"
+                                    aria-describedby="alert-dialog-description"
+                                >
+                                    <DialogTitle id="alert-dialog-title">
+                                        {"Create Confirmation"}
+                                    </DialogTitle>
+                                    <DialogContent>
+                                        <DialogContentText id="alert-dialog-description">
+                                            Are you sure to Create the Employee
+                                        </DialogContentText>
+                                    </DialogContent>
+                                    <DialogActions>
+                                        <Button onClick={handleClose}>Cancel</Button>
+                                        <Button onClick={(e) => { EmployeeSubmit(e); handleClose(); }} autoFocus>
+                                            Submit
+                                        </Button>
+                                    </DialogActions>
+                                </Dialog>}
+
+                                {/* <Stack sx={{ width: '50%' }} spacing={2}>
+                        <Alert severity="error">This is an error alert — check it out!</Alert>
+                        <Alert severity="warning">This is a warning alert — check it out!</Alert>
+                        <Alert severity="info">This is an info alert — check it out!</Alert>
+                        <Alert severity="success">This is a success alert — check it out!</Alert>
+                    </Stack> */}
+                                <Snackbar anchorOrigin={{ vertical: "top", horizontal: "right" }} open={snackBarOpen} autoHideDuration={6000} onClose={handleSnackClose}>
+                                    <Alert onClose={handleSnackClose} severity={errorhandler.code} sx={{ width: '25%' }}>
+                                        {errorhandler.message}
+                                    </Alert>
+                                </Snackbar>
+
+                                <div className='col d-flex justify-content-end'>
+                                    {empDataId ? <div className='col d-flex justify-content-end'>
+                                        <div className='me-2' >
+                                            <button type="button" onClick={handleClickOpen} className='btn btn-secondary' >Modify</button>
+                                        </div>
+                                        <div className='me-2' >
+                                            <button type="button" className='btn btn-danger' onClick={() => { setEmpDataId(null); setEmployeeData(initialEmpData) }} >Cancel</button>
+                                        </div>
+                                    </div> :
+                                        <div>
+                                            <button onClick={handleClickOpen} type="button" className='btn btn-warning'>+ Add Employee</button>
+                                        </div>
+                                    }
+                                </div>
+                            </div>
+                        </Paper>
+                    </Grid>
+
+
+                    <Grid item xs={6}>
+                        <Paper sx={{
+                            p: 1,
+                            display: 'flex',
+                            flexDirection: 'column',
+                            mb: 1
+
+
+                        }} >
+
+                            <h3 className='text-center'>Employee List</h3>
+                            <Grid container rowSpacing={1} columnSpacing={{ xs: 1 }} className=' g-2 mb-2'>
+
+                                <Grid item xs={4}>
+                                    <TextField fullWidth label="Employment Status Filter" onChange={handleFilterChange} className="form-select" select size="small" id="employementStatusFilterId" name="employementStatusFilter" defaultValue="" >
+                                        <MenuItem value="all">All</MenuItem >
+                                        <MenuItem value="Active">Active</MenuItem >
+                                        <MenuItem value="InActive">InActive</MenuItem >
+                                        <MenuItem value="Relieved">Relieved</MenuItem >
+
+                                    </TextField>
+
+                                </Grid>
+                                <Grid item xs={4}>
+                                    <TextField fullWidth label="Department Filter" onChange={handleFilterChange} className="form-select" select size="small" id="departmentFilterId" name="departmentFilter" defaultValue="" >
+                                        <MenuItem value="all">All</MenuItem>
+                                        {departmentList.map((item) => (
+                                            <MenuItem key={item._id} value={item.department}>{item.department}</MenuItem>
+                                        ))
+
+                                        }
+                                    </TextField>
+                                </Grid>
+
+
+                                <Grid item xs={4}>
+                                    <TextField fullWidth label="Report To" onChange={handleFilterChange} className="form-select" select size="small" id="reportToFilterId" name="reportToFilter" defaultValue="" >
+                                        <MenuItem value="all">All</MenuItem>
+
+                                        {employeeList.map((item) => (
+                                            <MenuItem value={item.firstName}>{item.firstName}</MenuItem>
+                                        ))}
+                                    </TextField>
+                                </Grid>
+
+                                {/* <div className="form-floating col">
                                         <select className="form-select" id="reportToFilterId" name="reportToFilter" onChange={handleFilterChange}>
                                             <option value="all">All</option>
                                             {employeeList.map((item) => (
@@ -774,45 +783,45 @@ const Employee = () => {
                                         </select>
                                         <label htmlFor="reportToFilterId">Report To</label>
                                     </div>*/}
-                                </Grid>
-                                <div>
-                                    <table className='table table-bordered text-center'>
-                                        <tbody>
-                                            <tr>
-                                                <th>Emp.Code</th>
-                                                <th>Emp.Name</th>
-                                                <th>Contact Number</th>
-                                                <th>Mail Id</th>
-                                                <th>Designation</th>
-                                                <th>Department</th>
-                                                <th>Report To</th>
-                                                <th>Delete</th>
+                            </Grid>
+                            <div>
+                                <table className='table table-bordered text-center'>
+                                    <tbody>
+                                        <tr>
+                                            <th>Emp.Code</th>
+                                            <th>Emp.Name</th>
+                                            <th>Contact Number</th>
+                                            <th>Mail Id</th>
+                                            <th>Designation</th>
+                                            <th>Department</th>
+                                            <th>Report To</th>
+                                            <th>Delete</th>
 
+                                        </tr>
+                                        {filteredData.map((emp, index) => (
+                                            <tr key={emp._id} onClick={() => handleSetEmp(emp)}>
+                                                <td>{emp.employeeCode}</td>
+                                                <td>{emp.firstName + emp.lastName}</td>
+                                                <td>{emp.contactNumber}</td>
+                                                <td>{emp.mailId}</td>
+                                                <td>{emp.designation}</td>
+                                                <td>{emp.department}</td>
+                                                <td>{emp.reportTo}</td>
+                                                <td><button type='button' className='btn btn-danger' onClick={() => deleteEmployee(emp._id)}><i className="bi bi-trash"></i></button></td>
                                             </tr>
-                                            {filteredData.map((emp, index) => (
-                                                <tr key={emp._id} onClick={() => handleSetEmp(emp)}>
-                                                    <td>{emp.employeeCode}</td>
-                                                    <td>{emp.firstName + emp.lastName}</td>
-                                                    <td>{emp.contactNumber}</td>
-                                                    <td>{emp.mailId}</td>
-                                                    <td>{emp.designation}</td>
-                                                    <td>{emp.department}</td>
-                                                    <td>{emp.reportTo}</td>
-                                                    <td><button type='button' className='btn btn-danger' onClick={() => deleteEmployee(emp._id)}><i className="bi bi-trash"></i></button></td>
-                                                </tr>
-                                            ))}
+                                        ))}
 
 
-                                        </tbody>
+                                    </tbody>
 
 
-                                    </table>
-                                    {/* <TextField id="outlined-basic" label="Outlined" variant="outlined" />
+                                </table>
+                                {/* <TextField id="outlined-basic" label="Outlined" variant="outlined" />
                     <TextField id="filled-basic" label="Filled" variant="filled" />
                     <TextField id="standard-basic" label="Standard" variant="standard" /> */}
-                                </div>
-                            </Paper>
-                        </Grid>
+                            </div>
+                        </Paper>
+                    </Grid>
 
 
 
@@ -822,8 +831,8 @@ const Employee = () => {
 
 
 
-                    </Container>
-                
+                </Container>
+
             </form>
 
 

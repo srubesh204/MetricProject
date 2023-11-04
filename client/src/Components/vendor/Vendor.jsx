@@ -1,17 +1,20 @@
 import React, { useState, useEffect } from 'react'
 import axios from 'axios'
 import Autocomplete from '@mui/material/Autocomplete';
-import TextField from '@mui/material/TextField';
+import { TextField, MenuItem, styled, Button, ButtonGroup } from '@mui/material';
+import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import Alert from '@mui/material/Alert';
 import Snackbar from '@mui/material/Snackbar';
 import RemoveRoundedIcon from '@mui/icons-material/RemoveRounded';
 import AddRoundedIcon from '@mui/icons-material/AddRounded';
 import { Container, Paper } from '@mui/material';
 import { Box, Grid } from '@mui/material';
+import { DataGrid } from '@mui/x-data-grid';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import dayjs from 'dayjs';
+
 const Vendor = () => {
 
 
@@ -55,7 +58,7 @@ const Vendor = () => {
 
         }
 
-          
+
     };
 
 
@@ -417,6 +420,18 @@ const Vendor = () => {
         }
     };
 
+    const VisuallyHiddenInput = styled('input')({
+        clip: 'rect(0 0 0 0)',
+        clipPath: 'inset(50%)',
+        height: 1,
+        overflow: 'hidden',
+        position: 'absolute',
+        bottom: 0,
+        left: 0,
+        whiteSpace: 'nowrap',
+        width: 1,
+    });
+
 
 
     return (
@@ -428,30 +443,11 @@ const Vendor = () => {
                             p: 2,
                             display: 'flex',
                             flexDirection: 'column',
-                            mb: 4
+                            mb: 2
                         }}
                     >
 
-                        <Grid container spacing={1} className='mb-2'  >
-                            <div className='col  d-flex justify-content-end '>
-                                <div class="form-check form-check-inline ">
-                                    <input className="form-check-input" type="checkbox" checked={vendorData.oem === "1"} onChange={handleVendorDataBaseChange} id="oemId" name="oem" />
-                                    <label className="form-check-label" htmlFor="oemId">OEM</label>
-                                </div>
-                                <div class="form-check form-check-inline ">
-                                    <input className="form-check-input" type="checkbox" checked={vendorData.customer === "1"} onChange={handleVendorDataBaseChange} id="customerId" name="customer" />
-                                    <label className="form-check-label" htmlFor="customerId">Customer</label>
-                                </div>
-                                <div class="form-check form-check-inline ">
-                                    <input className="form-check-input" type="checkbox" checked={vendorData.supplier === "1"} onChange={handleVendorDataBaseChange} id="supplierId" name="supplier" />
-                                    <label className="form-check-label" htmlFor="supplierId">Supplier</label>
-                                </div>
-                                <div class="form-check form-check-inline">
-                                    <input className="form-check-input" type="checkbox" checked={vendorData.subContractor === "1"} onChange={handleVendorDataBaseChange} id="subContractorId" name="subContractor" />
-                                    <label className="form-check-label" htmlFor="subContractorId">SubContractor</label>
-                                </div>
-                            </div>
-                        </Grid>
+
 
                         <Grid container rowSpacing={1} columnSpacing={{ xs: 1 }}  >
 
@@ -461,7 +457,7 @@ const Vendor = () => {
                                     id="vendorCodeId"
                                     defaultValue=""
                                     size="small"
-                                    sx={{width:"100%"}}
+                                    sx={{ width: "100%" }}
                                     value={vendorData.vendorCode}
                                     onChange={handleVendorDataBaseChange}
                                     name="vendorCode" />
@@ -473,7 +469,7 @@ const Vendor = () => {
                                     id="aliasNameId"
                                     defaultValue=""
                                     size="small"
-                                    sx={{width:"100%"}}
+                                    sx={{ width: "100%" }}
                                     value={vendorData.aliasName}
                                     onChange={handleVendorDataBaseChange}
                                     name="aliasName" />
@@ -484,114 +480,191 @@ const Vendor = () => {
                                     id="fullNameId"
                                     defaultValue=""
                                     size="small"
-                                    sx={{width:"100%"}}
+                                    sx={{ width: "100%" }}
                                     value={vendorData.fullName}
                                     onChange={handleVendorDataBaseChange}
                                     name="fullName" />
 
                             </Grid>
+
                             <Grid item xs={3}>
-                                <LocalizationProvider dateAdapter={AdapterDayjs}>
-
-                                    <DatePicker label="Date Of Reg"
-                                        id="dorId"
-                                        size="small"
-                                        sx={{width:"100%"}}
-                                        name="dor"
-                                        value={dayjs(vendorData.dor)}
-                                        onChange={(newValue) => {
-                                            if (newValue) {
-                                                setVendorData((prev) => ({ ...prev, dor: `${newValue.$y}-${newValue.$M + 1}-${newValue.$D}` }))
-                                            }
-                                        }}
-                                        format='DD/MM/YYYY'
-                                    ></DatePicker>
-
-                                </LocalizationProvider>
+                                <div className="col">
+                                    <input type="date" className="form-control" id="dorId" max={DateFormat} fullWidth name="dor" value={vendorData.dor} onChange={handleVendorDataBaseChange} placeholder="dor" />
+                                </div>
 
                             </Grid>
+
+
                         </Grid>
+                        <Grid container rowSpacing={1} columnSpacing={{ xs: 1 }} className='mt-1' >
+
+                            <Grid item xs={6}>
+                                <TextField label="Address"
+                                    id="addressId"
+                                    defaultValue=""
+                                    size="small"
+                                    sx={{ width: "100%" }}
+                                    value={vendorData.address}
+                                    onKeyDown={handleKeyDown}
+                                    onChange={handleVendorDataBaseChange}
+                                    name="addressId" />
+
+                            </Grid>
+
+
+                            <Grid item xs={6} >
+                                <div className='col  d-flex justify-content-end '>
+                                    <div class="form-check form-check-inline ">
+                                        <input className="form-check-input" type="checkbox" checked={vendorData.oem === "1"} onChange={handleVendorDataBaseChange} id="oemId" name="oem" />
+                                        <label className="form-check-label" htmlFor="oemId">OEM</label>
+                                    </div>
+                                    <div class="form-check form-check-inline ">
+                                        <input className="form-check-input" type="checkbox" checked={vendorData.customer === "1"} onChange={handleVendorDataBaseChange} id="customerId" name="customer" />
+                                        <label className="form-check-label" htmlFor="customerId">Customer</label>
+                                    </div>
+                                    <div class="form-check form-check-inline ">
+                                        <input className="form-check-input" type="checkbox" checked={vendorData.supplier === "1"} onChange={handleVendorDataBaseChange} id="supplierId" name="supplier" />
+                                        <label className="form-check-label" htmlFor="supplierId">Supplier</label>
+                                    </div>
+                                    <div class="form-check form-check-inline">
+                                        <input className="form-check-input" type="checkbox" checked={vendorData.subContractor === "1"} onChange={handleVendorDataBaseChange} id="subContractorId" name="subContractor" />
+                                        <label className="form-check-label" htmlFor="subContractorId">SubContractor</label>
+                                    </div>
+                                </div>
+                            </Grid>
+                        </Grid>
+
+
+
+
+
+
+
                     </Paper>
 
 
 
 
-                    <Paper
-                        sx={{
-                            p: 2,
-                            display: 'flex',
-                            flexDirection: 'column',
-
-                        }}
-                    >
-
-                        <div className="row g-2">
-                            <div className='col-md-6  '>
-                                <div class="form-floating mb-2">
-                                    <textarea className="form-control" id="addressId" placeholder="address" name="address" value={vendorData.address} style={{ height: "50px" }} onKeyDown={handleKeyDown} onChange={handleVendorDataBaseChange}></textarea>
-                                    <label htmlFor="addressId">Address</label>
-                                </div>
-                                <div className='row g-2'>
-
-                                    <Autocomplete
-                                        id="stateId"
-                                        onChange={(event, newValue) => {
-                                            setStateName(newValue);
-                                            setVendorData((prev) => ({ ...prev, state: newValue }))
-                                        }}
-                                        // name="state"
-                                        options={AllStates}
-                                        sx={{ width: 200 }}
-                                        value={vendorData.state}
-                                        isOptionEqualToValue={(option) => option}
-                                        renderInput={(params) => <TextField {...params} label="State" name="State" />} // Set the name attribute to "state"
-                                    />
 
 
-                                    <Autocomplete
-                                        id="cityId"
-                                        onChange={(event, newValue) => {
-                                            setStateName(newValue);
-                                            setVendorData((prev) => ({ ...prev, city: newValue }))
-                                        }}
-                                        // name="state"
-                                        options={cityByState.map((item) => item.name)}
-                                        sx={{ width: 200 }}
-                                        value={vendorData.city}
-                                        isOptionEqualToValue={(option) => option}
-                                        renderInput={(params) => <TextField {...params} label="City" name="City" />} // Set the name attribute to "state"
-                                    />
+                    <div className="row g-2 mb-3">
 
-                                    <div className="form-floating mb-2 col">
+                        <Paper
+                            sx={{
+                                p: 2,
+                                marginRight: 2
 
-                                        <select onChange={handleVendorDataBaseChange} value={vendorData.vendorStatus} className="form-select" id="vendorStatusId" name="vendorStatus" >
+                            }}
+                            className='col'
+                        >
+
+
+                            <div className="row g-2 mb-2">
+                                <Autocomplete
+                                    id="stateId"
+                                    onChange={(event, newValue) => {
+                                        setStateName(newValue);
+                                        setVendorData((prev) => ({ ...prev, state: newValue }))
+                                    }}
+                                    // name="state"
+                                    options={AllStates}
+                                    fullWidth
+                                    size='small'
+                                    className='col'
+                                    
+                                    value={vendorData.state}
+                                    isOptionEqualToValue={(option) => option}
+                                    renderInput={(params) => <TextField {...params} label="State" name="State" />} // Set the name attribute to "state"
+                                />
+
+
+                                <Autocomplete
+                                    id="cityId"
+                                    onChange={(event, newValue) => {
+                                        setStateName(newValue);
+                                        setVendorData((prev) => ({ ...prev, city: newValue }))
+                                    }}
+                                    // name="state"
+                                    options={cityByState.map((item) => item.name)}
+                                    
+                                    value={vendorData.city}
+                                    size='small'
+                                    className='col'
+                                    fullWidth
+                                    isOptionEqualToValue={(option) => option}
+                                    renderInput={(params) => <TextField {...params} label="City" name="City" />} // Set the name attribute to "state"
+                                />
+                            </div>
+
+
+
+                            {/* <select onChange={handleVendorDataBaseChange} value={vendorData.vendorStatus} className="form-select" id="vendorStatusId" name="vendorStatus" >
                                             <option value="">-select-</option>
                                             <option value="Active">Active</option>
                                             <option value="InActive">InActive</option>
                                             <option value="Relieved">Relieved</option>
                                         </select>
-                                        <label htmlFor="vendorStatusId">Vendor Status</label>
-                                    </div>
+                                        <label htmlFor="vendorStatusId">Vendor Status</label>*/}
 
+
+
+                            <div className=" row g-2 mb-2">
+
+
+
+                                <div className="col-md-5">
+                                    <TextField fullWidth label="VendorStatus" onChange={handleVendorDataBaseChange} value={vendorData.vendorStatus} className="col" select size="small" id="vendorStatusId" name="vendorStatus" defaultValue="" >
+                                        <MenuItem value="all">All</MenuItem >
+                                        <MenuItem value="Active">Active</MenuItem >
+                                        <MenuItem value="InActive">InActive</MenuItem >
+                                        <MenuItem value="Relieved">Relieved</MenuItem >
+
+                                    </TextField>
                                 </div>
-                                <div className=" row g-2">
 
-                                    <div className="form-floating me-4 mb-4 col-6">
+
+
+
+
+                                <div className='col input-group'>
+                                    <div className='input-group-text'>Certificate Validity</div>
+                                  <input type="date" className="form-control" id="certificateValidityId" fullWidth name="certificateValidity" value={vendorData.certificateValidity} onChange={handleVendorDataBaseChange} placeholder="certificateValidity" />
+                                </div>
+
+
+
+                                {/*<div className="form-floating me-4 mb-4 col">
                                         <input type="date" className="form-control" id="certificateValidityId" name="certificateValidity" placeholder="certificateValidity" value={vendorData.certificateValidity} onChange={handleVendorDataBaseChange} />
                                         <label htmlFor="certificateValidityId">Certificate Validity</label>
-                                    </div>
+                                    </div>*/}
 
 
-                                    <div className='me-2 col'>
-                                        <label className='certificateuplod'>
-                                            <input onChange={handleFileChange} className="form-control certificatedownlod" type="file" id="certificateUpload" />Certificate Upload </label>
-                                        <button type='button' onClick={handleFileUpload}>Upload</button>
-                                    </div>
-
-                                </div>
 
                             </div>
-                            <div className='col-md-6'>
+                            <div className="row">
+                                <ButtonGroup className='col' >
+
+                                    <Button component="label" variant='contained' sx={{ width: "80%" }}>
+                                        Certificate
+                                        <VisuallyHiddenInput type="file" />
+                                    </Button>
+                                    <Button variant='outlined' sx={{ width: "20%" }} startIcon={<CloudUploadIcon />} type='button' className='btn btn-info' onClick={handleFileUpload}>Upload</Button>
+                                </ButtonGroup>
+                            </div>
+
+                        </Paper>
+
+
+                        
+                            <Paper
+                                sx={{
+                                    p: 2,
+                                    display: 'flex',
+                                    flexDirection: 'column',
+                                    
+                                }}
+                                className='col'
+                            >
                                 <div style={{ maxHeight: "200px", overflow: "auto" }}>
                                     <table className='table table-sm table-bordered table-responsive text-center align-middle'>
                                         <tbody>
@@ -623,16 +696,29 @@ const Vendor = () => {
                                         </tbody>
                                     </table>
                                 </div>
+                                {/* <div style={{ height: 400, width: '100%' }}>
+                                    <DataGrid
+                                        rows="5"
+                                        columns="5"
+                                        initialState={{
+                                            pagination: {
+                                                paginationModel: { page: 0, pageSize: 5 },
+                                            },
+                                        }}
+                                        pageSizeOptions={[5, 10]}
+                                        checkboxSelection
+                                    />
+                                </div> */}
+                            </Paper>
+                       
+                    </div>
 
-                            </div>
-                        </div>
-                    </Paper>
                     <Paper
                         sx={{
                             p: 2,
                             display: 'flex',
                             flexDirection: 'column',
-                            mb: 5
+                            mb: 2
                         }}
                     >
                         <div className='row' >
@@ -671,16 +757,16 @@ const Vendor = () => {
 
                     <Paper
                         sx={{
-                            p: 4,
+                            p: 2,
                             display: 'flex',
                             flexDirection: 'column',
 
                         }}
                     >
-                        <div>
-                            <h3 className='text-center'>Vendor List</h3>
-                            <div className='row mb-2  g-2'>
-                                <div class="form-floating-sm  col-2">
+                       
+                            <h4 className='text-center'>Vendor List</h4>
+                           
+                                <div class="col-3 mb-2">
                                     <select className="form-select form-select-sm" id="vendorTypeId" name="vendorType" aria-label="Floating label select example" onChange={handleFilterChange} >
                                         <option value="all">All</option>
                                         <option value="oem">OEM</option>
@@ -690,7 +776,7 @@ const Vendor = () => {
                                     </select>
 
                                 </div>
-                            </div>
+                            
                             <table className='table table-bordered text-center'>
                                 <tbody>
                                     <tr>
@@ -719,7 +805,7 @@ const Vendor = () => {
                                     ))}
                                 </tbody>
                             </table>
-                        </div>
+                        
                         <Snackbar anchorOrigin={{ vertical: "top", horizontal: "right" }} open={snackBarOpen} autoHideDuration={6000} onClose={handleSnackClose}>
                             <Alert onClose={handleSnackClose} severity={errorhandler.code} sx={{ width: '100%' }}>
                                 {errorhandler.message}
