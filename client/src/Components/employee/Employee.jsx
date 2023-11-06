@@ -122,6 +122,8 @@ const Employee = () => {
         return <MuiAlert elevation={6} ref={ref} variant="filled"  {...props} />;
     });
     const [open, setOpen] = useState(false)
+    const [deleteOpen, setDeleteOpen] = useState(false)
+    const [deleteId, setDeleteId] = useState(null)
     const [snackBarOpen, setSnackBarOpen] = useState(false)
     //open Modal
     const handleClickOpen = () => {
@@ -130,6 +132,18 @@ const Employee = () => {
 
     const handleClose = () => {
         setOpen(false);
+    };
+
+    const handleDeleteOpen = (id) => {
+        setDeleteOpen(true);
+        setDeleteId(id)
+    };
+    console.log(deleteId)
+
+    const handleDeleteClose = () => {
+        setDeleteOpen(false);
+        setDeleteId(null)
+        setEmployeeData(initialEmpData)
     };
 
     const handleSnackClose = (event, reason) => {
@@ -164,7 +178,7 @@ const Employee = () => {
     const cityFetch = async () => {
         try {
             const response = await axios.get(
-                `${process.env.REACT_APP_PORT}/general/getCityByStateName/${StateName}`
+                `${process.env.REACT_APP_PORT}/general/getCityByStateName/${employeeData.state}`
             );
             setCityByState(response.data);
         } catch (err) {
@@ -172,9 +186,9 @@ const Employee = () => {
         }
     };
     useEffect(() => {
-        if (employeeData.state) {
+        
             cityFetch();
-        }
+       
 
 
     }, [employeeData.state]);
@@ -259,6 +273,8 @@ const Employee = () => {
             empFetch();
             console.log("Employee Created Successfully")
             setErrorHandler({ status: response.data.status, message: response.data.message, code: "success" })
+            setEmployeeData(initialEmpData)
+            setEmpDataId(null)
         } catch (err) {
 
             setSnackBarOpen(true)
@@ -326,40 +342,45 @@ const Employee = () => {
     const handleKeyDown = (event, newValue) => {
         const { name, value } = event.target
         console.log(event.target.value)
-        
+
         if (event.key === 'Tab') {
             // Prevent default Tab behavior
-            if(name === "mailId"){
+            if (name === "mailId") {
                 console.log("im here")
                 const lowerCase = value.toLowerCase()
                 setEmployeeData((prev) => ({ ...prev, [name]: lowerCase }));
-            }else{
+            } else {
 
-            const formattedValue = value.toLowerCase().
-                split(' ')
-                .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-                .join(' ');
-            console.log(formattedValue)
-            // Format the input newValue (capitalization)
-            setStateName(formattedValue); // Update the state to show the formatted newValue
-            setEmployeeData((prev) => ({ ...prev, [name]: formattedValue }));
-        } // Update the state with the formatted value
+                const formattedValue = value.toLowerCase().
+                    split(' ')
+                    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+                    .join(' ');
+                console.log(formattedValue)
+                // Format the input newValue (capitalization)
+                setStateName(formattedValue); // Update the state to show the formatted newValue
+                setEmployeeData((prev) => ({ ...prev, [name]: formattedValue }));
+            } // Update the state with the formatted value
         }
     };
 
 
     const deleteEmployee = async (id) => {
 
-        try {
-            const response = await axios.delete(
-                `${process.env.REACT_APP_PORT}/employee/deleteEmployee/${id}`
-            );
-            console.log(response)
-            empFetch();
 
-            setSnackBarOpen(true)
-            setErrorHandler({ status: response.data.status, message: `${response.data.result.firstName} ${response.data.result.lastName} ${response.data.message}`, code: "success" })
-            console.log("Employee Deleted Successfully")
+        try {
+            if (deleteId) {
+                const response = await axios.delete(
+                    `${process.env.REACT_APP_PORT}/employee/deleteEmployee/${deleteId}`
+                );
+                console.log(response)
+                empFetch();
+
+                setSnackBarOpen(true)
+                setErrorHandler({ status: response.data.status, message: `${response.data.result.firstName} ${response.data.result.lastName} ${response.data.message}`, code: "success" })
+                setEmpDataId(null)
+                console.log("Employee Deleted Successfully")
+            }
+
 
         } catch (err) {
             setSnackBarOpen(true)
@@ -383,7 +404,7 @@ const Employee = () => {
 
         }
     }
-    
+
 
     // const EmployeeDelete = (id) => {
     //     try{
@@ -407,7 +428,7 @@ const Employee = () => {
         <div>
             <form >
 
-                <Container maxWidth="lg" sx={{ mb: 2, mt:2 }}>
+                <Container maxWidth="lg" sx={{ mb: 2, mt: 2 }}>
 
                     <Paper sx={{ p: 1, flexGrow: 1, mb: 1 }} >
 
@@ -454,22 +475,22 @@ const Employee = () => {
                                     size="small"
                                     fullWidth
                                     onChange={handleChange}
-                                    onKeyDown={handleKeyDown} 
+                                    onKeyDown={handleKeyDown}
                                     value={employeeData.lastName}
                                     name="lastName" />
                             </Grid>
                             <Grid item xs={3}>
-                            <TextField label="DOB"
-                                        type='date'
-                                        
-                                            id="dobId"
-                                            defaultValue=""
-                                            sx={{ width: "100%", }}
-                                            size="small"
-                                            onChange={handleChange}
-                                            value={employeeData.dob}
-                                            max={DateFormat}
-                                            name="dob" />
+                                <TextField label="DOB"
+                                    type='date'
+
+                                    id="dobId"
+                                    defaultValue=""
+                                    sx={{ width: "100%", }}
+                                    size="small"
+                                    onChange={handleChange}
+                                    value={employeeData.dob}
+                                    max={DateFormat}
+                                    name="dob" />
 
                             </Grid>
 
@@ -508,7 +529,7 @@ const Employee = () => {
                                     size='small'
                                     // name="state"
                                     options={cityByState.map((item) => item.name)}
-                                    sx={{ width: 275}}
+                                    sx={{ width: 275 }}
                                     value={employeeData.city}
                                     isOptionEqualToValue={(option) => option}
                                     renderInput={(params) => <TextField {...params} label="City" name="City" />} // Set the name attribute to "state"
@@ -524,15 +545,15 @@ const Employee = () => {
 
                             <Grid item xs={3}>
 
-                                        <TextField label="Contact Number "
-                                            id="contactNumberId"
-                                            color={employeeData.contactNumber.length !== 10 ? "error": "success"}
-                                            defaultValue=""
-                                            sx={{ width: "100%" }}
-                                            size="small"
-                                            onChange={handleChange}
-                                            value={employeeData.contactNumber}
-                                            name="contactNumber" />
+                                <TextField label="Contact Number "
+                                    id="contactNumberId"
+                                    color={employeeData.contactNumber.length !== 10 ? "error" : "success"}
+                                    defaultValue=""
+                                    sx={{ width: "100%" }}
+                                    size="small"
+                                    onChange={handleChange}
+                                    value={employeeData.contactNumber}
+                                    name="contactNumber" />
 
                             </Grid>
 
@@ -605,8 +626,8 @@ const Employee = () => {
                                 <Grid container rowSpacing={1} columnSpacing={{ xs: 1 }} className=' g-2 mb-2'>
                                     <Grid item xs={4}>
                                         <TextField label="DOJ "
-                                        type='date'
-                                        
+                                            type='date'
+
                                             id="dojId"
                                             defaultValue=""
                                             sx={{ width: "100%", }}
@@ -623,10 +644,10 @@ const Employee = () => {
                                         </div>*/}
                                     <Grid item xs={5}>
                                         <TextField fullWidth label="Employment Status" onChange={handleChange} value={employeeData.employmentStatus} className="form-select" select size="small" id="employmentStatusId" name="employmentStatus" defaultValue="" >
-                                            
+
                                             <MenuItem value="Active">Active</MenuItem >
                                             <MenuItem value="InActive">InActive</MenuItem >
-                                            
+
 
                                         </TextField>
 
@@ -642,7 +663,7 @@ const Employee = () => {
                                         </div>*/}
                                     <Grid item xs={3}>
                                         <TextField fullWidth label="Report To" onChange={handleChange} value={employeeData.reportTo} className="form-select" select size="small" id="reportToId" name="reportTo" defaultValue="" >
-                                            <MenuItem value="">N/A</MenuItem>
+                                            <MenuItem value="N/A">N/A</MenuItem>
                                             {employeeList.map((item) => (
                                                 <MenuItem value={item.firstName}>{`${item.firstName} ${item.lastName}`}</MenuItem>
                                             ))}
@@ -786,10 +807,10 @@ const Employee = () => {
 
                                 <Grid item xs={4}>
                                     <TextField fullWidth label="Report To" onChange={handleFilterChange} className="form-select" select size="small" id="reportToFilterId" name="reportToFilter" defaultValue="" >
-                                      
-                                          <MenuItem value="N/A">N/A</MenuItem>
-                                        {employeeList.map((item) => (
-                                            <MenuItem value={item.firstName}>{item.firstName}</MenuItem>
+
+                                        <MenuItem value="N/A">N/A</MenuItem>
+                                        {employeeList.map((item, index) => (
+                                            <MenuItem key={index} value={item.firstName}>{item.firstName}</MenuItem>
                                         ))}
                                     </TextField>
                                 </Grid>
@@ -819,15 +840,15 @@ const Employee = () => {
 
                                         </tr>
                                         {filteredData.map((emp, index) => (
-                                            <tr key={emp._id} onClick={() => handleSetEmp(emp)}>
+                                            <tr key={emp._id} onClick={() => handleSetEmp(emp)} className={empDataId === emp._id ? "table-active" : ""}>
                                                 <td>{emp.employeeCode}</td>
-                                                <td>{emp.firstName +" "+ emp.lastName}</td>
+                                                <td>{emp.firstName + " " + emp.lastName}</td>
                                                 <td>{emp.contactNumber}</td>
                                                 <td>{emp.mailId}</td>
                                                 <td>{emp.designation}</td>
                                                 <td>{emp.department}</td>
                                                 <td>{emp.reportTo}</td>
-                                                <td><button type='button' className='btn btn-danger' onClick={() => deleteEmployee(emp._id)}><i className="bi bi-trash"></i></button></td>
+                                                <td><button type='button' className='btn btn-danger' onClick={() => handleDeleteOpen(emp._id)}><i className="bi bi-trash"></i></button></td>
                                             </tr>
                                         ))}
 
@@ -836,6 +857,31 @@ const Employee = () => {
 
 
                                 </table>
+                                {/*Delete Confirmation*/}
+                                <Dialog
+                                    open={deleteOpen}
+                                    onClose={handleDeleteClose}
+                                    aria-labelledby="alert-dialog-title"
+                                    aria-describedby="alert-dialog-description"
+                                >
+                                    <DialogTitle id="alert-dialog-title">
+                                        {"Delete"}
+                                    </DialogTitle>
+                                    <DialogContent>
+                                        <DialogContentText id="alert-dialog-description">
+                                            Are you sure to Delete the Employee
+                                        </DialogContentText>
+                                    </DialogContent>
+                                    <DialogActions>
+                                        <Button onClick={handleDeleteClose}>Cancel</Button>
+                                        <Button onClick={(e) => { deleteEmployee(); handleDeleteClose(); }} autoFocus>
+                                            Delete
+                                        </Button>
+                                    </DialogActions>
+                                </Dialog>
+
+
+
                                 {/* <TextField id="outlined-basic" label="Outlined" variant="outlined" />
                     <TextField id="filled-basic" label="Filled" variant="filled" />
                     <TextField id="standard-basic" label="Standard" variant="standard" /> */}

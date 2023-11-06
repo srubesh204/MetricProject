@@ -808,7 +808,35 @@ export const Department = () => {
                             name="area" ></TextField>
                         </Grid>*/}
                   </div>
-                  
+                  <div className="table-responsive">
+                    <table className="table table-bordered text-center">
+                      <tbody>
+                        <tr>
+                          <th>Si.No</th>
+                          <th>Area </th>
+                          <th>Delete</th>
+                        </tr>
+                        {areaList.map((item, index) => (
+                          <tr key={item._id} onClick={() => handleAreaRowClick(item)} className={item._id === areaStateId ? "table-active" : ""}>
+                            <td >{index + 1}</td>
+                            <td>{item.area}</td>
+                            <td>
+                              <button
+                                type="button"
+                                className="btn btn-sm btn-danger"
+                                onClick={() => deleteArea(item._id)}
+                              >
+                                <i className="bi bi-trash"></i>
+                              </button>
+                            </td>
+                          </tr>
+                        ))}
+
+
+                      </tbody>
+                    </table>
+                  </div>
+
 
                   <div className="col d-flex">
                     <div className="me-3">
@@ -859,35 +887,6 @@ export const Department = () => {
 
 
                   </div>
-                  <div className="table-responsive">
-                    <table className="table table-bordered text-center">
-                      <tbody>
-                        <tr>
-                          <th>Si.No</th>
-                          <th>Area </th>
-                          <th>Delete</th>
-                        </tr>
-                        {areaList.map((item, index) => (
-                          <tr key={item._id} onClick={() => handleAreaRowClick(item)} className={item._id === areaStateId ? "table-active" : ""}>
-                            <td >{index + 1}</td>
-                            <td>{item.area}</td>
-                            <td>
-                              <button
-                                type="button"
-                                className="btn btn-sm btn-danger"
-                                onClick={() => deleteArea(item._id)}
-                              >
-                                <i className="bi bi-trash"></i>
-                              </button>
-                            </td>
-                          </tr>
-                        ))}
-
-
-                      </tbody>
-                    </table>
-                  </div>
-
 
 
 
@@ -896,16 +895,15 @@ export const Department = () => {
               </Paper>
 
               <Paper sx={{
-                p: 2,
+                p: 4,
                 display: 'flex',
                 flexDirection: 'column',
-                my:2
 
               }}
                 className="col row g-2 mb-2"
               >
-                <Typography variant="h5" className="text-center">Place Of Usage</Typography>
-                <div className="row g-2">
+
+                <div className="row mb-2 g-2">
                   <div className="col-md-8">
                     <TextField label="Place Of Usage"
                       id="PlaceOfUsageId"
@@ -913,7 +911,7 @@ export const Department = () => {
 
                       fullWidth
                       size="small"
-                      
+                      placeholder="name@example.com"
                       onKeyDown={handleKeyDown}
 
                       name="placeOfUage" ></TextField>
@@ -962,42 +960,12 @@ export const Department = () => {
                       </lable>
                     </div>
                   </div>
-                  <div className="text-end col">
-
-                    {depStateId ? (<div>
-                      <button
-                        type="button"
-                        style={{ backgroundColor: "#e6e6e6", color: "black", fontWeight: "bolder" }}
-                        className="btn text-end me-3 hover"
-                        onClick={() => updateArea(depStateId)}
-                      //   disabled={!depStateId}
-                      >
-                        Modify
-                      </button >
-                      <button type="button" onMouseEnter={(e) => { e.target.style.background = 'red' }} onMouseOut={(e) => { e.target.style.background = '#e6e6e6' }}
-                        style={{ backgroundColor: "#e6e6e6", color: "black", fontWeight: "bolder" }}
-                        className="btn text-end me-3"
-                        onClick={() => { setDepStateId(null); setDepartmentData(emptyDepartmentData) }}
-                      >Cancel</button>
-                    </div>) : <button
-                      type="button"
-                      style={{ backgroundColor: "#e6e6e6", color: "black", fontWeight: "bolder" }}
-                      className="btn text-end hover"
-                      onClick={DepartmentSubmit}
-
-                    >
-                      <i className="bi bi-plus"></i>Add Department
-                    </button>}
-
-
-
-
-                  </div>
+                  
 
                 </div>
 
-                <div className="row g-2">
-                <div className="table-responsive col">
+               
+                <div className="table-responsive">
                   <table className="table table-bordered text-center">
                     <tbody>
                       <tr>
@@ -1024,7 +992,6 @@ export const Department = () => {
 
                     </tbody>
                   </table>
-                </div>
                 </div>
               </Paper>
             </div>

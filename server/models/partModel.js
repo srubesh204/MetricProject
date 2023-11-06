@@ -14,7 +14,11 @@ const partSchema = new mongoose.Schema({
     
   },
   customer: String,
-  operationNo: String
+  operationNo: String,
+  partStatus: {
+    type: String,
+    required: [true, "Part Status Required"]
+  },
 
 });
 partSchema.plugin(uniqueValidator);
