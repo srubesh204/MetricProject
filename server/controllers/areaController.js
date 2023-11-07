@@ -14,8 +14,13 @@ const areaController = {
       createArea: async (req, res) => {
        
         try {
+<<<<<<< HEAD
           const { area } = req.body;
           const areaResult = new areaModel({ area});
+=======
+          const { area,areaStatus} = req.body;
+          const areaResult = new areaModel({ area,areaStatus});
+>>>>>>> 7244357623c0b6b16707843eb531937d08bf8be2
           const validationError = areaResult.validateSync();
 
           if (validationError) {
@@ -61,7 +66,7 @@ const areaController = {
           // Create an object with the fields you want to update
           const updateAreaFields = {
             /* Specify the fields and their updated values here */
-             area : req.body.area // Example: updating the 'name' field
+             area : req.body.area, areaStatus: req.body.areaStatus// Example: updating the 'name' field
             // Add more fields as needed
           };
       
