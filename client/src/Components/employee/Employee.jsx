@@ -186,9 +186,9 @@ const Employee = () => {
         }
     };
     useEffect(() => {
-        
-            cityFetch();
-       
+
+        cityFetch();
+
 
 
     }, [employeeData.state]);
@@ -499,9 +499,29 @@ const Employee = () => {
 
 
                         </Grid>
+                        <div className='row mb-2'>
+                            <Grid item xs={2}>
+                                <TextField label="Address"
+                                    id="addressId"
+                                    defaultValue=""
+                                    size="small"
+                                    fullWidth
+                                    sx={{ width: "100%" }}
+                                    value={employeeData.address}
+                                    onKeyDown={handleKeyDown}
+                                    onChange={handleChange}
+                                    name="address" />
+
+                            </Grid>
+                        </div>
+
+
+
 
 
                         <Grid container rowSpacing={3} columnSpacing={{ xs: 1 }} className=' g-2 mb-2'>
+
+
 
                             <Grid item xs={3}>
                                 <Autocomplete
@@ -807,7 +827,7 @@ const Employee = () => {
 
                                 <Grid item xs={4}>
                                     <TextField fullWidth label="Report To" onChange={handleFilterChange} className="form-select" select size="small" id="reportToFilterId" name="reportToFilter" defaultValue="" >
-
+                                        <MenuItem value="all">All</MenuItem>
                                         <MenuItem value="N/A">N/A</MenuItem>
                                         {employeeList.map((item, index) => (
                                             <MenuItem key={index} value={item.firstName}>{item.firstName}</MenuItem>

@@ -376,7 +376,7 @@ export const PartDataBase = ({ style }) => {
             const response = await axios.get(
                 `${process.env.REACT_APP_PORT}/vendor/getAllVendors`
             );
-
+            console.log(response.data)
             const customersList = response.data.result.filter((item) => item.customer === "1")
             
             setCustomerList(customersList);
@@ -619,7 +619,7 @@ export const PartDataBase = ({ style }) => {
                                                 name="partDb" ></TextField>
 
                                         </div>
-                                        <div className="form-floating col-md-5">
+                                        <div className="form-floating col d-flex-md-5">
                                         <TextField label="Part No"
                                             id="partNoId"
                                             defaultValue=""
@@ -651,7 +651,7 @@ export const PartDataBase = ({ style }) => {
                                         <div className="form-floating col-md-6"  >
                                             <TextField label="Customer"
                                                 select
-                                                id="partNameId"
+                                                id="customerId"
                                                 defaultValue=""
                                                 placeholder="customer"
                                                 size="small"
@@ -729,11 +729,11 @@ export const PartDataBase = ({ style }) => {
                                     aria-describedby="alert-dialog-description"
                                 >
                                     <DialogTitle id="alert-dialog-title">
-                                        {"Update Confirmation?"}
+                                        {" Part Update Confirmation?"}
                                     </DialogTitle>
                                     <DialogContent>
                                         <DialogContentText id="alert-dialog-description">
-                                            Are you Sure to Update the Designation
+                                            Are you Sure to Update the Part
                                         </DialogContentText>
                                     </DialogContent>
                                     <DialogActions>
@@ -813,11 +813,11 @@ export const PartDataBase = ({ style }) => {
                                         aria-describedby="alert-dialog-description"
                                     >
                                         <DialogTitle id="alert-dialog-title">
-                                            {"Delete Confirmation?"}
+                                            {"Part Delete Confirmation?"}
                                         </DialogTitle>
                                         <DialogContent>
                                             <DialogContentText id="alert-dialog-description">
-                                                Are you Sure to Delete the Designation
+                                                Are you Sure to Delete the Part
                                             </DialogContentText>
                                         </DialogContent>
                                         <DialogActions>

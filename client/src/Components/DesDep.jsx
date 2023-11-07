@@ -87,7 +87,7 @@ export const Department = () => {
         // Handle other errors
         console.log(err);
         const errorData500 = err.response.data.error;
-        const errorMessages500 = Object.values(errorData500).join(', ');
+        const errorMessages500 = Object.values(errorData500);
         console.log(errorMessages500)
         setErrorHandler({ status: 0, message: errorMessages500, code: "error" });
       } else {
@@ -415,12 +415,34 @@ export const Department = () => {
 
     }
   };
+  const handleAreaKeyDown = (event) => {
+    const { name, value } = event.target
+    console.log(name)
+    if (event.key === 'Tab') {
+      // Prevent default Tab behavior
+
+      const formattedValue = value.toLowerCase().
+        split(' ')
+        .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+        .join(' ');
+      console.log(formattedValue)
+      // Format the input value (capitalization)
+      // Update the state to show the formatted value
+      setArea((prev) => ({ ...prev, [name]: formattedValue })); // Update the state with the formatted value
+
+
+    }
+  };
+
+
+ 
+
 
   //placeOfusage
 
 
   const [placeOfUsageDatas, setPlaceOfUsageData] = useState({
-    placeOfUsage: "",
+    placeOfUsage: "N/A",
     placeOfUsageStatus: ""
 
   });
@@ -448,6 +470,8 @@ export const Department = () => {
     placeOfUsageData();
   }, []);
 
+
+  
 
   const placeOfUsageSubmit = async (e) => {
     e.preventDefault();
@@ -572,6 +596,25 @@ export const Department = () => {
       console.log(err);
     }
   };
+  const handlePlaceOfKeyDown = (event) => {
+    const { name, value } = event.target
+    console.log(name)
+    if (event.key === 'Tab') {
+      // Prevent default Tab behavior
+
+      const formattedValue = value.toLowerCase().
+        split(' ')
+        .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+        .join(' ');
+      console.log(formattedValue)
+      // Format the input value (capitalization)
+      // Update the state to show the formatted value
+      setPlaceOfUsageData((prev) => ({ ...prev, [name]: formattedValue })); // Update the state with the formatted value
+
+
+    }
+  };
+
 
 
 
@@ -991,7 +1034,7 @@ export const Department = () => {
                         fullWidth
                         size="small"
                         onChange={handleAreaChange}
-                        onKeyDown={handleKeyDown}
+                        onKeyDown={handleAreaKeyDown}
                         value={areaData.area}
                         name="area" ></TextField>
                     </div>
@@ -1219,7 +1262,7 @@ export const Department = () => {
                       fullWidth
                       size="small"
                       onChange={handlePouChange}
-                      onKeyDown={handleKeyDown}
+                      onKeyDown={handlePlaceOfKeyDown}
                       value={placeOfUsageDatas.placeOfUsage}
                       name="placeOfUsage" ></TextField>
 
@@ -1233,7 +1276,7 @@ export const Department = () => {
                       fullWidth
                       size="small"
                       onChange={handlePouChange}
-                      onKeyDown={handleKeyDown}
+                      onKeyDown={handlePlaceOfKeyDown}
 
                       value={placeOfUsageDatas.placeOfUsageStatus}
                       name="placeOfUsageStatus" >
@@ -1653,6 +1696,7 @@ export const Designation = () => {
       );
       desFetchData();
       setSnackBarOpen(true)
+      setDesStateId(null)
       setErrorHandler({ status: response.data.status, message: response.data.message, code: "success" })
       setDesignationData({
         designation: "",
@@ -1759,7 +1803,8 @@ export const Designation = () => {
                 p: 2,
                 display: 'flex',
                 flexDirection: 'column',
-                mb: 2
+                m:2,
+                
               }}
             >
               <div className="row g-2">
@@ -1912,6 +1957,7 @@ export const Designation = () => {
                 p: 4,
                 display: 'flex',
                 flexDirection: 'column',
+                m:2
 
               }}
             >

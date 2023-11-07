@@ -20,7 +20,8 @@ const vendorSchema = new mongoose.Schema({
   certificate: String,
   certificateValidity : String,
   vendorStatus : String,
-  vendorContacts : [{name : String, 
+  vendorContacts : [{
+    name : String, 
     contactNumber : {
       type: Number,
       required: [true, "Vendor Contact number is must"],
@@ -31,8 +32,9 @@ const vendorSchema = new mongoose.Schema({
     mailId : {
     type: String,
     unique: [true, "Vendor Email should be unique"],
-    required: [true, "Email Required"]
-    
+    required: [true, "Email Required"],
+    lowercase: true
+     
   } , 
   vcStatus : String}]
 });

@@ -15,13 +15,14 @@ import '@fontsource/roboto/300.css';
 import '@fontsource/roboto/400.css';
 import '@fontsource/roboto/500.css';
 import '@fontsource/roboto/700.css';
+import ItemList from './Components/itemList/ItemList';
 
 
 function App() {
   return (
     <div className="App">
       <BrowserRouter>
-        <Dashboard />
+        <Dashboard /> 
         <Routes>
           <Route path="/desdep" element={<Department />} />
           <Route path="/des" element={<Designation />} />
@@ -32,6 +33,7 @@ function App() {
           <Route path="/devi" element={<Devi />} />
           <Route path="/home" element={<Home />} />
           <Route path="/itemAdd" element={<ItemAdd />} />
+          <Route path="/itemList" element={<ItemList/>} />
           
         </Routes>
       </BrowserRouter>

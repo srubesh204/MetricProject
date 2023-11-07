@@ -14,6 +14,12 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import dayjs from 'dayjs';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
+
 
 const Vendor = () => {
 
@@ -101,6 +107,8 @@ const Vendor = () => {
 
 
     })
+    const [openModalVendor, setOpenModalVendor] = useState(false);
+    const [deleteModal, setDeleteModal] = useState(false);
 
 
     const [AllStates, setAllStates] = useState([]);
@@ -161,10 +169,13 @@ const Vendor = () => {
         })
     };
     const changeVendorRow = (index, name, value) => {
+        const formattedValue = name === 'name'
+        ? value.toLowerCase().split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')
+        : value;
         setVendorData((prevVendorData) => {
             const updateCP = [...prevVendorData.vendorContacts]
             updateCP[index] = {
-                ...updateCP[index], [name]: value,
+                ...updateCP[index], [name]: formattedValue,
             };
             return {
                 ...prevVendorData, vendorContacts: updateCP,
@@ -239,10 +250,10 @@ const Vendor = () => {
     };
     console.log()
 
-    const updateVendorData = async (id) => {
+    const updateVendorData = async () => {
         try {
             const response = await axios.put(
-                "http://localhost:3001/vendor/updateVendor/" + id, vendorData
+                "http://localhost:3001/vendor/updateVendor/" + vendorStateId, vendorData
             );
             setSnackBarOpen(true)
             vendorFetchData();
@@ -281,12 +292,13 @@ const Vendor = () => {
         }
     };
 
-    const deleteVendorData = async (id) => {
+    const deleteVendorData = async () => {
         try {
             const response = await axios.delete(
-                "http://localhost:3001/vendor/deleteVendor/" + id, vendorData
+                "http://localhost:3001/vendor/deleteVendor/" + vendorStateId, vendorData
             );
             vendorFetchData();
+            setVendorStateId(null)
             setVendorData(initialVendorData);
             setSnackBarOpen(true)
             setErrorHandler({ status: response.data.status, message: `${response.data.result.fullName} ${response.data.message}`, code: "success" })
@@ -320,7 +332,7 @@ const Vendor = () => {
         }
     };
 
-    const handleKeyDown = (event) => {
+    const handleVendorKeyDown = (event) => {
         const { name, value } = event.target
         console.log(name)
         if (event.key === 'Tab') {
@@ -339,27 +351,27 @@ const Vendor = () => {
         }
     };
 
-    const handleKeyDownForContacts = (event) => {
-        const { name, value } = event.target
-        console.log(name)
-        if (event.key === 'Tab') {
-            // Prevent default Tab behavior
+    // const handleKeyDownForContacts = (event) => {
+    //     const { name, value } = event.target
+    //     console.log(name)
+    //     if (event.key === 'Tab') {
+    //         // Prevent default Tab behavior
 
-            const formattedValue = value.toLowerCase().
-                split(' ')
-                .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-                .join(' ');
-            console.log(formattedValue)
-            // Format the input value (capitalization)
-            // Update the state to show the formatted value
-            setVendorData((prevVendorData) => ({
-                ...prevVendorData,
-                vendorContacts: [{ ...prevVendorData.vendorContacts, [name]: formattedValue }]
-            }))
+    //         const formattedValue = value.toLowerCase().
+    //             split(' ')
+    //             .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+    //             .join(' ');
+    //         console.log(formattedValue)
+    //         // Format the input value (capitalization)
+    //         // Update the state to show the formatted value
+    //         setVendorData((prevVendorData) => ({
+    //             ...prevVendorData,
+    //             vendorContacts: [{ ...prevVendorData.vendorContacts, name: formattedValue }]
+    //         }))
 
 
-        }
-    };
+    //     }
+    // };
 
 
 
@@ -471,6 +483,7 @@ const Vendor = () => {
                                     size="small"
                                     sx={{ width: "100%" }}
                                     value={vendorData.aliasName}
+                                    onKeyDown={handleVendorKeyDown}
                                     onChange={handleVendorDataBaseChange}
                                     name="aliasName" />
 
@@ -479,6 +492,7 @@ const Vendor = () => {
                                 <TextField label="Full Name"
                                     id="fullNameId"
                                     defaultValue=""
+                                    onKeyDown={handleVendorKeyDown}
                                     size="small"
                                     sx={{ width: "100%" }}
                                     value={vendorData.fullName}
@@ -505,9 +519,9 @@ const Vendor = () => {
                                     size="small"
                                     sx={{ width: "100%" }}
                                     value={vendorData.address}
-                                    onKeyDown={handleKeyDown}
+                                    onKeyDown={handleVendorKeyDown}
                                     onChange={handleVendorDataBaseChange}
-                                    name="addressId" />
+                                    name="address" />
 
                             </Grid>
 
@@ -614,11 +628,10 @@ const Vendor = () => {
 
                                 <div className="col-md-5">
                                     <TextField fullWidth label="VendorStatus" onChange={handleVendorDataBaseChange} value={vendorData.vendorStatus} className="col" select size="small" id="vendorStatusId" name="vendorStatus" defaultValue="" >
-                                        <MenuItem value="all">All</MenuItem >
+                                        
                                         <MenuItem value="Active">Active</MenuItem >
                                         <MenuItem value="InActive">InActive</MenuItem >
-                                        <MenuItem value="Relieved">Relieved</MenuItem >
-
+                                       
                                     </TextField>
                                 </div>
 
@@ -679,15 +692,15 @@ const Vendor = () => {
                                             {vendorData.vendorContacts ? vendorData.vendorContacts.map((item, index) => (
                                                 <tr>
                                                     <td>{index + 1}</td>
-                                                    <td><input type="text" className='form-control form-control-sm' id="nameId" name="name" value={item.name} onChange={(e) => changeVendorRow(index, e.target.name, e.target.value)} onKeyDown={handleKeyDownForContacts} /></td>
-                                                    <td><input type="text" className='form-control form-control-sm' id="contactNumber" name="contactNumber" value={item.contactNumber} onChange={(e) => changeVendorRow(index, e.target.name, e.target.value)} /></td>
+                                                    <td><input type="text" className='form-control form-control-sm' id="nameId" name="name" value={item.name} onChange={(e) => changeVendorRow(index, e.target.name, e.target.value)}    /></td>
+                                                    <td><input type="text" className={`form-control form-control-sm ${item.contactNumber.length !== 10 ? 'is-invalid' : 'is-valid'}`}  id="contactNumber" name="contactNumber" value={item.contactNumber} onChange={(e) => changeVendorRow(index, e.target.name, e.target.value)  }    /></td>
                                                     <td><input type="text" className='form-control form-control-sm' id="mailId" name="mailId" value={item.mailId} onChange={(e) => changeVendorRow(index, e.target.name, e.target.value)} /></td>
 
                                                     <td> <select className="form-select form-select-sm" id="vcStatusId" name="vcStatus" value={item.vcStatus} onChange={(e) => changeVendorRow(index, e.target.name, e.target.value)} aria-label="Floating label select example">
                                                         <option selected>-select-</option>
                                                         <option value="Active">Active</option>
                                                         <option value="InActive">InActive</option>
-                                                        <option value="Relived">Relived</option>
+                                                       
 
                                                     </select></td>
                                                     <td ><button type='button' className='btn btn-danger' onClick={() => deleteVendorRow(index)}><RemoveRoundedIcon /></button></td>
@@ -721,6 +734,7 @@ const Vendor = () => {
                             mb: 2
                         }}
                     >
+                        
                         <div className='row' >
                             <div className='col  d-flex justify-content-end mb-2'>
                                 <div className='col  d-flex'>
@@ -736,18 +750,61 @@ const Vendor = () => {
                                 {vendorStateId ?
                                     <div className='d-flex justify-content-end'>
                                         <div className='me-2' >
-                                            <button type="button" className='btn btn-info' onClick={() => updateVendorData(vendorStateId)}>Modify</button>
+                                            <button type="button" className='btn btn-info' onClick={() => setOpenModalVendor(true)}>Modify</button>
                                         </div>
                                         <div className='me-2' >
                                             <button type="button" className='btn btn-danger' onClick={() => { setVendorStateId(null); setVendorData(initialVendorData) }}>Cancel</button>
                                         </div>
                                     </div> : <div className='col d-flex justify-content-end mb-2'>
                                         <div >
-                                            <button type="button" className='btn btn-warning' onClick={vendorSubmit}>+ Add Vendor</button>
+                                            <button type="button" className='btn btn-warning' onClick={() => setOpenModalVendor(true)}>+ Add Vendor</button>
                                         </div>
                                     </div>}
 
                             </div>
+
+                            {vendorStateId ? <Dialog
+                                    open={openModalVendor}
+                                    onClose={() => setOpenModalVendor(false)}
+                                    aria-labelledby="alert-dialog-title"
+                                    aria-describedby="alert-dialog-description"
+                                >
+                                    <DialogTitle id="alert-dialog-title">
+                                        {" Vendor Update Confirmation?"}
+                                    </DialogTitle>
+                                    <DialogContent>
+                                        <DialogContentText id="alert-dialog-description">
+                                            Are you Sure to Update the Vendor
+                                        </DialogContentText>
+                                    </DialogContent>
+                                    <DialogActions>
+                                        <Button onClick={() => setOpenModalVendor(false)}>Cancel</Button>
+                                        <Button onClick={() => { updateVendorData(); setOpenModalVendor(false); }} autoFocus>
+                                            Update
+                                        </Button>
+                                    </DialogActions>
+                                </Dialog> :
+                                    <Dialog
+                                        open={openModalVendor}
+                                        onClose={() => setOpenModalVendor(false)}
+                                        aria-labelledby="alert-dialog-title"
+                                        aria-describedby="alert-dialog-description"
+                                    >
+                                        <DialogTitle id="alert-dialog-title">
+                                            {" Vendor Create Confirmation?"}
+                                        </DialogTitle>
+                                        <DialogContent>
+                                            <DialogContentText id="alert-dialog-description">
+                                                Are you Sure to Add the Vendor
+                                            </DialogContentText>
+                                        </DialogContent>
+                                        <DialogActions>
+                                            <Button onClick={() => setOpenModalVendor(false)}>Cancel</Button>
+                                            <Button onClick={(e) => { vendorSubmit(e); setOpenModalVendor(false); }} autoFocus>
+                                                Add
+                                            </Button>
+                                        </DialogActions>
+                                    </Dialog>}
                         </div>
                     </Paper>
 
@@ -800,10 +857,33 @@ const Vendor = () => {
                                             <td>{`${item.supplier} ${item.oem} ${item.customer} ${item.subContractor}`}</td>
 
                                             <td>{item.vendorStatus}</td>
-                                            <td><button type='button' className='btn btn-danger' onClick={() => deleteVendorData(item._id)} ><i class="bi bi-trash-fill"></i></button></td>
+                                            <td><button type='button' className='btn btn-danger' onClick={() => setDeleteModal(true)} ><i class="bi bi-trash-fill"></i></button></td>
                                         </tr>
                                     ))}
                                 </tbody>
+                                <Dialog
+                                        open={deleteModal}
+                                        onClose={() => setDeleteModal(false)}
+                                        aria-labelledby="alert-dialog-title"
+                                        aria-describedby="alert-dialog-description"
+                                    >
+                                        <DialogTitle id="alert-dialog-title">
+                                            {"Vendor Delete Confirmation?"}
+                                        </DialogTitle>
+                                        <DialogContent>
+                                            <DialogContentText id="alert-dialog-description">
+                                                Are you Sure to Delete the Vendor
+                                            </DialogContentText>
+                                        </DialogContent>
+                                        <DialogActions>
+                                            <Button onClick={() => setDeleteModal(false)}>Cancel</Button>
+                                            <Button onClick={() => { deleteVendorData(); setDeleteModal(false); }} autoFocus>
+                                                Delete
+                                            </Button>
+                                        </DialogActions>
+                                    </Dialog>
+
+
                             </table>
                         
                         <Snackbar anchorOrigin={{ vertical: "top", horizontal: "right" }} open={snackBarOpen} autoHideDuration={6000} onClose={handleSnackClose}>
