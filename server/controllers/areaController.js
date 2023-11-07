@@ -14,13 +14,8 @@ const areaController = {
       createArea: async (req, res) => {
        
         try {
-<<<<<<< HEAD
-          const { area } = req.body;
-          const areaResult = new areaModel({ area});
-=======
           const { area,areaStatus} = req.body;
           const areaResult = new areaModel({ area,areaStatus});
->>>>>>> 7244357623c0b6b16707843eb531937d08bf8be2
           const validationError = areaResult.validateSync();
 
           if (validationError) {

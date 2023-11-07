@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import axios from 'axios'
 import Autocomplete from '@mui/material/Autocomplete';
-import { TextField, MenuItem, styled, Button, ButtonGroup } from '@mui/material';
+import { TextField, MenuItem, styled, Button, ButtonGroup, Chip } from '@mui/material';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import Alert from '@mui/material/Alert';
 import Snackbar from '@mui/material/Snackbar';
@@ -397,9 +397,9 @@ const Vendor = () => {
 
     const handleFileChange = (e) => {
         setFile(e.target.files[0]);
-
+        setVendorData((prev) => ({ ...prev, certificate: e.target.files[0].name }));
     };
-    console.log(file)
+    
     const handleFileUpload = async () => {
         const formData = new FormData();
         formData.append('file', file);
@@ -411,8 +411,9 @@ const Vendor = () => {
             });
             console.log(response)
             if (response.ok) {
-                console.log('File uploaded successfully');
                 setSnackBarOpen(true);
+                console.log('File uploaded successfully');
+                
                 setErrorHandler({ status: 1, message: "Vendor Certificate Uploaded Successfully", code: "success" });
             }
         } catch (error) {
@@ -646,10 +647,17 @@ const Vendor = () => {
 
                                     <Button component="label" variant='contained' sx={{ width: "80%" }}>
                                         Certificate
-                                        <VisuallyHiddenInput type="file" />
+                                        <VisuallyHiddenInput type="file" onChange={handleFileChange}/>
                                     </Button>
+                                    
                                     <Button variant='outlined' sx={{ width: "20%" }} startIcon={<CloudUploadIcon />} type='button' className='btn btn-info' onClick={handleFileUpload}>Upload</Button>
+                                    
                                 </ButtonGroup>
+                                <div className='text-center'>
+                                {vendorData.certificate && 
+                                <Chip clickable label={vendorData.certificate}  onDelete={""} />}
+                                </div>
+                                
                             </div>
 
                         </Paper>
@@ -806,8 +814,8 @@ const Vendor = () => {
                                 </tbody>
                             </table>
                         
-                        <Snackbar anchorOrigin={{ vertical: "top", horizontal: "right" }} open={snackBarOpen} autoHideDuration={6000} onClose={handleSnackClose}>
-                            <Alert onClose={handleSnackClose} severity={errorhandler.code} sx={{ width: '100%' }}>
+                        <Snackbar variant="contained" anchorOrigin={{ vertical: "top", horizontal: "right" }} open={snackBarOpen} autoHideDuration={6000} onClose={handleSnackClose}>
+                            <Alert variant="filled" onClose={handleSnackClose} severity={errorhandler.code} sx={{ width: '100%' }}>
                                 {errorhandler.message}
                             </Alert>
                         </Snackbar>

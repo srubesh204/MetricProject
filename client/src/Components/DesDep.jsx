@@ -622,10 +622,10 @@ export const Department = () => {
                 }}
                 className='col row'
               >
-                <Typography variant="h5" className="text-center">Department</Typography>
+                <Typography variant="h5" component="h5" className="text-center">Department</Typography>
                 <div className="row g-2" >
 
-                  <div className="col-md-8 d-felx ">
+                  <div className="col-md-8 d-flex ">
 
                     <TextField label="Department"
                       id="departmentId"
@@ -638,7 +638,7 @@ export const Department = () => {
                       name="department" ></TextField>
 
                   </div>
-                  <div className="col d-felx mb-2">
+                  <div className="col d-flex ">
 
                     <TextField label="Status"
                       id="departmentStatusId"
@@ -658,9 +658,9 @@ export const Department = () => {
                   </div>
                 </div>
 
-                <div className="row g-2 mb-2">
-                  <div className="col-md-6 d-flex">
-                    <div className="me-3">
+                <div className="row g-2 ">
+                  <div className="col-md-6 d-flex justify-content-start">
+                    <div className="me-2">
                       <lable className="uplable">
                         <input type="file" className="downlable" />
                         Upload
@@ -729,11 +729,11 @@ export const Department = () => {
 
                   <div className="col-md text-end">
 
-                    {depStateId ? (<div>
+                    {depStateId ? (<div className="d-flex justify-content-end">
                       <button
                         type="button"
                         style={{ backgroundColor: "#e6e6e6", color: "black", fontWeight: "bolder" }}
-                        className="btn text-end me-3 hover"
+                        className="btn text-end me-2 hover"
                         onClick={() => setDepOpenModal(true)}
                       //   disabled={!depStateId}
                       >
@@ -741,18 +741,22 @@ export const Department = () => {
                       </button >
                       <button type="button" onMouseEnter={(e) => { e.target.style.background = 'red' }} onMouseOut={(e) => { e.target.style.background = '#e6e6e6' }}
                         style={{ backgroundColor: "#e6e6e6", color: "black", fontWeight: "bolder" }}
-                        className="btn text-end me-3"
+                        className="btn text-end"
                         onClick={() => { setDepStateId(null); setDepartmentData(emptyDepartmentData) }}
                       >Cancel</button>
-                    </div>) : <button
-                      type="button"
-                      style={{ backgroundColor: "#e6e6e6", color: "black", fontWeight: "bolder" }}
-                      className="btn text-end hover"
-                      onClick={() => setDepOpenModal(true)}
+                    </div>) :
+                      <div className="d-flex justify-content-end">
+                        <button
+                          type="button"
+                          style={{ backgroundColor: "#e6e6e6", color: "black", fontWeight: "bolder" }}
+                          className="btn text-end hover"
+                          onClick={() => setDepOpenModal(true)}
 
-                    >
-                      <i className="bi bi-plus"></i>Add Department
-                    </button>}
+                        >
+                          <i className="bi bi-plus"></i>Add Department
+                        </button>
+                      </div>
+                    }
 
 
 
@@ -826,149 +830,7 @@ export const Department = () => {
 
 
               </Paper>
-              {/*<Paper sx={{
-                    p: 1,
-                    display: 'flex',
-                    flexDirection: 'column',
-                    mb:1
 
-                  }}
-                    className="col row g-2 me-3 "
-                  >
-                    <div className="col ">
-                      <TextField label="Department"
-                        id="departmentId"
-                        defaultValue=""
-                        fullWidth
-                        size="small"
-                        onChange={handleChange}
-                        onKeyDown={handleKeyDown}
-                        value={departmentData.department}
-                        name="department" >
-
-                      </TextField>
-                    </div>
-                    
-
-                    <div className="table-responsive ">
-                      <table className="table table-bordered text-center ">
-                        <tbody>
-                          <tr>
-                            <th>Si.No</th>
-                            <th>Department </th>
-                            <th>Delete</th>
-                          </tr>
-                          {departmentList.map((item, index) => (
-                            <tr key={item._id} onClick={() => handleDepRowClick(item)} className={item._id === depStateId ? "table-active" : ""}>
-                              <td >{index + 1}</td>
-                              <td>{item.department}</td>
-                              <td>
-                                <button
-                                  type="button"
-                                  className="btn btn-sm btn-danger"
-                                  onClick={() => deleteDepartment(item._id)}
-                                >
-                                  <i className="bi bi-trash"></i>
-                                </button>
-                              </td>
-                            </tr>
-                          ))}
-
-
-                        </tbody>
-                      </table>
-                    </div>
-                    
-                    <div className="row mt-4">
-                      <div className="col d-flex">
-                        <div className="me-3">
-                          <lable className="uplable">
-                            <input type="file" className="downlable" />
-                            Upload
-                          </lable>
-                        </div>
-                        <div>
-                          <lable
-                            className="uplable"
-
-                          >
-                            <input type="file" className="downlable" />
-                            Download
-                          </lable>
-                        </div>
-                      </div>
-
-                      <div className="text-end col">
-
-                        {depStateId ? (<div>
-                          <button
-                            type="button"
-                            style={{ backgroundColor: "#e6e6e6", color: "black", fontWeight: "bolder" }}
-                            className="btn text-end me-3 hover"
-                            onClick={() => updateDepartment(depStateId)}
-                          //   disabled={!depStateId}
-                          >
-                            Modify
-                          </button >
-                          <button type="button" onMouseEnter={(e) => { e.target.style.background = 'red' }} onMouseOut={(e) => { e.target.style.background = '#e6e6e6' }}
-                            style={{ backgroundColor: "#e6e6e6", color: "black", fontWeight: "bolder" }}
-                            className="btn text-end me-3"
-                            onClick={() => { setDepStateId(null); setDepartmentData(emptyDepartmentData) }}
-                          >Cancel</button>
-                        </div>) : <button
-                          type="button"
-                          style={{ backgroundColor: "#e6e6e6", color: "black", fontWeight: "bolder" }}
-                          className="btn text-end hover"
-                          onClick={DepartmentSubmit}
-
-                        >
-                          <i className="bi bi-plus"></i>Add Department
-                        </button>}
-
-
-
-
-                      </div>
-
-
-                    </div>
-                  </Paper>/*}
-
-
-
-
-
-
-
-
-
-
-
-                  {/* <Grid item xs={4}>
-                    <TextField label="Area"
-                      id="area"
-                      defaultValue=""
-                      fullWidth
-                      size="small"
-                      placeholder="name@example.com"
-                      onChange={handleChange}
-                      onKeyDown={handleKeyDown}
-                      value={departmentData.area}
-                       name="area" ></TextField>
-                    </Grid>*/}
-
-              {/* <Grid item xs={4}>
-                    <TextField label="Place Of Usage"
-                      id="placeOfUsage"
-                      defaultValue=""
-                      fullWidth
-                      size="small"
-                      placeholder="name@example.com"
-                      onChange={handleChange}
-                      onKeyDown={handleKeyDown}
-                      value={departmentData.placeOfUsage}
-                       name="placeOfUsage" ></TextField>
-                  </Grid>*/}
               <Paper
                 sx={{
                   p: 1,
@@ -979,10 +841,10 @@ export const Department = () => {
                 }}
                 className='col row g-2 me-3'
               >
-                <Typography variant="h5" className="text-center">Area</Typography>
+                <Typography variant="h5" className="text-center mb-2">Area</Typography>
                 <div >
                   <div className="row g-2">
-                    <div className="col-md-8 d-felx mb-2">
+                    <div className="col-md-8 d-flex ">
 
 
                       <TextField label="Area"
@@ -995,7 +857,7 @@ export const Department = () => {
                         value={areaData.area}
                         name="area" ></TextField>
                     </div>
-                    <div className="col d-flex mb-2">
+                    <div className="col d-flex mb-3">
 
                       <TextField label="Status"
                         id="areaStatusID"
@@ -1029,9 +891,9 @@ export const Department = () => {
                         </Grid>*/}
 
 
-                  <div className="row g-2 mb-2">
-                    <div className="col-md-6 d-flex">
-                      <div className="me-3">
+                  <div className="row g-2 mb-3">
+                    <div className="col-md-6 d-flex justify-content-start">
+                      <div className="me-2">
                         <lable className="uplable">
                           <input type="file" className="downlable" />
                           Upload
@@ -1102,11 +964,11 @@ export const Department = () => {
 
                     <div className="col-md text-end">
 
-                      {areaStateId ? (<div>
+                      {areaStateId ? (<div className="d-flex justify-content-end">
                         <button
                           type="button"
                           style={{ backgroundColor: "#e6e6e6", color: "black", fontWeight: "bolder" }}
-                          className="btn text-end me-3 hover"
+                          className="btn text-end me-2  hover"
                           onClick={() => setAreaOpenModal(true)}
                         //   disabled={!depStateId}
                         >
@@ -1114,18 +976,19 @@ export const Department = () => {
                         </button >
                         <button type="button" onMouseEnter={(e) => { e.target.style.background = 'red' }} onMouseOut={(e) => { e.target.style.background = '#e6e6e6' }}
                           style={{ backgroundColor: "#e6e6e6", color: "black", fontWeight: "bolder" }}
-                          className="btn text-end me-3"
+                          className="btn text-end"
                           onClick={() => { setareaStateId(null); setArea(initialAreaData) }}
                         >Cancel</button>
-                      </div>) : <button
-                        type="button"
-                        style={{ backgroundColor: "#e6e6e6", color: "black", fontWeight: "bolder" }}
-                        className="btn text-end hover"
-                        onClick={() => setAreaOpenModal(true)}
+                      </div>) : <div className="d-flex justify-content-end">
+                        <button
+                          type="button"
+                          style={{ backgroundColor: "#e6e6e6", color: "black", fontWeight: "bolder" }}
+                          className="btn text-end hover"
+                          onClick={() => setAreaOpenModal(true)}
 
-                      >
-                        <i className="bi bi-plus"></i>Add Area
-                      </button>}
+                        >
+                          <i className="bi bi-plus"></i>Add Area
+                        </button></div>}
 
 
 
@@ -1133,63 +996,63 @@ export const Department = () => {
                     </div>
                   </div>
                   <div className="row g-2">
-                  <div className="table-responsive col">
-                    <table className="table table-bordered text-center">
-                      <tbody>
-                        <tr>
-                          <th>Si.No</th>
-                          <th>Area </th>
+                    <div className="table-responsive col">
+                      <table className="table table-bordered text-center">
+                        <tbody>
+                          <tr>
+                            <th>Si.No</th>
+                            <th>Area </th>
 
-                          <th>Delete</th>
-                        </tr>
-                        {areaList.map((item, index) => (
-                          <tr key={item._id} onClick={() => handleAreaRowClick(item)} className={item._id === areaStateId ? "table-active" : ""}>
-                            <td >{index + 1}</td>
-                            <td>{item.area}</td>
-
-                            <td>
-                              <button
-                                type="button"
-                                className="btn btn-sm btn-danger"
-                                onClick={() => setDeleteAreaModal(true)}
-
-                              >
-                                <i className="bi bi-trash"></i>
-                              </button>
-                            </td>
+                            <th>Delete</th>
                           </tr>
-                        ))}
+                          {areaList.map((item, index) => (
+                            <tr key={item._id} onClick={() => handleAreaRowClick(item)} className={item._id === areaStateId ? "table-active" : ""}>
+                              <td >{index + 1}</td>
+                              <td>{item.area}</td>
+
+                              <td>
+                                <button
+                                  type="button"
+                                  className="btn btn-sm btn-danger"
+                                  onClick={() => setDeleteAreaModal(true)}
+
+                                >
+                                  <i className="bi bi-trash"></i>
+                                </button>
+                              </td>
+                            </tr>
+                          ))}
 
 
-                      </tbody>
-                    </table>
+                        </tbody>
+                      </table>
 
-                    <Dialog
-                      open={deleteAreaModal}
-                      onClose={() => setDeleteAreaModal(false)}
-                      aria-labelledby="alert-dialog-title"
-                      aria-describedby="alert-dialog-description"
-                    >
-                      <DialogTitle id="alert-dialog-title">
-                        {" Area Delete Confirmation?"}
-                      </DialogTitle>
-                      <DialogContent>
-                        <DialogContentText id="alert-dialog-description">
-                          Are you Sure to Delete the Area
-                        </DialogContentText>
-                      </DialogContent>
-                      <DialogActions>
-                        <Button onClick={() => setDeleteAreaModal(false)}>Cancel</Button>
-                        <Button onClick={(e) => { deleteArea(e); setDeleteAreaModal(false); }} autoFocus>
-                          Delete
-                        </Button>
-                      </DialogActions>
-                    </Dialog>
-
-
+                      <Dialog
+                        open={deleteAreaModal}
+                        onClose={() => setDeleteAreaModal(false)}
+                        aria-labelledby="alert-dialog-title"
+                        aria-describedby="alert-dialog-description"
+                      >
+                        <DialogTitle id="alert-dialog-title">
+                          {" Area Delete Confirmation?"}
+                        </DialogTitle>
+                        <DialogContent>
+                          <DialogContentText id="alert-dialog-description">
+                            Are you Sure to Delete the Area
+                          </DialogContentText>
+                        </DialogContent>
+                        <DialogActions>
+                          <Button onClick={() => setDeleteAreaModal(false)}>Cancel</Button>
+                          <Button onClick={(e) => { deleteArea(e); setDeleteAreaModal(false); }} autoFocus>
+                            Delete
+                          </Button>
+                        </DialogActions>
+                      </Dialog>
 
 
-                  </div>
+
+
+                    </div>
                   </div>
 
 
@@ -1224,7 +1087,7 @@ export const Department = () => {
                       name="placeOfUsage" ></TextField>
 
                   </div>
-                  <div className="col d-flex mb-2">
+                  <div className="col d-flex ">
 
                     <TextField label="Status"
                       id="placeOfUsageStatusId"
@@ -1248,9 +1111,9 @@ export const Department = () => {
 
 
                 <div className="row g-2 ">
-                  <div className="col d-flex">
+                  <div className="col d-flex justify-content-start">
 
-                    <div className="me-3">
+                    <div className="me-2">
                       <lable className="uplable">
                         <input type="file" className="downlable" />
                         Upload
@@ -1313,13 +1176,13 @@ export const Department = () => {
 
 
 
-                  <div className="col-md text-end">
+                  <div className="col-md p-0">
 
-                    {placeOfUsageId ? (<div>
+                    {placeOfUsageId ? (<div className="d-flex justify-content-end">
                       <button
                         type="button"
                         style={{ backgroundColor: "#e6e6e6", color: "black", fontWeight: "bolder" }}
-                        className="btn text-end me-3 hover"
+                        className="btn text-end me-2 hover"
                         onClick={() => setPouOpenModal(true)}
                       //   disabled={!depStateId}
                       >
@@ -1327,18 +1190,19 @@ export const Department = () => {
                       </button >
                       <button type="button" onMouseEnter={(e) => { e.target.style.background = 'red' }} onMouseOut={(e) => { e.target.style.background = '#e6e6e6' }}
                         style={{ backgroundColor: "#e6e6e6", color: "black", fontWeight: "bolder" }}
-                        className="btn text-end me-3"
+                        className="btn text-end "
                         onClick={() => { setPlaceOfUsageId(null); setPlaceOfUsageData(initialPlaceOfUsageData) }}
                       >Cancel</button>
-                    </div>) : <button
-                      type="button"
-                      style={{ backgroundColor: "#e6e6e6", color: "black", fontWeight: "bolder" }}
-                      className="btn text-end hover"
-                      onClick={() => setPouOpenModal(true)}
+                    </div>) :
+                      <div className="d-flex justify-content-end"><button
+                        type="button"
+                        style={{ backgroundColor: "#e6e6e6", color: "black", fontWeight: "bolder" }}
+                        className="btn hover"
+                        onClick={() => setPouOpenModal(true)}
 
-                    >
-                      <i className="bi bi-plus"></i>Add Place Of Usage
-                    </button>}
+                      >
+                        <i className="bi bi-plus"></i>Add Place
+                      </button></div>}
 
 
 
@@ -1759,7 +1623,7 @@ export const Designation = () => {
                 p: 2,
                 display: 'flex',
                 flexDirection: 'column',
-                mb: 2
+
               }}
             >
               <div className="row g-2">
@@ -1772,21 +1636,6 @@ export const Designation = () => {
                     onChange={handleChange}
                     onKeyDown={handleKeyDown}
                     value={designationData.designation}
-<<<<<<< HEAD
-                    name="designation" >
-
-                  </TextField>
-                </div>
-
-                <div className="col-md-3 col-xs-">
-                  <TextField
-                    label="Status"
-                    select
-                    id="designationStatusId"
-                    // defaultValue="Active"
-                    fullWidth
-                    size="small"
-=======
                     name="designation" ></TextField>
                 </div>
                 <div className="col d-flex mb-2">
@@ -1820,7 +1669,6 @@ export const Designation = () => {
                     className="form-control"
                     id="designation"
                     placeholder="designation"
->>>>>>> 7244357623c0b6b16707843eb531937d08bf8be2
                     onChange={handleChange}
                     onKeyDown={handleKeyDown}
                     name="designation"
