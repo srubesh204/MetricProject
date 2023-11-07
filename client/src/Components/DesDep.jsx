@@ -828,7 +828,7 @@ export const Designation = () => {
                   </TextField>
                 </div>
 
-                <div className="col-md-3">
+                <div className="col-md-3 col-xs-">
                   <TextField
                     label="Status"
                     select

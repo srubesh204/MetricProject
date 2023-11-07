@@ -4,7 +4,7 @@ const areaController = {
     getAllAreas: async (req, res) => {
         try {
           const areaResult = await areaModel.find();
-          res.status(202).json({ result: areaResult, status: 1 });
+          res.status(202).json({ result: areaResult, status: 1 , message: "Area Get Successfull"});
           //res.status(200).json(employees);
         } catch (err) {
           console.error(err);
@@ -14,7 +14,7 @@ const areaController = {
       createArea: async (req, res) => {
        
         try {
-          const { area} = req.body;
+          const { area } = req.body;
           const areaResult = new areaModel({ area});
           const validationError = areaResult.validateSync();
 

@@ -227,9 +227,9 @@ const Employee = () => {
         }
     };
     //get Designations
-    useEffect(() => {
+    useEffect(() => {  
         desFetchData();
-    }, []);
+    }, []);           
 
 
 
