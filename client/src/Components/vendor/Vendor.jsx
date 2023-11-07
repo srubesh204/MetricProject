@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import axios from 'axios'
 import Autocomplete from '@mui/material/Autocomplete';
-import { TextField, MenuItem, styled, Button, ButtonGroup, Chip } from '@mui/material';
+import { TextField, MenuItem, styled, Button, ButtonGroup, Chip, FormControl, OutlinedInput } from '@mui/material';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import Alert from '@mui/material/Alert';
 import Snackbar from '@mui/material/Snackbar';
@@ -14,6 +14,7 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import dayjs from 'dayjs';
+import ClearIcon from '@mui/icons-material/Clear';
 
 const Vendor = () => {
 
@@ -399,7 +400,7 @@ const Vendor = () => {
         setFile(e.target.files[0]);
         setVendorData((prev) => ({ ...prev, certificate: e.target.files[0].name }));
     };
-    
+
     const handleFileUpload = async () => {
         const formData = new FormData();
         formData.append('file', file);
@@ -413,7 +414,7 @@ const Vendor = () => {
             if (response.ok) {
                 setSnackBarOpen(true);
                 console.log('File uploaded successfully');
-                
+
                 setErrorHandler({ status: 1, message: "Vendor Certificate Uploaded Successfully", code: "success" });
             }
         } catch (error) {
@@ -437,169 +438,170 @@ const Vendor = () => {
 
     return (
         <div >
-            <Container maxWidth="lg" sx={{ mt: 4 }}>
-                <form>
-                    <Paper
-                        sx={{
-                            p: 2,
-                            display: 'flex',
-                            flexDirection: 'column',
-                            mb: 2
-                        }}
-                    >
-
-
-
-                        <Grid container rowSpacing={1} columnSpacing={{ xs: 1 }}  >
-
-                            <Grid item xs={2}>
-
-                                <TextField label="Vendor Code"
-                                    id="vendorCodeId"
-                                    defaultValue=""
-                                    size="small"
-                                    sx={{ width: "100%" }}
-                                    value={vendorData.vendorCode}
-                                    onChange={handleVendorDataBaseChange}
-                                    name="vendorCode" />
-
-                            </Grid>
-                            <Grid item xs={3}>
-
-                                <TextField label="Alias Name"
-                                    id="aliasNameId"
-                                    defaultValue=""
-                                    size="small"
-                                    sx={{ width: "100%" }}
-                                    value={vendorData.aliasName}
-                                    onChange={handleVendorDataBaseChange}
-                                    name="aliasName" />
-
-                            </Grid>
-                            <Grid item xs={4}>
-                                <TextField label="Full Name"
-                                    id="fullNameId"
-                                    defaultValue=""
-                                    size="small"
-                                    sx={{ width: "100%" }}
-                                    value={vendorData.fullName}
-                                    onChange={handleVendorDataBaseChange}
-                                    name="fullName" />
-
-                            </Grid>
-
-                            <Grid item xs={3}>
-                                <div className="col">
-                                    <input type="date" className="form-control" id="dorId" max={DateFormat} fullWidth name="dor" value={vendorData.dor} onChange={handleVendorDataBaseChange} placeholder="dor" />
-                                </div>
-
-                            </Grid>
-
-
-                        </Grid>
-                        <Grid container rowSpacing={1} columnSpacing={{ xs: 1 }} className='mt-1' >
-
-                            <Grid item xs={6}>
-                                <TextField label="Address"
-                                    id="addressId"
-                                    defaultValue=""
-                                    size="small"
-                                    sx={{ width: "100%" }}
-                                    value={vendorData.address}
-                                    onKeyDown={handleKeyDown}
-                                    onChange={handleVendorDataBaseChange}
-                                    name="addressId" />
-
-                            </Grid>
-
-
-                            <Grid item xs={6} >
-                                <div className='col  d-flex justify-content-end '>
-                                    <div class="form-check form-check-inline ">
-                                        <input className="form-check-input" type="checkbox" checked={vendorData.oem === "1"} onChange={handleVendorDataBaseChange} id="oemId" name="oem" />
-                                        <label className="form-check-label" htmlFor="oemId">OEM</label>
-                                    </div>
-                                    <div class="form-check form-check-inline ">
-                                        <input className="form-check-input" type="checkbox" checked={vendorData.customer === "1"} onChange={handleVendorDataBaseChange} id="customerId" name="customer" />
-                                        <label className="form-check-label" htmlFor="customerId">Customer</label>
-                                    </div>
-                                    <div class="form-check form-check-inline ">
-                                        <input className="form-check-input" type="checkbox" checked={vendorData.supplier === "1"} onChange={handleVendorDataBaseChange} id="supplierId" name="supplier" />
-                                        <label className="form-check-label" htmlFor="supplierId">Supplier</label>
-                                    </div>
-                                    <div class="form-check form-check-inline">
-                                        <input className="form-check-input" type="checkbox" checked={vendorData.subContractor === "1"} onChange={handleVendorDataBaseChange} id="subContractorId" name="subContractor" />
-                                        <label className="form-check-label" htmlFor="subContractorId">SubContractor</label>
-                                    </div>
-                                </div>
-                            </Grid>
-                        </Grid>
-
-
-
-
-
-
-
-                    </Paper>
-
-
-
-
-
-
-                    <div className="row g-2 mb-3">
-
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+                <Container maxWidth="lg" sx={{ mt: 4 }}>
+                    <form>
                         <Paper
                             sx={{
                                 p: 2,
-                                marginRight: 2
-
+                                display: 'flex',
+                                flexDirection: 'column',
+                                mb: 2
                             }}
-                            className='col'
                         >
 
 
-                            <div className="row g-2 mb-2">
-                                <Autocomplete
-                                    id="stateId"
-                                    onChange={(event, newValue) => {
-                                        setStateName(newValue);
-                                        setVendorData((prev) => ({ ...prev, state: newValue }))
-                                    }}
-                                    // name="state"
-                                    options={AllStates}
-                                    fullWidth
-                                    size='small'
-                                    className='col'
-                                    
-                                    value={vendorData.state}
-                                    isOptionEqualToValue={(option) => option}
-                                    renderInput={(params) => <TextField {...params} label="State" name="State" />} // Set the name attribute to "state"
-                                />
+
+                            <Grid container rowSpacing={1} columnSpacing={{ xs: 1 }}  >
+
+                                <Grid item xs={2}>
+
+                                    <TextField label="Vendor Code"
+                                        id="vendorCodeId"
+                                        defaultValue=""
+                                        size="small"
+                                        sx={{ width: "100%" }}
+                                        value={vendorData.vendorCode}
+                                        onChange={handleVendorDataBaseChange}
+                                        name="vendorCode" />
+
+                                </Grid>
+                                <Grid item xs={3}>
+
+                                    <TextField label="Alias Name"
+                                        id="aliasNameId"
+                                        defaultValue=""
+                                        size="small"
+                                        sx={{ width: "100%" }}
+                                        value={vendorData.aliasName}
+                                        onChange={handleVendorDataBaseChange}
+                                        name="aliasName" />
+
+                                </Grid>
+                                <Grid item xs={4}>
+                                    <TextField label="Full Name"
+                                        id="fullNameId"
+                                        defaultValue=""
+                                        size="small"
+                                        sx={{ width: "100%" }}
+                                        value={vendorData.fullName}
+                                        onChange={handleVendorDataBaseChange}
+                                        name="fullName" />
+
+                                </Grid>
+
+                                <Grid item xs={3}>
+                                    <div className="col">
+                                        <input type="date" className="form-control" id="dorId" max={DateFormat} fullWidth name="dor" value={vendorData.dor} onChange={handleVendorDataBaseChange} placeholder="dor" />
+                                    </div>
+
+                                </Grid>
 
 
-                                <Autocomplete
-                                    id="cityId"
-                                    onChange={(event, newValue) => {
-                                        setStateName(newValue);
-                                        setVendorData((prev) => ({ ...prev, city: newValue }))
-                                    }}
-                                    // name="state"
-                                    options={cityByState.map((item) => item.name)}
-                                    
-                                    value={vendorData.city}
-                                    size='small'
-                                    className='col'
-                                    fullWidth
-                                    isOptionEqualToValue={(option) => option}
-                                    renderInput={(params) => <TextField {...params} label="City" name="City" />} // Set the name attribute to "state"
-                                />
-                            </div>
+                            </Grid>
+                            <Grid container rowSpacing={1} columnSpacing={{ xs: 1 }} className='mt-1' >
+
+                                <Grid item xs={6}>
+                                    <TextField label="Address"
+                                        id="addressId"
+                                        defaultValue=""
+                                        size="small"
+                                        sx={{ width: "100%" }}
+                                        value={vendorData.address}
+                                        onKeyDown={handleKeyDown}
+                                        onChange={handleVendorDataBaseChange}
+                                        name="addressId" />
+
+                                </Grid>
+
+
+                                <Grid item xs={6} >
+                                    <div className='col  d-flex justify-content-end '>
+                                        <div class="form-check form-check-inline ">
+                                            <input className="form-check-input" type="checkbox" checked={vendorData.oem === "1"} onChange={handleVendorDataBaseChange} id="oemId" name="oem" />
+                                            <label className="form-check-label" htmlFor="oemId">OEM</label>
+                                        </div>
+                                        <div class="form-check form-check-inline ">
+                                            <input className="form-check-input" type="checkbox" checked={vendorData.customer === "1"} onChange={handleVendorDataBaseChange} id="customerId" name="customer" />
+                                            <label className="form-check-label" htmlFor="customerId">Customer</label>
+                                        </div>
+                                        <div class="form-check form-check-inline ">
+                                            <input className="form-check-input" type="checkbox" checked={vendorData.supplier === "1"} onChange={handleVendorDataBaseChange} id="supplierId" name="supplier" />
+                                            <label className="form-check-label" htmlFor="supplierId">Supplier</label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <input className="form-check-input" type="checkbox" checked={vendorData.subContractor === "1"} onChange={handleVendorDataBaseChange} id="subContractorId" name="subContractor" />
+                                            <label className="form-check-label" htmlFor="subContractorId">SubContractor</label>
+                                        </div>
+                                    </div>
+                                </Grid>
+                            </Grid>
 
 
 
-                            {/* <select onChange={handleVendorDataBaseChange} value={vendorData.vendorStatus} className="form-select" id="vendorStatusId" name="vendorStatus" >
+
+
+
+
+                        </Paper>
+
+
+
+
+
+
+                        <div className="row g-2 mb-3">
+
+                            <Paper
+                                sx={{
+                                    p: 2,
+                                    marginRight: 2
+
+                                }}
+                                className='col'
+                            >
+
+
+                                <div className="row g-2 mb-2">
+                                    <Autocomplete
+                                        id="stateId"
+                                        onChange={(event, newValue) => {
+                                            setStateName(newValue);
+                                            setVendorData((prev) => ({ ...prev, state: newValue }))
+                                        }}
+                                        // name="state"
+                                        options={AllStates}
+                                        fullWidth
+                                        size='small'
+                                        className='col'
+
+                                        value={vendorData.state}
+                                        isOptionEqualToValue={(option) => option}
+                                        renderInput={(params) => <TextField {...params} label="State" name="State" />} // Set the name attribute to "state"
+                                    />
+
+
+                                    <Autocomplete
+                                        id="cityId"
+                                        onChange={(event, newValue) => {
+                                            setStateName(newValue);
+                                            setVendorData((prev) => ({ ...prev, city: newValue }))
+                                        }}
+                                        // name="state"
+                                        options={cityByState.map((item) => item.name)}
+
+                                        value={vendorData.city}
+                                        size='small'
+                                        className='col'
+                                        fullWidth
+                                        isOptionEqualToValue={(option) => option}
+                                        renderInput={(params) => <TextField {...params} label="City" name="City" />} // Set the name attribute to "state"
+                                    />
+                                </div>
+
+
+
+                                {/* <select onChange={handleVendorDataBaseChange} value={vendorData.vendorStatus} className="form-select" id="vendorStatusId" name="vendorStatus" >
                                             <option value="">-select-</option>
                                             <option value="Active">Active</option>
                                             <option value="InActive">InActive</option>
@@ -609,67 +611,77 @@ const Vendor = () => {
 
 
 
-                            <div className=" row g-2 mb-2">
+                                <div className=" row g-2 mb-2">
 
 
 
-                                <div className="col-md-5">
-                                    <TextField fullWidth label="VendorStatus" onChange={handleVendorDataBaseChange} value={vendorData.vendorStatus} className="col" select size="small" id="vendorStatusId" name="vendorStatus" defaultValue="" >
-                                        <MenuItem value="all">All</MenuItem >
-                                        <MenuItem value="Active">Active</MenuItem >
-                                        <MenuItem value="InActive">InActive</MenuItem >
-                                        <MenuItem value="Relieved">Relieved</MenuItem >
+                                    <div className="col-md">
+                                        <TextField fullWidth label="VendorStatus" onChange={handleVendorDataBaseChange} value={vendorData.vendorStatus} className="col" select size="small" id="vendorStatusId" name="vendorStatus" defaultValue="" >
+                                            <MenuItem value="all">All</MenuItem >
+                                            <MenuItem value="Active">Active</MenuItem >
+                                            <MenuItem value="InActive">InActive</MenuItem >
+                                            <MenuItem value="Relieved">Relieved</MenuItem >
 
-                                    </TextField>
-                                </div>
-
-
+                                        </TextField>
+                                    </div>
 
 
 
-                                <div className='col input-group'>
-                                    <div className='input-group-text'>Certificate Validity</div>
-                                  <input type="date" className="form-control" id="certificateValidityId" fullWidth name="certificateValidity" value={vendorData.certificateValidity} onChange={handleVendorDataBaseChange} placeholder="certificateValidity" />
-                                </div>
+
+
+                                    <div className='col-md'>
+
+                                        <DatePicker
+                                            fullWidth
+                                            id="certificateValidityId"
+                                            name="certificateValidity"
+                                            value={dayjs('06-11-2023', { format: 'DD-MM-YYYY' })}
+                                            onChange={(newValue) => 
+                                                setVendorData((prev) => ({ ...prev, certificateValidity: newValue.format("YYYY-MM-DD") }))
+                                            }
+                                            label="Certificate Validiy"
+                                            size="small"
+                                            slotProps={{ textField: { size: 'small' } }}
+                                            format="DD-MM-YYYY" />
+                                    </div>
 
 
 
-                                {/*<div className="form-floating me-4 mb-4 col">
+                                    {/*<div className="form-floating me-4 mb-4 col">
                                         <input type="date" className="form-control" id="certificateValidityId" name="certificateValidity" placeholder="certificateValidity" value={vendorData.certificateValidity} onChange={handleVendorDataBaseChange} />
                                         <label htmlFor="certificateValidityId">Certificate Validity</label>
                                     </div>*/}
 
 
 
-                            </div>
-                            <div className="row">
-                                <ButtonGroup className='col' >
-
-                                    <Button component="label" variant='contained' sx={{ width: "80%" }}>
-                                        Certificate
-                                        <VisuallyHiddenInput type="file" onChange={handleFileChange}/>
-                                    </Button>
-                                    
-                                    <Button variant='outlined' sx={{ width: "20%" }} startIcon={<CloudUploadIcon />} type='button' className='btn btn-info' onClick={handleFileUpload}>Upload</Button>
-                                    
-                                </ButtonGroup>
-                                <div className='text-center'>
-                                {vendorData.certificate && 
-                                <Chip clickable label={vendorData.certificate}  onDelete={""} />}
                                 </div>
-                                
-                            </div>
+                                <div className="row">
+                                    <ButtonGroup className='col' >
 
-                        </Paper>
+                                        <Button component="label" variant='contained' sx={{ width: "80%" }}>
+                                            Certificate
+                                            <VisuallyHiddenInput type="file" onChange={handleFileChange} />
+                                        </Button>
+
+                                        <Button variant='outlined' sx={{ width: "20%" }} startIcon={<CloudUploadIcon />} type='button' className='btn btn-info' onClick={handleFileUpload}>Upload</Button>
+
+                                    </ButtonGroup>
 
 
-                        
+
+
+                                </div>
+
+                            </Paper>
+
+
+
                             <Paper
                                 sx={{
                                     p: 2,
                                     display: 'flex',
                                     flexDirection: 'column',
-                                    
+
                                 }}
                                 className='col'
                             >
@@ -718,73 +730,73 @@ const Vendor = () => {
                                     />
                                 </div> */}
                             </Paper>
-                       
-                    </div>
 
-                    <Paper
-                        sx={{
-                            p: 2,
-                            display: 'flex',
-                            flexDirection: 'column',
-                            mb: 2
-                        }}
-                    >
-                        <div className='row' >
-                            <div className='col  d-flex justify-content-end mb-2'>
-                                <div className='col  d-flex'>
-                                    <div className='me-2' >
-                                        <label className='upload'>
-                                            <input className="form-control download" type="file" id="upload" />Upload</label>
+                        </div>
+
+                        <Paper
+                            sx={{
+                                p: 2,
+                                display: 'flex',
+                                flexDirection: 'column',
+                                mb: 2
+                            }}
+                        >
+                            <div className='row' >
+                                <div className='col  d-flex justify-content-end mb-2'>
+                                    <div className='col  d-flex'>
+                                        <div className='me-2' >
+                                            <label className='upload'>
+                                                <input className="form-control download" type="file" id="upload" />Upload</label>
+                                        </div>
+                                        <div className='me-2'>
+                                            <label className='upload'>
+                                                <input className="form-control download" type="file" id="download" />Download </label>
+                                        </div>
                                     </div>
-                                    <div className='me-2'>
-                                        <label className='upload'>
-                                            <input className="form-control download" type="file" id="download" />Download </label>
-                                    </div>
+                                    {vendorStateId ?
+                                        <div className='d-flex justify-content-end'>
+                                            <div className='me-2' >
+                                                <button type="button" className='btn btn-info' onClick={() => updateVendorData(vendorStateId)}>Modify</button>
+                                            </div>
+                                            <div className='me-2' >
+                                                <button type="button" className='btn btn-danger' onClick={() => { setVendorStateId(null); setVendorData(initialVendorData) }}>Cancel</button>
+                                            </div>
+                                        </div> : <div className='col d-flex justify-content-end mb-2'>
+                                            <div >
+                                                <button type="button" className='btn btn-warning' onClick={vendorSubmit}>+ Add Vendor</button>
+                                            </div>
+                                        </div>}
+
                                 </div>
-                                {vendorStateId ?
-                                    <div className='d-flex justify-content-end'>
-                                        <div className='me-2' >
-                                            <button type="button" className='btn btn-info' onClick={() => updateVendorData(vendorStateId)}>Modify</button>
-                                        </div>
-                                        <div className='me-2' >
-                                            <button type="button" className='btn btn-danger' onClick={() => { setVendorStateId(null); setVendorData(initialVendorData) }}>Cancel</button>
-                                        </div>
-                                    </div> : <div className='col d-flex justify-content-end mb-2'>
-                                        <div >
-                                            <button type="button" className='btn btn-warning' onClick={vendorSubmit}>+ Add Vendor</button>
-                                        </div>
-                                    </div>}
+                            </div>
+                        </Paper>
+
+
+
+
+
+                        <Paper
+                            sx={{
+                                p: 2,
+                                display: 'flex',
+                                flexDirection: 'column',
+
+                            }}
+                        >
+
+                            <h4 className='text-center'>Vendor List</h4>
+
+                            <div class="col-3 mb-2">
+                                <select className="form-select form-select-sm" id="vendorTypeId" name="vendorType" aria-label="Floating label select example" onChange={handleFilterChange} >
+                                    <option value="all">All</option>
+                                    <option value="oem">OEM</option>
+                                    <option value="customer">Customer</option>
+                                    <option value="supplier">Supplier</option>
+                                    <option value="subContractor">SubContractor</option>
+                                </select>
 
                             </div>
-                        </div>
-                    </Paper>
 
-
-
-
-
-                    <Paper
-                        sx={{
-                            p: 2,
-                            display: 'flex',
-                            flexDirection: 'column',
-
-                        }}
-                    >
-                       
-                            <h4 className='text-center'>Vendor List</h4>
-                           
-                                <div class="col-3 mb-2">
-                                    <select className="form-select form-select-sm" id="vendorTypeId" name="vendorType" aria-label="Floating label select example" onChange={handleFilterChange} >
-                                        <option value="all">All</option>
-                                        <option value="oem">OEM</option>
-                                        <option value="customer">Customer</option>
-                                        <option value="supplier">Supplier</option>
-                                        <option value="subContractor">SubContractor</option>
-                                    </select>
-
-                                </div>
-                            
                             <table className='table table-bordered text-center'>
                                 <tbody>
                                     <tr>
@@ -813,18 +825,19 @@ const Vendor = () => {
                                     ))}
                                 </tbody>
                             </table>
-                        
-                        <Snackbar variant="contained" anchorOrigin={{ vertical: "top", horizontal: "right" }} open={snackBarOpen} autoHideDuration={6000} onClose={handleSnackClose}>
-                            <Alert variant="filled" onClose={handleSnackClose} severity={errorhandler.code} sx={{ width: '100%' }}>
-                                {errorhandler.message}
-                            </Alert>
-                        </Snackbar>
-                    </Paper>
+
+                            <Snackbar variant="contained" anchorOrigin={{ vertical: "top", horizontal: "right" }} open={snackBarOpen} autoHideDuration={6000} onClose={handleSnackClose}>
+                                <Alert variant="filled" onClose={handleSnackClose} severity={errorhandler.code} sx={{ width: '100%' }}>
+                                    {errorhandler.message}
+                                </Alert>
+                            </Snackbar>
+                        </Paper>
 
 
 
-                </form>
-            </Container>
+                    </form>
+                </Container>
+            </LocalizationProvider>
         </div>
     )
 
