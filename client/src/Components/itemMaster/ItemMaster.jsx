@@ -8,8 +8,17 @@ import FileDownloadIcon from '@mui/icons-material/FileDownload';
 import UploadFileIcon from '@mui/icons-material/UploadFile';
 import Alert from '@mui/material/Alert';
 import Snackbar from '@mui/material/Snackbar';
-import { TextField, MenuItem } from '@mui/material';
-import { Container, Paper } from '@mui/material';
+import { TextField, MenuItem, FormControl } from '@mui/material';
+import { Box, Grid, Paper, Container } from '@mui/material';
+
+
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
+
+
 
 
 const ItemMaster = () => {
@@ -65,7 +74,8 @@ const ItemMaster = () => {
 
     };
 
-
+    const [openModal, setOpenModal] = useState(false);
+    const [deleteModal, setDeleteModal] = useState(false);
 
 
     const [itemMasterStateId, setItemMasterStateId] = useState("")
@@ -192,10 +202,10 @@ const ItemMaster = () => {
         }
     };
 
-    const updateItemMasterData = async (id) => {
+    const updateItemMasterData = async () => {
         try {
             const response = await axios.put(
-                "http://localhost:3001/itemMaster/updateItemMaster/" + id, itemMasterData
+                "http://localhost:3001/itemMaster/updateItemMaster/" + itemMasterStateId, itemMasterData
             );
             itemMasterFetchData();
             setItemMasterStateId(null)
@@ -229,10 +239,10 @@ const ItemMaster = () => {
             console.log(err);
         }
     };
-    const deleteItemMasterData = async (id) => {
+    const deleteItemMasterData = async () => {
         try {
             const response = await axios.delete(
-                "http://localhost:3001/ItemMaster/deleteItemMaster/" + id, itemMasterData
+                "http://localhost:3001/ItemMaster/deleteItemMaster/" + itemMasterStateId, itemMasterData
             );
             itemMasterFetchData();
             setItemMasterData(initialItemMasterData);
@@ -328,7 +338,7 @@ const ItemMaster = () => {
             <div >
                 <form>
                     <Container maxWidth="lg" sx={{ mb: 2 }}>
-                        
+
                         <Paper
                             sx={{
                                 p: 1,
@@ -340,7 +350,7 @@ const ItemMaster = () => {
                             <div className='row mb-2 g-2'>
 
                                 <div className='col' >
-                                    <TextField fullWidth label="ItemType" value={itemMasterData.itemType} onChange={handleItemMasterBaseChange} className="form-select" select size="small" id="itemTypeId" name="itemType" defaultValue="" >
+                                    <TextField fullWidth label="Item Type" value={itemMasterData.itemType} onChange={handleItemMasterBaseChange} className="form-select" select size="small" id="itemTypeId" name="itemType" defaultValue="" >
 
                                         <MenuItem value="all">All</MenuItem >
                                         <MenuItem value="Attribute">Attribute</MenuItem >
@@ -365,7 +375,7 @@ const ItemMaster = () => {
                                 </div>
 
                                 <div className="form-floating col">
-                                    <TextField label="Item PrefixId "
+                                    <TextField label="Item Prefix "
                                         id="itemPrefix"
                                         defaultValue=""
                                         sx={{ width: "100%" }}
@@ -394,7 +404,7 @@ const ItemMaster = () => {
                                     <div className='row mb-2 g-2'>
                                         <div className="form-floating col-md-6">
 
-                                            <TextField label="WiNo "
+                                            <TextField label="Wi No "
                                                 id="wiNoId"
                                                 defaultValue=""
                                                 sx={{ width: "100%" }}
@@ -449,7 +459,7 @@ const ItemMaster = () => {
                                         </div>
                                         <div className="form-floating col">
 
-                                            <TextField label="CalAlertInDay "
+                                            <TextField label="Cal Alert In Day "
                                                 id="calAlertInDayId"
                                                 defaultValue=""
                                                 sx={{ width: "100%" }}
@@ -471,8 +481,7 @@ const ItemMaster = () => {
                                                 sx={{ width: "100%" }}
                                                 size="small"
                                                 fullWidth
-                                                type='number'
-                                                value={itemMasterData.calAlertInDay}
+                                                value={itemMasterData.standardRef}
                                                 onChange={handleItemMasterBaseChange}
                                                 name="standardRef" />
 
@@ -481,8 +490,8 @@ const ItemMaster = () => {
 
                                             <TextField fullWidth label="Status" value={itemMasterData.status} onChange={handleItemMasterBaseChange} className="form-select" select size="small" id="statusId" name="status" defaultValue="" >
 
-                                                <MenuItem value="all">All</MenuItem >
-                                                <MenuItem value="Attribute">Attribute</MenuItem >
+
+                                                <MenuItem value="Active">Active</MenuItem >
                                                 <MenuItem value="InActive">InActive</MenuItem >
 
 
@@ -586,19 +595,64 @@ const ItemMaster = () => {
 
                                 </div>
 
+                                {itemMasterStateId ? <Dialog
+                                    open={openModal}
+                                    onClose={() => setOpenModal(false)}
+                                    aria-labelledby="alert-dialog-title"
+                                    aria-describedby="alert-dialog-description"
+                                >
+                                    <DialogTitle id="alert-dialog-title">
+                                        {"ItemMaster Update Confirmation?"}
+                                    </DialogTitle>
+                                    <DialogContent>
+                                        <DialogContentText id="alert-dialog-description">
+                                            Are you Sure to Update the ItemMaster
+                                        </DialogContentText>
+                                    </DialogContent>
+                                    <DialogActions>
+                                        <Button onClick={() => setOpenModal(false)}>Cancel</Button>
+                                        <Button onClick={() => { updateItemMasterData(); setOpenModal(false); }} autoFocus>
+                                            Update
+                                        </Button>
+                                    </DialogActions>
+                                </Dialog> : <Dialog
+                                    open={openModal}
+                                    onClose={() => setOpenModal(false)}
+                                    aria-labelledby="alert-dialog-title"
+                                    aria-describedby="alert-dialog-description"
+                                >
+                                    <DialogTitle id="alert-dialog-title">
+                                        {" ItemMaster Create Confirmation?"}
+                                    </DialogTitle>
+                                    <DialogContent>
+                                        <DialogContentText id="alert-dialog-description">
+                                            Are you Sure to Add the ItemMaster
+                                        </DialogContentText>
+                                    </DialogContent>
+                                    <DialogActions>
+                                        <Button onClick={() => setOpenModal(false)}>Cancel</Button>
+                                        <Button onClick={(e) => { itemMasterSubmit(e); setOpenModal(false); }} autoFocus>
+                                            Add
+                                        </Button>
+                                    </DialogActions>
+                                </Dialog>}
+
+
+
+
 
                                 <div className="col-md-5">
                                     {itemMasterStateId ?
                                         <div className='col d-flex justify-content-end '>
                                             <div className='me-2' >
-                                                <button type="button" className='btn btn-secondary' onClick={() => updateItemMasterData(itemMasterStateId)} >Modify</button>
+                                                <button type="button" className='btn btn-secondary' onClick={() => setOpenModal(true)} >Modify</button>
                                             </div>
                                             <div className='me-2' >
                                                 <button type="button" className='btn btn-secondary' onClick={() => { setItemMasterStateId(null); setItemMasterData(initialItemMasterData) }}>Cancel</button>
                                             </div>
                                         </div> : <div className='col d-flex justify-content-end '>
                                             <div >
-                                                <button type="button" className='btn btn-warning' onClick={itemMasterSubmit}>+ Add Item Master</button>
+                                                <button type="button" className='btn btn-warning' onClick={() => setOpenModal(true)}>+ Add Item Master</button>
                                             </div>
                                         </div>
                                     }
@@ -673,7 +727,7 @@ const ItemMaster = () => {
                                                     <td>{item.status}</td>
 
 
-                                                    <td><button type='button' className='btn btn-danger' onClick={() => deleteItemMasterData(item._id)} ><i class="bi bi-trash-fill"></i></button></td>
+                                                    <td><button type='button' className='btn btn-danger' onClick={() => setDeleteModal(true)} ><i class="bi bi-trash-fill"></i></button></td>
                                                 </tr>
                                             )) : <tr>
                                                 <td colSpan={8}>No Data Available</td></tr>}
@@ -681,6 +735,30 @@ const ItemMaster = () => {
                                         </tbody>
                                     </table>
                                 </div>
+                                <Dialog
+                                        open={deleteModal}
+                                        onClose={() => setDeleteModal(false)}
+                                        aria-labelledby="alert-dialog-title"
+                                        aria-describedby="alert-dialog-description"
+                                    >
+                                        <DialogTitle id="alert-dialog-title">
+                                            {" ItemMaster Delete Confirmation?"}
+                                        </DialogTitle>
+                                        <DialogContent>
+                                            <DialogContentText id="alert-dialog-description">
+                                                Are you Sure to Delete the ItemMaster
+                                            </DialogContentText>
+                                        </DialogContent>
+                                        <DialogActions>
+                                            <Button onClick={() => setDeleteModal(false)}>Cancel</Button>
+                                            <Button onClick={(e) => { deleteItemMasterData(e); setDeleteModal(false); }} autoFocus>
+                                                Delete
+                                            </Button>
+                                        </DialogActions>
+                                    </Dialog>
+
+
+
                             </div>
                             <Snackbar anchorOrigin={{ vertical: "top", horizontal: "right" }} open={snackBarOpen} autoHideDuration={6000} onClose={handleSnackClose}>
                                 <Alert variant="filled" onClose={handleSnackClose} severity={errorhandler.code} sx={{ width: '100%' }}>
