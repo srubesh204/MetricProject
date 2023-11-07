@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import axios from 'axios'
 import Autocomplete from '@mui/material/Autocomplete';
-import { TextField, MenuItem, styled, Button, ButtonGroup, Chip, FormControl, OutlinedInput } from '@mui/material';
+import { TextField, MenuItem, styled, Button, ButtonGroup, Chip, FormControl, OutlinedInput, Fab } from '@mui/material';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import Alert from '@mui/material/Alert';
 import Snackbar from '@mui/material/Snackbar';
@@ -14,7 +14,7 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import dayjs from 'dayjs';
-import ClearIcon from '@mui/icons-material/Clear';
+import {Add, Remove} from '@mui/icons-material';
 
 const Vendor = () => {
 
@@ -162,10 +162,13 @@ const Vendor = () => {
         })
     };
     const changeVendorRow = (index, name, value) => {
+        const formattedValue = name === 'name'
+            ? value.toLowerCase().split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')
+            : value;
         setVendorData((prevVendorData) => {
             const updateCP = [...prevVendorData.vendorContacts]
             updateCP[index] = {
-                ...updateCP[index], [name]: value,
+                ...updateCP[index], [name]: formattedValue,
             };
             return {
                 ...prevVendorData, vendorContacts: updateCP,
@@ -340,27 +343,27 @@ const Vendor = () => {
         }
     };
 
-    const handleKeyDownForContacts = (event) => {
-        const { name, value } = event.target
-        console.log(name)
-        if (event.key === 'Tab') {
-            // Prevent default Tab behavior
+    // const handleKeyDownForContacts = (event) => {
+    //     const { name, value } = event.target
+    //     console.log(name)
+    //     if (event.key === 'Tab') {
+    //         // Prevent default Tab behavior
 
-            const formattedValue = value.toLowerCase().
-                split(' ')
-                .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-                .join(' ');
-            console.log(formattedValue)
-            // Format the input value (capitalization)
-            // Update the state to show the formatted value
-            setVendorData((prevVendorData) => ({
-                ...prevVendorData,
-                vendorContacts: [{ ...prevVendorData.vendorContacts, [name]: formattedValue }]
-            }))
+    //         const formattedValue = value.toLowerCase().
+    //             split(' ')
+    //             .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+    //             .join(' ');
+    //         console.log(formattedValue)
+    //         // Format the input value (capitalization)
+    //         // Update the state to show the formatted value
+    //         setVendorData((prevVendorData) => ({
+    //             ...prevVendorData,
+    //             vendorContacts: [{ ...prevVendorData.vendorContacts, [name]: formattedValue }]
+    //         }))
 
 
-        }
-    };
+    //     }
+    // };
 
 
 
@@ -492,6 +495,8 @@ const Vendor = () => {
 
                                 <Grid item xs={3}>
                                     <div className="col">
+
+                                        
                                         <input type="date" className="form-control" id="dorId" max={DateFormat} fullWidth name="dor" value={vendorData.dor} onChange={handleVendorDataBaseChange} placeholder="dor" />
                                     </div>
 
@@ -635,12 +640,12 @@ const Vendor = () => {
                                             fullWidth
                                             id="certificateValidityId"
                                             name="certificateValidity"
-                                            value={dayjs('06-11-2023', { format: 'DD-MM-YYYY' })}
-                                            onChange={(newValue) => 
+                                            value={dayjs(vendorData.certificateValidity)}
+                                            onChange={(newValue) =>
                                                 setVendorData((prev) => ({ ...prev, certificateValidity: newValue.format("YYYY-MM-DD") }))
                                             }
                                             label="Certificate Validiy"
-                                            size="small"
+
                                             slotProps={{ textField: { size: 'small' } }}
                                             format="DD-MM-YYYY" />
                                     </div>
@@ -694,13 +699,15 @@ const Vendor = () => {
                                                 <th width={"20%"}>Contact Number</th>
                                                 <th>Mail Id</th>
                                                 <th width={"15%"}>Status</th>
-                                                <th width={"10%"}><button type='button' className='btn btn-warning' onClick={addVendorDataRow}><AddRoundedIcon /></button></th>
+                                                <th width={"10%"}> <Fab size='small' color="primary" aria-label="add" onClick={() => addVendorDataRow()}>
+                                                            <Add/>
+                                                        </Fab></th>
                                             </tr>
                                             {vendorData.vendorContacts ? vendorData.vendorContacts.map((item, index) => (
                                                 <tr>
                                                     <td>{index + 1}</td>
-                                                    <td><input type="text" className='form-control form-control-sm' id="nameId" name="name" value={item.name} onChange={(e) => changeVendorRow(index, e.target.name, e.target.value)} onKeyDown={handleKeyDownForContacts} /></td>
-                                                    <td><input type="text" className='form-control form-control-sm' id="contactNumber" name="contactNumber" value={item.contactNumber} onChange={(e) => changeVendorRow(index, e.target.name, e.target.value)} /></td>
+                                                    <td><input type="text" className='form-control form-control-sm' id="nameId" name="name" value={item.name} onChange={(e) => changeVendorRow(index, e.target.name, e.target.value)} /></td>
+                                                    <td><input type="text" className={`form-control form-control-sm ${item.contactNumber.length !== 10 ? 'is-invalid' : 'is-valid'}`} id="contactNumber" name="contactNumber" value={item.contactNumber} onChange={(e) => changeVendorRow(index, e.target.name, e.target.value)} /></td>
                                                     <td><input type="text" className='form-control form-control-sm' id="mailId" name="mailId" value={item.mailId} onChange={(e) => changeVendorRow(index, e.target.name, e.target.value)} /></td>
 
                                                     <td> <select className="form-select form-select-sm" id="vcStatusId" name="vcStatus" value={item.vcStatus} onChange={(e) => changeVendorRow(index, e.target.name, e.target.value)} aria-label="Floating label select example">
@@ -710,25 +717,16 @@ const Vendor = () => {
                                                         <option value="Relived">Relived</option>
 
                                                     </select></td>
-                                                    <td ><button type='button' className='btn btn-danger' onClick={() => deleteVendorRow(index)}><RemoveRoundedIcon /></button></td>
+                                                    <td >
+                                                        <Fab size='small' color="error" aria-label="add" onClick={() => deleteVendorRow(index)}>
+                                                            <Remove/>
+                                                        </Fab></td>
                                                 </tr>
                                             )) : <tr></tr>}
                                         </tbody>
                                     </table>
                                 </div>
-                                {/* <div style={{ height: 400, width: '100%' }}>
-                                    <DataGrid
-                                        rows="5"
-                                        columns="5"
-                                        initialState={{
-                                            pagination: {
-                                                paginationModel: { page: 0, pageSize: 5 },
-                                            },
-                                        }}
-                                        pageSizeOptions={[5, 10]}
-                                        checkboxSelection
-                                    />
-                                </div> */}
+                               
                             </Paper>
 
                         </div>
