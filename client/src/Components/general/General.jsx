@@ -8,6 +8,13 @@ import Alert from '@mui/material/Alert';
 import { Container, Paper } from '@mui/material';
 import Grid from '@mui/material/Unstable_Grid2';
 import { TextField, MenuItem, FormControl } from '@mui/material';
+import Button from '@mui/material/Button';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
+
 
 
 
@@ -92,10 +99,10 @@ export const UnitDataBase = ({ style }) => {
         }
     };
 
-    const updateUnitData = async (id) => {
+    const updateUnitData = async () => {
         try {
             const response = await axios.put(
-                "http://localhost:3001/unit/updateUnit/" + id, unitData
+                "http://localhost:3001/unit/updateUnit/" + unitStateId, unitData
             );
             unitFetchData();
             setUnitData({
@@ -126,10 +133,10 @@ export const UnitDataBase = ({ style }) => {
             }
         }
     };
-    const deleteUnitData = async (id) => {
+    const deleteUnitData = async () => {
         try {
             const response = await axios.delete(
-                "http://localhost:3001/unit/deleteUnit/" + id, unitData
+                "http://localhost:3001/unit/deleteUnit/" + unitStateId, unitData
             );
             unitFetchData();
             setUnitData({
@@ -145,24 +152,27 @@ export const UnitDataBase = ({ style }) => {
     };
 
 
-    const handleKeyDown = (event) => {
-        const { name, value } = event.target
-        console.log(name)
-        if (event.key === 'Tab') {
-            // Prevent default Tab behavior
-
-            const formattedValue = value.toLowerCase().
-                split(' ')
-                .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-                .join(' ');
-            console.log(formattedValue)
-            // Format the input value (capitalization)
-            // Update the state to show the formatted value
-            setUnitData((prev) => ({ ...prev, [name]: formattedValue })); // Update the state with the formatted value
 
 
-        }
-    };
+
+    // const handleKeyDown = (event) => {
+    //     const { name, value } = event.target
+    //     console.log(name)
+    //     if (event.key === 'Tab') {
+    //         // Prevent default Tab behavior
+
+    //         const formattedValue = value.toLowerCase().
+    //             split(' ')
+    //             .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+    //             .join(' ');
+    //         console.log(formattedValue)
+    //         // Format the input value (capitalization)
+    //         // Update the state to show the formatted value
+    //         setUnitData((prev) => ({ ...prev, [name]: formattedValue })); // Update the state with the formatted value
+
+
+    //     }
+    // };
 
 
     const updateUnit = async (item) => {
@@ -179,6 +189,9 @@ export const UnitDataBase = ({ style }) => {
         margin: "1rem",
         boxShadow: "0px 0px 10px 0px",
     }
+
+    const [openModal, setOpenModal] = useState(false);
+    const [deleteModal, setDeleteModal] = useState(false);
     return (
 
         <div >
@@ -188,58 +201,97 @@ export const UnitDataBase = ({ style }) => {
                     <Grid container spacing={2} >
 
 
-                        <Grid item xs={5} >
+                        <Grid item xs={6} >
                             <Paper sx={{
-                                p: 1,
+                                p: 3,
                                 display: 'flex',
                                 flexDirection: 'column',
-                                mb: 2
+                                pb: 5
                             }} >
                                 <h6 className='text-center'>Unit DataBase</h6>
                                 <div className='row g-2 mb-2'>
-                                    <div className="form-floating col-2">
-                                    <TextField label="Si.No."
+                                    <div className="form-floating col-md-2">
+                                        <TextField label="Si.No."
                                             id="unitSiId"
                                             defaultValue=""
-
+                                            fullWidth
                                             size="small"
                                             placeholder="unitSi"
                                             onChange={handleUnitDataBaseChange}
                                             //onKeyDown={handleKeyDown}
-                                            disabled 
+                                            disabled
                                             value={uintDataList.length + 1}
                                             name="unitSi" ></TextField>
-                                       
+
                                     </div>
+                                    {unitStateId ? <Dialog
+                                        open={openModal}
+                                        onClose={() => setOpenModal(false)}
+                                        aria-labelledby="alert-dialog-title"
+                                        aria-describedby="alert-dialog-description"
+                                    >
+                                        <DialogTitle id="alert-dialog-title">
+                                            {"Update Confirmation?"}
+                                        </DialogTitle>
+                                        <DialogContent>
+                                            <DialogContentText id="alert-dialog-description">
+                                                Are you Sure to Update the Unit
+                                            </DialogContentText>
+                                        </DialogContent>
+                                        <DialogActions>
+                                            <Button onClick={() => setOpenModal(false)}>Cancel</Button>
+                                            <Button onClick={() => { updateUnitData(); setOpenModal(false); }} autoFocus>
+                                                Update
+                                            </Button>
+                                        </DialogActions>
+                                    </Dialog> : <Dialog
+                                        open={openModal}
+                                        onClose={() => setOpenModal(false)}
+                                        aria-labelledby="alert-dialog-title"
+                                        aria-describedby="alert-dialog-description"
+                                    >
+                                        <DialogTitle id="alert-dialog-title">
+                                            {"Create Confirmation?"}
+                                        </DialogTitle>
+                                        <DialogContent>
+                                            <DialogContentText id="alert-dialog-description">
+                                                Are you Sure to Add the Designation
+                                            </DialogContentText>
+                                        </DialogContent>
+                                        <DialogActions>
+                                            <Button onClick={() => setOpenModal(false)}>Cancel</Button>
+                                            <Button onClick={(e) => { unitSubmit(e); setOpenModal(false); }} autoFocus>
+                                                Add
+                                            </Button>
+                                        </DialogActions>
+                                    </Dialog>}
 
 
-                                    <div className="form-floating col">
-                                <Grid container spacing={1} className="mb-2" >
-                                    <Grid item xs={6}>
+                                    <div className="form-floating col-md-10">
+
                                         <TextField label="Unit Name"
                                             id="unitNameId"
                                             defaultValue=""
-
+                                            fullWidth
                                             size="small"
                                             placeholder="unitName"
                                             onChange={handleUnitDataBaseChange}
-                                            onKeyDown={handleKeyDown}
+
                                             value={unitData.unitName}
                                             name="unitName" ></TextField>
-                                    </Grid>
-                                </Grid>
-                                </div>
-                                </div>
-                               
 
-                                <div className='col d-flex justify-content-end mb-2'>
+                                    </div>
+                                </div>
+
+
+                                <div className='col d-flex justify-content-end'>
                                     {unitStateId ? <div className='d-flex justify-content-end'><div className='me-2' >
-                                        <button type="button" className='btn btn-secondary' onClick={() => updateUnitData(unitStateId)}>Modify</button>
+                                        <button type="button" className='btn btn-secondary' onClick={() => setOpenModal(true)}>Modify</button>
                                     </div>
                                         <div className='me-2' >
                                             <button type="button" className='btn btn-danger' onClick={() => { setUnitStateId(null); setUnitData(initialUnitData) }}>Cancel</button>
                                         </div></div> : <div>
-                                        <button type="button" className='btn btn-warning ' onClick={unitSubmit}>+ Add UnitDataBase</button>
+                                        <button type="button" className='btn btn-warning ' onClick={() => setOpenModal(true)}>+ Add UnitDataBase</button>
                                     </div>}
 
 
@@ -252,12 +304,12 @@ export const UnitDataBase = ({ style }) => {
                             </Paper>
                         </Grid>
 
-                        <Grid item xs={5} >
+                        <Grid item xs={6} >
                             <Paper sx={{
                                 p: 3,
                                 display: 'flex',
                                 flexDirection: 'column',
-                                mb: 4
+
                             }} >
                                 <div>
                                     <h6 className='text-center'>Unit List</h6>
@@ -273,12 +325,33 @@ export const UnitDataBase = ({ style }) => {
                                                     <tr onClick={() => updateUnit(item)}>
                                                         <td>{index + 1}</td>
                                                         <td>{item.unitName}</td>
-                                                        <td><button type='button' className='btn btn-danger' onClick={() => deleteUnitData(item._id)}><i class="bi bi-trash-fill"></i></button></td>
+                                                        <td><button type='button' className='btn btn-danger' onClick={() => setDeleteModal(true)}><i class="bi bi-trash-fill"></i></button></td>
                                                     </tr>
                                                 ))}
                                             </tbody>
                                         </table>
                                     </div>
+                                    <Dialog
+                                        open={deleteModal}
+                                        onClose={() => setDeleteModal(false)}
+                                        aria-labelledby="alert-dialog-title"
+                                        aria-describedby="alert-dialog-description"
+                                    >
+                                        <DialogTitle id="alert-dialog-title">
+                                            {"Delete Confirmation?"}
+                                        </DialogTitle>
+                                        <DialogContent>
+                                            <DialogContentText id="alert-dialog-description">
+                                                Are you Sure to Delete the Designation
+                                            </DialogContentText>
+                                        </DialogContent>
+                                        <DialogActions>
+                                            <Button onClick={() => setDeleteModal(false)}>Cancel</Button>
+                                            <Button onClick={(e) => { deleteUnitData(e); setDeleteModal(false); }} autoFocus>
+                                                Delete
+                                            </Button>
+                                        </DialogActions>
+                                    </Dialog>
 
                                 </div>
                             </Paper>
@@ -294,6 +367,28 @@ export const UnitDataBase = ({ style }) => {
 }
 
 export const PartDataBase = ({ style }) => {
+
+
+    const [customerList, setCustomerList]= useState([])
+
+    const vendorFetch = async () => {
+        try {
+            const response = await axios.get(
+                `${process.env.REACT_APP_PORT}/vendor/getAllVendors`
+            );
+
+            const customersList = response.data.result.filter((item) => item.customer === "1")
+            
+            setCustomerList(customersList);
+        } catch (err) {
+            console.log(err);
+        }
+    };
+    useEffect(() => {
+        vendorFetch();
+    }, []);
+
+    
 
 
     const [errorHandler, setErrorHandler] = useState({})
@@ -312,7 +407,8 @@ export const PartDataBase = ({ style }) => {
         partNo: "",
         partName: "",
         customer: "",
-        operationNo: ""
+        operationNo: "",
+        partStatus: ""
     }
 
 
@@ -320,7 +416,8 @@ export const PartDataBase = ({ style }) => {
         partNo: "",
         partName: "",
         customer: "",
-        operationNo: ""
+        operationNo: "",
+        partStatus: ""
     })
     console.log(partData)
 
@@ -379,10 +476,10 @@ export const PartDataBase = ({ style }) => {
 
         }
     };
-    const updatePartData = async (id) => {
+    const updatePartData = async () => {
         try {
             const response = await axios.put(
-                "http://localhost:3001/part/updatePart/" + id, partData
+                "http://localhost:3001/part/updatePart/" + partStateId, partData
             );
             partFetchData();
             setPartData({
@@ -423,7 +520,7 @@ export const PartDataBase = ({ style }) => {
     const deletePartData = async (id) => {
         try {
             const response = await axios.delete(
-                "http://localhost:3001/part/deletePart/" + id, partData
+                "http://localhost:3001/part/deletePart/" + partStateId, partData
             );
             partFetchData();
             setPartData({
@@ -481,6 +578,8 @@ export const PartDataBase = ({ style }) => {
         boxShadow: "0px 0px 10px 0px",
     }
 
+    const [openModal, setOpenModal] = useState(false);
+    const [deleteModal, setDeleteModal] = useState(false);
 
 
 
@@ -493,31 +592,34 @@ export const PartDataBase = ({ style }) => {
                     <Grid container spacing={2} >
 
 
-                        <Grid item xs={6} >
+                        <Grid item xs={12} className="d-flex justify-content-center">
                             <Paper sx={{
                                 p: 3,
                                 display: 'flex',
                                 flexDirection: 'column',
-                                mb: 4
-                            }} >
+                                
+                            }}
+                                className="d-flex justify-content-center"
+                            >
 
-                                <h6 className='text-center'>Part DataBase</h6>
+                                
                                 <div>
                                     <div className="row g-2 mb-2">
-                                        <div className="form-floating col">
-                                        <TextField label="Si.No."
-                                            id="partDbId"
-                                            
-                                            disabled 
-                                            defaultValue=""
-                                            placeholder="partDb"
-                                            size="small"
-                                           onChange={handlePartDataBaseChange}
-                                            onKeyDown={handleKeyDown}
-                                            value={partDataList.length + 1}
-                                            name="partDb" ></TextField>
-                                          
+                                        <div className="form-floating col-md-2">
+                                            <TextField label="Si.No."
+                                                id="partDbId"
+                                                fullWidth
+                                                disabled
+                                                defaultValue=""
+                                                placeholder="partDb"
+                                                size="small"
+                                                onChange={handlePartDataBaseChange}
+                                                onKeyDown={handleKeyDown}
+                                                value={partDataList.length + 1}
+                                                name="partDb" ></TextField>
+
                                         </div>
+<<<<<<< HEAD
                                         <div className="form-floating col-md-5">
                                         <TextField label="Part No"
                                             id="partNoId"
@@ -527,50 +629,89 @@ export const PartDataBase = ({ style }) => {
                                             onChange={handlePartDataBaseChange}
                                             onKeyDown={handleKeyDown}
                                             value={partData.partNo}
-                                            name="partNo" ></TextField>
+                                            name="partNo" />
                                            
+=======
+                                        <div className="form-floating col-md-4">
+                                            <TextField label="Part No"
+                                                id="partNoId"
+                                                defaultValue=""
+                                                fullWidth
+                                                size="small"
+                                                onChange={handlePartDataBaseChange}
+                                                onKeyDown={handleKeyDown}
+                                                value={partData.partNo}
+                                                name="partNo" ></TextField>
+
+>>>>>>> 810a2866990273708fd39c0fdf9f6ed0c709115d
                                         </div>
-                                        <div className="form-floating col">
-                                        <TextField label="Part Name"
-                                            id="partNameId"
-                                            defaultValue=""
-                                         
-                                            size="small"
-                                            onChange={handlePartDataBaseChange}
-                                            onKeyDown={handleKeyDown}
-                                            value={partData.partName}
-                                            name="partName" ></TextField>
-                                           
-                                           
+                                        <div className="form-floating col-md-6">
+                                            <TextField label="Part Name"
+                                                id="partNameId"
+                                                defaultValue=""
+                                                fullWidth
+                                                size="small"
+                                                onChange={handlePartDataBaseChange}
+                                                onKeyDown={handleKeyDown}
+                                                value={partData.partName}
+                                                name="partName" ></TextField>
+
+
                                         </div>
                                     </div>
 
 
                                     <div className="row mb-2 g-2">
-                                        <div className="form-floating col"  >
-                                        <TextField label="Customer"
-                                            id="partNameId"
-                                            defaultValue=""
-                                            placeholder="customer"
-                                            size="small"
-                                            onChange={handlePartDataBaseChange}
-                                            onKeyDown={handleKeyDown}
-                                            value={partData.customer}
-                                            name="customer" ></TextField>
-                                           
-                                           
+                                        <div className="form-floating col-md-6"  >
+                                            <TextField label="Customer"
+                                                select
+                                                id="partNameId"
+                                                defaultValue=""
+                                                placeholder="customer"
+                                                size="small"
+                                                onChange={handlePartDataBaseChange}
+                                                onKeyDown={handleKeyDown}
+                                                value={partData.customer}
+                                                name="customer"
+                                                fullWidth>
+                                                    {customerList.map((item, index)=> (
+                                                        <MenuItem key={index} value={item.aliasName}>{item.aliasName}</MenuItem>
+                                                    ))}
+
+                                                </TextField>
+
+
                                         </div>
-                                        <div className="form-floating col" >
-                                        <TextField label="Operation No"
-                                            id="operationNoId"
-                                            defaultValue=""
-                                            placeholder="operationNo" 
-                                            size="small"
-                                            onChange={handlePartDataBaseChange}
-                                            onKeyDown={handleKeyDown}
-                                            value={partData.operationNo}
-                                            name="operationNo" ></TextField>
-                                           
+                                        <div className="form-floating col-md-4" >
+                                            <TextField label="Operation No"
+                                                id="operationNoId"
+                                                defaultValue=""
+                                                placeholder="operationNo"
+                                                size="small"
+                                                onChange={handlePartDataBaseChange}
+                                                onKeyDown={handleKeyDown}
+                                                value={partData.operationNo}
+                                                name="operationNo"
+                                                fullWidth
+                                            ></TextField>
+
+                                        </div>
+                                        <div className="form-floating col-md-2">
+                                            <TextField label="Status"
+                                                id="partStatusId"
+                                                fullWidth
+                                                select
+                                                placeholder="partStatus"
+                                                size="small"
+                                                onChange={handlePartDataBaseChange}
+                                                defaultValue="Active"
+                                                value={partData.partStatus}
+                                                name="partStatus" >
+
+                                                <MenuItem value="Active">Active</MenuItem>
+                                                <MenuItem value="InActive">InActive</MenuItem>
+                                            </TextField>
+
                                         </div>
 
                                     </div>
@@ -585,38 +726,84 @@ export const PartDataBase = ({ style }) => {
                                 {partStateId ?
                                     <div className="d-flex justify-content-end">
                                         <div className='me-2'>
-                                            <button type="button" className='btn btn-secondary' onClick={() => updatePartData(partStateId)}>Modify</button>
+                                            <button type="button" className='btn btn-secondary' onClick={() => setOpenModal(true)}>Modify</button>
                                         </div>
                                         <div className='me-2'>
                                             <button type="button" className='btn btn-danger' onClick={() => { setPartStateId(null); setPartData(initialPartData) }}>Cancel</button>
                                         </div>
                                     </div> : <div className='col d-flex justify-content-end mb-2' >
                                         <div>
-                                            <button type="button" className='btn btn-warning' onClick={partSubmit}>+ Add PartDataBase</button>
+                                            <button type="button" className='btn btn-warning' onClick={() => setOpenModal(true)}>+ Add PartDataBase</button>
                                         </div>
                                     </div>}
+                                {partStateId ? <Dialog
+                                    open={openModal}
+                                    onClose={() => setOpenModal(false)}
+                                    aria-labelledby="alert-dialog-title"
+                                    aria-describedby="alert-dialog-description"
+                                >
+                                    <DialogTitle id="alert-dialog-title">
+                                        {"Update Confirmation?"}
+                                    </DialogTitle>
+                                    <DialogContent>
+                                        <DialogContentText id="alert-dialog-description">
+                                            Are you Sure to Update the Designation
+                                        </DialogContentText>
+                                    </DialogContent>
+                                    <DialogActions>
+                                        <Button onClick={() => setOpenModal(false)}>Cancel</Button>
+                                        <Button onClick={() => { updatePartData(); setOpenModal(false); }} autoFocus>
+                                            Update
+                                        </Button>
+                                    </DialogActions>
+                                </Dialog> :
+                                    <Dialog
+                                        open={openModal}
+                                        onClose={() => setOpenModal(false)}
+                                        aria-labelledby="alert-dialog-title"
+                                        aria-describedby="alert-dialog-description"
+                                    >
+                                        <DialogTitle id="alert-dialog-title">
+                                            {"Create Confirmation?"}
+                                        </DialogTitle>
+                                        <DialogContent>
+                                            <DialogContentText id="alert-dialog-description">
+                                                Are you Sure to Add the Part
+                                            </DialogContentText>
+                                        </DialogContent>
+                                        <DialogActions>
+                                            <Button onClick={() => setOpenModal(false)}>Cancel</Button>
+                                            <Button onClick={(e) => { partSubmit(e); setOpenModal(false); }} autoFocus>
+                                                Add
+                                            </Button>
+                                        </DialogActions>
+                                    </Dialog>}
+
+
+
                             </Paper>
                         </Grid>
 
 
 
-                        <Grid item xs={6} >
+                        <Grid item xs={12} >
                             <Paper sx={{
-                                p: 3,
+                                p: 2,
                                 display: 'flex',
                                 flexDirection: 'column',
-                                mb: 4
+
                             }} >
                                 <div>
-                                    <h6 className='text-center'>Part List</h6>
+                                    <h5 className='text-center'>Part List</h5>
                                     <div style={style} className='table-responsive'>
                                         <table className='table table-bordered text-center'>
                                             <tbody>
                                                 <tr>
                                                     <th>Sr.No</th>
                                                     <th>Part No</th>
-                                                    <th>Part Name</th>
-                                                    <th>Customer</th>
+                                                    <th width="20%">Part Name</th>
+                                                    <th width="25%">Customer</th>
+                                                    <th>Operation No.</th>
                                                     <th>Status</th>
                                                     <th>Delete</th>
                                                 </tr>
@@ -627,11 +814,33 @@ export const PartDataBase = ({ style }) => {
                                                         <td>{item.partName}</td>
                                                         <td>{item.customer}</td>
                                                         <td>{item.operationNo}</td>
-                                                        <td><button type="button" className='btn btn-danger' onClick={() => deletePartData(item._id)}><i class="bi bi-trash-fill"></i></button></td>
+                                                        <td>{item.partStatus}</td>
+                                                        <td><button type="button" className='btn btn-danger' onClick={() => setDeleteModal(true)}><i class="bi bi-trash-fill"></i></button></td>
                                                     </tr>
                                                 ))}
                                             </tbody>
                                         </table></div>
+                                    <Dialog
+                                        open={deleteModal}
+                                        onClose={() => setDeleteModal(false)}
+                                        aria-labelledby="alert-dialog-title"
+                                        aria-describedby="alert-dialog-description"
+                                    >
+                                        <DialogTitle id="alert-dialog-title">
+                                            {"Delete Confirmation?"}
+                                        </DialogTitle>
+                                        <DialogContent>
+                                            <DialogContentText id="alert-dialog-description">
+                                                Are you Sure to Delete the Designation
+                                            </DialogContentText>
+                                        </DialogContent>
+                                        <DialogActions>
+                                            <Button onClick={() => setDeleteModal(false)}>Cancel</Button>
+                                            <Button onClick={() => { deletePartData(); setDeleteModal(false); }} autoFocus>
+                                                Delete
+                                            </Button>
+                                        </DialogActions>
+                                    </Dialog>
 
                                 </div>
                             </Paper>

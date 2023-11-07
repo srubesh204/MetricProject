@@ -8,6 +8,8 @@ import FileDownloadIcon from '@mui/icons-material/FileDownload';
 import UploadFileIcon from '@mui/icons-material/UploadFile';
 import Alert from '@mui/material/Alert';
 import Snackbar from '@mui/material/Snackbar';
+import { TextField, MenuItem } from '@mui/material';
+import { Container, Paper } from '@mui/material';
 
 
 const ItemMaster = () => {
@@ -325,238 +327,368 @@ const ItemMaster = () => {
         <div style={{ marginTop: "4rem" }}>
             <div >
                 <form>
-                    <h1 className='text-center'>Item Master Database</h1>
-                    <div className='row mb-2 g-2'>
-                        <div class="form-floating col">
-                            <select className="form-select" id="itemTypeId" name="itemType" value={itemMasterData.itemType} onChange={handleItemMasterBaseChange} >
-                                <option selected>Item Type</option>
-                                <option value="Attribute">Attribute</option>
-                                <option value="Variable">Variable</option>
-                                <option value="Reference Standard">Reference Standard</option>
+                    <Container maxWidth="lg" sx={{ mb: 2 }}>
+                        
+                        <Paper
+                            sx={{
+                                p: 1,
+                                display: 'flex',
+                                flexDirection: 'column',
+                                mb: 2
 
-                            </select>
-                            <label htmlFor="itemTypeId">Item Type</label>
-                        </div>
-                        <div className="form-floating col">
-                            <input type="text" className="form-control" id="itemDescriptionId" name="itemDescription" placeholder="itemDescription" onKeyDown={handleKeyDown} value={itemMasterData.itemDescription} onChange={handleItemMasterBaseChange} />
-                            <label htmlFor="itemDescriptionId">Item Description</label>
-                        </div>
-
-                        <div className="form-floating col">
-                            <input type="text" className="form-control" id="itemPrefixId" name="itemPrefix" placeholder="itemPrefix" value={itemMasterData.itemPrefix} onChange={handleItemMasterBaseChange} />
-                            <label htmlFor="itemPrefixId">Item Prefix</label>
-                        </div>
-                    </div>
-
-                    <div className='row '>
-                        <div className='col-md-7'>
+                            }}>
                             <div className='row mb-2 g-2'>
-                                <div className="form-floating col-md-7">
-                                    <input type="text" className="form-control" id="wiNoId" name="wiNo" placeholder="wiNo" value={itemMasterData.wiNo} onChange={handleItemMasterBaseChange} />
-                                    <label htmlFor="wiNoId">WI No</label>
+
+                                <div className='col' >
+                                    <TextField fullWidth label="ItemType" value={itemMasterData.itemType} onChange={handleItemMasterBaseChange} className="form-select" select size="small" id="itemTypeId" name="itemType" defaultValue="" >
+
+                                        <MenuItem value="all">All</MenuItem >
+                                        <MenuItem value="Attribute">Attribute</MenuItem >
+                                        <MenuItem value="Variable">Variable</MenuItem >
+                                        <MenuItem value="Reference Standard">Reference Standard</MenuItem>
+
+                                    </TextField>
+
                                 </div>
+                                <div className="col">
+
+                                    <TextField label="Item Description "
+                                        id="itemDescriptionId"
+                                        defaultValue=""
+                                        sx={{ width: "100%" }}
+                                        size="small"
+                                        fullWidth
+                                        onKeyDown={handleKeyDown}
+                                        value={itemMasterData.itemDescription}
+                                        onChange={handleItemMasterBaseChange}
+                                        name="itemDescription" />
+                                </div>
+
                                 <div className="form-floating col">
-                                    <input type="number" className="form-control" id="itemFqInMonthsId" name="itemFqInMonths" placeholder="itemFqInMonths" value={itemMasterData.itemFqInMonths} onChange={handleItemMasterBaseChange} />
-                                    <label htmlFor="itemFqInMonthsId">Item Fq In Months</label>
+                                    <TextField label="Item PrefixId "
+                                        id="itemPrefix"
+                                        defaultValue=""
+                                        sx={{ width: "100%" }}
+                                        size="small"
+                                        fullWidth
+                                        value={itemMasterData.itemPrefix}
+                                        onChange={handleItemMasterBaseChange}
+                                        name="itemPrefix" />
                                 </div>
 
                             </div>
-                            <div className='row mb-2 g-2'>
-                                <div className="input-group col">
-                                    <div className="form-floating">
-                                        <input type="number" className="form-control" id="uncertaintyId" name="uncertainty" placeholder="Uncertainty" value={itemMasterData.uncertainty} onChange={handleItemMasterBaseChange} />
-                                        <label htmlFor="uncertaintyId">Uncertainty</label>
+                        </Paper>
+
+
+                        <div className='row '>
+
+                            <div className='col-md-7'>
+                                <Paper
+                                    sx={{
+                                        p: 1,
+                                        display: 'flex',
+                                        flexDirection: 'column',
+                                        mb: 2
+
+                                    }}>
+                                    <div className='row mb-2 g-2'>
+                                        <div className="form-floating col-md-6">
+
+                                            <TextField label="WiNo "
+                                                id="wiNoId"
+                                                defaultValue=""
+                                                sx={{ width: "100%" }}
+                                                size="small"
+                                                fullWidth
+                                                value={itemMasterData.wiNo}
+                                                onChange={handleItemMasterBaseChange}
+                                                name="wiNo" />
+                                        </div>
+                                        <div className="col">
+                                            <TextField label="Item Fq In Months "
+                                                id="itemFqInMonthsId"
+                                                defaultValue=""
+                                                sx={{ width: "100%" }}
+                                                size="small"
+                                                fullWidth
+                                                type='number'
+                                                value={itemMasterData.itemFqInMonths}
+                                                onChange={handleItemMasterBaseChange}
+                                                name="itemFqInMonths" />
+                                        </div>
+
                                     </div>
-                                    <div className="form-floating">
-                                        <select className="form-select" id="uncertaintyUnitId" name="uncertaintyUnit" value={itemMasterData.uncertaintyUnit} onChange={handleItemMasterBaseChange} >
-                                            <option selected>Unit</option>
-                                            <option value="1">Unit Name</option>
-                                        </select>
-                                        <label htmlFor="uncertaintyUnitId">Unit</label>
+                                    <div className='row mb-2 g-2'>
+                                        <div className="input-group col">
+                                            <div className="form-floating">
+
+                                                <TextField label="Uncertainty "
+                                                    id="uncertaintyId"
+                                                    defaultValue=""
+                                                    sx={{ width: "100%" }}
+                                                    size="small"
+                                                    fullWidth
+                                                    type='number'
+                                                    value={itemMasterData.uncertainty}
+                                                    onChange={handleItemMasterBaseChange}
+                                                    name="uncertainty" />
+
+                                            </div>
+                                            <div className='col' >
+
+                                                <TextField fullWidth label="Unit" value={itemMasterData.uncertaintyUnit} onChange={handleItemMasterBaseChange} className="form-select" select size="small" id="uncertaintyUnitId" name="uncertaintyUnit" defaultValue="" >
+
+
+                                                    <MenuItem value="Unit">Unit</MenuItem >
+                                                    <MenuItem value="Unit Name">Unit Name</MenuItem>
+
+                                                </TextField>
+
+                                            </div>
+
+                                        </div>
+                                        <div className="form-floating col">
+
+                                            <TextField label="CalAlertInDay "
+                                                id="calAlertInDayId"
+                                                defaultValue=""
+                                                sx={{ width: "100%" }}
+                                                size="small"
+                                                fullWidth
+                                                type='number'
+                                                value={itemMasterData.calAlertInDay}
+                                                onChange={handleItemMasterBaseChange}
+                                                name="calAlertInDay" />
+
+                                        </div>
+                                    </div>
+                                    <div className='row g-2 mb-2 '>
+
+                                        <div className="form-floating col">
+                                            <TextField label="StandardRef "
+                                                id="standardRefId"
+                                                defaultValue=""
+                                                sx={{ width: "100%" }}
+                                                size="small"
+                                                fullWidth
+                                                type='number'
+                                                value={itemMasterData.calAlertInDay}
+                                                onChange={handleItemMasterBaseChange}
+                                                name="standardRef" />
+
+                                        </div>
+                                        <div className=" col">
+
+                                            <TextField fullWidth label="Status" value={itemMasterData.status} onChange={handleItemMasterBaseChange} className="form-select" select size="small" id="statusId" name="status" defaultValue="" >
+
+                                                <MenuItem value="all">All</MenuItem >
+                                                <MenuItem value="Attribute">Attribute</MenuItem >
+                                                <MenuItem value="InActive">InActive</MenuItem >
+
+
+                                            </TextField>
+                                        </div>
+
+                                    </div>
+                                </Paper>
+                            </div>
+
+                            <div className='col-md-2'>
+                                <div style={{ width: "100%", height: "72%", margin: "0 0px 0 0", padding: 0 }}>
+                                    <input type="file" accept="image/*" onChange={handleImageChange} />
+                                    {image && <img src={image} width="200px" height="200px" alt="Uploaded" style={{ maxWidth: '100%' }} />}
+                                </div>
+                                <button className='btn btn-warning me-2 '>Upload Image</button>
+                                <button className='btn btn-danger' onClick={() => setImage(null)}>x</button>
+
+                            </div>
+
+
+                            <div className='col-md-3 d-flex justify-content-end mb-2 ps-0 ms-0'>
+                                <div className='col-12'>
+                                    <Paper
+                                        sx={{
+                                            p: 1,
+                                            display: 'flex',
+                                            flexDirection: 'column',
+                                            mb: 2
+
+                                        }}>
+                                        <table className='table table-bordered text-center align-middle'>
+                                            <tbody>
+                                                <tr>
+                                                    <th>Si No</th>
+                                                    <th>Calibration Points </th>
+                                                    <th><button type='button' className='btn btn-warning' onClick={addCalibrationPointRow}>Add</button></th>
+                                                </tr>
+                                                {itemMasterData.calibrationPoints ? itemMasterData.calibrationPoints.map((item, index) => (
+                                                    <tr key={index}>
+                                                        <td>{index + 1}</td>
+                                                        <td><input type='text' className='form-control' name='calibrationPoint' value={item.calibrationPoint} onChange={(e) => changeCalibrationPointRow(index, e.target.name, e.target.value)} /></td>
+                                                        <td><button type='button' className='btn btn-danger' onClick={() => deleteCalibrationPointRow(index)}><i class="bi bi-trash-fill"></i></button></td>
+                                                    </tr>
+
+
+                                                )) : <tr></tr>}
+
+                                            </tbody>
+                                        </table>
+                                    </Paper>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <Paper
+                            sx={{
+                                p: 1,
+                                display: 'flex',
+                                flexDirection: 'column',
+                                mb: 2
+
+                            }}>
+                            <div className='row'>
+
+                                <div className="col-md-7">
+                                    <div>
+                                        <Stack direction="row"
+                                            justifyContent="flex-start"
+                                            alignItems="flex-start"
+                                            spacing={2} >
+                                            <Button component="label" variant="contained" startIcon={<CloudUploadIcon />} size="small" font>
+                                                Upload file
+                                                <VisuallyHiddenInput type="file" />
+                                            </Button>
+                                            <Button component="label" variant="contained" startIcon={<FileDownloadIcon />} size="small">
+                                                Download file
+                                                <VisuallyHiddenInput type="file" />
+                                            </Button>
+                                        </Stack>
                                     </div>
 
-                                </div>
-                                <div className="form-floating col">
-                                    <input type="number" className="form-control" id="calAlertInDayId" name="calAlertInDay" placeholder="calAlertInDay" value={itemMasterData.calAlertInDay} onChange={handleItemMasterBaseChange} />
-                                    <label htmlFor="calAlertInDayId">Calibration Alert In Days</label>
-                                </div>
-                            </div>
-                            <div className='row g-2 mb-2 '>
 
-                                <div className="form-floating col">
-                                    <input type="text" className="form-control" id="standardRefId" name="standardRef" placeholder="standardRef" value={itemMasterData.standardRef} onChange={handleItemMasterBaseChange} />
-                                    <label htmlFor="standardRefId">Standard Ref </label>
-                                </div>
-                                <div className="form-floating col">
-                                    <select className="form-select" id="statusId" name="status" aria-label="Floating label select example" value={itemMasterData.status} onChange={handleItemMasterBaseChange} >
-                                        <option selected>All</option>
-                                        <option value="Active">Active</option>
-                                        <option value="InActive">InActive</option>
-                                        <option value="Relived">Relived</option>
-                                    </select>
-                                    <label htmlFor="statusId">Status</label>
+
+                                    <div className=' md-7'>
+                                        <Stack
+                                            direction="row"
+                                            justifyContent="flex-end"
+                                            alignItems="flex-start"
+                                            spacing={2}
+
+                                        >
+                                            <Button component="label" variant="contained" startIcon={<UploadFileIcon />} size="small">
+                                                Work Instruction Upload
+                                                <VisuallyHiddenInput type="file" />
+                                            </Button>
+                                        </Stack>
+                                    </div>
+
+
                                 </div>
 
+
+                                <div className="col-md-5">
+                                    {itemMasterStateId ?
+                                        <div className='col d-flex justify-content-end '>
+                                            <div className='me-2' >
+                                                <button type="button" className='btn btn-secondary' onClick={() => updateItemMasterData(itemMasterStateId)} >Modify</button>
+                                            </div>
+                                            <div className='me-2' >
+                                                <button type="button" className='btn btn-secondary' onClick={() => { setItemMasterStateId(null); setItemMasterData(initialItemMasterData) }}>Cancel</button>
+                                            </div>
+                                        </div> : <div className='col d-flex justify-content-end '>
+                                            <div >
+                                                <button type="button" className='btn btn-warning' onClick={itemMasterSubmit}>+ Add Item Master</button>
+                                            </div>
+                                        </div>
+                                    }
+                                </div>
+
                             </div>
-                        </div>
-                        <div className='col-md-2'>
-                            <div style={{ width: "100%", height: "72%", margin: "0 0px 0 0", padding: 0 }}>
-                                <input type="file" accept="image/*" onChange={handleImageChange} />
-                                {image && <img src={image} width="200px" height="200px" alt="Uploaded" style={{ maxWidth: '100%' }} />}
-                            </div>
-                            <button className='btn btn-warning me-2 '>Upload Image</button>
-                            <button className='btn btn-danger' onClick={() => setImage(null)}>x</button></div>
-                        <div className='col-md-3 d-flex justify-content-end mb-2 ps-0 ms-0'>
-                            <div className='col-12'>
-                                <table className='table table-bordered text-center align-middle'>
-                                    <tbody>
-                                        <tr>
-                                            <th>Si No</th>
-                                            <th>Calibration Points </th>
-                                            <th><button type='button' className='btn btn-warning' onClick={addCalibrationPointRow}>Add</button></th>
-                                        </tr>
-                                        {itemMasterData.calibrationPoints ? itemMasterData.calibrationPoints.map((item, index) => (
-                                            <tr key={index}>
-                                                <td>{index + 1}</td>
-                                                <td><input type='text' className='form-control' name='calibrationPoint' value={item.calibrationPoint} onChange={(e) => changeCalibrationPointRow(index, e.target.name, e.target.value)} /></td>
-                                                <td><button type='button' className='btn btn-danger' onClick={() => deleteCalibrationPointRow(index)}><i class="bi bi-trash-fill"></i></button></td>
-                                            </tr>
+                        </Paper>
 
 
-                                        )) : <tr></tr>}
 
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                    <div className='row'>
-                        <div className="col-md-7">
+
+
+
+                        <Paper
+                            sx={{
+                                p: 1,
+                                display: 'flex',
+                                flexDirection: 'column',
+                                mb: 4
+
+                            }}>
                             <div>
-                                <Stack direction="row"
-                                    justifyContent="flex-start"
-                                    alignItems="flex-start"
-                                    spacing={2} >
-                                    <Button component="label" variant="contained" startIcon={<CloudUploadIcon />} size="small" font>
-                                        Upload file
-                                        <VisuallyHiddenInput type="file" />
-                                    </Button>
-                                    <Button component="label" variant="contained" startIcon={<FileDownloadIcon />} size="small">
-                                        Download file
-                                        <VisuallyHiddenInput type="file" />
-                                    </Button>
-                                </Stack>
-                            </div>
+                                <h3 className='text-center'>Item List</h3>
+                                <div className='row mb-2 g-2'>
 
+                                    <div class="col-3 ">
+                                        <TextField fullWidth label="Item Type Sort" onChange={handleFilterChange} className="form-select" select size="small" id="itemTypeSortId" name="itemTypeSort" defaultValue="" >
 
+                                            <MenuItem value="all">All</MenuItem >
+                                            <MenuItem value="Attribute">Attribute</MenuItem >
+                                            <MenuItem value="Variable">Variable</MenuItem >
+                                            <MenuItem value="Reference Standard">Reference Standard</MenuItem >
 
-                            <div className=' md-7'>
-                                <Stack
-                                    direction="row"
-                                    justifyContent="flex-end"
-                                    alignItems="flex-start"
-                                    spacing={2}
+                                        </TextField>
 
-                                >
-                                    <Button component="label" variant="contained" startIcon={<UploadFileIcon />} size="small">
-                                        Work Instruction Upload
-                                        <VisuallyHiddenInput type="file" />
-                                    </Button>
-                                </Stack>
-                            </div>
-
-
-                        </div>
-
-
-                        <div className="col-md-5">
-                            {itemMasterStateId ?
-                                <div className='col d-flex justify-content-end '>
-                                    <div className='me-2' >
-                                        <button type="button" className='btn btn-secondary' onClick={() => updateItemMasterData(itemMasterStateId)} >Modify</button>
                                     </div>
-                                    <div className='me-2' >
-                                        <button type="button" className='btn btn-secondary' onClick={() => { setItemMasterStateId(null); setItemMasterData(initialItemMasterData) }}>Cancel</button>
+                                    <div class=" col-3">
+                                        <TextField fullWidth label="Item Description Sort" onChange={handleFilterChange} className="form-select" select size="small" id="itemDescriptionSortId" name="itemDescriptionSort" defaultValue="" >
+
+                                            <MenuItem value="all">All</MenuItem >
+                                            {itemMasterDataList.map((item) => (
+                                                <MenuItem value={item.itemDescription}>{item.itemDescription}</MenuItem>
+                                            ))}
+
+                                        </TextField>
                                     </div>
-                                </div> : <div className='col d-flex justify-content-end '>
-                                    <div >
-                                        <button type="button" className='btn btn-warning' onClick={itemMasterSubmit}>+ Add Item Master</button>
-                                    </div>
+
                                 </div>
-                            }
-                        </div>
-                    </div>
+                                <div>
+                                    <table className='table table-bordered text-center'>
+                                        <tbody>
+                                            <tr>
+                                                <th>Si No</th>
+                                                <th>Item Name</th>
+                                                <th>Item Prefix</th>
+                                                <th>Cal Fq</th>
+                                                <th>Alert Days</th>
+                                                <th>Item Type</th>
+                                                <th>Status</th>
+                                                <th>Delete</th>
 
 
+                                            </tr>
+                                            {filteredData ? filteredData.map((item, index) => (
+                                                <tr key={index} onClick={() => updateItemMaster(item)}>
+                                                    <td>{index + 1}</td>
+                                                    <td>{item.itemDescription}</td>
+                                                    <td>{item.itemPrefix}</td>
+                                                    <td>{item.itemFqInMonths}</td>
+                                                    <td>{item.calAlertInDay}</td>
+                                                    <td>{item.itemType}</td>
+                                                    <td>{item.status}</td>
 
 
-                    <hr />
+                                                    <td><button type='button' className='btn btn-danger' onClick={() => deleteItemMasterData(item._id)} ><i class="bi bi-trash-fill"></i></button></td>
+                                                </tr>
+                                            )) : <tr>
+                                                <td colSpan={8}>No Data Available</td></tr>}
 
-                    <div>
-                        <h3 className='text-center'>Item List</h3>
-                        <div className='row mb-2 g-2'>
-
-                            <div class="form-floating col-3 ">
-                                <select className="form-select" id="itemTypeId" name="itemTypeSort" aria-label="Floating label select example" onChange={handleFilterChange}>
-                                    <option value="all">All</option>
-                                    <option value="Attribute">Attribute</option>
-                                    <option value="Variable">Variable</option>
-                                    <option value="Reference Standard">Reference Standard</option>
-                                </select>
-                                <label htmlFor="itemTypeId">Item Type Sort</label>
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
-                            <div class="form-floating col-3">
-                                <select className="form-select" id="itemDescriptionSortId" name="itemDescriptionSort" aria-label="Floating label select example" onChange={handleFilterChange} >
-                                    <option value="all">all</option>
-                                    {itemMasterDataList.map((item) => (
-                                        <option value={item.itemDescription}>{item.itemDescription}</option>
-                                    ))}
-                                </select>
-                                <label htmlFor="itemDescriptionId">Item Description Sort</label>
-                            </div>
-
-                        </div>
-                        <div>
-                            <table className='table table-bordered text-center'>
-                                <tbody>
-                                    <tr>
-                                        <th>Si No</th>
-                                        <th>Item Name</th>
-                                        <th>Item Prefix</th>
-                                        <th>Cal Fq</th>
-                                        <th>Alert Days</th>
-                                        <th>Item Type</th>
-                                        <th>Status</th>
-                                        <th>Delete</th>
-
-
-                                    </tr>
-                                    {filteredData ? filteredData.map((item, index) => (
-                                        <tr key={index} onClick={() => updateItemMaster(item)}>
-                                            <td>{index + 1}</td>
-                                            <td>{item.itemDescription}</td>
-                                            <td>{item.itemPrefix}</td>
-                                            <td>{item.itemFqInMonths}</td>
-                                            <td>{item.calAlertInDay}</td>
-                                            <td>{item.itemType}</td>
-                                            <td>{item.status}</td>
-
-
-                                            <td><button type='button' className='btn btn-danger' onClick={() => deleteItemMasterData(item._id)} ><i class="bi bi-trash-fill"></i></button></td>
-                                        </tr>
-                                    )) : <tr>
-                                        <td colSpan={8}>No Data Available</td></tr>}
-
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                    <Snackbar anchorOrigin={{ vertical: "top", horizontal: "right" }} open={snackBarOpen} autoHideDuration={6000} onClose={handleSnackClose}>
-                        <Alert variant="filled" onClose={handleSnackClose} severity={errorhandler.code} sx={{ width: '100%' }}>
-                            {errorhandler.message}
-                        </Alert>
-                    </Snackbar>
-
+                            <Snackbar anchorOrigin={{ vertical: "top", horizontal: "right" }} open={snackBarOpen} autoHideDuration={6000} onClose={handleSnackClose}>
+                                <Alert variant="filled" onClose={handleSnackClose} severity={errorhandler.code} sx={{ width: '100%' }}>
+                                    {errorhandler.message}
+                                </Alert>
+                            </Snackbar>
+                        </Paper>
+                    </Container>
                 </form>
             </div>
         </div>
