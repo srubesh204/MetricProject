@@ -619,7 +619,6 @@ export const PartDataBase = ({ style }) => {
                                                 name="partDb" ></TextField>
 
                                         </div>
-<<<<<<< HEAD
                                         <div className="form-floating col-md-5">
                                         <TextField label="Part No"
                                             id="partNoId"
@@ -631,19 +630,6 @@ export const PartDataBase = ({ style }) => {
                                             value={partData.partNo}
                                             name="partNo" />
                                            
-=======
-                                        <div className="form-floating col-md-4">
-                                            <TextField label="Part No"
-                                                id="partNoId"
-                                                defaultValue=""
-                                                fullWidth
-                                                size="small"
-                                                onChange={handlePartDataBaseChange}
-                                                onKeyDown={handleKeyDown}
-                                                value={partData.partNo}
-                                                name="partNo" ></TextField>
-
->>>>>>> 810a2866990273708fd39c0fdf9f6ed0c709115d
                                         </div>
                                         <div className="form-floating col-md-6">
                                             <TextField label="Part Name"
