@@ -129,7 +129,7 @@ const employeeController = {
       if (!deleteEmployee) {
         return res.status(404).json({ error: 'Employee detail not found' });
       }
-
+      console.log("Employee Deleted Successfully")
       res.status(202).json({ message: 'Employee detail deleted successfully' ,result: deleteEmployee });
     } catch (error) {
       console.error(error);

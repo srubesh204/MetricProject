@@ -14,8 +14,8 @@ const areaController = {
       createArea: async (req, res) => {
        
         try {
-          const { area,areaStatus} = req.body;
-          const areaResult = new areaModel({ area,areaStatus});
+          const { area, areaStatus } = req.body;
+          const areaResult = new areaModel({ area, areaStatus});
           const validationError = areaResult.validateSync();
 
           if (validationError) {
@@ -121,7 +121,7 @@ const areaController = {
         if (!deleteArea) {
             return res.status(404).json({ error: 'Area not found' });
         }
-
+        console.log("Area Deleted Successfully")
         res.status(202).json({ message: 'Area detail deleted successfully' ,result: deleteArea });
 } catch (error) {
   console.error(error);

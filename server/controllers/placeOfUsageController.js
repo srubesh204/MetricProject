@@ -121,7 +121,7 @@ const placeOfUsageController = {
         if (!deletePlaceOfUsage) {
             return res.status(404).json({ error: 'Place Of Usage not found' });
         }
-
+        console.log("Place Of Usage Deleted Successfully")
         res.status(202).json({ message: 'Place Of Usage detail deleted successfully' ,result: deletePlaceOfUsage });
 } catch (error) {
   console.error(error);

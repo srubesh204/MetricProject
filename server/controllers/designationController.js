@@ -121,7 +121,7 @@ const designationController = {
           if (!deleteDesignation) {
               return res.status(404).json({ error: 'Designation not found' });
           }
-
+          console.log("Designation Deleted Successfully")
           res.status(202).json({ message: 'Designation detail deleted successfully' ,result: deleteDesignation });
   } catch (error) {
     console.error(error);
