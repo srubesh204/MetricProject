@@ -139,7 +139,7 @@ const vendorController = {
             if (!deleteVendor) {
                 return res.status(404).json({ error: 'Vendor not found' });
             }
-
+            console.log("Vendor Deleted Successfully")
             res.status(202).json({ message: 'Vendor deleted successfully' ,result: deleteVendor });
     } catch (error) {
       console.error(error);

@@ -2,8 +2,15 @@ const mongoose = require('mongoose');
 //const uniqueValidator = require('mongoose-unique-validator');
 
 const areaSchema = new mongoose.Schema({
-  area: String,
-  areaStatus:String,
+
+  area: {
+    type: String,
+    
+  },
+  areaStatus: {
+    type: String
+  }
+
     
 });
 //unitSchema.plugin(uniqueValidator);

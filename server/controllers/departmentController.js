@@ -121,7 +121,7 @@ const departmentController = {
         if (!deleteDepartment) {
             return res.status(404).json({ error: 'Department not found' });
         }
-
+        console.log("Department Deleted Successfully")
         res.status(202).json({ message: 'Department detail deleted successfully' ,result: deleteDepartment });
 } catch (error) {
   console.error(error);

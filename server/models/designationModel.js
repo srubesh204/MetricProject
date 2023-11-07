@@ -12,7 +12,7 @@ const designationSchema = new mongoose.Schema({
   },
   designationStatus: {
     type: String,
-    required: [true, "Department Status Required"]
+    required: [true, "Designation Status Required"]
   }
 });
 designationSchema.plugin(uniqueValidator);

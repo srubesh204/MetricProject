@@ -1,10 +1,10 @@
 
 import './App.css';
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
-import {Department,Designation} from './Components/DesDep';
+import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom';
+import { Department, Designation } from './Components/DesDep';
 import Employee from './Components/employee/Employee';
 
-import {UnitDataBase,PartDataBase} from './Components/general/General';
+import { UnitDataBase, PartDataBase } from './Components/general/General';
 import Vendor from './Components/vendor/Vendor';
 import ItemMaster from './Components/itemMaster/ItemMaster';
 import Devi from './Components/devi/Devi';
@@ -19,10 +19,16 @@ import ItemList from './Components/itemList/ItemList';
 
 
 function App() {
+  const location = useLocation();
+
+  console.log('hash', location.hash);
+  console.log(location.pathname);
+  console.log('search', location.search); 
   return (
     <div className="App">
-      <BrowserRouter>
-        <Dashboard /> 
+
+      
+        {location.pathname === "/itemadd" ? "" : <Dashboard /> }
         <Routes>
           <Route path="/desdep" element={<Department />} />
           <Route path="/des" element={<Designation />} />
@@ -36,7 +42,7 @@ function App() {
           <Route path="/itemList" element={<ItemList/>} />
           
         </Routes>
-      </BrowserRouter>
+      
     </div>
   );
 }

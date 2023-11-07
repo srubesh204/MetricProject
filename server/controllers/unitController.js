@@ -120,7 +120,7 @@ const unitController = {
       if (!deleteUnit) {
         return res.status(404).json({ error: 'Unit not found' });
       }
-
+      console.log("Unit Deleted Successfully")
       res.status(202).json({ message: 'Unit deleted successfully', result: deleteUnit });
     } catch (error) {
       console.error(error);

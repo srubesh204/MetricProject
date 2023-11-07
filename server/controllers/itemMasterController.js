@@ -135,7 +135,7 @@ const itemMasterController = {
           if (!deleteItemMaster) {
               return res.status(404).json({ error: 'Item Master not found' });
           }
-
+          console.log("Item Master Deleted Successfully")
           res.status(202).json({ message: 'Item Master detail deleted successfully' ,result: deleteItemMaster });
   } catch (error) {
     console.error(error);
