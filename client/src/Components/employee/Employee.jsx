@@ -316,7 +316,7 @@ const Employee = () => {
         }
     };
 
-    const handleKeyDown = (event) => {
+    const handleKeyDown = (event, newValue) => {
         const { name, value } = event.target
         console.log(name)
         if (event.key === 'Tab') {
@@ -447,6 +447,7 @@ const Employee = () => {
                                     size="small"
                                     fullWidth
                                     onChange={handleChange}
+                                    onKeyDown={handleKeyDown}
                                     value={employeeData.lastName}
                                     name="lastName" />
                             </Grid>

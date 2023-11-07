@@ -14,8 +14,8 @@ const placeOfUsageController = {
       createPlaceOfUsage: async (req, res) => {
        
         try {
-          const { placeOfUsage} = req.body;
-          const placeOfUsageResult = new placeOfUsageModel({ placeOfUsage});
+          const { placeOfUsage,placeOfUsageStatus} = req.body;
+          const placeOfUsageResult = new placeOfUsageModel({ placeOfUsage,placeOfUsageStatus});
           const validationError = placeOfUsageResult.validateSync();
 
           if (validationError) {
@@ -61,7 +61,7 @@ const placeOfUsageController = {
           // Create an object with the fields you want to update
           const updatepouFields = {
             /* Specify the fields and their updated values here */
-            placeOfUsage: req.body.placeOfUsage // Example: updating the 'name' field
+            placeOfUsage: req.body.placeOfUsage, placeOfUsageStatus:req.body.placeOfUsageStatus // Example: updating the 'name' field
             // Add more fields as needed
           };
       
@@ -87,7 +87,7 @@ const placeOfUsageController = {
 
           // Find the designation by desId and update it
           const updatePlaceOfUsage = await placeOfUsageModel.findOneAndUpdate(
-              { _id: depId },
+              { _id: pouId },
               updatepouFields,
               { new: true } // To return the updated document
           );

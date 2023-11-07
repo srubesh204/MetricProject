@@ -14,8 +14,8 @@ const departmentController = {
       createDepartment: async (req, res) => {
        
         try {
-          const { department, defaultdep} = req.body;
-          const departmentResult = new departmentModel({ department,defaultdep});
+          const { department, departmentStatus, defaultdep} = req.body;
+          const departmentResult = new departmentModel({ department, departmentStatus, defaultdep});
           const validationError = departmentResult.validateSync();
 
           if (validationError) {
@@ -61,7 +61,7 @@ const departmentController = {
           // Create an object with the fields you want to update
           const updateDepFields = {
             /* Specify the fields and their updated values here */
-            department: req.body.department, defaultdep : req.body.defaultdep, // Example: updating the 'name' field
+            department: req.body.department, departmentStatus : req.body.departmentStatus, defaultdep : req.body.defaultdep, // Example: updating the 'name' field
             // Add more fields as needed
           };
       
