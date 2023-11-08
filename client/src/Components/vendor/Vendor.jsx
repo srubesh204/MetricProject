@@ -1,12 +1,13 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import axios from 'axios'
 import Autocomplete from '@mui/material/Autocomplete';
-import { TextField, MenuItem, styled, Button, ButtonGroup, Chip, FormControl, OutlinedInput, Fab } from '@mui/material';
+import { TextField, MenuItem, styled, Button, ButtonGroup, Chip, FormControl, OutlinedInput, Fab, Link } from '@mui/material';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import Alert from '@mui/material/Alert';
 import Snackbar from '@mui/material/Snackbar';
 import RemoveRoundedIcon from '@mui/icons-material/RemoveRounded';
 import AddRoundedIcon from '@mui/icons-material/AddRounded';
+
 import { Container, Paper } from '@mui/material';
 import { Box, Grid } from '@mui/material';
 import { DataGrid } from '@mui/x-data-grid';
@@ -14,7 +15,7 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import dayjs from 'dayjs';
-import {Add, Remove} from '@mui/icons-material';
+import { Add, Remove, HighlightOffRounded } from '@mui/icons-material';
 
 const Vendor = () => {
 
@@ -397,33 +398,10 @@ const Vendor = () => {
 
     };
 
-    const [file, setFile] = useState(null);
+    
 
-    const handleFileChange = (e) => {
-        setFile(e.target.files[0]);
-        setVendorData((prev) => ({ ...prev, certificate: e.target.files[0].name }));
-    };
+    
 
-    const handleFileUpload = async () => {
-        const formData = new FormData();
-        formData.append('file', file);
-
-        try {
-            const response = await fetch("http://localhost:3001/upload/VendorCertificateUpload", {
-                method: 'POST',
-                body: formData,
-            });
-            console.log(response)
-            if (response.ok) {
-                setSnackBarOpen(true);
-                console.log('File uploaded successfully');
-
-                setErrorHandler({ status: 1, message: "Vendor Certificate Uploaded Successfully", code: "success" });
-            }
-        } catch (error) {
-            console.error('Error uploading the file:', error);
-        }
-    };
 
     const VisuallyHiddenInput = styled('input')({
         clip: 'rect(0 0 0 0)',
@@ -437,7 +415,76 @@ const Vendor = () => {
         width: 1,
     });
 
+    // useEffect(() => {
+    //     axios.get('http://localhost:3001/upload/getVendorCertificate/' + vendorData.certificate) // Replace with your API endpoint URL
+    //         .then((response) => {
+    //             console.log(response)
+    //             setFile((prev) => ({ ...prev, file: response.data }));
+    //         })
+    //         .catch((error) => {
+    //             console.error('Error fetching file:', error);
+    //         });
+    // }, [vendorData.certificate]);
 
+    const [iframeURL, setIframeURL] = useState({fileURL: "", fileName: "", file: ""});
+    const fileInputRef = useRef(null);
+    const [uploadProgress, setUploadProgress] = useState(0)
+
+    const handleFileSelect = (event) => {
+        const selectedFile = event.target.files[0];
+        console.log(selectedFile)
+        if (selectedFile) {
+            console.log("working")
+            setVendorData((prev) => ({ ...prev, certificate: selectedFile.name }));
+            const fileURL = URL.createObjectURL(selectedFile);
+            setIframeURL({ fileURL: fileURL, fileName: selectedFile.name, file: selectedFile });
+        }
+    };
+
+    const handleDragOver = (event) => {
+        event.preventDefault();
+    };
+
+    const handleDrop = (event) => {
+        event.preventDefault(); 
+        const droppedFile = event.dataTransfer.files[0];
+        
+        if (droppedFile) {
+            const fileURL = URL.createObjectURL(droppedFile);
+            setVendorData((prev) => ({ ...prev, certificate: droppedFile.name }));
+            setIframeURL({ fileURL: fileURL, fileName: droppedFile.name, file: droppedFile });
+        }
+    };
+    console.log(iframeURL)
+    const handleFileUpload = async () => {
+        const formData = new FormData();
+        formData.append('file', iframeURL.file);
+
+        try {
+            axios.post("http://localhost:3001/upload/VendorCertificateUpload", formData, {
+                onUploadProgress: (progressEvent) => {
+                    const percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total);
+                    setUploadProgress(percentCompleted);
+                }
+            })
+                .then(response => {
+                    setSnackBarOpen(true);
+                    setErrorHandler({ status: 1, message: response.data.message, code: "success" });
+                    console.log(response);
+                })
+                .catch(error => {
+                    console.error(error);
+                    // handle error here
+                });
+        } catch (error) {
+            console.error('Error uploading the file:', error);
+        }
+    };
+    
+    const RemoveFile = () => {
+        setIframeURL({fileURL: "", fileName: "", file: ""});
+        setVendorData((prev) => ({ ...prev, certificate: "" }));
+    }
 
     return (
         <div >
@@ -496,7 +543,7 @@ const Vendor = () => {
                                 <Grid item xs={3}>
                                     <div className="col">
 
-                                        
+
                                         <input type="date" className="form-control" id="dorId" max={DateFormat} fullWidth name="dor" value={vendorData.dor} onChange={handleVendorDataBaseChange} placeholder="dor" />
                                     </div>
 
@@ -661,7 +708,7 @@ const Vendor = () => {
 
                                 </div>
                                 <div className="row">
-                                    <ButtonGroup className='col' >
+                                    {/* <ButtonGroup className='col' >
 
                                         <Button component="label" variant='contained' sx={{ width: "80%" }}>
                                             Certificate
@@ -670,7 +717,70 @@ const Vendor = () => {
 
                                         <Button variant='outlined' sx={{ width: "20%" }} startIcon={<CloudUploadIcon />} type='button' className='btn btn-info' onClick={handleFileUpload}>Upload</Button>
 
-                                    </ButtonGroup>
+                                    </ButtonGroup> */}
+                                    <div>
+                                        <div>
+                                            <input
+                                                type="file"
+                                                accept=".pdf" // Specify the accepted file types
+                                                ref={fileInputRef}
+                                                style={{ display: 'none' }}
+                                                onChange={handleFileSelect}
+
+                                            />
+                                            <button style={{ display: "none" }} onClick={() => fileInputRef.current.click()}>Select File</button>
+                                        </div>
+                                        <div className="d-flex justify-content-spaced align-middle" style={{width: "100%", height: "50px"}}>
+                                            <div
+                                                onDragOver={handleDragOver}
+                                                onDrop={handleDrop}
+                                                onClick={() => fileInputRef.current.click()} // Click the hidden file input
+                                                style={{
+                                                    width: '100%',
+                                                    height: '100%',
+                                                    border: '2px dashed #ccc',
+                                                    display: 'flex',
+                                                    justifyContent: 'center',
+                                                    alignItems: 'center',
+                                                    cursor: 'pointer', // Change cursor on hover to indicate clickability
+                                                }}
+                                            >
+                                                <div>
+
+                                                    <p className='m-0'>
+                                                        Drag and drop or click here
+                                                    </p>
+
+
+
+                                                </div>
+
+                                            </div>
+                                            
+                                            {vendorData.certificate &&
+                                            <div className='d-flex ' style={{border: '2px dashed #ccc'}}>
+                                                
+                                                <Link className='m-0' target="_blank" href={`${process.env.REACT_APP_PORT}/vendorCertificates/${vendorData.certificate}`} underline="hover">
+                                                    {vendorData.certificate}
+                                                </Link>
+
+                                               <HighlightOffRounded type="button" onClick={()=> RemoveFile()} />
+                                          
+
+                                            </div>
+                                            }
+
+                                        </div>
+
+
+                                        {iframeURL && <div>
+
+                                        </div>}
+                                        <button disabled={!iframeURL.file} onClick={handleFileUpload} type='button' className='btn btn-warning mt-3 text-center'>
+                                            Certificate Upload
+                                        </button>
+                                    </div>
+
 
 
 
@@ -691,6 +801,7 @@ const Vendor = () => {
                                 className='col'
                             >
                                 <div style={{ maxHeight: "200px", overflow: "auto" }}>
+                                    <img src='file.file' />
                                     <table className='table table-sm table-bordered table-responsive text-center align-middle'>
                                         <tbody>
                                             <tr style={{ fontSize: "14px" }}>
@@ -700,8 +811,8 @@ const Vendor = () => {
                                                 <th>Mail Id</th>
                                                 <th width={"15%"}>Status</th>
                                                 <th width={"10%"}> <Fab size='small' color="primary" aria-label="add" onClick={() => addVendorDataRow()}>
-                                                            <Add/>
-                                                        </Fab></th>
+                                                    <Add />
+                                                </Fab></th>
                                             </tr>
                                             {vendorData.vendorContacts ? vendorData.vendorContacts.map((item, index) => (
                                                 <tr>
@@ -719,14 +830,14 @@ const Vendor = () => {
                                                     </select></td>
                                                     <td >
                                                         <Fab size='small' color="error" aria-label="add" onClick={() => deleteVendorRow(index)}>
-                                                            <Remove/>
+                                                            <Remove />
                                                         </Fab></td>
                                                 </tr>
                                             )) : <tr></tr>}
                                         </tbody>
                                     </table>
                                 </div>
-                               
+
                             </Paper>
 
                         </div>
