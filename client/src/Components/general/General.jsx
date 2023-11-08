@@ -43,7 +43,7 @@ export const UnitDataBase = ({ style }) => {
     console.log(unitData)
 
 
-    const [uintDataList, setUnitDataList] = useState([])
+    const [unitDataList, setUnitDataList] = useState([])
     const unitFetchData = async () => {
         try {
             const response = await axios.get(
@@ -57,7 +57,7 @@ export const UnitDataBase = ({ style }) => {
     useEffect(() => {
         unitFetchData();
     }, []);
-    console.log(uintDataList)
+    console.log(unitDataList)
 
 
     const handleUnitDataBaseChange = (e) => {
@@ -220,7 +220,7 @@ export const UnitDataBase = ({ style }) => {
                                             onChange={handleUnitDataBaseChange}
                                             //onKeyDown={handleKeyDown}
                                             disabled
-                                            value={uintDataList.length + 1}
+                                            value={unitDataList.length + 1}
                                             name="unitSi" ></TextField>
 
                                     </div>
@@ -231,11 +231,11 @@ export const UnitDataBase = ({ style }) => {
                                         aria-describedby="alert-dialog-description"
                                     >
                                         <DialogTitle id="alert-dialog-title">
-                                            {"Update Confirmation?"}
+                                            {"Unit update confirmation?"}
                                         </DialogTitle>
                                         <DialogContent>
                                             <DialogContentText id="alert-dialog-description">
-                                                Are you Sure to Update the Unit
+                                                Are you sure to update the Unit
                                             </DialogContentText>
                                         </DialogContent>
                                         <DialogActions>
@@ -251,11 +251,11 @@ export const UnitDataBase = ({ style }) => {
                                         aria-describedby="alert-dialog-description"
                                     >
                                         <DialogTitle id="alert-dialog-title">
-                                            {"Create Confirmation?"}
+                                            {" Unit create confirmation?"}
                                         </DialogTitle>
                                         <DialogContent>
                                             <DialogContentText id="alert-dialog-description">
-                                                Are you Sure to Add the Designation
+                                                Are you sure to add the Unit
                                             </DialogContentText>
                                         </DialogContent>
                                         <DialogActions>
@@ -321,7 +321,7 @@ export const UnitDataBase = ({ style }) => {
                                                     <th>Unit Name</th>
                                                     <th>Delete</th>
                                                 </tr>
-                                                {uintDataList.map((item, index) => (
+                                                {unitDataList.map((item, index) => (
                                                     <tr onClick={() => updateUnit(item)}>
                                                         <td>{index + 1}</td>
                                                         <td>{item.unitName}</td>
@@ -338,11 +338,11 @@ export const UnitDataBase = ({ style }) => {
                                         aria-describedby="alert-dialog-description"
                                     >
                                         <DialogTitle id="alert-dialog-title">
-                                            {"Delete Confirmation?"}
+                                            {" Unit delete confirmation?"}
                                         </DialogTitle>
                                         <DialogContent>
                                             <DialogContentText id="alert-dialog-description">
-                                                Are you Sure to Delete the Designation
+                                                Are you sure to delete the Unit
                                             </DialogContentText>
                                         </DialogContent>
                                         <DialogActions>
@@ -568,7 +568,10 @@ export const PartDataBase = ({ style }) => {
 
     const handlePartDataBaseChange = (e) => {
         const { name, value } = e.target;
-        setPartData((prev) => ({ ...prev, [name]: value }));
+        const formattedValue = name === 'partName'
+        ? value.toLowerCase().split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')
+        : value;
+        setPartData((prev) => ({ ...prev, [name]: formattedValue }));
 
     };
     const bodyModel = {
@@ -614,7 +617,6 @@ export const PartDataBase = ({ style }) => {
                                                 placeholder="partDb"
                                                 size="small"
                                                 onChange={handlePartDataBaseChange}
-                                                onKeyDown={handleKeyDown}
                                                 value={partDataList.length + 1}
                                                 name="partDb" ></TextField>
 
@@ -626,7 +628,6 @@ export const PartDataBase = ({ style }) => {
                                          
                                             size="small"
                                             onChange={handlePartDataBaseChange}
-                                            onKeyDown={handleKeyDown}
                                             value={partData.partNo}
                                             name="partNo" />
                                            
@@ -729,11 +730,11 @@ export const PartDataBase = ({ style }) => {
                                     aria-describedby="alert-dialog-description"
                                 >
                                     <DialogTitle id="alert-dialog-title">
-                                        {" Part Update Confirmation?"}
+                                        {" Part update confirmation?"}
                                     </DialogTitle>
                                     <DialogContent>
                                         <DialogContentText id="alert-dialog-description">
-                                            Are you Sure to Update the Part
+                                            Are you sure to update the Part
                                         </DialogContentText>
                                     </DialogContent>
                                     <DialogActions>
@@ -750,11 +751,11 @@ export const PartDataBase = ({ style }) => {
                                         aria-describedby="alert-dialog-description"
                                     >
                                         <DialogTitle id="alert-dialog-title">
-                                            {"Create Confirmation?"}
+                                            {" Part create confirmation?"}
                                         </DialogTitle>
                                         <DialogContent>
                                             <DialogContentText id="alert-dialog-description">
-                                                Are you Sure to Add the Part
+                                                Are you sure to add the Part
                                             </DialogContentText>
                                         </DialogContent>
                                         <DialogActions>
@@ -813,11 +814,11 @@ export const PartDataBase = ({ style }) => {
                                         aria-describedby="alert-dialog-description"
                                     >
                                         <DialogTitle id="alert-dialog-title">
-                                            {"Part Delete Confirmation?"}
+                                            {"Part delete confirmation?"}
                                         </DialogTitle>
                                         <DialogContent>
                                             <DialogContentText id="alert-dialog-description">
-                                                Are you Sure to Delete the Part
+                                                Are you sure to delete the Part
                                             </DialogContentText>
                                         </DialogContent>
                                         <DialogActions>

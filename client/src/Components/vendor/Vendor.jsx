@@ -17,6 +17,13 @@ import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import dayjs from 'dayjs';
 import { Add, Remove, HighlightOffRounded } from '@mui/icons-material';
 
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
+
+
 const Vendor = () => {
 
 
@@ -244,10 +251,10 @@ const Vendor = () => {
     };
     console.log()
 
-    const updateVendorData = async (id) => {
+    const updateVendorData = async () => {
         try {
             const response = await axios.put(
-                "http://localhost:3001/vendor/updateVendor/" + id, vendorData
+                "http://localhost:3001/vendor/updateVendor/" + vendorStateId, vendorData
             );
             setSnackBarOpen(true)
             vendorFetchData();
@@ -286,12 +293,13 @@ const Vendor = () => {
         }
     };
 
-    const deleteVendorData = async (id) => {
+    const deleteVendorData = async () => {
         try {
             const response = await axios.delete(
-                "http://localhost:3001/vendor/deleteVendor/" + id, vendorData
+                "http://localhost:3001/vendor/deleteVendor/" + vendorStateId, vendorData
             );
             vendorFetchData();
+            setVendorStateId(null)
             setVendorData(initialVendorData);
             setSnackBarOpen(true)
             setErrorHandler({ status: response.data.status, message: `${response.data.result.fullName} ${response.data.message}`, code: "success" })
@@ -425,6 +433,9 @@ const Vendor = () => {
     //             console.error('Error fetching file:', error);
     //         });
     // }, [vendorData.certificate]);
+    const [openModalVendor, setOpenModalVendor] = useState(false);
+    const [deleteModalVendor, setDeleteModalVendor] = useState(false);
+
 
     const [iframeURL, setIframeURL] = useState({fileURL: "", fileName: "", file: ""});
     const fileInputRef = useRef(null);
@@ -523,6 +534,7 @@ const Vendor = () => {
                                         defaultValue=""
                                         size="small"
                                         sx={{ width: "100%" }}
+                                        onKeyDown={handleKeyDown}
                                         value={vendorData.aliasName}
                                         onChange={handleVendorDataBaseChange}
                                         name="aliasName" />
@@ -535,6 +547,7 @@ const Vendor = () => {
                                         size="small"
                                         sx={{ width: "100%" }}
                                         value={vendorData.fullName}
+                                        onKeyDown={handleKeyDown}
                                         onChange={handleVendorDataBaseChange}
                                         name="fullName" />
 
@@ -542,9 +555,19 @@ const Vendor = () => {
 
                                 <Grid item xs={3}>
                                     <div className="col">
+                                        <DatePicker
+                                            disableFuture
+                                            fullWidth
+                                            id="dorId"
+                                            name="dor"
+                                            value={dayjs(vendorData.dor)}
+                                            onChange={(newValue) =>
+                                                setVendorData((prev) => ({ ...prev, dor: newValue.format("YYYY-MM-DD") }))
+                                            }
+                                            label="DOR"
 
-
-                                        <input type="date" className="form-control" id="dorId" max={DateFormat} fullWidth name="dor" value={vendorData.dor} onChange={handleVendorDataBaseChange} placeholder="dor" />
+                                            slotProps={{ textField: { size: 'small' } }}
+                                            format="DD-MM-YYYY" />
                                     </div>
 
                                 </Grid>
@@ -562,7 +585,7 @@ const Vendor = () => {
                                         value={vendorData.address}
                                         onKeyDown={handleKeyDown}
                                         onChange={handleVendorDataBaseChange}
-                                        name="addressId" />
+                                        name="address" />
 
                                 </Grid>
 
@@ -667,12 +690,12 @@ const Vendor = () => {
 
 
 
-                                    <div className="col-md">
+                                    <div className="col-md-6">
                                         <TextField fullWidth label="VendorStatus" onChange={handleVendorDataBaseChange} value={vendorData.vendorStatus} className="col" select size="small" id="vendorStatusId" name="vendorStatus" defaultValue="" >
-                                            <MenuItem value="all">All</MenuItem >
+
                                             <MenuItem value="Active">Active</MenuItem >
                                             <MenuItem value="InActive">InActive</MenuItem >
-                                            <MenuItem value="Relieved">Relieved</MenuItem >
+
 
                                         </TextField>
                                     </div>
@@ -681,7 +704,7 @@ const Vendor = () => {
 
 
 
-                                    <div className='col-md'>
+                                    <div className='col-md-6'>
 
                                         <DatePicker
                                             fullWidth
@@ -818,14 +841,14 @@ const Vendor = () => {
                                                 <tr>
                                                     <td>{index + 1}</td>
                                                     <td><input type="text" className='form-control form-control-sm' id="nameId" name="name" value={item.name} onChange={(e) => changeVendorRow(index, e.target.name, e.target.value)} /></td>
-                                                    <td><input type="text" className={`form-control form-control-sm ${item.contactNumber.length !== 10 ? 'is-invalid' : 'is-valid'}`} id="contactNumber" name="contactNumber" value={item.contactNumber} onChange={(e) => changeVendorRow(index, e.target.name, e.target.value)} /></td>
+                                                    <td><input type="number" className={`form-control form-control-sm ${item.contactNumber.length !== 10 ? 'is-invalid' : 'is-valid'}`} id="contactNumber" name="contactNumber" value={item.contactNumber} onChange={(e) => changeVendorRow(index, e.target.name, e.target.value)} /></td>
                                                     <td><input type="text" className='form-control form-control-sm' id="mailId" name="mailId" value={item.mailId} onChange={(e) => changeVendorRow(index, e.target.name, e.target.value)} /></td>
 
                                                     <td> <select className="form-select form-select-sm" id="vcStatusId" name="vcStatus" value={item.vcStatus} onChange={(e) => changeVendorRow(index, e.target.name, e.target.value)} aria-label="Floating label select example">
                                                         <option selected>-select-</option>
                                                         <option value="Active">Active</option>
                                                         <option value="InActive">InActive</option>
-                                                        <option value="Relived">Relived</option>
+
 
                                                     </select></td>
                                                     <td >
@@ -865,18 +888,61 @@ const Vendor = () => {
                                     {vendorStateId ?
                                         <div className='d-flex justify-content-end'>
                                             <div className='me-2' >
-                                                <button type="button" className='btn btn-info' onClick={() => updateVendorData(vendorStateId)}>Modify</button>
+                                                <button type="button" className='btn btn-info' onClick={() => setOpenModalVendor(true)}>Modify</button>
                                             </div>
                                             <div className='me-2' >
                                                 <button type="button" className='btn btn-danger' onClick={() => { setVendorStateId(null); setVendorData(initialVendorData) }}>Cancel</button>
                                             </div>
                                         </div> : <div className='col d-flex justify-content-end mb-2'>
                                             <div >
-                                                <button type="button" className='btn btn-warning' onClick={vendorSubmit}>+ Add Vendor</button>
+                                                <button type="button" className='btn btn-warning' onClick={() => setOpenModalVendor(true)}>+ Add Vendor</button>
                                             </div>
                                         </div>}
 
                                 </div>
+                                {vendorStateId ? <Dialog
+                                    open={openModalVendor}
+                                    onClose={() => setOpenModalVendor(false)}
+                                    aria-labelledby="alert-dialog-title"
+                                    aria-describedby="alert-dialog-description"
+                                >
+                                    <DialogTitle id="alert-dialog-title">
+                                        {" Vendor update confirmation?"}
+                                    </DialogTitle>
+                                    <DialogContent>
+                                        <DialogContentText id="alert-dialog-description">
+                                            Are you sure to update the Vendor
+                                        </DialogContentText>
+                                    </DialogContent>
+                                    <DialogActions>
+                                        <Button onClick={() => setOpenModalVendor(false)}>Cancel</Button>
+                                        <Button onClick={() => { updateVendorData(); setOpenModalVendor(false); }} autoFocus>
+                                            Update
+                                        </Button>
+                                    </DialogActions>
+                                </Dialog> :
+                                    <Dialog
+                                        open={openModalVendor}
+                                        onClose={() => setOpenModalVendor(false)}
+                                        aria-labelledby="alert-dialog-title"
+                                        aria-describedby="alert-dialog-description"
+                                    >
+                                        <DialogTitle id="alert-dialog-title">
+                                            {"Vendor create confirmation?"}
+                                        </DialogTitle>
+                                        <DialogContent>
+                                            <DialogContentText id="alert-dialog-description">
+                                                Are you sure to add the Vendor
+                                            </DialogContentText>
+                                        </DialogContent>
+                                        <DialogActions>
+                                            <Button onClick={() => setOpenModalVendor(false)}>Cancel</Button>
+                                            <Button onClick={(e) => { vendorSubmit(e); setOpenModalVendor(false); }} autoFocus>
+                                                Add
+                                            </Button>
+                                        </DialogActions>
+                                    </Dialog>}
+
                             </div>
                         </Paper>
 
@@ -929,11 +995,33 @@ const Vendor = () => {
                                             <td>{`${item.supplier} ${item.oem} ${item.customer} ${item.subContractor}`}</td>
 
                                             <td>{item.vendorStatus}</td>
-                                            <td><button type='button' className='btn btn-danger' onClick={() => deleteVendorData(item._id)} ><i class="bi bi-trash-fill"></i></button></td>
+                                            <td><button type='button' className='btn btn-danger' onClick={() => setDeleteModalVendor(true)} ><i class="bi bi-trash-fill"></i></button></td>
                                         </tr>
                                     ))}
                                 </tbody>
                             </table>
+
+                            <Dialog
+                                open={deleteModalVendor}
+                                onClose={() => setDeleteModalVendor(false)}
+                                aria-labelledby="alert-dialog-title"
+                                aria-describedby="alert-dialog-description"
+                            >
+                                <DialogTitle id="alert-dialog-title">
+                                    {" Vendor delete confirmation?"}
+                                </DialogTitle>
+                                <DialogContent>
+                                    <DialogContentText id="alert-dialog-description">
+                                        Are you sure to delete the Vendor
+                                    </DialogContentText>
+                                </DialogContent>
+                                <DialogActions>
+                                    <Button onClick={() => setDeleteModalVendor(false)}>Cancel</Button>
+                                    <Button onClick={(e) => { deleteVendorData(e); setDeleteModalVendor(false); }} autoFocus>
+                                        Delete
+                                    </Button>
+                                </DialogActions>
+                            </Dialog>
 
                             <Snackbar variant="contained" anchorOrigin={{ vertical: "top", horizontal: "right" }} open={snackBarOpen} autoHideDuration={6000} onClose={handleSnackClose}>
                                 <Alert variant="filled" onClose={handleSnackClose} severity={errorhandler.code} sx={{ width: '100%' }}>

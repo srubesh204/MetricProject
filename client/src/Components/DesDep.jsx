@@ -353,7 +353,7 @@ export const Department = () => {
 
 
   const initialPlaceOfUsageData = {
-    placeOfUsage: "",
+    placeOfUsage: "N/A",
     placeOfUsageStatus: ""
 
   }
@@ -383,17 +383,26 @@ export const Department = () => {
 
   const handleDepChange = (e) => {
     const { name, value } = e.target;
-    setDepartmentData((prev) => ({ ...prev, [name]: value }))
+    const formattedValue = name === 'department'
+    ? value.toLowerCase().split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')
+    : value;
+    setDepartmentData((prev) => ({ ...prev, [name]: formattedValue }))
   };
 
   const handleAreaChange = (e) => {
     const { name, value } = e.target;
-    setArea((prev) => ({ ...prev, [name]: value }))
+    const formattedValue = name === 'area'
+    ? value.toLowerCase().split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')
+    : value;
+    setArea((prev) => ({ ...prev, [name]: formattedValue }))
   };
 
   const handlePouChange = (e) => {
     const { name, value } = e.target;
-    setPlaceOfUsageData((prev) => ({ ...prev, [name]: value }))
+    const formattedValue = name === 'placeOfUsage'
+    ? value.toLowerCase().split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')
+    : value;
+    setPlaceOfUsageData((prev) => ({ ...prev, [name]: formattedValue }))
   };
 
 
@@ -728,11 +737,11 @@ export const Department = () => {
                     aria-describedby="alert-dialog-description"
                   >
                     <DialogTitle id="alert-dialog-title">
-                      {" Department Update Confirmation?"}
+                      {" Department update confirmation?"}
                     </DialogTitle>
                     <DialogContent>
                       <DialogContentText id="alert-dialog-description">
-                        Are you Sure to Update the Department
+                        Are you sure to update the Department
                       </DialogContentText>
                     </DialogContent>
                     <DialogActions>
@@ -749,11 +758,11 @@ export const Department = () => {
                       aria-describedby="alert-dialog-description"
                     >
                       <DialogTitle id="alert-dialog-title">
-                        {"Create Confirmation?"}
+                        {" Department create confirmation?"}
                       </DialogTitle>
                       <DialogContent>
                         <DialogContentText id="alert-dialog-description">
-                          Are you Sure to Add the Department
+                          Are you sure to add the Department
                         </DialogContentText>
                       </DialogContent>
                       <DialogActions>
@@ -846,11 +855,11 @@ export const Department = () => {
                     aria-describedby="alert-dialog-description"
                   >
                     <DialogTitle id="alert-dialog-title">
-                      {" DepartMent Delete Confirmation?"}
+                      {" Department delete confirmation?"}
                     </DialogTitle>
                     <DialogContent>
                       <DialogContentText id="alert-dialog-description">
-                        Are you Sure to Delete the DepartMent
+                        Are you sure to delete the Department
                       </DialogContentText>
                     </DialogContent>
                     <DialogActions>
@@ -961,11 +970,11 @@ export const Department = () => {
                       aria-describedby="alert-dialog-description"
                     >
                       <DialogTitle id="alert-dialog-title">
-                        {" Area Update Confirmation?"}
+                        {" Area update confirmation?"}
                       </DialogTitle>
                       <DialogContent>
                         <DialogContentText id="alert-dialog-description">
-                          Are you Sure to Update the Area
+                          Are you sure to update the Area
                         </DialogContentText>
                       </DialogContent>
                       <DialogActions>
@@ -982,11 +991,11 @@ export const Department = () => {
                         aria-describedby="alert-dialog-description"
                       >
                         <DialogTitle id="alert-dialog-title">
-                          {" Area Create Confirmation?"}
+                          {" Area create confirmation?"}
                         </DialogTitle>
                         <DialogContent>
                           <DialogContentText id="alert-dialog-description">
-                            Are you Sure to Add the Area
+                            Are you sure to add the Area
                           </DialogContentText>
                         </DialogContent>
                         <DialogActions>
@@ -1077,11 +1086,11 @@ export const Department = () => {
                         aria-describedby="alert-dialog-description"
                       >
                         <DialogTitle id="alert-dialog-title">
-                          {" Area Delete Confirmation?"}
+                          {" Area delete confirmation?"}
                         </DialogTitle>
                         <DialogContent>
                           <DialogContentText id="alert-dialog-description">
-                            Are you Sure to Delete the Area
+                            Are you sure to delete the Area
                           </DialogContentText>
                         </DialogContent>
                         <DialogActions>
@@ -1179,11 +1188,11 @@ export const Department = () => {
                     aria-describedby="alert-dialog-description"
                   >
                     <DialogTitle id="alert-dialog-title">
-                      {" Place Of Usage Update Confirmation?"}
+                      {" Place of usage update confirmation?"}
                     </DialogTitle>
                     <DialogContent>
                       <DialogContentText id="alert-dialog-description">
-                        Are you Sure to Update the Place Of Usage
+                        Are you sure to update the Place of usage
                       </DialogContentText>
                     </DialogContent>
                     <DialogActions>
@@ -1200,11 +1209,11 @@ export const Department = () => {
                       aria-describedby="alert-dialog-description"
                     >
                       <DialogTitle id="alert-dialog-title">
-                        {" Place OF Usage Create Confirmation?"}
+                        {" Place of usage create confirmation?"}
                       </DialogTitle>
                       <DialogContent>
                         <DialogContentText id="alert-dialog-description">
-                          Are you Sure to Add the Place Of Usage
+                          Are you sure to add the Place of usage
                         </DialogContentText>
                       </DialogContent>
                       <DialogActions>
@@ -1293,11 +1302,11 @@ export const Department = () => {
                     aria-describedby="alert-dialog-description"
                   >
                     <DialogTitle id="alert-dialog-title">
-                      {" Place Of Usage Delete Confirmation?"}
+                      {"Place of usage delete confirmation?"}
                     </DialogTitle>
                     <DialogContent>
                       <DialogContentText id="alert-dialog-description">
-                        Are you Sure to Delete the Place Of usage
+                        Are you sure to delete the Place of usage
                       </DialogContentText>
                     </DialogContent>
                     <DialogActions>
@@ -1431,7 +1440,10 @@ export const Designation = () => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setDesignationData((prev) => ({ ...prev, [name]: value }));
+    const formattedValue = name === 'designation'
+    ? value.toLowerCase().split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')
+    : value;
+    setDesignationData((prev) => ({ ...prev, [name]: formattedValue }));
 
   };
 
@@ -1749,11 +1761,11 @@ export const Designation = () => {
                   aria-describedby="alert-dialog-description"
                 >
                   <DialogTitle id="alert-dialog-title">
-                    {"ItemMaster Update Confirmation?"}
+                    {"Designation update confirmation?"}
                   </DialogTitle>
                   <DialogContent>
                     <DialogContentText id="alert-dialog-description">
-                      Are you Sure to Update the ItemMaster
+                      Are you sure to update the Designation
                     </DialogContentText>
                   </DialogContent>
                   <DialogActions>
@@ -1769,11 +1781,11 @@ export const Designation = () => {
                   aria-describedby="alert-dialog-description"
                 >
                   <DialogTitle id="alert-dialog-title">
-                    {" Designation Create Confirmation?"}
+                    {" Designation create confirmation?"}
                   </DialogTitle>
                   <DialogContent>
                     <DialogContentText id="alert-dialog-description">
-                      Are you Sure to Add the Designation
+                      Are you sure to add the Designation
                     </DialogContentText>
                   </DialogContent>
                   <DialogActions>
@@ -1855,11 +1867,11 @@ export const Designation = () => {
                 aria-describedby="alert-dialog-description"
               >
                 <DialogTitle id="alert-dialog-title">
-                  {" Place Of Usage Delete Confirmation?"}
+                  {"Designation delete confirmation?"}
                 </DialogTitle>
                 <DialogContent>
                   <DialogContentText id="alert-dialog-description">
-                    Are you Sure to Delete the Place Of usage
+                    Are you sure to delete the Designation
                   </DialogContentText>
                 </DialogContent>
                 <DialogActions>
