@@ -7,9 +7,14 @@ const vendorSchema = new mongoose.Schema({
     required: [true, "Vendor is Required"]
     
   } ,
-  aliasName: String,
-  fullName: String,
-  dor: String,
+  aliasName: {
+    type: String,
+    required:[true,"AliasName is required"]
+  },
+  fullName: {
+    type:String,
+  required:[true,"FullName is required"]
+},
   address: String,
   state: String,
   city: String,

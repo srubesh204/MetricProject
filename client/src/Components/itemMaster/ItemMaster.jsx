@@ -8,10 +8,10 @@ import FileDownloadIcon from '@mui/icons-material/FileDownload';
 import UploadFileIcon from '@mui/icons-material/UploadFile';
 import Alert from '@mui/material/Alert';
 import Snackbar from '@mui/material/Snackbar';
-import { TextField, MenuItem, FormControl } from '@mui/material';
+import { TextField, MenuItem, FormControl,Fab } from '@mui/material';
 import { Box, Grid, Paper, Container } from '@mui/material';
 
-
+import { Add, Remove } from '@mui/icons-material';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
@@ -325,6 +325,29 @@ const ItemMaster = () => {
         }
     };
 
+
+    const [unitDataList, setUnitDataList] = useState([])
+
+    const unitFetchData = async () => {
+        try {
+            const response = await axios.get(
+                `${process.env.REACT_APP_PORT}/unit/getAllUnits`
+            );
+            
+            console.log(response.data.result)
+            setUnitDataList(response.data.result);
+        } catch (err) {
+            console.log(err);
+        }
+    };
+    useEffect(() => {
+        unitFetchData();
+    }, []);
+
+
+
+
+
     //
 
     const bodyItem = {
@@ -447,10 +470,13 @@ const ItemMaster = () => {
                                             <div className='col' >
 
                                                 <TextField fullWidth label="Unit" value={itemMasterData.uncertaintyUnit} onChange={handleItemMasterBaseChange} className="form-select" select size="small" id="uncertaintyUnitId" name="uncertaintyUnit" defaultValue="" >
+                                                {unitDataList.map((item, index)=> (
+                                                        <MenuItem key={index} value={item.unitName}>{item.unitName}</MenuItem>
+                                                    ))} 
 
 
-                                                    <MenuItem value="Unit">Unit</MenuItem >
-                                                    <MenuItem value="Unit Name">Unit Name</MenuItem>
+                                                    {/*<MenuItem value="Unit">Unit</MenuItem >
+                                                    <MenuItem value="Unit Name">Unit Name</MenuItem>*/}
 
                                                 </TextField>
 
@@ -528,15 +554,19 @@ const ItemMaster = () => {
                                                 <tr>
                                                     <th>Si No</th>
                                                     <th>Calibration Points </th>
-                                                    <th><button type='button' className='btn btn-warning' onClick={addCalibrationPointRow}>Add</button></th>
+                                                    <th><Fab size='small' color="primary" aria-label="add" onClick={() => addCalibrationPointRow()}>
+                                                    <Add />
+                                                </Fab></th>
                                                 </tr>
                                                 {itemMasterData.calibrationPoints ? itemMasterData.calibrationPoints.map((item, index) => (
                                                     <tr key={index}>
                                                         <td>{index + 1}</td>
                                                         <td><input type='text' className='form-control' name='calibrationPoint' value={item.calibrationPoint} onChange={(e) => changeCalibrationPointRow(index, e.target.name, e.target.value)} /></td>
-                                                        <td><button type='button' className='btn btn-danger' onClick={() => deleteCalibrationPointRow(index)}><i class="bi bi-trash-fill"></i></button></td>
+                                                        <td><Fab size='small' color="error" aria-label="add" onClick={() => deleteCalibrationPointRow(index)}>
+                                                            <Remove />
+                                                        </Fab></td>
                                                     </tr>
-
+                                                      
 
                                                 )) : <tr></tr>}
 
@@ -602,11 +632,11 @@ const ItemMaster = () => {
                                     aria-describedby="alert-dialog-description"
                                 >
                                     <DialogTitle id="alert-dialog-title">
-                                        {"ItemMaster Update Confirmation?"}
+                                        {"ItemMaster update confirmation?"}
                                     </DialogTitle>
                                     <DialogContent>
                                         <DialogContentText id="alert-dialog-description">
-                                            Are you Sure to Update the ItemMaster
+                                            Are you sure to update the ItemMaster
                                         </DialogContentText>
                                     </DialogContent>
                                     <DialogActions>
@@ -622,11 +652,11 @@ const ItemMaster = () => {
                                     aria-describedby="alert-dialog-description"
                                 >
                                     <DialogTitle id="alert-dialog-title">
-                                        {" ItemMaster Create Confirmation?"}
+                                        {" ItemMaster create confirmation?"}
                                     </DialogTitle>
                                     <DialogContent>
                                         <DialogContentText id="alert-dialog-description">
-                                            Are you Sure to Add the ItemMaster
+                                            Are you sure to add the ItemMaster
                                         </DialogContentText>
                                     </DialogContent>
                                     <DialogActions>
@@ -742,11 +772,11 @@ const ItemMaster = () => {
                                         aria-describedby="alert-dialog-description"
                                     >
                                         <DialogTitle id="alert-dialog-title">
-                                            {" ItemMaster Delete Confirmation?"}
+                                            {" ItemMaster delete confirmation?"}
                                         </DialogTitle>
                                         <DialogContent>
                                             <DialogContentText id="alert-dialog-description">
-                                                Are you Sure to Delete the ItemMaster
+                                                Are you sure to delete the ItemMaster
                                             </DialogContentText>
                                         </DialogContent>
                                         <DialogActions>
