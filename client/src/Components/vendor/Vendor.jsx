@@ -71,7 +71,8 @@ const Vendor = () => {
     };
 
 
-    const [vendorStateId, setVendorStateId] = useState("")
+    const [vendorStateId, setVendorStateId] = useState(null)
+    console.log(vendorStateId)
     const initialVendorData = {
 
         vendorCode: "",
@@ -296,7 +297,11 @@ const Vendor = () => {
     const deleteVendorData = async () => {
         try {
             const response = await axios.delete(
-                "http://localhost:3001/vendor/deleteVendor/" + vendorStateId, vendorData
+                "http://localhost:3001/vendor/deleteVendor" ,{
+                    data: {
+                        vendorIds: selectedRowIds
+                    }
+                } 
             );
             vendorFetchData();
             setVendorStateId(null)
@@ -378,9 +383,10 @@ const Vendor = () => {
 
 
 
-    const updateVendor = async (item) => {
-        setVendorData(item)
-        setVendorStateId(item._id)
+    const updateVendor = async (params) => {
+        console.log(params)
+        setVendorData(params.row)
+        setVendorStateId(params.id)
     }
 
     //Dateformat
@@ -406,9 +412,9 @@ const Vendor = () => {
 
     };
 
-    
 
-    
+
+
 
 
     const VisuallyHiddenInput = styled('input')({
@@ -437,7 +443,7 @@ const Vendor = () => {
     const [deleteModalVendor, setDeleteModalVendor] = useState(false);
 
 
-    const [iframeURL, setIframeURL] = useState({fileURL: "", fileName: "", file: ""});
+    const [iframeURL, setIframeURL] = useState({ fileURL: "", fileName: "", file: "" });
     const fileInputRef = useRef(null);
     const [uploadProgress, setUploadProgress] = useState(0)
 
@@ -457,9 +463,9 @@ const Vendor = () => {
     };
 
     const handleDrop = (event) => {
-        event.preventDefault(); 
+        event.preventDefault();
         const droppedFile = event.dataTransfer.files[0];
-        
+
         if (droppedFile) {
             const fileURL = URL.createObjectURL(droppedFile);
             setVendorData((prev) => ({ ...prev, certificate: droppedFile.name }));
@@ -491,11 +497,42 @@ const Vendor = () => {
             console.error('Error uploading the file:', error);
         }
     };
-    
+
     const RemoveFile = () => {
-        setIframeURL({fileURL: "", fileName: "", file: ""});
+        setIframeURL({ fileURL: "", fileName: "", file: "" });
         setVendorData((prev) => ({ ...prev, certificate: "" }));
     }
+
+    const vendorListColumns = [
+
+        { field: 'vendorCode', headerName: 'VendorCode', width: 130 },
+        { field: 'fullName', headerName: 'Vendor Name', width: 200 },
+        {
+          field: 'fullName',
+          headerName: 'Full Name',
+          width: 200,
+        },
+        {
+          field: 'city',
+          headerName: 'City',
+        //   description: 'This column has a value getter and is not sortable.',
+          width: 100,
+        },
+        {
+            field: 'state',
+            headerName: 'State',
+            // description: 'This column has a value getter and is not sortable.',
+            width: 100,
+          },
+          {
+            field: 'vendorStatus',
+            headerName: 'Status',
+            // description: 'This column has a value getter and is not sortable.',
+            width: 100,
+          },
+      ];
+
+      const [selectedRowIds, setSelectedRowIds] = useState([]);
 
     return (
         <div >
@@ -715,7 +752,7 @@ const Vendor = () => {
                                                 setVendorData((prev) => ({ ...prev, certificateValidity: newValue.format("YYYY-MM-DD") }))
                                             }
                                             label="Certificate Validiy"
-
+                                            sx={{ width: "100%" }}
                                             slotProps={{ textField: { size: 'small' } }}
                                             format="DD-MM-YYYY" />
                                     </div>
@@ -753,13 +790,13 @@ const Vendor = () => {
                                             />
                                             <button style={{ display: "none" }} onClick={() => fileInputRef.current.click()}>Select File</button>
                                         </div>
-                                        <div className="d-flex justify-content-spaced align-middle" style={{width: "100%", height: "50px"}}>
+                                        <div className="d-flex justify-content-spaced align-middle" style={{ width: "100%", height: "50px" }}>
                                             <div
                                                 onDragOver={handleDragOver}
                                                 onDrop={handleDrop}
                                                 onClick={() => fileInputRef.current.click()} // Click the hidden file input
                                                 style={{
-                                                    width: '100%',
+                                                    width: '75%',
                                                     height: '100%',
                                                     border: '2px dashed #ccc',
                                                     display: 'flex',
@@ -779,18 +816,18 @@ const Vendor = () => {
                                                 </div>
 
                                             </div>
-                                            
+
                                             {vendorData.certificate &&
-                                            <div className='d-flex ' style={{border: '2px dashed #ccc'}}>
-                                                
-                                                <Link className='m-0' target="_blank" href={`${process.env.REACT_APP_PORT}/vendorCertificates/${vendorData.certificate}`} underline="hover">
-                                                    {vendorData.certificate}
-                                                </Link>
+                                                <div className='d-flex ' style={{ border: '2px dashed #ccc' }}>
 
-                                               <HighlightOffRounded type="button" onClick={()=> RemoveFile()} />
-                                          
+                                                    <Link className='ms-1' target="_blank" href={`${process.env.REACT_APP_PORT}/vendorCertificates/${vendorData.certificate}`} underline="hover">
+                                                        {vendorData.certificate}
+                                                    </Link>
 
-                                            </div>
+                                                    <HighlightOffRounded type="button" onClick={() => RemoveFile()} />
+
+
+                                                </div>
                                             }
 
                                         </div>
@@ -824,7 +861,7 @@ const Vendor = () => {
                                 className='col'
                             >
                                 <div style={{ maxHeight: "200px", overflow: "auto" }}>
-                                    <img src='file.file' />
+                                    <h6 className='text-center'>Vendor Contacts</h6>
                                     <table className='table table-sm table-bordered table-responsive text-center align-middle'>
                                         <tbody>
                                             <tr style={{ fontSize: "14px" }}>
@@ -960,6 +997,7 @@ const Vendor = () => {
                         >
 
                             <h4 className='text-center'>Vendor List</h4>
+                            <div className="d-flex justify-content-between">
 
                             <div class="col-3 mb-2">
                                 <select className="form-select form-select-sm" id="vendorTypeId" name="vendorType" aria-label="Floating label select example" onChange={handleFilterChange} >
@@ -971,35 +1009,31 @@ const Vendor = () => {
                                 </select>
 
                             </div>
+                            <Button type='button' onClick={()=>setDeleteModalVendor(true)}>Delete</Button>
+                            </div>
+                            
 
-                            <table className='table table-bordered text-center'>
-                                <tbody>
-                                    <tr>
-                                        <th>Si.No</th>
-                                        <th>Vendor Code</th>
-                                        <th>Vendor Name</th>
-                                        <th>City</th>
-                                        <th>State</th>
-                                        <th>Vendor Type</th>
-                                        <th>Status</th>
-                                        <th>Delete</th>
-                                    </tr>
-                                    {filteredData.map((item, index) => (
-                                        <tr onClick={() => updateVendor(item)}>
-                                            <td>{index + 1}</td>
+                            <DataGrid
+                                rows={vendorDataList}
+                                columns={vendorListColumns}
+                                getRowId={(row) => row._id}
+                                initialState={{
+                                    pagination: {
+                                        paginationModel: { page: 0, pageSize: 5 },
+                                    },
+                                }}
+                                pageSizeOptions={[5, 10]}
+                                onRowSelectionModelChange={(newRowSelectionModel, event) => {
+                                    setSelectedRowIds(newRowSelectionModel);
+                                    console.log(event)
+                                    
+                                }}
+                                onRowClick={updateVendor}
+                              
+                                checkboxSelection
 
-                                            <td>{item.vendorCode}</td>
-                                            <td>{item.fullName}</td>
-                                            <td>{item.city}</td>
-                                            <td>{item.state}</td>
-                                            <td>{`${item.supplier} ${item.oem} ${item.customer} ${item.subContractor}`}</td>
 
-                                            <td>{item.vendorStatus}</td>
-                                            <td><button type='button' className='btn btn-danger' onClick={() => setDeleteModalVendor(true)} ><i class="bi bi-trash-fill"></i></button></td>
-                                        </tr>
-                                    ))}
-                                </tbody>
-                            </table>
+                            />
 
                             <Dialog
                                 open={deleteModalVendor}
@@ -1017,7 +1051,7 @@ const Vendor = () => {
                                 </DialogContent>
                                 <DialogActions>
                                     <Button onClick={() => setDeleteModalVendor(false)}>Cancel</Button>
-                                    <Button onClick={(e) => { deleteVendorData(e); setDeleteModalVendor(false); }} autoFocus>
+                                    <Button onClick={() => { deleteVendorData(); setDeleteModalVendor(false); }} autoFocus>
                                         Delete
                                     </Button>
                                 </DialogActions>
