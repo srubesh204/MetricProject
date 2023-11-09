@@ -1,4 +1,6 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
+import { DataGrid } from '@mui/x-data-grid';
+import axios from "axios";
 
 const Devi = () => {
     const UserCredential = {
@@ -18,31 +20,66 @@ const Devi = () => {
     }
 
     console.log(inputData)
+    //
+
+
+    
+    const [employeeList, setEmployeeList] = useState([]);
+    const empFetch = async () => {
+        try {
+            const response = await axios.get(
+                `${process.env.REACT_APP_PORT}/employee/getAllEmployees`
+            );
+            const employeesWithId = response.data.result.map((employee, index) => ({
+                ...employee,
+                id: index + 1, // You can use a different logic for generating the id
+            }));
+            setEmployeeList(employeesWithId);
+
+        } catch (err) {
+            console.log(err);
+        }
+    };
+    useEffect(() => {
+        empFetch();
+    }, []);
+
+    const columns = [
+        { field: 'id', headerName: 'Si No', width: 70 },
+       
+        { field: 'employeeCode', headerName: 'Emp.Code', width: 70 },
+        { field: 'firstName', headerName: 'emp.Name', width: 130 },
+        { field: 'lastName', headerName: 'Last Name', width: 130 },
+        { field: 'dob', headerName: 'DOB', width: 90, },
+        { field: 'address', headerName: 'Address', width: 90, },
+        { field: 'city', headerName: 'City', width: 90, },
+        { field: 'state', headerName: 'State', width: 90, },
+        { field: 'contactNumber', headerName: 'Contact Number', type: "number", width: 90, },
+        { field: 'designation', headerName: 'Designation', width: 90, },
+        { field: 'department', headerName: 'Department', width: 90, },
+
+    ];
+
+    
+
+
+
+
 
     return (
         <div >
-            <div className='col'>
-                <div className='text-center'>
-                    <button type="button" className='btn btn-warning'>Login</button>
-                </div>
-
-                <div className='card ' style={{ width: "250px", height: "250px" }}>
-                    <div className="mb-2 text-center">
-                        <input type="text" className="form-control" id="userId" placeholder="user" name="user" onChange={userPwd} />
-
-                    </div>
-                    <div className="mb-3">
-                        <input type="text" className="form-control" id="passWordId" placeholder="passWord" name="passWord" onChange={userPwd} />
-                    </div>
-                    <div className='text-center'>
-                        <button type="button" className='btn btn-warning' onClick={LoginCheck}>Login</button>
-                    </div>
-                </div>
-            </div>
-            <div>
-                <div className='text-center'>
-                    <button type="button" className='btn btn-warning'>Register</button>
-                </div>
+            <div style={{ height: 400, width: '100%' }}>
+                <DataGrid
+                    rows={employeeList}
+                    columns={columns}
+                    initialState={{
+                        pagination: {
+                            paginationModel: { page: 0, pageSize: 5 },
+                        },
+                    }}
+                    pageSizeOptions={[5, 10]}
+                    checkboxSelection
+                />
             </div>
 
 

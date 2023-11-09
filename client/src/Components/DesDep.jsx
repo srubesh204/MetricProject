@@ -10,6 +10,7 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
+import { DataGrid } from '@mui/x-data-grid';
 
 
 export const Department = () => {
@@ -59,6 +60,24 @@ export const Department = () => {
   useEffect(() => {
     depFetchData();
   }, []);
+
+
+
+  const columns = [
+    { field: 'id', headerName: 'Si No', width: 70 },
+
+    { field: 'department', headerName: 'Department', width: 200 },
+    { field: 'departmentStatus', headerName: 'Department Status', width: 150 },
+
+
+  ];
+
+
+
+
+
+
+
   //
   //Submit Department
   const DepartmentSubmit = async (e) => {
@@ -384,24 +403,24 @@ export const Department = () => {
   const handleDepChange = (e) => {
     const { name, value } = e.target;
     const formattedValue = name === 'department'
-    ? value.toLowerCase().split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')
-    : value;
+      ? value.toLowerCase().split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')
+      : value;
     setDepartmentData((prev) => ({ ...prev, [name]: formattedValue }))
   };
 
   const handleAreaChange = (e) => {
     const { name, value } = e.target;
     const formattedValue = name === 'area'
-    ? value.toLowerCase().split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')
-    : value;
+      ? value.toLowerCase().split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')
+      : value;
     setArea((prev) => ({ ...prev, [name]: formattedValue }))
   };
 
   const handlePouChange = (e) => {
     const { name, value } = e.target;
     const formattedValue = name === 'placeOfUsage'
-    ? value.toLowerCase().split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')
-    : value;
+      ? value.toLowerCase().split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')
+      : value;
     setPlaceOfUsageData((prev) => ({ ...prev, [name]: formattedValue }))
   };
 
@@ -444,7 +463,7 @@ export const Department = () => {
   };
 
 
- 
+
 
 
   //placeOfusage
@@ -480,7 +499,7 @@ export const Department = () => {
   }, []);
 
 
-  
+
 
   const placeOfUsageSubmit = async (e) => {
     e.preventDefault();
@@ -819,7 +838,27 @@ export const Department = () => {
 
                 </div>
                 <div className="row g-2">
-                  <div className="table-responsive col">
+                  <div style={{ height: 400, width: '100%' }}>
+                    <DataGrid
+                      rows={departmentList}
+                      columns={columns}
+                      getRowId={(row) => row._id}
+                      initialState={{
+                        pagination: {
+                          paginationModel: { page: 0, pageSize: 5 },
+                        },
+                      }}
+                      pageSizeOptions={[5, 10]}
+                      checkboxSelection
+                    />
+                  </div>
+
+
+
+
+
+
+               {/* <div className="table-responsive col">
                     <table className="table table-bordered text-center">
                       <tbody>
                         <tr>
@@ -847,7 +886,7 @@ export const Department = () => {
 
                       </tbody>
                     </table>
-                  </div>
+                  </div>*/}
                   <Dialog
                     open={deleteDepModal}
                     onClose={() => setDeleteDepModal(false)}
@@ -1441,8 +1480,8 @@ export const Designation = () => {
   const handleChange = (e) => {
     const { name, value } = e.target;
     const formattedValue = name === 'designation'
-    ? value.toLowerCase().split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')
-    : value;
+      ? value.toLowerCase().split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')
+      : value;
     setDesignationData((prev) => ({ ...prev, [name]: formattedValue }));
 
   };
@@ -1679,8 +1718,8 @@ export const Designation = () => {
                 p: 2,
                 display: 'flex',
                 flexDirection: 'column',
-                m:2,
-                
+                m: 2,
+
               }}
             >
               <div className="row g-2">
@@ -1833,7 +1872,7 @@ export const Designation = () => {
                 p: 4,
                 display: 'flex',
                 flexDirection: 'column',
-                m:2
+                m: 2
 
               }}
             >
