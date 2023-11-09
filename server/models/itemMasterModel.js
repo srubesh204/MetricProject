@@ -18,10 +18,6 @@ const itemMasterSchema = new mongoose.Schema({
   standardRef : String,
   itemMasterImage: String,
   itemImageName : String,
-  workInsFile: {
-    data: Buffer,
-    contentType : String
-  },
   workInsName : String,
   status : String,
   calibrationPoints : []

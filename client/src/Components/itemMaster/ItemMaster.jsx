@@ -9,7 +9,7 @@ import FileDownloadIcon from '@mui/icons-material/FileDownload';
 import UploadFileIcon from '@mui/icons-material/UploadFile';
 import Alert from '@mui/material/Alert';
 import Snackbar from '@mui/material/Snackbar';
-import { TextField, MenuItem, FormControl, Fab, Link, IconButton } from '@mui/material';
+import { TextField, MenuItem, FormControl, Fab, Link, Typography, Badge } from '@mui/material';
 import { Box, Grid, Paper, Container } from '@mui/material';
 
 import { Add, Remove } from '@mui/icons-material';
@@ -93,7 +93,7 @@ const ItemMaster = () => {
         uncertainty: "",
         uncertaintyUnit: "",
         standardRef: "",
-        itemMasterImage: "",
+        
         itemImageName: "",
         workInsName: "",
         status: "",
@@ -113,7 +113,7 @@ const ItemMaster = () => {
         uncertaintyUnit: "",
         standardRef: "",
         itemImageName: "",
-        itemMasterImage: "",
+        
         workInsName: "",
         status: "",
         calibrationPoints: [],
@@ -396,43 +396,46 @@ const ItemMaster = () => {
         unitFetchData();
     }, []);
 
-    // const handleFileSelect = (event) => {
-    //     const selectedFile = event.target.files[0];
-    //     console.log(selectedFile)
-    //     if (selectedFile) {
-    //         console.log("working")
-    //         setItemMasterData((prev) => ({ ...prev, certificate: selectedFile.name }));
-    //         const fileURL = URL.createObjectURL(selectedFile);
-    //         setIframeURL({ fileURL: fileURL, fileName: selectedFile.name, file: selectedFile });
-    //     }
-    // };
+    const [iframeURL, setIframeURL] = useState({ fileURL: "", fileName: "", file: "" });
+    const [uploadProgress, setUploadProgress] = useState(0)
+
+    const handleFileSelect = (event) => {
+        const selectedFile = event.target.files[0];
+        console.log(selectedFile)
+        if (selectedFile) {
+            console.log("working")
+            setItemMasterData((prev) => ({ ...prev, workInsName: selectedFile.name }));
+            const fileURL = URL.createObjectURL(selectedFile);
+            setIframeURL({ fileURL: fileURL, fileName: selectedFile.name, file: selectedFile });
+        }
+    };
 
 
     //Work Instruction Upload
-    // const handleWorkInstructionUpload = async () => {
-    //     const formData = new FormData();
-    //     formData.append('file', .file);
+    const handleWorkInstructionUpload = async () => {
+        const formData = new FormData();
+        formData.append('file', iframeURL.file);
 
-    //     try {
-    //         axios.post("http://localhost:3001/upload/VendorCertificateUpload", formData, {
-    //             onUploadProgress: (progressEvent) => {
-    //                 const percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total);
-    //                 setUploadProgress(percentCompleted);
-    //             }
-    //         })
-    //             .then(response => {
-    //                 setSnackBarOpen(true);
-    //                 setErrorHandler({ status: 1, message: response.data.message, code: "success" });
-    //                 console.log(response);
-    //             })
-    //             .catch(error => {
-    //                 console.error(error);
-    //                 // handle error here
-    //             });
-    //     } catch (error) {
-    //         console.error('Error uploading the file:', error);
-    //     }
-    // };
+        try {
+            axios.post(`${process.env.REACT_APP_PORT}/upload/workInstructions`, formData, {
+                onUploadProgress: (progressEvent) => {
+                    const percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total);
+                    setUploadProgress(percentCompleted);
+                }
+            })
+                .then(response => {
+                    setSnackBarOpen(true);
+                    setErrorHandler({ status: 1, message: response.data.message, code: "success" });
+                    console.log(response);
+                })
+                .catch(error => {
+                    console.error(error);
+                    // handle error here
+                });
+        } catch (error) {
+            console.error('Error uploading the file:', error);
+        }
+    };
 
 
 
@@ -610,17 +613,21 @@ const ItemMaster = () => {
 
                                     </div>
                                     <div className="">
+                                        <div className="d-flex">
                                         <Button fullWidth color='secondary' component="label" variant="contained" startIcon={<UploadFileIcon />} size="small">
                                             Work Instruction Upload
-                                            <VisuallyHiddenInput type="file" />
+                                            <VisuallyHiddenInput type="file" onChange={handleFileSelect}/>
                                         </Button>
-                                        <div className='mt-2 text-center'>
-                                            <Link herf={`${process.env.REACT_APP_PORT}/`}></Link>
-                                            <Button variant='outlined' color='error' endIcon={<Delete />}>Remove</Button>
-
-
-
+                                        <Button className='ms-2' variant='contained' onClick={handleWorkInstructionUpload}>Upload</Button>
                                         </div>
+                                        
+                                        {itemMasterData.workInsName && <div className='d-flex justify-content-center mt-2 '>
+                                            <Link target="_blank" underline="hover" href={`${process.env.REACT_APP_PORT}/workInstructions/${itemMasterData.workInsName}`} className='me-2'>{itemMasterData.workInsName}</Link>
+                                            <Button size='small' variant='outlined' color='error' onClick={()=> {setIframeURL(null); setItemMasterData((prev)=> ({...prev, workInsName: ""}))} } endIcon={<Delete />}>Remove</Button>
+
+
+
+                                        </div>}
 
 
                                     </div>
@@ -629,8 +636,9 @@ const ItemMaster = () => {
                             </div>
 
                             <div className='col-md-2'>
-                                {!itemMasterData.itemMasterImage && <div>
-                                    <label htmlFor="fileInput" style={{ display: 'block', width: '100%', height: '200px', border: '2px dashed #ccc', position: 'relative', cursor: 'pointer' }}>
+                                {!itemMasterData.itemMasterImage && <div style={{}}>
+                                    <label htmlFor="fileInput" style={{ display: 'block', width: '100%', height: '200px', border: '2px dashed black', borderRadius: "10px", position: 'relative', cursor: 'pointer' }} className='text-center align-middle'>
+                                        
                                         <input
                                             type="file"
                                             id="fileInput"
@@ -648,20 +656,18 @@ const ItemMaster = () => {
                                             onChange={handleImageChange}
                                             ref={fileInputRef}
                                         />
+                                        Select here to Upload Image
                                         {/* Your other content or styling for the square box */}
                                     </label>
                                 </div>}
                                 {/* {image &&  <div style={{ width: "100%", height: "100%", margin: "0 0px 0 0", padding: 0 }}>
                                 <img src={image} width="200px" height="200px" alt="Uploaded" style={{ maxWidth: '100%' }} />
                                 </div>} */}
-                                {itemMasterData.itemMasterImage && <div style={{ margin: 0 }}>
-                                    <div className='d-flex justify-content-center' style={{ width: "100%", height: "70%" }}>
-                                        <img src={itemMasterData.itemMasterImage} style={{ width: "70%", height: "100%", margin: "auto", display: "block" }}></img>
+                                {itemMasterData.itemMasterImage && <div style={{ margin: 0  }}>
+                                    <div className='d-flex justify-content-center' style={{ width: "100%", height: "100%" }}>
+                                    <Badge type="button" badgeContent={"X"} onClick={() => setItemMasterData((prev) => ({ ...prev, itemMasterImage: "" }))}  style={{ width: "100%", height: "100%" }} color="error"><img src={itemMasterData.itemMasterImage} style={{ width: "100%", height: "100%", margin: "auto", display: "block", background: "inherit" }}></img></Badge>
                                     </div>
-                                    <div className='d-flex justify-content-center'>
-
-                                        <Button endIcon={<DeleteOutlined />} color='error' variant='contained' type='button' onClick={() => setItemMasterData((prev) => ({ ...prev, itemMasterImage: "" }))}>Remove</Button>
-                                    </div>
+                                    
                                 </div>}
                             </div>
 
