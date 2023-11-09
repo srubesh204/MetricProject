@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import axios from 'axios';
 import { styled } from '@mui/material/styles';
 import Button from '@mui/material/Button';
 
-import {AddToPhotos, CloudUpload, DeleteOutlined, Delete} from '@mui/icons-material';
+import { AddToPhotos, CloudUpload, DeleteOutlined, Delete } from '@mui/icons-material';
 import Stack from '@mui/material/Stack';
 import FileDownloadIcon from '@mui/icons-material/FileDownload';
 import UploadFileIcon from '@mui/icons-material/UploadFile';
@@ -23,6 +23,7 @@ import DialogTitle from '@mui/material/DialogTitle';
 
 
 const ItemMaster = () => {
+    const fileInputRef = useRef(null);
 
     const [snackBarOpen, setSnackBarOpen] = useState(false)
     const handleSnackClose = (event, reason) => {
@@ -348,18 +349,50 @@ const ItemMaster = () => {
         unitFetchData();
     }, []);
 
+    const handleFileSelect = (event) => {
+        const selectedFile = event.target.files[0];
+        console.log(selectedFile)
+        if (selectedFile) {
+            console.log("working")
+            setItemMasterData((prev) => ({ ...prev, certificate: selectedFile.name }));
+            const fileURL = URL.createObjectURL(selectedFile);
+            setIframeURL({ fileURL: fileURL, fileName: selectedFile.name, file: selectedFile });
+        }
+    };
+
+
+    //Work Instruction Upload
+    const handleWorkInstructionUpload = async () => {
+        const formData = new FormData();
+        formData.append('file', .file);
+
+        try {
+            axios.post("http://localhost:3001/upload/VendorCertificateUpload", formData, {
+                onUploadProgress: (progressEvent) => {
+                    const percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total);
+                    setUploadProgress(percentCompleted);
+                }
+            })
+                .then(response => {
+                    setSnackBarOpen(true);
+                    setErrorHandler({ status: 1, message: response.data.message, code: "success" });
+                    console.log(response);
+                })
+                .catch(error => {
+                    console.error(error);
+                    // handle error here
+                });
+        } catch (error) {
+            console.error('Error uploading the file:', error);
+        }
+    };
 
 
 
 
     //
 
-    const bodyItem = {
-        borderRadius: "10px",
-        padding: "2rem",
-        margin: "1rem",
-        boxShadow: "0px 0px 25px 10px",
-    }
+    
     return (
         <div style={{ marginTop: "4rem" }}>
             <div >
@@ -530,41 +563,59 @@ const ItemMaster = () => {
 
                                     </div>
                                     <div className="">
-                                    <Button fullWidth color='secondary' component="label" variant="contained" startIcon={<UploadFileIcon />} size="small">
-                                                Work Instruction Upload
-                                                <VisuallyHiddenInput type="file" />
-                                            </Button>
-                                            <div>
-                                                <Link herf={`${process.env.REACT_APP_PORT}/`}></Link>
-                                                <Button variant='outlined' color='error' endIcon={<Delete/>}>Remove</Button>
-                                            
-                                                
-                                            
-                                            </div>
-                                            
+                                        <Button fullWidth color='secondary' component="label" variant="contained" startIcon={<UploadFileIcon />} size="small">
+                                            Work Instruction Upload
+                                            <VisuallyHiddenInput type="file" />
+                                        </Button>
+                                        <div className='mt-2 text-center'>
+                                            <Link herf={`${process.env.REACT_APP_PORT}/`}></Link>
+                                            <Button variant='outlined' color='error' endIcon={<Delete />}>Remove</Button>
+
+
+
+                                        </div>
+
 
                                     </div>
-                                  
+
                                 </Paper>
                             </div>
 
                             <div className='col-md-2'>
-                                {!itemMasterData.itemMasterImage && <div style={{ width: "100%", height: "72%", margin: "0 0px 0 0", padding: 0 }}>
-                                    <input type="file" accept="image/*" onChange={handleImageChange} />
-
+                                {!itemMasterData.itemMasterImage && <div>
+                                    <label htmlFor="fileInput" style={{ display: 'block', width: '100%', height: '200px', border: '2px dashed #ccc', position: 'relative', cursor: 'pointer' }}>
+                                        <input
+                                            type="file"
+                                            id="fileInput"
+                                            accept="image/*"
+                                            style={{
+                                                width: '100%',
+                                                height: '100%',
+                                                opacity: 0,
+                                                overflow: 'hidden',
+                                                position: 'absolute',
+                                                top: 0,
+                                                left: 0,
+                                                cursor: 'pointer',
+                                            }}
+                                            onChange={handleImageChange}
+                                            ref={fileInputRef}
+                                        />
+                                        {/* Your other content or styling for the square box */}
+                                    </label>
                                 </div>}
                                 {/* {image &&  <div style={{ width: "100%", height: "100%", margin: "0 0px 0 0", padding: 0 }}>
                                 <img src={image} width="200px" height="200px" alt="Uploaded" style={{ maxWidth: '100%' }} />
                                 </div>} */}
-                                {itemMasterData.itemMasterImage && <div style={{margin: 0}}>
+                                {itemMasterData.itemMasterImage && <div style={{ margin: 0 }}>
                                     <div className='d-flex justify-content-center' style={{ width: "100%", height: "70%" }}>
-                                    <img src={itemMasterData.itemMasterImage} style={{ width: "70%", height: "100%", margin: "auto", display: "block" }}></img>
-                                </div>
-                                <div className='d-flex justify-content-center'>
-                                    
-                                    <Button endIcon={<DeleteOutlined/>} color='error'  variant='contained' type='button' onClick={() => setItemMasterData((prev)=> ({...prev, itemMasterImage: ""}))}>Cancel</Button>
+                                        <img src={itemMasterData.itemMasterImage} style={{ width: "70%", height: "100%", margin: "auto", display: "block" }}></img>
                                     </div>
-                                    </div>}
+                                    <div className='d-flex justify-content-center'>
+
+                                        <Button endIcon={<DeleteOutlined />} color='error' variant='contained' type='button' onClick={() => setItemMasterData((prev) => ({ ...prev, itemMasterImage: "" }))}>Remove</Button>
+                                    </div>
+                                </div>}
                             </div>
 
 
@@ -578,29 +629,32 @@ const ItemMaster = () => {
                                             mb: 2
 
                                         }}>
-                                        <table className='table table-bordered text-center align-middle'>
-                                            <tbody>
-                                                <tr>
-                                                    <th>Si No</th>
-                                                    <th>Calibration Points </th>
-                                                    <th><Fab size='small' color="primary" aria-label="add" onClick={() => addCalibrationPointRow()}>
-                                                        <Add />
-                                                    </Fab></th>
-                                                </tr>
-                                                {itemMasterData.calibrationPoints ? itemMasterData.calibrationPoints.map((item, index) => (
-                                                    <tr key={index}>
-                                                        <td>{index + 1}</td>
-                                                        <td><input type='text' className='form-control' name='calibrationPoint' value={item.calibrationPoint} onChange={(e) => changeCalibrationPointRow(index, e.target.name, e.target.value)} /></td>
-                                                        <td><Fab size='small' color="error" aria-label="add" onClick={() => deleteCalibrationPointRow(index)}>
-                                                            <Remove />
-                                                        </Fab></td>
+                                        <div style={{maxHeight: "215px", overflow: "auto", height: "100%"}}>
+                                            <table className='table table-bordered text-center align-middle'>
+                                                <tbody>
+                                                    <tr>
+                                                        <th>Si No</th>
+                                                        <th>Calibration Points </th>
+                                                        <th><Fab size='small' color="primary" aria-label="add" onClick={() => addCalibrationPointRow()}>
+                                                            <Add />
+                                                        </Fab></th>
                                                     </tr>
+                                                    {itemMasterData.calibrationPoints ? itemMasterData.calibrationPoints.map((item, index) => (
+                                                        <tr key={index}>
+                                                            <td>{index + 1}</td>
+                                                            <td><input type='text' className='form-control' name='calibrationPoint' value={item.calibrationPoint} onChange={(e) => changeCalibrationPointRow(index, e.target.name, e.target.value)} /></td>
+                                                            <td><Fab size='small' color="error" aria-label="add" onClick={() => deleteCalibrationPointRow(index)}>
+                                                                <Remove />
+                                                            </Fab></td>
+                                                        </tr>
 
 
-                                                )) : <tr></tr>}
+                                                    )) : <tr></tr>}
 
-                                            </tbody>
-                                        </table>
+                                                </tbody>
+                                            </table>
+                                        </div>
+
                                     </Paper>
                                 </div>
                             </div>
@@ -636,17 +690,6 @@ const ItemMaster = () => {
 
 
 
-                                    <div className=' col'>
-                                        <Stack
-                                            direction="row"
-                                            justifyContent="flex-end"
-                                            alignItems="flex-start"
-                                            spacing={2}
-
-                                        >
-                                            
-                                        </Stack>
-                                    </div>
 
 
                                 </div>
