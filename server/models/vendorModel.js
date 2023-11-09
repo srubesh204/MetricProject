@@ -7,9 +7,14 @@ const vendorSchema = new mongoose.Schema({
     required: [true, "Vendor is Required"]
     
   } ,
-  aliasName: String,
-  fullName: String,
-  dor: String,
+  aliasName: {
+    type: String,
+    required:[true,"AliasName is required"]
+  },
+  fullName: {
+    type:String,
+  required:[true,"FullName is required"]
+},
   address: String,
   state: String,
   city: String,
@@ -20,7 +25,8 @@ const vendorSchema = new mongoose.Schema({
   certificate: String,
   certificateValidity : String,
   vendorStatus : String,
-  vendorContacts : [{name : String, 
+  vendorContacts : [{
+    name : String, 
     contactNumber : {
       type: Number,
       required: [true, "Vendor Contact number is must"],
@@ -31,8 +37,9 @@ const vendorSchema = new mongoose.Schema({
     mailId : {
     type: String,
     unique: [true, "Vendor Email should be unique"],
-    required: [true, "Email Required"]
-    
+    required: [true, "Email Required"],
+    lowercase: true
+     
   } , 
   vcStatus : String}]
 });

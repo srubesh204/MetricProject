@@ -10,6 +10,7 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
+import { DataGrid } from '@mui/x-data-grid';
 
 
 export const Department = () => {
@@ -59,6 +60,24 @@ export const Department = () => {
   useEffect(() => {
     depFetchData();
   }, []);
+
+
+
+  const columns = [
+    { field: 'id', headerName: 'Si No', width: 70 },
+
+    { field: 'department', headerName: 'Department', width: 200 },
+    { field: 'departmentStatus', headerName: 'Department Status', width: 150 },
+
+
+  ];
+
+
+
+
+
+
+
   //
   //Submit Department
   const DepartmentSubmit = async (e) => {
@@ -87,7 +106,7 @@ export const Department = () => {
         // Handle other errors
         console.log(err);
         const errorData500 = err.response.data.error;
-        const errorMessages500 = Object.values(errorData500).join(', ');
+        const errorMessages500 = Object.values(errorData500);
         console.log(errorMessages500)
         setErrorHandler({ status: 0, message: errorMessages500, code: "error" });
       } else {
@@ -353,7 +372,7 @@ export const Department = () => {
 
 
   const initialPlaceOfUsageData = {
-    placeOfUsage: "",
+    placeOfUsage: "N/A",
     placeOfUsageStatus: ""
 
   }
@@ -383,17 +402,26 @@ export const Department = () => {
 
   const handleDepChange = (e) => {
     const { name, value } = e.target;
-    setDepartmentData((prev) => ({ ...prev, [name]: value }))
+    const formattedValue = name === 'department'
+      ? value.toLowerCase().split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')
+      : value;
+    setDepartmentData((prev) => ({ ...prev, [name]: formattedValue }))
   };
 
   const handleAreaChange = (e) => {
     const { name, value } = e.target;
-    setArea((prev) => ({ ...prev, [name]: value }))
+    const formattedValue = name === 'area'
+      ? value.toLowerCase().split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')
+      : value;
+    setArea((prev) => ({ ...prev, [name]: formattedValue }))
   };
 
   const handlePouChange = (e) => {
     const { name, value } = e.target;
-    setPlaceOfUsageData((prev) => ({ ...prev, [name]: value }))
+    const formattedValue = name === 'placeOfUsage'
+      ? value.toLowerCase().split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')
+      : value;
+    setPlaceOfUsageData((prev) => ({ ...prev, [name]: formattedValue }))
   };
 
 
@@ -415,12 +443,34 @@ export const Department = () => {
 
     }
   };
+  const handleAreaKeyDown = (event) => {
+    const { name, value } = event.target
+    console.log(name)
+    if (event.key === 'Tab') {
+      // Prevent default Tab behavior
+
+      const formattedValue = value.toLowerCase().
+        split(' ')
+        .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+        .join(' ');
+      console.log(formattedValue)
+      // Format the input value (capitalization)
+      // Update the state to show the formatted value
+      setArea((prev) => ({ ...prev, [name]: formattedValue })); // Update the state with the formatted value
+
+
+    }
+  };
+
+
+
+
 
   //placeOfusage
 
 
   const [placeOfUsageDatas, setPlaceOfUsageData] = useState({
-    placeOfUsage: "",
+    placeOfUsage: "N/A",
     placeOfUsageStatus: ""
 
   });
@@ -447,6 +497,8 @@ export const Department = () => {
   useEffect(() => {
     placeOfUsageData();
   }, []);
+
+
 
 
   const placeOfUsageSubmit = async (e) => {
@@ -572,6 +624,25 @@ export const Department = () => {
       console.log(err);
     }
   };
+  const handlePlaceOfKeyDown = (event) => {
+    const { name, value } = event.target
+    console.log(name)
+    if (event.key === 'Tab') {
+      // Prevent default Tab behavior
+
+      const formattedValue = value.toLowerCase().
+        split(' ')
+        .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+        .join(' ');
+      console.log(formattedValue)
+      // Format the input value (capitalization)
+      // Update the state to show the formatted value
+      setPlaceOfUsageData((prev) => ({ ...prev, [name]: formattedValue })); // Update the state with the formatted value
+
+
+    }
+  };
+
 
 
 
@@ -622,10 +693,10 @@ export const Department = () => {
                 }}
                 className='col row'
               >
-                <Typography variant="h5" className="text-center">Department</Typography>
+                <Typography variant="h5" component="h5" className="text-center">Department</Typography>
                 <div className="row g-2" >
 
-                  <div className="col-md-8 d-felx ">
+                  <div className="col-md-8 d-flex ">
 
                     <TextField label="Department"
                       id="departmentId"
@@ -638,7 +709,7 @@ export const Department = () => {
                       name="department" ></TextField>
 
                   </div>
-                  <div className="col d-felx mb-2">
+                  <div className="col d-flex ">
 
                     <TextField label="Status"
                       id="departmentStatusId"
@@ -658,9 +729,9 @@ export const Department = () => {
                   </div>
                 </div>
 
-                <div className="row g-2 mb-2">
-                  <div className="col-md-6 d-flex">
-                    <div className="me-3">
+                <div className="row g-2 ">
+                  <div className="col-md-6 d-flex justify-content-start">
+                    <div className="me-2">
                       <lable className="uplable">
                         <input type="file" className="downlable" />
                         Upload
@@ -685,11 +756,11 @@ export const Department = () => {
                     aria-describedby="alert-dialog-description"
                   >
                     <DialogTitle id="alert-dialog-title">
-                      {" Department Update Confirmation?"}
+                      {" Department update confirmation?"}
                     </DialogTitle>
                     <DialogContent>
                       <DialogContentText id="alert-dialog-description">
-                        Are you Sure to Update the Department
+                        Are you sure to update the Department
                       </DialogContentText>
                     </DialogContent>
                     <DialogActions>
@@ -706,11 +777,11 @@ export const Department = () => {
                       aria-describedby="alert-dialog-description"
                     >
                       <DialogTitle id="alert-dialog-title">
-                        {"Create Confirmation?"}
+                        {" Department create confirmation?"}
                       </DialogTitle>
                       <DialogContent>
                         <DialogContentText id="alert-dialog-description">
-                          Are you Sure to Add the Department
+                          Are you sure to add the Department
                         </DialogContentText>
                       </DialogContent>
                       <DialogActions>
@@ -729,11 +800,11 @@ export const Department = () => {
 
                   <div className="col-md text-end">
 
-                    {depStateId ? (<div>
+                    {depStateId ? (<div className="d-flex justify-content-end">
                       <button
                         type="button"
                         style={{ backgroundColor: "#e6e6e6", color: "black", fontWeight: "bolder" }}
-                        className="btn text-end me-3 hover"
+                        className="btn text-end me-2 hover"
                         onClick={() => setDepOpenModal(true)}
                       //   disabled={!depStateId}
                       >
@@ -741,18 +812,22 @@ export const Department = () => {
                       </button >
                       <button type="button" onMouseEnter={(e) => { e.target.style.background = 'red' }} onMouseOut={(e) => { e.target.style.background = '#e6e6e6' }}
                         style={{ backgroundColor: "#e6e6e6", color: "black", fontWeight: "bolder" }}
-                        className="btn text-end me-3"
+                        className="btn text-end"
                         onClick={() => { setDepStateId(null); setDepartmentData(emptyDepartmentData) }}
                       >Cancel</button>
-                    </div>) : <button
-                      type="button"
-                      style={{ backgroundColor: "#e6e6e6", color: "black", fontWeight: "bolder" }}
-                      className="btn text-end hover"
-                      onClick={() => setDepOpenModal(true)}
+                    </div>) :
+                      <div className="d-flex justify-content-end">
+                        <button
+                          type="button"
+                          style={{ backgroundColor: "#e6e6e6", color: "black", fontWeight: "bolder" }}
+                          className="btn text-end hover"
+                          onClick={() => setDepOpenModal(true)}
 
-                    >
-                      <i className="bi bi-plus"></i>Add Department
-                    </button>}
+                        >
+                          <i className="bi bi-plus"></i>Add Department
+                        </button>
+                      </div>
+                    }
 
 
 
@@ -763,7 +838,27 @@ export const Department = () => {
 
                 </div>
                 <div className="row g-2">
-                  <div className="table-responsive col">
+                  <div style={{ height: 400, width: '100%' }}>
+                    <DataGrid
+                      rows={departmentList}
+                      columns={columns}
+                      getRowId={(row) => row._id}
+                      initialState={{
+                        pagination: {
+                          paginationModel: { page: 0, pageSize: 5 },
+                        },
+                      }}
+                      pageSizeOptions={[5, 10]}
+                      checkboxSelection
+                    />
+                  </div>
+
+
+
+
+
+
+               {/* <div className="table-responsive col">
                     <table className="table table-bordered text-center">
                       <tbody>
                         <tr>
@@ -791,7 +886,7 @@ export const Department = () => {
 
                       </tbody>
                     </table>
-                  </div>
+                  </div>*/}
                   <Dialog
                     open={deleteDepModal}
                     onClose={() => setDeleteDepModal(false)}
@@ -799,11 +894,11 @@ export const Department = () => {
                     aria-describedby="alert-dialog-description"
                   >
                     <DialogTitle id="alert-dialog-title">
-                      {" DepartMent Delete Confirmation?"}
+                      {" Department delete confirmation?"}
                     </DialogTitle>
                     <DialogContent>
                       <DialogContentText id="alert-dialog-description">
-                        Are you Sure to Delete the DepartMent
+                        Are you sure to delete the Department
                       </DialogContentText>
                     </DialogContent>
                     <DialogActions>
@@ -826,149 +921,7 @@ export const Department = () => {
 
 
               </Paper>
-              {/*<Paper sx={{
-                    p: 1,
-                    display: 'flex',
-                    flexDirection: 'column',
-                    mb:1
 
-                  }}
-                    className="col row g-2 me-3 "
-                  >
-                    <div className="col ">
-                      <TextField label="Department"
-                        id="departmentId"
-                        defaultValue=""
-                        fullWidth
-                        size="small"
-                        onChange={handleChange}
-                        onKeyDown={handleKeyDown}
-                        value={departmentData.department}
-                        name="department" >
-
-                      </TextField>
-                    </div>
-                    
-
-                    <div className="table-responsive ">
-                      <table className="table table-bordered text-center ">
-                        <tbody>
-                          <tr>
-                            <th>Si.No</th>
-                            <th>Department </th>
-                            <th>Delete</th>
-                          </tr>
-                          {departmentList.map((item, index) => (
-                            <tr key={item._id} onClick={() => handleDepRowClick(item)} className={item._id === depStateId ? "table-active" : ""}>
-                              <td >{index + 1}</td>
-                              <td>{item.department}</td>
-                              <td>
-                                <button
-                                  type="button"
-                                  className="btn btn-sm btn-danger"
-                                  onClick={() => deleteDepartment(item._id)}
-                                >
-                                  <i className="bi bi-trash"></i>
-                                </button>
-                              </td>
-                            </tr>
-                          ))}
-
-
-                        </tbody>
-                      </table>
-                    </div>
-                    
-                    <div className="row mt-4">
-                      <div className="col d-flex">
-                        <div className="me-3">
-                          <lable className="uplable">
-                            <input type="file" className="downlable" />
-                            Upload
-                          </lable>
-                        </div>
-                        <div>
-                          <lable
-                            className="uplable"
-
-                          >
-                            <input type="file" className="downlable" />
-                            Download
-                          </lable>
-                        </div>
-                      </div>
-
-                      <div className="text-end col">
-
-                        {depStateId ? (<div>
-                          <button
-                            type="button"
-                            style={{ backgroundColor: "#e6e6e6", color: "black", fontWeight: "bolder" }}
-                            className="btn text-end me-3 hover"
-                            onClick={() => updateDepartment(depStateId)}
-                          //   disabled={!depStateId}
-                          >
-                            Modify
-                          </button >
-                          <button type="button" onMouseEnter={(e) => { e.target.style.background = 'red' }} onMouseOut={(e) => { e.target.style.background = '#e6e6e6' }}
-                            style={{ backgroundColor: "#e6e6e6", color: "black", fontWeight: "bolder" }}
-                            className="btn text-end me-3"
-                            onClick={() => { setDepStateId(null); setDepartmentData(emptyDepartmentData) }}
-                          >Cancel</button>
-                        </div>) : <button
-                          type="button"
-                          style={{ backgroundColor: "#e6e6e6", color: "black", fontWeight: "bolder" }}
-                          className="btn text-end hover"
-                          onClick={DepartmentSubmit}
-
-                        >
-                          <i className="bi bi-plus"></i>Add Department
-                        </button>}
-
-
-
-
-                      </div>
-
-
-                    </div>
-                  </Paper>/*}
-
-
-
-
-
-
-
-
-
-
-
-                  {/* <Grid item xs={4}>
-                    <TextField label="Area"
-                      id="area"
-                      defaultValue=""
-                      fullWidth
-                      size="small"
-                      placeholder="name@example.com"
-                      onChange={handleChange}
-                      onKeyDown={handleKeyDown}
-                      value={departmentData.area}
-                       name="area" ></TextField>
-                    </Grid>*/}
-
-              {/* <Grid item xs={4}>
-                    <TextField label="Place Of Usage"
-                      id="placeOfUsage"
-                      defaultValue=""
-                      fullWidth
-                      size="small"
-                      placeholder="name@example.com"
-                      onChange={handleChange}
-                      onKeyDown={handleKeyDown}
-                      value={departmentData.placeOfUsage}
-                       name="placeOfUsage" ></TextField>
-                  </Grid>*/}
               <Paper
                 sx={{
                   p: 1,
@@ -979,10 +932,10 @@ export const Department = () => {
                 }}
                 className='col row g-2 me-3'
               >
-                <Typography variant="h5" className="text-center">Area</Typography>
+                <Typography variant="h5" className="text-center mb-2">Area</Typography>
                 <div >
                   <div className="row g-2">
-                    <div className="col-md-8 d-felx mb-2">
+                    <div className="col-md-8 d-flex ">
 
 
                       <TextField label="Area"
@@ -991,11 +944,11 @@ export const Department = () => {
                         fullWidth
                         size="small"
                         onChange={handleAreaChange}
-                        onKeyDown={handleKeyDown}
+                        onKeyDown={handleAreaKeyDown}
                         value={areaData.area}
                         name="area" ></TextField>
                     </div>
-                    <div className="col d-flex mb-2">
+                    <div className="col d-flex mb-3">
 
                       <TextField label="Status"
                         id="areaStatusID"
@@ -1029,9 +982,9 @@ export const Department = () => {
                         </Grid>*/}
 
 
-                  <div className="row g-2 mb-2">
-                    <div className="col-md-6 d-flex">
-                      <div className="me-3">
+                  <div className="row g-2 mb-3">
+                    <div className="col-md-6 d-flex justify-content-start">
+                      <div className="me-2">
                         <lable className="uplable">
                           <input type="file" className="downlable" />
                           Upload
@@ -1056,11 +1009,11 @@ export const Department = () => {
                       aria-describedby="alert-dialog-description"
                     >
                       <DialogTitle id="alert-dialog-title">
-                        {" Area Update Confirmation?"}
+                        {" Area update confirmation?"}
                       </DialogTitle>
                       <DialogContent>
                         <DialogContentText id="alert-dialog-description">
-                          Are you Sure to Update the Area
+                          Are you sure to update the Area
                         </DialogContentText>
                       </DialogContent>
                       <DialogActions>
@@ -1077,11 +1030,11 @@ export const Department = () => {
                         aria-describedby="alert-dialog-description"
                       >
                         <DialogTitle id="alert-dialog-title">
-                          {" Area Create Confirmation?"}
+                          {" Area create confirmation?"}
                         </DialogTitle>
                         <DialogContent>
                           <DialogContentText id="alert-dialog-description">
-                            Are you Sure to Add the Area
+                            Are you sure to add the Area
                           </DialogContentText>
                         </DialogContent>
                         <DialogActions>
@@ -1102,11 +1055,11 @@ export const Department = () => {
 
                     <div className="col-md text-end">
 
-                      {areaStateId ? (<div>
+                      {areaStateId ? (<div className="d-flex justify-content-end">
                         <button
                           type="button"
                           style={{ backgroundColor: "#e6e6e6", color: "black", fontWeight: "bolder" }}
-                          className="btn text-end me-3 hover"
+                          className="btn text-end me-2  hover"
                           onClick={() => setAreaOpenModal(true)}
                         //   disabled={!depStateId}
                         >
@@ -1114,18 +1067,19 @@ export const Department = () => {
                         </button >
                         <button type="button" onMouseEnter={(e) => { e.target.style.background = 'red' }} onMouseOut={(e) => { e.target.style.background = '#e6e6e6' }}
                           style={{ backgroundColor: "#e6e6e6", color: "black", fontWeight: "bolder" }}
-                          className="btn text-end me-3"
+                          className="btn text-end"
                           onClick={() => { setareaStateId(null); setArea(initialAreaData) }}
                         >Cancel</button>
-                      </div>) : <button
-                        type="button"
-                        style={{ backgroundColor: "#e6e6e6", color: "black", fontWeight: "bolder" }}
-                        className="btn text-end hover"
-                        onClick={() => setAreaOpenModal(true)}
+                      </div>) : <div className="d-flex justify-content-end">
+                        <button
+                          type="button"
+                          style={{ backgroundColor: "#e6e6e6", color: "black", fontWeight: "bolder" }}
+                          className="btn text-end hover"
+                          onClick={() => setAreaOpenModal(true)}
 
-                      >
-                        <i className="bi bi-plus"></i>Add Area
-                      </button>}
+                        >
+                          <i className="bi bi-plus"></i>Add Area
+                        </button></div>}
 
 
 
@@ -1133,63 +1087,63 @@ export const Department = () => {
                     </div>
                   </div>
                   <div className="row g-2">
-                  <div className="table-responsive col">
-                    <table className="table table-bordered text-center">
-                      <tbody>
-                        <tr>
-                          <th>Si.No</th>
-                          <th>Area </th>
+                    <div className="table-responsive col">
+                      <table className="table table-bordered text-center">
+                        <tbody>
+                          <tr>
+                            <th>Si.No</th>
+                            <th>Area </th>
 
-                          <th>Delete</th>
-                        </tr>
-                        {areaList.map((item, index) => (
-                          <tr key={item._id} onClick={() => handleAreaRowClick(item)} className={item._id === areaStateId ? "table-active" : ""}>
-                            <td >{index + 1}</td>
-                            <td>{item.area}</td>
-
-                            <td>
-                              <button
-                                type="button"
-                                className="btn btn-sm btn-danger"
-                                onClick={() => setDeleteAreaModal(true)}
-
-                              >
-                                <i className="bi bi-trash"></i>
-                              </button>
-                            </td>
+                            <th>Delete</th>
                           </tr>
-                        ))}
+                          {areaList.map((item, index) => (
+                            <tr key={item._id} onClick={() => handleAreaRowClick(item)} className={item._id === areaStateId ? "table-active" : ""}>
+                              <td >{index + 1}</td>
+                              <td>{item.area}</td>
+
+                              <td>
+                                <button
+                                  type="button"
+                                  className="btn btn-sm btn-danger"
+                                  onClick={() => setDeleteAreaModal(true)}
+
+                                >
+                                  <i className="bi bi-trash"></i>
+                                </button>
+                              </td>
+                            </tr>
+                          ))}
 
 
-                      </tbody>
-                    </table>
+                        </tbody>
+                      </table>
 
-                    <Dialog
-                      open={deleteAreaModal}
-                      onClose={() => setDeleteAreaModal(false)}
-                      aria-labelledby="alert-dialog-title"
-                      aria-describedby="alert-dialog-description"
-                    >
-                      <DialogTitle id="alert-dialog-title">
-                        {" Area Delete Confirmation?"}
-                      </DialogTitle>
-                      <DialogContent>
-                        <DialogContentText id="alert-dialog-description">
-                          Are you Sure to Delete the Area
-                        </DialogContentText>
-                      </DialogContent>
-                      <DialogActions>
-                        <Button onClick={() => setDeleteAreaModal(false)}>Cancel</Button>
-                        <Button onClick={(e) => { deleteArea(e); setDeleteAreaModal(false); }} autoFocus>
-                          Delete
-                        </Button>
-                      </DialogActions>
-                    </Dialog>
-
-
+                      <Dialog
+                        open={deleteAreaModal}
+                        onClose={() => setDeleteAreaModal(false)}
+                        aria-labelledby="alert-dialog-title"
+                        aria-describedby="alert-dialog-description"
+                      >
+                        <DialogTitle id="alert-dialog-title">
+                          {" Area delete confirmation?"}
+                        </DialogTitle>
+                        <DialogContent>
+                          <DialogContentText id="alert-dialog-description">
+                            Are you sure to delete the Area
+                          </DialogContentText>
+                        </DialogContent>
+                        <DialogActions>
+                          <Button onClick={() => setDeleteAreaModal(false)}>Cancel</Button>
+                          <Button onClick={(e) => { deleteArea(e); setDeleteAreaModal(false); }} autoFocus>
+                            Delete
+                          </Button>
+                        </DialogActions>
+                      </Dialog>
 
 
-                  </div>
+
+
+                    </div>
                   </div>
 
 
@@ -1219,12 +1173,12 @@ export const Department = () => {
                       fullWidth
                       size="small"
                       onChange={handlePouChange}
-                      onKeyDown={handleKeyDown}
+                      onKeyDown={handlePlaceOfKeyDown}
                       value={placeOfUsageDatas.placeOfUsage}
                       name="placeOfUsage" ></TextField>
 
                   </div>
-                  <div className="col d-flex mb-2">
+                  <div className="col d-flex ">
 
                     <TextField label="Status"
                       id="placeOfUsageStatusId"
@@ -1233,7 +1187,7 @@ export const Department = () => {
                       fullWidth
                       size="small"
                       onChange={handlePouChange}
-                      onKeyDown={handleKeyDown}
+                      onKeyDown={handlePlaceOfKeyDown}
 
                       value={placeOfUsageDatas.placeOfUsageStatus}
                       name="placeOfUsageStatus" >
@@ -1248,9 +1202,9 @@ export const Department = () => {
 
 
                 <div className="row g-2 ">
-                  <div className="col d-flex">
+                  <div className="col d-flex justify-content-start">
 
-                    <div className="me-3">
+                    <div className="me-2">
                       <lable className="uplable">
                         <input type="file" className="downlable" />
                         Upload
@@ -1273,11 +1227,11 @@ export const Department = () => {
                     aria-describedby="alert-dialog-description"
                   >
                     <DialogTitle id="alert-dialog-title">
-                      {" Place Of Usage Update Confirmation?"}
+                      {" Place of usage update confirmation?"}
                     </DialogTitle>
                     <DialogContent>
                       <DialogContentText id="alert-dialog-description">
-                        Are you Sure to Update the Place Of Usage
+                        Are you sure to update the Place of usage
                       </DialogContentText>
                     </DialogContent>
                     <DialogActions>
@@ -1294,11 +1248,11 @@ export const Department = () => {
                       aria-describedby="alert-dialog-description"
                     >
                       <DialogTitle id="alert-dialog-title">
-                        {" Place OF Usage Create Confirmation?"}
+                        {" Place of usage create confirmation?"}
                       </DialogTitle>
                       <DialogContent>
                         <DialogContentText id="alert-dialog-description">
-                          Are you Sure to Add the Place Of Usage
+                          Are you sure to add the Place of usage
                         </DialogContentText>
                       </DialogContent>
                       <DialogActions>
@@ -1313,13 +1267,13 @@ export const Department = () => {
 
 
 
-                  <div className="col-md text-end">
+                  <div className="col-md p-0">
 
-                    {placeOfUsageId ? (<div>
+                    {placeOfUsageId ? (<div className="d-flex justify-content-end">
                       <button
                         type="button"
                         style={{ backgroundColor: "#e6e6e6", color: "black", fontWeight: "bolder" }}
-                        className="btn text-end me-3 hover"
+                        className="btn text-end me-2 hover"
                         onClick={() => setPouOpenModal(true)}
                       //   disabled={!depStateId}
                       >
@@ -1327,18 +1281,19 @@ export const Department = () => {
                       </button >
                       <button type="button" onMouseEnter={(e) => { e.target.style.background = 'red' }} onMouseOut={(e) => { e.target.style.background = '#e6e6e6' }}
                         style={{ backgroundColor: "#e6e6e6", color: "black", fontWeight: "bolder" }}
-                        className="btn text-end me-3"
+                        className="btn text-end "
                         onClick={() => { setPlaceOfUsageId(null); setPlaceOfUsageData(initialPlaceOfUsageData) }}
                       >Cancel</button>
-                    </div>) : <button
-                      type="button"
-                      style={{ backgroundColor: "#e6e6e6", color: "black", fontWeight: "bolder" }}
-                      className="btn text-end hover"
-                      onClick={() => setPouOpenModal(true)}
+                    </div>) :
+                      <div className="d-flex justify-content-end"><button
+                        type="button"
+                        style={{ backgroundColor: "#e6e6e6", color: "black", fontWeight: "bolder" }}
+                        className="btn hover"
+                        onClick={() => setPouOpenModal(true)}
 
-                    >
-                      <i className="bi bi-plus"></i>Add Place Of Usage
-                    </button>}
+                      >
+                        <i className="bi bi-plus"></i>Add Place
+                      </button></div>}
 
 
 
@@ -1386,11 +1341,11 @@ export const Department = () => {
                     aria-describedby="alert-dialog-description"
                   >
                     <DialogTitle id="alert-dialog-title">
-                      {" Place Of Usage Delete Confirmation?"}
+                      {"Place of usage delete confirmation?"}
                     </DialogTitle>
                     <DialogContent>
                       <DialogContentText id="alert-dialog-description">
-                        Are you Sure to Delete the Place Of usage
+                        Are you sure to delete the Place of usage
                       </DialogContentText>
                     </DialogContent>
                     <DialogActions>
@@ -1524,7 +1479,10 @@ export const Designation = () => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setDesignationData((prev) => ({ ...prev, [name]: value }));
+    const formattedValue = name === 'designation'
+      ? value.toLowerCase().split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')
+      : value;
+    setDesignationData((prev) => ({ ...prev, [name]: formattedValue }));
 
   };
 
@@ -1653,6 +1611,7 @@ export const Designation = () => {
       );
       desFetchData();
       setSnackBarOpen(true)
+      setDesStateId(null)
       setErrorHandler({ status: response.data.status, message: response.data.message, code: "success" })
       setDesignationData({
         designation: "",
@@ -1759,7 +1718,8 @@ export const Designation = () => {
                 p: 2,
                 display: 'flex',
                 flexDirection: 'column',
-                mb: 2
+                m: 2,
+
               }}
             >
               <div className="row g-2">
@@ -1772,21 +1732,6 @@ export const Designation = () => {
                     onChange={handleChange}
                     onKeyDown={handleKeyDown}
                     value={designationData.designation}
-<<<<<<< HEAD
-                    name="designation" >
-
-                  </TextField>
-                </div>
-
-                <div className="col-md-3 col-xs-">
-                  <TextField
-                    label="Status"
-                    select
-                    id="designationStatusId"
-                    // defaultValue="Active"
-                    fullWidth
-                    size="small"
-=======
                     name="designation" ></TextField>
                 </div>
                 <div className="col d-flex mb-2">
@@ -1820,7 +1765,6 @@ export const Designation = () => {
                     className="form-control"
                     id="designation"
                     placeholder="designation"
->>>>>>> 7244357623c0b6b16707843eb531937d08bf8be2
                     onChange={handleChange}
                     onKeyDown={handleKeyDown}
                     name="designation"
@@ -1856,11 +1800,11 @@ export const Designation = () => {
                   aria-describedby="alert-dialog-description"
                 >
                   <DialogTitle id="alert-dialog-title">
-                    {"ItemMaster Update Confirmation?"}
+                    {"Designation update confirmation?"}
                   </DialogTitle>
                   <DialogContent>
                     <DialogContentText id="alert-dialog-description">
-                      Are you Sure to Update the ItemMaster
+                      Are you sure to update the Designation
                     </DialogContentText>
                   </DialogContent>
                   <DialogActions>
@@ -1876,11 +1820,11 @@ export const Designation = () => {
                   aria-describedby="alert-dialog-description"
                 >
                   <DialogTitle id="alert-dialog-title">
-                    {" Designation Create Confirmation?"}
+                    {" Designation create confirmation?"}
                   </DialogTitle>
                   <DialogContent>
                     <DialogContentText id="alert-dialog-description">
-                      Are you Sure to Add the Designation
+                      Are you sure to add the Designation
                     </DialogContentText>
                   </DialogContent>
                   <DialogActions>
@@ -1928,6 +1872,7 @@ export const Designation = () => {
                 p: 4,
                 display: 'flex',
                 flexDirection: 'column',
+                m: 2
 
               }}
             >
@@ -1961,11 +1906,11 @@ export const Designation = () => {
                 aria-describedby="alert-dialog-description"
               >
                 <DialogTitle id="alert-dialog-title">
-                  {" Place Of Usage Delete Confirmation?"}
+                  {"Designation delete confirmation?"}
                 </DialogTitle>
                 <DialogContent>
                   <DialogContentText id="alert-dialog-description">
-                    Are you Sure to Delete the Place Of usage
+                    Are you sure to delete the Designation
                   </DialogContentText>
                 </DialogContent>
                 <DialogActions>

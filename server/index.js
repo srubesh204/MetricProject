@@ -57,6 +57,7 @@ app.use('/vendor', vendorRoute);
 app.use('/itemMaster', itemMasterRoute);
 
 app.use('/upload', uploadRoute);
+app.use('/vendorCertificates', express.static('storage/vendorCertificates'));
 app.use('/itemAdd', itemAddRoute);
 app.use('/area', areaRoute);
 app.use('/placeOfUsage', placeOfUsageRoute);

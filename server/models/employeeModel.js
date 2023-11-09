@@ -7,8 +7,14 @@ const employeeSchema = new mongoose.Schema({
         required: [true, "Employee Code Required"]
     },
     title : String,
-    firstName : String,
-    lastName : String,
+    firstName : {
+        type:String,
+        required:[true,"FirstName is required  "]
+    },
+    lastName : {
+        type:String,
+        required:[true,"LastName is required  "]
+    },
     dob : String,
     address : String,
     city : String,

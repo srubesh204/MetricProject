@@ -2,16 +2,17 @@ import React, { useState, useEffect } from 'react'
 import axios from 'axios';
 import { styled } from '@mui/material/styles';
 import Button from '@mui/material/Button';
-import CloudUploadIcon from '@mui/icons-material/CloudUpload';
+
+import {AddToPhotos, CloudUpload, DeleteOutlined, Delete} from '@mui/icons-material';
 import Stack from '@mui/material/Stack';
 import FileDownloadIcon from '@mui/icons-material/FileDownload';
 import UploadFileIcon from '@mui/icons-material/UploadFile';
 import Alert from '@mui/material/Alert';
 import Snackbar from '@mui/material/Snackbar';
-import { TextField, MenuItem, FormControl } from '@mui/material';
+import { TextField, MenuItem, FormControl, Fab, Link } from '@mui/material';
 import { Box, Grid, Paper, Container } from '@mui/material';
 
-
+import { Add, Remove } from '@mui/icons-material';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
@@ -89,6 +90,7 @@ const ItemMaster = () => {
         uncertainty: "",
         uncertaintyUnit: "",
         standardRef: "",
+        itemMasterImage: "",
         itemImageName: "",
         workInsName: "",
         status: "",
@@ -108,6 +110,7 @@ const ItemMaster = () => {
         uncertaintyUnit: "",
         standardRef: "",
         itemImageName: "",
+        itemMasterImage: "",
         workInsName: "",
         status: "",
         calibrationPoints: [],
@@ -318,12 +321,36 @@ const ItemMaster = () => {
             const reader = new FileReader();
 
             reader.onload = (event) => {
-                setImage(event.target.result);
+                console.log(event.target.result)
+                setItemMasterData((prev) => ({ ...prev, itemMasterImage: event.target.result }));
             };
 
             reader.readAsDataURL(selectedImage);
         }
     };
+
+
+    const [unitDataList, setUnitDataList] = useState([])
+
+    const unitFetchData = async () => {
+        try {
+            const response = await axios.get(
+                `${process.env.REACT_APP_PORT}/unit/getAllUnits`
+            );
+
+            console.log(response.data.result)
+            setUnitDataList(response.data.result);
+        } catch (err) {
+            console.log(err);
+        }
+    };
+    useEffect(() => {
+        unitFetchData();
+    }, []);
+
+
+
+
 
     //
 
@@ -392,7 +419,7 @@ const ItemMaster = () => {
 
                         <div className='row '>
 
-                            <div className='col-md-7'>
+                            <div className='col-md-6'>
                                 <Paper
                                     sx={{
                                         p: 1,
@@ -447,10 +474,13 @@ const ItemMaster = () => {
                                             <div className='col' >
 
                                                 <TextField fullWidth label="Unit" value={itemMasterData.uncertaintyUnit} onChange={handleItemMasterBaseChange} className="form-select" select size="small" id="uncertaintyUnitId" name="uncertaintyUnit" defaultValue="" >
+                                                    {unitDataList.map((item, index) => (
+                                                        <MenuItem key={index} value={item.unitName}>{item.unitName}</MenuItem>
+                                                    ))}
 
 
-                                                    <MenuItem value="Unit">Unit</MenuItem >
-                                                    <MenuItem value="Unit Name">Unit Name</MenuItem>
+                                                    {/*<MenuItem value="Unit">Unit</MenuItem >
+                                                    <MenuItem value="Unit Name">Unit Name</MenuItem>*/}
 
                                                 </TextField>
 
@@ -499,21 +529,46 @@ const ItemMaster = () => {
                                         </div>
 
                                     </div>
+                                    <div className="">
+                                    <Button fullWidth color='secondary' component="label" variant="contained" startIcon={<UploadFileIcon />} size="small">
+                                                Work Instruction Upload
+                                                <VisuallyHiddenInput type="file" />
+                                            </Button>
+                                            <div>
+                                                <Link herf={`${process.env.REACT_APP_PORT}/`}></Link>
+                                                <Button variant='outlined' color='error' endIcon={<Delete/>}>Remove</Button>
+                                            
+                                                
+                                            
+                                            </div>
+                                            
+
+                                    </div>
+                                  
                                 </Paper>
                             </div>
 
                             <div className='col-md-2'>
-                                <div style={{ width: "100%", height: "72%", margin: "0 0px 0 0", padding: 0 }}>
+                                {!itemMasterData.itemMasterImage && <div style={{ width: "100%", height: "72%", margin: "0 0px 0 0", padding: 0 }}>
                                     <input type="file" accept="image/*" onChange={handleImageChange} />
-                                    {image && <img src={image} width="200px" height="200px" alt="Uploaded" style={{ maxWidth: '100%' }} />}
-                                </div>
-                                <button className='btn btn-warning me-2 '>Upload Image</button>
-                                <button className='btn btn-danger' onClick={() => setImage(null)}>x</button>
 
+                                </div>}
+                                {/* {image &&  <div style={{ width: "100%", height: "100%", margin: "0 0px 0 0", padding: 0 }}>
+                                <img src={image} width="200px" height="200px" alt="Uploaded" style={{ maxWidth: '100%' }} />
+                                </div>} */}
+                                {itemMasterData.itemMasterImage && <div style={{margin: 0}}>
+                                    <div className='d-flex justify-content-center' style={{ width: "100%", height: "70%" }}>
+                                    <img src={itemMasterData.itemMasterImage} style={{ width: "70%", height: "100%", margin: "auto", display: "block" }}></img>
+                                </div>
+                                <div className='d-flex justify-content-center'>
+                                    
+                                    <Button endIcon={<DeleteOutlined/>} color='error'  variant='contained' type='button' onClick={() => setItemMasterData((prev)=> ({...prev, itemMasterImage: ""}))}>Cancel</Button>
+                                    </div>
+                                    </div>}
                             </div>
 
 
-                            <div className='col-md-3 d-flex justify-content-end mb-2 ps-0 ms-0'>
+                            <div className='col-md-4 d-flex justify-content-end mb-2 ps-0 ms-0'>
                                 <div className='col-12'>
                                     <Paper
                                         sx={{
@@ -528,13 +583,17 @@ const ItemMaster = () => {
                                                 <tr>
                                                     <th>Si No</th>
                                                     <th>Calibration Points </th>
-                                                    <th><button type='button' className='btn btn-warning' onClick={addCalibrationPointRow}>Add</button></th>
+                                                    <th><Fab size='small' color="primary" aria-label="add" onClick={() => addCalibrationPointRow()}>
+                                                        <Add />
+                                                    </Fab></th>
                                                 </tr>
                                                 {itemMasterData.calibrationPoints ? itemMasterData.calibrationPoints.map((item, index) => (
                                                     <tr key={index}>
                                                         <td>{index + 1}</td>
                                                         <td><input type='text' className='form-control' name='calibrationPoint' value={item.calibrationPoint} onChange={(e) => changeCalibrationPointRow(index, e.target.name, e.target.value)} /></td>
-                                                        <td><button type='button' className='btn btn-danger' onClick={() => deleteCalibrationPointRow(index)}><i class="bi bi-trash-fill"></i></button></td>
+                                                        <td><Fab size='small' color="error" aria-label="add" onClick={() => deleteCalibrationPointRow(index)}>
+                                                            <Remove />
+                                                        </Fab></td>
                                                     </tr>
 
 
@@ -564,7 +623,7 @@ const ItemMaster = () => {
                                             justifyContent="flex-start"
                                             alignItems="flex-start"
                                             spacing={2} >
-                                            <Button component="label" variant="contained" startIcon={<CloudUploadIcon />} size="small" font>
+                                            <Button component="label" variant="contained" startIcon={<CloudUpload />} size="small" font>
                                                 Upload file
                                                 <VisuallyHiddenInput type="file" />
                                             </Button>
@@ -577,7 +636,7 @@ const ItemMaster = () => {
 
 
 
-                                    <div className=' md-7'>
+                                    <div className=' col'>
                                         <Stack
                                             direction="row"
                                             justifyContent="flex-end"
@@ -585,10 +644,7 @@ const ItemMaster = () => {
                                             spacing={2}
 
                                         >
-                                            <Button component="label" variant="contained" startIcon={<UploadFileIcon />} size="small">
-                                                Work Instruction Upload
-                                                <VisuallyHiddenInput type="file" />
-                                            </Button>
+                                            
                                         </Stack>
                                     </div>
 
@@ -602,11 +658,11 @@ const ItemMaster = () => {
                                     aria-describedby="alert-dialog-description"
                                 >
                                     <DialogTitle id="alert-dialog-title">
-                                        {"ItemMaster Update Confirmation?"}
+                                        {"ItemMaster update confirmation?"}
                                     </DialogTitle>
                                     <DialogContent>
                                         <DialogContentText id="alert-dialog-description">
-                                            Are you Sure to Update the ItemMaster
+                                            Are you sure to update the ItemMaster
                                         </DialogContentText>
                                     </DialogContent>
                                     <DialogActions>
@@ -622,11 +678,11 @@ const ItemMaster = () => {
                                     aria-describedby="alert-dialog-description"
                                 >
                                     <DialogTitle id="alert-dialog-title">
-                                        {" ItemMaster Create Confirmation?"}
+                                        {" ItemMaster create confirmation?"}
                                     </DialogTitle>
                                     <DialogContent>
                                         <DialogContentText id="alert-dialog-description">
-                                            Are you Sure to Add the ItemMaster
+                                            Are you sure to add the ItemMaster
                                         </DialogContentText>
                                     </DialogContent>
                                     <DialogActions>
@@ -648,7 +704,7 @@ const ItemMaster = () => {
                                                 <button type="button" className='btn btn-secondary' onClick={() => setOpenModal(true)} >Modify</button>
                                             </div>
                                             <div className='me-2' >
-                                                <button type="button" className='btn btn-secondary' onClick={() => { setItemMasterStateId(null); setItemMasterData(initialItemMasterData) }}>Cancel</button>
+                                                <button type="button" className='btn btn-danger' onClick={() => { setItemMasterStateId(null); setItemMasterData(initialItemMasterData) }}>Cancel</button>
                                             </div>
                                         </div> : <div className='col d-flex justify-content-end '>
                                             <div >
@@ -656,7 +712,7 @@ const ItemMaster = () => {
                                             </div>
                                         </div>
                                     }
-                                </div>
+                                </div>.
 
                             </div>
                         </Paper>
@@ -702,7 +758,7 @@ const ItemMaster = () => {
 
                                 </div>
                                 <div>
-                                    <table className='table table-bordered text-center'>
+                                    <table className='table table-bordered text-center align-middle'>
                                         <tbody>
                                             <tr>
                                                 <th>Si No</th>
@@ -736,26 +792,26 @@ const ItemMaster = () => {
                                     </table>
                                 </div>
                                 <Dialog
-                                        open={deleteModal}
-                                        onClose={() => setDeleteModal(false)}
-                                        aria-labelledby="alert-dialog-title"
-                                        aria-describedby="alert-dialog-description"
-                                    >
-                                        <DialogTitle id="alert-dialog-title">
-                                            {" ItemMaster Delete Confirmation?"}
-                                        </DialogTitle>
-                                        <DialogContent>
-                                            <DialogContentText id="alert-dialog-description">
-                                                Are you Sure to Delete the ItemMaster
-                                            </DialogContentText>
-                                        </DialogContent>
-                                        <DialogActions>
-                                            <Button onClick={() => setDeleteModal(false)}>Cancel</Button>
-                                            <Button onClick={(e) => { deleteItemMasterData(e); setDeleteModal(false); }} autoFocus>
-                                                Delete
-                                            </Button>
-                                        </DialogActions>
-                                    </Dialog>
+                                    open={deleteModal}
+                                    onClose={() => setDeleteModal(false)}
+                                    aria-labelledby="alert-dialog-title"
+                                    aria-describedby="alert-dialog-description"
+                                >
+                                    <DialogTitle id="alert-dialog-title">
+                                        {" ItemMaster delete confirmation?"}
+                                    </DialogTitle>
+                                    <DialogContent>
+                                        <DialogContentText id="alert-dialog-description">
+                                            Are you sure to delete the ItemMaster
+                                        </DialogContentText>
+                                    </DialogContent>
+                                    <DialogActions>
+                                        <Button onClick={() => setDeleteModal(false)}>Cancel</Button>
+                                        <Button onClick={(e) => { deleteItemMasterData(e); setDeleteModal(false); }} autoFocus>
+                                            Delete
+                                        </Button>
+                                    </DialogActions>
+                                </Dialog>
 
 
 

@@ -1,3 +1,9 @@
+body{
+	margin: 0;
+	box-sizing: border-box;
+	background: #EEF2F6;
+}
+
 .uplable {
 	display: block;
 	width: 90px;
@@ -93,6 +99,30 @@
 	font-weight: bold;
 }
 .itemdownload{
+	border: 0;
+    clip: rect(1px, 1px, 1px, 1px);
+    height: 5px; 
+    margin: -1px;
+    overflow: hidden;
+    padding: 0;
+    position: absolute;
+    width: 1px;
+	background-color: #e6e6e6;
+
+}
+.itemlistloade{
+	display: block;
+	width: 200px;
+	max-width: 300px;
+	background-color: #e6e6e6;
+	border-radius: 5px;
+	font-size: 1em;
+	line-height: 2.42em;
+	text-align: center;
+	font-weight: bold;
+
+}
+.itemlistdownload{
 	border: 0;
     clip: rect(1px, 1px, 1px, 1px);
     height: 5px; 
