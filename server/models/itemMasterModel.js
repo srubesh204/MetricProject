@@ -16,7 +16,12 @@ const itemMasterSchema = new mongoose.Schema({
   uncertainty : Number,
   uncertaintyUnit : String,
   standardRef : String,
+  itemMasterImage: String,
   itemImageName : String,
+  workInsFile: {
+    data: Buffer,
+    contentType : String
+  },
   workInsName : String,
   status : String,
   calibrationPoints : []

@@ -11,7 +11,7 @@ const designationSchema = new mongoose.Schema({
      
   },
   designationStatus: {
-    type: String,
+    type: String, 
     required: [true, "Designation Status Required"]
   }
 });

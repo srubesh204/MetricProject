@@ -172,12 +172,12 @@ export default function Dashboard() {
 
   return (
     <ThemeProvider theme={defaultTheme}>
-      <Box sx={{ display: 'flex' }}>
+      <Box sx={{ display: 'flex', }}>
         <CssBaseline />
         <AppBar position="absolute" open={togglerOpen}>
           <Toolbar
             sx={{
-              pr: '24px', // keep right padding when drawer closed
+              pr: '24px',  height: "100%" // keep right padding when drawer closed
             }}
           >
             <IconButton
@@ -395,7 +395,7 @@ export default function Dashboard() {
         </Drawer>
         <Box
           component="main"
-          style={{background:"linear-gradient(to right, #32CCBC, #90F7EC)", flexGrow: 1}}
+          style={{background:"linear-gradient(to right, #32CCBC, #90F7EC)", flexGrow: 1, height: "100%"}}
           // sx={{
           //   backgroundColor: (theme) =>
           //     theme.palette.mode === 'light'

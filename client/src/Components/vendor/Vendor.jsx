@@ -136,7 +136,7 @@ const Vendor = () => {
     const cityFetch = async () => {
         try {
             const response = await axios.get(
-                `${process.env.REACT_APP_PORT}/general/getCityByStateName/${StateName}`
+                `${process.env.REACT_APP_PORT}/general/getCityByStateName/${vendorData.state}`
             );
             setCityByState(response.data);
         } catch (err) {
@@ -507,7 +507,7 @@ const Vendor = () => {
     const vendorListColumns = [
 
         { field: 'vendorCode', headerName: 'VendorCode', width: 130 },
-        { field: 'fullName', headerName: 'Vendor Name', width: 200 },
+       
         {
           field: 'fullName',
           headerName: 'Full Name',
@@ -530,6 +530,27 @@ const Vendor = () => {
             headerName: 'Status',
             // description: 'This column has a value getter and is not sortable.',
             width: 100,
+          },
+          {
+            field: 'vendorType',
+            headerName: 'Vendor Type',
+            width: 300,
+            
+            renderHeader: (params) => {
+                params.colDef.headerAlign = "center"
+                return params.colDef.headerName;
+            },
+            renderCell: (params) => {
+              const { row } = params;
+        
+              const types = [];
+              if (row.oem === "1") types.push('OEM');
+              if (row.customer === "1") types.push('Customer');
+              if (row.supplier === "1") types.push('Supplier');
+              if (row.subContractor === "1") types.push('Sub Contractor');
+        
+              return types.join(' | ');
+            },
           },
       ];
 
@@ -602,7 +623,7 @@ const Vendor = () => {
                                             onChange={(newValue) =>
                                                 setVendorData((prev) => ({ ...prev, dor: newValue.format("YYYY-MM-DD") }))
                                             }
-                                            label="DOR"
+                                            label="Date of Registration"
 
                                             slotProps={{ textField: { size: 'small' } }}
                                             format="DD-MM-YYYY" />
@@ -671,7 +692,7 @@ const Vendor = () => {
                                     marginRight: 2
 
                                 }}
-                                className='col'
+                                className='col-md-5'
                             >
 
 
@@ -742,7 +763,7 @@ const Vendor = () => {
 
 
 
-                                    <div className='col-md-6'>
+                                    <div className='col-md'>
 
                                         <DatePicker
                                             fullWidth
@@ -797,7 +818,7 @@ const Vendor = () => {
                                                 onDrop={handleDrop}
                                                 onClick={() => fileInputRef.current.click()} // Click the hidden file input
                                                 style={{
-                                                    width: '75%',
+                                                    width: vendorData.certificate === "" ? '100%' : '75%',
                                                     height: '100%',
                                                     border: '2px dashed #ccc',
                                                     display: 'flex',
@@ -819,7 +840,7 @@ const Vendor = () => {
                                             </div>
 
                                             {vendorData.certificate &&
-                                                <div className='d-flex ' style={{ border: '2px dashed #ccc' }}>
+                                                <div className='d-flex ' style={{ width: "30%", border: '2px dashed #ccc' }}>
 
                                                     <Link className='ms-1' target="_blank" href={`${process.env.REACT_APP_PORT}/vendorCertificates/${vendorData.certificate}`} underline="hover">
                                                         {vendorData.certificate}
@@ -889,9 +910,9 @@ const Vendor = () => {
 
 
                                                     </select></td>
-                                                    <td >
-                                                        <Fab size='small' color="error" aria-label="add" onClick={() => deleteVendorRow(index)}>
-                                                            <Remove />
+                                                    <td style={{padding: 0, margin: 0}}>
+                                                        <Fab size='small' sx={{m:0, p:0}} color="error" aria-label="add" onClick={() => deleteVendorRow(index)}>
+                                                            <Remove sx={{m:0, p:0}}/>
                                                         </Fab></td>
                                                 </tr>
                                             )) : <tr></tr>}
@@ -1010,16 +1031,16 @@ const Vendor = () => {
                                 </select>
 
                             </div>
-                            <Button type='button' onClick={()=>setDeleteModalVendor(true)}>Delete</Button>
+                        {selectedRowIds.length !== 0 && <Button variant='contained' type='button' color='error' onClick={()=>setDeleteModalVendor(true)}>Delete Vendors</Button>}
                             </div>
                             
-                            <div style={{ height: 400, width: '100%' }}>
+                            <div style={{ height: 400, width: '100%', marginTop: "0.5rem" }}>
                             <DataGrid
-                                rows={vendorDataList}
+                                rows={filteredData}
                                 columns={vendorListColumns}
                                 getRowId={(row) => row._id}
                                 initialState={{
-                                    pagination: {
+                                    pagination: { 
                                         paginationModel: { page: 0, pageSize: 5 },
                                     },
                                 }}

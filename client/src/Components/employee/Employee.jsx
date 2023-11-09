@@ -864,6 +864,13 @@ const Employee = () => {
                             }} >
 
                                 <h3 className='text-center'>Employee List</h3>
+                                <div className='row'>
+                                <div className='col d-flex justify-content-end'>
+                                {employeeSelectedRowIds.length !== 0 && <Button variant='contained' type='button' color='error' onClick={()=>handleDeleteOpen(true)}>Delete Employee</Button>}
+
+                                </div>
+                                </div>
+                               
                                 <Grid container rowSpacing={1} columnSpacing={{ xs: 1 }} className=' g-2 mb-2'>
 
                                     <Grid item xs={4}>
