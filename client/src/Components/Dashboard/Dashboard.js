@@ -395,15 +395,16 @@ export default function Dashboard() {
         </Drawer>
         <Box
           component="main"
-          sx={{
-            backgroundColor: (theme) =>
-              theme.palette.mode === 'light'
-                ? theme.palette.grey[100]
-                : theme.palette.grey[900],
-            flexGrow: 1,
-            height: 'inherit',
+          style={{background:"linear-gradient(to right, #32CCBC, #90F7EC)", flexGrow: 1}}
+          // sx={{
+          //   backgroundColor: (theme) =>
+          //     theme.palette.mode === 'light'
+          //       ? theme.palette.grey[100]
+          //       : theme.palette.grey[900],
+          //   flexGrow: 1,
+          //   height: 'inherit',
 
-          }}
+          // }}
         >
           <Toolbar />
 

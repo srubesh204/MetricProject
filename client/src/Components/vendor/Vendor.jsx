@@ -303,12 +303,13 @@ const Vendor = () => {
                     }
                 } 
             );
-            vendorFetchData();
+            
             setVendorStateId(null)
             setVendorData(initialVendorData);
             setSnackBarOpen(true)
-            setErrorHandler({ status: response.data.status, message: `${response.data.result.fullName} ${response.data.message}`, code: "success" })
+            setErrorHandler({ status: response.data.status, message: response.data.message, code: "success" })
             console.log(response.data);
+            vendorFetchData();
         } catch (err) {
             setSnackBarOpen(true)
 
@@ -788,7 +789,7 @@ const Vendor = () => {
                                                 onChange={handleFileSelect}
 
                                             />
-                                            <button style={{ display: "none" }} onClick={() => fileInputRef.current.click()}>Select File</button>
+                                            <button type='button' style={{ display: "none" }} onClick={() => fileInputRef.current.click()}>Select File</button>
                                         </div>
                                         <div className="d-flex justify-content-spaced align-middle" style={{ width: "100%", height: "50px" }}>
                                             <div
@@ -1012,7 +1013,7 @@ const Vendor = () => {
                             <Button type='button' onClick={()=>setDeleteModalVendor(true)}>Delete</Button>
                             </div>
                             
-
+                            <div style={{ height: 400, width: '100%' }}>
                             <DataGrid
                                 rows={vendorDataList}
                                 columns={vendorListColumns}
@@ -1034,6 +1035,7 @@ const Vendor = () => {
 
 
                             />
+                            </div>
 
                             <Dialog
                                 open={deleteModalVendor}

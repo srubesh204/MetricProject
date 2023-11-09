@@ -29,7 +29,7 @@ function App() {
     <div className="App">
 
       
-        {location.pathname === "/itemadd" ? "" : "" }
+        {location.pathname === "/itemadd" ? "" : <Dashboard /> }
         <Routes>
           <Route path="/desdep" element={<Department />} />
           <Route path="/des" element={<Designation />} />
