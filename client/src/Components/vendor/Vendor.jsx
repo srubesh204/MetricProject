@@ -1,12 +1,13 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import axios from 'axios'
 import Autocomplete from '@mui/material/Autocomplete';
-import { TextField, MenuItem, styled, Button, ButtonGroup, Chip, FormControl, OutlinedInput, Fab } from '@mui/material';
+import { TextField, MenuItem, styled, Button, ButtonGroup, Chip, FormControl, OutlinedInput, Fab, Link } from '@mui/material';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import Alert from '@mui/material/Alert';
 import Snackbar from '@mui/material/Snackbar';
 import RemoveRoundedIcon from '@mui/icons-material/RemoveRounded';
 import AddRoundedIcon from '@mui/icons-material/AddRounded';
+
 import { Container, Paper } from '@mui/material';
 import { Box, Grid } from '@mui/material';
 import { DataGrid } from '@mui/x-data-grid';
@@ -14,7 +15,8 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import dayjs from 'dayjs';
-import { Add, Remove } from '@mui/icons-material';
+import { Add, Remove, HighlightOffRounded } from '@mui/icons-material';
+
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
@@ -69,7 +71,8 @@ const Vendor = () => {
     };
 
 
-    const [vendorStateId, setVendorStateId] = useState("")
+    const [vendorStateId, setVendorStateId] = useState(null)
+    console.log(vendorStateId)
     const initialVendorData = {
 
         vendorCode: "",
@@ -294,14 +297,19 @@ const Vendor = () => {
     const deleteVendorData = async () => {
         try {
             const response = await axios.delete(
-                "http://localhost:3001/vendor/deleteVendor/" + vendorStateId, vendorData
+                "http://localhost:3001/vendor/deleteVendor" ,{
+                    data: {
+                        vendorIds: selectedRowIds
+                    }
+                } 
             );
-            vendorFetchData();
+            
             setVendorStateId(null)
             setVendorData(initialVendorData);
             setSnackBarOpen(true)
-            setErrorHandler({ status: response.data.status, message: `${response.data.result.fullName} ${response.data.message}`, code: "success" })
+            setErrorHandler({ status: response.data.status, message: response.data.message, code: "success" })
             console.log(response.data);
+            vendorFetchData();
         } catch (err) {
             setSnackBarOpen(true)
 
@@ -376,9 +384,10 @@ const Vendor = () => {
 
 
 
-    const updateVendor = async (item) => {
-        setVendorData(item)
-        setVendorStateId(item._id)
+    const updateVendor = async (params) => {
+        console.log(params)
+        setVendorData(params.row)
+        setVendorStateId(params.id)
     }
 
     //Dateformat
@@ -404,33 +413,10 @@ const Vendor = () => {
 
     };
 
-    const [file, setFile] = useState(null);
 
-    const handleFileChange = (e) => {
-        setFile(e.target.files[0]);
-        setVendorData((prev) => ({ ...prev, certificate: e.target.files[0].name }));
-    };
 
-    const handleFileUpload = async () => {
-        const formData = new FormData();
-        formData.append('file', file);
 
-        try {
-            const response = await fetch("http://localhost:3001/upload/VendorCertificateUpload", {
-                method: 'POST',
-                body: formData,
-            });
-            console.log(response)
-            if (response.ok) {
-                setSnackBarOpen(true);
-                console.log('File uploaded successfully');
 
-                setErrorHandler({ status: 1, message: "Vendor Certificate Uploaded Successfully", code: "success" });
-            }
-        } catch (error) {
-            console.error('Error uploading the file:', error);
-        }
-    };
 
     const VisuallyHiddenInput = styled('input')({
         clip: 'rect(0 0 0 0)',
@@ -444,10 +430,110 @@ const Vendor = () => {
         width: 1,
     });
 
+    // useEffect(() => {
+    //     axios.get('http://localhost:3001/upload/getVendorCertificate/' + vendorData.certificate) // Replace with your API endpoint URL
+    //         .then((response) => {
+    //             console.log(response)
+    //             setFile((prev) => ({ ...prev, file: response.data }));
+    //         })
+    //         .catch((error) => {
+    //             console.error('Error fetching file:', error);
+    //         });
+    // }, [vendorData.certificate]);
     const [openModalVendor, setOpenModalVendor] = useState(false);
     const [deleteModalVendor, setDeleteModalVendor] = useState(false);
 
 
+    const [iframeURL, setIframeURL] = useState({ fileURL: "", fileName: "", file: "" });
+    const fileInputRef = useRef(null);
+    const [uploadProgress, setUploadProgress] = useState(0)
+
+    const handleFileSelect = (event) => {
+        const selectedFile = event.target.files[0];
+        console.log(selectedFile)
+        if (selectedFile) {
+            console.log("working")
+            setVendorData((prev) => ({ ...prev, certificate: selectedFile.name }));
+            const fileURL = URL.createObjectURL(selectedFile);
+            setIframeURL({ fileURL: fileURL, fileName: selectedFile.name, file: selectedFile });
+        }
+    };
+
+    const handleDragOver = (event) => {
+        event.preventDefault();
+    };
+
+    const handleDrop = (event) => {
+        event.preventDefault();
+        const droppedFile = event.dataTransfer.files[0];
+
+        if (droppedFile) {
+            const fileURL = URL.createObjectURL(droppedFile);
+            setVendorData((prev) => ({ ...prev, certificate: droppedFile.name }));
+            setIframeURL({ fileURL: fileURL, fileName: droppedFile.name, file: droppedFile });
+        }
+    };
+    console.log(iframeURL)
+    const handleFileUpload = async () => {
+        const formData = new FormData();
+        formData.append('file', iframeURL.file);
+
+        try {
+            axios.post("http://localhost:3001/upload/VendorCertificateUpload", formData, {
+                onUploadProgress: (progressEvent) => {
+                    const percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total);
+                    setUploadProgress(percentCompleted);
+                }
+            })
+                .then(response => {
+                    setSnackBarOpen(true);
+                    setErrorHandler({ status: 1, message: response.data.message, code: "success" });
+                    console.log(response);
+                })
+                .catch(error => {
+                    console.error(error);
+                    // handle error here
+                });
+        } catch (error) {
+            console.error('Error uploading the file:', error);
+        }
+    };
+
+    const RemoveFile = () => {
+        setIframeURL({ fileURL: "", fileName: "", file: "" });
+        setVendorData((prev) => ({ ...prev, certificate: "" }));
+    }
+
+    const vendorListColumns = [
+
+        { field: 'vendorCode', headerName: 'VendorCode', width: 130 },
+        { field: 'fullName', headerName: 'Vendor Name', width: 200 },
+        {
+          field: 'fullName',
+          headerName: 'Full Name',
+          width: 200,
+        },
+        {
+          field: 'city',
+          headerName: 'City',
+        //   description: 'This column has a value getter and is not sortable.',
+          width: 100,
+        },
+        {
+            field: 'state',
+            headerName: 'State',
+            // description: 'This column has a value getter and is not sortable.',
+            width: 100,
+          },
+          {
+            field: 'vendorStatus',
+            headerName: 'Status',
+            // description: 'This column has a value getter and is not sortable.',
+            width: 100,
+          },
+      ];
+
+      const [selectedRowIds, setSelectedRowIds] = useState([]);
 
     return (
         <div >
@@ -667,7 +753,7 @@ const Vendor = () => {
                                                 setVendorData((prev) => ({ ...prev, certificateValidity: newValue.format("YYYY-MM-DD") }))
                                             }
                                             label="Certificate Validiy"
-
+                                            sx={{ width: "100%" }}
                                             slotProps={{ textField: { size: 'small' } }}
                                             format="DD-MM-YYYY" />
                                     </div>
@@ -683,7 +769,7 @@ const Vendor = () => {
 
                                 </div>
                                 <div className="row">
-                                    <ButtonGroup className='col' >
+                                    {/* <ButtonGroup className='col' >
 
                                         <Button component="label" variant='contained' sx={{ width: "80%" }}>
                                             Certificate
@@ -692,7 +778,70 @@ const Vendor = () => {
 
                                         <Button variant='outlined' sx={{ width: "20%" }} startIcon={<CloudUploadIcon />} type='button' className='btn btn-info' onClick={handleFileUpload}>Upload</Button>
 
-                                    </ButtonGroup>
+                                    </ButtonGroup> */}
+                                    <div>
+                                        <div>
+                                            <input
+                                                type="file"
+                                                accept=".pdf" // Specify the accepted file types
+                                                ref={fileInputRef}
+                                                style={{ display: 'none' }}
+                                                onChange={handleFileSelect}
+
+                                            />
+                                            <button type='button' style={{ display: "none" }} onClick={() => fileInputRef.current.click()}>Select File</button>
+                                        </div>
+                                        <div className="d-flex justify-content-spaced align-middle" style={{ width: "100%", height: "50px" }}>
+                                            <div
+                                                onDragOver={handleDragOver}
+                                                onDrop={handleDrop}
+                                                onClick={() => fileInputRef.current.click()} // Click the hidden file input
+                                                style={{
+                                                    width: '75%',
+                                                    height: '100%',
+                                                    border: '2px dashed #ccc',
+                                                    display: 'flex',
+                                                    justifyContent: 'center',
+                                                    alignItems: 'center',
+                                                    cursor: 'pointer', // Change cursor on hover to indicate clickability
+                                                }}
+                                            >
+                                                <div>
+
+                                                    <p className='m-0'>
+                                                        Drag and drop or click here
+                                                    </p>
+
+
+
+                                                </div>
+
+                                            </div>
+
+                                            {vendorData.certificate &&
+                                                <div className='d-flex ' style={{ border: '2px dashed #ccc' }}>
+
+                                                    <Link className='ms-1' target="_blank" href={`${process.env.REACT_APP_PORT}/vendorCertificates/${vendorData.certificate}`} underline="hover">
+                                                        {vendorData.certificate}
+                                                    </Link>
+
+                                                    <HighlightOffRounded type="button" onClick={() => RemoveFile()} />
+
+
+                                                </div>
+                                            }
+
+                                        </div>
+
+
+                                        {iframeURL && <div>
+
+                                        </div>}
+                                        <button disabled={!iframeURL.file} onClick={handleFileUpload} type='button' className='btn btn-warning mt-3 text-center'>
+                                            Certificate Upload
+                                        </button>
+                                    </div>
+
 
 
 
@@ -713,6 +862,7 @@ const Vendor = () => {
                                 className='col'
                             >
                                 <div style={{ maxHeight: "200px", overflow: "auto" }}>
+                                    <h6 className='text-center'>Vendor Contacts</h6>
                                     <table className='table table-sm table-bordered table-responsive text-center align-middle'>
                                         <tbody>
                                             <tr style={{ fontSize: "14px" }}>
@@ -848,6 +998,7 @@ const Vendor = () => {
                         >
 
                             <h4 className='text-center'>Vendor List</h4>
+                            <div className="d-flex justify-content-between">
 
                             <div class="col-3 mb-2">
                                 <select className="form-select form-select-sm" id="vendorTypeId" name="vendorType" aria-label="Floating label select example" onChange={handleFilterChange} >
@@ -859,35 +1010,32 @@ const Vendor = () => {
                                 </select>
 
                             </div>
+                            <Button type='button' onClick={()=>setDeleteModalVendor(true)}>Delete</Button>
+                            </div>
+                            
+                            <div style={{ height: 400, width: '100%' }}>
+                            <DataGrid
+                                rows={vendorDataList}
+                                columns={vendorListColumns}
+                                getRowId={(row) => row._id}
+                                initialState={{
+                                    pagination: {
+                                        paginationModel: { page: 0, pageSize: 5 },
+                                    },
+                                }}
+                                pageSizeOptions={[5, 10]}
+                                onRowSelectionModelChange={(newRowSelectionModel, event) => {
+                                    setSelectedRowIds(newRowSelectionModel);
+                                    console.log(event)
+                                    
+                                }}
+                                onRowClick={updateVendor}
+                              
+                                checkboxSelection
 
-                            <table className='table table-bordered text-center'>
-                                <tbody>
-                                    <tr>
-                                        <th>Si.No</th>
-                                        <th>Vendor Code</th>
-                                        <th>Vendor Name</th>
-                                        <th>City</th>
-                                        <th>State</th>
-                                        <th>Vendor Type</th>
-                                        <th>Status</th>
-                                        <th>Delete</th>
-                                    </tr>
-                                    {filteredData.map((item, index) => (
-                                        <tr onClick={() => updateVendor(item)}>
-                                            <td>{index + 1}</td>
 
-                                            <td>{item.vendorCode}</td>
-                                            <td>{item.fullName}</td>
-                                            <td>{item.city}</td>
-                                            <td>{item.state}</td>
-                                            <td>{`${item.supplier} ${item.oem} ${item.customer} ${item.subContractor}`}</td>
-
-                                            <td>{item.vendorStatus}</td>
-                                            <td><button type='button' className='btn btn-danger' onClick={() => setDeleteModalVendor(true)} ><i class="bi bi-trash-fill"></i></button></td>
-                                        </tr>
-                                    ))}
-                                </tbody>
-                            </table>
+                            />
+                            </div>
 
                             <Dialog
                                 open={deleteModalVendor}
@@ -905,7 +1053,7 @@ const Vendor = () => {
                                 </DialogContent>
                                 <DialogActions>
                                     <Button onClick={() => setDeleteModalVendor(false)}>Cancel</Button>
-                                    <Button onClick={(e) => { deleteVendorData(e); setDeleteModalVendor(false); }} autoFocus>
+                                    <Button onClick={() => { deleteVendorData(); setDeleteModalVendor(false); }} autoFocus>
                                         Delete
                                     </Button>
                                 </DialogActions>

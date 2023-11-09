@@ -16,6 +16,7 @@ import '@fontsource/roboto/400.css';
 import '@fontsource/roboto/500.css';
 import '@fontsource/roboto/700.css';
 import ItemList from './Components/itemList/ItemList';
+import FileViewer from './Components/Test/FileViewer';
 
 
 function App() {
@@ -28,7 +29,7 @@ function App() {
     <div className="App">
 
       
-        {location.pathname === "/itemadd" ? "" : "" }
+        {location.pathname === "/itemadd" ? "" : <Dashboard /> }
         <Routes>
           <Route path="/desdep" element={<Department />} />
           <Route path="/des" element={<Designation />} />
@@ -40,6 +41,7 @@ function App() {
           <Route path="/home" element={<Home />} />
           <Route path="/itemAdd" element={<ItemAdd />} />
           <Route path="/itemList" element={<ItemList/>} />
+          <Route path="/test" element={<FileViewer/>} />
           
         </Routes>
       
