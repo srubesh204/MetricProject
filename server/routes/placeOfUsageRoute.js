@@ -5,6 +5,6 @@ const router = express.Router();
 router.get("/getAllPlaceOfUsages",placeOfUsageController.getAllPlaceOfUsages)
 router.post("/createPlaceOfUsage", placeOfUsageController.createPlaceOfUsage)
 router.put("/updatePlaceOfUsage/:id",placeOfUsageController.updatePlaceOfUsage)
-router.delete("/deletePlaceOfUsage/:id", placeOfUsageController.deletePlaceOfUsage)
+router.delete("/deletePlaceOfUsage", placeOfUsageController.deletePlaceOfUsage)
 
 module.exports = router;

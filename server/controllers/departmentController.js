@@ -111,23 +111,33 @@ const departmentController = {
   },
   deleteDepartment: async (req, res) => {
     try {
-        const depId = req.params.id; // Assuming id is part of the URL parameter
 
-        // Find the designation by _id and remove it
-        const deleteDepartment = await departmentModel.findOneAndRemove(
-            { _id: depId } // Pass the _id as an object
-        );
+      const { departmentIds } = req.body; // Assuming an array of vendor IDs is sent in the request body
+      console.log(req.body)
+      const deleteResults = []; 
 
-        if (!deleteDepartment) {
-            return res.status(404).json({ error: 'Department not found' });
+      for (const departmentId of departmentIds) {
+        // Find and remove each vendor by _id
+        const deletedDepartment = await departmentModel.findOneAndRemove({ _id: departmentId });
+        console.log(deletedDepartment)
+        if (!deletedDepartment) {
+          // If a vendor was not found, you can skip it or handle the error as needed.
+          console.log(`Department with ID ${departmentId} not found.`);
+          res.status(500).json({ message:  `Department with ID not found.`});
+          
+        } else {
+          console.log(`Department with ID ${departmentId} deleted successfully.`);
+          deleteResults.push(deletedDepartment); 
         }
-        console.log("Department Deleted Successfully")
-        res.status(202).json({ message: 'Department detail deleted successfully' ,result: deleteDepartment });
-} catch (error) {
-  console.error(error);
-  res.status(500).send('Internal Server Error');
-}
-}
+      }
+
+      return res.status(202).json({ message: 'Department deleted successfully', results: `${deleteResults.length} Department Deleted Successfull ` });
+    } catch (error) {
+      console.error(error);
+      res.status(500).send('Internal Server Error');
+    }
+  }
+
 }
 
 
