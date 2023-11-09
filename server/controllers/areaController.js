@@ -14,11 +14,18 @@ const areaController = {
       createArea: async (req, res) => {
        
         try {
+          
           const { area, areaStatus } = req.body;
+
+          let dd = req.body.area.toLowerCase().
+                    split(' ')
+                    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+                    .join(' ');
+                    console.log(area)
           const areaResult = new areaModel({ area, areaStatus});
           const validationError = areaResult.validateSync();
 
-          if (validationError) {
+          if (validationError) { 
             // Handle validation errors
             const validationErrors = {};
     
