@@ -15,8 +15,11 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
 import Autocomplete from '@mui/material/Autocomplete';
-import { Box, Grid, Paper, Container } from '@mui/material';
+import { Box, Grid, Paper,IconButton, Container } from '@mui/material';
 import dayjs from 'dayjs';
+import { DataGrid } from '@mui/x-data-grid';
+import { Delete } from '@mui/icons-material';
+
 
 
 const Employee = () => {
@@ -46,6 +49,39 @@ const Employee = () => {
     useEffect(() => {
         empFetch();
     }, []);
+
+    const [employeeSelectedRowIds, setEmployeeSelectedRowIds] = useState([]);
+
+    const employeeColumns = [
+        { field: 'id', headerName: 'Si No', width: 70 },
+
+        { field: 'employeeCode', headerName: 'Emp.Code', width: 70 },
+        { field: 'firstName', headerName: 'emp.Name', width: 130 },
+        { field: 'lastName', headerName: 'Last Name', width: 130 },
+        { field: 'dob', headerName: 'DOB', width: 90, },
+        { field: 'address', headerName: 'Address', width: 90, },
+        { field: 'city', headerName: 'City', width: 90, },
+        { field: 'state', headerName: 'State', width: 90, },
+        { field: 'contactNumber', headerName: 'Contact Number', type: "number", width: 90, },
+        { field: 'designation', headerName: 'Designation', width: 90, },
+        { field: 'department', headerName: 'Department', width: 90, },
+        {
+            field: 'delete',
+            headerName: 'Delete',
+            width: 80,
+            sortable: false,
+            renderHeader: () => (
+                <IconButton color="secondary" aria-label="Delete" onClick={() => handleDeleteOpen(true)}>
+                    <Delete />
+                </IconButton>
+            ),
+        },
+
+    ];
+
+
+
+
 
 
     const [filteredData, setFilteredData] = useState([])
@@ -114,10 +150,15 @@ const Employee = () => {
         reportTo: ""
     });
 
-    const handleSetEmp = (emp) => {
-        setEmployeeData(emp)
-        setEmpDataId(emp._id)
+    const handleSetEmp = async (params) => {
+        console.log(params)
+        setEmployeeData(params.row)
+        setEmpDataId(params.id)
     }
+
+
+
+
     console.log(employeeData)
     const Alert = React.forwardRef(function Alert(props, ref) {
         return <MuiAlert elevation={6} ref={ref} variant="filled"  {...props} />;
@@ -248,7 +289,7 @@ const Employee = () => {
 
     const handleChange = (event, newValue) => {
         const { name, value } = event.target;
-       
+
         let capitalizedValue = value.toUpperCase()
         console.log(capitalizedValue)
 
@@ -370,9 +411,15 @@ const Employee = () => {
 
 
         try {
-            if (deleteId) {
+           
                 const response = await axios.delete(
-                    `${process.env.REACT_APP_PORT}/employee/deleteEmployee/${deleteId}`
+                    `${process.env.REACT_APP_PORT}/employee/deleteEmployee`,
+                    {
+                        data: {
+                            employeeIds: employeeSelectedRowIds
+                        }
+                      }
+
                 );
                 console.log(response)
                 empFetch();
@@ -381,7 +428,7 @@ const Employee = () => {
                 setErrorHandler({ status: response.data.status, message: `${response.data.result.firstName} ${response.data.result.lastName} ${response.data.message}`, code: "success" })
                 setEmpDataId(null)
                 console.log("Employee Deleted Successfully")
-            }
+            
 
 
         } catch (err) {
@@ -817,6 +864,13 @@ const Employee = () => {
                             }} >
 
                                 <h3 className='text-center'>Employee List</h3>
+                                <div className='row'>
+                                <div className='col d-flex justify-content-end'>
+                                {employeeSelectedRowIds.length !== 0 && <Button variant='contained' type='button' color='error' onClick={()=>handleDeleteOpen(true)}>Delete Employee</Button>}
+
+                                </div>
+                                </div>
+                               
                                 <Grid container rowSpacing={1} columnSpacing={{ xs: 1 }} className=' g-2 mb-2'>
 
                                     <Grid item xs={4}>
@@ -862,7 +916,49 @@ const Employee = () => {
                                     </div>*/}
                                 </Grid>
                                 <div>
-                                    <table className='table table-bordered text-center'>
+                                    <div style={{ height: 400, width: '100%' }}>
+                                        <DataGrid
+                                            rows={filteredData}
+                                            columns={employeeColumns}
+                                            getRowId={(row) => row._id}
+                                            initialState={{
+                                                pagination: {
+                                                    paginationModel: { page: 0, pageSize: 5 },
+                                                },
+                                            }}
+                                            pageSizeOptions={[5, 10]}
+                                            onRowSelectionModelChange={(newRowSelectionModel, event) => {
+                                                setEmployeeSelectedRowIds(newRowSelectionModel);
+                                                console.log(event)
+
+                                            }}
+                                            onRowClick={handleSetEmp}
+
+                                            checkboxSelection
+
+
+                                        >
+
+                                        </DataGrid>
+
+
+
+
+                                    </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                    {/* <table className='table table-bordered text-center'>
                                         <tbody>
                                             <tr>
                                                 <th>Emp.Code</th>
@@ -892,7 +988,7 @@ const Employee = () => {
                                         </tbody>
 
 
-                                    </table>
+                                    </table>*/}
                                     {/*Delete Confirmation*/}
                                     <Dialog
                                         open={deleteOpen}

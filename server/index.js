@@ -45,7 +45,8 @@ process.on('SIGINT', () => {
 
 const app = express();
 app.use(cors());
-app.use(bodyParser.json());
+app.use(bodyParser.json({ limit: '20mb' }));
+app.use(bodyParser.urlencoded({ limit: '20mb', extended: true }));
 
 app.use('/department', departmentRoute);
 app.use('/designation', designationRoute);
@@ -58,6 +59,7 @@ app.use('/itemMaster', itemMasterRoute);
 
 app.use('/upload', uploadRoute);
 app.use('/vendorCertificates', express.static('storage/vendorCertificates'));
+app.use('/workInstructions', express.static('storage/workInstructions'));
 app.use('/itemAdd', itemAddRoute);
 app.use('/area', areaRoute);
 app.use('/placeOfUsage', placeOfUsageRoute);

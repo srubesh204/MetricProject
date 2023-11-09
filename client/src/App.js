@@ -29,12 +29,12 @@ function App() {
     <div className="App">
 
       
-        {location.pathname === "/itemadd" ? "" : <Dashboard /> }
+        {location.pathname === "/itemadd" ? "" : "" }
         <Routes>
           <Route path="/desdep" element={<Department />} />
           <Route path="/des" element={<Designation />} />
           <Route path="/employee" element={<Employee />} />
-          <Route path="/general" element={<UnitDataBase />} />
+          <Route path="/general" element={<PartDataBase />} />
           <Route path="/vendor" element={<Vendor />} />
           <Route path="/itemMaster" element={<ItemMaster />} />
           <Route path="/devi" element={<Devi />} />

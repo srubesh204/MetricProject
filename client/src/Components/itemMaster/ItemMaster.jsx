@@ -1,15 +1,15 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import axios from 'axios';
 import { styled } from '@mui/material/styles';
 import Button from '@mui/material/Button';
 
-import {AddToPhotos, CloudUpload, DeleteOutlined, Delete} from '@mui/icons-material';
+import { AddToPhotos, CloudUpload, DeleteOutlined, Delete, DomainVerification } from '@mui/icons-material';
 import Stack from '@mui/material/Stack';
 import FileDownloadIcon from '@mui/icons-material/FileDownload';
 import UploadFileIcon from '@mui/icons-material/UploadFile';
 import Alert from '@mui/material/Alert';
 import Snackbar from '@mui/material/Snackbar';
-import { TextField, MenuItem, FormControl, Fab, Link } from '@mui/material';
+import { TextField, MenuItem, FormControl, Fab, Link, Typography, Badge } from '@mui/material';
 import { Box, Grid, Paper, Container } from '@mui/material';
 
 import { Add, Remove } from '@mui/icons-material';
@@ -18,11 +18,14 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
+import { DataGrid } from '@mui/x-data-grid';
+
 
 
 
 
 const ItemMaster = () => {
+    const fileInputRef = useRef(null);
 
     const [snackBarOpen, setSnackBarOpen] = useState(false)
     const handleSnackClose = (event, reason) => {
@@ -90,7 +93,7 @@ const ItemMaster = () => {
         uncertainty: "",
         uncertaintyUnit: "",
         standardRef: "",
-        itemMasterImage: "",
+        
         itemImageName: "",
         workInsName: "",
         status: "",
@@ -110,7 +113,7 @@ const ItemMaster = () => {
         uncertaintyUnit: "",
         standardRef: "",
         itemImageName: "",
-        itemMasterImage: "",
+        
         workInsName: "",
         status: "",
         calibrationPoints: [],
@@ -163,7 +166,43 @@ const ItemMaster = () => {
     useEffect(() => {
         itemMasterFetchData();
     }, []);
-    console.log(itemMasterDataList)
+
+    const [itemMasteSelectedRowIds, setItemMasteSelectedRowIds] = useState([]);
+    const itemMasterColumns = [
+        { field: '_id', headerName: 'Si No', width: 70 },
+
+        { field: 'itemType', headerName: 'Item Type', width: 70 },
+        { field: 'itemDescription', headerName: 'Item Description', width: 130 },
+        { field: 'itemPrefix', headerName: 'Item Prefix', width: 130 },
+        { field: 'itemFqInMonths', headerName: 'Item Fq In Months', width: 90, },
+        { field: 'calAlertInDay', headerName: 'Cal Alert In Day', width: 90, },
+        { field: 'wiNo', headerName: 'Wi No', width: 90, },
+        { field: 'uncertainty', headerName: 'Uncertainty', width: 100, },
+        { field: 'standardRef', headerName: 'Standard Ref', type: "number", width: 90, },
+
+
+        { field: 'status', headerName: 'Status', width: 90, },
+        { field: 'calibrationPoints', headerName: 'Calibration Points', width: 100, },
+
+        {/* {
+            field: 'delete',
+            headerName: 'Delete',
+            width: 80,
+            sortable: false,
+            renderHeader: () => (
+                <IconButton color="secondary" aria-label="Delete" onClick={() => setDeleteModal(true)}>
+                    <Delete />
+                </IconButton>
+            ),
+        },*/}
+
+    ];
+
+
+
+
+
+
 
     const itemMasterSubmit = async (e) => {
         e.preventDefault();
@@ -245,7 +284,13 @@ const ItemMaster = () => {
     const deleteItemMasterData = async () => {
         try {
             const response = await axios.delete(
-                "http://localhost:3001/ItemMaster/deleteItemMaster/" + itemMasterStateId, itemMasterData
+                "http://localhost:3001/ItemMaster/deleteItemMaster/", {
+                data: {
+                    itemMasterIds: itemMasteSelectedRowIds
+                }
+            }
+
+
             );
             itemMasterFetchData();
             setItemMasterData(initialItemMasterData);
@@ -300,11 +345,14 @@ const ItemMaster = () => {
         }
     };
 
-
-    const updateItemMaster = async (item) => {
-        setItemMasterData(item)
-        setItemMasterStateId(item._id)
+    const updateItemMaster = async (params) => {
+        console.log(params)
+        setItemMasterData(params.row)
+        setItemMasterStateId(params.id)
     }
+
+
+
 
     const handleItemMasterBaseChange = (e) => {
         const { name, value } = e.target;
@@ -348,18 +396,53 @@ const ItemMaster = () => {
         unitFetchData();
     }, []);
 
+    const [iframeURL, setIframeURL] = useState({ fileURL: "", fileName: "", file: "" });
+    const [uploadProgress, setUploadProgress] = useState(0)
+
+    const handleFileSelect = (event) => {
+        const selectedFile = event.target.files[0];
+        console.log(selectedFile)
+        if (selectedFile) {
+            console.log("working")
+            setItemMasterData((prev) => ({ ...prev, workInsName: selectedFile.name }));
+            const fileURL = URL.createObjectURL(selectedFile);
+            setIframeURL({ fileURL: fileURL, fileName: selectedFile.name, file: selectedFile });
+        }
+    };
+
+
+    //Work Instruction Upload
+    const handleWorkInstructionUpload = async () => {
+        const formData = new FormData();
+        formData.append('file', iframeURL.file);
+
+        try {
+            axios.post(`${process.env.REACT_APP_PORT}/upload/workInstructions`, formData, {
+                onUploadProgress: (progressEvent) => {
+                    const percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total);
+                    setUploadProgress(percentCompleted);
+                }
+            })
+                .then(response => {
+                    setSnackBarOpen(true);
+                    setErrorHandler({ status: 1, message: response.data.message, code: "success" });
+                    console.log(response);
+                })
+                .catch(error => {
+                    console.error(error);
+                    // handle error here
+                });
+        } catch (error) {
+            console.error('Error uploading the file:', error);
+        }
+    };
 
 
 
 
     //
 
-    const bodyItem = {
-        borderRadius: "10px",
-        padding: "2rem",
-        margin: "1rem",
-        boxShadow: "0px 0px 25px 10px",
-    }
+
     return (
         <div style={{ marginTop: "4rem" }}>
             <div >
@@ -530,41 +613,62 @@ const ItemMaster = () => {
 
                                     </div>
                                     <div className="">
-                                    <Button fullWidth color='secondary' component="label" variant="contained" startIcon={<UploadFileIcon />} size="small">
-                                                Work Instruction Upload
-                                                <VisuallyHiddenInput type="file" />
-                                            </Button>
-                                            <div>
-                                                <Link herf={`${process.env.REACT_APP_PORT}/`}></Link>
-                                                <Button variant='outlined' color='error' endIcon={<Delete/>}>Remove</Button>
-                                            
-                                                
-                                            
-                                            </div>
-                                            
+                                        <div className="d-flex">
+                                        <Button fullWidth color='secondary' component="label" variant="contained" startIcon={<UploadFileIcon />} size="small">
+                                            Work Instruction Upload
+                                            <VisuallyHiddenInput type="file" onChange={handleFileSelect}/>
+                                        </Button>
+                                        <Button className='ms-2' variant='contained' onClick={handleWorkInstructionUpload}>Upload</Button>
+                                        </div>
+                                        
+                                        {itemMasterData.workInsName && <div className='d-flex justify-content-center mt-2 '>
+                                            <Link target="_blank" underline="hover" href={`${process.env.REACT_APP_PORT}/workInstructions/${itemMasterData.workInsName}`} className='me-2'>{itemMasterData.workInsName}</Link>
+                                            <Button size='small' variant='outlined' color='error' onClick={()=> {setIframeURL(null); setItemMasterData((prev)=> ({...prev, workInsName: ""}))} } endIcon={<Delete />}>Remove</Button>
+
+
+
+                                        </div>}
+
 
                                     </div>
-                                  
+
                                 </Paper>
                             </div>
 
                             <div className='col-md-2'>
-                                {!itemMasterData.itemMasterImage && <div style={{ width: "100%", height: "72%", margin: "0 0px 0 0", padding: 0 }}>
-                                    <input type="file" accept="image/*" onChange={handleImageChange} />
-
+                                {!itemMasterData.itemMasterImage && <div style={{}}>
+                                    <label htmlFor="fileInput" style={{ display: 'block', width: '100%', height: '200px', border: '2px dashed black', borderRadius: "10px", position: 'relative', cursor: 'pointer' }} className='text-center align-middle'>
+                                        
+                                        <input
+                                            type="file"
+                                            id="fileInput"
+                                            accept="image/*"
+                                            style={{
+                                                width: '100%',
+                                                height: '100%',
+                                                opacity: 0,
+                                                overflow: 'hidden',
+                                                position: 'absolute',
+                                                top: 0,
+                                                left: 0,
+                                                cursor: 'pointer',
+                                            }}
+                                            onChange={handleImageChange}
+                                            ref={fileInputRef}
+                                        />
+                                        Select here to Upload Image
+                                        {/* Your other content or styling for the square box */}
+                                    </label>
                                 </div>}
                                 {/* {image &&  <div style={{ width: "100%", height: "100%", margin: "0 0px 0 0", padding: 0 }}>
                                 <img src={image} width="200px" height="200px" alt="Uploaded" style={{ maxWidth: '100%' }} />
                                 </div>} */}
-                                {itemMasterData.itemMasterImage && <div style={{margin: 0}}>
-                                    <div className='d-flex justify-content-center' style={{ width: "100%", height: "70%" }}>
-                                    <img src={itemMasterData.itemMasterImage} style={{ width: "70%", height: "100%", margin: "auto", display: "block" }}></img>
-                                </div>
-                                <div className='d-flex justify-content-center'>
-                                    
-                                    <Button endIcon={<DeleteOutlined/>} color='error'  variant='contained' type='button' onClick={() => setItemMasterData((prev)=> ({...prev, itemMasterImage: ""}))}>Cancel</Button>
+                                {itemMasterData.itemMasterImage && <div style={{ margin: 0  }}>
+                                    <div className='d-flex justify-content-center' style={{ width: "100%", height: "100%" }}>
+                                    <Badge type="button" badgeContent={"X"} onClick={() => setItemMasterData((prev) => ({ ...prev, itemMasterImage: "" }))}  style={{ width: "100%", height: "100%" }} color="error"><img src={itemMasterData.itemMasterImage} style={{ width: "100%", height: "100%", margin: "auto", display: "block", background: "inherit" }}></img></Badge>
                                     </div>
-                                    </div>}
+                                    
+                                </div>}
                             </div>
 
 
@@ -578,29 +682,32 @@ const ItemMaster = () => {
                                             mb: 2
 
                                         }}>
-                                        <table className='table table-bordered text-center align-middle'>
-                                            <tbody>
-                                                <tr>
-                                                    <th>Si No</th>
-                                                    <th>Calibration Points </th>
-                                                    <th><Fab size='small' color="primary" aria-label="add" onClick={() => addCalibrationPointRow()}>
-                                                        <Add />
-                                                    </Fab></th>
-                                                </tr>
-                                                {itemMasterData.calibrationPoints ? itemMasterData.calibrationPoints.map((item, index) => (
-                                                    <tr key={index}>
-                                                        <td>{index + 1}</td>
-                                                        <td><input type='text' className='form-control' name='calibrationPoint' value={item.calibrationPoint} onChange={(e) => changeCalibrationPointRow(index, e.target.name, e.target.value)} /></td>
-                                                        <td><Fab size='small' color="error" aria-label="add" onClick={() => deleteCalibrationPointRow(index)}>
-                                                            <Remove />
-                                                        </Fab></td>
+                                        <div style={{ maxHeight: "215px", overflow: "auto", height: "100%" }}>
+                                            <table className='table table-bordered text-center align-middle'>
+                                                <tbody>
+                                                    <tr>
+                                                        <th>Si No</th>
+                                                        <th>Calibration Points </th>
+                                                        <th><Fab size='small' color="primary" aria-label="add" onClick={() => addCalibrationPointRow()}>
+                                                            <Add />
+                                                        </Fab></th>
                                                     </tr>
+                                                    {itemMasterData.calibrationPoints ? itemMasterData.calibrationPoints.map((item, index) => (
+                                                        <tr key={index}>
+                                                            <td>{index + 1}</td>
+                                                            <td><input type='text' className='form-control' name='calibrationPoint' value={item.calibrationPoint} onChange={(e) => changeCalibrationPointRow(index, e.target.name, e.target.value)} /></td>
+                                                            <td><Fab size='small' color="error" aria-label="add" onClick={() => deleteCalibrationPointRow(index)}>
+                                                                <Remove />
+                                                            </Fab></td>
+                                                        </tr>
 
 
-                                                )) : <tr></tr>}
+                                                    )) : <tr></tr>}
 
-                                            </tbody>
-                                        </table>
+                                                </tbody>
+                                            </table>
+                                        </div>
+
                                     </Paper>
                                 </div>
                             </div>
@@ -636,17 +743,6 @@ const ItemMaster = () => {
 
 
 
-                                    <div className=' col'>
-                                        <Stack
-                                            direction="row"
-                                            justifyContent="flex-end"
-                                            alignItems="flex-start"
-                                            spacing={2}
-
-                                        >
-                                            
-                                        </Stack>
-                                    </div>
 
 
                                 </div>
@@ -755,10 +851,52 @@ const ItemMaster = () => {
 
                                         </TextField>
                                     </div>
+                                    <div className='col d-flex justify-content-end'>
+                                        <div >
+                                            {itemMasteSelectedRowIds.length !== 0 && <Button variant='contained' type='button' color='error' onClick={() => setDeleteModal(true)}>Delete </Button>}
+                                        </div>
+                                    </div>
+
 
                                 </div>
                                 <div>
-                                    <table className='table table-bordered text-center align-middle'>
+
+
+                                    <div style={{ height: 400, width: '100%' }}>
+                                        <DataGrid
+                                            rows={filteredData}
+                                            columns={itemMasterColumns}
+                                            getRowId={(row) => row._id}
+                                            initialState={{
+                                                pagination: {
+                                                    paginationModel: { page: 0, pageSize: 5 },
+                                                },
+                                            }}
+                                            pageSizeOptions={[5, 10]}
+                                            onRowSelectionModelChange={(newRowSelectionModel, event) => {
+                                                setItemMasteSelectedRowIds(newRowSelectionModel);
+                                                console.log(event)
+
+                                            }}
+                                            onRowClick={updateItemMaster}
+
+                                            checkboxSelection
+
+
+                                        >
+
+                                        </DataGrid>
+
+
+
+
+                                    </div>
+
+
+
+
+
+                                    {/* <table className='table table-bordered text-center'>
                                         <tbody>
                                             <tr>
                                                 <th>Si No</th>
@@ -789,7 +927,7 @@ const ItemMaster = () => {
                                                 <td colSpan={8}>No Data Available</td></tr>}
 
                                         </tbody>
-                                    </table>
+                                    </table>*/}
                                 </div>
                                 <Dialog
                                     open={deleteModal}

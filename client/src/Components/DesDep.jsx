@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import Alert from '@mui/material/Alert';
 import Snackbar from '@mui/material/Snackbar';
-import { Box, Container, Grid, Paper, Typography } from "@mui/material";
+import { Box, Container, Grid, IconButton, Paper, Typography } from "@mui/material";
 import { TextField, MenuItem, FormControl } from '@mui/material';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
@@ -11,6 +11,7 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import { DataGrid } from '@mui/x-data-grid';
+import { Delete } from '@mui/icons-material';
 
 
 export const Department = () => {
@@ -64,13 +65,26 @@ export const Department = () => {
 
 
   const columns = [
-    { field: 'id', headerName: 'Si No', width: 70 },
+    { field: '_id', headerName: 'Si No', width: "150" },
 
-    { field: 'department', headerName: 'Department', width: 200 },
-    { field: 'departmentStatus', headerName: 'Department Status', width: 150 },
+    { field: 'department', headerName: 'Department', width: "150" },
+    { field: 'departmentStatus', headerName: 'Department Status', width: "100" },
+    {
+      field: 'delete',
+      headerName: 'Delete',
+      width: 80,
+      sortable: false,
+      renderHeader: () => (
+        <IconButton color="secondary" aria-label="Delete" onClick={() => setDeleteDepModal(true)}>
+          <Delete />
+        </IconButton>
+      ),
+    },
 
 
   ];
+
+  const [selectedRowIds, setSelectedRowIds] = useState([]);
 
 
 
@@ -165,7 +179,12 @@ export const Department = () => {
   const deleteDepartment = async () => {
     try {
       const response = await axios.delete(
-        "http://localhost:3001/department/deleteDepartment/" + depStateId, departmentData
+        "http://localhost:3001/department/deleteDepartment/", {
+        data: {
+          departmentIds: selectedRowIds
+        }
+      }
+
       );
       depFetchData();
 
@@ -200,10 +219,13 @@ export const Department = () => {
     }
   };
 
-  const handleDepRowClick = (item) => {
-    setDepartmentData(item);
-    setDepStateId(item._id);
-  };
+
+
+  const handleDepRowClick = async (params) => {
+    console.log(params)
+    setDepartmentData(params.row)
+    setDepStateId(params.id)
+  }
 
 
   const initialAreaData = {
@@ -215,6 +237,9 @@ export const Department = () => {
     areaStatus: ""
   });
   const [areaList, setAreaList] = useState([]);
+
+
+
 
   const areaFetchData = async () => {
     try {
@@ -230,6 +255,31 @@ export const Department = () => {
   useEffect(() => {
     areaFetchData();
   }, []);
+
+  const [areaSelectedRowIds, setAreaSelectedRowIds] = useState([]);
+
+
+  const areaColumns = [
+    { field: '_id', headerName: 'Si No', width: "150" },
+
+    { field: 'area', headerName: 'Area', width: "150" },
+    { field: 'areaStatus', headerName: ' Area Status', width: "100" },
+    {
+      field: 'delete',
+      headerName: 'Delete',
+      width: 80,
+      sortable: false,
+      renderHeader: () => (
+        <IconButton color="secondary" aria-label="Delete" onClick={() => setDeleteAreaModal(true)}>
+          <Delete />
+        </IconButton>
+      ),
+    },
+
+
+  ];
+
+
 
 
   const AreaSubmit = async (e) => {
@@ -316,7 +366,13 @@ export const Department = () => {
   const deleteArea = async () => {
     try {
       const response = await axios.delete(
-        "http://localhost:3001/area/deleteArea/" + areaStateId, areaData
+        "http://localhost:3001/area/deleteArea/", {
+        data: {
+          areaIds: areaSelectedRowIds
+        }
+      }
+
+
       );
       areaFetchData();
       setareaStateId(null)
@@ -351,10 +407,12 @@ export const Department = () => {
   };
 
 
-  const handleAreaRowClick = async (item) => {
-    setArea(item)
-    setareaStateId(item._id)
+  const handleAreaRowClick = async (params) => {
+    console.log(params)
+    setArea(params.row)
+    setareaStateId(params.id)
   }
+
 
 
 
@@ -477,10 +535,13 @@ export const Department = () => {
   const [placeOfUsageList, setPlaceOfUsageList] = useState([]);
 
 
-  const updatePof = async (item) => {
-    setPlaceOfUsageData(item)
-    setPlaceOfUsageId(item._id)
+
+  const updatePof = async (params) => {
+    console.log(params)
+    setPlaceOfUsageData(params.row)
+    setPlaceOfUsageId(params.id)
   }
+
 
 
 
@@ -497,6 +558,30 @@ export const Department = () => {
   useEffect(() => {
     placeOfUsageData();
   }, []);
+
+  const [placeOfUsageselectedRowIds, setPlaceOfUsageSelectedRowIds] = useState([]);
+
+
+  const placeOfUsageColumns = [
+    { field: '_id', headerName: 'Si No', width: "150" },
+
+    { field: 'placeOfUsage', headerName: 'Place Of Usage', width: "150" },
+    { field: 'placeOfUsageStatus', headerName: ' Place Of Usage Status', width: "100" },
+    {
+      field: 'delete',
+      headerName: 'Delete',
+      width: 80,
+      sortable: false,
+      renderHeader: () => (
+        <IconButton color="secondary" aria-label="Delete" onClick={() => setDeletePouModal(true)}>
+          <Delete />
+        </IconButton>
+      ),
+    },
+
+
+  ];
+
 
 
 
@@ -591,7 +676,12 @@ export const Department = () => {
   const deletePlaceOfUsage = async () => {
     try {
       const response = await axios.delete(
-        "http://localhost:3001/PlaceOfUsage/deletePlaceOfUsage/" + placeOfUsageId, placeOfUsageDatas
+        "http://localhost:3001/PlaceOfUsage/deletePlaceOfUsage/", {
+        data: {
+          placeOfUsageIds: placeOfUsageselectedRowIds
+        }
+      }
+
       );
       placeOfUsageData();
       setPlaceOfUsageId(null)
@@ -837,8 +927,10 @@ export const Department = () => {
 
 
                 </div>
+
                 <div className="row g-2">
-                  <div style={{ height: 400, width: '100%' }}>
+
+                  {/* <div style={{ height: 400, width: '100%' }}>
                     <DataGrid
                       rows={departmentList}
                       columns={columns}
@@ -851,6 +943,37 @@ export const Department = () => {
                       pageSizeOptions={[5, 10]}
                       checkboxSelection
                     />
+                  </div>*/}
+
+
+                  <div style={{ height: 400, width: '100%' }}>
+                    <DataGrid
+                      rows={departmentList}
+                      columns={columns}
+                      getRowId={(row) => row._id}
+                      initialState={{
+                        pagination: {
+                          paginationModel: { page: 0, pageSize: 5 },
+                        },
+                      }}
+                      pageSizeOptions={[5, 10]}
+                      onRowSelectionModelChange={(newRowSelectionModel, event) => {
+                        setSelectedRowIds(newRowSelectionModel);
+                        console.log(event)
+
+                      }}
+                      onRowClick={handleDepRowClick}
+
+                      checkboxSelection
+
+
+                    >
+
+                    </DataGrid>
+
+
+
+
                   </div>
 
 
@@ -858,7 +981,7 @@ export const Department = () => {
 
 
 
-               {/* <div className="table-responsive col">
+                  {/* <div className="table-responsive col">
                     <table className="table table-bordered text-center">
                       <tbody>
                         <tr>
@@ -1087,7 +1210,47 @@ export const Department = () => {
                     </div>
                   </div>
                   <div className="row g-2">
-                    <div className="table-responsive col">
+
+                    <div style={{ height: 400, width: '100%' }}>
+                      <DataGrid
+                        rows={areaList}
+                        columns={areaColumns}
+                        getRowId={(row) => row._id}
+                        initialState={{
+                          pagination: {
+                            paginationModel: { page: 0, pageSize: 5 },
+                          },
+                        }}
+                        pageSizeOptions={[5, 10]}
+                        onRowSelectionModelChange={(newRowSelectionModel, event) => {
+                          setAreaSelectedRowIds(newRowSelectionModel);
+                          console.log(event)
+
+                        }}
+                        onRowClick={handleAreaRowClick}
+
+                        checkboxSelection
+
+
+                      >
+
+                      </DataGrid>
+
+
+
+
+                    </div>
+
+
+
+
+
+
+
+
+
+
+                    {/*} <div className="table-responsive col">
                       <table className="table table-bordered text-center">
                         <tbody>
                           <tr>
@@ -1117,33 +1280,34 @@ export const Department = () => {
 
                         </tbody>
                       </table>
+                    </div>*/}
 
-                      <Dialog
-                        open={deleteAreaModal}
-                        onClose={() => setDeleteAreaModal(false)}
-                        aria-labelledby="alert-dialog-title"
-                        aria-describedby="alert-dialog-description"
-                      >
-                        <DialogTitle id="alert-dialog-title">
-                          {" Area delete confirmation?"}
-                        </DialogTitle>
-                        <DialogContent>
-                          <DialogContentText id="alert-dialog-description">
-                            Are you sure to delete the Area
-                          </DialogContentText>
-                        </DialogContent>
-                        <DialogActions>
-                          <Button onClick={() => setDeleteAreaModal(false)}>Cancel</Button>
-                          <Button onClick={(e) => { deleteArea(e); setDeleteAreaModal(false); }} autoFocus>
-                            Delete
-                          </Button>
-                        </DialogActions>
-                      </Dialog>
+                    <Dialog
+                      open={deleteAreaModal}
+                      onClose={() => setDeleteAreaModal(false)}
+                      aria-labelledby="alert-dialog-title"
+                      aria-describedby="alert-dialog-description"
+                    >
+                      <DialogTitle id="alert-dialog-title">
+                        {" Area delete confirmation?"}
+                      </DialogTitle>
+                      <DialogContent>
+                        <DialogContentText id="alert-dialog-description">
+                          Are you sure to delete the Area
+                        </DialogContentText>
+                      </DialogContent>
+                      <DialogActions>
+                        <Button onClick={() => setDeleteAreaModal(false)}>Cancel</Button>
+                        <Button onClick={(e) => { deleteArea(e); setDeleteAreaModal(false); }} autoFocus>
+                          Delete
+                        </Button>
+                      </DialogActions>
+                    </Dialog>
 
 
 
 
-                    </div>
+
                   </div>
 
 
@@ -1304,7 +1468,45 @@ export const Department = () => {
 
                 </div>
                 <div className="row g-2">
-                  <div className="table-responsive col">
+
+
+                  <div style={{ height: 400, width: '100%' }}>
+                    <DataGrid
+                      rows={placeOfUsageList}
+                      columns={placeOfUsageColumns}
+                      getRowId={(row) => row._id}
+                      initialState={{
+                        pagination: {
+                          paginationModel: { page: 0, pageSize: 5 },
+                        },
+                      }}
+                      pageSizeOptions={[5, 10]}
+                      onRowSelectionModelChange={(newRowSelectionModel, event) => {
+                        setPlaceOfUsageSelectedRowIds(newRowSelectionModel);
+                        console.log(event)
+
+                      }}
+                      onRowClick={updatePof}
+
+                      checkboxSelection
+
+
+                    >
+
+                    </DataGrid>
+
+
+
+
+                  </div>
+
+
+
+
+
+
+
+                  {/* <div className="table-responsive col">
                     <table className="table table-bordered text-center">
                       <tbody>
                         <tr>
@@ -1332,7 +1534,7 @@ export const Department = () => {
 
                       </tbody>
                     </table>
-                  </div>
+                  </div>*/}
 
                   <Dialog
                     open={deletePouModal}
@@ -1467,11 +1669,12 @@ export const Designation = () => {
 
 
 
+  const handleDesRowClick = async (params) => {
+    console.log(params)
+    setDesignationData(params.row)
+    setDesStateId(params.id)
+  }
 
-  const handleDesRowClick = (item) => {
-    setDesignationData(item);
-    setDesStateId(item._id);
-  };
 
 
   const [designationList, setDesignationList] = useState([]);
@@ -1509,6 +1712,33 @@ export const Designation = () => {
   useEffect(() => {
     desFetchData();
   }, []);
+
+  const [designationselectedRowIds, setDesignationSelectedRowIds] = useState([]);
+
+
+  const designationColumns = [
+    { field: '_id', headerName: 'Si No', width: "150" },
+
+    { field: 'designation', headerName: 'Designation', width: "150" },
+    { field: 'designationStatus', headerName: 'Designation Status', width: "100" },
+    {
+      field: 'delete',
+      headerName: 'Delete',
+      width: 80,
+      sortable: false,
+      renderHeader: () => (
+        <IconButton color="secondary" aria-label="Delete" onClick={() => setDeleteModal(true)}>
+          <Delete />
+        </IconButton>
+      ),
+    },
+
+
+  ];
+
+
+
+
 
   //Submit Designation
   const DesignationSubmit = async (e) => {
@@ -1607,7 +1837,12 @@ export const Designation = () => {
   const deleteDesignation = async () => {
     try {
       const response = await axios.delete(
-        "http://localhost:3001/designation/deleteDesignation/" + desStateId, designationData
+        "http://localhost:3001/designation/deleteDesignation/", {
+        data: {
+          designationIds: designationselectedRowIds
+        }
+      }
+
       );
       desFetchData();
       setSnackBarOpen(true)
@@ -1877,7 +2112,45 @@ export const Designation = () => {
               }}
             >
               <h4 className="mb-3 text-center">Designation List</h4>
-              <div className="table-responsive">
+              <div style={{ height: 400, width: '100%' }}>
+                <DataGrid
+                  rows={designationList}
+                  columns={designationColumns}
+                  getRowId={(row) => row._id}
+                  initialState={{
+                    pagination: {
+                      paginationModel: { page: 0, pageSize: 5 },
+                    },
+                  }}
+                  pageSizeOptions={[5, 10]}
+                  onRowSelectionModelChange={(newRowSelectionModel, event) => {
+                    setDesignationSelectedRowIds(newRowSelectionModel);
+                    console.log(event)
+
+                  }}
+                  onRowClick={handleDesRowClick}
+
+                  checkboxSelection
+
+
+                >
+
+                </DataGrid>
+
+
+
+
+              </div>
+
+
+
+
+
+
+
+
+
+              {/*<div className="table-responsive">
                 <table className="table table-bordered text-center table-hover">
                   <tbody>
                     <tr className="text-center">
@@ -1898,7 +2171,7 @@ export const Designation = () => {
                     ))}
                   </tbody>
                 </table>
-              </div>
+              </div>*/}
               <Dialog
                 open={deleteModal}
                 onClose={() => setDeleteModal(false)}
