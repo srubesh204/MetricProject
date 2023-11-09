@@ -8,7 +8,7 @@ import FileDownloadIcon from '@mui/icons-material/FileDownload';
 import UploadFileIcon from '@mui/icons-material/UploadFile';
 import Alert from '@mui/material/Alert';
 import Snackbar from '@mui/material/Snackbar';
-import { TextField, MenuItem, FormControl,Fab } from '@mui/material';
+import { TextField, MenuItem, IconButton,FormControl, Fab } from '@mui/material';
 import { Box, Grid, Paper, Container } from '@mui/material';
 
 import { Add, Remove } from '@mui/icons-material';
@@ -17,6 +17,8 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
+import { DataGrid } from '@mui/x-data-grid';
+import { Delete } from '@mui/icons-material';
 
 
 
@@ -160,7 +162,43 @@ const ItemMaster = () => {
     useEffect(() => {
         itemMasterFetchData();
     }, []);
-    console.log(itemMasterDataList)
+
+    const [itemMasteSelectedRowIds, setItemMasteSelectedRowIds] = useState([]);
+    const itemMasterColumns = [
+        { field: '_id', headerName: 'Si No', width: 70 },
+
+        { field: 'itemType', headerName: 'Item Type', width: 70 },
+        { field: 'itemDescription', headerName: 'Item Description', width: 130 },
+        { field: 'itemPrefix', headerName: 'Item Prefix', width: 130 },
+        { field: 'itemFqInMonths', headerName: 'Item Fq In Months', width: 90, },
+        { field: 'calAlertInDay', headerName: 'Cal Alert In Day', width: 90, },
+        { field: 'wiNo', headerName: 'Wi No', width: 90, },
+        { field: 'uncertainty', headerName: 'Uncertainty', width: 100, },
+        { field: 'standardRef', headerName: 'Standard Ref', type: "number", width: 90, },
+
+        
+        { field: 'status', headerName: 'Status', width: 90, },
+        { field: 'calibrationPoints', headerName: 'Calibration Points', width: 100, },
+        
+        {
+            field: 'delete',
+            headerName: 'Delete',
+            width: 80,
+            sortable: false,
+            renderHeader: () => (
+                <IconButton color="secondary" aria-label="Delete" onClick={() => setDeleteModal(true)}>
+                    <Delete />
+                </IconButton>
+            ),
+        },
+
+    ];
+
+
+
+
+
+
 
     const itemMasterSubmit = async (e) => {
         e.preventDefault();
@@ -297,11 +335,14 @@ const ItemMaster = () => {
         }
     };
 
-
-    const updateItemMaster = async (item) => {
-        setItemMasterData(item)
-        setItemMasterStateId(item._id)
+    const updateItemMaster = async (params) => {
+        console.log(params)
+        setItemMasterData(params.row)
+        setItemMasterStateId(params.id)
     }
+
+
+    
 
     const handleItemMasterBaseChange = (e) => {
         const { name, value } = e.target;
@@ -333,7 +374,7 @@ const ItemMaster = () => {
             const response = await axios.get(
                 `${process.env.REACT_APP_PORT}/unit/getAllUnits`
             );
-            
+
             console.log(response.data.result)
             setUnitDataList(response.data.result);
         } catch (err) {
@@ -470,9 +511,9 @@ const ItemMaster = () => {
                                             <div className='col' >
 
                                                 <TextField fullWidth label="Unit" value={itemMasterData.uncertaintyUnit} onChange={handleItemMasterBaseChange} className="form-select" select size="small" id="uncertaintyUnitId" name="uncertaintyUnit" defaultValue="" >
-                                                {unitDataList.map((item, index)=> (
+                                                    {unitDataList.map((item, index) => (
                                                         <MenuItem key={index} value={item.unitName}>{item.unitName}</MenuItem>
-                                                    ))} 
+                                                    ))}
 
 
                                                     {/*<MenuItem value="Unit">Unit</MenuItem >
@@ -555,8 +596,8 @@ const ItemMaster = () => {
                                                     <th>Si No</th>
                                                     <th>Calibration Points </th>
                                                     <th><Fab size='small' color="primary" aria-label="add" onClick={() => addCalibrationPointRow()}>
-                                                    <Add />
-                                                </Fab></th>
+                                                        <Add />
+                                                    </Fab></th>
                                                 </tr>
                                                 {itemMasterData.calibrationPoints ? itemMasterData.calibrationPoints.map((item, index) => (
                                                     <tr key={index}>
@@ -566,7 +607,7 @@ const ItemMaster = () => {
                                                             <Remove />
                                                         </Fab></td>
                                                     </tr>
-                                                      
+
 
                                                 )) : <tr></tr>}
 
@@ -732,7 +773,43 @@ const ItemMaster = () => {
 
                                 </div>
                                 <div>
-                                    <table className='table table-bordered text-center'>
+
+
+                                    <div style={{ height: 400, width: '100%' }}>
+                                        <DataGrid
+                                            rows={filteredData}
+                                            columns={itemMasterColumns}
+                                            getRowId={(row) => row._id}
+                                            initialState={{
+                                                pagination: {
+                                                    paginationModel: { page: 0, pageSize: 5 },
+                                                },
+                                            }}
+                                            pageSizeOptions={[5, 10]}
+                                            onRowSelectionModelChange={(newRowSelectionModel, event) => {
+                                                setItemMasteSelectedRowIds(newRowSelectionModel);
+                                                console.log(event)
+
+                                            }}
+                                            onRowClick={updateItemMaster}
+
+                                            checkboxSelection
+
+
+                                        >
+
+                                        </DataGrid>
+
+
+
+
+                                    </div>
+
+
+
+
+
+                                   {/* <table className='table table-bordered text-center'>
                                         <tbody>
                                             <tr>
                                                 <th>Si No</th>
@@ -763,29 +840,29 @@ const ItemMaster = () => {
                                                 <td colSpan={8}>No Data Available</td></tr>}
 
                                         </tbody>
-                                    </table>
+                                    </table>*/}
                                 </div>
                                 <Dialog
-                                        open={deleteModal}
-                                        onClose={() => setDeleteModal(false)}
-                                        aria-labelledby="alert-dialog-title"
-                                        aria-describedby="alert-dialog-description"
-                                    >
-                                        <DialogTitle id="alert-dialog-title">
-                                            {" ItemMaster delete confirmation?"}
-                                        </DialogTitle>
-                                        <DialogContent>
-                                            <DialogContentText id="alert-dialog-description">
-                                                Are you sure to delete the ItemMaster
-                                            </DialogContentText>
-                                        </DialogContent>
-                                        <DialogActions>
-                                            <Button onClick={() => setDeleteModal(false)}>Cancel</Button>
-                                            <Button onClick={(e) => { deleteItemMasterData(e); setDeleteModal(false); }} autoFocus>
-                                                Delete
-                                            </Button>
-                                        </DialogActions>
-                                    </Dialog>
+                                    open={deleteModal}
+                                    onClose={() => setDeleteModal(false)}
+                                    aria-labelledby="alert-dialog-title"
+                                    aria-describedby="alert-dialog-description"
+                                >
+                                    <DialogTitle id="alert-dialog-title">
+                                        {" ItemMaster delete confirmation?"}
+                                    </DialogTitle>
+                                    <DialogContent>
+                                        <DialogContentText id="alert-dialog-description">
+                                            Are you sure to delete the ItemMaster
+                                        </DialogContentText>
+                                    </DialogContent>
+                                    <DialogActions>
+                                        <Button onClick={() => setDeleteModal(false)}>Cancel</Button>
+                                        <Button onClick={(e) => { deleteItemMasterData(e); setDeleteModal(false); }} autoFocus>
+                                            Delete
+                                        </Button>
+                                    </DialogActions>
+                                </Dialog>
 
 
 

@@ -7,13 +7,16 @@ import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
 import { Container, Paper } from '@mui/material';
 import Grid from '@mui/material/Unstable_Grid2';
-import { TextField, MenuItem, FormControl } from '@mui/material';
+import { TextField, MenuItem, IconButton, FormControl } from '@mui/material';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
+import { DataGrid } from '@mui/x-data-grid';
+import { Delete } from '@mui/icons-material';
+
 
 
 
@@ -57,7 +60,29 @@ export const UnitDataBase = ({ style }) => {
     useEffect(() => {
         unitFetchData();
     }, []);
-    console.log(unitDataList)
+
+    const [unitSelectedRowIds, setUnitSelectedRowIds] = useState([]);
+
+    const unitColumns = [
+        { field: '_id', headerName: 'Si No', width: "150" },
+
+        { field: 'unitName', headerName: 'UnitName', width: "150" },
+
+        {
+            field: 'delete',
+            headerName: 'Delete',
+            width: 80,
+            sortable: false,
+            renderHeader: () => (
+                <IconButton color="secondary" aria-label="Delete" onClick={() => setDeleteModal(true)}>
+                    <Delete />
+                </IconButton>
+            ),
+        },
+
+
+    ];
+
 
 
     const handleUnitDataBaseChange = (e) => {
@@ -65,6 +90,7 @@ export const UnitDataBase = ({ style }) => {
         setUnitData((prev) => ({ ...prev, [name]: value }));
 
     };
+
     const unitSubmit = async (e) => {
         e.preventDefault();
         try {
@@ -136,7 +162,13 @@ export const UnitDataBase = ({ style }) => {
     const deleteUnitData = async () => {
         try {
             const response = await axios.delete(
-                "http://localhost:3001/unit/deleteUnit/" + unitStateId, unitData
+                "http://localhost:3001/unit/deleteUnit/", {
+                data: {
+                    unitIds: unitSelectedRowIds
+                }
+            }
+
+
             );
             unitFetchData();
             setUnitData({
@@ -147,7 +179,24 @@ export const UnitDataBase = ({ style }) => {
             console.log("Unit delete Successfully");
             setUnitStateId(null)
         } catch (err) {
-            console.log(err);
+            setUnitSnackBar(true)
+
+            if (err.response && err.response.status === 400) {
+                // Handle validation errors
+                const errorData400 = err.response.data.errors;
+                const errorMessages400 = Object.values(errorData400).join(' | ');
+                console.log(errorMessages400)
+                setErrorHandler({ status: 0, message: errorMessages400, code: "error" });
+            } else if (err.response && err.response.status === 500) {
+                // Handle other errors
+                const errorData500 = err.response.data.error;
+                const errorMessages500 = Object.values(errorData500).join(' | ');
+                console.log(errorMessages500)
+                setErrorHandler({ status: 0, message: errorMessages500, code: "error" });
+            } else {
+                console.log(err.response.data.error)
+                setErrorHandler({ status: 0, message: "An error occurred", code: "error" });
+            }
         }
     };
 
@@ -175,10 +224,13 @@ export const UnitDataBase = ({ style }) => {
     // };
 
 
-    const updateUnit = async (item) => {
-        setUnitData(item)
-        setUnitStateId(item._id)
+
+    const updateUnit = async (params) => {
+        console.log(params)
+        setUnitData(params.row)
+        setUnitStateId(params.id)
     }
+
     console.log(unitStateId)
 
 
@@ -313,7 +365,40 @@ export const UnitDataBase = ({ style }) => {
                             }} >
                                 <div>
                                     <h6 className='text-center'>Unit List</h6>
-                                    <div style={style} className='table-responsive'>
+
+                                    <div style={{ height: 400, width: '100%' }}>
+                                        <DataGrid
+                                            rows={unitDataList}
+                                            columns={unitColumns}
+                                            getRowId={(row) => row._id}
+                                            initialState={{
+                                                pagination: {
+                                                    paginationModel: { page: 0, pageSize: 5 },
+                                                },
+                                            }}
+                                            pageSizeOptions={[5, 10]}
+                                            onRowSelectionModelChange={(newRowSelectionModel, event) => {
+                                                setUnitSelectedRowIds(newRowSelectionModel);
+                                                console.log(event)
+
+                                            }}
+                                            onRowClick={updateUnit}
+
+                                            checkboxSelection
+
+
+                                        >
+
+                                        </DataGrid>
+
+
+
+
+                                    </div>
+
+
+
+                                    {/* <div style={style} className='table-responsive'>
                                         <table className='table table-bordered text-center'>
                                             <tbody>
                                                 <tr>
@@ -330,7 +415,7 @@ export const UnitDataBase = ({ style }) => {
                                                 ))}
                                             </tbody>
                                         </table>
-                                    </div>
+                                    </div>*/}
                                     <Dialog
                                         open={deleteModal}
                                         onClose={() => setDeleteModal(false)}
@@ -369,7 +454,7 @@ export const UnitDataBase = ({ style }) => {
 export const PartDataBase = ({ style }) => {
 
 
-    const [customerList, setCustomerList]= useState([])
+    const [customerList, setCustomerList] = useState([])
 
     const vendorFetch = async () => {
         try {
@@ -378,7 +463,7 @@ export const PartDataBase = ({ style }) => {
             );
             console.log(response.data)
             const customersList = response.data.result.filter((item) => item.customer === "1")
-            
+
             setCustomerList(customersList);
         } catch (err) {
             console.log(err);
@@ -388,7 +473,7 @@ export const PartDataBase = ({ style }) => {
         vendorFetch();
     }, []);
 
-    
+
 
 
     const [errorHandler, setErrorHandler] = useState({})
@@ -437,7 +522,34 @@ export const PartDataBase = ({ style }) => {
         partFetchData();
     }, []);
 
-    console.log(partDataList)
+
+    const [partSelectedRowIds, setPartSelectedRowIds] = useState([]);
+    const partColumns = [
+        { field: '_id', headerName: 'Si No', width: "250" },
+
+        { field: 'partNo', headerName: 'PartNo', width: "250" },
+        { field: 'partName', headerName: 'partName', width: "250" },
+        { field: 'customer', headerName: 'Customer', width: "250" },
+        { field: 'operationNo', headerName: 'Operation No', width: "250" },
+        { field: 'partStatus', headerName: 'Part Status', width: "250" },
+
+        {
+            field: 'delete',
+            headerName: 'Delete',
+            width: 80,
+            sortable: false,
+            renderHeader: () => (
+                <IconButton color="secondary" aria-label="Delete" onClick={() => setDeleteModal(true)}>
+                    <Delete />
+                </IconButton>
+            ),
+        },
+
+
+    ];
+
+
+
 
 
 
@@ -520,7 +632,13 @@ export const PartDataBase = ({ style }) => {
     const deletePartData = async (id) => {
         try {
             const response = await axios.delete(
-                "http://localhost:3001/part/deletePart/" + partStateId, partData
+                "http://localhost:3001/part/deletePart/" ,{
+                    data: {
+                        partIds: partSelectedRowIds
+                    }
+                }
+
+                
             );
             partFetchData();
             setPartData({
@@ -534,7 +652,27 @@ export const PartDataBase = ({ style }) => {
             setErrorHandler({ status: response.data.status, message: response.data.message, code: "success" });
             console.log("Part delete Successfully");
         } catch (err) {
+            console.log(err);
             setPartSnackBar(true)
+            if (err.response && err.response.status === 400) {
+                // Handle validation errors
+                const errorData400 = err.response.data.errors;
+                const errorMessages400 = Object.values(errorData400).join(' / ');
+
+                console.log(errorMessages400);
+                console.log(err)
+                setErrorHandler({ status: 0, message: errorMessages400, code: "error" });
+            } else if (err.response && err.response.status === 500) {
+                // Handle other errors
+                // const errorData500 = err.response.data.error;
+                // const errorMessages500 = Object.values(errorData500).join(', ');
+                console.log(err)
+                setErrorHandler({ status: 0, message: err.response.data.error, code: "error" });
+            } else {
+                console.log(err)
+                setErrorHandler({ status: 0, message: "An error occurred", code: "error" });
+            }
+
 
         }
     };
@@ -561,16 +699,20 @@ export const PartDataBase = ({ style }) => {
     };
 
 
-    const updatePart = async (item) => {
-        setPartData(item)
-        setPartStateId(item._id)
+    const updatePart = async (params) => {
+        console.log(params)
+        setPartData(params.row)
+        setPartStateId(params.id)
     }
+   
+
+    
 
     const handlePartDataBaseChange = (e) => {
         const { name, value } = e.target;
         const formattedValue = name === 'partName'
-        ? value.toLowerCase().split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')
-        : value;
+            ? value.toLowerCase().split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')
+            : value;
         setPartData((prev) => ({ ...prev, [name]: formattedValue }));
 
     };
@@ -600,12 +742,12 @@ export const PartDataBase = ({ style }) => {
                                 p: 3,
                                 display: 'flex',
                                 flexDirection: 'column',
-                                
+
                             }}
                                 className="d-flex justify-content-center"
                             >
 
-                                
+
                                 <div>
                                     <div className="row g-2 mb-2">
                                         <div className="form-floating col-md-2">
@@ -622,15 +764,15 @@ export const PartDataBase = ({ style }) => {
 
                                         </div>
                                         <div className="form-floating col d-flex-md-5">
-                                        <TextField label="Part No"
-                                            id="partNoId"
-                                            defaultValue=""
-                                         
-                                            size="small"
-                                            onChange={handlePartDataBaseChange}
-                                            value={partData.partNo}
-                                            name="partNo" />
-                                           
+                                            <TextField label="Part No"
+                                                id="partNoId"
+                                                defaultValue=""
+
+                                                size="small"
+                                                onChange={handlePartDataBaseChange}
+                                                value={partData.partNo}
+                                                name="partNo" />
+
                                         </div>
                                         <div className="form-floating col-md-6">
                                             <TextField label="Part Name"
@@ -661,11 +803,11 @@ export const PartDataBase = ({ style }) => {
                                                 value={partData.customer}
                                                 name="customer"
                                                 fullWidth>
-                                                    {customerList.map((item, index)=> (
-                                                        <MenuItem key={index} value={item.aliasName}>{item.aliasName}</MenuItem>
-                                                    ))}
+                                                {customerList.map((item, index) => (
+                                                    <MenuItem key={index} value={item.aliasName}>{item.aliasName}</MenuItem>
+                                                ))}
 
-                                                </TextField>
+                                            </TextField>
 
 
                                         </div>
@@ -782,7 +924,44 @@ export const PartDataBase = ({ style }) => {
                             }} >
                                 <div>
                                     <h5 className='text-center'>Part List</h5>
-                                    <div style={style} className='table-responsive'>
+
+                                    <div style={{ height: 400, width: '100%' }}>
+                                        <DataGrid
+                                            rows={partDataList}
+                                            columns={partColumns}
+                                            getRowId={(row) => row._id}
+                                            initialState={{
+                                                pagination: {
+                                                    paginationModel: { page: 0, pageSize: 5 },
+                                                },
+                                            }}
+                                            pageSizeOptions={[5, 10]}
+                                            onRowSelectionModelChange={(newRowSelectionModel, event) => {
+                                                setPartSelectedRowIds(newRowSelectionModel);
+                                                console.log(event)
+
+                                            }}
+                                            onRowClick={updatePart}
+
+                                            checkboxSelection
+
+
+                                        >
+
+                                        </DataGrid>
+
+
+
+
+                                    </div>
+
+
+
+
+
+
+
+                                   {/*<div style={style} className='table-responsive'>
                                         <table className='table table-bordered text-center'>
                                             <tbody>
                                                 <tr>
@@ -806,7 +985,7 @@ export const PartDataBase = ({ style }) => {
                                                     </tr>
                                                 ))}
                                             </tbody>
-                                        </table></div>
+                                        </table></div>*/}
                                     <Dialog
                                         open={deleteModal}
                                         onClose={() => setDeleteModal(false)}
