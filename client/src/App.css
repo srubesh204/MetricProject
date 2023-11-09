@@ -1,3 +1,9 @@
+body{
+	margin: 0;
+	box-sizing: border-box;
+	background: #EEF2F6;
+}
+
 .uplable {
 	display: block;
 	width: 90px;

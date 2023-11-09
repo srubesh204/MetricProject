@@ -44,6 +44,26 @@ router.get('/getVendorCertificate/:fileName', (req, res) => {
   });
 });
 
+router.get('/workInstructions/:wIName', (req, res) => {
+  const { wIName } = req.params;
+  const fileURL = path.join(__dirname, '..', 'storage', 'workInstructions', wIName);
+  console.log(fileURL);
+
+  // Determine the appropriate content type based on the file extension
+  const contentType = getContentType(fileName);
+
+  // Set the appropriate content type in the response
+  res.setHeader('Content-Type', contentType);
+
+  // Stream the file to the response for viewing
+  res.sendFile(fileURL, (err) => {
+    if (err) {
+      // Handle errors (e.g., file not found)
+      res.status(404).json({ error: 'File not found' });
+    }
+  });
+});
+
 // Function to determine the content type based on the file extension
 function getContentType(fileName) {
   const fileExtension = path.extname(fileName);

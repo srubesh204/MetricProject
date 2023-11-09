@@ -140,7 +140,7 @@ const ItemAdd = () => {
     return (
         <div style={{ margin: "2rem", backgroundColor: "#f5f5f5" }}>
             <Paper className='row' elevation={12} sx={{ p: 2, mb: 2 }}>
-                <div className="col-md-5 row g-1">
+                <div className="col-lg-5 row g-1">
 
                     <div>
                         <TextField size='small' variant='outlined' label="Item Master" fullWidth />
@@ -152,10 +152,10 @@ const ItemAdd = () => {
                         <TextField size='small' variant='outlined' label="Item Master" fullWidth />
                     </div>
                 </div>
-                <div className="col-md-2 text-center align-middle">
+                <div className="col-lg-2 text-center align-middle">
                     <Typography variant='h5'  >Item Add</Typography>
                 </div>
-                <div className="col-md-5 d-flex justify-content-center">
+                <div className="col-lg-5 d-flex justify-content-center">
                     <Card sx={{ width: "50%", height: "100px" }}>
                         <CardContent>
 
@@ -166,13 +166,13 @@ const ItemAdd = () => {
 
             </Paper>
             <div className="row ">
-                <Paper className='col-md me-2' elevation={12} sx={{ p: 2 }}>
+                <Paper className='col-lg me-2' elevation={12} sx={{ p: 2 }}>
                     <Typography variant='h6' className='text-center'>Item General Details</Typography>
                     <div className="row g-2 mb-2">
-                        <div className="col-md-4">
+                        <div className="col-lg-4">
                             <TextField size='small' variant='outlined' label="Item Type" fullWidth />
                         </div>
-                        <div className='col-md-8 d-flex justify-content-between'>
+                        <div className='col-lg-8 d-flex justify-content-between'>
                             <TextField size='small' variant='outlined' label="Range/Size" name='rangeSize' id='rangeSizeId' fullWidth />
                             <FormControl size='small' sx={{ minWidth: 80 }}>
                                 <InputLabel id="rangeSizeUnitId">Unit</InputLabel>
@@ -195,10 +195,10 @@ const ItemAdd = () => {
                         </div>
                     </div>
                     <div className="row g-2">
-                        <div className="col-md-4">
+                        <div className="col-lg-4">
                             <TextField size='small' variant='outlined' label="MFR.Si.No." fullWidth />
                         </div>
-                        <div className='col-md-8 d-flex justify-content-between'>
+                        <div className='col-lg-8 d-flex justify-content-between'>
                             <TextField size='small' variant='outlined' label="Least Count" fullWidth />
                             <FormControl size='small' sx={{ minWidth: 80 }}>
                                 <InputLabel id="lcUnitId">Unit</InputLabel>
@@ -219,18 +219,18 @@ const ItemAdd = () => {
 
                         </div>
                         <div className="row g-1">
-                            <div className="col-md me-1">
+                            <div className="col-lg me-1">
                                 <TextField size='small' variant='outlined' label="Make" fullWidth />
                             </div>
-                            <div className="col-md">
+                            <div className="col-lg">
                                 <TextField size='small' variant='outlined' label="Model No." fullWidth />
                             </div>
                         </div>
                         <div className="row g-1">
-                            <div className="col-md me-1">
+                            <div className="col-lg me-1">
                                 <TextField size='small' variant='outlined' label="Item Status" fullWidth />
                             </div>
-                            <div className="col-md">
+                            <div className="col-lg">
                                 <TextField size='small' variant='outlined' label="Receipt Date" fullWidth />
                             </div>
                         </div>
@@ -278,20 +278,20 @@ const ItemAdd = () => {
 
 
                 </Paper>
-                <Paper className='col-md me-2' elevation={12} sx={{ p: 2 }}>
+                <Paper className='col-lg me-2' elevation={12} sx={{ p: 2 }}>
                     <Typography variant='h6' className='text-center'>Calibration</Typography>
                     <div className="row g-2">
-                        <div className='col-md-6'>
+                        <div className='col-lg-6'>
                             <TextField size='small' fullWidth variant='outlined' label="Cal Frequency in months" name='itemCalFreInMonths' type='number'>
 
                             </TextField>
                         </div>
-                        <div className='col-md-6'>
+                        <div className='col-lg-6'>
                             <TextField size='small' fullWidth variant='outlined' label="Cal Alert Days" name='itemCalAlertDays' type='number'>
 
                             </TextField>
                         </div>
-                        <div className='col-md-12'>
+                        <div className='col-lg-12'>
                             <TextField size='small' fullWidth variant='outlined' select label="Calibration Done At" value={itemAddData.itemCalDoneAt} defaultValue="" name='itemCalAlertDays' >
                                 <MenuItem value=""><em>--Select--</em></MenuItem>
                                 <MenuItem value="InHouse">InHouse</MenuItem>
@@ -324,29 +324,29 @@ const ItemAdd = () => {
                             </div>}
                     </div>
                 </Paper>
-                <Paper className='col-md' elevation={12} sx={{ p: 2, }}>
+                <Paper className='col-lg' elevation={12} sx={{ p: 2, }}>
                     <Typography variant='h6' className='text-center'>Enter Previous Calibration Data</Typography>
                     <div className="row g-2">
-                        <div className="col-md-6">
+                        <div className="col-lg-6">
                             <TextField size='small' fullWidth variant='outlined' label="Cal Date" type='date' name='itemMasterName'></TextField>
                         </div>
-                        <div className="col-md-6">
+                        <div className="col-lg-6">
                             <TextField size='small' fullWidth variant='outlined' label="Due Date" type='date' name='itemMasterName'></TextField>
                         </div>
-                        <div className="col-md-12">
+                        <div className="col-lg-12">
                             <TextField size='small' fullWidth variant='outlined' label="Calibrated at" type='date' select name='itemMasterName'>
                                 <MenuItem>Lab</MenuItem>
                                 <MenuItem>Site</MenuItem>
                                
                             </TextField>
                         </div>
-                        <div className="col-md-8">
+                        <div className="col-lg-8">
                             <Button component="label" variant="contained" fullWidth >
                                 Certificate Upload
                                 <VisuallyHiddenInput type="file" />
                             </Button>
                         </div>
-                        <div className='col-md-4'>
+                        <div className='col-lg-4'>
                             <Button 
                                 fullWidth
                                 variant="outlined"
