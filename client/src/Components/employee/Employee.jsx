@@ -53,7 +53,7 @@ const Employee = () => {
     const [employeeSelectedRowIds, setEmployeeSelectedRowIds] = useState([]);
 
     const employeeColumns = [
-        { field: 'id', headerName: 'Si No', width: 70 },
+        { field: 'id', headerName: 'Si. No', width: 70, renderCell: (params) => params.api.getRowIndexRelativeToVisibleRows(params.id) + 1 },
 
         { field: 'employeeCode', headerName: 'Emp.Code', width: 70 },
         { field: 'firstName', headerName: 'emp.Name', width: 130 },
@@ -865,7 +865,7 @@ const Employee = () => {
                                             <MenuItem value="all">All</MenuItem >
                                             <MenuItem value="Active">Active</MenuItem >
                                             <MenuItem value="InActive">InActive</MenuItem >
-                                            
+
                                         </TextField>
 
                                     </Grid>
@@ -891,10 +891,10 @@ const Employee = () => {
                                         </TextField>
                                     </Grid>
                                     <Grid item xs={2}>
-                                    <div className='col d-flex justify-content-end mb-2'>
-                                        {employeeSelectedRowIds.length !== 0 && <Button variant='contained' component="button"  fullWidth type='button' color='error' onClick={() => handleDeleteOpen(true)}>Delete  Employee</Button>}
+                                        <div className='col d-flex justify-content-end mb-2'>
+                                            {employeeSelectedRowIds.length !== 0 && <Button variant='contained' component="button" fullWidth type='button' color='error' onClick={() => handleDeleteOpen(true)}>Delete  Employee</Button>}
 
-                                    </div>
+                                        </div>
                                     </Grid>
 
                                     {/* <div className="form-floating col">

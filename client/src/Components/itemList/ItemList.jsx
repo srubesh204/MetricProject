@@ -7,6 +7,19 @@ import axios from 'axios';
 
 const ItemList = () => {
 
+
+
+
+
+
+
+
+
+
+
+
+
+
     const [itemList, setItemList] = useState([]);
 
     const itemFetch = async () => {
@@ -17,6 +30,7 @@ const ItemList = () => {
             // You can use a different logic for generating the id
 
             setItemList(response.data.result);
+            setFilteredItemListData(response.data.result);
 
         } catch (err) {
             console.log(err);
@@ -34,8 +48,8 @@ const ItemList = () => {
 
     const columns = [
         { field: 'id', headerName: 'Si No', },
-        { field: 'itemIMTENo', headerName: 'ItemIMTENo', },
-        { field: 'itemDescription', headerName: 'item Description', },
+        { field: 'itemIMTENo', headerName: 'ItemIMTE No', },
+        { field: 'itemMasterName', headerName: 'item Description', },
         { field: 'itemRangeSize', headerName: 'Item Range Size', },
         { field: 'itemMake', headerName: 'Item Make', },
         { field: 'itemCalDate', headerName: 'Item Cal Date', },
@@ -46,6 +60,99 @@ const ItemList = () => {
         { field: 'itemSupplier', headerName: 'Item Supplier', },
         { field: 'itemType', headerName: 'Item Type', },
     ];
+
+    const [filteredItemListData, setFilteredItemListData] = useState([])
+
+    const handleFilterChangeItemList = (e) => {
+        const { name, value } = e.target;
+        console.log(e)
+        if (value === "all") {
+            setFilteredItemListData(itemList)
+        } else {
+            if (name === "imteNo") {
+                const imteNo = itemList.filter((item) => (item.itemIMTENo === value))
+                setFilteredItemListData(imteNo)
+               
+            }
+            if (name === "itemType") {
+                const itemType = itemList.filter((item) => (item.itemType === value))
+                setFilteredItemListData(itemType)
+                console.log(value)
+
+            }
+            if (name === "currentLocation") {
+                const currentLocation = itemList.filter((item) => (item.itemLC === value))
+                setFilteredItemListData(currentLocation)
+            }
+            if (name === "customerWise") {
+                const customerWise = itemList.filter((item) => (item.customerWise === value))
+                setFilteredItemListData(customerWise)
+            }
+            if (name === "supplierWise") {
+                
+                const supperlierWise = itemList.filter((item) => (item.itemSupplier === value))
+                console.log(supperlierWise)
+                setFilteredItemListData(supperlierWise)
+            }
+            if (name === "partName") {
+                const partName = itemList.filter((item) => (item.itemPartName === value))
+                setFilteredItemListData(partName)
+            }
+
+        }
+
+
+    };
+    
+
+    const [customerList, setCustomerList] = useState([])
+
+    const vendorFetch = async () => {
+        try {
+            const response = await axios.get(
+                `${process.env.REACT_APP_PORT}/vendor/getAllVendors`
+            );
+            console.log(response.data)
+            const customersList = response.data.result.filter((item) => item.customer === "1")
+            const supperliersList = response.data.result.filter((item) => item.supplier === "1")
+            setSupplierList(supperliersList);
+            setCustomerList(customersList);
+        } catch (err) {
+            console.log(err);
+        }
+    };
+    useEffect(() => {
+        vendorFetch();
+    }, []);
+
+
+    const [supplierList, setSupplierList] = useState([])
+
+    const [partDataList, setPartDataList] = useState([])
+    const partFetchData = async () => {
+        try {
+            const response = await axios.get(
+                `${process.env.REACT_APP_PORT}/part/getAllParts`
+            );
+            setPartDataList(response.data.result);
+        } catch (err) {
+            console.log(err);
+        }
+    };
+    useEffect(() => {
+        partFetchData();
+    }, []);
+
+
+
+
+
+
+
+
+
+
+
 
     return (
         <div style={{ margin: "2rem" }}>
@@ -69,6 +176,7 @@ const ItemList = () => {
                                 defaultValue="Active"
                                 fullWidth
                                 size="small"
+                                onChange={handleFilterChangeItemList}
                                 name="imteNo" >
 
                                 <MenuItem value="Active">Active</MenuItem>
@@ -83,6 +191,7 @@ const ItemList = () => {
                                 select
                                 defaultValue="Active"
                                 fullWidth
+                                onChange={handleFilterChangeItemList}
                                 size="small"
                                 name="itemType" >
                                 <MenuItem value="all">All</MenuItem >
@@ -99,6 +208,7 @@ const ItemList = () => {
                                 select
                                 defaultValue="Active"
                                 fullWidth
+                                onChange={handleFilterChangeItemList}
                                 size="small"
                                 name="currentLocation" >
                                 <MenuItem value="all">All</MenuItem >
@@ -116,27 +226,27 @@ const ItemList = () => {
                                 defaultValue="Active"
                                 fullWidth
                                 size="small"
+                                onChange={handleFilterChangeItemList}
                                 name="customerWise" >
-                                <MenuItem value="all">All</MenuItem >
-                                <MenuItem value="Attribute">Attribute</MenuItem >
-                                <MenuItem value="Variable">Variable</MenuItem >
-                                <MenuItem value="Reference Standard">Reference Standard</MenuItem>
+                                {customerList.map((item, index) => (
+                                    <MenuItem key={index} value={item.aliasName}>{item.aliasName}</MenuItem>
+                                ))}
                             </TextField>
 
                         </div>
                         <div className="col d-flex  mb-2">
 
-                            <TextField label="Supperlier Wise"
-                                id="supperlierWiseId"
+                            <TextField label="supplier Wise"
+                                id="supplierWiseId"
                                 select
                                 defaultValue="Active"
                                 fullWidth
                                 size="small"
-                                name="supperlierWise" >
-                                <MenuItem value="all">All</MenuItem >
-                                <MenuItem value="Attribute">Attribute</MenuItem >
-                                <MenuItem value="Variable">Variable</MenuItem >
-                                <MenuItem value="Reference Standard">Reference Standard</MenuItem>
+                                onChange={handleFilterChangeItemList}
+                                name="supplierWise" >
+                                {supplierList.map((item, index) => (
+                                    <MenuItem key={index} value={item.aliasName}>{item.aliasName}</MenuItem>
+                                ))}
                             </TextField>
 
                         </div>
@@ -148,6 +258,7 @@ const ItemList = () => {
                                 defaultValue="Active"
                                 fullWidth
                                 size="small"
+                                onChange={handleFilterChangeItemList}
                                 name="dueInDays" >
                                 <MenuItem value="all">All</MenuItem >
                                 <MenuItem value="Attribute">Attribute</MenuItem >
@@ -164,11 +275,11 @@ const ItemList = () => {
                                 defaultValue="Active"
                                 fullWidth
                                 size="small"
+                                onChange={handleFilterChangeItemList}
                                 name="partName" >
-                                <MenuItem value="all">All</MenuItem >
-                                <MenuItem value="Attribute">Attribute</MenuItem >
-                                <MenuItem value="Variable">Variable</MenuItem >
-                                <MenuItem value="Reference Standard">Reference Standard</MenuItem>
+                                {partDataList.map((item, index) => (
+                                    <MenuItem key={index} value={item.partName}>{item.partName}</MenuItem>
+                                ))}
                             </TextField>
 
                         </div>
@@ -180,6 +291,7 @@ const ItemList = () => {
                                 defaultValue="Active"
                                 fullWidth
                                 size="small"
+                                onChange={handleFilterChangeItemList}
                                 name="plantWise" >
                                 <MenuItem value="all">All</MenuItem >
                                 <MenuItem value="Attribute">Attribute</MenuItem >
@@ -192,16 +304,10 @@ const ItemList = () => {
 
                     </div>
                     <div className='row'>
-                        <div className='col mb-2'>
-                            <div class="form-check ">
-                                <input className="form-check-input" type="checkbox" id="selectAllId" name="selectAll" />
-                                <label className="form-check-label" htmlFor="selectAllId">Select All</label>
-                            </div>
 
-                        </div>
 
                         <div className="col d-flex justify-content-end g-2 mb-2">
-                            <div className='col-4 me-2'>
+                            <div className='col-3 me-2'>
                                 <TextField label="item History"
                                     id="itemHistoryId"
                                     select
@@ -215,7 +321,7 @@ const ItemList = () => {
                                     <MenuItem value="Reference Standard">Reference Standard</MenuItem>
                                 </TextField>
                             </div>
-                            <div className='col-4 me-2'>
+                            <div className='col-3 me-2'>
                                 <TextField label="Status"
                                     id="statusId"
                                     select
@@ -235,7 +341,7 @@ const ItemList = () => {
                             <div className='mb-2' style={{ height: 400, width: '100%' }}>
                                 <DataGrid
 
-                                    rows={itemList}
+                                    rows={filteredItemListData}
                                     columns={columns}
                                     getRowId={(row) => row._id}
                                     initialState={{
@@ -299,11 +405,11 @@ const ItemList = () => {
                                 <div className='me-2 '>
                                     <button type="button" className='btn btn-secondary' >Sticker Print Barcode</button>
                                 </div>
-                                
+
                             </div>
-                     
-                               
-                
+
+
+
 
                         </div>
 

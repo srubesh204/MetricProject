@@ -65,10 +65,10 @@ export const Department = () => {
 
 
   const columns = [
-    { field: '_id', headerName: 'Si No', width: "150" },
+    { field: 'id', headerName: 'Si. No', width: 70, renderCell: (params) => params.api.getRowIndexRelativeToVisibleRows(params.id) + 1 },
 
-    { field: 'department', headerName: 'Department', width: "150" },
-    { field: 'departmentStatus', headerName: 'Department Status', width: "100" },
+    { field: 'department', headerName: 'Department', width: "170" },
+    { field: 'departmentStatus', headerName: 'Department Status', width: "190" },
     {
       field: 'delete',
       headerName: 'Delete',
@@ -260,10 +260,10 @@ export const Department = () => {
 
 
   const areaColumns = [
-    { field: '_id', headerName: 'Si No', width: "150" },
+    { field: 'id', headerName: 'Si. No', width: 70, renderCell: (params) => params.api.getRowIndexRelativeToVisibleRows(params.id) + 1 },
 
-    { field: 'area', headerName: 'Area', width: "150" },
-    { field: 'areaStatus', headerName: ' Area Status', width: "100" },
+    { field: 'area', headerName: 'Area', width: "170" },
+    { field: 'areaStatus', headerName: ' Area Status', width: "190" },
     {
       field: 'delete',
       headerName: 'Delete',
@@ -563,10 +563,10 @@ export const Department = () => {
 
 
   const placeOfUsageColumns = [
-    { field: '_id', headerName: 'Si No', width: "150" },
+    { field: 'id', headerName: 'Si. No', width: 70, renderCell: (params) => params.api.getRowIndexRelativeToVisibleRows(params.id) + 1 },
 
-    { field: 'placeOfUsage', headerName: 'Place Of Usage', width: "150" },
-    { field: 'placeOfUsageStatus', headerName: ' Place Of Usage Status', width: "100" },
+    { field: 'placeOfUsage', headerName: 'Place Of Usage', width: "170" },
+    { field: 'placeOfUsageStatus', headerName: ' Place Of Usage Status', width: "190" },
     {
       field: 'delete',
       headerName: 'Delete',
@@ -1717,10 +1717,10 @@ export const Designation = () => {
 
 
   const designationColumns = [
-    { field: '_id', headerName: 'Si No', width: "150" },
+    { field: 'id', headerName: 'Si. No', width: 150, renderCell: (params) => params.api.getRowIndexRelativeToVisibleRows(params.id) + 1 },
 
-    { field: 'designation', headerName: 'Designation', width: "150" },
-    { field: 'designationStatus', headerName: 'Designation Status', width: "100" },
+    { field: 'designation', headerName: 'Designation', width: "300" },
+    { field: 'designationStatus', headerName: 'Designation Status', width: "350" },
     {/*{
       field: 'delete',
       headerName: 'Delete',

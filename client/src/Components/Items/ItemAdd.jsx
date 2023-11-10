@@ -292,7 +292,7 @@ const ItemAdd = () => {
                                         {areas.map((item, index) => (
                                             <MenuItem key={index} value={item.areaName}>{item.areaName}</MenuItem>
                                         ))}
-                                    </TextField>
+                                    </TextField> 
                                 </div>
                                 <div className='mt-2'>
                                     <TextField size='small' value={itemAddData.itemPlaceOfUsage} select fullWidth variant='outlined' label="Place" name='itemPlaceOfUsage'>
@@ -334,7 +334,7 @@ const ItemAdd = () => {
                                 </TextField>
                             </div>
                             <div className='col-lg-12'>
-                                <TextField size='small' value={itemAddData.itemCalDoneAt} fullWidth variant='outlined' select label="Calibration Done At" value={itemAddData.itemCalDoneAt} defaultValue="" name='itemCalAlertDays' >
+                                <TextField size='small' value={itemAddData.itemCalDoneAt} fullWidth variant='outlined' select label="Calibration Done At"defaultValue="" name='itemCalAlertDays' >
                                     <MenuItem value=""><em>--Select--</em></MenuItem>
                                     <MenuItem value="InHouse">InHouse</MenuItem>
                                     <MenuItem value="OutSource">OutSource</MenuItem>

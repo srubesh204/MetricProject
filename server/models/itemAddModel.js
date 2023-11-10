@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const uniqueValidator = require('mongoose-unique-validator');
 const itemAddSchema = new mongoose.Schema({
-  itemMasterType: String,
+  itemMasterName: String,
   itemIMTENo: String,
   itemImageName: String,
   itemType: String,
