@@ -413,7 +413,7 @@ const Employee = () => {
         try {
            
                 const response = await axios.delete(
-                    `${process.env.REACT_APP_PORT}/employee/deleteEmployee/$`,
+                    `${process.env.REACT_APP_PORT}/employee/deleteEmployee`,
                     {
                         data: {
                             employeeIds: employeeSelectedRowIds
@@ -425,7 +425,7 @@ const Employee = () => {
                 empFetch();
 
                 setSnackBarOpen(true)
-                setErrorHandler({ status: response.data.status, message: `${response.data.result.firstName} ${response.data.result.lastName} ${response.data.message}`, code: "success" })
+                setErrorHandler({ status: response.data.status, message: response.data.result, code: "success" })
                 setEmpDataId(null)
                 console.log("Employee Deleted Successfully")
             

@@ -139,7 +139,7 @@ deleteEmployee: async (req, res) => {
       }
     }
 
-    return res.status(202).json({ message: 'Employee deleted successfully', results: `${deleteResults.length} Employee Deleted Successfull ` });
+    return res.status(202).json({ message: 'Employee deleted successfully', result: `${deleteResults.length} Employee Deleted Successfull`, status: 1 });
   } catch (error) {
     console.error(error);
     res.status(500).send('Internal Server Error');
