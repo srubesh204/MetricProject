@@ -133,22 +133,24 @@ const vendorController = {
 
       const { vendorIds } = req.body; // Assuming an array of vendor IDs is sent in the request body
       console.log(req.body)
-      const deleteResults = [];
+      const deleteResults = []; 
 
       for (const vendorId of vendorIds) {
         // Find and remove each vendor by _id
         const deletedVendor = await vendorModel.findOneAndRemove({ _id: vendorId });
-
+        console.log(deletedVendor)
         if (!deletedVendor) {
           // If a vendor was not found, you can skip it or handle the error as needed.
           console.log(`Vendor with ID ${vendorId} not found.`);
+          res.status(500).json({ message:  `Vendor with ID not found.`});
+          
         } else {
           console.log(`Vendor with ID ${vendorId} deleted successfully.`);
           deleteResults.push(deletedVendor); 
         }
       }
 
-      res.status(202).json({ message: 'Vendors deleted successfully', results: deleteResults });
+      return res.status(202).json({ message: 'Vendors deleted successfully', results: `${deleteResults.length} Vendors Deleted Successfull ` });
     } catch (error) {
       console.error(error);
       res.status(500).send('Internal Server Error');

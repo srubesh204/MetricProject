@@ -117,25 +117,34 @@ const employeeController = {
       res.status(500).json({ error: error, status: 0 });
   }
 },
-  deleteEmployee: async (req, res) => {
-    try {
-      const empId = req.params.id; // Assuming id is part of the URL parameter
+deleteEmployee: async (req, res) => {
+  try {
 
-      // Find the designation by _id and remove it
-      const deleteEmployee = await employeeModel.findOneAndRemove(
-        { _id: empId } // Pass the _id as an object
-      );
+    const { employeeIds } = req.body; // Assuming an array of vendor IDs is sent in the request body
+    console.log(req.body)
+    const deleteResults = []; 
 
-      if (!deleteEmployee) {
-        return res.status(404).json({ error: 'Employee detail not found' });
+    for (const employeeId of employeeIds) {
+      // Find and remove each vendor by _id
+      const deletedEmployee = await employeeModel.findOneAndRemove({ _id: employeeId });
+      console.log(deletedEmployee)
+      if (!deletedEmployee) {
+        // If a vendor was not found, you can skip it or handle the error as needed.
+        console.log(`Employee with ID ${employeeId} not found.`);
+        res.status(500).json({ message:  `Employee with ID not found.`});
+        
+      } else {
+        console.log(`Employee with ID ${employeeId} deleted successfully.`);
+        deleteResults.push(deletedEmployee); 
       }
-      console.log("Employee Deleted Successfully")
-      res.status(202).json({ message: 'Employee detail deleted successfully' ,result: deleteEmployee });
-    } catch (error) {
-      console.error(error);
-      res.status(500).send('Internal Server Error');
     }
+
+    return res.status(202).json({ message: 'Employee deleted successfully', results: `${deleteResults.length} Employee Deleted Successfull ` });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Internal Server Error');
   }
+}
 
 }
 module.exports = employeeController; 

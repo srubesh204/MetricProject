@@ -5,6 +5,6 @@ const router = express.Router();
 router.get("/getAllAreas", areaController.getAllAreas)
 router.post("/createArea", areaController.createArea)
 router.put("/updateArea/:id", areaController.updateArea)
-router.delete("/deleteArea/:id", areaController.deleteArea)
+router.delete("/deleteArea", areaController.deleteArea)
 
 module.exports = router;

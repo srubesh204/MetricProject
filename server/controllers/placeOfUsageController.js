@@ -111,23 +111,32 @@ const placeOfUsageController = {
   },
   deletePlaceOfUsage: async (req, res) => {
     try {
-        const pouId = req.params.id; // Assuming id is part of the URL parameter
 
-        // Find the designation by _id and remove it
-        const deletePlaceOfUsage = await placeOfUsageModel.findOneAndRemove(
-            { _id: pouId } // Pass the _id as an object
-        );
+      const {placeOfUsageIds } = req.body; // Assuming an array of vendor IDs is sent in the request body
+      console.log(req.body)
+      const deleteResults = []; 
 
-        if (!deletePlaceOfUsage) {
-            return res.status(404).json({ error: 'Place Of Usage not found' });
+      for (const placeOfUsageId of placeOfUsageIds) {
+        // Find and remove each vendor by _id
+        const deletedPlaceOfUsage = await placeOfUsageModel.findOneAndRemove({ _id: placeOfUsageId });
+        console.log(deletedPlaceOfUsage)
+        if (!deletedPlaceOfUsage) {
+          // If a vendor was not found, you can skip it or handle the error as needed.
+          console.log(`PlaceOfUsage with ID ${placeOfUsageId} not found.`);
+          res.status(500).json({ message:  `PlaceOfUsage with ID not found.`});
+          
+        } else {
+          console.log(`PlaceOfUsage with ID ${placeOfUsageId} deleted successfully.`);
+          deleteResults.push(deletedPlaceOfUsage); 
         }
-        console.log("Place Of Usage Deleted Successfully")
-        res.status(202).json({ message: 'Place Of Usage detail deleted successfully' ,result: deletePlaceOfUsage });
-} catch (error) {
-  console.error(error);
-  res.status(500).send('Internal Server Error');
-}
-}
+      }
+
+      return res.status(202).json({ message: 'PlaceOfUsage deleted successfully', results: `${deleteResults.length} PlaceOfUsage Deleted Successfull ` });
+    } catch (error) {
+      console.error(error);
+      res.status(500).send('Internal Server Error');
+    }
+  }
 }
 
 

@@ -109,24 +109,32 @@ const designationController = {
       }
   },
   deleteDesignation: async (req, res) => {
-  
-      try {
-          const desId = req.params.id; // Assuming id is part of the URL parameter
+    try {
 
-          // Find the designation by _id and remove it
-          const deleteDesignation = await designationModel.findOneAndRemove(
-              { _id: desId } // Pass the _id as an object
-          );
+      const { designationIds } = req.body; // Assuming an array of vendor IDs is sent in the request body
+      console.log(req.body)
+      const deleteResults = []; 
 
-          if (!deleteDesignation) {
-              return res.status(404).json({ error: 'Designation not found' });
-          }
-          console.log("Designation Deleted Successfully")
-          res.status(202).json({ message: 'Designation detail deleted successfully' ,result: deleteDesignation });
-  } catch (error) {
-    console.error(error);
-    res.status(500).send('Internal Server Error');
-  }
+      for (const designationId of designationIds) {
+        // Find and remove each vendor by _id
+        const deletedDesignation = await designationModel.findOneAndRemove({ _id: designationId });
+        console.log(deletedDesignation)
+        if (!deletedDesignation) {
+          // If a vendor was not found, you can skip it or handle the error as needed.
+          console.log(`Designation with ID ${designationId} not found.`);
+          res.status(500).json({ message:  `Designation with ID not found.`});
+          
+        } else {
+          console.log(`Designation with ID ${designationId} deleted successfully.`);
+          deleteResults.push(deletedDesignation); 
+        }
+      }
+
+      return res.status(202).json({ message: 'Designation deleted successfully', results: `${deleteResults.length}Designation Deleted Successfull ` });
+    } catch (error) {
+      console.error(error);
+      res.status(500).send('Internal Server Error');
+    }
   }
 }
 

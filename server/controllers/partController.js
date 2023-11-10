@@ -113,24 +113,33 @@ const partController = {
         }
     },
     deletePart: async (req, res) => {
-        try {
-            const partId = req.params.id; // Assuming id is part of the URL parameter
-
-            // Find the designation by _id and remove it
-            const deletePart = await partModel.findOneAndRemove(
-                { _id: partId } // Pass the _id as an object
-            );
-
-            if (!deletePart) {
-                return res.status(404).json({ error: 'Part not found' });
-            }
-            console.log("Part Deleted Successfully")
-            res.status(202).json({ message: 'Part deleted successfully' ,result: deletePart });
-    } catch (error) {
-      console.error(error);
-      res.status(500).send('Internal Server Error');
+      try {
+  
+        const { partIds } = req.body; // Assuming an array of vendor IDs is sent in the request body
+        console.log(req.body)
+        const deleteResults = []; 
+  
+        for (const partId of partIds) {
+          // Find and remove each vendor by _id
+          const deletedPart = await partModel.findOneAndRemove({ _id: partId });
+          console.log(deletedPart)
+          if (!deletedPart) {
+            // If a vendor was not found, you can skip it or handle the error as needed.
+            console.log(`Part with ID ${partId} not found.`);
+            res.status(500).json({ message:  `Part with ID not found.`});
+            
+          } else {
+            console.log(`Part with ID ${partId} deleted successfully.`);
+            deleteResults.push(deletedPart); 
+          }
+        }
+  
+        return res.status(202).json({ message: 'Part deleted successfully', results: `${deleteResults.length} Part Deleted Successfull ` });
+      } catch (error) {
+        console.error(error);
+        res.status(500).send('Internal Server Error');
+      }
     }
-  }
 }
 
 

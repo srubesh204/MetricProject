@@ -137,18 +137,27 @@ const itemAddController = {
   },
   deleteItemAdd: async (req, res) => {
     try {
-      const itemAddId = req.params.id; // Assuming id is part of the URL parameter
 
-      // Find the designation by _id and remove it
-      const deleteItemAdd = await itemAddModel.findOneAndRemove(
-        { _id: itemAddId } // Pass the _id as an object
-      );
+      const { itemAddIds } = req.body; // Assuming an array of vendor IDs is sent in the request body
+      console.log(req.body)
+      const deleteResults = []; 
 
-      if (!deleteItemAdd) {
-        return res.status(404).json({ error: 'ItemAdd not found' });
+      for (const itemAddId of itemAddIds) {
+        // Find and remove each vendor by _id
+        const deletedItemAdd = await itemAddModel.findOneAndRemove({ _id: itemAddId });
+        console.log(deletedItemAdd)
+        if (!deletedItemAdd) {
+          // If a vendor was not found, you can skip it or handle the error as needed.
+          console.log(`ItemAdd with ID ${itemAddId} not found.`);
+          res.status(500).json({ message:  `ItemAdd with ID not found.`});
+          
+        } else {
+          console.log(`ItemAdd with ID ${itemAddId} deleted successfully.`);
+          deleteResults.push(deletedItemAdd); 
+        }
       }
-      console.log("ItemAdd Deleted Successfully")
-      res.status(202).json({ message: 'ItemAdd detail deleted successfully', result: deleteItemAdd });
+
+      return res.status(202).json({ message: 'ItemAdd deleted successfully', results: `${deleteResults.length} ItemAdd Deleted Successfull ` });
     } catch (error) {
       console.error(error);
       res.status(500).send('Internal Server Error');

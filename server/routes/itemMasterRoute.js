@@ -5,6 +5,6 @@ const router = express.Router();
 router.get("/getAllItemMasters", itemMasterController.getAllItemMasters)
 router.post("/createItemMaster", itemMasterController.createItemMaster)
 router.put("/updateItemMaster/:id", itemMasterController.updateItemMaster)
-router.delete("/deleteItemMaster/:id", itemMasterController.deleteItemMaster)
+router.delete("/deleteItemMaster", itemMasterController.deleteItemMaster)
 
 module.exports = router;

@@ -5,6 +5,6 @@ const router = express.Router();
 router.get("/getAllDepartments", departmentController.getAllDepartment)
 router.post("/createDepartment", departmentController.createDepartment)
 router.put("/updateDepartment/:id", departmentController.updateDepartment)
-router.delete("/deleteDepartment/:id", departmentController.deleteDepartment)
+router.delete("/deleteDepartment", departmentController.deleteDepartment)
 
 module.exports = router;

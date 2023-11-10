@@ -5,6 +5,6 @@ const router = express.Router();
 router.get("/getAllUnits", unitController.getAllUnits)
 router.post("/createUnit", unitController.createUnit)
 router.put("/updateUnit/:id", unitController.updateUnit)
-router.delete("/deleteUnit/:id", unitController.deleteUnit)
+router.delete("/deleteUnit", unitController.deleteUnit)
 
 module.exports = router;
