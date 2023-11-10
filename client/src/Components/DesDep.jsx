@@ -2110,19 +2110,17 @@ export const Designation = () => {
                 m: 2
 
               }}
-            > 
-              <div className="col justify-content-center">
-             
+            >
+
+
+
+              <h4 className=" text-center">Designation List</h4>
+              <div className="row mb-2">
+                <div className="col d-flex justify-content-end">
+                  {designationselectedRowIds.length !== 0 && <Button variant='contained' type='button' color='error' onClick={() => setDeleteModal(true)}>Delete </Button>}
+                </div>
               </div>
-              <div className='mb-2'>
-                
-                <h4 className=" text-center">Designation List</h4>
-                
-                  {designationselectedRowIds.length !== 0 && <Button style={{display: "inline"}} variant='contained' type='button' color='error' onClick={() => setDeleteModal(true)}>Delete </Button>}
-             
-             
-              
-              </div>
+
               <div style={{ height: 400, width: '100%' }}>
                 <DataGrid
                   rows={designationList}
