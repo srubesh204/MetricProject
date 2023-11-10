@@ -9,7 +9,7 @@ import FileDownloadIcon from '@mui/icons-material/FileDownload';
 import UploadFileIcon from '@mui/icons-material/UploadFile';
 import Alert from '@mui/material/Alert';
 import Snackbar from '@mui/material/Snackbar';
-import { TextField, MenuItem, FormControl, Fab, Link, Typography, Badge } from '@mui/material';
+import { TextField, MenuItem, FormControl, Fab, Link, Typography, Badge, LinearProgress } from '@mui/material';
 import { Box, Grid, Paper, Container } from '@mui/material';
 
 import { Add, Remove } from '@mui/icons-material';
@@ -169,7 +169,7 @@ const ItemMaster = () => {
 
     const [itemMasteSelectedRowIds, setItemMasteSelectedRowIds] = useState([]);
     const itemMasterColumns = [
-        { field: '_id', headerName: 'Si No', width: 70 },
+        { field: 'id', headerName: 'ID', width: 70, valueGetter: (params) => console.log(params) },
 
         { field: 'itemType', headerName: 'Item Type', width: 70 },
         { field: 'itemDescription', headerName: 'Item Description', width: 130 },
@@ -397,7 +397,7 @@ const ItemMaster = () => {
     }, []);
 
     const [iframeURL, setIframeURL] = useState({ fileURL: "", fileName: "", file: "" });
-    const [uploadProgress, setUploadProgress] = useState(0)
+   
 
     const handleFileSelect = (event) => {
         const selectedFile = event.target.files[0];
@@ -417,12 +417,7 @@ const ItemMaster = () => {
         formData.append('file', iframeURL.file);
 
         try {
-            axios.post(`${process.env.REACT_APP_PORT}/upload/workInstructions`, formData, {
-                onUploadProgress: (progressEvent) => {
-                    const percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total);
-                    setUploadProgress(percentCompleted);
-                }
-            })
+            axios.post(`${process.env.REACT_APP_PORT}/upload/workInstructions`, formData)
                 .then(response => {
                     setSnackBarOpen(true);
                     setErrorHandler({ status: 1, message: response.data.message, code: "success" });
@@ -621,13 +616,17 @@ const ItemMaster = () => {
                                         <Button className='ms-2' variant='contained' onClick={handleWorkInstructionUpload}>Upload</Button>
                                         </div>
                                         
-                                        {itemMasterData.workInsName && <div className='d-flex justify-content-center mt-2 '>
+                                        {itemMasterData.workInsName && 
+                                            <div className='d-flex justify-content-center mt-2 '>
                                             <Link target="_blank" underline="hover" href={`${process.env.REACT_APP_PORT}/workInstructions/${itemMasterData.workInsName}`} className='me-2'>{itemMasterData.workInsName}</Link>
                                             <Button size='small' variant='outlined' color='error' onClick={()=> {setIframeURL(null); setItemMasterData((prev)=> ({...prev, workInsName: ""}))} } endIcon={<Delete />}>Remove</Button>
 
 
 
-                                        </div>}
+                                        </div>
+                                        
+                                        }
+                                        
 
 
                                     </div>
