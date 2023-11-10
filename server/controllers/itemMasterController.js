@@ -157,24 +157,17 @@ const itemMasterController = {
       const itemMasterId = req.params.id; // Assuming desId is part of the URL parameter
       // if (isNaN(desId)) {
       // Find the designation by desId and update it
-      const updateItemMaster = await itemMasterModel.findOne(
+      const getItemMasterById = await itemMasterModel.findOne(
           { _id: itemMasterId }// To return the updated document
       );
 
-      if (!updateItemMaster) {
+      if (!getItemMasterById) {
           return res.status(404).json({ error: 'Item Master not found' });
       }
-      console.log("Item Master Updated Successfully")
-      res.status(200).json({ result: updateItemMaster, message: "Item Master Updated Successfully" });
+      console.log("Item Master Get Successfully")
+      res.status(200).json({ result: getItemMasterById, message: "Item Master get Successfully" });
   } catch (error) {
       console.log(error);
-      if (error.code === 11000) {
-          return res.status(500).json({ error: 'Duplicate Value Not Accepted' });
-      }
-      const errors500 = {};
-      for (const key in error.errors) {
-          errors500[key] = error.errors[key].message;
-      }
       res.status(500).json({ error: error, status: 0 });
   }
 }
