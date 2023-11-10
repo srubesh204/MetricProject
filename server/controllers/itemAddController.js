@@ -162,7 +162,36 @@ const itemAddController = {
       console.error(error);
       res.status(500).send('Internal Server Error');
     }
+  },
+  getItemAddById : async (req, res) => {
+    try {
+      const itemAddId = req.params.id; // Assuming desId is part of the URL parameter
+      // if (isNaN(desId)) {
+      // Find the designation by desId and update it
+      const getItemAddById = await itemAddModel.findOne(
+          { _id: itemAddId }// To return the updated document
+      );
+
+      if (!getItemAddById) {
+          return res.status(404).json({ error: 'Item Add not found' });
+      }
+      console.log("Item Master Get Successfully")
+      res.status(200).json({ result: getItemAddById, message: "Item Master get Successfully" });
+  } catch (error) {
+      console.log(error);
+      res.status(500).json({ error: error, status: 0 });
   }
+},
+getItemAddByIMTESort: async (req, res) => {
+  try {
+    const itemAddResult = await itemAddModel.find().sort({itemIMTENo:-1});
+    res.status(202).json({ result: itemAddResult, status: 1 });
+    //res.status(200).json(employees);
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Error on ItemAdd');
+  }
+},
 }
 
 

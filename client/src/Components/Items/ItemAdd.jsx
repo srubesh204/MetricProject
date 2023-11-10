@@ -407,7 +407,7 @@ const ItemAdd = () => {
                        <table className='table table-sm table-bordered text-center'>
                         <tbody>
                             <tr>
-                            <th style={{width: }}>Si No</th>
+                            <th >Si No</th>
                             <th>Master Name</th>
                             <th>Due</th>
                             </tr>

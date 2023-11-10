@@ -103,7 +103,7 @@ const ItemList = () => {
 
 
     };
-    
+    const [supplierList, setSupplierList] = useState([])
 
     const [customerList, setCustomerList] = useState([])
 
@@ -114,8 +114,8 @@ const ItemList = () => {
             );
             console.log(response.data)
             const customersList = response.data.result.filter((item) => item.customer === "1")
-            const supperliersList = response.data.result.filter((item) => item.supplier === "1")
-            setSupplierList(supperliersList);
+            const suppliersList = response.data.result.filter((item) => item.supplier === "1")
+            setSupplierList(suppliersList);
             setCustomerList(customersList);
         } catch (err) {
             console.log(err);
@@ -126,7 +126,7 @@ const ItemList = () => {
     }, []);
 
 
-    const [supplierList, setSupplierList] = useState([])
+   
 
     const [partDataList, setPartDataList] = useState([])
     const partFetchData = async () => {
@@ -228,8 +228,8 @@ const ItemList = () => {
                                 size="small"
                                 onChange={handleFilterChangeItemList}
                                 name="customerWise" >
-                                {customerList.map((item, index) => (
-                                    <MenuItem key={index} value={item.aliasName}>{item.aliasName}</MenuItem>
+                                {customerList.map((item) => (
+                                    <MenuItem key={item._id} value={item.aliasName}>{item.aliasName}</MenuItem>
                                 ))}
                             </TextField>
 
