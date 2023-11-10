@@ -75,7 +75,7 @@ export const Department = () => {
       width: 80,
       sortable: false,
       renderHeader: () => (
-        <IconButton color="secondary" aria-label="Delete" onClick={() => setDeleteDepModal(true)}>
+        <IconButton color='error' aria-label="Delete" onClick={() => setDeleteDepModal(true)}>
           <Delete />
         </IconButton>
       ),
@@ -270,7 +270,7 @@ export const Department = () => {
       width: 80,
       sortable: false,
       renderHeader: () => (
-        <IconButton color="secondary" aria-label="Delete" onClick={() => setDeleteAreaModal(true)}>
+        <IconButton color='error' aria-label="Delete" onClick={() => setDeleteAreaModal(true)}>
           <Delete />
         </IconButton>
       ),
@@ -573,7 +573,7 @@ export const Department = () => {
       width: 80,
       sortable: false,
       renderHeader: () => (
-        <IconButton color="secondary" aria-label="Delete" onClick={() => setDeletePouModal(true)}>
+        <IconButton color='error' aria-label="Delete" onClick={() => setDeletePouModal(true)}>
           <Delete />
         </IconButton>
       ),
@@ -1721,17 +1721,17 @@ export const Designation = () => {
 
     { field: 'designation', headerName: 'Designation', width: "150" },
     { field: 'designationStatus', headerName: 'Designation Status', width: "100" },
-    {
+    {/*{
       field: 'delete',
       headerName: 'Delete',
       width: 80,
       sortable: false,
       renderHeader: () => (
-        <IconButton color="secondary" aria-label="Delete" onClick={() => setDeleteModal(true)}>
+        <IconButton color='error' aria-label="Delete" onClick={() => setDeleteModal(true)}>
           <Delete />
         </IconButton>
       ),
-    },
+    },*/}
 
 
   ];
@@ -2110,8 +2110,19 @@ export const Designation = () => {
                 m: 2
 
               }}
-            >
-              <h4 className="mb-3 text-center">Designation List</h4>
+            > 
+              <div className="col justify-content-center">
+             
+              </div>
+              <div className='mb-2'>
+                
+                <h4 className=" text-center">Designation List</h4>
+                
+                  {designationselectedRowIds.length !== 0 && <Button style={{display: "inline"}} variant='contained' type='button' color='error' onClick={() => setDeleteModal(true)}>Delete </Button>}
+             
+             
+              
+              </div>
               <div style={{ height: 400, width: '100%' }}>
                 <DataGrid
                   rows={designationList}

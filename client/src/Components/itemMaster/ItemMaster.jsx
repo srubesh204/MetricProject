@@ -179,11 +179,8 @@ const ItemMaster = () => {
         { field: 'wiNo', headerName: 'Wi No', width: 90, },
         { field: 'uncertainty', headerName: 'Uncertainty', width: 100, },
         { field: 'standardRef', headerName: 'Standard Ref', type: "number", width: 90, },
-
-
         { field: 'status', headerName: 'Status', width: 90, },
-        { field: 'calibrationPoints', headerName: 'Calibration Points', width: 100, },
-
+        
         {/* {
             field: 'delete',
             headerName: 'Delete',

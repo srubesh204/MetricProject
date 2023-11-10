@@ -413,7 +413,7 @@ const Employee = () => {
         try {
            
                 const response = await axios.delete(
-                    `${process.env.REACT_APP_PORT}/employee/deleteEmployee`,
+                    `${process.env.REACT_APP_PORT}/employee/deleteEmployee/$`,
                     {
                         data: {
                             employeeIds: employeeSelectedRowIds
@@ -865,7 +865,7 @@ const Employee = () => {
 
                                 <h3 className='text-center'>Employee List</h3>
                                 <div className='row'>
-                                <div className='col d-flex justify-content-end'>
+                                <div className='col d-flex justify-content-end mb-2'>
                                 {employeeSelectedRowIds.length !== 0 && <Button variant='contained' type='button' color='error' onClick={()=>handleDeleteOpen(true)}>Delete Employee</Button>}
 
                                 </div>
