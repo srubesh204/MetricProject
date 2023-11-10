@@ -169,7 +169,7 @@ const ItemMaster = () => {
 
     const [itemMasteSelectedRowIds, setItemMasteSelectedRowIds] = useState([]);
     const itemMasterColumns = [
-        { field: 'id', headerName: 'ID', width: 70, valueGetter: (params) => console.log(params) },
+        { field: 'id', headerName: 'Si. No', width: 70, renderCell: (params) => params.api.getRowIndexRelativeToVisibleRows(params.id)+1},
 
         { field: 'itemType', headerName: 'Item Type', width: 70 },
         { field: 'itemDescription', headerName: 'Item Description', width: 130 },
@@ -875,7 +875,6 @@ const ItemMaster = () => {
 
                                             }}
                                             onRowClick={updateItemMaster}
-
                                             checkboxSelection
 
 

@@ -3,6 +3,9 @@ import axios from 'axios';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import { styled } from '@mui/material/styles';
 import React, { useEffect, useState } from 'react'
+import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import dayjs from 'dayjs';
 
 const ItemAdd = () => {
 
@@ -79,6 +82,27 @@ const ItemAdd = () => {
 
     console.log({ Department: departments, Area: areas, placeOfUsage: placeOfUsages })
 
+    //item master list
+    const [itemMasterDataList, setItemMasterDataList] = useState([])
+    const itemMasterFetchData = async () => {
+        try {
+            const response = await axios.get(
+                `${process.env.REACT_APP_PORT}/itemMaster/getAllItemMasters`
+            );
+            console.log(response.data)
+            setItemMasterDataList(response.data.result);
+           
+        } catch (err) {
+            console.log(err);
+        }
+    };
+    useEffect(() => {
+        itemMasterFetchData();
+    }, []);
+
+
+    //
+
 
 
 
@@ -135,230 +159,268 @@ const ItemAdd = () => {
         width: 1,
     });
 
+    const handleItemAddChange = (e) => {
+        const {name, value} = e.target;
+        setItemAddData((prev) => ({...prev, [name]: value}))
+    }
+    const handleItemMasterPick = (e) => {
+        const {name, value} = e.target;
+
+    }
+
+    console.log(itemAddData)
     //
 
     return (
         <div style={{ margin: "2rem", backgroundColor: "#f5f5f5" }}>
-            <Paper className='row' elevation={12} sx={{ p: 2, mb: 2 }}>
-                <div className="col-lg-5 row g-1">
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+                <Paper className='row' elevation={12} sx={{ p: 2, mb: 2 }}>
+                    <div className="col-lg-5 row g-1">
 
-                    <div>
-                        <TextField size='small' variant='outlined' label="Item Master" fullWidth />
-                    </div>
-                    <div className="col">
-                        <TextField size='small' variant='outlined' label="Item Master" fullWidth />
-                    </div>
-                    <div className="col">
-                        <TextField size='small' variant='outlined' label="Item Master" fullWidth />
-                    </div>
-                </div>
-                <div className="col-lg-2 text-center align-middle">
-                    <Typography variant='h5'  >Item Add</Typography>
-                </div>
-                <div className="col-lg-5 d-flex justify-content-center">
-                    <Card sx={{ width: "50%", height: "100px" }}>
-                        <CardContent>
-
-                        </CardContent>
-                    </Card>
-                </div>
-
-
-            </Paper>
-            <div className="row ">
-                <Paper className='col-lg me-2' elevation={12} sx={{ p: 2 }}>
-                    <Typography variant='h6' className='text-center'>Item General Details</Typography>
-                    <div className="row g-2 mb-2">
-                        <div className="col-lg-4">
-                            <TextField size='small' variant='outlined' label="Item Type" fullWidth />
+                        <div>
+                            <TextField size='small' select variant='outlined' label="Item Master" name='itemMaster' value={itemAddData.itemMaster || ''} fullWidth onChange={(e) => {handleItemAddChange(e); handleItemMasterPick(e)}}>
+                                <MenuItem value=""><em>Select</em></MenuItem>
+                                {itemMasterDataList.map((item)=> (
+                                    <MenuItem value={item._id}>{item.itemDescription}</MenuItem>
+                                ))}
+                            </TextField>
                         </div>
-                        <div className='col-lg-8 d-flex justify-content-between'>
-                            <TextField size='small' variant='outlined' label="Range/Size" name='rangeSize' id='rangeSizeId' fullWidth />
-                            <FormControl size='small' sx={{ minWidth: 80 }}>
-                                <InputLabel id="rangeSizeUnitId">Unit</InputLabel>
-                                <Select
-                                    labelId="rangeSizeUnitId"
-                                    id="demo-simple-select-autowidth"
-                                    // onChange={handleChange}
-                                    autoWidth
-                                    name='rangeSizeUnit'
-                                    label="Unit"
-                                >
-                                    <MenuItem value=""><em>None</em></MenuItem>
-                                    {units.map((unit, index) => (
-                                        <MenuItem key={index} value={unit.unitName}>{unit.unitName}</MenuItem>
-                                    ))}
-
-                                </Select>
-                            </FormControl>
-
+                        <div className="col">
+                            <TextField size='small' variant='outlined' label="Item Master" name='item' fullWidth />
+                        </div>
+                        <div className="col">
+                            <TextField size='small' variant='outlined' label="Item Master" fullWidth />
                         </div>
                     </div>
-                    <div className="row g-2">
-                        <div className="col-lg-4">
-                            <TextField size='small' variant='outlined' label="MFR.Si.No." fullWidth />
-                        </div>
-                        <div className='col-lg-8 d-flex justify-content-between'>
-                            <TextField size='small' variant='outlined' label="Least Count" fullWidth />
-                            <FormControl size='small' sx={{ minWidth: 80 }}>
-                                <InputLabel id="lcUnitId">Unit</InputLabel>
-                                <Select
-                                    labelId="lcUnitId"
-                                    id="demo-simple-select-autowidth"
-                                    // onChange={handleChange}
-                                    autoWidth
-                                    name='lcUnit'
-                                    label="Unit"
-                                >
-                                    <MenuItem value=""><em>None</em></MenuItem>
-                                    {units.map((unit, index) => (
-                                        <MenuItem key={index} value={unit.unitName}>{unit.unitName}</MenuItem>
-                                    ))}
-                                </Select>
-                            </FormControl>
-
-                        </div>
-                        <div className="row g-1">
-                            <div className="col-lg me-1">
-                                <TextField size='small' variant='outlined' label="Make" fullWidth />
-                            </div>
-                            <div className="col-lg">
-                                <TextField size='small' variant='outlined' label="Model No." fullWidth />
-                            </div>
-                        </div>
-                        <div className="row g-1">
-                            <div className="col-lg me-1">
-                                <TextField size='small' variant='outlined' label="Item Status" fullWidth />
-                            </div>
-                            <div className="col-lg">
-                                <TextField size='small' variant='outlined' label="Receipt Date" fullWidth />
-                            </div>
-                        </div>
-                        <Typography variant='h6' className='text-center'>
-                            Select Location
-                        </Typography>
-                        <div className="row g-1 mt-0 mb-2">
-                            <div className="col me-1">
-                                <TextField size='small' select fullWidth variant='outlined' label="Department" name='itemDepartment'>
-                                    {departments.map((item, index) => (
-                                        <MenuItem key={index} value={item.department}>{item.department}</MenuItem>
-                                    ))}
-                                </TextField>
-                            </div>
-                            <div className="col">
-                                <TextField size='small' select fullWidth variant='outlined' label="Area" name='itemArea'>
-                                    {areas.map((item, index) => (
-                                        <MenuItem key={index} value={item.areaName}>{item.areaName}</MenuItem>
-                                    ))}
-                                </TextField>
-                            </div>
-                            <div className='mt-2'>
-                                <TextField size='small' select fullWidth variant='outlined' label="Place" name='itemPlaceOfUsage'>
-                                    {placeOfUsages.map((item, index) => (
-                                        <MenuItem key={index} value={item.placeOfUsage}>{item.placeOfUsageName}</MenuItem>
-                                    ))}
-                                </TextField>
-                            </div>
-
-                        </div>
-
-
-
-
-
+                    <div className="col-lg-2 text-center align-middle">
+                        <Typography variant='h5'  >Item Add</Typography>
                     </div>
+                    <div className="col-lg-5 d-flex justify-content-center">
+                        <Card sx={{ width: "50%", height: "100px" }}>
+                            <CardContent>
 
-
-
-
-
-
-
-
+                            </CardContent>
+                        </Card>
+                    </div>
 
 
                 </Paper>
-                <Paper className='col-lg me-2' elevation={12} sx={{ p: 2 }}>
-                    <Typography variant='h6' className='text-center'>Calibration</Typography>
-                    <div className="row g-2">
-                        <div className='col-lg-6'>
-                            <TextField size='small' fullWidth variant='outlined' label="Cal Frequency in months" name='itemCalFreInMonths' type='number'>
+                <div className="row ">
+                    <Paper className='col-lg me-2' elevation={12} sx={{ p: 2 }}>
+                        <Typography variant='h6' className='text-center'>Item General Details</Typography>
+                        <div className="row g-2 mb-2">
+                            <div className="col-lg-4">
+                                <TextField size='small' variant='outlined' label="Item Type" fullWidth />
+                            </div>
+                            <div className='col-lg-8 d-flex justify-content-between'>
+                                <TextField size='small' variant='outlined' label="Range/Size" name='rangeSize' id='rangeSizeId' fullWidth />
+                                <FormControl size='small' sx={{ minWidth: 80 }}>
+                                    <InputLabel id="rangeSizeUnitId">Unit</InputLabel>
+                                    <Select
+                                        labelId="rangeSizeUnitId"
+                                        id="demo-simple-select-autowidth"
+                                        // onChange={handleChange}
+                                        autoWidth
+                                        name='rangeSizeUnit'
+                                        label="Unit"
+                                        value={itemAddData.itemRangeSizeUnit}
+                                    >
+                                        <MenuItem value=''><em>None</em></MenuItem>
+                                        {units.map((unit, index) => (
+                                            <MenuItem key={index} value={unit.unitName}>{unit.unitName}</MenuItem>
+                                        ))}
 
-                            </TextField>
-                        </div>
-                        <div className='col-lg-6'>
-                            <TextField size='small' fullWidth variant='outlined' label="Cal Alert Days" name='itemCalAlertDays' type='number'>
+                                    </Select>
+                                </FormControl>
 
-                            </TextField>
+                            </div>
                         </div>
-                        <div className='col-lg-12'>
-                            <TextField size='small' fullWidth variant='outlined' select label="Calibration Done At" value={itemAddData.itemCalDoneAt} defaultValue="" name='itemCalAlertDays' >
-                                <MenuItem value=""><em>--Select--</em></MenuItem>
-                                <MenuItem value="InHouse">InHouse</MenuItem>
-                                <MenuItem value="OutSource">OutSource</MenuItem>
-                                <MenuItem value="OEM">OEM</MenuItem>
-                            </TextField>
-                        </div>
-                        {itemAddData.itemCalDoneAt === "" &&
-                            <div className='row'>
-                                <div className="col">
-                                    <TextField size='small' fullWidth variant='outlined' select label="Select Master" name='itemMasterName' >
-                                        <MenuItem value=""><em>--Select--</em></MenuItem>
-                                        <MenuItem value="InHouse">InHouse</MenuItem>
-                                        <MenuItem value="OutSource">OutSource</MenuItem>
-                                        <MenuItem value="OEM">OEM</MenuItem>
+                        <div className="row g-2">
+                            <div className="col-lg-4">
+                                <TextField size='small' variant='outlined' label="MFR.Si.No." fullWidth />
+                            </div>
+                            <div className='col-lg-8 d-flex justify-content-between'>
+                                <TextField size='small' variant='outlined' label="Least Count" fullWidth />
+                                <FormControl size='small' sx={{ minWidth: 80 }}>
+                                    <InputLabel id="lcUnitId">Unit</InputLabel>
+                                    <Select
+                                        labelId="lcUnitId"
+                                        id="demo-simple-select-autowidth"
+                                        // onChange={handleChange}
+                                        autoWidth
+                                        name='lcUnit'
+                                        label="Unit"
+                                        value={itemAddData.itemLCUnit}
+                                    >
+                                        <MenuItem value=""><em>None</em></MenuItem>
+                                        {units.map((unit, index) => (
+                                            <MenuItem key={index} value={unit.unitName}>{unit.unitName}</MenuItem>
+                                        ))}
+                                    </Select>
+                                </FormControl>
+
+                            </div>
+                            <div className="row g-1">
+                                <div className="col-lg me-1">
+                                    <TextField size='small' variant='outlined' label="Make" fullWidth />
+                                </div>
+                                <div className="col-lg">
+                                    <TextField size='small' variant='outlined' label="Model No." fullWidth />
+                                </div>
+                            </div>
+                            <div className="row g-1">
+                                <div className="col-lg me-1">
+                                    <TextField size='small' variant='outlined' label="Item Status" fullWidth />
+                                </div>
+                                <div className="col-lg">
+                                    <TextField size='small' variant='outlined' label="Receipt Date" fullWidth />
+                                </div>
+                            </div>
+                            <Typography variant='h6' className='text-center'>
+                                Select Location
+                            </Typography>
+                            <div className="row g-1 mt-0 mb-2">
+                                <div className="col me-1">
+                                    <TextField value={itemAddData.itemDepartment} size='small' select fullWidth variant='outlined' label="Department" name='itemDepartment'>
+                                        {departments.map((item, index) => (
+                                            <MenuItem key={index} value={item.department}>{item.department}</MenuItem>
+                                        ))}
                                     </TextField>
                                 </div>
                                 <div className="col">
-                                    <TextField size='small' fullWidth variant='outlined' select label="Select Master" name='itemMasterName' >
-                                        <MenuItem value=""><em>--Select--</em></MenuItem>
-                                        <MenuItem value="InHouse">InHouse</MenuItem>
-                                        <MenuItem value="OutSource">OutSource</MenuItem>
-                                        <MenuItem value="OEM">OEM</MenuItem>
+                                    <TextField size='small' value={itemAddData.itemArea} select fullWidth variant='outlined' label="Area" name='itemArea'>
+                                        {areas.map((item, index) => (
+                                            <MenuItem key={index} value={item.areaName}>{item.areaName}</MenuItem>
+                                        ))}
                                     </TextField>
                                 </div>
-                                <div className="col">
-                                    <TextField size='small' fullWidth variant='outlined' select label="Master Due Date" name='itemMasterName'></TextField>
+                                <div className='mt-2'>
+                                    <TextField size='small' value={itemAddData.itemPlaceOfUsage} select fullWidth variant='outlined' label="Place" name='itemPlaceOfUsage'>
+                                        {placeOfUsages.map((item, index) => (
+                                            <MenuItem key={index} value={item.placeOfUsage}>{item.placeOfUsageName}</MenuItem>
+                                        ))}
+                                    </TextField>
                                 </div>
 
-                            </div>}
-                    </div>
-                </Paper>
-                <Paper className='col-lg' elevation={12} sx={{ p: 2, }}>
-                    <Typography variant='h6' className='text-center'>Enter Previous Calibration Data</Typography>
-                    <div className="row g-2">
-                        <div className="col-lg-6">
-                            <TextField size='small' fullWidth variant='outlined' label="Cal Date" type='date' name='itemMasterName'></TextField>
+                            </div>
+
+
+
+
+
                         </div>
-                        <div className="col-lg-6">
-                            <TextField size='small' fullWidth variant='outlined' label="Due Date" type='date' name='itemMasterName'></TextField>
+
+
+
+
+
+
+
+
+
+
+                    </Paper>
+                    <Paper className='col-lg me-2' elevation={12} sx={{ p: 2 }}>
+                        <Typography variant='h6' className='text-center'>Calibration</Typography>
+                        <div className="row g-2">
+                            <div className='col-lg-6'>
+                                <TextField value={itemAddData.itemCalFreInMonths} size='small' fullWidth variant='outlined' label="Cal Frequency in months" name='itemCalFreInMonths' type='number'>
+
+                                </TextField>
+                            </div>
+                            <div className='col-lg-6'>
+                                <TextField size='small' value={itemAddData.itemCalAlertDays} fullWidth variant='outlined' label="Cal Alert Days" name='itemCalAlertDays' type='number'>
+
+                                </TextField>
+                            </div>
+                            <div className='col-lg-12'>
+                                <TextField size='small' value={itemAddData.itemCalDoneAt} fullWidth variant='outlined' select label="Calibration Done At" value={itemAddData.itemCalDoneAt} defaultValue="" name='itemCalAlertDays' >
+                                    <MenuItem value=""><em>--Select--</em></MenuItem>
+                                    <MenuItem value="InHouse">InHouse</MenuItem>
+                                    <MenuItem value="OutSource">OutSource</MenuItem>
+                                    <MenuItem value="OEM">OEM</MenuItem>
+                                </TextField>
+                            </div>
+                            {itemAddData.itemCalDoneAt === "" &&
+                                <div className='row'>
+                                    <div className="col">
+                                        <TextField size='small' fullWidth variant='outlined' select label="Select Master" name='itemMasterName' >
+                                            
+                                        </TextField>
+                                    </div>
+                                    <div className="col">
+                                        <TextField size='small' fullWidth variant='outlined' select label="Select Master" name='itemMasterName' >
+                                            <MenuItem value=""><em>--Select--</em></MenuItem>
+                                            <MenuItem value="InHouse">InHouse</MenuItem>
+                                            <MenuItem value="OutSource">OutSource</MenuItem>
+                                            <MenuItem value="OEM">OEM</MenuItem>
+                                        </TextField>
+                                    </div>
+                                    <div className="col">
+                                        <TextField size='small' fullWidth variant='outlined' select label="Master Due Date" name='itemMasterName'></TextField>
+                                    </div>
+
+                                </div>}
                         </div>
-                        <div className="col-lg-12">
-                            <TextField size='small' fullWidth variant='outlined' label="Calibrated at" type='date' select name='itemMasterName'>
-                                <MenuItem>Lab</MenuItem>
-                                <MenuItem>Site</MenuItem>
-                               
-                            </TextField>
+                    </Paper>
+                    <Paper className='col-lg' elevation={12} sx={{ p: 2, }}>
+                        <Typography variant='h6' className='text-center'>Enter Previous Calibration Data</Typography>
+                        <div className="row g-2">
+                            <div className="col-lg-6">
+                                <DatePicker
+                                    disableFuture
+                                    fullWidth
+                                    id="dobId"
+                                    name=""
+                                    value={dayjs(itemAddData.itemCalDate)}
+                                    onChange={(newValue) =>
+                                        setItemAddData((prev) => ({ ...prev, itemCalDate: newValue.format("YYYY-MM-DD") }))
+                                    }
+                                    label="Calibration Date"
+
+                                    slotProps={{ textField: { size: 'small' } }}
+                                    format="DD-MM-YYYY" />
+                            </div>
+                            <div className="col-lg-6">
+                                <DatePicker
+                                    disableFuture
+                                    fullWidth
+                                    id="itemDueDateId"
+                                    name="itemDueDate"
+                                    value={dayjs(itemAddData.itemDueDate)}
+                                    onChange={(newValue) =>
+                                        setItemAddData((prev) => ({ ...prev, itemDueDate: newValue.format("YYYY-MM-DD") }))
+                                    }
+                                    label="Due Date"
+
+                                    slotProps={{ textField: { size: 'small' } }}
+                                    format="DD-MM-YYYY" />+                            </div>
+                            <div className="col-lg-12">
+                                <TextField size='small' fullWidth variant='outlined' label="Calibrated at" type='date' select name='itemMasterName'>
+                                    <MenuItem>Lab</MenuItem>
+                                    <MenuItem>Site</MenuItem>
+
+                                </TextField>
+                            </div>
+                            <div className="col-lg-8">
+                                <Button component="label" variant="contained" fullWidth >
+                                    Certificate Upload
+                                    <VisuallyHiddenInput type="file" />
+                                </Button>
+                            </div>
+                            <div className='col-lg-4'>
+                                <Button
+                                    fullWidth
+                                    variant="outlined"
+
+
+                                >Upload</Button>
+                            </div>
                         </div>
-                        <div className="col-lg-8">
-                            <Button component="label" variant="contained" fullWidth >
-                                Certificate Upload
-                                <VisuallyHiddenInput type="file" />
-                            </Button>
-                        </div>
-                        <div className='col-lg-4'>
-                            <Button 
-                                fullWidth
-                                variant="outlined"
-                                
-                                
-                            >Upload</Button>
-                        </div>
-                    </div>
 
-                </Paper>
+                    </Paper>
 
-            </div>
+                </div>
 
 
 
@@ -366,7 +428,7 @@ const ItemAdd = () => {
 
 
 
-
+            </LocalizationProvider>
 
         </div>
     )
