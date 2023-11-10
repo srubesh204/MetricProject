@@ -124,25 +124,35 @@ const itemMasterController = {
           res.status(500).json({ error: error, status: 0 });
       }
   },
-      deleteItemMaster : async (req, res) => {
-        try {
-          const imId = req.params.id; // Assuming id is part of the URL parameter
-
-          // Find the designation by _id and remove it
-          const deleteItemMaster = await itemMasterModel.findOneAndRemove(
-              { _id: imId } // Pass the _id as an object
-          );
-
-          if (!deleteItemMaster) {
-              return res.status(404).json({ error: 'Item Master not found' });
-          }
-          console.log("Item Master Deleted Successfully")
-          res.status(202).json({ message: 'Item Master detail deleted successfully' ,result: deleteItemMaster });
-  } catch (error) {
-    console.error(error);
-    res.status(500).send('Internal Server Error');
+  deleteItemMaster: async (req, res) => {
+    try {
+  
+      const { itemMasterIds } = req.body; // Assuming an array of vendor IDs is sent in the request body
+      console.log(req.body)
+      const deleteResults = []; 
+  
+      for (const itemMasterId  of itemMasterIds ) {
+        // Find and remove each vendor by _id
+        const deletedItemMaster = await itemMasterModel.findOneAndRemove({ _id: itemMasterId  });
+        console.log(deletedItemMaster)
+        if (!deletedItemMaster) {
+          // If a vendor was not found, you can skip it or handle the error as needed.
+          console.log(`ItemMaster with ID ${itemMasterId} not found.`);
+          res.status(500).json({ message:  `ItemMaster with ID not found.`});
+          
+        } else {
+          console.log(`ItemMaster with ID ${itemMasterId} deleted successfully.`);
+          deleteResults.push(deletedItemMaster); 
+        }
+      }
+  
+      return res.status(202).json({ message: 'ItemMaster deleted successfully', results: `${deleteResults.length} ItemMaster Deleted Successfull ` });
+    } catch (error) {
+      console.error(error);
+      res.status(500).send('Internal Server Error');
+    }
   }
-}
+  
 } 
 
 module.exports = itemMasterController;

@@ -110,23 +110,33 @@ const unitController = {
   },
   deleteUnit: async (req, res) => {
     try {
-      const unitId = req.params.id; // Assuming id is part of the URL parameter
 
-      // Find the designation by _id and remove it
-      const deleteUnit = await unitModel.findOneAndRemove(
-        { _id: unitId } // Pass the _id as an object
-      );
+      const {unitIds } = req.body; // Assuming an array of vendor IDs is sent in the request body
+      console.log(req.body)
+      const deleteResults = []; 
 
-      if (!deleteUnit) {
-        return res.status(404).json({ error: 'Unit not found' });
+      for (const unitId of unitIds) {
+        // Find and remove each vendor by _id
+        const deletedUnit = await unitModel.findOneAndRemove({ _id: unitId });
+        console.log(deletedUnit)
+        if (!deletedUnit) {
+          // If a vendor was not found, you can skip it or handle the error as needed.
+          console.log(`Unit with ID ${unitId} not found.`);
+          res.status(500).json({ message:  `Unit with ID not found.`});
+          
+        } else {
+          console.log(`Unit with ID ${unitId} deleted successfully.`);
+          deleteResults.push(deletedUnit); 
+        }
       }
-      console.log("Unit Deleted Successfully")
-      res.status(202).json({ message: 'Unit deleted successfully', result: deleteUnit });
+
+      return res.status(202).json({ message: 'Unit deleted successfully', results: `${deleteResults.length} Unit Deleted Successfull ` });
     } catch (error) {
       console.error(error);
       res.status(500).send('Internal Server Error');
     }
   }
+
 }
 
 

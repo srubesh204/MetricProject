@@ -118,23 +118,33 @@ const areaController = {
   },
   deleteArea: async (req, res) => {
     try {
-        const areaId = req.params.id; // Assuming id is part of the URL parameter
 
-        // Find the designation by _id and remove it
-        const deleteArea = await areaModel.findOneAndRemove(
-            { _id: areaId } // Pass the _id as an object
-        );
+      const { areaIds } = req.body; // Assuming an array of vendor IDs is sent in the request body
+      console.log(req.body)
+      const deleteResults = []; 
 
-        if (!deleteArea) {
-            return res.status(404).json({ error: 'Area not found' });
+      for (const areaId of areaIds) {
+        // Find and remove each vendor by _id
+        const deletedArea = await areaModel.findOneAndRemove({ _id: areaId });
+        console.log(deletedArea)
+        if (!deletedArea) {
+          // If a vendor was not found, you can skip it or handle the error as needed.
+          console.log(`Area with ID ${areaId} not found.`);
+          res.status(500).json({ message:  `Area with ID not found.`});
+          
+        } else {
+          console.log(`Area with ID ${areaId} deleted successfully.`);
+          deleteResults.push(deletedArea); 
         }
-        console.log("Area Deleted Successfully")
-        res.status(202).json({ message: 'Area detail deleted successfully' ,result: deleteArea });
-} catch (error) {
-  console.error(error);
-  res.status(500).send('Internal Server Error');
-}
-}
+      }
+
+      return res.status(202).json({ message: 'Area deleted successfully', results: `${deleteResults.length} Area Deleted Successfull ` });
+    } catch (error) {
+      console.error(error);
+      res.status(500).send('Internal Server Error');
+    }
+  }
+
 }
 
 

@@ -5,6 +5,6 @@ const router = express.Router();
 router.get("/getAllItemAdds", itemAddController.getAllItemAdds)
 router.post("/createItemAdd", itemAddController.createItemAdd)
 router.put("/updateItemAdd/:id", itemAddController.updateItemAdd)
-router.delete("/deleteItemAdd/:id", itemAddController.deleteItemAdd)
+router.delete("/deleteItemAdd", itemAddController.deleteItemAdd)
 
 module.exports = router;
