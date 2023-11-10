@@ -15,7 +15,7 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
 import Autocomplete from '@mui/material/Autocomplete';
-import { Box, Grid, Paper,IconButton, Container } from '@mui/material';
+import { Box, Grid, Paper, IconButton, Container } from '@mui/material';
 import dayjs from 'dayjs';
 import { DataGrid } from '@mui/x-data-grid';
 import { Delete } from '@mui/icons-material';
@@ -65,17 +65,7 @@ const Employee = () => {
         { field: 'contactNumber', headerName: 'Contact Number', type: "number", width: 90, },
         { field: 'designation', headerName: 'Designation', width: 90, },
         { field: 'department', headerName: 'Department', width: 90, },
-        {
-            field: 'delete',
-            headerName: 'Delete',
-            width: 80,
-            sortable: false,
-            renderHeader: () => (
-                <IconButton color="secondary" aria-label="Delete" onClick={() => handleDeleteOpen(true)}>
-                    <Delete />
-                </IconButton>
-            ),
-        },
+
 
     ];
 
@@ -411,24 +401,24 @@ const Employee = () => {
 
 
         try {
-           
-                const response = await axios.delete(
-                    `${process.env.REACT_APP_PORT}/employee/deleteEmployee`,
-                    {
-                        data: {
-                            employeeIds: employeeSelectedRowIds
-                        }
-                      }
 
-                );
-                console.log(response)
-                empFetch();
+            const response = await axios.delete(
+                `${process.env.REACT_APP_PORT}/employee/deleteEmployee`,
+                {
+                    data: {
+                        employeeIds: employeeSelectedRowIds
+                    }
+                }
 
-                setSnackBarOpen(true)
-                setErrorHandler({ status: response.data.status, message: response.data.result, code: "success" })
-                setEmpDataId(null)
-                console.log("Employee Deleted Successfully")
-            
+            );
+            console.log(response)
+            empFetch();
+
+            setSnackBarOpen(true)
+            setErrorHandler({ status: response.data.status, message: response.data.result, code: "success" })
+            setEmpDataId(null)
+            console.log("Employee Deleted Successfully")
+
 
 
         } catch (err) {
@@ -864,22 +854,18 @@ const Employee = () => {
                             }} >
 
                                 <h3 className='text-center'>Employee List</h3>
-                                <div className='row'>
-                                <div className='col d-flex justify-content-end mb-2'>
-                                {employeeSelectedRowIds.length !== 0 && <Button variant='contained' type='button' color='error' onClick={()=>handleDeleteOpen(true)}>Delete Employee</Button>}
 
-                                </div>
-                                </div>
-                               
+
+
+
                                 <Grid container rowSpacing={1} columnSpacing={{ xs: 1 }} className=' g-2 mb-2'>
 
-                                    <Grid item xs={4}>
+                                    <Grid item xs={3}>
                                         <TextField fullWidth label="Employment Status Filter" onChange={handleFilterChange} className="form-select" select size="small" id="employementStatusFilterId" name="employementStatusFilter" defaultValue="" >
                                             <MenuItem value="all">All</MenuItem >
                                             <MenuItem value="Active">Active</MenuItem >
                                             <MenuItem value="InActive">InActive</MenuItem >
-                                            <MenuItem value="Relieved">Relieved</MenuItem >
-
+                                            
                                         </TextField>
 
                                     </Grid>
@@ -895,7 +881,7 @@ const Employee = () => {
                                     </Grid>
 
 
-                                    <Grid item xs={4}>
+                                    <Grid item xs={3}>
                                         <TextField fullWidth label="Report To" onChange={handleFilterChange} className="form-select" select size="small" id="reportToFilterId" name="reportToFilter" defaultValue="" >
                                             <MenuItem value="all">All</MenuItem>
                                             <MenuItem value="N/A">N/A</MenuItem>
@@ -903,6 +889,12 @@ const Employee = () => {
                                                 <MenuItem key={index} value={item.firstName}>{item.firstName}</MenuItem>
                                             ))}
                                         </TextField>
+                                    </Grid>
+                                    <Grid item xs={2}>
+                                    <div className='col d-flex justify-content-end mb-2'>
+                                        {employeeSelectedRowIds.length !== 0 && <Button variant='contained' component="button"  fullWidth type='button' color='error' onClick={() => handleDeleteOpen(true)}>Delete  Employee</Button>}
+
+                                    </div>
                                     </Grid>
 
                                     {/* <div className="form-floating col">

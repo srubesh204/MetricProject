@@ -68,17 +68,7 @@ export const UnitDataBase = ({ style }) => {
 
         { field: 'unitName', headerName: 'UnitName', width: "150" },
 
-        {
-            field: 'delete',
-            headerName: 'Delete',
-            width: 80,
-            sortable: false,
-            renderHeader: () => (
-                <IconButton color="secondary" aria-label="Delete" onClick={() => setDeleteModal(true)}>
-                    <Delete />
-                </IconButton>
-            ),
-        },
+        
 
 
     ];
@@ -365,6 +355,11 @@ export const UnitDataBase = ({ style }) => {
                             }} >
                                 <div>
                                     <h6 className='text-center'>Unit List</h6>
+                                    <div className="row mb-2">
+                                        <div className="col d-flex justify-content-end">
+                                            {unitSelectedRowIds.length !== 0 && <Button variant='contained' type='button' color='error' onClick={() => setDeleteModal(true)}>Delete </Button>}
+                                        </div>
+                                    </div>
 
                                     <div style={{ height: 400, width: '100%' }}>
                                         <DataGrid
@@ -533,17 +528,7 @@ export const PartDataBase = ({ style }) => {
         { field: 'operationNo', headerName: 'Operation No', width: "250" },
         { field: 'partStatus', headerName: 'Part Status', width: "250" },
 
-        {
-            field: 'delete',
-            headerName: 'Delete',
-            width: 80,
-            sortable: false,
-            renderHeader: () => (
-                <IconButton color="secondary" aria-label="Delete" onClick={() => setDeleteModal(true)}>
-                    <Delete />
-                </IconButton>
-            ),
-        },
+
 
 
     ];
@@ -632,13 +617,13 @@ export const PartDataBase = ({ style }) => {
     const deletePartData = async (id) => {
         try {
             const response = await axios.delete(
-                "http://localhost:3001/part/deletePart/" ,{
-                    data: {
-                        partIds: partSelectedRowIds
-                    }
+                "http://localhost:3001/part/deletePart/", {
+                data: {
+                    partIds: partSelectedRowIds
                 }
+            }
 
-                
+
             );
             partFetchData();
             setPartData({
@@ -704,9 +689,9 @@ export const PartDataBase = ({ style }) => {
         setPartData(params.row)
         setPartStateId(params.id)
     }
-   
 
-    
+
+
 
     const handlePartDataBaseChange = (e) => {
         const { name, value } = e.target;
@@ -924,6 +909,11 @@ export const PartDataBase = ({ style }) => {
                             }} >
                                 <div>
                                     <h5 className='text-center'>Part List</h5>
+                                    <div className="row mb-2">
+                                        <div className="col d-flex justify-content-end">
+                                            {partSelectedRowIds.length !== 0 && <Button variant='contained' type='button' color='error' onClick={() => setDeleteModal(true)}>Delete </Button>}
+                                        </div>
+                                    </div>
 
                                     <div style={{ height: 400, width: '100%' }}>
                                         <DataGrid
@@ -961,7 +951,7 @@ export const PartDataBase = ({ style }) => {
 
 
 
-                                   {/*<div style={style} className='table-responsive'>
+                                    {/*<div style={style} className='table-responsive'>
                                         <table className='table table-bordered text-center'>
                                             <tbody>
                                                 <tr>

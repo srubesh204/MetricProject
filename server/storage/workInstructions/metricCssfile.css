@@ -1,0 +1,15 @@
+body{
+    width: 800px;
+    height:  600px;
+    background-color: black;
+    color: white;
+}
+.mainHeading{
+   text-align: center;
+}
+.imgProperty{
+    background-color: white;
+    width: 400px;
+    /* margin: 5px 200px 0 200px; */
+    padding: 5px 200px 5px 200px;
+}
