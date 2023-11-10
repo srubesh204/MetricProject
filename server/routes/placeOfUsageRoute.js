@@ -3,6 +3,7 @@ const placeOfUsageController = require('../controllers/placeOfUsageController')
 const router = express.Router();
  
 router.get("/getAllPlaceOfUsages",placeOfUsageController.getAllPlaceOfUsages)
+router.get("/getPlaceOfUsageById/:id", placeOfUsageController.getPlaceOfUsageById)
 router.post("/createPlaceOfUsage", placeOfUsageController.createPlaceOfUsage)
 router.put("/updatePlaceOfUsage/:id",placeOfUsageController.updatePlaceOfUsage)
 router.delete("/deletePlaceOfUsage", placeOfUsageController.deletePlaceOfUsage)

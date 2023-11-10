@@ -136,7 +136,26 @@ const placeOfUsageController = {
       console.error(error);
       res.status(500).send('Internal Server Error');
     }
+  },
+  getPlaceOfUsageById : async (req, res) => {
+    try {
+      const placeOfUsageId = req.params.id; // Assuming desId is part of the URL parameter
+      // if (isNaN(desId)) {
+      // Find the designation by desId and update it
+      const getPlaceOfUsageById = await placeOfUsageModel.findOne(
+          { _id: placeOfUsageId }// To return the updated document
+      );
+
+      if (!getPlaceOfUsageById) {
+          return res.status(404).json({ error: 'Place of Usage not found' });
+      }
+      console.log("Place of Usage Get Successfully")
+      res.status(200).json({ result: getPlaceOfUsageById, message: "Place of Usage get Successfully" });
+  } catch (error) {
+      console.log(error);
+      res.status(500).json({ error: error, status: 0 });
   }
+}
 }
 
 

@@ -171,8 +171,8 @@ const itemMasterController = {
       res.status(500).json({ error: error, status: 0 });
   }
 }
+
+}
   
-  
-} 
 
 module.exports = itemMasterController;

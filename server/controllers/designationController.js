@@ -135,7 +135,26 @@ const designationController = {
       console.error(error);
       res.status(500).send('Internal Server Error');
     }
+  },
+  getDesignationById : async (req, res) => {
+    try {
+      const designationId = req.params.id; // Assuming desId is part of the URL parameter
+      // if (isNaN(desId)) {
+      // Find the designation by desId and update it
+      const getDesignationById = await designationModel.findOne(
+          { _id: designationId }// To return the updated document
+      );
+
+      if (!getDesignationById) {
+          return res.status(404).json({ error: 'Designation not found' });
+      }
+      console.log("Designation Get Successfully")
+      res.status(200).json({ result: getDesignationById, message: "Designation get Successfully" });
+  } catch (error) {
+      console.log(error);
+      res.status(500).json({ error: error, status: 0 });
   }
+}
 }
 
 module.exports = designationController;

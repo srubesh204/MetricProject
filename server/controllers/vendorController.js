@@ -155,7 +155,26 @@ const vendorController = {
       console.error(error);
       res.status(500).send('Internal Server Error');
     }
+  },
+  getVendorById : async (req, res) => {
+    try {
+      const vendorId = req.params.id; // Assuming desId is part of the URL parameter
+      // if (isNaN(desId)) {
+      // Find the designation by desId and update it
+      const getVendorById = await vendorModel.findOne(
+          { _id: vendorId }// To return the updated document
+      );
+
+      if (!getVendorById) {
+          return res.status(404).json({ error: 'Vendor not found' });
+      }
+      console.log("Vendor Get Successfully")
+      res.status(200).json({ result: getVendorById, message: "Vendor get Successfully" });
+  } catch (error) {
+      console.log(error);
+      res.status(500).json({ error: error, status: 0 });
   }
+}
 
 }
 

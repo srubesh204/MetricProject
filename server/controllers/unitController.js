@@ -135,7 +135,26 @@ const unitController = {
       console.error(error);
       res.status(500).send('Internal Server Error');
     }
+  },
+  getUnitById : async (req, res) => {
+    try {
+      const unitId = req.params.id; // Assuming desId is part of the URL parameter
+      // if (isNaN(desId)) {
+      // Find the designation by desId and update it
+      const getUnitById = await unitModel.findOne(
+          { _id: unitId }// To return the updated document
+      );
+
+      if (!getUnitById) {
+          return res.status(404).json({ error: 'Unit not found' });
+      }
+      console.log("Unit Get Successfully")
+      res.status(200).json({ result: getUnitById, message: "Unit get Successfully" });
+  } catch (error) {
+      console.log(error);
+      res.status(500).json({ error: error, status: 0 });
   }
+}
 
 }
 
