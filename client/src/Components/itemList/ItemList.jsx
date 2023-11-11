@@ -8,18 +8,6 @@ import axios from 'axios';
 const ItemList = () => {
 
 
-
-
-
-
-
-
-
-
-
-
-
-
     const [itemList, setItemList] = useState([]);
 
     const itemFetch = async () => {
@@ -40,14 +28,34 @@ const ItemList = () => {
         itemFetch();
     }, []);
 
-    console.log(itemList)
+
+
+    const [itemAddList, setItemAddList] = useState([]);
+
+    const itemAddFetch = async () => {
+        try {
+            const response = await axios.get(
+                `${process.env.REACT_APP_PORT}/itemAdd/getItemAddByIMTESort`
+            );
+            // You can use a different logic for generating the id
+
+            setItemAddList(response.data.result);
+
+
+        } catch (err) {
+            console.log(err);
+        }
+    };
+    useEffect(() => {
+        itemAddFetch();
+    }, []);
 
 
 
 
 
     const columns = [
-        { field: 'id', headerName: 'Si No', },
+        { field: 'id', headerName: 'Si. No', width: 70, renderCell: (params) => params.api.getRowIndexRelativeToVisibleRows(params.id)+1},
         { field: 'itemIMTENo', headerName: 'ItemIMTE No', },
         { field: 'itemMasterName', headerName: 'item Description', },
         { field: 'itemRangeSize', headerName: 'Item Range Size', },
@@ -72,12 +80,13 @@ const ItemList = () => {
             if (name === "imteNo") {
                 const imteNo = itemList.filter((item) => (item.itemIMTENo === value))
                 setFilteredItemListData(imteNo)
-               
+
             }
             if (name === "itemType") {
                 const itemType = itemList.filter((item) => (item.itemType === value))
+                console.log(itemType)
                 setFilteredItemListData(itemType)
-                console.log(value)
+                
 
             }
             if (name === "currentLocation") {
@@ -89,7 +98,7 @@ const ItemList = () => {
                 setFilteredItemListData(customerWise)
             }
             if (name === "supplierWise") {
-                
+
                 const supperlierWise = itemList.filter((item) => (item.itemSupplier === value))
                 console.log(supperlierWise)
                 setFilteredItemListData(supperlierWise)
@@ -126,7 +135,7 @@ const ItemList = () => {
     }, []);
 
 
-   
+
 
     const [partDataList, setPartDataList] = useState([])
     const partFetchData = async () => {
@@ -179,8 +188,9 @@ const ItemList = () => {
                                 onChange={handleFilterChangeItemList}
                                 name="imteNo" >
 
-                                <MenuItem value="Active">Active</MenuItem>
-                                <MenuItem value="InActive">InActive</MenuItem>
+                                {itemAddList.map((item, index) => (
+                                    <MenuItem key={index} value={item.itemIMTENo}>{item.itemIMTENo}</MenuItem>
+                                ))}
                             </TextField>
 
                         </div>
@@ -197,7 +207,7 @@ const ItemList = () => {
                                 <MenuItem value="all">All</MenuItem >
                                 <MenuItem value="Attribute">Attribute</MenuItem >
                                 <MenuItem value="Variable">Variable</MenuItem >
-                                <MenuItem value="Reference Standard">Reference Standard</MenuItem>
+                                <MenuItem value="ReferenceStandard">Reference Standard</MenuItem >
                             </TextField>
 
                         </div>
@@ -211,10 +221,8 @@ const ItemList = () => {
                                 onChange={handleFilterChangeItemList}
                                 size="small"
                                 name="currentLocation" >
-                                <MenuItem value="all">All</MenuItem >
-                                <MenuItem value="Attribute">Attribute</MenuItem >
-                                <MenuItem value="Variable">Variable</MenuItem >
-                                <MenuItem value="Reference Standard">Reference Standard</MenuItem>
+                                <MenuItem value="">All</MenuItem >
+                                
                             </TextField>
 
                         </div>
@@ -228,8 +236,8 @@ const ItemList = () => {
                                 size="small"
                                 onChange={handleFilterChangeItemList}
                                 name="customerWise" >
-                                {customerList.map((item) => (
-                                    <MenuItem key={item._id} value={item.aliasName}>{item.aliasName}</MenuItem>
+                                {customerList.map((item, index) => (
+                                    <MenuItem key={index} value={item.aliasName}>{item.aliasName}</MenuItem>
                                 ))}
                             </TextField>
 
@@ -261,9 +269,7 @@ const ItemList = () => {
                                 onChange={handleFilterChangeItemList}
                                 name="dueInDays" >
                                 <MenuItem value="all">All</MenuItem >
-                                <MenuItem value="Attribute">Attribute</MenuItem >
-                                <MenuItem value="Variable">Variable</MenuItem >
-                                <MenuItem value="Reference Standard">Reference Standard</MenuItem>
+                                
                             </TextField>
 
                         </div>
@@ -293,9 +299,7 @@ const ItemList = () => {
                                 size="small"
                                 onChange={handleFilterChangeItemList}
                                 name="plantWise" >
-                                <MenuItem value="all">All</MenuItem >
-                                <MenuItem value="Attribute">Attribute</MenuItem >
-                                <MenuItem value="Variable">Variable</MenuItem >
+                                
                                 <MenuItem value="Reference Standard">Reference Standard</MenuItem>
                             </TextField>
 

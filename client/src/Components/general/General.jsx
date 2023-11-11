@@ -522,11 +522,11 @@ export const PartDataBase = ({ style }) => {
     const partColumns = [
         { field: 'id', headerName: 'Si. No', width: 100, renderCell: (params) => params.api.getRowIndexRelativeToVisibleRows(params.id) + 1 },
 
-        { field: 'partNo', headerName: 'PartNo', width: "250" },
-        { field: 'partName', headerName: 'partName', width: "270" },
-        { field: 'customer', headerName: 'Customer', width: "280" },
-        { field: 'operationNo', headerName: 'Operation No', width: "290" },
-        { field: 'partStatus', headerName: 'Part Status', width: "300" },
+        { field: 'partNo', headerName: 'PartNo', width: "210" },
+        { field: 'partName', headerName: 'partName', width: "220" },
+        { field: 'customer', headerName: 'Customer', width: "230" },
+        { field: 'operationNo', headerName: 'Operation No', width: "240" },
+        { field: 'partStatus', headerName: 'Part Status', width: "250" },
 
 
 
