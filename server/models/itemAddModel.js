@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const uniqueValidator = require('mongoose-unique-validator');
 const itemAddSchema = new mongoose.Schema({
-  itemMasterType: String,
+  itemMasterName: String,
   itemIMTENo: String,
   itemImageName: String,
   itemType: String,
@@ -22,8 +22,8 @@ const itemAddSchema = new mongoose.Schema({
   itemCalDoneAt: String,
   itemCalibrationSrc: String,
   itemMaster: [],
-  itemSupplier: [],
-  itemOEM: [],
+  itemSupplier: String,
+  itemOEM: String,
   itemCalDate: String,
   itemDueDate:String,
   itemCalibratedAt:String,

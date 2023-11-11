@@ -391,7 +391,7 @@ const ItemAdd = () => {
                                         {areas.map((item, index) => (
                                             <MenuItem key={index} value={item.areaName}>{item.areaName}</MenuItem>
                                         ))}
-                                    </TextField>
+                                    </TextField> 
                                 </div>
                                 <div className='mt-2'>
                                     <TextField size='small' value={itemAddData.itemPlaceOfUsage} select fullWidth variant='outlined' label="Place" name='itemPlaceOfUsage' id='itemPlaceOfUsageId'>

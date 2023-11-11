@@ -64,7 +64,7 @@ export const UnitDataBase = ({ style }) => {
     const [unitSelectedRowIds, setUnitSelectedRowIds] = useState([]);
 
     const unitColumns = [
-        { field: '_id', headerName: 'Si No', width: "150" },
+        { field: 'id', headerName: 'Si. No', width: 70, renderCell: (params) => params.api.getRowIndexRelativeToVisibleRows(params.id) + 1 },
 
         { field: 'unitName', headerName: 'UnitName', width: "150" },
 
@@ -520,13 +520,13 @@ export const PartDataBase = ({ style }) => {
 
     const [partSelectedRowIds, setPartSelectedRowIds] = useState([]);
     const partColumns = [
-        { field: '_id', headerName: 'Si No', width: "250" },
+        { field: 'id', headerName: 'Si. No', width: 100, renderCell: (params) => params.api.getRowIndexRelativeToVisibleRows(params.id) + 1 },
 
         { field: 'partNo', headerName: 'PartNo', width: "250" },
-        { field: 'partName', headerName: 'partName', width: "250" },
-        { field: 'customer', headerName: 'Customer', width: "250" },
-        { field: 'operationNo', headerName: 'Operation No', width: "250" },
-        { field: 'partStatus', headerName: 'Part Status', width: "250" },
+        { field: 'partName', headerName: 'partName', width: "270" },
+        { field: 'customer', headerName: 'Customer', width: "280" },
+        { field: 'operationNo', headerName: 'Operation No', width: "290" },
+        { field: 'partStatus', headerName: 'Part Status', width: "300" },
 
 
 
