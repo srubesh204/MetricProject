@@ -51,64 +51,64 @@ const placeOfUsageController = {
             }
         },
          
-      updatePlaceOfUsage: async (req, res) => {
-        try {
-          const pouId = req.params.id; // Assuming desId is part of the URL parameter
-          // if (isNaN(desId)) {
-          //   return res.status(400).json({ error: 'Invalid desId value' });
-          // }
+        updatePlaceOfUsage: async (req, res) => {
+          try {
+            const pouId = req.params.id; // Assuming desId is part of the URL parameter
+            // if (isNaN(desId)) {
+            //   return res.status(400).json({ error: 'Invalid desId value' });
+            // }
+        
+            // Create an object with the fields you want to update
+            const updatePouFields = {
+              /* Specify the fields and their updated values here */
+              placeOfUsage: req.body.placeOfUsage, placeOfUsageStatus : req.body.placeOfUsageStatus, // Example: updating the 'name' field
+              // Add more fields as needed
+            };
+        
+            // Find the designation by desId and update it
+            const placeOfUsageUpdate = new placeOfUsageModel(updatePouFields);
+  
+            const validationError = placeOfUsageUpdate.validateSync();
+            if (validationError) {
+              // Handle validation errors
+              const validationErrors = {};
       
-          // Create an object with the fields you want to update
-          const updatepouFields = {
-            /* Specify the fields and their updated values here */
-            placeOfUsage: req.body.placeOfUsage, placeOfUsageStatus:req.body.placeOfUsageStatus // Example: updating the 'name' field
-            // Add more fields as needed
-          };
-      
-          // Find the designation by desId and update it
-          const placeOfUsageUpdate = new placeOfUsageModel(updatepouFields);
-
-          const validationError = placeOfUsageUpdate.validateSync();
-          if (validationError) {
-            // Handle validation errors
-            const validationErrors = {};
-    
-            if (validationError.errors) {
-              // Convert Mongoose validation error details to a more user-friendly format
-              for (const key in validationError.errors) {
-                validationErrors[key] = validationError.errors[key].message;
+              if (validationError.errors) {
+                // Convert Mongoose validation error details to a more user-friendly format
+                for (const key in validationError.errors) {
+                  validationErrors[key] = validationError.errors[key].message;
+                }
               }
+      
+              return res.status(400).json({
+                errors: validationErrors
+              });
             }
-    
-            return res.status(400).json({
-              errors: validationErrors
-            });
-          }
-
-          // Find the designation by desId and update it
-          const updatePlaceOfUsage = await placeOfUsageModel.findOneAndUpdate(
-              { _id: pouId },
-              updatepouFields,
-              { new: true } // To return the updated document
-          );
-
-          if (!updatePlaceOfUsage) {
-              return res.status(404).json({ error: 'Place Of Usage not found' });
-          }
-          console.log("Place Of Usage Updated Successfully")
-          res.status(200).json({ result: updatePlaceOfUsage, message: "Place Of Usage Updated Successfully" });
-      } catch (error) {
-          console.log(error);
-          if (error.code === 11000) {
-              return res.status(500).json({ error: 'Duplicate Value Not Accepted' });
-          }
-          const errors500 = {};
-          for (const key in error.errors) {
-              errors500[key] = error.errors[key].message;
-          }
-          res.status(500).json({ error: error, status: 0 });
-      }
-  },
+  
+            // Find the designation by desId and update it
+            const updatePlaceOfUsage = await placeOfUsageModel.findOneAndUpdate(
+                { _id: pouId },
+                updatePouFields,
+                { new: true } // To return the updated document
+            );
+  
+            if (!updatePlaceOfUsage) {
+                return res.status(404).json({ error: 'Place Of Usage not found' });
+            }
+            console.log("Place Of Usage Updated Successfully")
+            res.status(200).json({ result: updatePlaceOfUsage, message: "Place Of Usage Updated Successfully" });
+        } catch (error) {
+            console.log(error);
+            if (error.code === 11000) {
+                return res.status(500).json({ error: 'Duplicate Value Not Accepted' });
+            }
+            const errors500 = {};
+            for (const key in error.errors) {
+                errors500[key] = error.errors[key].message;
+            }
+            res.status(500).json({ error: error, status: 0 });
+        }
+    },
   deletePlaceOfUsage: async (req, res) => {
     try {
 

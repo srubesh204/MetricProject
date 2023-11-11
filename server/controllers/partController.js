@@ -14,8 +14,9 @@ const partController = {
     createPart: async (req, res) => {
 
         try {
-            const { partNo, partName, customer, operationNo, partStatus } = req.body;
-
+          const { partNo, operationNo, partStatus } = req.body;
+            const partName = req.body.partName || "N/A";
+            const customer = req.body.customer || "N/A";
             const partResult = new partModel({ partNo, partName, customer, operationNo, partStatus });
             const validationError = partResult.validateSync();
 

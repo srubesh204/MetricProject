@@ -116,7 +116,7 @@ const Employee = () => {
         department: "",
         mailId: "",
         doj: DateFormat,
-        employmentStatus: "",
+        employmentStatus: "Active",
         reportTo: ""
     }
 
@@ -136,7 +136,7 @@ const Employee = () => {
         department: "",
         mailId: "",
         doj: DateFormat,
-        employmentStatus: "",
+        employmentStatus: "Active",
         reportTo: ""
     });
 

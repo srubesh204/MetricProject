@@ -1,10 +1,14 @@
 const mongoose = require('mongoose');
-//const uniqueValidator = require('mongoose-unique-validator');
+const uniqueValidator = require('mongoose-unique-validator');
 
 const placeOfUsageSchema = new mongoose.Schema({
-  placeOfUsage: String,
-  placeOfUsageStatus:String,  
+  placeOfUsage: {
+    type: String,
+    unique: [true, "Place Of Usage should be Unique"],
+    required: [true, "place Of Usage is Required"],
+  },
+  placeOfUsageStatus:String,
 });
-//unitSchema.plugin(uniqueValidator);
+placeOfUsageSchema.plugin(uniqueValidator);
 
-module.exports = mongoose.model('placeOfUsage', placeOfUsageSchema);
+module.exports = mongoose.model('placeOfUsage', placeOfUsageSchema); 

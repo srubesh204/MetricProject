@@ -28,12 +28,8 @@ const employeeSchema = new mongoose.Schema({
     },
     designation : String,
     department : String,
-    mailId : {
-        type: String,
-        unique: [true, "Email should be unique"],
-        required: [true, "Email Required"],
-        lowercase: [true]
-    },
+    mailId : String,
+      
     doj : String,
     employmentStatus : String,
     reportTo : String

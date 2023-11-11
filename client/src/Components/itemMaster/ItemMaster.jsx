@@ -96,7 +96,7 @@ const ItemMaster = () => {
         
         itemImageName: "",
         workInsName: "",
-        status: "",
+        status: "Active",
         calibrationPoints: [],
 
 
@@ -115,7 +115,7 @@ const ItemMaster = () => {
         itemImageName: "",
         
         workInsName: "",
-        status: "",
+        status: "Active",
         calibrationPoints: [],
 
     })
@@ -177,9 +177,9 @@ const ItemMaster = () => {
         { field: 'itemFqInMonths', headerName: 'Item Fq In Months', width: 90, },
         { field: 'calAlertInDay', headerName: 'Cal Alert In Day', width: 90, },
         { field: 'wiNo', headerName: 'Wi No', width: 90, },
-        { field: 'uncertainty', headerName: 'Uncertainty', width: 100, },
-        { field: 'standardRef', headerName: 'Standard Ref', type: "number", width: 120, },
-        { field: 'status', headerName: 'Status', width: 100, },
+        { field: 'uncertainty', headerName: 'Uncertainty', width: 90, },
+        { field: 'standardRef', headerName: 'Standard Ref', type: "number", width: 90, },
+        { field: 'status', headerName: 'Status', width: 90, },
         
         {/* {
             field: 'delete',
