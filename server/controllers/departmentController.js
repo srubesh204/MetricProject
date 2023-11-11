@@ -136,7 +136,26 @@ const departmentController = {
       console.error(error);
       res.status(500).send('Internal Server Error');
     }
+  },
+  getDepartmentById : async (req, res) => {
+    try {
+      const departmentId = req.params.id; // Assuming desId is part of the URL parameter
+      // if (isNaN(desId)) {
+      // Find the designation by desId and update it
+      const getDepartmentById = await departmentModel.findOne(
+          { _id: departmentId }// To return the updated document
+      );
+
+      if (!getDepartmentById) {
+          return res.status(404).json({ error: 'Department not found' });
+      }
+      console.log("Department Get Successfully")
+      res.status(200).json({ result: getDepartmentById, message: "Department get Successfully" });
+  } catch (error) {
+      console.log(error);
+      res.status(500).json({ error: error, status: 0 });
   }
+}
 
 }
 

@@ -139,7 +139,26 @@ const partController = {
         console.error(error);
         res.status(500).send('Internal Server Error');
       }
+    },
+    getPartById : async (req, res) => {
+      try {
+        const partId = req.params.id; // Assuming desId is part of the URL parameter
+        // if (isNaN(desId)) {
+        // Find the designation by desId and update it
+        const getPartById = await partModel.findOne(
+            { _id: partId }// To return the updated document
+        );
+  
+        if (!getPartById) {
+            return res.status(404).json({ error: 'Part not found' });
+        }
+        console.log("Part Get Successfully")
+        res.status(200).json({ result: getPartById, message: "Part get Successfully" });
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ error: error, status: 0 });
     }
+  }
 }
 
 
