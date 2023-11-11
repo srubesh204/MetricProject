@@ -1,4 +1,4 @@
-import { Card, CardContent, CardActions, Button, Container, Grid, Paper, TextField, Typography, CardMedia, InputLabel, Input, FormControl, FormHelperText, FormGroup, FormLabel, MenuItem, Select, Menu, FormControlLabel, Radio, RadioGroup, TableContainer, Table, TableHead, TableRow, TableCell, TableBody } from '@mui/material'
+import { Card, CardContent, CardActions, Button, Container, Grid, Paper, TextField, Typography, CardMedia, InputLabel, Input, FormControl, FormHelperText, FormGroup, FormLabel, MenuItem, Select, Menu, FormControlLabel, Radio, RadioGroup, TableContainer, Table, TableHead, TableRow, TableCell, TableBody, IconButton, OutlinedInput } from '@mui/material'
 import axios from 'axios';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import { styled } from '@mui/material/styles';
@@ -6,6 +6,7 @@ import React, { useEffect, useState } from 'react'
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import dayjs from 'dayjs';
+import { Delete } from '@mui/icons-material';
 
 const ItemAdd = () => {
 
@@ -26,6 +27,8 @@ const ItemAdd = () => {
     useEffect(() => {
         UnitFetch()
     }, []);
+
+   
 
 
     const [departments, setDepartments] = useState([])
@@ -103,6 +106,35 @@ const ItemAdd = () => {
 
     //
 
+    //Vendor
+    const [vendorLIist, setVendorList] = useState([])
+    const [customerList, setCustomerList] = useState([]);
+    const [OEMLIst, setOEMList] = useState([]);
+
+
+    const vendorListFetch = async () => {
+        try {
+            const response = await axios.get(
+                `${process.env.REACT_APP_PORT}/vendor/getAllVendors`
+            );
+            const vendorList = response.data.result
+            const customerList = vendorList.filter((item) => item.customer === "1" || item.supplier === "1")
+            const OEMList = vendorList.filter((item) => item.oem === "1")
+
+            console.log(customerList)
+            setCustomerList(customerList);
+            setOEMList(OEMList);
+
+
+        } catch (err) {
+            console.log(err);
+        }
+    };
+    useEffect(() => {
+        vendorListFetch();
+    }, []);
+
+    //
 
 
 
@@ -138,8 +170,17 @@ const ItemAdd = () => {
         itemDueDate: "",
         itemCalibratedAt: "",
         itemCertificateName: "",
-        itemPartName: [],
-        acceptanceCriteria: []
+        itemPartName: [{ partName: "" }],
+        acceptanceCriteria: [{
+            acParameter: "",
+            acRangeSize: "",
+            acRangeSizeUnit: "",
+            acMin: "",
+            acMax: "",
+            acWearLimit: "",
+            acAccuracy: "",
+            acAccuracyUnit: "",
+        }]
 
 
 
@@ -163,19 +204,23 @@ const ItemAdd = () => {
         const { name, value } = e.target;
         setItemAddData((prev) => ({ ...prev, [name]: value }))
     }
+
+    const [calibrationPointsData, setCalibrationPointsData] = useState([])
     const itemMasterById = async () => {
         try {
             const response = await axios.get(
                 `${process.env.REACT_APP_PORT}/itemMaster/getItemMasterById/${itemAddData.itemMasterName}`
             );
             console.log(response.data)
-            const { itemType, itemDescription, itemPrefix, itemFqInMonths, calAlertInDay, wiNo, uncertainity, standartRef, itemImageName, status, itemMasterImage, workInsName } = response.data.result
+            const { itemType, itemDescription, itemPrefix, itemFqInMonths, calAlertInDay, wiNo, uncertainity, standartRef, itemImageName, status, itemMasterImage, workInsName, calibrationPoints } = response.data.result
             setItemAddData((prev) => ({
                 ...prev,
                 itemType: itemType,
                 itemImage: itemMasterImage
 
             }))
+            setCalibrationPointsData(calibrationPoints)
+
 
         } catch (err) {
             console.log(err);
@@ -186,7 +231,52 @@ const ItemAdd = () => {
         itemMasterById();
     }, [itemAddData.itemMasterName]);
 
+    const [partData, setPartData] = useState([])
+    const getPartList = async () => {
+        try {
+            const response = await axios.get(
+                `${process.env.REACT_APP_PORT}/part/getAllParts`
+            );
+            console.log(response.data)
+            setPartData(response.data.result)
+
+
+        } catch (err) {
+            console.log(err);
+        }
+    };
+
+    useEffect(() => {
+        getPartList();
+    }, [itemAddData.itemPartName]);
+
     console.log(itemAddData)
+    console.log(calibrationPointsData)
+    //
+
+    //Acceptance Criteria
+    const changeACValue = (index, name, value) => {
+        setItemAddData((prevItemAddData) => {
+            const AC = [...prevItemAddData.acceptanceCriteria]
+            AC[index] = {
+                ...AC[index], [name]: value,
+            };
+            return {
+                ...prevItemAddData, acceptanceCriteria: AC,
+            };
+        })
+    };
+
+    const deleteAC = (index) => {
+        setItemAddData((prevItemAddData) => {
+            const AC = [...prevItemAddData.acceptanceCriteria]
+            AC.splice(index, 1);
+            return {
+                ...prevItemAddData, acceptanceCriteria: AC,
+            };
+        })
+    };
+
     //
 
     return (
@@ -404,77 +494,194 @@ const ItemAdd = () => {
 
                         </div>}
 
-                       <table className='table table-sm table-bordered text-center'>
-                        <tbody>
-                            <tr>
-                            <th >Si No</th>
-                            <th>Master Name</th>
-                            <th>Due</th>
-                            </tr>
-                            <tr>
+                        <table className='table table-sm table-bordered text-center mt-2'>
+                            <tbody>
+                                <tr>
+                                    <th style={{ width: "20%" }}>Si No</th>
+                                    <th style={{ width: "50%" }}>Master Name</th>
+                                    <th style={{ width: "30%" }}>Due</th>
+                                </tr>
+                                <tr>
 
-                            </tr>
-                            
-                        
-                        </tbody>
-                       </table>
+                                </tr>
+
+
+                            </tbody>
+                        </table>
+                        <table className='table table-sm table-bordered text-center mt-2'>
+                            <tbody>
+                                <tr>
+                                    <th style={{ width: "20%" }}>Si No</th>
+                                    <th style={{ width: "80%" }}>Supplier</th>
+
+                                </tr>
+                                <tr>
+
+                                </tr>
+
+
+                            </tbody>
+                        </table>
+                        <table className='table table-sm table-bordered text-center mt-2'>
+                            <tbody>
+                                <tr>
+                                    <th style={{ width: "20%" }}>Si No</th>
+                                    <th style={{ width: "80%" }}>OEM</th>
+
+                                </tr>
+                                <tr>
+
+                                </tr>
+
+
+                            </tbody>
+                        </table>
 
                     </Paper>
-                    <Paper className='col-lg' elevation={12} sx={{ p: 2, }}>
-                        <Typography variant='h6' className='text-center'>Enter Previous Calibration Data</Typography>
-                        <div className="row g-2">
-                            <div className="col-lg-6">
-                                <DatePicker
-                                    disableFuture
-                                    fullWidth
-                                    id="dobId"
-                                    name=""
-                                    value={dayjs(itemAddData.itemCalDate)}
-                                    onChange={(newValue) =>
-                                        setItemAddData((prev) => ({ ...prev, itemCalDate: newValue.format("YYYY-MM-DD") }))
-                                    }
-                                    label="Calibration Date"
+                    <div className="col">
+                        <Paper className='row-6-lg' elevation={12} sx={{ p: 2, }}>
+                            <Typography variant='h6' className='text-center'>Enter Previous Calibration Data</Typography>
+                            <div className="row g-2">
+                                <div className="col-lg-6">
+                                    <DatePicker
+                                        disableFuture
+                                        fullWidth
+                                        id="dobId"
+                                        name=""
+                                        value={dayjs(itemAddData.itemCalDate)}
+                                        onChange={(newValue) =>
+                                            setItemAddData((prev) => ({ ...prev, itemCalDate: newValue.format("YYYY-MM-DD") }))
+                                        }
+                                        label="Calibration Date"
 
-                                    slotProps={{ textField: { size: 'small' } }}
-                                    format="DD-MM-YYYY" />
+                                        slotProps={{ textField: { size: 'small' } }}
+                                        format="DD-MM-YYYY" />
+                                </div>
+                                <div className="col-lg-6">
+                                    <DatePicker
+                                        disableFuture
+                                        fullWidth
+                                        id="itemDueDateId"
+                                        name="itemDueDate"
+                                        value={dayjs(itemAddData.itemDueDate)}
+                                        onChange={(newValue) =>
+                                            setItemAddData((prev) => ({ ...prev, itemDueDate: newValue.format("YYYY-MM-DD") }))
+                                        }
+                                        label="Due Date"
+
+                                        slotProps={{ textField: { size: 'small' } }}
+                                        format="DD-MM-YYYY" />
+                                </div>
+                                <div className="col-lg-12">
+                                    <TextField size='small' fullWidth variant='outlined' label="Calibrated at" select name='itemMasterName'>
+                                        <MenuItem>Lab</MenuItem>
+                                        <MenuItem>Site</MenuItem>
+
+                                    </TextField>
+                                </div>
+                                <div className="col-lg-8">
+                                    <Button component="label" variant="contained" fullWidth >
+                                        Certificate Upload
+                                        <VisuallyHiddenInput type="file" />
+                                    </Button>
+                                </div>
+                                <div className='col-lg-4'>
+                                    <Button
+                                        fullWidth
+                                        variant="outlined"
+
+
+                                    >Upload</Button>
+                                </div>
                             </div>
-                            <div className="col-lg-6">
-                                <DatePicker
-                                    disableFuture
-                                    fullWidth
-                                    id="itemDueDateId"
-                                    name="itemDueDate"
-                                    value={dayjs(itemAddData.itemDueDate)}
-                                    onChange={(newValue) =>
-                                        setItemAddData((prev) => ({ ...prev, itemDueDate: newValue.format("YYYY-MM-DD") }))
-                                    }
-                                    label="Due Date"
 
-                                    slotProps={{ textField: { size: 'small' } }}
-                                    format="DD-MM-YYYY" />+                            </div>
-                            <div className="col-lg-12">
-                                <TextField size='small' fullWidth variant='outlined' label="Calibrated at" type='date' select name='itemMasterName'>
-                                    <MenuItem>Lab</MenuItem>
-                                    <MenuItem>Site</MenuItem>
+                        </Paper >
+                        <Paper className='row-6-lg' elevation={12} sx={{ p: 2, mt: 2, height: "inherit" }} >
 
-                                </TextField>
+                            <h5 className=''>Part</h5>
+                            <div className="row g-2">
+                                <div className="col-md-12">
+                                    {/* <FormControl sx={{ m: 1, width: 300 }}>
+                                        <InputLabel id="itemPartNameId">Tag</InputLabel>
+                                         <Select
+                                            labelId="itemPartNameId"
+                                            id="itemPartNameId"
+                                            multiple
+                                            onChange={handleChange}
+                                            input={<OutlinedInput label="Part" />}
+                                            renderValue={(selected) => selected.join(', ')}
+                                            MenuProps={MenuProps}
+                                        >
+                                            {names.map((name) => (
+                                                <MenuItem key={name} value={name}>
+                                                    <Checkbox checked={personName.indexOf(name) > -1} />
+                                                    <ListItemText primary={name} />
+                                                </MenuItem>
+                                            ))}
+                                        </Select>
+                                    </FormControl> */}
+                                </div>
+                                
+                                <div className="col-md-12 ">
+                                    <table className=' table table-sm table-bordered text-center'>
+                                        <tbody>
+                                            <tr>
+                                                <th style={{ width: "20%" }}>Si No</th>
+                                                <th>Part</th>
+                                            </tr>
+                                            {itemAddData.itemPartName.map((item, index) => (
+                                                <tr key={index}>
+                                                    <td>{index + 1}</td>
+                                                    <td>{item.partName}</td>
+                                                </tr>
+                                            ))}
+
+                                        </tbody>
+                                    </table>
+                                </div>
+
+
+
                             </div>
-                            <div className="col-lg-8">
-                                <Button component="label" variant="contained" fullWidth >
-                                    Certificate Upload
-                                    <VisuallyHiddenInput type="file" />
-                                </Button>
-                            </div>
-                            <div className='col-lg-4'>
-                                <Button
-                                    fullWidth
-                                    variant="outlined"
+                        </Paper>
+                    </div>
+                    <Paper sx={{ mt: 2 }}>
+                        <h6 className='h5 text-center'>Acceptance Criteria</h6>
+                        <table className='table table-sm table-bordered'>
+                            <tbody>
+                                <tr>
+                                    <th>Parameter</th>
+                                    <th>Range/Size</th>
+                                    <th>Unit</th>
+                                    <th>Min</th>
+                                    <th>Max</th>
+                                    <th>WearLimit</th>
+                                    <th>Accuracy</th>
+                                    <th>Unit</th>
+                                </tr>
+                                {itemAddData.acceptanceCriteria ? itemAddData.acceptanceCriteria.map((item, index) => (
+                                    <tr key={index}>
+                                        <td style={{ width: "10%" }}><TextField fullWidth select size="small" variant='outlined' name='acParameter'>
+                                            {calibrationPointsData.map((item, index) => (
+                                                <MenuItem key={index}>{item.calibrationPoint}</MenuItem>
+                                            ))}
+                                        </TextField></td>
+                                        <td><TextField fullWidth size="small" variant='outlined' name='acRangeSize' onChange={(e) => changeACValue(index, e.target.name, e.target.value)}></TextField></td>
+                                        <td><TextField fullWidth size="small" variant='outlined' name='acRangeSizeUnit' onChange={(e) => changeACValue(index, e.target.name, e.target.value)}></TextField></td>
+                                        <td><TextField fullWidth size="small" variant='outlined' name='acMin' onChange={(e) => changeACValue(index, e.target.name, e.target.value)}></TextField></td>
+                                        <td><TextField fullWidth size="small" variant='outlined' name='acMax' onChange={(e) => changeACValue(index, e.target.name, e.target.value)}></TextField></td>
+                                        <td><TextField fullWidth size="small" variant='outlined' name='acMax' onChange={(e) => changeACValue(index, e.target.name, e.target.value)}></TextField></td>
+                                        <td><TextField fullWidth size="small" variant='outlined' name='acWearLimit' onChange={(e) => changeACValue(index, e.target.name, e.target.value)} /></td>
+                                        <td><IconButton aria-label="delete" onClick={() => deleteAC(index)}>
+                                            <Delete />
+                                        </IconButton>
+                                        </td>
+                                    </tr>
 
 
-                                >Upload</Button>
-                            </div>
-                        </div>
-
+                                )) : <tr></tr>}
+                            </tbody>
+                        </table>
                     </Paper>
 
                 </div>
