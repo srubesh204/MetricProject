@@ -86,7 +86,12 @@ const Vendor = () => {
         customer: "",
         supplier: "",
         subContractor: "",
-        vendorContacts: [],
+        vendorContacts: [{
+            name: "",
+            contactNumber: "",
+            mailId: "",
+            vcStatus: ""
+        }],
         certificate: "",
         certificateValidity: "",
         vendorStatus: "",
@@ -104,7 +109,12 @@ const Vendor = () => {
         customer: "",
         supplier: "",
         subContractor: "",
-        vendorContacts: [],
+        vendorContacts: [{
+            name: "",
+            contactNumber: "",
+            mailId: "",
+            vcStatus: ""
+        }],
         certificate: "",
         certificateValidity: "",
         vendorStatus: "",
@@ -297,13 +307,13 @@ const Vendor = () => {
     const deleteVendorData = async () => {
         try {
             const response = await axios.delete(
-                "http://localhost:3001/vendor/deleteVendor" ,{
-                    data: {
-                        vendorIds: selectedRowIds
-                    }
-                } 
+                "http://localhost:3001/vendor/deleteVendor", {
+                data: {
+                    vendorIds: selectedRowIds
+                }
+            }
             );
-            
+
             setVendorStateId(null)
             setVendorData(initialVendorData);
             setSnackBarOpen(true)
@@ -507,54 +517,54 @@ const Vendor = () => {
     const vendorListColumns = [
 
         { field: 'vendorCode', headerName: 'VendorCode', width: 130 },
-       
+
         {
-          field: 'fullName',
-          headerName: 'Full Name',
-          width: 200,
+            field: 'fullName',
+            headerName: 'Full Name',
+            width: 200,
         },
         {
-          field: 'city',
-          headerName: 'City',
-        //   description: 'This column has a value getter and is not sortable.',
-          width: 100,
+            field: 'city',
+            headerName: 'City',
+            //   description: 'This column has a value getter and is not sortable.',
+            width: 100,
         },
         {
             field: 'state',
             headerName: 'State',
             // description: 'This column has a value getter and is not sortable.',
             width: 100,
-          },
-          {
+        },
+        {
             field: 'vendorStatus',
             headerName: 'Status',
             // description: 'This column has a value getter and is not sortable.',
             width: 100,
-          },
-          {
+        },
+        {
             field: 'vendorType',
             headerName: 'Vendor Type',
             width: 300,
-            
+
             renderHeader: (params) => {
                 params.colDef.headerAlign = "center"
                 return params.colDef.headerName;
             },
             renderCell: (params) => {
-              const { row } = params;
-        
-              const types = [];
-              if (row.oem === "1") types.push('OEM');
-              if (row.customer === "1") types.push('Customer');
-              if (row.supplier === "1") types.push('Supplier');
-              if (row.subContractor === "1") types.push('Sub Contractor');
-        
-              return types.join(' | ');
-            },
-          },
-      ];
+                const { row } = params;
 
-      const [selectedRowIds, setSelectedRowIds] = useState([]);
+                const types = [];
+                if (row.oem === "1") types.push('OEM');
+                if (row.customer === "1") types.push('Customer');
+                if (row.supplier === "1") types.push('Supplier');
+                if (row.subContractor === "1") types.push('Sub Contractor');
+
+                return types.join(' | ');
+            },
+        },
+    ];
+
+    const [selectedRowIds, setSelectedRowIds] = useState([]);
 
     return (
         <div >
@@ -900,7 +910,7 @@ const Vendor = () => {
                                                 <tr>
                                                     <td>{index + 1}</td>
                                                     <td><input type="text" className='form-control form-control-sm' id="nameId" name="name" value={item.name} onChange={(e) => changeVendorRow(index, e.target.name, e.target.value)} /></td>
-                                                    <td><input type="number" className={`form-control form-control-sm ${item.contactNumber.length !== 10 ? 'is-invalid' : 'is-valid'}`} id="contactNumber" name="contactNumber" value={item.contactNumber} onChange={(e) => changeVendorRow(index, e.target.name, e.target.value)} /></td>
+                                                    <td><input type="number" className={`form-control form-control-sm ${item.contactNumber.length === 10 ? 'is-valid' : 'is-invalid'}`} id="contactNumber" name="contactNumber" value={item.contactNumber} onChange={(e) => changeVendorRow(index, e.target.name, e.target.value)} /></td>
                                                     <td><input type="text" className='form-control form-control-sm' id="mailId" name="mailId" value={item.mailId} onChange={(e) => changeVendorRow(index, e.target.name, e.target.value)} /></td>
 
                                                     <td> <select className="form-select form-select-sm" id="vcStatusId" name="vcStatus" value={item.vcStatus} onChange={(e) => changeVendorRow(index, e.target.name, e.target.value)} aria-label="Floating label select example">
@@ -910,9 +920,9 @@ const Vendor = () => {
 
 
                                                     </select></td>
-                                                    <td style={{padding: 0, margin: 0}}>
-                                                        <Fab size='small' sx={{m:0, p:0}} color="error" aria-label="add" onClick={() => deleteVendorRow(index)}>
-                                                            <Remove sx={{m:0, p:0}}/>
+                                                    <td style={{ padding: 0, margin: 0 }}>
+                                                        <Fab size='small' sx={{ m: 0, p: 0 }} color="error" aria-label="add" onClick={() => deleteVendorRow(index)}>
+                                                            <Remove sx={{ m: 0, p: 0 }} />
                                                         </Fab></td>
                                                 </tr>
                                             )) : <tr></tr>}
@@ -1021,41 +1031,41 @@ const Vendor = () => {
                             <h4 className='text-center'>Vendor List</h4>
                             <div className="d-flex justify-content-between">
 
-                            <div class="col-3 mb-2">
-                                <select className="form-select form-select-sm" id="vendorTypeId" name="vendorType" aria-label="Floating label select example" onChange={handleFilterChange} >
-                                    <option value="all">All</option>
-                                    <option value="oem">OEM</option>
-                                    <option value="customer">Customer</option>
-                                    <option value="supplier">Supplier</option>
-                                    <option value="subContractor">SubContractor</option>
-                                </select>
+                                <div class="col-3 mb-2">
+                                    <select className="form-select form-select-sm" id="vendorTypeId" name="vendorType" aria-label="Floating label select example" onChange={handleFilterChange} >
+                                        <option value="all">All</option>
+                                        <option value="oem">OEM</option>
+                                        <option value="customer">Customer</option>
+                                        <option value="supplier">Supplier</option>
+                                        <option value="subContractor">SubContractor</option>
+                                    </select>
 
+                                </div>
+                                {selectedRowIds.length !== 0 && <Button variant='contained' type='button' color='error' onClick={() => setDeleteModalVendor(true)}>Delete Vendors</Button>}
                             </div>
-                        {selectedRowIds.length !== 0 && <Button variant='contained' type='button' color='error' onClick={()=>setDeleteModalVendor(true)}>Delete Vendors</Button>}
-                            </div>
-                            
+
                             <div style={{ height: 400, width: '100%', marginTop: "0.5rem" }}>
-                            <DataGrid
-                                rows={filteredData}
-                                columns={vendorListColumns}
-                                getRowId={(row) => row._id}
-                                initialState={{
-                                    pagination: { 
-                                        paginationModel: { page: 0, pageSize: 5 },
-                                    },
-                                }}
-                                pageSizeOptions={[5, 10]}
-                                onRowSelectionModelChange={(newRowSelectionModel, event) => {
-                                    setSelectedRowIds(newRowSelectionModel);
-                                    console.log(event)
-                                    
-                                }}
-                                onRowClick={updateVendor}
-                              
-                                checkboxSelection
+                                <DataGrid
+                                    rows={filteredData}
+                                    columns={vendorListColumns}
+                                    getRowId={(row) => row._id}
+                                    initialState={{
+                                        pagination: {
+                                            paginationModel: { page: 0, pageSize: 5 },
+                                        },
+                                    }}
+                                    pageSizeOptions={[5, 10]}
+                                    onRowSelectionModelChange={(newRowSelectionModel, event) => {
+                                        setSelectedRowIds(newRowSelectionModel);
+                                        console.log(event)
+
+                                    }}
+                                    onRowClick={updateVendor}
+
+                                    checkboxSelection
 
 
-                            />
+                                />
                             </div>
 
                             <Dialog
