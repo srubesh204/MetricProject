@@ -210,31 +210,29 @@ const ItemAdd = () => {
         itemCalFreInMonths: "",
         itemCalAlertDays: "",
         itemCalibrationSource: "",
+        itemCalibrationDoneAt: "",
         itemItemMasterName: "",
         itemItemMasterIMTENo: [],
         itemSupplier: [],
         itemOEM: [],
-        itemCalibrationDoneAt: "",
         itemCalDate: "",
         itemDueDate: "",
         itemCalibratedAt: "",
         itemCertificateName: "",
         itemPartName: [],
-        acceptanceCriteria: [{
-            acParameter: "",
-            acRangeSize: "",
-            acRangeSizeUnit: "",
-            acMin: "",
-            acMax: "",
-            acWearLimit: "",
-            acAccuracy: "",
-            acAccuracyUnit: "",
-            acObservedSize: "",
-        }]
-
-
-
-
+        acceptanceCriteria: [
+            {
+                acAccuracyUnit: "",
+                acRangeSizeUnit: "",
+                acParameter: "",
+                acRangeSize: "",
+                acMin: "",
+                acMax: "",
+                acWearLimit: "",
+                acAccuracy: "",
+                acObservedSize: ""
+            }
+        ]
     })
 
     //upload Button

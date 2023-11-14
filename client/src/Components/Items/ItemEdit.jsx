@@ -1,17 +1,17 @@
-import { Card, CardContent, CardActions, Button, Container, Grid, Paper, TextField, Typography, CardMedia, InputLabel, Input, FormControl, FormHelperText, FormGroup, FormLabel, MenuItem, Select, Menu, FormControlLabel, Radio, RadioGroup, TableContainer, Table, TableHead, TableRow, TableCell, TableBody, IconButton, OutlinedInput, Box, Chip, Snackbar, Alert, Dialog, DialogTitle, DialogContent, DialogActions, DialogContentText } from '@mui/material'
+import { Card, CardContent, CardActions, Button, Container, Grid, Paper, TextField, Typography, CardMedia, InputLabel, Input, FormControl, FormHelperText, FormGroup, FormLabel, MenuItem, Select, Menu, FormControlLabel, Radio, RadioGroup, TableContainer, Table, TableHead, TableRow, TableCell, TableBody, IconButton, OutlinedInput, Box, Chip, Snackbar, Alert, Dialog, DialogTitle, DialogContent, DialogActions, DialogContentText, Checkbox, ListItemText } from '@mui/material'
 import axios from 'axios';
-import CloudUploadIcon from '@mui/icons-material/CloudUpload';
+import {CloudUploadIcon, ArrowBack, Edit} from '@mui/icons-material';
 import { styled } from '@mui/material/styles';
 import React, { useEffect, useState } from 'react'
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import dayjs from 'dayjs';
 import { Delete } from '@mui/icons-material';
-import {useParams} from 'react-router-dom'
+import { useParams, useNavigate, Link } from 'react-router-dom'
 
 const ItemAdd = () => {
-
-    const {id}=useParams()
+    const Navigate = useNavigate();
+    const { id } = useParams();
     console.log(id)
 
     // Units Data
@@ -167,9 +167,9 @@ const ItemAdd = () => {
         itemCalFreInMonths: "",
         itemCalAlertDays: "",
         itemCalibrationSource: "",
+        itemCalibrationDoneAt: "",
         itemItemMasterName: "",
-        itemItemMasterIMTENo: "",
-        itemItemMasterDue: "",
+        itemItemMasterIMTENo: [],
         itemSupplier: [],
         itemOEM: [],
         itemCalDate: "",
@@ -177,19 +177,19 @@ const ItemAdd = () => {
         itemCalibratedAt: "",
         itemCertificateName: "",
         itemPartName: [],
-        acceptanceCriteria: [{
-            acParameter: "",
-            acRangeSize: "",
-            acRangeSizeUnit: "",
-            acMin: "",
-            acMax: "",
-            acWearLimit: "",
-            acAccuracy: "",
-            acAccuracyUnit: "",
-            acObservedSize: "",
-        }]
-
-
+        acceptanceCriteria: [
+            {
+                acAccuracyUnit: "",
+                acRangeSizeUnit: "",
+                acParameter: "",
+                acRangeSize: "",
+                acMin: "",
+                acMax: "",
+                acWearLimit: "",
+                acAccuracy: "",
+                acObservedSize: ""
+            }
+        ]
     }
 
 
@@ -214,9 +214,9 @@ const ItemAdd = () => {
         itemCalFreInMonths: "",
         itemCalAlertDays: "",
         itemCalibrationSource: "",
+        itemCalibrationDoneAt: "",
         itemItemMasterName: "",
-        itemItemMasterIMTENo: "",
-        itemItemMasterDue: "",
+        itemItemMasterIMTENo: [],
         itemSupplier: [],
         itemOEM: [],
         itemCalDate: "",
@@ -224,21 +224,19 @@ const ItemAdd = () => {
         itemCalibratedAt: "",
         itemCertificateName: "",
         itemPartName: [],
-        acceptanceCriteria: [{
-            acParameter: "",
-            acRangeSize: "",
-            acRangeSizeUnit: "",
-            acMin: "",
-            acMax: "",
-            acWearLimit: "",
-            acAccuracy: "",
-            acAccuracyUnit: "",
-            acObservedSize: "",
-        }]
-
-
-
-
+        acceptanceCriteria: [
+            {
+                acAccuracyUnit: "",
+                acRangeSizeUnit: "",
+                acParameter: "",
+                acRangeSize: "",
+                acMin: "",
+                acMax: "",
+                acWearLimit: "",
+                acAccuracy: "",
+                acObservedSize: ""
+            }
+        ]
     })
 
     const getItemById = async () => {
@@ -247,9 +245,9 @@ const ItemAdd = () => {
                 `${process.env.REACT_APP_PORT}/itemAdd/getItemAddById/${id}`
             );
             console.log(response.data.result)
-           
+
             setItemAddData(response.data.result)
-          
+
 
 
         } catch (err) {
@@ -397,19 +395,19 @@ const ItemAdd = () => {
     const [errorhandler, setErrorHandler] = useState({});
     const [open, setOpen] = useState(false)
 
-    const handleItemAddSubmit = async (e) => {
+    const handleUpdateItemAdd = async (e) => {
         e.preventDefault();
         try {
-            const response = await axios.post(
-                `${process.env.REACT_APP_PORT}/itemAdd/createItemAdd`, itemAddData
+            const response = await axios.put(
+                `${process.env.REACT_APP_PORT}/itemAdd/updateItemAdd/${id}`, itemAddData
             );
 
             setSnackBarOpen(true)
 
-            console.log("Item Created Successfully")
+            console.log("Item Updated Successfully")
             setErrorHandler({ status: response.data.status, message: response.data.message, code: "success" })
-            setItemAddData(initialItemAddData)
-
+            // setItemAddData(initialItemAddData)
+            setTimeout(() => Navigate("/itemList"), 2000)
         } catch (err) {
 
             setSnackBarOpen(true)
@@ -452,6 +450,8 @@ const ItemAdd = () => {
 
         setSnackBarOpen(false);
     }
+
+
 
 
     return (
@@ -672,80 +672,90 @@ const ItemAdd = () => {
                                         slotProps={{ textField: { size: 'small' } }}
                                         format="DD-MM-YYYY" />
                                 </div>
-                                <div className="col">
-
-                                    <Button fullWidth variant='contained' color='success'>Add Master</Button>
-                                </div>
+                                
 
 
                             </div>}
-                        {itemAddData.itemCalibrationSource === "OutSource" &&
-                            <div className='row g-2'>
+                        <div className="row">
+                            {itemAddData.itemCalibrationSource === "OutSource" &&
+
                                 <div className="col-md-7">
-                                    <TextField size='small' select fullWidth variant='outlined' label="Select Supplier" name='itemSupplier' value={itemAddData.itemSupplier} onChange={handleItemAddChange}>
-                                        <MenuItem value=""><em>--Select--</em></MenuItem>
-                                        {supplierList.map((item, index) => (
-                                            <MenuItem key={index} value={item}>{item.aliasName}</MenuItem>
-                                        ))}
-                                    </TextField>
+                                    <FormControl size='small' component="div" fullWidth>
+                                        <InputLabel id="itemSupplierId">Select Supplier</InputLabel>
+                                        <Select
+                                            labelId="itemSupplierId"
+                                            id="demo-multiple-checkbox"
+                                            multiple
+                                            name="itemSupplier"
+                                            value={itemAddData.itemSupplier}
+                                            onChange={handleItemAddChange}
+                                            input={<OutlinedInput fullWidth label="Select Supplier" />}
+                                            renderValue={(selected) => selected.join(', ')}
+                                            MenuProps={MenuProps}
+                                            fullWidth
+                                        >
+                                            {supplierList.map((name, index) => (
+                                                <MenuItem key={index} value={name.aliasName}>
+                                                    <Checkbox checked={itemAddData.itemSupplier.indexOf(name.aliasName) > -1} />
+                                                    <ListItemText primary={name.aliasName} />
+                                                </MenuItem>
+                                            ))}
+                                        </Select>
+                                    </FormControl>
+                                </div>}
+
+
+
+
+
+
+                            {itemAddData.itemCalibrationSource === "OEM" &&
+
+                                <div className="col-md-7">
+                                    <FormControl size='small' component="div" fullWidth>
+                                        <InputLabel id="itemOEMId">Select Supplier</InputLabel>
+                                        <Select
+                                            labelId="itemOEMId"
+                                            id="demo-multiple-checkbox"
+                                            multiple
+                                            name="itemOEM"
+                                            value={itemAddData.itemOEM}
+                                            onChange={handleItemAddChange}
+                                            input={<OutlinedInput fullWidth label="Select Supplier" />}
+                                            renderValue={(selected) => selected.join(', ')}
+                                            MenuProps={MenuProps}
+                                            fullWidth
+                                        >
+                                            {OEMList.map((name) => (
+                                                <MenuItem key={name} value={name.aliasName}>
+                                                    <Checkbox checked={itemAddData.itemOEM.indexOf(name.aliasName) > -1} />
+                                                    <ListItemText primary={name.aliasName} />
+                                                </MenuItem>
+                                            ))}
+                                        </Select>
+                                    </FormControl>
                                 </div>
+
+                            }
+
+                            {(itemAddData.itemCalibrationSource === "OEM" || itemAddData.itemCalibrationSource === "OutSource") &&
+
                                 <RadioGroup
                                     className="col-md-5 d-flex justify-content-center"
                                     row
-                                    name='calibrationDoneAt'
-                                    value={itemAddData.itemCalibratedAt}
+                                    name='itemCalibrationDoneAt'
                                     onChange={handleItemAddChange}
+
                                 >
-                                    <FormControlLabel value="Lab" control={<Radio />} label="Lab" />
-                                    <FormControlLabel value="Site" control={<Radio />} label="Site" />
+                                    <FormControlLabel value="Lab" checked={itemAddData.itemCalibrationDoneAt === "Lab"} control={<Radio />} label="Lab" />
+                                    <FormControlLabel value="Site" checked={itemAddData.itemCalibrationDoneAt === "Site"} control={<Radio />} label="Site" />
                                 </RadioGroup>
-                                <div className="">
-                                    <Button
-                                        fullWidth
-                                        sx={{ m: 0, p: 1 }}
-                                        variant='contained'
-                                        onClick={() => {
+                            }
+                        </div>
 
-                                        }}
-                                        color='secondary' >Add</Button>
-                                </div>
-
-
-                            </div>}
-
-                        {itemAddData.itemCalibrationSource === "OEM" || itemAddData.itemCalibrationSource === "itemSupplier" &&
-                            <div className='row g-2'>
-                                <div className="col-md-7">
-                                    <TextField size='small' select fullWidth variant='outlined' label="Select OEM" name='itemOEM' value={itemAddData.itemOEM} onChange={handleItemAddChange}>
-                                        <MenuItem value=""><em>--Select--</em></MenuItem>
-                                        {OEMList.map((item, index) => (
-                                            <MenuItem key={index} value={item}>{item.aliasName}</MenuItem>
-                                        ))}
-                                    </TextField>
-                                </div>
-                                <RadioGroup
-                                    className="col-md-5 d-flex justify-content-center"
-                                    row
-                                    name='calibrationDoneAt'
-                                    onChange={handleItemAddChange}
-                                    value={itemAddData.itemCalibratedAt}
-                                >
-                                    <FormControlLabel value="Lab" control={<Radio />} label="Lab" />
-                                    <FormControlLabel value="Site" control={<Radio />} label="Site" />
-                                </RadioGroup>
-                                <div className="">
-                                    <Button
-                                        fullWidth
-                                        sx={{ m: 0, p: 1 }}
-                                        variant='contained'
-                                        onClick={() => {
-
-                                        }}
-                                        color='secondary' >Add</Button>
-                                </div>
-
-
-                            </div>}
+                        {/* 
+                            {itemAddData.itemCalibrationSource === "OEM" || itemAddData.itemCalibrationSource === "OEM" && 
+                            } */}
 
                         {itemAddData.itemCalibrationSource === "InHouse" && <table className='table table-sm table-bordered text-center mt-2'>
                             <tbody>
@@ -769,9 +779,12 @@ const ItemAdd = () => {
                                     <th style={{ width: "80%" }}>Supplier</th>
 
                                 </tr>
-                                <tr>
-
-                                </tr>
+                                {itemAddData.itemSupplier.map((item, index) => (
+                                    <tr key={index}>
+                                        <td>{index + 1}</td>
+                                        <td >{item}</td>
+                                    </tr>
+                                ))}
 
 
                             </tbody>
@@ -783,9 +796,12 @@ const ItemAdd = () => {
                                     <th style={{ width: "80%" }}>OEM</th>
 
                                 </tr>
-                                <tr>
-
-                                </tr>
+                                {itemAddData.itemOEM.map((item, index) => (
+                                    <tr key={index}>
+                                        <td>{index + 1}</td>
+                                        <td >{item}</td>
+                                    </tr>
+                                ))}
 
 
                             </tbody>
@@ -959,9 +975,12 @@ const ItemAdd = () => {
                         </table>
                     </Paper>
                     <div className="d-flex justify-content-end">
+                        <Button component={Link} to="/itemList" variant='contained' className='me-3' startIcon={<ArrowBack/>}>
+                            Back to List
+                        </Button>
 
-                        <Button variant='contained' color='warning' onClick={() => setOpen(true)} className='me-3' type='button'>
-                            Submit
+                        <Button startIcon={<Edit />} variant='contained' color='warning' onClick={() => setOpen(true)} className='me-3' type='button'>
+                            Update
                         </Button>
                         <Button variant='contained' color='error' type="cancel">
                             Cancel
@@ -976,22 +995,22 @@ const ItemAdd = () => {
                     </Snackbar>
                     <Dialog
                         open={open}
-                        onClose={()=> setOpen(false)}
+                        onClose={() => setOpen(false)}
                         aria-labelledby="alert-dialog-title"
                         aria-describedby="alert-dialog-description"
                     >
                         <DialogTitle id="alert-dialog-title">
-                            {"Item create confirmation"}
+                            {"Item update confirmation"}
                         </DialogTitle>
                         <DialogContent>
                             <DialogContentText id="alert-dialog-description">
-                                Are you sure to Create an Item
+                                Are you sure to Update an Item
                             </DialogContentText>
                         </DialogContent>
                         <DialogActions>
-                            <Button onClick={()=> setOpen(false)}>Cancel</Button>
-                            <Button onClick={(e) => { handleItemAddSubmit(e); setOpen(false); }} autoFocus>
-                                Create
+                            <Button onClick={() => setOpen(false)}>Cancel</Button>
+                            <Button onClick={(e) => { handleUpdateItemAdd(e); setOpen(false); }} autoFocus>
+                                Update
                             </Button>
                         </DialogActions>
                     </Dialog>
