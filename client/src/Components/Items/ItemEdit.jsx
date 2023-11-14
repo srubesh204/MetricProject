@@ -478,7 +478,7 @@ const ItemAdd = () => {
                         </div>
                     </div>
                     <div className="col-lg-2 " >
-                        <Typography variant='h3' style={{ height: "50%", margin: "13% 0" }} className='text-center'>Item Add</Typography>
+                        <Typography variant='h3' style={{ height: "50%", margin: "13% 0" }} className='text-center'>Item Edit</Typography>
                     </div>
 
                     <div className="col-lg-5 d-flex justify-content-end">
@@ -713,7 +713,7 @@ const ItemAdd = () => {
 
                             </div>}
 
-                        {itemAddData.itemCalibrationSource === "OEM" &&
+                        {itemAddData.itemCalibrationSource === "OEM" || itemAddData.itemCalibrationSource === "itemSupplier" &&
                             <div className='row g-2'>
                                 <div className="col-md-7">
                                     <TextField size='small' select fullWidth variant='outlined' label="Select OEM" name='itemOEM' value={itemAddData.itemOEM} onChange={handleItemAddChange}>
@@ -827,7 +827,7 @@ const ItemAdd = () => {
                                         format="DD-MM-YYYY" />
                                 </div>
                                 <div className="col-lg-12">
-                                    <TextField size='small' fullWidth variant='outlined' onChange={handleItemAddChange} label="Calibrated at" select name='itemCalibratedAt'>
+                                    <TextField size='small' fullWidth variant='outlined' onChange={handleItemAddChange} label="Calibrated at" select  value={itemAddData.itemCalibratedAt} name='itemCalibratedAt'>
                                         <MenuItem value="InHouse">InHouse</MenuItem>
                                         {suppOEM.map((item, index) => (
                                             <MenuItem key={index} value={item.fullName}>{item.aliasName}</MenuItem>
