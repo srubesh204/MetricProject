@@ -11,6 +11,7 @@ import Devi from './Components/devi/Devi';
 import Dashboard from './Components/Dashboard/Dashboard';
 import Home from './Components/Dashboard/Home';
 import ItemAdd from './Components/Items/ItemAdd';
+import ItemEdit from './Components/Items/ItemEdit';
 import '@fontsource/roboto/300.css';
 import '@fontsource/roboto/400.css';
 import '@fontsource/roboto/500.css';
@@ -29,7 +30,7 @@ function App() {
     <div className="App">
 
       
-        {location.pathname === "/itemadd" ? "" :<Dashboard /> }
+        {location.pathname === "/itemadd" || "/itemlist" ? "" :<Dashboard /> }
         <Routes>
           <Route path="/desdep" element={<Department />} />
           <Route path="/des" element={<Designation />} />
@@ -40,6 +41,7 @@ function App() {
           <Route path="/devi" element={<Devi />} />
           <Route path="/home" element={<Home />} />
           <Route path="/itemAdd" element={<ItemAdd />} />
+          <Route path="/itemEdit/:id" element={<ItemEdit />} />
           <Route path="/itemList" element={<ItemList/>} />
           <Route path="/test" element={<FileViewer/>} />
           

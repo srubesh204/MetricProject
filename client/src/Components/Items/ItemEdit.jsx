@@ -1,4 +1,4 @@
-import { Card, CardContent, CardActions, Button, Container, Grid, Paper, TextField, Typography, CardMedia, InputLabel, Input, FormControl, FormHelperText, FormGroup, FormLabel, MenuItem, Select, Menu, FormControlLabel, Radio, RadioGroup, TableContainer, Table, TableHead, TableRow, TableCell, TableBody, IconButton, OutlinedInput, Box, Chip, Snackbar, Alert, Dialog, DialogTitle, DialogContent, DialogActions, DialogContentText, Checkbox, ListItemText } from '@mui/material'
+import { Card, CardContent, CardActions, Button, Container, Grid, Paper, TextField, Typography, CardMedia, InputLabel, Input, FormControl, FormHelperText, FormGroup, FormLabel, MenuItem, Select, Menu, FormControlLabel, Radio, RadioGroup, TableContainer, Table, TableHead, TableRow, TableCell, TableBody, IconButton, OutlinedInput, Box, Chip, Snackbar, Alert, Dialog, DialogTitle, DialogContent, DialogActions, DialogContentText } from '@mui/material'
 import axios from 'axios';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import { styled } from '@mui/material/styles';
@@ -261,13 +261,6 @@ const ItemAdd = () => {
             setItemAddData((prev) => ({ ...prev, itemPartName: typeof value === 'string' ? value.split(',') : value }));
         }
 
-        if (name === "itemSupplier") {
-            setItemAddData((prev) => ({ ...prev, itemSupplier: typeof value === 'string' ? value.split(',') : value }));
-        }
-       
-           
-        
-
 
         setItemAddData((prev) => ({ ...prev, [name]: value }));
     }
@@ -439,7 +432,6 @@ const ItemAdd = () => {
 
     return (
         <div style={{ margin: "2rem", backgroundColor: "#f5f5f5" }}>
-            <form onSubmit={handleItemAddSubmit}>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
                 <Paper className='row' elevation={12} sx={{ p: 1.5, mb: 2, mx: 0 }}>
                     <div className="col-lg-5 row g-2">
@@ -666,32 +658,13 @@ const ItemAdd = () => {
                         {itemAddData.itemCalibrationSource === "OutSource" &&
                             <div className='row g-2'>
                                 <div className="col-md-7">
-
-                                    <FormControl  size='small' component="div" fullWidth>
-                                        <InputLabel id="itemSupplierId">Select Supplier</InputLabel>
-                                        <Select
-                                            labelId="itemSupplierId"
-                                            id="demo-multiple-checkbox"
-                                            multiple
-                                            name="itemSupplier"
-                                            value={itemAddData.itemSupplier}
-                                            onChange={handleItemAddChange}
-                                            input={<OutlinedInput fullWidth label="Select Supplier" />}
-                                            renderValue={(selected) => selected.join(', ')}
-                                            MenuProps={MenuProps}
-                                            fullWidth
-                                        >
-                                            {supplierList.map((name) => (
-                                                <MenuItem key={name} value={name.aliasName}>
-                                                    <Checkbox checked={itemAddData.itemSupplier.indexOf(name.aliasName) > -1} />
-                                                    <ListItemText primary={name.aliasName} />
-                                                </MenuItem>
-                                            ))}
-                                        </Select>
-                                    </FormControl>
+                                    <TextField size='small' select fullWidth variant='outlined' label="Select Supplier" name='itemSupplier' onChange={handleItemAddChange}>
+                                        <MenuItem value=""><em>--Select--</em></MenuItem>
+                                        {supplierList.map((item, index) => (
+                                            <MenuItem key={index} value={item}>{item.aliasName}</MenuItem>
+                                        ))}
+                                    </TextField>
                                 </div>
-
-
                                 <RadioGroup
                                     className="col-md-5 d-flex justify-content-center"
                                     row
@@ -701,7 +674,16 @@ const ItemAdd = () => {
                                     <FormControlLabel value="Lab" control={<Radio />} label="Lab" />
                                     <FormControlLabel value="Site" control={<Radio />} label="Site" />
                                 </RadioGroup>
-                               
+                                <div className="">
+                                    <Button
+                                        fullWidth
+                                        sx={{ m: 0, p: 1 }}
+                                        variant='contained'
+                                        onClick={() => {
+
+                                        }}
+                                        color='secondary' >Add</Button>
+                                </div>
 
 
                             </div>}
@@ -709,28 +691,12 @@ const ItemAdd = () => {
                         {itemAddData.itemCalibrationSource === "OEM" &&
                             <div className='row g-2'>
                                 <div className="col-md-7">
-                                <FormControl  size='small' component="div" fullWidth>
-                                        <InputLabel id="itemOEMId">Select OEM</InputLabel>
-                                        <Select
-                                            labelId="itemOEMId"
-                                            id="demo-multiple-checkbox"
-                                            multiple
-                                            name="itemOEM"
-                                            value={itemAddData.itemOEM}
-                                            onChange={handleItemAddChange}
-                                            input={<OutlinedInput fullWidth label="Select OEM" />}
-                                            renderValue={(selected) => selected.join(', ')}
-                                            MenuProps={MenuProps}
-                                            fullWidth
-                                        >
-                                            {supplierList.map((name) => (
-                                                <MenuItem key={name} value={name.aliasName}>
-                                                    <Checkbox checked={itemAddData.itemOEM.indexOf(name.aliasName) > -1} />
-                                                    <ListItemText primary={name.aliasName} />
-                                                </MenuItem>
-                                            ))}
-                                        </Select>
-                                    </FormControl>
+                                    <TextField size='small' select fullWidth variant='outlined' label="Select OEM" name='itemOEM' onChange={handleItemAddChange}>
+                                        <MenuItem value=""><em>--Select--</em></MenuItem>
+                                        {OEMList.map((item, index) => (
+                                            <MenuItem key={index} value={item}>{item.aliasName}</MenuItem>
+                                        ))}
+                                    </TextField>
                                 </div>
                                 <RadioGroup
                                     className="col-md-5 d-flex justify-content-center"
@@ -776,13 +742,9 @@ const ItemAdd = () => {
                                     <th style={{ width: "80%" }}>Supplier</th>
 
                                 </tr>
-                                {itemAddData.itemSupplier.map((item, index)=> (
-                                    <tr key={index}>
-                                        <td>{index+1}</td>
-                                        <td >{item}</td>
-                                    </tr>
-                                ))}
-                                
+                                <tr>
+
+                                </tr>
 
 
                             </tbody>
@@ -971,10 +933,10 @@ const ItemAdd = () => {
                     </Paper>
                     <div className="d-flex justify-content-end">
 
-                        <Button variant='contained' color='warning' onClick={() => setOpen(true)} className='me-3' type="button">
+                        <Button variant='contained' color='warning' onClick={() => setOpen(true)} className='me-3' type='button'>
                             Submit
                         </Button>
-                        <Button variant='contained' color='error' type="reset">
+                        <Button variant='contained' color='error' type="cancel">
                             Cancel
                         </Button>
                     </div>
@@ -987,7 +949,7 @@ const ItemAdd = () => {
                     </Snackbar>
                     <Dialog
                         open={open}
-                        onClose={() => setOpen(false)}
+                        onClose={()=> setOpen(false)}
                         aria-labelledby="alert-dialog-title"
                         aria-describedby="alert-dialog-description"
                     >
@@ -1000,8 +962,8 @@ const ItemAdd = () => {
                             </DialogContentText>
                         </DialogContent>
                         <DialogActions>
-                            <Button onClick={() => setOpen(false)}>Cancel</Button>
-                            <Button type="submit" onClick={(e) => { setOpen(false); }} autoFocus>
+                            <Button onClick={()=> setOpen(false)}>Cancel</Button>
+                            <Button onClick={(e) => { handleItemAddSubmit(e); setOpen(false); }} autoFocus>
                                 Create
                             </Button>
                         </DialogActions>
@@ -1015,7 +977,7 @@ const ItemAdd = () => {
 
 
             </LocalizationProvider >
-            </form>
+
         </div >
     )
 }

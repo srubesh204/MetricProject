@@ -67,7 +67,7 @@ const ItemList = () => {
         { field: 'itemDueDate', headerName: 'Item Due Date',width: 140 },
         { field: 'itemLC', headerName: 'itemLC',width: 120 },
         { field: 'itemCalFreInMonths', headerName: 'Item Cal Fre In Months', type: "number",width: 170 },
-        { field: 'itemCalibrationSrc', headerName: 'Item Calibration Src',width: 190 },
+        { field: 'itemCalibrationSource', headerName: 'Item Calibration Src',width: 190 },
         { field: 'itemSupplier', headerName: 'Item Supplier',width: 180 },
         { field: 'itemType', headerName: 'Item Type',width: 190 },
     ];
@@ -252,8 +252,9 @@ const ItemList = () => {
                         display: 'flex',
                         flexDirection: 'column',
                         mb: 1,
-
-                    }} >
+                       
+                    }}  elevation={12}
+                    >
                         <div className='row g-2  '>
                             <Typography variant="h5" className="text-center mb-2">Item List</Typography>
 
