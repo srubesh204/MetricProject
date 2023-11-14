@@ -64,7 +64,16 @@ export const UnitDataBase = ({ style }) => {
     const [unitSelectedRowIds, setUnitSelectedRowIds] = useState([]);
 
     const unitColumns = [
-        { field: 'id', headerName: 'Si. No', width: 70, renderCell: (params) => params.api.getRowIndexRelativeToVisibleRows(params.id) + 1 },
+    {/*{ field: 'id', headerName: 'Si. No', width: 100, renderCell: (params) => params.api.getRowIndexRelativeToVisibleRows(params.id) + 1 }*/},
+    {
+        field: 'id',
+        headerName: 'Si. No',
+        width: 100,
+        renderCell: (params) => {
+          const rowIndex = params.api.getRowIndexRelativeToVisibleRows(params.id);
+          return Number.isInteger(rowIndex) ? rowIndex + 1 : '';
+        }
+      },
 
         { field: 'unitName', headerName: 'UnitName', width: "150" },
 
@@ -249,7 +258,9 @@ export const UnitDataBase = ({ style }) => {
                                 display: 'flex',
                                 flexDirection: 'column',
                                 pb: 5
-                            }} >
+                            }} 
+                            elevation={12}
+                            >
                                 <h6 className='text-center'>Unit DataBase</h6>
                                 <div className='row g-2 mb-2'>
                                     <div className="form-floating col-md-2">
@@ -352,7 +363,9 @@ export const UnitDataBase = ({ style }) => {
                                 display: 'flex',
                                 flexDirection: 'column',
 
-                            }} >
+                            }}
+                            elevation={12}
+                             >
                                 <div>
                                     <h6 className='text-center'>Unit List</h6>
                                     <div className="row mb-2">
@@ -520,13 +533,13 @@ export const PartDataBase = ({ style }) => {
 
     const [partSelectedRowIds, setPartSelectedRowIds] = useState([]);
     const partColumns = [
-        { field: 'id', headerName: 'Si. No', width: 70, renderCell: (params) => params.api.getRowIndexRelativeToVisibleRows(params.id) + 1 },
+        { field: 'id', headerName: 'Si. No', width: 100, renderCell: (params) => params.api.getRowIndexRelativeToVisibleRows(params.id) + 1 },
 
         { field: 'partNo', headerName: 'PartNo', width: "150" },
-        { field: 'partName', headerName: 'partName', width: "160" },
-        { field: 'customer', headerName: 'Customer', width: "170" },
-        { field: 'operationNo', headerName: 'Operation No', width: "200" },
-        { field: 'partStatus', headerName: 'Part Status', width: "200" },
+        { field: 'partName', headerName: 'partName', width: "190" },
+        { field: 'customer', headerName: 'Customer', width: "200" },
+        { field: 'operationNo', headerName: 'Operation No', width: "300" },
+        { field: 'partStatus', headerName: 'Part Status', width: "300" },
 
 
 
@@ -719,6 +732,7 @@ export const PartDataBase = ({ style }) => {
                                 flexDirection: 'column',
 
                             }}
+                            elevation={12}
                                 className="d-flex justify-content-center"
                             >
 
@@ -896,7 +910,9 @@ export const PartDataBase = ({ style }) => {
                                 display: 'flex',
                                 flexDirection: 'column',
 
-                            }} >
+                            }}
+                            elevation={12}
+                             >
                                 <div>
                                     <h5 className='text-center'>Part List</h5>
                                     <div className="row mb-2">

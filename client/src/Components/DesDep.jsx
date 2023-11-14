@@ -954,10 +954,10 @@ export const Department = () => {
                       getRowId={(row) => row._id}
                       initialState={{
                         pagination: {
-                          paginationModel: { page: 0, pageSize: 5 },
+                            paginationModel: { page: 0, pageSize: 5 },
                         },
-                      }}
-                      pageSizeOptions={[5, 10]}
+                    }}
+                    pageSizeOptions={[5, 10]}
                       onRowSelectionModelChange={(newRowSelectionModel, event) => {
                         setSelectedRowIds(newRowSelectionModel);
                         console.log(event)
@@ -1213,19 +1213,21 @@ export const Department = () => {
 
                     </div>
                   </div>
-                  <div className="row g-2">
+                  <div className="row ">
 
                     <div style={{ height: 400, width: '100%' }}>
                       <DataGrid
+                         className="MuiDataGrid-root" 
                         rows={areaList}
                         columns={areaColumns}
                         getRowId={(row) => row._id}
+                       
                         initialState={{
                           pagination: {
-                            paginationModel: { page: 0, pageSize: 5 },
+                              paginationModel: { page: 0, pageSize: 5 },
                           },
-                        }}
-                        pageSizeOptions={[5, 10]}
+                      }}
+                      pageSizeOptions={[5, 10]}
                         onRowSelectionModelChange={(newRowSelectionModel, event) => {
                           setAreaSelectedRowIds(newRowSelectionModel);
                           console.log(event)
@@ -1480,12 +1482,13 @@ export const Department = () => {
                       rows={placeOfUsageList}
                       columns={placeOfUsageColumns}
                       getRowId={(row) => row._id}
+                      
                       initialState={{
                         pagination: {
-                          paginationModel: { page: 0, pageSize: 5 },
+                            paginationModel: { page: 0, pageSize: 5 },
                         },
-                      }}
-                      pageSizeOptions={[5, 10]}
+                    }}
+                    pageSizeOptions={[5, 10]}
                       onRowSelectionModelChange={(newRowSelectionModel, event) => {
                         setPlaceOfUsageSelectedRowIds(newRowSelectionModel);
                         console.log(event)
@@ -1958,6 +1961,7 @@ export const Designation = () => {
                 m: 2,
 
               }}
+              elevation={12}
             >
               <div className="row g-2">
                 <div className="col-md-8 d-felx ">
@@ -2111,6 +2115,7 @@ export const Designation = () => {
                 m: 2
 
               }}
+              elevation={12}
             >
 
 
@@ -2127,12 +2132,13 @@ export const Designation = () => {
                   rows={designationList}
                   columns={designationColumns}
                   getRowId={(row) => row._id}
+                  
                   initialState={{
                     pagination: {
-                      paginationModel: { page: 0, pageSize: 5 },
+                        paginationModel: { page: 0, pageSize: 5 },
                     },
-                  }}
-                  pageSizeOptions={[5, 10]}
+                }}
+                pageSizeOptions={[5, 10]}
                   onRowSelectionModelChange={(newRowSelectionModel, event) => {
                     setDesignationSelectedRowIds(newRowSelectionModel);
                     console.log(event)
