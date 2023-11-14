@@ -827,7 +827,7 @@ const ItemAdd = () => {
                                         format="DD-MM-YYYY" />
                                 </div>
                                 <div className="col-lg-12">
-                                    <TextField size='small' fullWidth variant='outlined' onChange={handleItemAddChange} label="Calibrated at" select name='itemCalibratedAt'>
+                                    <TextField size='small' fullWidth variant='outlined' value={itemAddData.itemCalibratedAt} onChange={handleItemAddChange} label="Calibrated at" select name='itemCalibratedAt'>
                                         <MenuItem value="InHouse">InHouse</MenuItem>
                                         {suppOEM.map((item, index) => (
                                             <MenuItem key={index} value={item.fullName}>{item.aliasName}</MenuItem>

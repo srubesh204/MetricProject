@@ -211,11 +211,10 @@ const ItemAdd = () => {
         itemCalAlertDays: "",
         itemCalibrationSource: "",
         itemItemMasterName: "",
-        itemItemMasterIMTENo: "",
-        itemItemMasterDue: "",
-        itemCalibrationDoneAt: "",
+        itemItemMasterIMTENo: [],
         itemSupplier: [],
         itemOEM: [],
+        itemCalibrationDoneAt: "",
         itemCalDate: "",
         itemDueDate: "",
         itemCalibratedAt: "",
@@ -715,7 +714,7 @@ const ItemAdd = () => {
                             {itemAddData.itemCalibrationSource === "OEM" &&
                                 <div className='row g-2'>
                                     <div className="col-md-7">
-                                    <FormControl size='small' component="div" fullWidth>
+                                        <FormControl size='small' component="div" fullWidth>
                                             <InputLabel id="itemOEMId">Select Supplier</InputLabel>
                                             <Select
                                                 labelId="itemOEMId"
@@ -827,7 +826,7 @@ const ItemAdd = () => {
                                     </div>
                                     <div className="col-md-6">
                                         <DatePicker
-                                            disableFuture
+
                                             fullWidth
                                             id="itemDueDateId"
                                             name="itemDueDate"
@@ -1004,7 +1003,7 @@ const ItemAdd = () => {
                             </DialogContent>
                             <DialogActions>
                                 <Button onClick={() => setOpen(false)}>Cancel</Button>
-                                <Button type="submit" onClick={(e) => {handleItemAddSubmit(e); setOpen(false); }} autoFocus>
+                                <Button type="button" onClick={(e) => { handleItemAddSubmit(e); setOpen(false); }} autoFocus>
                                     Create
                                 </Button>
                             </DialogActions>
