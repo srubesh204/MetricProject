@@ -1,4 +1,4 @@
-import { Card, CardContent, CardActions, Button, Container, Grid, Paper, TextField, Typography, CardMedia, InputLabel, Input, FormControl, FormHelperText, FormGroup, FormLabel, MenuItem, Select, Menu, FormControlLabel, Radio, RadioGroup, TableContainer, Table, TableHead, TableRow, TableCell, TableBody, IconButton, OutlinedInput, Box, Chip } from '@mui/material'
+import { Card, CardContent, CardActions, Button, Container, Grid, Paper, TextField, Typography, CardMedia, InputLabel, Input, FormControl, FormHelperText, FormGroup, FormLabel, MenuItem, Select, Menu, FormControlLabel, Radio, RadioGroup, TableContainer, Table, TableHead, TableRow, TableCell, TableBody, IconButton, OutlinedInput, Box, Chip, Snackbar, Alert, Dialog, DialogTitle, DialogContent, DialogActions, DialogContentText } from '@mui/material'
 import axios from 'axios';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import { styled } from '@mui/material/styles';
@@ -143,7 +143,50 @@ const ItemAdd = () => {
 
     //
 
+    const initialItemAddData = {
+        itemMasterName: "",
+        itemIMTENo: "",
+        itemImage: "",
+        itemType: "",
+        itemRangeSize: "",
+        itemRangeSizeUnit: "",
+        itemMFRNo: "",
+        itemLC: "",
+        itemLCUnit: "",
+        itemMake: "",
+        itemModelNo: "",
+        itemStatus: "",
+        itemReceiptDate: "",
+        itemDepartment: "",
+        itemArea: "",
+        itemPlaceOfUsage: "",
+        itemCalFreInMonths: "",
+        itemCalAlertDays: "",
+        itemCalibrationSource: "",
+        itemItemMasterName: "",
+        itemItemMasterIMTENo: "",
+        itemItemMasterDue: "",
+        itemSupplier: [],
+        itemOEM: [],
+        itemCalDate: "",
+        itemDueDate: "",
+        itemCalibratedAt: "",
+        itemCertificateName: "",
+        itemPartName: [],
+        acceptanceCriteria: [{
+            acParameter: "",
+            acRangeSize: "",
+            acRangeSizeUnit: "",
+            acMin: "",
+            acMax: "",
+            acWearLimit: "",
+            acAccuracy: "",
+            acAccuracyUnit: "",
+            acObservedSize: "",
+        }]
 
+
+    }
 
 
 
@@ -209,8 +252,8 @@ const ItemAdd = () => {
 
     const handleItemAddChange = (e) => {
         const { name, value } = e.target;
-        if (name === "itemRangeSizeUnit"){
-            setItemAddData((prev)=> ({...prev, [name] : value, acceptanceCriteria: [{acAccuracyUnit : value, acRangeSizeUnit: value}]}))
+        if (name === "itemRangeSizeUnit") {
+            setItemAddData((prev) => ({ ...prev, [name]: value, acceptanceCriteria: [{ acAccuracyUnit: value, acRangeSizeUnit: value }] }))
         }
 
 
@@ -326,6 +369,49 @@ const ItemAdd = () => {
         },
     }
 
+    const [snackBarOpen, setSnackBarOpen] = useState(false)
+    const [errorhandler, setErrorHandler] = useState({});
+    const [open, setOpen] = useState(false)
+
+    const handleItemAddSubmit = async (e) => {
+        e.preventDefault();
+        try {
+            const response = await axios.post(
+                `${process.env.REACT_APP_PORT}/itemAdd/createItemAdd`, itemAddData
+            );
+
+            setSnackBarOpen(true)
+
+            console.log("Item Created Successfully")
+            setErrorHandler({ status: response.data.status, message: response.data.message, code: "success" })
+            setItemAddData(initialItemAddData)
+
+        } catch (err) {
+
+            setSnackBarOpen(true)
+
+
+
+
+            if (err.response && err.response.status === 400) {
+                // Handle validation errors
+                const errorData400 = err.response.data.errors;
+                const errorMessages400 = Object.values(errorData400).join(', ');
+                console.log(errorMessages400)
+                setErrorHandler({ status: 0, message: errorMessages400, code: "error" });
+            } else if (err.response && err.response.status === 500) {
+                // Handle other errors
+                const errorData500 = err.response.data.error;
+                const errorMessages500 = Object.values(errorData500).join(', ');
+                console.log(errorMessages500)
+                setErrorHandler({ status: 0, message: errorMessages500, code: "error" });
+            } else {
+                console.log(err.response.data.error)
+                setErrorHandler({ status: 0, message: "An error occurred", code: "error" });
+            }
+        }
+    };
+
     // const handlePartCheckBox = (event) => {
     //     const {target: { value }} = event;
     //     setItemAddData((prev) => ({ ...prev, itemPartName: typeof value === 'string' ? value.split(',') : value })
@@ -334,6 +420,15 @@ const ItemAdd = () => {
     //     );
     // };
     //
+
+    const handleSnackClose = (event, reason) => {
+        if (reason === 'clickaway') {
+            return;
+        }
+
+        setSnackBarOpen(false);
+    }
+
 
     return (
         <div style={{ margin: "2rem", backgroundColor: "#f5f5f5" }}>
@@ -798,7 +893,7 @@ const ItemAdd = () => {
                                     <tr>
                                         <td><select className='form-select form-select-sm' id="acParameterId" name="acParameter" value={item.acParameter} onChange={(e) => changeACValue(index, e.target.name, e.target.value)}>
                                             <option value="">-Select-</option>
-                                            {calibrationPointsData.map((item)=> (
+                                            {calibrationPointsData.map((item) => (
                                                 <option>{item.calibrationPoint}</option>
                                             ))}
                                         </select></td>
@@ -822,21 +917,57 @@ const ItemAdd = () => {
 
                                         <td><input type="text" className="form-control form-control-sm" id="acAccuracyId" name="acAccuracy" value={item.acAccuracy} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} /></td>
                                         <td> <select className="form-select form-select-sm" id="acAccuracyUnitId" name="acAccuracyUnit" value={item.acAccuracyUnit} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} >
-                                        <option value="">-Select-</option>
+                                            <option value="">-Select-</option>
                                             {units.map((item, index) => (
                                                 <option key={index} value={item.unitName}>{item.unitName}</option>
                                             ))}
 
                                         </select></td>
                                         <td><input type="text" className="form-control form-control-sm" id="acObservedSizeId" name="acObservedSize" value={item.acObservedSize} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} /></td>
-                                                <td><Button  color='error' onClick={deleteAC}><Delete /></Button></td>
+                                        <td><Button color='error' onClick={deleteAC}><Delete /></Button></td>
 
                                     </tr>
                                 )) : <tr></tr>}
                             </tbody>
                         </table>
                     </Paper>
+                    <div className="d-flex justify-content-end">
 
+                        <Button variant='contained' color='warning' onClick={() => setOpen(true)} className='me-3' type='button'>
+                            Submit
+                        </Button>
+                        <Button variant='contained' color='error' type="cancel">
+                            Cancel
+                        </Button>
+                    </div>
+
+
+                    <Snackbar anchorOrigin={{ vertical: "top", horizontal: "right" }} open={snackBarOpen} autoHideDuration={6000} onClose={handleSnackClose}>
+                        <Alert onClose={handleSnackClose} severity={errorhandler.code} sx={{ width: '25%' }}>
+                            {errorhandler.message}
+                        </Alert>
+                    </Snackbar>
+                    <Dialog
+                        open={open}
+                        onClose={()=> setOpen(false)}
+                        aria-labelledby="alert-dialog-title"
+                        aria-describedby="alert-dialog-description"
+                    >
+                        <DialogTitle id="alert-dialog-title">
+                            {"Item create confirmation"}
+                        </DialogTitle>
+                        <DialogContent>
+                            <DialogContentText id="alert-dialog-description">
+                                Are you sure to Create an Item
+                            </DialogContentText>
+                        </DialogContent>
+                        <DialogActions>
+                            <Button onClick={()=> setOpen(false)}>Cancel</Button>
+                            <Button onClick={(e) => { handleItemAddSubmit(e); setOpen(false); }} autoFocus>
+                                Create
+                            </Button>
+                        </DialogActions>
+                    </Dialog>
                 </div>
 
 
