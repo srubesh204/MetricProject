@@ -39,11 +39,11 @@ export const Department = () => {
 
   const emptyDepartmentData = {
     department: "",
-    departmentStatus: ""
+    departmentStatus: "Active"
   }
   const [departmentData, setDepartmentData] = useState({
     department: "",
-    departmentStatus: ""
+    departmentStatus: "Active"
   });
   console.log(departmentData)
 
@@ -68,7 +68,7 @@ export const Department = () => {
     { field: 'id', headerName: 'Si. No', width: 70, renderCell: (params) => params.api.getRowIndexRelativeToVisibleRows(params.id) + 1 },
 
     { field: 'department', headerName: 'Department', width: "90" },
-    { field: 'departmentStatus', headerName: 'Department Status', width: "100" },
+    { field: 'departmentStatus', headerName: 'Department Status', width: "90" },
     {
       field: 'delete',
       headerName: 'Delete',
@@ -230,11 +230,11 @@ export const Department = () => {
 
   const initialAreaData = {
     area: "N/A",
-    areaStatus: ""
+    areaStatus: "Active"
   }
   const [areaData, setArea] = useState({
     area: "N/A",
-    areaStatus: ""
+    areaStatus: "Active"
   });
   const [areaList, setAreaList] = useState([]);
 
@@ -263,7 +263,7 @@ export const Department = () => {
     { field: 'id', headerName: 'Si. No', width: 70, renderCell: (params) => params.api.getRowIndexRelativeToVisibleRows(params.id) + 1 },
 
     { field: 'area', headerName: 'Area', width: "90" },
-    { field: 'areaStatus', headerName: ' Area Status', width: "100" },
+    { field: 'areaStatus', headerName: ' Area Status', width: "90" },
     {
       field: 'delete',
       headerName: 'Delete',
@@ -347,7 +347,7 @@ export const Department = () => {
         // Handle other errors
         console.log(err);
         const errorData500 = err.response.data.error;
-        const errorMessages500 = Object.values(errorData500).join(', ');
+        const errorMessages500 = Object.values(errorData500);
         console.log(errorMessages500)
         setErrorHandler({ status: 0, message: errorMessages500, code: "error" });
       } else {
@@ -431,7 +431,7 @@ export const Department = () => {
 
   const initialPlaceOfUsageData = {
     placeOfUsage: "N/A",
-    placeOfUsageStatus: ""
+    placeOfUsageStatus: "Active"
 
   }
 
@@ -529,7 +529,7 @@ export const Department = () => {
 
   const [placeOfUsageDatas, setPlaceOfUsageData] = useState({
     placeOfUsage: "N/A",
-    placeOfUsageStatus: ""
+    placeOfUsageStatus: "Active"
 
   });
   const [placeOfUsageList, setPlaceOfUsageList] = useState([]);
@@ -566,7 +566,7 @@ export const Department = () => {
     { field: 'id', headerName: 'Si. No', width: 70, renderCell: (params) => params.api.getRowIndexRelativeToVisibleRows(params.id) + 1 },
 
     { field: 'placeOfUsage', headerName: 'Place Of Usage', width: "70" },
-    { field: 'placeOfUsageStatus', headerName: ' Place Of Usage Status', width: "100" },
+    { field: 'placeOfUsageStatus', headerName: ' Place Of Usage Status', width: "90" },
     {
       field: 'delete',
       headerName: 'Delete',
@@ -652,7 +652,7 @@ export const Department = () => {
         // Handle other errors
         console.log(err);
         const errorData500 = err.response.data.error;
-        const errorMessages500 = Object.values(errorData500).join(', ');
+        const errorMessages500 = Object.values(errorData500);
         console.log(errorMessages500)
         setErrorHandler({ status: 0, message: errorMessages500, code: "error" });
       } else {
@@ -661,7 +661,7 @@ export const Department = () => {
         setErrorHandler({ status: 0, message: "An error occurred", code: "error" });
       }
 
-
+   
 
 
 
@@ -781,6 +781,7 @@ export const Department = () => {
                   m: 2
 
                 }}
+                elevation={12}
                 className='col row'
               >
                 <Typography variant="h5" component="h5" className="text-center">Department</Typography>
@@ -1053,6 +1054,7 @@ export const Department = () => {
                   my: 2
 
                 }}
+                elevation={12}
                 className='col row g-2 me-3'
               >
                 <Typography variant="h5" className="text-center mb-2">Area</Typography>
@@ -1066,6 +1068,8 @@ export const Department = () => {
                         defaultValue=""
                         fullWidth
                         size="small"
+
+                        placeholder="N/A"
                         onChange={handleAreaChange}
                         onKeyDown={handleAreaKeyDown}
                         value={areaData.area}
@@ -1324,6 +1328,7 @@ export const Department = () => {
                   my: 2
 
                 }}
+                elevation={12}
                 className='col row g-2 me-3'
               >
                 <Typography variant="h5" className="text-center">Place Of Usage</Typography>
@@ -1656,16 +1661,16 @@ export const Designation = () => {
 
 
 
-
+  const initialDesignationData = {
+    designation: "",
+    designationStatus: "Active"
+  }
 
   const [designationData, setDesignationData] = useState({
     designation: "",
-    designationStatus: ""
+    designationStatus: "Active"
   });
-  const initialDesignationData = {
-    designation: "",
-    designationStatus: ""
-  }
+ 
 
 
 
@@ -1717,10 +1722,10 @@ export const Designation = () => {
 
 
   const designationColumns = [
-    { field: 'id', headerName: 'Si. No', width: 150, renderCell: (params) => params.api.getRowIndexRelativeToVisibleRows(params.id) + 1 },
+    { field: 'id', headerName: 'Si. No', width: 100, renderCell: (params) => params.api.getRowIndexRelativeToVisibleRows(params.id) + 1 },
 
     { field: 'designation', headerName: 'Designation', width: "200" },
-    { field: 'designationStatus', headerName: 'Designation Status', width: "250" },
+    { field: 'designationStatus', headerName: 'Designation Status', width: "150" },
     {/*{
       field: 'delete',
       headerName: 'Delete',
@@ -1752,10 +1757,7 @@ export const Designation = () => {
       setSnackBarOpen(true)
       setErrorHandler({ status: response.data.status, message: response.data.message, code: "success" })
       console.log("designation Created Successfully")
-      setDesignationData({
-        designation: "",
-        designationStatus: ""
-      });
+      setDesignationData(initialDesignationData);
     } catch (err) {
       setSnackBarOpen(true)
 
@@ -1978,7 +1980,6 @@ export const Designation = () => {
                     fullWidth
                     size="small"
                     onChange={handleChange}
-                    onKeyDown={handleKeyDown}
 
                     value={designationData.designationStatus}
                     name="designationStatus" >

@@ -487,8 +487,8 @@ export const PartDataBase = ({ style }) => {
         partNo: "",
         partName: "",
         customer: "",
-        operationNo: "",
-        partStatus: ""
+        operationNo: "N/A",
+        partStatus: "Active"
     }
 
 
@@ -496,8 +496,8 @@ export const PartDataBase = ({ style }) => {
         partNo: "",
         partName: "",
         customer: "",
-        operationNo: "",
-        partStatus: ""
+        operationNo: "N/A",
+        partStatus: "Active"
     })
     console.log(partData)
 
@@ -520,13 +520,13 @@ export const PartDataBase = ({ style }) => {
 
     const [partSelectedRowIds, setPartSelectedRowIds] = useState([]);
     const partColumns = [
-        { field: 'id', headerName: 'Si. No', width: 100, renderCell: (params) => params.api.getRowIndexRelativeToVisibleRows(params.id) + 1 },
+        { field: 'id', headerName: 'Si. No', width: 70, renderCell: (params) => params.api.getRowIndexRelativeToVisibleRows(params.id) + 1 },
 
-        { field: 'partNo', headerName: 'PartNo', width: "210" },
-        { field: 'partName', headerName: 'partName', width: "220" },
-        { field: 'customer', headerName: 'Customer', width: "230" },
-        { field: 'operationNo', headerName: 'Operation No', width: "240" },
-        { field: 'partStatus', headerName: 'Part Status', width: "250" },
+        { field: 'partNo', headerName: 'PartNo', width: "150" },
+        { field: 'partName', headerName: 'partName', width: "160" },
+        { field: 'customer', headerName: 'Customer', width: "170" },
+        { field: 'operationNo', headerName: 'Operation No', width: "200" },
+        { field: 'partStatus', headerName: 'Part Status', width: "200" },
 
 
 
@@ -563,7 +563,7 @@ export const PartDataBase = ({ style }) => {
             } else if (err.response && err.response.status === 500) {
                 // Handle other errors
                 const errorData500 = err.response.data.error;
-                const errorMessages500 = Object.values(errorData500).join(' | ');
+                const errorMessages500 = Object.values(errorData500);
                 console.log(errorMessages500)
                 setErrorHandler({ status: 0, message: errorMessages500, code: "error" });
             } else {
@@ -579,12 +579,7 @@ export const PartDataBase = ({ style }) => {
                 "http://localhost:3001/part/updatePart/" + partStateId, partData
             );
             partFetchData();
-            setPartData({
-                partNo: "",
-                partName: "",
-                customer: "",
-                operationNo: ""
-            });
+            setPartData(initialPartData);
             setPartSnackBar(true)
             setErrorHandler({ status: response.data.status, message: response.data.message, code: "success" })
             setPartStateId(null)
@@ -626,12 +621,7 @@ export const PartDataBase = ({ style }) => {
 
             );
             partFetchData();
-            setPartData({
-                partNo: "",
-                partName: "",
-                customer: "",
-                operationNo: ""
-            });
+            setPartData(initialPartData);
             setPartStateId(null);
             setPartSnackBar(true);
             setErrorHandler({ status: response.data.status, message: response.data.message, code: "success" });

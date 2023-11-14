@@ -115,9 +115,10 @@ export default function Dashboard() {
       { name: "Department", file: <Department />, icon: <CategoryIcon /> },
       { name: "Designation", file: <Designation />, icon: <CategoryIcon /> },
       { name: "Employee", file: <Employee />, icon: <BadgeIcon /> },
+      { name: "Vendor", file: <Vendor />, icon: <ContactPageIcon /> },
       { name: "Unit", file: <UnitDataBase />, icon: <CategoryIcon /> },
       { name: "Part", file: <PartDataBase />, icon: <CategoryIcon /> },
-      { name: "Vendor", file: <Vendor />, icon: <ContactPageIcon /> },
+      
       { name: "Item Master", file: <ItemMaster />, icon: <CategoryIcon /> },
     ],
     system: [
@@ -395,7 +396,7 @@ export default function Dashboard() {
         </Drawer>
         <Box
           component="main"
-          style={{background:"linear-gradient(to right, #32CCBC, #90F7EC)", flexGrow: 1, height: "100%"}}
+          style={{ flexGrow: 1, height: "100%"}}
           // sx={{
           //   backgroundColor: (theme) =>
           //     theme.palette.mode === 'light'

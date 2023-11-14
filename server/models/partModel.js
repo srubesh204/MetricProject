@@ -9,11 +9,12 @@ const partSchema = new mongoose.Schema({
   },
   partName: {
     type: String,
-    unique: [true, "PartName should be unique"],
-    required: [true, "Part Name is required"]
-    
+  default: 'N/A'
   },
-  customer: String,
+ customer: {
+    type: String,
+  default: 'N/A'
+  },
   operationNo: String,
   partStatus: {
     type: String,

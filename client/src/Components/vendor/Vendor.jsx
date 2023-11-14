@@ -94,7 +94,7 @@ const Vendor = () => {
         }],
         certificate: "",
         certificateValidity: "",
-        vendorStatus: "",
+        vendorStatus: "Active",
     }
 
     const [vendorData, setVendorData] = useState({
