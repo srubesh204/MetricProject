@@ -397,16 +397,16 @@ const ItemAdd = () => {
     const [errorhandler, setErrorHandler] = useState({});
     const [open, setOpen] = useState(false)
 
-    const handleItemAddSubmit = async (e) => {
+    const updateItemEditData = async (e) => {
         e.preventDefault();
         try {
-            const response = await axios.post(
-                `${process.env.REACT_APP_PORT}/itemAdd/createItemAdd`, itemAddData
+            const response = await axios.put(
+                `${process.env.REACT_APP_PORT}/itemAdd/updateItemAdd/${id} `, itemAddData
             );
 
             setSnackBarOpen(true)
 
-            console.log("Item Created Successfully")
+            console.log("Item Update Successfully")
             setErrorHandler({ status: response.data.status, message: response.data.message, code: "success" })
             setItemAddData(initialItemAddData)
 
@@ -435,6 +435,48 @@ const ItemAdd = () => {
             }
         }
     };
+
+
+
+
+
+   {/* const updateItemEditData = async (id) => {
+        try {
+            const response = await axios.put(
+                "http://localhost:3001/itemAdd/updateItemAdd/" + id, itemAddData
+            );
+           
+            
+            setItemAddData(initialItemAddData)
+            setSnackBarOpen(true)
+            setErrorHandler({ status: response.data.status, message: response.data.message, code: "success" })
+            console.log("Item Update Successfully");
+        } catch (err) {
+            setSnackBarOpen(true)
+
+            if (err.response && err.response.status === 400) {
+                // Handle validation errors
+                console.log(err);
+                const errorData400 = err.response.data.errors;
+                const errorMessages400 = Object.values(errorData400).join(', ');
+                console.log(errorMessages400)
+                setErrorHandler({ status: 0, message: errorMessages400, code: "error" });
+            } else if (err.response && err.response.status === 500) {
+                // Handle other errors
+                console.log(err);
+                const errorData500 = err.response.data.error;
+                const errorMessages500 = Object.values(errorData500);
+                console.log(errorMessages500)
+                setErrorHandler({ status: 0, message: errorMessages500, code: "error" });
+            } else {
+                console.log(err);
+                console.log(err.response.data.error)
+                setErrorHandler({ status: 0, message: "An error occurred", code: "error" });
+            }
+
+            console.log(err);
+        }
+    };*/}
 
     // const handlePartCheckBox = (event) => {
     //     const {target: { value }} = event;
@@ -755,7 +797,8 @@ const ItemAdd = () => {
                                     <th style={{ width: "30%" }}>Due</th>
                                 </tr>
                                 <tr>
-                                    <td>sino</td>
+                                    <td value="Si NO">Si NO</td>
+                                    <td value="Master Name">Master Name</td>
 
                                 </tr>
 
@@ -981,16 +1024,16 @@ const ItemAdd = () => {
                         aria-describedby="alert-dialog-description"
                     >
                         <DialogTitle id="alert-dialog-title">
-                            {"Item create confirmation"}
+                            {"Item update confirmation"}
                         </DialogTitle>
                         <DialogContent>
                             <DialogContentText id="alert-dialog-description">
-                                Are you sure to Create an Item
+                                are you sure to update an Item
                             </DialogContentText>
                         </DialogContent>
                         <DialogActions>
                             <Button onClick={()=> setOpen(false)}>Cancel</Button>
-                            <Button onClick={(e) => { handleItemAddSubmit(e); setOpen(false); }} autoFocus>
+                            <Button onClick={(e) => { updateItemEditData(e); setOpen(false); }} autoFocus>
                                 Create
                             </Button>
                         </DialogActions>
