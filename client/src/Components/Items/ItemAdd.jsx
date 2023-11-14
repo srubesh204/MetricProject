@@ -439,7 +439,7 @@ const ItemAdd = () => {
 
     return (
         <div style={{ margin: "2rem", backgroundColor: "#f5f5f5" }}>
-            <form onSubmit={handleItemAddSubmit}>
+            <form >
             <LocalizationProvider dateAdapter={AdapterDayjs}>
                 <Paper className='row' elevation={12} sx={{ p: 1.5, mb: 2, mx: 0 }}>
                     <div className="col-lg-5 row g-2">
@@ -1001,7 +1001,7 @@ const ItemAdd = () => {
                         </DialogContent>
                         <DialogActions>
                             <Button onClick={() => setOpen(false)}>Cancel</Button>
-                            <Button type="submit" onClick={(e) => { setOpen(false); }} autoFocus>
+                            <Button type="submit" onClick={(e) => {handleItemAddSubmit(e); setOpen(false); }} autoFocus>
                                 Create
                             </Button>
                         </DialogActions>

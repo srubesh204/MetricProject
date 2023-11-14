@@ -7,8 +7,12 @@ import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import dayjs from 'dayjs';
 import { Delete } from '@mui/icons-material';
+import {useParams} from 'react-router-dom'
 
 const ItemAdd = () => {
+
+    const {id}=useParams()
+    console.log(id)
 
     // Units Data
     const [units, setUnits] = useState([]);
@@ -237,6 +241,26 @@ const ItemAdd = () => {
 
     })
 
+    const getItemById = async () => {
+        try {
+            const response = await axios.get(
+                `${process.env.REACT_APP_PORT}/itemAdd/getItemAddById/${id}`
+            );
+            console.log(response.data.result)
+           
+            setItemAddData(response.data.result)
+          
+
+
+        } catch (err) {
+            console.log(err);
+        }
+    };
+    useEffect(() => {
+        getItemById();
+    }, []);
+
+
     //upload Button
     const VisuallyHiddenInput = styled('input')({
         clip: 'rect(0 0 0 0)',
@@ -437,7 +461,7 @@ const ItemAdd = () => {
                     <div className="col-lg-5 row g-2">
 
                         <div className='col-9'>
-                            <TextField size='small' select variant='outlined' label="Item Master" name='itemMasterName' value={itemAddData.itemMasterName || ""} fullWidth onChange={(e) => { handleItemAddChange(e) }}>
+                            <TextField size='small' select variant='outlined' label="Item Master" name='itemMasterName' value={itemAddData.itemMasterName} fullWidth onChange={(e) => { handleItemAddChange(e) }}>
                                 <MenuItem value=""><em>Select</em></MenuItem>
                                 {itemMasterDataList.map((item) => (
                                     <MenuItem value={item._id}>{item.itemDescription}</MenuItem>
@@ -473,7 +497,7 @@ const ItemAdd = () => {
                             <Typography variant='h6' className='text-center'>Item General Details</Typography>
                             <div className="row g-2 mb-2">
                                 <div className="col-lg-4">
-                                    <TextField size='small' select variant='outlined' onChange={handleItemAddChange} label="Item Type" name='itemType' fullWidth value={itemAddData.itemType || ""}>
+                                    <TextField size='small' select variant='outlined' onChange={handleItemAddChange} label="Item Type" name='itemType' fullWidth value={itemAddData.itemType}>
                                         <MenuItem><em>Select Type</em></MenuItem>
                                         <MenuItem value="Attribute">Attribute</MenuItem>
                                         <MenuItem value="Variable">Variable</MenuItem>
@@ -482,8 +506,8 @@ const ItemAdd = () => {
                                     </TextField>
                                 </div>
                                 <div className='col-lg-8 d-flex justify-content-between'>
-                                    <TextField size='small' variant='outlined' label="Range/Size" onChange={handleItemAddChange} name='itemRangeSize' id='itemRangeSizeId' fullWidth />
-                                    <TextField label="Unit" size='small' select onChange={(e) => {
+                                    <TextField size='small' variant='outlined' label="Range/Size" onChange={handleItemAddChange} value={itemAddData.itemRangeSize} name='itemRangeSize' id='itemRangeSizeId' fullWidth />
+                                    <TextField label="Unit" size='small' select value={itemAddData.itemRangeSizeUnit} onChange={(e) => {
                                         handleItemAddChange(e);
                                     }} name='itemRangeSizeUnit' id='itemRangeSizeUnitId' style={{ width: "40%" }} >
                                         <MenuItem value=''><em>None</em></MenuItem>
@@ -499,13 +523,13 @@ const ItemAdd = () => {
                             </div>
                             <div className="row g-2">
                                 <div className="col-lg-4">
-                                    <TextField size='small' variant='outlined' label="MFR.Si.No." onChange={handleItemAddChange} name='itemMFRNo' id='itemMFRNoId' fullWidth />
+                                    <TextField size='small' variant='outlined' label="MFR.Si.No." onChange={handleItemAddChange} name='itemMFRNo' value={itemAddData.itemMFRNo} id='itemMFRNoId' fullWidth />
                                 </div>
                                 <div className='col-lg-8 d-flex justify-content-between'>
-                                    <TextField size='small' variant='outlined' name='itemLC' onChange={handleItemAddChange} id="itemLCId" label="Least Count" fullWidth />
+                                    <TextField size='small' variant='outlined' name='itemLC' onChange={handleItemAddChange} id="itemLCId" value={itemAddData.itemLC} label="Least Count" fullWidth />
 
 
-                                    <TextField select size='small' variant='outlined' label="Unit" name='itemLCUnit' onChange={handleItemAddChange} style={{ width: "40%" }} >
+                                    <TextField select size='small' variant='outlined' label="Unit" name='itemLCUnit' value={itemAddData.itemLCUnit} onChange={handleItemAddChange} style={{ width: "40%" }} >
                                         <MenuItem value=""><em>None</em></MenuItem>
                                         {units.map((unit, index) => (
                                             <MenuItem key={index} value={unit.unitName}>{unit.unitName}</MenuItem>
@@ -515,15 +539,15 @@ const ItemAdd = () => {
                                 </div>
                                 <div className="row g-1">
                                     <div className="col-lg me-1">
-                                        <TextField size='small' variant='outlined' label="Make" onChange={handleItemAddChange} name='itemMake' id='itemMakeId' fullWidth />
+                                        <TextField size='small' variant='outlined' label="Make" onChange={handleItemAddChange} value={itemAddData.itemMake} name='itemMake' id='itemMakeId' fullWidth />
                                     </div>
                                     <div className="col-lg">
-                                        <TextField size='small' variant='outlined' label="Model No." onChange={handleItemAddChange} name='itemModelNo' id='itemModelNoId' fullWidth />
+                                        <TextField size='small' variant='outlined' label="Model No." onChange={handleItemAddChange} value={itemAddData.itemModelNo} name='itemModelNo' id='itemModelNoId' fullWidth />
                                     </div>
                                 </div>
                                 <div className="row g-1">
                                     <div className="col-lg me-1">
-                                        <TextField size='small' select variant='outlined' onChange={handleItemAddChange} label="Item Status" name='itemStatus' id='itemStatusId' fullWidth >
+                                        <TextField size='small' select variant='outlined' onChange={handleItemAddChange} value={itemAddData.itemStatus} label="Item Status" name='itemStatus' id='itemStatusId' fullWidth >
                                             <MenuItem value="Active">Active</MenuItem>
                                             <MenuItem value="InActive">InActive</MenuItem>
                                         </TextField>
@@ -616,7 +640,7 @@ const ItemAdd = () => {
                         {itemAddData.itemCalibrationSource === "InHouse" &&
                             <div className='row g-2'>
                                 <div className="col-md-12">
-                                    <TextField size='small' select fullWidth variant='outlined' onChange={handleItemAddChange} label="Select Master" name='itemItemMasterName' >
+                                    <TextField size='small' select fullWidth variant='outlined' onChange={handleItemAddChange} value={itemAddData.itemItemMasterName} label="Select Master" name='itemItemMasterName' >
                                         <MenuItem value=""><em>--Select--</em></MenuItem>
                                         <MenuItem value="Master1">Master1</MenuItem>
                                         <MenuItem value="Master2">Master2</MenuItem>
@@ -628,7 +652,7 @@ const ItemAdd = () => {
 
 
                                 <div className="col-md-6">
-                                    <TextField size='small' fullWidth variant='outlined' select label="Master IMTE No" name='itemItemMasterIMTENo' onChange={handleItemAddChange} >
+                                    <TextField size='small' fullWidth variant='outlined' select label="Master IMTE No" name='itemItemMasterIMTENo' value={itemAddData.itemItemMasterIMTENo} onChange={handleItemAddChange} >
                                         <MenuItem value=""><em>--Select--</em></MenuItem>
                                         <MenuItem value="MMT-01">MMT-01</MenuItem>
                                         <MenuItem value="MMT-02">MMT-02</MenuItem>
@@ -658,7 +682,7 @@ const ItemAdd = () => {
                         {itemAddData.itemCalibrationSource === "OutSource" &&
                             <div className='row g-2'>
                                 <div className="col-md-7">
-                                    <TextField size='small' select fullWidth variant='outlined' label="Select Supplier" name='itemSupplier' onChange={handleItemAddChange}>
+                                    <TextField size='small' select fullWidth variant='outlined' label="Select Supplier" name='itemSupplier' value={itemAddData.itemSupplier} onChange={handleItemAddChange}>
                                         <MenuItem value=""><em>--Select--</em></MenuItem>
                                         {supplierList.map((item, index) => (
                                             <MenuItem key={index} value={item}>{item.aliasName}</MenuItem>
@@ -669,6 +693,7 @@ const ItemAdd = () => {
                                     className="col-md-5 d-flex justify-content-center"
                                     row
                                     name='calibrationDoneAt'
+                                    value={itemAddData.itemCalibratedAt}
                                     onChange={handleItemAddChange}
                                 >
                                     <FormControlLabel value="Lab" control={<Radio />} label="Lab" />
@@ -691,7 +716,7 @@ const ItemAdd = () => {
                         {itemAddData.itemCalibrationSource === "OEM" &&
                             <div className='row g-2'>
                                 <div className="col-md-7">
-                                    <TextField size='small' select fullWidth variant='outlined' label="Select OEM" name='itemOEM' onChange={handleItemAddChange}>
+                                    <TextField size='small' select fullWidth variant='outlined' label="Select OEM" name='itemOEM' value={itemAddData.itemOEM} onChange={handleItemAddChange}>
                                         <MenuItem value=""><em>--Select--</em></MenuItem>
                                         {OEMList.map((item, index) => (
                                             <MenuItem key={index} value={item}>{item.aliasName}</MenuItem>
@@ -703,6 +728,7 @@ const ItemAdd = () => {
                                     row
                                     name='calibrationDoneAt'
                                     onChange={handleItemAddChange}
+                                    value={itemAddData.itemCalibratedAt}
                                 >
                                     <FormControlLabel value="Lab" control={<Radio />} label="Lab" />
                                     <FormControlLabel value="Site" control={<Radio />} label="Site" />
@@ -729,6 +755,7 @@ const ItemAdd = () => {
                                     <th style={{ width: "30%" }}>Due</th>
                                 </tr>
                                 <tr>
+                                    <td>sino</td>
 
                                 </tr>
 
