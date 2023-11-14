@@ -14,8 +14,72 @@ const itemAddController = {
   createItemAdd: async (req, res) => {
 
     try {
-      const { itemMasterType, itemIMTENo, itemImageName, itemType, itemRangeSize, itemRangeSizeUnit, itemLC, itemLCUnit, itemMFRNo, itemMake, itemModelNo, itemStatus, itemReceiptDate, itemDepartment, itemArea, itemPlaceOfUsage, itemCalFreInMonths, itemCalAlertDays, itemCalDoneAt, itemCalibrationSrc, itemMaster, itemSupplier, itemOEM, itemCalDate, itemDueDate, itemCalibratedAt, itemCertificateName, itemPartName, acceptanceCriteria} = req.body;
-      const itemAddResult = new itemAddModel({ itemMasterType, itemIMTENo, itemImageName, itemType, itemRangeSize, itemRangeSizeUnit, itemLC, itemLCUnit, itemMFRNo, itemMake, itemModelNo, itemStatus, itemReceiptDate, itemDepartment, itemArea, itemPlaceOfUsage, itemCalFreInMonths, itemCalAlertDays, itemCalDoneAt, itemCalibrationSrc, itemMaster, itemSupplier, itemOEM, itemCalDate, itemDueDate, itemCalibratedAt, itemCertificateName, itemPartName, acceptanceCriteria });
+      const {
+        itemMasterName,
+        itemIMTENo,
+        itemImage,
+        itemType,
+        itemRangeSize,
+        itemRangeSizeUnit,
+        itemMFRNo,
+        itemLC,
+        itemLCUnit,
+        itemMake,
+        itemModelNo,
+        itemStatus,
+        itemReceiptDate,
+        itemDepartment,
+        itemArea,
+        itemPlaceOfUsage,
+        itemCalFreInMonths,
+        itemCalAlertDays,
+        itemCalibrationSource,
+        itemItemMasterName,
+        itemItemMasterIMTENo,
+        itemItemMasterDue,
+        itemCalibrationDoneAt,
+        itemSupplier,
+        itemOEM,
+        itemCalDate,
+        itemDueDate,
+        itemCalibratedAt,
+        itemCertificateName,
+        itemPartName,
+        acceptanceCriteria
+      } = req.body;
+      const itemAddResult = new itemAddModel({
+        itemMasterName,
+        itemIMTENo,
+        itemImage,
+        itemType,
+        itemRangeSize,
+        itemRangeSizeUnit,
+        itemMFRNo,
+        itemLC,
+        itemLCUnit,
+        itemMake,
+        itemModelNo,
+        itemStatus,
+        itemReceiptDate,
+        itemDepartment,
+        itemArea,
+        itemPlaceOfUsage,
+        itemCalFreInMonths,
+        itemCalAlertDays,
+        itemCalibrationSource,
+        itemItemMasterName,
+        itemItemMasterIMTENo,
+        itemItemMasterDue,
+        itemCalibrationDoneAt,
+        itemSupplier,
+        itemOEM,
+        itemCalDate,
+        itemDueDate,
+        itemCalibratedAt,
+        itemCertificateName,
+        itemPartName,
+        acceptanceCriteria
+      });
       const validationError = itemAddResult.validateSync();
 
       if (validationError) {
@@ -57,38 +121,70 @@ const itemAddController = {
       // if (isNaN(desId)) {
       //   return res.status(400).json({ error: 'Invalid desId value' });
       // }
-      const { itemMasterType, itemIMTENo, itemImageName, itemType, itemRangeSize, itemRangeSizeUnit, itemLC, itemLCUnit, itemMFRNo, itemMake, itemModelNo, itemStatus, itemReceiptDate, itemDepartment, itemArea, itemPlaceOfUsage, itemCalFreInMonths, itemCalAlertDays, itemCalDoneAt, itemCalibrationSrc, itemMaster, itemSupplier, itemOEM, itemCalDate, itemDueDate, itemCalibratedAt, itemCertificateName, itemPartName, acceptanceCriteria } = req.body;
+      const { itemMasterName ,
+        itemIMTENo ,
+        itemImage ,
+        itemType ,
+        itemRangeSize ,
+        itemRangeSizeUnit ,
+        itemMFRNo ,
+        itemLC ,
+        itemLCUnit ,
+        itemMake ,
+        itemModelNo ,
+        itemStatus ,
+        itemReceiptDate ,
+        itemDepartment ,
+        itemArea ,
+        itemPlaceOfUsage ,
+        itemCalFreInMonths ,
+        itemCalAlertDays ,
+        itemCalibrationSource ,
+        itemItemMasterName ,
+        itemItemMasterIMTENo ,
+        itemItemMasterDue ,
+        itemCalibrationDoneAt ,    
+        itemSupplier ,
+        itemOEM ,
+        itemCalDate ,
+        itemDueDate ,
+        itemCalibratedAt ,
+        itemCertificateName ,
+        itemPartName ,
+        acceptanceCriteria  } = req.body;
       // Create an object with the fields you want to update
       const updateItemFields = {
-        itemMasterType,
-        itemIMTENo,
-        itemImageName,
-        itemType,
-        itemRangeSize,
-        itemRangeSizeUnit,
-        itemLC,
-        itemLCUnit,
-        itemMFRNo,
-        itemMake,
-        itemModelNo,
-        itemStatus,
-        itemReceiptDate,
-        itemDepartment,
-        itemArea,
-        itemPlaceOfUsage,
-        itemCalFreInMonths,
-        itemCalAlertDays,
-        itemCalDoneAt,
-        itemCalibrationSrc,
-        itemMaster,
-        itemSupplier,
-        itemOEM,
-        itemCalDate,
-        itemDueDate,
-        itemCalibratedAt,
-        itemCertificateName,
-        itemPartName,
-        acceptanceCriteria
+        itemMasterName ,
+        itemIMTENo ,
+        itemImage ,
+        itemType ,
+        itemRangeSize ,
+        itemRangeSizeUnit ,
+        itemMFRNo ,
+        itemLC ,
+        itemLCUnit ,
+        itemMake ,
+        itemModelNo ,
+        itemStatus ,
+        itemReceiptDate ,
+        itemDepartment ,
+        itemArea ,
+        itemPlaceOfUsage ,
+        itemCalFreInMonths ,
+        itemCalAlertDays ,
+        itemCalibrationSource ,
+        itemItemMasterName ,
+        itemItemMasterIMTENo ,
+        itemItemMasterDue ,
+        itemCalibrationDoneAt ,    
+        itemSupplier ,
+        itemOEM ,
+        itemCalDate ,
+        itemDueDate ,
+        itemCalibratedAt ,
+        itemCertificateName ,
+        itemPartName ,
+        acceptanceCriteria 
       };
 
       // Find the designation by desId and update it
@@ -140,7 +236,7 @@ const itemAddController = {
 
       const { itemAddIds } = req.body; // Assuming an array of vendor IDs is sent in the request body
       console.log(req.body)
-      const deleteResults = []; 
+      const deleteResults = [];
 
       for (const itemAddId of itemAddIds) {
         // Find and remove each vendor by _id
@@ -149,11 +245,11 @@ const itemAddController = {
         if (!deletedItemAdd) {
           // If a vendor was not found, you can skip it or handle the error as needed.
           console.log(`ItemAdd with ID ${itemAddId} not found.`);
-          res.status(500).json({ message:  `ItemAdd with ID not found.`});
-          
+          res.status(500).json({ message: `ItemAdd with ID not found.` });
+
         } else {
           console.log(`ItemAdd with ID ${itemAddId} deleted successfully.`);
-          deleteResults.push(deletedItemAdd); 
+          deleteResults.push(deletedItemAdd);
         }
       }
 
@@ -163,35 +259,35 @@ const itemAddController = {
       res.status(500).send('Internal Server Error');
     }
   },
-  getItemAddById : async (req, res) => {
+  getItemAddById: async (req, res) => {
     try {
       const itemAddId = req.params.id; // Assuming desId is part of the URL parameter
       // if (isNaN(desId)) {
       // Find the designation by desId and update it
       const getItemAddById = await itemAddModel.findOne(
-          { _id: itemAddId }// To return the updated document
+        { _id: itemAddId }// To return the updated document
       );
 
       if (!getItemAddById) {
-          return res.status(404).json({ error: 'Item Add not found' });
+        return res.status(404).json({ error: 'Item Add not found' });
       }
       console.log("Item Master Get Successfully")
       res.status(200).json({ result: getItemAddById, message: "Item Master get Successfully" });
-  } catch (error) {
+    } catch (error) {
       console.log(error);
       res.status(500).json({ error: error, status: 0 });
-  }
-},
-getItemAddByIMTESort: async (req, res) => {
-  try {
-    const itemAddResult = await itemAddModel.find().sort({itemIMTENo:-1});
-    res.status(202).json({ result: itemAddResult, status: 1 });
-    //res.status(200).json(employees);
-  } catch (err) {
-    console.error(err);
-    res.status(500).send('Error on ItemAdd');
-  }
-},
+    }
+  },
+  getItemAddByIMTESort: async (req, res) => {
+    try {
+      const itemAddResult = await itemAddModel.find().sort({ itemIMTENo: -1 });
+      res.status(202).json({ result: itemAddResult, status: 1 });
+      //res.status(200).json(employees);
+    } catch (err) {
+      console.error(err);
+      res.status(500).send('Error on ItemAdd');
+    }
+  },
 }
 
 
