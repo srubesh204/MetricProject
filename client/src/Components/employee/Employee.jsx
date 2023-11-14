@@ -470,7 +470,7 @@ const Employee = () => {
 
                     <Container maxWidth="lg" sx={{ mb: 2, mt: 2 }}>
 
-                        <Paper sx={{ p: 1, flexGrow: 1, mb: 1 }} >
+                        <Paper sx={{ p: 1, flexGrow: 1, mb: 1 }}  elevation={12} >
 
 
                             <Grid container spacing={1} className='mb-2' >
@@ -658,7 +658,9 @@ const Employee = () => {
                                     display: 'flex',
                                     flexDirection: 'column',
                                     mb: 1
-                                }} >
+                                }}
+                                elevation={12}
+                                 >
                                     <Grid container rowSpacing={1} columnSpacing={{ xs: 1 }} className=' g-2 mb-2'>
 
                                         <Grid item xs={6}>
@@ -691,7 +693,10 @@ const Employee = () => {
                                     display: 'flex',
                                     flexDirection: 'column',
                                     mb: 1
-                                }} >
+                                    
+                                }}
+                                elevation={12}
+                                 >
                                     <Grid container rowSpacing={1} columnSpacing={{ xs: 1 }} className=' g-2 mb-2'>
                                         <Grid item xs={4}>
 
@@ -755,7 +760,9 @@ const Employee = () => {
                                 display: 'flex',
                                 flexDirection: 'column',
                                 mb: 1
-                            }} >
+                            }} 
+                            elevation={12}
+                            >
 
                                 <div className="row g-2" >
                                     <div className="col d-flex ">
@@ -851,7 +858,9 @@ const Employee = () => {
                                 mb: 1
 
 
-                            }} >
+                            }}
+                            elevation={12}
+                             >
 
                                 <h3 className='text-center'>Employee List</h3>
 
@@ -913,6 +922,7 @@ const Employee = () => {
                                             rows={filteredData}
                                             columns={employeeColumns}
                                             getRowId={(row) => row._id}
+                                            
                                             initialState={{
                                                 pagination: {
                                                     paginationModel: { page: 0, pageSize: 5 },

@@ -448,7 +448,9 @@ const ItemMaster = () => {
                                 flexDirection: 'column',
                                 mb: 2
 
-                            }}>
+                            }} 
+                            elevation={12}
+                            >
                             <div className='row mb-2 g-2'>
 
                                 <div className='col' >
@@ -502,7 +504,9 @@ const ItemMaster = () => {
                                         flexDirection: 'column',
                                         mb: 2
 
-                                    }}>
+                                    }} 
+                                    elevation={12}
+                                    >
                                     <div className='row mb-2 g-2'>
                                         <div className="form-floating col-md-6">
 
@@ -677,24 +681,25 @@ const ItemMaster = () => {
                                             flexDirection: 'column',
                                             mb: 2
 
-                                        }}>
-                                        <div style={{ maxHeight: "215px", overflow: "auto", height: "100%" }}>
-                                            <table className='table table-bordered text-center align-middle'>
+                                        }}  elevation={12}
+                                        >
+                                        <div style={{ maxHeight: "185px", overflow: "auto", height: "100%",  minHeight:"185px"}}>
+                                            <table className='table table-sm table-bordered text-center align-middle'>
                                                 <tbody>
                                                     <tr>
                                                         <th>Si No</th>
                                                         <th>Calibration Points </th>
-                                                        <th><Fab size='small' color="primary" aria-label="add" onClick={() => addCalibrationPointRow()}>
+                                                        <th style={{width:"2%"}}><Button size='small' color="primary" aria-label="add" onClick={() => addCalibrationPointRow()}>
                                                             <Add />
-                                                        </Fab></th>
+                                                        </Button></th>
                                                     </tr>
                                                     {itemMasterData.calibrationPoints ? itemMasterData.calibrationPoints.map((item, index) => (
                                                         <tr key={index}>
                                                             <td>{index + 1}</td>
-                                                            <td><input type='text' className='form-control' name='calibrationPoint' value={item.calibrationPoint} onChange={(e) => changeCalibrationPointRow(index, e.target.name, e.target.value)} /></td>
-                                                            <td><Fab size='small' color="error" aria-label="add" onClick={() => deleteCalibrationPointRow(index)}>
+                                                            <td><input type='text' className='form-control form-control-sm' name='calibrationPoint' value={item.calibrationPoint} onChange={(e) => changeCalibrationPointRow(index, e.target.name, e.target.value)} /></td>
+                                                            <td  style={{width:"2%"}}><Button size='small' color="error" aria-label="add" onClick={() => deleteCalibrationPointRow(index)}>
                                                                 <Remove />
-                                                            </Fab></td>
+                                                            </Button></td>
                                                         </tr>
 
 
@@ -717,7 +722,9 @@ const ItemMaster = () => {
                                 flexDirection: 'column',
                                 mb: 2
 
-                            }}>
+                            }} 
+                            elevation={12}
+                            >
                             <div className='row'>
 
                                 <div className="col-md-7">
@@ -821,7 +828,9 @@ const ItemMaster = () => {
                                 flexDirection: 'column',
                                 mb: 4
 
-                            }}>
+                            }} 
+                            elevation={12}
+                            >
                             <div>
                                 <h3 className='text-center'>Item List</h3>
                                 <div className='row mb-2 g-2'>

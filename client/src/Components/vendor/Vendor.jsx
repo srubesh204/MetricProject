@@ -579,6 +579,7 @@ const Vendor = () => {
                                 flexDirection: 'column',
                                 mb: 2
                             }}
+                            elevation={12}
                         >
 
 
@@ -703,6 +704,7 @@ const Vendor = () => {
                                     marginRight: 2
 
                                 }}
+                                elevation={12}
                                 className='col-md-5'
                             >
 
@@ -891,6 +893,7 @@ const Vendor = () => {
                                     flexDirection: 'column',
 
                                 }}
+                                elevation={12}
                                 className='col'
                             >
                                 <div style={{ maxHeight: "200px", overflow: "auto" }}>
@@ -942,6 +945,7 @@ const Vendor = () => {
                                 flexDirection: 'column',
                                 mb: 2
                             }}
+                            elevation={12}
                         >
                             <div className='row' >
                                 <div className='col  d-flex justify-content-end mb-2'>
@@ -1027,6 +1031,7 @@ const Vendor = () => {
                                 flexDirection: 'column',
 
                             }}
+                            elevation={12}
                         >
 
                             <h4 className='text-center'>Vendor List</h4>
