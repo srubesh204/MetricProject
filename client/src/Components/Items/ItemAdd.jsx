@@ -1,4 +1,4 @@
-import { Card, CardContent, CardActions, Button, Container, Grid, Paper, TextField, Typography, CardMedia, InputLabel, Input, FormControl, FormHelperText, FormGroup, FormLabel, MenuItem, Select, Menu, FormControlLabel, Radio, RadioGroup, TableContainer, Table, TableHead, TableRow, TableCell, TableBody, IconButton, OutlinedInput, Box, Chip, Snackbar, Alert, Dialog, DialogTitle, DialogContent, DialogActions, DialogContentText, Checkbox, ListItemText } from '@mui/material'
+import { Card, CardContent, CardActions, Button, Container, Grid, Paper, TextField, Typography, CardMedia, InputLabel, Input, FormControl, FormHelperText, FormGroup, FormLabel, MenuItem, Select, Menu, FormControlLabel, Radio, RadioGroup, TableContainer, Table, TableHead, TableRow, TableCell, TableBody, IconButton, OutlinedInput, Box, Chip, Snackbar, Alert, Dialog, DialogTitle, DialogContent, DialogActions, DialogContentText, Checkbox, ListItemText, Autocomplete } from '@mui/material'
 import axios from 'axios';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import { styled } from '@mui/material/styles';
@@ -321,6 +321,26 @@ const ItemAdd = () => {
         getPartList();
     }, [itemAddData.itemPartName]);
 
+
+    const [imteList, setImteList] = useState([])
+    const getImteList = async () => {
+        try {
+            const response = await axios.get(
+                `${process.env.REACT_APP_PORT}/itemAdd/getItemAddByIMTESort`
+            );
+            console.log(response.data)
+            setImteList(response.data.result)
+
+
+        } catch (err) {
+            console.log(err);
+        }
+    };
+
+    useEffect(() => {
+        getImteList();
+    }, []);
+
     console.log(itemAddData)
     console.log(calibrationPointsData)
     //
@@ -456,14 +476,20 @@ const ItemAdd = () => {
                                     ))}
                                 </TextField>
                             </div>
-                            <div className="col-5">
-                                <TextField size='small' variant='outlined' label="Enter IMTE No." name='itemIMTENo' value={itemAddData.itemIMTENo} fullWidth onChange={handleItemAddChange} />
+                            <div className="col-9">
+                                <Autocomplete
+                                    disablePortal
+                                    id="combo-box-demo"
+                                    options={imteList.map((item) => ({ label: item.itemIMTENo }))}
+                                    size='small'
+                                    renderInput={(params) => <TextField name='itemIMTENo' onChange={handleItemAddChange}  {...params} label="IMTE No" />}
+                                    getOptionDisabled={option => true}
+                                    clearOnBlur={false}
+                                    // getOptionDisabled={options => true}
+                                    
+                                />
                             </div>
-                            <div className="col-4">
-                                <TextField disabled select size='small' variant='outlined' label="Previous IMTE No." fullWidth >
-                                    {<MenuItem></MenuItem>}
-                                </TextField>
-                            </div>
+                            
                         </div>
                         <div className="col-lg-2 " >
                             <Typography variant='h3' style={{ height: "50%", margin: "13% 0" }} className='text-center'>Item Add</Typography>
@@ -627,6 +653,7 @@ const ItemAdd = () => {
                             </div>
                             {itemAddData.itemCalibrationSource === "InHouse" &&
                                 <div className='row g-2'>
+                                    <h6 className='text-center'>Enter Master Details</h6>
                                     <div className="col-md-12">
                                         <TextField size='small' select fullWidth variant='outlined' onChange={handleItemAddChange} label="Select Master" name='itemItemMasterName' >
                                             <MenuItem value=""><em>--Select--</em></MenuItem>
@@ -660,15 +687,13 @@ const ItemAdd = () => {
                                             slotProps={{ textField: { size: 'small' } }}
                                             format="DD-MM-YYYY" />
                                     </div>
-                                    <div className="col">
 
-                                        <Button fullWidth variant='contained' color='success'>Add Master</Button>
-                                    </div>
 
 
                                 </div>}
                             {itemAddData.itemCalibrationSource === "OutSource" &&
                                 <div className='row g-2'>
+                                    <h6 className='text-center'>Enter Supplier Details</h6>
                                     <div className="col-md-7">
 
                                         <FormControl size='small' component="div" fullWidth>
@@ -713,6 +738,7 @@ const ItemAdd = () => {
 
                             {itemAddData.itemCalibrationSource === "OEM" &&
                                 <div className='row g-2'>
+                                    <h6 className='text-center'>Enter OEM Details</h6>
                                     <div className="col-md-7">
                                         <FormControl size='small' component="div" fullWidth>
                                             <InputLabel id="itemOEMId">Select Supplier</InputLabel>
@@ -915,7 +941,7 @@ const ItemAdd = () => {
                                 <Button variant='contained' onClick={() => addACValue()}>Add</Button>
                             </div>
 
-                            <table className='table table-sm table-bordered'>
+                            <table className='table table-sm table-bordered text-center'>
                                 <tbody>
                                     <tr>
                                         <th>Parameter</th>

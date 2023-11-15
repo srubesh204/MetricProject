@@ -280,7 +280,7 @@ const itemAddController = {
   },
   getItemAddByIMTESort: async (req, res) => {
     try {
-      const itemAddResult = await itemAddModel.find().sort({ itemIMTENo: -1 });
+      const itemAddResult = await itemAddModel.find().sort({ itemIMTENo: -1 }).select('itemIMTENo');
       res.status(202).json({ result: itemAddResult, status: 1 });
       //res.status(200).json(employees);
     } catch (err) {
