@@ -30,7 +30,7 @@ function App() {
     <div className="App">
 
       
-        {location.pathname === "/itemadd" || "/itemlist" ? "" :<Dashboard /> }
+        {location.pathname === "/itemadd" || "/itemlist" ? "": <Dashboard />}
         <Routes>
           <Route path="/desdep" element={<Department />} />
           <Route path="/des" element={<Designation />} />

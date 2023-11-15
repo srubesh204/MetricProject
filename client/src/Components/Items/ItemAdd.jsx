@@ -144,7 +144,7 @@ const ItemAdd = () => {
     //
 
     const initialItemAddData = {
-        itemMasterName: "",
+        itemMasterId: "",
         itemIMTENo: "",
         itemImage: "",
         itemType: "",
@@ -191,6 +191,7 @@ const ItemAdd = () => {
 
 
     const [itemAddData, setItemAddData] = useState({
+        itemMasterId: "",
         itemMasterName: "",
         itemIMTENo: "",
         itemImage: "",
@@ -278,14 +279,15 @@ const ItemAdd = () => {
     const itemMasterById = async () => {
         try {
             const response = await axios.get(
-                `${process.env.REACT_APP_PORT}/itemMaster/getItemMasterById/${itemAddData.itemMasterName}`
+                `${process.env.REACT_APP_PORT}/itemMaster/getItemMasterById/${itemAddData.itemMasterId}`
             );
             console.log(response.data)
-            const { itemType, itemDescription, itemPrefix, itemFqInMonths, calAlertInDay, wiNo, uncertainity, standartRef, itemImageName, status, itemMasterImage, workInsName, calibrationPoints } = response.data.result
+            const { _id, itemType, itemDescription, itemPrefix, itemFqInMonths, calAlertInDay, wiNo, uncertainity, standartRef, itemImageName, status, itemMasterImage, workInsName, calibrationPoints } = response.data.result
             setItemAddData((prev) => ({
                 ...prev,
                 itemType: itemType,
-                itemImage: itemMasterImage
+                itemImage: itemMasterImage,
+                itemMasterName: itemDescription
 
             }))
             setCalibrationPointsData(calibrationPoints)
@@ -298,7 +300,7 @@ const ItemAdd = () => {
 
     useEffect(() => {
         itemMasterById();
-    }, [itemAddData.itemMasterName]);
+    }, [itemAddData.itemMasterId]);
 
     const [partData, setPartData] = useState([])
     const getPartList = async () => {
@@ -447,7 +449,7 @@ const ItemAdd = () => {
                         <div className="col-lg-5 row g-2">
 
                             <div className='col-9'>
-                                <TextField size='small' select variant='outlined' label="Item Master" name='itemMasterName' value={itemAddData.itemMasterName || ""} fullWidth onChange={handleItemAddChange}>
+                                <TextField size='small' select variant='outlined' label="Item Master" name='itemMasterId' value={itemAddData.itemMasterId || ""} fullWidth onChange={handleItemAddChange}>
                                     <MenuItem value=""><em>Select</em></MenuItem>
                                     {itemMasterDataList.map((item) => (
                                         <MenuItem value={item._id}>{item.itemDescription}</MenuItem>
