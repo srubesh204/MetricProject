@@ -806,11 +806,12 @@ const ItemAdd = () => {
                                     <th style={{ width: "50%" }}>Master Name</th>
                                     <th style={{ width: "30%" }}>Due</th>
                                 </tr>
-                                <tr>
-                                    <td value="Si NO">Si NO</td>
-                                    <td value="Master Name">Master Name</td>
-
-                                </tr>
+                                {itemAddData.itemItemMasterName.map((item, index) => (
+                                    <tr key={index}>
+                                        <td>{index + 1}</td>
+                                        <td >{item}</td>
+                                    </tr>
+                                ))}
 
 
                             </tbody>
