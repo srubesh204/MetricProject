@@ -108,11 +108,11 @@ const ItemAdd = () => {
         itemMasterFetchData();
     }, []);
 
-    
+
     const [itemMasterDistNames, setItemMasterDistNames] = useState([])
     const [itemMasterListByName, setItemMasterListByName] = useState([])
-   
-    
+
+
 
     const getDistinctItemName = async () => {
         try {
@@ -130,8 +130,8 @@ const ItemAdd = () => {
         getDistinctItemName();
     }, []);
 
-    
-   
+
+
 
 
     //
@@ -144,7 +144,7 @@ const ItemAdd = () => {
     const [suppOEM, setSuppOEM] = useState([]);
 
 
-   
+
 
 
     const vendorListFetch = async () => {
@@ -198,7 +198,7 @@ const ItemAdd = () => {
         itemCalibrationSource: "",
         itemItemMasterName: "",
         itemItemMasterIMTENo: "",
-       
+
         itemSupplier: [],
         itemOEM: [],
         itemCalDate: "",
@@ -281,7 +281,7 @@ const ItemAdd = () => {
         whiteSpace: 'nowrap',
         width: 1,
     });
-   
+
 
     const handleItemAddChange = (e) => {
         const { name, value } = e.target;
@@ -305,8 +305,8 @@ const ItemAdd = () => {
             setItemAddData((prev) => ({ ...prev, itemOEM: typeof value === 'string' ? value.split(',') : value }));
         }
 
-        if(name === "itemItemMasterName"){
-            setItemAddData((prev) => ({ ...prev, itemItemMasterName: value}));
+        if (name === "itemItemMasterName") {
+            setItemAddData((prev) => ({ ...prev, itemItemMasterName: value }));
         }
 
 
@@ -573,17 +573,17 @@ console.log(dueDate)
     }
 
     const handleRemoveFile = () => {
-        setItemAddData((prev)=> ({...prev, itemCertificateData: ""}));
+        setItemAddData((prev) => ({ ...prev, itemCertificateData: "" }));
         setUploadMessage(null)
     }
 
     const getItemMasterByName = async () => {
         try {
             const response = await axios.post(
-                `${process.env.REACT_APP_PORT}/itemAdd/getItemAddByName`,{ itemMasterName: itemAddData.itemItemMasterName }
-                
-            ); 
-         
+                `${process.env.REACT_APP_PORT}/itemAdd/getItemAddByName`, { itemMasterName: itemAddData.itemItemMasterName }
+
+            );
+
             console.log(response.data)
             setItemMasterListByName(response.data.result);
 
@@ -594,6 +594,25 @@ console.log(dueDate)
     useEffect(() => {
         getItemMasterByName();
     }, [itemAddData.itemItemMasterName]);
+
+
+
+    useEffect(() => {
+        calculateResultDate(itemAddData.itemCalDate, itemAddData.itemCalFreInMonths);
+    }, [itemAddData.itemCalDate, itemAddData.itemCalFreInMonths]);
+
+   
+
+    const calculateResultDate = (itemCalDate, itemCalFreInMonths) => {
+        const parsedDate = dayjs(itemCalDate);
+        if (parsedDate.isValid() && !isNaN(parseInt(itemCalFreInMonths))) {
+            const calculatedDate = parsedDate.add(parseInt(itemCalFreInMonths, 10), 'month').subtract(1, 'day');
+            setItemAddData((prev) => ({
+                ...prev,
+                itemDueDate: calculatedDate.format('YYYY-MM-DD'),
+            }));
+        }
+    };
 
     return (
         <div style={{ margin: "2rem", backgroundColor: "#f5f5f5" }}>
@@ -791,7 +810,7 @@ console.log(dueDate)
                                     <div className="col-md-12">
                                         <TextField size='small' select fullWidth variant='outlined' onChange={handleItemAddChange} label="Select Master" name='itemItemMasterName' >
                                             <MenuItem value=""><em>--Select--</em></MenuItem>
-                                            {itemMasterDistNames.map((item, index)=> (
+                                            {itemMasterDistNames.map((item, index) => (
                                                 <MenuItem key={index} value={item}>{item}</MenuItem>
                                             ))}
                                         </TextField>
@@ -801,7 +820,7 @@ console.log(dueDate)
 
 
                                     <div className="col-md-12">
-                                    <FormControl size='small' component="div" fullWidth>
+                                        <FormControl size='small' component="div" fullWidth>
                                             <InputLabel id="itemItemMasterIMTENoId">Select IMTENo.</InputLabel>
                                             <Select
                                                 labelId="itemItemMasterIMTENoId"
@@ -824,7 +843,7 @@ console.log(dueDate)
                                             </Select>
                                         </FormControl>
                                     </div>
-                                
+
 
 
                                 </div>}
@@ -924,14 +943,14 @@ console.log(dueDate)
                                         <th style={{ width: "50%" }}>Master Name</th>
                                         <th style={{ width: "30%" }}>Due</th>
                                     </tr>
-                                    {itemAddData.itemItemMasterIMTENo.map((item, index)=> (
+                                    {itemAddData.itemItemMasterIMTENo.map((item, index) => (
                                         <tr>
-                                            <td>{index+1}</td>
+                                            <td>{index + 1}</td>
                                             <td>{item.itemIMTENo}</td>
                                             <td>{item.itemDueDate}</td>
                                         </tr>
                                     ))
-                                
+
                                     }
 
 
@@ -980,10 +999,10 @@ console.log(dueDate)
                                 <div className="row g-2">
                                     <div className="col-lg-6">
                                         <DatePicker
-                                           disableFuture
+                                            defaultValue={dayjs().format("YYYY-MM-DD")}
                                             fullWidth
-                                            id="calibrationDateId"
-                                            name="calibrationDate"
+                                            id="itemCalDateId"
+                                            name="itemCalDate"
                                             value={dayjs(itemAddData.itemCalDate)}
                                             onChange={(newValue) =>
                                                 setItemAddData((prev) => ({ ...prev, itemCalDate: newValue.format("YYYY-MM-DD") }))
@@ -1027,10 +1046,10 @@ console.log(dueDate)
                                     </div>
 
                                     {uploadMessage &&
-                                    <div className="col-md-12 d-flex justify-content-between">
-                                        {itemAddData.itemCertificateName !== "" && <Chip clickable={true} onDelete={()=> handleRemoveFile()} label={itemAddData.itemCertificateName} size='small' color='warning' />}
-                                        <Chip label={uploadMessage} size='small'  color="success" icon={<Done/>}/>
-                                    </div>}
+                                        <div className="col-md-12 d-flex justify-content-between">
+                                            {itemAddData.itemCertificateName !== "" && <Chip clickable={true} onDelete={() => handleRemoveFile()} label={itemAddData.itemCertificateName} size='small' color='warning' />}
+                                            <Chip label={uploadMessage} size='small' color="success" icon={<Done />} />
+                                        </div>}
 
 
 

@@ -16,7 +16,7 @@ import '@fontsource/roboto/300.css';
 import '@fontsource/roboto/400.css';
 import '@fontsource/roboto/500.css';
 import '@fontsource/roboto/700.css';
-import ItemList from './Components/itemList/ItemList';
+import ItemList from './Components/Items/ItemList';
 import FileViewer from './Components/Test/FileViewer';
 
 
@@ -26,11 +26,14 @@ function App() {
   console.log('hash', location.hash);
   console.log(location.pathname);
   console.log('search', location.search);
+
+  const fullList =['/itemadd', '/itemedit', '/itemlist', '/test']
+  console.log(fullList.includes(location.pathname))
   return (
     <div className="App">
 
-      <Dashboard />
-      {/* {location.pathname === "/itemadd" || "/itemlist" ? "": <Dashboard />} */}
+      
+      {fullList.includes(location.pathname) ? "": <Dashboard />}
       <Routes>
         <Route path="/desdep" element={<Department />} />
         <Route path="/des" element={<Designation />} />
