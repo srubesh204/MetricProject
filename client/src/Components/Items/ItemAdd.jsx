@@ -237,7 +237,7 @@ const ItemAdd = () => {
         itemMake: "",
         itemModelNo: "",
         itemStatus: "Active",
-        itemReceiptDate: "",
+        itemReceiptDate: dayjs().format("YYYY-MM-DD"),
         itemDepartment: "",
         itemArea: "N/A",
         itemPlaceOfUsage: "N/A",
@@ -249,7 +249,7 @@ const ItemAdd = () => {
         itemItemMasterIMTENo: [],
         itemSupplier: [],
         itemOEM: [],
-        itemCalDate: "",
+        itemCalDate: dayjs().format("YYYY-MM-DD"),
         itemDueDate: "",
         itemCalibratedAt: "",
         itemCertificateName: "",
@@ -999,7 +999,7 @@ console.log(dueDate)
                                 <div className="row g-2">
                                     <div className="col-lg-6">
                                         <DatePicker
-                                            defaultValue={dayjs().format("YYYY-MM-DD")}
+                                            
                                             fullWidth
                                             id="itemCalDateId"
                                             name="itemCalDate"
@@ -1111,9 +1111,9 @@ console.log(dueDate)
                                         <th>Parameter</th>
                                         <th>Range/Size</th>
                                         <th>Unit</th>
-                                        <th>Min</th>
-                                        <th>Max</th>
-                                        <th>WearLimit</th>
+                                        {itemAddData.itemType === "Attribute" && <th>Min</th>}
+                                        {itemAddData.itemType === "Attribute" && <th>Max</th>}
+                                        {itemAddData.itemType === "Attribute" && <th>WearLimit</th>}
                                         <th>Accuracy</th>
                                         <th>Unit</th>
                                         <th>Observed Size</th>
@@ -1139,11 +1139,11 @@ console.log(dueDate)
 
 
                                             </select></td>
-                                            <td><input type="text" className="form-control form-control-sm" id="acMinId" name="acMin" value={item.acMin} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} /></td>
+                                            {itemAddData.itemType === "Attribute" && <td><input type="text" className="form-control form-control-sm" id="acMinId" name="acMin" value={item.acMin} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} /></td>}
 
-                                            <td><input type="text" className='form-control form-control-sm' id="acMaxId" name="acMax" value={item.acMax} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} /></td>
+                                            {itemAddData.itemType === "Attribute" && <td><input type="text" className='form-control form-control-sm' id="acMaxId" name="acMax" value={item.acMax} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} /></td>}
 
-                                            <td><input type="text" className="form-control form-control-sm" id="acWearLimitId" name="acWearLimit" value={item.acWearLimit} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} /></td>
+                                            {itemAddData.itemType === "Attribute" && <td><input type="text" className="form-control form-control-sm" id="acWearLimitId" name="acWearLimit" value={item.acWearLimit} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} /></td>}
 
                                             <td><input type="text" className="form-control form-control-sm" id="acAccuracyId" name="acAccuracy" value={item.acAccuracy} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} /></td>
                                             <td> <select className="form-select form-select-sm" id="acAccuracyUnitId" name="acAccuracyUnit" value={item.acAccuracyUnit} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} >
