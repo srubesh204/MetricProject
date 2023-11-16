@@ -27,7 +27,7 @@ function App() {
   console.log(location.pathname);
   console.log('search', location.search);
 
-  const fullList =['/itemadd', '/itemedit', '/itemlist']
+  const fullList =['/itemadd', '/itemedit', '/itemlist', '/test']
   console.log(fullList.includes(location.pathname))
   return (
     <div className="App">

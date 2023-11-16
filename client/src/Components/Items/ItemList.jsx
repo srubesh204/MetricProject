@@ -58,18 +58,18 @@ const ItemList = () => {
 
 
     const columns = [
-        { field: 'id', headerName: 'Si. No', width: 70, renderCell: (params) => params.api.getAllRowIds().indexOf(params.id)+1 },
-        { field: 'itemIMTENo', headerName: 'ItemIMTE No',width: 80 },
-        { field: 'itemMasterName', headerName: 'item Description',width: 90 },
-        { field: 'itemRangeSize', headerName: 'Item Range Size',width: 100 },
-        { field: 'itemMake', headerName: 'Item Make',width: 110 },
-        { field: 'itemCalDate', headerName: 'Item Cal Date',width: 130 },
-        { field: 'itemDueDate', headerName: 'Item Due Date',width: 140 },
-        { field: 'itemLC', headerName: 'itemLC',width: 120 },
-        { field: 'itemCalFreInMonths', headerName: 'Item Cal Fre In Months', type: "number",width: 170 },
-        { field: 'itemCalibrationSource', headerName: 'Item Calibration Src',width: 190 },
-        { field: 'itemSupplier', headerName: 'Item Supplier',width: 180 },
-        { field: 'itemType', headerName: 'Item Type',width: 190 },
+        { field: 'id', headerName: 'Si. No', width: 70, renderCell: (params) => params.api.getAllRowIds().indexOf(params.id)+1, align: "center" },
+        { field: 'itemIMTENo', headerName: 'ItemIMTE No',width: 80, align: "center" },
+        { field: 'itemMasterName', headerName: 'item Description',width: 90, align: "center" },
+        { field: 'itemRangeSize', headerName: 'Item Range Size',width: 100, align: "center" },
+        { field: 'itemMake', headerName: 'Item Make',width: 110, align: "center" },
+        { field: 'itemCalDate', headerName: 'Item Cal Date',width: 130, align: "center" },
+        { field: 'itemDueDate', headerName: 'Item Due Date',width: 140, align: "center" },
+        { field: 'itemLC', headerName: 'itemLC',width: 120, align: "center" },
+        { field: 'itemCalFreInMonths', headerName: 'Frequency(in months)', type: "number",width: 170, align: "center" },
+        { field: 'itemCalibrationSource', headerName: 'Item Calibration Src',width: 190, align: "center" },
+        { field: 'itemSupplier', headerName: 'Item Supplier',  renderCell:(params) => params.row.itemSupplier.toString(), width: 180, align: "center" },
+        { field: 'itemType', headerName: 'Item Type',width: 190, align: "center" },
     ];
 
     const [filteredItemListData, setFilteredItemListData] = useState([])
@@ -461,7 +461,7 @@ const ItemList = () => {
                             </div>
                         </div>
                         <div>
-                            <div className='mb-2' style={{ height: 400, width: '100%' }}>
+                        <Box sx={{ height: 400, width: '100%' }}>
                                 <DataGrid
 
                                     rows={filteredItemListData}
@@ -469,16 +469,19 @@ const ItemList = () => {
                                     getRowId={(row) => row._id}
                                     initialState={{
                                         pagination: {
-                                            paginationModel: { page: 0, pageSize: 5 },
-                                        },
+                                            paginationModel: {
+                                              pageSize: 5,
+                                            },
+                                          },
                                     }}
                                     disableRowSelectionOnClick
                                     density="compact"
                                     //disableColumnMenu={true}
                                     //clipboardCopyCellDelimiter={true}
                                     checkboxSelection
+                                    pageSizeOptions={[5]}
                                 />
-                            </div>
+                            </Box>
 
                         </div>
                         <div className='row'>
