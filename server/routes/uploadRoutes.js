@@ -21,8 +21,18 @@ const WorkInstructionStorage =  multer.diskStorage({
   },
 });
 
+const itemCertificateStorage =  multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, 'storage/itemCertificates');
+  },
+  filename: (req, file, cb) => {
+    cb(null, file.originalname);
+  },
+});
+
 const vendorCertificateUpload = multer({ storage: VendorCertificateStorage });
 const workInsUploadFolder = multer({ storage: WorkInstructionStorage });
+const itemCertificateFolder = multer({ storage: itemCertificateStorage });
 
 router.post('/VendorCertificateUpload', vendorCertificateUpload.single('file'), (req, res) => {
   if (!req.file) {
@@ -62,6 +72,16 @@ router.post('/workInstructions', workInsUploadFolder.single('file'), (req, res) 
 
   // File was provided, proceed with processing
   res.status(200).json({ message: 'Vendor Certificate uploaded successfully' });
+});
+
+router.post('/itemCertificates', itemCertificateFolder.single('file'), (req, res) => {
+  if (!req.file) {
+    // No file was provided in the request
+    return res.status(400).json({ error: 'No file selected for upload' });
+  }
+
+  // File was provided, proceed with processing
+  res.status(200).json({ message: 'Item Certificate uploaded successfully' });
 });
 
 // Function to determine the content type based on the file extension
