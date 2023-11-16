@@ -1,6 +1,6 @@
 import { Card, CardContent, CardActions, Button, Container, Grid, Paper, TextField, Typography, CardMedia, InputLabel, Input, FormControl, FormHelperText, FormGroup, FormLabel, MenuItem, Select, Menu, FormControlLabel, Radio, RadioGroup, TableContainer, Table, TableHead, TableRow, TableCell, TableBody, IconButton, OutlinedInput, Box, Chip, Snackbar, Alert, Dialog, DialogTitle, DialogContent, DialogActions, DialogContentText, Checkbox, ListItemText } from '@mui/material'
 import axios from 'axios';
-import {CloudUploadIcon, ArrowBack, Edit} from '@mui/icons-material';
+import { CloudUploadIcon, ArrowBack, Edit } from '@mui/icons-material';
 import { styled } from '@mui/material/styles';
 import React, { useEffect, useState } from 'react'
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
@@ -51,6 +51,28 @@ const ItemAdd = () => {
     useEffect(() => {
         DepartmentFetch()
     }, []);
+
+
+    const [itemAddList, setItemAddList] = useState([]);
+
+    const itemAddFetch = async () => {
+        try {
+            const response = await axios.get(
+                `${process.env.REACT_APP_PORT}/itemAdd/getItemAddByIMTESort`
+            );
+            // You can use a different logic for generating the id
+
+            setItemAddList(response.data.result);
+
+
+        } catch (err) {
+            console.log(err);
+        }
+    };
+    useEffect(() => {
+        itemAddFetch();
+    }, []);
+
 
 
     const [areas, setAreas] = useState([])
@@ -438,7 +460,7 @@ const ItemAdd = () => {
 
 
 
-   {/* const updateItemEditData = async (id) => {
+    {/* const updateItemEditData = async (id) => {
         try {
             const response = await axios.put(
                 "http://localhost:3001/itemAdd/updateItemAdd/" + id, itemAddData
@@ -701,7 +723,7 @@ const ItemAdd = () => {
                                         <MenuItem value="MMT-03">MMT-03</MenuItem>
                                     </TextField>
                                 </div>
-                                <div className="col-md-6">
+                                {/*<div className="col-md-6">
                                     <DatePicker
                                         fullWidth
                                         id="itemItemMasterDueId"
@@ -713,8 +735,8 @@ const ItemAdd = () => {
                                         label="Master Due"
                                         slotProps={{ textField: { size: 'small' } }}
                                         format="DD-MM-YYYY" />
-                                </div>
-                                
+                                    </div>*/}
+
 
 
                             </div>}
@@ -799,23 +821,23 @@ const ItemAdd = () => {
                             {itemAddData.itemCalibrationSource === "OEM" || itemAddData.itemCalibrationSource === "OEM" && 
                             } */}
 
-                        {itemAddData.itemCalibrationSource === "InHouse" && <table className='table table-sm table-bordered text-center mt-2'>
-                            <tbody>
-                                <tr>
-                                    <th style={{ width: "20%" }}>Si No</th>
-                                    <th style={{ width: "50%" }}>Master Name</th>
-                                    <th style={{ width: "30%" }}>Due</th>
-                                </tr>
-                                {itemAddData.itemItemMasterName.map((item, index) => (
-                                    <tr key={index}>
-                                        <td>{index + 1}</td>
-                                        <td >{item}</td>
+                        {itemAddData.itemCalibrationSource === "InHouse" && Array.isArray(itemAddData.itemItemMasterName) && (
+                            <table className='table table-sm table-bordered text-center mt-2'>
+                                <tbody>
+                                    <tr>
+                                        <th style={{ width: "20%" }}>Si No</th>
+                                        <th style={{ width: "50%" }}>Master Name</th>
+                                        <th style={{ width: "30%" }}>Due</th>
                                     </tr>
-                                ))}
-
-
-                            </tbody>
-                        </table>}
+                                    
+                                        <tr >
+                                            <td></td>
+                                            <td></td>
+                                        </tr>
+                                   
+                                </tbody>
+                            </table>
+                        )}
                         {itemAddData.itemCalibrationSource === "OutSource" && <table className='table table-sm table-bordered text-center mt-2'>
                             <tbody>
                                 <tr>
@@ -1019,7 +1041,7 @@ const ItemAdd = () => {
                         </table>
                     </Paper>
                     <div className="d-flex justify-content-end">
-                        <Button component={Link} to="/itemList" variant='contained' className='me-3' startIcon={<ArrowBack/>}>
+                        <Button component={Link} to="/itemList" variant='contained' className='me-3' startIcon={<ArrowBack />}>
                             Back to List
                         </Button>
 

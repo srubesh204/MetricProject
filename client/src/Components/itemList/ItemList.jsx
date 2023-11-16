@@ -68,8 +68,9 @@ const ItemList = () => {
         { field: 'itemLC', headerName: 'itemLC',width: 120 },
         { field: 'itemCalFreInMonths', headerName: 'Item Cal Fre In Months', type: "number",width: 170 },
         { field: 'itemCalibrationSource', headerName: 'Item Calibration Src',width: 190 },
-        { field: 'itemSupplier', headerName: 'Item Supplier',width: 180 },
+        { field: 'itemSupplier', headerName: 'Item Supplier', renderCell:(params) => params.row.itemSupplier.toString(), width: 180 },
         { field: 'itemType', headerName: 'Item Type',width: 190 },
+        
     ];
 
     const [filteredItemListData, setFilteredItemListData] = useState([])
@@ -103,8 +104,9 @@ const ItemList = () => {
             if (name === "supplierWise") {
 
                 const supperlierWise = itemList.filter((item) => (item.itemSupplier === value))
-                console.log(supperlierWise)
+                
                 setFilteredItemListData(supperlierWise)
+                console.log(supperlierWise)
             }
             if (name === "partName") {
                 const partName = itemList.filter((item) => (item.itemPartName === value))
@@ -356,15 +358,15 @@ const ItemList = () => {
                                     <MenuItem value="7">7</MenuItem >
                                     <MenuItem value="15">15</MenuItem >
                                     <MenuItem value="30">30</MenuItem >
-                                    <MenuItem value="30">30</MenuItem >
-                                    <MenuItem value="Date">Date</MenuItem >
+                                    <MenuItem value="greaterThan30">About values 30</MenuItem>
+                                    <MenuItem value="Customer Rang">Customer Rang</MenuItem >
 
                                 </TextField>
 
                             </div>
                             <div className="col d-flex  mb-2">
 
-                                <TextField label="Part Name"
+                                <TextField label="Part No & Part Name"
                                     id="partNameId"
                                     select
                                     defaultValue="Active"
@@ -374,8 +376,9 @@ const ItemList = () => {
                                    
                                     name="partName" >
                                     {partDataList.map((item, index) => (
-                                        <MenuItem key={index} value={item.partName}>{item.partName}</MenuItem>
+                                        <MenuItem key={index} value={item.partName}>{item.partNo + " "+item.partName}</MenuItem>
                                     ))}
+                                   
                                 </TextField>
 
                             </div>
@@ -401,20 +404,7 @@ const ItemList = () => {
 
 
                             <div className="col d-flex  g-2 mb-2">
-                                <div className='col-3 me-1'>
-                                    <TextField label="item History"
-                                        id="itemHistoryId"
-                                        select
-                                        defaultValue="Active"
-                                        fullWidth
-                                        size="small"
-                                        name="itemHistory" >
-                                        <MenuItem value="all">All</MenuItem >
-                                        <MenuItem value="Attribute">Attribute</MenuItem >
-                                        <MenuItem value="Variable">Variable</MenuItem >
-                                        <MenuItem value="Reference Standard">Reference Standard</MenuItem>
-                                    </TextField>
-                                </div>
+                               
                                 <div className='col-3'>
                                     <TextField label="Status"
                                         id="statusId"
@@ -470,10 +460,10 @@ const ItemList = () => {
                                     initialState={{
 
                                         pagination: {
-                                            paginationModel: { page: 0, pageSize: 5 },
+                                            paginationModel: { pageSize: 5},
                                         },
                                     }}
-                                    pageSizeOptions={[5, 10]}
+                                    disableRowSelectionOnClick
                                     checkboxSelection
                                 />
                             </div>

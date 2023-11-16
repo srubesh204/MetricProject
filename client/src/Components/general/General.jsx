@@ -928,10 +928,10 @@ export const PartDataBase = ({ style }) => {
                                             getRowId={(row) => row._id}
                                             initialState={{
                                                 pagination: {
-                                                    paginationModel: { page: 0, pageSize: 5 },
+                                                    paginationModel: { pageSize: 5},
                                                 },
                                             }}
-                                            pageSizeOptions={[5, 10]}
+                                            
                                             onRowSelectionModelChange={(newRowSelectionModel, event) => {
                                                 setPartSelectedRowIds(newRowSelectionModel);
                                                 console.log(event)
