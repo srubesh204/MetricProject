@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { TextField, MenuItem } from '@mui/material';
+import { TextField, MenuItem, Button } from '@mui/material';
 import { Box, Container, Grid, Paper, Typography } from "@mui/material";
 import { DataGrid } from '@mui/x-data-grid';
 import axios from 'axios';
@@ -7,6 +7,7 @@ import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import dayjs from 'dayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { Link } from 'react-router-dom';
 
 const ItemList = () => {
 
@@ -33,7 +34,7 @@ const ItemList = () => {
 
     const [today, setToday] = useState(dayjs().format('YYYY-MM-DD'))
     console.log(today)
-   
+
 
     const [itemAddList, setItemAddList] = useState([]);
 
@@ -238,9 +239,36 @@ const ItemList = () => {
         partFetchData();
     }, []);
 
+    const [dueDate, setDueDate] = useState("")
 
+    const handleDueChange = (e) => {
+        const { value } = e.target;
+        setDueDate(value)
+        const currentDate = dayjs();
 
+        // Example: Filtering data for the last 7 days
+        const sevenDaysAgo = currentDate.subtract(7, 'day');
 
+        if(value === "all"){
+           setFilteredItemListData(itemList)
+        }else{
+            if (value === "7") {
+
+                const filteredDataLast7Days = itemList.filter((item) => dayjs(item.itemDueDate).isAfter(sevenDaysAgo) && dayjs(item.itemDueDate).isBefore(currentDate));
+                setFilteredItemListData(filteredDataLast7Days)
+            }
+            setFilteredItemListData(itemList)
+        }
+
+       
+       
+    }
+    const [itemId, setItemId] = useState("")
+
+    const handleRowClick = async (params) => {
+        console.log(params)
+        setItemId(params.id)
+    }
 
 
 
@@ -359,7 +387,7 @@ const ItemList = () => {
                                     defaultValue="all"
                                     fullWidth
                                     size="small"
-                                    onChange={handleFilterChangeItemList}
+                                    onChange={handleDueChange}
                                     name="dueInDays" >
                                     <MenuItem value="all">All</MenuItem>
                                     <MenuItem value="Past">Past</MenuItem >
@@ -421,9 +449,9 @@ const ItemList = () => {
                                         defaultValue="Active"
                                         fullWidth
                                         size="small"
-                                        name="status" 
-                                         onChange={handleFilterChangeItemList}>
-                                       
+                                        name="status"
+                                        onChange={handleFilterChangeItemList}>
+
                                         <MenuItem value="all">All</MenuItem>
                                         <MenuItem value="Active">Active</MenuItem >
                                         <MenuItem value="InActive">InActive</MenuItem >
@@ -434,7 +462,7 @@ const ItemList = () => {
                             </div>
 
 
-                            <div className='col d-flex justify-content-end  g-2'>
+                            {dueDate === "Date" && <div className='col d-flex justify-content-end  g-2'>
                                 <div className="me-2 ">
                                     <DatePicker
                                         disableFuture
@@ -459,7 +487,7 @@ const ItemList = () => {
                                         slotProps={{ textField: { size: 'small' } }}
                                         format="DD-MM-YYYY" />
                                 </div>
-                            </div>
+                            </div>}
                         </div>
                         <div>
                             <Box sx={{ height: 400, width: '100%', my: 2 }}>
@@ -487,6 +515,7 @@ const ItemList = () => {
                                     //disableColumnMenu={true}
                                     //clipboardCopyCellDelimiter={true}
                                     checkboxSelection
+                                    onRowClick={handleRowClick}
                                     pageSizeOptions={[5]}
                                 />
                             </Box>
@@ -509,7 +538,7 @@ const ItemList = () => {
                                     <button type="button" className='btn btn-warning' >+ Add Vendor</button>
                                 </div>
                                 <div className='me-2'>
-                                    <button type="button" className='btn btn-info' >Modify</button>
+                                    <Button component={Link} to={`/itemedit/${itemId}`} variant="contained" color="warning">Modify</Button>
                                 </div>
                                 <div className='me-2'>
                                     <button type="button" className='btn btn-danger' >Delete</button>
