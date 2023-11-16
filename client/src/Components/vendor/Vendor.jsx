@@ -516,7 +516,7 @@ const Vendor = () => {
 
     const vendorListColumns = [
 
-        { field: 'id', headerName: 'Si. No', width: 70, renderCell: (params) => params.api.getRowIndexRelativeToVisibleRows(params.id)+1},     
+        { field: 'id', headerName: 'Si. No', width: 70, renderCell: (params) => params.api.getAllRowIds().indexOf(params.id)+1 },     
         { field: 'vendorCode', headerName: 'VendorCode', width: 130 },
 
         {

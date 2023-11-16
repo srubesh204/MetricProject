@@ -169,7 +169,7 @@ const ItemMaster = () => {
 
     const [itemMasteSelectedRowIds, setItemMasteSelectedRowIds] = useState([]);
     const itemMasterColumns = [
-        { field: 'id', headerName: 'Si. No', width: 70, renderCell: (params) => params.api.getRowIndexRelativeToVisibleRows(params.id)+1},
+        { field: 'id', headerName: 'Si. No', width: 70, renderCell: (params) => params.api.getAllRowIds().indexOf(params.id)+1 },
 
         { field: 'itemType', headerName: 'Item Type', width: 70 },
         { field: 'itemDescription', headerName: 'Item Description', width: 150 },
@@ -877,7 +877,7 @@ const ItemMaster = () => {
                                                     paginationModel: { page: 0, pageSize: 5 },
                                                 },
                                             }}
-                                            pageSizeOptions={[5, 10]}
+                                           
                                             onRowSelectionModelChange={(newRowSelectionModel, event) => {
                                                 setItemMasteSelectedRowIds(newRowSelectionModel);
                                                 console.log(event)
@@ -885,6 +885,8 @@ const ItemMaster = () => {
                                             }}
                                             onRowClick={updateItemMaster}
                                             checkboxSelection
+                                            
+                                            
 
 
                                         >
