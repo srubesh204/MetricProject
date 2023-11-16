@@ -371,6 +371,7 @@ const ItemList = () => {
                                     fullWidth
                                     size="small"
                                     onChange={handleFilterChangeItemList}
+                                   
                                     name="partName" >
                                     {partDataList.map((item, index) => (
                                         <MenuItem key={index} value={item.partName}>{item.partName}</MenuItem>
