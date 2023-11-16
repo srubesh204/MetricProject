@@ -1,6 +1,6 @@
-import { Card, CardContent, CardActions, Button, Container, Grid, Paper, TextField, Typography, CardMedia, InputLabel, Input, FormControl, FormHelperText, FormGroup, FormLabel, MenuItem, Select, Menu, FormControlLabel, Radio, RadioGroup, TableContainer, Table, TableHead, TableRow, TableCell, TableBody, IconButton, OutlinedInput, Box, Chip, Snackbar, Alert, Dialog, DialogTitle, DialogContent, DialogActions, DialogContentText, Checkbox, ListItemText } from '@mui/material'
+import { Card, CardContent, CardActions, Button, Container, Grid, Paper, TextField, Typography, CardMedia, InputLabel, Input, FormControl, FormHelperText, FormGroup, FormLabel, MenuItem, Select, Menu, FormControlLabel, Radio, RadioGroup, TableContainer, Table, TableHead, TableRow, TableCell, TableBody, IconButton, OutlinedInput, Box, Chip, Snackbar, Alert, Dialog, DialogTitle, DialogContent, DialogActions, DialogContentText, Checkbox, ListItemText, Autocomplete } from '@mui/material'
 import axios from 'axios';
-import { CloudUploadIcon, ArrowBack, Edit } from '@mui/icons-material';
+import { CloudUploadIcon, ArrowBack, Edit, Done } from '@mui/icons-material';
 import { styled } from '@mui/material/styles';
 import React, { useEffect, useState } from 'react'
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
@@ -515,7 +515,57 @@ const ItemAdd = () => {
         setSnackBarOpen(false);
     }
 
+    const [imteList, setImteList] = useState([])
+    const getImteList = async () => {
+        try {
+            const response = await axios.get(
+                `${process.env.REACT_APP_PORT}/itemAdd/getItemAddByIMTESort`
+            );
+            console.log(response.data)
+            setImteList(response.data.result)
 
+
+        } catch (err) {
+            console.log(err);
+        }
+    };
+
+    useEffect(() => {
+        getImteList();
+    }, []);
+
+    const [uploadMessage, setUploadMessage] = useState("")
+
+    const handleCertificateUpload = (event) => {
+        const selectedFile = event.target.files[0];
+        if (selectedFile) {
+            console.log("working")
+            setItemAddData((prev) => ({ ...prev, itemCertificateName: selectedFile.name }));
+            const formData = new FormData();
+            formData.append('file', selectedFile);
+            try {
+                axios.post(`${process.env.REACT_APP_PORT}/upload/itemCertificates`, formData)
+                    .then(response => {
+                        setUploadMessage(response.data.message)
+                        console.log(response);
+                    })
+                    .catch(error => {
+                        setUploadMessage("")
+                        console.error(error);
+                        // handle error here
+                    });
+            } catch (error) {
+                console.error('Error uploading the file:', error);
+            }
+
+        }
+    };
+
+    const handleRemoveFile = () => {
+        console.log("work")
+        setItemAddData((prev) => ({ ...prev, itemCertificateName: "" }));
+        setUploadMessage(null)
+    }
 
 
     return (
@@ -532,13 +582,19 @@ const ItemAdd = () => {
                                 ))}
                             </TextField>
                         </div>
-                        <div className="col-5">
-                            <TextField size='small' variant='outlined' label="Enter IMTE No." name='itemIMTENo' value={itemAddData.itemIMTENo} fullWidth onChange={handleItemAddChange} />
-                        </div>
-                        <div className="col-4">
-                            <TextField disabled select size='small' variant='outlined' label="Previous IMTE No." fullWidth >
-                                {<MenuItem></MenuItem>}
-                            </TextField>
+                        <div className="col-9">
+                            <Autocomplete
+                                disablePortal
+                                id="combo-box-demo"
+                                options={imteList.map((item) => ({ label: item.itemIMTENo }))}
+                                size='small'
+                                value={itemAddData.itemIMTENo}
+                                renderInput={(params) => <TextField name='itemIMTENo' onChange={handleItemAddChange}   {...params} label="IMTE No" />}
+                                getOptionDisabled={option => true}
+                                clearOnBlur={false}
+                            // getOptionDisabled={options => true}
+
+                            />
                         </div>
                     </div>
                     <div className="col-lg-2 " >
@@ -917,20 +973,25 @@ const ItemAdd = () => {
 
                                     </TextField>
                                 </div>
-                                <div className="col-lg-8">
+                                <div className="col-lg-6">
                                     <Button component="label" variant="contained" fullWidth >
                                         Certificate Upload
-                                        <VisuallyHiddenInput type="file" />
+                                        <VisuallyHiddenInput type="file" onChange={handleCertificateUpload} />
                                     </Button>
                                 </div>
-                                <div className='col-lg-4'>
-                                    <Button
-                                        fullWidth
-                                        variant="outlined"
+                                {itemAddData.itemCertificateName !== "" && <div className='d-flex justif-content-end col-md-6 '>
+                                            <Chip component={Link} clickable={true} label={itemAddData.itemCertificateName}  color='warning' target='_blank' to={`${process.env.REACT_APP_PORT}/itemCertificates/${itemAddData.itemCertificateName}`}></Chip>
+                                            <Button size='small'  onClick={handleRemoveFile}><Delete color='error'/></Button>
+                                        </div>}
+                               
+                                {itemAddData.itemCertificateName !== "" &&
+                                    <div className="col-md-12 d-flex justify-content-between">
+                                        
 
+                                        {uploadMessage && <Chip label={uploadMessage}  color="success" icon={<Done />} />}
+                                       
+                                    </div>}
 
-                                    >Upload</Button>
-                                </div>
                             </div>
 
                         </Paper >

@@ -25,28 +25,28 @@ function App() {
 
   console.log('hash', location.hash);
   console.log(location.pathname);
-  console.log('search', location.search); 
+  console.log('search', location.search);
   return (
     <div className="App">
 
-      
-        {location.pathname === "/itemadd" || "/itemlist" ? "": <Dashboard />}
-        <Routes>
-          <Route path="/desdep" element={<Department />} />
-          <Route path="/des" element={<Designation />} />
-          <Route path="/employee" element={<Employee />} />
-          <Route path="/general" element={<PartDataBase />} />
-          <Route path="/vendor" element={<Vendor />} />
-          <Route path="/itemMaster" element={<ItemMaster />} />
-          <Route path="/devi" element={<Devi />} />
-          <Route path="/home" element={<Home />} />
-          <Route path="/itemAdd" element={<ItemAdd />} />
-          <Route path="/itemEdit/:id" element={<ItemEdit />} />
-          <Route path="/itemList" element={<ItemList/>} />
-          <Route path="/test" element={<FileViewer/>} />
-          
-        </Routes>
-      
+      <Dashboard />
+      {/* {location.pathname === "/itemadd" || "/itemlist" ? "": <Dashboard />} */}
+      <Routes>
+        <Route path="/desdep" element={<Department />} />
+        <Route path="/des" element={<Designation />} />
+        <Route path="/employee" element={<Employee />} />
+        <Route path="/general" element={<PartDataBase />} />
+        <Route path="/vendor" element={<Vendor />} />
+        <Route path="/itemMaster" element={<ItemMaster />} />
+        <Route path="/devi" element={<Devi />} />
+        <Route path="/home" element={<Home />} />
+        <Route path="/itemAdd" element={<ItemAdd />} />
+        <Route path="/itemEdit/:id" element={<ItemEdit />} />
+        <Route path="/itemList" element={<ItemList />} />
+        <Route path="/test" element={<FileViewer />} />
+
+      </Routes>
+
     </div>
   );
 }

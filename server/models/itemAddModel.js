@@ -1,8 +1,21 @@
 const mongoose = require('mongoose');
 const uniqueValidator = require('mongoose-unique-validator');
 const itemAddSchema = new mongoose.Schema({
-    itemMasterName: String,
-    itemIMTENo: String,
+    itemMasterId: {
+    type: String,
+    unique: [true, "Item Add should be Unique"],
+    required: [true, "Item Add is Required"]
+  },
+    itemMasterName:  {
+        type: String,
+        unique: [true, "Item Add should be Unique"],
+        required: [true, "Item Add is Required"]
+      },
+    itemIMTENo:  {
+        type: String,
+        unique: [true, "Item Add should be Unique"],
+        required: [true, "Item Add is Required"]
+      },
     itemImage: String,
     itemType: String,
     itemRangeSize: String,

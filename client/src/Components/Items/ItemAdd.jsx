@@ -1,12 +1,11 @@
-import { Card, CardContent, CardActions, Button, Container, Grid, Paper, TextField, Typography, CardMedia, InputLabel, Input, FormControl, FormHelperText, FormGroup, FormLabel, MenuItem, Select, Menu, FormControlLabel, Radio, RadioGroup, TableContainer, Table, TableHead, TableRow, TableCell, TableBody, IconButton, OutlinedInput, Box, Chip, Snackbar, Alert, Dialog, DialogTitle, DialogContent, DialogActions, DialogContentText, Checkbox, ListItemText } from '@mui/material'
+import { Card, CardContent, CardActions, Button, Container, Grid, Paper, TextField, Typography, CardMedia, InputLabel, Input, FormControl, FormHelperText, FormGroup, FormLabel, MenuItem, Select, Menu, FormControlLabel, Radio, RadioGroup, TableContainer, Table, TableHead, TableRow, TableCell, TableBody, IconButton, OutlinedInput, Box, Chip, Snackbar, Alert, Dialog, DialogTitle, DialogContent, DialogActions, DialogContentText, Checkbox, ListItemText, Autocomplete } from '@mui/material'
 import axios from 'axios';
-import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import { styled } from '@mui/material/styles';
 import React, { useEffect, useState } from 'react'
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import dayjs from 'dayjs';
-import { Delete } from '@mui/icons-material';
+import { Delete, Done } from '@mui/icons-material';
 
 const ItemAdd = () => {
 
@@ -103,6 +102,31 @@ const ItemAdd = () => {
         itemMasterFetchData();
     }, []);
 
+    
+    const [itemMasterDistNames, setItemMasterDistNames] = useState([])
+    const [itemMasterListByName, setItemMasterListByName] = useState([])
+   
+    
+
+    const getDistinctItemName = async () => {
+        try {
+            const response = await axios.get(
+                `${process.env.REACT_APP_PORT}/itemAdd/getDistinctItemName`
+            );
+            console.log(response.data)
+            setItemMasterDistNames(response.data.result);
+
+        } catch (err) {
+            console.log(err);
+        }
+    };
+    useEffect(() => {
+        getDistinctItemName();
+    }, []);
+
+    
+   
+
 
     //
 
@@ -112,6 +136,9 @@ const ItemAdd = () => {
     const [OEMList, setOEMList] = useState([]);
     const [supplierList, setSupplierList] = useState([])
     const [suppOEM, setSuppOEM] = useState([]);
+
+
+   
 
 
     const vendorListFetch = async () => {
@@ -165,7 +192,7 @@ const ItemAdd = () => {
         itemCalibrationSource: "",
         itemItemMasterName: "",
         itemItemMasterIMTENo: "",
-        itemItemMasterDue: "",
+       
         itemSupplier: [],
         itemOEM: [],
         itemCalDate: "",
@@ -248,6 +275,7 @@ const ItemAdd = () => {
         whiteSpace: 'nowrap',
         width: 1,
     });
+   
 
     const handleItemAddChange = (e) => {
         const { name, value } = e.target;
@@ -259,6 +287,9 @@ const ItemAdd = () => {
         if (name === "itemPartName") {
             setItemAddData((prev) => ({ ...prev, itemPartName: typeof value === 'string' ? value.split(',') : value }));
         }
+        if (name === "itemItemMasterIMTENo") {
+            setItemAddData((prev) => ({ ...prev, itemItemMasterIMTENo: typeof value === 'string' ? value.split(',') : value }));
+        }
 
         if (name === "itemSupplier") {
             setItemAddData((prev) => ({ ...prev, itemSupplier: typeof value === 'string' ? value.split(',') : value }));
@@ -266,6 +297,10 @@ const ItemAdd = () => {
         if (name === "itemOEM") {
             // Map selected names back to corresponding objects
             setItemAddData((prev) => ({ ...prev, itemOEM: typeof value === 'string' ? value.split(',') : value }));
+        }
+
+        if(name === "itemItemMasterName"){
+            setItemAddData((prev) => ({ ...prev, itemItemMasterName: value}));
         }
 
 
@@ -320,6 +355,26 @@ const ItemAdd = () => {
     useEffect(() => {
         getPartList();
     }, [itemAddData.itemPartName]);
+
+
+    const [imteList, setImteList] = useState([])
+    const getImteList = async () => {
+        try {
+            const response = await axios.get(
+                `${process.env.REACT_APP_PORT}/itemAdd/getItemAddByIMTESort`
+            );
+            console.log(response.data)
+            setImteList(response.data.result)
+
+
+        } catch (err) {
+            console.log(err);
+        }
+    };
+
+    useEffect(() => {
+        getImteList();
+    }, []);
 
     console.log(itemAddData)
     console.log(calibrationPointsData)
@@ -423,6 +478,33 @@ const ItemAdd = () => {
         }
     };
 
+    const [uploadMessage, setUploadMessage] = useState("")
+
+    const handleCertificateUpload = (event) => {
+        const selectedFile = event.target.files[0];
+        if (selectedFile) {
+            console.log("working")
+            setItemAddData((prev) => ({ ...prev, itemCertificateName: selectedFile.name }));
+            const formData = new FormData();
+            formData.append('file', selectedFile);
+            try {
+                axios.post(`${process.env.REACT_APP_PORT}/upload/workInstructions`, formData)
+                    .then(response => {
+                        setUploadMessage(response.data.message)
+                        console.log(response);
+                    })
+                    .catch(error => {
+                        setUploadMessage("")
+                        console.error(error);
+                        // handle error here
+                    });
+            } catch (error) {
+                console.error('Error uploading the file:', error);
+            }
+
+        }
+    };
+
     // const handlePartCheckBox = (event) => {
     //     const {target: { value }} = event;
     //     setItemAddData((prev) => ({ ...prev, itemPartName: typeof value === 'string' ? value.split(',') : value })
@@ -440,6 +522,28 @@ const ItemAdd = () => {
         setSnackBarOpen(false);
     }
 
+    const handleRemoveFile = () => {
+        setItemAddData((prev)=> ({...prev, itemCertificateData: ""}));
+        setUploadMessage(null)
+    }
+
+    const getItemMasterByName = async () => {
+        try {
+            const response = await axios.post(
+                `${process.env.REACT_APP_PORT}/itemAdd/getItemAddByName`,{ itemMasterName: itemAddData.itemItemMasterName }
+                
+            ); 
+         
+            console.log(response.data)
+            setItemMasterListByName(response.data.result);
+
+        } catch (err) {
+            console.log(err);
+        }
+    };
+    useEffect(() => {
+        getItemMasterByName();
+    }, [itemAddData.itemItemMasterName]);
 
     return (
         <div style={{ margin: "2rem", backgroundColor: "#f5f5f5" }}>
@@ -456,14 +560,20 @@ const ItemAdd = () => {
                                     ))}
                                 </TextField>
                             </div>
-                            <div className="col-5">
-                                <TextField size='small' variant='outlined' label="Enter IMTE No." name='itemIMTENo' value={itemAddData.itemIMTENo} fullWidth onChange={handleItemAddChange} />
+                            <div className="col-9">
+                                <Autocomplete
+                                    disablePortal
+                                    id="combo-box-demo"
+                                    options={imteList.map((item) => ({ label: item.itemIMTENo }))}
+                                    size='small'
+                                    renderInput={(params) => <TextField name='itemIMTENo' onChange={handleItemAddChange}  {...params} label="IMTE No" />}
+                                    getOptionDisabled={option => true}
+                                    clearOnBlur={false}
+                                // getOptionDisabled={options => true}
+
+                                />
                             </div>
-                            <div className="col-4">
-                                <TextField disabled select size='small' variant='outlined' label="Previous IMTE No." fullWidth >
-                                    {<MenuItem></MenuItem>}
-                                </TextField>
-                            </div>
+
                         </div>
                         <div className="col-lg-2 " >
                             <Typography variant='h3' style={{ height: "50%", margin: "13% 0" }} className='text-center'>Item Add</Typography>
@@ -627,48 +737,50 @@ const ItemAdd = () => {
                             </div>
                             {itemAddData.itemCalibrationSource === "InHouse" &&
                                 <div className='row g-2'>
+                                    <h6 className='text-center'>Enter Master Details</h6>
                                     <div className="col-md-12">
                                         <TextField size='small' select fullWidth variant='outlined' onChange={handleItemAddChange} label="Select Master" name='itemItemMasterName' >
                                             <MenuItem value=""><em>--Select--</em></MenuItem>
-                                            <MenuItem value="Master1">Master1</MenuItem>
-                                            <MenuItem value="Master2">Master2</MenuItem>
-                                            <MenuItem value="Master3">Master3</MenuItem>
+                                            {itemMasterDistNames.map((item, index)=> (
+                                                <MenuItem key={index} value={item}>{item}</MenuItem>
+                                            ))}
                                         </TextField>
                                     </div>
 
 
 
 
-                                    <div className="col-md-6">
-                                        <TextField size='small' fullWidth variant='outlined' select label="Master IMTE No" name='itemItemMasterIMTENo' onChange={handleItemAddChange} >
-                                            <MenuItem value=""><em>--Select--</em></MenuItem>
-                                            <MenuItem value="MMT-01">MMT-01</MenuItem>
-                                            <MenuItem value="MMT-02">MMT-02</MenuItem>
-                                            <MenuItem value="MMT-03">MMT-03</MenuItem>
-                                        </TextField>
+                                    <div className="col-md-12">
+                                    <FormControl size='small' component="div" fullWidth>
+                                            <InputLabel id="itemItemMasterIMTENoId">Select IMTENo.</InputLabel>
+                                            <Select
+                                                labelId="itemItemMasterIMTENoId"
+                                                id="demo-multiple-checkbox"
+                                                multiple
+                                                name="itemItemMasterIMTENo"
+                                                value={itemAddData.itemItemMasterIMTENo}
+                                                onChange={handleItemAddChange}
+                                                input={<OutlinedInput fullWidth label="Select IMTE No" />}
+                                                renderValue={(selected) => selected.map(item => item.itemIMTENo).join(", ")}
+                                                MenuProps={MenuProps}
+                                                fullWidth
+                                            >
+                                                {itemMasterListByName.map((name, index) => (
+                                                    <MenuItem key={index} value={name}>
+                                                        <Checkbox checked={itemAddData.itemItemMasterIMTENo.indexOf(name) > -1} />
+                                                        <ListItemText primary={name.itemIMTENo} />
+                                                    </MenuItem>
+                                                ))}
+                                            </Select>
+                                        </FormControl>
                                     </div>
-                                    <div className="col-md-6">
-                                        <DatePicker
-                                            fullWidth
-                                            id="itemItemMasterDueId"
-                                            name="itemItemMasterDue"
-                                            value={dayjs(itemAddData.itemItemMasterDue)}
-                                            onChange={(newValue) =>
-                                                setItemAddData((prev) => ({ ...prev, itemItemMasterDue: newValue.format("YYYY-MM-DD") }))
-                                            }
-                                            label="Master Due"
-                                            slotProps={{ textField: { size: 'small' } }}
-                                            format="DD-MM-YYYY" />
-                                    </div>
-                                    <div className="col">
-
-                                        <Button fullWidth variant='contained' color='success'>Add Master</Button>
-                                    </div>
+                                
 
 
                                 </div>}
                             {itemAddData.itemCalibrationSource === "OutSource" &&
                                 <div className='row g-2'>
+                                    <h6 className='text-center'>Enter Supplier Details</h6>
                                     <div className="col-md-7">
 
                                         <FormControl size='small' component="div" fullWidth>
@@ -713,6 +825,7 @@ const ItemAdd = () => {
 
                             {itemAddData.itemCalibrationSource === "OEM" &&
                                 <div className='row g-2'>
+                                    <h6 className='text-center'>Enter OEM Details</h6>
                                     <div className="col-md-7">
                                         <FormControl size='small' component="div" fullWidth>
                                             <InputLabel id="itemOEMId">Select Supplier</InputLabel>
@@ -761,9 +874,15 @@ const ItemAdd = () => {
                                         <th style={{ width: "50%" }}>Master Name</th>
                                         <th style={{ width: "30%" }}>Due</th>
                                     </tr>
-                                    <tr>
-
-                                    </tr>
+                                    {itemAddData.itemItemMasterIMTENo.map((item, index)=> (
+                                        <tr>
+                                            <td>{index+1}</td>
+                                            <td>{item.itemIMTENo}</td>
+                                            <td>{item.itemDueDate}</td>
+                                        </tr>
+                                    ))
+                                
+                                    }
 
 
                                 </tbody>
@@ -848,20 +967,22 @@ const ItemAdd = () => {
 
                                         </TextField>
                                     </div>
-                                    <div className="col-lg-8">
+                                    <div className="col-lg-12">
                                         <Button component="label" variant="contained" fullWidth >
+
                                             Certificate Upload
-                                            <VisuallyHiddenInput type="file" />
+                                            <VisuallyHiddenInput type="file" onChange={handleCertificateUpload} />
                                         </Button>
                                     </div>
-                                    <div className='col-lg-4'>
-                                        <Button
-                                            fullWidth
-                                            variant="outlined"
+
+                                    {uploadMessage &&
+                                    <div className="col-md-12 d-flex justify-content-between">
+                                        {itemAddData.itemCertificateName !== "" && <Chip clickable={true} onDelete={()=> handleRemoveFile()} label={itemAddData.itemCertificateName} size='small' color='warning' />}
+                                        <Chip label={uploadMessage} size='small'  color="success" icon={<Done/>}/>
+                                    </div>}
 
 
-                                        >Upload</Button>
-                                    </div>
+
                                 </div>
 
                             </Paper >
@@ -876,7 +997,6 @@ const ItemAdd = () => {
                                                 labelId="demo-multiple-chip-label"
                                                 id="demo-multiple-chip"
                                                 multiple
-
                                                 value={itemAddData.itemPartName}
                                                 onChange={handleItemAddChange}
                                                 input={<OutlinedInput id="select-multiple-chip" label="Select Part" name='itemPartName' />}
@@ -915,7 +1035,7 @@ const ItemAdd = () => {
                                 <Button variant='contained' onClick={() => addACValue()}>Add</Button>
                             </div>
 
-                            <table className='table table-sm table-bordered'>
+                            <table className='table table-sm table-bordered text-center'>
                                 <tbody>
                                     <tr>
                                         <th>Parameter</th>
