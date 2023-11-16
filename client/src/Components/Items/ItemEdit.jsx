@@ -53,6 +53,28 @@ const ItemAdd = () => {
     }, []);
 
 
+    const [itemAddList, setItemAddList] = useState([]);
+
+    const itemAddFetch = async () => {
+        try {
+            const response = await axios.get(
+                `${process.env.REACT_APP_PORT}/itemAdd/getItemAddByIMTESort`
+            );
+            // You can use a different logic for generating the id
+
+            setItemAddList(response.data.result);
+
+
+        } catch (err) {
+            console.log(err);
+        }
+    };
+    useEffect(() => {
+        itemAddFetch();
+    }, []);
+
+
+
     const [areas, setAreas] = useState([])
     const areaFetch = async () => {
         try {
@@ -438,7 +460,7 @@ const ItemAdd = () => {
 
 
 
-   {/* const updateItemEditData = async (id) => {
+    {/* const updateItemEditData = async (id) => {
         try {
             const response = await axios.put(
                 "http://localhost:3001/itemAdd/updateItemAdd/" + id, itemAddData
@@ -757,7 +779,7 @@ const ItemAdd = () => {
                                         <MenuItem value="MMT-03">MMT-03</MenuItem>
                                     </TextField>
                                 </div>
-                                <div className="col-md-6">
+                                {/*<div className="col-md-6">
                                     <DatePicker
                                         fullWidth
                                         id="itemItemMasterDueId"
@@ -769,7 +791,7 @@ const ItemAdd = () => {
                                         label="Master Due"
                                         slotProps={{ textField: { size: 'small' } }}
                                         format="DD-MM-YYYY" />
-                                </div>
+                                    </div>*/}
 
 
 
@@ -855,23 +877,23 @@ const ItemAdd = () => {
                             {itemAddData.itemCalibrationSource === "OEM" || itemAddData.itemCalibrationSource === "OEM" && 
                             } */}
 
-                        {itemAddData.itemCalibrationSource === "InHouse" && <table className='table table-sm table-bordered text-center mt-2'>
-                            <tbody>
-                                <tr>
-                                    <th style={{ width: "20%" }}>Si No</th>
-                                    <th style={{ width: "50%" }}>Master Name</th>
-                                    <th style={{ width: "30%" }}>Due</th>
-                                </tr>
-                                {itemAddData.itemItemMasterName.map((item, index) => (
-                                    <tr key={index}>
-                                        <td>{index + 1}</td>
-                                        <td >{item}</td>
+                        {itemAddData.itemCalibrationSource === "InHouse" && Array.isArray(itemAddData.itemItemMasterName) && (
+                            <table className='table table-sm table-bordered text-center mt-2'>
+                                <tbody>
+                                    <tr>
+                                        <th style={{ width: "20%" }}>Si No</th>
+                                        <th style={{ width: "50%" }}>Master Name</th>
+                                        <th style={{ width: "30%" }}>Due</th>
                                     </tr>
-                                ))}
-
-
-                            </tbody>
-                        </table>}
+                                    
+                                        <tr >
+                                            <td></td>
+                                            <td></td>
+                                        </tr>
+                                   
+                                </tbody>
+                            </table>
+                        )}
                         {itemAddData.itemCalibrationSource === "OutSource" && <table className='table table-sm table-bordered text-center mt-2'>
                             <tbody>
                                 <tr>

@@ -1887,23 +1887,22 @@ export const Designation = () => {
   };
 
   const handleKeyDown = (event) => {
-    const { name, value } = event.target
-    console.log(name)
+    const { name, value } = event.target;
+    console.log(name);
     if (event.key === 'Tab') {
-      // Prevent default Tab behavior
+        // Prevent default Tab behavior
+        event.preventDefault();
 
-      const formattedValue = value.toLowerCase().
-        split(' ')
-        .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-        .join(' ');
-      console.log(formattedValue)
-      // Format the input value (capitalization)
-      // Update the state to show the formatted value
-      setDesignationData((prev) => ({ ...prev, [name]: formattedValue })); // Update the state with the formatted value
+        const formattedValue = value.toLowerCase()
+            .split(/[.\s/&]+/)
+            .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+            .join(' ');
 
-
+        console.log(formattedValue);
+        // Update the state to show the formatted value
+        setDesignationData(prev => ({ ...prev, [name]: formattedValue }));
     }
-  };
+};
 
 
   //
