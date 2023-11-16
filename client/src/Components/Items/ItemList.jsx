@@ -31,7 +31,9 @@ const ItemList = () => {
         itemFetch();
     }, []);
 
-
+    const [today, setToday] = useState(dayjs().format('YYYY-MM-DD'))
+    console.log(today)
+   
 
     const [itemAddList, setItemAddList] = useState([]);
 
@@ -58,18 +60,18 @@ const ItemList = () => {
 
 
     const columns = [
-        { field: 'id', headerName: 'Si. No', width: 70, renderCell: (params) => params.api.getAllRowIds().indexOf(params.id)+1, align: "center" },
-        { field: 'itemIMTENo', headerName: 'ItemIMTE No',width: 80, align: "center" },
-        { field: 'itemMasterName', headerName: 'item Description',width: 90, align: "center" },
-        { field: 'itemRangeSize', headerName: 'Item Range Size',width: 100, align: "center" },
-        { field: 'itemMake', headerName: 'Item Make',width: 110, align: "center" },
-        { field: 'itemCalDate', headerName: 'Item Cal Date',width: 130, align: "center" },
-        { field: 'itemDueDate', headerName: 'Item Due Date',width: 140, align: "center" },
-        { field: 'itemLC', headerName: 'itemLC',width: 120, align: "center" },
-        { field: 'itemCalFreInMonths', headerName: 'Frequency(in months)', type: "number",width: 170, align: "center" },
-        { field: 'itemCalibrationSource', headerName: 'Item Calibration Src',width: 190, align: "center" },
-        { field: 'itemSupplier', headerName: 'Item Supplier',  renderCell:(params) => params.row.itemSupplier.toString(), width: 180, align: "center" },
-        { field: 'itemType', headerName: 'Item Type',width: 190, align: "center" },
+        { field: 'id', headerName: 'Si. No', width: 70, renderCell: (params) => params.api.getAllRowIds().indexOf(params.id) + 1, align: "center" },
+        { field: 'itemIMTENo', headerName: 'ItemIMTE No', width: 80, align: "center" },
+        { field: 'itemMasterName', headerName: 'item Description', width: 90, align: "center" },
+        { field: 'itemRangeSize', headerName: 'Item Range Size', width: 100, align: "center" },
+        { field: 'itemMake', headerName: 'Item Make', width: 110, align: "center" },
+        { field: 'itemCalDate', headerName: 'Item Cal Date', width: 130, align: "center" },
+        { field: 'itemDueDate', headerName: 'Item Due Date', width: 140, align: "center" },
+        { field: 'itemLC', headerName: 'itemLC', width: 120, align: "center" },
+        { field: 'itemCalFreInMonths', headerName: 'Frequency(in months)', type: "number", width: 170, align: "center" },
+        { field: 'itemCalibrationSource', headerName: 'Item Calibration Src', width: 190, align: "center" },
+        { field: 'itemSupplier', headerName: 'Item Supplier', renderCell: (params) => params.row.itemSupplier.toString(), width: 180, align: "center" },
+        { field: 'itemType', headerName: 'Item Type', width: 190, align: "center" },
     ];
 
     const [filteredItemListData, setFilteredItemListData] = useState([])
@@ -93,21 +95,26 @@ const ItemList = () => {
 
             }
             if (name === "currentLocation") {
-                const currentLocation = itemList.filter((item) => (item.itemLC === value))
+                const currentLocation = itemList.filter((item) => (item.itemDepartment === value))
                 setFilteredItemListData(currentLocation)
             }
             if (name === "customerWise") {
-                const customerWise = itemList.filter((item) => (item.customerWise === value))
+                const customerWise = itemList.filter((item) => item.itemSupplier.includes(value))
                 setFilteredItemListData(customerWise)
             }
             if (name === "supplierWise") {
 
-                const supperlierWise = itemList.filter((item) => (item.itemSupplier === value))
+                const supperlierWise = itemList.filter((item) => item.itemSupplier.includes(value))
                 console.log(supperlierWise)
                 setFilteredItemListData(supperlierWise)
             }
             if (name === "partName") {
                 const partName = itemList.filter((item) => (item.itemPartName === value))
+                setFilteredItemListData(partName)
+            }
+
+            if (name === "status") {
+                const partName = itemList.filter((item) => (item.itemStatus === value))
                 setFilteredItemListData(partName)
             }
 
@@ -118,7 +125,7 @@ const ItemList = () => {
     };
 
 
-   {/* const dueDatePicker = (newValue, name) => {
+    {/* const dueDatePicker = (newValue, name) => {
         let startDate = "";
         let endDate = "";
         let startDueDate = "";
@@ -153,26 +160,26 @@ const ItemList = () => {
         let startDueDate = "";
         let endDueDate = "";
 
-    
+
         if (name === "dueStartDate") {
             startDate = newValue.format("YYYY-MM-DD");
         }
         if (name === "dueEndDate") {
             endDate = newValue.format("YYYY-MM-DD");
         }
-    
+
         const filteredData = itemList.filter((item) => {
             console.log(item.itemDueDate);
-            
+
             // Assuming item.itemDueDate is a valid date
             const itemDueDate = new Date(item.itemDueDate);
-    
+
             return (
                 (startDate === "" || itemDueDate >= new Date(startDate)) &&
                 (endDate === "" || itemDueDate <= new Date(endDate))
             );
         });
-    
+
         console.log(filteredData);
     };
 
@@ -252,8 +259,8 @@ const ItemList = () => {
                         display: 'flex',
                         flexDirection: 'column',
                         mb: 1,
-                       
-                    }}  elevation={12}
+
+                    }} elevation={12}
                     >
                         <div className='row g-2  '>
                             <Typography variant="h5" className="text-center mb-2">Item List</Typography>
@@ -263,12 +270,12 @@ const ItemList = () => {
                                 <TextField label="Imte No"
                                     id="imteNoId"
                                     select
-                                    defaultValue="Active"
+                                    defaultValue="all"
                                     fullWidth
                                     size="small"
                                     onChange={handleFilterChangeItemList}
                                     name="imteNo" >
-
+                                    <MenuItem value="all">All</MenuItem>
                                     {itemAddList.map((item, index) => (
                                         <MenuItem key={index} value={item.itemIMTENo}>{item.itemIMTENo}</MenuItem>
                                     ))}
@@ -280,7 +287,7 @@ const ItemList = () => {
                                 <TextField label="Item Type"
                                     id="itemTypeId"
                                     select
-                                    defaultValue="Active"
+                                    defaultValue="all"
                                     fullWidth
                                     onChange={handleFilterChangeItemList}
                                     size="small"
@@ -297,11 +304,12 @@ const ItemList = () => {
                                 <TextField label="Current Location"
                                     id="currentLocationId"
                                     select
-                                    defaultValue="Active"
+                                    defaultValue="all"
                                     fullWidth
                                     onChange={handleFilterChangeItemList}
                                     size="small"
                                     name="currentLocation" >
+                                    <MenuItem value="all">All</MenuItem>
                                     {departmentList.map((item, index) => (
                                         <MenuItem key={index} value={item.department}>{item.department}</MenuItem>
                                     ))}
@@ -314,11 +322,12 @@ const ItemList = () => {
                                 <TextField label="Customer Wise"
                                     id="customerWiseId"
                                     select
-                                    defaultValue="Active"
+                                    defaultValue="all"
                                     fullWidth
                                     size="small"
                                     onChange={handleFilterChangeItemList}
                                     name="customerWise" >
+                                    <MenuItem value="all">All</MenuItem>
                                     {customerList.map((item, index) => (
                                         <MenuItem key={index} value={item.aliasName}>{item.aliasName}</MenuItem>
                                     ))}
@@ -330,11 +339,12 @@ const ItemList = () => {
                                 <TextField label="supplier Wise"
                                     id="supplierWiseId"
                                     select
-                                    defaultValue="Active"
+                                    defaultValue="all"
                                     fullWidth
                                     size="small"
                                     onChange={handleFilterChangeItemList}
                                     name="supplierWise" >
+                                    <MenuItem value="all">All</MenuItem>
                                     {supplierList.map((item, index) => (
                                         <MenuItem key={index} value={item.aliasName}>{item.aliasName}</MenuItem>
                                     ))}
@@ -346,17 +356,18 @@ const ItemList = () => {
                                 <TextField label="Due In Days"
                                     id="dueInDaysId"
                                     select
-                                    defaultValue="Active"
+                                    defaultValue="all"
                                     fullWidth
                                     size="small"
                                     onChange={handleFilterChangeItemList}
                                     name="dueInDays" >
+                                    <MenuItem value="all">All</MenuItem>
                                     <MenuItem value="Past">Past</MenuItem >
                                     <MenuItem value="Today">Today</MenuItem >
                                     <MenuItem value="7">7</MenuItem >
                                     <MenuItem value="15">15</MenuItem >
                                     <MenuItem value="30">30</MenuItem >
-                                    <MenuItem value="30">30</MenuItem >
+                                    <MenuItem value=">30">{'>'}30</MenuItem >
                                     <MenuItem value="Date">Date</MenuItem >
 
                                 </TextField>
@@ -367,12 +378,13 @@ const ItemList = () => {
                                 <TextField label="Part Name"
                                     id="partNameId"
                                     select
-                                    defaultValue="Active"
+                                    defaultValue="all"
                                     fullWidth
                                     size="small"
                                     onChange={handleFilterChangeItemList}
-                                   
+
                                     name="partName" >
+                                    <MenuItem value="all">All</MenuItem>
                                     {partDataList.map((item, index) => (
                                         <MenuItem key={index} value={item.partName}>{item.partName}</MenuItem>
                                     ))}
@@ -384,12 +396,12 @@ const ItemList = () => {
                                 <TextField label="Plant Wise"
                                     id="plantWiseId"
                                     select
-                                    defaultValue="Active"
+                                    defaultValue="all"
                                     fullWidth
                                     size="small"
                                     onChange={handleFilterChangeItemList}
                                     name="plantWise" >
-
+                                    <MenuItem value="all">All</MenuItem>
                                     <MenuItem value="Reference Standard">Reference Standard</MenuItem>
                                 </TextField>
 
@@ -401,20 +413,7 @@ const ItemList = () => {
 
 
                             <div className="col d-flex  g-2 mb-2">
-                                <div className='col-3 me-1'>
-                                    <TextField label="item History"
-                                        id="itemHistoryId"
-                                        select
-                                        defaultValue="Active"
-                                        fullWidth
-                                        size="small"
-                                        name="itemHistory" >
-                                        <MenuItem value="all">All</MenuItem >
-                                        <MenuItem value="Attribute">Attribute</MenuItem >
-                                        <MenuItem value="Variable">Variable</MenuItem >
-                                        <MenuItem value="Reference Standard">Reference Standard</MenuItem>
-                                    </TextField>
-                                </div>
+
                                 <div className='col-3'>
                                     <TextField label="Status"
                                         id="statusId"
@@ -422,8 +421,10 @@ const ItemList = () => {
                                         defaultValue="Active"
                                         fullWidth
                                         size="small"
-                                        name="status" >
-
+                                        name="status" 
+                                         onChange={handleFilterChangeItemList}>
+                                       
+                                        <MenuItem value="all">All</MenuItem>
                                         <MenuItem value="Active">Active</MenuItem >
                                         <MenuItem value="InActive">InActive</MenuItem >
 
@@ -461,7 +462,7 @@ const ItemList = () => {
                             </div>
                         </div>
                         <div>
-                        <Box sx={{ height: 400, width: '100%' }}>
+                            <Box sx={{ height: 400, width: '100%', my: 2 }}>
                                 <DataGrid
 
                                     rows={filteredItemListData}
@@ -470,11 +471,18 @@ const ItemList = () => {
                                     initialState={{
                                         pagination: {
                                             paginationModel: {
-                                              pageSize: 5,
+                                                pageSize: 5,
                                             },
-                                          },
+                                        },
                                     }}
-                                    disableRowSelectionOnClick
+                                    sx={{
+                                        ".MuiTablePagination-displayedRows": {
+
+                                            "margin-top": "1em",
+                                            "margin-bottom": "1em"
+                                        }
+                                    }}
+
                                     density="compact"
                                     //disableColumnMenu={true}
                                     //clipboardCopyCellDelimiter={true}
