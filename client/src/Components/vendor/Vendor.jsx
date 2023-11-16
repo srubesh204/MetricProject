@@ -117,7 +117,7 @@ const Vendor = () => {
         }],
         certificate: "",
         certificateValidity: "",
-        vendorStatus: "",
+        vendorStatus: "Active",
 
 
     })
@@ -903,7 +903,7 @@ const Vendor = () => {
                                             <tr style={{ fontSize: "14px" }}>
                                                 <th width={"5%"}>Si.No</th>
                                                 <th>Name</th>
-                                                <th width={"20%"}>Contact Number</th>
+                                                <th width={"25%"}>Contact Number</th>
                                                 <th>Mail Id</th>
                                                 <th width={"15%"}>Status</th>
                                                 <th width={"10%"}> <Fab size='small' color="primary" aria-label="add" onClick={() => addVendorDataRow()}>

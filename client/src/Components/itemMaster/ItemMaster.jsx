@@ -88,7 +88,7 @@ const ItemMaster = () => {
         itemDescription: "",
         itemPrefix: "",
         itemFqInMonths: "",
-        calAlertInDay: "",
+        calAlertInDay: "7",
         wiNo: "",
         uncertainty: "",
         uncertaintyUnit: "",
@@ -107,7 +107,7 @@ const ItemMaster = () => {
         itemDescription: "",
         itemPrefix: "",
         itemFqInMonths: "",
-        calAlertInDay: "",
+        calAlertInDay: "7",
         wiNo: "",
         uncertainty: "",
         uncertaintyUnit: "",
@@ -138,17 +138,25 @@ const ItemMaster = () => {
         })
     };
 
-    const changeCalibrationPointRow = (index, name, value) => {
+   const changeCalibrationPointRow = (index, name, value) => {
+    const formattedValue = name === 'calibrationPoint'
+            ? value.toLowerCase().split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')
+            : value;
         setItemMasterData((prevItemMasterData) => {
             const updateCP = [...prevItemMasterData.calibrationPoints]
             updateCP[index] = {
-                ...updateCP[index], [name]: value,
+                ...updateCP[index], [name]: formattedValue,
             };
             return {
                 ...prevItemMasterData, calibrationPoints: updateCP,
             };
         })
     };
+   
+
+
+
+
 
     const [itemMasterDataList, setItemMasterDataList] = useState([])
     const itemMasterFetchData = async () => {
@@ -341,6 +349,7 @@ const ItemMaster = () => {
 
         }
     };
+
 
     const updateItemMaster = async (params) => {
         console.log(params)
@@ -696,7 +705,7 @@ const ItemMaster = () => {
                                                     {itemMasterData.calibrationPoints ? itemMasterData.calibrationPoints.map((item, index) => (
                                                         <tr key={index}>
                                                             <td>{index + 1}</td>
-                                                            <td><input type='text' className='form-control form-control-sm' name='calibrationPoint' value={item.calibrationPoint} onChange={(e) => changeCalibrationPointRow(index, e.target.name, e.target.value)} /></td>
+                                                            <td><input type='text' className='form-control form-control-sm' name='calibrationPoint' value={item.calibrationPoint} onChange={(e) => changeCalibrationPointRow(index, e.target.name, e.target.value)} onKeyDown={handleKeyDown} /></td>
                                                             <td  style={{width:"2%"}}><Button size='small' color="error" aria-label="add" onClick={() => deleteCalibrationPointRow(index)}>
                                                                 <Remove />
                                                             </Button></td>

@@ -1886,7 +1886,7 @@ export const Designation = () => {
     }
   };
 
-  const handleKeyDown = (event) => {
+  {/*const handleKeyDown = (event) => {
     const { name, value } = event.target;
     console.log(name);
     if (event.key === 'Tab') {
@@ -1902,6 +1902,18 @@ export const Designation = () => {
         // Update the state to show the formatted value
         setDesignationData(prev => ({ ...prev, [name]: formattedValue }));
     }
+};*/}
+const handleKeyDown = (event) => {
+  const { name, value } = event.target;
+  console.log(name);
+  if (event.key === 'Tab') {
+      event.preventDefault();
+
+      const formattedValue = value.charAt(0).toUpperCase() + value.slice(1).toLowerCase();
+
+      console.log(formattedValue);
+      setDesignationData(prev => ({ ...prev, [name]: formattedValue }));
+  }
 };
 
 
@@ -1971,6 +1983,7 @@ export const Designation = () => {
                     size="small"
                     onChange={handleChange}
                     onKeyDown={handleKeyDown}
+              
                     value={designationData.designation}
                     name="designation" ></TextField>
                 </div>

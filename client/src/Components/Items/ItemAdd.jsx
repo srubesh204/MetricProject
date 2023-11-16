@@ -77,6 +77,12 @@ const ItemAdd = () => {
             console.log(err);
         }
     };
+
+
+
+
+
+
     //get Designations
     useEffect(() => {
         placeOfUsageFetch()
@@ -182,11 +188,11 @@ const ItemAdd = () => {
         itemLCUnit: "",
         itemMake: "",
         itemModelNo: "",
-        itemStatus: "",
+        itemStatus: "Active",
         itemReceiptDate: "",
         itemDepartment: "",
-        itemArea: "",
-        itemPlaceOfUsage: "",
+        itemArea: "N/A",
+        itemPlaceOfUsage: "N/A",
         itemCalFreInMonths: "",
         itemCalAlertDays: "",
         itemCalibrationSource: "",
@@ -230,11 +236,11 @@ const ItemAdd = () => {
         itemLCUnit: "",
         itemMake: "",
         itemModelNo: "",
-        itemStatus: "",
+        itemStatus: "Active",
         itemReceiptDate: "",
         itemDepartment: "",
-        itemArea: "",
-        itemPlaceOfUsage: "",
+        itemArea: "N/A",
+        itemPlaceOfUsage: "N/A",
         itemCalFreInMonths: "",
         itemCalAlertDays: "",
         itemCalibrationSource: "",
@@ -310,6 +316,46 @@ const ItemAdd = () => {
         setItemAddData((prev) => ({ ...prev, [name]: value }));
     }
 
+    const handleItemDue = (e) => {
+        const { name, value } = e.target;
+        if(name==="calibrationDate"){
+            setItemAddData((prev) => ({ ...prev, itemCalFreInMonths: typeof value === 'string' ? value.split(',') : value }));
+        }
+
+    }
+
+    let dueDates = new Date();
+    const frequencyMonths = 6; 
+    let newDueDate = new Date(dueDates);
+    newDueDate.setMonth(newDueDate.getMonth() + frequencyMonths);
+    newDueDate.setDate(newDueDate.getDate() - 1);
+    console.log( dueDates.toDateString());
+
+
+    ///
+    const currentDate = new Date();
+
+    const currentDay = currentDate.getDate();
+const currentMonth = currentDate.getMonth();
+const currentYear = currentDate.getFullYear();
+const calibrationFrequencyMonths = 12;
+let dueDate = new Date(currentYear, currentMonth + calibrationFrequencyMonths, currentDay);
+
+if ((currentDate.getDate() !== dueDate.getDate()) || (currentDate.getMonth() !== dueDate.getMonth())) {
+
+    dueDate = new Date(currentYear, currentMonth + calibrationFrequencyMonths + 1, 0);
+}
+console.log(dueDate)
+
+
+
+
+
+
+
+
+
+
     const [calibrationPointsData, setCalibrationPointsData] = useState([])
     const itemMasterById = async () => {
         try {
@@ -322,7 +368,11 @@ const ItemAdd = () => {
                 ...prev,
                 itemType: itemType,
                 itemImage: itemMasterImage,
-                itemMasterName: itemDescription
+                itemMasterName: itemDescription,
+                itemCalFreInMonths: itemFqInMonths,
+                itemCalAlertDays: calAlertInDay
+
+
 
             }))
             setCalibrationPointsData(calibrationPoints)
@@ -563,13 +613,13 @@ const ItemAdd = () => {
                             <div className="col-9">
                                 <Autocomplete
                                     disablePortal
-                                    id="combo-box-demo"
+                                    id="itemIMTENoId"
                                     options={imteList.map((item) => ({ label: item.itemIMTENo }))}
                                     size='small'
                                     renderInput={(params) => <TextField name='itemIMTENo' onChange={handleItemAddChange}  {...params} label="IMTE No" />}
                                     getOptionDisabled={option => true}
                                     clearOnBlur={false}
-                                // getOptionDisabled={options => true}
+                                //getOptionDisabled={options => true}
 
                                 />
                             </div>
@@ -645,7 +695,7 @@ const ItemAdd = () => {
                                     </div>
                                     <div className="row g-1">
                                         <div className="col-lg me-1">
-                                            <TextField size='small' select variant='outlined' onChange={handleItemAddChange} label="Item Status" name='itemStatus' id='itemStatusId' fullWidth >
+                                            <TextField size='small' select variant='outlined' value={itemAddData.itemStatus} onChange={handleItemAddChange} label="Item Status" name='itemStatus' id='itemStatusId' fullWidth >
                                                 <MenuItem value="Active">Active</MenuItem>
                                                 <MenuItem value="InActive">InActive</MenuItem>
                                             </TextField>
@@ -930,10 +980,10 @@ const ItemAdd = () => {
                                 <div className="row g-2">
                                     <div className="col-lg-6">
                                         <DatePicker
-                                            disableFuture
+                                           disableFuture
                                             fullWidth
-                                            id="dobId"
-                                            name=""
+                                            id="calibrationDateId"
+                                            name="calibrationDate"
                                             value={dayjs(itemAddData.itemCalDate)}
                                             onChange={(newValue) =>
                                                 setItemAddData((prev) => ({ ...prev, itemCalDate: newValue.format("YYYY-MM-DD") }))
@@ -949,14 +999,15 @@ const ItemAdd = () => {
                                             fullWidth
                                             id="itemDueDateId"
                                             name="itemDueDate"
+                                            
                                             value={dayjs(itemAddData.itemDueDate)}
                                             onChange={(newValue) =>
                                                 setItemAddData((prev) => ({ ...prev, itemDueDate: newValue.format("YYYY-MM-DD") }))
                                             }
-                                            label="Due Date"
+                                            label="Due Date"  
 
                                             slotProps={{ textField: { size: 'small' } }}
-                                            format="DD-MM-YYYY" />
+                                            format="DD-MM-YYYY" /> 
                                     </div>
                                     <div className="col-lg-12">
                                         <TextField size='small' fullWidth variant='outlined' onChange={handleItemAddChange} label="Calibrated at" select name='itemCalibratedAt'>
