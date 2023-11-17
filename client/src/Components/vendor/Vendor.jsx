@@ -78,7 +78,7 @@ const Vendor = () => {
         vendorCode: "",
         aliasName: "",
         fullName: "",
-        dor: "",
+        dor: dayjs().format("YYYY-MM-DD"),
         address: "",
         state: "",
         city: "",
@@ -93,7 +93,7 @@ const Vendor = () => {
             vcStatus: ""
         }],
         certificate: "",
-        certificateValidity: "",
+        certificateValidity: dayjs().format("YYYY-MM-DD"),
         vendorStatus: "Active",
     }
 
@@ -101,7 +101,7 @@ const Vendor = () => {
         vendorCode: "",
         aliasName: "",
         fullName: "",
-        dor: "",
+        dor: dayjs().format("YYYY-MM-DD"),
         address: "",
         state: "",
         city: "",
@@ -116,7 +116,7 @@ const Vendor = () => {
             vcStatus: ""
         }],
         certificate: "",
-        certificateValidity: "",
+        certificateValidity: dayjs().format("YYYY-MM-DD"),
         vendorStatus: "Active",
 
 
@@ -1060,15 +1060,26 @@ const Vendor = () => {
                                             paginationModel: { page: 0, pageSize: 5 },
                                         },
                                     }}
-                                    pageSizeOptions={[5, 10]}
+                                    sx={{
+                                        ".MuiTablePagination-displayedRows": {
+
+                                            "margin-top": "1em",
+                                            "margin-bottom": "1em"
+                                        }
+                                    }}
                                     onRowSelectionModelChange={(newRowSelectionModel, event) => {
                                         setSelectedRowIds(newRowSelectionModel);
                                         console.log(event)
-
+                    
                                     }}
+
                                     onRowClick={updateVendor}
 
+                                    density="compact"
+                                    //disableColumnMenu={true}
+                                    //clipboardCopyCellDelimiter={true}
                                     checkboxSelection
+                                    pageSizeOptions={[10]}
 
 
                                 />

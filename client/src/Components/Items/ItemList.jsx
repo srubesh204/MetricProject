@@ -7,6 +7,13 @@ import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import dayjs from 'dayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
+import Button from '@mui/material/Button';
+
 
 const ItemList = () => {
 
@@ -73,6 +80,9 @@ const ItemList = () => {
         { field: 'itemSupplier', headerName: 'Item Supplier', renderCell: (params) => params.row.itemSupplier.toString(), width: 180, align: "center" },
         { field: 'itemType', headerName: 'Item Type', width: 190, align: "center" },
     ];
+
+    const [deleteModalItem, setDeleteModalItem] = useState(false);
+const[itemListSelectedRowIds, setItemListSelectedRowIds] =useState([])
 
     const [filteredItemListData, setFilteredItemListData] = useState([])
 
@@ -237,6 +247,53 @@ const ItemList = () => {
     useEffect(() => {
         partFetchData();
     }, []);
+
+    const [snackBarOpen, setSnackBarOpen] = useState(false)
+    const [errorhandler, setErrorHandler] = useState({});
+
+console.log(itemListSelectedRowIds)
+    const deleteItemData = async () => {
+      
+        try {
+            const response = await axios.delete(
+                "http://localhost:3001/itemAdd/deleteItemAdd", {
+                data: {
+                    itemAddIds: itemListSelectedRowIds
+                }
+            }
+            );
+            
+            setSnackBarOpen(true)
+
+            console.log("ItemAdd deleted successfully")
+            setErrorHandler({ status: response.data.status, message: response.data.message, code: "success" })
+            //setItemAddData(initialItemAddData)
+            itemFetch()
+        } catch (err) {
+
+            setSnackBarOpen(true)
+
+
+
+
+            if (err.response && err.response.status === 400) {
+                // Handle validation errors
+                const errorData400 = err.response.data.errors;
+                const errorMessages400 = Object.values(errorData400).join(', ');
+                console.log(errorMessages400)
+                setErrorHandler({ status: 0, message: errorMessages400, code: "error" });
+            } else if (err.response && err.response.status === 500) {
+                // Handle other errors
+                const errorData500 = err.response.data.error;
+                const errorMessages500 = Object.values(errorData500).join(', ');
+                console.log(errorMessages500)
+                setErrorHandler({ status: 0, message: errorMessages500, code: "error" });
+            } else {
+                console.log(err.response.data.error)
+                setErrorHandler({ status: 0, message: "An error occurred", code: "error" });
+            }
+        }
+    };
 
 
 
@@ -482,6 +539,11 @@ const ItemList = () => {
                                             "margin-bottom": "1em"
                                         }
                                     }}
+                                    onRowSelectionModelChange={(newRowSelectionModel, event) => {
+                                        setItemListSelectedRowIds(newRowSelectionModel);
+                                       
+                    
+                                    }}
 
                                     density="compact"
                                     //disableColumnMenu={true}
@@ -490,6 +552,28 @@ const ItemList = () => {
                                     pageSizeOptions={[5]}
                                 />
                             </Box>
+                            <Dialog
+                                open={deleteModalItem}
+                                onClose={() => setDeleteModalItem(false)}
+                                aria-labelledby="alert-dialog-title"
+                                aria-describedby="alert-dialog-description"
+                            >
+                                <DialogTitle id="alert-dialog-title">
+                                    {" ItemAdd delete confirmation?"}
+                                </DialogTitle>
+                                <DialogContent>
+                                    <DialogContentText id="alert-dialog-description">
+                                        Are you sure to delete the ItemAdd
+                                    </DialogContentText>
+                                </DialogContent>
+                                <DialogActions>
+                                    <Button onClick={() => setDeleteModalItem(false)}>Cancel</Button>
+                                    <Button onClick={() => { deleteItemData(); setDeleteModalItem(false); }} autoFocus>
+                                        Delete
+                                    </Button>
+                                </DialogActions>
+                            </Dialog>
+
 
                         </div>
                         <div className='row'>
@@ -512,7 +596,7 @@ const ItemList = () => {
                                     <button type="button" className='btn btn-info' >Modify</button>
                                 </div>
                                 <div className='me-2'>
-                                    <button type="button" className='btn btn-danger' >Delete</button>
+                                {itemListSelectedRowIds.length !== 0 && <Button variant='contained' type='button' color='error' onClick={() => setDeleteModalItem(true)}>Delete </Button>}
                                 </div>
                                 <div className='me-2'>
                                     <button type="button" className='btn btn-secondary' >Back</button>

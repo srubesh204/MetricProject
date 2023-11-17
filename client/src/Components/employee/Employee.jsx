@@ -928,15 +928,25 @@ const Employee = () => {
                                                     paginationModel: { page: 0, pageSize: 5 },
                                                 },
                                             }}
-                                            pageSizeOptions={[5, 10]}
+                                            sx={{
+                                                ".MuiTablePagination-displayedRows": {
+        
+                                                    "margin-top": "1em",
+                                                    "margin-bottom": "1em"
+                                                }
+                                            }}
                                             onRowSelectionModelChange={(newRowSelectionModel, event) => {
                                                 setEmployeeSelectedRowIds(newRowSelectionModel);
                                                 console.log(event)
-
+                            
                                             }}
                                             onRowClick={handleSetEmp}
 
+                                            density="compact"
+                                            //disableColumnMenu={true}
+                                            //clipboardCopyCellDelimiter={true}
                                             checkboxSelection
+                                            pageSizeOptions={[5]}
 
 
                                         >

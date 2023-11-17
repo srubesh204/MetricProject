@@ -488,7 +488,7 @@ const ItemMaster = () => {
                                 </div>
 
                                 <div className="form-floating col">
-                                    <TextField label="Item Prefix "
+                                    <TextField label="Imte Prefix "
                                         id="itemPrefix"
                                         defaultValue=""
                                         sx={{ width: "100%" }}
