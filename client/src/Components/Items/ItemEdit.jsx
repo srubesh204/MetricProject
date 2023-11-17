@@ -6,8 +6,12 @@ import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import dayjs from 'dayjs';
 import { Delete, Done } from '@mui/icons-material';
+import { useParams } from 'react-router-dom';
 
 const ItemEdit = () => {
+
+    const {id} = useParams()
+    console.log(id)
 
     // Units Data
     const [units, setUnits] = useState([]);
@@ -178,6 +182,7 @@ const ItemEdit = () => {
 
     const initialItemAddData = {
         itemMasterId: "",
+        itemMasterName: "",
         itemIMTENo: "",
         itemImage: "",
         itemType: "",
@@ -189,36 +194,36 @@ const ItemEdit = () => {
         itemMake: "",
         itemModelNo: "",
         itemStatus: "Active",
-        itemReceiptDate: "",
+        itemReceiptDate: dayjs().format("YYYY-MM-DD"),
         itemDepartment: "",
         itemArea: "N/A",
         itemPlaceOfUsage: "N/A",
         itemCalFreInMonths: "",
         itemCalAlertDays: "",
         itemCalibrationSource: "",
+        itemCalibrationDoneAt: "",
         itemItemMasterName: "",
-        itemItemMasterIMTENo: "",
-
+        itemItemMasterIMTENo: [],
         itemSupplier: [],
         itemOEM: [],
-        itemCalDate: "",
+        itemCalDate: dayjs().format("YYYY-MM-DD"),
         itemDueDate: "",
         itemCalibratedAt: "",
         itemCertificateName: "",
         itemPartName: [],
-        acceptanceCriteria: [{
-            acParameter: "",
-            acRangeSize: "",
-            acRangeSizeUnit: "",
-            acMin: "",
-            acMax: "",
-            acWearLimit: "",
-            acAccuracy: "",
-            acAccuracyUnit: "",
-            acObservedSize: "",
-        }]
-
-
+        acceptanceCriteria: [
+            {
+                acAccuracyUnit: "",
+                acRangeSizeUnit: "",
+                acParameter: "",
+                acRangeSize: "",
+                acMin: "",
+                acMax: "",
+                acWearLimit: "",
+                acAccuracy: "",
+                acObservedSize: ""
+            }
+        ]
     }
 
 
@@ -269,6 +274,12 @@ const ItemEdit = () => {
         ]
     })
 
+    //
+
+
+    //
+
+
     //upload Button
     const VisuallyHiddenInput = styled('input')({
         clip: 'rect(0 0 0 0)',
@@ -282,8 +293,24 @@ const ItemEdit = () => {
         width: 1,
     });
 
+    useEffect(() => {
+      getItemDataById();
+    }, [])
+    const getItemDataById = async () => {
+        try {
+            const response = await axios.get(
+                `${process.env.REACT_APP_PORT}/itemAdd/getItemAddById/${id}`
+            );
+            setItemAddData(response.data.result)
+             console.log(response)
+
+        } catch (err) {
+            console.log(err);
+        }
+    };
 
     const handleItemAddChange = (e) => {
+
         const { name, value } = e.target;
         if (name === "itemRangeSizeUnit") {
             setItemAddData((prev) => ({ ...prev, [name]: value, acceptanceCriteria: [{ acAccuracyUnit: value, acRangeSizeUnit: value }] }))
@@ -309,48 +336,39 @@ const ItemEdit = () => {
             setItemAddData((prev) => ({ ...prev, itemItemMasterName: value }));
         }
 
-
-
-
-
         setItemAddData((prev) => ({ ...prev, [name]: value }));
     }
 
     const handleItemDue = (e) => {
         const { name, value } = e.target;
-        if(name==="calibrationDate"){
+        if (name === "calibrationDate") {
             setItemAddData((prev) => ({ ...prev, itemCalFreInMonths: typeof value === 'string' ? value.split(',') : value }));
         }
 
     }
 
     let dueDates = new Date();
-    const frequencyMonths = 6; 
+    const frequencyMonths = 6;
     let newDueDate = new Date(dueDates);
     newDueDate.setMonth(newDueDate.getMonth() + frequencyMonths);
     newDueDate.setDate(newDueDate.getDate() - 1);
-    console.log( dueDates.toDateString());
+    console.log(dueDates.toDateString());
 
 
     ///
     const currentDate = new Date();
 
     const currentDay = currentDate.getDate();
-const currentMonth = currentDate.getMonth();
-const currentYear = currentDate.getFullYear();
-const calibrationFrequencyMonths = 12;
-let dueDate = new Date(currentYear, currentMonth + calibrationFrequencyMonths, currentDay);
+    const currentMonth = currentDate.getMonth();
+    const currentYear = currentDate.getFullYear();
+    const calibrationFrequencyMonths = 12;
+    let dueDate = new Date(currentYear, currentMonth + calibrationFrequencyMonths, currentDay);
 
-if ((currentDate.getDate() !== dueDate.getDate()) || (currentDate.getMonth() !== dueDate.getMonth())) {
+    if ((currentDate.getDate() !== dueDate.getDate()) || (currentDate.getMonth() !== dueDate.getMonth())) {
 
-    dueDate = new Date(currentYear, currentMonth + calibrationFrequencyMonths + 1, 0);
-}
-console.log(dueDate)
-
-
-
-
-
+        dueDate = new Date(currentYear, currentMonth + calibrationFrequencyMonths + 1, 0);
+    }
+    console.log(dueDate)
 
 
 
@@ -601,7 +619,7 @@ console.log(dueDate)
         calculateResultDate(itemAddData.itemCalDate, itemAddData.itemCalFreInMonths);
     }, [itemAddData.itemCalDate, itemAddData.itemCalFreInMonths]);
 
-   
+
 
     const calculateResultDate = (itemCalDate, itemCalFreInMonths) => {
         const parsedDate = dayjs(itemCalDate);
@@ -622,7 +640,7 @@ console.log(dueDate)
                         <div className="col-lg-5 row g-2">
 
                             <div className='col-9'>
-                                <TextField size='small' select variant='outlined' label="Item Master" name='itemMasterId' value={itemAddData.itemMasterId || ""} fullWidth onChange={handleItemAddChange}>
+                                <TextField size='small' select variant='outlined' label="Item Master" name='itemMasterId' value={itemAddData.itemMasterId} fullWidth onChange={handleItemAddChange}>
                                     <MenuItem value=""><em>Select</em></MenuItem>
                                     {itemMasterDataList.map((item) => (
                                         <MenuItem value={item._id}>{item.itemDescription}</MenuItem>
@@ -999,7 +1017,7 @@ console.log(dueDate)
                                 <div className="row g-2">
                                     <div className="col-lg-6">
                                         <DatePicker
-                                            
+
                                             fullWidth
                                             id="itemCalDateId"
                                             name="itemCalDate"
@@ -1018,15 +1036,15 @@ console.log(dueDate)
                                             fullWidth
                                             id="itemDueDateId"
                                             name="itemDueDate"
-                                            
+
                                             value={dayjs(itemAddData.itemDueDate)}
                                             onChange={(newValue) =>
                                                 setItemAddData((prev) => ({ ...prev, itemDueDate: newValue.format("YYYY-MM-DD") }))
                                             }
-                                            label="Due Date"  
+                                            label="Due Date"
 
                                             slotProps={{ textField: { size: 'small' } }}
-                                            format="DD-MM-YYYY" /> 
+                                            format="DD-MM-YYYY" />
                                     </div>
                                     <div className="col-lg-12">
                                         <TextField size='small' fullWidth variant='outlined' onChange={handleItemAddChange} label="Calibrated at" select name='itemCalibratedAt'>
