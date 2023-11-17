@@ -13,6 +13,11 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import Button from '@mui/material/Button';
+import Alert from '@mui/material/Alert';
+import Snackbar from '@mui/material/Snackbar';
+import AddIcon from '@mui/icons-material/Add';
+import DeleteIcon from '@mui/icons-material/Delete';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 
 
 const ItemList = () => {
@@ -40,7 +45,7 @@ const ItemList = () => {
 
     const [today, setToday] = useState(dayjs().format('YYYY-MM-DD'))
     console.log(today)
-   
+
 
     const [itemAddList, setItemAddList] = useState([]);
 
@@ -62,7 +67,13 @@ const ItemList = () => {
         itemAddFetch();
     }, []);
 
+    const handleSnackClose = (event, reason) => {
+        if (reason === 'clickaway') {
+            return;
+        }
 
+        setSnackBarOpen(false);
+    }
 
 
 
@@ -82,7 +93,7 @@ const ItemList = () => {
     ];
 
     const [deleteModalItem, setDeleteModalItem] = useState(false);
-const[itemListSelectedRowIds, setItemListSelectedRowIds] =useState([])
+    const [itemListSelectedRowIds, setItemListSelectedRowIds] = useState([])
 
     const [filteredItemListData, setFilteredItemListData] = useState([])
 
@@ -251,9 +262,55 @@ const[itemListSelectedRowIds, setItemListSelectedRowIds] =useState([])
     const [snackBarOpen, setSnackBarOpen] = useState(false)
     const [errorhandler, setErrorHandler] = useState({});
 
-console.log(itemListSelectedRowIds)
+    console.log(itemListSelectedRowIds)
+
+
+    {/*const deleteItemData = async () => {
+    try {
+        const response = await axios.delete(
+            "http://localhost:3001/itemAdd/deleteItemAdd/", {
+            data: {
+                itemAddIds: itemListSelectedRowIds
+            }
+        }
+
+
+        );
+       
+        setSnackBarOpen(true)
+        setErrorHandler({ status: response.data.status, message: response.data.message, code: "success" })
+        console.log("ItemAdd delete Successfully");
+    } catch (err) {
+        setSnackBarOpen(true)
+
+        if (err.response && err.response.status === 400) {
+            // Handle validation errors
+            console.log(err);
+            const errorData400 = err.response.data.errors;
+            const errorMessages400 = Object.values(errorData400).join(', ');
+            console.log(errorMessages400)
+            setErrorHandler({ status: 0, message: errorMessages400, code: "error" });
+        } else if (err.response && err.response.status === 500) {
+            // Handle other errors
+            console.log(err);
+            const errorData500 = err.response.data.error;
+            const errorMessages500 = Object.values(errorData500);
+            console.log(errorMessages500)
+            setErrorHandler({ status: 0, message: errorMessages500, code: "error" });
+        } else {
+            console.log(err);
+            console.log(err.response.data.error)
+            setErrorHandler({ status: 0, message: "An error occurred", code: "error" });
+        }
+
+        console.log(err);
+    }
+};*/}
+
+
+
     const deleteItemData = async () => {
-      
+
         try {
             const response = await axios.delete(
                 "http://localhost:3001/itemAdd/deleteItemAdd", {
@@ -262,19 +319,17 @@ console.log(itemListSelectedRowIds)
                 }
             }
             );
-            
+
             setSnackBarOpen(true)
 
-            console.log("ItemAdd deleted successfully")
+
             setErrorHandler({ status: response.data.status, message: response.data.message, code: "success" })
+            console.log("ItemAdd delete Successfully");
             //setItemAddData(initialItemAddData)
             itemFetch()
         } catch (err) {
 
             setSnackBarOpen(true)
-
-
-
 
             if (err.response && err.response.status === 400) {
                 // Handle validation errors
@@ -292,6 +347,7 @@ console.log(itemListSelectedRowIds)
                 console.log(err.response.data.error)
                 setErrorHandler({ status: 0, message: "An error occurred", code: "error" });
             }
+            console.log(err);
         }
     };
 
@@ -478,9 +534,9 @@ console.log(itemListSelectedRowIds)
                                         defaultValue="Active"
                                         fullWidth
                                         size="small"
-                                        name="status" 
-                                         onChange={handleFilterChangeItemList}>
-                                       
+                                        name="status"
+                                        onChange={handleFilterChangeItemList}>
+
                                         <MenuItem value="all">All</MenuItem>
                                         <MenuItem value="Active">Active</MenuItem >
                                         <MenuItem value="InActive">InActive</MenuItem >
@@ -541,8 +597,8 @@ console.log(itemListSelectedRowIds)
                                     }}
                                     onRowSelectionModelChange={(newRowSelectionModel, event) => {
                                         setItemListSelectedRowIds(newRowSelectionModel);
-                                       
-                    
+
+
                                     }}
 
                                     density="compact"
@@ -590,16 +646,14 @@ console.log(itemListSelectedRowIds)
                             </div>
                             <div className=' col d-flex justify-content-end'>
                                 <div className='me-2'>
-                                    <button type="button" className='btn btn-warning' >+ Add Vendor</button>
+                                    <button type="button" className='btn btn-warning' > <AddIcon/> Add ItemAdd</button>
+                                </div>
+                               
+                                <div className='me-2'>
+                                    {itemListSelectedRowIds.length !== 0 && <Button variant='contained' type='button' color='error' onClick={() => setDeleteModalItem(true)}><DeleteIcon/> Delete </Button>}
                                 </div>
                                 <div className='me-2'>
-                                    <button type="button" className='btn btn-info' >Modify</button>
-                                </div>
-                                <div className='me-2'>
-                                {itemListSelectedRowIds.length !== 0 && <Button variant='contained' type='button' color='error' onClick={() => setDeleteModalItem(true)}>Delete </Button>}
-                                </div>
-                                <div className='me-2'>
-                                    <button type="button" className='btn btn-secondary' >Back</button>
+                                    <button type="button" className='btn btn-secondary' ><ArrowBackIcon/> Back</button>
                                 </div>
 
 
@@ -627,6 +681,11 @@ console.log(itemListSelectedRowIds)
                                 </div>
 
                             </div>
+                            <Snackbar anchorOrigin={{ vertical: "top", horizontal: "right" }} open={snackBarOpen} autoHideDuration={6000} onClose={handleSnackClose}>
+                            <Alert onClose={handleSnackClose} severity={errorhandler.code} sx={{ width: '25%' }}>
+                                {errorhandler.message}
+                            </Alert>
+                        </Snackbar>
 
 
 

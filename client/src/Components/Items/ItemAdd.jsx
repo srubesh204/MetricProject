@@ -381,7 +381,8 @@ const ItemAdd = () => {
                 itemImage: itemMasterImage,
                 itemMasterName: itemDescription,
                 itemCalFreInMonths: itemFqInMonths,
-                itemCalAlertDays: calAlertInDay
+                itemCalAlertDays: calAlertInDay,
+                
 
 
 
@@ -633,7 +634,7 @@ const ItemAdd = () => {
                         <div className="col-lg-5 row g-2">
 
                             <div className='col-9'>
-                                <TextField size='small' select variant='outlined' label="Item Master" name='itemMasterId' value={itemAddData.itemMasterId || ""} fullWidth onChange={handleItemAddChange}>
+                                <TextField size='small' select variant='outlined' label="Item Master" name='itemMasterId' value={itemAddData.itemMasterId} fullWidth onChange={handleItemAddChange}>
                                     <MenuItem value=""><em>Select</em></MenuItem>
                                     {itemMasterDataList.map((item) => (
                                         <MenuItem value={item._id}>{item.itemDescription}</MenuItem>

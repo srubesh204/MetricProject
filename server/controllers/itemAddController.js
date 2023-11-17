@@ -15,6 +15,7 @@ const itemAddController = {
 
     try {
       const {
+        itemMasterId,
         itemMasterName,
         itemIMTENo,
         itemImage,
@@ -48,6 +49,7 @@ const itemAddController = {
         acceptanceCriteria
       } = req.body;
       const itemAddResult = new itemAddModel({
+        itemMasterId,
         itemMasterName,
         itemIMTENo,
         itemImage,
@@ -121,7 +123,7 @@ const itemAddController = {
       // if (isNaN(desId)) {
       //   return res.status(400).json({ error: 'Invalid desId value' });
       // }
-      const { itemMasterName ,
+      const { itemMasterId,itemMasterName ,
         itemIMTENo ,
         itemImage ,
         itemType ,
@@ -154,6 +156,7 @@ const itemAddController = {
         acceptanceCriteria  } = req.body;
       // Create an object with the fields you want to update
       const updateItemFields = {
+        itemMasterId,
         itemMasterName ,
         itemIMTENo ,
         itemImage ,
@@ -246,7 +249,7 @@ const itemAddController = {
           // If a vendor was not found, you can skip it or handle the error as needed.
           console.log(`ItemAdd with ID ${itemAddId} not found.`);
           res.status(500).json({ message: `ItemAdd with ID not found.` });
-
+ 
         } else {
           console.log(`ItemAdd with ID ${itemAddId} deleted successfully.`);
           deleteResults.push(deletedItemAdd);
