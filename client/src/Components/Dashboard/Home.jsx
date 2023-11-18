@@ -1,4 +1,4 @@
-import { Paper, Typography } from '@mui/material';
+import { Button, MenuItem, Paper, TextField, Typography } from '@mui/material';
 import { PieChart } from '@mui/x-charts/PieChart';
 import axios from 'axios';
 import React, { useEffect, useState } from 'react'
@@ -71,147 +71,78 @@ const Home = () => {
 
 
   return (
-    <div style={{ backgroundColor: "#f1f4f4", width: "100%" }}>
+    <div style={{ backgroundColor: "#f1f4f4", width: "100%", height: "100%", margin: 0 }}>
 
-      <Typography className='text-center' variant='h4'>DashBoard</Typography>
-      <div className="row">
-        <div className="col-md-3">
-          <Paper className="row"><PieChart
-            series={[
-              {
-                data: itemStatus,
-                highlightScope: { faded: 'global', highlighted: 'item' },
-                faded: { innerRadius: 30, additionalRadius: -30, color: 'gray' },
-                innerRadius: 25,
-                outerRadius: 75,
-                paddingAngle: 1,
-                cornerRadius: 0,
-                startAngle: -90,
-                endAngle: 360,
 
+      <div className="row" style={{ margin: "10px" }}>
+        <Typography className='text-center' variant='h4'>DashBoard</Typography>
+        <div className="col-md-5 ">
  
-              },
-              
-            ]}
-            slotProps={{
-              legend:{ hidden: true }
-            }}
-            
-            width={400}
-            height={200}
-          /></Paper>
-          <Paper className="row"><PieChart
-            series={[
-              {
-                data: itemStatus,
-                highlightScope: { faded: 'global', highlighted: 'item' },
-                faded: { innerRadius: 30, additionalRadius: -30, color: 'gray' },
-                innerRadius: 25,
-                outerRadius: 75,
-                paddingAngle: 1,
-                cornerRadius: 0,
-                startAngle: -90,
-                endAngle: 360,
-
-              },
-            ]}
-            slotProps={{
-              legend:{ hidden: true }
-            }}
-            width={400}
-            height={200}
-          /></Paper>
-          <Paper className="row">
-            <PieChart
-            series={[
-              {
-                data: itemStatus,
-                highlightScope: { faded: 'global', highlighted: 'item' },
-                faded: { innerRadius: 30, additionalRadius: -30, color: 'gray' },
-                innerRadius: 25,
-                outerRadius: 75,
-                paddingAngle: 1,
-                cornerRadius: 0,
-                startAngle: -90,
-                endAngle: 360,
-
-              },
-            ]}
-            slotProps={{
-              legend:{ hidden: true }
-            }}
-            width={400}
-            height={200}
-          /></Paper>
-          <Paper className="row"><PieChart
-            series={[
-              {
-                data: itemStatus,
-                highlightScope: { faded: 'global', highlighted: 'item' },
-                faded: { innerRadius: 30, additionalRadius: -30, color: 'gray' },
-                innerRadius: 25,
-                outerRadius: 75,
-                paddingAngle: 1,
-                cornerRadius: 0,
-                startAngle: -90,
-                endAngle: 360,
-
-              },
-            ]}
-            slotProps={(props) => {
-              console.log(props); // Log the slotProps object to the console
-              return {
-                legend: { hidden: true },
-              };
-            }}
-            width={400}
-            height={200}
-          /></Paper>
         </div>
-        <div className="col row">
-        <Paper className='col-md-3'></Paper>
-        <Paper className='col-md-3'>
-          <PieChart
-            series={[
-              {
-                data: itemStatus,
-                highlightScope: { faded: 'global', highlighted: 'item' },
-                faded: { innerRadius: 30, additionalRadius: -30, color: 'gray' },
-                innerRadius: 35,
-                outerRadius: 100,
-                paddingAngle: 1,
-                cornerRadius: 0,
-                startAngle: -90,
-                endAngle: 360,
+        <div className="col-md-7 ">
+          <div className="row ">
 
-              },
-            ]}
-            width={400}
-            height={200}
-          />
-        </Paper>
-        <Paper className='col-md-3'>
-          <PieChart
-            series={[
-              {
-                data: calStatus,
-                highlightScope: { faded: 'global', highlighted: 'item' },
-                faded: { innerRadius: 30, additionalRadius: -30, color: 'gray' },
-                innerRadius: 35,
-                outerRadius: 100,
-                paddingAngle: 1,
-                cornerRadius: 5,
-                startAngle: -90,
-                endAngle: 360,
+            <Paper className='col-md ' elevation={12} sx={{ p: 2, display: 'flex', alignItems: 'center' }}>
+              <PieChart
+                series={[
+                  {
+                    data: itemStatus,
+                    highlightScope: { faded: 'global', highlighted: 'item' },
+                    faded: { innerRadius: 30, additionalRadius: -30, color: 'gray' },
+                    innerRadius: 30,
+                    outerRadius: 100,
+                    paddingAngle: 1,
+                    cornerRadius: 0,
+                    startAngle: -90,
+                    endAngle: 360,
+                    cx: 200
 
-              },
-            ]}
-            onClick={(event, itemIdentifier, item) => console.log({ event: event, ItemIdentifies: itemIdentifier, Item: item })}
-            width={400}
-            height={200}
-            slotProps={{}}
-          />
-        </Paper>
+                  },
+                ]}
+                slotProps={{
+                  legend: {
+                    direction: 'column',
+                    position: { vertical: 'middle', horizontal: 'left' },
+                    padding: -20,
+                  },
+                }}
+                width={200}
+                height={200}
+                sx={{ p: 0, m: 0 }}
+              />
+            </Paper>
+            <Paper className='col-md ' elevation={12} sx={{ p: 2, display: 'flex', alignItems: 'center', justifyContent: "center" }}>
+              <PieChart
+                series={[
+                  {
+                    data: calStatus,
+                    highlightScope: { faded: 'global', highlighted: 'item' },
+                    faded: { innerRadius: 30, additionalRadius: -30, color: 'gray' },
+                    innerRadius: 30,
+                    outerRadius: 100,
+                    paddingAngle: 1,
+                    cornerRadius: 5,
+                    startAngle: -90,
+                    endAngle: 360,
+                    cx: 200
+
+                  },
+                ]}
+                onClick={(event, itemIdentifier, item) => console.log({ event: event, ItemIdentifies: itemIdentifier, Item: item })}
+                width={200}
+                height={200}
+                slotProps={{
+                  legend: {
+                    direction: 'column',
+                    position: { vertical: 'middle', horizontal: 'left' },
+                    padding: -20,
+                  },
+                }}
+              />
+            </Paper>
+
+          </div>
+          
         </div>
 
       </div>
