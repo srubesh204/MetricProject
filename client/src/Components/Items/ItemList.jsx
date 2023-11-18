@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react'
-import { TextField, MenuItem } from '@mui/material';
+import { TextField, MenuItem, Button } from '@mui/material';
 import { Box, Container, Grid, Paper, Typography } from "@mui/material";
-import { DataGrid } from '@mui/x-data-grid';
+import { DataGrid, GridToolbar } from '@mui/x-data-grid';
 import axios from 'axios';
+import { Edit, FilterAlt } from '@mui/icons-material';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import dayjs from 'dayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
@@ -12,17 +13,22 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
-import Button from '@mui/material/Button';
+
 import Alert from '@mui/material/Alert';
 import Snackbar from '@mui/material/Snackbar';
 import AddIcon from '@mui/icons-material/Add';
 import DeleteIcon from '@mui/icons-material/Delete';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-
+import { Link as RouterLink } from 'react-router-dom';
+import { Link } from 'react-router-dom';
+import isSameOrAfter from 'dayjs/plugin/isSameOrAfter'
+import isSameOrBefore from 'dayjs/plugin/isSameOrBefore'
+dayjs.extend(isSameOrBefore)
+dayjs.extend(isSameOrAfter)
 
 const ItemList = () => {
 
-
+    console.log(dayjs("2023-11-17").isSameOrBefore("2023-11-21"))
     const [itemList, setItemList] = useState([]);
 
     const itemFetch = async () => {
@@ -78,18 +84,19 @@ const ItemList = () => {
 
 
     const columns = [
-        { field: 'id', headerName: 'Si. No', width: 70, renderCell: (params) => params.api.getAllRowIds().indexOf(params.id) + 1, align: "center" },
-        { field: 'itemIMTENo', headerName: 'ItemIMTE No', width: 80, align: "center" },
-        { field: 'itemMasterName', headerName: 'item Description', width: 90, align: "center" },
-        { field: 'itemRangeSize', headerName: 'Item Range Size', width: 100, align: "center" },
-        { field: 'itemMake', headerName: 'Item Make', width: 110, align: "center" },
-        { field: 'itemCalDate', headerName: 'Item Cal Date', width: 130, align: "center" },
-        { field: 'itemDueDate', headerName: 'Item Due Date', width: 140, align: "center" },
-        { field: 'itemLC', headerName: 'itemLC', width: 120, align: "center" },
-        { field: 'itemCalFreInMonths', headerName: 'Frequency(in months)', type: "number", width: 170, align: "center" },
+        { field: 'button', headerName: 'Edit', width: 60, renderCell: (params) => <Button component={Link} to={`/itemedit/${params.id}`}><Edit color='success' /></Button>, align: "center" },
+        { field: 'id', headerName: 'Si. No', width: 60, renderCell: (params) => params.api.getAllRowIds().indexOf(params.id) + 1, align: "center" },
+        { field: 'itemIMTENo', headerName: 'ItemIMTE No', width: 100, align: "center" },
+        { field: 'itemAddMasterName', headerName: 'item Description', width: 120, align: "center" },
+        { field: 'itemRangeSize', headerName: 'Item Range Size', width: 120, align: "center" },
+        { field: 'itemMake', headerName: 'Item Make', width: 90, align: "center" },
+        { field: 'itemCalDate', headerName: 'Item Cal Date', width: 100, align: "center" },
+        { field: 'itemDueDate', headerName: 'Item Due Date', width: 110, align: "center" },
+        { field: 'itemLC', headerName: 'itemLC', width: 90, align: "center" },
+        { field: 'itemCalFreInMonths', headerName: 'Frequency(in months)', type: "number", width: 160, align: "center" },
         { field: 'itemCalibrationSource', headerName: 'Item Calibration Src', width: 190, align: "center" },
-        { field: 'itemSupplier', headerName: 'Item Supplier', renderCell: (params) => params.row.itemSupplier.toString(), width: 180, align: "center" },
-        { field: 'itemType', headerName: 'Item Type', width: 190, align: "center" },
+        { field: 'itemSupplier', headerName: 'Item Supplier', renderCell: (params) => params.row.itemSupplier.toString(), width: 110, align: "center" },
+        { field: 'itemType', headerName: 'Item Type', width: 180, align: "center" },
     ];
 
     const [deleteModalItem, setDeleteModalItem] = useState(false);
@@ -351,9 +358,85 @@ const ItemList = () => {
         }
     };
 
+    const [dueDate, setDueDate] = useState("")
+
+    const handleDueChange = (e) => {
+        const { value } = e.target;
+        setDueDate(value)
+        const currentDate = dayjs();
+
+        // Example: Filtering data for the last 7 days
+        const sevenDaysAgo = currentDate.add(7, 'day');
+        const fifteenDaysAgo = currentDate.add(15, 'day');
+        const thirtyDaysAgo = currentDate.add(30, 'day');
+        // console.log(sevenDaysAgo.format("YYYY-MM-DD"))
+
+        if (value === "all") {
+            setFilteredItemListData(itemList)
+        } else {
+
+
+            if (value === "Past") {
+                const pastData = itemList.filter((item) => dayjs(item.itemDueDate).isBefore(currentDate.format("YYYY-MM-DD")))
+                setFilteredItemListData(pastData)
+                console.log("past")
+            }
+            if (value === "Today") {
+                const CurrentDue = itemList.filter((item) => dayjs(item.itemDueDate).isSame(currentDate.format("YYYY-MM-DD")))
+                console.log(dayjs().isSame(currentDate))
+                setFilteredItemListData(CurrentDue)
+            }
+            if (value === "7") {
+
+                const filteredDataLast7Days = itemList.filter((item) => {
+                    console.log(item.itemDueDate)
+                    return (dayjs(item.itemDueDate).isSameOrBefore(sevenDaysAgo) && dayjs(item.itemDueDate).isSameOrAfter(currentDate.format("YYYY-MM-DD")))
+                })
+                console.log(dayjs("2023-11-11").isBefore(sevenDaysAgo))
+                console.log(filteredDataLast7Days)
+                setFilteredItemListData(filteredDataLast7Days)
+            }
+            if (value === "15") {
+
+                const fifteenDaysFilter = itemList.filter((item) => {
+                    console.log(item.itemDueDate)
+                    return (dayjs(item.itemDueDate).isBetween(currentDate.format("YYYY-MM-DD"), fifteenDaysAgo))
+                })
+                setFilteredItemListData(fifteenDaysFilter)
+            }
+            if (value === "30") {
+
+                const thirtyDaysFilter = itemList.filter((item) => {
+                    console.log(item.itemDueDate)
+                    return (dayjs(item.itemDueDate).isBetween(currentDate.format("YYYY-MM-DD"), thirtyDaysAgo))
+                })
+                setFilteredItemListData(thirtyDaysFilter)
+            }
+
+            if (value === ">30") {
+
+                const thirtyDaysFilter = itemList.filter((item) => {
+                    console.log(item.itemDueDate)
+                    return (dayjs(item.itemDueDate).isAfter(thirtyDaysAgo))
+                })
+                setFilteredItemListData(thirtyDaysFilter)
+            }
+
+            if (value === "Date") {
+                setFilteredItemListData(itemList)
+            }
+
+        }
 
 
 
+    }
+    const [itemId, setItemId] = useState("")
+
+    const handleRowClick = async (params) => {
+        console.log(params)
+        setItemId(params.id)
+    }
 
 
 
@@ -472,7 +555,7 @@ const ItemList = () => {
                                     defaultValue="all"
                                     fullWidth
                                     size="small"
-                                    onChange={handleFilterChangeItemList}
+                                    onChange={handleDueChange}
                                     name="dueInDays" >
                                     <MenuItem value="all">All</MenuItem>
                                     <MenuItem value="Past">Past</MenuItem >
@@ -488,7 +571,7 @@ const ItemList = () => {
                             </div>
                             <div className="col d-flex  mb-2">
 
-                                <TextField label="Part Name"
+                                <TextField label=" Part No & Part Name"
                                     id="partNameId"
                                     select
                                     defaultValue="all"
@@ -499,7 +582,7 @@ const ItemList = () => {
                                     name="partName" >
                                     <MenuItem value="all">All</MenuItem>
                                     {partDataList.map((item, index) => (
-                                        <MenuItem key={index} value={item.partName}>{item.partName}</MenuItem>
+                                        <MenuItem key={index} value={item.partName}>{[item.partNo, item.partName].join(', ')}</MenuItem>
                                     ))}
                                 </TextField>
 
@@ -547,10 +630,10 @@ const ItemList = () => {
                             </div>
 
 
-                            <div className='col d-flex justify-content-end  g-2'>
+                            {dueDate === "Date" && <div className='col d-flex justify-content-end mb-2 g-2'>
                                 <div className="me-2 ">
                                     <DatePicker
-                                        disableFuture
+
                                         fullWidth
                                         id="startDateId"
                                         name="dueStartDate"
@@ -560,9 +643,9 @@ const ItemList = () => {
                                         slotProps={{ textField: { size: 'small' } }}
                                         format="DD-MM-YYYY" />
                                 </div>
-                                <div className=" mb-2">
+                                <div className="me-2">
                                     <DatePicker
-                                        disableFuture
+
                                         fullWidth
                                         id="endDateId"
                                         name="dueEndDate"
@@ -572,10 +655,13 @@ const ItemList = () => {
                                         slotProps={{ textField: { size: 'small' } }}
                                         format="DD-MM-YYYY" />
                                 </div>
-                            </div>
+                                <div>
+                                    <Button variant='contained' startIcon={<FilterAlt />} color='warning'>Filter</Button>
+                                </div>
+                            </div>}
                         </div>
                         <div>
-                            <Box sx={{ height: 400, width: '100%', my: 2 }}>
+                            <Box sx={{ height: 490, width: '100%', my: 2 }}>
                                 <DataGrid
 
                                     rows={filteredItemListData}
@@ -583,11 +669,9 @@ const ItemList = () => {
                                     getRowId={(row) => row._id}
                                     initialState={{
                                         pagination: {
-                                            paginationModel: {
-                                                pageSize: 5,
-                                            },
+                                          paginationModel: { page: 0, pageSize: 10},
                                         },
-                                    }}
+                                      }}
                                     sx={{
                                         ".MuiTablePagination-displayedRows": {
 
@@ -601,10 +685,15 @@ const ItemList = () => {
 
                                     }}
 
+                                    slots={{
+                                        toolbar: GridToolbar,
+                                    }}
+
                                     density="compact"
                                     //disableColumnMenu={true}
                                     //clipboardCopyCellDelimiter={true}
                                     checkboxSelection
+                                    onRowClick={handleRowClick}
                                     pageSizeOptions={[5]}
                                 />
                             </Box>
@@ -646,14 +735,20 @@ const ItemList = () => {
                             </div>
                             <div className=' col d-flex justify-content-end'>
                                 <div className='me-2'>
-                                    <button type="button" className='btn btn-warning' > <AddIcon/> Add ItemAdd</button>
+                                    {/* <Button component={Link} to={`/itemAdd/`}><AddIcon color='warning' /> Add ItemAdd</Button> */}
+                                    <Button component={RouterLink} to={`/itemAdd/`} variant="contained" color="warning">
+                                        <AddIcon /> Add Item
+                                    </Button>
+                                   {/* <button type="button" component={Link} to={`/itemAdd/`} className='btn btn-warning' > <AddIcon color='warning' /> Add ItemAdd</button>*/}
                                 </div>
-                               
+
                                 <div className='me-2'>
-                                    {itemListSelectedRowIds.length !== 0 && <Button variant='contained' type='button' color='error' onClick={() => setDeleteModalItem(true)}><DeleteIcon/> Delete </Button>}
+                                    {itemListSelectedRowIds.length !== 0 && <Button variant='contained' type='button' color='error' onClick={() => setDeleteModalItem(true)}><DeleteIcon /> Delete </Button>}
                                 </div>
+
+
                                 <div className='me-2'>
-                                    <button type="button" className='btn btn-secondary' ><ArrowBackIcon/> Back</button>
+                                    <button type="button" className='btn btn-secondary' ><ArrowBackIcon /> Back</button>
                                 </div>
 
 
@@ -682,10 +777,10 @@ const ItemList = () => {
 
                             </div>
                             <Snackbar anchorOrigin={{ vertical: "top", horizontal: "right" }} open={snackBarOpen} autoHideDuration={6000} onClose={handleSnackClose}>
-                            <Alert onClose={handleSnackClose} severity={errorhandler.code} sx={{ width: '25%' }}>
-                                {errorhandler.message}
-                            </Alert>
-                        </Snackbar>
+                                <Alert onClose={handleSnackClose} severity={errorhandler.code} sx={{ width: '25%' }}>
+                                    {errorhandler.message}
+                                </Alert>
+                            </Snackbar>
 
 
 

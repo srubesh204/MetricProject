@@ -1,17 +1,16 @@
 import { Card, CardContent, CardActions, Button, Container, Grid, Paper, TextField, Typography, CardMedia, InputLabel, Input, FormControl, FormHelperText, FormGroup, FormLabel, MenuItem, Select, Menu, FormControlLabel, Radio, RadioGroup, TableContainer, Table, TableHead, TableRow, TableCell, TableBody, IconButton, OutlinedInput, Box, Chip, Snackbar, Alert, Dialog, DialogTitle, DialogContent, DialogActions, DialogContentText, Checkbox, ListItemText, Autocomplete } from '@mui/material'
 import axios from 'axios';
-import { CloudUploadIcon, ArrowBack, Edit, Done } from '@mui/icons-material';
 import { styled } from '@mui/material/styles';
 import React, { useEffect, useState } from 'react'
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import dayjs from 'dayjs';
-import { Delete } from '@mui/icons-material';
-import { useParams, useNavigate, Link } from 'react-router-dom'
+import { Delete, Done } from '@mui/icons-material';
+import { useParams } from 'react-router-dom';
 
-const ItemAdd = () => {
-    const Navigate = useNavigate();
-    const { id } = useParams();
+const ItemEdit = () => {
+
+    const {id} = useParams()
     console.log(id)
 
     // Units Data
@@ -53,28 +52,6 @@ const ItemAdd = () => {
     }, []);
 
 
-    const [itemAddList, setItemAddList] = useState([]);
-
-    const itemAddFetch = async () => {
-        try {
-            const response = await axios.get(
-                `${process.env.REACT_APP_PORT}/itemAdd/getItemAddByIMTESort`
-            );
-            // You can use a different logic for generating the id
-
-            setItemAddList(response.data.result);
-
-
-        } catch (err) {
-            console.log(err);
-        }
-    };
-    useEffect(() => {
-        itemAddFetch();
-    }, []);
-
-
-
     const [areas, setAreas] = useState([])
     const areaFetch = async () => {
         try {
@@ -104,6 +81,12 @@ const ItemAdd = () => {
             console.log(err);
         }
     };
+
+
+
+
+
+
     //get Designations
     useEffect(() => {
         placeOfUsageFetch()
@@ -130,6 +113,31 @@ const ItemAdd = () => {
     }, []);
 
 
+    const [itemMasterDistNames, setItemMasterDistNames] = useState([])
+    const [itemMasterListByName, setItemMasterListByName] = useState([])
+
+
+
+    const getDistinctItemName = async () => {
+        try {
+            const response = await axios.get(
+                `${process.env.REACT_APP_PORT}/itemAdd/getDistinctItemName`
+            );
+            console.log(response.data)
+            setItemMasterDistNames(response.data.result);
+
+        } catch (err) {
+            console.log(err);
+        }
+    };
+    useEffect(() => {
+        getDistinctItemName();
+    }, []);
+
+
+
+
+
     //
 
     //Vendor
@@ -138,6 +146,9 @@ const ItemAdd = () => {
     const [OEMList, setOEMList] = useState([]);
     const [supplierList, setSupplierList] = useState([])
     const [suppOEM, setSuppOEM] = useState([]);
+
+
+
 
 
     const vendorListFetch = async () => {
@@ -170,6 +181,7 @@ const ItemAdd = () => {
     //
 
     const initialItemAddData = {
+        itemMasterId: "",
         itemMasterName: "",
         itemIMTENo: "",
         itemImage: "",
@@ -181,11 +193,11 @@ const ItemAdd = () => {
         itemLCUnit: "",
         itemMake: "",
         itemModelNo: "",
-        itemStatus: "",
-        itemReceiptDate: "",
+        itemStatus: "Active",
+        itemReceiptDate: dayjs().format("YYYY-MM-DD"),
         itemDepartment: "",
-        itemArea: "",
-        itemPlaceOfUsage: "",
+        itemArea: "N/A",
+        itemPlaceOfUsage: "N/A",
         itemCalFreInMonths: "",
         itemCalAlertDays: "",
         itemCalibrationSource: "",
@@ -194,7 +206,7 @@ const ItemAdd = () => {
         itemItemMasterIMTENo: [],
         itemSupplier: [],
         itemOEM: [],
-        itemCalDate: "",
+        itemCalDate: dayjs().format("YYYY-MM-DD"),
         itemDueDate: "",
         itemCalibratedAt: "",
         itemCertificateName: "",
@@ -217,6 +229,7 @@ const ItemAdd = () => {
 
 
     const [itemAddData, setItemAddData] = useState({
+        itemMasterId: "",
         itemMasterName: "",
         itemIMTENo: "",
         itemImage: "",
@@ -228,11 +241,11 @@ const ItemAdd = () => {
         itemLCUnit: "",
         itemMake: "",
         itemModelNo: "",
-        itemStatus: "",
-        itemReceiptDate: "",
+        itemStatus: "Active",
+        itemReceiptDate: dayjs().format("YYYY-MM-DD"),
         itemDepartment: "",
-        itemArea: "",
-        itemPlaceOfUsage: "",
+        itemArea: "N/A",
+        itemPlaceOfUsage: "N/A",
         itemCalFreInMonths: "",
         itemCalAlertDays: "",
         itemCalibrationSource: "",
@@ -241,7 +254,7 @@ const ItemAdd = () => {
         itemItemMasterIMTENo: [],
         itemSupplier: [],
         itemOEM: [],
-        itemCalDate: "",
+        itemCalDate: dayjs().format("YYYY-MM-DD"),
         itemDueDate: "",
         itemCalibratedAt: "",
         itemCertificateName: "",
@@ -261,24 +274,10 @@ const ItemAdd = () => {
         ]
     })
 
-    const getItemById = async () => {
-        try {
-            const response = await axios.get(
-                `${process.env.REACT_APP_PORT}/itemAdd/getItemAddById/${id}`
-            );
-            console.log(response.data.result)
-
-            setItemAddData(response.data.result)
+    //
 
 
-
-        } catch (err) {
-            console.log(err);
-        }
-    };
-    useEffect(() => {
-        getItemById();
-    }, []);
+    //
 
 
     //upload Button
@@ -294,7 +293,24 @@ const ItemAdd = () => {
         width: 1,
     });
 
+    useEffect(() => {
+      getItemDataById();
+    }, [])
+    const getItemDataById = async () => {
+        try {
+            const response = await axios.get(
+                `${process.env.REACT_APP_PORT}/itemAdd/getItemAddById/${id}`
+            );
+            setItemAddData(response.data.result)
+             console.log(response)
+
+        } catch (err) {
+            console.log(err);
+        }
+    };
+
     const handleItemAddChange = (e) => {
+
         const { name, value } = e.target;
         if (name === "itemRangeSizeUnit") {
             setItemAddData((prev) => ({ ...prev, [name]: value, acceptanceCriteria: [{ acAccuracyUnit: value, acRangeSizeUnit: value }] }))
@@ -304,23 +320,77 @@ const ItemAdd = () => {
         if (name === "itemPartName") {
             setItemAddData((prev) => ({ ...prev, itemPartName: typeof value === 'string' ? value.split(',') : value }));
         }
+        if (name === "itemItemMasterIMTENo") {
+            setItemAddData((prev) => ({ ...prev, itemItemMasterIMTENo: typeof value === 'string' ? value.split(',') : value }));
+        }
 
+        if (name === "itemSupplier") {
+            setItemAddData((prev) => ({ ...prev, itemSupplier: typeof value === 'string' ? value.split(',') : value }));
+        }
+        if (name === "itemOEM") {
+            // Map selected names back to corresponding objects
+            setItemAddData((prev) => ({ ...prev, itemOEM: typeof value === 'string' ? value.split(',') : value }));
+        }
+
+        if (name === "itemItemMasterName") {
+            setItemAddData((prev) => ({ ...prev, itemItemMasterName: value }));
+        }
 
         setItemAddData((prev) => ({ ...prev, [name]: value }));
     }
+
+    const handleItemDue = (e) => {
+        const { name, value } = e.target;
+        if (name === "calibrationDate") {
+            setItemAddData((prev) => ({ ...prev, itemCalFreInMonths: typeof value === 'string' ? value.split(',') : value }));
+        }
+
+    }
+
+    let dueDates = new Date();
+    const frequencyMonths = 6;
+    let newDueDate = new Date(dueDates);
+    newDueDate.setMonth(newDueDate.getMonth() + frequencyMonths);
+    newDueDate.setDate(newDueDate.getDate() - 1);
+    console.log(dueDates.toDateString());
+
+
+    ///
+    const currentDate = new Date();
+
+    const currentDay = currentDate.getDate();
+    const currentMonth = currentDate.getMonth();
+    const currentYear = currentDate.getFullYear();
+    const calibrationFrequencyMonths = 12;
+    let dueDate = new Date(currentYear, currentMonth + calibrationFrequencyMonths, currentDay);
+
+    if ((currentDate.getDate() !== dueDate.getDate()) || (currentDate.getMonth() !== dueDate.getMonth())) {
+
+        dueDate = new Date(currentYear, currentMonth + calibrationFrequencyMonths + 1, 0);
+    }
+    console.log(dueDate)
+
+
+
+
 
     const [calibrationPointsData, setCalibrationPointsData] = useState([])
     const itemMasterById = async () => {
         try {
             const response = await axios.get(
-                `${process.env.REACT_APP_PORT}/itemMaster/getItemMasterById/${itemAddData.itemMasterName}`
+                `${process.env.REACT_APP_PORT}/itemMaster/getItemMasterById/${itemAddData.itemMasterId}`
             );
             console.log(response.data)
-            const { itemType, itemDescription, itemPrefix, itemFqInMonths, calAlertInDay, wiNo, uncertainity, standartRef, itemImageName, status, itemMasterImage, workInsName, calibrationPoints } = response.data.result
+            const { _id, itemType, itemDescription, itemPrefix, itemFqInMonths, calAlertInDay, wiNo, uncertainity, standartRef, itemImageName, status, itemMasterImage, workInsName, calibrationPoints } = response.data.result
             setItemAddData((prev) => ({
                 ...prev,
                 itemType: itemType,
-                itemImage: itemMasterImage
+                itemImage: itemMasterImage,
+                itemMasterName: itemDescription,
+                itemCalFreInMonths: itemFqInMonths,
+                itemCalAlertDays: calAlertInDay
+
+
 
             }))
             setCalibrationPointsData(calibrationPoints)
@@ -333,7 +403,7 @@ const ItemAdd = () => {
 
     useEffect(() => {
         itemMasterById();
-    }, [itemAddData.itemMasterName]);
+    }, [itemAddData.itemMasterId]);
 
     const [partData, setPartData] = useState([])
     const getPartList = async () => {
@@ -353,6 +423,26 @@ const ItemAdd = () => {
     useEffect(() => {
         getPartList();
     }, [itemAddData.itemPartName]);
+
+
+    const [imteList, setImteList] = useState([])
+    const getImteList = async () => {
+        try {
+            const response = await axios.get(
+                `${process.env.REACT_APP_PORT}/itemAdd/getItemAddByIMTESort`
+            );
+            console.log(response.data)
+            setImteList(response.data.result)
+
+
+        } catch (err) {
+            console.log(err);
+        }
+    };
+
+    useEffect(() => {
+        getImteList();
+    }, []);
 
     console.log(itemAddData)
     console.log(calibrationPointsData)
@@ -417,19 +507,19 @@ const ItemAdd = () => {
     const [errorhandler, setErrorHandler] = useState({});
     const [open, setOpen] = useState(false)
 
-    const handleUpdateItemAdd = async (e) => {
+    const handleItemAddSubmit = async (e) => {
         e.preventDefault();
         try {
-            const response = await axios.put(
-                `${process.env.REACT_APP_PORT}/itemAdd/updateItemAdd/${id}`, itemAddData
+            const response = await axios.post(
+                `${process.env.REACT_APP_PORT}/itemAdd/createItemAdd`, itemAddData
             );
 
             setSnackBarOpen(true)
 
-            console.log("Item Updated Successfully")
+            console.log("Item Created Successfully")
             setErrorHandler({ status: response.data.status, message: response.data.message, code: "success" })
-            // setItemAddData(initialItemAddData)
-            setTimeout(() => Navigate("/itemList"), 2000)
+            setItemAddData(initialItemAddData)
+
         } catch (err) {
 
             setSnackBarOpen(true)
@@ -456,47 +546,32 @@ const ItemAdd = () => {
         }
     };
 
+    const [uploadMessage, setUploadMessage] = useState("")
 
-
-
-
-    {/* const updateItemEditData = async (id) => {
-        try {
-            const response = await axios.put(
-                "http://localhost:3001/itemAdd/updateItemAdd/" + id, itemAddData
-            );
-           
-            
-            setItemAddData(initialItemAddData)
-            setSnackBarOpen(true)
-            setErrorHandler({ status: response.data.status, message: response.data.message, code: "success" })
-            console.log("Item Update Successfully");
-        } catch (err) {
-            setSnackBarOpen(true)
-
-            if (err.response && err.response.status === 400) {
-                // Handle validation errors
-                console.log(err);
-                const errorData400 = err.response.data.errors;
-                const errorMessages400 = Object.values(errorData400).join(', ');
-                console.log(errorMessages400)
-                setErrorHandler({ status: 0, message: errorMessages400, code: "error" });
-            } else if (err.response && err.response.status === 500) {
-                // Handle other errors
-                console.log(err);
-                const errorData500 = err.response.data.error;
-                const errorMessages500 = Object.values(errorData500);
-                console.log(errorMessages500)
-                setErrorHandler({ status: 0, message: errorMessages500, code: "error" });
-            } else {
-                console.log(err);
-                console.log(err.response.data.error)
-                setErrorHandler({ status: 0, message: "An error occurred", code: "error" });
+    const handleCertificateUpload = (event) => {
+        const selectedFile = event.target.files[0];
+        if (selectedFile) {
+            console.log("working")
+            setItemAddData((prev) => ({ ...prev, itemCertificateName: selectedFile.name }));
+            const formData = new FormData();
+            formData.append('file', selectedFile);
+            try {
+                axios.post(`${process.env.REACT_APP_PORT}/upload/workInstructions`, formData)
+                    .then(response => {
+                        setUploadMessage(response.data.message)
+                        console.log(response);
+                    })
+                    .catch(error => {
+                        setUploadMessage("")
+                        console.error(error);
+                        // handle error here
+                    });
+            } catch (error) {
+                console.error('Error uploading the file:', error);
             }
 
-            console.log(err);
         }
-    };*/}
+    };
 
     // const handlePartCheckBox = (event) => {
     //     const {target: { value }} = event;
@@ -515,644 +590,644 @@ const ItemAdd = () => {
         setSnackBarOpen(false);
     }
 
-    const [imteList, setImteList] = useState([])
-    const getImteList = async () => {
-        try {
-            const response = await axios.get(
-                `${process.env.REACT_APP_PORT}/itemAdd/getItemAddByIMTESort`
-            );
-            console.log(response.data)
-            setImteList(response.data.result)
+    const handleRemoveFile = () => {
+        setItemAddData((prev) => ({ ...prev, itemCertificateData: "" }));
+        setUploadMessage(null)
+    }
 
+    const getItemMasterByName = async () => {
+        try {
+            const response = await axios.post(
+                `${process.env.REACT_APP_PORT}/itemAdd/getItemAddByName`, { itemMasterName: itemAddData.itemItemMasterName }
+
+            );
+
+            console.log(response.data)
+            setItemMasterListByName(response.data.result);
 
         } catch (err) {
             console.log(err);
         }
     };
+    useEffect(() => {
+        getItemMasterByName();
+    }, [itemAddData.itemItemMasterName]);
+
+
 
     useEffect(() => {
-        getImteList();
-    }, []);
+        calculateResultDate(itemAddData.itemCalDate, itemAddData.itemCalFreInMonths);
+    }, [itemAddData.itemCalDate, itemAddData.itemCalFreInMonths]);
 
-    const [uploadMessage, setUploadMessage] = useState("")
 
-    const handleCertificateUpload = (event) => {
-        const selectedFile = event.target.files[0];
-        if (selectedFile) {
-            console.log("working")
-            setItemAddData((prev) => ({ ...prev, itemCertificateName: selectedFile.name }));
-            const formData = new FormData();
-            formData.append('file', selectedFile);
-            try {
-                axios.post(`${process.env.REACT_APP_PORT}/upload/itemCertificates`, formData)
-                    .then(response => {
-                        setUploadMessage(response.data.message)
-                        console.log(response);
-                    })
-                    .catch(error => {
-                        setUploadMessage("")
-                        console.error(error);
-                        // handle error here
-                    });
-            } catch (error) {
-                console.error('Error uploading the file:', error);
-            }
 
+    const calculateResultDate = (itemCalDate, itemCalFreInMonths) => {
+        const parsedDate = dayjs(itemCalDate);
+        if (parsedDate.isValid() && !isNaN(parseInt(itemCalFreInMonths))) {
+            const calculatedDate = parsedDate.add(parseInt(itemCalFreInMonths, 10), 'month').subtract(1, 'day');
+            setItemAddData((prev) => ({
+                ...prev,
+                itemDueDate: calculatedDate.format('YYYY-MM-DD'),
+            }));
         }
     };
 
-    const handleRemoveFile = () => {
-        console.log("work")
-        setItemAddData((prev) => ({ ...prev, itemCertificateName: "" }));
-        setUploadMessage(null)
-    }
-
-
     return (
         <div style={{ margin: "2rem", backgroundColor: "#f5f5f5" }}>
-            <LocalizationProvider dateAdapter={AdapterDayjs}>
-                <Paper className='row' elevation={12} sx={{ p: 1.5, mb: 2, mx: 0 }}>
-                    <div className="col-lg-5 row g-2">
+            <form>
+                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                    <Paper className='row' elevation={12} sx={{ p: 1.5, mb: 2, mx: 0 }}>
+                        <div className="col-lg-5 row g-2">
 
-                        <div className='col-9'>
-                            <TextField size='small' select variant='outlined' label="Item Master" name='itemMasterName' value={itemAddData.itemMasterName} fullWidth onChange={(e) => { handleItemAddChange(e) }}>
-                                <MenuItem value=""><em>Select</em></MenuItem>
-                                {itemMasterDataList.map((item) => (
-                                    <MenuItem value={item._id}>{item.itemDescription}</MenuItem>
-                                ))}
-                            </TextField>
-                        </div>
-                        <div className="col-9">
-                            <Autocomplete
-                                disablePortal
-                                id="combo-box-demo"
-                                options={imteList.map((item) => ({ label: item.itemIMTENo }))}
-                                size='small'
-                                value={itemAddData.itemIMTENo}
-                                renderInput={(params) => <TextField name='itemIMTENo' onChange={handleItemAddChange}   {...params} label="IMTE No" />}
-                                getOptionDisabled={option => true}
-                                clearOnBlur={false}
-                            // getOptionDisabled={options => true}
-
-                            />
-                        </div>
-                    </div>
-                    <div className="col-lg-2 " >
-                        <Typography variant='h3' style={{ height: "50%", margin: "13% 0" }} className='text-center'>Item Edit</Typography>
-                    </div>
-
-                    <div className="col-lg-5 d-flex justify-content-end">
-                        {itemAddData.itemImage && <Card elevation={12} sx={{ width: "110px", height: "110px" }}>
-
-                            <img src={itemAddData.itemImage} style={{ width: "100%", height: "100%" }} />
-
-                        </Card>}
-                    </div>
-
-
-                </Paper>
-                <div className="row ">
-                    <div className="col">
-                        <Paper className='mb-2 row-md-6' elevation={12} sx={{ p: 2 }}>
-                            <Typography variant='h6' className='text-center'>Item General Details</Typography>
-                            <div className="row g-2 mb-2">
-                                <div className="col-lg-4">
-                                    <TextField size='small' select variant='outlined' onChange={handleItemAddChange} label="Item Type" name='itemType' fullWidth value={itemAddData.itemType}>
-                                        <MenuItem><em>Select Type</em></MenuItem>
-                                        <MenuItem value="Attribute">Attribute</MenuItem>
-                                        <MenuItem value="Variable">Variable</MenuItem>
-                                        <MenuItem value="Reference Standard">Reference Standard</MenuItem>
-
-                                    </TextField>
-                                </div>
-                                <div className='col-lg-8 d-flex justify-content-between'>
-                                    <TextField size='small' variant='outlined' label="Range/Size" onChange={handleItemAddChange} value={itemAddData.itemRangeSize} name='itemRangeSize' id='itemRangeSizeId' fullWidth />
-                                    <TextField label="Unit" size='small' select value={itemAddData.itemRangeSizeUnit} onChange={(e) => {
-                                        handleItemAddChange(e);
-                                    }} name='itemRangeSizeUnit' id='itemRangeSizeUnitId' style={{ width: "40%" }} >
-                                        <MenuItem value=''><em>None</em></MenuItem>
-                                        {units.map((unit, index) => (
-                                            <MenuItem key={index} value={unit.unitName}>{unit.unitName}</MenuItem>
-                                        ))}
-                                    </TextField>
-
-
-
-
-                                </div>
+                            <div className='col-9'>
+                                <TextField size='small' select variant='outlined' label="Item Master" name='itemMasterId' value={itemAddData.itemMasterId} fullWidth onChange={handleItemAddChange}>
+                                    <MenuItem value=""><em>Select</em></MenuItem>
+                                    {itemMasterDataList.map((item) => (
+                                        <MenuItem value={item._id}>{item.itemDescription}</MenuItem>
+                                    ))}
+                                </TextField>
                             </div>
-                            <div className="row g-2">
-                                <div className="col-lg-4">
-                                    <TextField size='small' variant='outlined' label="MFR.Si.No." onChange={handleItemAddChange} name='itemMFRNo' value={itemAddData.itemMFRNo} id='itemMFRNoId' fullWidth />
-                                </div>
-                                <div className='col-lg-8 d-flex justify-content-between'>
-                                    <TextField size='small' variant='outlined' name='itemLC' onChange={handleItemAddChange} id="itemLCId" value={itemAddData.itemLC} label="Least Count" fullWidth />
+                            <div className="col-9">
+                                <Autocomplete
+                                    disablePortal
+                                    id="itemIMTENoId"
+                                    options={imteList.map((item) => ({ label: item.itemIMTENo }))}
+                                    size='small'
+                                    renderInput={(params) => <TextField name='itemIMTENo' onChange={handleItemAddChange}  {...params} label="IMTE No" />}
+                                    getOptionDisabled={option => true}
+                                    clearOnBlur={false}
+                                //getOptionDisabled={options => true}
+
+                                />
+                            </div>
+
+                        </div>
+                        <div className="col-lg-2 " >
+                            <Typography variant='h3' style={{ height: "50%", margin: "13% 0" }} className='text-center'>Item Add</Typography>
+                        </div>
+
+                        <div className="col-lg-5 d-flex justify-content-end">
+                            {itemAddData.itemImage && <Card elevation={12} sx={{ width: "110px", height: "110px" }}>
+
+                                <img src={itemAddData.itemImage} style={{ width: "100%", height: "100%" }} />
+
+                            </Card>}
+                        </div>
 
 
-                                    <TextField select size='small' variant='outlined' label="Unit" name='itemLCUnit' value={itemAddData.itemLCUnit} onChange={handleItemAddChange} style={{ width: "40%" }} >
-                                        <MenuItem value=""><em>None</em></MenuItem>
-                                        {units.map((unit, index) => (
-                                            <MenuItem key={index} value={unit.unitName}>{unit.unitName}</MenuItem>
-                                        ))}
-                                    </TextField>
+                    </Paper>
+                    <div className="row ">
+                        <div className="col">
+                            <Paper className='mb-2 row-md-6' elevation={12} sx={{ p: 2 }}>
+                                <Typography variant='h6' className='text-center'>Item General Details</Typography>
+                                <div className="row g-2 mb-2">
+                                    <div className="col-lg-4">
+                                        <TextField size='small' select variant='outlined' onChange={handleItemAddChange} label="Item Type" name='itemType' fullWidth value={itemAddData.itemType || ""}>
+                                            <MenuItem><em>Select Type</em></MenuItem>
+                                            <MenuItem value="Attribute">Attribute</MenuItem>
+                                            <MenuItem value="Variable">Variable</MenuItem>
+                                            <MenuItem value="Reference Standard">Reference Standard</MenuItem>
 
-                                </div>
-                                <div className="row g-1">
-                                    <div className="col-lg me-1">
-                                        <TextField size='small' variant='outlined' label="Make" onChange={handleItemAddChange} value={itemAddData.itemMake} name='itemMake' id='itemMakeId' fullWidth />
-                                    </div>
-                                    <div className="col-lg">
-                                        <TextField size='small' variant='outlined' label="Model No." onChange={handleItemAddChange} value={itemAddData.itemModelNo} name='itemModelNo' id='itemModelNoId' fullWidth />
-                                    </div>
-                                </div>
-                                <div className="row g-1">
-                                    <div className="col-lg me-1">
-                                        <TextField size='small' select variant='outlined' onChange={handleItemAddChange} value={itemAddData.itemStatus} label="Item Status" name='itemStatus' id='itemStatusId' fullWidth >
-                                            <MenuItem value="Active">Active</MenuItem>
-                                            <MenuItem value="InActive">InActive</MenuItem>
                                         </TextField>
                                     </div>
-                                    <div className="col-lg">
-                                        <DatePicker
-                                            fullWidth
-                                            id="itemReceiptDateId"
-                                            name="itemReceiptDate"
-                                            value={dayjs(itemAddData.itemReceiptDate)}
-                                            onChange={(newValue) =>
-                                                setItemAddData((prev) => ({ ...prev, itemReceiptDate: newValue.format("YYYY-MM-DD") }))
-                                            }
-                                            label="Master Due"
-                                            slotProps={{ textField: { size: 'small' } }}
-                                            format="DD-MM-YYYY" />
+                                    <div className='col-lg-8 d-flex justify-content-between'>
+                                        <TextField size='small' variant='outlined' label="Range/Size" onChange={handleItemAddChange} name='itemRangeSize' id='itemRangeSizeId' fullWidth />
+                                        <TextField label="Unit" size='small' select onChange={(e) => {
+                                            handleItemAddChange(e);
+                                        }} name='itemRangeSizeUnit' id='itemRangeSizeUnitId' style={{ width: "40%" }} >
+                                            <MenuItem value=''><em>None</em></MenuItem>
+                                            {units.map((unit, index) => (
+                                                <MenuItem key={index} value={unit.unitName}>{unit.unitName}</MenuItem>
+                                            ))}
+                                        </TextField>
+
+
+
+
                                     </div>
                                 </div>
-                            </div>
-                        </Paper>
-                        <Paper elevation={12} sx={{ p: 2 }} className='row-md-6'>
-                            <Typography variant='h6' className='text-center'>
-                                Select Location
-                            </Typography>
-                            <div className="row g-1 mt-0 mb-2">
-                                <div className="col me-1">
-                                    <TextField value={itemAddData.itemDepartment} onChange={handleItemAddChange} size='small' select fullWidth variant='outlined' label="Department" name='itemDepartment' id='itemDepartmentId'>
-                                        {departments.map((item, index) => (
-                                            <MenuItem key={index} value={item.department}>{item.department}</MenuItem>
-                                        ))}
-                                    </TextField>
-                                </div>
-                                <div className="col">
-                                    <TextField size='small' onChange={handleItemAddChange} value={itemAddData.itemArea} select fullWidth variant='outlined' label="Area" name='itemArea' id='itemAreaId'>
-                                        {areas.map((item, index) => (
-                                            <MenuItem key={index} value={item.area}>{item.area}</MenuItem>
-                                        ))}
-                                    </TextField>
-                                </div>
-                                <div className='mt-2'>
-                                    <TextField size='small' onChange={handleItemAddChange} value={itemAddData.itemPlaceOfUsage} select fullWidth variant='outlined' label="Place" name='itemPlaceOfUsage' id='itemPlaceOfUsageId'>
-                                        {placeOfUsages.map((item, index) => (
-                                            <MenuItem key={index} value={item.placeOfUsage}>{item.placeOfUsage}</MenuItem>
-                                        ))}
-                                    </TextField>
-                                </div>
-
-                            </div>
-                        </Paper>
-                    </div>
+                                <div className="row g-2">
+                                    <div className="col-lg-4">
+                                        <TextField size='small' variant='outlined' label="MFR.Si.No." onChange={handleItemAddChange} name='itemMFRNo' id='itemMFRNoId' fullWidth />
+                                    </div>
+                                    <div className='col-lg-8 d-flex justify-content-between'>
+                                        <TextField size='small' variant='outlined' name='itemLC' onChange={handleItemAddChange} id="itemLCId" label="Least Count" fullWidth />
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-                    <Paper className='col-lg ' elevation={12} sx={{ p: 2 }}>
-                        <Typography variant='h6' className='text-center'>Calibration</Typography>
-                        <div className="row g-2 mb-2">
-                            <div className='col-lg-6'>
-                                <TextField value={itemAddData.itemCalFreInMonths} onChange={handleItemAddChange} size='small' fullWidth variant='outlined' label="Cal Frequency in months" id='itemCalFreInMonthsId' name='itemCalFreInMonths' type='number'>
-
-                                </TextField>
-                            </div>
-                            <div className='col-lg-6'>
-                                <TextField size='small' value={itemAddData.itemCalAlertDays} onChange={handleItemAddChange} fullWidth variant='outlined' label="Cal Alert Days" id='itemCalAlertDaysId' name='itemCalAlertDays' type='number'>
-
-                                </TextField>
-                            </div>
-                            <div className='col-lg-12'>
-                                <TextField size='small' value={itemAddData.itemCalibrationSource} onChange={handleItemAddChange} fullWidth variant='outlined' select label="Calibration Source" name='itemCalibrationSource'>
-                                    <MenuItem value=""><em>--Select--</em></MenuItem>
-                                    <MenuItem value="InHouse">InHouse</MenuItem>
-                                    <MenuItem value="OutSource">OutSource</MenuItem>
-                                    <MenuItem value="OEM">OEM</MenuItem>
-                                </TextField>
-                            </div>
-                        </div>
-                        {itemAddData.itemCalibrationSource === "InHouse" &&
-                            <div className='row g-2'>
-                                <div className="col-md-12">
-                                    <TextField size='small' select fullWidth variant='outlined' onChange={handleItemAddChange} value={itemAddData.itemItemMasterName} label="Select Master" name='itemItemMasterName' >
-                                        <MenuItem value=""><em>--Select--</em></MenuItem>
-                                        <MenuItem value="Master1">Master1</MenuItem>
-                                        <MenuItem value="Master2">Master2</MenuItem>
-                                        <MenuItem value="Master3">Master3</MenuItem>
-                                    </TextField>
-                                </div>
-
-
-
-
-                                <div className="col-md-6">
-                                    <TextField size='small' fullWidth variant='outlined' select label="Master IMTE No" name='itemItemMasterIMTENo' value={itemAddData.itemItemMasterIMTENo} onChange={handleItemAddChange} >
-                                        <MenuItem value=""><em>--Select--</em></MenuItem>
-                                        <MenuItem value="MMT-01">MMT-01</MenuItem>
-                                        <MenuItem value="MMT-02">MMT-02</MenuItem>
-                                        <MenuItem value="MMT-03">MMT-03</MenuItem>
-                                    </TextField>
-                                </div>
-                                {/*<div className="col-md-6">
-                                    <DatePicker
-                                        fullWidth
-                                        id="itemItemMasterDueId"
-                                        name="itemItemMasterDue"
-                                        value={dayjs(itemAddData.itemItemMasterDue)}
-                                        onChange={(newValue) =>
-                                            setItemAddData((prev) => ({ ...prev, itemItemMasterDue: newValue.format("YYYY-MM-DD") }))
-                                        }
-                                        label="Master Due"
-                                        slotProps={{ textField: { size: 'small' } }}
-                                        format="DD-MM-YYYY" />
-                                    </div>*/}
-
-
-
-                            </div>}
-                        <div className="row">
-                            {itemAddData.itemCalibrationSource === "OutSource" &&
-
-                                <div className="col-md-7">
-                                    <FormControl size='small' component="div" fullWidth>
-                                        <InputLabel id="itemSupplierId">Select Supplier</InputLabel>
-                                        <Select
-                                            labelId="itemSupplierId"
-                                            id="demo-multiple-checkbox"
-                                            multiple
-                                            name="itemSupplier"
-                                            value={itemAddData.itemSupplier}
-                                            onChange={handleItemAddChange}
-                                            input={<OutlinedInput fullWidth label="Select Supplier" />}
-                                            renderValue={(selected) => selected.join(', ')}
-                                            MenuProps={MenuProps}
-                                            fullWidth
-                                        >
-                                            {supplierList.map((name, index) => (
-                                                <MenuItem key={index} value={name.aliasName}>
-                                                    <Checkbox checked={itemAddData.itemSupplier.indexOf(name.aliasName) > -1} />
-                                                    <ListItemText primary={name.aliasName} />
-                                                </MenuItem>
+                                        <TextField select size='small' variant='outlined' label="Unit" name='itemLCUnit' onChange={handleItemAddChange} style={{ width: "40%" }} >
+                                            <MenuItem value=""><em>None</em></MenuItem>
+                                            {units.map((unit, index) => (
+                                                <MenuItem key={index} value={unit.unitName}>{unit.unitName}</MenuItem>
                                             ))}
-                                        </Select>
-                                    </FormControl>
+                                        </TextField>
+
+                                    </div>
+                                    <div className="row g-1">
+                                        <div className="col-lg me-1">
+                                            <TextField size='small' variant='outlined' label="Make" onChange={handleItemAddChange} name='itemMake' id='itemMakeId' fullWidth />
+                                        </div>
+                                        <div className="col-lg">
+                                            <TextField size='small' variant='outlined' label="Model No." onChange={handleItemAddChange} name='itemModelNo' id='itemModelNoId' fullWidth />
+                                        </div>
+                                    </div>
+                                    <div className="row g-1">
+                                        <div className="col-lg me-1">
+                                            <TextField size='small' select variant='outlined' value={itemAddData.itemStatus} onChange={handleItemAddChange} label="Item Status" name='itemStatus' id='itemStatusId' fullWidth >
+                                                <MenuItem value="Active">Active</MenuItem>
+                                                <MenuItem value="InActive">InActive</MenuItem>
+                                            </TextField>
+                                        </div>
+                                        <div className="col-lg">
+                                            <DatePicker
+                                                fullWidth
+                                                id="itemReceiptDateId"
+                                                name="itemReceiptDate"
+                                                value={dayjs(itemAddData.itemReceiptDate)}
+                                                onChange={(newValue) =>
+                                                    setItemAddData((prev) => ({ ...prev, itemReceiptDate: newValue.format("YYYY-MM-DD") }))
+                                                }
+                                                label="Item Receipt Date"
+                                                slotProps={{ textField: { size: 'small' } }}
+                                                format="DD-MM-YYYY" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </Paper>
+                            <Paper elevation={12} sx={{ p: 2 }} className='row-md-6'>
+                                <Typography variant='h6' className='text-center'>
+                                    Select Location
+                                </Typography>
+                                <div className="row g-1 mt-0 mb-2">
+                                    <div className="col me-1">
+                                        <TextField value={itemAddData.itemDepartment} onChange={handleItemAddChange} size='small' select fullWidth variant='outlined' label="Department" name='itemDepartment' id='itemDepartmentId'>
+                                            {departments.map((item, index) => (
+                                                <MenuItem key={index} value={item.department}>{item.department}</MenuItem>
+                                            ))}
+                                        </TextField>
+                                    </div>
+                                    <div className="col">
+                                        <TextField size='small' onChange={handleItemAddChange} value={itemAddData.itemArea} select fullWidth variant='outlined' label="Area" name='itemArea' id='itemAreaId'>
+                                            {areas.map((item, index) => (
+                                                <MenuItem key={index} value={item.area}>{item.area}</MenuItem>
+                                            ))}
+                                        </TextField>
+                                    </div>
+                                    <div className='mt-2'>
+                                        <TextField size='small' onChange={handleItemAddChange} value={itemAddData.itemPlaceOfUsage} select fullWidth variant='outlined' label="Place" name='itemPlaceOfUsage' id='itemPlaceOfUsageId'>
+                                            {placeOfUsages.map((item, index) => (
+                                                <MenuItem key={index} value={item.placeOfUsage}>{item.placeOfUsage}</MenuItem>
+                                            ))}
+                                        </TextField>
+                                    </div>
+
+                                </div>
+                            </Paper>
+                        </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                        <Paper className='col-lg ' elevation={12} sx={{ p: 2 }}>
+                            <Typography variant='h6' className='text-center'>Calibration</Typography>
+                            <div className="row g-2 mb-2">
+                                <div className='col-lg-6'>
+                                    <TextField value={itemAddData.itemCalFreInMonths} onChange={handleItemAddChange} size='small' fullWidth variant='outlined' label="Cal Frequency in months" id='itemCalFreInMonthsId' name='itemCalFreInMonths' type='number'>
+
+                                    </TextField>
+                                </div>
+                                <div className='col-lg-6'>
+                                    <TextField size='small' value={itemAddData.itemCalAlertDays} onChange={handleItemAddChange} fullWidth variant='outlined' label="Cal Alert Days" id='itemCalAlertDaysId' name='itemCalAlertDays' type='number'>
+
+                                    </TextField>
+                                </div>
+                                <div className='col-lg-12'>
+                                    <TextField size='small' value={itemAddData.itemCalibrationSource} onChange={handleItemAddChange} fullWidth variant='outlined' select label="Calibration Source" name='itemCalibrationSource'>
+                                        <MenuItem value=""><em>--Select--</em></MenuItem>
+                                        <MenuItem value="InHouse">InHouse</MenuItem>
+                                        <MenuItem value="OutSource">OutSource</MenuItem>
+                                        <MenuItem value="OEM">OEM</MenuItem>
+                                    </TextField>
+                                </div>
+                            </div>
+                            {itemAddData.itemCalibrationSource === "InHouse" &&
+                                <div className='row g-2'>
+                                    <h6 className='text-center'>Enter Master Details</h6>
+                                    <div className="col-md-12">
+                                        <TextField size='small' select fullWidth variant='outlined' onChange={handleItemAddChange} label="Select Master" name='itemItemMasterName' >
+                                            <MenuItem value=""><em>--Select--</em></MenuItem>
+                                            {itemMasterDistNames.map((item, index) => (
+                                                <MenuItem key={index} value={item}>{item}</MenuItem>
+                                            ))}
+                                        </TextField>
+                                    </div>
+
+
+
+
+                                    <div className="col-md-12">
+                                        <FormControl size='small' component="div" fullWidth>
+                                            <InputLabel id="itemItemMasterIMTENoId">Select IMTENo.</InputLabel>
+                                            <Select
+                                                labelId="itemItemMasterIMTENoId"
+                                                id="demo-multiple-checkbox"
+                                                multiple
+                                                name="itemItemMasterIMTENo"
+                                                value={itemAddData.itemItemMasterIMTENo}
+                                                onChange={handleItemAddChange}
+                                                input={<OutlinedInput fullWidth label="Select IMTE No" />}
+                                                renderValue={(selected) => selected.map(item => item.itemIMTENo).join(", ")}
+                                                MenuProps={MenuProps}
+                                                fullWidth
+                                            >
+                                                {itemMasterListByName.map((name, index) => (
+                                                    <MenuItem key={index} value={name}>
+                                                        <Checkbox checked={itemAddData.itemItemMasterIMTENo.indexOf(name) > -1} />
+                                                        <ListItemText primary={name.itemIMTENo} />
+                                                    </MenuItem>
+                                                ))}
+                                            </Select>
+                                        </FormControl>
+                                    </div>
+
+
+
+                                </div>}
+                            {itemAddData.itemCalibrationSource === "OutSource" &&
+                                <div className='row g-2'>
+                                    <h6 className='text-center'>Enter Supplier Details</h6>
+                                    <div className="col-md-7">
+
+                                        <FormControl size='small' component="div" fullWidth>
+                                            <InputLabel id="itemSupplierId">Select Supplier</InputLabel>
+                                            <Select
+                                                labelId="itemSupplierId"
+                                                id="demo-multiple-checkbox"
+                                                multiple
+                                                name="itemSupplier"
+                                                value={itemAddData.itemSupplier}
+                                                onChange={handleItemAddChange}
+                                                input={<OutlinedInput fullWidth label="Select Supplier" />}
+                                                renderValue={(selected) => selected.join(', ')}
+                                                MenuProps={MenuProps}
+                                                fullWidth
+                                            >
+                                                {supplierList.map((name, index) => (
+                                                    <MenuItem key={index} value={name.aliasName}>
+                                                        <Checkbox checked={itemAddData.itemSupplier.indexOf(name.aliasName) > -1} />
+                                                        <ListItemText primary={name.aliasName} />
+                                                    </MenuItem>
+                                                ))}
+                                            </Select>
+                                        </FormControl>
+                                    </div>
+
+
+                                    <RadioGroup
+                                        className="col-md-5 d-flex justify-content-center"
+                                        row
+                                        name='itemCalibrationDoneAt'
+                                        onChange={handleItemAddChange}
+                                        checked={itemAddData.itemCalibrationDoneAt}
+                                    >
+                                        <FormControlLabel value="Lab" control={<Radio />} label="Lab" />
+                                        <FormControlLabel value="Site" control={<Radio />} label="Site" />
+                                    </RadioGroup>
+
+
+
                                 </div>}
 
-
-
-
-
-
                             {itemAddData.itemCalibrationSource === "OEM" &&
+                                <div className='row g-2'>
+                                    <h6 className='text-center'>Enter OEM Details</h6>
+                                    <div className="col-md-7">
+                                        <FormControl size='small' component="div" fullWidth>
+                                            <InputLabel id="itemOEMId">Select Supplier</InputLabel>
+                                            <Select
+                                                labelId="itemOEMId"
+                                                id="demo-multiple-checkbox"
+                                                multiple
+                                                name="itemOEM"
+                                                value={itemAddData.itemOEM}
+                                                onChange={handleItemAddChange}
+                                                input={<OutlinedInput fullWidth label="Select Supplier" />}
+                                                renderValue={(selected) => selected.join(', ')}
+                                                MenuProps={MenuProps}
+                                                fullWidth
+                                            >
+                                                {OEMList.map((name) => (
+                                                    <MenuItem key={name} value={name.aliasName}>
+                                                        <Checkbox checked={itemAddData.itemOEM.indexOf(name.aliasName) > -1} />
+                                                        <ListItemText primary={name.aliasName} />
+                                                    </MenuItem>
+                                                ))}
+                                            </Select>
+                                        </FormControl>
 
-                                <div className="col-md-7">
-                                    <FormControl size='small' component="div" fullWidth>
-                                        <InputLabel id="itemOEMId">Select Supplier</InputLabel>
-                                        <Select
-                                            labelId="itemOEMId"
-                                            id="demo-multiple-checkbox"
-                                            multiple
-                                            name="itemOEM"
-                                            value={itemAddData.itemOEM}
-                                            onChange={handleItemAddChange}
-                                            input={<OutlinedInput fullWidth label="Select Supplier" />}
-                                            renderValue={(selected) => selected.join(', ')}
-                                            MenuProps={MenuProps}
-                                            fullWidth
-                                        >
-                                            {OEMList.map((name) => (
-                                                <MenuItem key={name} value={name.aliasName}>
-                                                    <Checkbox checked={itemAddData.itemOEM.indexOf(name.aliasName) > -1} />
-                                                    <ListItemText primary={name.aliasName} />
-                                                </MenuItem>
-                                            ))}
-                                        </Select>
-                                    </FormControl>
-                                </div>
 
-                            }
+                                    </div>
+                                    <RadioGroup
+                                        className="col-md-5 d-flex justify-content-center"
+                                        row
+                                        name='itemCalibrationDoneAt'
+                                        onChange={handleItemAddChange}
 
-                            {(itemAddData.itemCalibrationSource === "OEM" || itemAddData.itemCalibrationSource === "OutSource") &&
+                                    >
+                                        <FormControlLabel value="Lab" control={<Radio />} label="Lab" />
+                                        <FormControlLabel value="Site" control={<Radio />} label="Site" />
+                                    </RadioGroup>
 
-                                <RadioGroup
-                                    className="col-md-5 d-flex justify-content-center"
-                                    row
-                                    name='itemCalibrationDoneAt'
-                                    onChange={handleItemAddChange}
 
-                                >
-                                    <FormControlLabel value="Lab" checked={itemAddData.itemCalibrationDoneAt === "Lab"} control={<Radio />} label="Lab" />
-                                    <FormControlLabel value="Site" checked={itemAddData.itemCalibrationDoneAt === "Site"} control={<Radio />} label="Site" />
-                                </RadioGroup>
-                            }
-                        </div>
 
-                        {/* 
-                            {itemAddData.itemCalibrationSource === "OEM" || itemAddData.itemCalibrationSource === "OEM" && 
-                            } */}
+                                </div>}
 
-                        {itemAddData.itemCalibrationSource === "InHouse" && Array.isArray(itemAddData.itemItemMasterName) && (
-                            <table className='table table-sm table-bordered text-center mt-2'>
+                            {itemAddData.itemCalibrationSource === "InHouse" && <table className='table table-sm table-bordered text-center mt-2'>
                                 <tbody>
                                     <tr>
                                         <th style={{ width: "20%" }}>Si No</th>
                                         <th style={{ width: "50%" }}>Master Name</th>
                                         <th style={{ width: "30%" }}>Due</th>
                                     </tr>
-                                    
-                                        <tr >
-                                            <td></td>
-                                            <td></td>
+                                    {itemAddData.itemItemMasterIMTENo.map((item, index) => (
+                                        <tr>
+                                            <td>{index + 1}</td>
+                                            <td>{item.itemIMTENo}</td>
+                                            <td>{item.itemDueDate}</td>
                                         </tr>
-                                   
+                                    ))
+
+                                    }
+
+
+                                </tbody>
+                            </table>}
+                            {itemAddData.itemCalibrationSource === "OutSource" && <table className='table table-sm table-bordered text-center mt-2'>
+                                <tbody>
+                                    <tr>
+                                        <th style={{ width: "20%" }}>Si No</th>
+                                        <th style={{ width: "80%" }}>Supplier</th>
+
+                                    </tr>
+                                    {itemAddData.itemSupplier.map((item, index) => (
+                                        <tr key={index}>
+                                            <td>{index + 1}</td>
+                                            <td >{item}</td>
+                                        </tr>
+                                    ))}
+
+
+
+                                </tbody>
+                            </table>}
+                            {itemAddData.itemCalibrationSource === "OEM" && <table className='table table-sm table-bordered text-center mt-2'>
+                                <tbody>
+                                    <tr>
+                                        <th style={{ width: "20%" }}>Si No</th>
+                                        <th style={{ width: "80%" }}>OEM</th>
+
+                                    </tr>
+                                    {itemAddData.itemOEM.map((item, index) => (
+                                        <tr key={index}>
+                                            <td>{index + 1}</td>
+                                            <td >{item}</td>
+                                        </tr>
+                                    ))}
+
+
+                                </tbody>
+                            </table>}
+
+                        </Paper>
+                        <div className="col">
+                            <Paper className='row-md-6' elevation={12} sx={{ p: 2, }}>
+                                <Typography variant='h6' className='text-center'>Enter Previous Calibration Data</Typography>
+                                <div className="row g-2">
+                                    <div className="col-lg-6">
+                                        <DatePicker
+
+                                            fullWidth
+                                            id="itemCalDateId"
+                                            name="itemCalDate"
+                                            value={dayjs(itemAddData.itemCalDate)}
+                                            onChange={(newValue) =>
+                                                setItemAddData((prev) => ({ ...prev, itemCalDate: newValue.format("YYYY-MM-DD") }))
+                                            }
+                                            label="Calibration Date"
+
+                                            slotProps={{ textField: { size: 'small' } }}
+                                            format="DD-MM-YYYY" />
+                                    </div>
+                                    <div className="col-md-6">
+                                        <DatePicker
+
+                                            fullWidth
+                                            id="itemDueDateId"
+                                            name="itemDueDate"
+
+                                            value={dayjs(itemAddData.itemDueDate)}
+                                            onChange={(newValue) =>
+                                                setItemAddData((prev) => ({ ...prev, itemDueDate: newValue.format("YYYY-MM-DD") }))
+                                            }
+                                            label="Due Date"
+
+                                            slotProps={{ textField: { size: 'small' } }}
+                                            format="DD-MM-YYYY" />
+                                    </div>
+                                    <div className="col-lg-12">
+                                        <TextField size='small' fullWidth variant='outlined' onChange={handleItemAddChange} label="Calibrated at" select name='itemCalibratedAt'>
+                                            <MenuItem value="InHouse">InHouse</MenuItem>
+                                            {suppOEM.map((item, index) => (
+                                                <MenuItem key={index} value={item.fullName}>{item.aliasName}</MenuItem>
+                                            ))}
+
+                                        </TextField>
+                                    </div>
+                                    <div className="col-lg-12">
+                                        <Button component="label" variant="contained" fullWidth >
+
+                                            Certificate Upload
+                                            <VisuallyHiddenInput type="file" onChange={handleCertificateUpload} />
+                                        </Button>
+                                    </div>
+
+                                    {uploadMessage &&
+                                        <div className="col-md-12 d-flex justify-content-between">
+                                            {itemAddData.itemCertificateName !== "" && <Chip clickable={true} onDelete={() => handleRemoveFile()} label={itemAddData.itemCertificateName} size='small' color='warning' />}
+                                            <Chip label={uploadMessage} size='small' color="success" icon={<Done />} />
+                                        </div>}
+
+
+
+                                </div>
+
+                            </Paper >
+                            <Paper className='row-6-lg' elevation={12} sx={{ p: 2, mt: 2, height: "inherit" }} >
+
+                                <h5 className='text-center'>Part</h5>
+                                <div className="row">
+                                    <div className="col-md-12">
+                                        <FormControl sx={{ m: 1 }} fullWidth>
+                                            <InputLabel id="demo-multiple-chip-label">Select Part</InputLabel>
+                                            <Select
+                                                labelId="demo-multiple-chip-label"
+                                                id="demo-multiple-chip"
+                                                multiple
+                                                value={itemAddData.itemPartName}
+                                                onChange={handleItemAddChange}
+                                                input={<OutlinedInput id="select-multiple-chip" label="Select Part" name='itemPartName' />}
+                                                renderValue={(selected) => (
+                                                    <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
+                                                        {selected.map((value) => (
+                                                            <Chip key={value} label={value} />
+                                                        ))}
+                                                    </Box>
+                                                )}
+                                                MenuProps={MenuProps}
+                                            >
+                                                {partData.map((name, index) => (
+                                                    <MenuItem
+                                                        key={index}
+                                                        value={name.partName}
+                                                    // style={getStyles(name, personName, theme)}
+                                                    >
+                                                        {name.partName}
+                                                    </MenuItem>
+                                                ))}
+                                            </Select>
+                                        </FormControl>
+                                    </div>
+
+
+
+
+
+                                </div>
+                            </Paper>
+                        </div>
+                        <Paper sx={{ m: 2, p: 2 }} elevation={12}>
+                            <div className="d-flex justify-content-between mb-2">
+                                <h6 className='h5 text-center'>Acceptance Criteria</h6>
+                                <Button variant='contained' onClick={() => addACValue()}>Add</Button>
+                            </div>
+
+                            <table className='table table-sm table-bordered text-center'>
+                                <tbody>
+                                    <tr>
+                                        <th>Parameter</th>
+                                        <th>Range/Size</th>
+                                        <th>Unit</th>
+                                        {itemAddData.itemType === "Attribute" && <th>Min</th>}
+                                        {itemAddData.itemType === "Attribute" && <th>Max</th>}
+                                        {itemAddData.itemType === "Attribute" && <th>WearLimit</th>}
+                                        <th>Accuracy</th>
+                                        <th>Unit</th>
+                                        <th>Observed Size</th>
+                                        <th>Delete</th>
+                                    </tr>
+                                    {itemAddData.acceptanceCriteria ? itemAddData.acceptanceCriteria.map((item, index) => (
+                                        <tr>
+                                            <td><select className='form-select form-select-sm' id="acParameterId" name="acParameter" value={item.acParameter} onChange={(e) => changeACValue(index, e.target.name, e.target.value)}>
+                                                <option value="">-Select-</option>
+                                                {calibrationPointsData.map((item) => (
+                                                    <option>{item.calibrationPoint}</option>
+                                                ))}
+                                            </select></td>
+                                            <td><input type="text" className='form-control form-control-sm' id="acRangeSizeId" name="acRangeSize" value={item.acRangeSize} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} /></td>
+
+
+                                            <td> <select className="form-select form-select-sm" id="acRangeSizeUnitId" name="acRangeSizeUnit" value={item.acRangeSizeUnit} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} >
+                                                <option value="">-Select-</option>
+                                                {units.map((item, index) => (
+                                                    <option key={index} value={item.unitName}>{item.unitName}</option>
+                                                ))}
+
+
+
+                                            </select></td>
+                                            {itemAddData.itemType === "Attribute" && <td><input type="text" className="form-control form-control-sm" id="acMinId" name="acMin" value={item.acMin} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} /></td>}
+
+                                            {itemAddData.itemType === "Attribute" && <td><input type="text" className='form-control form-control-sm' id="acMaxId" name="acMax" value={item.acMax} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} /></td>}
+
+                                            {itemAddData.itemType === "Attribute" && <td><input type="text" className="form-control form-control-sm" id="acWearLimitId" name="acWearLimit" value={item.acWearLimit} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} /></td>}
+
+                                            <td><input type="text" className="form-control form-control-sm" id="acAccuracyId" name="acAccuracy" value={item.acAccuracy} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} /></td>
+                                            <td> <select className="form-select form-select-sm" id="acAccuracyUnitId" name="acAccuracyUnit" value={item.acAccuracyUnit} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} >
+                                                <option value="">-Select-</option>
+                                                {units.map((item, index) => (
+                                                    <option key={index} value={item.unitName}>{item.unitName}</option>
+                                                ))}
+
+                                            </select></td>
+                                            <td><input type="text" className="form-control form-control-sm" id="acObservedSizeId" name="acObservedSize" value={item.acObservedSize} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} /></td>
+                                            <td><Button color='error' onClick={deleteAC}><Delete /></Button></td>
+
+                                        </tr>
+                                    )) : <tr></tr>}
                                 </tbody>
                             </table>
-                        )}
-                        {itemAddData.itemCalibrationSource === "OutSource" && <table className='table table-sm table-bordered text-center mt-2'>
-                            <tbody>
-                                <tr>
-                                    <th style={{ width: "20%" }}>Si No</th>
-                                    <th style={{ width: "80%" }}>Supplier</th>
-
-                                </tr>
-                                {itemAddData.itemSupplier.map((item, index) => (
-                                    <tr key={index}>
-                                        <td>{index + 1}</td>
-                                        <td >{item}</td>
-                                    </tr>
-                                ))}
-
-
-                            </tbody>
-                        </table>}
-                        {itemAddData.itemCalibrationSource === "OEM" && <table className='table table-sm table-bordered text-center mt-2'>
-                            <tbody>
-                                <tr>
-                                    <th style={{ width: "20%" }}>Si No</th>
-                                    <th style={{ width: "80%" }}>OEM</th>
-
-                                </tr>
-                                {itemAddData.itemOEM.map((item, index) => (
-                                    <tr key={index}>
-                                        <td>{index + 1}</td>
-                                        <td >{item}</td>
-                                    </tr>
-                                ))}
-
-
-                            </tbody>
-                        </table>}
-
-                    </Paper>
-                    <div className="col">
-                        <Paper className='row-md-6' elevation={12} sx={{ p: 2, }}>
-                            <Typography variant='h6' className='text-center'>Enter Previous Calibration Data</Typography>
-                            <div className="row g-2">
-                                <div className="col-lg-6">
-                                    <DatePicker
-                                        disableFuture
-                                        fullWidth
-                                        id="dobId"
-                                        name=""
-                                        value={dayjs(itemAddData.itemCalDate)}
-                                        onChange={(newValue) =>
-                                            setItemAddData((prev) => ({ ...prev, itemCalDate: newValue.format("YYYY-MM-DD") }))
-                                        }
-                                        label="Calibration Date"
-
-                                        slotProps={{ textField: { size: 'small' } }}
-                                        format="DD-MM-YYYY" />
-                                </div>
-                                <div className="col-md-6">
-                                    <DatePicker
-                                        disableFuture
-                                        fullWidth
-                                        id="itemDueDateId"
-                                        name="itemDueDate"
-                                        value={dayjs(itemAddData.itemDueDate)}
-                                        onChange={(newValue) =>
-                                            setItemAddData((prev) => ({ ...prev, itemDueDate: newValue.format("YYYY-MM-DD") }))
-                                        }
-                                        label="Due Date"
-
-                                        slotProps={{ textField: { size: 'small' } }}
-                                        format="DD-MM-YYYY" />
-                                </div>
-                                <div className="col-lg-12">
-                                    <TextField size='small' fullWidth variant='outlined' value={itemAddData.itemCalibratedAt} onChange={handleItemAddChange} label="Calibrated at" select name='itemCalibratedAt'>
-                                        <MenuItem value="InHouse">InHouse</MenuItem>
-                                        {suppOEM.map((item, index) => (
-                                            <MenuItem key={index} value={item.fullName}>{item.aliasName}</MenuItem>
-                                        ))}
-
-                                    </TextField>
-                                </div>
-                                <div className="col-lg-6">
-                                    <Button component="label" variant="contained" fullWidth >
-                                        Certificate Upload
-                                        <VisuallyHiddenInput type="file" onChange={handleCertificateUpload} />
-                                    </Button>
-                                </div>
-                                {itemAddData.itemCertificateName !== "" && <div className='d-flex justif-content-end col-md-6 '>
-                                            <Chip component={Link} clickable={true} label={itemAddData.itemCertificateName}  color='warning' target='_blank' to={`${process.env.REACT_APP_PORT}/itemCertificates/${itemAddData.itemCertificateName}`}></Chip>
-                                            <Button size='small'  onClick={handleRemoveFile}><Delete color='error'/></Button>
-                                        </div>}
-                               
-                                {itemAddData.itemCertificateName !== "" &&
-                                    <div className="col-md-12 d-flex justify-content-between">
-                                        
-
-                                        {uploadMessage && <Chip label={uploadMessage}  color="success" icon={<Done />} />}
-                                       
-                                    </div>}
-
-                            </div>
-
-                        </Paper >
-                        <Paper className='row-6-lg' elevation={12} sx={{ p: 2, mt: 2, height: "inherit" }} >
-
-                            <h5 className='text-center'>Part</h5>
-                            <div className="row">
-                                <div className="col-md-12">
-                                    <FormControl sx={{ m: 1 }} fullWidth>
-                                        <InputLabel id="demo-multiple-chip-label">Select Part</InputLabel>
-                                        <Select
-                                            labelId="demo-multiple-chip-label"
-                                            id="demo-multiple-chip"
-                                            multiple
-
-                                            value={itemAddData.itemPartName}
-                                            onChange={handleItemAddChange}
-                                            input={<OutlinedInput id="select-multiple-chip" label="Select Part" name='itemPartName' />}
-                                            renderValue={(selected) => (
-                                                <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
-                                                    {selected.map((value) => (
-                                                        <Chip key={value} label={value} />
-                                                    ))}
-                                                </Box>
-                                            )}
-                                            MenuProps={MenuProps}
-                                        >
-                                            {partData.map((name, index) => (
-                                                <MenuItem
-                                                    key={index}
-                                                    value={name.partName}
-                                                // style={getStyles(name, personName, theme)}
-                                                >
-                                                    {name.partName}
-                                                </MenuItem>
-                                            ))}
-                                        </Select>
-                                    </FormControl>
-                                </div>
-
-
-
-
-
-                            </div>
                         </Paper>
-                    </div>
-                    <Paper sx={{ m: 2, p: 2 }} elevation={12}>
-                        <div className="d-flex justify-content-between mb-2">
-                            <h6 className='h5 text-center'>Acceptance Criteria</h6>
-                            <Button variant='contained' onClick={() => addACValue()}>Add</Button>
+                        <div className="d-flex justify-content-end">
+
+                            <Button variant='contained' color='warning' onClick={() => setOpen(true)} className='me-3' type="button">
+                                Submit
+                            </Button>
+                            <Button variant='contained' color='error' type="reset">
+                                Cancel
+                            </Button>
                         </div>
 
-                        <table className='table table-sm table-bordered'>
-                            <tbody>
-                                <tr>
-                                    <th>Parameter</th>
-                                    <th>Range/Size</th>
-                                    <th>Unit</th>
-                                    <th>Min</th>
-                                    <th>Max</th>
-                                    <th>WearLimit</th>
-                                    <th>Accuracy</th>
-                                    <th>Unit</th>
-                                    <th>Observed Size</th>
-                                    <th>Delete</th>
-                                </tr>
-                                {itemAddData.acceptanceCriteria ? itemAddData.acceptanceCriteria.map((item, index) => (
-                                    <tr>
-                                        <td><select className='form-select form-select-sm' id="acParameterId" name="acParameter" value={item.acParameter} onChange={(e) => changeACValue(index, e.target.name, e.target.value)}>
-                                            <option value="">-Select-</option>
-                                            {calibrationPointsData.map((item) => (
-                                                <option>{item.calibrationPoint}</option>
-                                            ))}
-                                        </select></td>
-                                        <td><input type="text" className='form-control form-control-sm' id="acRangeSizeId" name="acRangeSize" value={item.acRangeSize} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} /></td>
 
-
-                                        <td> <select className="form-select form-select-sm" id="acRangeSizeUnitId" name="acRangeSizeUnit" value={item.acRangeSizeUnit} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} >
-                                            <option value="">-Select-</option>
-                                            {units.map((item, index) => (
-                                                <option key={index} value={item.unitName}>{item.unitName}</option>
-                                            ))}
-
-
-
-                                        </select></td>
-                                        <td><input type="text" className="form-control form-control-sm" id="acMinId" name="acMin" value={item.acMin} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} /></td>
-
-                                        <td><input type="text" className='form-control form-control-sm' id="acMaxId" name="acMax" value={item.acMax} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} /></td>
-
-                                        <td><input type="text" className="form-control form-control-sm" id="acWearLimitId" name="acWearLimit" value={item.acWearLimit} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} /></td>
-
-                                        <td><input type="text" className="form-control form-control-sm" id="acAccuracyId" name="acAccuracy" value={item.acAccuracy} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} /></td>
-                                        <td> <select className="form-select form-select-sm" id="acAccuracyUnitId" name="acAccuracyUnit" value={item.acAccuracyUnit} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} >
-                                            <option value="">-Select-</option>
-                                            {units.map((item, index) => (
-                                                <option key={index} value={item.unitName}>{item.unitName}</option>
-                                            ))}
-
-                                        </select></td>
-                                        <td><input type="text" className="form-control form-control-sm" id="acObservedSizeId" name="acObservedSize" value={item.acObservedSize} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} /></td>
-                                        <td><Button color='error' onClick={deleteAC}><Delete /></Button></td>
-
-                                    </tr>
-                                )) : <tr></tr>}
-                            </tbody>
-                        </table>
-                    </Paper>
-                    <div className="d-flex justify-content-end">
-                        <Button component={Link} to="/itemList" variant='contained' className='me-3' startIcon={<ArrowBack />}>
-                            Back to List
-                        </Button>
-
-                        <Button startIcon={<Edit />} variant='contained' color='warning' onClick={() => setOpen(true)} className='me-3' type='button'>
-                            Update
-                        </Button>
-                        <Button variant='contained' color='error' type="cancel">
-                            Cancel
-                        </Button>
+                        <Snackbar anchorOrigin={{ vertical: "top", horizontal: "right" }} open={snackBarOpen} autoHideDuration={6000} onClose={handleSnackClose}>
+                            <Alert onClose={handleSnackClose} severity={errorhandler.code} sx={{ width: '25%' }}>
+                                {errorhandler.message}
+                            </Alert>
+                        </Snackbar>
+                        <Dialog
+                            open={open}
+                            onClose={() => setOpen(false)}
+                            aria-labelledby="alert-dialog-title"
+                            aria-describedby="alert-dialog-description"
+                        >
+                            <DialogTitle id="alert-dialog-title">
+                                {"Item create confirmation"}
+                            </DialogTitle>
+                            <DialogContent>
+                                <DialogContentText id="alert-dialog-description">
+                                    Are you sure to Create an Item
+                                </DialogContentText>
+                            </DialogContent>
+                            <DialogActions>
+                                <Button onClick={() => setOpen(false)}>Cancel</Button>
+                                <Button type="button" onClick={(e) => { handleItemAddSubmit(e); setOpen(false); }} autoFocus>
+                                    Create
+                                </Button>
+                            </DialogActions>
+                        </Dialog>
                     </div>
 
 
-                    <Snackbar anchorOrigin={{ vertical: "top", horizontal: "right" }} open={snackBarOpen} autoHideDuration={6000} onClose={handleSnackClose}>
-                        <Alert onClose={handleSnackClose} severity={errorhandler.code} sx={{ width: '25%' }}>
-                            {errorhandler.message}
-                        </Alert>
-                    </Snackbar>
-                    <Dialog
-                        open={open}
-                        onClose={() => setOpen(false)}
-                        aria-labelledby="alert-dialog-title"
-                        aria-describedby="alert-dialog-description"
-                    >
-                        <DialogTitle id="alert-dialog-title">
-                            {"Item update confirmation"}
-                        </DialogTitle>
-                        <DialogContent>
-                            <DialogContentText id="alert-dialog-description">
-                                Are you sure to Update an Item
-                            </DialogContentText>
-                        </DialogContent>
-                        <DialogActions>
-                            <Button onClick={() => setOpen(false)}>Cancel</Button>
-                            <Button onClick={(e) => { handleUpdateItemAdd(e); setOpen(false); }} autoFocus>
-                                Update
-                            </Button>
-                        </DialogActions>
-                    </Dialog>
-                </div>
 
 
 
 
 
-
-
-            </LocalizationProvider >
-
+                </LocalizationProvider >
+            </form>
         </div >
     )
 }
 
-export default ItemAdd
+export default ItemEdit
