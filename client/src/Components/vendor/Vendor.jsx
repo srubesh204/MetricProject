@@ -10,7 +10,7 @@ import AddRoundedIcon from '@mui/icons-material/AddRounded';
 
 import { Container, Paper } from '@mui/material';
 import { Box, Grid } from '@mui/material';
-import { DataGrid } from '@mui/x-data-grid';
+import { DataGrid,GridToolbar } from '@mui/x-data-grid';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
@@ -1067,6 +1067,11 @@ const Vendor = () => {
                                             "margin-bottom": "1em"
                                         }
                                     }}
+                                    
+                                    slots={{
+                                        toolbar: GridToolbar,
+                                    }}
+                                    
                                     onRowSelectionModelChange={(newRowSelectionModel, event) => {
                                         setSelectedRowIds(newRowSelectionModel);
                                         console.log(event)

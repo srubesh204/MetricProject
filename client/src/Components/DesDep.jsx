@@ -10,7 +10,7 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
-import { DataGrid } from '@mui/x-data-grid';
+import { DataGrid,GridToolbar } from '@mui/x-data-grid';
 import { Delete } from '@mui/icons-material';
 
 
@@ -65,7 +65,8 @@ export const Department = () => {
 
 
   const columns = [
-    { field: 'id', headerName: 'Si. No', width: 70, renderCell: (params) => params.api.getRowIndexRelativeToVisibleRows(params.id) + 1 },
+
+    { field: 'id', headerName: 'Si. No', width: 70, renderCell: (params) => params.api.getAllRowIds().indexOf(params.id) + 1, align: "center" },
 
     { field: 'department', headerName: 'Department', width: "90" },
     { field: 'departmentStatus', headerName: 'Department Status', width: "90" },
@@ -948,7 +949,7 @@ export const Department = () => {
                   </div>*/}
 
 
-                  <div style={{ height: 460, width: '100%' }}>
+                  <div style={{ height: 480, width: '100%' }}>
                     <DataGrid
                       rows={departmentList}
                       columns={columns}
@@ -968,6 +969,10 @@ export const Department = () => {
                           
                         }
                       }}
+                      slots={{
+                        toolbar: GridToolbar,
+                    }}
+
                       onRowSelectionModelChange={(newRowSelectionModel, event) => {
                         setSelectedRowIds(newRowSelectionModel);
                         console.log(event)
@@ -1229,7 +1234,7 @@ export const Department = () => {
                   </div>
                   <div className="row ">
 
-                    <div style={{ height: 460, width: '100%' }}>
+                    <div style={{ height: 480, width: '100%' }}>
                       <DataGrid
                         className="MuiDataGrid-root"
                         rows={areaList}
@@ -1248,6 +1253,9 @@ export const Department = () => {
                             "margin-bottom": "1em"
                           }
                         }}
+                        slots={{
+                          toolbar: GridToolbar,
+                      }}
                         onRowSelectionModelChange={(newRowSelectionModel, event) => {
                           setAreaSelectedRowIds(newRowSelectionModel);
                           console.log(event)
@@ -1500,7 +1508,7 @@ export const Department = () => {
                 <div className="row g-2">
 
 
-                  <div style={{ height: 460, width: '100%' }}>
+                  <div style={{ height: 480, width: '100%' }}>
                     <DataGrid
                       rows={placeOfUsageList}
                       columns={placeOfUsageColumns}
@@ -1518,6 +1526,9 @@ export const Department = () => {
                           "margin-bottom": "1em"
                         }
                       }}
+                      slots={{
+                        toolbar: GridToolbar,
+                    }}
                       onRowSelectionModelChange={(newRowSelectionModel, event) => {
                         setPlaceOfUsageSelectedRowIds(newRowSelectionModel);
                         console.log(event)
@@ -2172,7 +2183,7 @@ export const Designation = () => {
                 </div>
               </div>
 
-              <div style={{ height: 460, width: '100%' }}>
+              <div style={{ height: 480, width: '100%' }}>
                 <DataGrid
                   rows={designationList}
                   columns={designationColumns}
@@ -2190,6 +2201,9 @@ export const Designation = () => {
                       "margin-bottom": "1em"
                     }
                   }}
+                  slots={{
+                    toolbar: GridToolbar,
+                }}
                   onRowSelectionModelChange={(newRowSelectionModel, event) => {
                     setDesignationSelectedRowIds(newRowSelectionModel);
                     console.log(event)

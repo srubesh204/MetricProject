@@ -17,7 +17,7 @@ import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
 import Autocomplete from '@mui/material/Autocomplete';
 import { Box, Grid, Paper, IconButton, Container } from '@mui/material';
 import dayjs from 'dayjs';
-import { DataGrid } from '@mui/x-data-grid';
+import { DataGrid,GridToolbar } from '@mui/x-data-grid';
 import { Delete } from '@mui/icons-material';
 
 
@@ -934,6 +934,9 @@ const Employee = () => {
                                                     "margin-top": "1em",
                                                     "margin-bottom": "1em"
                                                 }
+                                            }}
+                                            slots={{
+                                                toolbar: GridToolbar,
                                             }}
                                             onRowSelectionModelChange={(newRowSelectionModel, event) => {
                                                 setEmployeeSelectedRowIds(newRowSelectionModel);

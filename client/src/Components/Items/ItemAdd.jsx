@@ -6,6 +6,8 @@ import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import dayjs from 'dayjs';
 import { Delete, Done } from '@mui/icons-material';
+import { useNavigate } from 'react-router-dom';
+import { Link as RouterLink } from 'react-router-dom';
 
 const ItemAdd = () => {
 
@@ -177,7 +179,7 @@ const ItemAdd = () => {
     //
 
     const initialItemAddData = {
-        itemMasterId: "",
+        itemMasterRef: "",
         itemIMTENo: "",
         itemImage: "",
         itemType: "",
@@ -224,8 +226,8 @@ const ItemAdd = () => {
 
 
     const [itemAddData, setItemAddData] = useState({
-        itemMasterId: "",
-        itemMasterName: "",
+        itemMasterRef: "",
+        itemAddMasterName: "",
         itemIMTENo: "",
         itemImage: "",
         itemType: "",
@@ -292,6 +294,7 @@ const ItemAdd = () => {
         setItemAddData((prev) => ({ ...prev, [name]: formattedValue }));
 
     };
+
 
 
     const handleItemAddChange = (e) => {
@@ -371,7 +374,7 @@ const ItemAdd = () => {
     const itemMasterById = async () => {
         try {
             const response = await axios.get(
-                `${process.env.REACT_APP_PORT}/itemMaster/getItemMasterById/${itemAddData.itemMasterId}`
+                `${process.env.REACT_APP_PORT}/itemMaster/getItemMasterById/${itemAddData.itemMasterRef}`
             );
             console.log(response.data)
             const { _id, itemType, itemDescription, itemPrefix, itemFqInMonths, calAlertInDay, wiNo, uncertainity, standartRef, itemImageName, status, itemMasterImage, workInsName, calibrationPoints } = response.data.result
@@ -379,10 +382,10 @@ const ItemAdd = () => {
                 ...prev,
                 itemType: itemType,
                 itemImage: itemMasterImage,
-                itemMasterName: itemDescription,
+                itemAddMasterName: itemDescription,
                 itemCalFreInMonths: itemFqInMonths,
                 itemCalAlertDays: calAlertInDay,
-                
+
 
 
 
@@ -397,7 +400,7 @@ const ItemAdd = () => {
 
     useEffect(() => {
         itemMasterById();
-    }, [itemAddData.itemMasterId]);
+    }, [itemAddData.itemMasterRef]);
 
     const [partData, setPartData] = useState([])
     const getPartList = async () => {
@@ -500,6 +503,7 @@ const ItemAdd = () => {
     const [snackBarOpen, setSnackBarOpen] = useState(false)
     const [errorhandler, setErrorHandler] = useState({});
     const [open, setOpen] = useState(false)
+    const navigate = useNavigate();
 
     const handleItemAddSubmit = async (e) => {
         e.preventDefault();
@@ -513,6 +517,9 @@ const ItemAdd = () => {
             console.log("Item Created Successfully")
             setErrorHandler({ status: response.data.status, message: response.data.message, code: "success" })
             setItemAddData(initialItemAddData)
+            setTimeout(() => {
+                navigate('/itemList');
+            }, 3000);
 
         } catch (err) {
 
@@ -592,7 +599,7 @@ const ItemAdd = () => {
     const getItemMasterByName = async () => {
         try {
             const response = await axios.post(
-                `${process.env.REACT_APP_PORT}/itemAdd/getItemAddByName`, { itemMasterName: itemAddData.itemItemMasterName }
+                `${process.env.REACT_APP_PORT}/itemAdd/getItemAddByName`, { itemAddMasterName: itemAddData.itemItemMasterName }
 
             );
 
@@ -634,7 +641,7 @@ const ItemAdd = () => {
                         <div className="col-lg-5 row g-2">
 
                             <div className='col-9'>
-                                <TextField size='small' select variant='outlined' label="Item Master" name='itemMasterId' value={itemAddData.itemMasterId} fullWidth onChange={handleItemAddChange}>
+                                <TextField size='small' select variant='outlined' label="Item Master" name='itemMasterRef' value={itemAddData.itemMasterRef} fullWidth onChange={handleItemAddChange}>
                                     <MenuItem value=""><em>Select</em></MenuItem>
                                     {itemMasterDataList.map((item) => (
                                         <MenuItem value={item._id}>{item.itemDescription}</MenuItem>
@@ -998,7 +1005,7 @@ const ItemAdd = () => {
                                             <td>{index + 1}</td>
                                             <td >{item}</td>
                                         </tr>
-                                    ))}
+                                    ))} 
 
 
                                 </tbody>
@@ -1131,8 +1138,10 @@ const ItemAdd = () => {
                                         {itemAddData.itemType === "Attribute" && <th colspan="2">Observed size</th>}
 
 
-                                        {itemAddData.itemType === "Variable" && <th>Unit</th>}
+
                                         {itemAddData.itemType === "Variable" && <th>Accuracy</th>}
+                                        {itemAddData.itemType === "Variable" && <th>Unit</th>}
+
                                         {itemAddData.itemType === "Variable" && <th>Observed Error</th>}
 
 
@@ -1173,6 +1182,7 @@ const ItemAdd = () => {
                                             {itemAddData.itemType === "Attribute" && <td><input type="text" className="form-control form-control-sm" id="acWearLimitId" name="acWearLimit" placeholder='wearLimit' value={item.acWearLimit} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} /></td>}
                                             {itemAddData.itemType === "Attribute" && <td><input type="text" className="form-control form-control-sm" id="acMinId" name="acMin" placeholder='min' value={item.acMin} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} /></td>}
                                             {itemAddData.itemType === "Attribute" && <td><input type="text" className='form-control form-control-sm' id="acMaxId" name="acMax" placeholder='max' value={item.acMax} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} /></td>}
+                                            {itemAddData.itemType === "Variable" && <td><input type="text" className="form-control form-control-sm" id="acAccuracyId" name="acAccuracy" value={item.acAccuracy} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} /></td>}
 
                                             {itemAddData.itemType === "Variable" && <td> <select className="form-select form-select-sm" id="acAccuracyUnitId" name="acAccuracyUnit" value={item.acAccuracyUnit} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} >
                                                 <option value="">-Select-</option>
@@ -1181,7 +1191,6 @@ const ItemAdd = () => {
                                                 ))}
 
                                             </select></td>}
-                                            {itemAddData.itemType === "Variable" && <td><input type="text" className="form-control form-control-sm" id="acAccuracyId" name="acAccuracy" value={item.acAccuracy} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} /></td>}
                                             {itemAddData.itemType === "Variable" && <td><input type="text" className="form-control form-control-sm" id="acObservedSizeId" name="acObservedSize" value={item.acObservedSize} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} /></td>}
 
                                             {itemAddData.itemType === "Reference Standard" && <td><input type="text" className="form-control form-control-sm" id="acAccuracyId" name="acAccuracy" value={item.acAccuracy} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} /></td>}
@@ -1210,7 +1219,7 @@ const ItemAdd = () => {
                             <Button variant='contained' color='warning' onClick={() => setOpen(true)} className='me-3' type="button">
                                 Submit
                             </Button>
-                            <Button variant='contained' color='error' type="reset">
+                            <Button component={RouterLink} to={`/itemList/`} variant="contained" color="error">
                                 Cancel
                             </Button>
                         </div>

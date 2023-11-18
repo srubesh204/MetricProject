@@ -14,7 +14,7 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
-import { DataGrid } from '@mui/x-data-grid';
+import { DataGrid,GridToolbar } from '@mui/x-data-grid';
 import { Delete } from '@mui/icons-material';
 
 
@@ -384,7 +384,18 @@ export const UnitDataBase = ({ style }) => {
                                                     paginationModel: { page: 0, pageSize: 5 },
                                                 },
                                             }}
-                                            pageSizeOptions={[5, 10]}
+                                            sx={{
+                                                ".MuiTablePagination-displayedRows": {
+                            
+                                                  "margin-top": "1em",
+                                                  "margin-bottom": "1em"
+                                                }
+                                              }}
+                                            slots={{
+                                                toolbar: GridToolbar,
+                                            }}
+                                            
+                                            
                                             onRowSelectionModelChange={(newRowSelectionModel, event) => {
                                                 setUnitSelectedRowIds(newRowSelectionModel);
                                                 console.log(event)
@@ -538,8 +549,8 @@ export const PartDataBase = ({ style }) => {
         { field: 'partNo', headerName: 'PartNo', width: "150" },
         { field: 'partName', headerName: 'partName', width: "190" },
         { field: 'customer', headerName: 'Customer', width: "200" },
-        { field: 'operationNo', headerName: 'Operation No', width: "300" },
-        { field: 'partStatus', headerName: 'Part Status', width: "300" },
+        { field: 'operationNo', headerName: 'Operation No', width: "200" },
+        { field: 'partStatus', headerName: 'Part Status', width: "200" },
 
 
 
@@ -930,6 +941,16 @@ export const PartDataBase = ({ style }) => {
                                                 pagination: {
                                                     paginationModel: { pageSize: 5},
                                                 },
+                                            }}
+                                            sx={{
+                                                ".MuiTablePagination-displayedRows": {
+                            
+                                                  "margin-top": "1em",
+                                                  "margin-bottom": "1em"
+                                                }
+                                              }}
+                                            slots={{
+                                                toolbar: GridToolbar,
                                             }}
                                             
                                             onRowSelectionModelChange={(newRowSelectionModel, event) => {
