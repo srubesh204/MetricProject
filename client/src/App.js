@@ -18,6 +18,7 @@ import '@fontsource/roboto/500.css';
 import '@fontsource/roboto/700.css';
 import ItemList from './Components/Items/ItemList';
 import FileViewer from './Components/Test/FileViewer';
+import Login from './Components/Dashboard/Login';
 
 
 function App() {
@@ -27,7 +28,7 @@ function App() {
   console.log(location.pathname);
   console.log('search', location.search);
 
-  const fullList =['/itemadd', '/itemedit/:id', '/itemlist', '/test',"/home"]
+  const fullList =['/itemadd', '/itemedit/:id', '/itemlist', '/test',"/home", "/login"]
   console.log(fullList.includes(location.pathname))
   return (
     <div className="App">
@@ -47,7 +48,7 @@ function App() {
         <Route path="/itemEdit/:id" element={<ItemEdit />} />
         <Route path="/itemList" element={<ItemList />} />
         <Route path="/test" element={<FileViewer />} />
-        
+        <Route path="/login" element={<Login/>} />
       </Routes>
 
     </div>

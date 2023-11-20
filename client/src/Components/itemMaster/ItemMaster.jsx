@@ -674,7 +674,7 @@ const ItemMaster = () => {
                                 </div>} */}
                                 {itemMasterData.itemMasterImage && <div style={{ margin: 0  }}>
                                     <div className='d-flex justify-content-center' style={{ width: "100%", height: "100%" }}>
-                                    <Badge type="button" badgeContent={"X"} onClick={() => setItemMasterData((prev) => ({ ...prev, itemMasterImage: "" }))}  style={{ width: "100%", height: "100%" }} color="error"><img src={itemMasterData.itemMasterImage} style={{ width: "100%", height: "100%", margin: "auto", display: "block", background: "inherit" }}></img></Badge>
+                                    <Badge type="button" badgeContent={"X"} onClick={() => setItemMasterData((prev) => ({ ...prev, itemMasterImage: "" }))}  style={{ width: "100%", height: "100%" }} color="error"><img src={itemMasterData.itemMasterImage} style={{ width: "100%", height: "100%", margin: "auto", display: "block", background: "inherit", backgroundSize: "cover" }}></img></Badge>
                                     </div>
                                     
                                 </div>}
