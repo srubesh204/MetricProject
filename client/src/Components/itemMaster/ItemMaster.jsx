@@ -18,7 +18,7 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
-import { DataGrid } from '@mui/x-data-grid';
+import { DataGrid,GridToolbar } from '@mui/x-data-grid';
 
 
 
@@ -488,7 +488,7 @@ const ItemMaster = () => {
                                 </div>
 
                                 <div className="form-floating col">
-                                    <TextField label="Item Prefix "
+                                    <TextField label="Imte Prefix "
                                         id="itemPrefix"
                                         defaultValue=""
                                         sx={{ width: "100%" }}
@@ -876,7 +876,7 @@ const ItemMaster = () => {
                                 <div>
 
 
-                                    <div style={{ height: 400, width: '100%' }}>
+                                    <div style={{ height: 440, width: '100%' }}>
                                         <DataGrid
                                             rows={filteredData}
                                             columns={itemMasterColumns}
@@ -886,11 +886,21 @@ const ItemMaster = () => {
                                                     paginationModel: { page: 0, pageSize: 5 },
                                                 },
                                             }}
+                                            sx={{
+                                                ".MuiTablePagination-displayedRows": {
+        
+                                                    "margin-top": "1em",
+                                                    "margin-bottom": "1em"
+                                                }
+                                            }}
                                            
                                             onRowSelectionModelChange={(newRowSelectionModel, event) => {
                                                 setItemMasteSelectedRowIds(newRowSelectionModel);
                                                 console.log(event)
 
+                                            }}
+                                            slots={{
+                                                toolbar: GridToolbar,
                                             }}
                                             onRowClick={updateItemMaster}
                                             checkboxSelection

@@ -15,7 +15,8 @@ const itemAddController = {
 
     try {
       const {
-        itemMasterName,
+        itemMasterRef,
+        itemAddMasterName,
         itemIMTENo,
         itemImage,
         itemType,
@@ -48,7 +49,8 @@ const itemAddController = {
         acceptanceCriteria
       } = req.body;
       const itemAddResult = new itemAddModel({
-        itemMasterName,
+        itemMasterRef,
+        itemAddMasterName,
         itemIMTENo,
         itemImage,
         itemType,
@@ -121,7 +123,8 @@ const itemAddController = {
       // if (isNaN(desId)) {
       //   return res.status(400).json({ error: 'Invalid desId value' });
       // }
-      const { itemMasterName ,
+      const { itemMasterRef,
+        itemAddMasterName ,
         itemIMTENo ,
         itemImage ,
         itemType ,
@@ -154,7 +157,8 @@ const itemAddController = {
         acceptanceCriteria  } = req.body;
       // Create an object with the fields you want to update
       const updateItemFields = {
-        itemMasterName ,
+        itemMasterRef,
+        itemAddMasterName ,
         itemIMTENo ,
         itemImage ,
         itemType ,
@@ -222,12 +226,15 @@ const itemAddController = {
     } catch (error) {
       console.log(error);
       if (error.code === 11000) {
+        console.log(error)
         return res.status(500).json({ error: 'Duplicate Value Not Accepted' });
+        
       }
       const errors500 = {};
       for (const key in error.errors) {
         errors500[key] = error.errors[key].message;
       }
+      console.log(error)
       res.status(500).json({ error: error, status: 0 });
     }
   },
@@ -246,7 +253,7 @@ const itemAddController = {
           // If a vendor was not found, you can skip it or handle the error as needed.
           console.log(`ItemAdd with ID ${itemAddId} not found.`);
           res.status(500).json({ message: `ItemAdd with ID not found.` });
-
+ 
         } else {
           console.log(`ItemAdd with ID ${itemAddId} deleted successfully.`);
           deleteResults.push(deletedItemAdd);

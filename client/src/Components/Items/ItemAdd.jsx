@@ -6,6 +6,8 @@ import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import dayjs from 'dayjs';
 import { Delete, Done } from '@mui/icons-material';
+import { useNavigate } from 'react-router-dom';
+import { Link as RouterLink } from 'react-router-dom';
 
 const ItemAdd = () => {
 
@@ -177,7 +179,7 @@ const ItemAdd = () => {
     //
 
     const initialItemAddData = {
-        itemMasterId: "",
+        itemMasterRef: "",
         itemIMTENo: "",
         itemImage: "",
         itemType: "",
@@ -224,8 +226,8 @@ const ItemAdd = () => {
 
 
     const [itemAddData, setItemAddData] = useState({
-        itemMasterId: "",
-        itemMasterName: "",
+        itemMasterRef: "",
+        itemAddMasterName: "",
         itemIMTENo: "",
         itemImage: "",
         itemType: "",
@@ -283,6 +285,18 @@ const ItemAdd = () => {
     });
 
 
+
+    const handleKeyDown = (e) => {
+        const { name, value } = e.target;
+        const formattedValue = name === 'itemMake'
+            ? value.toLowerCase().split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')
+            : value;
+        setItemAddData((prev) => ({ ...prev, [name]: formattedValue }));
+
+    };
+
+
+
     const handleItemAddChange = (e) => {
         const { name, value } = e.target;
         if (name === "itemRangeSizeUnit") {
@@ -318,34 +332,34 @@ const ItemAdd = () => {
 
     const handleItemDue = (e) => {
         const { name, value } = e.target;
-        if(name==="calibrationDate"){
+        if (name === "calibrationDate") {
             setItemAddData((prev) => ({ ...prev, itemCalFreInMonths: typeof value === 'string' ? value.split(',') : value }));
         }
 
     }
 
     let dueDates = new Date();
-    const frequencyMonths = 6; 
+    const frequencyMonths = 6;
     let newDueDate = new Date(dueDates);
     newDueDate.setMonth(newDueDate.getMonth() + frequencyMonths);
     newDueDate.setDate(newDueDate.getDate() - 1);
-    console.log( dueDates.toDateString());
+    console.log(dueDates.toDateString());
 
 
     ///
     const currentDate = new Date();
 
     const currentDay = currentDate.getDate();
-const currentMonth = currentDate.getMonth();
-const currentYear = currentDate.getFullYear();
-const calibrationFrequencyMonths = 12;
-let dueDate = new Date(currentYear, currentMonth + calibrationFrequencyMonths, currentDay);
+    const currentMonth = currentDate.getMonth();
+    const currentYear = currentDate.getFullYear();
+    const calibrationFrequencyMonths = 12;
+    let dueDate = new Date(currentYear, currentMonth + calibrationFrequencyMonths, currentDay);
 
-if ((currentDate.getDate() !== dueDate.getDate()) || (currentDate.getMonth() !== dueDate.getMonth())) {
+    if ((currentDate.getDate() !== dueDate.getDate()) || (currentDate.getMonth() !== dueDate.getMonth())) {
 
-    dueDate = new Date(currentYear, currentMonth + calibrationFrequencyMonths + 1, 0);
-}
-console.log(dueDate)
+        dueDate = new Date(currentYear, currentMonth + calibrationFrequencyMonths + 1, 0);
+    }
+    console.log(dueDate)
 
 
 
@@ -360,7 +374,7 @@ console.log(dueDate)
     const itemMasterById = async () => {
         try {
             const response = await axios.get(
-                `${process.env.REACT_APP_PORT}/itemMaster/getItemMasterById/${itemAddData.itemMasterId}`
+                `${process.env.REACT_APP_PORT}/itemMaster/getItemMasterById/${itemAddData.itemMasterRef}`
             );
             console.log(response.data)
             const { _id, itemType, itemDescription, itemPrefix, itemFqInMonths, calAlertInDay, wiNo, uncertainity, standartRef, itemImageName, status, itemMasterImage, workInsName, calibrationPoints } = response.data.result
@@ -368,9 +382,10 @@ console.log(dueDate)
                 ...prev,
                 itemType: itemType,
                 itemImage: itemMasterImage,
-                itemMasterName: itemDescription,
+                itemAddMasterName: itemDescription,
                 itemCalFreInMonths: itemFqInMonths,
-                itemCalAlertDays: calAlertInDay
+                itemCalAlertDays: calAlertInDay,
+
 
 
 
@@ -385,7 +400,7 @@ console.log(dueDate)
 
     useEffect(() => {
         itemMasterById();
-    }, [itemAddData.itemMasterId]);
+    }, [itemAddData.itemMasterRef]);
 
     const [partData, setPartData] = useState([])
     const getPartList = async () => {
@@ -488,6 +503,7 @@ console.log(dueDate)
     const [snackBarOpen, setSnackBarOpen] = useState(false)
     const [errorhandler, setErrorHandler] = useState({});
     const [open, setOpen] = useState(false)
+    const navigate = useNavigate();
 
     const handleItemAddSubmit = async (e) => {
         e.preventDefault();
@@ -501,6 +517,9 @@ console.log(dueDate)
             console.log("Item Created Successfully")
             setErrorHandler({ status: response.data.status, message: response.data.message, code: "success" })
             setItemAddData(initialItemAddData)
+            setTimeout(() => {
+                navigate('/itemList');
+            }, 3000);
 
         } catch (err) {
 
@@ -580,7 +599,7 @@ console.log(dueDate)
     const getItemMasterByName = async () => {
         try {
             const response = await axios.post(
-                `${process.env.REACT_APP_PORT}/itemAdd/getItemAddByName`, { itemMasterName: itemAddData.itemItemMasterName }
+                `${process.env.REACT_APP_PORT}/itemAdd/getItemAddByName`, { itemAddMasterName: itemAddData.itemItemMasterName }
 
             );
 
@@ -601,7 +620,7 @@ console.log(dueDate)
         calculateResultDate(itemAddData.itemCalDate, itemAddData.itemCalFreInMonths);
     }, [itemAddData.itemCalDate, itemAddData.itemCalFreInMonths]);
 
-   
+
 
     const calculateResultDate = (itemCalDate, itemCalFreInMonths) => {
         const parsedDate = dayjs(itemCalDate);
@@ -622,7 +641,7 @@ console.log(dueDate)
                         <div className="col-lg-5 row g-2">
 
                             <div className='col-9'>
-                                <TextField size='small' select variant='outlined' label="Item Master" name='itemMasterId' value={itemAddData.itemMasterId || ""} fullWidth onChange={handleItemAddChange}>
+                                <TextField size='small' select variant='outlined' label="Item Master" name='itemMasterRef' value={itemAddData.itemMasterRef} fullWidth onChange={handleItemAddChange}>
                                     <MenuItem value=""><em>Select</em></MenuItem>
                                     {itemMasterDataList.map((item) => (
                                         <MenuItem value={item._id}>{item.itemDescription}</MenuItem>
@@ -706,7 +725,7 @@ console.log(dueDate)
                                     </div>
                                     <div className="row g-1">
                                         <div className="col-lg me-1">
-                                            <TextField size='small' variant='outlined' label="Make" onChange={handleItemAddChange} name='itemMake' id='itemMakeId' fullWidth />
+                                            <TextField size='small' variant='outlined' label="Make" onChange={handleItemAddChange} value={itemAddData.itemMake} onKeyDown={handleKeyDown} name='itemMake' id='itemMakeId' fullWidth />
                                         </div>
                                         <div className="col-lg">
                                             <TextField size='small' variant='outlined' label="Model No." onChange={handleItemAddChange} name='itemModelNo' id='itemModelNoId' fullWidth />
@@ -986,7 +1005,7 @@ console.log(dueDate)
                                             <td>{index + 1}</td>
                                             <td >{item}</td>
                                         </tr>
-                                    ))}
+                                    ))} 
 
 
                                 </tbody>
@@ -999,7 +1018,7 @@ console.log(dueDate)
                                 <div className="row g-2">
                                     <div className="col-lg-6">
                                         <DatePicker
-                                            
+
                                             fullWidth
                                             id="itemCalDateId"
                                             name="itemCalDate"
@@ -1018,15 +1037,15 @@ console.log(dueDate)
                                             fullWidth
                                             id="itemDueDateId"
                                             name="itemDueDate"
-                                            
+
                                             value={dayjs(itemAddData.itemDueDate)}
                                             onChange={(newValue) =>
                                                 setItemAddData((prev) => ({ ...prev, itemDueDate: newValue.format("YYYY-MM-DD") }))
                                             }
-                                            label="Due Date"  
+                                            label="Due Date"
 
                                             slotProps={{ textField: { size: 'small' } }}
-                                            format="DD-MM-YYYY" /> 
+                                            format="DD-MM-YYYY" />
                                     </div>
                                     <div className="col-lg-12">
                                         <TextField size='small' fullWidth variant='outlined' onChange={handleItemAddChange} label="Calibrated at" select name='itemCalibratedAt'>
@@ -1111,14 +1130,31 @@ console.log(dueDate)
                                         <th>Parameter</th>
                                         <th>Range/Size</th>
                                         <th>Unit</th>
-                                        {itemAddData.itemType === "Attribute" && <th>Min</th>}
+                                        {itemAddData.itemType === "Attribute" && <th colspan="3">Permissible Size</th>}
+                                        {/*{itemAddData.itemType === "Attribute" && <th>Min</th>}
                                         {itemAddData.itemType === "Attribute" && <th>Max</th>}
-                                        {itemAddData.itemType === "Attribute" && <th>WearLimit</th>}
-                                        <th>Accuracy</th>
-                                        <th>Unit</th>
-                                        <th>Observed Size</th>
+                                                {itemAddData.itemType === "Attribute" && <th>WearLimit</th>}*/}
+                                        {/*{itemAddData.itemType === "Attribute" && <th>Unit</th>}*/}
+                                        {itemAddData.itemType === "Attribute" && <th colspan="2">Observed size</th>}
+
+
+
+                                        {itemAddData.itemType === "Variable" && <th>Accuracy</th>}
+                                        {itemAddData.itemType === "Variable" && <th>Unit</th>}
+
+                                        {itemAddData.itemType === "Variable" && <th>Observed Error</th>}
+
+
+
+
+
+                                        {itemAddData.itemType === "Reference Standard" && <th>Accuracy</th>}
+                                        {itemAddData.itemType === "Reference Standard" && <th>Unit</th>}
+
+                                        {itemAddData.itemType === "Reference Standard" && <th colspan="2">Observed size</th>}
                                         <th>Delete</th>
                                     </tr>
+
                                     {itemAddData.acceptanceCriteria ? itemAddData.acceptanceCriteria.map((item, index) => (
                                         <tr>
                                             <td><select className='form-select form-select-sm' id="acParameterId" name="acParameter" value={item.acParameter} onChange={(e) => changeACValue(index, e.target.name, e.target.value)}>
@@ -1139,21 +1175,38 @@ console.log(dueDate)
 
 
                                             </select></td>
-                                            {itemAddData.itemType === "Attribute" && <td><input type="text" className="form-control form-control-sm" id="acMinId" name="acMin" value={item.acMin} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} /></td>}
+                                            {itemAddData.itemType === "Attribute" && <td><input type="text" className="form-control form-control-sm" id="acMinId" name="acMin" placeholder='min' value={item.acMin} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} /></td>}
 
-                                            {itemAddData.itemType === "Attribute" && <td><input type="text" className='form-control form-control-sm' id="acMaxId" name="acMax" value={item.acMax} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} /></td>}
+                                            {itemAddData.itemType === "Attribute" && <td><input type="text" className='form-control form-control-sm' id="acMaxId" name="acMax" placeholder='max' value={item.acMax} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} /></td>}
 
-                                            {itemAddData.itemType === "Attribute" && <td><input type="text" className="form-control form-control-sm" id="acWearLimitId" name="acWearLimit" value={item.acWearLimit} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} /></td>}
+                                            {itemAddData.itemType === "Attribute" && <td><input type="text" className="form-control form-control-sm" id="acWearLimitId" name="acWearLimit" placeholder='wearLimit' value={item.acWearLimit} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} /></td>}
+                                            {itemAddData.itemType === "Attribute" && <td><input type="text" className="form-control form-control-sm" id="acMinId" name="acMin" placeholder='min' value={item.acMin} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} /></td>}
+                                            {itemAddData.itemType === "Attribute" && <td><input type="text" className='form-control form-control-sm' id="acMaxId" name="acMax" placeholder='max' value={item.acMax} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} /></td>}
+                                            {itemAddData.itemType === "Variable" && <td><input type="text" className="form-control form-control-sm" id="acAccuracyId" name="acAccuracy" value={item.acAccuracy} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} /></td>}
 
-                                            <td><input type="text" className="form-control form-control-sm" id="acAccuracyId" name="acAccuracy" value={item.acAccuracy} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} /></td>
-                                            <td> <select className="form-select form-select-sm" id="acAccuracyUnitId" name="acAccuracyUnit" value={item.acAccuracyUnit} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} >
+                                            {itemAddData.itemType === "Variable" && <td> <select className="form-select form-select-sm" id="acAccuracyUnitId" name="acAccuracyUnit" value={item.acAccuracyUnit} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} >
                                                 <option value="">-Select-</option>
                                                 {units.map((item, index) => (
                                                     <option key={index} value={item.unitName}>{item.unitName}</option>
                                                 ))}
 
-                                            </select></td>
-                                            <td><input type="text" className="form-control form-control-sm" id="acObservedSizeId" name="acObservedSize" value={item.acObservedSize} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} /></td>
+                                            </select></td>}
+                                            {itemAddData.itemType === "Variable" && <td><input type="text" className="form-control form-control-sm" id="acObservedSizeId" name="acObservedSize" value={item.acObservedSize} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} /></td>}
+
+                                            {itemAddData.itemType === "Reference Standard" && <td><input type="text" className="form-control form-control-sm" id="acAccuracyId" name="acAccuracy" value={item.acAccuracy} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} /></td>}
+                                            {itemAddData.itemType === "Reference Standard" && <td> <select className="form-select form-select-sm" id="acAccuracyUnitId" name="acAccuracyUnit" value={item.acAccuracyUnit} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} >
+                                                <option value="">-Select-</option>
+                                                {units.map((item, index) => (
+                                                    <option key={index} value={item.unitName}>{item.unitName}</option>
+                                                ))}
+
+                                            </select></td>}
+
+                                            {itemAddData.itemType === "Reference Standard" && <td><input type="text" className="form-control form-control-sm" id="acMinId" name="acMin" placeholder='min' value={item.acMin} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} /></td>}
+
+                                            {itemAddData.itemType === "Reference Standard" && <td><input type="text" className='form-control form-control-sm' id="acMaxId" name="acMax" placeholder='max' value={item.acMax} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} /></td>}
+
+
                                             <td><Button color='error' onClick={deleteAC}><Delete /></Button></td>
 
                                         </tr>
@@ -1166,7 +1219,7 @@ console.log(dueDate)
                             <Button variant='contained' color='warning' onClick={() => setOpen(true)} className='me-3' type="button">
                                 Submit
                             </Button>
-                            <Button variant='contained' color='error' type="reset">
+                            <Button component={RouterLink} to={`/itemList/`} variant="contained" color="error">
                                 Cancel
                             </Button>
                         </div>

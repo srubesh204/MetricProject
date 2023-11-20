@@ -10,7 +10,7 @@ import AddRoundedIcon from '@mui/icons-material/AddRounded';
 
 import { Container, Paper } from '@mui/material';
 import { Box, Grid } from '@mui/material';
-import { DataGrid } from '@mui/x-data-grid';
+import { DataGrid,GridToolbar } from '@mui/x-data-grid';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
@@ -78,7 +78,7 @@ const Vendor = () => {
         vendorCode: "",
         aliasName: "",
         fullName: "",
-        dor: "",
+        dor: dayjs().format("YYYY-MM-DD"),
         address: "",
         state: "",
         city: "",
@@ -93,7 +93,7 @@ const Vendor = () => {
             vcStatus: ""
         }],
         certificate: "",
-        certificateValidity: "",
+        certificateValidity: dayjs().format("YYYY-MM-DD"),
         vendorStatus: "Active",
     }
 
@@ -101,7 +101,7 @@ const Vendor = () => {
         vendorCode: "",
         aliasName: "",
         fullName: "",
-        dor: "",
+        dor: dayjs().format("YYYY-MM-DD"),
         address: "",
         state: "",
         city: "",
@@ -116,7 +116,7 @@ const Vendor = () => {
             vcStatus: ""
         }],
         certificate: "",
-        certificateValidity: "",
+        certificateValidity: dayjs().format("YYYY-MM-DD"),
         vendorStatus: "Active",
 
 
@@ -1060,15 +1060,31 @@ const Vendor = () => {
                                             paginationModel: { page: 0, pageSize: 5 },
                                         },
                                     }}
-                                    pageSizeOptions={[5, 10]}
+                                    sx={{
+                                        ".MuiTablePagination-displayedRows": {
+
+                                            "margin-top": "1em",
+                                            "margin-bottom": "1em"
+                                        }
+                                    }}
+                                    
+                                    slots={{
+                                        toolbar: GridToolbar,
+                                    }}
+                                    
                                     onRowSelectionModelChange={(newRowSelectionModel, event) => {
                                         setSelectedRowIds(newRowSelectionModel);
                                         console.log(event)
-
+                    
                                     }}
+
                                     onRowClick={updateVendor}
 
+                                    density="compact"
+                                    //disableColumnMenu={true}
+                                    //clipboardCopyCellDelimiter={true}
                                     checkboxSelection
+                                    pageSizeOptions={[10]}
 
 
                                 />

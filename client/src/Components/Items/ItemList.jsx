@@ -3,11 +3,23 @@ import { TextField, MenuItem, Button } from '@mui/material';
 import { Box, Container, Grid, Paper, Typography } from "@mui/material";
 import { DataGrid, GridToolbar } from '@mui/x-data-grid';
 import axios from 'axios';
-import {Edit, FilterAlt} from '@mui/icons-material';
+import { Edit, FilterAlt } from '@mui/icons-material';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import dayjs from 'dayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
+
+import Alert from '@mui/material/Alert';
+import Snackbar from '@mui/material/Snackbar';
+import AddIcon from '@mui/icons-material/Add';
+import DeleteIcon from '@mui/icons-material/Delete';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import { Link as RouterLink } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import isSameOrAfter from 'dayjs/plugin/isSameOrAfter'
 import isSameOrBefore from 'dayjs/plugin/isSameOrBefore'
@@ -15,7 +27,7 @@ dayjs.extend(isSameOrBefore)
 dayjs.extend(isSameOrAfter)
 
 const ItemList = () => {
-   
+
     console.log(dayjs("2023-11-17").isSameOrBefore("2023-11-21"))
     const [itemList, setItemList] = useState([]);
 
@@ -61,25 +73,34 @@ const ItemList = () => {
         itemAddFetch();
     }, []);
 
+    const handleSnackClose = (event, reason) => {
+        if (reason === 'clickaway') {
+            return;
+        }
 
+        setSnackBarOpen(false);
+    }
 
 
 
     const columns = [
-        {field: 'button', headerName: 'Edit', width: 70, renderCell: (params) => <Button component={Link} to={`/itemedit/${params.id}`}><Edit color='success' /></Button>, align:"center" },
-        { field: 'id', headerName: 'Si. No', width: 70, renderCell: (params) => params.api.getAllRowIds().indexOf(params.id) + 1, align: "center" },
-        { field: 'itemIMTENo', headerName: 'ItemIMTE No', width: 80, align: "center" },
-        { field: 'itemMasterName', headerName: 'item Description', width: 90, align: "center" },
-        { field: 'itemRangeSize', headerName: 'Item Range Size', width: 100, align: "center" },
-        { field: 'itemMake', headerName: 'Item Make', width: 110, align: "center" },
-        { field: 'itemCalDate', headerName: 'Item Cal Date', width: 130, align: "center" },
-        { field: 'itemDueDate', headerName: 'Item Due Date', width: 140, align: "center" },
-        { field: 'itemLC', headerName: 'itemLC', width: 120, align: "center" },
-        { field: 'itemCalFreInMonths', headerName: 'Frequency(in months)', type: "number", width: 170, align: "center" },
+        { field: 'button', headerName: 'Edit', width: 60, renderCell: (params) => <Button component={Link} to={`/itemedit/${params.id}`}><Edit color='success' /></Button>, align: "center" },
+        { field: 'id', headerName: 'Si. No', width: 60, renderCell: (params) => params.api.getAllRowIds().indexOf(params.id) + 1, align: "center" },
+        { field: 'itemIMTENo', headerName: 'ItemIMTE No', width: 100, align: "center" },
+        { field: 'itemAddMasterName', headerName: 'item Description', width: 120, align: "center" },
+        { field: 'itemRangeSize', headerName: 'Item Range Size', width: 120, align: "center" },
+        { field: 'itemMake', headerName: 'Item Make', width: 90, align: "center" },
+        { field: 'itemCalDate', headerName: 'Item Cal Date', width: 100, align: "center" },
+        { field: 'itemDueDate', headerName: 'Item Due Date', width: 110, align: "center" },
+        { field: 'itemLC', headerName: 'itemLC', width: 90, align: "center" },
+        { field: 'itemCalFreInMonths', headerName: 'Frequency(in months)', type: "number", width: 160, align: "center" },
         { field: 'itemCalibrationSource', headerName: 'Item Calibration Src', width: 190, align: "center" },
-        { field: 'itemSupplier', headerName: 'Item Supplier', renderCell: (params) => params.row.itemSupplier.toString(), width: 180, align: "center" },
-        { field: 'itemType', headerName: 'Item Type', width: 190, align: "center" },
+        { field: 'itemSupplier', headerName: 'Item Supplier', renderCell: (params) => params.row.itemSupplier.toString(), width: 110, align: "center" },
+        { field: 'itemType', headerName: 'Item Type', width: 180, align: "center" },
     ];
+
+    const [deleteModalItem, setDeleteModalItem] = useState(false);
+    const [itemListSelectedRowIds, setItemListSelectedRowIds] = useState([])
 
     const [filteredItemListData, setFilteredItemListData] = useState([])
 
@@ -245,6 +266,98 @@ const ItemList = () => {
         partFetchData();
     }, []);
 
+    const [snackBarOpen, setSnackBarOpen] = useState(false)
+    const [errorhandler, setErrorHandler] = useState({});
+
+    console.log(itemListSelectedRowIds)
+
+
+    {/*const deleteItemData = async () => {
+    try {
+        const response = await axios.delete(
+            "http://localhost:3001/itemAdd/deleteItemAdd/", {
+            data: {
+                itemAddIds: itemListSelectedRowIds
+            }
+        }
+
+
+        );
+       
+        setSnackBarOpen(true)
+        setErrorHandler({ status: response.data.status, message: response.data.message, code: "success" })
+        console.log("ItemAdd delete Successfully");
+    } catch (err) {
+        setSnackBarOpen(true)
+
+        if (err.response && err.response.status === 400) {
+            // Handle validation errors
+            console.log(err);
+            const errorData400 = err.response.data.errors;
+            const errorMessages400 = Object.values(errorData400).join(', ');
+            console.log(errorMessages400)
+            setErrorHandler({ status: 0, message: errorMessages400, code: "error" });
+        } else if (err.response && err.response.status === 500) {
+            // Handle other errors
+            console.log(err);
+            const errorData500 = err.response.data.error;
+            const errorMessages500 = Object.values(errorData500);
+            console.log(errorMessages500)
+            setErrorHandler({ status: 0, message: errorMessages500, code: "error" });
+        } else {
+            console.log(err);
+            console.log(err.response.data.error)
+            setErrorHandler({ status: 0, message: "An error occurred", code: "error" });
+        }
+
+        console.log(err);
+    }
+};*/}
+
+
+
+    const deleteItemData = async () => {
+
+        try {
+            const response = await axios.delete(
+                "http://localhost:3001/itemAdd/deleteItemAdd", {
+                data: {
+                    itemAddIds: itemListSelectedRowIds
+                }
+            }
+            );
+
+            setSnackBarOpen(true)
+
+
+            setErrorHandler({ status: response.data.status, message: response.data.message, code: "success" })
+            console.log("ItemAdd delete Successfully");
+            //setItemAddData(initialItemAddData)
+            itemFetch()
+        } catch (err) {
+
+            setSnackBarOpen(true)
+
+            if (err.response && err.response.status === 400) {
+                // Handle validation errors
+                const errorData400 = err.response.data.errors;
+                const errorMessages400 = Object.values(errorData400).join(', ');
+                console.log(errorMessages400)
+                setErrorHandler({ status: 0, message: errorMessages400, code: "error" });
+            } else if (err.response && err.response.status === 500) {
+                // Handle other errors
+                const errorData500 = err.response.data.error;
+                const errorMessages500 = Object.values(errorData500).join(', ');
+                console.log(errorMessages500)
+                setErrorHandler({ status: 0, message: errorMessages500, code: "error" });
+            } else {
+                console.log(err.response.data.error)
+                setErrorHandler({ status: 0, message: "An error occurred", code: "error" });
+            }
+            console.log(err);
+        }
+    };
+
     const [dueDate, setDueDate] = useState("")
 
     const handleDueChange = (e) => {
@@ -261,20 +374,20 @@ const ItemList = () => {
         if (value === "all") {
             setFilteredItemListData(itemList)
         } else {
-            
 
-            if(value === "Past"){
-                const pastData = itemList.filter((item)=> dayjs(item.itemDueDate).isBefore(currentDate.format("YYYY-MM-DD")))
+
+            if (value === "Past") {
+                const pastData = itemList.filter((item) => dayjs(item.itemDueDate).isBefore(currentDate.format("YYYY-MM-DD")))
                 setFilteredItemListData(pastData)
                 console.log("past")
             }
-            if(value === "Today"){
-                const CurrentDue = itemList.filter((item)=> dayjs(item.itemDueDate).isSame(currentDate.format("YYYY-MM-DD")))
+            if (value === "Today") {
+                const CurrentDue = itemList.filter((item) => dayjs(item.itemDueDate).isSame(currentDate.format("YYYY-MM-DD")))
                 console.log(dayjs().isSame(currentDate))
                 setFilteredItemListData(CurrentDue)
             }
             if (value === "7") {
-                
+
                 const filteredDataLast7Days = itemList.filter((item) => {
                     console.log(item.itemDueDate)
                     return (dayjs(item.itemDueDate).isSameOrBefore(sevenDaysAgo) && dayjs(item.itemDueDate).isSameOrAfter(currentDate.format("YYYY-MM-DD")))
@@ -284,7 +397,7 @@ const ItemList = () => {
                 setFilteredItemListData(filteredDataLast7Days)
             }
             if (value === "15") {
-               
+
                 const fifteenDaysFilter = itemList.filter((item) => {
                     console.log(item.itemDueDate)
                     return (dayjs(item.itemDueDate).isBetween(currentDate.format("YYYY-MM-DD"), fifteenDaysAgo))
@@ -292,7 +405,7 @@ const ItemList = () => {
                 setFilteredItemListData(fifteenDaysFilter)
             }
             if (value === "30") {
-               
+
                 const thirtyDaysFilter = itemList.filter((item) => {
                     console.log(item.itemDueDate)
                     return (dayjs(item.itemDueDate).isBetween(currentDate.format("YYYY-MM-DD"), thirtyDaysAgo))
@@ -301,7 +414,7 @@ const ItemList = () => {
             }
 
             if (value === ">30") {
-               
+
                 const thirtyDaysFilter = itemList.filter((item) => {
                     console.log(item.itemDueDate)
                     return (dayjs(item.itemDueDate).isAfter(thirtyDaysAgo))
@@ -309,7 +422,7 @@ const ItemList = () => {
                 setFilteredItemListData(thirtyDaysFilter)
             }
 
-            if(value === "Date"){
+            if (value === "Date") {
                 setFilteredItemListData(itemList)
             }
 
@@ -458,7 +571,7 @@ const ItemList = () => {
                             </div>
                             <div className="col d-flex  mb-2">
 
-                                <TextField label="Part Name"
+                                <TextField label=" Part No & Part Name"
                                     id="partNameId"
                                     select
                                     defaultValue="all"
@@ -469,7 +582,7 @@ const ItemList = () => {
                                     name="partName" >
                                     <MenuItem value="all">All</MenuItem>
                                     {partDataList.map((item, index) => (
-                                        <MenuItem key={index} value={item.partName}>{item.partName}</MenuItem>
+                                        <MenuItem key={index} value={item.partName}>{[item.partNo, item.partName].join(', ')}</MenuItem>
                                     ))}
                                 </TextField>
 
@@ -520,7 +633,7 @@ const ItemList = () => {
                             {dueDate === "Date" && <div className='col d-flex justify-content-end mb-2 g-2'>
                                 <div className="me-2 ">
                                     <DatePicker
-                                      
+
                                         fullWidth
                                         id="startDateId"
                                         name="dueStartDate"
@@ -532,7 +645,7 @@ const ItemList = () => {
                                 </div>
                                 <div className="me-2">
                                     <DatePicker
-                                       
+
                                         fullWidth
                                         id="endDateId"
                                         name="dueEndDate"
@@ -544,11 +657,11 @@ const ItemList = () => {
                                 </div>
                                 <div>
                                     <Button variant='contained' startIcon={<FilterAlt />} color='warning'>Filter</Button>
-                                    </div>
+                                </div>
                             </div>}
                         </div>
                         <div>
-                            <Box sx={{ height: 400, width: '100%', my: 2 }}>
+                            <Box sx={{ height: 490, width: '100%', my: 2 }}>
                                 <DataGrid
 
                                     rows={filteredItemListData}
@@ -556,11 +669,9 @@ const ItemList = () => {
                                     getRowId={(row) => row._id}
                                     initialState={{
                                         pagination: {
-                                            paginationModel: {
-                                                pageSize: 5,
-                                            },
+                                          paginationModel: { page: 0, pageSize: 10},
                                         },
-                                    }}
+                                      }}
                                     sx={{
                                         ".MuiTablePagination-displayedRows": {
 
@@ -568,10 +679,16 @@ const ItemList = () => {
                                             "margin-bottom": "1em"
                                         }
                                     }}
+                                    onRowSelectionModelChange={(newRowSelectionModel, event) => {
+                                        setItemListSelectedRowIds(newRowSelectionModel);
+
+
+                                    }}
+
                                     slots={{
                                         toolbar: GridToolbar,
-                                      }}
-                                      
+                                    }}
+
                                     density="compact"
                                     //disableColumnMenu={true}
                                     //clipboardCopyCellDelimiter={true}
@@ -580,6 +697,28 @@ const ItemList = () => {
                                     pageSizeOptions={[5]}
                                 />
                             </Box>
+                            <Dialog
+                                open={deleteModalItem}
+                                onClose={() => setDeleteModalItem(false)}
+                                aria-labelledby="alert-dialog-title"
+                                aria-describedby="alert-dialog-description"
+                            >
+                                <DialogTitle id="alert-dialog-title">
+                                    {" ItemAdd delete confirmation?"}
+                                </DialogTitle>
+                                <DialogContent>
+                                    <DialogContentText id="alert-dialog-description">
+                                        Are you sure to delete the ItemAdd
+                                    </DialogContentText>
+                                </DialogContent>
+                                <DialogActions>
+                                    <Button onClick={() => setDeleteModalItem(false)}>Cancel</Button>
+                                    <Button onClick={() => { deleteItemData(); setDeleteModalItem(false); }} autoFocus>
+                                        Delete
+                                    </Button>
+                                </DialogActions>
+                            </Dialog>
+
 
                         </div>
                         <div className='row'>
@@ -596,16 +735,20 @@ const ItemList = () => {
                             </div>
                             <div className=' col d-flex justify-content-end'>
                                 <div className='me-2'>
-                                    <button type="button" className='btn btn-warning' >+ Add Vendor</button>
+                                    {/* <Button component={Link} to={`/itemAdd/`}><AddIcon color='warning' /> Add ItemAdd</Button> */}
+                                    <Button component={RouterLink} to={`/itemAdd/`} variant="contained" color="warning">
+                                        <AddIcon /> Add Item
+                                    </Button>
+                                   {/* <button type="button" component={Link} to={`/itemAdd/`} className='btn btn-warning' > <AddIcon color='warning' /> Add ItemAdd</button>*/}
                                 </div>
+
                                 <div className='me-2'>
-                                    <Button component={Link} to={`/itemedit/${itemId}`} variant="contained" color="warning">Modify</Button>
+                                    {itemListSelectedRowIds.length !== 0 && <Button variant='contained' type='button' color='error' onClick={() => setDeleteModalItem(true)}><DeleteIcon /> Delete </Button>}
                                 </div>
+
+
                                 <div className='me-2'>
-                                    <button type="button" className='btn btn-danger' >Delete</button>
-                                </div>
-                                <div className='me-2'>
-                                    <button type="button" className='btn btn-secondary' >Back</button>
+                                    <button type="button" className='btn btn-secondary' ><ArrowBackIcon /> Back</button>
                                 </div>
 
 
@@ -633,6 +776,11 @@ const ItemList = () => {
                                 </div>
 
                             </div>
+                            <Snackbar anchorOrigin={{ vertical: "top", horizontal: "right" }} open={snackBarOpen} autoHideDuration={6000} onClose={handleSnackClose}>
+                                <Alert onClose={handleSnackClose} severity={errorhandler.code} sx={{ width: '25%' }}>
+                                    {errorhandler.message}
+                                </Alert>
+                            </Snackbar>
 
 
 

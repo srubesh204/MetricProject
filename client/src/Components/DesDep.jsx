@@ -10,7 +10,7 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
-import { DataGrid } from '@mui/x-data-grid';
+import { DataGrid,GridToolbar } from '@mui/x-data-grid';
 import { Delete } from '@mui/icons-material';
 
 
@@ -65,7 +65,8 @@ export const Department = () => {
 
 
   const columns = [
-    { field: 'id', headerName: 'Si. No', width: 70, renderCell: (params) => params.api.getRowIndexRelativeToVisibleRows(params.id) + 1 },
+
+    { field: 'id', headerName: 'Si. No', width: 70, renderCell: (params) => params.api.getAllRowIds().indexOf(params.id) + 1, align: "center" },
 
     { field: 'department', headerName: 'Department', width: "90" },
     { field: 'departmentStatus', headerName: 'Department Status', width: "90" },
@@ -661,7 +662,7 @@ export const Department = () => {
         setErrorHandler({ status: 0, message: "An error occurred", code: "error" });
       }
 
-   
+
 
 
 
@@ -778,7 +779,8 @@ export const Department = () => {
                   p: 1,
                   display: 'flex',
                   flexDirection: 'column',
-                  m: 2
+                  m: 2,
+                  
 
                 }}
                 elevation={12}
@@ -947,25 +949,42 @@ export const Department = () => {
                   </div>*/}
 
 
-                  <div style={{ height: 400, width: '100%' }}>
+                  <div style={{ height: 480, width: '100%' }}>
                     <DataGrid
                       rows={departmentList}
                       columns={columns}
                       getRowId={(row) => row._id}
                       initialState={{
                         pagination: {
-                            paginationModel: { page: 0, pageSize: 5 },
+                          paginationModel: { page: 0, pageSize: 10},
                         },
+                      }}
+                      sx={{
+                        ".MuiTablePagination-displayedRows": {
+
+                          "margin-top": "1em",
+                          "margin-bottom": "1em",
+                         
+                          
+                          
+                        }
+                      }}
+                      slots={{
+                        toolbar: GridToolbar,
                     }}
-                    pageSizeOptions={[5, 10]}
+
                       onRowSelectionModelChange={(newRowSelectionModel, event) => {
                         setSelectedRowIds(newRowSelectionModel);
                         console.log(event)
 
-                      }}
+                    }}
                       onRowClick={handleDepRowClick}
 
+                      density="compact"
+                      //disableColumnMenu={true}
+                      //clipboardCopyCellDelimiter={true}
                       checkboxSelection
+                      pageSizeOptions={[5]}
 
 
                     >
@@ -1215,28 +1234,40 @@ export const Department = () => {
                   </div>
                   <div className="row ">
 
-                    <div style={{ height: 400, width: '100%' }}>
+                    <div style={{ height: 480, width: '100%' }}>
                       <DataGrid
-                         className="MuiDataGrid-root" 
+                        className="MuiDataGrid-root"
                         rows={areaList}
                         columns={areaColumns}
                         getRowId={(row) => row._id}
-                       
+
                         initialState={{
                           pagination: {
-                              paginationModel: { page: 0, pageSize: 5 },
+                            paginationModel: { page: 0, pageSize: 10 },
                           },
+                        }}
+                        sx={{
+                          ".MuiTablePagination-displayedRows": {
+
+                            "margin-top": "1em",
+                            "margin-bottom": "1em"
+                          }
+                        }}
+                        slots={{
+                          toolbar: GridToolbar,
                       }}
-                      pageSizeOptions={[5, 10]}
                         onRowSelectionModelChange={(newRowSelectionModel, event) => {
                           setAreaSelectedRowIds(newRowSelectionModel);
                           console.log(event)
-
-                        }}
+  
+                      }}
                         onRowClick={handleAreaRowClick}
 
+                        density="compact"
+                        //disableColumnMenu={true}
+                        //clipboardCopyCellDelimiter={true}
                         checkboxSelection
-
+                        pageSizeOptions={[5]}
 
                       >
 
@@ -1477,26 +1508,39 @@ export const Department = () => {
                 <div className="row g-2">
 
 
-                  <div style={{ height: 400, width: '100%' }}>
+                  <div style={{ height: 480, width: '100%' }}>
                     <DataGrid
                       rows={placeOfUsageList}
                       columns={placeOfUsageColumns}
                       getRowId={(row) => row._id}
-                      
+
                       initialState={{
                         pagination: {
-                            paginationModel: { page: 0, pageSize: 5 },
+                          paginationModel: { page: 0, pageSize: 10},
                         },
+                      }}
+                      sx={{
+                        ".MuiTablePagination-displayedRows": {
+
+                          "margin-top": "1em",
+                          "margin-bottom": "1em"
+                        }
+                      }}
+                      slots={{
+                        toolbar: GridToolbar,
                     }}
-                    pageSizeOptions={[5, 10]}
                       onRowSelectionModelChange={(newRowSelectionModel, event) => {
                         setPlaceOfUsageSelectedRowIds(newRowSelectionModel);
                         console.log(event)
 
-                      }}
+                    }}
                       onRowClick={updatePof}
 
+                      density="compact"
+                      //disableColumnMenu={true}
+                      //clipboardCopyCellDelimiter={true}
                       checkboxSelection
+                      pageSizeOptions={[5]}
 
 
                     >
@@ -1673,7 +1717,7 @@ export const Designation = () => {
     designation: "",
     designationStatus: "Active"
   });
- 
+
 
 
 
@@ -1903,18 +1947,18 @@ export const Designation = () => {
         setDesignationData(prev => ({ ...prev, [name]: formattedValue }));
     }
 };*/}
-const handleKeyDown = (event) => {
-  const { name, value } = event.target;
-  console.log(name);
-  if (event.key === 'Tab') {
+  const handleKeyDown = (event) => {
+    const { name, value } = event.target;
+    console.log(name);
+    if (event.key === 'Tab') {
       event.preventDefault();
 
       const formattedValue = value.charAt(0).toUpperCase() + value.slice(1).toLowerCase();
 
       console.log(formattedValue);
       setDesignationData(prev => ({ ...prev, [name]: formattedValue }));
-  }
-};
+    }
+  };
 
 
   //
@@ -1983,7 +2027,7 @@ const handleKeyDown = (event) => {
                     size="small"
                     onChange={handleChange}
                     onKeyDown={handleKeyDown}
-              
+
                     value={designationData.designation}
                     name="designation" ></TextField>
                 </div>
@@ -2139,26 +2183,39 @@ const handleKeyDown = (event) => {
                 </div>
               </div>
 
-              <div style={{ height: 400, width: '100%' }}>
+              <div style={{ height: 480, width: '100%' }}>
                 <DataGrid
                   rows={designationList}
                   columns={designationColumns}
                   getRowId={(row) => row._id}
-                  
+
                   initialState={{
                     pagination: {
-                        paginationModel: { page: 0, pageSize: 5 },
+                      paginationModel: { page: 0, pageSize: 10},
                     },
+                  }}
+                  sx={{
+                    ".MuiTablePagination-displayedRows": {
+
+                      "margin-top": "1em",
+                      "margin-bottom": "1em"
+                    }
+                  }}
+                  slots={{
+                    toolbar: GridToolbar,
                 }}
-                pageSizeOptions={[5, 10]}
                   onRowSelectionModelChange={(newRowSelectionModel, event) => {
                     setDesignationSelectedRowIds(newRowSelectionModel);
                     console.log(event)
 
-                  }}
+                }}
                   onRowClick={handleDesRowClick}
 
+                  density="compact"
+                  //disableColumnMenu={true}
+                  //clipboardCopyCellDelimiter={true}
                   checkboxSelection
+                  pageSizeOptions={[5]}
 
 
                 >
