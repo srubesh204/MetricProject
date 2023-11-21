@@ -617,7 +617,7 @@ const ItemEdit = () => {
     const getItemMasterByName = async () => {
         try {
             const response = await axios.post(
-                `${process.env.REACT_APP_PORT}/itemAdd/getItemAddByName`, { itemAddMasterName: itemAddData.itemItemMasterName }
+                `${process.env.REACT_APP_PORT}/itemAdd/getItemAddByName`, { itemMasterName: itemAddData.itemItemMasterName }
 
             );
 
@@ -846,7 +846,7 @@ const ItemEdit = () => {
                                 <div className='row g-2'>
                                     <h6 className='text-center'>Enter Master Details</h6>
                                     <div className="col-md-12">
-                                        <TextField size='small' select fullWidth variant='outlined' onChange={handleItemAddChange} label="Select Master" name='itemItemMasterName' >
+                                        <TextField size='small' select fullWidth variant='outlined' onChange={handleItemAddChange} label="Select Master" value={itemAddData.itemItemMasterName} name='itemItemMasterName' >
                                             <MenuItem value=""><em>--Select--</em></MenuItem>
                                             {itemMasterDistNames.map((item, index) => (
                                                 <MenuItem key={index} value={item}>{item}</MenuItem>

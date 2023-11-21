@@ -86,17 +86,17 @@ const ItemList = () => {
     const columns = [
         { field: 'button', headerName: 'Edit', width: 60, renderCell: (params) => <Button component={Link} to={`/itemedit/${params.id}`}><Edit color='success' /></Button>, align: "center" },
         { field: 'id', headerName: 'Si. No', width: 60, renderCell: (params) => params.api.getAllRowIds().indexOf(params.id) + 1, align: "center" },
-        { field: 'itemIMTENo', headerName: 'ItemIMTE No', width: 100, align: "center" },
-        { field: 'itemAddMasterName', headerName: 'item Description', width: 120, align: "center" },
-        { field: 'itemRangeSize', headerName: 'Item Range Size', width: 120, align: "center" },
-        { field: 'itemMake', headerName: 'Item Make', width: 90, align: "center" },
-        { field: 'itemCalDate', headerName: 'Item Cal Date', width: 100, align: "center" },
-        { field: 'itemDueDate', headerName: 'Item Due Date', width: 110, align: "center" },
+        { field: 'itemIMTENo', headerName: 'IMTE No', width: 100, align: "center" },
+        { field: 'itemAddMasterName', headerName: 'Description', width: 120, align: "center" },
+        { field: 'itemRangeSize', headerName: 'Range Size', width: 120, align: "center" },
+        { field: 'itemMake', headerName: 'Make', width: 90, align: "center" },
+        { field: 'itemCalDate', headerName: 'Cal Date', width: 100, align: "center" },
+        { field: 'itemDueDate', headerName: 'Due Date', width: 110, align: "center" },
         { field: 'itemLC', headerName: 'itemLC', width: 90, align: "center" },
-        { field: 'itemCalFreInMonths', headerName: 'Frequency(in months)', type: "number", width: 160, align: "center" },
-        { field: 'itemCalibrationSource', headerName: 'Item Calibration Src', width: 190, align: "center" },
-        { field: 'itemSupplier', headerName: 'Item Supplier', renderCell: (params) => params.row.itemSupplier.toString(), width: 110, align: "center" },
-        { field: 'itemType', headerName: 'Item Type', width: 180, align: "center" },
+        { field: 'itemCalFreInMonths', headerName: 'Fq(in months)', type: "number", width: 160, align: "center" },
+        { field: 'itemCalibrationSource', headerName: 'Calibration Src', width: 190, align: "center" },
+        { field: 'itemSupplier', headerName: 'Supplier', renderCell: (params) => params.row.itemSupplier.toString(), width: 110, align: "center" },
+        { field: 'itemType', headerName: 'Type', width: 180, align: "center" },
     ];
 
     const [deleteModalItem, setDeleteModalItem] = useState(false);
@@ -736,7 +736,7 @@ const ItemList = () => {
                             <div className=' col d-flex justify-content-end'>
                                 <div className='me-2'>
                                     {/* <Button component={Link} to={`/itemAdd/`}><AddIcon color='warning' /> Add ItemAdd</Button> */}
-                                    <Button component={RouterLink} to={`/itemAdd/`} variant="contained" color="warning">
+                                    <Button component={Link} to={`/itemAdd`} variant="contained" color="warning">
                                         <AddIcon /> Add Item
                                     </Button>
                                    {/* <button type="button" component={Link} to={`/itemAdd/`} className='btn btn-warning' > <AddIcon color='warning' /> Add ItemAdd</button>*/}
@@ -748,7 +748,10 @@ const ItemList = () => {
 
 
                                 <div className='me-2'>
-                                    <button type="button" className='btn btn-secondary' ><ArrowBackIcon /> Back</button>
+                                <Button component={Link} to={`/home`} variant="contained" color="warning">
+                                <ArrowBackIcon /> Dashboard
+                                    </Button>
+                                   
                                 </div>
 
 

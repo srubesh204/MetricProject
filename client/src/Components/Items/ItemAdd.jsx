@@ -8,6 +8,7 @@ import dayjs from 'dayjs';
 import { Delete, Done } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
 import { Link as RouterLink } from 'react-router-dom';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 
 const ItemAdd = () => {
 
@@ -735,7 +736,11 @@ const ItemAdd = () => {
                                         <div className="col-lg me-1">
                                             <TextField size='small' select variant='outlined' value={itemAddData.itemStatus} onChange={handleItemAddChange} label="Item Status" name='itemStatus' id='itemStatusId' fullWidth >
                                                 <MenuItem value="Active">Active</MenuItem>
-                                                <MenuItem value="InActive">InActive</MenuItem>
+                                                <MenuItem value="Spara">Spara</MenuItem>
+                                                <MenuItem value="Breakdown">Breakdown</MenuItem>
+                                                <MenuItem value="Missing">Missing</MenuItem>
+                                                <MenuItem value="Rejection">Rejection</MenuItem>
+
                                             </TextField>
                                         </div>
                                         <div className="col-lg">
@@ -1220,7 +1225,7 @@ const ItemAdd = () => {
                                 Submit
                             </Button>
                             <Button component={RouterLink} to={`/itemList/`} variant="contained" color="error">
-                                Cancel
+                            <ArrowBackIcon /> Back To List
                             </Button>
                         </div>
 
