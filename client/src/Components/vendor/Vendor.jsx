@@ -10,7 +10,7 @@ import AddRoundedIcon from '@mui/icons-material/AddRounded';
 
 import { Container, Paper } from '@mui/material';
 import { Box, Grid } from '@mui/material';
-import { DataGrid,GridToolbar } from '@mui/x-data-grid';
+import { DataGrid, GridToolbar } from '@mui/x-data-grid';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
@@ -22,6 +22,7 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
+import { Delete, Done } from '@mui/icons-material';
 
 
 const Vendor = () => {
@@ -69,6 +70,8 @@ const Vendor = () => {
 
 
     };
+
+
 
 
     const [vendorStateId, setVendorStateId] = useState(null)
@@ -473,6 +476,35 @@ const Vendor = () => {
         event.preventDefault();
     };
 
+    const [uploadMessage, setUploadMessage] = useState("")
+    const handleCertificateUpload = (event) => {
+        const selectedFile = event.target.files[0];
+        if (selectedFile) {
+            console.log("working")
+            setVendorData((prev) => ({ ...prev, certificate: selectedFile.name }));
+            const fileURL = URL.createObjectURL(selectedFile);
+            setIframeURL({ fileURL: fileURL, fileName: selectedFile.name, file: selectedFile });
+
+            const formData = new FormData();
+            formData.append('file', selectedFile);
+            try {
+                axios.post(`${process.env.REACT_APP_PORT}/upload/VendorCertificateUpload`, formData)
+                    .then(response => {
+                        setUploadMessage(response.data.message)
+                        console.log(response);
+                    })
+                    .catch(error => {
+                        setUploadMessage("")
+                        console.error(error);
+                        // handle error here
+                    });
+            } catch (error) {
+                console.error('Error uploading the file:', error);
+            }
+
+        }
+    };
+
     const handleDrop = (event) => {
         event.preventDefault();
         const droppedFile = event.dataTransfer.files[0];
@@ -516,7 +548,7 @@ const Vendor = () => {
 
     const vendorListColumns = [
 
-        { field: 'id', headerName: 'Si. No', width: 70, renderCell: (params) => params.api.getAllRowIds().indexOf(params.id)+1 },     
+        { field: 'id', headerName: 'Si. No', width: 70, renderCell: (params) => params.api.getAllRowIds().indexOf(params.id) + 1 },
         { field: 'vendorCode', headerName: 'VendorCode', width: 130 },
 
         {
@@ -813,6 +845,12 @@ const Vendor = () => {
                                         <Button variant='outlined' sx={{ width: "20%" }} startIcon={<CloudUploadIcon />} type='button' className='btn btn-info' onClick={handleFileUpload}>Upload</Button>
 
                                     </ButtonGroup> */}
+                                    {/* <Button component="label" variant="contained" fullWidth >
+
+                                        Certificate Upload
+                                        <VisuallyHiddenInput type="file" onChange={handleCertificateUpload} />
+                                </Button>*/}
+
                                     <div>
                                         <div>
                                             <input
@@ -820,7 +858,7 @@ const Vendor = () => {
                                                 accept=".pdf" // Specify the accepted file types
                                                 ref={fileInputRef}
                                                 style={{ display: 'none' }}
-                                                onChange={handleFileSelect}
+                                                onChange={handleCertificateUpload}
 
                                             />
                                             <button type='button' style={{ display: "none" }} onClick={() => fileInputRef.current.click()}>Select File</button>
@@ -852,28 +890,38 @@ const Vendor = () => {
 
                                             </div>
 
+
+
                                             {vendorData.certificate &&
-                                                <div className='d-flex ' style={{ width: "30%", border: '2px dashed #ccc' }}>
+                                                <div className='d-flex ' style={{ width: "60%", height: '100%', border: '2px dashed #ccc' }}>
 
-                                                    <Link className='ms-1' target="_blank" href={`${process.env.REACT_APP_PORT}/vendorCertificates/${vendorData.certificate}`} underline="hover">
-                                                        {vendorData.certificate}
-                                                    </Link>
-
+                                                    <Chip label={vendorData.certificate} component="a" href={`${process.env.REACT_APP_PORT}/vendorCertificates/${vendorData.certificate}`} target="_blank" clickable={true} />
                                                     <HighlightOffRounded type="button" onClick={() => RemoveFile()} />
 
 
-                                                </div>
-                                            }
+                                                </div>}
+                                            {/*} <div className='d-flex ' style={{ width: "20%", height: '60%', border: '2px dashed #ccc' }}>
 
+                                                <Chip label={vendorData.certificate} component="a" href={`${process.env.REACT_APP_PORT}/workInstructions/${vendorData.certificate}`} target="_blank" clickable={true} />
+                                                <Chip
+                                                    label={uploadMessage}
+                                                    size='small'
+                                                    onClick={() => RemoveFile()}
+                                                    color="success"
+                                                    icon={<Done />}
+                                                />
+                                            </div>*/}
                                         </div>
+                                        {vendorData.certificate &&
+                                            <Chip
+                                                label={uploadMessage}
+                                                size='small'
 
+                                                color="success"
+                                                icon={<Done />}
+                                            />
+                                        }
 
-                                        {iframeURL && <div>
-
-                                        </div>}
-                                        <button disabled={!iframeURL.file} onClick={handleFileUpload} type='button' className='btn btn-warning mt-3 text-center'>
-                                            Certificate Upload
-                                        </button>
                                     </div>
 
 
@@ -1067,15 +1115,15 @@ const Vendor = () => {
                                             "margin-bottom": "1em"
                                         }
                                     }}
-                                    
+
                                     slots={{
                                         toolbar: GridToolbar,
                                     }}
-                                    
+
                                     onRowSelectionModelChange={(newRowSelectionModel, event) => {
                                         setSelectedRowIds(newRowSelectionModel);
                                         console.log(event)
-                    
+
                                     }}
 
                                     onRowClick={updateVendor}

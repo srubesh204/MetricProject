@@ -10,15 +10,16 @@ import UploadFileIcon from '@mui/icons-material/UploadFile';
 import Alert from '@mui/material/Alert';
 import Snackbar from '@mui/material/Snackbar';
 import { TextField, MenuItem, FormControl, Fab, Link, Typography, Badge, LinearProgress } from '@mui/material';
-import { Box, Grid, Paper, Container } from '@mui/material';
+import { Box, Grid, Paper, Container, Chip } from '@mui/material';
 
-import { Add, Remove } from '@mui/icons-material';
+import { Add, Remove,HighlightOffRounded } from '@mui/icons-material';
+import { Done } from '@mui/icons-material';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
-import { DataGrid,GridToolbar } from '@mui/x-data-grid';
+import { DataGrid, GridToolbar } from '@mui/x-data-grid';
 
 
 
@@ -93,7 +94,7 @@ const ItemMaster = () => {
         uncertainty: "",
         uncertaintyUnit: "",
         standardRef: "",
-        
+
         itemImageName: "",
         workInsName: "",
         status: "Active",
@@ -113,7 +114,7 @@ const ItemMaster = () => {
         uncertaintyUnit: "",
         standardRef: "",
         itemImageName: "",
-        
+
         workInsName: "",
         status: "Active",
         calibrationPoints: [],
@@ -138,8 +139,8 @@ const ItemMaster = () => {
         })
     };
 
-   const changeCalibrationPointRow = (index, name, value) => {
-    const formattedValue = name === 'calibrationPoint'
+    const changeCalibrationPointRow = (index, name, value) => {
+        const formattedValue = name === 'calibrationPoint'
             ? value.toLowerCase().split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')
             : value;
         setItemMasterData((prevItemMasterData) => {
@@ -152,7 +153,7 @@ const ItemMaster = () => {
             };
         })
     };
-   
+
 
 
 
@@ -177,7 +178,7 @@ const ItemMaster = () => {
 
     const [itemMasteSelectedRowIds, setItemMasteSelectedRowIds] = useState([]);
     const itemMasterColumns = [
-        { field: 'id', headerName: 'Si. No', width: 70, renderCell: (params) => params.api.getAllRowIds().indexOf(params.id)+1 },
+        { field: 'id', headerName: 'Si. No', width: 70, renderCell: (params) => params.api.getAllRowIds().indexOf(params.id) + 1 },
 
         { field: 'itemType', headerName: 'Item Type', width: 70 },
         { field: 'itemDescription', headerName: 'Item Description', width: 150 },
@@ -188,7 +189,7 @@ const ItemMaster = () => {
         { field: 'uncertainty', headerName: 'Uncertainty', width: 90, },
         { field: 'standardRef', headerName: 'Standard Ref', type: "number", width: 90, },
         { field: 'status', headerName: 'Status', width: 90, },
-        
+
         {/* {
             field: 'delete',
             headerName: 'Delete',
@@ -403,7 +404,7 @@ const ItemMaster = () => {
     }, []);
 
     const [iframeURL, setIframeURL] = useState({ fileURL: "", fileName: "", file: "" });
-   
+
 
     const handleFileSelect = (event) => {
         const selectedFile = event.target.files[0];
@@ -415,10 +416,41 @@ const ItemMaster = () => {
             setIframeURL({ fileURL: fileURL, fileName: selectedFile.name, file: selectedFile });
         }
     };
+    const [uploadMessage, setUploadMessage] = useState("")
+    const handleRemoveFile = () => {
+        setItemMasterData((prev) => ({ ...prev, workInsName: "" }));
+        setUploadMessage(null)
+    }
 
+    const handleWorkInstructionUpload = (event) => {
+        const selectedFile = event.target.files[0];
+        if (selectedFile) {
+            console.log("working")
+            setItemMasterData((prev) => ({ ...prev, workInsName: selectedFile.name }));
+            const fileURL = URL.createObjectURL(selectedFile);
+            setIframeURL({ fileURL: fileURL, fileName: selectedFile.name, file: selectedFile });
+            const formData = new FormData();
+            formData.append('file', selectedFile);
+            try {
+                axios.post(`${process.env.REACT_APP_PORT}/upload/workInstructions`, formData)
+                    .then(response => {
+                        setUploadMessage(response.data.message)
+                        console.log(response);
+                    })
+                    .catch(error => {
+                        setUploadMessage("")
+                        console.error(error);
+                        // handle error here
+                    });
+            } catch (error) {
+                console.error('Error uploading the file:', error);
+            }
+
+        }
+    };
 
     //Work Instruction Upload
-    const handleWorkInstructionUpload = async () => {
+    {/* const handleWorkInstructionUpload = async () => {
         const formData = new FormData();
         formData.append('file', iframeURL.file);
 
@@ -436,7 +468,8 @@ const ItemMaster = () => {
         } catch (error) {
             console.error('Error uploading the file:', error);
         }
-    };
+    };*/}
+
 
 
 
@@ -457,9 +490,9 @@ const ItemMaster = () => {
                                 flexDirection: 'column',
                                 mb: 2
 
-                            }} 
+                            }}
                             elevation={12}
-                            >
+                        >
                             <div className='row mb-2 g-2'>
 
                                 <div className='col' >
@@ -513,9 +546,9 @@ const ItemMaster = () => {
                                         flexDirection: 'column',
                                         mb: 2
 
-                                    }} 
+                                    }}
                                     elevation={12}
-                                    >
+                                >
                                     <div className='row mb-2 g-2'>
                                         <div className="form-floating col-md-6">
 
@@ -619,24 +652,56 @@ const ItemMaster = () => {
                                     </div>
                                     <div className="">
                                         <div className="d-flex">
-                                        <Button fullWidth color='secondary' component="label" variant="contained" startIcon={<UploadFileIcon />} size="small">
-                                            Work Instruction Upload
-                                            <VisuallyHiddenInput type="file" onChange={handleFileSelect}/>
-                                        </Button>
-                                        <Button className='ms-2' variant='contained' onClick={handleWorkInstructionUpload}>Upload</Button>
+                                            <Button fullWidth color='secondary' component="label" variant="contained" startIcon={<UploadFileIcon />} size="small">
+                                                Work Instruction Upload
+                                                <VisuallyHiddenInput type="file" onChange={handleWorkInstructionUpload} />
+
+                                            </Button>
+                                            {/* <Button className='ms-2' variant='contained' onClick={handleWorkInstructionUpload}>Upload</Button>*/}
                                         </div>
-                                        
-                                        {itemMasterData.workInsName && 
-                                            <div className='d-flex justify-content-center mt-2 '>
-                                            <Link target="_blank" underline="hover" href={`${process.env.REACT_APP_PORT}/workInstructions/${itemMasterData.workInsName}`} className='me-2'>{itemMasterData.workInsName}</Link>
-                                            <Button size='small' variant='outlined' color='error' onClick={()=> {setIframeURL(null); setItemMasterData((prev)=> ({...prev, workInsName: ""}))} } endIcon={<Delete />}>Remove</Button>
+
+                                        {uploadMessage &&
+                                            <div className=' d-flex justify-content-center mt-2  '>
+                                                {/* {itemMasterData.workInsName !== "" && (
+                                                    <Link target="_blank" underline="hover" href={`${process.env.REACT_APP_PORT}/workInstructions/${itemMasterData.workInsName}`} className='me-2'>
+                                                        {itemMasterData.workInsName}
+                                                        <Chip
+                                                            clickable={true}
+                                                            href={`${process.env.REACT_APP_PORT}/workInstructions/${itemMasterData.workInsName}`}
+                                                          
+                                                            label={itemMasterData.workInsName}
+                                                            size='small'
+                                                            color='warning'
+                                                        />
+                                                    </Link>
+                                                )}
+                                                <Chip
+                                                    label={uploadMessage}
+                                                    size='small'
+                                                    onClick={() => {
+                                                        setIframeURL(null);
+                                                        setItemMasterData((prev) => ({ ...prev, workInsName: "" }));
+                                                    }}
+                                                    onDelete={() => handleRemoveFile()}
+                                                    color="success"
+                                                    icon={<Done />}
+                                                />*/}
+
+                                                <Chip className='col-6' label={itemMasterData.workInsName} size='small' component="a" href={`${process.env.REACT_APP_PORT}/workInstructions/${itemMasterData.workInsName}`} target="_blank" clickable={true} color="primary" />
+                                               
+                                                <HighlightOffRounded  type="button" onClick={() => handleRemoveFile()} />
+                                                <Chip className=''
+                                                    label={uploadMessage}
+                                                    size='small'
 
 
+                                                    color="success"
+                                                    icon={<Done />}
+                                                />
+                                            </div>
 
-                                        </div>
-                                        
                                         }
-                                        
+
 
 
                                     </div>
@@ -647,7 +712,7 @@ const ItemMaster = () => {
                             <div className='col-md-2'>
                                 {!itemMasterData.itemMasterImage && <div style={{}}>
                                     <label htmlFor="fileInput" style={{ display: 'block', width: '100%', height: '200px', border: '2px dashed black', borderRadius: "10px", position: 'relative', cursor: 'pointer' }} className='text-center align-middle'>
-                                        
+
                                         <input
                                             type="file"
                                             id="fileInput"
@@ -672,11 +737,11 @@ const ItemMaster = () => {
                                 {/* {image &&  <div style={{ width: "100%", height: "100%", margin: "0 0px 0 0", padding: 0 }}>
                                 <img src={image} width="200px" height="200px" alt="Uploaded" style={{ maxWidth: '100%' }} />
                                 </div>} */}
-                                {itemMasterData.itemMasterImage && <div style={{ margin: 0  }}>
+                                {itemMasterData.itemMasterImage && <div style={{ margin: 0 }}>
                                     <div className='d-flex justify-content-center' style={{ width: "100%", height: "100%" }}>
-                                    <Badge type="button" badgeContent={"X"} onClick={() => setItemMasterData((prev) => ({ ...prev, itemMasterImage: "" }))}  style={{ width: "100%", height: "100%" }} color="error"><img src={itemMasterData.itemMasterImage} style={{ width: "100%", height: "100%", margin: "auto", display: "block", background: "inherit", backgroundSize: "cover" }}></img></Badge>
+                                        <Badge type="button" badgeContent={"X"} onClick={() => setItemMasterData((prev) => ({ ...prev, itemMasterImage: "" }))} style={{ width: "100%", height: "100%" }} color="error"><img src={itemMasterData.itemMasterImage} style={{ width: "100%", height: "100%", margin: "auto", display: "block", background: "inherit", backgroundSize: "cover" }}></img></Badge>
                                     </div>
-                                    
+
                                 </div>}
                             </div>
 
@@ -690,15 +755,15 @@ const ItemMaster = () => {
                                             flexDirection: 'column',
                                             mb: 2
 
-                                        }}  elevation={12}
-                                        >
-                                        <div style={{ maxHeight: "185px", overflow: "auto", height: "100%",  minHeight:"185px"}}>
+                                        }} elevation={12}
+                                    >
+                                        <div style={{ maxHeight: "185px", overflow: "auto", height: "100%", minHeight: "185px" }}>
                                             <table className='table table-sm table-bordered text-center align-middle'>
                                                 <tbody>
                                                     <tr>
                                                         <th>Si No</th>
                                                         <th>Calibration Points </th>
-                                                        <th style={{width:"2%"}}><Button size='small' color="primary" aria-label="add" onClick={() => addCalibrationPointRow()}>
+                                                        <th style={{ width: "2%" }}><Button size='small' color="primary" aria-label="add" onClick={() => addCalibrationPointRow()}>
                                                             <Add />
                                                         </Button></th>
                                                     </tr>
@@ -706,7 +771,7 @@ const ItemMaster = () => {
                                                         <tr key={index}>
                                                             <td>{index + 1}</td>
                                                             <td><input type='text' className='form-control form-control-sm' name='calibrationPoint' value={item.calibrationPoint} onChange={(e) => changeCalibrationPointRow(index, e.target.name, e.target.value)} onKeyDown={handleKeyDown} /></td>
-                                                            <td  style={{width:"2%"}}><Button size='small' color="error" aria-label="add" onClick={() => deleteCalibrationPointRow(index)}>
+                                                            <td style={{ width: "2%" }}><Button size='small' color="error" aria-label="add" onClick={() => deleteCalibrationPointRow(index)}>
                                                                 <Remove />
                                                             </Button></td>
                                                         </tr>
@@ -731,9 +796,9 @@ const ItemMaster = () => {
                                 flexDirection: 'column',
                                 mb: 2
 
-                            }} 
+                            }}
                             elevation={12}
-                            >
+                        >
                             <div className='row'>
 
                                 <div className="col-md-7">
@@ -837,9 +902,9 @@ const ItemMaster = () => {
                                 flexDirection: 'column',
                                 mb: 4
 
-                            }} 
+                            }}
                             elevation={12}
-                            >
+                        >
                             <div>
                                 <h3 className='text-center'>Item List</h3>
                                 <div className='row mb-2 g-2'>
@@ -888,12 +953,12 @@ const ItemMaster = () => {
                                             }}
                                             sx={{
                                                 ".MuiTablePagination-displayedRows": {
-        
+
                                                     "margin-top": "1em",
                                                     "margin-bottom": "1em"
                                                 }
                                             }}
-                                           
+
                                             onRowSelectionModelChange={(newRowSelectionModel, event) => {
                                                 setItemMasteSelectedRowIds(newRowSelectionModel);
                                                 console.log(event)
@@ -904,8 +969,8 @@ const ItemMaster = () => {
                                             }}
                                             onRowClick={updateItemMaster}
                                             checkboxSelection
-                                            
-                                            
+
+
 
 
                                         >

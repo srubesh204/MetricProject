@@ -53,7 +53,7 @@ const Employee = () => {
     const [employeeSelectedRowIds, setEmployeeSelectedRowIds] = useState([]);
 
     const employeeColumns = [
-        { field: 'id', headerName: 'Si. No', width: 70, renderCell: (params) => params.api.getRowIndexRelativeToVisibleRows(params.id) + 1 },
+        { field: 'id', headerName: 'Si. No', width: 70, renderCell: (params) => params.api.getAllRowIds().indexOf(params.id) + 1, align: "center" },
 
         { field: 'employeeCode', headerName: 'Emp.Code', width: 70 },
         { field: 'firstName', headerName: 'emp.Name', width: 130 },

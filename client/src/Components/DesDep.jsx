@@ -10,7 +10,7 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
-import { DataGrid,GridToolbar } from '@mui/x-data-grid';
+import { DataGrid, GridToolbar } from '@mui/x-data-grid';
 import { Delete } from '@mui/icons-material';
 
 
@@ -261,7 +261,7 @@ export const Department = () => {
 
 
   const areaColumns = [
-    { field: 'id', headerName: 'Si. No', width: 70, renderCell: (params) => params.api.getRowIndexRelativeToVisibleRows(params.id) + 1 },
+    { field: 'id', headerName: 'Si. No', width: 70, renderCell: (params) => params.api.getAllRowIds().indexOf(params.id) + 1, align: "center" },
 
     { field: 'area', headerName: 'Area', width: "90" },
     { field: 'areaStatus', headerName: ' Area Status', width: "90" },
@@ -564,7 +564,7 @@ export const Department = () => {
 
 
   const placeOfUsageColumns = [
-    { field: 'id', headerName: 'Si. No', width: 70, renderCell: (params) => params.api.getRowIndexRelativeToVisibleRows(params.id) + 1 },
+    { field: 'id', headerName: 'Si. No', width: 70, renderCell: (params) => params.api.getAllRowIds().indexOf(params.id) + 1, align: "center" },
 
     { field: 'placeOfUsage', headerName: 'Place Of Usage', width: "70" },
     { field: 'placeOfUsageStatus', headerName: ' Place Of Usage Status', width: "90" },
@@ -780,7 +780,7 @@ export const Department = () => {
                   display: 'flex',
                   flexDirection: 'column',
                   m: 2,
-                  
+
 
                 }}
                 elevation={12}
@@ -956,7 +956,7 @@ export const Department = () => {
                       getRowId={(row) => row._id}
                       initialState={{
                         pagination: {
-                          paginationModel: { page: 0, pageSize: 10},
+                          paginationModel: { page: 0, pageSize: 10 },
                         },
                       }}
                       sx={{
@@ -964,20 +964,20 @@ export const Department = () => {
 
                           "margin-top": "1em",
                           "margin-bottom": "1em",
-                         
-                          
-                          
+
+
+
                         }
                       }}
                       slots={{
                         toolbar: GridToolbar,
-                    }}
+                      }}
 
                       onRowSelectionModelChange={(newRowSelectionModel, event) => {
                         setSelectedRowIds(newRowSelectionModel);
                         console.log(event)
 
-                    }}
+                      }}
                       onRowClick={handleDepRowClick}
 
                       density="compact"
@@ -1255,12 +1255,12 @@ export const Department = () => {
                         }}
                         slots={{
                           toolbar: GridToolbar,
-                      }}
+                        }}
                         onRowSelectionModelChange={(newRowSelectionModel, event) => {
                           setAreaSelectedRowIds(newRowSelectionModel);
                           console.log(event)
-  
-                      }}
+
+                        }}
                         onRowClick={handleAreaRowClick}
 
                         density="compact"
@@ -1516,7 +1516,7 @@ export const Department = () => {
 
                       initialState={{
                         pagination: {
-                          paginationModel: { page: 0, pageSize: 10},
+                          paginationModel: { page: 0, pageSize: 10 },
                         },
                       }}
                       sx={{
@@ -1528,12 +1528,12 @@ export const Department = () => {
                       }}
                       slots={{
                         toolbar: GridToolbar,
-                    }}
+                      }}
                       onRowSelectionModelChange={(newRowSelectionModel, event) => {
                         setPlaceOfUsageSelectedRowIds(newRowSelectionModel);
                         console.log(event)
 
-                    }}
+                      }}
                       onRowClick={updatePof}
 
                       density="compact"
@@ -1730,16 +1730,40 @@ export const Designation = () => {
 
 
   const [designationList, setDesignationList] = useState([]);
+  console.log(designationData)
 
-
+ 
   const handleChange = (e) => {
     const { name, value } = e.target;
     const formattedValue = name === 'designation'
       ? value.toLowerCase().split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')
       : value;
-    setDesignationData((prev) => ({ ...prev, [name]: formattedValue }));
-
+      setDesignationData((prev) => ({ ...prev, [name]: formattedValue }))
   };
+
+
+  {/*} const handleChanges = (e) => {
+    const { name, value } = e.target;
+    let formattedValue = value;
+  
+    if (name === 'designation') {
+      formattedValue = value
+        .toLowerCase()
+        .split(' ')
+        .map(word => {
+          const capitalizedWord = word.charAt(0).toUpperCase() + word.slice(1);
+          // Check if the word was originally capitalized
+          if (word.charAt(0) === word.charAt(0).toUpperCase()) {
+            return '.' + capitalizedWord;
+            // Replace with your desired special character and capitalized word
+          }
+          return capitalizedWord;
+        })
+        .join(' ');
+    }
+  
+    setDesignationData(prev => ({ ...prev, [name]: formattedValue }));
+  };*/}
 
   //get Departments
 
@@ -1769,7 +1793,7 @@ export const Designation = () => {
 
 
   const designationColumns = [
-    { field: 'id', headerName: 'Si. No', width: 100, renderCell: (params) => params.api.getRowIndexRelativeToVisibleRows(params.id) + 1 },
+    { field: 'id', headerName: 'Si. No', width: 70, renderCell: (params) => params.api.getAllRowIds().indexOf(params.id) + 1, align: "center" },
 
     { field: 'designation', headerName: 'Designation', width: "200" },
     { field: 'designationStatus', headerName: 'Designation Status', width: "150" },
@@ -2183,7 +2207,7 @@ export const Designation = () => {
                 </div>
               </div>
 
-              <div style={{ height: 480, width: '100%' }}>
+              <div style={{ height: 500, width: '100%' }}>
                 <DataGrid
                   rows={designationList}
                   columns={designationColumns}
@@ -2191,7 +2215,7 @@ export const Designation = () => {
 
                   initialState={{
                     pagination: {
-                      paginationModel: { page: 0, pageSize: 10},
+                      paginationModel: { page: 0, pageSize: 10 },
                     },
                   }}
                   sx={{
@@ -2203,12 +2227,12 @@ export const Designation = () => {
                   }}
                   slots={{
                     toolbar: GridToolbar,
-                }}
+                  }}
                   onRowSelectionModelChange={(newRowSelectionModel, event) => {
                     setDesignationSelectedRowIds(newRowSelectionModel);
                     console.log(event)
 
-                }}
+                  }}
                   onRowClick={handleDesRowClick}
 
                   density="compact"

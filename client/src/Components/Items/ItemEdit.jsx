@@ -10,6 +10,7 @@ import { Delete, Done } from '@mui/icons-material';
 import { useParams } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 import { Link as RouterLink } from 'react-router-dom';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 
 const ItemEdit = () => {
 
@@ -764,7 +765,7 @@ const ItemEdit = () => {
                                                 name="itemReceiptDate"
                                                 value={dayjs(itemAddData.itemReceiptDate)}
                                                 onChange={(newValue) =>
-                                                    setItemAddData((prev) => ({ ...prev, itemReceiptDate: newValue.format("YYYY-MM-DD") }))
+                                                    setItemAddData((prev) => ({ ...prev, itemReceiptDate: newValue.format("DD-MM-YYYY") }))
                                                 }
                                                 label="Item Receipt Date"
                                                 slotProps={{ textField: { size: 'small' } }}
@@ -1044,6 +1045,7 @@ const ItemEdit = () => {
                                             value={dayjs(itemAddData.itemCalDate)}
                                             onChange={(newValue) =>
                                                 setItemAddData((prev) => ({ ...prev, itemCalDate: newValue.format("YYYY-MM-DD") }))
+
                                             }
                                             label="Calibration Date"
 
@@ -1237,7 +1239,7 @@ const ItemEdit = () => {
                               <BorderColor/>  Update
                             </Button>
                             <Button variant='contained' component={RouterLink} to={`/itemList/`} color='error' onClick={()=>setItemAddData(initialItemAddData)} type="reset">
-                                Cancel
+                            <ArrowBackIcon /> Back To List
                             </Button>
                             
                         </div>

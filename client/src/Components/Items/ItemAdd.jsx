@@ -9,6 +9,8 @@ import { Delete, Done } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
 import { Link as RouterLink } from 'react-router-dom';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import { Add, Remove,HighlightOffRounded } from '@mui/icons-material';
+import { Link } from '@mui/material';
 
 const ItemAdd = () => {
 
@@ -122,7 +124,7 @@ const ItemAdd = () => {
             const response = await axios.get(
                 `${process.env.REACT_APP_PORT}/itemAdd/getDistinctItemName`
             );
-            console.log(response.data)
+            console.log(response.data.result)
             setItemMasterDistNames(response.data.result);
 
         } catch (err) {
@@ -132,6 +134,7 @@ const ItemAdd = () => {
     useEffect(() => {
         getDistinctItemName();
     }, []);
+    console.log(itemMasterDistNames)
 
 
 
@@ -549,7 +552,7 @@ const ItemAdd = () => {
     };
 
     const [uploadMessage, setUploadMessage] = useState("")
-
+    const [iframeURL, setIframeURL] = useState({ fileURL: "", fileName: "", file: "" });
     const handleCertificateUpload = (event) => {
         const selectedFile = event.target.files[0];
         if (selectedFile) {
@@ -1010,7 +1013,7 @@ const ItemAdd = () => {
                                             <td>{index + 1}</td>
                                             <td >{item}</td>
                                         </tr>
-                                    ))} 
+                                    ))}
 
 
                                 </tbody>
@@ -1070,9 +1073,18 @@ const ItemAdd = () => {
                                     </div>
 
                                     {uploadMessage &&
-                                        <div className="col-md-12 d-flex justify-content-between">
-                                            {itemAddData.itemCertificateName !== "" && <Chip clickable={true} onDelete={() => handleRemoveFile()} label={itemAddData.itemCertificateName} size='small' color='warning' />}
-                                            <Chip label={uploadMessage} size='small' color="success" icon={<Done />} />
+                                        <div className="col-md-7 d-flex justify-content-between">
+
+                                            <Chip label={itemAddData.itemCertificateName} size='small' component="a" href={`${process.env.REACT_APP_PORT}/workInstructions/${itemAddData.itemCertificateName}`} target="_blank" clickable={true} color="primary" />
+                                            <HighlightOffRounded  type="button" onClick={() => handleRemoveFile()} />
+                                            <Chip col-md-4
+                                                label={uploadMessage}
+                                                size='small'
+
+
+                                                color="success"
+                                                icon={<Done />}
+                                            />
                                         </div>}
 
 
@@ -1225,7 +1237,7 @@ const ItemAdd = () => {
                                 Submit
                             </Button>
                             <Button component={RouterLink} to={`/itemList/`} variant="contained" color="error">
-                            <ArrowBackIcon /> Back To List
+                                <ArrowBackIcon /> Back To List
                             </Button>
                         </div>
 
