@@ -19,6 +19,7 @@ import '@fontsource/roboto/700.css';
 import ItemList from './Components/Items/ItemList';
 import FileViewer from './Components/Test/FileViewer';
 import Login from './Components/Dashboard/Login';
+import InsHisCard from './Components/reports/InsHisCard';
 
 
 function App() {
@@ -34,7 +35,7 @@ function App() {
     <div className="App">
 
       
-      {fullList.includes(location.pathname) ? "":<Dashboard />}
+      {fullList.includes(location.pathname) ? "":""}
       <Routes>
         <Route path="/desdep" element={<Department />} />
         <Route path="/des" element={<Designation />} />
@@ -49,6 +50,7 @@ function App() {
         <Route path="/itemList" element={<ItemList />} />
         <Route path="/test" element={<FileViewer />} />
         <Route path="/login" element={<Login/>} />
+        <Route path="/reports" element={<InsHisCard/>} />
       </Routes>
 
     </div>

@@ -11,10 +11,11 @@ import { useParams } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 import { Link as RouterLink } from 'react-router-dom';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import { Add, Remove, HighlightOffRounded } from '@mui/icons-material';
 
 const ItemEdit = () => {
 
-    const {id} = useParams()
+    const { id } = useParams()
     console.log(id)
 
     // Units Data
@@ -35,7 +36,7 @@ const ItemEdit = () => {
         UnitFetch()
     }, []);
 
-    
+
 
 
     const [departments, setDepartments] = useState([])
@@ -150,7 +151,7 @@ const ItemEdit = () => {
     const [OEMList, setOEMList] = useState([]);
     const [supplierList, setSupplierList] = useState([])
     const [suppOEM, setSuppOEM] = useState([]);
-
+  
 
 
 
@@ -305,7 +306,7 @@ const ItemEdit = () => {
     });
 
     useEffect(() => {
-      getItemDataById();
+        getItemDataById();
     }, [])
     const getItemDataById = async () => {
         try {
@@ -313,7 +314,7 @@ const ItemEdit = () => {
                 `${process.env.REACT_APP_PORT}/itemAdd/getItemAddById/${id}`
             );
             setItemAddData(response.data.result)
-             console.log(response)
+            console.log(response)
 
         } catch (err) {
             console.log(err);
@@ -334,7 +335,25 @@ const ItemEdit = () => {
         if (name === "itemItemMasterIMTENo") {
             setItemAddData((prev) => ({ ...prev, itemItemMasterIMTENo: typeof value === 'string' ? value.split(',') : value }));
         }
-
+        if (name === "itemCalibrationSource") {
+            if(value=== "InHouse"){
+                console.log("InHouse")
+                setItemAddData((prev) => ({ ...prev, itemSupplier :[], itemOEM:[] }));
+            }
+            if(value=== "OutSource"){
+                console.log("OutSource")
+                setItemAddData((prev) => ({ ...prev, itemItemMasterIMTENo :[], itemOEM:[] }));
+            }
+            if(value=== "OEM"){
+                console.log("OEM")
+                setItemAddData((prev) => ({ ...prev, itemItemMasterIMTENo :[], itemSupplier:[] }));
+            }
+            
+            
+        }
+        if (name === "itemItemMasterName") {
+            setItemAddData((prev) => ({ ...prev, itemItemMasterName: value }));
+        }
         if (name === "itemSupplier") {
             setItemAddData((prev) => ({ ...prev, itemSupplier: typeof value === 'string' ? value.split(',') : value }));
         }
@@ -343,9 +362,7 @@ const ItemEdit = () => {
             setItemAddData((prev) => ({ ...prev, itemOEM: typeof value === 'string' ? value.split(',') : value }));
         }
 
-        if (name === "itemItemMasterName") {
-            setItemAddData((prev) => ({ ...prev, itemItemMasterName: value }));
-        }
+        
 
         setItemAddData((prev) => ({ ...prev, [name]: value }));
     }
@@ -519,9 +536,9 @@ const ItemEdit = () => {
     const [open, setOpen] = useState(false)
 
     const navigate = useNavigate();
-    
-        
-      
+
+
+
 
     const updateItemData = async (e) => {
         e.preventDefault();
@@ -537,9 +554,9 @@ const ItemEdit = () => {
             setItemAddData(initialItemAddData)
             setTimeout(() => {
                 navigate('/itemList');
-              }, 3000); 
-            
-           
+            }, 3000);
+
+
         } catch (err) {
 
             setSnackBarOpen(true)
@@ -618,7 +635,7 @@ const ItemEdit = () => {
     const getItemMasterByName = async () => {
         try {
             const response = await axios.post(
-                `${process.env.REACT_APP_PORT}/itemAdd/getItemAddByName`, { itemMasterName: itemAddData.itemItemMasterName }
+                `${process.env.REACT_APP_PORT}/itemAdd/getItemAddByName`, { itemItemMasterName: itemAddData.itemItemMasterName }
 
             );
 
@@ -630,7 +647,10 @@ const ItemEdit = () => {
         }
     };
     useEffect(() => {
-        getItemMasterByName();
+        if(itemAddData.itemItemMasterName){
+            getItemMasterByName();
+        }
+        
     }, [itemAddData.itemItemMasterName]);
 
 
@@ -729,7 +749,7 @@ const ItemEdit = () => {
                                 </div>
                                 <div className="row g-2">
                                     <div className="col-lg-4">
-                                        <TextField size='small' variant='outlined' label="MFR.Si.No." onChange={handleItemAddChange} name='itemMFRNo'value={itemAddData.itemMFRNo} id='itemMFRNoId' fullWidth />
+                                        <TextField size='small' variant='outlined' label="MFR.Si.No." onChange={handleItemAddChange} name='itemMFRNo' value={itemAddData.itemMFRNo} id='itemMFRNoId' fullWidth />
                                     </div>
                                     <div className='col-lg-8 d-flex justify-content-between'>
                                         <TextField size='small' variant='outlined' name='itemLC' onChange={handleItemAddChange} id="itemLCId" value={itemAddData.itemLC} label="Least Count" fullWidth />
@@ -755,7 +775,10 @@ const ItemEdit = () => {
                                         <div className="col-lg me-1">
                                             <TextField size='small' select variant='outlined' value={itemAddData.itemStatus} onChange={handleItemAddChange} label="Item Status" name='itemStatus' id='itemStatusId' fullWidth >
                                                 <MenuItem value="Active">Active</MenuItem>
-                                                <MenuItem value="InActive">InActive</MenuItem>
+                                                <MenuItem value="Spara">Spara</MenuItem>
+                                                <MenuItem value="Breakdown">Breakdown</MenuItem>
+                                                <MenuItem value="Missing">Missing</MenuItem>
+                                                <MenuItem value="Rejection">Rejection</MenuItem>
                                             </TextField>
                                         </div>
                                         <div className="col-lg">
@@ -1069,7 +1092,7 @@ const ItemEdit = () => {
                                             format="DD-MM-YYYY" />
                                     </div>
                                     <div className="col-lg-12">
-                                        <TextField size='small' fullWidth variant='outlined' onChange={handleItemAddChange} label="Calibrated at"  value={itemAddData.itemCalibratedAt}select name='itemCalibratedAt'>
+                                        <TextField size='small' fullWidth variant='outlined' onChange={handleItemAddChange} label="Calibrated at" value={itemAddData.itemCalibratedAt} select name='itemCalibratedAt'>
                                             <MenuItem value="InHouse">InHouse</MenuItem>
                                             {suppOEM.map((item, index) => (
                                                 <MenuItem key={index} value={item.fullName}>{item.aliasName}</MenuItem>
@@ -1078,17 +1101,20 @@ const ItemEdit = () => {
                                         </TextField>
                                     </div>
                                     <div className="col-lg-12">
-                                        <Button component="label" variant="contained" fullWidth >
+                                        <Button component="label" value={itemAddData.itemCertificateName} variant="contained"  fullWidth >
 
                                             Certificate Upload
-                                            <VisuallyHiddenInput type="file" onChange={handleCertificateUpload} />
+                                            <VisuallyHiddenInput type="file" onChange={handleCertificateUpload}  />
+                                            <button type='button' style={{ display: "none" }} value={itemAddData.itemCertificateName}>Select File</button>
                                         </Button>
                                     </div>
 
-                                    {uploadMessage &&
-                                        <div className="col-md-12 d-flex justify-content-between">
-                                            {itemAddData.itemCertificateName !== "" && <Chip clickable={true} onDelete={() => handleRemoveFile()} label={itemAddData.itemCertificateName} size='small' color='warning' />}
-                                            <Chip label={uploadMessage} size='small' color="success" icon={<Done />} />
+                                    {itemAddData.itemCertificateName&&
+                                        <div className="col-md-7 d-flex justify-content-between">
+                                            <Chip label={itemAddData.itemCertificateName} size='small' component="a" href={`${process.env.REACT_APP_PORT}/workInstructions/${itemAddData.itemCertificateName}`} target="_blank" clickable={true} color="primary" />
+                                            <HighlightOffRounded type="button" onClick={() => handleRemoveFile()} />
+                                            {uploadMessage&&
+                                            <Chip label={uploadMessage} size='small' color="success" icon={<Done />} />}
                                         </div>}
 
 
@@ -1148,7 +1174,7 @@ const ItemEdit = () => {
                             <table className='table table-sm table-bordered text-center'>
                                 <tbody>
                                     <tr>
-                                    <th>Parameter</th>
+                                        <th>Parameter</th>
                                         <th>Range/Size</th>
                                         <th>Unit</th>
                                         {itemAddData.itemType === "Attribute" && <th colspan="3">Permissible Size</th>}
@@ -1159,7 +1185,7 @@ const ItemEdit = () => {
                                         {itemAddData.itemType === "Attribute" && <th colspan="2">Observed size</th>}
 
 
-                                        
+
                                         {itemAddData.itemType === "Variable" && <th>Accuracy</th>}
                                         {itemAddData.itemType === "Variable" && <th>Unit</th>}
                                         {itemAddData.itemType === "Variable" && <th>Observed Error</th>}
@@ -1202,7 +1228,7 @@ const ItemEdit = () => {
                                             {itemAddData.itemType === "Attribute" && <td><input type="text" className="form-control form-control-sm" id="acMinId" name="acMin" placeholder='min' value={item.acMin} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} /></td>}
                                             {itemAddData.itemType === "Attribute" && <td><input type="text" className='form-control form-control-sm' id="acMaxId" name="acMax" placeholder='max' value={item.acMax} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} /></td>}
                                             {itemAddData.itemType === "Variable" && <td><input type="text" className="form-control form-control-sm" id="acAccuracyId" name="acAccuracy" value={item.acAccuracy} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} /></td>}
-      
+
                                             {itemAddData.itemType === "Variable" && <td> <select className="form-select form-select-sm" id="acAccuracyUnitId" name="acAccuracyUnit" value={item.acAccuracyUnit} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} >
                                                 <option value="">-Select-</option>
                                                 {units.map((item, index) => (
@@ -1235,13 +1261,13 @@ const ItemEdit = () => {
                         </Paper>
                         <div className="d-flex justify-content-end">
 
-                            <Button variant='contained' color='warning' onClick={() => { setOpen(true)}}  className='me-3' type="button"  >
-                              <BorderColor/>  Update
+                            <Button variant='contained' color='warning' onClick={() => { setOpen(true) }} className='me-3' type="button"  >
+                                <BorderColor />  Update
                             </Button>
-                            <Button variant='contained' component={RouterLink} to={`/itemList/`} color='error' onClick={()=>setItemAddData(initialItemAddData)} type="reset">
-                            <ArrowBackIcon /> Back To List
+                            <Button variant='contained' component={RouterLink} to={`/itemList/`} color='error' onClick={() => setItemAddData(initialItemAddData)} type="reset">
+                                <ArrowBackIcon /> Back To List
                             </Button>
-                            
+
                         </div>
 
 

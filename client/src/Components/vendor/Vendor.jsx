@@ -860,8 +860,9 @@ const Vendor = () => {
                                                 style={{ display: 'none' }}
                                                 onChange={handleCertificateUpload}
 
+
                                             />
-                                            <button type='button' style={{ display: "none" }} onClick={() => fileInputRef.current.click()}>Select File</button>
+                                            <button type='button' style={{ display: "none" }} onClick={() => fileInputRef.current.click()} value={vendorData.certificate}>Select File</button>
                                         </div>
                                         <div className="d-flex justify-content-spaced align-middle" style={{ width: "100%", height: "50px" }}>
                                             <div
@@ -895,9 +896,18 @@ const Vendor = () => {
                                             {vendorData.certificate &&
                                                 <div className='d-flex ' style={{ width: "60%", height: '100%', border: '2px dashed #ccc' }}>
 
-                                                    <Chip label={vendorData.certificate} component="a" href={`${process.env.REACT_APP_PORT}/vendorCertificates/${vendorData.certificate}`} target="_blank" clickable={true} />
+                                                    {/*<Chip label={vendorData.certificate} component="a" href={`${process.env.REACT_APP_PORT}/vendorCertificates/${vendorData.certificate}`} target="_blank" clickable={true} />*/}
+                                                    {vendorData.certificate !== "" && (
+                                                        <a
+                                                        href={`${process.env.REACT_APP_PORT}/vendorCertificates/${vendorData.certificate}`} 
+                                                            target="_blank"
+                                                            rel="noopener noreferrer"
+                                                            className="me-2"
+                                                        >
+                                                            {vendorData.certificate}
+                                                        </a>
+                                                    )}
                                                     <HighlightOffRounded type="button" onClick={() => RemoveFile()} />
-
 
                                                 </div>}
                                             {/*} <div className='d-flex ' style={{ width: "20%", height: '60%', border: '2px dashed #ccc' }}>
@@ -915,6 +925,7 @@ const Vendor = () => {
                                         {vendorData.certificate &&
                                             <Chip
                                                 label={uploadMessage}
+
                                                 size='small'
 
                                                 color="success"

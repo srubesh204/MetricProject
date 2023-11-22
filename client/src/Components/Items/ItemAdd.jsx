@@ -306,6 +306,25 @@ const ItemAdd = () => {
         if (name === "itemRangeSizeUnit") {
             setItemAddData((prev) => ({ ...prev, [name]: value, acceptanceCriteria: [{ acAccuracyUnit: value, acRangeSizeUnit: value }] }))
         }
+        if (name === "itemCalibrationSource") {
+            if(value=== "InHouse"){
+                console.log("InHouse")
+                setItemAddData((prev) => ({ ...prev, itemSupplier :[], itemOEM:[] }));
+            }
+            if(value=== "OutSource"){
+                console.log("OutSource")
+                setItemAddData((prev) => ({ ...prev, itemItemMasterIMTENo :[], itemOEM:[] }));
+            }
+            if(value=== "OEM"){
+                console.log("OEM")
+                setItemAddData((prev) => ({ ...prev, itemItemMasterIMTENo :[], itemSupplier:[] }));
+            }
+            
+            
+        }
+        if (name === "itemItemMasterName") {
+            setItemAddData((prev) => ({ ...prev, itemItemMasterName: value }));
+        }
 
 
         if (name === "itemPartName") {
@@ -323,9 +342,7 @@ const ItemAdd = () => {
             setItemAddData((prev) => ({ ...prev, itemOEM: typeof value === 'string' ? value.split(',') : value }));
         }
 
-        if (name === "itemItemMasterName") {
-            setItemAddData((prev) => ({ ...prev, itemItemMasterName: value }));
-        }
+      
 
 
 
@@ -603,7 +620,7 @@ const ItemAdd = () => {
     const getItemMasterByName = async () => {
         try {
             const response = await axios.post(
-                `${process.env.REACT_APP_PORT}/itemAdd/getItemAddByName`, { itemAddMasterName: itemAddData.itemItemMasterName }
+                `${process.env.REACT_APP_PORT}/itemAdd/getItemAddByName`, { itemItemMasterName: itemAddData.itemItemMasterName }
 
             );
 
@@ -615,7 +632,10 @@ const ItemAdd = () => {
         }
     };
     useEffect(() => {
-        getItemMasterByName();
+        if(itemAddData.itemItemMasterName){
+            getItemMasterByName();
+        }
+        
     }, [itemAddData.itemItemMasterName]);
 
 
@@ -1065,19 +1085,20 @@ const ItemAdd = () => {
                                         </TextField>
                                     </div>
                                     <div className="col-lg-12">
-                                        <Button component="label" variant="contained" fullWidth >
+                                        <Button component="label" value={ itemAddData.itemCertificateName}  variant="contained" fullWidth >
 
                                             Certificate Upload
-                                            <VisuallyHiddenInput type="file" onChange={handleCertificateUpload} />
+                                            <VisuallyHiddenInput type="file"  onChange={handleCertificateUpload} />
                                         </Button>
                                     </div>
 
-                                    {uploadMessage &&
+                                    {itemAddData.itemCertificateName &&
                                         <div className="col-md-7 d-flex justify-content-between">
 
-                                            <Chip label={itemAddData.itemCertificateName} size='small' component="a" href={`${process.env.REACT_APP_PORT}/workInstructions/${itemAddData.itemCertificateName}`} target="_blank" clickable={true} color="primary" />
+                                            <Chip label={itemAddData.itemCertificateName}  size='small' component="a" href={`${process.env.REACT_APP_PORT}/workInstructions/${itemAddData.itemCertificateName}`} target="_blank" clickable={true} color="primary" />
                                             <HighlightOffRounded  type="button" onClick={() => handleRemoveFile()} />
-                                            <Chip col-md-4
+                                    
+                                             <Chip col-md-4
                                                 label={uploadMessage}
                                                 size='small'
 

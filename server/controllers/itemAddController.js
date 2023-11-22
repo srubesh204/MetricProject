@@ -307,8 +307,8 @@ const itemAddController = {
   },
   getItemAddByName: async (req, res) => {
     try {
-      const {itemMasterName} = req.body
-      const getItemAddByName = await itemAddModel.find({itemMasterName: itemMasterName})  // To return the updated document);
+      const {itemItemMasterName} = req.body
+      const getItemAddByName = await itemAddModel.find({itemAddMasterName: itemItemMasterName})  // To return the updated document);
       res.status(202).json({ result: getItemAddByName, status: 1 });
       //res.status(200).json(employees);
     } catch (err) {

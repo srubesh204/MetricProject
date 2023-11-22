@@ -652,15 +652,16 @@ const ItemMaster = () => {
                                     </div>
                                     <div className="">
                                         <div className="d-flex">
-                                            <Button fullWidth color='secondary' component="label" variant="contained" startIcon={<UploadFileIcon />} size="small">
+                                            <Button fullWidth color='secondary'component="label" variant="contained" startIcon={<UploadFileIcon />} size="small">
                                                 Work Instruction Upload
-                                                <VisuallyHiddenInput type="file" onChange={handleWorkInstructionUpload} />
+                                                <VisuallyHiddenInput type="file"  onChange={handleWorkInstructionUpload} />
 
                                             </Button>
                                             {/* <Button className='ms-2' variant='contained' onClick={handleWorkInstructionUpload}>Upload</Button>*/}
+                                            {/*<button type='button' style={{ display: "none" }}  value={itemMasterData.workInsName}>Select File</button>*/}
                                         </div>
 
-                                        {uploadMessage &&
+                                        {itemMasterData.workInsName &&
                                             <div className=' d-flex justify-content-center mt-2  '>
                                                 {/* {itemMasterData.workInsName !== "" && (
                                                     <Link target="_blank" underline="hover" href={`${process.env.REACT_APP_PORT}/workInstructions/${itemMasterData.workInsName}`} className='me-2'>
@@ -690,6 +691,7 @@ const ItemMaster = () => {
                                                 <Chip className='col-6' label={itemMasterData.workInsName} size='small' component="a" href={`${process.env.REACT_APP_PORT}/workInstructions/${itemMasterData.workInsName}`} target="_blank" clickable={true} color="primary" />
                                                
                                                 <HighlightOffRounded  type="button" onClick={() => handleRemoveFile()} />
+                                                {uploadMessage && 
                                                 <Chip className=''
                                                     label={uploadMessage}
                                                     size='small'
@@ -697,7 +699,7 @@ const ItemMaster = () => {
 
                                                     color="success"
                                                     icon={<Done />}
-                                                />
+                                                />}
                                             </div>
 
                                         }
