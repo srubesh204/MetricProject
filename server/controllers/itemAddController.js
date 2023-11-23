@@ -326,6 +326,27 @@ const itemAddController = {
       res.status(500).send('Error on ItemAdd');
     }
   },
+  getDistinctItemDepartments: async (req, res) => {
+    try {
+      const itemDepartments = await itemAddModel.find().distinct('itemDepartment');
+      res.status(202).json({ result: itemDepartments, status: 1 });
+      //res.status(200).json(employees);
+    } catch (err) {
+      console.error(err);
+      res.status(500).send('Error on ItemAdd Get');
+    }
+  },
+  getItemAddByDepName: async (req, res) => {
+    try {
+      const {itemDepartment} = req.body
+      const getItemAddByDepName = await itemAddModel.find({itemDepartment: itemDepartment})  // To return the updated document);
+      res.status(202).json({ result: getItemAddByDepName, status: 1 });
+      //res.status(200).json(employees);
+    } catch (err) {
+      console.error(err);
+      res.status(500).send('Error on ItemAdd Get');
+    }
+  },
 }
 
 

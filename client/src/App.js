@@ -28,13 +28,13 @@ function App() {
   console.log(location.pathname);
   console.log('search', location.search);
 
-  const fullList =['/itemadd', '/itemedit/:id', '/itemlist', '/test',"/home", "/login"]
+  const fullList =['/itemadd', '/itemedit/:id', '/itemList', '/test','/home', '/login']
   console.log(fullList.includes(location.pathname))
   return (
     <div className="App">
 
       
-      {fullList.includes(location.pathname) ? "":""}
+      {fullList.includes(location.pathname) ? "":<Dashboard />}
       <Routes>
         <Route path="/desdep" element={<Department />} />
         <Route path="/des" element={<Designation />} />
@@ -44,7 +44,7 @@ function App() {
         <Route path="/itemMaster" element={<ItemMaster />} />
         <Route path="/devi" element={<Devi />} />
         <Route path="/home" element={<Home />} />
-        <Route path="/itemAdd" element={<ItemAdd />} />
+        <Route path="/itemadd" element={<ItemAdd />} />
         <Route path="/itemEdit/:id" element={<ItemEdit />} />
         <Route path="/itemList" element={<ItemList />} />
         <Route path="/test" element={<FileViewer />} />
