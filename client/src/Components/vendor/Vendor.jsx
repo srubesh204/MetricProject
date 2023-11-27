@@ -106,7 +106,7 @@ const Vendor = () => {
         fullName: "",
         dor: dayjs().format("YYYY-MM-DD"),
         address: "",
-        state: "",
+        state: "Active",
         city: "",
         oem: "",
         customer: "",
@@ -573,10 +573,13 @@ const Vendor = () => {
             headerName: 'Status',
             // description: 'This column has a value getter and is not sortable.',
             width: 100,
+
         },
         {
             field: 'vendorType',
             headerName: 'Vendor Type',
+            headerAlign: "center",
+
             width: 300,
 
             renderHeader: (params) => {
@@ -899,7 +902,7 @@ const Vendor = () => {
                                                     {/*<Chip label={vendorData.certificate} component="a" href={`${process.env.REACT_APP_PORT}/vendorCertificates/${vendorData.certificate}`} target="_blank" clickable={true} />*/}
                                                     {vendorData.certificate !== "" && (
                                                         <a
-                                                        href={`${process.env.REACT_APP_PORT}/vendorCertificates/${vendorData.certificate}`} 
+                                                            href={`${process.env.REACT_APP_PORT}/vendorCertificates/${vendorData.certificate}`}
                                                             target="_blank"
                                                             rel="noopener noreferrer"
                                                             className="me-2"
@@ -977,7 +980,7 @@ const Vendor = () => {
                                                     <td><input type="text" className='form-control form-control-sm' id="mailId" name="mailId" value={item.mailId} onChange={(e) => changeVendorRow(index, e.target.name, e.target.value)} /></td>
 
                                                     <td> <select className="form-select form-select-sm" id="vcStatusId" name="vcStatus" value={item.vcStatus} onChange={(e) => changeVendorRow(index, e.target.name, e.target.value)} aria-label="Floating label select example">
-                                                        <option selected>-select-</option>
+                                                        {/*<option selected>-select-</option>*/}
                                                         <option value="Active">Active</option>
                                                         <option value="InActive">InActive</option>
 

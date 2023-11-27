@@ -13,6 +13,8 @@ import { Link as RouterLink } from 'react-router-dom';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { Add, Remove, HighlightOffRounded } from '@mui/icons-material';
 
+
+
 const ItemEdit = () => {
 
     const { id } = useParams()
@@ -36,8 +38,7 @@ const ItemEdit = () => {
         UnitFetch()
     }, []);
 
-
-
+   
 
     const [departments, setDepartments] = useState([])
     const DepartmentFetch = async () => {
@@ -224,7 +225,9 @@ const ItemEdit = () => {
                 acRangeSize: "",
                 acMin: "",
                 acMax: "",
-                acWearLimit: "",
+                acPsMin:"",
+                acPsMax:"",
+                acPsWearLimit: "",
                 acAccuracy: "",
                 acObservedSize: ""
             }
@@ -271,7 +274,9 @@ const ItemEdit = () => {
                 acRangeSize: "",
                 acMin: "",
                 acMax: "",
-                acWearLimit: "",
+                acPsMin:"",
+                acPsMax:"",
+                acPsWearLimit: "",
                 acAccuracy: "",
                 acObservedSize: ""
             }
@@ -486,7 +491,9 @@ const ItemEdit = () => {
                 acRangeSizeUnit: "",
                 acMin: "",
                 acMax: "",
-                acWearLimit: "",
+                acPsMin:"",
+                acPsMax:"",
+                acPsWearLimit: "",
                 acAccuracy: "",
                 acAccuracyUnit: "",
                 acObservedSize: "",
@@ -1186,7 +1193,7 @@ const ItemEdit = () => {
 
 
 
-                                        {itemAddData.itemType === "Variable" && <th>Accuracy</th>}
+                                        {itemAddData.itemType === "Variable" && <th>Accuracy(+ & -)</th>}
                                         {itemAddData.itemType === "Variable" && <th>Unit</th>}
                                         {itemAddData.itemType === "Variable" && <th>Observed Error</th>}
 
@@ -1194,7 +1201,7 @@ const ItemEdit = () => {
 
 
 
-                                        {itemAddData.itemType === "Reference Standard" && <th>Accuracy</th>}
+                                        {itemAddData.itemType === "Reference Standard" && <th>Accuracy(+ & -)</th>}
                                         {itemAddData.itemType === "Reference Standard" && <th>Unit</th>}
 
                                         {itemAddData.itemType === "Reference Standard" && <th colspan="2">Observed size</th>}
@@ -1220,11 +1227,11 @@ const ItemEdit = () => {
 
 
                                             </select></td>
-                                            {itemAddData.itemType === "Attribute" && <td><input type="text" className="form-control form-control-sm" id="acMinId" name="acMin" placeholder='min' value={item.acMin} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} /></td>}
+                                            {itemAddData.itemType === "Attribute" && <td><input type="text" className="form-control form-control-sm" id="acPsMinId" name="acPsMin" placeholder='min' value={item.acPsMin} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} /></td>}
 
-                                            {itemAddData.itemType === "Attribute" && <td><input type="text" className='form-control form-control-sm' id="acMaxId" name="acMax" placeholder='max' value={item.acMax} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} /></td>}
+                                            {itemAddData.itemType === "Attribute" && <td><input type="text" className='form-control form-control-sm' id="acPsMaxId" name="acPsMax" placeholder='max' value={item.acPsMax} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} /></td>}
 
-                                            {itemAddData.itemType === "Attribute" && <td><input type="text" className="form-control form-control-sm" id="acWearLimitId" name="acWearLimit" placeholder='wearLimit' value={item.acWearLimit} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} /></td>}
+                                            {itemAddData.itemType === "Attribute" && <td><input type="text" className="form-control form-control-sm" id="acPsWearLimitId" name="acPsWearLimit" placeholder='wearLimit' value={item.acPsWearLimit} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} /></td>}
                                             {itemAddData.itemType === "Attribute" && <td><input type="text" className="form-control form-control-sm" id="acMinId" name="acMin" placeholder='min' value={item.acMin} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} /></td>}
                                             {itemAddData.itemType === "Attribute" && <td><input type="text" className='form-control form-control-sm' id="acMaxId" name="acMax" placeholder='max' value={item.acMax} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} /></td>}
                                             {itemAddData.itemType === "Variable" && <td><input type="text" className="form-control form-control-sm" id="acAccuracyId" name="acAccuracy" value={item.acAccuracy} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} /></td>}
@@ -1293,7 +1300,7 @@ const ItemEdit = () => {
                             <DialogActions>
                                 <Button onClick={() => setOpen(false)}>Cancel</Button>
                                 <Button type="button" onClick={(e) => { updateItemData(e); setOpen(false); }} autoFocus>
-                                    Create
+                                    Update
                                 </Button>
                             </DialogActions>
                         </Dialog>

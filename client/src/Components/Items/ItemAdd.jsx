@@ -9,7 +9,7 @@ import { Delete, Done } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
 import { Link as RouterLink } from 'react-router-dom';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import { Add, Remove,HighlightOffRounded } from '@mui/icons-material';
+import { Add, Remove, HighlightOffRounded } from '@mui/icons-material';
 import { Link } from '@mui/material';
 
 const ItemAdd = () => {
@@ -97,11 +97,14 @@ const ItemAdd = () => {
 
     //item master list
     const [itemMasterDataList, setItemMasterDataList] = useState([])
+
     const itemMasterFetchData = async () => {
         try {
             const response = await axios.get(
                 `${process.env.REACT_APP_PORT}/itemMaster/getAllItemMasters`
+
             );
+
             console.log(response.data)
             setItemMasterDataList(response.data.result);
 
@@ -111,6 +114,25 @@ const ItemAdd = () => {
     };
     useEffect(() => {
         itemMasterFetchData();
+    }, []);
+
+    const [itemMasterDataPrefix, setItemMasterDataPrefix] = useState([])
+    const itemMasterFetchDataItem = async () => {
+        try {
+            const response = await axios.get(
+                `${process.env.REACT_APP_PORT}/itemMaster/getAllItemMasters`
+
+            );
+
+            console.log(response.data)
+            setItemMasterDataPrefix(response.data.result);
+
+        } catch (err) {
+            console.log(err);
+        }
+    };
+    useEffect(() => {
+        itemMasterFetchDataItem();
     }, []);
 
 
@@ -137,7 +159,7 @@ const ItemAdd = () => {
     console.log(itemMasterDistNames)
 
 
-
+    const [isSelectType, setIsSelectType] = useState(true);
 
 
     //
@@ -218,7 +240,9 @@ const ItemAdd = () => {
             acRangeSizeUnit: "",
             acMin: "",
             acMax: "",
-            acWearLimit: "",
+            acPsMin: "",
+            acPsMax: "",
+            acPsWearLimit: "",
             acAccuracy: "",
             acAccuracyUnit: "",
             acObservedSize: "",
@@ -268,7 +292,9 @@ const ItemAdd = () => {
                 acRangeSize: "",
                 acMin: "",
                 acMax: "",
-                acWearLimit: "",
+                acPsMin: "",
+                acPsMax: "",
+                acPsWearLimit: "",
                 acAccuracy: "",
                 acObservedSize: ""
             }
@@ -307,20 +333,20 @@ const ItemAdd = () => {
             setItemAddData((prev) => ({ ...prev, [name]: value, acceptanceCriteria: [{ acAccuracyUnit: value, acRangeSizeUnit: value }] }))
         }
         if (name === "itemCalibrationSource") {
-            if(value=== "InHouse"){
+            if (value === "InHouse") {
                 console.log("InHouse")
-                setItemAddData((prev) => ({ ...prev, itemSupplier :[], itemOEM:[] }));
+                setItemAddData((prev) => ({ ...prev, itemSupplier: [], itemOEM: [] }));
             }
-            if(value=== "OutSource"){
+            if (value === "OutSource") {
                 console.log("OutSource")
-                setItemAddData((prev) => ({ ...prev, itemItemMasterIMTENo :[], itemOEM:[] }));
+                setItemAddData((prev) => ({ ...prev, itemItemMasterIMTENo: [], itemOEM: [] }));
             }
-            if(value=== "OEM"){
+            if (value === "OEM") {
                 console.log("OEM")
-                setItemAddData((prev) => ({ ...prev, itemItemMasterIMTENo :[], itemSupplier:[] }));
+                setItemAddData((prev) => ({ ...prev, itemItemMasterIMTENo: [], itemSupplier: [] }));
             }
-            
-            
+
+
         }
         if (name === "itemItemMasterName") {
             setItemAddData((prev) => ({ ...prev, itemItemMasterName: value }));
@@ -342,7 +368,7 @@ const ItemAdd = () => {
             setItemAddData((prev) => ({ ...prev, itemOEM: typeof value === 'string' ? value.split(',') : value }));
         }
 
-      
+
 
 
 
@@ -476,7 +502,9 @@ const ItemAdd = () => {
                 acRangeSizeUnit: "",
                 acMin: "",
                 acMax: "",
-                acWearLimit: "",
+                acPsMin: "",
+                acPsMax: "",
+                acPsWearLimit: "",
                 acAccuracy: "",
                 acAccuracyUnit: "",
                 acObservedSize: "",
@@ -632,10 +660,10 @@ const ItemAdd = () => {
         }
     };
     useEffect(() => {
-        if(itemAddData.itemItemMasterName){
+        if (itemAddData.itemItemMasterName) {
             getItemMasterByName();
         }
-        
+
     }, [itemAddData.itemItemMasterName]);
 
 
@@ -673,9 +701,10 @@ const ItemAdd = () => {
                                 </TextField>
                             </div>
                             <div className="col-9">
-                                <Autocomplete
+                            <Autocomplete
                                     disablePortal
                                     id="itemIMTENoId"
+                                    value={itemAddData.itemIMTENo}
                                     options={imteList.map((item) => ({ label: item.itemIMTENo }))}
                                     size='small'
                                     renderInput={(params) => <TextField name='itemIMTENo' onChange={handleItemAddChange}  {...params} label="IMTE No" />}
@@ -684,6 +713,15 @@ const ItemAdd = () => {
                                 //getOptionDisabled={options => true}
 
                                 />
+
+
+                               {/* <TextField size='small' select variant='outlined' label="Item Prefix" name='itemIMTENo' value={itemAddData.itemIMTENo} fullWidth onChange={handleItemAddChange}>
+                                    <MenuItem value=""><em>Select</em></MenuItem>
+                                    {itemMasterDataPrefix.map((item) => (
+                                        <MenuItem value={item._id}>{item.itemPrefix}</MenuItem>
+                                    ))}
+                                    </TextField>*/}
+
                             </div>
 
                         </div>
@@ -732,14 +770,14 @@ const ItemAdd = () => {
                                     </div>
                                 </div>
                                 <div className="row g-2">
-                                    <div className="col-lg-4">
+                                    <div className="col-lg-5">
                                         <TextField size='small' variant='outlined' label="MFR.Si.No." onChange={handleItemAddChange} name='itemMFRNo' id='itemMFRNoId' fullWidth />
                                     </div>
-                                    <div className='col-lg-8 d-flex justify-content-between'>
-                                        <TextField size='small' variant='outlined' name='itemLC' onChange={handleItemAddChange} id="itemLCId" label="Least Count" fullWidth />
+                                    <div className='col-lg-7 d-flex justify-content-between'>
+                                        {itemAddData.itemType === "Variable" && <TextField size='small' variant='outlined' name='itemLC' onChange={handleItemAddChange} id="itemLCId" label="Least Count" fullWidth />}
 
 
-                                        <TextField select size='small' variant='outlined' label="Unit" name='itemLCUnit' onChange={handleItemAddChange} style={{ width: "40%" }} >
+                                        <TextField select size='small' variant='outlined' label="Unit" name='itemLCUnit' onChange={handleItemAddChange} style={{ width: "100%" }} >
                                             <MenuItem value=""><em>None</em></MenuItem>
                                             {units.map((unit, index) => (
                                                 <MenuItem key={index} value={unit.unitName}>{unit.unitName}</MenuItem>
@@ -748,18 +786,25 @@ const ItemAdd = () => {
 
                                     </div>
                                     <div className="row g-1">
-                                        <div className="col-lg me-1">
-                                            <TextField size='small' variant='outlined' label="Make" onChange={handleItemAddChange} value={itemAddData.itemMake} onKeyDown={handleKeyDown} name='itemMake' id='itemMakeId' fullWidth />
-                                        </div>
+                                        <div className="col-lg-12 me-1">
+                                        {itemAddData.itemType === "Attribute" &&   <TextField size='small' variant='outlined' label="Make" onChange={handleItemAddChange} value={itemAddData.itemMake} onKeyDown={handleKeyDown} name='itemMake' id='itemMakeId' fullWidth />}
+                                        {itemAddData.itemType === "Reference Standard" &&   <TextField size='small' variant='outlined' label="Make" onChange={handleItemAddChange} value={itemAddData.itemMake} onKeyDown={handleKeyDown} name='itemMake' id='itemMakeId' fullWidth />}
+                                            </div>
+
+                                        {itemAddData.itemType === "Variable" &&
+                                            <div className="col-lg me-1">
+                                                <TextField size='small' variant='outlined' label="Make" onChange={handleItemAddChange} value={itemAddData.itemMake} onKeyDown={handleKeyDown} name='itemMake' id='itemMakeId' fullWidth />
+                                            </div>}
                                         <div className="col-lg">
-                                            <TextField size='small' variant='outlined' label="Model No." onChange={handleItemAddChange} name='itemModelNo' id='itemModelNoId' fullWidth />
+
+                                            {itemAddData.itemType === "Variable" && <TextField size='small' variant='outlined' label="Model No." onChange={handleItemAddChange} name='itemModelNo' id='itemModelNoId' fullWidth />}
                                         </div>
                                     </div>
                                     <div className="row g-1">
                                         <div className="col-lg me-1">
                                             <TextField size='small' select variant='outlined' value={itemAddData.itemStatus} onChange={handleItemAddChange} label="Item Status" name='itemStatus' id='itemStatusId' fullWidth >
                                                 <MenuItem value="Active">Active</MenuItem>
-                                                <MenuItem value="Spara">Spara</MenuItem>
+                                                <MenuItem value="Spare">Spare</MenuItem>
                                                 <MenuItem value="Breakdown">Breakdown</MenuItem>
                                                 <MenuItem value="Missing">Missing</MenuItem>
                                                 <MenuItem value="Rejection">Rejection</MenuItem>
@@ -1085,20 +1130,20 @@ const ItemAdd = () => {
                                         </TextField>
                                     </div>
                                     <div className="col-lg-12">
-                                        <Button component="label" value={ itemAddData.itemCertificateName}  variant="contained" fullWidth >
+                                        <Button component="label" value={itemAddData.itemCertificateName} variant="contained" fullWidth >
 
                                             Certificate Upload
-                                            <VisuallyHiddenInput type="file"  onChange={handleCertificateUpload} />
+                                            <VisuallyHiddenInput type="file" onChange={handleCertificateUpload} />
                                         </Button>
                                     </div>
 
                                     {itemAddData.itemCertificateName &&
                                         <div className="col-md-7 d-flex justify-content-between">
 
-                                            <Chip label={itemAddData.itemCertificateName}  size='small' component="a" href={`${process.env.REACT_APP_PORT}/workInstructions/${itemAddData.itemCertificateName}`} target="_blank" clickable={true} color="primary" />
-                                            <HighlightOffRounded  type="button" onClick={() => handleRemoveFile()} />
-                                    
-                                             <Chip col-md-4
+                                            <Chip label={itemAddData.itemCertificateName} size='small' component="a" href={`${process.env.REACT_APP_PORT}/workInstructions/${itemAddData.itemCertificateName}`} target="_blank" clickable={true} color="primary" />
+                                            <HighlightOffRounded type="button" onClick={() => handleRemoveFile()} />
+
+                                            <Chip col-md-4
                                                 label={uploadMessage}
                                                 size='small'
 
@@ -1176,8 +1221,7 @@ const ItemAdd = () => {
                                         {itemAddData.itemType === "Attribute" && <th colspan="2">Observed size</th>}
 
 
-
-                                        {itemAddData.itemType === "Variable" && <th>Accuracy</th>}
+                                        {itemAddData.itemType === "Variable" && <th>Accuracy(+ & -) </th>}
                                         {itemAddData.itemType === "Variable" && <th>Unit</th>}
 
                                         {itemAddData.itemType === "Variable" && <th>Observed Error</th>}
@@ -1186,7 +1230,7 @@ const ItemAdd = () => {
 
 
 
-                                        {itemAddData.itemType === "Reference Standard" && <th>Accuracy</th>}
+                                        {itemAddData.itemType === "Reference Standard" && <th>Accuracy(+ & -)</th>}
                                         {itemAddData.itemType === "Reference Standard" && <th>Unit</th>}
 
                                         {itemAddData.itemType === "Reference Standard" && <th colspan="2">Observed size</th>}
@@ -1213,11 +1257,11 @@ const ItemAdd = () => {
 
 
                                             </select></td>
-                                            {itemAddData.itemType === "Attribute" && <td><input type="text" className="form-control form-control-sm" id="acMinId" name="acMin" placeholder='min' value={item.acMin} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} /></td>}
+                                            {itemAddData.itemType === "Attribute" && <td><input type="text" className="form-control form-control-sm" id="acPsMinId" name="acPsMin" placeholder='min' value={item.acPsMin} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} /></td>}
 
-                                            {itemAddData.itemType === "Attribute" && <td><input type="text" className='form-control form-control-sm' id="acMaxId" name="acMax" placeholder='max' value={item.acMax} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} /></td>}
+                                            {itemAddData.itemType === "Attribute" && <td><input type="text" className='form-control form-control-sm' id="acPsMaxId" name="acPsMax" placeholder='max' value={item.acPsMax} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} /></td>}
 
-                                            {itemAddData.itemType === "Attribute" && <td><input type="text" className="form-control form-control-sm" id="acWearLimitId" name="acWearLimit" placeholder='wearLimit' value={item.acWearLimit} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} /></td>}
+                                            {itemAddData.itemType === "Attribute" && <td><input type="text" className="form-control form-control-sm" id="acPsWearLimitId" name="acPsWearLimit" placeholder='wearLimit' value={item.acPsWearLimit} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} /></td>}
                                             {itemAddData.itemType === "Attribute" && <td><input type="text" className="form-control form-control-sm" id="acMinId" name="acMin" placeholder='min' value={item.acMin} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} /></td>}
                                             {itemAddData.itemType === "Attribute" && <td><input type="text" className='form-control form-control-sm' id="acMaxId" name="acMax" placeholder='max' value={item.acMax} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} /></td>}
                                             {itemAddData.itemType === "Variable" && <td><input type="text" className="form-control form-control-sm" id="acAccuracyId" name="acAccuracy" value={item.acAccuracy} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} /></td>}
@@ -1255,7 +1299,7 @@ const ItemAdd = () => {
                         <div className="d-flex justify-content-end">
 
                             <Button variant='contained' color='warning' onClick={() => setOpen(true)} className='me-3' type="button">
-                                Submit
+                                Item Add
                             </Button>
                             <Button component={RouterLink} to={`/itemList/`} variant="contained" color="error">
                                 <ArrowBackIcon /> Back To List

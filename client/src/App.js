@@ -20,6 +20,7 @@ import ItemList from './Components/Items/ItemList';
 import FileViewer from './Components/Test/FileViewer';
 import Login from './Components/Dashboard/Login';
 import InsHisCard from './Components/reports/InsHisCard';
+import Status from './Components/status/Status';
 
 
 function App() {
@@ -29,13 +30,13 @@ function App() {
   console.log(location.pathname);
   console.log('search', location.search);
 
-  const fullList =['/itemadd', '/itemedit/:id', '/itemlist', '/test',"/home", "/login"]
+  const fullList =['/itemAdd', '/itemedit/:id', '/itemList', '/test',"/home", "/login"]
   console.log(fullList.includes(location.pathname))
   return (
     <div className="App">
 
       
-      {fullList.includes(location.pathname) ? "":""}
+      {fullList.includes(location.pathname) ? "":<Dashboard/>}
       <Routes>
         <Route path="/desdep" element={<Department />} />
         <Route path="/des" element={<Designation />} />
@@ -51,6 +52,7 @@ function App() {
         <Route path="/test" element={<FileViewer />} />
         <Route path="/login" element={<Login/>} />
         <Route path="/reports" element={<InsHisCard/>} />
+        <Route path="/status" element={<Status/>} />
       </Routes>
 
     </div>

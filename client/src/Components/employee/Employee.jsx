@@ -53,18 +53,26 @@ const Employee = () => {
     const [employeeSelectedRowIds, setEmployeeSelectedRowIds] = useState([]);
 
     const employeeColumns = [
-        { field: 'id', headerName: 'Si. No', width: 70, renderCell: (params) => params.api.getAllRowIds().indexOf(params.id) + 1, align: "center" },
+        { field: 'id', headerName: 'Si. No', width: 50, renderCell: (params) => params.api.getAllRowIds().indexOf(params.id) + 1, align: "center" },
 
-        { field: 'employeeCode', headerName: 'Emp.Code', width: 70 },
-        { field: 'firstName', headerName: 'emp.Name', width: 130 },
-        { field: 'lastName', headerName: 'Last Name', width: 130 },
-        { field: 'dob', headerName: 'DOB', width: 90, },
-        { field: 'address', headerName: 'Address', width: 90, },
-        { field: 'city', headerName: 'City', width: 90, },
-        { field: 'state', headerName: 'State', width: 90, },
-        { field: 'contactNumber', headerName: 'Contact Number', type: "number", width: 90, },
-        { field: 'designation', headerName: 'Designation', width: 90, },
-        { field: 'department', headerName: 'Department', width: 90, },
+        { field: 'employeeCode', headerName: 'Emp.Code', width: 80 },
+        {
+            field: 'Name',
+            headerName: 'Name',
+            description: 'This column has a value getter and is not sortable.',
+            sortable: false,
+            width: 120,
+            valueGetter: (params) =>
+              `${params.row.firstName || ''} ${params.row.lastName || ''}`,
+          },
+  
+        { field: 'dob', headerName: 'DOB', width: 100, },
+        { field: 'contactNumber', headerName: 'Contact No', type: "number", width: 120, },
+        { field: 'designation', headerName: 'Designation', width: 120, },
+        { field: 'department', headerName: 'Department', width: 130, },
+        { field: 'address', headerName: 'Address', width: 150, },
+        { field: 'city', headerName: 'City', width: 130, },
+        { field: 'state', headerName: 'State', width: 100, },
 
 
     ];

@@ -13,7 +13,6 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
-
 import Alert from '@mui/material/Alert';
 import Snackbar from '@mui/material/Snackbar';
 import AddIcon from '@mui/icons-material/Add';
@@ -53,6 +52,182 @@ const ItemList = () => {
     console.log(today)
 
 
+    const initialItemStatusData = {
+        itemMasterRef: "",
+        itemIMTENo: "",
+        itemImage: "",
+        itemType: "",
+        itemRangeSize: "",
+        itemRangeSizeUnit: "",
+        itemMFRNo: "",
+        itemLC: "",
+        itemLCUnit: "",
+        itemMake: "",
+        itemModelNo: "",
+        itemStatus: "Active",
+        itemReceiptDate: "",
+        itemDepartment: "",
+        itemArea: "N/A",
+        itemPlaceOfUsage: "N/A",
+        itemCalFreInMonths: "",
+        itemCalAlertDays: "",
+        itemCalibrationSource: "",
+        itemItemMasterName: "",
+        itemItemMasterIMTENo: "",
+
+        itemSupplier: [],
+        itemOEM: [],
+        itemCalDate: "",
+        itemDueDate: "",
+        itemCalibratedAt: "",
+        itemCertificateName: "",
+        itemPartName: [],
+        acceptanceCriteria: [{
+            acParameter: "",
+            acRangeSize: "",
+            acRangeSizeUnit: "",
+            acMin: "",
+            acMax: "",
+            acPsMin: "",
+            acPsMax: "",
+            acPsWearLimit: "",
+            acAccuracy: "",
+            acAccuracyUnit: "",
+            acObservedSize: "",
+        }]
+
+
+    }
+
+    const [itemStatusStateId, setItemStatusStateId] = useState(null)
+    const [itemStatusData, setItemStatusData] = useState({
+        itemMasterRef: "",
+        itemAddMasterName: "",
+        itemIMTENo: "",
+        itemImage: "",
+        itemType: "",
+        itemRangeSize: "",
+        itemRangeSizeUnit: "",
+        itemMFRNo: "",
+        itemLC: "",
+        itemLCUnit: "",
+        itemMake: "",
+        itemModelNo: "",
+        itemStatus: "Active",
+        itemReceiptDate: dayjs().format("YYYY-MM-DD"),
+        itemDepartment: "",
+        itemArea: "N/A",
+        itemPlaceOfUsage: "N/A",
+        itemCalFreInMonths: "",
+        itemCalAlertDays: "",
+        itemCalibrationSource: "",
+        itemCalibrationDoneAt: "",
+        itemItemMasterName: "",
+        itemItemMasterIMTENo: [],
+        itemSupplier: [],
+        itemOEM: [],
+        itemCalDate: dayjs().format("YYYY-MM-DD"),
+        itemDueDate: "",
+        itemCalibratedAt: "",
+        itemCertificateName: "",
+        itemPartName: [],
+        acceptanceCriteria: [
+            {
+                acAccuracyUnit: "",
+                acRangeSizeUnit: "",
+                acParameter: "",
+                acRangeSize: "",
+                acMin: "",
+                acMax: "",
+                acPsMin: "",
+                acPsMax: "",
+                acPsWearLimit: "",
+                acAccuracy: "",
+                acObservedSize: ""
+            }
+        ]
+    })
+
+
+
+
+
+
+
+
+
+
+
+    const [openModalStatus, setOpenModalStatus] = useState(false);
+    const [itemStatusDataList, setItemStatusDataList] = useState([])
+    const itemStatusFetchData = async () => {
+        try {
+            const response = await axios.get(
+                `${process.env.REACT_APP_PORT}/vendor/getAllVendors`
+            );
+            setItemStatusDataList(response.data.result);
+
+        } catch (err) {
+            console.log(err);
+        }
+    };
+    useEffect(() => {
+        itemStatusFetchData();
+    }, []);
+    console.log(itemStatusDataList)
+
+    const updateItemStatus = async () => {
+        try {
+            const response = await axios.put(
+                "http://localhost:3001/itemAdd/updateItemAdd/" + statusInfo._id, statusInfo
+            );
+            setSnackBarOpen(true)
+            itemAddFetch();
+
+            setItemStatusStateId(null)
+            setItemStatusData(initialItemStatusData);
+            console.log("Updated Successfully");
+            setErrorHandler({ status: response.data.status, message: response.data.message, code: "success" })
+            setTimeout(() => {
+                window.location.reload();
+            }, 2000);
+
+        } catch (err) {
+
+            setSnackBarOpen(true)
+
+            if (err.response && err.response.status === 400) {
+                // Handle validation errors
+                console.log(err);
+                const errorData400 = err.response.data.errors;
+                const errorMessages400 = Object.values(errorData400).join(', ');
+                console.log(errorMessages400)
+                setErrorHandler({ status: 0, message: errorMessages400, code: "error" });
+            } else if (err.response && err.response.status === 500) {
+                // Handle other errors
+                console.log(err);
+                const errorData500 = err.response.data.error;
+                const errorMessages500 = Object.values(errorData500);
+                console.log(errorMessages500)
+                setErrorHandler({ status: 0, message: errorMessages500, code: "error" });
+            } else {
+                console.log(err);
+                console.log(err.response.data.error)
+                setErrorHandler({ status: 0, message: "An error occurred", code: "error" });
+            }
+
+
+
+            console.log(err);
+        }
+    };
+    const [showDialog, setShowDialog] = useState(false);
+
+
+
+
+
+
     const [itemAddList, setItemAddList] = useState([]);
 
     const itemAddFetch = async () => {
@@ -84,19 +259,30 @@ const ItemList = () => {
 
 
     const columns = [
-        { field: 'button', headerName: 'Edit', width: 60, renderCell: (params) => <Button component={Link} to={`/itemedit/${params.id}`}><Edit color='success' /></Button>, align: "center" },
-        { field: 'id', headerName: 'Si. No', width: 60, renderCell: (params) => params.api.getAllRowIds().indexOf(params.id) + 1, align: "center" },
-        { field: 'itemIMTENo', headerName: 'IMTE No', width: 100, align: "center" },
-        { field: 'itemAddMasterName', headerName: 'Description', width: 120, align: "center" },
-        { field: 'itemRangeSize', headerName: 'Range Size', width: 120, align: "center" },
-        { field: 'itemMake', headerName: 'Make', width: 90, align: "center" },
-        { field: 'itemCalDate', headerName: 'Cal Date', width: 100, align: "center",valueGetter: (params) => dayjs(params.row.itemCalDate).format('DD-MM-YYYY') },
-        { field: 'itemDueDate', headerName: 'Due Date', width: 110, align: "center",valueGetter: (params) => dayjs(params.row.itemCalDate).format('DD-MM-YYYY') },
-        { field: 'itemLC', headerName: 'itemLC', width: 90, align: "center" },
-        { field: 'itemCalFreInMonths', headerName: 'Fq(in months)', type: "number", width: 160, align: "center" },
-        { field: 'itemCalibrationSource', headerName: 'Calibration Src', width: 190, align: "center" },
-        { field: 'itemSupplier', headerName: 'Supplier', renderCell: (params) => params.row.itemSupplier.toString(), width: 110, align: "center" },
-        { field: 'itemType', headerName: 'Type', width: 180, align: "center" },
+        { field: 'button', headerName: 'Edit', width: 60, renderCell: (params) => <Button component={Link} to={`/itemedit/${params.id}`}><Edit color='success' /></Button> },
+        { field: 'id', headerName: 'Si. No', width: 60, renderCell: (params) => params.api.getAllRowIds().indexOf(params.id) + 1 },
+        { field: 'itemIMTENo', headerName: 'IMTE No', width: 100 },
+        { field: 'itemAddMasterName', headerName: 'Description', width: 120 },
+        {
+            field: 'Range/Size',
+            headerName: 'Range/Size',
+            description: 'This column has a value getter and is not sortable.',
+            sortable: false,
+            width: 130,
+            valueGetter: (params) =>
+                `${params.row.itemRangeSize || ''} ${params.row.itemLCUnit || ''}`,
+        },
+        { field: 'itemMake', headerName: 'Make', width: 90 },
+        { field: 'itemCalDate', headerName: 'Cal Date', width: 100, valueGetter: (params) => dayjs(params.row.itemCalDate).format('DD-MM-YYYY') },
+        { field: 'itemDueDate', headerName: 'Due Date', width: 110, valueGetter: (params) => dayjs(params.row.itemDueDate).format('DD-MM-YYYY') },
+        { field: 'itemLC', headerName: 'itemLC', width: 60, valueGetter: (params) => params.row.itemLC || "-" },
+        { field: 'itemCalFreInMonths', headerName: 'Frequency', type: "number", width: 100 },
+        { field: 'itemCalibrationSource', headerName: 'Cal Done At ', width: 100 },
+        { field: 'itemStatus', headerName: 'Status ', width: 80, },
+        { field: 'itemDepartment', headerName: 'current location', width: 120, },
+
+        { field: 'itemSupplier', headerName: 'Cal Source', renderCell: (params) => params.row.itemSupplier.toString(), width: 110 },
+        { field: 'itemType', headerName: 'Type', width: 180 },
     ];
 
     const [deleteModalItem, setDeleteModalItem] = useState(false);
@@ -127,7 +313,7 @@ const ItemList = () => {
                 setFilteredItemListData(currentLocation)
             }
             if (name === "customerWise") {
-                const customerWise = itemList.filter((item) => item.itemSupplier.includes(value))
+                const customerWise = itemList.filter((item) => item.itemCustomer.includes(value))
                 setFilteredItemListData(customerWise)
             }
             if (name === "supplierWise") {
@@ -150,6 +336,14 @@ const ItemList = () => {
         }
 
 
+    };
+
+
+    const handleItemStatusDataBaseChange = (e) => {
+        const { name, checked, type } = e.target;
+        let value = type === "checkbox" ? (checked ? "1" : "0") : e.target.value;
+
+        setItemStatusData((prev) => ({ ...prev, [name]: value }));
     };
 
 
@@ -211,7 +405,11 @@ const ItemList = () => {
         console.log(filteredData);
     };
 
-
+    {/*const updateVendor = async (params) => {
+        console.log(params)
+        setVendorData(params.row)
+        setVendorStateId(params.id)
+    }*/}
     const [supplierList, setSupplierList] = useState([])
 
     const [customerList, setCustomerList] = useState([])
@@ -432,11 +630,54 @@ const ItemList = () => {
 
     }
     const [itemId, setItemId] = useState("")
+    const [statusInfo, setStatusInfo] = useState([])
 
-    const handleRowClick = async (params) => {
+   {/* const handleRowClick = async (params) => {
         console.log(params)
+
         setItemId(params.id)
+        setStatusInfo(params.row)
+
+
     }
+console.log(statusInfo)*/}
+
+
+ const handleRowClick = async (params) => {
+        if (itemListSelectedRowIds.length > 0) {
+
+            setShowDialog(true);
+         } else {
+
+            setItemId(params.id);
+           setStatusInfo(params.row);
+             setItemListSelectedRowIds([params.id]);
+        }
+    };
+
+    const handleConfirmDialogClose = () => {
+        setShowDialog(false);
+    };
+    const handleSelectionModelChange = (newSelection) => {
+        setItemListSelectedRowIds(newSelection);
+    };
+
+
+
+
+
+
+
+    const handleCloseDialog = () => {
+        setOpenModalStatus(false);
+    };
+    const handleSave = () => {
+        if (itemListSelectedRowIds) {
+
+            console.log('Save logic:', itemListSelectedRowIds);
+            setOpenModalStatus(false); // Close dialog after saving
+        }
+    };
 
 
 
@@ -621,8 +862,12 @@ const ItemList = () => {
                                         onChange={handleFilterChangeItemList}>
 
                                         <MenuItem value="all">All</MenuItem>
-                                        <MenuItem value="Active">Active</MenuItem >
-                                        <MenuItem value="InActive">InActive</MenuItem >
+                                        <MenuItem value="Active">Active</MenuItem>
+                                        <MenuItem value="InActive">InActive</MenuItem>
+                                        <MenuItem value="Spara">Spare</MenuItem>
+                                        <MenuItem value="Breakdown">Breakdown</MenuItem>
+                                        <MenuItem value="Missing">Missing</MenuItem>
+                                        <MenuItem value="Rejection">Rejection</MenuItem>
 
                                     </TextField>
                                 </div>
@@ -669,9 +914,9 @@ const ItemList = () => {
                                     getRowId={(row) => row._id}
                                     initialState={{
                                         pagination: {
-                                          paginationModel: { page: 0, pageSize: 10},
+                                            paginationModel: { page: 0, pageSize: 10 },
                                         },
-                                      }}
+                                    }}
                                     sx={{
                                         ".MuiTablePagination-displayedRows": {
 
@@ -694,8 +939,22 @@ const ItemList = () => {
                                     //clipboardCopyCellDelimiter={true}
                                     checkboxSelection
                                     onRowClick={handleRowClick}
+                                    disableRowSelectionOnClick
                                     pageSizeOptions={[5]}
                                 />
+                                <Dialog open={showDialog} onClose={handleConfirmDialogClose}>
+                                    <DialogTitle>Multiple Row Selection Not Allowed</DialogTitle>
+                                    <DialogContent>
+                                        Selecting multiple rows is not allowed. Please deselect the extra rows.
+                                    </DialogContent>
+                                    <DialogActions>
+                                        <Button onClick={handleConfirmDialogClose} color="primary">
+                                            Okay
+                                        </Button>
+                                    </DialogActions>
+                                </Dialog>
+
+
                             </Box>
                             <Dialog
                                 open={deleteModalItem}
@@ -727,10 +986,153 @@ const ItemList = () => {
                                     <button type="button" className='btn btn' >History Card</button>
                                 </div>
                                 <div className='me-2' >
-                                    <button type="button" className='btn btn-' >Change status</button>
+                                {itemListSelectedRowIds.length !== 0 &&  <button type="button" className='btn btn-' onClick={() => setOpenModalStatus(true)} >Change status</button>}
+                                    {/*  {itemStatusStateId &&  (
+                                        <Button
+                                            type="button"
+                                            onRowClick={handleRowStatusClick}
+                                            className="btn btn-"
+                                            onClick={() => setOpenModalStatus(true)}
+                                        >
+                                            Change status
+                                        </Button>
+                                  )}*/}
                                 </div>
+                                {/* <Dialog>
+                                    <DialogContent sx={{ display: "flex", flexDirection: "column" }}>
+                                        <TextField
+                                            id="item-name"
+                                            label="Item Name"
+                                        />
+                                        <TextField
+                                            id="item-description"
+                                            label="Item Description"
+                                            multiline
+                                        />
+                                    </DialogContent>
+                                    <DialogActions>
+                                    <Button onClick={() => setOpenModalStatus(false)}>Cancel</Button>
+                                        <Button onClick={() => { updateItemStatus(); setOpenModalStatus(false); }} autoFocus></Button>
+                                    </DialogActions>
+                                </Dialog>*/}
+
+                                {/* <DialogTitle id="alert-dialog-title">
+                                    </DialogTitle>
+                                    <DialogContent>
+                                        <DialogContentText id="alert-dialog-description">
+                                        <TextField
+                                            id="itemIMTEID"
+                                            label="ItemIMTE"
+                                            className='mb-2'
+                                            size='small'
+                                            value={itemStatusData.itemIMTENo}
+                                           
+                                        />
+                                         <TextField
+                                            id="itemMaster"
+                                            size='small'
+                                            label="Instrument Name"
+                                            value={itemStatusData.itemAddMasterName}
+                                           
+                                        />
+                                        </DialogContentText>
+                                        
+                                    </DialogContent>
+                                    <DialogActions>
+                                        <Button onClick={() => setOpenModalStatus(false)}>Cancel</Button>
+                                        <Button onClick={() => { updateItemStatus(); setOpenModalStatus(false); }} autoFocus>
+                                        Change status
+                                        </Button>
+                            </DialogActions>*/}
+                                <Dialog
+                                    open={openModalStatus}
+                                    onClose={() => setOpenModalStatus(false)}
+                                    aria-labelledby="alert-dialog-title"
+                                    aria-describedby="alert-dialog-description"
+                                    maxWidth="lg-12"
+
+                                >
+                                    <DialogContent>
+
+
+                                        <DialogContentText id="alert-dialog-description ">
+                                            <div className='row mb-2'>
+                                                <TextField
+                                                    id="itemIMTENoId"
+                                                    label="ItemIMTE"
+                                                    name="itemIMTENo"
+                                                    size='small'
+                                                    value={statusInfo.itemIMTENo}
+
+                                                    disabled
+
+                                                />
+                                            </div>
+                                            <div className='row mb-2' >
+                                                <TextField
+                                                    id="itemMasterId"
+                                                    size='small'
+                                                    name='itemMaster'
+                                                    label="Item Master"
+
+                                                    disabled
+                                                    value={statusInfo.itemAddMasterName}
+
+                                                />
+                                            </div>
+                                            <div className='row mb-2'>
+                                                <TextField size='small' select variant='outlined' className='mb-2' onChange={(e) => setStatusInfo((prev) => ({ ...prev, itemStatus: e.target.value }))} value={statusInfo.itemStatus} label="Item Status" name='itemStatus' id='itemStatusId'  >
+                                                    <MenuItem value="Active">Active</MenuItem>
+                                                    <MenuItem value="InActive">InActive</MenuItem>
+                                                    <MenuItem value="Spare">Spare</MenuItem>
+                                                    <MenuItem value="Breakdown">Breakdown</MenuItem>
+                                                    <MenuItem value="Missing">Missing</MenuItem>
+                                                    <MenuItem value="Rejection">Rejection</MenuItem>
+
+                                                </TextField>
+
+
+
+                                            </div>
+                                        </DialogContentText>
+
+
+
+                                    </DialogContent>
+                                    <DialogActions>
+                                        <Button onClick={() => setOpenModalStatus(false)}>Cancel</Button>
+                                        <Button onClick={() => { updateItemStatus(); setOpenModalStatus(false); }} autoFocus>
+                                            Save
+                                        </Button>
+                                    </DialogActions>
+                                </Dialog>
+                                {/* <Dialog >
+                                    <DialogContent>
+                                        <DialogContentText>
+                                           
+                                        </DialogContentText>
+                                        <TextField
+                                            autoFocus
+                                            margin="dense"
+                                            id="name"
+                                            label="IMTE"
+
+                                        />
+                                    </DialogContent>
+                                    <DialogActions>
+                                        <Button onClick={updateItemStatus}>Cancel</Button>
+                                        <Button onClick={updateItemStatus}>Subscribe</Button>
+                                    </DialogActions>
+                                </Dialog>*/}
+
+
+
+
                                 <div className='me-2' >
-                                    <button type="button" className='btn btn-' >Item Master</button>
+                                    <Button component={RouterLink} to={`/itemMaster`} variant="contained" color="secondary">
+                                        Item Master
+                                    </Button>
+
                                 </div>
                             </div>
                             <div className=' col d-flex justify-content-end'>
@@ -739,7 +1141,7 @@ const ItemList = () => {
                                     <Button component={Link} to={`/itemAdd`} variant="contained" color="warning">
                                         <AddIcon /> Add Item
                                     </Button>
-                                   {/* <button type="button" component={Link} to={`/itemAdd/`} className='btn btn-warning' > <AddIcon color='warning' /> Add ItemAdd</button>*/}
+                                    {/* <button type="button" component={Link} to={`/itemAdd/`} className='btn btn-warning' > <AddIcon color='warning' /> Add ItemAdd</button>*/}
                                 </div>
 
                                 <div className='me-2'>
@@ -748,10 +1150,10 @@ const ItemList = () => {
 
 
                                 <div className='me-2'>
-                                <Button component={Link} to={`/home`} variant="contained" color="warning">
-                                <ArrowBackIcon /> Dashboard
+                                    <Button component={Link} to={`/home`} variant="contained" color="warning">
+                                        <ArrowBackIcon /> Dashboard
                                     </Button>
-                                   
+
                                 </div>
 
 

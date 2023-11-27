@@ -327,18 +327,18 @@ export default function Dashboard() {
             </ListItemButton>
             <Collapse in={itemOpen} timeout="auto" unmountOnExit>
               <List component="div" disablePadding>
-                <ListItemButton sx={{ pl: 4 }} >
-                  <ListItemIcon>
-                    <AdminPanelSettingsIcon />
-                  </ListItemIcon>
-                  <ListItemText primary="Item List" />
-
-                </ListItemButton>
-                <ListItemButton sx={{ pl: 4 }}  >
+                <ListItemButton sx={{ pl: 4 }} to="/itemAdd">
                   <ListItemIcon>
                     <AdminPanelSettingsIcon />
                   </ListItemIcon>
                   <ListItemText primary="Item Add" />
+
+                </ListItemButton>
+                <ListItemButton sx={{ pl: 4 }} to="/itemList" >
+                  <ListItemIcon>
+                    <AdminPanelSettingsIcon />
+                  </ListItemIcon>
+                  <ListItemText primary="Item List" />
 
                 </ListItemButton>
 

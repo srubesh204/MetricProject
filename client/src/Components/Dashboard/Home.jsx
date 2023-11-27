@@ -268,7 +268,7 @@ const Home = () => {
                     outerRadius={80}
                     fill="#ff4545"
                     isAnimationActive={true}
-                    animationBegin={3000}
+                    animationBegin={0}
                     animationDuration={3000}
                     innerRadius={40}
                     activeIndex={activeIndex}
@@ -314,7 +314,7 @@ const Home = () => {
                     outerRadius={80}
                     fill="#ff4545"
                     isAnimationActive={true}
-                    animationBegin={3000}
+                    animationBegin={0}
                     animationDuration={3000}
                     innerRadius={40}
                     activeIndex={activeIndex}
