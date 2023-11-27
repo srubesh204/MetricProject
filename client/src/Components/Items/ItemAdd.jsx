@@ -605,12 +605,9 @@ const ItemAdd = () => {
         try {
             const response = await axios.post(
                 `${process.env.REACT_APP_PORT}/itemAdd/getItemAddByName`, { itemAddMasterName: itemAddData.itemItemMasterName }
-
             );
-
             console.log(response.data)
             setItemMasterListByName(response.data.result);
-
         } catch (err) {
             console.log(err);
         }
