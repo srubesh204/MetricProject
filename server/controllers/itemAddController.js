@@ -297,7 +297,7 @@ const itemAddController = {
   },
   getDistinctItemName: async (req, res) => {
     try {
-      const itemAddResult = await itemAddModel.find().distinct('itemMasterName');
+      const itemAddResult = await itemAddModel.find().distinct('itemAddMasterName');
       res.status(202).json({ result: itemAddResult, status: 1 });
       //res.status(200).json(employees);
     } catch (err) {
@@ -347,6 +347,20 @@ const itemAddController = {
       res.status(500).send('Error on ItemAdd Get');
     }
   },
+
+  getitemAddMasterName: async (req, res) => {
+    try {
+      const {itemAddMasterName} = req.body
+      const getItemAddMasterName = await itemAddModel.find({itemAddMasterName: itemAddMasterName})  // To return the updated document);
+      res.status(202).json({ result: getItemAddMasterName, status: 1 });
+      //res.status(200).json(employees);
+    } catch (err) {
+      console.error(err);
+      res.status(500).send('Error on getitemAddMasterName Get');
+    }
+  },
+
+   
 }
 
 

@@ -133,7 +133,7 @@ const vendorController = {
 
       const { vendorIds } = req.body; // Assuming an array of vendor IDs is sent in the request body
       console.log(req.body)
-      const deleteResults = []; 
+      const deleteResults = [];
 
       for (const vendorId of vendorIds) {
         // Find and remove each vendor by _id
@@ -142,11 +142,11 @@ const vendorController = {
         if (!deletedVendor) {
           // If a vendor was not found, you can skip it or handle the error as needed.
           console.log(`Vendor with ID ${vendorId} not found.`);
-          res.status(500).json({ message:  `Vendor with ID not found.`});
-          
+          res.status(500).json({ message: `Vendor with ID not found.` });
+
         } else {
           console.log(`Vendor with ID ${vendorId} deleted successfully.`);
-          deleteResults.push(deletedVendor); 
+          deleteResults.push(deletedVendor);
         }
       }
 
@@ -156,26 +156,50 @@ const vendorController = {
       res.status(500).send('Internal Server Error');
     }
   },
-  getVendorById : async (req, res) => {
+  getVendorById: async (req, res) => {
     try {
       const vendorId = req.params.id; // Assuming desId is part of the URL parameter
       // if (isNaN(desId)) {
       // Find the designation by desId and update it
       const getVendorById = await vendorModel.findOne(
-          { _id: vendorId }// To return the updated document
+        { _id: vendorId }// To return the updated document
       );
 
       if (!getVendorById) {
-          return res.status(404).json({ error: 'Vendor not found' });
+        return res.status(404).json({ error: 'Vendor not found' });
       }
       console.log("Vendor Get Successfully")
       res.status(200).json({ result: getVendorById, message: "Vendor get Successfully" });
-  } catch (error) {
+    } catch (error) {
       console.log(error);
       res.status(500).json({ error: error, status: 0 });
-  }
-}
-
+    }
+  },
+  getAllVendorWithTypes: async (req, res) => {
+    try {
+      const fetchVendor = async (category) => {
+        return await vendorModel.find({ [category]: "1" });
+      };
+  
+      const [customers, subContractors, suppliers, oems] = await Promise.all([
+        fetchVendor('customer'),
+        fetchVendor('subContractor'),
+        fetchVendor('supplier'),
+        fetchVendor('oem'),
+      ]);
+  
+      res.status(202).json({
+        result: { customers, subContractors, suppliers, oems },
+        status: 1,
+      });
+    } catch (err) {
+      console.error(err);
+      res.status(500).send('Error on VendorSegragation Data');
+    }
+  },
+  
+  
+  
 }
 
 

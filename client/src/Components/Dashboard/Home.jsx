@@ -1,7 +1,8 @@
-import { Button, MenuItem, Paper, TextField, Typography } from '@mui/material';
+import { Autocomplete, Button, MenuItem, Paper, Stack, TextField, Typography } from '@mui/material';
 import Box from '@mui/material/Box';
+import { Link } from 'react-router-dom'
 import { DataGrid, GridToolbar } from '@mui/x-data-grid';
-import { BarChart, PieChart, Pie, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, Cell } from 'recharts';
+import { PieChart, Pie, Tooltip, Legend, ResponsiveContainer, Cell } from 'recharts';
 import axios from 'axios';
 import React, { useEffect, useState } from 'react'
 import dayjs from 'dayjs';
@@ -12,6 +13,8 @@ dayjs.extend(isSameOrBefore)
 dayjs.extend(isSameOrAfter)
 
 const Home = () => {
+
+  const [itemDistinctNames, setItemDistinctNames] = useState([])
 
   const [itemList, setItemList] = useState([]);
   const [filteredData, setFilteredData] = useState([])
@@ -24,16 +27,19 @@ const Home = () => {
   console.log(filteredData)
 
 
+  //Vendor Type state
+  const [customers, setCustomers] = useState([{aliasName : "all"}])
+  const [suppliers, setSuppliers] = useState([])
+  const [subContractors, setSubContractors] = useState([])
+  const [oems, setOems] = useState([])
+  //
+
 
   const [locationTableData, setLocationTableData] = useState([])
-
-
   const [itemStatus, setItemStatus] = useState([])
   const [calStatus, setCalStatus] = useState([])
-
   const [distinctDepartment, setDistinctDepartment] = useState([])
   const [departmentName, setDepartmentName] = useState("")
-
   const [allDepartments, setAllDepartments] = useState([])
 
   const getAllDepartments = async () => {
@@ -49,6 +55,43 @@ const Home = () => {
     }
   };
 
+  const getDistinctItemName = async () => {
+    try {
+      const response = await axios.get(
+        `${process.env.REACT_APP_PORT}/itemAdd/getDistinctItemName`
+      );
+      console.log(response.data)
+      setItemDistinctNames(response.data.result);
+
+    } catch (err) {
+      console.log(err);
+    }
+  };
+  useEffect(() => {
+    getDistinctItemName();
+  }, []);
+
+  const getVendorsByType = async () => {
+    try {
+      const getAllVendorWithTypes = await axios.get(
+        `${process.env.REACT_APP_PORT}/vendor/getAllVendorWithTypes`
+      );
+      console.log(getAllVendorWithTypes)
+      setCustomers([
+        { aliasName: "all" },
+        ...getAllVendorWithTypes.data.result.customers.map(customer => ({ ...customer }))
+      ]);
+      
+      
+      setOems(getAllVendorWithTypes.data.result.oems)
+      setSubContractors(getAllVendorWithTypes.data.result.subContractors)
+      setSuppliers(getAllVendorWithTypes.data.result.suppliers)
+
+    } catch (err) {
+      console.log(err);
+    }
+  };
+  console.log(customers)
 
   const DepartmentFetch = async () => {
     try {
@@ -71,19 +114,19 @@ const Home = () => {
         `${process.env.REACT_APP_PORT}/itemAdd/getAllItemAdds`
       );
       const allItems = response.data.result
-
-      setFilteredData(response.data.result)
+      setPieDataFilter(allItems)
+      setFilteredData(allItems)
       // You can use a different logic for generating the id
 
 
-      setItemList(response.data.result);
+      setItemList(allItems);
 
 
-
+      console.log(itemList)
 
       const pastDue = allItems.filter((item) => dayjs(item.itemDueDate).isBefore(currentDate.format("YYYY-MM-DD")))
       const CurrentDue = allItems.filter((item) => dayjs(item.itemDueDate).isSame(currentDate.format("YYYY-MM-DD")))
-      const sevenDaysFilter = allItems.filter((item) => dayjs(item.itemDueDate).isSameOrBefore(sevenDaysAgo) && dayjs(item.itemDueDate).isSameOrAfter(currentDate.format("YYYY-MM-DD")))
+      const sevenDaysFilter = allItems.filter((item) => dayjs(item.itemDueDate).isSameOrBefore(sevenDaysAgo) && dayjs(item.itemDueDate).isAfter(currentDate.format("YYYY-MM-DD")))
       const fifteenDaysFilter = allItems.filter((item) => dayjs(item.itemDueDate).isBetween(currentDate.format("YYYY-MM-DD"), fifteenDaysAgo))
       const thirtyDaysFilter = allItems.filter((item) => dayjs(item.itemDueDate).isBetween(currentDate.format("YYYY-MM-DD"), thirtyDaysAgo))
       const AboveThirtyDaysFilter = allItems.filter((item) => dayjs(item.itemDueDate).isAfter(thirtyDaysAgo))
@@ -97,7 +140,7 @@ const Home = () => {
 
 
       setItemStatus([
-        { id: 0, value: allItems.length, label: 'Total Item' },
+        { id: 0, value: allItems.length, label: 'Total Items' },
         { id: 1, value: activeItems.length, label: 'Active' },
         { id: 2, value: spareItems.length, label: 'Spare' },
         { id: 3, value: breakDownItems.length, label: 'BreakDown' },
@@ -182,7 +225,7 @@ const Home = () => {
   const data = [
     {
       "name": "Departments",
-      "value": 500,
+      "value": 10000,
 
     },
     {
@@ -213,18 +256,18 @@ const Home = () => {
 
   const itemStatusLegend = (name) => {
     console.log(name)
-    const pastDue = itemList.filter((item) => dayjs(item.itemDueDate).isBefore(currentDate.format("YYYY-MM-DD")))
-    const CurrentDue = itemList.filter((item) => dayjs(item.itemDueDate).isSame(currentDate.format("YYYY-MM-DD")))
-    const sevenDaysFilter = itemList.filter((item) => dayjs(item.itemDueDate).isSameOrBefore(sevenDaysAgo) && dayjs(item.itemDueDate).isSameOrAfter(currentDate.format("YYYY-MM-DD")))
-    const fifteenDaysFilter = itemList.filter((item) => dayjs(item.itemDueDate).isBetween(currentDate.format("YYYY-MM-DD"), fifteenDaysAgo))
-    const thirtyDaysFilter = itemList.filter((item) => dayjs(item.itemDueDate).isBetween(currentDate.format("YYYY-MM-DD"), thirtyDaysAgo))
-    const AboveThirtyDaysFilter = itemList.filter((item) => dayjs(item.itemDueDate).isAfter(thirtyDaysAgo))
+    const pastDue = pieDataFilter.filter((item) => dayjs(item.itemDueDate).isBefore(currentDate.format("YYYY-MM-DD")))
+    const CurrentDue = pieDataFilter.filter((item) => dayjs(item.itemDueDate).isSame(currentDate.format("YYYY-MM-DD")))
+    const sevenDaysFilter = pieDataFilter.filter((item) => dayjs(item.itemDueDate).isSameOrBefore(sevenDaysAgo) && dayjs(item.itemDueDate).isSameOrAfter(currentDate.format("YYYY-MM-DD")))
+    const fifteenDaysFilter = pieDataFilter.filter((item) => dayjs(item.itemDueDate).isBetween(currentDate.format("YYYY-MM-DD"), fifteenDaysAgo))
+    const thirtyDaysFilter = pieDataFilter.filter((item) => dayjs(item.itemDueDate).isBetween(currentDate.format("YYYY-MM-DD"), thirtyDaysAgo))
+    const AboveThirtyDaysFilter = pieDataFilter.filter((item) => dayjs(item.itemDueDate).isAfter(thirtyDaysAgo))
 
-    const activeItems = itemList.filter((item) => item.itemStatus === "Active");
-    const spareItems = itemList.filter((item) => item.itemStatus === "Spare");
-    const breakDownItems = itemList.filter((item) => item.itemStatus === "BreakDown");
-    const missingItems = itemList.filter((item) => item.itemStatus === "Missing");
-    const rejectionItems = itemList.filter((item) => item.itemStatus === "Rejection");
+    const activeItems = pieDataFilter.filter((item) => item.itemStatus === "Active");
+    const spareItems = pieDataFilter.filter((item) => item.itemStatus === "Spare");
+    const breakDownItems = pieDataFilter.filter((item) => item.itemStatus === "BreakDown");
+    const missingItems = pieDataFilter.filter((item) => item.itemStatus === "Missing");
+    const rejectionItems = pieDataFilter.filter((item) => item.itemStatus === "Rejection");
 
 
     switch (name) {
@@ -247,7 +290,7 @@ const Home = () => {
         setFilteredData(AboveThirtyDaysFilter);
         break;
       case "Total Items":
-        setFilteredData(itemList);
+        setFilteredData(pieDataFilter);
         break;
       case "Active":
         setFilteredData(activeItems);
@@ -342,6 +385,7 @@ const Home = () => {
     DepartmentFetch();
     itemFetch();
     getAllDepartments();
+    getVendorsByType();
   }, [])
 
 
@@ -360,12 +404,121 @@ const Home = () => {
     }
   };
 
+  const [pieDataFilter, setPieDataFilter] = useState([])
+
+  const MainFilter = (e) => {
+    const { value } = e.target
+    const uniqueName = e.target.name
+    if (value === "all") {
+      itemFetch()
+      // console.log("working")
+    } else {
+      const filter = itemList.filter((item) => item[uniqueName] === value)
+      setFilteredData(filter)
+      setPieDataFilter(filter)
+
+      const pastDue = filter.filter((item) => dayjs(item.itemDueDate).isBefore(currentDate.format("YYYY-MM-DD")))
+      const CurrentDue = filter.filter((item) => dayjs(item.itemDueDate).isSame(currentDate.format("YYYY-MM-DD")))
+      const sevenDaysFilter = filter.filter((item) => dayjs(item.itemDueDate).isSameOrBefore(sevenDaysAgo) && dayjs(item.itemDueDate).isSameOrAfter(currentDate.format("YYYY-MM-DD")))
+      const fifteenDaysFilter = filter.filter((item) => dayjs(item.itemDueDate).isBetween(currentDate.format("YYYY-MM-DD"), fifteenDaysAgo))
+      const thirtyDaysFilter = filter.filter((item) => dayjs(item.itemDueDate).isBetween(currentDate.format("YYYY-MM-DD"), thirtyDaysAgo))
+      const AboveThirtyDaysFilter = filter.filter((item) => dayjs(item.itemDueDate).isAfter(thirtyDaysAgo))
+
+
+      const activeItems = filter.filter((item) => item.itemStatus === "Active");
+      const spareItems = filter.filter((item) => item.itemStatus === "Spare");
+      const breakDownItems = filter.filter((item) => item.itemStatus === "BreakDown");
+      const missingItems = filter.filter((item) => item.itemStatus === "Missing");
+      const rejectionItems = filter.filter((item) => item.itemStatus === "Rejection");
+
+      setCalStatus([
+        { id: 0, value: pastDue.length, label: 'Past Due' },
+        { id: 1, value: CurrentDue.length, label: 'Today' },
+        { id: 2, value: sevenDaysFilter.length, label: '7 Days' },
+        { id: 3, value: fifteenDaysFilter.length, label: '15 Days' },
+        { id: 4, value: thirtyDaysFilter.length, label: '30 Days' },
+        { id: 5, value: AboveThirtyDaysFilter.length, label: '>30 Days' }
+      ])
+      setItemStatus([
+        { id: 0, value: filter.length, label: 'Total Items' },
+        { id: 1, value: activeItems.length, label: 'Active' },
+        { id: 2, value: spareItems.length, label: 'Spare' },
+        { id: 3, value: breakDownItems.length, label: 'BreakDown' },
+        { id: 4, value: missingItems.length, label: 'Missing' },
+        { id: 5, value: rejectionItems.length, label: 'Rejection' }
+      ])
+    }
+  }
+
 
   return (
     <div style={{ backgroundColor: "#f1f4f4", margin: 0, padding: 0 }}>
 
 
       <div className="row gx-3 m-3" >
+        <div className="col-8 mb-2">
+          <Paper sx={{ p: 2 }} elevation={12} className=''>
+
+            <Stack direction="row"
+              justifyContent="center"
+              alignItems="center"
+              spacing={2}>
+              <TextField select onChange={MainFilter} fullWidth size='small' name='itemIMTENo' defaultValue="all" label="Item IMTE No">
+                <MenuItem value="all">All</MenuItem>
+                {itemList.map((item, index) => (<MenuItem key={index} value={item.itemIMTENo}>{item.itemIMTENo}</MenuItem>))}
+              </TextField>
+              <TextField select onChange={MainFilter} fullWidth size='small' name='itemType' defaultValue="All" label="Item Type">
+                <MenuItem value="all">All</MenuItem>
+                <MenuItem value="Variable">Variable</MenuItem>
+                <MenuItem value="Attribute">Attribute</MenuItem>
+                <MenuItem value="Ref Standard">Ref Standard</MenuItem>
+              </TextField>
+
+              <TextField select onChange={MainFilter} fullWidth size='small' defaultValue="All" name='itemAddMasterName' label="Item Description">
+                <MenuItem value="all">All</MenuItem>
+                {itemDistinctNames.map((item, index) => (<MenuItem key={index} value={item}>{item}</MenuItem>))}
+              </TextField>
+
+              <Autocomplete
+                disablePortal
+                id="combo-box-demo"
+                options={customers}
+                size='small'
+                fullWidth
+                getOptionLabel={(customers)=> customers.aliasName}
+                onChange={(e, newValue)=> console.log(e, newValue)}
+                renderInput={(params) => <TextField {...params} label="Customer" />}
+              />
+
+              {/* <TextField select fullWidth size='small' defaultValue="All" label="Due in Days">
+                <MenuItem value="All">All</MenuItem>
+                {itemList.map((item, index) => (<MenuItem key={index} value={item.itemIMTENo}>{item.itemIMTENo}</MenuItem>))}
+              </TextField> */}
+
+
+            </Stack>
+
+          </Paper>
+
+        </div>
+        <div className="col-md-4">
+          <Paper sx={{ p: 2 }} elevation={12}>
+            <Stack direction="row"
+              justifyContent="center"
+              alignItems="center"
+              spacing={2}>
+              <TextField select onChange={MainFilter} fullWidth size='small' defaultValue="All" name='plantLocationFilter' label="Plant Location">
+                <MenuItem value="all">All</MenuItem>
+
+              </TextField>
+              <TextField select onChange={MainFilter} fullWidth size='small' name='employeeFilter' defaultValue="All" label="Employee">
+                <MenuItem value="all">All</MenuItem>
+                {suppliers.map((item, index) => (<MenuItem key={index} value={item.aliasName}>{item.aliasName}</MenuItem>))}
+              </TextField>
+            </Stack>
+          </Paper>
+        </div>
+
 
         <div className="col">
 
@@ -384,7 +537,7 @@ const Home = () => {
                   fill="#ff4545"
                   isAnimationActive={true}
                   animationBegin={0}
-                  animationDuration={1500}
+                  animationDuration={1000}
                   innerRadius={40}
                   activeIndex={activeIndex}
                   activeShape={{ fill: '#8884d8', strokeWidth: 2 }}
@@ -437,7 +590,7 @@ const Home = () => {
 
                   isAnimationActive={true}
                   animationBegin={0}
-                  animationDuration={1500}
+                  animationDuration={1000}
                   innerRadius={40}
                   activeIndex={activeIndex}
                   activeShape={{ fill: '#ffffff', strokeWidth: 2 }}
@@ -482,7 +635,7 @@ const Home = () => {
 
                   isAnimationActive={true}
                   animationBegin={0}
-                  animationDuration={1500}
+                  animationDuration={1000}
                   innerRadius={40}
                   activeIndex={activeIndex}
                   activeShape={{ fill: '#ffffff' }}
@@ -524,42 +677,55 @@ const Home = () => {
 
       <div className="row gx-3 mx-3">
         <div className="col-md-8">
-          <Paper sx={{ p: 2, height: 400 }}>
-            <DataGrid
-              rows={filteredData}
-              columns={ItemListColumns}
-              getRowId={(row) => row._id}
-              initialState={{
-                pagination: {
-                  paginationModel: {
-                    pageSize: 5,
+          <Paper sx={{ p: 2, }} elevation={12}>
+            <Box sx={{ height: 400, mb: 2 }}>
+              <DataGrid
+
+                rows={filteredData}
+                columns={ItemListColumns}
+                getRowId={(row) => row._id}
+                initialState={{
+                  pagination: {
+                    paginationModel: {
+                      pageSize: 5,
+                    },
                   },
-                },
-              }}
-              sx={{
-                ".MuiTablePagination-displayedRows": {
+                }}
+                sx={{
+                  ".MuiTablePagination-displayedRows": {
 
-                  "margin-top": "1em",
-                  "margin-bottom": "1em"
-                }
-              }}
+                    "margin-top": "1em",
+                    "margin-bottom": "1em"
+                  }
+                }}
 
-              checkboxSelection
-              disableColumnFilter
-              disableColumnSelector
-              disableDensitySelector
-              slots={{ toolbar: GridToolbar }}
-              slotProps={{
-                toolbar: {
-                  showQuickFilter: true,
-                },
-              }}
+                checkboxSelection
 
-            />
+                slots={{ toolbar: GridToolbar }}
+                slotProps={{
+                  toolbar: {
+                    showQuickFilter: true,
+                  },
+                }}
+
+              />
+            </Box>
+            <div className="row">
+              <div className="col-md-9">
+                <Button size='small' className='me-2'>Onsite</Button>
+                <Button size='small' className='me-2'>Cal</Button>
+                <Button size='small' className='me-2'>Grn</Button>
+                <Button size='small'>Create DC</Button>
+              </div>
+              <div className="col-md-3">
+                <Button component={Link} to="/itemmaster" size='small' className='me-2'>Item Master</Button>
+                <Button component={Link} to="/itemList" size='small'>Item Entry</Button>
+              </div>
+            </div>
           </Paper>
         </div>
         <div className="col-md-4">
-          <Paper className='col' elevation={12} sx={{ p: 2 }}>
+          <Paper className='col' elevation={12} sx={{ p: 2, height: "100%" }}>
             <table className='table table-bordered table-sm text-center align-middle table-hover'>
               <tbody>
                 <tr>

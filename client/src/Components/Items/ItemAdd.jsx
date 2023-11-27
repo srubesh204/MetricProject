@@ -263,8 +263,10 @@ const ItemAdd = () => {
                 acRangeSizeUnit: "",
                 acParameter: "",
                 acRangeSize: "",
-                acMin: "",
-                acMax: "",
+                acPsMin: "",
+                acPsMax: "",
+                acObMin: "",
+                acObMax: "",
                 acWearLimit: "",
                 acAccuracy: "",
                 acObservedSize: ""
@@ -1180,13 +1182,13 @@ const ItemAdd = () => {
 
 
                                             </select></td>
-                                            {itemAddData.itemType === "Attribute" && <td><input type="text" className="form-control form-control-sm" id="acMinId" name="acMin" placeholder='min' value={item.acMin} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} /></td>}
+                                            {itemAddData.itemType === "Attribute" && <td><input type="text" className="form-control form-control-sm" id="acMinId" name="acMin" placeholder='min' value={item.acPsMin} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} /></td>}
 
-                                            {itemAddData.itemType === "Attribute" && <td><input type="text" className='form-control form-control-sm' id="acMaxId" name="acMax" placeholder='max' value={item.acMax} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} /></td>}
+                                            {itemAddData.itemType === "Attribute" && <td><input type="text" className='form-control form-control-sm' id="acMaxId" name="acMax" placeholder='max' value={item.acPsMax} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} /></td>}
 
                                             {itemAddData.itemType === "Attribute" && <td><input type="text" className="form-control form-control-sm" id="acWearLimitId" name="acWearLimit" placeholder='wearLimit' value={item.acWearLimit} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} /></td>}
-                                            {itemAddData.itemType === "Attribute" && <td><input type="text" className="form-control form-control-sm" id="acMinId" name="acMin" placeholder='min' value={item.acMin} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} /></td>}
-                                            {itemAddData.itemType === "Attribute" && <td><input type="text" className='form-control form-control-sm' id="acMaxId" name="acMax" placeholder='max' value={item.acMax} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} /></td>}
+                                            {itemAddData.itemType === "Attribute" && <td><input type="text" className="form-control form-control-sm" id="acMinId" name="acMin" placeholder='min' value={item.acObMin} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} /></td>}
+                                            {itemAddData.itemType === "Attribute" && <td><input type="text" className='form-control form-control-sm' id="acMaxId" name="acMax" placeholder='max' value={item.acObMax} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} /></td>}
                                             {itemAddData.itemType === "Variable" && <td><input type="text" className="form-control form-control-sm" id="acAccuracyId" name="acAccuracy" value={item.acAccuracy} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} /></td>}
 
                                             {itemAddData.itemType === "Variable" && <td> <select className="form-select form-select-sm" id="acAccuracyUnitId" name="acAccuracyUnit" value={item.acAccuracyUnit} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} >
