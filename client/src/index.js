@@ -5,7 +5,7 @@ import App from './App';
 
 import '../node_modules/bootstrap/dist/css/bootstrap.min.css'
 import '../node_modules/bootstrap/dist/js/bootstrap.bundle.js'
-import '../node_modules/bootstrap-icons/bootstrap-icons.svg'
+
 import {BrowserRouter as Router } from 'react-router-dom';
 
 

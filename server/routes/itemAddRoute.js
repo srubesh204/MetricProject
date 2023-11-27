@@ -10,5 +10,8 @@ router.post("/getItemAddByName", itemAddController.getItemAddByName)
 router.post("/createItemAdd", itemAddController.createItemAdd)
 router.put("/updateItemAdd/:id", itemAddController.updateItemAdd)
 router.delete("/deleteItemAdd", itemAddController.deleteItemAdd)
-
+router.get("/getDistinctItemDepartments", itemAddController.getDistinctItemDepartments)
+router.post("/getItemAddByDepName", itemAddController.getItemAddByDepName)
+router.post("/getitemAddMasterName", itemAddController.getitemAddMasterName)
+ 
 module.exports = router;

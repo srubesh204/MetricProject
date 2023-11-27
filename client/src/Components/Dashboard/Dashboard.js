@@ -39,6 +39,7 @@ import Employee from '../employee/Employee'
 import ItemMaster from '../itemMaster/ItemMaster'
 import { PartDataBase, UnitDataBase } from '../general/General'
 import { Department, Designation } from '../DesDep';
+import Home from './Home';
 //
 
 // function Copyright(props) {
@@ -118,7 +119,7 @@ export default function Dashboard() {
       { name: "Vendor", file: <Vendor />, icon: <ContactPageIcon /> },
       { name: "Unit", file: <UnitDataBase />, icon: <CategoryIcon /> },
       { name: "Part", file: <PartDataBase />, icon: <CategoryIcon /> },
-      
+      { name: "Dashboard", file: <Home />, icon: <CategoryIcon /> },
       { name: "Item Master", file: <ItemMaster />, icon: <CategoryIcon /> },
     ],
     system: [
@@ -139,7 +140,7 @@ export default function Dashboard() {
       file: item.file,
     });
   }
-  const [togglerOpen, setTogglerOpen] = useState(true);
+  const [togglerOpen, setTogglerOpen] = useState(false);
   const toggleDrawer = () => {
     setTogglerOpen(!togglerOpen);
   };
@@ -175,7 +176,7 @@ export default function Dashboard() {
     <ThemeProvider theme={defaultTheme}>
       <Box sx={{ display: 'flex', }}>
         <CssBaseline />
-        <AppBar position="absolute" open={togglerOpen}>
+        <AppBar  position="absolute" open={togglerOpen}>
           <Toolbar
             sx={{
               pr: '24px',  height: "100%" // keep right padding when drawer closed
@@ -326,8 +327,15 @@ export default function Dashboard() {
               {itemOpen ? <ExpandLess /> : <ExpandMore />}
             </ListItemButton>
             <Collapse in={itemOpen} timeout="auto" unmountOnExit>
-              <List component="div" disablePadding>
-                <ListItemButton sx={{ pl: 4 }} to="/itemAdd">
+              <List component="div" disablePadding >
+                <ListItemButton sx={{ pl: 4 }} to="/itemlist">
+                  <ListItemIcon>
+                    <AdminPanelSettingsIcon />
+                  </ListItemIcon>
+                  <ListItemText primary="Item List" />
+
+                </ListItemButton>
+                <ListItemButton sx={{ pl: 4 }} to="/itemAdd" >
                   <ListItemIcon>
                     <AdminPanelSettingsIcon />
                   </ListItemIcon>

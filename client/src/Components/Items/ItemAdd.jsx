@@ -146,7 +146,7 @@ const ItemAdd = () => {
             const response = await axios.get(
                 `${process.env.REACT_APP_PORT}/itemAdd/getDistinctItemName`
             );
-            console.log(response.data.result)
+            console.log(response.data)
             setItemMasterDistNames(response.data.result);
 
         } catch (err) {
@@ -156,7 +156,6 @@ const ItemAdd = () => {
     useEffect(() => {
         getDistinctItemName();
     }, []);
-    console.log(itemMasterDistNames)
 
 
     const [isSelectType, setIsSelectType] = useState(true);
@@ -290,11 +289,11 @@ const ItemAdd = () => {
                 acRangeSizeUnit: "",
                 acParameter: "",
                 acRangeSize: "",
-                acMin: "",
-                acMax: "",
                 acPsMin: "",
                 acPsMax: "",
-                acPsWearLimit: "",
+                acObMin: "",
+                acObMax: "",
+                acWearLimit: "",
                 acAccuracy: "",
                 acObservedSize: ""
             }
@@ -354,9 +353,11 @@ const ItemAdd = () => {
 
 
         if (name === "itemPartName") {
+            console.log(value)
             setItemAddData((prev) => ({ ...prev, itemPartName: typeof value === 'string' ? value.split(',') : value }));
         }
         if (name === "itemItemMasterIMTENo") {
+            console.log(value)
             setItemAddData((prev) => ({ ...prev, itemItemMasterIMTENo: typeof value === 'string' ? value.split(',') : value }));
         }
 
@@ -466,7 +467,7 @@ const ItemAdd = () => {
 
     useEffect(() => {
         getPartList();
-    }, [itemAddData.itemPartName]);
+    }, []);
 
 
     const [imteList, setImteList] = useState([])
@@ -597,7 +598,7 @@ const ItemAdd = () => {
     };
 
     const [uploadMessage, setUploadMessage] = useState("")
-    const [iframeURL, setIframeURL] = useState({ fileURL: "", fileName: "", file: "" });
+
     const handleCertificateUpload = (event) => {
         const selectedFile = event.target.files[0];
         if (selectedFile) {
@@ -648,13 +649,10 @@ const ItemAdd = () => {
     const getItemMasterByName = async () => {
         try {
             const response = await axios.post(
-                `${process.env.REACT_APP_PORT}/itemAdd/getItemAddByName`, { itemItemMasterName: itemAddData.itemItemMasterName }
-
+                `${process.env.REACT_APP_PORT}/itemAdd/getItemAddByName`, { itemAddMasterName: itemAddData.itemItemMasterName }
             );
-
             console.log(response.data)
             setItemMasterListByName(response.data.result);
-
         } catch (err) {
             console.log(err);
         }
@@ -916,7 +914,7 @@ const ItemAdd = () => {
                                             <InputLabel id="itemItemMasterIMTENoId">Select IMTENo.</InputLabel>
                                             <Select
                                                 labelId="itemItemMasterIMTENoId"
-                                                id="demo-multiple-checkbox"
+                                               
                                                 multiple
                                                 name="itemItemMasterIMTENo"
                                                 value={itemAddData.itemItemMasterIMTENo}
@@ -1163,31 +1161,24 @@ const ItemAdd = () => {
                                 <h5 className='text-center'>Part</h5>
                                 <div className="row">
                                     <div className="col-md-12">
-                                        <FormControl sx={{ m: 1 }} fullWidth>
-                                            <InputLabel id="demo-multiple-chip-label">Select Part</InputLabel>
+                                        <FormControl size='small' component="div" fullWidth>
+                                            <InputLabel id="itemPartNameId">Select Part</InputLabel>
                                             <Select
-                                                labelId="demo-multiple-chip-label"
-                                                id="demo-multiple-chip"
+                                                labelId="itemPartNameId"
+                                                
                                                 multiple
+                                                name="itemPartName"
                                                 value={itemAddData.itemPartName}
                                                 onChange={handleItemAddChange}
-                                                input={<OutlinedInput id="select-multiple-chip" label="Select Part" name='itemPartName' />}
-                                                renderValue={(selected) => (
-                                                    <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
-                                                        {selected.map((value) => (
-                                                            <Chip key={value} label={value} />
-                                                        ))}
-                                                    </Box>
-                                                )}
+                                                input={<OutlinedInput fullWidth label="Select Part" />}
+                                                renderValue={(selected) => selected.map(item => item.partName).join(", ")}
                                                 MenuProps={MenuProps}
+                                                fullWidth
                                             >
                                                 {partData.map((name, index) => (
-                                                    <MenuItem
-                                                        key={index}
-                                                        value={name.partName}
-                                                    // style={getStyles(name, personName, theme)}
-                                                    >
-                                                        {name.partName}
+                                                    <MenuItem key={index} value={name}>
+                                                        <Checkbox checked={itemAddData.itemPartName.indexOf(name) > -1} />
+                                                        <ListItemText primary={name.partName} />
                                                     </MenuItem>
                                                 ))}
                                             </Select>
@@ -1257,13 +1248,13 @@ const ItemAdd = () => {
 
 
                                             </select></td>
-                                            {itemAddData.itemType === "Attribute" && <td><input type="text" className="form-control form-control-sm" id="acPsMinId" name="acPsMin" placeholder='min' value={item.acPsMin} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} /></td>}
+                                            {itemAddData.itemType === "Attribute" && <td><input type="text" className="form-control form-control-sm" id="acMinId" name="acMin" placeholder='min' value={item.acPsMin} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} /></td>}
 
-                                            {itemAddData.itemType === "Attribute" && <td><input type="text" className='form-control form-control-sm' id="acPsMaxId" name="acPsMax" placeholder='max' value={item.acPsMax} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} /></td>}
+                                            {itemAddData.itemType === "Attribute" && <td><input type="text" className='form-control form-control-sm' id="acMaxId" name="acMax" placeholder='max' value={item.acPsMax} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} /></td>}
 
-                                            {itemAddData.itemType === "Attribute" && <td><input type="text" className="form-control form-control-sm" id="acPsWearLimitId" name="acPsWearLimit" placeholder='wearLimit' value={item.acPsWearLimit} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} /></td>}
-                                            {itemAddData.itemType === "Attribute" && <td><input type="text" className="form-control form-control-sm" id="acMinId" name="acMin" placeholder='min' value={item.acMin} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} /></td>}
-                                            {itemAddData.itemType === "Attribute" && <td><input type="text" className='form-control form-control-sm' id="acMaxId" name="acMax" placeholder='max' value={item.acMax} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} /></td>}
+                                            {itemAddData.itemType === "Attribute" && <td><input type="text" className="form-control form-control-sm" id="acWearLimitId" name="acWearLimit" placeholder='wearLimit' value={item.acWearLimit} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} /></td>}
+                                            {itemAddData.itemType === "Attribute" && <td><input type="text" className="form-control form-control-sm" id="acMinId" name="acMin" placeholder='min' value={item.acObMin} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} /></td>}
+                                            {itemAddData.itemType === "Attribute" && <td><input type="text" className='form-control form-control-sm' id="acMaxId" name="acMax" placeholder='max' value={item.acObMax} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} /></td>}
                                             {itemAddData.itemType === "Variable" && <td><input type="text" className="form-control form-control-sm" id="acAccuracyId" name="acAccuracy" value={item.acAccuracy} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} /></td>}
 
                                             {itemAddData.itemType === "Variable" && <td> <select className="form-select form-select-sm" id="acAccuracyUnitId" name="acAccuracyUnit" value={item.acAccuracyUnit} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} >
