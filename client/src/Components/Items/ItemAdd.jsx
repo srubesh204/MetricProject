@@ -478,8 +478,6 @@ const ItemAdd = () => {
             );
             console.log(response.data)
             setImteList(response.data.result)
-
-
         } catch (err) {
             console.log(err);
         }

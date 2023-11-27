@@ -455,7 +455,7 @@ const ItemEdit = () => {
 
     useEffect(() => {
         getPartList();
-    }, [itemAddData.itemPartName]);
+    }, []);
 
 
     const [imteList, setImteList] = useState([])
@@ -1134,31 +1134,24 @@ const ItemEdit = () => {
                                 <h5 className='text-center'>Part</h5>
                                 <div className="row">
                                     <div className="col-md-12">
-                                        <FormControl sx={{ m: 1 }} fullWidth>
-                                            <InputLabel id="demo-multiple-chip-label">Select Part</InputLabel>
+                                        <FormControl size='small' component="div" fullWidth>
+                                            <InputLabel id="itemPartNameId">Select Part</InputLabel>
                                             <Select
-                                                labelId="demo-multiple-chip-label"
-                                                id="demo-multiple-chip"
+                                                labelId="itemPartNameId"
+
                                                 multiple
+                                                name="itemPartName"
                                                 value={itemAddData.itemPartName}
                                                 onChange={handleItemAddChange}
-                                                input={<OutlinedInput id="select-multiple-chip" label="Select Part" name='itemPartName' />}
-                                                renderValue={(selected) => (
-                                                    <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
-                                                        {selected.map((value) => (
-                                                            <Chip key={value} label={value} />
-                                                        ))}
-                                                    </Box>
-                                                )}
+                                                input={<OutlinedInput fullWidth label="Select Part" />}
+                                                renderValue={(selected) => selected.map(item => item.partName).join(", ")}
                                                 MenuProps={MenuProps}
+                                                fullWidth
                                             >
                                                 {partData.map((name, index) => (
-                                                    <MenuItem
-                                                        key={index}
-                                                        value={name.partName}
-                                                    // style={getStyles(name, personName, theme)}
-                                                    >
-                                                        {name.partName}
+                                                    <MenuItem key={index} value={name}>
+                                                        <Checkbox checked={itemAddData.itemPartName.indexOf(name) > -1} />
+                                                        <ListItemText primary={name.partName} />
                                                     </MenuItem>
                                                 ))}
                                             </Select>
