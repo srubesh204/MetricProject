@@ -9,8 +9,6 @@ import { Delete, Done } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
 import { Link as RouterLink } from 'react-router-dom';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import { Add, Remove,HighlightOffRounded } from '@mui/icons-material';
-import { Link } from '@mui/material';
 
 const ItemAdd = () => {
 
@@ -124,7 +122,7 @@ const ItemAdd = () => {
             const response = await axios.get(
                 `${process.env.REACT_APP_PORT}/itemAdd/getDistinctItemName`
             );
-            console.log(response.data.result)
+            console.log(response.data)
             setItemMasterDistNames(response.data.result);
 
         } catch (err) {
@@ -134,7 +132,6 @@ const ItemAdd = () => {
     useEffect(() => {
         getDistinctItemName();
     }, []);
-    console.log(itemMasterDistNames)
 
 
 
@@ -311,9 +308,11 @@ const ItemAdd = () => {
 
 
         if (name === "itemPartName") {
+            console.log(value)
             setItemAddData((prev) => ({ ...prev, itemPartName: typeof value === 'string' ? value.split(',') : value }));
         }
         if (name === "itemItemMasterIMTENo") {
+            console.log(value)
             setItemAddData((prev) => ({ ...prev, itemItemMasterIMTENo: typeof value === 'string' ? value.split(',') : value }));
         }
 
@@ -425,7 +424,7 @@ const ItemAdd = () => {
 
     useEffect(() => {
         getPartList();
-    }, [itemAddData.itemPartName]);
+    }, []);
 
 
     const [imteList, setImteList] = useState([])
@@ -554,7 +553,7 @@ const ItemAdd = () => {
     };
 
     const [uploadMessage, setUploadMessage] = useState("")
-    const [iframeURL, setIframeURL] = useState({ fileURL: "", fileName: "", file: "" });
+
     const handleCertificateUpload = (event) => {
         const selectedFile = event.target.files[0];
         if (selectedFile) {
@@ -853,7 +852,7 @@ const ItemAdd = () => {
                                             <InputLabel id="itemItemMasterIMTENoId">Select IMTENo.</InputLabel>
                                             <Select
                                                 labelId="itemItemMasterIMTENoId"
-                                                id="demo-multiple-checkbox"
+                                               
                                                 multiple
                                                 name="itemItemMasterIMTENo"
                                                 value={itemAddData.itemItemMasterIMTENo}
@@ -1075,18 +1074,9 @@ const ItemAdd = () => {
                                     </div>
 
                                     {uploadMessage &&
-                                        <div className="col-md-7 d-flex justify-content-between">
-
-                                            <Chip label={itemAddData.itemCertificateName} size='small' component="a" href={`${process.env.REACT_APP_PORT}/workInstructions/${itemAddData.itemCertificateName}`} target="_blank" clickable={true} color="primary" />
-                                            <HighlightOffRounded  type="button" onClick={() => handleRemoveFile()} />
-                                            <Chip col-md-4
-                                                label={uploadMessage}
-                                                size='small'
-
-
-                                                color="success"
-                                                icon={<Done />}
-                                            />
+                                        <div className="col-md-12 d-flex justify-content-between">
+                                            {itemAddData.itemCertificateName !== "" && <Chip clickable={true} onDelete={() => handleRemoveFile()} label={itemAddData.itemCertificateName} size='small' color='warning' />}
+                                            <Chip label={uploadMessage} size='small' color="success" icon={<Done />} />
                                         </div>}
 
 
@@ -1099,31 +1089,24 @@ const ItemAdd = () => {
                                 <h5 className='text-center'>Part</h5>
                                 <div className="row">
                                     <div className="col-md-12">
-                                        <FormControl sx={{ m: 1 }} fullWidth>
-                                            <InputLabel id="demo-multiple-chip-label">Select Part</InputLabel>
+                                        <FormControl size='small' component="div" fullWidth>
+                                            <InputLabel id="itemPartNameId">Select Part</InputLabel>
                                             <Select
-                                                labelId="demo-multiple-chip-label"
-                                                id="demo-multiple-chip"
+                                                labelId="itemPartNameId"
+                                                
                                                 multiple
+                                                name="itemPartName"
                                                 value={itemAddData.itemPartName}
                                                 onChange={handleItemAddChange}
-                                                input={<OutlinedInput id="select-multiple-chip" label="Select Part" name='itemPartName' />}
-                                                renderValue={(selected) => (
-                                                    <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
-                                                        {selected.map((value) => (
-                                                            <Chip key={value} label={value} />
-                                                        ))}
-                                                    </Box>
-                                                )}
+                                                input={<OutlinedInput fullWidth label="Select Part" />}
+                                                renderValue={(selected) => selected.map(item => item.partName).join(", ")}
                                                 MenuProps={MenuProps}
+                                                fullWidth
                                             >
                                                 {partData.map((name, index) => (
-                                                    <MenuItem
-                                                        key={index}
-                                                        value={name.partName}
-                                                    // style={getStyles(name, personName, theme)}
-                                                    >
-                                                        {name.partName}
+                                                    <MenuItem key={index} value={name}>
+                                                        <Checkbox checked={itemAddData.itemPartName.indexOf(name) > -1} />
+                                                        <ListItemText primary={name.partName} />
                                                     </MenuItem>
                                                 ))}
                                             </Select>
