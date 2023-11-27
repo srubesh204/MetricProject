@@ -14,7 +14,7 @@ import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 
 const ItemEdit = () => {
 
-    const {id} = useParams()
+    const { id } = useParams()
     console.log(id)
 
     // Units Data
@@ -35,7 +35,7 @@ const ItemEdit = () => {
         UnitFetch()
     }, []);
 
-    
+
 
 
     const [departments, setDepartments] = useState([])
@@ -305,7 +305,7 @@ const ItemEdit = () => {
     });
 
     useEffect(() => {
-      getItemDataById();
+        getItemDataById();
     }, [])
     const getItemDataById = async () => {
         try {
@@ -313,7 +313,7 @@ const ItemEdit = () => {
                 `${process.env.REACT_APP_PORT}/itemAdd/getItemAddById/${id}`
             );
             setItemAddData(response.data.result)
-             console.log(response)
+            console.log(response)
 
         } catch (err) {
             console.log(err);
@@ -433,7 +433,7 @@ const ItemEdit = () => {
 
     useEffect(() => {
         getPartList();
-    }, [itemAddData.itemPartName]);
+    }, []);
 
 
     const [imteList, setImteList] = useState([])
@@ -519,9 +519,9 @@ const ItemEdit = () => {
     const [open, setOpen] = useState(false)
 
     const navigate = useNavigate();
-    
-        
-      
+
+
+
 
     const updateItemData = async (e) => {
         e.preventDefault();
@@ -537,9 +537,9 @@ const ItemEdit = () => {
             setItemAddData(initialItemAddData)
             setTimeout(() => {
                 navigate('/itemList');
-              }, 3000); 
-            
-           
+            }, 3000);
+
+
         } catch (err) {
 
             setSnackBarOpen(true)
@@ -729,7 +729,7 @@ const ItemEdit = () => {
                                 </div>
                                 <div className="row g-2">
                                     <div className="col-lg-4">
-                                        <TextField size='small' variant='outlined' label="MFR.Si.No." onChange={handleItemAddChange} name='itemMFRNo'value={itemAddData.itemMFRNo} id='itemMFRNoId' fullWidth />
+                                        <TextField size='small' variant='outlined' label="MFR.Si.No." onChange={handleItemAddChange} name='itemMFRNo' value={itemAddData.itemMFRNo} id='itemMFRNoId' fullWidth />
                                     </div>
                                     <div className='col-lg-8 d-flex justify-content-between'>
                                         <TextField size='small' variant='outlined' name='itemLC' onChange={handleItemAddChange} id="itemLCId" value={itemAddData.itemLC} label="Least Count" fullWidth />
@@ -1069,7 +1069,7 @@ const ItemEdit = () => {
                                             format="DD-MM-YYYY" />
                                     </div>
                                     <div className="col-lg-12">
-                                        <TextField size='small' fullWidth variant='outlined' onChange={handleItemAddChange} label="Calibrated at"  value={itemAddData.itemCalibratedAt}select name='itemCalibratedAt'>
+                                        <TextField size='small' fullWidth variant='outlined' onChange={handleItemAddChange} label="Calibrated at" value={itemAddData.itemCalibratedAt} select name='itemCalibratedAt'>
                                             <MenuItem value="InHouse">InHouse</MenuItem>
                                             {suppOEM.map((item, index) => (
                                                 <MenuItem key={index} value={item.fullName}>{item.aliasName}</MenuItem>
@@ -1101,31 +1101,24 @@ const ItemEdit = () => {
                                 <h5 className='text-center'>Part</h5>
                                 <div className="row">
                                     <div className="col-md-12">
-                                        <FormControl sx={{ m: 1 }} fullWidth>
-                                            <InputLabel id="demo-multiple-chip-label">Select Part</InputLabel>
+                                        <FormControl size='small' component="div" fullWidth>
+                                            <InputLabel id="itemPartNameId">Select Part</InputLabel>
                                             <Select
-                                                labelId="demo-multiple-chip-label"
-                                                id="demo-multiple-chip"
+                                                labelId="itemPartNameId"
+
                                                 multiple
+                                                name="itemPartName"
                                                 value={itemAddData.itemPartName}
                                                 onChange={handleItemAddChange}
-                                                input={<OutlinedInput id="select-multiple-chip" label="Select Part" name='itemPartName' />}
-                                                renderValue={(selected) => (
-                                                    <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
-                                                        {selected.map((value) => (
-                                                            <Chip key={value} label={value} />
-                                                        ))}
-                                                    </Box>
-                                                )}
+                                                input={<OutlinedInput fullWidth label="Select Part" />}
+                                                renderValue={(selected) => selected.map(item => item.partName).join(", ")}
                                                 MenuProps={MenuProps}
+                                                fullWidth
                                             >
                                                 {partData.map((name, index) => (
-                                                    <MenuItem
-                                                        key={index}
-                                                        value={name.partName}
-                                                    // style={getStyles(name, personName, theme)}
-                                                    >
-                                                        {name.partName}
+                                                    <MenuItem key={index} value={name}>
+                                                        <Checkbox checked={itemAddData.itemPartName.indexOf(name) > -1} />
+                                                        <ListItemText primary={name.partName} />
                                                     </MenuItem>
                                                 ))}
                                             </Select>
@@ -1148,7 +1141,7 @@ const ItemEdit = () => {
                             <table className='table table-sm table-bordered text-center'>
                                 <tbody>
                                     <tr>
-                                    <th>Parameter</th>
+                                        <th>Parameter</th>
                                         <th>Range/Size</th>
                                         <th>Unit</th>
                                         {itemAddData.itemType === "Attribute" && <th colspan="3">Permissible Size</th>}
@@ -1159,7 +1152,7 @@ const ItemEdit = () => {
                                         {itemAddData.itemType === "Attribute" && <th colspan="2">Observed size</th>}
 
 
-                                        
+
                                         {itemAddData.itemType === "Variable" && <th>Accuracy</th>}
                                         {itemAddData.itemType === "Variable" && <th>Unit</th>}
                                         {itemAddData.itemType === "Variable" && <th>Observed Error</th>}
@@ -1202,7 +1195,7 @@ const ItemEdit = () => {
                                             {itemAddData.itemType === "Attribute" && <td><input type="text" className="form-control form-control-sm" id="acMinId" name="acMin" placeholder='min' value={item.acMin} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} /></td>}
                                             {itemAddData.itemType === "Attribute" && <td><input type="text" className='form-control form-control-sm' id="acMaxId" name="acMax" placeholder='max' value={item.acMax} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} /></td>}
                                             {itemAddData.itemType === "Variable" && <td><input type="text" className="form-control form-control-sm" id="acAccuracyId" name="acAccuracy" value={item.acAccuracy} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} /></td>}
-      
+
                                             {itemAddData.itemType === "Variable" && <td> <select className="form-select form-select-sm" id="acAccuracyUnitId" name="acAccuracyUnit" value={item.acAccuracyUnit} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} >
                                                 <option value="">-Select-</option>
                                                 {units.map((item, index) => (
@@ -1235,13 +1228,13 @@ const ItemEdit = () => {
                         </Paper>
                         <div className="d-flex justify-content-end">
 
-                            <Button variant='contained' color='warning' onClick={() => { setOpen(true)}}  className='me-3' type="button"  >
-                              <BorderColor/>  Update
+                            <Button variant='contained' color='warning' onClick={() => { setOpen(true) }} className='me-3' type="button"  >
+                                <BorderColor />  Update
                             </Button>
-                            <Button variant='contained' component={RouterLink} to={`/itemList/`} color='error' onClick={()=>setItemAddData(initialItemAddData)} type="reset">
-                            <ArrowBackIcon /> Back To List
+                            <Button variant='contained' component={RouterLink} to={`/itemList/`} color='error' onClick={() => setItemAddData(initialItemAddData)} type="reset">
+                                <ArrowBackIcon /> Back To List
                             </Button>
-                            
+
                         </div>
 
 
