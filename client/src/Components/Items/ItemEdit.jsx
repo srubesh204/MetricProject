@@ -38,7 +38,7 @@ const ItemEdit = () => {
         UnitFetch()
     }, []);
 
-   
+
 
     const [departments, setDepartments] = useState([])
     const DepartmentFetch = async () => {
@@ -152,7 +152,7 @@ const ItemEdit = () => {
     const [OEMList, setOEMList] = useState([]);
     const [supplierList, setSupplierList] = useState([])
     const [suppOEM, setSuppOEM] = useState([]);
-  
+
 
 
 
@@ -225,8 +225,8 @@ const ItemEdit = () => {
                 acRangeSize: "",
                 acMin: "",
                 acMax: "",
-                acPsMin:"",
-                acPsMax:"",
+                acPsMin: "",
+                acPsMax: "",
                 acPsWearLimit: "",
                 acAccuracy: "",
                 acObservedSize: ""
@@ -274,8 +274,8 @@ const ItemEdit = () => {
                 acRangeSize: "",
                 acMin: "",
                 acMax: "",
-                acPsMin:"",
-                acPsMax:"",
+                acPsMin: "",
+                acPsMax: "",
                 acPsWearLimit: "",
                 acAccuracy: "",
                 acObservedSize: ""
@@ -341,20 +341,20 @@ const ItemEdit = () => {
             setItemAddData((prev) => ({ ...prev, itemItemMasterIMTENo: typeof value === 'string' ? value.split(',') : value }));
         }
         if (name === "itemCalibrationSource") {
-            if(value=== "InHouse"){
+            if (value === "InHouse") {
                 console.log("InHouse")
-                setItemAddData((prev) => ({ ...prev, itemSupplier :[], itemOEM:[] }));
+                setItemAddData((prev) => ({ ...prev, itemSupplier: [], itemOEM: [] }));
             }
-            if(value=== "OutSource"){
+            if (value === "OutSource") {
                 console.log("OutSource")
-                setItemAddData((prev) => ({ ...prev, itemItemMasterIMTENo :[], itemOEM:[] }));
+                setItemAddData((prev) => ({ ...prev, itemItemMasterIMTENo: [], itemOEM: [] }));
             }
-            if(value=== "OEM"){
+            if (value === "OEM") {
                 console.log("OEM")
-                setItemAddData((prev) => ({ ...prev, itemItemMasterIMTENo :[], itemSupplier:[] }));
+                setItemAddData((prev) => ({ ...prev, itemItemMasterIMTENo: [], itemSupplier: [] }));
             }
-            
-            
+
+
         }
         if (name === "itemItemMasterName") {
             setItemAddData((prev) => ({ ...prev, itemItemMasterName: value }));
@@ -367,7 +367,7 @@ const ItemEdit = () => {
             setItemAddData((prev) => ({ ...prev, itemOEM: typeof value === 'string' ? value.split(',') : value }));
         }
 
-        
+
 
         setItemAddData((prev) => ({ ...prev, [name]: value }));
     }
@@ -491,8 +491,8 @@ const ItemEdit = () => {
                 acRangeSizeUnit: "",
                 acMin: "",
                 acMax: "",
-                acPsMin:"",
-                acPsMax:"",
+                acPsMin: "",
+                acPsMax: "",
                 acPsWearLimit: "",
                 acAccuracy: "",
                 acAccuracyUnit: "",
@@ -654,10 +654,10 @@ const ItemEdit = () => {
         }
     };
     useEffect(() => {
-        if(itemAddData.itemItemMasterName){
+        if (itemAddData.itemItemMasterName) {
             getItemMasterByName();
         }
-        
+
     }, [itemAddData.itemItemMasterName]);
 
 
@@ -893,7 +893,7 @@ const ItemEdit = () => {
                                             <InputLabel id="itemItemMasterIMTENoId">Select IMTENo.</InputLabel>
                                             <Select
                                                 labelId="itemItemMasterIMTENoId"
-                                                id="demo-multiple-checkbox"
+
                                                 multiple
                                                 name="itemItemMasterIMTENo"
                                                 value={itemAddData.itemItemMasterIMTENo}
@@ -1108,20 +1108,20 @@ const ItemEdit = () => {
                                         </TextField>
                                     </div>
                                     <div className="col-lg-12">
-                                        <Button component="label" value={itemAddData.itemCertificateName} variant="contained"  fullWidth >
+                                        <Button component="label" value={itemAddData.itemCertificateName} variant="contained" fullWidth >
 
                                             Certificate Upload
-                                            <VisuallyHiddenInput type="file" onChange={handleCertificateUpload}  />
+                                            <VisuallyHiddenInput type="file" onChange={handleCertificateUpload} />
                                             <button type='button' style={{ display: "none" }} value={itemAddData.itemCertificateName}>Select File</button>
                                         </Button>
                                     </div>
 
-                                    {itemAddData.itemCertificateName&&
+                                    {itemAddData.itemCertificateName &&
                                         <div className="col-md-7 d-flex justify-content-between">
                                             <Chip label={itemAddData.itemCertificateName} size='small' component="a" href={`${process.env.REACT_APP_PORT}/workInstructions/${itemAddData.itemCertificateName}`} target="_blank" clickable={true} color="primary" />
                                             <HighlightOffRounded type="button" onClick={() => handleRemoveFile()} />
-                                            {uploadMessage&&
-                                            <Chip label={uploadMessage} size='small' color="success" icon={<Done />} />}
+                                            {uploadMessage &&
+                                                <Chip label={uploadMessage} size='small' color="success" icon={<Done />} />}
                                         </div>}
 
 
