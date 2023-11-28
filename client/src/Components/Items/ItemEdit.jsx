@@ -335,10 +335,10 @@ const ItemEdit = () => {
 
 
         if (name === "itemPartName") {
-            setItemAddData((prev) => ({ ...prev, itemPartName: typeof value === 'string' ? value.split(',') : value }));
+            setItemAddData((prev) => ({ ...prev, itemPartName: value }));
         }
         if (name === "itemItemMasterIMTENo") {
-            setItemAddData((prev) => ({ ...prev, itemItemMasterIMTENo: typeof value === 'string' ? value.split(',') : value }));
+            setItemAddData((prev) => ({ ...prev, itemItemMasterIMTENo: value }));
         }
         if (name === "itemCalibrationSource") {
             if(value=== "InHouse"){
@@ -1150,7 +1150,7 @@ const ItemEdit = () => {
                                             >
                                                 {partData.map((name, index) => (
                                                     <MenuItem key={index} value={name}>
-                                                        <Checkbox checked={itemAddData.itemPartName.indexOf(name) > -1} />
+                                                        <Checkbox checked={itemAddData.itemPartName} />
                                                         <ListItemText primary={name.partName} />
                                                     </MenuItem>
                                                 ))}
