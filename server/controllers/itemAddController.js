@@ -1,18 +1,20 @@
 const itemAddModel = require("../models/itemAddModel")
+const dayjs = require('dayjs')
 
 const itemAddController = {
   getAllItemAdds: async (req, res) => {
     try {
       const itemAddResult = await itemAddModel.find();
+      console.log(dayjs().format("YYYY-MM-DD"))
       res.status(202).json({ result: itemAddResult, status: 1 });
       //res.status(200).json(employees);
+
     } catch (err) {
       console.error(err);
       res.status(500).send('Error on ItemAdd');
     }
   },
   createItemAdd: async (req, res) => {
-
     try {
       const {
         itemMasterRef,
@@ -46,9 +48,11 @@ const itemAddController = {
         itemCalibratedAt,
         itemCertificateName,
         itemPartName,
-        acceptanceCriteria
+        acceptanceCriteria,
+        createdAt // Assuming createdAt is part of the request body
       } = req.body;
-      const itemAddResult = new itemAddModel({
+  
+      const newItemFields = {
         itemMasterRef,
         itemAddMasterName,
         itemIMTENo,
@@ -80,115 +84,123 @@ const itemAddController = {
         itemCalibratedAt,
         itemCertificateName,
         itemPartName,
-        acceptanceCriteria
-      });
-      const validationError = itemAddResult.validateSync();
-
+        acceptanceCriteria,
+        createdAt // If createdAt is necessary for the creation, include it here
+      };
+  
+      const newItem = new itemAddModel(newItemFields);
+  
+      const validationError = newItem.validateSync();
       if (validationError) {
-        // Handle validation errors
         const validationErrors = {};
-
+  
         if (validationError.errors) {
-          // Convert Mongoose validation error details to a more user-friendly format
           for (const key in validationError.errors) {
             validationErrors[key] = validationError.errors[key].message;
           }
         }
-
+  
         return res.status(400).json({
           errors: validationErrors
         });
       }
-      console.log("success")
-
-      await itemAddResult.save();
-      return res.status(200).json({ message: "ItemAdd Data Successfully Saved", status: 1 });
+  
+      const createdItem = await itemAddModel.create(newItemFields);
+      console.log("ItemAdd Created Successfully");
+      res.status(200).json({ result: createdItem, message: "ItemAdd Created Successfully" });
     } catch (error) {
-      console.log(error)
-      if (error.errors) {
-        const errors500 = {};
-        for (const key in error.errors) {
-          errors500[key] = error.errors[key].message;
-        }
-        return res.status(500).json({ error: errors500, status: 0 });
+      console.log(error);
+  
+      if (error.code === 11000) {
+        return res.status(500).json({ error: 'Duplicate Value Not Accepted' });
       }
-
-      return res.status(500).json({ error: 'Internal server error on ItemAdd', status: 0 });
+  
+      const errors500 = {};
+      for (const key in error.errors) {
+        errors500[key] = error.errors[key].message;
+      }
+      console.log(error);
+      res.status(500).json({ error: error, status: 0 });
     }
   },
+  
 
   updateItemAdd: async (req, res) => {
     try {
       const itemAddId = req.params.id; // Assuming desId is part of the URL parameter
+
+      const itemData = itemAddModel.findById(itemAddId)
+      console.log(itemData)
       // if (isNaN(desId)) {
       //   return res.status(400).json({ error: 'Invalid desId value' });
       // }
       const { itemMasterRef,
-        itemAddMasterName ,
-        itemIMTENo ,
-        itemImage ,
-        itemType ,
-        itemRangeSize ,
-        itemRangeSizeUnit ,
-        itemMFRNo ,
-        itemLC ,
-        itemLCUnit ,
-        itemMake ,
-        itemModelNo ,
-        itemStatus ,
-        itemReceiptDate ,
-        itemDepartment ,
-        itemArea ,
-        itemPlaceOfUsage ,
-        itemCalFreInMonths ,
-        itemCalAlertDays ,
-        itemCalibrationSource ,
-        itemItemMasterName ,
-        itemItemMasterIMTENo ,
-        itemItemMasterDue ,
-        itemCalibrationDoneAt ,    
-        itemSupplier ,
-        itemOEM ,
-        itemCalDate ,
-        itemDueDate ,
-        itemCalibratedAt ,
-        itemCertificateName ,
-        itemPartName ,
-        acceptanceCriteria  } = req.body;
+        itemAddMasterName,
+        itemIMTENo,
+        itemImage,
+        itemType,
+        itemRangeSize,
+        itemRangeSizeUnit,
+        itemMFRNo,
+        itemLC,
+        itemLCUnit,
+        itemMake,
+        itemModelNo,
+        itemStatus,
+        itemReceiptDate,
+        itemDepartment,
+        itemArea,
+        itemPlaceOfUsage,
+        itemCalFreInMonths,
+        itemCalAlertDays,
+        itemCalibrationSource,
+        itemItemMasterName,
+        itemItemMasterIMTENo,
+        itemItemMasterDue,
+        itemCalibrationDoneAt,
+        itemSupplier,
+        itemOEM,
+        itemCalDate,
+        itemDueDate,
+        itemCalibratedAt,
+        itemCertificateName,
+        itemPartName,
+        acceptanceCriteria,
+        } = req.body;
       // Create an object with the fields you want to update
       const updateItemFields = {
         itemMasterRef,
-        itemAddMasterName ,
-        itemIMTENo ,
-        itemImage ,
-        itemType ,
-        itemRangeSize ,
-        itemRangeSizeUnit ,
-        itemMFRNo ,
-        itemLC ,
-        itemLCUnit ,
-        itemMake ,
-        itemModelNo ,
-        itemStatus ,
-        itemReceiptDate ,
-        itemDepartment ,
-        itemArea ,
-        itemPlaceOfUsage ,
-        itemCalFreInMonths ,
-        itemCalAlertDays ,
-        itemCalibrationSource ,
-        itemItemMasterName ,
-        itemItemMasterIMTENo ,
-        itemItemMasterDue ,
-        itemCalibrationDoneAt ,    
-        itemSupplier ,
-        itemOEM ,
-        itemCalDate ,
-        itemDueDate ,
-        itemCalibratedAt ,
-        itemCertificateName ,
-        itemPartName ,
-        acceptanceCriteria 
+        itemAddMasterName,
+        itemIMTENo,
+        itemImage,
+        itemType,
+        itemRangeSize,
+        itemRangeSizeUnit,
+        itemMFRNo,
+        itemLC,
+        itemLCUnit,
+        itemMake,
+        itemModelNo,
+        itemStatus,
+        itemReceiptDate,
+        itemDepartment,
+        itemArea,
+        itemPlaceOfUsage,
+        itemCalFreInMonths,
+        itemCalAlertDays,
+        itemCalibrationSource,
+        itemItemMasterName,
+        itemItemMasterIMTENo,
+        itemItemMasterDue,
+        itemCalibrationDoneAt,
+        itemSupplier,
+        itemOEM,
+        itemCalDate,
+        itemDueDate,
+        itemCalibratedAt,
+        itemCertificateName,
+        itemPartName,
+        acceptanceCriteria,
       };
 
       // Find the designation by desId and update it
@@ -228,7 +240,7 @@ const itemAddController = {
       if (error.code === 11000) {
         console.log(error)
         return res.status(500).json({ error: 'Duplicate Value Not Accepted' });
-        
+
       }
       const errors500 = {};
       for (const key in error.errors) {
@@ -253,7 +265,7 @@ const itemAddController = {
           // If a vendor was not found, you can skip it or handle the error as needed.
           console.log(`ItemAdd with ID ${itemAddId} not found.`);
           res.status(500).json({ message: `ItemAdd with ID not found.` });
- 
+
         } else {
           console.log(`ItemAdd with ID ${itemAddId} deleted successfully.`);
           deleteResults.push(deletedItemAdd);
@@ -307,8 +319,8 @@ const itemAddController = {
   },
   getItemAddByName: async (req, res) => {
     try {
-      const {itemItemMasterName} = req.body
-      const getItemAddByName = await itemAddModel.find({itemAddMasterName: itemItemMasterName})  // To return the updated document);
+      const { itemItemMasterName } = req.body
+      const getItemAddByName = await itemAddModel.find({ itemAddMasterName: itemItemMasterName })  // To return the updated document);
       res.status(202).json({ result: getItemAddByName, status: 1 });
       //res.status(200).json(employees);
     } catch (err) {
@@ -338,8 +350,8 @@ const itemAddController = {
   },
   getItemAddByDepName: async (req, res) => {
     try {
-      const {itemDepartment} = req.body
-      const getItemAddByDepName = await itemAddModel.find({itemDepartment: itemDepartment})  // To return the updated document);
+      const { itemDepartment } = req.body
+      const getItemAddByDepName = await itemAddModel.find({ itemDepartment: itemDepartment })  // To return the updated document);
       res.status(202).json({ result: getItemAddByDepName, status: 1 });
       //res.status(200).json(employees);
     } catch (err) {
@@ -350,8 +362,8 @@ const itemAddController = {
 
   getitemAddMasterName: async (req, res) => {
     try {
-      const {itemAddMasterName} = req.body
-      const getItemAddMasterName = await itemAddModel.find({itemAddMasterName: itemAddMasterName})  // To return the updated document);
+      const { itemAddMasterName } = req.body
+      const getItemAddMasterName = await itemAddModel.find({ itemAddMasterName: itemAddMasterName })  // To return the updated document);
       res.status(202).json({ result: getItemAddMasterName, status: 1 });
       //res.status(200).json(employees);
     } catch (err) {
@@ -359,8 +371,51 @@ const itemAddController = {
       res.status(500).send('Error on getitemAddMasterName Get');
     }
   },
+  changeDepartmentUpdate: async (req, res) => {
+    try {
+      // Assuming desId is part of the URL parameter
 
-   
+      
+      // if (isNaN(desId)) {
+      //   return res.status(400).json({ error: 'Invalid desId value' });
+      // }
+     
+      const {itemIds, itemDepartment} = req.body
+
+      const updatePromises = itemIds.map(async (itemId) => {
+        const {itemIMTENo} = itemId
+        const itemData = await itemAddModel.findById(itemId._id)
+        const {itemDepartment: itemLastLocation} = itemData
+        const updateItemFields = {itemIMTENo, itemDepartment, itemLastLocation}
+        const updateResult = await itemAddModel.findOneAndUpdate(
+          { _id: itemId._id },
+          { $set: updateItemFields },
+          { new: true }
+        );
+        return updateResult;
+      });
+      const updatedItems = await Promise.all(updatePromises);
+     
+      console.log("ItemAdd Updated Successfully")
+      res.status(200).json({ result: updatedItems, message: "ItemAdd Updated Successfully" });
+    } catch (error) {
+      console.log(error);
+      if (error.code === 11000) {
+        console.log(error)
+        return res.status(500).json({ error: 'Duplicate Value Not Accepted' });
+
+      }
+      const errors500 = {};
+      for (const key in error.errors) {
+        errors500[key] = error.errors[key].message;
+      }
+      console.log(error)
+      res.status(500).json({ error: error, status: 0 });
+    }
+  },
+  
+
+
 }
 
 

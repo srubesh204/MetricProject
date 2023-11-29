@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const dayjs = require('dayjs')
 const uniqueValidator = require('mongoose-unique-validator');
 
 const itemAddSchema = new mongoose.Schema({
@@ -21,6 +22,7 @@ const itemAddSchema = new mongoose.Schema({
   itemStatus: String,
   itemReceiptDate: String,
   itemDepartment: String,
+  itemLastLocation: String,
   itemArea: String,
   itemPlaceOfUsage: String,
   itemCalFreInMonths: String,
@@ -52,7 +54,12 @@ const itemAddSchema = new mongoose.Schema({
           acAccuracy: String,
           acObservedSize: String
       }
-  ]
+  ],
+  createdAt: {
+    type: String,
+    default: () => dayjs().format("YYYY-MM-DD"),
+    immutable: true,
+  }
 
 });
 itemAddSchema.plugin(uniqueValidator);
