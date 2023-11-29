@@ -275,11 +275,11 @@ const ItemList = () => {
         { field: 'itemMake', headerName: 'Make', width: 90 },
         { field: 'itemCalDate', headerName: 'Cal Date', width: 100, valueGetter: (params) => dayjs(params.row.itemCalDate).format('DD-MM-YYYY') },
         { field: 'itemDueDate', headerName: 'Due Date', width: 110, valueGetter: (params) => dayjs(params.row.itemDueDate).format('DD-MM-YYYY') },
-        { field: 'itemLC', headerName: 'itemLC', width: 60, valueGetter: (params) => params.row.itemLC || "-" },
+        { field: 'itemLC', headerName: 'ItemLC', width: 60, valueGetter: (params) => params.row.itemLC || "-" },
         { field: 'itemCalFreInMonths', headerName: 'Frequency', type: "number", width: 100 },
         { field: 'itemCalibrationSource', headerName: 'Cal Done At ', width: 100 },
         { field: 'itemStatus', headerName: 'Status ', width: 80, },
-        { field: 'itemDepartment', headerName: 'current location', width: 120, },
+        { field: 'itemDepartment', headerName: 'Current location', width: 120, },
 
         { field: 'itemSupplier', headerName: 'Cal Source', renderCell: (params) => params.row.itemSupplier.toString(), width: 110 },
         { field: 'itemType', headerName: 'Type', width: 180 },

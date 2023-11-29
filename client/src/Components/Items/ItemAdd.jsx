@@ -293,6 +293,8 @@ const ItemAdd = () => {
                 acPsMax: "",
                 acObMin: "",
                 acObMax: "",
+                acMin:"",
+                acMax:"",
                 acWearLimit: "",
                 acAccuracy: "",
                 acObservedSize: ""
@@ -505,6 +507,8 @@ const ItemAdd = () => {
                 acMax: "",
                 acPsMin: "",
                 acPsMax: "",
+                acMin:"",
+                acMax:"",
                 acPsWearLimit: "",
                 acAccuracy: "",
                 acAccuracyUnit: "",
@@ -649,7 +653,7 @@ const ItemAdd = () => {
     const getItemMasterByName = async () => {
         try {
             const response = await axios.post(
-                `${process.env.REACT_APP_PORT}/itemAdd/getItemAddByName`, { itemAddMasterName: itemAddData.itemItemMasterName }
+                `${process.env.REACT_APP_PORT}/itemAdd/getItemAddByName`, { itemItemMasterName: itemAddData.itemItemMasterName }
             );
             console.log(response.data)
             setItemMasterListByName(response.data.result);
@@ -663,6 +667,8 @@ const ItemAdd = () => {
         }
 
     }, [itemAddData.itemItemMasterName]);
+
+
 
 
 
@@ -710,7 +716,7 @@ const ItemAdd = () => {
                                     clearOnBlur={false}
                                 //getOptionDisabled={options => true}
 
-                                    />
+                                />
 
 
                                 {/*  <TextField size='small' select variant='outlined' label="Item Prefix" name='itemIMTENo' value={itemAddData.itemIMTENo} fullWidth onChange={handleItemAddChange}>
@@ -1188,6 +1194,27 @@ const ItemAdd = () => {
                                             <InputLabel id="itemPartNameId">Select Part</InputLabel>
                                             <Select
                                                 labelId="itemPartNameId"
+                                                multiple
+                                                name="itemPartName"
+                                                value={itemAddData.itemPartName}
+                                                onChange={handleItemAddChange}
+                                                input={<OutlinedInput fullWidth label="Select Part" />}
+                                                renderValue={(selected) => selected.map(item => item.partName).join(", ")}
+                                                MenuProps={MenuProps}
+                                                fullWidth
+                                            >
+                                                {partData.map((name, index) => (
+                                                    <MenuItem key={index} value={name}>
+                                                        <Checkbox checked={itemAddData.itemPartName.indexOf(name) > -1} /> {/* Check if the item is selected */}
+                                                        <ListItemText primary={name.partName} />
+                                                    </MenuItem>
+                                                ))}
+                                            </Select>
+                                        </FormControl>
+                                        {/*<FormControl size='small' component="div" fullWidth>
+                                            <InputLabel id="itemPartNameId">Select Part</InputLabel>
+                                            <Select
+                                                labelId="itemPartNameId"
 
                                                 multiple
                                                 name="itemPartName"
@@ -1205,7 +1232,7 @@ const ItemAdd = () => {
                                                     </MenuItem>
                                                 ))}
                                             </Select>
-                                        </FormControl>
+                                                </FormControl>*/}
                                     </div>
 
 
@@ -1271,13 +1298,13 @@ const ItemAdd = () => {
 
 
                                             </select></td>
-                                            {itemAddData.itemType === "Attribute" && <td><input type="text" className="form-control form-control-sm" id="acMinId" name="acMin" placeholder='min' value={item.acPsMin} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} /></td>}
+                                            {itemAddData.itemType === "Attribute" && <td><input type="text" className="form-control form-control-sm" id="acPsMinId" name="acPsMin" placeholder='min' value={item.acPsMin} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} /></td>}
 
-                                            {itemAddData.itemType === "Attribute" && <td><input type="text" className='form-control form-control-sm' id="acMaxId" name="acMax" placeholder='max' value={item.acPsMax} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} /></td>}
+                                            {itemAddData.itemType === "Attribute" && <td><input type="text" className='form-control form-control-sm' id="acPsMaxId" name="acPsMax" placeholder='max' value={item.acPsMax} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} /></td>}
 
                                             {itemAddData.itemType === "Attribute" && <td><input type="text" className="form-control form-control-sm" id="acWearLimitId" name="acWearLimit" placeholder='wearLimit' value={item.acWearLimit} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} /></td>}
-                                            {itemAddData.itemType === "Attribute" && <td><input type="text" className="form-control form-control-sm" id="acMinId" name="acMin" placeholder='min' value={item.acObMin} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} /></td>}
-                                            {itemAddData.itemType === "Attribute" && <td><input type="text" className='form-control form-control-sm' id="acMaxId" name="acMax" placeholder='max' value={item.acObMax} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} /></td>}
+                                            {itemAddData.itemType === "Attribute" && <td><input type="text" className="form-control form-control-sm" id="acObMinId" name="acObMin" placeholder='min' value={item.acObMin} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} /></td>}
+                                            {itemAddData.itemType === "Attribute" && <td><input type="text" className='form-control form-control-sm' id="acObMaxId" name="acObMax" placeholder='max' value={item.acObMax} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} /></td>}
                                             {itemAddData.itemType === "Variable" && <td><input type="text" className="form-control form-control-sm" id="acAccuracyId" name="acAccuracy" value={item.acAccuracy} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} /></td>}
 
                                             {itemAddData.itemType === "Variable" && <td> <select className="form-select form-select-sm" id="acAccuracyUnitId" name="acAccuracyUnit" value={item.acAccuracyUnit} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} >

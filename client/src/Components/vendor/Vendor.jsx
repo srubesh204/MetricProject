@@ -93,7 +93,7 @@ const Vendor = () => {
             name: "",
             contactNumber: "",
             mailId: "",
-            vcStatus: ""
+            vcStatus: "Active"
         }],
         certificate: "",
         certificateValidity: dayjs().format("YYYY-MM-DD"),
@@ -106,7 +106,7 @@ const Vendor = () => {
         fullName: "",
         dor: dayjs().format("YYYY-MM-DD"),
         address: "",
-        state: "Active",
+        state: "",
         city: "",
         oem: "",
         customer: "",
@@ -116,7 +116,7 @@ const Vendor = () => {
             name: "",
             contactNumber: "",
             mailId: "",
-            vcStatus: ""
+            vcStatus: "Active"
         }],
         certificate: "",
         certificateValidity: dayjs().format("YYYY-MM-DD"),

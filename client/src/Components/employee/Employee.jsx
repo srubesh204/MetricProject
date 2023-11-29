@@ -66,7 +66,7 @@ const Employee = () => {
               `${params.row.firstName || ''} ${params.row.lastName || ''}`,
           },
   
-        { field: 'dob', headerName: 'DOB', width: 100, },
+        { field: 'dob', headerName: 'DOB', width: 100,  valueGetter: (params) => dayjs(params.row.itemCalDate).format('DD-MM-YYYY')},
         { field: 'contactNumber', headerName: 'Contact No', type: "number", width: 120, },
         { field: 'designation', headerName: 'Designation', width: 120, },
         { field: 'department', headerName: 'Department', width: 130, },

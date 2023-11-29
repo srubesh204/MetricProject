@@ -36,7 +36,7 @@ function App() {
     <div className="App">
 
       
-      {fullList.includes(location.pathname) ? "":<Dashboard/>}
+      {fullList.includes(location.pathname) ? "":""}
       <Routes>
         <Route path="/desdep" element={<Department />} />
         <Route path="/des" element={<Designation />} />

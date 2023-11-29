@@ -46,7 +46,9 @@ const itemAddSchema = new mongoose.Schema({
           acMax: String,
           acPsMin: String,
           acPsMax:String,
-          acPsWearLimit:String,
+          acObMin:String,
+          acObMax:String,
+          acWearLimit:String,
           acAccuracy: String,
           acObservedSize: String
       }

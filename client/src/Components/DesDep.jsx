@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import Alert from '@mui/material/Alert';
 import Snackbar from '@mui/material/Snackbar';
-import { Box, Container, Grid, IconButton, Paper, Typography } from "@mui/material";
+import { Box, Checkbox, Container, FormControlLabel, Grid, IconButton, Paper, Typography } from "@mui/material";
 import { TextField, MenuItem, FormControl } from '@mui/material';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
@@ -43,7 +43,8 @@ export const Department = () => {
   }
   const [departmentData, setDepartmentData] = useState({
     department: "",
-    departmentStatus: "Active"
+    departmentStatus: "Active",
+    defaultdep: ""
   });
   console.log(departmentData)
 
@@ -457,14 +458,29 @@ export const Department = () => {
 
 
 
-
+  const capitalizeAfterSpaceOrPeriod = (value) => {
+    return value.toLowerCase().replace(/(?:^|\s|\.|\/)([a-z])/g, (match) => match.toUpperCase());
+  };
 
   const handleDepChange = (e) => {
-    const { name, value } = e.target;
+    const { name, value , checked} = e.target;
     const formattedValue = name === 'department'
-      ? value.toLowerCase().split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')
-      : value;
-    setDepartmentData((prev) => ({ ...prev, [name]: formattedValue }))
+    ? capitalizeAfterSpaceOrPeriod(value)
+    : value;
+    
+   
+    if (name === "defaultdep") {
+      console.log(checked)
+      setDepartmentData((prev) => ({
+        ...prev,
+        [name]: checked ? "yes" : "no"
+      }));
+    }else{
+      setDepartmentData((prev) => ({ ...prev, [name]: formattedValue }))
+    }
+
+   
+  
   };
 
   const handleAreaChange = (e) => {
@@ -789,7 +805,7 @@ export const Department = () => {
                 <Typography variant="h5" component="h5" className="text-center">Department</Typography>
                 <div className="row g-2" >
 
-                  <div className="col-md-8 d-flex ">
+                  <div className="col-md-6">
 
                     <TextField label="Department"
                       id="departmentId"
@@ -802,7 +818,7 @@ export const Department = () => {
                       name="department" ></TextField>
 
                   </div>
-                  <div className="col d-flex ">
+                  <div className="col">
 
                     <TextField label="Status"
                       id="departmentStatusId"
@@ -820,6 +836,10 @@ export const Department = () => {
                     </TextField>
 
                   </div>
+                  <div className="col">
+                  <FormControlLabel control={<Checkbox name="defaultdep" checked={departmentData.defaultdep === "yes"} onChange={handleDepChange} />} label="Default" />
+                  </div>
+
                 </div>
 
                 <div className="row g-2 ">
@@ -1732,13 +1752,16 @@ export const Designation = () => {
   const [designationList, setDesignationList] = useState([]);
   console.log(designationData)
 
- 
+  const capitalizeAfterSpaceOrPeriod = (value) => {
+    return value.toLowerCase().replace(/(?:^|\s|\.|\/)([a-z])/g, (match) => match.toUpperCase());
+  };
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     const formattedValue = name === 'designation'
-      ? value.toLowerCase().split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')
-      : value;
-      setDesignationData((prev) => ({ ...prev, [name]: formattedValue }))
+      ? capitalizeAfterSpaceOrPeriod(value)
+    : value;
+    setDesignationData((prev) => ({ ...prev, [name]: formattedValue }))
   };
 
 

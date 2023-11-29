@@ -276,7 +276,9 @@ const ItemEdit = () => {
                 acMax: "",
                 acPsMin: "",
                 acPsMax: "",
-                acPsWearLimit: "",
+                acObMin: "",
+                acObMax: "",
+                acWearLimit: "",
                 acAccuracy: "",
                 acObservedSize: ""
             }
@@ -325,13 +327,27 @@ const ItemEdit = () => {
             console.log(err);
         }
     };
+    {/* const handleItemAddChange = (e) => {
+        const { name, value } = e.target;
+        setItemAddData((prevData) => ({
+            ...prevData,
+            [name]: value,
+            previousItemRangeSizeUnit: prevData.itemRangeSizeUnit, // Store the previous value
+        }));
+    };*/}
+
 
     const handleItemAddChange = (e) => {
 
         const { name, value } = e.target;
-        if (name === "itemRangeSizeUnit") {
+        {/*} if (name === "itemRangeSizeUnit") {
             setItemAddData((prev) => ({ ...prev, [name]: value, acceptanceCriteria: [{ acAccuracyUnit: value, acRangeSizeUnit: value }] }))
-        }
+        }*/}
+        setItemAddData((prevData) => ({
+            ...prevData,
+            [name]: value,
+            previousItemRangeSizeUnit: prevData.itemRangeSizeUnit, // Store the previous value
+        }));
 
 
         if (name === "itemPartName") {
@@ -371,6 +387,32 @@ const ItemEdit = () => {
 
         setItemAddData((prev) => ({ ...prev, [name]: value }));
     }
+
+
+
+   {/* const handleItemAddChanges = (event) => {
+        const { value } = event.target;
+        const selectedIndex = itemAddData.itemPartName.indexOf(value);
+        let newSelected = [];
+
+        if (selectedIndex === -1) {
+            newSelected = [...itemAddData.itemPartName, value];
+        } else if (selectedIndex === 0) {
+            newSelected = [...itemAddData.itemPartName.slice(1)];
+        } else if (selectedIndex === itemAddData.itemPartName.length - 1) {
+            newSelected = [...itemAddData.itemPartName.slice(0, -1)];
+        } else if (selectedIndex > 0) {
+            newSelected = [
+                ...itemAddData.itemPartName.slice(0, selectedIndex),
+                ...itemAddData.itemPartName.slice(selectedIndex + 1),
+            ];
+        }
+
+        setItemAddData({ ...itemAddData, itemPartName: newSelected });
+    };*/}
+
+
+
 
     const handleItemDue = (e) => {
         const { name, value } = e.target;
@@ -493,7 +535,9 @@ const ItemEdit = () => {
                 acMax: "",
                 acPsMin: "",
                 acPsMax: "",
-                acPsWearLimit: "",
+                acObMin: "",
+                acObMax: "",
+                acWearLimit: "",
                 acAccuracy: "",
                 acAccuracyUnit: "",
                 acObservedSize: "",
@@ -501,7 +545,7 @@ const ItemEdit = () => {
         }))
     }
 
-    const changeACValue = (index, name, value) => {
+    {/* const changeACValue = (index, name, value) => {
 
         setItemAddData((prevItemAddData) => {
             const updateAC = [...prevItemAddData.acceptanceCriteria]
@@ -512,6 +556,31 @@ const ItemEdit = () => {
                 ...prevItemAddData, acceptanceCriteria: updateAC,
             };
         })
+    };*/}
+
+    const changeACValue = (index, name, value) => {
+        console.log('Received:', { index, name, value });
+
+        setItemAddData((prevItemAddData) => {
+            console.log('Previous State:', prevItemAddData);
+
+            const updateAC = [...prevItemAddData.acceptanceCriteria];
+            updateAC[index] = {
+                ...updateAC[index],
+                [name]: value,
+            };
+
+            console.log('Updated AC:', updateAC);
+
+            const updatedData = {
+                ...prevItemAddData,
+                acceptanceCriteria: updateAC,
+            };
+
+            console.log('New State:', updatedData);
+
+            return updatedData;
+        });
     };
 
     const deleteAC = (index) => {
@@ -759,10 +828,10 @@ const ItemEdit = () => {
                                         <TextField size='small' variant='outlined' label="MFR.Si.No." onChange={handleItemAddChange} name='itemMFRNo' value={itemAddData.itemMFRNo} id='itemMFRNoId' fullWidth />
                                     </div>
                                     <div className='col-lg-8 d-flex justify-content-between'>
-                                        <TextField size='small' variant='outlined' name='itemLC' onChange={handleItemAddChange} id="itemLCId" value={itemAddData.itemLC} label="Least Count" fullWidth />
+                                        {itemAddData.itemType === "Variable" && <TextField size='small' variant='outlined' name='itemLC' onChange={handleItemAddChange} id="itemLCId" value={itemAddData.itemLC} label="Least Count" fullWidth />}
 
 
-                                        <TextField select size='small' variant='outlined' label="Unit" name='itemLCUnit' onChange={handleItemAddChange} value={itemAddData.itemLCUnit} style={{ width: "40%" }} >
+                                        <TextField select size='small' variant='outlined' label="Unit" name='itemLCUnit' onChange={handleItemAddChange} value={itemAddData.itemLCUnit} style={{ width: "100%" }} >
                                             <MenuItem value=""><em>None</em></MenuItem>
                                             {units.map((unit, index) => (
                                                 <MenuItem key={index} value={unit.unitName}>{unit.unitName}</MenuItem>
@@ -771,18 +840,23 @@ const ItemEdit = () => {
 
                                     </div>
                                     <div className="row g-1">
-                                        <div className="col-lg me-1">
-                                            <TextField size='small' variant='outlined' label="Make" value={itemAddData.itemMake} onChange={handleItemAddChange} onKeyDown={handleKeyDown} name='itemMake' id='itemMakeId' fullWidth />
+                                        <div className="col-lg-12 me-1">
+                                            {itemAddData.itemType === "Attribute" && <TextField size='small' variant='outlined' label="Make" onChange={handleItemAddChange} value={itemAddData.itemMake} onKeyDown={handleKeyDown} name='itemMake' id='itemMakeId' fullWidth />}
+                                            {itemAddData.itemType === "Reference Standard" && <TextField size='small' variant='outlined' label="Make" onChange={handleItemAddChange} value={itemAddData.itemMake} onKeyDown={handleKeyDown} name='itemMake' id='itemMakeId' fullWidth />}
                                         </div>
+                                        {itemAddData.itemType === "Variable" &&
+                                            <div className="col-lg me-1">
+                                                <TextField size='small' variant='outlined' label="Make" value={itemAddData.itemMake} onChange={handleItemAddChange} onKeyDown={handleKeyDown} name='itemMake' id='itemMakeId' fullWidth />
+                                            </div>}
                                         <div className="col-lg">
-                                            <TextField size='small' variant='outlined' label="Model No." onChange={handleItemAddChange} value={itemAddData.itemModelNo} name='itemModelNo' id='itemModelNoId' fullWidth />
+                                            {itemAddData.itemType === "Variable" && <TextField size='small' variant='outlined' label="Model No." onChange={handleItemAddChange} value={itemAddData.itemModelNo} name='itemModelNo' id='itemModelNoId' fullWidth />}
                                         </div>
                                     </div>
                                     <div className="row g-1">
                                         <div className="col-lg me-1">
                                             <TextField size='small' select variant='outlined' value={itemAddData.itemStatus} onChange={handleItemAddChange} label="Item Status" name='itemStatus' id='itemStatusId' fullWidth >
                                                 <MenuItem value="Active">Active</MenuItem>
-                                                <MenuItem value="Spara">Spara</MenuItem>
+                                                <MenuItem value="Spare">Spare</MenuItem>
                                                 <MenuItem value="Breakdown">Breakdown</MenuItem>
                                                 <MenuItem value="Missing">Missing</MenuItem>
                                                 <MenuItem value="Rejection">Rejection</MenuItem>
@@ -893,6 +967,31 @@ const ItemEdit = () => {
                                             <InputLabel id="itemItemMasterIMTENoId">Select IMTENo.</InputLabel>
                                             <Select
                                                 labelId="itemItemMasterIMTENoId"
+                                                multiple
+                                                name="itemItemMasterIMTENo"
+                                                value={itemAddData.itemItemMasterIMTENo} // Ensure this holds the correct selected value(s)
+                                                onChange={handleItemAddChange}
+                                                input={<OutlinedInput fullWidth label="Select IMTE No" />}
+                                                renderValue={(selected) => (
+                                                    Array.isArray(selected) ?
+                                                        selected.map((item) => item.itemIMTENo).join(", ") :
+                                                        selected.itemIMTENo // Render a single selected value
+                                                )}
+                                                MenuProps={MenuProps}
+                                                fullWidth
+                                            >
+                                                {itemMasterListByName.map((name, index) => (
+                                                    <MenuItem key={index} value={name}>
+                                                        <Checkbox checked={itemAddData.itemItemMasterIMTENo.indexOf(name) > -1} />
+                                                        <ListItemText primary={name.itemIMTENo} />
+                                                    </MenuItem>
+                                                ))}
+                                            </Select>
+                                        </FormControl>
+                                        {/*<FormControl size='small' component="div" fullWidth>
+                                            <InputLabel id="itemItemMasterIMTENoId">Select IMTENo.</InputLabel>
+                                            <Select
+                                                labelId="itemItemMasterIMTENoId"
 
                                                 multiple
                                                 name="itemItemMasterIMTENo"
@@ -910,7 +1009,7 @@ const ItemEdit = () => {
                                                     </MenuItem>
                                                 ))}
                                             </Select>
-                                        </FormControl>
+                                                </FormControl>*/}
                                     </div>
 
 
@@ -1117,8 +1216,8 @@ const ItemEdit = () => {
                                     </div>
 
                                     {itemAddData.itemCertificateName &&
-                                        <div className="col-md-7 d-flex justify-content-between">
-                                            <Chip label={itemAddData.itemCertificateName} size='small' component="a" href={`${process.env.REACT_APP_PORT}/workInstructions/${itemAddData.itemCertificateName}`} target="_blank" clickable={true} color="primary" />
+                                        <div className="col-md-4 d-flex justify-content-between">
+                                            <Chip label={itemAddData.itemCertificateName} size='small' component="a" href={`${process.env.REACT_APP_PORT}/workInstructions/${itemAddData.itemCertificateName}`} onClick={() => handleRemoveFile()} target="_blank" clickable={true} color="primary" />
                                             <HighlightOffRounded type="button" onClick={() => handleRemoveFile()} />
                                             {uploadMessage &&
                                                 <Chip label={uploadMessage} size='small' color="success" icon={<Done />} />}
@@ -1135,6 +1234,29 @@ const ItemEdit = () => {
                                 <div className="row">
                                     <div className="col-md-12">
                                         <FormControl size='small' component="div" fullWidth>
+                                            <InputLabel id="itemPartNameId">Select Part</InputLabel>
+                                            <Select
+                                                labelId="itemPartNameId"
+                                                name="itemPartName"
+                                                value={itemAddData.itemPartName}
+                                                onChange={handleItemAddChange}
+                                                input={<OutlinedInput fullWidth label="Select Part" />}
+                                                renderValue={(selected) => selected.map(item => item.partName).join(", ")}
+                                                MenuProps={MenuProps}
+                                                fullWidth
+                                            >
+                                                {partData.map((name, index) => (
+                                                    <MenuItem key={index} value={name}>
+                                                        <Checkbox
+                                                            checked={itemAddData.itemPartName.indexOf(name) > -1}
+                                                        // Check if the item is selected
+                                                        />
+                                                        <ListItemText primary={name.partName} />
+                                                    </MenuItem>
+                                                ))}
+                                            </Select>
+                                        </FormControl>
+                                        {/* <FormControl size='small' component="div" fullWidth>
                                             <InputLabel id="itemPartNameId">Select Part</InputLabel>
                                             <Select
                                                 labelId="itemPartNameId"
@@ -1155,7 +1277,7 @@ const ItemEdit = () => {
                                                     </MenuItem>
                                                 ))}
                                             </Select>
-                                        </FormControl>
+                                                </FormControl>*/}
                                     </div>
 
 
@@ -1224,9 +1346,9 @@ const ItemEdit = () => {
 
                                             {itemAddData.itemType === "Attribute" && <td><input type="text" className='form-control form-control-sm' id="acPsMaxId" name="acPsMax" placeholder='max' value={item.acPsMax} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} /></td>}
 
-                                            {itemAddData.itemType === "Attribute" && <td><input type="text" className="form-control form-control-sm" id="acPsWearLimitId" name="acPsWearLimit" placeholder='wearLimit' value={item.acPsWearLimit} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} /></td>}
-                                            {itemAddData.itemType === "Attribute" && <td><input type="text" className="form-control form-control-sm" id="acMinId" name="acMin" placeholder='min' value={item.acMin} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} /></td>}
-                                            {itemAddData.itemType === "Attribute" && <td><input type="text" className='form-control form-control-sm' id="acMaxId" name="acMax" placeholder='max' value={item.acMax} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} /></td>}
+                                            {itemAddData.itemType === "Attribute" && <td><input type="text" className="form-control form-control-sm" id="acWearLimitId" name="acWearLimit" placeholder='wearLimit' value={item.acWearLimit} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} /></td>}
+                                            {itemAddData.itemType === "Attribute" && <td><input type="text" className="form-control form-control-sm" id="acObMinId" name="acObMin" placeholder='min' value={item.acObMin} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} /></td>}
+                                            {itemAddData.itemType === "Attribute" && <td><input type="text" className='form-control form-control-sm' id="acObMaxId" name="acObMax" placeholder='max' value={item.acObMax} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} /></td>}
                                             {itemAddData.itemType === "Variable" && <td><input type="text" className="form-control form-control-sm" id="acAccuracyId" name="acAccuracy" value={item.acAccuracy} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} /></td>}
 
                                             {itemAddData.itemType === "Variable" && <td> <select className="form-select form-select-sm" id="acAccuracyUnitId" name="acAccuracyUnit" value={item.acAccuracyUnit} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} >
