@@ -647,7 +647,7 @@ const ItemAdd = () => {
     const getItemMasterByName = async () => {
         try {
             const response = await axios.post(
-                `${process.env.REACT_APP_PORT}/itemAdd/getItemAddByName`, { itemAddMasterName: itemAddData.itemItemMasterName }
+                `${process.env.REACT_APP_PORT}/itemAdd/getItemAddByName`, { itemItemMasterName: itemAddData.itemItemMasterName }
             );
             console.log(response.data)
             setItemMasterListByName(response.data.result);
