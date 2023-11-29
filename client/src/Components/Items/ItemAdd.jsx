@@ -478,6 +478,8 @@ const ItemAdd = () => {
             );
             console.log(response.data)
             setImteList(response.data.result)
+
+
         } catch (err) {
             console.log(err);
         }
@@ -697,7 +699,7 @@ const ItemAdd = () => {
                                 </TextField>
                             </div>
                             <div className="col-9">
-                            <Autocomplete
+                                <Autocomplete
                                     disablePortal
                                     id="itemIMTENoId"
                                     value={itemAddData.itemIMTENo}
@@ -708,10 +710,10 @@ const ItemAdd = () => {
                                     clearOnBlur={false}
                                 //getOptionDisabled={options => true}
 
-                                />
+                                    />
 
 
-                               {/* <TextField size='small' select variant='outlined' label="Item Prefix" name='itemIMTENo' value={itemAddData.itemIMTENo} fullWidth onChange={handleItemAddChange}>
+                                {/*  <TextField size='small' select variant='outlined' label="Item Prefix" name='itemIMTENo' value={itemAddData.itemIMTENo} fullWidth onChange={handleItemAddChange}>
                                     <MenuItem value=""><em>Select</em></MenuItem>
                                     {itemMasterDataPrefix.map((item) => (
                                         <MenuItem value={item._id}>{item.itemPrefix}</MenuItem>
@@ -783,9 +785,9 @@ const ItemAdd = () => {
                                     </div>
                                     <div className="row g-1">
                                         <div className="col-lg-12 me-1">
-                                        {itemAddData.itemType === "Attribute" &&   <TextField size='small' variant='outlined' label="Make" onChange={handleItemAddChange} value={itemAddData.itemMake} onKeyDown={handleKeyDown} name='itemMake' id='itemMakeId' fullWidth />}
-                                        {itemAddData.itemType === "Reference Standard" &&   <TextField size='small' variant='outlined' label="Make" onChange={handleItemAddChange} value={itemAddData.itemMake} onKeyDown={handleKeyDown} name='itemMake' id='itemMakeId' fullWidth />}
-                                            </div>
+                                            {itemAddData.itemType === "Attribute" && <TextField size='small' variant='outlined' label="Make" onChange={handleItemAddChange} value={itemAddData.itemMake} onKeyDown={handleKeyDown} name='itemMake' id='itemMakeId' fullWidth />}
+                                            {itemAddData.itemType === "Reference Standard" && <TextField size='small' variant='outlined' label="Make" onChange={handleItemAddChange} value={itemAddData.itemMake} onKeyDown={handleKeyDown} name='itemMake' id='itemMakeId' fullWidth />}
+                                        </div>
 
                                         {itemAddData.itemType === "Variable" &&
                                             <div className="col-lg me-1">
@@ -912,6 +914,29 @@ const ItemAdd = () => {
                                             <InputLabel id="itemItemMasterIMTENoId">Select IMTENo.</InputLabel>
                                             <Select
                                                 labelId="itemItemMasterIMTENoId"
+
+                                                multiple
+                                                name="itemItemMasterIMTENo"
+                                                value={itemAddData.itemItemMasterIMTENo}
+                                                onChange={handleItemAddChange}
+                                                input={<OutlinedInput fullWidth label="Select IMTE No" />}
+                                                renderValue={(selected) => selected.map(item => item.itemIMTENo).join(", ")}
+
+                                                MenuProps={MenuProps}
+                                                fullWidth
+                                            >
+                                                {itemMasterListByName.map((name, index) => (
+                                                    <MenuItem key={index} value={name}>
+                                                        <Checkbox checked={itemAddData.itemItemMasterIMTENo.indexOf(name) > -1} />
+                                                        <ListItemText primary={name.itemIMTENo} />
+                                                    </MenuItem>
+                                                ))}
+                                            </Select>
+                                        </FormControl>
+                                        {/*<FormControl size='small' component="div" fullWidth>
+                                            <InputLabel id="itemItemMasterIMTENoId">Select IMTENo.</InputLabel>
+                                            <Select
+                                                labelId="itemItemMasterIMTENoId"
                                                
                                                 multiple
                                                 name="itemItemMasterIMTENo"
@@ -929,7 +954,7 @@ const ItemAdd = () => {
                                                     </MenuItem>
                                                 ))}
                                             </Select>
-                                        </FormControl>
+                                                </FormControl>*/}
                                     </div>
 
 
@@ -1163,7 +1188,7 @@ const ItemAdd = () => {
                                             <InputLabel id="itemPartNameId">Select Part</InputLabel>
                                             <Select
                                                 labelId="itemPartNameId"
-                                                
+
                                                 multiple
                                                 name="itemPartName"
                                                 value={itemAddData.itemPartName}
