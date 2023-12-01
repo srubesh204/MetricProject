@@ -55,6 +55,7 @@ const itemAddSchema = new mongoose.Schema({
         acMaxPSError: String,
       }
   ],
+  itemUncertainity : String,
   createdAt: {
     type: String,
     default: () => dayjs().format("YYYY-MM-DD"),
@@ -62,7 +63,7 @@ const itemAddSchema = new mongoose.Schema({
   },
   updatedAt: {
     type: String,
-    default: ()=> dayjs()
+    default: ()=> dayjs().format("YYYY-MM-DD")
   }
 
 });

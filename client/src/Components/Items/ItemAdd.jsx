@@ -106,6 +106,7 @@ const ItemAdd = () => {
             );
 
             console.log(response.data)
+            const masterItems = response.data.result.filter((item) => item.isItemMaster === "1")
             setItemMasterDataList(response.data.result);
 
         } catch (err) {
@@ -116,24 +117,9 @@ const ItemAdd = () => {
         itemMasterFetchData();
     }, []);
 
-    const [itemMasterDataPrefix, setItemMasterDataPrefix] = useState([])
-    const itemMasterFetchDataItem = async () => {
-        try {
-            const response = await axios.get(
-                `${process.env.REACT_APP_PORT}/itemMaster/getAllItemMasters`
 
-            );
 
-            console.log(response.data)
-            setItemMasterDataPrefix(response.data.result);
 
-        } catch (err) {
-            console.log(err);
-        }
-    };
-    useEffect(() => {
-        itemMasterFetchDataItem();
-    }, []);
 
 
     const [itemMasterDistNames, setItemMasterDistNames] = useState([])
@@ -203,7 +189,7 @@ const ItemAdd = () => {
 
     //
 
-  
+
 
 
 
@@ -254,7 +240,8 @@ const ItemAdd = () => {
                 acMinPSError: "",
                 acMaxPSError: "",
             }
-        ]
+        ],
+        itemUncertainity: ""
     })
 
     //upload Button
@@ -326,20 +313,14 @@ const ItemAdd = () => {
             setItemAddData((prev) => ({ ...prev, itemOEM: typeof value === 'string' ? value.split(',') : value }));
         }
 
+        setItemAddData((prev) => ({ ...prev, [name]: value }));
+
         if (name === "isItemMaster") {
-            console.log(checked)
             setItemAddData((prev) => ({
               ...prev,
               [name]: checked ? "1" : "0"
             }));
           }
-
-
-
-
-
-
-        setItemAddData((prev) => ({ ...prev, [name]: value }));
     }
 
     const handleItemDue = (e) => {
@@ -532,7 +513,7 @@ const ItemAdd = () => {
 
             console.log("Item Created Successfully")
             setErrorHandler({ status: response.data.status, message: response.data.message, code: "success" })
-            
+
             setTimeout(() => {
                 navigate('/itemList');
             }, 2000);
@@ -692,7 +673,11 @@ const ItemAdd = () => {
 
                             </div>
                             <div className="col">
-                                <FormControlLabel control={<Checkbox name='isItemMaster' checked={itemAddData.isItemMaster === "1"} onChange={handleItemAddChange}/>} label="Use as Master" />
+                                <FormControlLabel
+                                    control={<Checkbox name='isItemMaster'  onChange={handleItemAddChange} />}
+                                    label="Use as Master"
+                                />
+
                             </div>
 
 
@@ -729,8 +714,8 @@ const ItemAdd = () => {
                                         <TextField size='small' variant='outlined' label="Range/Size" onChange={handleItemAddChange} name='itemRangeSize' id='itemRangeSizeId' fullWidth />
                                         <TextField label="Unit" size='small' select onChange={(e) => {
                                             handleItemAddChange(e);
-                                        }} name='itemRangeSizeUnit' id='itemRangeSizeUnitId' style={{ width: "40%" }} >
-                                            <MenuItem value=''><em>None</em></MenuItem>
+                                        }} name='itemRangeSizeUnit' id='itemRangeSizeUnitId' defaultValue="none" style={{ width: "40%" }} >
+                                            <MenuItem value='none'><em>None</em></MenuItem>
                                             {units.map((unit, index) => (
                                                 <MenuItem key={index} value={unit.unitName}>{unit.unitName}</MenuItem>
                                             ))}
@@ -1124,13 +1109,16 @@ const ItemAdd = () => {
 
                                         </TextField>
                                     </div>
-                                    <div className="col-lg-12">
-                                        <Button component="label" value={itemAddData.itemCertificateName} variant="contained" fullWidth >
+                                    <div className="col-lg-12 d-flex justify-content-between">
+                                        <Button className='me-2' component="label" value={itemAddData.itemCertificateName} variant="contained" fullWidth >
 
                                             Certificate Upload
                                             <VisuallyHiddenInput type="file" onChange={handleCertificateUpload} />
                                         </Button>
+
+                                        {itemAddData.isItemMaster === "1" && <TextField fullWidth label="Uncertainity" variant='outlined' size='small' onChange={handleItemAddChange} name='itemUncertainity' value={itemAddData.itemUncertainity} />}
                                     </div>
+
 
                                     {itemAddData.itemCertificateName &&
                                         <div className="col-md-7 d-flex justify-content-between">

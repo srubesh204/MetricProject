@@ -49,6 +49,7 @@ const itemAddController = {
         itemCalibratedAt,
         itemCertificateName,
         itemPartName,
+        itemUncertainity,
         acceptanceCriteria,
         createdAt // Assuming createdAt is part of the request body
       } = req.body;
@@ -86,6 +87,7 @@ const itemAddController = {
         itemCalibratedAt,
         itemCertificateName,
         itemPartName,
+        itemUncertainity,
         acceptanceCriteria,
         createdAt // If createdAt is necessary for the creation, include it here
       };
@@ -168,6 +170,7 @@ const itemAddController = {
         itemCalibratedAt,
         itemCertificateName,
         itemPartName,
+        itemUncertainity,
         acceptanceCriteria,
         } = req.body;
       // Create an object with the fields you want to update
@@ -204,6 +207,7 @@ const itemAddController = {
         itemCalibratedAt,
         itemCertificateName,
         itemPartName,
+        itemUncertainity,
         acceptanceCriteria,
       };
 
@@ -313,7 +317,7 @@ const itemAddController = {
   },
   getDistinctItemName: async (req, res) => {
     try {
-      const itemAddResult = await itemAddModel.find().distinct('itemAddMasterName');
+      const itemAddResult = await itemAddModel.find({ isItemMaster: "1" }).distinct('itemAddMasterName');
       res.status(202).json({ result: itemAddResult, status: 1 });
       //res.status(200).json(employees);
     } catch (err) {

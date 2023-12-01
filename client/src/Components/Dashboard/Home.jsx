@@ -1315,6 +1315,42 @@ const Home = () => {
                     </tr>
                   </tbody>
                 </table>
+                <table className='table table-bordered table-responsive text-center align-middle'>
+                  <tbody>
+                    <tr>
+                        <th>Parameter</th>
+                        <th>Range/Size</th>
+                        <th>Unit</th>
+                        <th>Max</th>
+                        <th>Min</th>
+                        <th>WearLimit</th>
+                        <th>Observed Size/ Observer Error</th>
+                        <th>Unit</th>
+                        <th>Status</th>
+                    </tr>
+                    {/* {calibrationData.calcalibrationData.map((item)=> ()} */}
+                    <tr>
+                    </tr>
+                  </tbody>
+                </table>
+                <table className='table table-bordered table-responsive text-center align-middle'>
+                  <tbody>
+                    <tr>
+                        <th>Parameter</th>
+                        <th>Range/Size</th>
+                        <th>Unit</th>
+                        <th>Max</th>
+                        <th>Min</th>
+                        <th>WearLimit</th>
+                        <th>Observed Size/ Observer Error</th>
+                        <th>Unit</th>
+                        <th>Status</th>
+                    </tr>
+                    {/* {calibrationData.calcalibrationData.map((item)=> ()} */}
+                    <tr>
+                    </tr>
+                  </tbody>
+                </table>
               </Paper>
 
             </DialogContent>
