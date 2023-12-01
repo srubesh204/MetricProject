@@ -247,6 +247,7 @@ const ItemList = () => {
     useEffect(() => {
         itemAddFetch();
     }, []);
+    
 
     const handleSnackClose = (event, reason) => {
         if (reason === 'clickaway') {
@@ -280,7 +281,6 @@ const ItemList = () => {
         { field: 'itemCalibrationSource', headerName: 'Cal Done At ', width: 100 },
         { field: 'itemStatus', headerName: 'Status ', width: 80, },
         { field: 'itemDepartment', headerName: 'Current location', width: 120, },
-
         { field: 'itemSupplier', headerName: 'Cal Source', renderCell: (params) => params.row.itemSupplier.toString(), width: 110 },
         { field: 'itemType', headerName: 'Type', width: 180 },
     ];

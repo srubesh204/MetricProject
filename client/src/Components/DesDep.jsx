@@ -12,6 +12,8 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import { DataGrid, GridToolbar } from '@mui/x-data-grid';
 import { Delete } from '@mui/icons-material';
+import { Check, Clear } from '@mui/icons-material';
+
 
 
 export const Department = () => {
@@ -73,6 +75,10 @@ export const Department = () => {
     { field: 'department', headerName: 'Department', width: "90" },
     { field: 'departmentStatus', headerName: 'Department Status', width: "90" },
     {
+      field: 'defaultdep', headerName: 'Default', width: "90",
+      renderCell: (params) => params.row.defaultdep === "yes" ? <Check color="success" /> : <Clear color="error" />
+    },
+    {
       field: 'delete',
       headerName: 'Delete',
       width: 80,
@@ -83,8 +89,6 @@ export const Department = () => {
         </IconButton>
       ),
     },
-
-
   ];
 
   const [selectedRowIds, setSelectedRowIds] = useState([]);
@@ -464,24 +468,24 @@ export const Department = () => {
   };
 
   const handleDepChange = (e) => {
-    const { name, value , checked} = e.target;
+    const { name, value, checked } = e.target;
     const formattedValue = name === 'department'
-    ? capitalizeAfterSpaceOrPeriod(value)
-    : value;
-    
-   
+      ? capitalizeAfterSpaceOrPeriod(value)
+      : value;
+
+
     if (name === "defaultdep") {
       console.log(checked)
       setDepartmentData((prev) => ({
         ...prev,
         [name]: checked ? "yes" : "no"
       }));
-    }else{
+    } else {
       setDepartmentData((prev) => ({ ...prev, [name]: formattedValue }))
     }
 
-   
-  
+
+
   };
 
   const handleAreaChange = (e) => {
@@ -838,7 +842,7 @@ export const Department = () => {
 
                   </div>
                   <div className="col">
-                  <FormControlLabel control={<Checkbox name="defaultdep" checked={departmentData.defaultdep === "yes"} onChange={handleDepChange} />} label="Default" />
+                    <FormControlLabel control={<Checkbox name="defaultdep" checked={departmentData.defaultdep === "yes"} onChange={handleDepChange} />} label="Default" />
                   </div>
 
                 </div>
@@ -1761,7 +1765,7 @@ export const Designation = () => {
     const { name, value } = e.target;
     const formattedValue = name === 'designation'
       ? capitalizeAfterSpaceOrPeriod(value)
-    : value;
+      : value;
     setDesignationData((prev) => ({ ...prev, [name]: formattedValue }))
   };
 
