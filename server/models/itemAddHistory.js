@@ -2,9 +2,8 @@ const mongoose = require('mongoose');
 const dayjs = require('dayjs')
 const uniqueValidator = require('mongoose-unique-validator');
 
-const itemAddSchema = new mongoose.Schema({
+const itemAddHistory = new mongoose.Schema({
   itemMasterRef: String,
-  isItemMaster: String,
   itemAddMasterName: String,
   itemIMTENo: {
     type: String,
@@ -41,21 +40,21 @@ const itemAddSchema = new mongoose.Schema({
   itemPartName: [],
   acceptanceCriteria: [
       {
-        acParameter: String,
-        acNominalSize: String,
-        acNominalSizeUnit: String,
-        acMinPS: String,
-        acMaxPS: String,
-        acWearLimitPS: String,
-        acMinOB: String,
-        acMaxOB: String,
-        acAverageOB: String,
-        acOBError: String,
-        acMinPSError: String,
-        acMaxPSError: String,
+          acAccuracyUnit: String,
+          acRangeSizeUnit: String,
+          acParameter: String,
+          acRangeSize: String,
+          acMin: String,
+          acMax: String,
+          acPsMin: String,
+          acPsMax:String,
+          acObMin:String,
+          acObMax:String,
+          acWearLimit:String,
+          acAccuracy: String,
+          acObservedSize: String
       }
   ],
-  itemUncertainity : String,
   createdAt: {
     type: String,
     default: () => dayjs().format("YYYY-MM-DD"),
@@ -63,10 +62,10 @@ const itemAddSchema = new mongoose.Schema({
   },
   updatedAt: {
     type: String,
-    default: ()=> dayjs().format("YYYY-MM-DD")
+    default: () => dayjs().format("YYYY-MM-DD"),
   }
 
 });
 itemAddSchema.plugin(uniqueValidator);
 
-module.exports = mongoose.model('itemAdd', itemAddSchema);
+module.exports = mongoose.model('itemAddHistory', itemAddHistory);

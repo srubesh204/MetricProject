@@ -18,6 +18,7 @@ const itemAddController = {
     try {
       const {
         itemMasterRef,
+        isItemMaster,
         itemAddMasterName,
         itemIMTENo,
         itemImage,
@@ -48,12 +49,14 @@ const itemAddController = {
         itemCalibratedAt,
         itemCertificateName,
         itemPartName,
+        itemUncertainity,
         acceptanceCriteria,
         createdAt // Assuming createdAt is part of the request body
       } = req.body;
   
       const newItemFields = {
         itemMasterRef,
+        isItemMaster,
         itemAddMasterName,
         itemIMTENo,
         itemImage,
@@ -84,6 +87,7 @@ const itemAddController = {
         itemCalibratedAt,
         itemCertificateName,
         itemPartName,
+        itemUncertainity,
         acceptanceCriteria,
         createdAt // If createdAt is necessary for the creation, include it here
       };
@@ -136,6 +140,7 @@ const itemAddController = {
       // }
       const { itemMasterRef,
         itemAddMasterName,
+        isItemMaster,
         itemIMTENo,
         itemImage,
         itemType,
@@ -165,11 +170,13 @@ const itemAddController = {
         itemCalibratedAt,
         itemCertificateName,
         itemPartName,
+        itemUncertainity,
         acceptanceCriteria,
         } = req.body;
       // Create an object with the fields you want to update
       const updateItemFields = {
         itemMasterRef,
+        isItemMaster,
         itemAddMasterName,
         itemIMTENo,
         itemImage,
@@ -200,6 +207,7 @@ const itemAddController = {
         itemCalibratedAt,
         itemCertificateName,
         itemPartName,
+        itemUncertainity,
         acceptanceCriteria,
       };
 
@@ -309,7 +317,7 @@ const itemAddController = {
   },
   getDistinctItemName: async (req, res) => {
     try {
-      const itemAddResult = await itemAddModel.find().distinct('itemAddMasterName');
+      const itemAddResult = await itemAddModel.find({ isItemMaster: "1" }).distinct('itemAddMasterName');
       res.status(202).json({ result: itemAddResult, status: 1 });
       //res.status(200).json(employees);
     } catch (err) {
@@ -383,15 +391,16 @@ const itemAddController = {
       const {itemIds, itemDepartment} = req.body
 
       const updatePromises = itemIds.map(async (itemId) => {
-        const {itemIMTENo} = itemId
-        const itemData = await itemAddModel.findById(itemId._id)
-        const {itemDepartment: itemLastLocation} = itemData
+        
+        const itemData = await itemAddModel.findById(itemId)
+        const {itemDepartment: itemLastLocation , itemIMTENo} = itemData
         const updateItemFields = {itemIMTENo, itemDepartment, itemLastLocation}
         const updateResult = await itemAddModel.findOneAndUpdate(
           { _id: itemId._id },
           { $set: updateItemFields },
           { new: true }
         );
+        console.log(updateResult)
         return updateResult;
       });
       const updatedItems = await Promise.all(updatePromises);
