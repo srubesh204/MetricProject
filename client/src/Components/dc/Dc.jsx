@@ -50,6 +50,73 @@ const Dc = () => {
         dcFetchData();
     }, []);
 
+    const [vendorDataList, setVendorDataList] = useState([])
+
+    const vendorFetchData = async () => {
+        try {
+            const response = await axios.get(
+                `${process.env.REACT_APP_PORT}/vendor/getAllVendors`
+            );
+            setVendorDataList(response.data.result);
+            //setFilteredData(response.data.result);
+        } catch (err) {
+            console.log(err);
+        }
+    };
+    useEffect(() => {
+        vendorFetchData();
+    }, []);
+
+    const [vendorDcList, setVendorDcList] = useState([])
+    const FetchData = async () => {
+        try {
+            const response = await axios.get(
+                `${process.env.REACT_APP_PORT}/vendor/getAllVendors`
+            );
+            setVendorDcList(response.data.result);
+            //setFilteredData(response.data.result);
+        } catch (err) {
+            console.log(err);
+        }
+    };
+    useEffect(() => {
+        FetchData();
+    }, []);
+    const [vendorDcDataList, setVendorDcDataList] = useState([])
+    const dcDataFetchData = async () => {
+        try {
+            const response = await axios.get(
+                `${process.env.REACT_APP_PORT}/vendor/getAllVendors`
+            );
+            setVendorDcDataList(response.data.result);
+            //setFilteredData(response.data.result);
+        } catch (err) {
+            console.log(err);
+        }
+    };
+    useEffect(() => {
+        dcDataFetchData();
+    }, []);
+
+    const [itemMasterDataList, setItemMasterDataList] = useState([])
+
+    const itemMasterFetchData = async () => {
+        try {
+            const response = await axios.get(
+                `${process.env.REACT_APP_PORT}/itemMaster/getAllItemMasters`
+
+            );
+
+            console.log(response.data)
+            setItemMasterDataList(response.data.result);
+
+        } catch (err) {
+            console.log(err);
+        }
+    };
+    useEffect(() => {
+        itemMasterFetchData();
+    }, []);
 
     const [itemAddList, setItemAddList] = useState([]);
 
@@ -96,21 +163,33 @@ const Dc = () => {
 
                                             <TextField label="Party Name"
                                                 id="partyNameId"
+                                                select
                                                 defaultValue=""
                                                 //  sx={{ width: "100%" }}
                                                 size="small"
                                                 fullWidth
-                                                name="partyName" />
+                                                name="partyName" >
+                                                {vendorDataList.map((item) => (
+                                                    <MenuItem value={item._id}>{item.fullName}</MenuItem>
+                                                ))}
+                                            </TextField>
+
                                         </div>
                                         <div className="col-6">
 
                                             <TextField label="Party code"
                                                 id="partyCodeId"
                                                 defaultValue=""
+                                                select
                                                 // sx={{ width: "100%" }}
                                                 size="small"
                                                 fullWidth
-                                                name="partyCode" />
+                                                name="partyCode" >
+                                                {vendorDcList.map((item) => (
+                                                    <MenuItem value={item._id}>{item.vendorCode}</MenuItem>
+                                                ))}
+                                            </TextField>
+
 
                                         </div>
 
@@ -121,10 +200,15 @@ const Dc = () => {
 
                                             <TextField label="PartyAddress"
                                                 id="partyAddressId"
+                                                select
                                                 defaultValue=""
                                                 size="small"
                                                 sx={{ width: "101%" }}
-                                                name="Party Address" />
+                                                name="Party Address" >
+                                                {vendorDcDataList.map((item) => (
+                                                    <MenuItem value={item._id}>{item.address}</MenuItem>
+                                                ))}
+                                            </TextField>
 
                                         </div>
                                     </div>
@@ -179,7 +263,9 @@ const Dc = () => {
                                             name="reason"
                                         >
                                             <MenuItem value="all">All</MenuItem>
-                                            <MenuItem value="Active">Active</MenuItem>
+                                            <MenuItem value="Service">Service</MenuItem>
+                                            <MenuItem value="Calibration">Calibration</MenuItem>
+                                            <MenuItem value="service & calibration">service & calibration</MenuItem>
 
 
                                         </TextField>
@@ -215,9 +301,10 @@ const Dc = () => {
                                 <div className='col d-flex'>
                                     <div className='col me-2'>
                                         <TextField size='small' fullWidth variant='outlined' id="itemListId" select label="Item List" name='itemList'>
-                                            <MenuItem value="InHouse">InHouse</MenuItem>
-                                            <MenuItem value="OutSource">OutSource</MenuItem>
-                                            <MenuItem value="OEM">OEM</MenuItem>
+                                        <MenuItem value="all">All</MenuItem>
+                                            {itemMasterDataList.map((item) => (
+                                        <MenuItem value={item._id}>{item.itemDescription}</MenuItem>
+                                    ))}
                                         </TextField>
                                     </div>
                                     <div className='col'>
@@ -310,10 +397,6 @@ const Dc = () => {
                         >
                             <div className='row'>
                                 <div className='col d-flex '>
-
-                                    <div className='me-2 '>
-                                        <button type="button" className='btn btn-secondary' >Create New Dc</button>
-                                    </div>
                                     <div className='me-2 '>
                                         <button type="button" className='btn btn-secondary' >Print</button>
                                     </div>
