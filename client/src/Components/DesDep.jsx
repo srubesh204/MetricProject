@@ -39,12 +39,13 @@ export const Department = () => {
 
   const emptyDepartmentData = {
     department: "",
-    departmentStatus: "Active"
+    departmentStatus: "Active",
+    defaultdep: "no"
   }
   const [departmentData, setDepartmentData] = useState({
     department: "",
     departmentStatus: "Active",
-    defaultdep: ""
+    defaultdep: "no"
   });
   console.log(departmentData)
 

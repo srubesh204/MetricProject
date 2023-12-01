@@ -1,4 +1,4 @@
-import { Autocomplete, Badge, Button, Chip, MenuItem, Paper, Stack, TextField, ToggleButton, ToggleButtonGroup, Typography } from '@mui/material';
+import { Autocomplete, Badge, Button, Chip, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, FormControl, Grid, InputLabel, List, ListSubheader, MenuItem, Paper, Select, Stack, TextField, ToggleButton, ToggleButtonGroup, Typography } from '@mui/material';
 import Box from '@mui/material/Box';
 import { Link } from 'react-router-dom'
 import { DataGrid, GridToolbar } from '@mui/x-data-grid';
@@ -43,6 +43,7 @@ const Home = () => {
   const [distinctDepartment, setDistinctDepartment] = useState([])
   const [departmentName, setDepartmentName] = useState("")
   const [allDepartments, setAllDepartments] = useState([])
+  const [defaultDepartment, setDefaultDepartment] = useState("")
 
   const getAllDepartments = async () => {
     try {
@@ -50,7 +51,14 @@ const Home = () => {
         `${process.env.REACT_APP_PORT}/department/getAllDepartments`
       );
       console.log(Departments)
-      setAllDepartments(Departments.data.result)
+      const defaultDepartment = Departments.data.result.filter((dep) => dep.defaultdep === "yes");
+      const otherDepartment = Departments.data.result.filter((dep) => dep.defaultdep === "no")
+
+
+      setAllDepartments([...defaultDepartment, ...otherDepartment])
+
+
+
 
     } catch (err) {
       console.log(err);
@@ -95,21 +103,6 @@ const Home = () => {
   };
   console.log(customers)
 
-  const DepartmentFetch = async () => {
-    try {
-      const Departments = await axios.get(
-        `${process.env.REACT_APP_PORT}/itemAdd/getDistinctItemDepartments`
-      );
-      setDistinctDepartment(Departments.data.result)
-      console.log(Departments)
-      setItemLocationData([{ value: Departments.data.result.length, label: "Departments" }, { value: 0, label: "Sub Contractors" }, { value: 0, label: "Customers" }, { value: 0, label: "Suppliers" }])
-
-    } catch (err) {
-      console.log(err);
-    }
-  };
-
-  console.log(itemListOptions)
   const itemFetch = async () => {
     try {
       const response = await axios.get(
@@ -164,6 +157,23 @@ const Home = () => {
       console.log(err);
     }
   };
+
+
+  const DepartmentFetch = async () => {
+    try {
+      const Departments = await axios.get(
+        `${process.env.REACT_APP_PORT}/itemAdd/getDistinctItemDepartments`
+      );
+      setDistinctDepartment(Departments.data.result)
+      console.log(Departments)
+      setItemLocationData([{ value: Departments.data.result.length, label: "Departments" }, { value: 0, label: "Sub Contractors" }, { value: 0, label: "Customers" }, { value: 0, label: "Suppliers" }])
+
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  console.log(itemListOptions)
 
 
   const ItemListColumns = [
@@ -553,27 +563,35 @@ const Home = () => {
 
   const [selectedRows, setSelectedRows] = useState([]);
 
-  const [DepUpdateData, setDepUpdateData] = useState({itemDepartment: "Standards Room"})
+  const [DepUpdateData, setDepUpdateData] = useState("")
+  const [selectedDepartment, setSelectedDepartment] = useState()
 
   const DepartmentChange = (e) => {
     const { value } = e.target;
-    const itemData = selectedRows.map((item)=> ({_id :item._id, itemIMTENo :item.itemIMTENo}))
-    setDepUpdateData({itemIds : itemData, itemDepartment: value})
+    setSelectedDepartment(value)
+    const itemData = selectedRows.map((item) => item._id)
+    setDepUpdateData({ itemIds: itemData, itemDepartment: value })
   }
   console.log(DepUpdateData)
   const updateItemData = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.put(
-        `${process.env.REACT_APP_PORT}/itemAdd/changeDepartmentUpdate`, DepUpdateData
-      );
 
-      setSnackBarOpen(true)
+      const itemData = selectedRows.map((item) => ({ _id: item._id, itemIMTENo: item.itemIMTENo }))
+      const depData = { itemIds: itemData, itemDepartment: selectedDepartment }
+      if (depData) {
+        const response = await axios.put(
+          `${process.env.REACT_APP_PORT}/itemAdd/changeDepartmentUpdate`, depData
+        );
 
-      console.log("Item Update Successfully")
-      setErrorHandler({ status: response.data.status, message: response.data.message, code: "success" })
-      setSelectedRows([])
-      itemFetch();
+        setSnackBarOpen(true)
+
+        console.log("Item Update Successfully")
+        setErrorHandler({ status: response.data.status, message: response.data.message, code: "success" })
+        setSelectedRows([])
+        itemFetch();
+      }
+
 
 
     } catch (err) {
@@ -602,7 +620,7 @@ const Home = () => {
     }
   };
 
- 
+
 
   // const handleSelectRow = (row) => {
   //   // Check if the row is already selected
@@ -623,7 +641,51 @@ const Home = () => {
     setSelectedRows(selectedRowsData);
   };
 
+  const [calOpen, setCalOpen] = useState(false);
+
   console.log(selectedRows)
+
+
+  const [calibrationData, setCalibrationData] = useState({
+    calIMTENo: "",
+    calItemName: "",
+    calItemType: "",
+    calRangeSize: "",
+    calItemMFRNo: "",
+    calLC: "",
+    calItemMake: "",
+    calItemTemperature: "",
+    calItemHumidity: "",
+    calItemUncertainity: "",
+    calItemSOPNo: "",
+    calStandardRef: "",
+    calCertificateNo: "",
+    calItemCalDate: "",
+    calItemDueDate: "",
+    calItemEntryDate: "",
+    calCalibratedBy: "",
+    calApprovedBy: "",
+    calcalibrationData: [{
+      calDataParameter: "",
+      calDataRangeSize: "",
+      calDataRangeSizeUnit: "",
+      calDataMin: "",
+      calDataMax: "",
+      calDataWearLimit: "",
+      calDataOSOE: "",
+      calDataOSOEUnit: "",
+      calDataStatus: ""
+    }],
+    calMasterUsed: [{
+      masterIMTENo: "",
+      masterName: "",
+      masterRangeSize: "",
+      masterCalCertificateNo: "",
+      masterCalDate: "",
+      masterNextDue: "",
+      masterCalibratedAt: "",
+    }]
+  })
 
   return (
     <div style={{ backgroundColor: "#f1f4f4", margin: 0, padding: 0 }}>
@@ -817,7 +879,7 @@ const Home = () => {
           </Paper></div>
 
         <div className="col">
-          <Paper elevation={12} sx={{ p: 2 , height: "100%"}}>
+          <Paper elevation={12} sx={{ p: 2, height: "100%" }}>
             <h4 className='text-center'>Item Location</h4>
             <ResponsiveContainer width="100%" height={200}>
 
@@ -858,13 +920,30 @@ const Home = () => {
               </PieChart>
 
             </ResponsiveContainer>
-           <div className='row mx-2'>
-              <TextField className='col me-2' size='small' select label="Move to" fullWidth defaultValue={"Standards Room"} value={DepUpdateData.itemDepartment} onChange={DepartmentChange}>
-                {allDepartments.map((item, index) => (
-                  <MenuItem key={index} value={item.department}>{item.department}</MenuItem>
-                ))}
-              </TextField>
-              <Button className='col' size='small' fullWidth variant='contained' onClick={(e)=> updateItemData(e)}>Move</Button>
+            <div className='row mx-2'>
+              <FormControl className='col-md-8 me-2' size='small'>
+                <InputLabel htmlFor="grouped-select">Select Department</InputLabel>
+                <Select defaultValue="" id="grouped-select" label="Select Department" onChange={DepartmentChange}>
+                  <ListSubheader color='primary' sx={{ fontSize: "12px" }}>Default Department</ListSubheader>
+                  {allDepartments
+                    .filter(item => item.defaultdep === "yes")
+                    .map((item, index) => (
+                      <MenuItem sx={{ marginLeft: "20px" }} key={index} value={item.department}>
+                        {item.department}
+                      </MenuItem>
+                    ))}
+
+                  <ListSubheader color='primary' sx={{ fontSize: "12px" }}>Other Department</ListSubheader>
+                  {allDepartments
+                    .filter(item => item.defaultdep === "no")
+                    .map((item, index) => (
+                      <MenuItem sx={{ marginLeft: "20px" }} key={index} value={item.department}>
+                        {item.department}
+                      </MenuItem>
+                    ))}
+                </Select>
+              </FormControl>
+              <Button className='col' size='small' fullWidth variant='contained' onClick={(e) => updateItemData(e)}>Move</Button>
 
             </div>
 
@@ -888,7 +967,7 @@ const Home = () => {
                     },
                   },
                 }}
-                
+
                 onRowSelectionModelChange={handleRowSelectionChange}
                 sx={{
                   ".MuiTablePagination-displayedRows": {
@@ -912,7 +991,7 @@ const Home = () => {
             <div className="row">
               <div className="col-md-9">
                 <Button size='small' className='me-2'>Onsite</Button>
-                <Button size='small' className='me-2'>Cal</Button>
+                <Button size='small' className='me-2' onClick={() => setCalOpen(true)}>Cal</Button>
                 <Button size='small' className='me-2'>Grn</Button>
                 <Button size='small'>Create DC</Button>
               </div>
@@ -942,6 +1021,308 @@ const Home = () => {
               </tbody>
             </table>
           </Paper>
+
+          <Dialog fullWidth={true} maxWidth="xl" open={calOpen} sx={{ color: "#f1f4f4" }} onClose={() => setCalOpen(false)}>
+            <DialogTitle align='center'>Calibration</DialogTitle>
+
+            <DialogContent >
+
+                  <div className="row mb-2">
+              <Paper elevation={12} sx={{ p: 2 }} className='col-md-4 me-3'>
+                <div className="row gy-0 gx-2 ">
+                  <div className="col-md-6">
+                    <TextField
+                      autoFocus
+                      margin="dense"
+                      id="name"
+                      size='small'
+                      label="Item IMTE No"
+                      type="email"
+                      fullWidth
+                      variant="outlined"
+                    />
+                  </div>
+                  <div className="col-md-6">
+                    <TextField
+                      autoFocus
+                      margin="dense"
+                      id="name"
+                      size='small'
+                      label="Item Name"
+                      type="email"
+                      fullWidth
+                      variant="outlined"
+                    />
+                  </div>
+
+                  <div className="col-md-6">
+                    <TextField
+                      autoFocus
+                      margin="dense"
+                      id="name"
+                      size='small'
+                      label="Item Type"
+                      type="email"
+                      fullWidth
+                      variant="outlined"
+                    />
+                  </div>
+                  <div className="col-md-6">
+                    <TextField
+                      autoFocus
+                      margin="dense"
+                      id="name"
+                      size='small'
+                      label="Range/Size"
+                      type="email"
+                      fullWidth
+                      variant="outlined"
+                    />
+                  </div>
+                  <div className="col-md-6">
+                    <TextField
+                      autoFocus
+                      margin="dense"
+                      id="name"
+                      size='small'
+                      label="Item MFR No"
+                      type="email"
+                      fullWidth
+                      variant="outlined"
+                    />
+                  </div>
+                  <div className="col-md-6">
+                    <TextField
+                      autoFocus
+                      margin="dense"
+                      id="name"
+                      size='small'
+                      label="Least Count"
+                      type="email"
+                      fullWidth
+                      variant="outlined"
+                    />
+                  </div>
+                  <div className="col-md-6">
+                    <TextField
+                      autoFocus
+                      margin="dense"
+                      id="name"
+                      size='small'
+                      label="Make"
+                      type="email"
+                      fullWidth
+                      variant="outlined"
+                    />
+                  </div>
+                </div>
+              </Paper>
+
+              <Paper elevation={12} sx={{ p: 2 }} className='col-4 row'>
+                <div className="row gy-0 gx-2 ">
+                  <div className="col-md-6">
+                    <TextField
+                      autoFocus
+                      margin="dense"
+                      id="name"
+                      size='small'
+                      label="Item IMTE No"
+                      type="email"
+                      fullWidth
+                      variant="outlined"
+                    />
+                  </div>
+                  <div className="col-md-6">
+                    <TextField
+                      autoFocus
+                      margin="dense"
+                      id="name"
+                      size='small'
+                      label="Item Name"
+                      type="email"
+                      fullWidth
+                      variant="outlined"
+                    />
+                  </div>
+                  <div className="col-md-6">
+                    <TextField
+                      autoFocus
+                      margin="dense"
+                      id="name"
+                      size='small'
+                      label="Item Type"
+                      type="email"
+                      fullWidth
+                      variant="outlined"
+                    />
+                  </div>
+                  <div className="col-md-6">
+                    <TextField
+                      autoFocus
+                      margin="dense"
+                      id="name"
+                      size='small'
+                      label="Range/Size"
+                      type="email"
+                      fullWidth
+                      variant="outlined"
+                    />
+                  </div>
+                  <div className="col-md-6">
+                    <TextField
+                      autoFocus
+                      margin="dense"
+                      id="name"
+                      size='small'
+                      label="Item MFR No"
+                      type="email"
+                      fullWidth
+                      variant="outlined"
+                    />
+                  </div>
+                  <div className="col-md-6">
+                    <TextField
+                      autoFocus
+                      margin="dense"
+                      id="name"
+                      size='small'
+                      label="Least Count"
+                      type="email"
+                      fullWidth
+                      variant="outlined"
+                    />
+                  </div>
+                  <div className="col-md-6">
+                    <TextField
+                      autoFocus
+                      margin="dense"
+                      id="name"
+                      size='small'
+                      label="Make"
+                      type="email"
+                      fullWidth
+                      variant="outlined"
+                    />
+                  </div>
+                </div>
+              </Paper>
+
+              <Paper elevation={12} sx={{ p: 2 }} className='col-4 row'>
+                <div className="row gy-0 gx-2 ">
+                  <div className="col-md-6">
+                    <TextField
+                      autoFocus
+                      margin="dense"
+                      id="name"
+                      size='small'
+                      label="Item IMTE No"
+                      type="email"
+                      fullWidth
+                      variant="outlined"
+                    />
+                  </div>
+                  <div className="col-md-6">
+                    <TextField
+                      autoFocus
+                      margin="dense"
+                      id="name"
+                      size='small'
+                      label="Item Name"
+                      type="email"
+                      fullWidth
+                      variant="outlined"
+                    />
+                  </div>
+                  <div className="col-md-6">
+                    <TextField
+                      autoFocus
+                      margin="dense"
+                      id="name"
+                      size='small'
+                      label="Item Type"
+                      type="email"
+                      fullWidth
+                      variant="outlined"
+                    />
+                  </div>
+                  <div className="col-md-6">
+                    <TextField
+                      autoFocus
+                      margin="dense"
+                      id="name"
+                      size='small'
+                      label="Range/Size"
+                      type="email"
+                      fullWidth
+                      variant="outlined"
+                    />
+                  </div>
+                  <div className="col-md-6">
+                    <TextField
+                      autoFocus
+                      margin="dense"
+                      id="name"
+                      size='small'
+                      label="Item MFR No"
+                      type="email"
+                      fullWidth
+                      variant="outlined"
+                    />
+                  </div>
+                  <div className="col-md-6">
+                    <TextField
+                      autoFocus
+                      margin="dense"
+                      id="name"
+                      size='small'
+                      label="Least Count"
+                      type="email"
+                      fullWidth
+                      variant="outlined"
+                    />
+                  </div>
+                  <div className="col-md-6">
+                    <TextField
+                      autoFocus
+                      margin="dense"
+                      id="name"
+                      size='small'
+                      label="Make"
+                      type="email"
+                      fullWidth
+                      variant="outlined"
+                    />
+                  </div>
+                </div>
+              </Paper>
+              </div>
+              <Paper elevation={12} sx={{ p: 2 }} className='col-md-12 row'>
+                <table className='table table-bordered table-responsive text-center align-middle'>
+                  <tbody>
+                    <tr>
+                        <th>Parameter</th>
+                        <th>Range/Size</th>
+                        <th>Unit</th>
+                        <th>Max</th>
+                        <th>Min</th>
+                        <th>WearLimit</th>
+                        <th>Observed Size/ Observer Error</th>
+                        <th>Unit</th>
+                        <th>Status</th>
+                    </tr>
+                    {/* {calibrationData.calcalibrationData.map((item)=> ()} */}
+                    <tr>
+                    </tr>
+                  </tbody>
+                </table>
+              </Paper>
+
+            </DialogContent>
+            <DialogActions>
+              <Button onClick={() => setCalOpen(false)}>Cancel</Button>
+              <Button onClick={() => setCalOpen(false)}>Submit</Button>
+            </DialogActions>
+          </Dialog>
         </div>
       </div>
 

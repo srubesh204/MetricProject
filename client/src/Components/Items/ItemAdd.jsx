@@ -203,57 +203,13 @@ const ItemAdd = () => {
 
     //
 
-    const initialItemAddData = {
-        itemMasterRef: "",
-        itemIMTENo: "",
-        itemImage: "",
-        itemType: "",
-        itemRangeSize: "",
-        itemRangeSizeUnit: "",
-        itemMFRNo: "",
-        itemLC: "",
-        itemLCUnit: "",
-        itemMake: "",
-        itemModelNo: "",
-        itemStatus: "Active",
-        itemReceiptDate: "",
-        itemDepartment: "",
-        itemArea: "N/A",
-        itemPlaceOfUsage: "N/A",
-        itemCalFreInMonths: "",
-        itemCalAlertDays: "",
-        itemCalibrationSource: "",
-        itemItemMasterName: "",
-        itemItemMasterIMTENo: "",
-
-        itemSupplier: [],
-        itemOEM: [],
-        itemCalDate: "",
-        itemDueDate: "",
-        itemCalibratedAt: "",
-        itemCertificateName: "",
-        itemPartName: [],
-        acceptanceCriteria: [{
-            acParameter: "",
-            acRangeSize: "",
-            acRangeSizeUnit: "",
-            acMin: "",
-            acMax: "",
-            acPsMin: "",
-            acPsMax: "",
-            acPsWearLimit: "",
-            acAccuracy: "",
-            acAccuracyUnit: "",
-            acObservedSize: "",
-        }]
-
-
-    }
+  
 
 
 
     const [itemAddData, setItemAddData] = useState({
         itemMasterRef: "",
+        isItemMaster: "",
         itemAddMasterName: "",
         itemIMTENo: "",
         itemImage: "",
@@ -285,19 +241,18 @@ const ItemAdd = () => {
         itemPartName: [],
         acceptanceCriteria: [
             {
-                acAccuracyUnit: "",
-                acRangeSizeUnit: "",
                 acParameter: "",
-                acRangeSize: "",
-                acPsMin: "",
-                acPsMax: "",
-                acObMin: "",
-                acObMax: "",
-                acMin:"",
-                acMax:"",
-                acWearLimit: "",
-                acAccuracy: "",
-                acObservedSize: ""
+                acNominalSize: "",
+                acNominalSizeUnit: "",
+                acMinPS: "",
+                acMaxPS: "",
+                acWearLimitPS: "",
+                acMinOB: "",
+                acMaxOB: "",
+                acAverageOB: "",
+                acOBError: "",
+                acMinPSError: "",
+                acMaxPSError: "",
             }
         ]
     })
@@ -329,7 +284,7 @@ const ItemAdd = () => {
 
 
     const handleItemAddChange = (e) => {
-        const { name, value } = e.target;
+        const { name, value, checked } = e.target;
         if (name === "itemRangeSizeUnit") {
             setItemAddData((prev) => ({ ...prev, [name]: value, acceptanceCriteria: [{ acAccuracyUnit: value, acRangeSizeUnit: value }] }))
         }
@@ -371,6 +326,13 @@ const ItemAdd = () => {
             setItemAddData((prev) => ({ ...prev, itemOEM: typeof value === 'string' ? value.split(',') : value }));
         }
 
+        if (name === "isItemMaster") {
+            console.log(checked)
+            setItemAddData((prev) => ({
+              ...prev,
+              [name]: checked ? "1" : "0"
+            }));
+          }
 
 
 
@@ -507,8 +469,8 @@ const ItemAdd = () => {
                 acMax: "",
                 acPsMin: "",
                 acPsMax: "",
-                acMin:"",
-                acMax:"",
+                acMin: "",
+                acMax: "",
                 acPsWearLimit: "",
                 acAccuracy: "",
                 acAccuracyUnit: "",
@@ -570,10 +532,10 @@ const ItemAdd = () => {
 
             console.log("Item Created Successfully")
             setErrorHandler({ status: response.data.status, message: response.data.message, code: "success" })
-            setItemAddData(initialItemAddData)
+            
             setTimeout(() => {
                 navigate('/itemList');
-            }, 3000);
+            }, 2000);
 
         } catch (err) {
 
@@ -689,6 +651,8 @@ const ItemAdd = () => {
         }
     };
 
+    const [obCheckedValue, setObCheckedValue] = useState("average")
+
     return (
         <div style={{ margin: "2rem", backgroundColor: "#f5f5f5" }}>
             <form>
@@ -704,7 +668,7 @@ const ItemAdd = () => {
                                     ))}
                                 </TextField>
                             </div>
-                            <div className="col-9">
+                            <div className="col-6">
                                 <Autocomplete
                                     disablePortal
                                     id="itemIMTENoId"
@@ -727,6 +691,10 @@ const ItemAdd = () => {
                                     </TextField>*/}
 
                             </div>
+                            <div className="col">
+                                <FormControlLabel control={<Checkbox name='isItemMaster' checked={itemAddData.isItemMaster === "1"} onChange={handleItemAddChange}/>} label="Use as Master" />
+                            </div>
+
 
                         </div>
                         <div className="col-lg-2 " >
@@ -1242,7 +1210,7 @@ const ItemAdd = () => {
                                 </div>
                             </Paper>
                         </div>
-                        <Paper sx={{ m: 2, p: 2 }} elevation={12}>
+                        {itemAddData.itemAddMasterName && <Paper sx={{ m: 2, p: 2 }} elevation={12}>
                             <div className="d-flex justify-content-between mb-2">
                                 <h6 className='h5 text-center'>Acceptance Criteria</h6>
                                 <Button variant='contained' onClick={() => addACValue()}>Add</Button>
@@ -1252,29 +1220,51 @@ const ItemAdd = () => {
                                 <tbody>
                                     <tr>
                                         <th>Parameter</th>
-                                        <th>Range/Size</th>
+                                        <th>Nominal Size</th>
                                         <th>Unit</th>
                                         {itemAddData.itemType === "Attribute" && <th colspan="3">Permissible Size</th>}
                                         {/*{itemAddData.itemType === "Attribute" && <th>Min</th>}
                                         {itemAddData.itemType === "Attribute" && <th>Max</th>}
                                                 {itemAddData.itemType === "Attribute" && <th>WearLimit</th>}*/}
                                         {/*{itemAddData.itemType === "Attribute" && <th>Unit</th>}*/}
-                                        {itemAddData.itemType === "Attribute" && <th colspan="2">Observed size</th>}
+                                        {itemAddData.itemType === "Attribute" && <th colspan="2" className='text-center'>Observed size
+                                            <RadioGroup
+                                                className='d-flex justify-content-around'
+                                                row
+                                                onChange={(e) => setObCheckedValue(e.target.value)}
+                                                aria-labelledby="demo-row-radio-buttons-group-label"
+                                                name="row-radio-buttons-group"
+                                            >
+                                                <FormControlLabel value="minmax" checked={obCheckedValue === "minmax"} control={<Radio />} label="Min/Max" />
+
+                                                <FormControlLabel value="average" checked={obCheckedValue === "average"} control={<Radio />} label="Average" />
+                                            </RadioGroup></th>}
 
 
-                                        {itemAddData.itemType === "Variable" && <th>Accuracy(+ & -) </th>}
-                                        {itemAddData.itemType === "Variable" && <th>Unit</th>}
+                                        {itemAddData.itemType === "Variable" && <th colSpan={2}>Permissible Error </th>}
+
 
                                         {itemAddData.itemType === "Variable" && <th>Observed Error</th>}
 
 
 
 
+                                        {itemAddData.itemType === "Reference Standard" && <th colspan="2">Permissible Size</th>}
 
-                                        {itemAddData.itemType === "Reference Standard" && <th>Accuracy(+ & -)</th>}
-                                        {itemAddData.itemType === "Reference Standard" && <th>Unit</th>}
 
-                                        {itemAddData.itemType === "Reference Standard" && <th colspan="2">Observed size</th>}
+
+                                        {itemAddData.itemType === "Reference Standard" && <th colspan="2" className='text-center'>Observed size
+                                            <RadioGroup
+                                                className='d-flex justify-content-around'
+                                                row
+                                                onChange={(e) => setObCheckedValue(e.target.value)}
+                                                aria-labelledby="demo-row-radio-buttons-group-label"
+                                                name="row-radio-buttons-group"
+                                            >
+                                                <FormControlLabel value="minmax" checked={obCheckedValue === "minmax"} control={<Radio />} label="Min/Max" />
+
+                                                <FormControlLabel value="average" checked={obCheckedValue === "average"} control={<Radio />} label="Average" />
+                                            </RadioGroup></th>}
                                         <th>Delete</th>
                                     </tr>
 
@@ -1286,10 +1276,10 @@ const ItemAdd = () => {
                                                     <option>{item.calibrationPoint}</option>
                                                 ))}
                                             </select></td>
-                                            <td><input type="text" className='form-control form-control-sm' id="acRangeSizeId" name="acRangeSize" value={item.acRangeSize} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} /></td>
+                                            <td><input type="text" className='form-control form-control-sm' id="acNominalSizeId" name="acNominalSize" value={item.acNominalSize} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} /></td>
 
 
-                                            <td> <select className="form-select form-select-sm" id="acRangeSizeUnitId" name="acRangeSizeUnit" value={item.acRangeSizeUnit} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} >
+                                            <td> <select className="form-select form-select-sm" id="acNominalSizeUnitId" name="acNominalSizeUnit" value={item.acNominalSizeUnit} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} >
                                                 <option value="">-Select-</option>
                                                 {units.map((item, index) => (
                                                     <option key={index} value={item.unitName}>{item.unitName}</option>
@@ -1298,36 +1288,50 @@ const ItemAdd = () => {
 
 
                                             </select></td>
-                                            {itemAddData.itemType === "Attribute" && <td><input type="text" className="form-control form-control-sm" id="acPsMinId" name="acPsMin" placeholder='min' value={item.acPsMin} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} /></td>}
+                                            {itemAddData.itemType === "Attribute" && <td><input type="text" className="form-control form-control-sm" id="acMinPSId" name="acMinPS" placeholder='min' value={item.acMinPS} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} /></td>}
 
-                                            {itemAddData.itemType === "Attribute" && <td><input type="text" className='form-control form-control-sm' id="acPsMaxId" name="acPsMax" placeholder='max' value={item.acPsMax} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} /></td>}
+                                            {itemAddData.itemType === "Attribute" && <td><input type="text" className='form-control form-control-sm' id="acMaxPSId" name="acMaxPS" placeholder='max' value={item.acMaxPS} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} /></td>}
 
-                                            {itemAddData.itemType === "Attribute" && <td><input type="text" className="form-control form-control-sm" id="acWearLimitId" name="acWearLimit" placeholder='wearLimit' value={item.acWearLimit} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} /></td>}
-                                            {itemAddData.itemType === "Attribute" && <td><input type="text" className="form-control form-control-sm" id="acObMinId" name="acObMin" placeholder='min' value={item.acObMin} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} /></td>}
-                                            {itemAddData.itemType === "Attribute" && <td><input type="text" className='form-control form-control-sm' id="acObMaxId" name="acObMax" placeholder='max' value={item.acObMax} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} /></td>}
-                                            {itemAddData.itemType === "Variable" && <td><input type="text" className="form-control form-control-sm" id="acAccuracyId" name="acAccuracy" value={item.acAccuracy} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} /></td>}
 
-                                            {itemAddData.itemType === "Variable" && <td> <select className="form-select form-select-sm" id="acAccuracyUnitId" name="acAccuracyUnit" value={item.acAccuracyUnit} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} >
-                                                <option value="">-Select-</option>
-                                                {units.map((item, index) => (
-                                                    <option key={index} value={item.unitName}>{item.unitName}</option>
-                                                ))}
+                                            {itemAddData.itemType === "Attribute" && <td><input type="text" className="form-control form-control-sm" id="acWearLimitPSId" name="acWearLimitPS" placeholder='wearLimit' value={item.acWearLimitPS} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} /></td>}
 
-                                            </select></td>}
-                                            {itemAddData.itemType === "Variable" && <td><input type="text" className="form-control form-control-sm" id="acObservedSizeId" name="acObservedSize" value={item.acObservedSize} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} /></td>}
+                                            {(itemAddData.itemType === "Attribute" && obCheckedValue === "minmax") &&
+                                                <React.Fragment>
+                                                    <td><input type="text" className="form-control form-control-sm" id="acMinOBId" name="acMinOB" placeholder='min' value={item.acMinOB} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} /></td>
+                                                    <td><input type="text" className='form-control form-control-sm' id="acMaxOBId" name="acMaxOB" placeholder='max' value={item.acMaxOB} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} /></td>
+                                                </React.Fragment>
+                                            }
+                                            {(itemAddData.itemType === "Attribute" && obCheckedValue === "average") &&
+                                                <React.Fragment>
+                                                    <td colSpan={2}><input type="text" className="form-control form-control-sm" id="acAverageOBId" name="acAverageOB" placeholder='Average' value={item.acAverageOB} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} /></td>
+                                                </React.Fragment>
+                                            }
 
-                                            {itemAddData.itemType === "Reference Standard" && <td><input type="text" className="form-control form-control-sm" id="acAccuracyId" name="acAccuracy" value={item.acAccuracy} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} /></td>}
-                                            {itemAddData.itemType === "Reference Standard" && <td> <select className="form-select form-select-sm" id="acAccuracyUnitId" name="acAccuracyUnit" value={item.acAccuracyUnit} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} >
-                                                <option value="">-Select-</option>
-                                                {units.map((item, index) => (
-                                                    <option key={index} value={item.unitName}>{item.unitName}</option>
-                                                ))}
 
-                                            </select></td>}
+                                            {itemAddData.itemType === "Variable" && <td><input type="text" className="form-control form-control-sm" id="acMinPSErrorId" name="acMinPSError" value={item.acMinPSError} placeholder='Min' onChange={(e) => changeACValue(index, e.target.name, e.target.value)} /></td>}
+                                            {itemAddData.itemType === "Variable" && <td><input type="text" className="form-control form-control-sm" id="acMinPSErrorId" name="acMinPSError" value={item.acMinPSError} placeholder='Max' onChange={(e) => changeACValue(index, e.target.name, e.target.value)} /></td>}
 
-                                            {itemAddData.itemType === "Reference Standard" && <td><input type="text" className="form-control form-control-sm" id="acMinId" name="acMin" placeholder='min' value={item.acMin} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} /></td>}
 
-                                            {itemAddData.itemType === "Reference Standard" && <td><input type="text" className='form-control form-control-sm' id="acMaxId" name="acMax" placeholder='max' value={item.acMax} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} /></td>}
+                                            {itemAddData.itemType === "Variable" && <td><input type="text" className="form-control form-control-sm" id="acOBErrorId" name="acOBError" value={item.acOBError} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} /></td>}
+
+
+
+                                            {itemAddData.itemType === "Reference Standard" && <td><input type="text" className="form-control form-control-sm" id="acMinPSId" name="acMinPS" placeholder='min' value={item.acMinPS} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} /></td>}
+
+                                            {itemAddData.itemType === "Reference Standard" && <td><input type="text" className='form-control form-control-sm' id="acMaxPSId" name="acMaxPS" placeholder='max' value={item.acMaxPS} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} /></td>}
+
+                                            {(itemAddData.itemType === "Reference Standard" && obCheckedValue === "minmax") &&
+                                                <React.Fragment>
+                                                    <td><input type="text" className="form-control form-control-sm" id="acMinOBId" name="acMinOB" placeholder='min' value={item.acMinOB} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} /></td>
+                                                    <td><input type="text" className='form-control form-control-sm' id="acMaxOBId" name="acMaxOB" placeholder='max' value={item.acMaxOB} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} /></td>
+                                                </React.Fragment>
+                                            }
+                                            {(itemAddData.itemType === "Reference Standard" && obCheckedValue === "average") &&
+                                                <React.Fragment>
+                                                    <td colSpan={2}><input type="text" className="form-control form-control-sm" id="acAverageOBId" name="acAverageOB" placeholder='Average' value={item.acAverageOB} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} /></td>
+                                                </React.Fragment>
+                                            }
+
 
 
                                             <td><Button color='error' onClick={deleteAC}><Delete /></Button></td>
@@ -1336,7 +1340,8 @@ const ItemAdd = () => {
                                     )) : <tr></tr>}
                                 </tbody>
                             </table>
-                        </Paper>
+                        </Paper>}
+
                         <div className="d-flex justify-content-end">
 
                             <Button variant='contained' color='warning' onClick={() => setOpen(true)} className='me-3' type="button">

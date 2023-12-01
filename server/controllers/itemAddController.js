@@ -18,6 +18,7 @@ const itemAddController = {
     try {
       const {
         itemMasterRef,
+        isItemMaster,
         itemAddMasterName,
         itemIMTENo,
         itemImage,
@@ -54,6 +55,7 @@ const itemAddController = {
   
       const newItemFields = {
         itemMasterRef,
+        isItemMaster,
         itemAddMasterName,
         itemIMTENo,
         itemImage,
@@ -136,6 +138,7 @@ const itemAddController = {
       // }
       const { itemMasterRef,
         itemAddMasterName,
+        isItemMaster,
         itemIMTENo,
         itemImage,
         itemType,
@@ -170,6 +173,7 @@ const itemAddController = {
       // Create an object with the fields you want to update
       const updateItemFields = {
         itemMasterRef,
+        isItemMaster,
         itemAddMasterName,
         itemIMTENo,
         itemImage,
@@ -383,15 +387,16 @@ const itemAddController = {
       const {itemIds, itemDepartment} = req.body
 
       const updatePromises = itemIds.map(async (itemId) => {
-        const {itemIMTENo} = itemId
-        const itemData = await itemAddModel.findById(itemId._id)
-        const {itemDepartment: itemLastLocation} = itemData
+        
+        const itemData = await itemAddModel.findById(itemId)
+        const {itemDepartment: itemLastLocation , itemIMTENo} = itemData
         const updateItemFields = {itemIMTENo, itemDepartment, itemLastLocation}
         const updateResult = await itemAddModel.findOneAndUpdate(
           { _id: itemId._id },
           { $set: updateItemFields },
           { new: true }
         );
+        console.log(updateResult)
         return updateResult;
       });
       const updatedItems = await Promise.all(updatePromises);
