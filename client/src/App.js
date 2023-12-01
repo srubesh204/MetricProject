@@ -21,6 +21,8 @@ import FileViewer from './Components/Test/FileViewer';
 import Login from './Components/Dashboard/Login';
 import InsHisCard from './Components/reports/InsHisCard';
 import Status from './Components/status/Status';
+import Dc from './Components/dc/Dc';
+import Grn from './Components/grn/Grn';
 
 
 function App() {
@@ -53,6 +55,8 @@ function App() {
         <Route path="/login" element={<Login/>} />
         <Route path="/reports" element={<InsHisCard/>} />
         <Route path="/status" element={<Status/>} />
+        <Route path="/dc" element={<Dc/>} />
+        <Route path="/grn" element={<Grn/>} />
       </Routes>
 
     </div>
