@@ -14,8 +14,8 @@ const itemMasterController = {
       createItemMaster: async (req, res) => {
        
         try {
-          const { itemType, itemDescription, itemPrefix, itemFqInMonths, calAlertInDay, wiNo, uncertainty, uncertaintyUnit, standardRef, itemMasterImage, itemImageName, workInsName, status,calibrationPoints} = req.body;
-          const itemMasterResult = new itemMasterModel({ itemType, itemDescription, itemPrefix, itemFqInMonths, calAlertInDay, wiNo, uncertainty, uncertaintyUnit, standardRef, itemMasterImage, itemImageName, workInsName, status,calibrationPoints});
+          const { itemType, itemDescription, itemPrefix, itemFqInMonths, calAlertInDay, SOPNo, uncertainty, uncertaintyUnit, standardRef, itemMasterImage, itemImageName, workInsName, status,calibrationPoints} = req.body;
+          const itemMasterResult = new itemMasterModel({ itemType, itemDescription, itemPrefix, itemFqInMonths, calAlertInDay, SOPNo, uncertainty, uncertaintyUnit, standardRef, itemMasterImage, itemImageName, workInsName, status,calibrationPoints});
           const validationError = itemMasterResult.validateSync();
 
           if (validationError) {
@@ -58,7 +58,7 @@ const itemMasterController = {
           // }
       
           // Create an object with the fields you want to update
-          const { itemType, itemDescription, itemPrefix, itemFqInMonths, calAlertInDay, wiNo, uncertainty, uncertaintyUnit, standardRef,itemMasterImage,  itemImageName, workInsName, status, calibrationPoints} = req.body;
+          const { itemType, itemDescription, itemPrefix, itemFqInMonths, calAlertInDay, SOPNo, uncertainty, uncertaintyUnit, standardRef,itemMasterImage,  itemImageName, workInsName, status, calibrationPoints} = req.body;
 
           const updateImFields = {
             itemType,
@@ -66,7 +66,7 @@ const itemMasterController = {
             itemPrefix,
             itemFqInMonths,
             calAlertInDay,
-            wiNo, 
+            SOPNo, 
             uncertainty,
             uncertaintyUnit,
             standardRef,

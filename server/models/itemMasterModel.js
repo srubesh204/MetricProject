@@ -12,7 +12,7 @@ const itemMasterSchema = new mongoose.Schema({
   itemPrefix : String,
   itemFqInMonths : Number,
   calAlertInDay : Number,
-  wiNo : String,
+  SOPNo : String,
   uncertainty : Number,
   uncertaintyUnit : String,
   standardRef : String,

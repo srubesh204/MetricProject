@@ -666,15 +666,18 @@ const Home = () => {
     calCalibratedBy: "",
     calApprovedBy: "",
     calcalibrationData: [{
-      calDataParameter: "",
-      calDataRangeSize: "",
-      calDataRangeSizeUnit: "",
-      calDataMin: "",
-      calDataMax: "",
-      calDataWearLimit: "",
-      calDataOSOE: "",
-      calDataOSOEUnit: "",
-      calDataStatus: ""
+      calParameter: "",
+      calNominalSize: "",
+      calNominalSizeUnit: "",
+      calMinPS: "",
+      calMaxPS: "",
+      calWearLimitPS: "",
+      calMinOB: "",
+      calMaxOB: "",
+      calAverageOB: "",
+      calOBError: "",
+      calMinPSError: "",
+      calMaxPSError: "",
     }],
     calMasterUsed: [{
       masterIMTENo: "",
@@ -686,6 +689,58 @@ const Home = () => {
       masterCalibratedAt: "",
     }]
   })
+
+  const setCalData = () => {
+    if (selectedRows.length === 1) {
+      setCalibrationData((prev) => (
+        {
+          ...prev,
+          calIMTENo: selectedRows[0].itemIMTENo,
+          calItemName: selectedRows[0].itemAddMasterName,
+          calItemType: selectedRows[0].itemType,
+          calRangeSize: selectedRows[0].itemRangeSize,
+          calItemMFRNo: selectedRows[0].itemMFRNo,
+          calLC: selectedRows[0].itemLC,
+          calItemMake: selectedRows[0].itemMake,
+         
+         
+          calItemUncertainity: selectedRows[0],
+          calItemSOPNo: selectedRows[0],
+          calStandardRef: selectedRows[0],
+          calCertificateNo: selectedRows[0],
+          calItemCalDate: selectedRows[0],
+          calItemDueDate: selectedRows[0],
+          calItemEntryDate: selectedRows[0],
+          calCalibratedBy: selectedRows[0],
+          calApprovedBy: selectedRows[0],
+          calcalibrationData: [{
+            calParameter: selectedRows[0],
+            calNominalSize: selectedRows[0],
+            calNominalSizeUnit: selectedRows[0],
+            calMinPS: selectedRows[0],
+            calMaxPS: selectedRows[0],
+            calWearLimitPS: selectedRows[0],
+            calMinOB: selectedRows[0],
+            calMaxOB: selectedRows[0],
+            calAverageOB: selectedRows[0],
+            calOBError: selectedRows[0],
+            calMinPSError: selectedRows[0],
+            calMaxPSError: selectedRows[0],
+          }],
+          calMasterUsed: [{
+            masterIMTENo: selectedRows[0],
+            masterName: selectedRows[0],
+            masterRangeSize: selectedRows[0],
+            masterCalCertificateNo: selectedRows[0],
+            masterCalDate: selectedRows[0],
+            masterNextDue: selectedRows[0],
+            masterCalibratedAt: selectedRows[0],
+          }]
+        }
+      ))
+    }
+
+  };
 
   return (
     <div style={{ backgroundColor: "#f1f4f4", margin: 0, padding: 0 }}>
@@ -1027,288 +1082,243 @@ const Home = () => {
 
             <DialogContent >
 
-                  <div className="row mb-2">
-              <Paper elevation={12} sx={{ p: 2 }} className='col-md-4 me-3'>
-                <div className="row gy-0 gx-2 ">
-                  <div className="col-md-6">
-                    <TextField
-                      autoFocus
-                      margin="dense"
-                      id="name"
-                      size='small'
-                      label="Item IMTE No"
-                      type="email"
-                      fullWidth
-                      variant="outlined"
-                    />
-                  </div>
-                  <div className="col-md-6">
-                    <TextField
-                      autoFocus
-                      margin="dense"
-                      id="name"
-                      size='small'
-                      label="Item Name"
-                      type="email"
-                      fullWidth
-                      variant="outlined"
-                    />
-                  </div>
+              <div className="row mb-2">
+                <Paper elevation={12} sx={{ p: 2 }} className='col-md-4 '>
+                  <div className="row g-2 ">
+                    <div className="col-md-6">
+                      <TextField
 
-                  <div className="col-md-6">
-                    <TextField
-                      autoFocus
-                      margin="dense"
-                      id="name"
-                      size='small'
-                      label="Item Type"
-                      type="email"
-                      fullWidth
-                      variant="outlined"
-                    />
-                  </div>
-                  <div className="col-md-6">
-                    <TextField
-                      autoFocus
-                      margin="dense"
-                      id="name"
-                      size='small'
-                      label="Range/Size"
-                      type="email"
-                      fullWidth
-                      variant="outlined"
-                    />
-                  </div>
-                  <div className="col-md-6">
-                    <TextField
-                      autoFocus
-                      margin="dense"
-                      id="name"
-                      size='small'
-                      label="Item MFR No"
-                      type="email"
-                      fullWidth
-                      variant="outlined"
-                    />
-                  </div>
-                  <div className="col-md-6">
-                    <TextField
-                      autoFocus
-                      margin="dense"
-                      id="name"
-                      size='small'
-                      label="Least Count"
-                      type="email"
-                      fullWidth
-                      variant="outlined"
-                    />
-                  </div>
-                  <div className="col-md-6">
-                    <TextField
-                      autoFocus
-                      margin="dense"
-                      id="name"
-                      size='small'
-                      label="Make"
-                      type="email"
-                      fullWidth
-                      variant="outlined"
-                    />
-                  </div>
-                </div>
-              </Paper>
+                        value={calibrationData.calIMTENo}
+                        id="calIMTENoId"
+                        size='small'
+                        label="Item IMTE No"
+                        name='calIMTENo'
+                        fullWidth
+                        variant="outlined"
+                      />
+                    </div>
+                    <div className="col-md-6">
+                      <TextField
 
-              <Paper elevation={12} sx={{ p: 2 }} className='col-4 row'>
-                <div className="row gy-0 gx-2 ">
-                  <div className="col-md-6">
-                    <TextField
-                      autoFocus
-                      margin="dense"
-                      id="name"
-                      size='small'
-                      label="Item IMTE No"
-                      type="email"
-                      fullWidth
-                      variant="outlined"
-                    />
-                  </div>
-                  <div className="col-md-6">
-                    <TextField
-                      autoFocus
-                      margin="dense"
-                      id="name"
-                      size='small'
-                      label="Item Name"
-                      type="email"
-                      fullWidth
-                      variant="outlined"
-                    />
-                  </div>
-                  <div className="col-md-6">
-                    <TextField
-                      autoFocus
-                      margin="dense"
-                      id="name"
-                      size='small'
-                      label="Item Type"
-                      type="email"
-                      fullWidth
-                      variant="outlined"
-                    />
-                  </div>
-                  <div className="col-md-6">
-                    <TextField
-                      autoFocus
-                      margin="dense"
-                      id="name"
-                      size='small'
-                      label="Range/Size"
-                      type="email"
-                      fullWidth
-                      variant="outlined"
-                    />
-                  </div>
-                  <div className="col-md-6">
-                    <TextField
-                      autoFocus
-                      margin="dense"
-                      id="name"
-                      size='small'
-                      label="Item MFR No"
-                      type="email"
-                      fullWidth
-                      variant="outlined"
-                    />
-                  </div>
-                  <div className="col-md-6">
-                    <TextField
-                      autoFocus
-                      margin="dense"
-                      id="name"
-                      size='small'
-                      label="Least Count"
-                      type="email"
-                      fullWidth
-                      variant="outlined"
-                    />
-                  </div>
-                  <div className="col-md-6">
-                    <TextField
-                      autoFocus
-                      margin="dense"
-                      id="name"
-                      size='small'
-                      label="Make"
-                      type="email"
-                      fullWidth
-                      variant="outlined"
-                    />
-                  </div>
-                </div>
-              </Paper>
+                        name='calItemName'
+                        id="calItemNameId"
+                        size='small'
+                        label="Item Name"
+                        value={calibrationData.calItemName}
+                        fullWidth
+                        variant="outlined"
+                      />
+                    </div>
 
-              <Paper elevation={12} sx={{ p: 2 }} className='col-4 row'>
-                <div className="row gy-0 gx-2 ">
-                  <div className="col-md-6">
-                    <TextField
-                      autoFocus
-                      margin="dense"
-                      id="name"
-                      size='small'
-                      label="Item IMTE No"
-                      type="email"
-                      fullWidth
-                      variant="outlined"
-                    />
+                    <div className="col-md-6">
+                      <TextField
+
+                        name='calItemType'
+                        id="calItemTypeId"
+                        size='small'
+                        label="Item Type"
+                        value={calibrationData.calItemType}
+                        fullWidth
+                        variant="outlined"
+                      />
+                    </div>
+                    <div className="col-md-6">
+                      <TextField
+
+                        value={calibrationData.calRangeSize}
+                        id="calRangeSizeId"
+                        size='small'
+                        label="Range/Size"
+                        name='calRangeSize'
+                        fullWidth
+                        variant="outlined"
+                      />
+                    </div>
+                    <div className="col-md-6">
+                      <TextField
+
+                        value={calibrationData.calItemMFRNo}
+                        id="calItemMFRNoId"
+                        size='small'
+                        label="Item MFR No"
+                        name='calItemMFRNo'
+                        fullWidth
+                        variant="outlined"
+                      />
+                    </div>
+                    <div className="col-md-6">
+                      <TextField
+
+                        value={calibrationData.calLC}
+                        id="calLCId"
+                        size='small'
+                        label="Least Count"
+                        name='calLC'
+                        fullWidth
+                        variant="outlined"
+                      />
+                    </div>
+                    <div className="col-md-6">
+                      <TextField
+
+                        value={calibrationData.calItemMake}
+                        id="calItemMakeId"
+                        size='small'
+                        label="Make"
+                        name='calItemMake'
+                        fullWidth
+                        variant="outlined"
+                      />
+                    </div>
                   </div>
-                  <div className="col-md-6">
-                    <TextField
-                      autoFocus
-                      margin="dense"
-                      id="name"
-                      size='small'
-                      label="Item Name"
-                      type="email"
-                      fullWidth
-                      variant="outlined"
-                    />
+                </Paper>
+
+                <Paper elevation={12} sx={{ p: 2 }} className='col-4 '>
+                  <div className="row g-2 ">
+
+                    <div className="col-md-6">
+                      <TextField
+                        id="calItemTemperatureId"
+                        size='small'
+                        label="Temperature"
+                        value={calibrationData.calItemTemperature}
+                        fullWidth
+                        name='calItemTemperature'
+                        variant="outlined"
+                      />
+                    </div>
+                    <div className="col-md-6">
+                      <TextField
+                        id="calItemHumidityId"
+                        size='small'
+                        label="Humidity"
+                        value={calibrationData.calItemHumidity}
+                        name='calItemHumidity'
+                        fullWidth
+                        variant="outlined"
+                      />
+                    </div>
+                    <div className="col-md-6">
+                      <TextField
+                        id="calItemUncertainityId"
+                        size='small'
+                        label="Uncertainity"
+                        value={calibrationData.calItemUncertainity}
+                        name='calItemUncertainity'
+                        fullWidth
+                        variant="outlined"
+                      />
+                    </div>
+                    <div className="col-md-6">
+                      <TextField
+                        id="calItemSOPNoId"
+                        size='small'
+                        label="SOP No."
+                        value={calibrationData.calItemSOPNo}
+                        name='calItemSOPNo'
+                        fullWidth
+                        variant="outlined"
+                      />
+                    </div>
+                    <div className="col-md-6">
+                      <TextField
+                        id="calStandardRefId"
+                        size='small'
+                        label="Standard Ref"
+                        value={calibrationData.calStandardRef}
+                        name='calStandardRef'
+                        fullWidth
+                        variant="outlined"
+                      />
+                    </div>
+
                   </div>
-                  <div className="col-md-6">
-                    <TextField
-                      autoFocus
-                      margin="dense"
-                      id="name"
-                      size='small'
-                      label="Item Type"
-                      type="email"
-                      fullWidth
-                      variant="outlined"
-                    />
+                </Paper>
+
+                <Paper elevation={12} sx={{ p: 2 }} className='col-4 '>
+                  <div className="row g-2 ">
+                    <div className="col-md-6">
+                      <TextField
+                        id="calCertificateNoId"
+                        size='small'
+                        label="Certificate No."
+                        value={calibrationData.calCertificateNo}
+                        name='calCertificateNo'
+                        fullWidth
+                        variant="outlined"
+                      />
+                    </div>
+                    <div className="col-md-6">
+                      <TextField
+                        id="calItemCalDateId"
+                        size='small'
+                        label="Cal. Date"
+                        value={calibrationData.calItemCalDate}
+                        name='calItemCalDate'
+                        fullWidth
+                        variant="outlined"
+                      />
+                    </div>
+                    <div className="col-md-6">
+                      <TextField
+                        id="calItemDueDateId"
+                        size='small'
+                        label="Due Date"
+                        value={calibrationData.calItemDueDate}
+                        name='calItemDueDate'
+                        fullWidth
+                        variant="outlined"
+                      />
+                    </div>
+                    <div className="col-md-6">
+                      <TextField
+                        id="calItemEntryDateId"
+                        size='small'
+                        label="Entry Date"
+                        value={calibrationData.calItemEntryDate}
+                        name='calItemEntryDate'
+                        fullWidth
+                        variant="outlined"
+                      />
+                    </div>
+                    <div className="col-md-6">
+                      <TextField
+                        id="calCalibratedById"
+                        size='small'
+                        label="Calibrated By"
+                        value={calibrationData.calCalibratedBy}
+                        name='calCalibratedBy'
+                        fullWidth
+                        variant="outlined"
+                      />
+                    </div>
+                    <div className="col-md-6">
+                      <TextField
+                        id="calApprovedById"
+                        size='small'
+                        label="Approved By"
+                        value={calibrationData.calApprovedBy}
+                        name='calApprovedBy'
+                        fullWidth
+                        variant="outlined"
+                      />
+                    </div>
                   </div>
-                  <div className="col-md-6">
-                    <TextField
-                      autoFocus
-                      margin="dense"
-                      id="name"
-                      size='small'
-                      label="Range/Size"
-                      type="email"
-                      fullWidth
-                      variant="outlined"
-                    />
-                  </div>
-                  <div className="col-md-6">
-                    <TextField
-                      autoFocus
-                      margin="dense"
-                      id="name"
-                      size='small'
-                      label="Item MFR No"
-                      type="email"
-                      fullWidth
-                      variant="outlined"
-                    />
-                  </div>
-                  <div className="col-md-6">
-                    <TextField
-                      autoFocus
-                      margin="dense"
-                      id="name"
-                      size='small'
-                      label="Least Count"
-                      type="email"
-                      fullWidth
-                      variant="outlined"
-                    />
-                  </div>
-                  <div className="col-md-6">
-                    <TextField
-                      autoFocus
-                      margin="dense"
-                      id="name"
-                      size='small'
-                      label="Make"
-                      type="email"
-                      fullWidth
-                      variant="outlined"
-                    />
-                  </div>
-                </div>
-              </Paper>
+                </Paper>
               </div>
               <Paper elevation={12} sx={{ p: 2 }} className='col-md-12 row'>
                 <table className='table table-bordered table-responsive text-center align-middle'>
                   <tbody>
                     <tr>
-                        <th>Parameter</th>
-                        <th>Range/Size</th>
-                        <th>Unit</th>
-                        <th>Max</th>
-                        <th>Min</th>
-                        <th>WearLimit</th>
-                        <th>Observed Size/ Observer Error</th>
-                        <th>Unit</th>
-                        <th>Status</th>
+                      <th>Parameter</th>
+                      <th>Range/Size</th>
+                      <th>Unit</th>
+                      <th>Max</th>
+                      <th>Min</th>
+                      <th>WearLimit</th>
+                      <th>Observed Size/ Observer Error</th>
+                      <th>Unit</th>
+                      <th>Status</th>
                     </tr>
                     {/* {calibrationData.calcalibrationData.map((item)=> ()} */}
                     <tr>
@@ -1318,15 +1328,15 @@ const Home = () => {
                 <table className='table table-bordered table-responsive text-center align-middle'>
                   <tbody>
                     <tr>
-                        <th>Parameter</th>
-                        <th>Range/Size</th>
-                        <th>Unit</th>
-                        <th>Max</th>
-                        <th>Min</th>
-                        <th>WearLimit</th>
-                        <th>Observed Size/ Observer Error</th>
-                        <th>Unit</th>
-                        <th>Status</th>
+                      <th>Parameter</th>
+                      <th>Range/Size</th>
+                      <th>Unit</th>
+                      <th>Max</th>
+                      <th>Min</th>
+                      <th>WearLimit</th>
+                      <th>Observed Size/ Observer Error</th>
+                      <th>Unit</th>
+                      <th>Status</th>
                     </tr>
                     {/* {calibrationData.calcalibrationData.map((item)=> ()} */}
                     <tr>
@@ -1336,15 +1346,15 @@ const Home = () => {
                 <table className='table table-bordered table-responsive text-center align-middle'>
                   <tbody>
                     <tr>
-                        <th>Parameter</th>
-                        <th>Range/Size</th>
-                        <th>Unit</th>
-                        <th>Max</th>
-                        <th>Min</th>
-                        <th>WearLimit</th>
-                        <th>Observed Size/ Observer Error</th>
-                        <th>Unit</th>
-                        <th>Status</th>
+                      <th>Parameter</th>
+                      <th>Range/Size</th>
+                      <th>Unit</th>
+                      <th>Max</th>
+                      <th>Min</th>
+                      <th>WearLimit</th>
+                      <th>Observed Size/ Observer Error</th>
+                      <th>Unit</th>
+                      <th>Status</th>
                     </tr>
                     {/* {calibrationData.calcalibrationData.map((item)=> ()} */}
                     <tr>
