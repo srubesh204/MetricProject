@@ -217,6 +217,8 @@ const Vendor = () => {
     useEffect(() => {
         vendorFetchData();
     }, []);
+
+    
     console.log(vendorDataList)
 
     const vendorSubmit = async (e) => {
