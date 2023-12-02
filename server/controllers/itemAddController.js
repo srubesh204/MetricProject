@@ -18,6 +18,7 @@ const itemAddController = {
     try {
       const {
         itemMasterRef,
+        selectedItemMaster,
         isItemMaster,
         itemAddMasterName,
         itemIMTENo,
@@ -56,6 +57,7 @@ const itemAddController = {
   
       const newItemFields = {
         itemMasterRef,
+        selectedItemMaster,
         isItemMaster,
         itemAddMasterName,
         itemIMTENo,
@@ -138,8 +140,10 @@ const itemAddController = {
       // if (isNaN(desId)) {
       //   return res.status(400).json({ error: 'Invalid desId value' });
       // }
-      const { itemMasterRef,
+      const { 
+        itemMasterRef,
         itemAddMasterName,
+        selectedItemMaster,
         isItemMaster,
         itemIMTENo,
         itemImage,
@@ -176,8 +180,9 @@ const itemAddController = {
       // Create an object with the fields you want to update
       const updateItemFields = {
         itemMasterRef,
-        isItemMaster,
         itemAddMasterName,
+        selectedItemMaster,
+        isItemMaster,
         itemIMTENo,
         itemImage,
         itemType,

@@ -8,6 +8,8 @@ import React, { useEffect, useState } from 'react'
 import dayjs from 'dayjs';
 import isSameOrAfter from 'dayjs/plugin/isSameOrAfter'
 import isSameOrBefore from 'dayjs/plugin/isSameOrBefore'
+import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 
 dayjs.extend(isSameOrBefore)
 dayjs.extend(isSameOrAfter)
@@ -150,7 +152,7 @@ const Home = () => {
         { id: 4, value: thirtyDaysFilter.length, label: '30 Days' },
         { id: 5, value: AboveThirtyDaysFilter.length, label: '>30 Days' }
       ])
-
+      setItemLocationData([{ value: allItems.length, label: "Departments" }])
 
 
     } catch (err) {
@@ -166,14 +168,19 @@ const Home = () => {
       );
       setDistinctDepartment(Departments.data.result)
       console.log(Departments)
-      setItemLocationData([{ value: Departments.data.result.length, label: "Departments" }, { value: 0, label: "Sub Contractors" }, { value: 0, label: "Customers" }, { value: 0, label: "Suppliers" }])
+      setItemLocationData(prev => ([
+        ...prev,
+        { value: 0, label: "Sub Contractors" },
+        { value: 0, label: "Customers" },
+        { value: 0, label: "Suppliers" }
+      ]));
 
     } catch (err) {
       console.log(err);
     }
   };
 
-  console.log(itemListOptions)
+  console.log(itemLocationData)
 
 
   const ItemListColumns = [
@@ -409,8 +416,9 @@ const Home = () => {
   };
 
   useEffect(() => {
-    DepartmentFetch();
+
     itemFetch();
+    DepartmentFetch();
     getAllDepartments();
     getVendorsByType();
   }, [])
@@ -590,6 +598,7 @@ const Home = () => {
         setErrorHandler({ status: response.data.status, message: response.data.message, code: "success" })
         setSelectedRows([])
         itemFetch();
+        DepartmentFetch();
       }
 
 
@@ -660,7 +669,7 @@ const Home = () => {
     calItemSOPNo: "",
     calStandardRef: "",
     calCertificateNo: "",
-    calItemCalDate: "",
+    calItemCalDate: dayjs().format('YYYY-MM-DD'),
     calItemDueDate: "",
     calItemEntryDate: "",
     calCalibratedBy: "",
@@ -695,6 +704,7 @@ const Home = () => {
       setCalibrationData((prev) => (
         {
           ...prev,
+          calItemId : selectedRows[0]._id,
           calIMTENo: selectedRows[0].itemIMTENo,
           calItemName: selectedRows[0].itemAddMasterName,
           calItemType: selectedRows[0].itemType,
@@ -702,675 +712,731 @@ const Home = () => {
           calItemMFRNo: selectedRows[0].itemMFRNo,
           calLC: selectedRows[0].itemLC,
           calItemMake: selectedRows[0].itemMake,
-         
-         
-          calItemUncertainity: selectedRows[0],
-          calItemSOPNo: selectedRows[0],
-          calStandardRef: selectedRows[0],
-          calCertificateNo: selectedRows[0],
-          calItemCalDate: selectedRows[0],
-          calItemDueDate: selectedRows[0],
-          calItemEntryDate: selectedRows[0],
-          calCalibratedBy: selectedRows[0],
-          calApprovedBy: selectedRows[0],
-          calcalibrationData: [{
-            calParameter: selectedRows[0],
-            calNominalSize: selectedRows[0],
-            calNominalSizeUnit: selectedRows[0],
-            calMinPS: selectedRows[0],
-            calMaxPS: selectedRows[0],
-            calWearLimitPS: selectedRows[0],
-            calMinOB: selectedRows[0],
-            calMaxOB: selectedRows[0],
-            calAverageOB: selectedRows[0],
-            calOBError: selectedRows[0],
-            calMinPSError: selectedRows[0],
-            calMaxPSError: selectedRows[0],
-          }],
-          calMasterUsed: [{
-            masterIMTENo: selectedRows[0],
-            masterName: selectedRows[0],
-            masterRangeSize: selectedRows[0],
-            masterCalCertificateNo: selectedRows[0],
-            masterCalDate: selectedRows[0],
-            masterNextDue: selectedRows[0],
-            masterCalibratedAt: selectedRows[0],
-          }]
+
+
+          calItemUncertainity: selectedRows[0].selectedItemMaster[0].uncertainty,
+          calItemSOPNo: selectedRows[0].selectedItemMaster[0].SOPNo,
+          calStandardRef: selectedRows[0].selectedItemMaster[0].standardRef,
+
+          // calCalibratedBy: selectedRows[0],
+          // calApprovedBy: selectedRows[0],
+          calcalibrationData:
+
+            selectedRows[0].acceptanceCriteria.map((item) => (
+              {
+                calParameter: item.acParameter,
+                calNominalSize: item.acNominalSize,
+                calNominalSizeUnit: item.acNominalSizeUnit,
+                calMinPS: item.acMinPS,
+                calMaxPS: item.acMaxPS,
+                calWearLimitPS: item.acWearLimitPS,
+                calMinOB: item.acMinOB,
+                calMaxOB: item.acMaxOB,
+                calAverageOB: item.acAverageOB,
+                calOBError: item.acOBError,
+                calMinPSError: item.acMinPSError,
+                calMaxPSError: item.acMaxPSError,
+              }
+            )),
+
+          // calMasterUsed: [{
+          //   masterIMTENo: selectedRows[0],
+          //   masterName: selectedRows[0],
+          //   masterRangeSize: selectedRows[0],
+          //   masterCalCertificateNo: selectedRows[0],
+          //   masterCalDate: selectedRows[0],
+          //   masterNextDue: selectedRows[0],
+          //   masterCalibratedAt: selectedRows[0],
+          // }]
         }
       ))
     }
 
   };
+  console.log(calibrationData)
+
+  const changecalDataValue = (index, name, value) => {
+
+    setCalibrationData((prev) => {
+      const updateAC = [...prev.calcalibrationData]
+      updateAC[index] = {
+        ...updateAC[index], [name]: value,
+      };
+      return {
+        ...prev, calcalibrationData: updateAC,
+      };
+    })
+  };
 
   return (
     <div style={{ backgroundColor: "#f1f4f4", margin: 0, padding: 0 }}>
+      <LocalizationProvider dateAdapter={AdapterDayjs}>
 
 
-      <div className="row gx-3 m-3" >
-        <div className="col-8 mb-2">
-          <Paper sx={{ p: 2 }} elevation={12} className=''>
+        <div className="row gx-3 m-3" >
+          <div className="col-8 mb-2">
+            <Paper sx={{ p: 2 }} elevation={12} className=''>
 
-            <Stack direction="row"
-              justifyContent="center"
-              alignItems="center"
-              spacing={2}>
+              <Stack direction="row"
+                justifyContent="center"
+                alignItems="center"
+                spacing={2}>
 
-              <Autocomplete
-                disablePortal
-                id="combo-box-demo"
-                options={itemListOptions}
-                size='small'
-                fullWidth
-                onInputChange={(e, newValue) => MainFilter(newValue, "itemIMTENo")}
-                name="itemIMTENo"
-                getOptionLabel={(itemList) => itemList.itemIMTENo}
-                renderInput={(params) => <TextField {...params} label="IMTE No" />}
-                defaultValue={(e) => console.log(e)}
-              />
-              <TextField select onChange={(e) => MainFilter(e.target.value, "itemType")} fullWidth size='small' value={selectedFilterName === 'itemType' ? selectedFilterValue : 'all'} name='itemType' defaultValue="all" label="Item Type">
-                <MenuItem value="all">All</MenuItem>
-                <MenuItem value="Variable">Variable</MenuItem>
-                <MenuItem value="Attribute">Attribute</MenuItem>
-                <MenuItem value="Ref Standard">Ref Standard</MenuItem>
-              </TextField>
+                <Autocomplete
+                  disablePortal
+                  id="combo-box-demo"
+                  options={itemListOptions}
+                  size='small'
+                  fullWidth
+                  onInputChange={(e, newValue) => MainFilter(newValue, "itemIMTENo")}
+                  name="itemIMTENo"
+                  getOptionLabel={(itemList) => itemList.itemIMTENo}
+                  renderInput={(params) => <TextField {...params} label="IMTE No" />}
+                  defaultValue={(e) => console.log(e)}
+                />
+                <TextField select onChange={(e) => MainFilter(e.target.value, "itemType")} fullWidth size='small' value={selectedFilterName === 'itemType' ? selectedFilterValue : 'all'} name='itemType' defaultValue="all" label="Item Type">
+                  <MenuItem value="all">All</MenuItem>
+                  <MenuItem value="Variable">Variable</MenuItem>
+                  <MenuItem value="Attribute">Attribute</MenuItem>
+                  <MenuItem value="Ref Standard">Ref Standard</MenuItem>
+                </TextField>
 
-              <TextField select onChange={(e) => MainFilter(e.target.value, "itemAddMasterName")} fullWidth size='small' value={selectedFilterName === 'itemAddMasterName' ? selectedFilterValue : 'all'} defaultValue="all" name='itemAddMasterName' label="Item Description">
-                <MenuItem value="all">All</MenuItem>
-                {itemDistinctNames.map((item, index) => (<MenuItem key={index} value={item}>{item}</MenuItem>))}
-              </TextField>
+                <TextField select onChange={(e) => MainFilter(e.target.value, "itemAddMasterName")} fullWidth size='small' value={selectedFilterName === 'itemAddMasterName' ? selectedFilterValue : 'all'} defaultValue="all" name='itemAddMasterName' label="Item Description">
+                  <MenuItem value="all">All</MenuItem>
+                  {itemDistinctNames.map((item, index) => (<MenuItem key={index} value={item}>{item}</MenuItem>))}
+                </TextField>
 
-              <Autocomplete
-                disablePortal
-                id="combo-box-demo"
-                options={customers}
-                size='small'
-                fullWidth
-                onInputChange={(e, newValue) => MainFilter(newValue, "customer")}
-                // value={selectedFilterName === 'customer' ? selectedFilterValue : 0}
-                name="customer"
-                getOptionLabel={(customers) => customers.aliasName}
-                // onChange={(e, newValue) => MainFilter(e,newValue, "customer")}
-                renderInput={(params) => <TextField {...params} label="Customer" name='Master' />}
-                disableClearable
-              />
+                <Autocomplete
+                  disablePortal
+                  id="combo-box-demo"
+                  options={customers}
+                  size='small'
+                  fullWidth
+                  onInputChange={(e, newValue) => MainFilter(newValue, "customer")}
+                  // value={selectedFilterName === 'customer' ? selectedFilterValue : 0}
+                  name="customer"
+                  getOptionLabel={(customers) => customers.aliasName}
+                  // onChange={(e, newValue) => MainFilter(e,newValue, "customer")}
+                  renderInput={(params) => <TextField {...params} label="Customer" name='Master' />}
+                  disableClearable
+                />
 
-              {/* <TextField select fullWidth size='small' defaultValue="All" label="Due in Days">
+                {/* <TextField select fullWidth size='small' defaultValue="All" label="Due in Days">
                 <MenuItem value="All">All</MenuItem>
                 {itemList.map((item, index) => (<MenuItem key={index} value={item.itemIMTENo}>{item.itemIMTENo}</MenuItem>))}
               </TextField> */}
 
 
-            </Stack>
+              </Stack>
 
-          </Paper>
+            </Paper>
 
-        </div>
-        <div className="col-md-4">
-          <Paper sx={{ p: 2 }} elevation={12}>
-            <Stack direction="row"
-              justifyContent="center"
-              alignItems="center"
-              spacing={2}>
-              <TextField select onChange={MainFilter} fullWidth size='small' defaultValue="All" name='plantLocationFilter' label="Plant Location">
-                <MenuItem value="all">All</MenuItem>
+          </div>
+          <div className="col-md-4">
+            <Paper sx={{ p: 2 }} elevation={12}>
+              <Stack direction="row"
+                justifyContent="center"
+                alignItems="center"
+                spacing={2}>
+                <TextField select onChange={MainFilter} fullWidth size='small' defaultValue="All" name='plantLocationFilter' label="Plant Location">
+                  <MenuItem value="all">All</MenuItem>
 
-              </TextField>
-              <TextField select onChange={MainFilter} fullWidth size='small' name='employeeFilter' defaultValue="All" label="Employee">
-                <MenuItem value="all">All</MenuItem>
-                {suppliers.map((item, index) => (<MenuItem key={index} value={item.aliasName}>{item.aliasName}</MenuItem>))}
-              </TextField>
-            </Stack>
-          </Paper>
-        </div>
-
-
-        <div className="col">
-
-          <Paper elevation={12} sx={{ p: 2, height: "100%" }}>
-            <h4 className='text-center'>Calibration Status</h4>
-            <ResponsiveContainer width="100%" height={200}>
-
-              <PieChart>
-                <Pie
-                  data={calStatus}
-                  dataKey="value"
-                  nameKey="label"
-                  cx="50%"
-                  cy="50%"
-                  outerRadius={80}
-                  fill="#ff4545"
-                  isAnimationActive={true}
-                  animationBegin={0}
-                  animationDuration={1000}
-                  innerRadius={40}
-                  activeIndex={activeIndex}
-                  activeShape={{ fill: '#8884d8', strokeWidth: 2 }}
-                  labelLine={false}
-                >
-                  {data.map((entry, index) => (
-                    <Cell key={index} fill={COLORS[index % COLORS.length]} />
-                  ))}
-
-                </Pie>
-
-                <Tooltip />
-                <Legend
-
-                  align='left'
-                  verticalAlign='top'
-                  layout='vertical'
-                  iconSize={30}
-                  content={calibrationStatusLegendContent}
-
-                />
-              </PieChart>
-
-            </ResponsiveContainer>
-            <Box className="d-flex justify-content-around">
-              <ToggleButtonGroup
-                color="success"
-                value={calSrcValue}
-                exclusive
-                size="small"
-                aria-label="Platform"
-                onChange={handleCalSrc}
-              >
-                <ToggleButton value="InHouse">In House&nbsp;{(calSourceCount.inHouse !== "" && calSourceCount.inHouse !== 0) && <Chip label={calSourceCount.inHouse}></Chip>}</ToggleButton>
-                <ToggleButton value="OutSource">Out Source&nbsp;{(calSourceCount.outSource !== "" && calSourceCount.outSource !== 0) && <Chip label={calSourceCount.outSource}></Chip>}</ToggleButton>
-                <ToggleButton value="OEM">OEM&nbsp;{(calSourceCount.oem !== "" && calSourceCount.oem !== 0) && <Chip label={calSourceCount.oem}></Chip>}</ToggleButton>
-              </ToggleButtonGroup>
-
-            </Box>
+                </TextField>
+                <TextField select onChange={MainFilter} fullWidth size='small' name='employeeFilter' defaultValue="All" label="Employee">
+                  <MenuItem value="all">All</MenuItem>
+                  {suppliers.map((item, index) => (<MenuItem key={index} value={item.aliasName}>{item.aliasName}</MenuItem>))}
+                </TextField>
+              </Stack>
+            </Paper>
+          </div>
 
 
-          </Paper>
-        </div>
+          <div className="col">
 
+            <Paper elevation={12} sx={{ p: 2, height: "100%" }}>
+              <h4 className='text-center'>Calibration Status</h4>
+              <ResponsiveContainer width="100%" height={200}>
 
-
-        <div className="col">
-          <Paper elevation={12} sx={{ p: 2, height: "100%" }}>
-            <h4 className='text-center'>Item Status</h4>
-            <ResponsiveContainer width="100%" height={200}>
-
-              <PieChart>
-                <Pie
-                  data={itemStatus}
-                  dataKey="value"
-                  nameKey="label"
-                  cx="50%"
-                  cy="50%"
-                  outerRadius={80}
-
-                  isAnimationActive={true}
-                  animationBegin={0}
-                  animationDuration={1000}
-                  innerRadius={40}
-                  activeIndex={activeIndex}
-                  activeShape={{ fill: '#ffffff', strokeWidth: 2 }}
-                  labelLine={false}
-                >
-                  {data.map((entry, index) => (
-                    <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                  ))}
-
-                </Pie>
-
-                <Tooltip />
-                <Legend
-                  // onMouseEnter={handleLegendMouseEnter}
-                  // onMouseLeave={handleLegendMouseLeave}
-                  align='left'
-                  verticalAlign='top'
-                  layout='vertical'
-                  iconSize={30}
-                  content={itemStatusLegendContent}
-                  onClick={(e) => console.log(e)}
-                />
-              </PieChart>
-
-            </ResponsiveContainer>
-
-          </Paper></div>
-
-        <div className="col">
-          <Paper elevation={12} sx={{ p: 2, height: "100%" }}>
-            <h4 className='text-center'>Item Location</h4>
-            <ResponsiveContainer width="100%" height={200}>
-
-              <PieChart>
-                <Pie
-                  data={itemLocationData}
-                  dataKey="value"
-                  nameKey="label"
-                  cx="50%"
-                  cy="50%"
-                  outerRadius={80}
-
-                  isAnimationActive={true}
-                  animationBegin={0}
-                  animationDuration={1000}
-                  innerRadius={40}
-                  activeIndex={activeIndex}
-                  activeShape={{ fill: '#ffffff' }}
-                  labelLine={false}
-                >
-                  {data.map((entry, index) => (
-                    <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                  ))}
-
-                </Pie>
-
-                <Tooltip />
-                <Legend
-                  // onMouseEnter={handleLegendMouseEnter}
-                  // onMouseLeave={handleLegendMouseLeave}
-                  align='left'
-                  verticalAlign='top'
-                  layout='vertical'
-                  iconSize={30}
-                  content={itemLocationLegend}
-                  onClick={(e) => console.log(e)}
-                />
-              </PieChart>
-
-            </ResponsiveContainer>
-            <div className='row mx-2'>
-              <FormControl className='col-md-8 me-2' size='small'>
-                <InputLabel htmlFor="grouped-select">Select Department</InputLabel>
-                <Select defaultValue="" id="grouped-select" label="Select Department" onChange={DepartmentChange}>
-                  <ListSubheader color='primary' sx={{ fontSize: "12px" }}>Default Department</ListSubheader>
-                  {allDepartments
-                    .filter(item => item.defaultdep === "yes")
-                    .map((item, index) => (
-                      <MenuItem sx={{ marginLeft: "20px" }} key={index} value={item.department}>
-                        {item.department}
-                      </MenuItem>
+                <PieChart>
+                  <Pie
+                    data={calStatus}
+                    dataKey="value"
+                    nameKey="label"
+                    cx="50%"
+                    cy="50%"
+                    outerRadius={80}
+                    fill="#ff4545"
+                    isAnimationActive={true}
+                    animationBegin={0}
+                    animationDuration={1000}
+                    innerRadius={40}
+                    activeIndex={activeIndex}
+                    activeShape={{ fill: '#8884d8', strokeWidth: 2 }}
+                    labelLine={false}
+                  >
+                    {data.map((entry, index) => (
+                      <Cell key={index} fill={COLORS[index % COLORS.length]} />
                     ))}
 
-                  <ListSubheader color='primary' sx={{ fontSize: "12px" }}>Other Department</ListSubheader>
-                  {allDepartments
-                    .filter(item => item.defaultdep === "no")
-                    .map((item, index) => (
-                      <MenuItem sx={{ marginLeft: "20px" }} key={index} value={item.department}>
-                        {item.department}
-                      </MenuItem>
+                  </Pie>
+
+                  <Tooltip />
+                  <Legend
+
+                    align='left'
+                    verticalAlign='top'
+                    layout='vertical'
+                    iconSize={30}
+                    content={calibrationStatusLegendContent}
+
+                  />
+                </PieChart>
+
+              </ResponsiveContainer>
+              <Box className="d-flex justify-content-around">
+                <ToggleButtonGroup
+                  color="success"
+                  value={calSrcValue}
+                  exclusive
+                  size="small"
+                  aria-label="Platform"
+                  onChange={handleCalSrc}
+                >
+                  <ToggleButton value="InHouse">In House&nbsp;{(calSourceCount.inHouse !== "" && calSourceCount.inHouse !== 0) && <Chip label={calSourceCount.inHouse}></Chip>}</ToggleButton>
+                  <ToggleButton value="OutSource">Out Source&nbsp;{(calSourceCount.outSource !== "" && calSourceCount.outSource !== 0) && <Chip label={calSourceCount.outSource}></Chip>}</ToggleButton>
+                  <ToggleButton value="OEM">OEM&nbsp;{(calSourceCount.oem !== "" && calSourceCount.oem !== 0) && <Chip label={calSourceCount.oem}></Chip>}</ToggleButton>
+                </ToggleButtonGroup>
+
+              </Box>
+
+
+            </Paper>
+          </div>
+
+
+
+          <div className="col">
+            <Paper elevation={12} sx={{ p: 2, height: "100%" }}>
+              <h4 className='text-center'>Item Status</h4>
+              <ResponsiveContainer width="100%" height={200}>
+
+                <PieChart>
+                  <Pie
+                    data={itemStatus}
+                    dataKey="value"
+                    nameKey="label"
+                    cx="50%"
+                    cy="50%"
+                    outerRadius={80}
+
+                    isAnimationActive={true}
+                    animationBegin={0}
+                    animationDuration={1000}
+                    innerRadius={40}
+                    activeIndex={activeIndex}
+                    activeShape={{ fill: '#ffffff', strokeWidth: 2 }}
+                    labelLine={false}
+                  >
+                    {data.map((entry, index) => (
+                      <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                     ))}
-                </Select>
-              </FormControl>
-              <Button className='col' size='small' fullWidth variant='contained' onClick={(e) => updateItemData(e)}>Move</Button>
 
-            </div>
+                  </Pie>
 
-          </Paper>
+                  <Tooltip />
+                  <Legend
+                    // onMouseEnter={handleLegendMouseEnter}
+                    // onMouseLeave={handleLegendMouseLeave}
+                    align='left'
+                    verticalAlign='top'
+                    layout='vertical'
+                    iconSize={30}
+                    content={itemStatusLegendContent}
+                    onClick={(e) => console.log(e)}
+                  />
+                </PieChart>
+
+              </ResponsiveContainer>
+
+            </Paper></div>
+
+          <div className="col">
+            <Paper elevation={12} sx={{ p: 2, height: "100%" }}>
+              <h4 className='text-center'>Item Location</h4>
+              <ResponsiveContainer width="100%" height={200}>
+
+                <PieChart>
+                  <Pie
+                    data={itemLocationData}
+                    dataKey="value"
+                    nameKey="label"
+                    cx="50%"
+                    cy="50%"
+                    outerRadius={80}
+
+                    isAnimationActive={true}
+                    animationBegin={0}
+                    animationDuration={1000}
+                    innerRadius={40}
+                    activeIndex={activeIndex}
+                    activeShape={{ fill: '#ffffff' }}
+                    labelLine={false}
+                  >
+                    {data.map((entry, index) => (
+                      <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                    ))}
+
+                  </Pie>
+
+                  <Tooltip />
+                  <Legend
+                    // onMouseEnter={handleLegendMouseEnter}
+                    // onMouseLeave={handleLegendMouseLeave}
+                    align='left'
+                    verticalAlign='top'
+                    layout='vertical'
+                    iconSize={30}
+                    content={itemLocationLegend}
+                    onClick={(e) => console.log(e)}
+                  />
+                </PieChart>
+
+              </ResponsiveContainer>
+              <div className='row mx-2'>
+                <FormControl className='col-md-8 me-2' size='small'>
+                  <InputLabel htmlFor="grouped-select">Select Department</InputLabel>
+                  <Select defaultValue="" id="grouped-select" label="Select Department" onChange={DepartmentChange}>
+                    <ListSubheader color='primary' sx={{ fontSize: "12px" }}>Default Department</ListSubheader>
+                    {allDepartments
+                      .filter(item => item.defaultdep === "yes")
+                      .map((item, index) => (
+                        <MenuItem sx={{ marginLeft: "20px" }} key={index} value={item.department}>
+                          {item.department}
+                        </MenuItem>
+                      ))}
+
+                    <ListSubheader color='primary' sx={{ fontSize: "12px" }}>Other Department</ListSubheader>
+                    {allDepartments
+                      .filter(item => item.defaultdep === "no")
+                      .map((item, index) => (
+                        <MenuItem sx={{ marginLeft: "20px" }} key={index} value={item.department}>
+                          {item.department}
+                        </MenuItem>
+                      ))}
+                  </Select>
+                </FormControl>
+                <Button className='col' size='small' fullWidth variant='contained' onClick={(e) => updateItemData(e)}>Move</Button>
+
+              </div>
+
+            </Paper>
+          </div>
         </div>
-      </div>
 
-      <div className="row gx-3 mx-3">
-        <div className="col-md-8">
-          <Paper sx={{ p: 2, }} elevation={12}>
-            <Box sx={{ height: 400, mb: 2 }}>
-              <DataGrid
+        <div className="row gx-3 mx-3">
+          <div className="col-md-8">
+            <Paper sx={{ p: 2, }} elevation={12}>
+              <Box sx={{ height: 400, mb: 2 }}>
+                <DataGrid
 
-                rows={filteredData}
-                columns={ItemListColumns}
-                getRowId={(row) => row._id}
-                initialState={{
-                  pagination: {
-                    paginationModel: {
-                      pageSize: 5,
+                  rows={filteredData}
+                  columns={ItemListColumns}
+                  getRowId={(row) => row._id}
+                  initialState={{
+                    pagination: {
+                      paginationModel: {
+                        pageSize: 5,
+                      },
                     },
-                  },
-                }}
+                  }}
 
-                onRowSelectionModelChange={handleRowSelectionChange}
-                sx={{
-                  ".MuiTablePagination-displayedRows": {
+                  onRowSelectionModelChange={handleRowSelectionChange}
+                  sx={{
+                    ".MuiTablePagination-displayedRows": {
 
-                    "margin-top": "1em",
-                    "margin-bottom": "1em"
-                  }
-                }}
+                      "margin-top": "1em",
+                      "margin-bottom": "1em"
+                    }
+                  }}
 
-                checkboxSelection
-                // onRowClick={handleSelectRow}
-                slots={{ toolbar: GridToolbar }}
-                slotProps={{
-                  toolbar: {
-                    showQuickFilter: true,
-                  },
-                }}
+                  checkboxSelection
+                  // onRowClick={handleSelectRow}
+                  slots={{ toolbar: GridToolbar }}
+                  slotProps={{
+                    toolbar: {
+                      showQuickFilter: true,
+                    },
+                  }}
 
-              />
-            </Box>
-            <div className="row">
-              <div className="col-md-9">
-                <Button size='small' className='me-2'>Onsite</Button>
-                <Button size='small' className='me-2' onClick={() => setCalOpen(true)}>Cal</Button>
-                <Button size='small' className='me-2'>Grn</Button>
-                <Button size='small'>Create DC</Button>
+                />
+              </Box>
+              <div className="row">
+                <div className="col-md-9">
+                  <Button size='small' className='me-2'>Onsite</Button>
+                  {(selectedRows.length === 1 && selectedRows[0].itemCalibrationSource === "InHouse") && <Button size='small' className='me-2' onClick={() => { setCalOpen(true); setCalData() }}>Cal</Button>}
+                  <Button size='small' className='me-2'>Grn</Button>
+                  <Button size='small'>Create DC</Button>
+                </div>
+                <div className="col-md-3">
+                  <Button component={Link} to="/itemmaster" size='small' className='me-2'>Item Master</Button>
+                  <Button component={Link} to="/itemList" size='small'>Item Entry</Button>
+                </div>
               </div>
-              <div className="col-md-3">
-                <Button component={Link} to="/itemmaster" size='small' className='me-2'>Item Master</Button>
-                <Button component={Link} to="/itemList" size='small'>Item Entry</Button>
-              </div>
-            </div>
-          </Paper>
-        </div>
-        <div className="col-md-4">
-          <Paper className='col' elevation={12} sx={{ p: 2, height: "100%" }}>
-            <table className='table table-bordered table-sm text-center align-middle table-hover'>
-              <tbody>
-                <tr>
-                  <th>Si. No</th>
-                  <th>Name</th>
-                  <th>Quantity</th>
-                </tr>
-                {locationTableData.map((item, index) => (
-                  <tr className={`${item.departmentName === departmentName ? "table-active" : ""}`} key={index} onClick={() => DepartmentDataShow(item.departmentName)}>
-                    <td>{index + 1}</td>
-                    <td>{item.departmentName}</td>
-                    <td>{item.quantity}</td>
+            </Paper>
+          </div>
+          <div className="col-md-4">
+            <Paper className='col' elevation={12} sx={{ p: 2, height: "100%" }}>
+              <table className='table table-bordered table-sm text-center align-middle table-hover'>
+                <tbody>
+                  <tr>
+                    <th>Si. No</th>
+                    <th>Name</th>
+                    <th>Quantity</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
-          </Paper>
+                  {locationTableData.map((item, index) => (
+                    <tr className={`${item.departmentName === departmentName ? "table-active" : ""}`} key={index} onClick={() => DepartmentDataShow(item.departmentName)}>
+                      <td>{index + 1}</td>
+                      <td>{item.departmentName}</td>
+                      <td>{item.quantity}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </Paper>
 
-          <Dialog fullWidth={true} maxWidth="xl" open={calOpen} sx={{ color: "#f1f4f4" }} onClose={() => setCalOpen(false)}>
-            <DialogTitle align='center'>Calibration</DialogTitle>
+            <Dialog fullWidth={true} maxWidth="xl" open={calOpen} sx={{ color: "#f1f4f4" }} onClose={() => setCalOpen(false)}>
+              <DialogTitle align='center'>Calibration</DialogTitle>
 
-            <DialogContent >
+              <DialogContent >
 
-              <div className="row mb-2">
-                <Paper elevation={12} sx={{ p: 2 }} className='col-md-4 '>
-                  <div className="row g-2 ">
-                    <div className="col-md-6">
-                      <TextField
+                <div className="row mb-2">
+                  <Paper elevation={12} sx={{ p: 2 }} className='col-md-4 '>
+                    <div className="row g-2 ">
+                      <div className="col-md-6">
+                        <TextField
+                          InputProps={{
+                            readOnly: true,
+                          }}
+                          value={calibrationData.calIMTENo}
+                          id="calIMTENoId"
+                          size='small'
+                          label="Item IMTE No"
+                          name='calIMTENo'
+                          fullWidth
+                          variant="outlined"
+                        />
+                      </div>
+                      <div className="col-md-6">
+                        <TextField
+                          InputProps={{
+                            readOnly: true,
+                          }}
+                          name='calItemName'
+                          id="calItemNameId"
+                          size='small'
+                          label="Item Name"
+                          value={calibrationData.calItemName}
+                          fullWidth
+                          variant="outlined"
+                        />
+                      </div>
 
-                        value={calibrationData.calIMTENo}
-                        id="calIMTENoId"
-                        size='small'
-                        label="Item IMTE No"
-                        name='calIMTENo'
-                        fullWidth
-                        variant="outlined"
-                      />
+                      <div className="col-md-6">
+                        <TextField
+                          InputProps={{
+                            readOnly: true,
+                          }}
+                          name='calItemType'
+                          id="calItemTypeId"
+                          size='small'
+                          label="Item Type"
+                          value={calibrationData.calItemType}
+                          fullWidth
+                          variant="outlined"
+                        />
+                      </div>
+                      <div className="col-md-3">
+                        <TextField
+                          InputProps={{
+                            readOnly: true,
+                          }}
+                          value={calibrationData.calRangeSize}
+                          id="calRangeSizeId"
+                          size='small'
+                          label="Range/Size"
+                          name='calRangeSize'
+                          fullWidth
+                          variant="outlined"
+                        />
+                      </div>
+                      <div className="col-md-3">
+                        <TextField
+                          InputProps={{
+                            readOnly: true,
+                          }}
+                          value={calibrationData.calLC}
+                          id="calLCId"
+                          size='small'
+                          label="Least Count"
+                          name='calLC'
+                          fullWidth
+                          variant="outlined"
+                        />
+                      </div>
+                      <div className="col-md-6">
+                        <TextField
+                          InputProps={{
+                            readOnly: true,
+                          }}
+                          value={calibrationData.calItemMFRNo}
+                          id="calItemMFRNoId"
+                          size='small'
+                          label="Item MFR No"
+                          name='calItemMFRNo'
+                          fullWidth
+                          variant="outlined"
+                        />
+                      </div>
+
+                      <div className="col-md-6">
+                        <TextField
+                          InputProps={{
+                            readOnly: true,
+                          }}
+                          value={calibrationData.calItemMake}
+                          id="calItemMakeId"
+                          size='small'
+                          label="Make"
+                          name='calItemMake'
+                          fullWidth
+                          variant="outlined"
+                        />
+                      </div>
                     </div>
-                    <div className="col-md-6">
-                      <TextField
+                  </Paper>
 
-                        name='calItemName'
-                        id="calItemNameId"
-                        size='small'
-                        label="Item Name"
-                        value={calibrationData.calItemName}
-                        fullWidth
-                        variant="outlined"
-                      />
+                  <Paper elevation={12} sx={{ p: 2 }} className='col-4 '>
+                    <div className="row g-2 ">
+
+                      <div className="col-md-6">
+                        <TextField
+                          id="calItemTemperatureId"
+                          size='small'
+                          label="Temperature"
+                          value={calibrationData.calItemTemperature}
+                          fullWidth
+                          name='calItemTemperature'
+                          variant="outlined"
+                        />
+                      </div>
+                      <div className="col-md-6">
+                        <TextField
+                          id="calItemHumidityId"
+                          size='small'
+                          label="Humidity"
+                          value={calibrationData.calItemHumidity}
+                          name='calItemHumidity'
+                          fullWidth
+                          variant="outlined"
+                        />
+                      </div>
+                      <div className="col-md-6">
+                        <TextField
+                        InputProps={{
+                          readOnly: true,
+                        }}
+                          id="calItemUncertainityId"
+                          size='small'
+                          label="Uncertainity"
+                          value={calibrationData.calItemUncertainity}
+                          name='calItemUncertainity'
+                          fullWidth
+                          variant="outlined"
+                        />
+                      </div>
+                      <div className="col-md-6">
+                        <TextField
+                        InputProps={{
+                          readOnly: true,
+                        }}
+                          id="calItemSOPNoId"
+                          size='small'
+                          label="SOP No."
+                          value={calibrationData.calItemSOPNo}
+                          name='calItemSOPNo'
+                          fullWidth
+                          variant="outlined"
+                        />
+                      </div>
+                      <div className="col-md-6">
+                        <TextField
+                        InputProps={{
+                          readOnly: true,
+                        }}
+                          id="calStandardRefId"
+                          size='small'
+                          label="Standard Ref"
+                          value={calibrationData.calStandardRef}
+                          name='calStandardRef'
+                          fullWidth
+                          variant="outlined"
+                        />
+                      </div>
+
                     </div>
+                  </Paper>
 
-                    <div className="col-md-6">
-                      <TextField
-
-                        name='calItemType'
-                        id="calItemTypeId"
-                        size='small'
-                        label="Item Type"
-                        value={calibrationData.calItemType}
-                        fullWidth
-                        variant="outlined"
-                      />
+                  <Paper elevation={12} sx={{ p: 2 }} className='col-4 '>
+                    <div className="row g-2 ">
+                      <div className="col-md-6">
+                        <TextField
+                          id="calCertificateNoId"
+                          size='small'
+                          label="Certificate No."
+                          value={calibrationData.calCertificateNo}
+                          name='calCertificateNo'
+                          fullWidth
+                          variant="outlined"
+                        />
+                      </div>
+                      <div className="col-md-6">
+                        <DatePicker slotProps={{ textField: { size: 'small' } }} value={dayjs(calibrationData.calItemCalDate)} onChange={(newValue) => setCalibrationData((prev) => ({ ...prev, calItemCalDate: newValue.format('YYYY-MM-DD') }))} />
+                      </div>
+                      <div className="col-md-6">
+                      <DatePicker slotProps={{ textField: { size: 'small' } }} value={dayjs(calibrationData.calItemDueDate)} onChange={(newValue) => setCalibrationData((prev) => ({ ...prev, calItemDueDate: newValue.format('YYYY-MM-DD') }))} />
+                      </div>
+                      <div className="col-md-6">
+                        <TextField
+                          id="calItemEntryDateId"
+                          size='small'
+                          label="Entry Date"
+                          value={calibrationData.calItemEntryDate}
+                          name='calItemEntryDate'
+                          fullWidth
+                          variant="outlined"
+                        />
+                      </div>
+                      <div className="col-md-6">
+                        <TextField
+                          id="calCalibratedById"
+                          size='small'
+                          label="Calibrated By"
+                          value={calibrationData.calCalibratedBy}
+                          name='calCalibratedBy'
+                          fullWidth
+                          variant="outlined"
+                        />
+                      </div>
+                      <div className="col-md-6">
+                        <TextField
+                          id="calApprovedById"
+                          size='small'
+                          label="Approved By"
+                          value={calibrationData.calApprovedBy}
+                          name='calApprovedBy'
+                          fullWidth
+                          variant="outlined"
+                        />
+                      </div>
                     </div>
-                    <div className="col-md-6">
-                      <TextField
+                  </Paper>
+                </div>
+                <Paper elevation={12} sx={{ p: 2 }} className='col-md-12 row'>
 
-                        value={calibrationData.calRangeSize}
-                        id="calRangeSizeId"
-                        size='small'
-                        label="Range/Size"
-                        name='calRangeSize'
-                        fullWidth
-                        variant="outlined"
-                      />
-                    </div>
-                    <div className="col-md-6">
-                      <TextField
+                  <table className='table table-bordered table-responsive text-center align-middle'>
+                    {calibrationData.calItemType === "attribute" &&
+                      <tbody>
+                        <tr>
+                          <th>Parameter</th>
+                          <th>Range/Size</th>
+                          <th>Unit</th>
+                          <th>Max</th>
+                          <th>Min</th>
+                          <th>WearLimit</th>
+                          <th>Observed Size/ Observer Error</th>
+                          <th>Unit</th>
+                          <th>Status</th>
+                        </tr>
+                        {/* {calibrationData.calcalibrationData.map((item)=> ()} */}
+                        <tr>
+                        </tr>
+                      </tbody>}
+                    {calibrationData.calItemType === "variable" &&
 
-                        value={calibrationData.calItemMFRNo}
-                        id="calItemMFRNoId"
-                        size='small'
-                        label="Item MFR No"
-                        name='calItemMFRNo'
-                        fullWidth
-                        variant="outlined"
-                      />
-                    </div>
-                    <div className="col-md-6">
-                      <TextField
+                      <tbody>
+                        <tr>
+                          <th>Parameter</th>
+                          <th>Range/Size</th>
+                          <th>Unit</th>
+                          <th>Max</th>
+                          <th>Min</th>
+                          <th>WearLimit</th>
+                          <th>Observed Size/ Observer Error</th>
+                          <th>Unit</th>
+                          <th>Status</th>
+                        </tr>
+                        {calibrationData.calcalibrationData.map((item, index) => (
+                          <tr>
+                            <td><input type="text" className='form-control form-control-sm' id="acNominalSizeId" name="acNominalSize" value={item.acNominalSize} onChange={(e) => changecalDataValue(index, e.target.name, e.target.value)} /></td>
+                            <td><input type="text" className='form-control form-control-sm' id="acNominalSizeId" name="acNominalSize" value={item.acNominalSize} onChange={(e) => changecalDataValue(index, e.target.name, e.target.value)} /></td>
 
-                        value={calibrationData.calLC}
-                        id="calLCId"
-                        size='small'
-                        label="Least Count"
-                        name='calLC'
-                        fullWidth
-                        variant="outlined"
-                      />
-                    </div>
-                    <div className="col-md-6">
-                      <TextField
 
-                        value={calibrationData.calItemMake}
-                        id="calItemMakeId"
-                        size='small'
-                        label="Make"
-                        name='calItemMake'
-                        fullWidth
-                        variant="outlined"
-                      />
-                    </div>
-                  </div>
+                            <td> </td>
+                            <td><input type="text" className="form-control form-control-sm" id="acMinPSId" name="acMinPS" placeholder='min' value={item.acMinPS} onChange={(e) => changecalDataValue(index, e.target.name, e.target.value)} /></td>
+
+                            <td><input type="text" className='form-control form-control-sm' id="acMaxPSId" name="acMaxPS" placeholder='max' value={item.acMaxPS} onChange={(e) => changecalDataValue(index, e.target.name, e.target.value)} /></td>
+
+
+                            <td><input type="text" className="form-control form-control-sm" id="acWearLimitPSId" name="acWearLimitPS" placeholder='wearLimit' value={item.acWearLimitPS} onChange={(e) => changecalDataValue(index, e.target.name, e.target.value)} /></td>
+
+                            {/* {obCheckedValue === "minmax" &&
+                            <React.Fragment>
+                              <td><input type="text" className="form-control form-control-sm" id="acMinOBId" name="acMinOB" placeholder='min' value={item.acMinOB} onChange={(e) => changecalDataValue(index, e.target.name, e.target.value)} /></td>
+                              <td><input type="text" className='form-control form-control-sm' id="acMaxOBId" name="acMaxOB" placeholder='max' value={item.acMaxOB} onChange={(e) => changecalDataValue(index, e.target.name, e.target.value)} /></td>
+                            </React.Fragment>
+                          }
+                          {obCheckedValue === "average" &&
+                            <React.Fragment>
+                              <td colSpan={2}><input type="text" className="form-control form-control-sm" id="acAverageOBId" name="acAverageOB" placeholder='Average' value={item.acAverageOB} onChange={(e) => changecalDataValue(index, e.target.name, e.target.value)} /></td>
+                            </React.Fragment>
+                          } */}
+                          </tr>
+                        ))}
+
+                      </tbody>
+                    }
+                    {calibrationData.calItemType === "referencestandard" &&
+
+                      <tbody>
+                        <tr>
+                          <th>Parameter</th>
+                          <th>Range/Size</th>
+                          <th>Unit</th>
+                          <th>Max</th>
+                          <th>Min</th>
+                          <th>WearLimit</th>
+                          <th>Observed Size/ Observer Error</th>
+                          <th>Unit</th>
+                          <th>Status</th>
+                        </tr>
+                        {/* {calibrationData.calcalibrationData.map((item)=> ()} */}
+                        <tr>
+                        </tr>
+                      </tbody>
+                    }
+                  </table>
+
+
                 </Paper>
 
-                <Paper elevation={12} sx={{ p: 2 }} className='col-4 '>
-                  <div className="row g-2 ">
-
-                    <div className="col-md-6">
-                      <TextField
-                        id="calItemTemperatureId"
-                        size='small'
-                        label="Temperature"
-                        value={calibrationData.calItemTemperature}
-                        fullWidth
-                        name='calItemTemperature'
-                        variant="outlined"
-                      />
-                    </div>
-                    <div className="col-md-6">
-                      <TextField
-                        id="calItemHumidityId"
-                        size='small'
-                        label="Humidity"
-                        value={calibrationData.calItemHumidity}
-                        name='calItemHumidity'
-                        fullWidth
-                        variant="outlined"
-                      />
-                    </div>
-                    <div className="col-md-6">
-                      <TextField
-                        id="calItemUncertainityId"
-                        size='small'
-                        label="Uncertainity"
-                        value={calibrationData.calItemUncertainity}
-                        name='calItemUncertainity'
-                        fullWidth
-                        variant="outlined"
-                      />
-                    </div>
-                    <div className="col-md-6">
-                      <TextField
-                        id="calItemSOPNoId"
-                        size='small'
-                        label="SOP No."
-                        value={calibrationData.calItemSOPNo}
-                        name='calItemSOPNo'
-                        fullWidth
-                        variant="outlined"
-                      />
-                    </div>
-                    <div className="col-md-6">
-                      <TextField
-                        id="calStandardRefId"
-                        size='small'
-                        label="Standard Ref"
-                        value={calibrationData.calStandardRef}
-                        name='calStandardRef'
-                        fullWidth
-                        variant="outlined"
-                      />
-                    </div>
-
-                  </div>
-                </Paper>
-
-                <Paper elevation={12} sx={{ p: 2 }} className='col-4 '>
-                  <div className="row g-2 ">
-                    <div className="col-md-6">
-                      <TextField
-                        id="calCertificateNoId"
-                        size='small'
-                        label="Certificate No."
-                        value={calibrationData.calCertificateNo}
-                        name='calCertificateNo'
-                        fullWidth
-                        variant="outlined"
-                      />
-                    </div>
-                    <div className="col-md-6">
-                      <TextField
-                        id="calItemCalDateId"
-                        size='small'
-                        label="Cal. Date"
-                        value={calibrationData.calItemCalDate}
-                        name='calItemCalDate'
-                        fullWidth
-                        variant="outlined"
-                      />
-                    </div>
-                    <div className="col-md-6">
-                      <TextField
-                        id="calItemDueDateId"
-                        size='small'
-                        label="Due Date"
-                        value={calibrationData.calItemDueDate}
-                        name='calItemDueDate'
-                        fullWidth
-                        variant="outlined"
-                      />
-                    </div>
-                    <div className="col-md-6">
-                      <TextField
-                        id="calItemEntryDateId"
-                        size='small'
-                        label="Entry Date"
-                        value={calibrationData.calItemEntryDate}
-                        name='calItemEntryDate'
-                        fullWidth
-                        variant="outlined"
-                      />
-                    </div>
-                    <div className="col-md-6">
-                      <TextField
-                        id="calCalibratedById"
-                        size='small'
-                        label="Calibrated By"
-                        value={calibrationData.calCalibratedBy}
-                        name='calCalibratedBy'
-                        fullWidth
-                        variant="outlined"
-                      />
-                    </div>
-                    <div className="col-md-6">
-                      <TextField
-                        id="calApprovedById"
-                        size='small'
-                        label="Approved By"
-                        value={calibrationData.calApprovedBy}
-                        name='calApprovedBy'
-                        fullWidth
-                        variant="outlined"
-                      />
-                    </div>
-                  </div>
-                </Paper>
-              </div>
-              <Paper elevation={12} sx={{ p: 2 }} className='col-md-12 row'>
-                <table className='table table-bordered table-responsive text-center align-middle'>
-                  <tbody>
-                    <tr>
-                      <th>Parameter</th>
-                      <th>Range/Size</th>
-                      <th>Unit</th>
-                      <th>Max</th>
-                      <th>Min</th>
-                      <th>WearLimit</th>
-                      <th>Observed Size/ Observer Error</th>
-                      <th>Unit</th>
-                      <th>Status</th>
-                    </tr>
-                    {/* {calibrationData.calcalibrationData.map((item)=> ()} */}
-                    <tr>
-                    </tr>
-                  </tbody>
-                </table>
-                <table className='table table-bordered table-responsive text-center align-middle'>
-                  <tbody>
-                    <tr>
-                      <th>Parameter</th>
-                      <th>Range/Size</th>
-                      <th>Unit</th>
-                      <th>Max</th>
-                      <th>Min</th>
-                      <th>WearLimit</th>
-                      <th>Observed Size/ Observer Error</th>
-                      <th>Unit</th>
-                      <th>Status</th>
-                    </tr>
-                    {/* {calibrationData.calcalibrationData.map((item)=> ()} */}
-                    <tr>
-                    </tr>
-                  </tbody>
-                </table>
-                <table className='table table-bordered table-responsive text-center align-middle'>
-                  <tbody>
-                    <tr>
-                      <th>Parameter</th>
-                      <th>Range/Size</th>
-                      <th>Unit</th>
-                      <th>Max</th>
-                      <th>Min</th>
-                      <th>WearLimit</th>
-                      <th>Observed Size/ Observer Error</th>
-                      <th>Unit</th>
-                      <th>Status</th>
-                    </tr>
-                    {/* {calibrationData.calcalibrationData.map((item)=> ()} */}
-                    <tr>
-                    </tr>
-                  </tbody>
-                </table>
-              </Paper>
-
-            </DialogContent>
-            <DialogActions>
-              <Button onClick={() => setCalOpen(false)}>Cancel</Button>
-              <Button onClick={() => setCalOpen(false)}>Submit</Button>
-            </DialogActions>
-          </Dialog>
+              </DialogContent>
+              <DialogActions>
+                <Button onClick={() => setCalOpen(false)}>Cancel</Button>
+                <Button onClick={() => setCalOpen(false)}>Submit</Button>
+              </DialogActions>
+            </Dialog>
+          </div>
         </div>
-      </div>
 
 
 
@@ -1379,7 +1445,7 @@ const Home = () => {
 
 
 
-
+      </LocalizationProvider>
 
     </div>
 

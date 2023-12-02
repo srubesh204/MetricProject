@@ -188,6 +188,7 @@ const ItemEdit = () => {
 
     const initialItemAddData = {
         itemMasterRef: "",
+        selectedItemMaster: [],
         itemAddMasterName: "",
         itemIMTENo: "",
         itemImage: "",
@@ -237,6 +238,7 @@ const ItemEdit = () => {
 
     const [itemAddData, setItemAddData] = useState({
         itemMasterRef: "",
+        selectedItemMaster: [],
         itemAddMasterName: "",
         itemIMTENo: "",
         itemImage: "",
@@ -463,10 +465,8 @@ const ItemEdit = () => {
                 itemImage: itemMasterImage,
                 itemAddMasterName: itemDescription,
                 itemCalFreInMonths: itemFqInMonths,
-                itemCalAlertDays: calAlertInDay
-
-
-
+                itemCalAlertDays: calAlertInDay,
+                selectedItemMaster: response.data.result
             }))
             setCalibrationPointsData(calibrationPoints)
 
@@ -801,9 +801,9 @@ const ItemEdit = () => {
                                     <div className="col-lg-4">
                                         <TextField size='small' select variant='outlined' onChange={handleItemAddChange} label="Item Type" name='itemType' fullWidth value={itemAddData.itemType || ""}>
                                             <MenuItem><em>Select Type</em></MenuItem>
-                                            <MenuItem value="Attribute">Attribute</MenuItem>
-                                            <MenuItem value="Variable">Variable</MenuItem>
-                                            <MenuItem value="Reference Standard">Reference Standard</MenuItem>
+                                            <MenuItem value="attribute">attribute</MenuItem>
+                                            <MenuItem value="variable">variable</MenuItem>
+                                            <MenuItem value="referencestandard">referencestandard</MenuItem>
 
                                         </TextField>
                                     </div>
@@ -828,7 +828,7 @@ const ItemEdit = () => {
                                         <TextField size='small' variant='outlined' label="MFR.Si.No." onChange={handleItemAddChange} name='itemMFRNo' value={itemAddData.itemMFRNo} id='itemMFRNoId' fullWidth />
                                     </div>
                                     <div className='col-lg-8 d-flex justify-content-between'>
-                                        {itemAddData.itemType === "Variable" && <TextField size='small' variant='outlined' name='itemLC' onChange={handleItemAddChange} id="itemLCId" value={itemAddData.itemLC} label="Least Count" fullWidth />}
+                                        {itemAddData.itemType === "variable" && <TextField size='small' variant='outlined' name='itemLC' onChange={handleItemAddChange} id="itemLCId" value={itemAddData.itemLC} label="Least Count" fullWidth />}
 
 
                                         <TextField select size='small' variant='outlined' label="Unit" name='itemLCUnit' onChange={handleItemAddChange} value={itemAddData.itemLCUnit} style={{ width: "100%" }} >
@@ -841,15 +841,15 @@ const ItemEdit = () => {
                                     </div>
                                     <div className="row g-1">
                                         <div className="col-lg-12 me-1">
-                                            {itemAddData.itemType === "Attribute" && <TextField size='small' variant='outlined' label="Make" onChange={handleItemAddChange} value={itemAddData.itemMake} onKeyDown={handleKeyDown} name='itemMake' id='itemMakeId' fullWidth />}
-                                            {itemAddData.itemType === "Reference Standard" && <TextField size='small' variant='outlined' label="Make" onChange={handleItemAddChange} value={itemAddData.itemMake} onKeyDown={handleKeyDown} name='itemMake' id='itemMakeId' fullWidth />}
+                                            {itemAddData.itemType === "attribute" && <TextField size='small' variant='outlined' label="Make" onChange={handleItemAddChange} value={itemAddData.itemMake} onKeyDown={handleKeyDown} name='itemMake' id='itemMakeId' fullWidth />}
+                                            {itemAddData.itemType === "referencestandard" && <TextField size='small' variant='outlined' label="Make" onChange={handleItemAddChange} value={itemAddData.itemMake} onKeyDown={handleKeyDown} name='itemMake' id='itemMakeId' fullWidth />}
                                         </div>
-                                        {itemAddData.itemType === "Variable" &&
+                                        {itemAddData.itemType === "variable" &&
                                             <div className="col-lg me-1">
                                                 <TextField size='small' variant='outlined' label="Make" value={itemAddData.itemMake} onChange={handleItemAddChange} onKeyDown={handleKeyDown} name='itemMake' id='itemMakeId' fullWidth />
                                             </div>}
                                         <div className="col-lg">
-                                            {itemAddData.itemType === "Variable" && <TextField size='small' variant='outlined' label="Model No." onChange={handleItemAddChange} value={itemAddData.itemModelNo} name='itemModelNo' id='itemModelNoId' fullWidth />}
+                                            {itemAddData.itemType === "variable" && <TextField size='small' variant='outlined' label="Model No." onChange={handleItemAddChange} value={itemAddData.itemModelNo} name='itemModelNo' id='itemModelNoId' fullWidth />}
                                         </div>
                                     </div>
                                     <div className="row g-1">
@@ -1299,27 +1299,27 @@ const ItemEdit = () => {
                                         <th>Parameter</th>
                                         <th>Range/Size</th>
                                         <th>Unit</th>
-                                        {itemAddData.itemType === "Attribute" && <th colspan="3">Permissible Size</th>}
-                                        {/*{itemAddData.itemType === "Attribute" && <th>Min</th>}
-                                        {itemAddData.itemType === "Attribute" && <th>Max</th>}
-                                                {itemAddData.itemType === "Attribute" && <th>WearLimit</th>}*/}
-                                        {/*{itemAddData.itemType === "Attribute" && <th>Unit</th>}*/}
-                                        {itemAddData.itemType === "Attribute" && <th colspan="2">Observed size</th>}
+                                        {itemAddData.itemType === "attribute" && <th colspan="3">Permissible Size</th>}
+                                        {/*{itemAddData.itemType === "attribute" && <th>Min</th>}
+                                        {itemAddData.itemType === "attribute" && <th>Max</th>}
+                                                {itemAddData.itemType === "attribute" && <th>WearLimit</th>}*/}
+                                        {/*{itemAddData.itemType === "attribute" && <th>Unit</th>}*/}
+                                        {itemAddData.itemType === "attribute" && <th colspan="2">Observed size</th>}
 
 
 
-                                        {itemAddData.itemType === "Variable" && <th>Accuracy(+ & -)</th>}
-                                        {itemAddData.itemType === "Variable" && <th>Unit</th>}
-                                        {itemAddData.itemType === "Variable" && <th>Observed Error</th>}
+                                        {itemAddData.itemType === "variable" && <th>Accuracy(+ & -)</th>}
+                                        {itemAddData.itemType === "variable" && <th>Unit</th>}
+                                        {itemAddData.itemType === "variable" && <th>Observed Error</th>}
 
 
 
 
 
-                                        {itemAddData.itemType === "Reference Standard" && <th>Accuracy(+ & -)</th>}
-                                        {itemAddData.itemType === "Reference Standard" && <th>Unit</th>}
+                                        {itemAddData.itemType === "referencestandard" && <th>Accuracy(+ & -)</th>}
+                                        {itemAddData.itemType === "referencestandard" && <th>Unit</th>}
 
-                                        {itemAddData.itemType === "Reference Standard" && <th colspan="2">Observed size</th>}
+                                        {itemAddData.itemType === "referencestandard" && <th colspan="2">Observed size</th>}
                                         <th>Delete</th>
                                     </tr>
                                     {itemAddData.acceptanceCriteria ? itemAddData.acceptanceCriteria.map((item, index) => (
@@ -1342,26 +1342,26 @@ const ItemEdit = () => {
 
 
                                             </select></td>
-                                            {itemAddData.itemType === "Attribute" && <td><input type="text" className="form-control form-control-sm" id="acPsMinId" name="acPsMin" placeholder='min' value={item.acPsMin} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} /></td>}
+                                            {itemAddData.itemType === "attribute" && <td><input type="text" className="form-control form-control-sm" id="acPsMinId" name="acPsMin" placeholder='min' value={item.acPsMin} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} /></td>}
 
-                                            {itemAddData.itemType === "Attribute" && <td><input type="text" className='form-control form-control-sm' id="acPsMaxId" name="acPsMax" placeholder='max' value={item.acPsMax} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} /></td>}
+                                            {itemAddData.itemType === "attribute" && <td><input type="text" className='form-control form-control-sm' id="acPsMaxId" name="acPsMax" placeholder='max' value={item.acPsMax} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} /></td>}
 
-                                            {itemAddData.itemType === "Attribute" && <td><input type="text" className="form-control form-control-sm" id="acWearLimitId" name="acWearLimit" placeholder='wearLimit' value={item.acWearLimit} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} /></td>}
-                                            {itemAddData.itemType === "Attribute" && <td><input type="text" className="form-control form-control-sm" id="acObMinId" name="acObMin" placeholder='min' value={item.acObMin} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} /></td>}
-                                            {itemAddData.itemType === "Attribute" && <td><input type="text" className='form-control form-control-sm' id="acObMaxId" name="acObMax" placeholder='max' value={item.acObMax} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} /></td>}
-                                            {itemAddData.itemType === "Variable" && <td><input type="text" className="form-control form-control-sm" id="acAccuracyId" name="acAccuracy" value={item.acAccuracy} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} /></td>}
+                                            {itemAddData.itemType === "attribute" && <td><input type="text" className="form-control form-control-sm" id="acWearLimitId" name="acWearLimit" placeholder='wearLimit' value={item.acWearLimit} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} /></td>}
+                                            {itemAddData.itemType === "attribute" && <td><input type="text" className="form-control form-control-sm" id="acObMinId" name="acObMin" placeholder='min' value={item.acObMin} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} /></td>}
+                                            {itemAddData.itemType === "attribute" && <td><input type="text" className='form-control form-control-sm' id="acObMaxId" name="acObMax" placeholder='max' value={item.acObMax} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} /></td>}
+                                            {itemAddData.itemType === "variable" && <td><input type="text" className="form-control form-control-sm" id="acAccuracyId" name="acAccuracy" value={item.acAccuracy} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} /></td>}
 
-                                            {itemAddData.itemType === "Variable" && <td> <select className="form-select form-select-sm" id="acAccuracyUnitId" name="acAccuracyUnit" value={item.acAccuracyUnit} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} >
+                                            {itemAddData.itemType === "variable" && <td> <select className="form-select form-select-sm" id="acAccuracyUnitId" name="acAccuracyUnit" value={item.acAccuracyUnit} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} >
                                                 <option value="">-Select-</option>
                                                 {units.map((item, index) => (
                                                     <option key={index} value={item.unitName}>{item.unitName}</option>
                                                 ))}
 
                                             </select></td>}
-                                            {itemAddData.itemType === "Variable" && <td><input type="text" className="form-control form-control-sm" id="acObservedSizeId" name="acObservedSize" value={item.acObservedSize} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} /></td>}
+                                            {itemAddData.itemType === "variable" && <td><input type="text" className="form-control form-control-sm" id="acObservedSizeId" name="acObservedSize" value={item.acObservedSize} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} /></td>}
 
-                                            {itemAddData.itemType === "Reference Standard" && <td><input type="text" className="form-control form-control-sm" id="acAccuracyId" name="acAccuracy" value={item.acAccuracy} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} /></td>}
-                                            {itemAddData.itemType === "Reference Standard" && <td> <select className="form-select form-select-sm" id="acAccuracyUnitId" name="acAccuracyUnit" value={item.acAccuracyUnit} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} >
+                                            {itemAddData.itemType === "referencestandard" && <td><input type="text" className="form-control form-control-sm" id="acAccuracyId" name="acAccuracy" value={item.acAccuracy} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} /></td>}
+                                            {itemAddData.itemType === "referencestandard" && <td> <select className="form-select form-select-sm" id="acAccuracyUnitId" name="acAccuracyUnit" value={item.acAccuracyUnit} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} >
                                                 <option value="">-Select-</option>
                                                 {units.map((item, index) => (
                                                     <option key={index} value={item.unitName}>{item.unitName}</option>
@@ -1369,9 +1369,9 @@ const ItemEdit = () => {
 
                                             </select></td>}
 
-                                            {itemAddData.itemType === "Reference Standard" && <td><input type="text" className="form-control form-control-sm" id="acMinId" name="acMin" placeholder='min' value={item.acMin} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} /></td>}
+                                            {itemAddData.itemType === "referencestandard" && <td><input type="text" className="form-control form-control-sm" id="acMinId" name="acMin" placeholder='min' value={item.acMin} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} /></td>}
 
-                                            {itemAddData.itemType === "Reference Standard" && <td><input type="text" className='form-control form-control-sm' id="acMaxId" name="acMax" placeholder='max' value={item.acMax} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} /></td>}
+                                            {itemAddData.itemType === "referencestandard" && <td><input type="text" className='form-control form-control-sm' id="acMaxId" name="acMax" placeholder='max' value={item.acMax} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} /></td>}
 
 
                                             <td><Button color='error' onClick={deleteAC}><Delete /></Button></td>
