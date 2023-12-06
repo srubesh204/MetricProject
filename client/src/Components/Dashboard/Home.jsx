@@ -45,7 +45,42 @@ const Home = () => {
   const [distinctDepartment, setDistinctDepartment] = useState([])
   const [departmentName, setDepartmentName] = useState("")
   const [allDepartments, setAllDepartments] = useState([])
-  const [defaultDepartment, setDefaultDepartment] = useState("")
+
+
+  const getAllEmployees = async () => {
+    try {
+      const Departments = await axios.get(
+        `${process.env.REACT_APP_PORT}/employee/getAllEmployees`
+      );
+      console.log(Departments)
+      const defaultDepartment = Departments.data.result.filter((dep) => dep.defaultdep === "yes");
+      const otherDepartment = Departments.data.result.filter((dep) => dep.defaultdep === "no")
+
+
+      setAllDepartments([...defaultDepartment, ...otherDepartment])
+
+
+
+
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const [activeEmps, setActiveEmps] = useState([])
+
+  const empFetch = async () => {
+    try {
+      const response = await axios.get(
+        `${process.env.REACT_APP_PORT}/employee/getAllActiveEmployees`
+      );
+     setActiveEmps(response.data.result)
+    } catch (err) {
+      console.log(err);
+    }
+  };
+  
+  console.log(activeEmps)
 
   const getAllDepartments = async () => {
     try {
@@ -421,6 +456,7 @@ const Home = () => {
     DepartmentFetch();
     getAllDepartments();
     getVendorsByType();
+    empFetch();
   }, [])
 
 
@@ -671,7 +707,7 @@ const Home = () => {
     calCertificateNo: "",
     calItemCalDate: dayjs().format('YYYY-MM-DD'),
     calItemDueDate: "",
-    calItemEntryDate: "",
+    calItemEntryDate: dayjs().format('YYYY-MM-DD'),
     calCalibratedBy: "",
     calApprovedBy: "",
     calcalibrationData: [{
@@ -704,7 +740,7 @@ const Home = () => {
       setCalibrationData((prev) => (
         {
           ...prev,
-          calItemId : selectedRows[0]._id,
+          calItemId: selectedRows[0]._id,
           calIMTENo: selectedRows[0].itemIMTENo,
           calItemName: selectedRows[0].itemAddMasterName,
           calItemType: selectedRows[0].itemType,
@@ -712,8 +748,7 @@ const Home = () => {
           calItemMFRNo: selectedRows[0].itemMFRNo,
           calLC: selectedRows[0].itemLC,
           calItemMake: selectedRows[0].itemMake,
-
-
+          calItemFreInMonths: selectedRows[0].itemCalFreInMonths,
           calItemUncertainity: selectedRows[0].selectedItemMaster[0].uncertainty,
           calItemSOPNo: selectedRows[0].selectedItemMaster[0].SOPNo,
           calStandardRef: selectedRows[0].selectedItemMaster[0].standardRef,
@@ -767,6 +802,38 @@ const Home = () => {
       };
     })
   };
+
+  useEffect(() => {
+    calculateResultDate(calibrationData.calItemCalDate, calibrationData.calItemFreInMonths);
+  }, [calibrationData.calItemCalDate, calibrationData.calItemFreInMonths]);
+
+
+
+  const calculateResultDate = (itemCalDate, itemCalFreInMonths) => {
+    const parsedDate = dayjs(itemCalDate);
+    if (parsedDate.isValid() && !isNaN(parseInt(itemCalFreInMonths))) {
+      const calculatedDate = parsedDate.add(parseInt(itemCalFreInMonths, 10), 'month').subtract(1, 'day');
+      setCalibrationData((prev) => ({
+        ...prev,
+        calItemDueDate: calculatedDate.format('YYYY-MM-DD'),
+      }));
+    }
+  };
+
+  const [selectedEmp, setSelectedEmp] = useState([])
+  const getEmployeeByName = (empId) => {
+    const selectedEmp = activeEmps.filter((emp)=> emp._id === empId);
+    setSelectedEmp(selectedEmp)
+  }
+  useEffect(()=>{
+    getEmployeeByName(calibrationData.calCalibratedBy)
+  }, [calibrationData.calCalibratedBy])
+
+  const handleCalData = (e) => {
+    const {name, value} = e.target;
+    console.log(name)
+    setCalibrationData((prev)=> ({...prev, [name]: value}))
+  }
 
   return (
     <div style={{ backgroundColor: "#f1f4f4", margin: 0, padding: 0 }}>
@@ -997,7 +1064,7 @@ const Home = () => {
                     layout='vertical'
                     iconSize={30}
                     content={itemLocationLegend}
-                    onClick={(e) => console.log(e)}
+                   
                   />
                 </PieChart>
 
@@ -1210,6 +1277,7 @@ const Home = () => {
                           name='calItemMake'
                           fullWidth
                           variant="outlined"
+                         
                         />
                       </div>
                     </div>
@@ -1227,6 +1295,7 @@ const Home = () => {
                           fullWidth
                           name='calItemTemperature'
                           variant="outlined"
+                          onChange={handleCalData}
                         />
                       </div>
                       <div className="col-md-6">
@@ -1238,13 +1307,14 @@ const Home = () => {
                           name='calItemHumidity'
                           fullWidth
                           variant="outlined"
+                          onChange={handleCalData}
                         />
                       </div>
                       <div className="col-md-6">
                         <TextField
-                        InputProps={{
-                          readOnly: true,
-                        }}
+                          InputProps={{
+                            readOnly: true,
+                          }}
                           id="calItemUncertainityId"
                           size='small'
                           label="Uncertainity"
@@ -1256,9 +1326,9 @@ const Home = () => {
                       </div>
                       <div className="col-md-6">
                         <TextField
-                        InputProps={{
-                          readOnly: true,
-                        }}
+                          InputProps={{
+                            readOnly: true,
+                          }}
                           id="calItemSOPNoId"
                           size='small'
                           label="SOP No."
@@ -1270,9 +1340,9 @@ const Home = () => {
                       </div>
                       <div className="col-md-6">
                         <TextField
-                        InputProps={{
-                          readOnly: true,
-                        }}
+                          InputProps={{
+                            readOnly: true,
+                          }}
                           id="calStandardRefId"
                           size='small'
                           label="Standard Ref"
@@ -1300,21 +1370,13 @@ const Home = () => {
                         />
                       </div>
                       <div className="col-md-6">
-                        <DatePicker slotProps={{ textField: { size: 'small' } }} value={dayjs(calibrationData.calItemCalDate)} onChange={(newValue) => setCalibrationData((prev) => ({ ...prev, calItemCalDate: newValue.format('YYYY-MM-DD') }))} />
+                        <DatePicker format="DD-MM-YYYY" slotProps={{ textField: { size: 'small' } }} value={dayjs(calibrationData.calItemCalDate)} onChange={(newValue) => setCalibrationData((prev) => ({ ...prev, calItemCalDate: newValue.format('YYYY-MM-DD') }))} />
                       </div>
                       <div className="col-md-6">
-                      <DatePicker slotProps={{ textField: { size: 'small' } }} value={dayjs(calibrationData.calItemDueDate)} onChange={(newValue) => setCalibrationData((prev) => ({ ...prev, calItemDueDate: newValue.format('YYYY-MM-DD') }))} />
+                        <DatePicker format="DD-MM-YYYY" slotProps={{ textField: { size: 'small' } }} value={dayjs(calibrationData.calItemDueDate)} onChange={(newValue) => setCalibrationData((prev) => ({ ...prev, calItemDueDate: newValue.format('YYYY-MM-DD') }))} />
                       </div>
                       <div className="col-md-6">
-                        <TextField
-                          id="calItemEntryDateId"
-                          size='small'
-                          label="Entry Date"
-                          value={calibrationData.calItemEntryDate}
-                          name='calItemEntryDate'
-                          fullWidth
-                          variant="outlined"
-                        />
+                        <DatePicker format="DD-MM-YYYY" slotProps={{ textField: { size: 'small' } }} value={dayjs(calibrationData.calItemEntryDate)} onChange={(newValue) => setCalibrationData((prev) => ({ ...prev, calItemEntryDate: newValue.format('YYYY-MM-DD') }))} />
                       </div>
                       <div className="col-md-6">
                         <TextField
@@ -1324,24 +1386,42 @@ const Home = () => {
                           value={calibrationData.calCalibratedBy}
                           name='calCalibratedBy'
                           fullWidth
+                          select
                           variant="outlined"
-                        />
+                          onChange={handleCalData}
+                        >
+                          {activeEmps.map((emp, index)=> (
+                          <MenuItem key={index} value={emp._id}>{emp.firstName + " "+ emp.lastName}</MenuItem>
+                        ))}
+                        </TextField>
+                        
+                        
                       </div>
                       <div className="col-md-6">
                         <TextField
+                         InputProps={{
+                          disabled: selectedEmp.length === 0,
+                        }}
                           id="calApprovedById"
                           size='small'
                           label="Approved By"
+                          select
                           value={calibrationData.calApprovedBy}
                           name='calApprovedBy'
                           fullWidth
                           variant="outlined"
-                        />
+                          onChange={handleCalData}
+                        >
+                           {selectedEmp.map((emp, index)=> (
+                          <MenuItem key={index} value={emp._id}>{emp.firstName+" "+ emp.lastName}</MenuItem>
+                        ))}
+                        </TextField>
                       </div>
                     </div>
                   </Paper>
                 </div>
-                <Paper elevation={12} sx={{ p: 2 }} className='col-md-12 row'>
+                <Paper elevation={12} sx={{ p: 2 }} className='col-md-12'>
+                  <h5 className='text-center'>Calibration Data</h5>
 
                   <table className='table table-bordered table-responsive text-center align-middle'>
                     {calibrationData.calItemType === "attribute" &&
@@ -1368,21 +1448,20 @@ const Home = () => {
                           <th>Parameter</th>
                           <th>Range/Size</th>
                           <th>Unit</th>
-                          <th>Max</th>
-                          <th>Min</th>
-                          <th>WearLimit</th>
+                          <th>Permissible Error</th>
+                          
                           <th>Observed Size/ Observer Error</th>
                           <th>Unit</th>
                           <th>Status</th>
                         </tr>
                         {calibrationData.calcalibrationData.map((item, index) => (
                           <tr>
-                            <td><input type="text" className='form-control form-control-sm' id="acNominalSizeId" name="acNominalSize" value={item.acNominalSize} onChange={(e) => changecalDataValue(index, e.target.name, e.target.value)} /></td>
-                            <td><input type="text" className='form-control form-control-sm' id="acNominalSizeId" name="acNominalSize" value={item.acNominalSize} onChange={(e) => changecalDataValue(index, e.target.name, e.target.value)} /></td>
+                            <td></td>
+                            <td></td>
 
 
                             <td> </td>
-                            <td><input type="text" className="form-control form-control-sm" id="acMinPSId" name="acMinPS" placeholder='min' value={item.acMinPS} onChange={(e) => changecalDataValue(index, e.target.name, e.target.value)} /></td>
+                            <td></td>
 
                             <td><input type="text" className='form-control form-control-sm' id="acMaxPSId" name="acMaxPS" placeholder='max' value={item.acMaxPS} onChange={(e) => changecalDataValue(index, e.target.name, e.target.value)} /></td>
 
@@ -1427,6 +1506,25 @@ const Home = () => {
                   </table>
 
 
+
+                </Paper>
+                <Paper elevation={12} sx={{ p: 2 }} className='col-md-12'>
+                    <h5 className='text-center'>Master Used</h5>
+                    <table>
+                      <tbody>
+                        <tr>
+                          <th>IMTE No</th>
+                          <th>Master Name</th>
+                          <th>Range/Size</th>
+                          <th>Cal Certificate No</th>
+                          <th>Cal Date</th>
+                          <th>Next Due</th>
+                          <th>Calibrated At</th>
+                        </tr>
+                        
+                        <tr></tr>
+                      </tbody>
+                    </table>
                 </Paper>
 
               </DialogContent>

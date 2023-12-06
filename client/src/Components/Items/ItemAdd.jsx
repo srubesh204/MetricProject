@@ -631,7 +631,7 @@ const ItemAdd = () => {
         }
     };
 
-    const [obCheckedValue, setObCheckedValue] = useState("average")
+    
 
     return (
         <div style={{ margin: "2rem", backgroundColor: "#f5f5f5" }}>
@@ -1383,3 +1383,5 @@ const ItemAdd = () => {
 }
 
 export default ItemAdd
+
+;

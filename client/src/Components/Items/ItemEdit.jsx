@@ -189,6 +189,7 @@ const ItemEdit = () => {
     const initialItemAddData = {
         itemMasterRef: "",
         selectedItemMaster: [],
+        isItemMaster: "",
         itemAddMasterName: "",
         itemIMTENo: "",
         itemImage: "",
@@ -218,27 +219,31 @@ const ItemEdit = () => {
         itemCalibratedAt: "",
         itemCertificateName: "",
         itemPartName: [],
+        itemOBType: "average",
         acceptanceCriteria: [
             {
-                acAccuracyUnit: "",
-                acRangeSizeUnit: "",
                 acParameter: "",
-                acRangeSize: "",
-                acMin: "",
-                acMax: "",
-                acPsMin: "",
-                acPsMax: "",
-                acPsWearLimit: "",
-                acAccuracy: "",
-                acObservedSize: ""
+                acNominalSize: "",
+                acNominalSizeUnit: "",
+                acMinPS: "",
+                acMaxPS: "",
+                acWearLimitPS: "",
+                acMinOB: "",
+                acMaxOB: "",
+                acAverageOB: "",
+                acOBError: "",
+                acMinPSError: "",
+                acMaxPSError: "",
             }
-        ]
+        ],
+        itemUncertainity: ""
     }
 
 
     const [itemAddData, setItemAddData] = useState({
         itemMasterRef: "",
         selectedItemMaster: [],
+        isItemMaster: "",
         itemAddMasterName: "",
         itemIMTENo: "",
         itemImage: "",
@@ -268,24 +273,75 @@ const ItemEdit = () => {
         itemCalibratedAt: "",
         itemCertificateName: "",
         itemPartName: [],
+        itemOBType: "average",
         acceptanceCriteria: [
             {
-                acAccuracyUnit: "",
-                acRangeSizeUnit: "",
                 acParameter: "",
-                acRangeSize: "",
-                acMin: "",
-                acMax: "",
-                acPsMin: "",
-                acPsMax: "",
-                acObMin: "",
-                acObMax: "",
-                acWearLimit: "",
-                acAccuracy: "",
-                acObservedSize: ""
+                acNominalSize: "",
+                acNominalSizeUnit: "",
+                acMinPS: "",
+                acMaxPS: "",
+                acWearLimitPS: "",
+                acMinOB: "",
+                acMaxOB: "",
+                acAverageOB: "",
+                acOBError: "",
+                acMinPSError: "",
+                acMaxPSError: "",
             }
-        ]
+        ],
+        itemUncertainity: ""
     })
+
+
+    const getItemDataById = async () => {
+        try {
+            const response = await axios.get(
+                `${process.env.REACT_APP_PORT}/itemAdd/getItemAddById/${id}`
+            );
+            const itemData = response.data.result
+            console.log(itemData.itemType)
+            setItemAddData((prev) => ({
+                ...prev,
+                itemMasterRef: itemData.itemMasterRef,
+                selectedItemMaster: itemData.selectedItemMaster,
+                itemAddMasterName: itemData.itemAddMasterName,
+                itemIMTENo: itemData.itemIMTENo,
+                itemImage: itemData.itemImage,
+                itemType: itemData.itemType,
+                itemRangeSize: itemData.itemRangeSize,
+                itemRangeSizeUnit: itemData.itemRangeSizeUnit,
+                itemMFRNo: itemData.itemMFRNo,
+                itemLC: itemData.itemLC,
+                itemLCUnit: itemData.itemLCUnit,
+                itemMake: itemData.itemMake,
+                itemModelNo: itemData.itemModelNo,
+                itemStatus: itemData.itemStatus,
+                itemReceiptDate: itemData.itemReceiptDate,
+                itemDepartment: itemData.itemDepartment,
+                itemArea: itemData.itemArea,
+                itemPlaceOfUsage: itemData.itemPlaceOfUsage,
+                itemCalFreInMonths: itemData.itemCalFreInMonths,
+                itemCalAlertDays: itemData.itemCalAlertDays,
+                itemCalibrationSource: itemData.itemCalibrationSource,
+                itemCalibrationDoneAt: itemData.itemCalibrationDoneAt,
+                itemItemMasterName: itemData.itemItemMasterName,
+                itemItemMasterIMTENo: itemData.itemItemMasterIMTENo,
+                itemSupplier: itemData.itemSupplier,
+                itemOEM: itemData.itemOEM,
+                itemCalDate: itemData.itemCalDate,
+                itemDueDate: itemData.itemDueDate,
+                itemCalibratedAt: itemData.itemCalibratedAt,
+                itemCertificateName: itemData.itemCertificateName,
+                itemPartName: itemData.itemPartName,
+                acceptanceCriteria: itemData.acceptanceCriteria
+            }))
+            console.log(response)
+
+        } catch (err) {
+            console.log(err);
+        }
+    };
 
     //
 
@@ -314,21 +370,17 @@ const ItemEdit = () => {
         width: 1,
     });
 
+   
+
     useEffect(() => {
         getItemDataById();
     }, [])
-    const getItemDataById = async () => {
-        try {
-            const response = await axios.get(
-                `${process.env.REACT_APP_PORT}/itemAdd/getItemAddById/${id}`
-            );
-            setItemAddData(response.data.result)
-            console.log(response)
 
-        } catch (err) {
-            console.log(err);
-        }
-    };
+   
+
+   
+
+   
     {/* const handleItemAddChange = (e) => {
         const { name, value } = e.target;
         setItemAddData((prevData) => ({
@@ -341,7 +393,7 @@ const ItemEdit = () => {
 
     const handleItemAddChange = (e) => {
 
-        const { name, value } = e.target;
+        const { name, value, checked } = e.target;
         {/*} if (name === "itemRangeSizeUnit") {
             setItemAddData((prev) => ({ ...prev, [name]: value, acceptanceCriteria: [{ acAccuracyUnit: value, acRangeSizeUnit: value }] }))
         }*/}
@@ -356,7 +408,8 @@ const ItemEdit = () => {
             setItemAddData((prev) => ({ ...prev, itemPartName: value }));
         }
         if (name === "itemItemMasterIMTENo") {
-            setItemAddData((prev) => ({ ...prev, itemItemMasterIMTENo: value }));
+            const updatedSelection = itemMasterListByName.filter(item => value.some(selectedItem => selectedItem.itemIMTENo === item.itemIMTENo));
+            setItemAddData((prev) => ({ ...prev, itemItemMasterIMTENo: updatedSelection }));
         }
         if (name === "itemCalibrationSource") {
             if (value === "InHouse") {
@@ -392,7 +445,7 @@ const ItemEdit = () => {
 
 
 
-   {/* const handleItemAddChanges = (event) => {
+    {/* const handleItemAddChanges = (event) => {
         const { value } = event.target;
         const selectedIndex = itemAddData.itemPartName.indexOf(value);
         let newSelected = [];
@@ -452,33 +505,9 @@ const ItemEdit = () => {
 
 
     const [calibrationPointsData, setCalibrationPointsData] = useState([])
-    const itemMasterById = async () => {
-        try {
-            const response = await axios.get(
-                `${process.env.REACT_APP_PORT}/itemMaster/getItemMasterById/${itemAddData.itemMasterRef}`
-            );
-            console.log(response.data)
-            const { _id, itemType, itemDescription, itemPrefix, itemFqInMonths, calAlertInDay, wiNo, uncertainity, standartRef, itemImageName, status, itemMasterImage, workInsName, calibrationPoints } = response.data.result
-            setItemAddData((prev) => ({
-                ...prev,
-                itemType: itemType,
-                itemImage: itemMasterImage,
-                itemAddMasterName: itemDescription,
-                itemCalFreInMonths: itemFqInMonths,
-                itemCalAlertDays: calAlertInDay,
-                selectedItemMaster: response.data.result
-            }))
-            setCalibrationPointsData(calibrationPoints)
+    
 
-
-        } catch (err) {
-            console.log(err);
-        }
-    };
-
-    useEffect(() => {
-        itemMasterById();
-    }, [itemAddData.itemMasterRef]);
+    
 
     const [partData, setPartData] = useState([])
     const getPartList = async () => {
@@ -528,19 +557,20 @@ const ItemEdit = () => {
         setItemAddData((prev) => ({
             ...prev,
             acceptanceCriteria: [...prev.acceptanceCriteria, {
+                acAccuracyUnit: "",
+                acRangeSizeUnit:"",
                 acParameter: "",
                 acRangeSize: "",
-                acRangeSizeUnit: "",
                 acMin: "",
                 acMax: "",
+                acPsMin: "",
                 acPsMin: "",
                 acPsMax: "",
                 acObMin: "",
                 acObMax: "",
                 acWearLimit: "",
                 acAccuracy: "",
-                acAccuracyUnit: "",
-                acObservedSize: "",
+                acObservedSize: ""
             }]
         }))
     }
@@ -799,11 +829,11 @@ const ItemEdit = () => {
                                 <Typography variant='h6' className='text-center'>Item General Details</Typography>
                                 <div className="row g-2 mb-2">
                                     <div className="col-lg-4">
-                                        <TextField size='small' select variant='outlined' onChange={handleItemAddChange} label="Item Type" name='itemType' fullWidth value={itemAddData.itemType || ""}>
-                                            <MenuItem><em>Select Type</em></MenuItem>
-                                            <MenuItem value="attribute">attribute</MenuItem>
-                                            <MenuItem value="variable">variable</MenuItem>
-                                            <MenuItem value="referencestandard">referencestandard</MenuItem>
+                                        <TextField size='small' select variant='outlined' onChange={handleItemAddChange} label="Item Type" name='itemType' fullWidth value={itemAddData.itemType}>
+                                            
+                                            <MenuItem value="attribute">Attribute</MenuItem>
+                                            <MenuItem value="variable">Variable</MenuItem>
+                                            <MenuItem value="referencestandard">Reference Standard</MenuItem>
 
                                         </TextField>
                                     </div>
@@ -982,7 +1012,7 @@ const ItemEdit = () => {
                                             >
                                                 {itemMasterListByName.map((name, index) => (
                                                     <MenuItem key={index} value={name}>
-                                                        <Checkbox checked={itemAddData.itemItemMasterIMTENo.indexOf(name) > -1} />
+                                                        <Checkbox checked={itemAddData.itemItemMasterIMTENo.indexOf(name.itemIMTENo) > -1} />
                                                         <ListItemText primary={name.itemIMTENo} />
                                                     </MenuItem>
                                                 ))}
@@ -1052,8 +1082,8 @@ const ItemEdit = () => {
                                         onChange={handleItemAddChange}
                                         checked={itemAddData.itemCalibrationDoneAt}
                                     >
-                                        <FormControlLabel value="Lab" control={<Radio />} label="Lab" />
-                                        <FormControlLabel value="Site" control={<Radio />} label="Site" />
+                                        <FormControlLabel value="Lab" checked={itemAddData.itemCalibrationDoneAt === "Lab"} control={<Radio />} label="Lab" />
+                                        <FormControlLabel value="Site" checked={itemAddData.itemCalibrationDoneAt === "Site"} control={<Radio />} label="Site" />
                                     </RadioGroup>
 
 
@@ -1096,8 +1126,8 @@ const ItemEdit = () => {
                                         onChange={handleItemAddChange}
 
                                     >
-                                        <FormControlLabel value="Lab" control={<Radio />} label="Lab" />
-                                        <FormControlLabel value="Site" control={<Radio />} label="Site" />
+                                        <FormControlLabel value="Lab" checked={itemAddData.itemCalibrationDoneAt === "Lab"} control={<Radio />} label="Lab" />
+                                        <FormControlLabel value="Site" checked={itemAddData.itemCalibrationDoneAt === "Site"} control={<Radio />} label="Site" />
                                     </RadioGroup>
 
 

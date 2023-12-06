@@ -40,6 +40,7 @@ const itemAddSchema = new mongoose.Schema({
   itemCalibratedAt: String,
   itemCertificateName: String,
   itemPartName: [],
+  itemOBType: String,
   acceptanceCriteria: [
       {
         acParameter: String,

@@ -51,6 +51,7 @@ const itemAddController = {
         itemCertificateName,
         itemPartName,
         itemUncertainity,
+        itemOBType,
         acceptanceCriteria,
         createdAt // Assuming createdAt is part of the request body
       } = req.body;
@@ -90,6 +91,7 @@ const itemAddController = {
         itemCertificateName,
         itemPartName,
         itemUncertainity,
+        itemOBType,
         acceptanceCriteria,
         createdAt // If createdAt is necessary for the creation, include it here
       };
@@ -175,6 +177,7 @@ const itemAddController = {
         itemCertificateName,
         itemPartName,
         itemUncertainity,
+        itemOBType,
         acceptanceCriteria,
         } = req.body;
       // Create an object with the fields you want to update
@@ -213,6 +216,7 @@ const itemAddController = {
         itemCertificateName,
         itemPartName,
         itemUncertainity,
+        itemOBType,
         acceptanceCriteria,
       };
 
