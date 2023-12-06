@@ -9,7 +9,7 @@ import { Delete, Done } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
 import { Link as RouterLink } from 'react-router-dom';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import { Add, Remove, HighlightOffRounded } from '@mui/icons-material';
+import { Add, Remove, HighlightOffRounded, UploadFile } from '@mui/icons-material';
 import { Link } from '@mui/material';
 
 const ItemAdd = () => {
@@ -225,6 +225,7 @@ const ItemAdd = () => {
         itemDueDate: "",
         itemCalibratedAt: "",
         itemCertificateName: "",
+        itemCertificateNo: "",
         itemPartName: [],
         itemOBType: "average",
         acceptanceCriteria: [
@@ -1103,21 +1104,27 @@ const ItemAdd = () => {
                                     </div>
                                     <div className="col-lg-12">
                                         <TextField size='small' fullWidth variant='outlined' onChange={handleItemAddChange} label="Calibrated at" select name='itemCalibratedAt'>
-                                            <MenuItem value="inhouse">inhouse</MenuItem>
+                                            <MenuItem value="inhouse">InHouse</MenuItem>
                                             {suppOEM.map((item, index) => (
                                                 <MenuItem key={index} value={item.fullName}>{item.aliasName}</MenuItem>
                                             ))}
 
                                         </TextField>
+                                        {itemAddData.isItemMaster === "1" && <TextField fullWidth label="Uncertainity" variant='outlined' size='small' onChange={handleItemAddChange} name='itemUncertainity' value={itemAddData.itemUncertainity} />}
+
                                     </div>
-                                    <div className="col-lg-12  d-flex justify-content-between">
-                                        <Button className='me-2' component="label" value={itemAddData.itemCertificateName} variant="contained" fullWidth >
+
+
+                                    <div className="col-md-12 d-flex justify-content-between">
+                                        <TextField size='small' className='me-2' fullWidth variant='outlined' onChange={handleItemAddChange} label="Certificate No" name='itemCertificateNo'></TextField>
+
+                                        <Button startIcon={<UploadFile />} size="small" fullWidth  component="label" value={itemAddData.itemCertificateName} variant="contained" >
 
                                             Certificate Upload
                                             <VisuallyHiddenInput type="file" onChange={handleCertificateUpload} />
                                         </Button>
 
-                                        {itemAddData.isItemMaster === "1" && <TextField fullWidth label="Uncertainity" variant='outlined' size='small' onChange={handleItemAddChange} name='itemUncertainity' value={itemAddData.itemUncertainity} />}
+
                                     </div>
 
 
