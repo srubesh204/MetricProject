@@ -188,6 +188,8 @@ const ItemEdit = () => {
 
     const initialItemAddData = {
         itemMasterRef: "",
+        selectedItemMaster: [],
+        isItemMaster: "",
         itemAddMasterName: "",
         itemIMTENo: "",
         itemImage: "",
@@ -217,6 +219,7 @@ const ItemEdit = () => {
         itemCalibratedAt: "",
         itemCertificateName: "",
         itemPartName: [],
+        itemOBType: "average",
         acceptanceCriteria: [
             {
                 acParameter: "",
@@ -232,12 +235,15 @@ const ItemEdit = () => {
                 acMinPSError: "",
                 acMaxPSError: "",
             }
-        ]
+        ],
+        itemUncertainity: ""
     }
 
 
     const [itemAddData, setItemAddData] = useState({
         itemMasterRef: "",
+        selectedItemMaster: [],
+        isItemMaster: "",
         itemAddMasterName: "",
         itemIMTENo: "",
         itemImage: "",
@@ -267,6 +273,7 @@ const ItemEdit = () => {
         itemCalibratedAt: "",
         itemCertificateName: "",
         itemPartName: [],
+        itemOBType: "",
         acceptanceCriteria: [
             {
                 acParameter: "",
@@ -282,8 +289,60 @@ const ItemEdit = () => {
                 acMinPSError: "",
                 acMaxPSError: "",
             }
-        ]
+        ],
+        itemUncertainity: ""
     })
+
+
+    const getItemDataById = async () => {
+        try {
+            const response = await axios.get(
+                `${process.env.REACT_APP_PORT}/itemAdd/getItemAddById/${id}`
+            );
+            const itemData = response.data.result
+            console.log(itemData.itemType)
+            setItemAddData((prev) => ({
+                ...prev,
+                itemMasterRef: itemData.itemMasterRef,
+                selectedItemMaster: itemData.selectedItemMaster,
+                itemAddMasterName: itemData.itemAddMasterName,
+                itemIMTENo: itemData.itemIMTENo,
+                itemImage: itemData.itemImage,
+                itemType: itemData.itemType,
+                itemRangeSize: itemData.itemRangeSize,
+                itemRangeSizeUnit: itemData.itemRangeSizeUnit,
+                itemMFRNo: itemData.itemMFRNo,
+                itemLC: itemData.itemLC,
+                itemLCUnit: itemData.itemLCUnit,
+                itemMake: itemData.itemMake,
+                itemModelNo: itemData.itemModelNo,
+                itemStatus: itemData.itemStatus,
+                itemReceiptDate: itemData.itemReceiptDate,
+                itemDepartment: itemData.itemDepartment,
+                itemArea: itemData.itemArea,
+                itemPlaceOfUsage: itemData.itemPlaceOfUsage,
+                itemCalFreInMonths: itemData.itemCalFreInMonths,
+                itemCalAlertDays: itemData.itemCalAlertDays,
+                itemCalibrationSource: itemData.itemCalibrationSource,
+                itemCalibrationDoneAt: itemData.itemCalibrationDoneAt,
+                itemItemMasterName: itemData.itemItemMasterName,
+                itemItemMasterIMTENo: itemData.itemItemMasterIMTENo,
+                itemSupplier: itemData.itemSupplier,
+                itemOEM: itemData.itemOEM,
+                itemCalDate: itemData.itemCalDate,
+                itemDueDate: itemData.itemDueDate,
+                itemCalibratedAt: itemData.itemCalibratedAt,
+                itemCertificateName: itemData.itemCertificateName,
+                itemPartName: itemData.itemPartName,
+                itemOBType: itemData.itemOBType,
+                acceptanceCriteria: itemData.acceptanceCriteria
+            }))
+            console.log(response)
+
+        } catch (err) {
+            console.log(err);
+        }
+    };
 
     //
 
@@ -312,21 +371,17 @@ const ItemEdit = () => {
         width: 1,
     });
 
+
+
     useEffect(() => {
         getItemDataById();
     }, [])
-    const getItemDataById = async () => {
-        try {
-            const response = await axios.get(
-                `${process.env.REACT_APP_PORT}/itemAdd/getItemAddById/${id}`
-            );
-            setItemAddData(response.data.result)
-            console.log(response)
 
-        } catch (err) {
-            console.log(err);
-        }
-    };
+
+
+
+
+
     {/* const handleItemAddChange = (e) => {
         const { name, value } = e.target;
         setItemAddData((prevData) => ({
@@ -354,7 +409,8 @@ const ItemEdit = () => {
             setItemAddData((prev) => ({ ...prev, itemPartName: value }));
         }
         if (name === "itemItemMasterIMTENo") {
-            setItemAddData((prev) => ({ ...prev, itemItemMasterIMTENo: value }));
+            const updatedSelection = itemMasterListByName.filter(item => value.some(selectedItem => selectedItem.itemIMTENo === item.itemIMTENo));
+            setItemAddData((prev) => ({ ...prev, itemItemMasterIMTENo: updatedSelection }));
         }
         if (name === "itemCalibrationSource") {
             if (value === "inhouse") {
@@ -392,6 +448,13 @@ const ItemEdit = () => {
                 ...prev,
                 [name]: checked ? "1" : "0"
             }));
+        }
+        if (name == "itemOBType") {
+            setItemAddData((prev) => ({
+                ...prev,
+                [name]: value
+            }));
+            console.log("working")
         }
     }
 
@@ -457,35 +520,9 @@ const ItemEdit = () => {
 
 
     const [calibrationPointsData, setCalibrationPointsData] = useState([])
-    const itemMasterById = async () => {
-        try {
-            const response = await axios.get(
-                `${process.env.REACT_APP_PORT}/itemMaster/getItemMasterById/${itemAddData.itemMasterRef}`
-            );
-            console.log(response.data)
-            const { _id, itemType, itemDescription, itemPrefix, itemFqInMonths, calAlertInDay, wiNo, uncertainity, standartRef, itemImageName, status, itemMasterImage, workInsName, calibrationPoints } = response.data.result
-            setItemAddData((prev) => ({
-                ...prev,
-                itemType: itemType,
-                itemImage: itemMasterImage,
-                itemAddMasterName: itemDescription,
-                itemCalFreInMonths: itemFqInMonths,
-                itemCalAlertDays: calAlertInDay
 
 
 
-            }))
-            setCalibrationPointsData(calibrationPoints)
-
-
-        } catch (err) {
-            console.log(err);
-        }
-    };
-
-    useEffect(() => {
-        itemMasterById();
-    }, [itemAddData.itemMasterRef]);
 
     const [partData, setPartData] = useState([])
     const getPartList = async () => {
@@ -665,7 +702,7 @@ const ItemEdit = () => {
         }
     };
 
-    const [uploadMessage, setUploadMessage] = useState("")
+
 
     const handleCertificateUpload = (event) => {
         const selectedFile = event.target.files[0];
@@ -708,9 +745,9 @@ const ItemEdit = () => {
 
         setSnackBarOpen(false);
     }
-
+    const [uploadMessage, setUploadMessage] = useState("")
     const handleRemoveFile = () => {
-        setItemAddData((prev) => ({ ...prev, itemCertificateData: "" }));
+        setItemAddData((prev) => ({ ...prev, itemCertificateName: "" }));
         setUploadMessage(null)
     }
 
@@ -815,8 +852,8 @@ const ItemEdit = () => {
                                 <Typography variant='h6' className='text-center'>Item General Details</Typography>
                                 <div className="row g-2 mb-2">
                                     <div className="col-lg-4">
-                                        <TextField size='small' select variant='outlined' onChange={handleItemAddChange} label="Item Type" name='itemType' fullWidth value={itemAddData.itemType || ""}>
-                                            <MenuItem><em>Select Type</em></MenuItem>
+                                        <TextField size='small' select variant='outlined' onChange={handleItemAddChange} label="Item Type" name='itemType' fullWidth value={itemAddData.itemType}>
+
                                             <MenuItem value="attribute">Attribute</MenuItem>
                                             <MenuItem value="variable">Variable</MenuItem>
                                             <MenuItem value="referencestandard">Reference Standard</MenuItem>
@@ -998,7 +1035,7 @@ const ItemEdit = () => {
                                             >
                                                 {itemMasterListByName.map((name, index) => (
                                                     <MenuItem key={index} value={name}>
-                                                        <Checkbox checked={itemAddData.itemItemMasterIMTENo.indexOf(name) > -1} />
+                                                        <Checkbox checked={itemAddData.itemItemMasterIMTENo.indexOf(name.itemIMTENo) > -1} />
                                                         <ListItemText primary={name.itemIMTENo} />
                                                     </MenuItem>
                                                 ))}
@@ -1068,8 +1105,8 @@ const ItemEdit = () => {
                                         onChange={handleItemAddChange}
                                         checked={itemAddData.itemCalibrationDoneAt}
                                     >
-                                        <FormControlLabel value="Lab" control={<Radio />} label="Lab" />
-                                        <FormControlLabel value="Site" control={<Radio />} label="Site" />
+                                        <FormControlLabel value="Lab" checked={itemAddData.itemCalibrationDoneAt === "Lab"} control={<Radio />} label="Lab" />
+                                        <FormControlLabel value="Site" checked={itemAddData.itemCalibrationDoneAt === "Site"} control={<Radio />} label="Site" />
                                     </RadioGroup>
 
 
@@ -1112,8 +1149,8 @@ const ItemEdit = () => {
                                         onChange={handleItemAddChange}
 
                                     >
-                                        <FormControlLabel value="Lab" control={<Radio />} label="Lab" />
-                                        <FormControlLabel value="Site" control={<Radio />} label="Site" />
+                                        <FormControlLabel value="Lab" checked={itemAddData.itemCalibrationDoneAt === "Lab"} control={<Radio />} label="Lab" />
+                                        <FormControlLabel value="Site" checked={itemAddData.itemCalibrationDoneAt === "Site"} control={<Radio />} label="Site" />
                                     </RadioGroup>
 
 
@@ -1215,26 +1252,26 @@ const ItemEdit = () => {
                                     </div>
                                     <div className="col-lg-12">
                                         <TextField size='small' fullWidth variant='outlined' onChange={handleItemAddChange} label="Calibrated at" value={itemAddData.itemCalibratedAt} select name='itemCalibratedAt'>
-                                            <MenuItem value="inhouse">inhouse</MenuItem>
+                                            <MenuItem value="inhouse">InHouse</MenuItem>
                                             {suppoem.map((item, index) => (
                                                 <MenuItem key={index} value={item.fullName}>{item.aliasName}</MenuItem>
                                             ))}
 
                                         </TextField>
                                     </div>
-                                    <div  className="col-lg-12 mb-2 d-flex justify-content-between">
-                                        <Button component="label"  className='me-2' value={itemAddData.itemCertificateName} variant="contained" fullWidth >
+                                    <div className="col-lg-12 mb-2 d-flex justify-content-between">
+                                        <Button component="label" className='me-2' value={itemAddData.itemCertificateName} variant="contained" fullWidth >
 
                                             Certificate Upload
                                             <VisuallyHiddenInput type="file" onChange={handleCertificateUpload} />
-                                            
+
                                         </Button>
                                         {itemAddData.isItemMaster === "1" && <TextField fullWidth label="Uncertainity" variant='outlined' size='small' onChange={handleItemAddChange} name='itemUncertainity' value={itemAddData.itemUncertainity} />}
                                     </div>
 
                                     {itemAddData.itemCertificateName &&
                                         <div className="col-md-4 d-flex justify-content-between">
-                                            <Chip label={itemAddData.itemCertificateName} size='small' component="a" href={`${process.env.REACT_APP_PORT}/workInstructions/${itemAddData.itemCertificateName}`} onClick={() => handleRemoveFile()} target="_blank" clickable={true} color="primary" />
+                                            <Chip label={itemAddData.itemCertificateName} size='small' component="a" href={`${process.env.REACT_APP_PORT}/workInstructions/${itemAddData.itemCertificateName}`} target="_blank" clickable={true} color="primary" />
                                             <HighlightOffRounded type="button" onClick={() => handleRemoveFile()} />
                                             {uploadMessage &&
                                                 <Chip label={uploadMessage} size='small' color="success" icon={<Done />} />}
@@ -1310,7 +1347,6 @@ const ItemEdit = () => {
                                 <Button variant='contained' onClick={() => addACValue()}>Add</Button>
                             </div>
 
-
                             <table className='table table-sm table-bordered text-center'>
                                 <tbody>
                                     <tr>
@@ -1322,17 +1358,18 @@ const ItemEdit = () => {
                                         {itemAddData.itemType === "attribute" && <th>Max</th>}
                                                 {itemAddData.itemType === "attribute" && <th>WearLimit</th>}*/}
                                         {/*{itemAddData.itemType === "attribute" && <th>Unit</th>}*/}
-                                        {itemAddData.itemType === "attribute" && <th colspan="2" className='text-center'>Observed size
+                                        {itemAddData.itemType === "attribute" && <th width="20%" colspan="2" className='text-center'>Observed size
                                             <RadioGroup
                                                 className='d-flex justify-content-around'
                                                 row
-                                                onChange={(e) => setObCheckedValue(e.target.value)}
+                                                name="itemOBType"
+                                                onChange={handleItemAddChange}
                                                 aria-labelledby="demo-row-radio-buttons-group-label"
-                                                name="row-radio-buttons-group"
-                                            >
-                                                <FormControlLabel value="minmax" checked={obCheckedValue === "minmax"} control={<Radio />} label="Min/Max" />
 
-                                                <FormControlLabel value="average" checked={obCheckedValue === "average"} control={<Radio />} label="Average" />
+                                            >
+                                                <FormControlLabel value="minmax" checked={itemAddData.itemOBType === "minmax"} control={<Radio />} label="Min/Max" />
+
+                                                <FormControlLabel value="average" checked={itemAddData.itemOBType === "average"} control={<Radio />} label="Average" />
                                             </RadioGroup></th>}
 
 
@@ -1348,17 +1385,18 @@ const ItemEdit = () => {
 
 
 
-                                        {itemAddData.itemType === "referencestandard" && <th colspan="2" className='text-center'>Observed size
+                                        {itemAddData.itemType === "referencestandard" && <th width="20%" colspan="2" className='text-center'>Observed size
                                             <RadioGroup
                                                 className='d-flex justify-content-around'
                                                 row
-                                                onChange={(e) => setObCheckedValue(e.target.value)}
+                                                name="itemOBType"
+                                                onChange={handleItemAddChange}
                                                 aria-labelledby="demo-row-radio-buttons-group-label"
-                                                name="row-radio-buttons-group"
-                                            >
-                                                <FormControlLabel value="minmax" checked={obCheckedValue === "minmax"} control={<Radio />} label="Min/Max" />
 
-                                                <FormControlLabel value="average" checked={obCheckedValue === "average"} control={<Radio />} label="Average" />
+                                            >
+                                                <FormControlLabel value="minmax" checked={itemAddData.itemOBType === "minmax"} control={<Radio />} label="Min/Max" />
+
+                                                <FormControlLabel value="average" checked={itemAddData.itemOBType === "average"} control={<Radio />} label="Average" />
                                             </RadioGroup></th>}
                                         <th>Delete</th>
                                     </tr>
@@ -1390,13 +1428,13 @@ const ItemEdit = () => {
 
                                             {itemAddData.itemType === "attribute" && <td><input type="text" className="form-control form-control-sm" id="acWearLimitPSId" name="acWearLimitPS" placeholder='wearLimit' value={item.acWearLimitPS} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} /></td>}
 
-                                            {(itemAddData.itemType === "attribute" && obCheckedValue === "minmax") &&
+                                            {(itemAddData.itemType === "attribute" && itemAddData.itemOBType === "minmax") &&
                                                 <React.Fragment>
                                                     <td><input type="text" className="form-control form-control-sm" id="acMinOBId" name="acMinOB" placeholder='min' value={item.acMinOB} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} /></td>
                                                     <td><input type="text" className='form-control form-control-sm' id="acMaxOBId" name="acMaxOB" placeholder='max' value={item.acMaxOB} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} /></td>
                                                 </React.Fragment>
                                             }
-                                            {(itemAddData.itemType === "attribute" && obCheckedValue === "average") &&
+                                            {(itemAddData.itemType === "attribute" && itemAddData.itemOBType === "average") &&
                                                 <React.Fragment>
                                                     <td colSpan={2}><input type="text" className="form-control form-control-sm" id="acAverageOBId" name="acAverageOB" placeholder='Average' value={item.acAverageOB} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} /></td>
                                                 </React.Fragment>
@@ -1404,7 +1442,8 @@ const ItemEdit = () => {
 
 
                                             {itemAddData.itemType === "variable" && <td><input type="text" className="form-control form-control-sm" id="acMinPSErrorId" name="acMinPSError" value={item.acMinPSError} placeholder='Min' onChange={(e) => changeACValue(index, e.target.name, e.target.value)} /></td>}
-                                            {itemAddData.itemType === "variable" && <td><input type="text" className="form-control form-control-sm" id="acMinPSErrorId" name="acMinPSError" value={item.acMinPSError} placeholder='Max' onChange={(e) => changeACValue(index, e.target.name, e.target.value)} /></td>}
+                                            {itemAddData.itemType === "variable" && <td><input type="text" className="form-control form-control-sm" id="acMaxPSErrorId" name="acMaxPSError" value={item.acMaxPSError} placeholder='Max' onChange={(e) => changeACValue(index, e.target.name, e.target.value)} /></td>}
+                                            {/* {itemAddData.itemType === "variable" && <td><input type="text" className="form-control form-control-sm" id="acMinPSErrorId" name="acMinPSError" value={item.acMinPSError} placeholder='Max' onChange={(e) => changeACValue(index, e.target.name, e.target.value)} /></td>}*/}
 
 
                                             {itemAddData.itemType === "variable" && <td><input type="text" className="form-control form-control-sm" id="acOBErrorId" name="acOBError" value={item.acOBError} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} /></td>}
@@ -1415,13 +1454,13 @@ const ItemEdit = () => {
 
                                             {itemAddData.itemType === "referencestandard" && <td><input type="text" className='form-control form-control-sm' id="acMaxPSId" name="acMaxPS" placeholder='max' value={item.acMaxPS} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} /></td>}
 
-                                            {(itemAddData.itemType === "referencestandard" && obCheckedValue === "minmax") &&
+                                            {(itemAddData.itemType === "referencestandard" && itemAddData.itemOBType === "minmax") &&
                                                 <React.Fragment>
                                                     <td><input type="text" className="form-control form-control-sm" id="acMinOBId" name="acMinOB" placeholder='min' value={item.acMinOB} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} /></td>
                                                     <td><input type="text" className='form-control form-control-sm' id="acMaxOBId" name="acMaxOB" placeholder='max' value={item.acMaxOB} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} /></td>
                                                 </React.Fragment>
                                             }
-                                            {(itemAddData.itemType === "referencestandard" && obCheckedValue === "average") &&
+                                            {(itemAddData.itemType === "referencestandard" && itemAddData.itemOBType === "average") &&
                                                 <React.Fragment>
                                                     <td colSpan={2}><input type="text" className="form-control form-control-sm" id="acAverageOBId" name="acAverageOB" placeholder='Average' value={item.acAverageOB} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} /></td>
                                                 </React.Fragment>
@@ -1449,7 +1488,7 @@ const ItemEdit = () => {
 
 
                         <Snackbar anchorOrigin={{ vertical: "top", horizontal: "right" }} open={snackBarOpen} autoHideDuration={6000} onClose={handleSnackClose}>
-                            <Alert onClose={handleSnackClose} severity={errorhandler.code} sx={{ width: '25%' }}>
+                            <Alert variant="filled" onClose={handleSnackClose} severity={errorhandler.code} sx={{ width: '25%' }}>
                                 {errorhandler.message}
                             </Alert>
                         </Snackbar>

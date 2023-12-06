@@ -4,6 +4,7 @@ const uniqueValidator = require('mongoose-unique-validator');
 
 const itemAddSchema = new mongoose.Schema({
   itemMasterRef: String,
+  selectedItemMaster: [],
   isItemMaster: String,
   itemAddMasterName: String,
   itemIMTENo: {
@@ -39,6 +40,7 @@ const itemAddSchema = new mongoose.Schema({
   itemCalibratedAt: String,
   itemCertificateName: String,
   itemPartName: [],
+  itemOBType: String,
   acceptanceCriteria: [
       {
         acParameter: String,

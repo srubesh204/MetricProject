@@ -195,6 +195,7 @@ const ItemAdd = () => {
 
     const [itemAddData, setItemAddData] = useState({
         itemMasterRef: "",
+        selectedItemMaster: [],
         isItemMaster: "",
         itemAddMasterName: "",
         itemIMTENo: "",
@@ -225,6 +226,7 @@ const ItemAdd = () => {
         itemCalibratedAt: "",
         itemCertificateName: "",
         itemPartName: [],
+        itemOBType: "average",
         acceptanceCriteria: [
             {
                 acParameter: "",
@@ -317,19 +319,19 @@ const ItemAdd = () => {
 
         if (name === "isItemMaster") {
             setItemAddData((prev) => ({
-              ...prev,
-              [name]: checked ? "1" : "0"
+                ...prev,
+                [name]: checked ? "1" : "0"
             }));
-          }
-    }
-
-    const handleItemDue = (e) => {
-        const { name, value } = e.target;
-        if (name === "calibrationDate") {
-            setItemAddData((prev) => ({ ...prev, itemCalFreInMonths: typeof value === 'string' ? value.split(',') : value }));
         }
-
+        if (name == "itemOBType") {
+            setItemAddData((prev) => ({
+                ...prev,
+                [name]: value
+            }));
+            console.log("working")
+        }
     }
+
 
     let dueDates = new Date();
     const frequencyMonths = 6;
@@ -378,10 +380,7 @@ const ItemAdd = () => {
                 itemAddMasterName: itemDescription,
                 itemCalFreInMonths: itemFqInMonths,
                 itemCalAlertDays: calAlertInDay,
-
-
-
-
+                selectedItemMaster: response.data.result
             }))
             setCalibrationPointsData(calibrationPoints)
 
@@ -496,8 +495,7 @@ const ItemAdd = () => {
         },
     }
 
-    const [snackBarOpen, setSnackBarOpen] = useState(false)
-    const [errorhandler, setErrorHandler] = useState({});
+
     const [open, setOpen] = useState(false)
     const navigate = useNavigate();
 
@@ -578,6 +576,7 @@ const ItemAdd = () => {
     //     );
     // };
     //
+    const [snackBarOpen, setSnackBarOpen] = useState(false)
 
     const handleSnackClose = (event, reason) => {
         if (reason === 'clickaway') {
@@ -586,6 +585,9 @@ const ItemAdd = () => {
 
         setSnackBarOpen(false);
     }
+    const [errorhandler, setErrorHandler] = useState({})
+    console.log(errorhandler)
+
 
     const handleRemoveFile = () => {
         setItemAddData((prev) => ({ ...prev, itemCertificateData: "" }));
@@ -631,7 +633,7 @@ const ItemAdd = () => {
         }
     };
 
-    const [obCheckedValue, setObCheckedValue] = useState("average")
+
 
     return (
         <div style={{ margin: "2rem", backgroundColor: "#f5f5f5" }}>
@@ -673,7 +675,7 @@ const ItemAdd = () => {
                             </div>
                             <div className="col">
                                 <FormControlLabel
-                                    control={<Checkbox name='isItemMaster'  onChange={handleItemAddChange} />}
+                                    control={<Checkbox name='isItemMaster' onChange={handleItemAddChange} />}
                                     label="Use as Master"
                                 />
 
@@ -718,7 +720,7 @@ const ItemAdd = () => {
                                             {units.map((unit, index) => (
                                                 <MenuItem key={index} value={unit.unitName}>{unit.unitName}</MenuItem>
                                             ))}
-                                        </TextField> 
+                                        </TextField>
 
 
 
@@ -726,10 +728,10 @@ const ItemAdd = () => {
                                     </div>
                                 </div>
                                 <div className="row g-2">
-                                    <div className="col-lg-5">
+                                    <div className="col-lg-9">
                                         <TextField size='small' variant='outlined' label="MFR.Si.No." onChange={handleItemAddChange} name='itemMFRNo' id='itemMFRNoId' fullWidth />
                                     </div>
-                                    <div className='col-lg-7 d-flex justify-content-between'>
+                                    <div className='col-lg-3 d-flex justify-content-between'>
                                         {itemAddData.itemType === "variable" && <TextField size='small' variant='outlined' name='itemLC' onChange={handleItemAddChange} id="itemLCId" label="Least Count" fullWidth />}
 
 
@@ -1214,17 +1216,18 @@ const ItemAdd = () => {
                                         {itemAddData.itemType === "attribute" && <th>Max</th>}
                                                 {itemAddData.itemType === "attribute" && <th>WearLimit</th>}*/}
                                         {/*{itemAddData.itemType === "attribute" && <th>Unit</th>}*/}
-                                        {itemAddData.itemType === "attribute" && <th colspan="2" className='text-center'>Observed size
+                                        {itemAddData.itemType === "attribute" && <th width="20%" colspan="2" className='text-center'>Observed size
                                             <RadioGroup
                                                 className='d-flex justify-content-around'
                                                 row
-                                                onChange={(e) => setObCheckedValue(e.target.value)}
+                                                name="itemOBType"
+                                                onChange={handleItemAddChange}
                                                 aria-labelledby="demo-row-radio-buttons-group-label"
-                                                name="row-radio-buttons-group"
-                                            >
-                                                <FormControlLabel value="minmax" checked={obCheckedValue === "minmax"} control={<Radio />} label="Min/Max" />
 
-                                                <FormControlLabel value="average" checked={obCheckedValue === "average"} control={<Radio />} label="Average" />
+                                            >
+                                                <FormControlLabel value="minmax" checked={itemAddData.itemOBType === "minmax"} control={<Radio />} label="Min/Max" />
+
+                                                <FormControlLabel value="average" checked={itemAddData.itemOBType === "average"} control={<Radio />} label="Average" />
                                             </RadioGroup></th>}
 
 
@@ -1240,17 +1243,18 @@ const ItemAdd = () => {
 
 
 
-                                        {itemAddData.itemType === "referencestandard" && <th colspan="2" className='text-center'>Observed size
+                                        {itemAddData.itemType === "referencestandard" && <th width="20%" colspan="2" className='text-center'>Observed size
                                             <RadioGroup
                                                 className='d-flex justify-content-around'
                                                 row
-                                                onChange={(e) => setObCheckedValue(e.target.value)}
+                                                name="itemOBType"
+                                                onChange={handleItemAddChange}
                                                 aria-labelledby="demo-row-radio-buttons-group-label"
-                                                name="row-radio-buttons-group"
-                                            >
-                                                <FormControlLabel value="minmax" checked={obCheckedValue === "minmax"} control={<Radio />} label="Min/Max" />
 
-                                                <FormControlLabel value="average" checked={obCheckedValue === "average"} control={<Radio />} label="Average" />
+                                            >
+                                                <FormControlLabel value="minmax" checked={itemAddData.itemOBType === "minmax"} control={<Radio />} label="Min/Max" />
+
+                                                <FormControlLabel value="average" checked={itemAddData.itemOBType === "average"} control={<Radio />} label="Average" />
                                             </RadioGroup></th>}
                                         <th>Delete</th>
                                     </tr>
@@ -1282,13 +1286,13 @@ const ItemAdd = () => {
 
                                             {itemAddData.itemType === "attribute" && <td><input type="text" className="form-control form-control-sm" id="acWearLimitPSId" name="acWearLimitPS" placeholder='wearLimit' value={item.acWearLimitPS} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} /></td>}
 
-                                            {(itemAddData.itemType === "attribute" && obCheckedValue === "minmax") &&
+                                            {(itemAddData.itemType === "attribute" && itemAddData.itemOBType === "minmax") &&
                                                 <React.Fragment>
                                                     <td><input type="text" className="form-control form-control-sm" id="acMinOBId" name="acMinOB" placeholder='min' value={item.acMinOB} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} /></td>
                                                     <td><input type="text" className='form-control form-control-sm' id="acMaxOBId" name="acMaxOB" placeholder='max' value={item.acMaxOB} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} /></td>
                                                 </React.Fragment>
                                             }
-                                            {(itemAddData.itemType === "attribute" && obCheckedValue === "average") &&
+                                            {(itemAddData.itemType === "attribute" && itemAddData.itemOBType === "average") &&
                                                 <React.Fragment>
                                                     <td colSpan={2}><input type="text" className="form-control form-control-sm" id="acAverageOBId" name="acAverageOB" placeholder='Average' value={item.acAverageOB} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} /></td>
                                                 </React.Fragment>
@@ -1297,6 +1301,7 @@ const ItemAdd = () => {
 
                                             {itemAddData.itemType === "variable" && <td><input type="text" className="form-control form-control-sm" id="acMinPSErrorId" name="acMinPSError" value={item.acMinPSError} placeholder='Min' onChange={(e) => changeACValue(index, e.target.name, e.target.value)} /></td>}
                                             {itemAddData.itemType === "variable" && <td><input type="text" className="form-control form-control-sm" id="acMaxPSErrorId" name="acMaxPSError" value={item.acMaxPSError} placeholder='Max' onChange={(e) => changeACValue(index, e.target.name, e.target.value)} /></td>}
+                                            {/* {itemAddData.itemType === "variable" && <td><input type="text" className="form-control form-control-sm" id="acMinPSErrorId" name="acMinPSError" value={item.acMinPSError} placeholder='Max' onChange={(e) => changeACValue(index, e.target.name, e.target.value)} /></td>}*/}
 
 
                                             {itemAddData.itemType === "variable" && <td><input type="text" className="form-control form-control-sm" id="acOBErrorId" name="acOBError" value={item.acOBError} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} /></td>}
@@ -1307,13 +1312,13 @@ const ItemAdd = () => {
 
                                             {itemAddData.itemType === "referencestandard" && <td><input type="text" className='form-control form-control-sm' id="acMaxPSId" name="acMaxPS" placeholder='max' value={item.acMaxPS} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} /></td>}
 
-                                            {(itemAddData.itemType === "referencestandard" && obCheckedValue === "minmax") &&
+                                            {(itemAddData.itemType === "referencestandard" && itemAddData.itemOBType === "minmax") &&
                                                 <React.Fragment>
                                                     <td><input type="text" className="form-control form-control-sm" id="acMinOBId" name="acMinOB" placeholder='min' value={item.acMinOB} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} /></td>
                                                     <td><input type="text" className='form-control form-control-sm' id="acMaxOBId" name="acMaxOB" placeholder='max' value={item.acMaxOB} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} /></td>
                                                 </React.Fragment>
                                             }
-                                            {(itemAddData.itemType === "referencestandard" && obCheckedValue === "average") &&
+                                            {(itemAddData.itemType === "referencestandard" && itemAddData.itemOBType === "average") &&
                                                 <React.Fragment>
                                                     <td colSpan={2}><input type="text" className="form-control form-control-sm" id="acAverageOBId" name="acAverageOB" placeholder='Average' value={item.acAverageOB} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} /></td>
                                                 </React.Fragment>
@@ -1341,10 +1346,10 @@ const ItemAdd = () => {
 
 
                         <Snackbar anchorOrigin={{ vertical: "top", horizontal: "right" }} open={snackBarOpen} autoHideDuration={6000} onClose={handleSnackClose}>
-                            <Alert onClose={handleSnackClose} severity={errorhandler.code} sx={{ width: '25%' }}>
+                            <Alert variant="filled" onClose={handleSnackClose} severity={errorhandler.code} sx={{ width: '25%' }}>
                                 {errorhandler.message}
                             </Alert>
-                        </Snackbar>
+                        </Snackbar> 
                         <Dialog
                             open={open}
                             onClose={() => setOpen(false)}
@@ -1381,3 +1386,5 @@ const ItemAdd = () => {
 }
 
 export default ItemAdd
+
+    ;

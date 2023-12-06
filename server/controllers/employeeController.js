@@ -11,6 +11,17 @@ const employeeController = {
       res.status(500).send('Error on Employee');
     }
   },
+
+  getAllActiveEmployees: async (req, res) => {
+    try {
+      const employeeResult = await employeeModel.find({employmentStatus: "Active"});
+      res.status(202).json({ result: employeeResult, status: 1 });
+      //res.status(200).json(employees);
+    } catch (err) {
+      console.error(err);
+      res.status(500).send('Error on Employee');
+    }
+  },
   createEmployee: async (req, res) => {
 
     try {

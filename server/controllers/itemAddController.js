@@ -18,6 +18,7 @@ const itemAddController = {
     try {
       const {
         itemMasterRef,
+        selectedItemMaster,
         isItemMaster,
         itemAddMasterName,
         itemIMTENo,
@@ -50,12 +51,14 @@ const itemAddController = {
         itemCertificateName,
         itemPartName,
         itemUncertainity,
+        itemOBType,
         acceptanceCriteria,
         createdAt // Assuming createdAt is part of the request body
       } = req.body;
   
       const newItemFields = {
         itemMasterRef,
+        selectedItemMaster,
         isItemMaster,
         itemAddMasterName,
         itemIMTENo,
@@ -88,6 +91,7 @@ const itemAddController = {
         itemCertificateName,
         itemPartName,
         itemUncertainity,
+        itemOBType,
         acceptanceCriteria,
         createdAt // If createdAt is necessary for the creation, include it here
       };
@@ -138,8 +142,10 @@ const itemAddController = {
       // if (isNaN(desId)) {
       //   return res.status(400).json({ error: 'Invalid desId value' });
       // }
-      const { itemMasterRef,
+      const { 
+        itemMasterRef,
         itemAddMasterName,
+        selectedItemMaster,
         isItemMaster,
         itemIMTENo,
         itemImage,
@@ -171,13 +177,15 @@ const itemAddController = {
         itemCertificateName,
         itemPartName,
         itemUncertainity,
+        itemOBType,
         acceptanceCriteria,
         } = req.body;
       // Create an object with the fields you want to update
       const updateItemFields = {
         itemMasterRef,
-        isItemMaster,
         itemAddMasterName,
+        selectedItemMaster,
+        isItemMaster,
         itemIMTENo,
         itemImage,
         itemType,
@@ -208,6 +216,7 @@ const itemAddController = {
         itemCertificateName,
         itemPartName,
         itemUncertainity,
+        itemOBType,
         acceptanceCriteria,
       };
 
