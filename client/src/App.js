@@ -23,6 +23,9 @@ import InsHisCard from './Components/reports/InsHisCard';
 import Status from './Components/status/Status';
 import Dc from './Components/dc/Dc';
 import Grn from './Components/grn/Grn';
+import DcList from './Components/dcList/DcList';
+import GrnList from './Components/grnList/GrnList';
+import CalList from './Components/calList/CalList';
 
 
 function App() {
@@ -57,6 +60,9 @@ function App() {
         <Route path="/status" element={<Status/>} />
         <Route path="/dc" element={<Dc/>} />
         <Route path="/grn" element={<Grn/>} />
+        <Route path="/dcList" element={<DcList/>} />
+        <Route path="/grnList" element={<GrnList/>} />
+        <Route path="/calList" element={<CalList/>} />
       </Routes>
 
     </div>

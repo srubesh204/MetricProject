@@ -233,7 +233,7 @@ const Grn = () => {
                                             id="calDateId"
                                             name="calDate"
                                             label="Cal Date"
-                                            sx={{ width: "100%" }}
+                                            //sx={{ width: "100%" }}
                                             slotProps={{ textField: { size: 'small' } }}
                                             format="DD-MM-YYYY" />
 
@@ -245,7 +245,7 @@ const Grn = () => {
                                             id="nextCalDateId"
                                             name="nextCalDate"
                                             label="Next Cal Date"
-                                            sx={{ width: "100%" }}
+                                           // sx={{ width: "100%" }}
                                             slotProps={{ textField: { size: 'small' } }}
                                             format="DD-MM-YYYY" />
 
@@ -267,6 +267,11 @@ const Grn = () => {
                                             name="certificateNo" />
 
                                     </div>
+                                    <div className='col me-2'>
+                                        <TextField fullWidth label="Uncertainity" variant='outlined' size='small'  name='itemUncertainity' />
+
+                                    </div>
+
                                     <div className='me-2' >
                                         <label className='itemlistloade'>
                                             <input className="form-control itemlistdownload" type="file" id="upload" />Upload Certificate</label>
