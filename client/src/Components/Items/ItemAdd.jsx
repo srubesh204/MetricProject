@@ -9,7 +9,7 @@ import { Delete, Done } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
 import { Link as RouterLink } from 'react-router-dom';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import { Add, Remove, HighlightOffRounded } from '@mui/icons-material';
+import { Add, Remove, HighlightOffRounded, UploadFile } from '@mui/icons-material';
 import { Link } from '@mui/material';
 
 const ItemAdd = () => {
@@ -225,6 +225,7 @@ const ItemAdd = () => {
         itemDueDate: "",
         itemCalibratedAt: "",
         itemCertificateName: "",
+        itemCertificateNo: "",
         itemPartName: [],
         itemOBType: "average",
         acceptanceCriteria: [
@@ -319,16 +320,16 @@ const ItemAdd = () => {
 
         if (name === "isItemMaster") {
             setItemAddData((prev) => ({
-              ...prev,
-              [name]: checked ? "1" : "0"
+                ...prev,
+                [name]: checked ? "1" : "0"
             }));
-          }
-        if(name == "itemOBType"){
+        }
+        if (name == "itemOBType") {
             setItemAddData((prev) => ({
                 ...prev,
                 [name]: value
-              }));
-              console.log("working")
+            }));
+            console.log("working")
         }
     }
 
@@ -631,7 +632,7 @@ const ItemAdd = () => {
         }
     };
 
-    
+
 
     return (
         <div style={{ margin: "2rem", backgroundColor: "#f5f5f5" }}>
@@ -673,7 +674,7 @@ const ItemAdd = () => {
                             </div>
                             <div className="col">
                                 <FormControlLabel
-                                    control={<Checkbox name='isItemMaster'  onChange={handleItemAddChange} />}
+                                    control={<Checkbox name='isItemMaster' onChange={handleItemAddChange} />}
                                     label="Use as Master"
                                 />
 
@@ -1099,23 +1100,29 @@ const ItemAdd = () => {
                                             slotProps={{ textField: { size: 'small' } }}
                                             format="DD-MM-YYYY" />
                                     </div>
-                                    <div className="col-lg-12">
-                                        <TextField size='small' fullWidth variant='outlined' onChange={handleItemAddChange} label="Calibrated at" select name='itemCalibratedAt'>
+                                    <div className="col-md-12 d-flex justify-content-between">
+                                        <TextField className='me-2' size='small' fullWidth variant='outlined' onChange={handleItemAddChange} label="Calibrated at" select name='itemCalibratedAt'>
                                             <MenuItem value="InHouse">InHouse</MenuItem>
                                             {suppOEM.map((item, index) => (
                                                 <MenuItem key={index} value={item.fullName}>{item.aliasName}</MenuItem>
                                             ))}
 
                                         </TextField>
+                                        {itemAddData.isItemMaster === "1" && <TextField fullWidth label="Uncertainity" variant='outlined' size='small' onChange={handleItemAddChange} name='itemUncertainity' value={itemAddData.itemUncertainity} />}
+
                                     </div>
-                                    <div className="col-lg-12 d-flex justify-content-between">
-                                        <Button className='me-2' component="label" value={itemAddData.itemCertificateName} variant="contained" fullWidth >
+
+
+                                    <div className="col-md-12 d-flex justify-content-between">
+                                        <TextField size='small' className='me-2' fullWidth variant='outlined' onChange={handleItemAddChange} label="Certificate No" name='itemCertificateNo'></TextField>
+
+                                        <Button startIcon={<UploadFile />} size="small" fullWidth  component="label" value={itemAddData.itemCertificateName} variant="contained" >
 
                                             Certificate Upload
                                             <VisuallyHiddenInput type="file" onChange={handleCertificateUpload} />
                                         </Button>
 
-                                        {itemAddData.isItemMaster === "1" && <TextField fullWidth label="Uncertainity" variant='outlined' size='small' onChange={handleItemAddChange} name='itemUncertainity' value={itemAddData.itemUncertainity} />}
+
                                     </div>
 
 
@@ -1221,7 +1228,7 @@ const ItemAdd = () => {
                                                 name="itemOBType"
                                                 onChange={handleItemAddChange}
                                                 aria-labelledby="demo-row-radio-buttons-group-label"
-                                                
+
                                             >
                                                 <FormControlLabel value="minmax" checked={itemAddData.itemOBType === "minmax"} control={<Radio />} label="Min/Max" />
 
@@ -1248,7 +1255,7 @@ const ItemAdd = () => {
                                                 name="itemOBType"
                                                 onChange={handleItemAddChange}
                                                 aria-labelledby="demo-row-radio-buttons-group-label"
-                                                
+
                                             >
                                                 <FormControlLabel value="minmax" checked={itemAddData.itemOBType === "minmax"} control={<Radio />} label="Min/Max" />
 
@@ -1384,4 +1391,4 @@ const ItemAdd = () => {
 
 export default ItemAdd
 
-;
+    ;

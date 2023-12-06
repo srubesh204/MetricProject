@@ -10,6 +10,7 @@ import isSameOrAfter from 'dayjs/plugin/isSameOrAfter'
 import isSameOrBefore from 'dayjs/plugin/isSameOrBefore'
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { Add } from '@mui/icons-material';
 
 dayjs.extend(isSameOrBefore)
 dayjs.extend(isSameOrAfter)
@@ -1168,187 +1169,187 @@ const Home = () => {
 
               <DialogContent >
 
-                <div className="row mb-2">
-                  <Paper elevation={12} sx={{ p: 2 }} className='col-md-4 '>
-                    <div className="row g-2 ">
-                      <div className="col-md-6">
-                        <TextField
-                          InputProps={{
-                            readOnly: true,
-                          }}
-                          value={calibrationData.calIMTENo}
-                          id="calIMTENoId"
-                          size='small'
-                          label="Item IMTE No"
-                          name='calIMTENo'
-                          fullWidth
-                          variant="outlined"
-                        />
-                      </div>
-                      <div className="col-md-6">
-                        <TextField
-                          InputProps={{
-                            readOnly: true,
-                          }}
-                          name='calItemName'
-                          id="calItemNameId"
-                          size='small'
-                          label="Item Name"
-                          value={calibrationData.calItemName}
-                          fullWidth
-                          variant="outlined"
-                        />
+                <div className="row my-2 ">
+                  <Paper elevation={12} sx={{ p: 2 }} className='col-md-7 mb-2'>
+                    <div className="row">
+                      <div className="col-md-7 row g-2 ">
+                        <div className="col-md-6">
+                          <TextField
+                            InputProps={{
+                              readOnly: true,
+                            }}
+                            value={calibrationData.calIMTENo}
+                            id="calIMTENoId"
+                            size='small'
+                            label="Item IMTE No"
+                            name='calIMTENo'
+                            fullWidth
+                            variant="outlined"
+                          />
+                        </div>
+                        <div className="col-md-6">
+                          <TextField
+                            InputProps={{
+                              readOnly: true,
+                            }}
+                            name='calItemName'
+                            id="calItemNameId"
+                            size='small'
+                            label="Item Name"
+                            value={calibrationData.calItemName}
+                            fullWidth
+                            variant="outlined"
+                          />
+                        </div>
+
+                        <div className="col-md-6">
+                          <TextField
+                            InputProps={{
+                              readOnly: true,
+                            }}
+                            name='calItemType'
+                            id="calItemTypeId"
+                            size='small'
+                            label="Item Type"
+                            value={calibrationData.calItemType}
+                            fullWidth
+                            variant="outlined"
+                          />
+                        </div>
+                        <div className="col-md-3">
+                          <TextField
+                            InputProps={{
+                              readOnly: true,
+                            }}
+                            value={calibrationData.calRangeSize}
+                            id="calRangeSizeId"
+                            size='small'
+                            label="Range/Size"
+                            name='calRangeSize'
+                            fullWidth
+                            variant="outlined"
+                          />
+                        </div>
+                        <div className="col-md-3">
+                          <TextField
+                            InputProps={{
+                              readOnly: true,
+                            }}
+                            value={calibrationData.calLC}
+                            id="calLCId"
+                            size='small'
+                            label="Least Count"
+                            name='calLC'
+                            fullWidth
+                            variant="outlined"
+                          />
+                        </div>
+                        <div className="col-md-6">
+                          <TextField
+                            InputProps={{
+                              readOnly: true,
+                            }}
+                            value={calibrationData.calItemMFRNo}
+                            id="calItemMFRNoId"
+                            size='small'
+                            label="Item MFR No"
+                            name='calItemMFRNo'
+                            fullWidth
+                            variant="outlined"
+                          />
+                        </div>
+
+                        <div className="col-md-6">
+                          <TextField
+                            InputProps={{
+                              readOnly: true,
+                            }}
+                            value={calibrationData.calItemMake}
+                            id="calItemMakeId"
+                            size='small'
+                            label="Make"
+                            name='calItemMake'
+                            fullWidth
+                            variant="outlined"
+
+                          />
+                        </div>
                       </div>
 
-                      <div className="col-md-6">
-                        <TextField
-                          InputProps={{
-                            readOnly: true,
-                          }}
-                          name='calItemType'
-                          id="calItemTypeId"
-                          size='small'
-                          label="Item Type"
-                          value={calibrationData.calItemType}
-                          fullWidth
-                          variant="outlined"
-                        />
-                      </div>
-                      <div className="col-md-3">
-                        <TextField
-                          InputProps={{
-                            readOnly: true,
-                          }}
-                          value={calibrationData.calRangeSize}
-                          id="calRangeSizeId"
-                          size='small'
-                          label="Range/Size"
-                          name='calRangeSize'
-                          fullWidth
-                          variant="outlined"
-                        />
-                      </div>
-                      <div className="col-md-3">
-                        <TextField
-                          InputProps={{
-                            readOnly: true,
-                          }}
-                          value={calibrationData.calLC}
-                          id="calLCId"
-                          size='small'
-                          label="Least Count"
-                          name='calLC'
-                          fullWidth
-                          variant="outlined"
-                        />
-                      </div>
-                      <div className="col-md-6">
-                        <TextField
-                          InputProps={{
-                            readOnly: true,
-                          }}
-                          value={calibrationData.calItemMFRNo}
-                          id="calItemMFRNoId"
-                          size='small'
-                          label="Item MFR No"
-                          name='calItemMFRNo'
-                          fullWidth
-                          variant="outlined"
-                        />
-                      </div>
+                      <div className="col row g-2 ">
 
-                      <div className="col-md-6">
-                        <TextField
-                          InputProps={{
-                            readOnly: true,
-                          }}
-                          value={calibrationData.calItemMake}
-                          id="calItemMakeId"
-                          size='small'
-                          label="Make"
-                          name='calItemMake'
-                          fullWidth
-                          variant="outlined"
+                        <div className="col-md-6">
+                          <TextField
+                            id="calItemTemperatureId"
+                            size='small'
+                            label="Temperature"
+                            value={calibrationData.calItemTemperature}
+                            fullWidth
+                            name='calItemTemperature'
+                            variant="outlined"
+                            onChange={handleCalData}
+                          />
+                        </div>
+                        <div className="col-md-6">
+                          <TextField
+                            id="calItemHumidityId"
+                            size='small'
+                            label="Humidity"
+                            value={calibrationData.calItemHumidity}
+                            name='calItemHumidity'
+                            fullWidth
+                            variant="outlined"
+                            onChange={handleCalData}
+                          />
+                        </div>
+                        <div className="col-md-6">
+                          <TextField
+                            InputProps={{
+                              readOnly: true,
+                            }}
+                            id="calItemUncertainityId"
+                            size='small'
+                            label="Uncertainity"
+                            value={calibrationData.calItemUncertainity}
+                            name='calItemUncertainity'
+                            fullWidth
+                            variant="outlined"
+                          />
+                        </div>
+                        <div className="col-md-6">
+                          <TextField
+                            InputProps={{
+                              readOnly: true,
+                            }}
+                            id="calItemSOPNoId"
+                            size='small'
+                            label="SOP No."
+                            value={calibrationData.calItemSOPNo}
+                            name='calItemSOPNo'
+                            fullWidth
+                            variant="outlined"
+                          />
+                        </div>
+                        <div className="col-md-6">
+                          <TextField
+                            InputProps={{
+                              readOnly: true,
+                            }}
+                            id="calStandardRefId"
+                            size='small'
+                            label="Standard Ref"
+                            value={calibrationData.calStandardRef}
+                            name='calStandardRef'
+                            fullWidth
+                            variant="outlined"
+                          />
+                        </div>
 
-                        />
                       </div>
                     </div>
                   </Paper>
 
-                  <Paper elevation={12} sx={{ p: 2 }} className='col-4 '>
-                    <div className="row g-2 ">
-
-                      <div className="col-md-6">
-                        <TextField
-                          id="calItemTemperatureId"
-                          size='small'
-                          label="Temperature"
-                          value={calibrationData.calItemTemperature}
-                          fullWidth
-                          name='calItemTemperature'
-                          variant="outlined"
-                          onChange={handleCalData}
-                        />
-                      </div>
-                      <div className="col-md-6">
-                        <TextField
-                          id="calItemHumidityId"
-                          size='small'
-                          label="Humidity"
-                          value={calibrationData.calItemHumidity}
-                          name='calItemHumidity'
-                          fullWidth
-                          variant="outlined"
-                          onChange={handleCalData}
-                        />
-                      </div>
-                      <div className="col-md-6">
-                        <TextField
-                          InputProps={{
-                            readOnly: true,
-                          }}
-                          id="calItemUncertainityId"
-                          size='small'
-                          label="Uncertainity"
-                          value={calibrationData.calItemUncertainity}
-                          name='calItemUncertainity'
-                          fullWidth
-                          variant="outlined"
-                        />
-                      </div>
-                      <div className="col-md-6">
-                        <TextField
-                          InputProps={{
-                            readOnly: true,
-                          }}
-                          id="calItemSOPNoId"
-                          size='small'
-                          label="SOP No."
-                          value={calibrationData.calItemSOPNo}
-                          name='calItemSOPNo'
-                          fullWidth
-                          variant="outlined"
-                        />
-                      </div>
-                      <div className="col-md-6">
-                        <TextField
-                          InputProps={{
-                            readOnly: true,
-                          }}
-                          id="calStandardRefId"
-                          size='small'
-                          label="Standard Ref"
-                          value={calibrationData.calStandardRef}
-                          name='calStandardRef'
-                          fullWidth
-                          variant="outlined"
-                        />
-                      </div>
-
-                    </div>
-                  </Paper>
-
-                  <Paper elevation={12} sx={{ p: 2 }} className='col-4 '>
+                  <Paper elevation={12} sx={{ p: 2 }} className='col ms-2 mb-2'>
                     <div className="row g-2 ">
                       <div className="col-md-6">
                         <TextField
@@ -1411,94 +1412,101 @@ const Home = () => {
                       </div>
                     </div>
                   </Paper>
-                </div>
-                <Paper elevation={12} sx={{ p: 2 }} className='col-md-12'>
-                  <h5 className='text-center'>Calibration Data</h5>
 
-                  <table className='table table-bordered table-responsive text-center align-middle'>
-                    {calibrationData.calItemType === "attribute" &&
-                      <tbody>
-                        <tr>
+                  <Paper elevation={12} sx={{ p: 2 }} className='col-md-12 mb-2'>
+                    <div className="d-flex justify-content-between mb-2">
+                      <div> <Button size='small' variant='outlined' color='success' className='me-3'>Last Result</Button>
+                        <Button size='small' variant='outlined' color='info'>Before Calibration</Button></div>
+                      <div><h5 className='text-center'>Calibration Data</h5></div>
+                      <div><TextField inputProps={{ sx: { color: "green" } }} InputLabelProps={{ shrink: true }} color='success' label="Cal Status" size="small" value="Ok"></TextField></div>
 
-                          <th rowSpan={2}>Parameter</th>
-                          <th rowSpan={2}>Range/Size</th>
-                          <th rowSpan={2}>Unit</th>
-                          <th colSpan={3}>Permissible Size</th>
-                          <th width="20%"  colSpan={calibrationData.calOBType === "average" ? 1 : 2}>Observed Size</th>
-                          <th rowSpan={2}>Status</th>
-                        </tr>
-                        <tr>
-                          <th width="6%">Min</th>
-                          <th width="6%">Max</th>
-                          <th width="8%">Wear Limit</th>
-                          {calibrationData.calOBType === "average" ? 
-                          <React.Fragment>
-                            <th>Average</th>
-                          </React.Fragment>: 
-                          <React.Fragment>
-                            <th>Min</th>
-                            <th>Max</th>
-                            </React.Fragment>}
-                          
-                        </tr>
-                        {/* {calibrationData.calcalibrationData.map((item)=> ()} */}
-                        {calibrationData.calcalibrationData.map((item, index) => (
-                          <tr key={index}>
-                            <td>{item.calParameter}</td>
-                            <td>{item.calNominalSize}</td>
-                            <td>{item.calNominalSizeUnit}</td>
-                            <td>{item.calMinPS}</td>
-                            <td>{item.calMaxPS}</td>
-                            <td>{item.calWearLimitPS}</td>
-                            {calibrationData.calOBType === "average" && 
-                            <td><input className='form-control form-control-sm' /></td>
-                            }
-                            {calibrationData.calOBType === "minmax" &&
-                              <React.Fragment>
-                                <td><input className='form-control form-control-sm' />
-                                </td> <td><input className='form-control form-control-sm' /></td>
-                              </React.Fragment>}
+                    </div>
 
 
-                            <td width="15%">
-                              <select className='form-select form-select-sm'>
-                                <option>Status</option>
-                                <option>Accepted</option>
-                                <option>Rejected</option>
-                                <option>Conditionally Accepted</option>
-                              </select>
-                            </td>
-                          </tr>
-
-                        ))}
-
-                      </tbody>}
-                    {calibrationData.calItemType === "variable" &&
-
-                      <tbody>
-                        <tr>
-                          <th>Parameter</th>
-                          <th>Range/Size</th>
-                          <th>Unit</th>
-                          <th>Permissible Error</th>
-
-                          <th>Observed Size/ Observer Error</th>
-                          <th>Unit</th>
-                          <th>Status</th>
-                        </tr>
-                        {calibrationData.calcalibrationData.map((item, index) => (
+                    <table className='table table-bordered table-responsive text-center align-middle'>
+                      {calibrationData.calItemType === "attribute" &&
+                        <tbody>
                           <tr>
 
+                            <th rowSpan={2}>Parameter</th>
+                            <th rowSpan={2}>Range/Size</th>
+                            <th rowSpan={2}>Unit</th>
+                            <th colSpan={3}>Permissible Size</th>
+                            <th width="20%" colSpan={calibrationData.calOBType === "average" ? 1 : 2}>Observed Size</th>
+                            <th rowSpan={2}>Status</th>
+                          </tr>
+                          <tr>
+                            <th width="6%">Min</th>
+                            <th width="6%">Max</th>
+                            <th width="8%">Wear Limit</th>
+                            {calibrationData.calOBType === "average" ?
+                              <React.Fragment>
+                                <th>Average</th>
+                              </React.Fragment> :
+                              <React.Fragment>
+                                <th>Min</th>
+                                <th>Max</th>
+                              </React.Fragment>}
+
+                          </tr>
+                          {/* {calibrationData.calcalibrationData.map((item)=> ()} */}
+                          {calibrationData.calcalibrationData.map((item, index) => (
+                            <tr key={index}>
+                              <td>{item.calParameter}</td>
+                              <td>{item.calNominalSize}</td>
+                              <td>{item.calNominalSizeUnit}</td>
+                              <td>{item.calMinPS}</td>
+                              <td>{item.calMaxPS}</td>
+                              <td>{item.calWearLimitPS}</td>
+                              {calibrationData.calOBType === "average" &&
+                                <td><input className='form-control form-control-sm' /></td>
+                              }
+                              {calibrationData.calOBType === "minmax" &&
+                                <React.Fragment>
+                                  <td><input className='form-control form-control-sm' />
+                                  </td> <td><input className='form-control form-control-sm' /></td>
+                                </React.Fragment>}
+
+
+                              <td width="15%">
+                                <select className='form-select form-select-sm'>
+                                  <option>Status</option>
+                                  <option value="accepted" color='success'>Accepted</option>
+                                  <option value="rejected">Rejected</option>
+                                  <option value="conditionallyAccepted">Conditionally Accepted</option>
+                                </select>
+                              </td>
+                            </tr>
+
+                          ))}
+
+                        </tbody>}
+                      {calibrationData.calItemType === "variable" &&
+
+                        <tbody>
+                          <tr>
+                            <th>Parameter</th>
+                            <th>Range/Size</th>
+                            <th>Unit</th>
+                            <th>Permissible Error</th>
+
+                            <th>Observed Size/ Observer Error</th>
+                            <th>Unit</th>
+                            <th>Status</th>
+                          </tr>
+                          {calibrationData.calcalibrationData.map((item, index) => (
+                            <tr>
 
 
 
 
-                            <td><input type="text" className='form-control form-control-sm' id="acMaxPSId" name="acMaxPS" placeholder='max' value={item.acMaxPS} onChange={(e) => changecalDataValue(index, e.target.name, e.target.value)} /></td>
+
+                              <td><input type="text" className='form-control form-control-sm' id="acMaxPSId" name="acMaxPS" placeholder='max' value={item.acMaxPS} onChange={(e) => changecalDataValue(index, e.target.name, e.target.value)} /></td>
 
 
-                            <td><input type="text" className="form-control form-control-sm" id="acWearLimitPSId" name="acWearLimitPS" placeholder='wearLimit' value={item.acWearLimitPS} onChange={(e) => changecalDataValue(index, e.target.name, e.target.value)} /></td>
+                              <td><input type="text" className="form-control form-control-sm" id="acWearLimitPSId" name="acWearLimitPS" placeholder='wearLimit' value={item.acWearLimitPS} onChange={(e) => changecalDataValue(index, e.target.name, e.target.value)} /></td>
 
-                            {/* {obCheckedValue === "minmax" &&
+                              {/* {obCheckedValue === "minmax" &&
                             <React.Fragment>
                               <td><input type="text" className="form-control form-control-sm" id="acMinOBId" name="acMinOB" placeholder='min' value={item.acMinOB} onChange={(e) => changecalDataValue(index, e.target.name, e.target.value)} /></td>
                               <td><input type="text" className='form-control form-control-sm' id="acMaxOBId" name="acMaxOB" placeholder='max' value={item.acMaxOB} onChange={(e) => changecalDataValue(index, e.target.name, e.target.value)} /></td>
@@ -1509,78 +1517,83 @@ const Home = () => {
                               <td colSpan={2}><input type="text" className="form-control form-control-sm" id="acAverageOBId" name="acAverageOB" placeholder='Average' value={item.acAverageOB} onChange={(e) => changecalDataValue(index, e.target.name, e.target.value)} /></td>
                             </React.Fragment>
                           } */}
+                            </tr>
+                          ))}
+
+                        </tbody>
+                      }
+                      {calibrationData.calItemType === "referencestandard" &&
+
+                        <tbody>
+                          <tr>
+                            <th>Parameter</th>
+                            <th>Range/Size</th>
+                            <th>Unit</th>
+                            <th>Max</th>
+                            <th>Min</th>
+                            <th>WearLimit</th>
+                            <th>Observed Size/ Observer Error</th>
+                            <th>Unit</th>
+                            <th>Status</th>
                           </tr>
-                        ))}
+                          {/* {calibrationData.calcalibrationData.map((item)=> ()} */}
+                          <tr>
+                          </tr>
+                        </tbody>
+                      }
+                    </table>
 
-                      </tbody>
-                    }
-                    {calibrationData.calItemType === "referencestandard" &&
 
+
+                  </Paper>
+                  <Paper elevation={12} sx={{ p: 2 }} className='col-md-12'>
+                    <div className="row mb-2">
+                      <div className='col-md-3'> </div>
+                      <div className='col-md'> <h5 className='text-center'>Master Used</h5></div>
+                      <div className='col-md-3 d-flex justify-content-center'><TextField className='me-2' size='small' fullWidth select label="Select Master"></TextField>
+                        <Button startIcon={<Add />} size='small' sx={{ minWidth: "130px" }} variant='contained'>Add Master</Button></div>
+
+                    </div>
+
+                    <table className='table table-bordered table-responsive text-center align-middle'>
                       <tbody>
                         <tr>
-                          <th>Parameter</th>
+                          <th>Si No</th>
+                          <th>IMTE No</th>
+                          <th>Master Name</th>
                           <th>Range/Size</th>
-                          <th>Unit</th>
-                          <th>Max</th>
-                          <th>Min</th>
-                          <th>WearLimit</th>
-                          <th>Observed Size/ Observer Error</th>
-                          <th>Unit</th>
-                          <th>Status</th>
+                          <th>Cal Certificate No</th>
+                          <th>Cal Date</th>
+                          <th>Next Due</th>
+                          <th>Calibrated At</th>
                         </tr>
-                        {/* {calibrationData.calcalibrationData.map((item)=> ()} */}
-                        <tr>
-                        </tr>
+
+                        {calibrationData.calMasterUsed.map((item, index) => (
+                          <tr key={index}>
+                            <td>{index + 1}</td>
+                            <td>{item.itemIMTENo}</td>
+                            <td>{item.itemAddMasterName}</td>
+                            <td>{item.itemRangeSize}</td>
+                            <td>{ }</td>
+                            <td>{item.itemCalDate}</td>
+                            <td>{item.itemDueDate}</td>
+                            <td>{item.itemCalibratedAt}</td>
+                          </tr>
+                        ))}
                       </tbody>
-                    }
-                  </table>
-
-                  <div className="row">
-                    <div className="col justify-content-start">
-                      <TextField inputProps={{ sx: { color: "green" } }} InputLabelProps={{ shrink: true }} color='success' label="Cal Status" size="small" value="Ok"></TextField>
-                    </div>
-                    <div className="col d-flex justify-content-end">
-                      <Button size='small' variant='outlined' color='success' className='me-3'>Last Result</Button>
-                      <Button size='small' variant='outlined' color='info'>Before Calibration</Button>
-                    </div>
-                  </div>
-
-                </Paper>
-                <Paper elevation={12} sx={{ p: 2 }} className='col-md-12'>
-                  <h5 className='text-center'>Master Used</h5>
-                  <table className='table table-bordered table-responsive text-center align-middle'>
-                    <tbody>
-                      <tr>
-                        <th>Si No</th>
-                        <th>IMTE No</th>
-                        <th>Master Name</th>
-                        <th>Range/Size</th>
-                        <th>Cal Certificate No</th>
-                        <th>Cal Date</th>
-                        <th>Next Due</th>
-                        <th>Calibrated At</th>
-                      </tr>
-
-                      {calibrationData.calMasterUsed.map((item, index) => (
-                        <tr key={index}>
-                          <td>{index + 1}</td>
-                          <td>{item.itemIMTENo}</td>
-                          <td>{item.itemAddMasterName}</td>
-                          <td>{item.itemRangeSize}</td>
-                          <td>{ }</td>
-                          <td>{item.itemCalDate}</td>
-                          <td>{item.itemDueDate}</td>
-                          <td>{item.itemCalibratedAt}</td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </Paper>
-
+                    </table>
+                  </Paper>
+                </div>
               </DialogContent>
-              <DialogActions>
-                <Button onClick={() => setCalOpen(false)}>Cancel</Button>
-                <Button onClick={() => setCalOpen(false)}>Submit</Button>
+              <DialogActions className='d-flex justify-content-between'>
+                <div>
+                  <Button variant='contained' color='warning' className='me-3'>Upload Report</Button>
+                  <Button variant='contained' color='info'>Print</Button>
+                </div>
+                <div>
+                  <Button variant='contained' sx={{backgroundColor : "green"}} className='me-3' onClick={() => setCalOpen(false)}>Cancel</Button>
+                  <Button variant='contained' color='success' onClick={() => setCalOpen(false)}>Submit</Button>
+                </div>
               </DialogActions>
             </Dialog>
           </div>
