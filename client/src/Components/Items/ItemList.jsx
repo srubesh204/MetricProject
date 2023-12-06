@@ -282,7 +282,15 @@ const ItemList = () => {
         { field: 'itemStatus', headerName: 'Status ', width: 80, },
         { field: 'itemDepartment', headerName: 'Current location', width: 120, },
         { field: 'itemSupplier', headerName: 'Cal Source', renderCell: (params) => params.row.itemSupplier.toString(), width: 110 },
-        { field: 'itemType', headerName: 'Type', width: 180 },
+        {
+            field: 'itemType',
+            headerName: 'Type',
+            width: 180,
+            renderCell: (params) => {
+                const itemType = params.row.itemType.toString();
+                return itemType.charAt(0).toUpperCase() + itemType.slice(1).toLowerCase();
+            },
+        }
     ];
 
     const [deleteModalItem, setDeleteModalItem] = useState(false);
