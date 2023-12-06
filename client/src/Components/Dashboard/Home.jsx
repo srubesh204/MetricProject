@@ -74,12 +74,12 @@ const Home = () => {
       const response = await axios.get(
         `${process.env.REACT_APP_PORT}/employee/getAllActiveEmployees`
       );
-     setActiveEmps(response.data.result)
+      setActiveEmps(response.data.result)
     } catch (err) {
       console.log(err);
     }
   };
-  
+
   console.log(activeEmps)
 
   const getAllDepartments = async () => {
@@ -752,7 +752,7 @@ const Home = () => {
           calItemUncertainity: selectedRows[0].selectedItemMaster[0].uncertainty,
           calItemSOPNo: selectedRows[0].selectedItemMaster[0].SOPNo,
           calStandardRef: selectedRows[0].selectedItemMaster[0].standardRef,
-
+          calOBType: selectedRows[0].itemOBType,
           // calCalibratedBy: selectedRows[0],
           // calApprovedBy: selectedRows[0],
           calcalibrationData:
@@ -774,15 +774,7 @@ const Home = () => {
               }
             )),
 
-          // calMasterUsed: [{
-          //   masterIMTENo: selectedRows[0],
-          //   masterName: selectedRows[0],
-          //   masterRangeSize: selectedRows[0],
-          //   masterCalCertificateNo: selectedRows[0],
-          //   masterCalDate: selectedRows[0],
-          //   masterNextDue: selectedRows[0],
-          //   masterCalibratedAt: selectedRows[0],
-          // }]
+          calMasterUsed: selectedRows[0].itemItemMasterIMTENo
         }
       ))
     }
@@ -822,17 +814,17 @@ const Home = () => {
 
   const [selectedEmp, setSelectedEmp] = useState([])
   const getEmployeeByName = (empId) => {
-    const selectedEmp = activeEmps.filter((emp)=> emp._id === empId);
+    const selectedEmp = activeEmps.filter((emp) => emp._id === empId);
     setSelectedEmp(selectedEmp)
   }
-  useEffect(()=>{
+  useEffect(() => {
     getEmployeeByName(calibrationData.calCalibratedBy)
   }, [calibrationData.calCalibratedBy])
 
   const handleCalData = (e) => {
-    const {name, value} = e.target;
+    const { name, value } = e.target;
     console.log(name)
-    setCalibrationData((prev)=> ({...prev, [name]: value}))
+    setCalibrationData((prev) => ({ ...prev, [name]: value }))
   }
 
   return (
@@ -1064,7 +1056,7 @@ const Home = () => {
                     layout='vertical'
                     iconSize={30}
                     content={itemLocationLegend}
-                   
+
                   />
                 </PieChart>
 
@@ -1277,7 +1269,7 @@ const Home = () => {
                           name='calItemMake'
                           fullWidth
                           variant="outlined"
-                         
+
                         />
                       </div>
                     </div>
@@ -1390,18 +1382,18 @@ const Home = () => {
                           variant="outlined"
                           onChange={handleCalData}
                         >
-                          {activeEmps.map((emp, index)=> (
-                          <MenuItem key={index} value={emp._id}>{emp.firstName + " "+ emp.lastName}</MenuItem>
-                        ))}
+                          {activeEmps.map((emp, index) => (
+                            <MenuItem key={index} value={emp._id}>{emp.firstName + " " + emp.lastName}</MenuItem>
+                          ))}
                         </TextField>
-                        
-                        
+
+
                       </div>
                       <div className="col-md-6">
                         <TextField
-                         InputProps={{
-                          disabled: selectedEmp.length === 0,
-                        }}
+                          InputProps={{
+                            disabled: selectedEmp.length === 0,
+                          }}
                           id="calApprovedById"
                           size='small'
                           label="Approved By"
@@ -1412,9 +1404,9 @@ const Home = () => {
                           variant="outlined"
                           onChange={handleCalData}
                         >
-                           {selectedEmp.map((emp, index)=> (
-                          <MenuItem key={index} value={emp._id}>{emp.firstName+" "+ emp.lastName}</MenuItem>
-                        ))}
+                          {selectedEmp.map((emp, index) => (
+                            <MenuItem key={index} value={emp._id}>{emp.firstName + " " + emp.lastName}</MenuItem>
+                          ))}
                         </TextField>
                       </div>
                     </div>
@@ -1427,19 +1419,59 @@ const Home = () => {
                     {calibrationData.calItemType === "attribute" &&
                       <tbody>
                         <tr>
-                          <th>Parameter</th>
-                          <th>Range/Size</th>
-                          <th>Unit</th>
-                          <th>Max</th>
-                          <th>Min</th>
-                          <th>WearLimit</th>
-                          <th>Observed Size/ Observer Error</th>
-                          <th>Unit</th>
-                          <th>Status</th>
+
+                          <th rowSpan={2}>Parameter</th>
+                          <th rowSpan={2}>Range/Size</th>
+                          <th rowSpan={2}>Unit</th>
+                          <th colSpan={3}>Permissible Size</th>
+                          <th width="20%"  colSpan={calibrationData.calOBType === "average" ? 1 : 2}>Observed Size</th>
+                          <th rowSpan={2}>Status</th>
+                        </tr>
+                        <tr>
+                          <th width="6%">Min</th>
+                          <th width="6%">Max</th>
+                          <th width="8%">Wear Limit</th>
+                          {calibrationData.calOBType === "average" ? 
+                          <React.Fragment>
+                            <th>Average</th>
+                          </React.Fragment>: 
+                          <React.Fragment>
+                            <th>Min</th>
+                            <th>Max</th>
+                            </React.Fragment>}
+                          
                         </tr>
                         {/* {calibrationData.calcalibrationData.map((item)=> ()} */}
-                        <tr>
-                        </tr>
+                        {calibrationData.calcalibrationData.map((item, index) => (
+                          <tr key={index}>
+                            <td>{item.calParameter}</td>
+                            <td>{item.calNominalSize}</td>
+                            <td>{item.calNominalSizeUnit}</td>
+                            <td>{item.calMinPS}</td>
+                            <td>{item.calMaxPS}</td>
+                            <td>{item.calWearLimitPS}</td>
+                            {calibrationData.calOBType === "average" && 
+                            <td><input className='form-control form-control-sm' /></td>
+                            }
+                            {calibrationData.calOBType === "minmax" &&
+                              <React.Fragment>
+                                <td><input className='form-control form-control-sm' />
+                                </td> <td><input className='form-control form-control-sm' /></td>
+                              </React.Fragment>}
+
+
+                            <td width="15%">
+                              <select className='form-select form-select-sm'>
+                                <option>Status</option>
+                                <option>Accepted</option>
+                                <option>Rejected</option>
+                                <option>Conditionally Accepted</option>
+                              </select>
+                            </td>
+                          </tr>
+
+                        ))}
+
                       </tbody>}
                     {calibrationData.calItemType === "variable" &&
 
@@ -1449,19 +1481,17 @@ const Home = () => {
                           <th>Range/Size</th>
                           <th>Unit</th>
                           <th>Permissible Error</th>
-                          
+
                           <th>Observed Size/ Observer Error</th>
                           <th>Unit</th>
                           <th>Status</th>
                         </tr>
                         {calibrationData.calcalibrationData.map((item, index) => (
                           <tr>
-                            <td></td>
-                            <td></td>
 
 
-                            <td> </td>
-                            <td></td>
+
+
 
                             <td><input type="text" className='form-control form-control-sm' id="acMaxPSId" name="acMaxPS" placeholder='max' value={item.acMaxPS} onChange={(e) => changecalDataValue(index, e.target.name, e.target.value)} /></td>
 
@@ -1505,26 +1535,46 @@ const Home = () => {
                     }
                   </table>
 
-
+                  <div className="row">
+                    <div className="col justify-content-start">
+                      <TextField inputProps={{ sx: { color: "green" } }} InputLabelProps={{ shrink: true }} color='success' label="Cal Status" size="small" value="Ok"></TextField>
+                    </div>
+                    <div className="col d-flex justify-content-end">
+                      <Button size='small' variant='outlined' color='success' className='me-3'>Last Result</Button>
+                      <Button size='small' variant='outlined' color='info'>Before Calibration</Button>
+                    </div>
+                  </div>
 
                 </Paper>
                 <Paper elevation={12} sx={{ p: 2 }} className='col-md-12'>
-                    <h5 className='text-center'>Master Used</h5>
-                    <table>
-                      <tbody>
-                        <tr>
-                          <th>IMTE No</th>
-                          <th>Master Name</th>
-                          <th>Range/Size</th>
-                          <th>Cal Certificate No</th>
-                          <th>Cal Date</th>
-                          <th>Next Due</th>
-                          <th>Calibrated At</th>
+                  <h5 className='text-center'>Master Used</h5>
+                  <table className='table table-bordered table-responsive text-center align-middle'>
+                    <tbody>
+                      <tr>
+                        <th>Si No</th>
+                        <th>IMTE No</th>
+                        <th>Master Name</th>
+                        <th>Range/Size</th>
+                        <th>Cal Certificate No</th>
+                        <th>Cal Date</th>
+                        <th>Next Due</th>
+                        <th>Calibrated At</th>
+                      </tr>
+
+                      {calibrationData.calMasterUsed.map((item, index) => (
+                        <tr key={index}>
+                          <td>{index + 1}</td>
+                          <td>{item.itemIMTENo}</td>
+                          <td>{item.itemAddMasterName}</td>
+                          <td>{item.itemRangeSize}</td>
+                          <td>{ }</td>
+                          <td>{item.itemCalDate}</td>
+                          <td>{item.itemDueDate}</td>
+                          <td>{item.itemCalibratedAt}</td>
                         </tr>
-                        
-                        <tr></tr>
-                      </tbody>
-                    </table>
+                      ))}
+                    </tbody>
+                  </table>
                 </Paper>
 
               </DialogContent>
