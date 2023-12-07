@@ -18,7 +18,7 @@ const itemCalController = {
     try {
       const {
         calItemId,
-        calIMTENo ,
+        calIMTENo,
         calItemName,
         calItemType,
         calRangeSize,
@@ -30,19 +30,21 @@ const itemCalController = {
         calItemUncertainity,
         calItemSOPNo,
         calStandardRef,
+        calOBType,
         calCertificateNo,
         calItemCalDate,
         calItemDueDate,
         calItemEntryDate,
         calCalibratedBy,
         calApprovedBy,
+        calBeforeData,
         calcalibrationData,
         calMasterUsed
       } = req.body;
   
       const newItemFields = {
         calItemId,
-        calIMTENo ,
+        calIMTENo,
         calItemName,
         calItemType,
         calRangeSize,
@@ -54,12 +56,14 @@ const itemCalController = {
         calItemUncertainity,
         calItemSOPNo,
         calStandardRef,
+        calOBType,
         calCertificateNo,
         calItemCalDate,
         calItemDueDate,
         calItemEntryDate,
         calCalibratedBy,
         calApprovedBy,
+        calBeforeData,
         calcalibrationData,
         calMasterUsed
       };
@@ -112,7 +116,7 @@ const itemCalController = {
       // }
       const {
         calItemId,
-        calIMTENo ,
+        calIMTENo,
         calItemName,
         calItemType,
         calRangeSize,
@@ -124,19 +128,21 @@ const itemCalController = {
         calItemUncertainity,
         calItemSOPNo,
         calStandardRef,
+        calOBType,
         calCertificateNo,
         calItemCalDate,
         calItemDueDate,
         calItemEntryDate,
         calCalibratedBy,
         calApprovedBy,
+        calBeforeData,
         calcalibrationData,
         calMasterUsed
         } = req.body;
       // Create an object with the fields you want to update
       const updateItemFields = {
         calItemId,
-        calIMTENo ,
+        calIMTENo,
         calItemName,
         calItemType,
         calRangeSize,
@@ -148,12 +154,14 @@ const itemCalController = {
         calItemUncertainity,
         calItemSOPNo,
         calStandardRef,
+        calOBType,
         calCertificateNo,
         calItemCalDate,
         calItemDueDate,
         calItemEntryDate,
         calCalibratedBy,
         calApprovedBy,
+        calBeforeData,
         calcalibrationData,
         calMasterUsed
       };
