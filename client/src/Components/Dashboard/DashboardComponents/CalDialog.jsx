@@ -1,5 +1,5 @@
 import React, { createContext, useEffect, useState, useContext } from 'react'
-import { Button, Dialog, DialogActions, DialogContent, DialogTitle, FormControlLabel, IconButton, MenuItem, Paper, Switch, TextField } from '@mui/material';
+import { Alert, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, FormControlLabel, IconButton, MenuItem, Paper, Snackbar, Switch, TextField } from '@mui/material';
 import axios from 'axios';
 import dayjs from 'dayjs';
 import isSameOrAfter from 'dayjs/plugin/isSameOrAfter'
@@ -8,10 +8,22 @@ import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { CalDataContent } from '../Home';
 import { Add, Close, Delete } from '@mui/icons-material';
+import Swal from 'sweetalert2'
 dayjs.extend(isSameOrBefore)
 dayjs.extend(isSameOrAfter)
 
 const CalDialog = () => {
+    const Toast = Swal.mixin({
+        toast: true,
+        position: "top-end",
+        showConfirmButton: false,
+        timer: 3000,
+        timerProgressBar: true,
+        didOpen: (toast) => {
+            toast.onmouseenter = Swal.stopTimer;
+            toast.onmouseleave = Swal.resumeTimer;
+        }
+    });
     const [calibrationDatas, setCalibrationDatas] = useState([])
 
     const getAllCalibrationData = async () => {
@@ -25,7 +37,7 @@ const CalDialog = () => {
             console.log(err);
         }
     };
-    useEffect(()=> {
+    useEffect(() => {
         getAllCalibrationData();
     }, [])
 
@@ -153,7 +165,7 @@ const CalDialog = () => {
 
     const changecalDataValue = (index, name, value) => {
 
-       
+
         setCalibrationData((prev) => {
             const updateAC = [...prev.calcalibrationData]
             updateAC[index] = {
@@ -229,10 +241,17 @@ const CalDialog = () => {
                 `${process.env.REACT_APP_PORT}/itemCal/createItemCal`, calibrationData
             );
             console.log(response.data.message)
+            Swal.fire({
+                template: "#my-template"
+            });
         } catch (err) {
             console.log(err);
         }
     };
+
+    const [confirmSubmit, setConfirmSubmit] = useState(false)
+
+    const [snackBarOpen, setSnackBarOpen]= useState(true)
     return (
         <Dialog fullWidth={true} keepMounted maxWidth="xl" open={calOpen} sx={{ color: "#f1f4f4" }}
             onClose={(e, reason) => {
@@ -548,19 +567,19 @@ const CalDialog = () => {
                                             <td>{item.calMinPS}</td>
                                             <td>{item.calMaxPS}</td>
                                             <td>{item.calWearLimitPS}</td>
-                                            {calibrationData.calBeforeData === "yes" && <td><input className='form-control form-control-sm' name="calBeforeCalibration" onChange={(e, index)=> changecalDataValue(index, e.target.name, e.target.value)}/></td>}
+                                            {calibrationData.calBeforeData === "yes" && <td><input className='form-control form-control-sm' name="calBeforeCalibration" onChange={(e, index) => changecalDataValue(index, e.target.name, e.target.value)} /></td>}
                                             {calibrationData.calOBType === "average" &&
-                                                <td><input name='calAverageOB' onChange={(e, index)=> changecalDataValue(index, e.target.name, e.target.value)} className='form-control form-control-sm' /></td>
+                                                <td><input name='calAverageOB' onChange={(e, index) => changecalDataValue(index, e.target.name, e.target.value)} className='form-control form-control-sm' /></td>
                                             }
                                             {calibrationData.calOBType === "minmax" &&
                                                 <React.Fragment>
-                                                    <td><input className='form-control form-control-sm' onChange={(e, index)=> changecalDataValue(index, e.target.name, e.target.value)}/>
-                                                    </td> <td><input className='form-control form-control-sm' onChange={(e, index)=> changecalDataValue(index, e.target.name, e.target.value)}/></td>
+                                                    <td><input className='form-control form-control-sm' onChange={(e, index) => changecalDataValue(index, e.target.name, e.target.value)} />
+                                                    </td> <td><input className='form-control form-control-sm' onChange={(e, index) => changecalDataValue(index, e.target.name, e.target.value)} /></td>
                                                 </React.Fragment>}
 
 
                                             <td width="15%">
-                                                <select className='form-select form-select-sm' name="" onChange={(e, index)=> changecalDataValue(index, e.target.name, e.target.value)}>
+                                                <select className='form-select form-select-sm' name="" onChange={(e, index) => changecalDataValue(index, e.target.name, e.target.value)}>
                                                     <option>Status</option>
                                                     <option value="accepted" color='success'>Accepted</option>
                                                     <option value="rejected">Rejected</option>
@@ -648,14 +667,14 @@ const CalDialog = () => {
                                             <td>{item.calMinPS}</td>
                                             <td>{item.calMaxPS}</td>
 
-                                            {calibrationData.calBeforeData === "yes" && <td><input className='form-control form-control-sm' name='calBeforeCalibration'/></td>}
+                                            {calibrationData.calBeforeData === "yes" && <td><input className='form-control form-control-sm' name='calBeforeCalibration' /></td>}
                                             {calibrationData.calOBType === "average" &&
                                                 <td><input className='form-control form-control-sm' /></td>
                                             }
                                             {calibrationData.calOBType === "minmax" &&
                                                 <React.Fragment>
-                                                    <td><input className='form-control form-control-sm' name="calMinOB"/>
-                                                    </td> <td><input className='form-control form-control-sm' name="calMaxOB"/></td>
+                                                    <td><input className='form-control form-control-sm' name="calMinOB" />
+                                                    </td> <td><input className='form-control form-control-sm' name="calMaxOB" /></td>
                                                 </React.Fragment>}
 
 
@@ -729,6 +748,41 @@ const CalDialog = () => {
                             </tbody>
                         </table>
                     </Paper>
+                    <Dialog
+                        open={confirmSubmit}
+                        onClose={(e, reason) => {
+                            console.log(reason)
+                            if (reason !== 'backdropClick' && reason !== 'escapeKeyDown') {
+                                setConfirmSubmit(false)
+                            }
+                        }}
+                        aria-labelledby="alert-dialog-title"
+                        aria-describedby="alert-dialog-description"
+                    >
+                        <DialogTitle id="alert-dialog-title">
+                            {"Use Google's location service?"}
+                        </DialogTitle>
+                        <DialogContent>
+                            <DialogContentText id="alert-dialog-description">
+                                Are you sure to Submit?
+                            </DialogContentText>
+                        </DialogContent>
+                        <DialogActions>
+                            <Button onClick={() => setConfirmSubmit(false)}>Disagree</Button>
+                            <Button onClick={() => { submitCalForm(); setConfirmSubmit(false) }} autoFocus>
+                                Agree
+                            </Button>
+                        </DialogActions>
+                    </Dialog>
+
+                    <Snackbar open={snackBarOpen} autoHideDuration={3000} 
+                    onClose={()=> setTimeout(() => {
+                        setSnackBarOpen(false)
+                        }, 3000)}>
+                        <Alert onClose={()=> setSnackBarOpen(false)} severity="success" sx={{ width: '100%' }}>
+                            This is a success message!
+                        </Alert>
+                    </Snackbar>
                 </div>
             </DialogContent>
             <DialogActions className='d-flex justify-content-between'>
@@ -736,10 +790,11 @@ const CalDialog = () => {
                     <Button variant='contained' color='warning' className='me-3'>Upload Report</Button>
                 </div>
                 <div>
-                    <Button variant='contained' color='error' className='me-3' onClick={() => setCalOpen(false)}>Cancel</Button>
-                    <Button variant='contained' color='success' onClick={() => { submitCalForm(); setCalOpen(false) }}>Submit</Button>
+                    <Button variant='contained' color='error' className='me-3' onClick={() => setConfirmSubmit(false)}>Cancel</Button>
+                    <Button variant='contained' color='success' onClick={() => { setConfirmSubmit(true) }}>Submit</Button>
                 </div>
             </DialogActions>
+
 
         </Dialog>
     )
