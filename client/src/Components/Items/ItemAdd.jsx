@@ -279,12 +279,12 @@ const ItemAdd = () => {
             setItemAddData((prev) => ({ ...prev, [name]: value, acceptanceCriteria: [{ acAccuracyUnit: value, acRangeSizeUnit: value }] }))
         }
         if (name === "itemCalibrationSource") {
-            if (value === "InHouse") {
-                console.log("InHouse")
+            if (value === "inhouse") {
+                console.log("inhouse")
                 setItemAddData((prev) => ({ ...prev, itemSupplier: [], itemOEM: [] }));
             }
-            if (value === "OutSource") {
-                console.log("OutSource")
+            if (value === "outsource") {
+                console.log("outsource")
                 setItemAddData((prev) => ({ ...prev, itemItemMasterIMTENo: [], itemOEM: [] }));
             }
             if (value === "OEM") {
@@ -444,18 +444,17 @@ const ItemAdd = () => {
             ...prev,
             acceptanceCriteria: [...prev.acceptanceCriteria, {
                 acParameter: "",
-                acRangeSize: "",
-                acRangeSizeUnit: "",
-                acMin: "",
-                acMax: "",
-                acPsMin: "",
-                acPsMax: "",
-                acMin: "",
-                acMax: "",
-                acPsWearLimit: "",
-                acAccuracy: "",
-                acAccuracyUnit: "",
-                acObservedSize: "",
+                acNominalSize: "",
+                acNominalSizeUnit: "",
+                acMinPS: "",
+                acMaxPS: "",
+                acWearLimitPS: "",
+                acMinOB: "",
+                acMaxOB: "",
+                acAverageOB: "",
+                acOBError: "",
+                acMinPSError: "",
+                acMaxPSError: "",
             }]
         }))
     }
@@ -497,8 +496,7 @@ const ItemAdd = () => {
         },
     }
 
-    const [snackBarOpen, setSnackBarOpen] = useState(false)
-    const [errorhandler, setErrorHandler] = useState({});
+
     const [open, setOpen] = useState(false)
     const navigate = useNavigate();
 
@@ -579,6 +577,7 @@ const ItemAdd = () => {
     //     );
     // };
     //
+    const [snackBarOpen, setSnackBarOpen] = useState(false)
 
     const handleSnackClose = (event, reason) => {
         if (reason === 'clickaway') {
@@ -587,6 +586,9 @@ const ItemAdd = () => {
 
         setSnackBarOpen(false);
     }
+    const [errorhandler, setErrorHandler] = useState({})
+    console.log(errorhandler)
+
 
     const handleRemoveFile = () => {
         setItemAddData((prev) => ({ ...prev, itemCertificateData: "" }));
@@ -704,9 +706,9 @@ const ItemAdd = () => {
                                     <div className="col-lg-4">
                                         <TextField size='small' select variant='outlined' onChange={handleItemAddChange} label="Item Type" name='itemType' fullWidth value={itemAddData.itemType || ""}>
                                             <MenuItem><em>Select Type</em></MenuItem>
-                                            <MenuItem value="attribute">attribute</MenuItem>
-                                            <MenuItem value="variable">variable</MenuItem>
-                                            <MenuItem value="referencestandard">referencestandard</MenuItem>
+                                            <MenuItem value="attribute">Attribute</MenuItem>
+                                            <MenuItem value="variable">Variable</MenuItem>
+                                            <MenuItem value="referencestandard">Reference Standard</MenuItem>
 
                                         </TextField>
                                     </div>
@@ -727,10 +729,10 @@ const ItemAdd = () => {
                                     </div>
                                 </div>
                                 <div className="row g-2">
-                                    <div className="col-lg-5">
+                                    <div className="col-lg-9">
                                         <TextField size='small' variant='outlined' label="MFR.Si.No." onChange={handleItemAddChange} name='itemMFRNo' id='itemMFRNoId' fullWidth />
                                     </div>
-                                    <div className='col-lg-7 d-flex justify-content-between'>
+                                    <div className='col-lg-3 d-flex justify-content-between'>
                                         {itemAddData.itemType === "variable" && <TextField size='small' variant='outlined' name='itemLC' onChange={handleItemAddChange} id="itemLCId" label="Least Count" fullWidth />}
 
 
@@ -847,13 +849,13 @@ const ItemAdd = () => {
                                 <div className='col-lg-12'>
                                     <TextField size='small' value={itemAddData.itemCalibrationSource} onChange={handleItemAddChange} fullWidth variant='outlined' select label="Calibration Source" name='itemCalibrationSource'>
                                         <MenuItem value=""><em>--Select--</em></MenuItem>
-                                        <MenuItem value="InHouse">InHouse</MenuItem>
-                                        <MenuItem value="OutSource">OutSource</MenuItem>
-                                        <MenuItem value="OEM">OEM</MenuItem>
+                                        <MenuItem value="inhouse">InHouse</MenuItem>
+                                        <MenuItem value="outsource">OutSource</MenuItem>
+                                        <MenuItem value="oem">OEM</MenuItem>
                                     </TextField>
                                 </div>
                             </div>
-                            {itemAddData.itemCalibrationSource === "InHouse" &&
+                            {itemAddData.itemCalibrationSource === "inhouse" &&
                                 <div className='row g-2'>
                                     <h6 className='text-center'>Enter Master Details</h6>
                                     <div className="col-md-12">
@@ -919,7 +921,7 @@ const ItemAdd = () => {
 
 
                                 </div>}
-                            {itemAddData.itemCalibrationSource === "OutSource" &&
+                            {itemAddData.itemCalibrationSource === "outsource" &&
                                 <div className='row g-2'>
                                     <h6 className='text-center'>Enter Supplier Details</h6>
                                     <div className="col-md-7">
@@ -964,9 +966,9 @@ const ItemAdd = () => {
 
                                 </div>}
 
-                            {itemAddData.itemCalibrationSource === "OEM" &&
+                            {itemAddData.itemCalibrationSource === "oem" &&
                                 <div className='row g-2'>
-                                    <h6 className='text-center'>Enter OEM Details</h6>
+                                    <h6 className='text-center'>Enter oem Details</h6>
                                     <div className="col-md-7">
                                         <FormControl size='small' component="div" fullWidth>
                                             <InputLabel id="itemOEMId">Select Supplier</InputLabel>
@@ -1008,8 +1010,8 @@ const ItemAdd = () => {
 
                                 </div>}
 
-                            {itemAddData.itemCalibrationSource === "InHouse" && <table className='table table-sm table-bordered text-center mt-2'>
-                                <tbody>
+                            {itemAddData.itemCalibrationSource === "inhouse" && <table className='table table-sm table-bordered text-center mt-2'>
+                                <tbody className='table table-sm table-bordered text-center align-middle'>
                                     <tr>
                                         <th style={{ width: "20%" }}>Si No</th>
                                         <th style={{ width: "50%" }}>Master Name</th>
@@ -1028,7 +1030,7 @@ const ItemAdd = () => {
 
                                 </tbody>
                             </table>}
-                            {itemAddData.itemCalibrationSource === "OutSource" && <table className='table table-sm table-bordered text-center mt-2'>
+                            {itemAddData.itemCalibrationSource === "outsource" && <table className='table table-sm table-bordered text-center mt-2'>
                                 <tbody>
                                     <tr>
                                         <th style={{ width: "20%" }}>Si No</th>
@@ -1100,9 +1102,9 @@ const ItemAdd = () => {
                                             slotProps={{ textField: { size: 'small' } }}
                                             format="DD-MM-YYYY" />
                                     </div>
-                                    <div className="col-md-12 d-flex justify-content-between">
-                                        <TextField className='me-2' size='small' fullWidth variant='outlined' onChange={handleItemAddChange} label="Calibrated at" select name='itemCalibratedAt'>
-                                            <MenuItem value="InHouse">InHouse</MenuItem>
+                                    <div className="col-lg-12">
+                                        <TextField size='small' fullWidth variant='outlined' onChange={handleItemAddChange} label="Calibrated at" select name='itemCalibratedAt'>
+                                            <MenuItem value="inhouse">InHouse</MenuItem>
                                             {suppOEM.map((item, index) => (
                                                 <MenuItem key={index} value={item.fullName}>{item.aliasName}</MenuItem>
                                             ))}
@@ -1305,7 +1307,8 @@ const ItemAdd = () => {
 
 
                                             {itemAddData.itemType === "variable" && <td><input type="text" className="form-control form-control-sm" id="acMinPSErrorId" name="acMinPSError" value={item.acMinPSError} placeholder='Min' onChange={(e) => changeACValue(index, e.target.name, e.target.value)} /></td>}
-                                            {itemAddData.itemType === "variable" && <td><input type="text" className="form-control form-control-sm" id="acMinPSErrorId" name="acMinPSError" value={item.acMinPSError} placeholder='Max' onChange={(e) => changeACValue(index, e.target.name, e.target.value)} /></td>}
+                                            {itemAddData.itemType === "variable" && <td><input type="text" className="form-control form-control-sm" id="acMaxPSErrorId" name="acMaxPSError" value={item.acMaxPSError} placeholder='Max' onChange={(e) => changeACValue(index, e.target.name, e.target.value)} /></td>}
+                                            {/* {itemAddData.itemType === "variable" && <td><input type="text" className="form-control form-control-sm" id="acMinPSErrorId" name="acMinPSError" value={item.acMinPSError} placeholder='Max' onChange={(e) => changeACValue(index, e.target.name, e.target.value)} /></td>}*/}
 
 
                                             {itemAddData.itemType === "variable" && <td><input type="text" className="form-control form-control-sm" id="acOBErrorId" name="acOBError" value={item.acOBError} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} /></td>}
@@ -1350,10 +1353,10 @@ const ItemAdd = () => {
 
 
                         <Snackbar anchorOrigin={{ vertical: "top", horizontal: "right" }} open={snackBarOpen} autoHideDuration={6000} onClose={handleSnackClose}>
-                            <Alert onClose={handleSnackClose} severity={errorhandler.code} sx={{ width: '25%' }}>
+                            <Alert variant="filled" onClose={handleSnackClose} severity={errorhandler.code} sx={{ width: '25%' }}>
                                 {errorhandler.message}
                             </Alert>
-                        </Snackbar>
+                        </Snackbar> 
                         <Dialog
                             open={open}
                             onClose={() => setOpen(false)}

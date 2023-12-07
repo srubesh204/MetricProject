@@ -149,9 +149,9 @@ const ItemEdit = () => {
     //Vendor
     const [vendorList, setVendorList] = useState([])
     const [customerList, setCustomerList] = useState([]);
-    const [OEMList, setOEMList] = useState([]);
+    const [oemList, setoemList] = useState([]);
     const [supplierList, setSupplierList] = useState([])
-    const [suppOEM, setSuppOEM] = useState([]);
+    const [suppoem, setSuppoem] = useState([]);
 
 
 
@@ -164,16 +164,16 @@ const ItemEdit = () => {
             );
             const vendorList = response.data.result
             const customerList = vendorList.filter((item) => item.customer === "1" || item.supplier === "1");
-            const OEMList = vendorList.filter((item) => item.oem === "1");
+            const oemList = vendorList.filter((item) => item.oem === "1");
             const SupplierList = vendorList.filter((item) => item.supplier === "1");
-            const suppOEM = vendorList.filter((item) => item.supplier === "1" || item.OEM === "1");
+            const suppoem = vendorList.filter((item) => item.supplier === "1" || item.oem === "1");
 
             console.log(customerList)
             setVendorList(vendorList);
             setCustomerList(customerList);
-            setOEMList(OEMList);
+            setoemList(oemList);
             setSupplierList(SupplierList)
-            setSuppOEM(suppOEM)
+            setSuppoem(suppoem)
             console.log(SupplierList)
 
         } catch (err) {
@@ -213,7 +213,7 @@ const ItemEdit = () => {
         itemItemMasterName: "",
         itemItemMasterIMTENo: [],
         itemSupplier: [],
-        itemOEM: [],
+        itemoem: [],
         itemCalDate: dayjs().format("YYYY-MM-DD"),
         itemDueDate: "",
         itemCalibratedAt: "",
@@ -267,13 +267,13 @@ const ItemEdit = () => {
         itemItemMasterName: "",
         itemItemMasterIMTENo: [],
         itemSupplier: [],
-        itemOEM: [],
+        itemoem: [],
         itemCalDate: dayjs().format("YYYY-MM-DD"),
         itemDueDate: "",
         itemCalibratedAt: "",
         itemCertificateName: "",
         itemPartName: [],
-        itemOBType: "average",
+        itemOBType: "",
         acceptanceCriteria: [
             {
                 acParameter: "",
@@ -334,6 +334,7 @@ const ItemEdit = () => {
                 itemCalibratedAt: itemData.itemCalibratedAt,
                 itemCertificateName: itemData.itemCertificateName,
                 itemPartName: itemData.itemPartName,
+                itemOBType: itemData.itemOBType,
                 acceptanceCriteria: itemData.acceptanceCriteria
             }))
             console.log(response)
@@ -370,17 +371,17 @@ const ItemEdit = () => {
         width: 1,
     });
 
-   
+
 
     useEffect(() => {
         getItemDataById();
     }, [])
 
-   
 
-   
 
-   
+
+
+
     {/* const handleItemAddChange = (e) => {
         const { name, value } = e.target;
         setItemAddData((prevData) => ({
@@ -412,16 +413,16 @@ const ItemEdit = () => {
             setItemAddData((prev) => ({ ...prev, itemItemMasterIMTENo: updatedSelection }));
         }
         if (name === "itemCalibrationSource") {
-            if (value === "InHouse") {
-                console.log("InHouse")
-                setItemAddData((prev) => ({ ...prev, itemSupplier: [], itemOEM: [] }));
+            if (value === "inhouse") {
+                console.log("inhouse")
+                setItemAddData((prev) => ({ ...prev, itemSupplier: [], itemoem: [] }));
             }
-            if (value === "OutSource") {
-                console.log("OutSource")
-                setItemAddData((prev) => ({ ...prev, itemItemMasterIMTENo: [], itemOEM: [] }));
+            if (value === "outsource") {
+                console.log("outsource")
+                setItemAddData((prev) => ({ ...prev, itemItemMasterIMTENo: [], itemoem: [] }));
             }
-            if (value === "OEM") {
-                console.log("OEM")
+            if (value === "oem") {
+                console.log("oem")
                 setItemAddData((prev) => ({ ...prev, itemItemMasterIMTENo: [], itemSupplier: [] }));
             }
 
@@ -433,14 +434,28 @@ const ItemEdit = () => {
         if (name === "itemSupplier") {
             setItemAddData((prev) => ({ ...prev, itemSupplier: typeof value === 'string' ? value.split(',') : value }));
         }
-        if (name === "itemOEM") {
+        if (name === "itemoem") {
             // Map selected names back to corresponding objects
-            setItemAddData((prev) => ({ ...prev, itemOEM: typeof value === 'string' ? value.split(',') : value }));
+            setItemAddData((prev) => ({ ...prev, itemoem: typeof value === 'string' ? value.split(',') : value }));
         }
 
 
 
         setItemAddData((prev) => ({ ...prev, [name]: value }));
+
+        if (name === "isItemMaster") {
+            setItemAddData((prev) => ({
+                ...prev,
+                [name]: checked ? "1" : "0"
+            }));
+        }
+        if (name == "itemOBType") {
+            setItemAddData((prev) => ({
+                ...prev,
+                [name]: value
+            }));
+            console.log("working")
+        }
     }
 
 
@@ -505,9 +520,9 @@ const ItemEdit = () => {
 
 
     const [calibrationPointsData, setCalibrationPointsData] = useState([])
-    
 
-    
+
+
 
     const [partData, setPartData] = useState([])
     const getPartList = async () => {
@@ -557,20 +572,18 @@ const ItemEdit = () => {
         setItemAddData((prev) => ({
             ...prev,
             acceptanceCriteria: [...prev.acceptanceCriteria, {
-                acAccuracyUnit: "",
-                acRangeSizeUnit:"",
                 acParameter: "",
-                acRangeSize: "",
-                acMin: "",
-                acMax: "",
-                acPsMin: "",
-                acPsMin: "",
-                acPsMax: "",
-                acObMin: "",
-                acObMax: "",
-                acWearLimit: "",
-                acAccuracy: "",
-                acObservedSize: ""
+                acNominalSize: "",
+                acNominalSizeUnit: "",
+                acMinPS: "",
+                acMaxPS: "",
+                acWearLimitPS: "",
+                acMinOB: "",
+                acMaxOB: "",
+                acAverageOB: "",
+                acOBError: "",
+                acMinPSError: "",
+                acMaxPSError: "",
             }]
         }))
     }
@@ -689,7 +702,7 @@ const ItemEdit = () => {
         }
     };
 
-    const [uploadMessage, setUploadMessage] = useState("")
+
 
     const handleCertificateUpload = (event) => {
         const selectedFile = event.target.files[0];
@@ -732,9 +745,9 @@ const ItemEdit = () => {
 
         setSnackBarOpen(false);
     }
-
+    const [uploadMessage, setUploadMessage] = useState("")
     const handleRemoveFile = () => {
-        setItemAddData((prev) => ({ ...prev, itemCertificateData: "" }));
+        setItemAddData((prev) => ({ ...prev, itemCertificateName: "" }));
         setUploadMessage(null)
     }
 
@@ -778,6 +791,8 @@ const ItemEdit = () => {
         }
     };
 
+    const [obCheckedValue, setObCheckedValue] = useState("average")
+
     return (
         <div style={{ margin: "2rem", backgroundColor: "#f5f5f5" }}>
             <form>
@@ -793,7 +808,7 @@ const ItemEdit = () => {
                                     ))}
                                 </TextField>
                             </div>
-                            <div className="col-9">
+                            <div className="col-6">
                                 <Autocomplete
                                     disablePortal
                                     id="itemIMTENoId"
@@ -807,6 +822,14 @@ const ItemEdit = () => {
 
                                 />
                             </div>
+                            <div className="col">
+                                <FormControlLabel
+                                    control={<Checkbox name='isItemMaster' onChange={handleItemAddChange} />}
+                                    label="Use as Master"
+                                />
+
+                            </div>
+
 
                         </div>
                         <div className="col-lg-2 " >
@@ -830,7 +853,7 @@ const ItemEdit = () => {
                                 <div className="row g-2 mb-2">
                                     <div className="col-lg-4">
                                         <TextField size='small' select variant='outlined' onChange={handleItemAddChange} label="Item Type" name='itemType' fullWidth value={itemAddData.itemType}>
-                                            
+
                                             <MenuItem value="attribute">Attribute</MenuItem>
                                             <MenuItem value="variable">Variable</MenuItem>
                                             <MenuItem value="referencestandard">Reference Standard</MenuItem>
@@ -971,13 +994,13 @@ const ItemEdit = () => {
                                 <div className='col-lg-12'>
                                     <TextField size='small' value={itemAddData.itemCalibrationSource} onChange={handleItemAddChange} fullWidth variant='outlined' select label="Calibration Source" name='itemCalibrationSource'>
                                         <MenuItem value=""><em>--Select--</em></MenuItem>
-                                        <MenuItem value="InHouse">InHouse</MenuItem>
-                                        <MenuItem value="OutSource">OutSource</MenuItem>
-                                        <MenuItem value="OEM">OEM</MenuItem>
+                                        <MenuItem value="inhouse">InHouse</MenuItem>
+                                        <MenuItem value="outsource">OutSource</MenuItem>
+                                        <MenuItem value="oem">OEM</MenuItem>
                                     </TextField>
                                 </div>
                             </div>
-                            {itemAddData.itemCalibrationSource === "InHouse" &&
+                            {itemAddData.itemCalibrationSource === "inhouse" &&
                                 <div className='row g-2'>
                                     <h6 className='text-center'>Enter Master Details</h6>
                                     <div className="col-md-12">
@@ -1045,7 +1068,7 @@ const ItemEdit = () => {
 
 
                                 </div>}
-                            {itemAddData.itemCalibrationSource === "OutSource" &&
+                            {itemAddData.itemCalibrationSource === "outsource" &&
                                 <div className='row g-2'>
                                     <h6 className='text-center'>Enter Supplier Details</h6>
                                     <div className="col-md-7">
@@ -1090,27 +1113,27 @@ const ItemEdit = () => {
 
                                 </div>}
 
-                            {itemAddData.itemCalibrationSource === "OEM" &&
+                            {itemAddData.itemCalibrationSource === "oem" &&
                                 <div className='row g-2'>
-                                    <h6 className='text-center'>Enter OEM Details</h6>
+                                    <h6 className='text-center'>Enter oem Details</h6>
                                     <div className="col-md-7">
                                         <FormControl size='small' component="div" fullWidth>
-                                            <InputLabel id="itemOEMId">Select Supplier</InputLabel>
+                                            <InputLabel id="itemoemId">Select Supplier</InputLabel>
                                             <Select
-                                                labelId="itemOEMId"
+                                                labelId="itemoemId"
                                                 id="demo-multiple-checkbox"
                                                 multiple
-                                                name="itemOEM"
-                                                value={itemAddData.itemOEM}
+                                                name="itemoem"
+                                                value={itemAddData.itemoem}
                                                 onChange={handleItemAddChange}
                                                 input={<OutlinedInput fullWidth label="Select Supplier" />}
                                                 renderValue={(selected) => selected.join(', ')}
                                                 MenuProps={MenuProps}
                                                 fullWidth
                                             >
-                                                {OEMList.map((name) => (
+                                                {oemList.map((name) => (
                                                     <MenuItem key={name} value={name.aliasName}>
-                                                        <Checkbox checked={itemAddData.itemOEM.indexOf(name.aliasName) > -1} />
+                                                        <Checkbox checked={itemAddData.itemoem.indexOf(name.aliasName) > -1} />
                                                         <ListItemText primary={name.aliasName} />
                                                     </MenuItem>
                                                 ))}
@@ -1134,7 +1157,7 @@ const ItemEdit = () => {
 
                                 </div>}
 
-                            {itemAddData.itemCalibrationSource === "InHouse" && <table className='table table-sm table-bordered text-center mt-2'>
+                            {itemAddData.itemCalibrationSource === "inhouse" && <table className='table table-sm table-bordered text-center mt-2'>
                                 <tbody>
                                     <tr>
                                         <th style={{ width: "20%" }}>Si No</th>
@@ -1154,7 +1177,7 @@ const ItemEdit = () => {
 
                                 </tbody>
                             </table>}
-                            {itemAddData.itemCalibrationSource === "OutSource" && <table className='table table-sm table-bordered text-center mt-2'>
+                            {itemAddData.itemCalibrationSource === "outsource" && <table className='table table-sm table-bordered text-center mt-2'>
                                 <tbody>
                                     <tr>
                                         <th style={{ width: "20%" }}>Si No</th>
@@ -1172,14 +1195,14 @@ const ItemEdit = () => {
 
                                 </tbody>
                             </table>}
-                            {itemAddData.itemCalibrationSource === "OEM" && <table className='table table-sm table-bordered text-center mt-2'>
+                            {itemAddData.itemCalibrationSource === "oem" && <table className='table table-sm table-bordered text-center mt-2'>
                                 <tbody>
                                     <tr>
                                         <th style={{ width: "20%" }}>Si No</th>
-                                        <th style={{ width: "80%" }}>OEM</th>
+                                        <th style={{ width: "80%" }}>oem</th>
 
                                     </tr>
-                                    {itemAddData.itemOEM.map((item, index) => (
+                                    {itemAddData.itemoem.map((item, index) => (
                                         <tr key={index}>
                                             <td>{index + 1}</td>
                                             <td >{item}</td>
@@ -1229,25 +1252,26 @@ const ItemEdit = () => {
                                     </div>
                                     <div className="col-lg-12">
                                         <TextField size='small' fullWidth variant='outlined' onChange={handleItemAddChange} label="Calibrated at" value={itemAddData.itemCalibratedAt} select name='itemCalibratedAt'>
-                                            <MenuItem value="InHouse">InHouse</MenuItem>
-                                            {suppOEM.map((item, index) => (
+                                            <MenuItem value="inhouse">InHouse</MenuItem>
+                                            {suppoem.map((item, index) => (
                                                 <MenuItem key={index} value={item.fullName}>{item.aliasName}</MenuItem>
                                             ))}
 
                                         </TextField>
                                     </div>
-                                    <div className="col-lg-12">
-                                        <Button component="label" value={itemAddData.itemCertificateName} variant="contained" fullWidth >
+                                    <div className="col-lg-12 mb-2 d-flex justify-content-between">
+                                        <Button component="label" className='me-2' value={itemAddData.itemCertificateName} variant="contained" fullWidth >
 
                                             Certificate Upload
                                             <VisuallyHiddenInput type="file" onChange={handleCertificateUpload} />
-                                            <button type='button' style={{ display: "none" }} value={itemAddData.itemCertificateName}>Select File</button>
+
                                         </Button>
+                                        {itemAddData.isItemMaster === "1" && <TextField fullWidth label="Uncertainity" variant='outlined' size='small' onChange={handleItemAddChange} name='itemUncertainity' value={itemAddData.itemUncertainity} />}
                                     </div>
 
                                     {itemAddData.itemCertificateName &&
                                         <div className="col-md-4 d-flex justify-content-between">
-                                            <Chip label={itemAddData.itemCertificateName} size='small' component="a" href={`${process.env.REACT_APP_PORT}/workInstructions/${itemAddData.itemCertificateName}`} onClick={() => handleRemoveFile()} target="_blank" clickable={true} color="primary" />
+                                            <Chip label={itemAddData.itemCertificateName} size='small' component="a" href={`${process.env.REACT_APP_PORT}/workInstructions/${itemAddData.itemCertificateName}`} target="_blank" clickable={true} color="primary" />
                                             <HighlightOffRounded type="button" onClick={() => handleRemoveFile()} />
                                             {uploadMessage &&
                                                 <Chip label={uploadMessage} size='small' color="success" icon={<Done />} />}
@@ -1317,7 +1341,7 @@ const ItemEdit = () => {
                                 </div>
                             </Paper>
                         </div>
-                        <Paper sx={{ m: 2, p: 2 }} elevation={12}>
+                        {itemAddData.itemAddMasterName && <Paper sx={{ m: 2, p: 2 }} elevation={12}>
                             <div className="d-flex justify-content-between mb-2">
                                 <h6 className='h5 text-center'>Acceptance Criteria</h6>
                                 <Button variant='contained' onClick={() => addACValue()}>Add</Button>
@@ -1327,31 +1351,56 @@ const ItemEdit = () => {
                                 <tbody>
                                     <tr>
                                         <th>Parameter</th>
-                                        <th>Range/Size</th>
+                                        <th>Nominal Size</th>
                                         <th>Unit</th>
                                         {itemAddData.itemType === "attribute" && <th colspan="3">Permissible Size</th>}
                                         {/*{itemAddData.itemType === "attribute" && <th>Min</th>}
                                         {itemAddData.itemType === "attribute" && <th>Max</th>}
                                                 {itemAddData.itemType === "attribute" && <th>WearLimit</th>}*/}
                                         {/*{itemAddData.itemType === "attribute" && <th>Unit</th>}*/}
-                                        {itemAddData.itemType === "attribute" && <th colspan="2">Observed size</th>}
+                                        {itemAddData.itemType === "attribute" && <th width="20%" colspan="2" className='text-center'>Observed size
+                                            <RadioGroup
+                                                className='d-flex justify-content-around'
+                                                row
+                                                name="itemOBType"
+                                                onChange={handleItemAddChange}
+                                                aria-labelledby="demo-row-radio-buttons-group-label"
+
+                                            >
+                                                <FormControlLabel value="minmax" checked={itemAddData.itemOBType === "minmax"} control={<Radio />} label="Min/Max" />
+
+                                                <FormControlLabel value="average" checked={itemAddData.itemOBType === "average"} control={<Radio />} label="Average" />
+                                            </RadioGroup></th>}
 
 
+                                        {itemAddData.itemType === "variable" && <th colSpan={2}>Permissible Error </th>}
 
-                                        {itemAddData.itemType === "variable" && <th>Accuracy(+ & -)</th>}
-                                        {itemAddData.itemType === "variable" && <th>Unit</th>}
+
                                         {itemAddData.itemType === "variable" && <th>Observed Error</th>}
 
 
 
 
+                                        {itemAddData.itemType === "referencestandard" && <th colspan="2">Permissible Size</th>}
 
-                                        {itemAddData.itemType === "referencestandard" && <th>Accuracy(+ & -)</th>}
-                                        {itemAddData.itemType === "referencestandard" && <th>Unit</th>}
 
-                                        {itemAddData.itemType === "referencestandard" && <th colspan="2">Observed size</th>}
+
+                                        {itemAddData.itemType === "referencestandard" && <th width="20%" colspan="2" className='text-center'>Observed size
+                                            <RadioGroup
+                                                className='d-flex justify-content-around'
+                                                row
+                                                name="itemOBType"
+                                                onChange={handleItemAddChange}
+                                                aria-labelledby="demo-row-radio-buttons-group-label"
+
+                                            >
+                                                <FormControlLabel value="minmax" checked={itemAddData.itemOBType === "minmax"} control={<Radio />} label="Min/Max" />
+
+                                                <FormControlLabel value="average" checked={itemAddData.itemOBType === "average"} control={<Radio />} label="Average" />
+                                            </RadioGroup></th>}
                                         <th>Delete</th>
                                     </tr>
+
                                     {itemAddData.acceptanceCriteria ? itemAddData.acceptanceCriteria.map((item, index) => (
                                         <tr>
                                             <td><select className='form-select form-select-sm' id="acParameterId" name="acParameter" value={item.acParameter} onChange={(e) => changeACValue(index, e.target.name, e.target.value)}>
@@ -1360,10 +1409,10 @@ const ItemEdit = () => {
                                                     <option>{item.calibrationPoint}</option>
                                                 ))}
                                             </select></td>
-                                            <td><input type="text" className='form-control form-control-sm' id="acRangeSizeId" name="acRangeSize" value={item.acRangeSize} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} /></td>
+                                            <td><input type="text" className='form-control form-control-sm' id="acNominalSizeId" name="acNominalSize" value={item.acNominalSize} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} /></td>
 
 
-                                            <td> <select className="form-select form-select-sm" id="acRangeSizeUnitId" name="acRangeSizeUnit" value={item.acRangeSizeUnit} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} >
+                                            <td> <select className="form-select form-select-sm" id="acNominalSizeUnitId" name="acNominalSizeUnit" value={item.acNominalSizeUnit} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} >
                                                 <option value="">-Select-</option>
                                                 {units.map((item, index) => (
                                                     <option key={index} value={item.unitName}>{item.unitName}</option>
@@ -1372,36 +1421,51 @@ const ItemEdit = () => {
 
 
                                             </select></td>
-                                            {itemAddData.itemType === "attribute" && <td><input type="text" className="form-control form-control-sm" id="acPsMinId" name="acPsMin" placeholder='min' value={item.acPsMin} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} /></td>}
+                                            {itemAddData.itemType === "attribute" && <td><input type="text" className="form-control form-control-sm" id="acMinPSId" name="acMinPS" placeholder='min' value={item.acMinPS} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} /></td>}
 
-                                            {itemAddData.itemType === "attribute" && <td><input type="text" className='form-control form-control-sm' id="acPsMaxId" name="acPsMax" placeholder='max' value={item.acPsMax} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} /></td>}
+                                            {itemAddData.itemType === "attribute" && <td><input type="text" className='form-control form-control-sm' id="acMaxPSId" name="acMaxPS" placeholder='max' value={item.acMaxPS} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} /></td>}
 
-                                            {itemAddData.itemType === "attribute" && <td><input type="text" className="form-control form-control-sm" id="acWearLimitId" name="acWearLimit" placeholder='wearLimit' value={item.acWearLimit} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} /></td>}
-                                            {itemAddData.itemType === "attribute" && <td><input type="text" className="form-control form-control-sm" id="acObMinId" name="acObMin" placeholder='min' value={item.acObMin} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} /></td>}
-                                            {itemAddData.itemType === "attribute" && <td><input type="text" className='form-control form-control-sm' id="acObMaxId" name="acObMax" placeholder='max' value={item.acObMax} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} /></td>}
-                                            {itemAddData.itemType === "variable" && <td><input type="text" className="form-control form-control-sm" id="acAccuracyId" name="acAccuracy" value={item.acAccuracy} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} /></td>}
 
-                                            {itemAddData.itemType === "variable" && <td> <select className="form-select form-select-sm" id="acAccuracyUnitId" name="acAccuracyUnit" value={item.acAccuracyUnit} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} >
-                                                <option value="">-Select-</option>
-                                                {units.map((item, index) => (
-                                                    <option key={index} value={item.unitName}>{item.unitName}</option>
-                                                ))}
+                                            {itemAddData.itemType === "attribute" && <td><input type="text" className="form-control form-control-sm" id="acWearLimitPSId" name="acWearLimitPS" placeholder='wearLimit' value={item.acWearLimitPS} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} /></td>}
 
-                                            </select></td>}
-                                            {itemAddData.itemType === "variable" && <td><input type="text" className="form-control form-control-sm" id="acObservedSizeId" name="acObservedSize" value={item.acObservedSize} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} /></td>}
+                                            {(itemAddData.itemType === "attribute" && itemAddData.itemOBType === "minmax") &&
+                                                <React.Fragment>
+                                                    <td><input type="text" className="form-control form-control-sm" id="acMinOBId" name="acMinOB" placeholder='min' value={item.acMinOB} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} /></td>
+                                                    <td><input type="text" className='form-control form-control-sm' id="acMaxOBId" name="acMaxOB" placeholder='max' value={item.acMaxOB} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} /></td>
+                                                </React.Fragment>
+                                            }
+                                            {(itemAddData.itemType === "attribute" && itemAddData.itemOBType === "average") &&
+                                                <React.Fragment>
+                                                    <td colSpan={2}><input type="text" className="form-control form-control-sm" id="acAverageOBId" name="acAverageOB" placeholder='Average' value={item.acAverageOB} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} /></td>
+                                                </React.Fragment>
+                                            }
 
-                                            {itemAddData.itemType === "referencestandard" && <td><input type="text" className="form-control form-control-sm" id="acAccuracyId" name="acAccuracy" value={item.acAccuracy} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} /></td>}
-                                            {itemAddData.itemType === "referencestandard" && <td> <select className="form-select form-select-sm" id="acAccuracyUnitId" name="acAccuracyUnit" value={item.acAccuracyUnit} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} >
-                                                <option value="">-Select-</option>
-                                                {units.map((item, index) => (
-                                                    <option key={index} value={item.unitName}>{item.unitName}</option>
-                                                ))}
 
-                                            </select></td>}
+                                            {itemAddData.itemType === "variable" && <td><input type="text" className="form-control form-control-sm" id="acMinPSErrorId" name="acMinPSError" value={item.acMinPSError} placeholder='Min' onChange={(e) => changeACValue(index, e.target.name, e.target.value)} /></td>}
+                                            {itemAddData.itemType === "variable" && <td><input type="text" className="form-control form-control-sm" id="acMaxPSErrorId" name="acMaxPSError" value={item.acMaxPSError} placeholder='Max' onChange={(e) => changeACValue(index, e.target.name, e.target.value)} /></td>}
+                                            {/* {itemAddData.itemType === "variable" && <td><input type="text" className="form-control form-control-sm" id="acMinPSErrorId" name="acMinPSError" value={item.acMinPSError} placeholder='Max' onChange={(e) => changeACValue(index, e.target.name, e.target.value)} /></td>}*/}
 
-                                            {itemAddData.itemType === "referencestandard" && <td><input type="text" className="form-control form-control-sm" id="acMinId" name="acMin" placeholder='min' value={item.acMin} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} /></td>}
 
-                                            {itemAddData.itemType === "referencestandard" && <td><input type="text" className='form-control form-control-sm' id="acMaxId" name="acMax" placeholder='max' value={item.acMax} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} /></td>}
+                                            {itemAddData.itemType === "variable" && <td><input type="text" className="form-control form-control-sm" id="acOBErrorId" name="acOBError" value={item.acOBError} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} /></td>}
+
+
+
+                                            {itemAddData.itemType === "referencestandard" && <td><input type="text" className="form-control form-control-sm" id="acMinPSId" name="acMinPS" placeholder='min' value={item.acMinPS} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} /></td>}
+
+                                            {itemAddData.itemType === "referencestandard" && <td><input type="text" className='form-control form-control-sm' id="acMaxPSId" name="acMaxPS" placeholder='max' value={item.acMaxPS} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} /></td>}
+
+                                            {(itemAddData.itemType === "referencestandard" && itemAddData.itemOBType === "minmax") &&
+                                                <React.Fragment>
+                                                    <td><input type="text" className="form-control form-control-sm" id="acMinOBId" name="acMinOB" placeholder='min' value={item.acMinOB} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} /></td>
+                                                    <td><input type="text" className='form-control form-control-sm' id="acMaxOBId" name="acMaxOB" placeholder='max' value={item.acMaxOB} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} /></td>
+                                                </React.Fragment>
+                                            }
+                                            {(itemAddData.itemType === "referencestandard" && itemAddData.itemOBType === "average") &&
+                                                <React.Fragment>
+                                                    <td colSpan={2}><input type="text" className="form-control form-control-sm" id="acAverageOBId" name="acAverageOB" placeholder='Average' value={item.acAverageOB} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} /></td>
+                                                </React.Fragment>
+                                            }
+
 
 
                                             <td><Button color='error' onClick={deleteAC}><Delete /></Button></td>
@@ -1410,7 +1474,7 @@ const ItemEdit = () => {
                                     )) : <tr></tr>}
                                 </tbody>
                             </table>
-                        </Paper>
+                        </Paper>}
                         <div className="d-flex justify-content-end">
 
                             <Button variant='contained' color='warning' onClick={() => { setOpen(true) }} className='me-3' type="button"  >
@@ -1424,7 +1488,7 @@ const ItemEdit = () => {
 
 
                         <Snackbar anchorOrigin={{ vertical: "top", horizontal: "right" }} open={snackBarOpen} autoHideDuration={6000} onClose={handleSnackClose}>
-                            <Alert onClose={handleSnackClose} severity={errorhandler.code} sx={{ width: '25%' }}>
+                            <Alert variant="filled" onClose={handleSnackClose} severity={errorhandler.code} sx={{ width: '25%' }}>
                                 {errorhandler.message}
                             </Alert>
                         </Snackbar>

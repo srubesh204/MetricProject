@@ -50,6 +50,7 @@ const Dc = () => {
         dcFetchData();
     }, []);
 
+
     const [vendorDataList, setVendorDataList] = useState([])
 
     const vendorFetchData = async () => {
@@ -343,7 +344,7 @@ const Dc = () => {
                             elevation={12}
                         >
                             <div className='row'>
-                                <Box sx={{ height: 300, width: '100%', my: 2 }}>
+                                <Box sx={{ height: 350, width: '100%', my: 2 }}>
                                     <DataGrid
 
                                         rows={dcDataList}

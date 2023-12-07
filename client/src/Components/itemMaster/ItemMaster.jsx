@@ -90,7 +90,7 @@ const ItemMaster = () => {
         itemPrefix: "",
         itemFqInMonths: "",
         calAlertInDay: "7",
-        wiNo: "",
+        SOPNo: "",
         uncertainty: "",
         uncertaintyUnit: "",
         standardRef: "",
@@ -109,7 +109,7 @@ const ItemMaster = () => {
         itemPrefix: "",
         itemFqInMonths: "",
         calAlertInDay: "7",
-        wiNo: "",
+        SOPNo: "",
         uncertainty: "",
         uncertaintyUnit: "",
         standardRef: "",
@@ -551,15 +551,15 @@ const ItemMaster = () => {
                                     <div className='row mb-2 g-2'>
                                         <div className="form-floating col-md-6">
 
-                                            <TextField label="Wi No "
-                                                id="wiNoId"
+                                            <TextField label="SOP No "
+                                                id="SOPNoId"
                                                 defaultValue=""
                                                 sx={{ width: "100%" }}
                                                 size="small"
                                                 fullWidth
-                                                value={itemMasterData.wiNo}
+                                                value={itemMasterData.SOPNo}
                                                 onChange={handleItemMasterBaseChange}
-                                                name="wiNo" />
+                                                name="SOPNo" />
                                         </div>
                                         <div className="col">
                                             <TextField label="Item Fq In Months "
@@ -758,7 +758,7 @@ const ItemMaster = () => {
 
                                         }} elevation={12}
                                     >
-                                        <div style={{ maxHeight: "185px", overflow: "auto", height: "100%", minHeight: "185px" }}>
+                                        <div style={{ maxHeight: "185px", overflow: "auto", height: "90%", minHeight: "185px" }}>
                                             <table className='table table-sm table-bordered text-center align-middle'>
                                                 <tbody>
                                                     <tr>
@@ -875,10 +875,10 @@ const ItemMaster = () => {
                                     {itemMasterStateId ?
                                         <div className='col d-flex justify-content-end '>
                                             <div className='me-2' >
-                                                <button type="button" className='btn btn-secondary' onClick={() => setOpenModal(true)} >Modify</button>
+                                                <Button variant='contained' size='small' type='button' color='info' onClick={() => setOpenModal(true)} >Modify</Button>
                                             </div>
                                             <div className='me-2' >
-                                                <button type="button" className='btn btn-danger' onClick={() => { setItemMasterStateId(null); setItemMasterData(initialItemMasterData) }}>Cancel</button>
+                                                <Button variant='contained' size='small' type='button' color='error' onClick={() => { setItemMasterStateId(null); setItemMasterData(initialItemMasterData) }}>Cancel</Button>
                                             </div>
                                         </div> : <div className='col d-flex justify-content-end '>
                                             <div >
@@ -914,9 +914,9 @@ const ItemMaster = () => {
                                         <TextField fullWidth label="Item Type Sort" onChange={handleFilterChange} className="form-select" select size="small" id="itemTypeSortId" name="itemTypeSort" defaultValue="" >
 
                                             <MenuItem value="all">All</MenuItem >
-                                            <MenuItem value="Attribute">Attribute</MenuItem >
-                                            <MenuItem value="Variable">Variable</MenuItem >
-                                            <MenuItem value="Reference Standard">Reference Standard</MenuItem >
+                                            <MenuItem value="attribute">Attribute</MenuItem >
+                                            <MenuItem value="variable">Variable</MenuItem >
+                                            <MenuItem value="referencestandard">Reference Standard</MenuItem >
 
                                         </TextField>
 
@@ -933,7 +933,7 @@ const ItemMaster = () => {
                                     </div>
                                     <div className='col d-flex justify-content-end'>
                                         <div >
-                                            {itemMasteSelectedRowIds.length !== 0 && <Button variant='contained' type='button' color='error' onClick={() => setDeleteModal(true)}>Delete </Button>}
+                                            {itemMasteSelectedRowIds.length !== 0 && <Button variant='contained' size='small' type='button' color='error' onClick={() => setDeleteModal(true)}>Delete </Button>}
                                         </div>
                                     </div>
 
