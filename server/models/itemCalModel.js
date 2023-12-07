@@ -3,11 +3,9 @@ const dayjs = require('dayjs')
 const uniqueValidator = require('mongoose-unique-validator');
 
 const itemCal = new mongoose.Schema({
+
   calItemId: String,
-  calIMTENo: {
-    type: String,
-    required: [true],
-  },
+  calIMTENo: String,
   calItemName: String,
   calItemType: String,
   calRangeSize: String,
@@ -19,13 +17,28 @@ const itemCal = new mongoose.Schema({
   calItemUncertainity: String,
   calItemSOPNo: String,
   calStandardRef: String,
+  calOBType: String,
   calCertificateNo: String,
   calItemCalDate: String,
   calItemDueDate: String,
   calItemEntryDate: String,
   calCalibratedBy: String,
   calApprovedBy: String,
-  calcalibrationData: [],
+  calBeforeData: String,
+  calcalibrationData: [{
+    calParameter: String,
+    calNominalSize: String,
+    calNominalSizeUnit: String,
+    calMinPS: String,
+    calMaxPS: String,
+    calWearLimitPS: String,
+    calMinOB: String,
+    calMaxOB: String,
+    calAverageOB: String,
+    calOBError: String,
+    calMinPSError: String,
+    calMaxPSError: String,
+  }],
   calMasterUsed: [],
   calCreatedAt: {
     type: String,
