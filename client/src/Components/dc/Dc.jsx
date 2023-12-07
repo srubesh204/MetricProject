@@ -146,147 +146,131 @@ const Dc = () => {
             <LocalizationProvider dateAdapter={AdapterDayjs}>
                 <form>
                     <Container maxWidth="lg" sx={{ mb: 2 }}>
+                    <Paper
+                            sx={{
+                                p: 1,
+                                display: 'flex',
+                                flexDirection: 'column',
+                                mb: 1,
+
+                            }}
+                            elevation={12}
+                        >
                         <div className='row'>
                             <h1 className='text-center mb-2'>DC</h1>
+                            
 
                             <div className='col'>
-                                <Paper
-                                    sx={{
-                                        p: 8,
-                                        display: 'flex',
-                                        flexDirection: 'column',
-                                        mb: 2
-                                    }}
-                                    elevation={12}
-                                >
-                                    <div className='col d-flex mb-2'>
-                                        <div className=" col-6 me-2">
 
-                                            <TextField label="Party Name"
-                                                id="partyNameId"
-                                                select
-                                                defaultValue=""
-                                                //  sx={{ width: "100%" }}
-                                                size="small"
-                                                fullWidth
-                                                name="partyName" >
-                                                {vendorDataList.map((item) => (
-                                                    <MenuItem value={item._id}>{item.fullName}</MenuItem>
-                                                ))}
-                                            </TextField>
+                                <div className='col d-flex mb-2'>
+                                    <div className=" col me-2">
 
-                                        </div>
-                                        <div className="col-6">
-
-                                            <TextField label="Party code"
-                                                id="partyCodeId"
-                                                defaultValue=""
-                                                select
-                                                // sx={{ width: "100%" }}
-                                                size="small"
-                                                fullWidth
-                                                name="partyCode" >
-                                                {vendorDcList.map((item) => (
-                                                    <MenuItem value={item._id}>{item.vendorCode}</MenuItem>
-                                                ))}
-                                            </TextField>
-
-
-                                        </div>
-
-
-                                    </div>
-                                    <div className='row '>
-                                        <div className="col-12">
-
-                                            <TextField label="PartyAddress"
-                                                id="partyAddressId"
-                                                select
-                                                defaultValue=""
-                                                size="small"
-                                                sx={{ width: "101%" }}
-                                                name="Party Address" >
-                                                {vendorDcDataList.map((item) => (
-                                                    <MenuItem value={item._id}>{item.address}</MenuItem>
-                                                ))}
-                                            </TextField>
-
-                                        </div>
-                                    </div>
-                                </Paper>
-                            </div>
-
-
-                            <div className='col'>
-                                <Paper
-                                    sx={{
-                                        p: 2,
-                                        display: 'flex',
-                                        flexDirection: 'column',
-                                        mb: 1,
-
-                                    }}
-                                    elevation={12}
-                                >
-                                    <div className='col d-flex mb-2'>
-                                        <div className=" col-6 me-2">
-
-                                            <TextField label="DC NO"
-                                                id="dcNoId"
-                                                defaultValue=""
-                                                //  sx={{ width: "100%" }}
-                                                size="small"
-                                                fullWidth
-                                                name="dcNo" />
-                                        </div>
-                                        <div className="col-6">
-
-                                            <DatePicker
-                                                fullWidth
-                                                id="dcDateId"
-                                                name="dcDate"
-                                                label="DC Date"
-                                                sx={{ width: "100%" }}
-                                                slotProps={{ textField: { size: 'small' } }}
-                                                format="DD-MM-YYYY" />
-
-                                        </div>
-
-
-                                    </div>
-                                    <div className='mb-3'>
-                                        <TextField label="Reasion"
-                                            id="reasonId"
+                                        <TextField label="Party Name"
+                                            id="partyNameId"
                                             select
                                             defaultValue=""
-                                            fullWidth
+                                            //  sx={{ width: "100%" }}
                                             size="small"
-                                            name="reason"
-                                        >
-                                            <MenuItem value="all">All</MenuItem>
-                                            <MenuItem value="Service">Service</MenuItem>
-                                            <MenuItem value="Calibration">Calibration</MenuItem>
-                                            <MenuItem value="service & calibration">service & calibration</MenuItem>
-
-
+                                            fullWidth
+                                            name="partyName" >
+                                            {vendorDataList.map((item) => (
+                                                <MenuItem value={item._id}>{item.fullName}</MenuItem>
+                                            ))}
                                         </TextField>
-                                    </div>
-                                    <div className='mb-5'>
-                                        <TextField label="Common Remarks"
-                                            id="commonRemarksId"
 
+                                    </div>
+                                    <div className="col me-2">
+
+                                        <TextField label="Party code"
+                                            id="partyCodeId"
                                             defaultValue=""
-                                            fullWidth
+                                            select
+                                            // sx={{ width: "100%" }}
                                             size="small"
-                                            name="commonRemarks"
-                                        >
+                                            fullWidth
+                                            name="partyCode" >
+                                            {vendorDcList.map((item) => (
+                                                <MenuItem value={item._id}>{item.vendorCode}</MenuItem>
+                                            ))}
                                         </TextField>
+
+
+                                    </div>
+                                    <div className="col">
+
+                                        <TextField label="Party Address"
+                                            id="partyAddressId"
+                                            select
+                                            defaultValue=""
+                                            size="small"
+                                            sx={{ width: "100%" }}
+                                            name="Party Address" >
+                                            {vendorDcDataList.map((item) => (
+                                                <MenuItem value={item._id}>{item.address}</MenuItem>
+                                            ))}
+                                        </TextField>
+
                                     </div>
 
-                                </Paper>
+
+                                </div>
+
+
+                            </div>
+                        </div>
+
+
+                        <div className='row g-2 mb-2'>
+                            <div className='col d-flex'>
+                                <div className=" col-2 me-2">
+
+                                    <TextField label="Dc No"
+                                        id="dcNoId"
+                                        defaultValue=""
+                                        size="small"
+                                        sx={{ width: "101%" }}
+                                        name="dcNo" />
+
+                                </div>
+                                <div className="col-2 me-2">
+
+                                    <DatePicker
+                                        fullWidth
+                                        id="dcDateId"
+                                        name="dcDate"
+                                        label="Dc Date"
+                                         //sx={{ width: "75%" }}
+                                        slotProps={{ textField: { size: 'small' } }}
+                                        format="DD-MM-YYYY" />
+
+                                </div>
+                                <div className="col me-2">
+
+                                    <TextField label="Reason"
+                                        id="reasonId"
+                                        defaultValue=""
+                                        size="small"
+                                        sx={{ width: "101%" }}
+                                        name="reason" />
+
+                                </div>
+                                <div className='col me-2'>
+                                <TextField label="Common Remarks"
+                                        id="commonRemarksId"
+                                        defaultValue=""
+                                        size="small"
+                                        sx={{ width: "102%" }}
+                                        name="commonRemarks" />
+
+                                </div>
+
+                                
                             </div>
 
                         </div>
+                        </Paper>
+
+
 
                         <Paper
                             sx={{
@@ -301,11 +285,11 @@ const Dc = () => {
                             <div className='row g-2'>
                                 <div className='col d-flex'>
                                     <div className='col me-2'>
-                                        <TextField size='small' fullWidth variant='outlined' id="itemListId" select label="Item List" name='itemList'>
+                                        <TextField size='small' fullWidth variant='outlined'  defaultValue="all" id="itemListId" select label="Item List" name='itemList'>
                                         <MenuItem value="all">All</MenuItem>
                                             {itemMasterDataList.map((item) => (
-                                        <MenuItem value={item._id}>{item.itemDescription}</MenuItem>
-                                    ))}
+                                                <MenuItem value={item._id}>{item.itemDescription}</MenuItem>
+                                            ))}
                                         </TextField>
                                     </div>
                                     <div className='col'>
