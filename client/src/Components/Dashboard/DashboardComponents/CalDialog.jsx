@@ -8,22 +8,12 @@ import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { CalDataContent } from '../Home';
 import { Add, Close, Delete } from '@mui/icons-material';
-import Swal from 'sweetalert2'
+
 dayjs.extend(isSameOrBefore)
 dayjs.extend(isSameOrAfter)
 
 const CalDialog = () => {
-    const Toast = Swal.mixin({
-        toast: true,
-        position: "top-end",
-        showConfirmButton: false,
-        timer: 3000,
-        timerProgressBar: true,
-        didOpen: (toast) => {
-            toast.onmouseenter = Swal.stopTimer;
-            toast.onmouseleave = Swal.resumeTimer;
-        }
-    });
+    
     const [calibrationDatas, setCalibrationDatas] = useState([])
 
     const getAllCalibrationData = async () => {
@@ -241,9 +231,7 @@ const CalDialog = () => {
                 `${process.env.REACT_APP_PORT}/itemCal/createItemCal`, calibrationData
             );
             console.log(response.data.message)
-            Swal.fire({
-                template: "#my-template"
-            });
+           
         } catch (err) {
             console.log(err);
         }

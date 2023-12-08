@@ -395,19 +395,31 @@ const ItemEdit = () => {
     const handleItemAddChange = (e) => {
 
         const { name, value, checked } = e.target;
-     if (name === "itemRangeSizeUnit") {
+        if (name === "itemRangeSizeUnit") {
             setItemAddData((prev) => ({ ...prev, [name]: value, acceptanceCriteria: [{ acAccuracyUnit: value, acRangeSizeUnit: value }] }))
         }
-       {/* setItemAddData((prevData) => ({
+        {/* setItemAddData((prevData) => ({
             ...prevData,
             [name]: value,
             previousItemRangeSizeUnit: prevData.itemRangeSizeUnit, // Store the previous value
         }));*/}
+        const selectedIndex = itemAddData.itemPartName.indexOf(value);
+        let updatedValues = [...itemAddData.itemPartName];
 
-
-        if (name === "itemPartName") {
-            setItemAddData((prev) => ({ ...prev, itemPartName: value }));
+        if (selectedIndex === -1) {
+            // Add the selected value if it doesn't exist in the array
+            updatedValues = [...updatedValues, value];
+        } else {
+            // Remove the selected value if it exists in the array
+            updatedValues = updatedValues.filter((item) => item !== value);
         }
+
+        // Update the state with the new selected values
+        setItemAddData({ ...itemAddData, itemPartName: updatedValues });
+
+        {/*} if (name === "itemPartName") {
+            setItemAddData((prev) => ({ ...prev, itemPartName: value }));
+        }*/}
         if (name === "itemItemMasterIMTENo") {
             const updatedSelection = itemMasterListByName.filter(item => value.some(selectedItem => selectedItem.itemIMTENo === item.itemIMTENo));
             setItemAddData((prev) => ({ ...prev, itemItemMasterIMTENo: updatedSelection }));
@@ -1287,29 +1299,24 @@ const ItemEdit = () => {
                                 <h5 className='text-center'>Part</h5>
                                 <div className="row">
                                     <div className="col-md-12">
-                                        <FormControl size='small' component="div" fullWidth>
-                                            <InputLabel id="itemPartNameId">Select Part</InputLabel>
-                                            <Select
-                                                labelId="itemPartNameId"
-                                                name="itemPartName"
-                                                value={itemAddData.itemPartName}
-                                                onChange={handleItemAddChange}
-                                                input={<OutlinedInput fullWidth label="Select Part" />}
-                                                renderValue={(selected) => selected.map(item => item.partName).join(", ")}
-                                                MenuProps={MenuProps}
-                                                fullWidth
-                                            >
-                                                {partData.map((name, index) => (
-                                                    <MenuItem key={index} value={name}>
-                                                        <Checkbox
-                                                            checked={itemAddData.itemPartName.indexOf(name) > -1}
-                                                        // Check if the item is selected
-                                                        />
-                                                        <ListItemText primary={name.partName} />
-                                                    </MenuItem>
-                                                ))}
-                                            </Select>
-                                        </FormControl>
+                                        <Select
+                                            labelId="itemPartNameId"
+                                            multiple
+                                            name="itemPartName"
+                                            value={itemAddData.itemPartName}
+                                            onChange={handleItemAddChange}
+                                            input={<OutlinedInput fullWidth label="Select Part" />}
+                                            renderValue={(selected) => selected.map(item => item.partName).join(", ")}
+                                            MenuProps={MenuProps}
+                                            fullWidth
+                                        >
+                                            {partData.map((name, index) => (
+                                                <MenuItem key={index} value={name}>
+                                                    <Checkbox checked={itemAddData.itemPartName.indexOf(name) > -1} />
+                                                    <ListItemText primary={name.partName} />
+                                                </MenuItem>
+                                            ))}
+                                        </Select>
                                         {/* <FormControl size='small' component="div" fullWidth>
                                             <InputLabel id="itemPartNameId">Select Part</InputLabel>
                                             <Select
@@ -1379,12 +1386,23 @@ const ItemEdit = () => {
                                         {/* {calibrationData.calcalibrationData.map((item)=> ()} */}
                                         {itemAddData.acceptanceCriteria.map((item, index) => (
                                             <tr key={index}>
-                                                <td><select className='form-select form-select-sm' id="acParameterId" name="acParameter" value={item.acParameter} onChange={(e) => changeACValue(index, e.target.name, e.target.value)}>
-                                                    <option value="">-Select-</option>
-                                                    {calibrationPointsData.map((item) => (
-                                                        <option>{item.calibrationPoint}</option>
-                                                    ))}
-                                                </select></td>
+                                                <td>
+                                                    <select
+                                                        className='form-select form-select-sm'
+                                                        id="acParameterId"
+                                                        name="acParameter"
+                                                        value={item.acParameter}
+                                                        onChange={(e) => changeACValue(index, e.target.name, e.target.value)}
+                                                    >
+                                                        <option value="">-Select-</option>
+                                                        {calibrationPointsData.map((item, index) => (
+                                                            // Display both calibrationPoint and acParameter in the option
+                                                            <option key={index} value={item.acParameter}>
+                                                                {`${item.calibrationPoint} - ${item.acParameter}`}
+                                                            </option>
+                                                        ))}
+                                                    </select>
+                                                </td>
                                                 <td><input type="text" className='form-control form-control-sm' id="acNominalSizeId" name="acNominalSize" value={item.acNominalSize} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} /></td>
                                                 <td> <select className="form-select form-select-sm" id="acNominalSizeUnitId" name="acNominalSizeUnit" value={item.acNominalSizeUnit} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} >
                                                     <option value="">-Select-</option>
@@ -1551,51 +1569,51 @@ const ItemEdit = () => {
                                     </tbody>}
                                 <tbody>
                                     <tr>
-                                       
+
                                     </tr>
 
                                 </tbody>
                             </table>
                         </Paper>}
-                <div className="d-flex justify-content-end">
+                        <div className="d-flex justify-content-end">
 
-                    <Button variant='contained' color='warning' onClick={() => { setOpen(true) }} className='me-3' type="button"  >
-                        <BorderColor />  Update
-                    </Button>
-                    <Button variant='contained' component={RouterLink} to={`/itemList/`} color='error' onClick={() => setItemAddData(initialItemAddData)} type="reset">
-                        <ArrowBackIcon /> Back To List
-                    </Button>
+                            <Button variant='contained' color='warning' onClick={() => { setOpen(true) }} className='me-3' type="button"  >
+                                <BorderColor />  Update
+                            </Button>
+                            <Button variant='contained' component={RouterLink} to={`/itemList/`} color='error' onClick={() => setItemAddData(initialItemAddData)} type="reset">
+                                <ArrowBackIcon /> Back To List
+                            </Button>
 
-                </div>
+                        </div>
 
 
-                <Snackbar anchorOrigin={{ vertical: "top", horizontal: "right" }} open={snackBarOpen} autoHideDuration={6000} onClose={handleSnackClose}>
-                    <Alert variant="filled" onClose={handleSnackClose} severity={errorhandler.code} sx={{ width: '25%' }}>
-                        {errorhandler.message}
-                    </Alert>
-                </Snackbar>
-                <Dialog
-                    open={open}
-                    onClose={() => setOpen(false)}
-                    aria-labelledby="alert-dialog-title"
-                    aria-describedby="alert-dialog-description"
-                >
-                    <DialogTitle id="alert-dialog-title">
-                        {"Item Update confirmation"}
-                    </DialogTitle>
-                    <DialogContent>
-                        <DialogContentText id="alert-dialog-description">
-                            Are you sure to Update an Item
-                        </DialogContentText>
-                    </DialogContent>
-                    <DialogActions>
-                        <Button onClick={() => setOpen(false)}>Cancel</Button>
-                        <Button type="button" onClick={(e) => { updateItemData(e); setOpen(false); }} autoFocus>
-                            Update
-                        </Button>
-                    </DialogActions>
-                </Dialog>
-        </div>
+                        <Snackbar anchorOrigin={{ vertical: "top", horizontal: "right" }} open={snackBarOpen} autoHideDuration={6000} onClose={handleSnackClose}>
+                            <Alert variant="filled" onClose={handleSnackClose} severity={errorhandler.code} sx={{ width: '25%' }}>
+                                {errorhandler.message}
+                            </Alert>
+                        </Snackbar>
+                        <Dialog
+                            open={open}
+                            onClose={() => setOpen(false)}
+                            aria-labelledby="alert-dialog-title"
+                            aria-describedby="alert-dialog-description"
+                        >
+                            <DialogTitle id="alert-dialog-title">
+                                {"Item Update confirmation"}
+                            </DialogTitle>
+                            <DialogContent>
+                                <DialogContentText id="alert-dialog-description">
+                                    Are you sure to Update an Item
+                                </DialogContentText>
+                            </DialogContent>
+                            <DialogActions>
+                                <Button onClick={() => setOpen(false)}>Cancel</Button>
+                                <Button type="button" onClick={(e) => { updateItemData(e); setOpen(false); }} autoFocus>
+                                    Update
+                                </Button>
+                            </DialogActions>
+                        </Dialog>
+                    </div>
 
 
 

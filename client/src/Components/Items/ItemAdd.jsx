@@ -53,6 +53,11 @@ const ItemAdd = () => {
     }, []);
 
 
+
+
+
+
+
     const [areas, setAreas] = useState([])
     const areaFetch = async () => {
         try {
@@ -189,7 +194,13 @@ const ItemAdd = () => {
 
     //
 
+    const [selectedValues, setSelectedValues] = useState([]);
 
+    const handleSelectChange = (e, index) => {
+        const selectedOptions = Array.from(e.target.selectedOptions, (option) => option.value);
+
+        setSelectedValues(selectedOptions);
+    };
 
 
 
@@ -1010,26 +1021,37 @@ const ItemAdd = () => {
 
                                 </div>}
 
-                                {itemAddData.itemCalibrationSource === "inhouse" && <table className='table table-sm table-bordered text-center mt-2'>
-                                <tbody>
-                                    <tr>
-                                        <th style={{ width: "20%" }}>Si No</th>
-                                        <th style={{ width: "50%" }}>Master Name</th>
-                                        <th style={{ width: "30%" }}>Due</th>
-                                    </tr>
-                                    {itemAddData.itemItemMasterIMTENo.map((item, index) => (
+                            {itemAddData.itemCalibrationSource === "inhouse" && itemAddData.itemItemMasterIMTENo && Array.isArray(itemAddData.itemItemMasterIMTENo) && (
+                                <table className='table table-sm table-bordered text-center mt-2'>
+                                    <tbody>
                                         <tr>
-                                            <td>{index + 1}</td>
-                                            <td>{item.itemIMTENo}</td>
-                                            <td>{item.itemDueDate}</td>
+                                            <th style={{ width: "20%" }}>Si No</th>
+                                            <th style={{ width: "50%" }}>Master Name</th>
+                                            <th style={{ width: "30%" }}>Due</th>
                                         </tr>
-                                    ))
-
-                                    }
-
-
-                                </tbody>
-                            </table>}
+                                        {itemAddData.itemItemMasterIMTENo.map((item, index) => (
+                                            <tr key={index}>
+                                                <td>{index + 1}</td>
+                                                <td>
+                                                    <select
+                                                        className='form-select'
+                                                        multiple={false} // Allow single selection only
+                                                        value={selectedValues} // Maintain selected values in state
+                                                        onChange={(e) => handleSelectChange(e, index)} // Handle change event
+                                                    >
+                                                        {Array.isArray(item.masterNames) && item.masterNames.map((master, idx) => (
+                                                            <option key={idx} value={master}>
+                                                                {master}
+                                                            </option>
+                                                        ))}
+                                                    </select>
+                                                </td>
+                                                <td>{item.itemDueDate}</td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
+                            )}
                             {itemAddData.itemCalibrationSource === "outsource" && <table className='table table-sm table-bordered text-center mt-2'>
                                 <tbody>
                                     <tr>
@@ -1457,7 +1479,7 @@ const ItemAdd = () => {
 
 
 
-                                       {/* {itemAddData.itemType === "referencestandard" && <th colspan="2">Permissible Size</th>}
+                                        {/* {itemAddData.itemType === "referencestandard" && <th colspan="2">Permissible Size</th>}
 
 
 
@@ -1526,7 +1548,7 @@ const ItemAdd = () => {
 
 
 
-                                           {/*} {itemAddData.itemType === "referencestandard" && <td><input type="text" className="form-control form-control-sm" id="acMinPSId" name="acMinPS" placeholder='min' value={item.acMinPS} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} /></td>}
+                                            {/*} {itemAddData.itemType === "referencestandard" && <td><input type="text" className="form-control form-control-sm" id="acMinPSId" name="acMinPS" placeholder='min' value={item.acMinPS} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} /></td>}
 
                                             {itemAddData.itemType === "referencestandard" && <td><input type="text" className='form-control form-control-sm' id="acMaxPSId" name="acMaxPS" placeholder='max' value={item.acMaxPS} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} /></td>}
 
