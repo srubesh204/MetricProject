@@ -91,44 +91,29 @@ const [itemAddData, setItemAddData] = useState({
   // Your initial state for itemAddData
 });
 
-const partyNameId = async (id) => {
-  try {
-    const response = await axios.get(
-      `${process.env.REACT_APP_PORT}/vendor/getAllVendors/${id}`
-    );
-    console.log(response.data);
-
-    const {
-      _id,
-      vendorCode,
-      aliasName,
-      fullName,
-      dor,
-      address,
-      state,
-      city,
-      oem,
-      customer,
-      supplier,
-      subContractor
-    } = response.data.result;
-
-    setItemAddData((prev) => ({
-      ...prev,
-      partyName: aliasName,
-      partyCode: vendorCode,
-      partyAddress:  address,
-      selectedItemMaster: response.data.result
-    }));
-
-    // Set partyData to the fetched vendor data
-    setPartyData(response.data.result);
-
-  } catch (err) {
-    console.log(err);
-  }
-};
-
+const handlePartyNameClick = async (id) => {
+    try {
+      const response = await axios.get(
+        `${process.env.REACT_APP_PORT}/vendor/getAllVendors/${id}`
+      );
+      
+      // Destructure the necessary values from the response
+      const { fullName, vendorCode, address } = response.data.result;
+  
+      // Update the state with the party code and party address
+      setItemAddData((prev) => ({
+        ...prev,
+        partyName: fullName,
+        partyCode: vendorCode,
+        partyAddress: address,
+        // Other values you may want to set
+        // partyName: response.data.result.aliasName,
+        // selectedItemMaster: response.data.result
+      }));
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
 
    {/*} const [partyData, setPartyData] = useState([])
@@ -266,6 +251,7 @@ const partyNameId = async (id) => {
                                             //  sx={{ width: "100%" }}
                                             size="small"
                                             fullWidth
+                                            onClick={() => handlePartyNameClick(id)}
                                             name="partyName" >
                                             {vendorDataList.map((item) => (
                                                 <MenuItem value={item._id}>{item.fullName}</MenuItem>
