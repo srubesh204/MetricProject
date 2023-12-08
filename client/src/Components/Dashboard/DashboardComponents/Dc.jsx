@@ -1,15 +1,21 @@
-import React, { useEffect, useState } from 'react'
-import { TextField, MenuItem, styled, Button, ButtonGroup, Chip, FormControl, OutlinedInput, Fab, Link } from '@mui/material';
-import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { Container, Paper, Box } from '@mui/material';
+import React, { createContext, useEffect, useState, useContext } from 'react'
+import { Container, Box,  Alert, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, FormControlLabel, IconButton, MenuItem, Paper, Snackbar, Switch, TextField } from '@mui/material';
+import axios from 'axios';
 import { DataGrid, GridToolbar } from '@mui/x-data-grid';
-import axios from 'axios'
+import dayjs from 'dayjs';
+import isSameOrAfter from 'dayjs/plugin/isSameOrAfter'
+import isSameOrBefore from 'dayjs/plugin/isSameOrBefore'
+import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { HomeContent } from '../Home';
+import { Add, Close, Delete } from '@mui/icons-material';
+
 
 const Dc = () => {
 
-
+    const dcData = useContext(HomeContent)
+    const { dcOpen,setDcOpen, selectedRows } = dcData
+    console.log(selectedRows)
 
 
     const Columns = [
@@ -221,10 +227,32 @@ const handlePartyNameClick = async (id) => {
 
 
     return (
+        <Dialog fullWidth={true} keepMounted maxWidth="xl" open={dcOpen} sx={{ color: "#f1f4f4" }}
+            onClose={(e, reason) => {
+                console.log(reason)
+                if (reason !== 'backdropClick' && reason !== 'escapeKeyDown') {
+                    setDcOpen(false)
+                }
+            }}>
+            <DialogTitle align='center' >DC</DialogTitle>
+            <IconButton
+                aria-label="close"
+                onClick={() => setDcOpen(false)}
+                sx={{
+                    position: 'absolute',
+                    right: 8,
+                    top: 8,
+                    color: (theme) => theme.palette.grey[500],
+                }}
+            >
+                <Close />
+            </IconButton>
+
+            <DialogContent >
         <div>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
                 <form>
-                    <Container maxWidth="lg" sx={{ mb: 2 }}>
+                    
                     <Paper
                             sx={{
                                 p: 1,
@@ -236,7 +264,7 @@ const handlePartyNameClick = async (id) => {
                             elevation={12}
                         >
                         <div className='row'>
-                            <h1 className='text-center mb-2'>DC</h1>
+                           
                             
 
                             <div className='col'>
@@ -251,10 +279,10 @@ const handlePartyNameClick = async (id) => {
                                             //  sx={{ width: "100%" }}
                                             size="small"
                                             fullWidth
-                                            onClick={() => handlePartyNameClick(id)}
+                                            onClick={() => handlePartyNameClick()}
                                             name="partyName" >
-                                            {vendorDataList.map((item) => (
-                                                <MenuItem value={item._id}>{item.fullName}</MenuItem>
+                                            {vendorDataList.map((item, index) => (
+                                                <MenuItem key={index} value={item._id}>{item.fullName}</MenuItem>
                                             ))}
                                         </TextField>
 
@@ -490,10 +518,23 @@ const handlePartyNameClick = async (id) => {
 
 
 
-                    </Container>
+                  
                 </form>
             </LocalizationProvider>
         </div >
+        </DialogContent>
+        <DialogActions className='d-flex justify-content-between'>
+                <div>
+                    <Button variant='contained' color='warning' className='me-3'>Upload Report</Button>
+                </div>
+                <div>
+                    <Button variant='contained' color='error' className='me-3' onClick={() => { setDcOpen(false) }}>Cancel</Button>
+                    <Button variant='contained' color='success'>Submit</Button>
+                </div>
+            </DialogActions>
+
+
+        </Dialog>
     )
 }
 

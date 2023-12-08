@@ -719,7 +719,7 @@ const ItemAdd = () => {
                                             <MenuItem><em>Select Type</em></MenuItem>
                                             <MenuItem value="attribute">Attribute</MenuItem>
                                             <MenuItem value="variable">Variable</MenuItem>
-                                            <MenuItem value="referencestandard">Reference Standard</MenuItem>
+                                            <MenuItem value="referenceStandard">Reference Standard</MenuItem>
 
                                         </TextField>
                                     </div>
@@ -758,7 +758,7 @@ const ItemAdd = () => {
                                     <div className="row g-1">
                                         <div className="col-lg-12 me-1">
                                             {itemAddData.itemType === "attribute" && <TextField size='small' variant='outlined' label="Make" onChange={handleItemAddChange} value={itemAddData.itemMake} onKeyDown={handleKeyDown} name='itemMake' id='itemMakeId' fullWidth />}
-                                            {itemAddData.itemType === "referencestandard" && <TextField size='small' variant='outlined' label="Make" onChange={handleItemAddChange} value={itemAddData.itemMake} onKeyDown={handleKeyDown} name='itemMake' id='itemMakeId' fullWidth />}
+                                            {itemAddData.itemType === "referenceStandard" && <TextField size='small' variant='outlined' label="Make" onChange={handleItemAddChange} value={itemAddData.itemMake} onKeyDown={handleKeyDown} name='itemMake' id='itemMakeId' fullWidth />}
                                         </div>
 
                                         {itemAddData.itemType === "variable" &&
@@ -1349,7 +1349,7 @@ const ItemAdd = () => {
 
 
 
-                                {itemAddData.itemType === "referencestandard" &&
+                                {itemAddData.itemType === "referenceStandard" &&
 
                                     <tbody >
                                         <tr>
@@ -1468,11 +1468,11 @@ const ItemAdd = () => {
 
 
 
-                                        {/* {itemAddData.itemType === "referencestandard" && <th colspan="2">Permissible Size</th>}
+                                        {/* {itemAddData.itemType === "referenceStandard" && <th colspan="2">Permissible Size</th>}
 
 
 
-                                        {itemAddData.itemType === "referencestandard" && <th width="20%" colspan="2" className='text-center'>Observed size
+                                        {itemAddData.itemType === "referenceStandard" && <th width="20%" colspan="2" className='text-center'>Observed size
                                             <RadioGroup
                                                 className='d-flex justify-content-around'
                                                 row
@@ -1537,17 +1537,17 @@ const ItemAdd = () => {
 
 
 
-                                            {/*} {itemAddData.itemType === "referencestandard" && <td><input type="text" className="form-control form-control-sm" id="acMinPSId" name="acMinPS" placeholder='min' value={item.acMinPS} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} /></td>}
+                                            {/*} {itemAddData.itemType === "referenceStandard" && <td><input type="text" className="form-control form-control-sm" id="acMinPSId" name="acMinPS" placeholder='min' value={item.acMinPS} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} /></td>}
 
-                                            {itemAddData.itemType === "referencestandard" && <td><input type="text" className='form-control form-control-sm' id="acMaxPSId" name="acMaxPS" placeholder='max' value={item.acMaxPS} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} /></td>}
+                                            {itemAddData.itemType === "referenceStandard" && <td><input type="text" className='form-control form-control-sm' id="acMaxPSId" name="acMaxPS" placeholder='max' value={item.acMaxPS} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} /></td>}
 
-                                            {(itemAddData.itemType === "referencestandard" && itemAddData.itemOBType === "minmax") &&
+                                            {(itemAddData.itemType === "referenceStandard" && itemAddData.itemOBType === "minmax") &&
                                                 <React.Fragment>
                                                     <td><input type="text" className="form-control form-control-sm" id="acMinOBId" name="acMinOB" placeholder='min' value={item.acMinOB} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} /></td>
                                                     <td><input type="text" className='form-control form-control-sm' id="acMaxOBId" name="acMaxOB" placeholder='max' value={item.acMaxOB} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} /></td>
                                                 </React.Fragment>
                                             }
-                                            {(itemAddData.itemType === "referencestandard" && itemAddData.itemOBType === "average") &&
+                                            {(itemAddData.itemType === "referenceStandard" && itemAddData.itemOBType === "average") &&
                                                 <React.Fragment>
                                                     <td colSpan={2}><input type="text" className="form-control form-control-sm" id="acAverageOBId" name="acAverageOB" placeholder='Average' value={item.acAverageOB} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} /></td>
                                                 </React.Fragment>

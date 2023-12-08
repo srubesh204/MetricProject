@@ -6,7 +6,7 @@ import isSameOrAfter from 'dayjs/plugin/isSameOrAfter'
 import isSameOrBefore from 'dayjs/plugin/isSameOrBefore'
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { CalDataContent } from '../Home';
+import { HomeContent } from '../Home';
 import { Add, Close, Delete } from '@mui/icons-material';
 
 dayjs.extend(isSameOrBefore)
@@ -15,7 +15,8 @@ dayjs.extend(isSameOrAfter)
 const CalDialog = () => {
 
 
-
+    const calData = useContext(HomeContent)
+    const { calOpen, setCalOpen, selectedRows, itemMasters, activeEmps } = calData
     const [calibrationDatas, setCalibrationDatas] = useState([])
 
     const getAllCalibrationData = async () => {
@@ -33,8 +34,7 @@ const CalDialog = () => {
         getAllCalibrationData();
     }, [])
 
-    const calData = useContext(CalDataContent)
-    const { calOpen, setCalOpen, selectedRows, itemMasters, activeEmps } = calData
+    
     const [selectedExtraMaster, setSelectedExtraMaster] = useState([])
     console.log(selectedExtraMaster)
 
@@ -176,6 +176,7 @@ const CalDialog = () => {
 
                 return isAverageInRange ? "accepted" : "rejected";
             });
+            console.log(initialStatuses)
             setCalibrationData((prev) => {
                 const updateAC = [...prev.calcalibrationData]
                 updateAC[index] = {
@@ -190,19 +191,19 @@ const CalDialog = () => {
 
     };
 
-    useEffect(() => {
-        calibrationData.calcalibrationData.forEach((item, index) => {
-            if (item.calAverageOB !== undefined) {
-                const isAverageInRange =
-                    parseFloat(item.calAverageOB) >= parseFloat(item.calMinPS) &&
-                    parseFloat(item.calAverageOB) <= parseFloat(item.calMaxPS);
+    // useEffect(() => {
+    //     calibrationData.calcalibrationData.forEach((item, index) => {
+    //         if (item.calAverageOB !== undefined) {
+    //             const isAverageInRange =
+    //                 parseFloat(item.calAverageOB) >= parseFloat(item.calMinPS) &&
+    //                 parseFloat(item.calAverageOB) <= parseFloat(item.calMaxPS);
     
-                const status = isAverageInRange ? "accepted" : "rejected";
+    //             const status = isAverageInRange ? "accepted" : "rejected";
     
-                changecalDataValue(index, "calStatus", status);
-            }
-        });
-    }, [calibrationData.calcalibrationData]);
+    //             changecalDataValue(index, "calStatus", status);
+    //         }
+    //     });
+    // }, [calibrationData.calcalibrationData]);
 
 
 
@@ -693,7 +694,7 @@ const CalDialog = () => {
 
                                 </tbody>
                             }
-                            {calibrationData.calItemType === "referencestandard" &&
+                            {calibrationData.calItemType === "referenceStandard" &&
                                 <tbody>
                                     <tr>
 
@@ -727,7 +728,7 @@ const CalDialog = () => {
                                             }else if(item.calStatus === "rejected"){
                                                 color="red"
                                             }else if(item.calStatus === "conditionallyAccepted"){
-                                                color="yellow"
+                                                color="orange"
                                             }else{
                                                 color=""
                                             }
@@ -742,7 +743,7 @@ const CalDialog = () => {
 
                                                 {calibrationData.calBeforeData === "yes" && <td><input className='form-control form-control-sm' onChange={(e) => changecalDataValue(index, e.target.name, e.target.value)} name='calBeforeCalibration' /></td>}
                                                 {calibrationData.calOBType === "average" &&
-                                                    <td><input className='form-control form-control-sm' name='calAverageOB' style={{color: color}} onChange={(e) => changecalDataValue(index, e.target.name, e.target.value)} /></td>
+                                                    <td><input className='form-control form-control-sm' name='calAverageOB' style={{color: color, fontWeight: "bold"}} onChange={(e) => changecalDataValue(index, e.target.name, e.target.value)} /></td>
                                                 }
                                                 {calibrationData.calOBType === "minmax" &&
                                                     <React.Fragment>

@@ -12,7 +12,10 @@ import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { Add, Delete } from '@mui/icons-material';
 import CalDialog from './DashboardComponents/CalDialog';
-export const CalDataContent = createContext(null);
+import Dc from './DashboardComponents/Dc';
+import Grn from './DashboardComponents/Grn';
+export const HomeContent = createContext(null);
+
 
 dayjs.extend(isSameOrBefore)
 dayjs.extend(isSameOrAfter)
@@ -693,6 +696,8 @@ const Home = () => {
   };
 
   const [calOpen, setCalOpen] = useState(false);
+  const [dcOpen, setDcOpen] = useState(false);
+  const [grnOpen, setGrnOpen] = useState(false);
 
   console.log(selectedRows)
 
@@ -1001,9 +1006,9 @@ const Home = () => {
               <div className="row">
                 <div className="col-md-9">
                   <Button size='small' className='me-2'>Onsite</Button>
-                  {(selectedRows.length === 1 && selectedRows[0].itemCalibrationSource === "InHouse") && <Button size='small' className='me-2' onClick={() => setCalOpen(true)}>Cal</Button>}
-                  <Button size='small' className='me-2'>Grn</Button>
-                  <Button size='small'>Create DC</Button>
+                  {(selectedRows.length === 1 && selectedRows[0].itemCalibrationSource === "inhouse") && <Button size='small' className='me-2' onClick={() => setCalOpen(true)}>Cal</Button>}
+                  <Button size='small' onClick={() => setGrnOpen(true)} className='me-2'>Grn</Button>
+                  <Button size='small' onClick={() => setDcOpen(true)}>Create DC</Button>
                 </div>
                 <div className="col-md-3">
                   <Button component={Link} to="/itemmaster" size='small' className='me-2'>Item Master</Button>
@@ -1032,11 +1037,22 @@ const Home = () => {
               </table>
             </Paper>
 
-            <CalDataContent.Provider
+            <HomeContent.Provider
               value={{calOpen,setCalOpen, selectedRows, itemMasters, activeEmps}}
             >
               <CalDialog />
-            </CalDataContent.Provider>
+            </HomeContent.Provider>
+
+            <HomeContent.Provider
+              value={{dcOpen,setDcOpen, selectedRows}}
+            >
+              <Dc />
+            </HomeContent.Provider>
+            {/* <HomeContent.Provider
+              value={{grnOpen,setGrnOpen, selectedRows}}
+            >
+              <Grn />
+            </HomeContent.Provider> */}
            
           </div>
         </div>
