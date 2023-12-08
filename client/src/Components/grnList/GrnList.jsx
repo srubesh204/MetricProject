@@ -182,7 +182,7 @@ const GrnList = () => {
 
 
 
-                                    <Box sx={{ height: 260, width: '100%', my: 2 }}>
+                                    <Box sx={{ height: 310, width: '100%', my: 2 }}>
                                         <DataGrid
 
                                             rows={vendorDcList}
@@ -288,7 +288,7 @@ const GrnList = () => {
                             <div className='col'>
                                 <Paper
                                     sx={{
-                                        p: 1,
+                                        p: "35Px",
                                         display: 'flex',
                                         flexDirection: 'column',
                                         mb: 1
