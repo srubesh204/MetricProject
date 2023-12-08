@@ -13,15 +13,40 @@ import { Add, Close, Delete } from '@mui/icons-material';
 
 const Dc = () => {
 
-    const dcData = useContext(HomeContent)
-    const { dcOpen,setDcOpen, selectedRows } = dcData
+    const dcDatas = useContext(HomeContent)
+    const { dcOpen,setDcOpen, selectedRows } = dcDatas
     console.log(selectedRows)
+
+    const initialDcData = {
+        dcNo:"",
+        dcDate:"",
+        dcReason:"",
+        dcCommonRemarks:"",
+        dcPartyName:"",
+        dcPartyCode:"",
+        dcPartyAddress:"",
+    }
+
+    const [dcData, setDcData] = useState({
+        dcNo:"",
+        dcDate:"",
+        dcReason:"",
+        dcCommonRemarks:"",
+        dcPartyName:"",
+        dcPartyCode:"",
+        dcPartyAddress:"",
+
+
+    })
+
+
+
 
 
     const Columns = [
         { field: 'id', headerName: 'Si. No', width: 70, renderCell: (params) => params.api.getAllRowIds().indexOf(params.id) + 1 },
 
-        { field: 'itemIMTENo', headerName: 'itemIMTE No', width: 70 },
+        { field: 'itemIMTENo', headerName: 'ItemIMTE No', width: 100 },
         { field: 'itemAddMasterName', headerName: 'Item Name', width: 150 },
         {
             field: 'Range/Size',
@@ -35,7 +60,7 @@ const Dc = () => {
         { field: 'itemMake', headerName: 'Make', width: 90 },
         { field: 'id', headerName: 'Si. No', width: 70, renderCell: (params) => params.api.getAllRowIds().indexOf(params.id) + 1 },
         { field: 'itemCalFreInMonths', headerName: 'Frequency', type: "number", width: 100 },
-        { field: 'reMarks', headerName: 'Remarks', width: 100 },
+        { field: 'dcCommonRemarks', headerName: 'Remarks', width: 100 },
     ]
 
 
@@ -93,9 +118,9 @@ const Dc = () => {
 
 
     const [partyData, setPartyData] = useState([]);
-const [itemAddData, setItemAddData] = useState({
+{/*const [itemAddData, setItemAddData] = useState({
   // Your initial state for itemAddData
-});
+});*/}
 
 const handlePartyNameClick = async (id) => {
     try {
@@ -107,11 +132,11 @@ const handlePartyNameClick = async (id) => {
       const { fullName, vendorCode, address } = response.data.result;
   
       // Update the state with the party code and party address
-      setItemAddData((prev) => ({
+      setDcData((prev) => ({
         ...prev,
-        partyName: fullName,
-        partyCode: vendorCode,
-        partyAddress: address,
+        dcPartyName: fullName,
+        dcPartyCode: vendorCode,
+        dcPartyAddress: address,
         // Other values you may want to set
         // partyName: response.data.result.aliasName,
         // selectedItemMaster: response.data.result
@@ -293,6 +318,7 @@ const handlePartyNameClick = async (id) => {
                                             id="partyCodeId"
                                             defaultValue=""
                                             select
+                                            onClick={handlePartyNameClick}
                                             // sx={{ width: "100%" }}
                                             size="small"
                                             fullWidth
