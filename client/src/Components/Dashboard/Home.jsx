@@ -1002,7 +1002,7 @@ const Home = () => {
               <div className="row">
                 <div className="col-md-9">
                   <Button size='small' className='me-2'>Onsite</Button>
-                  {(selectedRows.length === 1 && selectedRows[0].itemCalibrationSource === "InHouse") && <Button size='small' className='me-2' onClick={() => setCalOpen(true)}>Cal</Button>}
+                  {(selectedRows.length === 1 && selectedRows[0].itemCalibrationSource === "inhouse") && <Button size='small' className='me-2' onClick={() => setCalOpen(true)}>Cal</Button>}
                   <Button size='small' className='me-2'>Grn</Button>
                   <Button size='small'>Create DC</Button>
                 </div>
