@@ -179,7 +179,7 @@ const CalDialog = () => {
             setCalibrationData((prev) => {
                 const updateAC = [...prev.calcalibrationData]
                 updateAC[index] = {
-                    ...updateAC[index], calStatus: initialStatuses[index] || "conditionallyAccepted",
+                    ...updateAC[index], calStatus: initialStatuses[index],
                 };
                 return {
                     ...prev, calcalibrationData: updateAC,
@@ -189,6 +189,21 @@ const CalDialog = () => {
 
 
     };
+
+    useEffect(() => {
+        calibrationData.calcalibrationData.forEach((item, index) => {
+            if (item.calAverageOB !== undefined) {
+                const isAverageInRange =
+                    parseFloat(item.calAverageOB) >= parseFloat(item.calMinPS) &&
+                    parseFloat(item.calAverageOB) <= parseFloat(item.calMaxPS);
+    
+                const status = isAverageInRange ? "accepted" : "rejected";
+    
+                changecalDataValue(index, "calStatus", status);
+            }
+        });
+    }, [calibrationData.calcalibrationData]);
+
 
 
 
@@ -706,7 +721,16 @@ const CalDialog = () => {
                                     </tr>
                                     {/* {calibrationData.calcalibrationData.map((item)=> ()} */}
                                     {calibrationData.calcalibrationData.map((item, index) => {
-
+                                            let color = "";
+                                            if(item.calStatus === "accepted"){
+                                                color = "#4cbb17"
+                                            }else if(item.calStatus === "rejected"){
+                                                color="red"
+                                            }else if(item.calStatus === "conditionallyAccepted"){
+                                                color="yellow"
+                                            }else{
+                                                color=""
+                                            }
 
                                         return (
                                             <tr key={index}>
@@ -718,7 +742,7 @@ const CalDialog = () => {
 
                                                 {calibrationData.calBeforeData === "yes" && <td><input className='form-control form-control-sm' onChange={(e) => changecalDataValue(index, e.target.name, e.target.value)} name='calBeforeCalibration' /></td>}
                                                 {calibrationData.calOBType === "average" &&
-                                                    <td><input className='form-control form-control-sm' name='calAverageOB' style={{border: "3px solid #4cbb17"}} onChange={(e) => changecalDataValue(index, e.target.name, e.target.value)} /></td>
+                                                    <td><input className='form-control form-control-sm' name='calAverageOB' style={{color: color}} onChange={(e) => changecalDataValue(index, e.target.name, e.target.value)} /></td>
                                                 }
                                                 {calibrationData.calOBType === "minmax" &&
                                                     <React.Fragment>

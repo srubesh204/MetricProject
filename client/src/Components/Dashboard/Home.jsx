@@ -902,7 +902,6 @@ const Home = () => {
                     cx="50%"
                     cy="50%"
                     outerRadius={80}
-
                     isAnimationActive={true}
                     animationBegin={0}
                     animationDuration={1000}
