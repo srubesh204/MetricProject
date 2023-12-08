@@ -902,7 +902,6 @@ const Home = () => {
                     cx="50%"
                     cy="50%"
                     outerRadius={80}
-
                     isAnimationActive={true}
                     animationBegin={0}
                     animationDuration={1000}
@@ -967,7 +966,7 @@ const Home = () => {
             <Paper sx={{ p: 2, }} elevation={12}>
               <Box sx={{ height: 400, mb: 2 }}>
                 <DataGrid
-
+                  density='compact'
                   rows={filteredData}
                   columns={ItemListColumns}
                   getRowId={(row) => row._id}
