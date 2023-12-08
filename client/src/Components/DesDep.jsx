@@ -13,10 +13,14 @@ import DialogTitle from '@mui/material/DialogTitle';
 import { DataGrid, GridToolbar } from '@mui/x-data-grid';
 import { Delete } from '@mui/icons-material';
 import { Check, Clear } from '@mui/icons-material';
+import { useParams } from 'react-router-dom';
 
 
 
 export const Department = () => {
+
+  const { id } = useParams()
+  console.log(id)
 
 
   const [depOpenModal, setDepOpenModal] = useState(false);
@@ -144,7 +148,8 @@ export const Department = () => {
   const updateDepartment = async () => {
     try {
       const response = await axios.put(
-        "http://localhost:3001/department/updateDepartment/" + depStateId, departmentData
+       // "http://localhost:3001/department/updateDepartment/" + depStateId, departmentData
+        `${process.env.REACT_APP_PORT}/department/updateDepartment/${id}`, departmentData
       );
       depFetchData();
       setDepartmentData(emptyDepartmentData);

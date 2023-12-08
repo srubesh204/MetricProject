@@ -1021,37 +1021,26 @@ const ItemAdd = () => {
 
                                 </div>}
 
-                            {itemAddData.itemCalibrationSource === "inhouse" && itemAddData.itemItemMasterIMTENo && Array.isArray(itemAddData.itemItemMasterIMTENo) && (
-                                <table className='table table-sm table-bordered text-center mt-2'>
-                                    <tbody>
+                            {itemAddData.itemCalibrationSource === "inhouse" && <table className='table table-sm table-bordered text-center mt-2'>
+                                <tbody>
+                                    <tr>
+                                        <th style={{ width: "20%" }}>Si No</th>
+                                        <th style={{ width: "50%" }}>Master Name</th>
+                                        <th style={{ width: "30%" }}>Due</th>
+                                    </tr>
+                                    {itemAddData.itemItemMasterIMTENo.map((item, index) => (
                                         <tr>
-                                            <th style={{ width: "20%" }}>Si No</th>
-                                            <th style={{ width: "50%" }}>Master Name</th>
-                                            <th style={{ width: "30%" }}>Due</th>
+                                            <td>{index + 1}</td>
+                                            <td>{item.itemIMTENo}</td>
+                                            <td>{item.itemDueDate}</td>
                                         </tr>
-                                        {itemAddData.itemItemMasterIMTENo.map((item, index) => (
-                                            <tr key={index}>
-                                                <td>{index + 1}</td>
-                                                <td>
-                                                    <select
-                                                        className='form-select'
-                                                        multiple={false} // Allow single selection only
-                                                        value={selectedValues} // Maintain selected values in state
-                                                        onChange={(e) => handleSelectChange(e, index)} // Handle change event
-                                                    >
-                                                        {Array.isArray(item.masterNames) && item.masterNames.map((master, idx) => (
-                                                            <option key={idx} value={master}>
-                                                                {master}
-                                                            </option>
-                                                        ))}
-                                                    </select>
-                                                </td>
-                                                <td>{item.itemDueDate}</td>
-                                            </tr>
-                                        ))}
-                                    </tbody>
-                                </table>
-                            )}
+                                    ))
+
+                                    }
+
+
+                                </tbody>
+                            </table>}
                             {itemAddData.itemCalibrationSource === "outsource" && <table className='table table-sm table-bordered text-center mt-2'>
                                 <tbody>
                                     <tr>
