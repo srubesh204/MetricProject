@@ -29,6 +29,25 @@ const Grn = () => {
     useEffect(() => {
         itemAddFetch();
     }, []);
+    const [grnDataList, setGrnDataList] = useState([])
+
+    const grnFetchData = async () => {
+        try {
+            const response = await axios.get(
+                `${process.env.REACT_APP_PORT}/itemMaster/getAllItemMasters`
+
+            );
+
+            console.log(response.data)
+            setGrnDataList(response.data.result);
+
+        } catch (err) {
+            console.log(err);
+        }
+    };
+    useEffect(() => {
+        grnFetchData();
+    }, []);
 
 
 
@@ -49,7 +68,7 @@ const Grn = () => {
                             <div className='col'>
                                 <Paper
                                     sx={{
-                                        p: 4,
+                                        p: 2,
                                         display: 'flex',
                                         flexDirection: 'column',
                                         mb: 1,
@@ -139,7 +158,7 @@ const Grn = () => {
                                     elevation={12}
                                 >
 
-                                    <div className='col d-flex mb-5'>
+                                    <div className='col d-flex mb-2'>
                                         <div className=" col-6 me-2">
 
                                             <TextField label="GRN NO"
@@ -194,10 +213,11 @@ const Grn = () => {
                             <div className='row g-2 mb-2'>
                                 <div className='col d-flex'>
                                     <div className='col me-2'>
-                                        <TextField size='small' fullWidth variant='outlined' id="itemListId" select label="Item List" name='itemList'>
-                                            <MenuItem value="InHouse">InHouse</MenuItem>
-                                            <MenuItem value="OutSource">OutSource</MenuItem>
-                                            <MenuItem value="OEM">OEM</MenuItem>
+                                        <TextField size='small' fullWidth variant='outlined' defaultValue="all" id="itemListId" select label="Item List" name='itemList'>
+                                        <MenuItem value="all">All</MenuItem>
+                                            {grnDataList.map((item) => (
+                                                <MenuItem value={item._id}>{item.itemDescription}</MenuItem>
+                                            ))}
                                         </TextField>
                                     </div>
                                     <div className='col'>
@@ -226,7 +246,7 @@ const Grn = () => {
 
                             <div className='row g-2 '>
                                 <div className='col d-flex'>
-                                    <div className="me-2">
+                                    <div className="col-2 me-2">
 
                                         <DatePicker
                                             fullWidth
@@ -238,7 +258,7 @@ const Grn = () => {
                                             format="DD-MM-YYYY" />
 
                                     </div>
-                                    <div className="me-2">
+                                    <div className="col-2 me-2">
 
                                         <DatePicker
                                             fullWidth
@@ -336,9 +356,7 @@ const Grn = () => {
                         >
                             <div className='row'>
                                 <div className=' col d-flex '>
-                                    <div className='me-2 '>
-                                        <button type="button" className='btn btn-secondary' >Create New GRN</button>
-                                    </div>
+                                   
                                     <div className='me-2 '>
                                         <button type="button" className='btn btn-secondary' >Print</button>
                                     </div>

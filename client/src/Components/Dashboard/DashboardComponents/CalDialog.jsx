@@ -8,22 +8,14 @@ import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { CalDataContent } from '../Home';
 import { Add, Close, Delete } from '@mui/icons-material';
-import Swal from 'sweetalert2'
+
 dayjs.extend(isSameOrBefore)
 dayjs.extend(isSameOrAfter)
 
 const CalDialog = () => {
-    const Toast = Swal.mixin({
-        toast: true,
-        position: "top-end",
-        showConfirmButton: false,
-        timer: 3000,
-        timerProgressBar: true,
-        didOpen: (toast) => {
-            toast.onmouseenter = Swal.stopTimer;
-            toast.onmouseleave = Swal.resumeTimer;
-        }
-    });
+
+
+
     const [calibrationDatas, setCalibrationDatas] = useState([])
 
     const getAllCalibrationData = async () => {
@@ -175,7 +167,30 @@ const CalDialog = () => {
                 ...prev, calcalibrationData: updateAC,
             };
         })
+
+        if (name === "calAverageOB") {
+            const initialStatuses = calibrationData.calcalibrationData.map(item => {
+                const isAverageInRange =
+                    parseFloat(value) >= parseFloat(item.calMinPS) &&
+                    parseFloat(value) <= parseFloat(item.calMaxPS);
+
+                return isAverageInRange ? "accepted" : "rejected";
+            });
+            setCalibrationData((prev) => {
+                const updateAC = [...prev.calcalibrationData]
+                updateAC[index] = {
+                    ...updateAC[index], calStatus: initialStatuses[index] || "conditionallyAccepted",
+                };
+                return {
+                    ...prev, calcalibrationData: updateAC,
+                };
+            })
+        }
+
+
     };
+
+
 
     useEffect(() => {
         calculateResultDate(calibrationData.calItemCalDate, calibrationData.calItemFreInMonths);
@@ -233,25 +248,56 @@ const CalDialog = () => {
             };
         })
     };
+    const [confirmSubmit, setConfirmSubmit] = useState(false)
 
+    const [snackBarOpen, setSnackBarOpen] = useState(false)
+    const [alertMessage, setAlertMessage] = useState("")
 
     const submitCalForm = async () => {
         try {
             const response = await axios.post(
                 `${process.env.REACT_APP_PORT}/itemCal/createItemCal`, calibrationData
             );
-            console.log(response.data.message)
-            Swal.fire({
-                template: "#my-template"
-            });
+            setAlertMessage(response.data.message)
+            setSnackBarOpen(true)
+            setTimeout(() => setCalOpen(false), 3000)
         } catch (err) {
             console.log(err);
         }
     };
 
-    const [confirmSubmit, setConfirmSubmit] = useState(false)
+    const [obStatus, setObStatus] = useState([]);
 
-    const [snackBarOpen, setSnackBarOpen]= useState(true)
+    // const obStatusChange = (index, name, value) => {
+    //     const initialStatuses = calibrationData.calcalibrationData.map(item => {
+    //         const isAverageInRange =
+    //             parseFloat(item.calAverageOB) >= parseFloat(item.calMinPS) &&
+    //             parseFloat(item.calAverageOB) <= parseFloat(item.calMaxPS);
+
+    //         return isAverageInRange ? "accepted" : "rejected";
+    //     });
+    //     console.log(initialStatuses)
+
+    //     setCalibrationData((prev) => {
+    //         const updateAC = [...prev.calcalibrationData]
+    //         updateAC[index] = {
+    //             ...updateAC[index], [name]: initialStatuses[index],
+    //         };
+    //         return {
+    //             ...prev, calcalibrationData: updateAC,
+    //         };
+    //     })
+    // }
+
+
+
+    useEffect(() => {
+
+
+    }, [calibrationData.calcalibrationData]);
+
+
+
     return (
         <Dialog fullWidth={true} keepMounted maxWidth="xl" open={calOpen} sx={{ color: "#f1f4f4" }}
             onClose={(e, reason) => {
@@ -659,36 +705,40 @@ const CalDialog = () => {
 
                                     </tr>
                                     {/* {calibrationData.calcalibrationData.map((item)=> ()} */}
-                                    {calibrationData.calcalibrationData.map((item, index) => (
-                                        <tr key={index}>
-                                            <td>{item.calParameter}</td>
-                                            <td>{item.calNominalSize}</td>
-                                            <td>{item.calNominalSizeUnit}</td>
-                                            <td>{item.calMinPS}</td>
-                                            <td>{item.calMaxPS}</td>
-
-                                            {calibrationData.calBeforeData === "yes" && <td><input className='form-control form-control-sm' name='calBeforeCalibration' /></td>}
-                                            {calibrationData.calOBType === "average" &&
-                                                <td><input className='form-control form-control-sm' /></td>
-                                            }
-                                            {calibrationData.calOBType === "minmax" &&
-                                                <React.Fragment>
-                                                    <td><input className='form-control form-control-sm' name="calMinOB" />
-                                                    </td> <td><input className='form-control form-control-sm' name="calMaxOB" /></td>
-                                                </React.Fragment>}
+                                    {calibrationData.calcalibrationData.map((item, index) => {
 
 
-                                            <td width="15%">
-                                                <select className='form-select form-select-sm'>
-                                                    <option>Status</option>
-                                                    <option value="accepted" color='success'>Accepted</option>
-                                                    <option value="rejected">Rejected</option>
-                                                    <option value="conditionallyAccepted">Conditionally Accepted</option>
-                                                </select>
-                                            </td>
-                                        </tr>
+                                        return (
+                                            <tr key={index}>
+                                                <td>{item.calParameter}</td>
+                                                <td>{item.calNominalSize}</td>
+                                                <td>{item.calNominalSizeUnit}</td>
+                                                <td>{item.calMinPS}</td>
+                                                <td>{item.calMaxPS}</td>
 
-                                    ))}
+                                                {calibrationData.calBeforeData === "yes" && <td><input className='form-control form-control-sm' onChange={(e) => changecalDataValue(index, e.target.name, e.target.value)} name='calBeforeCalibration' /></td>}
+                                                {calibrationData.calOBType === "average" &&
+                                                    <td><input className='form-control form-control-sm' name='calAverageOB' style={{border: "3px solid #4cbb17"}} onChange={(e) => changecalDataValue(index, e.target.name, e.target.value)} /></td>
+                                                }
+                                                {calibrationData.calOBType === "minmax" &&
+                                                    <React.Fragment>
+                                                        <td><input className='form-control form-control-sm' name="calMinOB"  onChange={(e) => changecalDataValue(index, e.target.name, e.target.value)} />
+                                                        </td> <td><input className='form-control form-control-sm' name="calMaxOB" onChange={(e) => changecalDataValue(index, e.target.name, e.target.value)} /></td>
+                                                    </React.Fragment>}
+
+
+                                                <td width="15%">
+                                                    <select className='form-select form-select-sm' name="calStatus" value={item.calStatus} onChange={(e) => changecalDataValue(index, e.target.name, e.target.value)}>
+                                                        <option value="">Status</option>
+                                                        <option value="accepted">Accepted</option>
+                                                        <option value="rejected">Rejected</option>
+                                                        <option value="conditionallyAccepted">Conditionally Accepted</option>
+                                                    </select>
+                                                </td>
+                                            </tr>
+
+                                        )
+                                    })}
 
                                 </tbody>}
                         </table>
@@ -708,7 +758,7 @@ const CalDialog = () => {
                                         </MenuItem>
                                     ) : (
                                         nonSelectedMaster.map((item, index) => (
-                                            <MenuItem key={index} value={item}>
+                                            <MenuItem sx={{ color: item.itemDueDate < dayjs().format('YYYY-MM-DD') ? "red" : "" }} disabled={item.itemDueDate < dayjs().format('YYYY-MM-DD')} key={index} value={item}>
                                                 {item.itemIMTENo} - {item.itemAddMasterName}
                                             </MenuItem>
                                         ))
@@ -760,27 +810,23 @@ const CalDialog = () => {
                         aria-describedby="alert-dialog-description"
                     >
                         <DialogTitle id="alert-dialog-title">
-                            {"Use Google's location service?"}
+                            Are you sure to submit ?
                         </DialogTitle>
-                        <DialogContent>
-                            <DialogContentText id="alert-dialog-description">
-                                Are you sure to Submit?
-                            </DialogContentText>
-                        </DialogContent>
-                        <DialogActions>
-                            <Button onClick={() => setConfirmSubmit(false)}>Disagree</Button>
+
+                        <DialogActions className='d-flex justify-content-center'>
+                            <Button onClick={() => setConfirmSubmit(false)}>Cancel</Button>
                             <Button onClick={() => { submitCalForm(); setConfirmSubmit(false) }} autoFocus>
-                                Agree
+                                Submit
                             </Button>
                         </DialogActions>
                     </Dialog>
 
-                    <Snackbar open={snackBarOpen} autoHideDuration={3000} 
-                    onClose={()=> setTimeout(() => {
-                        setSnackBarOpen(false)
+                    <Snackbar anchorOrigin={{ vertical: "top", horizontal: "right" }} open={snackBarOpen} autoHideDuration={3000}
+                        onClose={() => setTimeout(() => {
+                            setSnackBarOpen(false)
                         }, 3000)}>
-                        <Alert onClose={()=> setSnackBarOpen(false)} severity="success" sx={{ width: '100%' }}>
-                            This is a success message!
+                        <Alert onClose={() => setSnackBarOpen(false)} variant='filled' severity="success" sx={{ width: '25%' }}>
+                            {alertMessage}
                         </Alert>
                     </Snackbar>
                 </div>
@@ -790,7 +836,7 @@ const CalDialog = () => {
                     <Button variant='contained' color='warning' className='me-3'>Upload Report</Button>
                 </div>
                 <div>
-                    <Button variant='contained' color='error' className='me-3' onClick={() => setConfirmSubmit(false)}>Cancel</Button>
+                    <Button variant='contained' color='error' className='me-3' onClick={() => { setCalOpen(false) }}>Cancel</Button>
                     <Button variant='contained' color='success' onClick={() => { setConfirmSubmit(true) }}>Submit</Button>
                 </div>
             </DialogActions>
