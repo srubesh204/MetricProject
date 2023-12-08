@@ -14,8 +14,8 @@ const itemGRNController = {
       createItemGRN: async (req, res) => {
        
         try {
-          const {partyRefNo, partyRefDate, partyName, partyCode, partyAddress, GRNNo, GRNDate, commonRemarks} = req.body;
-          const itemGRNResult = new itemGRNModel({ partyRefNo, partyRefDate, partyName, partyCode, partyAddress, GRNNo, GRNDate, commonRemarks});
+          const {grnPartyRefNo, grnPartyRefDate, grnPartyName, grnPartyCode, grnPartyAddress, grnNo, grnDate, grnCommonRemarks, grnPartItems} = req.body;
+          const itemGRNResult = new itemGRNModel({ grnPartyRefNo, grnPartyRefDate, grnPartyName, grnPartyCode, grnPartyAddress, grnNo, grnDate, grnCommonRemarks, grnPartyItems});
           const validationError = itemGRNResult.validateSync();
 
           if (validationError) {
@@ -61,7 +61,7 @@ const itemGRNController = {
           // Create an object with the fields you want to update
           const updateItemGRNFields = {
             /* Specify the fields and their updated values here */
-            partyRefNo: req.body.partyRefNo, partyRefDate : req.body.partyRefDate, partyName : req.body.partyName, partyCode : req.body.partyCode, partyAddress : req.body.partyAddress, GRNNo : req.body.GRNNo, GRNDate : req.body.GRNDate, commonRemarks : req.body.commonRemarks // Example: updating the 'name' field
+            grnPartyRefNo: req.body.grnPartyRefNo, grnPartyRefDate : req.body.grnPartyRefDate, grnPartyName : req.body.grnPartyName, grnPartyCode : req.body.grnPartyCode, grnPartyAddress : req.body.grnPartyAddress, grnNo : req.body.grnNo, grnDate : req.body.grnDate, grnCommonRemarks : req.body.grnCommonRemarks,  grnPartyItems: req.body.grnPartItems // Example: updating the 'name' field
             // Add more fields as needed
           };
       

@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 const uniqueValidator = require('mongoose-unique-validator');
-const itemGRNSchema = new mongoose.Schema({
+const onsiteItemGRNSchema = new mongoose.Schema({
   grnPartyRefNo:String,
   grnPartyRefDate:String,
   grnPartyName:String,
@@ -8,8 +8,7 @@ const itemGRNSchema = new mongoose.Schema({
   grnPartyAddress:String,
   grnNo:String,
   grnDate:String,
-  grncCommonRemarks:String,
-  grnPartyItems:[]
+  grncCommonRemarks:String
 });
-itemGRNSchema.plugin(uniqueValidator);
-module.exports = mongoose.model('itemGRN', itemGRNSchema);
+onsiteItemGRNSchema.plugin(uniqueValidator);
+module.exports = mongoose.model('onsiteItemGRN', onsiteItemGRNSchema);
