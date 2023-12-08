@@ -498,9 +498,9 @@ const ItemMaster = () => {
                                     <TextField fullWidth label="Item Type" value={itemMasterData.itemType} onChange={handleItemMasterBaseChange} className="form-select" select size="small" id="itemTypeId" name="itemType" defaultValue="" >
 
                                         <MenuItem value="all">All</MenuItem >
-                                        <MenuItem value="Attribute">Attribute</MenuItem >
-                                        <MenuItem value="Variable">Variable</MenuItem >
-                                        <MenuItem value="Reference Standard">Reference Standard</MenuItem>
+                                        <MenuItem value="attribute">Attribute</MenuItem >
+                                        <MenuItem value="variable">Variable</MenuItem >
+                                        <MenuItem value="referenceStandard">Reference Standard</MenuItem>
 
                                     </TextField>
 

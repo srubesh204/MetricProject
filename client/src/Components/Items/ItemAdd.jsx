@@ -1021,37 +1021,26 @@ const ItemAdd = () => {
 
                                 </div>}
 
-                            {itemAddData.itemCalibrationSource === "inhouse" && itemAddData.itemItemMasterIMTENo && Array.isArray(itemAddData.itemItemMasterIMTENo) && (
-                                <table className='table table-sm table-bordered text-center mt-2'>
-                                    <tbody>
+                            {itemAddData.itemCalibrationSource === "inhouse" && <table className='table table-sm table-bordered text-center mt-2'>
+                                <tbody>
+                                    <tr>
+                                        <th style={{ width: "20%" }}>Si No</th>
+                                        <th style={{ width: "50%" }}>Master Name</th>
+                                        <th style={{ width: "30%" }}>Due</th>
+                                    </tr>
+                                    {itemAddData.itemItemMasterIMTENo.map((item, index) => (
                                         <tr>
-                                            <th style={{ width: "20%" }}>Si No</th>
-                                            <th style={{ width: "50%" }}>Master Name</th>
-                                            <th style={{ width: "30%" }}>Due</th>
+                                            <td>{index + 1}</td>
+                                            <td>{item.itemIMTENo}</td>
+                                            <td>{item.itemDueDate}</td>
                                         </tr>
-                                        {itemAddData.itemItemMasterIMTENo.map((item, index) => (
-                                            <tr key={index}>
-                                                <td>{index + 1}</td>
-                                                <td>
-                                                    <select
-                                                        className='form-select'
-                                                        multiple={false} // Allow single selection only
-                                                        value={selectedValues} // Maintain selected values in state
-                                                        onChange={(e) => handleSelectChange(e, index)} // Handle change event
-                                                    >
-                                                        {Array.isArray(item.masterNames) && item.masterNames.map((master, idx) => (
-                                                            <option key={idx} value={master}>
-                                                                {master}
-                                                            </option>
-                                                        ))}
-                                                    </select>
-                                                </td>
-                                                <td>{item.itemDueDate}</td>
-                                            </tr>
-                                        ))}
-                                    </tbody>
-                                </table>
-                            )}
+                                    ))
+
+                                    }
+
+
+                                </tbody>
+                            </table>}
                             {itemAddData.itemCalibrationSource === "outsource" && <table className='table table-sm table-bordered text-center mt-2'>
                                 <tbody>
                                     <tr>
@@ -1093,7 +1082,7 @@ const ItemAdd = () => {
                             <Paper className='row-md-6' elevation={12} sx={{ p: 2, }}>
                                 <Typography variant='h6' className='text-center'>Enter Previous Calibration Data</Typography>
                                 <div className="row g-2">
-                                    <div className="col-lg-6">
+                                    <div className="col-md-6">
                                         <DatePicker
 
                                             fullWidth
@@ -1124,7 +1113,7 @@ const ItemAdd = () => {
                                             slotProps={{ textField: { size: 'small' } }}
                                             format="DD-MM-YYYY" />
                                     </div>
-                                    <div className="col-lg-12">
+                                    <div className="col-lg-12 d-flex justify-content-between">
                                         <TextField size='small' fullWidth variant='outlined' onChange={handleItemAddChange} label="Calibrated at" select name='itemCalibratedAt'>
                                             <MenuItem value="inhouse">InHouse</MenuItem>
                                             {suppOEM.map((item, index) => (
@@ -1132,15 +1121,15 @@ const ItemAdd = () => {
                                             ))}
 
                                         </TextField>
-                                        {itemAddData.isItemMaster === "1" && <TextField fullWidth label="Uncertainity" variant='outlined' size='small' onChange={handleItemAddChange} name='itemUncertainity' value={itemAddData.itemUncertainity} />}
+                                        {itemAddData.isItemMaster === "1" && <TextField className='ms-2' fullWidth label="Uncertainity" variant='outlined' size='small' onChange={handleItemAddChange} name='itemUncertainity' value={itemAddData.itemUncertainity} />}
 
                                     </div>
 
 
                                     <div className="col-md-12 d-flex justify-content-between">
-                                        <TextField size='small' className='me-2' fullWidth variant='outlined' onChange={handleItemAddChange} label="Certificate No" name='itemCertificateNo'></TextField>
+                                        <TextField size='small'  fullWidth variant='outlined' onChange={handleItemAddChange} label="Certificate No" name='itemCertificateNo'></TextField>
 
-                                        <Button startIcon={<UploadFile />} size="small" fullWidth component="label" value={itemAddData.itemCertificateName} variant="contained" >
+                                        <Button className='ms-2' startIcon={<UploadFile />} size="small" fullWidth component="label" value={itemAddData.itemCertificateName} variant="contained" >
 
                                             Certificate Upload
                                             <VisuallyHiddenInput type="file" onChange={handleCertificateUpload} />

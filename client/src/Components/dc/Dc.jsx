@@ -83,6 +83,82 @@ const Dc = () => {
     useEffect(() => {
         FetchData();
     }, []);
+
+
+
+    const [partyData, setPartyData] = useState([]);
+const [itemAddData, setItemAddData] = useState({
+  // Your initial state for itemAddData
+});
+
+const handlePartyNameClick = async (id) => {
+    try {
+      const response = await axios.get(
+        `${process.env.REACT_APP_PORT}/vendor/getAllVendors/${id}`
+      );
+      
+      // Destructure the necessary values from the response
+      const { fullName, vendorCode, address } = response.data.result;
+  
+      // Update the state with the party code and party address
+      setItemAddData((prev) => ({
+        ...prev,
+        partyName: fullName,
+        partyCode: vendorCode,
+        partyAddress: address,
+        // Other values you may want to set
+        // partyName: response.data.result.aliasName,
+        // selectedItemMaster: response.data.result
+      }));
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+
+   {/*} const [partyData, setPartyData] = useState([])
+    const partyNameId = async () => {
+        try {
+            const response = await axios.get(
+                `${process.env.REACT_APP_PORT}/vendor/getAllVendors/${id}`
+            );
+            console.log(response.data)
+            const { _id,  vendorCode,
+            aliasName,
+            fullName,
+            dor,
+            address,
+            state,
+            city,
+            oem,
+            customer,
+            supplier,
+            subContractor} = response.data.result
+            setItemAddData((prev) => ({
+                ...prev,
+                itemType: aliasName,
+                itemImage: vendorCode,
+                
+               
+                selectedItemMaster: response.data.result
+            }))
+            setPartyData()
+
+
+        } catch (err) {
+            console.log(err);
+        }
+    };
+    useEffect(() => {
+        partyNameId();
+    }, [itemAddData.itemMasterRef]);*/}
+
+
+
+
+
+
+
     const [vendorDcDataList, setVendorDcDataList] = useState([])
     const dcDataFetchData = async () => {
         try {
@@ -98,6 +174,9 @@ const Dc = () => {
     useEffect(() => {
         dcDataFetchData();
     }, []);
+
+
+
 
     const [itemMasterDataList, setItemMasterDataList] = useState([])
 
@@ -172,6 +251,7 @@ const Dc = () => {
                                             //  sx={{ width: "100%" }}
                                             size="small"
                                             fullWidth
+                                            onClick={() => handlePartyNameClick(id)}
                                             name="partyName" >
                                             {vendorDataList.map((item) => (
                                                 <MenuItem value={item._id}>{item.fullName}</MenuItem>
@@ -249,9 +329,16 @@ const Dc = () => {
                                     <TextField label="Reason"
                                         id="reasonId"
                                         defaultValue=""
+                                        select 
                                         size="small"
                                         sx={{ width: "101%" }}
-                                        name="reason" />
+                                        name="reason" >
+                                            <MenuItem value="all">All</MenuItem>
+                                            <MenuItem value="service">Service</MenuItem>
+                                            <MenuItem value="servicecalibration">Service&Calibration</MenuItem>
+                                            <MenuItem value="calibration">Calibration</MenuItem>
+                                           
+                                        </TextField>
 
                                 </div>
                                 <div className='col me-2'>
