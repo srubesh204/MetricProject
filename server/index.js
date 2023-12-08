@@ -16,6 +16,7 @@ const itemAddRoute = require('./routes/itemAddRoute')
 const areaRoute = require('./routes/areaRoute')
 const placeOfUsageRoute = require('./routes/placeOfUsageRoute');
 const itemCalRoute = require("./routes/itemCalRoute");
+const itemGRNRoute = require("./routes/itemGRNRoute");
 //
 mongoose.connect('mongodb://localhost/metric', {
   useNewUrlParser: true,
@@ -64,6 +65,7 @@ app.use('/workInstructions', express.static('storage/workInstructions'));
 app.use('/itemCertificates', express.static('storage/itemCertificates'));
 app.use('/itemAdd', itemAddRoute);
 app.use('/itemCal', itemCalRoute);
+app.use('/itemGRN', itemGRNRoute);
 app.use('/area', areaRoute);
 app.use('/placeOfUsage', placeOfUsageRoute);
 const port = 3001;
