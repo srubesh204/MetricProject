@@ -34,7 +34,7 @@ const CalDialog = () => {
         getAllCalibrationData();
     }, [])
 
-    
+
     const [selectedExtraMaster, setSelectedExtraMaster] = useState([])
     console.log(selectedExtraMaster)
 
@@ -60,6 +60,7 @@ const CalDialog = () => {
         calCalibratedBy: "",
         calApprovedBy: "",
         calBeforeData: "no",
+        calAcceptanceStatus: "",
         calcalibrationData: [{
             calParameter: "",
             calNominalSize: "",
@@ -121,6 +122,7 @@ const CalDialog = () => {
                                 calMinPSError: item.acMinPSError,
                                 calMaxPSError: item.acMaxPSError,
                                 calStatus: ""
+
                             }
                         )),
 
@@ -155,7 +157,13 @@ const CalDialog = () => {
 
     console.log(calibrationData)
 
+    // const [minColor, setMinColor] = useState("")
+    // const [maxColor, setMaxColor] = useState("")
+
+    const [modifiedFields, setModifiedFields] = useState({ minModified: false, maxModified: false });
+
     const changecalDataValue = (index, name, value) => {
+
 
 
         setCalibrationData((prev) => {
@@ -168,41 +176,143 @@ const CalDialog = () => {
             };
         })
 
-        if (name === "calAverageOB") {
-            const initialStatuses = calibrationData.calcalibrationData.map(item => {
-                const isAverageInRange =
-                    parseFloat(value) >= parseFloat(item.calMinPS) &&
-                    parseFloat(value) <= parseFloat(item.calMaxPS);
+        if (calibrationData.calItemType === "referenceStandard") {
+            if (name === "calAverageOB") {
+                const initialStatuses = calibrationData.calcalibrationData.map(item => {
+                    const isAverageInRange =
+                        parseFloat(value) >= parseFloat(item.calMinPS) &&
+                        parseFloat(value) <= parseFloat(item.calMaxPS);
 
-                return isAverageInRange ? "accepted" : "rejected";
-            });
-            console.log(initialStatuses)
-            setCalibrationData((prev) => {
-                const updateAC = [...prev.calcalibrationData]
-                updateAC[index] = {
-                    ...updateAC[index], calStatus: initialStatuses[index],
-                };
-                return {
-                    ...prev, calcalibrationData: updateAC,
-                };
-            })
+                    return isAverageInRange ? "accepted" : "rejected";
+                });
+                console.log(initialStatuses)
+                setCalibrationData((prev) => {
+                    const updateAC = [...prev.calcalibrationData]
+                    updateAC[index] = {
+                        ...updateAC[index], calStatus: initialStatuses[index],
+                    };
+                    return {
+                        ...prev, calcalibrationData: updateAC,
+                    };
+                })
+            }
+
+            if (name === "calMinOB" || name === "calMaxOB") {
+                setCalibrationData(prev => {
+                    const updatedData = prev.calcalibrationData.map((item, idx) => {
+                        if (idx === index) {
+
+                            const isMinInRange = parseFloat(item.calMinOB) >= parseFloat(item.calMinPS) &&
+                                parseFloat(item.calMinOB) <= parseFloat(item.calMaxPS);
+                            const isMaxInRange = parseFloat(item.calMaxOB) >= parseFloat(item.calMinPS) &&
+                                parseFloat(item.calMaxOB) <= parseFloat(item.calMaxPS);
+
+
+                            let status = ""
+                            
+                            if(item.calMaxOB === "" && item.calMinOB === ""){
+                                status = "";
+                            }else if(item.calMaxOB === ""){
+                                status = (isMinInRange) ? "accepted" : "rejected";
+                            }else{
+                                status = (isMinInRange && isMaxInRange) ? "accepted" : "rejected";
+                            }
+            
+                            return {
+                                ...item,
+                                calStatus: status,
+                            };
+                        }
+                        return item;
+                    });
+                    return {
+                        ...prev,
+                        calcalibrationData: updatedData,
+                    };
+                });
+            }
+
         }
+
+        if (calibrationData.calItemType === "variable") {
+            if (name === "calAverageOB") {
+                const initialStatuses = calibrationData.calcalibrationData.map(item => {
+                    const isAverageInRange =
+                        parseFloat(value) >= parseFloat(item.calMinPS) &&
+                        parseFloat(value) <= parseFloat(item.calMaxPS);
+
+                    return isAverageInRange ? "accepted" : "rejected";
+                });
+                console.log(initialStatuses)
+                setCalibrationData((prev) => {
+                    const updateAC = [...prev.calcalibrationData]
+                    updateAC[index] = {
+                        ...updateAC[index], calStatus: initialStatuses[index],
+                    };
+                    return {
+                        ...prev, calcalibrationData: updateAC,
+                    };
+                })
+            }
+
+            if (name === "calMinOB" || name === "calMaxOB") {
+
+
+                setCalibrationData(prev => {
+                    const updatedData = prev.calcalibrationData.map((item, idx) => {
+                        if (idx === index) {
+                            const isMinInRange = parseFloat(item.calMinOB) >= parseFloat(item.calMinPS) &&
+                                parseFloat(item.calMinOB) <= parseFloat(item.calMaxPS);
+
+                            const isMaxInRange = parseFloat(item.calMaxOB) >= parseFloat(item.calMinPS) &&
+                                parseFloat(item.calMaxOB) <= parseFloat(item.calMaxPS);
+
+
+                            const status = (isMinInRange && isMaxInRange) ? "accepted" : "rejected";
+
+                            return {
+                                ...item,
+                                calStatus: status,
+                            };
+                        }
+                        return item;
+                    });
+                    return {
+                        ...prev,
+                        calcalibrationData: updatedData,
+                    };
+                });
+            }
+
+
+        }
+
+        if (calibrationData.calItemType === "attribute") {
+
+        }
+
+
 
 
     };
 
     // useEffect(() => {
-    //     calibrationData.calcalibrationData.forEach((item, index) => {
-    //         if (item.calAverageOB !== undefined) {
-    //             const isAverageInRange =
-    //                 parseFloat(item.calAverageOB) >= parseFloat(item.calMinPS) &&
-    //                 parseFloat(item.calAverageOB) <= parseFloat(item.calMaxPS);
-    
-    //             const status = isAverageInRange ? "accepted" : "rejected";
-    
-    //             changecalDataValue(index, "calStatus", status);
-    //         }
+    //     const initialStatuses = calibrationData.calcalibrationData.map(item => {
+    //         const isAverageInRange =
+    //            ( parseFloat(calMinOB) >= parseFloat(item.calMinPS) && parseFloat(value) <= parseFloat(item.calMaxPS)) && (parseFloat(calMinOB) >= parseFloat(item.calMinPS) && parseFloat(value) <= parseFloat(item.calMaxPS))
+
+    //         return isAverageInRange ? "accepted" : "rejected";
     //     });
+    //     console.log(initialStatuses)
+    //     setCalibrationData((prev) => {
+    //         const updateAC = [...prev.calcalibrationData]
+    //         updateAC[index] = {
+    //             ...updateAC[index], calStatus: initialStatuses[index],
+    //         };
+    //         return {
+    //             ...prev, calcalibrationData: updateAC,
+    //         };
+    //     })
     // }, [calibrationData.calcalibrationData]);
 
 
@@ -284,33 +394,10 @@ const CalDialog = () => {
 
     const [obStatus, setObStatus] = useState([]);
 
-    // const obStatusChange = (index, name, value) => {
-    //     const initialStatuses = calibrationData.calcalibrationData.map(item => {
-    //         const isAverageInRange =
-    //             parseFloat(item.calAverageOB) >= parseFloat(item.calMinPS) &&
-    //             parseFloat(item.calAverageOB) <= parseFloat(item.calMaxPS);
-
-    //         return isAverageInRange ? "accepted" : "rejected";
-    //     });
-    //     console.log(initialStatuses)
-
-    //     setCalibrationData((prev) => {
-    //         const updateAC = [...prev.calcalibrationData]
-    //         updateAC[index] = {
-    //             ...updateAC[index], [name]: initialStatuses[index],
-    //         };
-    //         return {
-    //             ...prev, calcalibrationData: updateAC,
-    //         };
-    //     })
-    // }
 
 
 
-    useEffect(() => {
 
-
-    }, [calibrationData.calcalibrationData]);
 
 
 
@@ -658,12 +745,12 @@ const CalDialog = () => {
                                 <tbody>
                                     <tr>
                                         <th>Parameter</th>
-                                        <th>Range/Size</th>
+                                        <th>Nominal Size</th>
                                         <th>Unit</th>
                                         <th>Permissible Error</th>
 
-                                        <th>Observed Size/ Observer Error</th>
-                                        <th>Unit</th>
+                                        <th>Observer Error</th>
+                                        
                                         <th>Status</th>
                                     </tr>
                                     {calibrationData.calcalibrationData.map((item, index) => (
@@ -722,16 +809,36 @@ const CalDialog = () => {
                                     </tr>
                                     {/* {calibrationData.calcalibrationData.map((item)=> ()} */}
                                     {calibrationData.calcalibrationData.map((item, index) => {
-                                            let color = "";
-                                            if(item.calStatus === "accepted"){
-                                                color = "#4cbb17"
-                                            }else if(item.calStatus === "rejected"){
-                                                color="red"
-                                            }else if(item.calStatus === "conditionallyAccepted"){
-                                                color="orange"
-                                            }else{
-                                                color=""
-                                            }
+                                        let color = "";
+                                        if (item.calStatus === "accepted") {
+                                            color = "#4cbb17"
+                                        } else if (item.calStatus === "rejected") {
+                                            color = "red"
+                                        } else if (item.calStatus === "conditionallyAccepted") {
+                                            color = "orange"
+                                        } else {
+                                            color = ""
+                                        }
+                                        let minColor = "";
+                                        let minStatus = false;
+                                        let maxStatus = false;
+                                        if (parseFloat(item.calMinOB) >= parseFloat(item.calMinPS) && parseFloat(item.calMinOB) <= parseFloat(item.calMaxPS)) {
+                                            minColor = "#4cbb17";
+                                            let minStatus = true;
+                                        } else {
+                                            minColor = "red"
+                                            let minStatus = false;
+                                        }
+
+                                        let maxColor = "";
+                                        if (parseFloat(item.calMaxOB) >= parseFloat(item.calMinPS) && parseFloat(item.calMaxOB) <= parseFloat(item.calMaxPS)) {
+                                            maxColor = "#4cbb17"
+                                            maxStatus = true;
+                                        } else {
+                                            maxColor = "red"
+                                            maxStatus = false;
+                                        }
+
 
                                         return (
                                             <tr key={index}>
@@ -743,12 +850,12 @@ const CalDialog = () => {
 
                                                 {calibrationData.calBeforeData === "yes" && <td><input className='form-control form-control-sm' onChange={(e) => changecalDataValue(index, e.target.name, e.target.value)} name='calBeforeCalibration' /></td>}
                                                 {calibrationData.calOBType === "average" &&
-                                                    <td><input className='form-control form-control-sm' name='calAverageOB' style={{color: color, fontWeight: "bold"}} onChange={(e) => changecalDataValue(index, e.target.name, e.target.value)} /></td>
+                                                    <td><input className='form-control form-control-sm' name='calAverageOB' style={{ color: color, fontWeight: "bold" }} onChange={(e) => changecalDataValue(index, e.target.name, e.target.value)} /></td>
                                                 }
                                                 {calibrationData.calOBType === "minmax" &&
                                                     <React.Fragment>
-                                                        <td><input className='form-control form-control-sm' name="calMinOB"  onChange={(e) => changecalDataValue(index, e.target.name, e.target.value)} />
-                                                        </td> <td><input className='form-control form-control-sm' name="calMaxOB" onChange={(e) => changecalDataValue(index, e.target.name, e.target.value)} /></td>
+                                                        <td><input className='form-control form-control-sm' style={{ color: minColor, fontWeight: "bold" }} name="calMinOB" onChange={(e) => changecalDataValue(index, e.target.name, e.target.value)} />
+                                                        </td> <td><input className='form-control form-control-sm' style={{ color: maxColor, fontWeight: "bold" }} name="calMaxOB" onChange={(e) => changecalDataValue(index, e.target.name, e.target.value)} /></td>
                                                     </React.Fragment>}
 
 
