@@ -1048,11 +1048,11 @@ const Home = () => {
             >
               <Dc />
             </HomeContent.Provider>
-            {/* <HomeContent.Provider
+             <HomeContent.Provider
               value={{grnOpen,setGrnOpen, selectedRows}}
             >
               <Grn />
-            </HomeContent.Provider> */}
+            </HomeContent.Provider> 
            
           </div>
         </div>

@@ -18,7 +18,7 @@ const Dc = () => {
 
 
     console.log(selectedRows)
-
+    const [selectedExtraMaster, setSelectedExtraMaster] = useState([])
     const initialDcData = {
         dcPartyId: "",
         dcPartyName: "",
@@ -58,6 +58,19 @@ const Dc = () => {
         settingDcData()
     }, [selectedRows])
 
+
+
+
+     const addDcValue = () => {
+        if (selectedExtraMaster.length !== 0) {
+            setDcData((prev) => ({
+                ...prev,
+                dcPartyItems: [...prev. dcPartyItems, selectedExtraMaster]
+            }))
+            setSelectedExtraMaster([])
+        }
+    }
+
     const ITEM_HEIGHT = 48;
     const ITEM_PADDING_TOP = 8;
     const MenuProps = {
@@ -70,12 +83,7 @@ const Dc = () => {
     }
 
 
-    const addDcDataRow = () => {
-        setDcData((prevDcData) => ({
-            ...prevDcData,
-            dcPartyItems: []
-        }))
-    }
+   
 
 
 
@@ -192,6 +200,23 @@ const Dc = () => {
     useEffect(() => {
         getImteList();
     }, []);
+
+
+    const [confirmSubmit, setConfirmSubmit] = useState(false)
+    const [snackBarOpen, setSnackBarOpen] = useState(false)
+    const [alertMessage, setAlertMessage] = useState("")
+    const submitCalForm = async () => {
+        try {
+            const response = await axios.post(
+                `${process.env.REACT_APP_PORT}/itemDc/createItemDc`, dcData
+            );
+            setAlertMessage(response.data.message)
+            setSnackBarOpen(true)
+            setTimeout(() => setDcOpen(false), 3000)
+        } catch (err) {
+            console.log(err);
+        }
+    };
 
 
 
@@ -392,20 +417,19 @@ const Dc = () => {
 
                                         </div>
                                         <div className="col me-2">
-
-                                            <TextField label="Reason"
+                                        <TextField label="Reason"
                                                 id="reasonId"
-                                                defaultValue=""
                                                 select
-                                                value={dcData.dcReason}
+                                                defaultValue=""
+                                                //value={dcData.dcReason}
                                                 onChange={handleDcChange}
                                                 size="small"
                                                 sx={{ width: "101%" }}
                                                 name="reason" >
-                                                <MenuItem value="all">All</MenuItem>
-                                                <MenuItem value="service">Service</MenuItem>
-                                                <MenuItem value="servicecalibration">Service&Calibration</MenuItem>
-                                                <MenuItem value="calibration">Calibration</MenuItem>
+                                                <MenuItem value="All">All</MenuItem>
+                                                <MenuItem value="Service">Service</MenuItem>
+                                                <MenuItem value="Service Calibration">Service&Calibration</MenuItem>
+                                                <MenuItem value="Calibration">Calibration</MenuItem>
 
                                             </TextField>
 
@@ -413,7 +437,7 @@ const Dc = () => {
                                         <div className='col me-2'>
                                             <TextField label="Common Remarks"
                                                 id="commonRemarksId"
-                                                value={dcData.dcCommonRemarks}
+                                              //  value={dcData.dcCommonRemarks}
                                                 defaultValue=""
                                                 onChange={handleDcChange}
                                                 size="small"
@@ -451,7 +475,7 @@ const Dc = () => {
                                             </TextField>
                                         </div>
                                         <div className='col'>
-                                        <TextField size='small' select fullWidth variant='outlined' onChange={handleDcChange} label="Select Master" name='itemItemMasterName' >
+                                        <TextField size='small' select fullWidth variant='outlined' onChange={handleDcChange} label="Item IMTENo" name='itemIMTENo' >
                                                 <MenuItem value=""><em>--Select--</em></MenuItem>
                                                 {imteList.map((item, index) => (
                                                    <MenuItem key={index} value={item.itemIMTENo}>{item.itemIMTENo}</MenuItem>
@@ -463,7 +487,8 @@ const Dc = () => {
                                     </div>
                                     <div className=' col d-flex justify-content-end'>
                                         <div className='me-2 '>
-                                            <button type="button" className='btn btn-secondary' onClick={() => addDcDataRow()} >Add Item</button>
+                                            {/*<button type="button" className='btn btn-secondary' onClick={addDcValue} >Add Item</button>*/}
+                                            <Button startIcon={<Add />} onClick={addDcValue} size='small' sx={{ minWidth: "130px" }} variant='contained'>Add Item</Button>
                                         </div>
 
                                     </div>
@@ -524,6 +549,38 @@ const Dc = () => {
                                 </div>
                             </Paper>
 
+                            <Dialog
+                        open={confirmSubmit}
+                        onClose={(e, reason) => {
+                            console.log(reason)
+                            if (reason !== 'backdropClick' && reason !== 'escapeKeyDown') {
+                                setConfirmSubmit(false)
+                            }
+                        }}
+                        aria-labelledby="alert-dialog-title"
+                        aria-describedby="alert-dialog-description"
+                    >
+                        <DialogTitle id="alert-dialog-title">
+                            Are you sure to submit ?
+                        </DialogTitle>
+
+                        <DialogActions className='d-flex justify-content-center'>
+                            <Button onClick={() => setConfirmSubmit(false)}>Cancel</Button>
+                            <Button onClick={() => { submitCalForm(); setConfirmSubmit(false) }} autoFocus>
+                                Submit
+                            </Button>
+                        </DialogActions>
+                    </Dialog>
+                    <Snackbar anchorOrigin={{ vertical: "top", horizontal: "right" }} open={snackBarOpen} autoHideDuration={3000}
+                        onClose={() => setTimeout(() => {
+                            setSnackBarOpen(false)
+                        }, 3000)}>
+                        <Alert onClose={() => setSnackBarOpen(false)} variant='filled' severity="success" sx={{ width: '100%' }}>
+                            {alertMessage}
+                        </Alert>
+                    </Snackbar>
+
+
                         </form>
                     </LocalizationProvider>
                 </div >
@@ -534,7 +591,7 @@ const Dc = () => {
                 </div>
                 <div>
                     <Button variant='contained' color='error' className='me-3' onClick={() => { setDcOpen(false) }}>Cancel</Button>
-                    <Button variant='contained' color='success'>Submit</Button>
+                    <Button variant='contained' color='success'  onClick={() => { setConfirmSubmit(true) }}>Submit</Button>
                 </div>
             </DialogActions>
 
