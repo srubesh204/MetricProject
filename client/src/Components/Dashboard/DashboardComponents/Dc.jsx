@@ -1,5 +1,5 @@
 import React, { createContext, useEffect, useState, useContext } from 'react'
-import { Container, Box,  Alert, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, FormControlLabel, IconButton, MenuItem, Paper, Snackbar, Switch, TextField } from '@mui/material';
+import { Container, Box, Alert, Button, Dialog, DialogActions, DialogContent, InputLabel, DialogContentText, FormControl, Select, DialogTitle, OutlinedInput, FormControlLabel, IconButton, MenuItem, Paper, Checkbox, ListItemText, Snackbar, Switch, TextField } from '@mui/material';
 import axios from 'axios';
 import { DataGrid, GridToolbar } from '@mui/x-data-grid';
 import dayjs from 'dayjs';
@@ -14,32 +14,76 @@ import { Add, Close, Delete } from '@mui/icons-material';
 const Dc = () => {
 
     const dcDatas = useContext(HomeContent)
-    const { dcOpen,setDcOpen, selectedRows } = dcDatas
-    console.log(selectedRows)
+    const { dcOpen, setDcOpen, selectedRows } = dcDatas
 
+
+    console.log(selectedRows)
+    const [selectedExtraMaster, setSelectedExtraMaster] = useState([])
     const initialDcData = {
-        dcNo:"",
-        dcDate:"",
-        dcReason:"",
-        dcCommonRemarks:"",
-        dcPartyName:"",
-        dcPartyCode:"",
-        dcPartyAddress:"",
+        dcPartyId: "",
+        dcPartyName: "",
+        dcPartyCode: "",
+        dcPartyAddress: "",
+        dcNo: "",
+        dcDate: "",
+        dcReason: "",
+        dcCommonRemarks: "",
+        dcPartyItems: []
+
     }
 
     const [dcData, setDcData] = useState({
-        dcNo:"",
-        dcDate:"",
-        dcReason:"",
-        dcCommonRemarks:"",
-        dcPartyName:"",
-        dcPartyCode:"",
-        dcPartyAddress:"",
-
+        dcPartyId: "",
+        dcPartyName: "",
+        dcPartyCode: "",
+        dcPartyAddress: "",
+        dcNo: "",
+        dcDate: "",
+        dcReason: "",
+        dcCommonRemarks: "",
+        dcPartyItems: []
 
     })
 
+    const settingDcData = () => {
+        setDcData((prev) => (
+            {
+                ...prev,
+                dcPartyItems: selectedRows
+            }
 
+        ))
+    };
+    useEffect(() => {
+        settingDcData()
+    }, [selectedRows])
+
+
+
+
+     const addDcValue = () => {
+        if (selectedExtraMaster.length !== 0) {
+            setDcData((prev) => ({
+                ...prev,
+                dcPartyItems: [...prev. dcPartyItems, selectedExtraMaster]
+            }))
+            setSelectedExtraMaster([])
+        }
+    }
+
+    const ITEM_HEIGHT = 48;
+    const ITEM_PADDING_TOP = 8;
+    const MenuProps = {
+        PaperProps: {
+            style: {
+                maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
+                width: 250,
+            },
+        },
+    }
+
+
+   
 
 
 
@@ -65,21 +109,7 @@ const Dc = () => {
 
 
     const [itemListSelectedRowIds, setItemListSelectedRowIds] = useState([])
-    const [dcDataList, setDcDataList] = useState([])
-    const dcFetchData = async () => {
-        try {
-            const response = await axios.get(
-                `${process.env.REACT_APP_PORT}/itemAdd/getAllItemAdds`
-            );
 
-            setDcDataList(response.data.result);
-        } catch (err) {
-            console.log(err);
-        }
-    };
-    useEffect(() => {
-        dcFetchData();
-    }, []);
 
 
     const [vendorDataList, setVendorDataList] = useState([])
@@ -99,112 +129,111 @@ const Dc = () => {
         vendorFetchData();
     }, []);
 
-    const [vendorDcList, setVendorDcList] = useState([])
-    const FetchData = async () => {
+
+
+
+
+
+
+
+
+
+    const handleDcChange = (e) => {
+        const { name, value, checked } = e.target;
+        setDcData((prev) => ({ ...prev, [name]: value }));
+    }
+
+    const setPartyData = async (id) => {
         try {
             const response = await axios.get(
-                `${process.env.REACT_APP_PORT}/vendor/getAllVendors`
+                `${process.env.REACT_APP_PORT}/vendor/getVendorById/${id}`
             );
-            setVendorDcList(response.data.result);
-            //setFilteredData(response.data.result);
+            console.log(response)
+            setDcData((prev) => ({
+                ...prev,
+                dcPartyName: response.data.result.fullName,
+                dcPartyAddress: response.data.result.address,
+                dcPartyCode: response.data.result.vendorCode
+
+            }))
+
         } catch (err) {
             console.log(err);
         }
     };
-    useEffect(() => {
-        FetchData();
-    }, []);
 
+    //
 
-
-    const [partyData, setPartyData] = useState([]);
-{/*const [itemAddData, setItemAddData] = useState({
-  // Your initial state for itemAddData
-});*/}
-
-const handlePartyNameClick = async (id) => {
-    try {
-      const response = await axios.get(
-        `${process.env.REACT_APP_PORT}/vendor/getAllVendors/${id}`
-      );
-      
-      // Destructure the necessary values from the response
-      const { fullName, vendorCode, address } = response.data.result;
-  
-      // Update the state with the party code and party address
-      setDcData((prev) => ({
-        ...prev,
-        dcPartyName: fullName,
-        dcPartyCode: vendorCode,
-        dcPartyAddress: address,
-        // Other values you may want to set
-        // partyName: response.data.result.aliasName,
-        // selectedItemMaster: response.data.result
-      }));
-    } catch (err) {
-      console.log(err);
-    }
-  };
-
-
-   {/*} const [partyData, setPartyData] = useState([])
-    const partyNameId = async () => {
+    const [itemMasterDistNames, setItemMasterDistNames] = useState([])
+    const getDistinctItemName = async () => {
         try {
             const response = await axios.get(
-                `${process.env.REACT_APP_PORT}/vendor/getAllVendors/${id}`
+                `${process.env.REACT_APP_PORT}/itemAdd/getDistinctItemName`
             );
             console.log(response.data)
-            const { _id,  vendorCode,
-            aliasName,
-            fullName,
-            dor,
-            address,
-            state,
-            city,
-            oem,
-            customer,
-            supplier,
-            subContractor} = response.data.result
-            setItemAddData((prev) => ({
-                ...prev,
-                itemType: aliasName,
-                itemImage: vendorCode,
-                
-               
-                selectedItemMaster: response.data.result
-            }))
-            setPartyData()
-
+            setItemMasterDistNames(response.data.result);
 
         } catch (err) {
             console.log(err);
         }
     };
     useEffect(() => {
-        partyNameId();
-    }, [itemAddData.itemMasterRef]);*/}
+        getDistinctItemName();
+    }, []);
 
-
-
-
-
-
-
-    const [vendorDcDataList, setVendorDcDataList] = useState([])
-    const dcDataFetchData = async () => {
+    //
+    const [imteList, setImteList] = useState([])
+    const getImteList = async () => {
         try {
             const response = await axios.get(
-                `${process.env.REACT_APP_PORT}/vendor/getAllVendors`
+                `${process.env.REACT_APP_PORT}/itemAdd/getItemAddByIMTESort`
             );
-            setVendorDcDataList(response.data.result);
-            //setFilteredData(response.data.result);
+            console.log(response.data)
+            setImteList(response.data.result)
+
+
         } catch (err) {
             console.log(err);
         }
     };
+
     useEffect(() => {
-        dcDataFetchData();
+        getImteList();
     }, []);
+
+
+    const [confirmSubmit, setConfirmSubmit] = useState(false)
+    const [snackBarOpen, setSnackBarOpen] = useState(false)
+    const [alertMessage, setAlertMessage] = useState("")
+    const submitCalForm = async () => {
+        try {
+            const response = await axios.post(
+                `${process.env.REACT_APP_PORT}/itemDc/createItemDc`, dcData
+            );
+            setAlertMessage(response.data.message)
+            setSnackBarOpen(true)
+            setTimeout(() => setDcOpen(false), 3000)
+        } catch (err) {
+            console.log(err);
+        }
+    };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -274,288 +303,295 @@ const handlePartyNameClick = async (id) => {
             </IconButton>
 
             <DialogContent >
-        <div>
-            <LocalizationProvider dateAdapter={AdapterDayjs}>
-                <form>
-                    
-                    <Paper
-                            sx={{
-                                p: 1,
-                                display: 'flex',
-                                flexDirection: 'column',
-                                mb: 1,
+                <div>
+                    <LocalizationProvider dateAdapter={AdapterDayjs}>
+                        <form>
 
-                            }}
-                            elevation={12}
-                        >
-                        <div className='row'>
-                           
-                            
+                            <Paper
+                                sx={{
+                                    p: 1,
+                                    display: 'flex',
+                                    flexDirection: 'column',
+                                    mb: 1,
 
-                            <div className='col'>
-
-                                <div className='col d-flex mb-2'>
-                                    <div className=" col me-2">
-
-                                        <TextField label="Party Name"
-                                            id="partyNameId"
-                                            select
-                                            defaultValue=""
-                                            //  sx={{ width: "100%" }}
-                                            size="small"
-                                            fullWidth
-                                            onClick={() => handlePartyNameClick()}
-                                            name="partyName" >
-                                            {vendorDataList.map((item, index) => (
-                                                <MenuItem key={index} value={item._id}>{item.fullName}</MenuItem>
-                                            ))}
-                                        </TextField>
-
-                                    </div>
-                                    <div className="col me-2">
-
-                                        <TextField label="Party code"
-                                            id="partyCodeId"
-                                            defaultValue=""
-                                            select
-                                            onClick={handlePartyNameClick}
-                                            // sx={{ width: "100%" }}
-                                            size="small"
-                                            fullWidth
-                                            name="partyCode" >
-                                            {vendorDcList.map((item) => (
-                                                <MenuItem value={item._id}>{item.vendorCode}</MenuItem>
-                                            ))}
-                                        </TextField>
-
-
-                                    </div>
-                                    <div className="col">
-
-                                        <TextField label="Party Address"
-                                            id="partyAddressId"
-                                            select
-                                            defaultValue=""
-                                            size="small"
-                                            sx={{ width: "100%" }}
-                                            name="Party Address" >
-                                            {vendorDcDataList.map((item) => (
-                                                <MenuItem value={item._id}>{item.address}</MenuItem>
-                                            ))}
-                                        </TextField>
-
-                                    </div>
-
-
-                                </div>
-
-
-                            </div>
-                        </div>
-
-
-                        <div className='row g-2 mb-2'>
-                            <div className='col d-flex'>
-                                <div className=" col-2 me-2">
-
-                                    <TextField label="Dc No"
-                                        id="dcNoId"
-                                        defaultValue=""
-                                        size="small"
-                                        sx={{ width: "101%" }}
-                                        name="dcNo" />
-
-                                </div>
-                                <div className="col-2 me-2">
-
-                                    <DatePicker
-                                        fullWidth
-                                        id="dcDateId"
-                                        name="dcDate"
-                                        label="Dc Date"
-                                         //sx={{ width: "75%" }}
-                                        slotProps={{ textField: { size: 'small' } }}
-                                        format="DD-MM-YYYY" />
-
-                                </div>
-                                <div className="col me-2">
-
-                                    <TextField label="Reason"
-                                        id="reasonId"
-                                        defaultValue=""
-                                        select 
-                                        size="small"
-                                        sx={{ width: "101%" }}
-                                        name="reason" >
-                                            <MenuItem value="all">All</MenuItem>
-                                            <MenuItem value="service">Service</MenuItem>
-                                            <MenuItem value="servicecalibration">Service&Calibration</MenuItem>
-                                            <MenuItem value="calibration">Calibration</MenuItem>
-                                           
-                                        </TextField>
-
-                                </div>
-                                <div className='col me-2'>
-                                <TextField label="Common Remarks"
-                                        id="commonRemarksId"
-                                        defaultValue=""
-                                        size="small"
-                                        sx={{ width: "102%" }}
-                                        name="commonRemarks" />
-
-                                </div>
-
-                                
-                            </div>
-
-                        </div>
-                        </Paper>
+                                }}
+                                elevation={12}
+                            >
+                                <div className='row'>
 
 
 
-                        <Paper
-                            sx={{
-                                p: 2,
-                                display: 'flex',
-                                flexDirection: 'column',
-                                mb: 1,
-
-                            }}
-                            elevation={12}
-                        >
-                            <div className='row g-2'>
-                                <div className='col d-flex'>
-                                    <div className='col me-2'>
-                                        <TextField size='small' fullWidth variant='outlined'  defaultValue="all" id="itemListId" select label="Item List" name='itemList'>
-                                        <MenuItem value="all">All</MenuItem>
-                                            {itemMasterDataList.map((item) => (
-                                                <MenuItem value={item._id}>{item.itemDescription}</MenuItem>
-                                            ))}
-                                        </TextField>
-                                    </div>
                                     <div className='col'>
-                                        <TextField label="Imte No"
-                                            id="imteNoId"
-                                            select
-                                            defaultValue="all"
-                                            fullWidth
-                                            size="small"
-                                            name="imteNo" >
-                                            <MenuItem value="all">All</MenuItem>
-                                            {itemAddList.map((item, index) => (
-                                                <MenuItem key={index} value={item.itemIMTENo}>{item.itemIMTENo}</MenuItem>
-                                            ))}
-                                        </TextField>
+
+                                        <div className='col d-flex mb-2'>
+                                            <div className=" col me-2">
+
+                                                <TextField label="Party Name"
+                                                    id="partyNameId"
+                                                    select
+                                                    // value={dcData.dcPartyName}
+                                                    onChange={(e) => setPartyData(e.target.value)}
+
+                                                    //  sx={{ width: "100%" }}
+                                                    size="small"
+                                                    fullWidth
+                                                    name="partyName" >
+                                                    {vendorDataList.map((item, index) => (
+                                                        <MenuItem key={index} value={item._id}>{item.fullName}</MenuItem>
+                                                    ))}
+                                                </TextField>
+
+                                            </div>
+                                            <div className="col me-2">
+
+                                                <TextField label="Party code"
+                                                    id="partyCodeId"
+                                                    defaultValue=""
+
+                                                    value={dcData.dcPartyCode}
+
+
+                                                    // sx={{ width: "100%" }}
+                                                    size="small"
+                                                    fullWidth
+                                                    name="partyCode" >
+
+                                                </TextField>
+
+
+                                            </div>
+                                            <div className="col">
+
+                                                <TextField label="Party Address"
+                                                    id="partyAddressId"
+                                                    value={dcData.dcPartyAddress}
+
+                                                    defaultValue=""
+
+                                                    size="small"
+                                                    sx={{ width: "100%" }}
+                                                    name="Party Address" >
+
+                                                </TextField>
+
+                                            </div>
+
+
+                                        </div>
+
+
                                     </div>
                                 </div>
-                                <div className=' col d-flex justify-content-end'>
-                                    <div className='me-2 '>
-                                        <button type="button" className='btn btn-secondary' >Add Item</button>
+
+
+                                <div className='row g-2 mb-2'>
+                                    <div className='col d-flex'>
+                                        <div className=" col-2 me-2">
+
+                                            <TextField label="Dc No"
+                                                id="dcNoId"
+                                                defaultValue=""
+                                                value={dcData.dcNo}
+                                                onChange={handleDcChange}
+                                                size="small"
+                                                sx={{ width: "101%" }}
+                                                name="dcNo" />
+
+                                        </div>
+                                        <div className="col-2 me-2">
+                                            <DatePicker
+
+                                                fullWidth
+                                                id="dcDateId"
+                                                name="dcDate"
+                                                value={dayjs(dcData.dcDate)}
+                                                onChange={(newValue) =>
+                                                    setDcData((prev) => ({ ...prev, dcDate: newValue.format("YYYY-MM-DD") }))
+                                                }
+                                                label="Dc Date"
+
+
+                                                slotProps={{ textField: { size: 'small' } }}
+                                                format="DD-MM-YYYY" />
+
+
+                                        </div>
+                                        <div className="col me-2">
+                                        <TextField label="Reason"
+                                                id="reasonId"
+                                                select
+                                                defaultValue=""
+                                                //value={dcData.dcReason}
+                                                onChange={handleDcChange}
+                                                size="small"
+                                                sx={{ width: "101%" }}
+                                                name="reason" >
+                                                <MenuItem value="All">All</MenuItem>
+                                                <MenuItem value="Service">Service</MenuItem>
+                                                <MenuItem value="Service Calibration">Service&Calibration</MenuItem>
+                                                <MenuItem value="Calibration">Calibration</MenuItem>
+
+                                            </TextField>
+
+                                        </div>
+                                        <div className='col me-2'>
+                                            <TextField label="Common Remarks"
+                                                id="commonRemarksId"
+                                              //  value={dcData.dcCommonRemarks}
+                                                defaultValue=""
+                                                onChange={handleDcChange}
+                                                size="small"
+                                                sx={{ width: "102%" }}
+                                                name="commonRemarks" />
+
+                                        </div>
+
+
                                     </div>
 
                                 </div>
-
-                            </div>
-                        </Paper>
-
-                        <Paper
-                            sx={{
-                                p: 2,
-                                display: 'flex',
-                                flexDirection: 'column',
-                                mb: 1,
-
-                            }}
-                            elevation={12}
-                        >
-                            <div className='row'>
-                                <Box sx={{ height: 350, width: '100%', my: 2 }}>
-                                    <DataGrid
-
-                                        rows={dcDataList}
-                                        columns={Columns}
-                                        getRowId={(row) => row._id}
-                                        initialState={{
-                                            pagination: {
-                                                paginationModel: { page: 0, pageSize: 5 },
-                                            },
-                                        }}
-                                        sx={{
-                                            ".MuiTablePagination-displayedRows": {
-
-                                                "margin-top": "1em",
-                                                "margin-bottom": "1em"
-                                            }
-                                        }}
-                                        onRowSelectionModelChange={(newRowSelectionModel, event) => {
-                                            setItemListSelectedRowIds(newRowSelectionModel);
+                            </Paper>
 
 
-                                        }}
 
-                                        slots={{
-                                            toolbar: GridToolbar,
-                                        }}
+                            <Paper
+                                sx={{
+                                    p: 2,
+                                    display: 'flex',
+                                    flexDirection: 'column',
+                                    mb: 1,
 
-                                        density="compact"
-                                        //disableColumnMenu={true}
-                                        //clipboardCopyCellDelimiter={true}
-                                        checkboxSelection
-                                        //onRowClick={handleRowClick}
-                                        disableRowSelectionOnClick
-                                        pageSizeOptions={[5]}
-                                    />
+                                }}
+                                elevation={12}
+                            >
+                                <div className='row g-2'>
+                                    <div className='col d-flex'>
+                                        <div className='col me-2'>
+                                            <TextField size='small' select fullWidth variant='outlined' onChange={handleDcChange} label="Select Master" name='itemItemMasterName' >
+                                                <MenuItem value=""><em>--Select--</em></MenuItem>
+                                                {itemMasterDistNames.map((item, index) => (
+                                                    <MenuItem key={index} value={item}>{item}</MenuItem>
+                                                ))}
+                                            </TextField>
+                                        </div>
+                                        <div className='col'>
+                                        <TextField size='small' select fullWidth variant='outlined' onChange={handleDcChange} label="Item IMTENo" name='itemIMTENo' >
+                                                <MenuItem value=""><em>--Select--</em></MenuItem>
+                                                {imteList.map((item, index) => (
+                                                   <MenuItem key={index} value={item.itemIMTENo}>{item.itemIMTENo}</MenuItem>
+                                                ))}
+                                            </TextField>
 
-                                </Box>
 
-                            </div>
-                        </Paper>
+                                        </div>
+                                    </div>
+                                    <div className=' col d-flex justify-content-end'>
+                                        <div className='me-2 '>
+                                            {/*<button type="button" className='btn btn-secondary' onClick={addDcValue} >Add Item</button>*/}
+                                            <Button startIcon={<Add />} onClick={addDcValue} size='small' sx={{ minWidth: "130px" }} variant='contained'>Add Item</Button>
+                                        </div>
 
-                        <Paper
-                            sx={{
-                                p: 2,
-                                display: 'flex',
-                                flexDirection: 'column',
-                                mb: 1,
-
-                            }}
-                            elevation={12}
-                        >
-                            <div className='row'>
-                                <div className='col d-flex '>
-                                    <div className='me-2 '>
-                                        <button type="button" className='btn btn-secondary' >Print</button>
                                     </div>
 
                                 </div>
-                                <div className='col d-flex justify-content-end'>
-                                    <div className='me-2 '>
-                                        <button type="button" className='btn btn-secondary' >Save</button>
-                                    </div>
-                                    <div className='me-2 '>
-                                        <button type="button" className='btn btn-secondary' >Close</button>
-                                    </div>
+                            </Paper>
+
+                            <Paper
+                                sx={{
+                                    p: 2,
+                                    display: 'flex',
+                                    flexDirection: 'column',
+                                    mb: 1,
+
+                                }}
+                                elevation={12}
+                            >
+                                <div className='row'>
+                                    <Box sx={{ height: 350, width: '100%', my: 2 }}>
+                                        <DataGrid
+
+                                            rows={dcData.dcPartyItems}
+                                            columns={Columns}
+                                            getRowId={(row) => row._id}
+                                            initialState={{
+                                                pagination: {
+                                                    paginationModel: { page: 0, pageSize: 5 },
+                                                },
+                                            }}
+                                            sx={{
+                                                ".MuiTablePagination-displayedRows": {
+
+                                                    "margin-top": "1em",
+                                                    "margin-bottom": "1em"
+                                                }
+                                            }}
+                                            onRowSelectionModelChange={(newRowSelectionModel, event) => {
+                                                setItemListSelectedRowIds(newRowSelectionModel);
+
+
+                                            }}
+
+                                            slots={{
+                                                toolbar: GridToolbar,
+                                            }}
+
+                                            density="compact"
+                                            //disableColumnMenu={true}
+                                            //clipboardCopyCellDelimiter={true}
+                                            checkboxSelection
+                                            //onRowClick={handleRowClick}
+                                            disableRowSelectionOnClick
+                                            pageSizeOptions={[5]}
+                                        />
+
+                                    </Box>
 
                                 </div>
-                            </div>
-                        </Paper>
+                            </Paper>
+
+                            <Dialog
+                        open={confirmSubmit}
+                        onClose={(e, reason) => {
+                            console.log(reason)
+                            if (reason !== 'backdropClick' && reason !== 'escapeKeyDown') {
+                                setConfirmSubmit(false)
+                            }
+                        }}
+                        aria-labelledby="alert-dialog-title"
+                        aria-describedby="alert-dialog-description"
+                    >
+                        <DialogTitle id="alert-dialog-title">
+                            Are you sure to submit ?
+                        </DialogTitle>
+
+                        <DialogActions className='d-flex justify-content-center'>
+                            <Button onClick={() => setConfirmSubmit(false)}>Cancel</Button>
+                            <Button onClick={() => { submitCalForm(); setConfirmSubmit(false) }} autoFocus>
+                                Submit
+                            </Button>
+                        </DialogActions>
+                    </Dialog>
+                    <Snackbar anchorOrigin={{ vertical: "top", horizontal: "right" }} open={snackBarOpen} autoHideDuration={3000}
+                        onClose={() => setTimeout(() => {
+                            setSnackBarOpen(false)
+                        }, 3000)}>
+                        <Alert onClose={() => setSnackBarOpen(false)} variant='filled' severity="success" sx={{ width: '100%' }}>
+                            {alertMessage}
+                        </Alert>
+                    </Snackbar>
 
 
-
-
-
-                  
-                </form>
-            </LocalizationProvider>
-        </div >
-        </DialogContent>
-        <DialogActions className='d-flex justify-content-between'>
+                        </form>
+                    </LocalizationProvider>
+                </div >
+            </DialogContent>
+            <DialogActions className='d-flex justify-content-between'>
                 <div>
                     <Button variant='contained' color='warning' className='me-3'>Upload Report</Button>
                 </div>
                 <div>
                     <Button variant='contained' color='error' className='me-3' onClick={() => { setDcOpen(false) }}>Cancel</Button>
-                    <Button variant='contained' color='success'>Submit</Button>
+                    <Button variant='contained' color='success'  onClick={() => { setConfirmSubmit(true) }}>Submit</Button>
                 </div>
             </DialogActions>
 

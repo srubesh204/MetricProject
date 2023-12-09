@@ -12,6 +12,8 @@ import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { Add, Delete } from '@mui/icons-material';
 import CalDialog from './DashboardComponents/CalDialog';
+import Dc from './DashboardComponents/Dc'
+import Grn from './DashboardComponents/Grn'
 // import Dc from './DashboardComponents/Dc';
 // import Grn from './DashboardComponents/Grn';
 export const HomeContent = createContext(null);
@@ -1043,16 +1045,16 @@ const Home = () => {
               <CalDialog />
             </HomeContent.Provider>
 
-            {/* <HomeContent.Provider
+            <HomeContent.Provider
               value={{dcOpen,setDcOpen, selectedRows}}
             >
               <Dc />
-            </HomeContent.Provider> */}
-            {/* <HomeContent.Provider
+            </HomeContent.Provider>
+             <HomeContent.Provider
               value={{grnOpen,setGrnOpen, selectedRows}}
             >
               <Grn />
-            </HomeContent.Provider> */}
+            </HomeContent.Provider> 
            
           </div>
         </div>
