@@ -39,28 +39,31 @@ const itemAddSchema = new mongoose.Schema({
   itemDueDate: String,
   itemCalibratedAt: String,
   itemCertificateName: String,
-  itemCertificateNo : String,
+  itemCertificateNo: String,
   itemPartName: [],
   itemOBType: String,
   dcStatus: String,
   dcCreatedOn: String,
   acceptanceCriteria: [
-      {
-        acParameter: String,
-        acNominalSize: String,
-        acNominalSizeUnit: String,
-        acMinPS: String,
-        acMaxPS: String,
-        acWearLimitPS: String,
-        acMinOB: String,
-        acMaxOB: String,
-        acAverageOB: String,
-        acOBError: String,
-        acMinPSError: String,
-        acMaxPSError: String,
-      }
+    {
+      acParameter: String,
+      acNominalSize: String,
+      acNominalSizeUnit: String,
+      acMinPS: String,
+      acMaxPS: String,
+      acWearLimitPS: {
+        type: String,
+        default: () => "--"
+      },
+      acMinOB: String,
+      acMaxOB: String,
+      acAverageOB: String,
+      acOBError: String,
+      acMinPSError: String,
+      acMaxPSError: String,
+    }
   ],
-  itemUncertainity : String,
+  itemUncertainity: String,
   createdAt: {
     type: String,
     default: () => dayjs().format("YYYY-MM-DD"),
@@ -68,7 +71,7 @@ const itemAddSchema = new mongoose.Schema({
   },
   updatedAt: {
     type: String,
-    default: ()=> dayjs().format("YYYY-MM-DD")
+    default: () => dayjs().format("YYYY-MM-DD")
   }
 
 });

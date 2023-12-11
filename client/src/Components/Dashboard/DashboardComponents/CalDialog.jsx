@@ -294,9 +294,168 @@ const CalDialog = () => {
 
 
         }
-
+        // attribute status change  
         if (calibrationData.calItemType === "attribute") {
+            if (name === "calAverageOB") {
+                setCalibrationData(prev => {
+                    const updatedData = prev.calcalibrationData.map((item, idx) => {
+                        if (idx === index) {
+                            let status = ""
+                            if (item.calWearLimitPS !== "") {
 
+                                if (item.calWearLimitPS <= item.calMinPS) {
+                                    const isAverageInRange = parseFloat(item.calAverageOB) >= parseFloat(item.calWearLimitPS) &&
+                                        parseFloat(item.calAverageOB) <= parseFloat(item.calMaxPS);
+
+                                        if(item.calAverageOB === ""){
+                                            status = ""
+                                        } else{
+                                            if (isAverageInRange) {
+                                                status = "ok"
+                                            } else {
+                                                status = "notOk"
+                                            }
+                                        }  
+                                }
+
+                                if (item.calWearLimitPS >= item.calMaxPS) {
+                                    const isAverageInRange = parseFloat(item.calAverageOB) <= parseFloat(item.calWearLimitPS) &&
+                                        parseFloat(item.calAverageOB) >= parseFloat(item.calMinPS);
+
+                                        if(item.calAverageOB === ""){
+                                            status = ""
+                                        } else{
+                                            if (isAverageInRange) {
+                                                status = "ok"
+                                            } else {
+                                                status = "notOk"
+                                            }
+                                        }  
+
+                                }
+
+                                return {
+                                    ...item,
+                                    rowStatus: status,
+                                };
+
+                            } else {
+                                const isAverageInRange = parseFloat(item.calAverageOB) >= parseFloat(item.calMinPS) &&
+                                    parseFloat(item.calAverageOB) <= parseFloat(item.calMaxPS);
+
+                                if(item.calAverageOB === ""){
+                                    status = ""
+                                } else{
+                                    if (isAverageInRange) {
+                                        status = "ok"
+                                    } else {
+                                        status = "notOk"
+                                    }
+                                }   
+                               
+                                return {
+                                    ...item,
+                                    rowStatus: status,
+                                };
+                            }
+
+
+
+
+                        }
+                        return item;
+                    });
+                    return {
+                        ...prev,
+                        calcalibrationData: updatedData,
+                    };
+                });
+            }
+
+            if (name === "calMinOB" || name === "calMaxOB") {
+                setCalibrationData(prev => {
+                    const updatedData = prev.calcalibrationData.map((item, idx) => {
+                        if (idx === index) {
+                            let status = ""
+                            if (item.calWearLimitPS !== "") {
+
+                                if (item.calWearLimitPS <= item.calMinPS) {
+
+
+                                    const isMinInRange = parseFloat(item.calMinOB) >= parseFloat(item.calWearLimitPS) &&
+                                        parseFloat(item.calMinOB) <= parseFloat(item.calMaxPS);
+                                    const isMaxInRange = parseFloat(item.calMaxOB) >= parseFloat(item.calWearLimitPS) &&
+                                        parseFloat(item.calMaxOB) <= parseFloat(item.calMaxPS);
+
+
+
+                                    if (isMinInRange && isMaxInRange) {
+                                        status = "ok"
+                                    } else {
+                                        status = "notOk"
+                                    }
+
+                                }
+
+                                if (item.calWearLimitPS >= item.calMaxPS) {
+                                    const isMinInRange = parseFloat(item.calMinOB) <= parseFloat(item.calWearLimitPS) &&
+                                        parseFloat(item.calMinOB) >= parseFloat(item.calMinPS);
+                                    const isMaxInRange = parseFloat(item.calMaxOB) <= parseFloat(item.calWearLimitPS) &&
+                                        parseFloat(item.calMaxOB) >= parseFloat(item.calMinPS);
+
+
+
+                                    if (isMinInRange && isMaxInRange) {
+                                        status = "ok"
+                                    } else {
+                                        status = "notOk"
+                                    }
+
+                                }
+                                const isMinInRange = parseFloat(item.calMinOB) >= parseFloat(item.calMinPS) &&
+                                    parseFloat(item.calMinOB) <= parseFloat(item.calMaxPS);
+                                const isMaxInRange = parseFloat(item.calMaxOB) >= parseFloat(item.calMinPS) &&
+                                    parseFloat(item.calMaxOB) <= parseFloat(item.calMaxPS);
+
+                                return {
+                                    ...item,
+                                    rowStatus: status,
+                                };
+
+                            } else {
+                                const isMinInRange = parseFloat(item.calMinOB) >= parseFloat(item.calMinPS) &&
+                                    parseFloat(item.calMinOB) <= parseFloat(item.calMaxPS);
+                                const isMaxInRange = parseFloat(item.calMaxOB) >= parseFloat(item.calMinPS) &&
+                                    parseFloat(item.calMaxOB) <= parseFloat(item.calMaxPS);
+
+
+
+
+                                if (item.calMaxOB === "" && item.calMinOB === "") {
+                                    status = "";
+                                } else if (item.calMaxOB === "") {
+                                    status = (isMinInRange) ? "ok" : "notOk";
+                                } else {
+                                    status = (isMinInRange && isMaxInRange) ? "ok" : "notOk";
+                                }
+                                return {
+                                    ...item,
+                                    rowStatus: status,
+                                };
+                            }
+
+
+
+
+                        }
+                        return item;
+                    });
+                    return {
+                        ...prev,
+                        calcalibrationData: updatedData,
+                    };
+                });
+            }
         }
 
 
@@ -306,9 +465,12 @@ const CalDialog = () => {
 
     useEffect(() => {
         const ifRejected = calibrationData.calcalibrationData.some((item) => item.rowStatus === "notOk")
+        const isEmpty = calibrationData.calcalibrationData.some((item) => item.rowStatus === "")
         if (ifRejected) {
             setCalibrationData((prev) => ({ ...prev, calStatus: "rejected" }))
-        } else {
+        }else if(isEmpty) {
+            setCalibrationData((prev) => ({ ...prev, calStatus: "status" }))
+        }else{
             setCalibrationData((prev) => ({ ...prev, calStatus: "accepted" }))
         }
 
@@ -332,7 +494,6 @@ const CalDialog = () => {
     //         };
     //     })
     // }, [calibrationData.calcalibrationData]);
-
 
 
 
@@ -699,11 +860,11 @@ const CalDialog = () => {
 
                     <Paper elevation={12} sx={{ p: 2 }} className='col-md-12 mb-2'>
                         <div className="d-flex justify-content-between mb-2">
-                            <div> <FormControlLabel control={<Switch name='lastResult' onChange={handleCalData} />} label="Label" />
+                            <div> <FormControlLabel control={<Switch name='lastResult' onChange={handleCalData} />} label="Last Result" />
                                 <FormControlLabel control={<Switch name='beforeCalSwitch' onChange={handleCalData} />} label="Before Calibration" /></div>
                             <div><h5 className='text-center'>Calibration Data</h5></div>
-                            <div><TextField select inputProps={{ sx: { color: calibrationData.calStatus === "accepted" ? "green" : "red", width: "100px" } }} name='calStatus' onChange={handleCalData} InputLabelProps={{ shrink: true }} label="Cal Status" size="small" value={calibrationData.calStatus}>
-                                <MenuItem value="">Status</MenuItem>
+                            <div><TextField select inputProps={{ sx: { color: calibrationData.calStatus === "status" ? "" : calibrationData.calStatus === "accepted" ? "green" : "red", width: "100px" } }} name='calStatus' onChange={handleCalData} InputLabelProps={{ shrink: true }} label="Cal Status" size="small" value={calibrationData.calStatus}>
+                                <MenuItem value="status">Status</MenuItem>
                                 <MenuItem value="accepted">Accepted</MenuItem>
                                 <MenuItem value="rejected">Rejected</MenuItem>
                             </TextField></div>
@@ -741,7 +902,7 @@ const CalDialog = () => {
                                             </tr>
                                             {/* {calibrationData.calcalibrationData.map((item)=> ()} */}
                                             {calibrationData.calcalibrationData.map((item, index) => {
-                                                let color = "";
+                                                let color = ""
                                                 if (item.rowStatus === "ok") {
                                                     color = "#4cbb17"
                                                 } else if (item.rowStatus === "notOk") {
@@ -751,25 +912,90 @@ const CalDialog = () => {
                                                 } else {
                                                     color = ""
                                                 }
+
+                                                //color changer
                                                 let minColor = "";
-                                                let minStatus = false;
-                                                let maxStatus = false;
-                                                if (parseFloat(item.calMinOB) >= parseFloat(item.calMinPS) && parseFloat(item.calMinOB) <= parseFloat(item.calMaxPS)) {
-                                                    minColor = "#4cbb17";
-                                                    let minStatus = true;
-                                                } else {
-                                                    minColor = "red"
-                                                    let minStatus = false;
+                                                let maxColor = "";
+                                                let averageColor = "";
+                                                let size = "";
+                                                if (item.calWearLimitPS !== "") {
+
+                                                    if (item.calWearLimitPS < item.calMinPS) {
+                                                        size = "OD"
+                                                    } else {
+                                                        size = "ID"
+                                                    }
+
+                                                    if (size === "OD") {
+                                                        //min OD condition
+                                                        if (item.calMinOB >= item.calWearLimitPS && item.calMinOB < item.calMinPS) {
+                                                            minColor = "orange"
+                                                        }
+                                                        else if (item.calMinOB >= item.calMinPS && item.calMinOB <= item.calMaxPS) {
+                                                            minColor = "green"
+                                                        } else {
+                                                            minColor = "red"
+                                                        }
+
+                                                        if (item.calMaxOB >= item.calWearLimitPS && item.calMaxOB < item.calMinPS) {
+                                                            maxColor = "orange"
+                                                        }
+                                                        else if (item.calMaxOB >= item.calMinPS && item.calMaxOB <= item.calMaxPS) {
+                                                            maxColor = "green"
+                                                        } else {
+                                                            maxColor = "red"
+                                                        }
+
+                                                        if (item.calAverageOB >= item.calWearLimitPS && item.calAverageOB < item.calMinPS) {
+                                                            averageColor = "orange"
+                                                        }
+                                                        else if (item.calAverageOB >= item.calMinPS && item.calAverageOB <= item.calMaxPS) {
+                                                            averageColor = "green"
+                                                        } else {
+                                                            averageColor = "red"
+                                                        }
+
+
+                                                    }
+
+                                                    if (size === "ID") {
+                                                        //min Id condition
+                                                        if (item.calMinOB <= item.calWearLimitPS && item.calMinOB > item.calMaxPS) {
+                                                            minColor = "orange"
+                                                        }
+                                                        else if (item.calMinOB >= item.calMinPS && item.calMinOB <= item.calMaxPS) {
+                                                            minColor = "green"
+                                                        } else {
+                                                            minColor = "red"
+                                                        }
+                                                        //max ID condition
+                                                        if (item.calMaxOB <= item.calWearLimitPS && item.calMaxOB > item.calMaxPS) {
+                                                            maxColor = "orange"
+                                                        }
+                                                        else if (item.calMaxOB >= item.calMinPS && item.calMaxOB <= item.calMaxPS) {
+                                                            maxColor = "green"
+                                                        } else {
+                                                            maxColor = "red"
+                                                        }
+
+                                                        if (item.calAverageOB <= item.calWearLimitPS && item.calAverageOB > item.calMaxPS) {
+                                                            averageColor = "orange"
+                                                        }
+                                                        else if (item.calAverageOB >= item.calMinPS && item.calAverageOB <= item.calMaxPS) {
+                                                            averageColor = "green"
+                                                        } else {
+                                                            averageColor = "red"
+                                                        }
+                                                    }
+
+                                                    //   handleStatus(index, minColor, maxColor);
+
+
+
                                                 }
 
-                                                let maxColor = "";
-                                                if (parseFloat(item.calMaxOB) >= parseFloat(item.calMinPS) && parseFloat(item.calMaxOB) <= parseFloat(item.calMaxPS)) {
-                                                    maxColor = "#4cbb17"
-                                                    maxStatus = true;
-                                                } else {
-                                                    maxColor = "red"
-                                                    maxStatus = false;
-                                                }
+
+
 
 
                                                 return (
@@ -783,7 +1009,7 @@ const CalDialog = () => {
 
                                                         {calibrationData.calBeforeData === "yes" && <td><input className='form-control form-control-sm' onChange={(e) => changecalDataValue(index, e.target.name, e.target.value)} name='calBeforeCalibration' /></td>}
                                                         {calibrationData.calOBType === "average" &&
-                                                            <td><input className='form-control form-control-sm' name='calAverageOB' style={{ color: color, fontWeight: "bold" }} onChange={(e) => changecalDataValue(index, e.target.name, e.target.value)} /></td>
+                                                            <td><input className='form-control form-control-sm' name='calAverageOB' style={{ color: averageColor, fontWeight: "bold" }} onChange={(e) => changecalDataValue(index, e.target.name, e.target.value)} /></td>
                                                         }
                                                         {calibrationData.calOBType === "minmax" &&
                                                             <React.Fragment>
