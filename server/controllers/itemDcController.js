@@ -14,8 +14,8 @@ const itemDcController = {
       createItemDc: async (req, res) => {
        
         try {
-          const {dcPartyName, dcPartyCode, dcPartyAddress, dcNo, dcDate, dcReason, dccommonRemarks, dcPartyItems} = req.body;
-          const itemDcResult = new itemDcModel({dcPartyName, dcPartyCode, dcPartyAddress, dcNo, dcDate, dcReason, dccommonRemarks, dcPartyItems});
+          const {dcPartyId, dcPartyType, dcPartyName, dcPartyCode, dcPartyAddress, dcNo, dcDate, dcReason, dccommonRemarks, dcPartyItems} = req.body;
+          const itemDcResult = new itemDcModel({dcPartyId, dcPartyType, dcPartyName, dcPartyCode, dcPartyAddress, dcNo, dcDate, dcReason, dccommonRemarks, dcPartyItems});
           const validationError = itemDcResult.validateSync();
 
           if (validationError) {
@@ -61,7 +61,7 @@ const itemDcController = {
           // Create an object with the fields you want to update
           const updateItemDcFields = {
             /* Specify the fields and their updated values here */
-            dcPartyName : req.body.dcPartyName, dcPartyCode : req.body.dcPartyCode, dcPartyAddress : req.body.dcPartyAddress, dcNo : req.body.dcNo, dcDate : req.body.dcDate, dcReason : req.body.dcReason, dcCommonRemarks : req.body.dcCommonRemarks, dcPartyItems : req.body.dcPartyItems // Example: updating the 'name' field
+            dcPartyId: req.body.dcPartyId, dcPartyType: req.body.dcPartyType, dcPartyName : req.body.dcPartyName, dcPartyCode : req.body.dcPartyCode, dcPartyAddress : req.body.dcPartyAddress, dcNo : req.body.dcNo, dcDate : req.body.dcDate, dcReason : req.body.dcReason, dcCommonRemarks : req.body.dcCommonRemarks, dcPartyItems : req.body.dcPartyItems // Example: updating the 'name' field
             // Add more fields as needed
           };
       

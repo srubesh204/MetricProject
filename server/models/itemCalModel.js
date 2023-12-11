@@ -25,6 +25,7 @@ const itemCal = new mongoose.Schema({
   calCalibratedBy: String,
   calApprovedBy: String,
   calBeforeData: String,
+  calAcceptanceStatus: String,
   calcalibrationData: [{
     calParameter: String,
     calNominalSize: String,
