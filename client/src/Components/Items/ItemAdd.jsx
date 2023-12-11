@@ -1357,7 +1357,7 @@ const ItemAdd = () => {
                                             <th>Parameter</th>
                                             <th>Nominal Size</th>
                                             <th>Unit</th>
-                                            <th colspan="3">Permissible Size</th>
+                                            <th colspan="2">Permissible Size</th>
                                             <th width="20%" colspan="2" className='text-center'>Observed size
                                                 <RadioGroup
                                                     className='d-flex justify-content-around'
@@ -1395,7 +1395,6 @@ const ItemAdd = () => {
                                                 </select></td>
                                                 <td><input type="text" className="form-control form-control-sm" id="acMinPSId" name="acMinPS" placeholder='min' value={item.acMinPS} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} /></td>
                                                 <td><input type="text" className='form-control form-control-sm' id="acMaxPSId" name="acMaxPS" placeholder='max' value={item.acMaxPS} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} /></td>
-                                                <td><input type="text" className="form-control form-control-sm" id="acWearLimitPSId" name="acWearLimitPS" placeholder='wearLimit' value={item.acWearLimitPS} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} /></td>
                                                 {itemAddData.itemOBType === "average" ?
                                                     <React.Fragment>
                                                         <td colSpan={2} ><input type="text" className="form-control form-control-sm" id="acAverageOBId" name="acAverageOB" placeholder='Average' value={item.acAverageOB} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} /></td>

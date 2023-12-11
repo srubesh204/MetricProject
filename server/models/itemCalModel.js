@@ -32,7 +32,10 @@ const itemCal = new mongoose.Schema({
     calNominalSizeUnit: String,
     calMinPS: String,
     calMaxPS: String,
-    calWearLimitPS: String,
+    calWearLimitPS: {
+      type: String,
+      default: () => "--"
+    },
     calMinOB: String,
     calMaxOB: String,
     calAverageOB: String,
