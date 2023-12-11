@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState, useEffect, useRef, createContext } from 'react'
 import axios from 'axios'
 import { TextField, MenuItem, styled, Button, ButtonGroup, Chip, FormControl, OutlinedInput, Fab, Link, Box } from '@mui/material';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
@@ -6,7 +6,13 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DataGrid, GridToolbar } from '@mui/x-data-grid';
 import { Container, Paper } from '@mui/material';
+import { Edit, FilterAlt } from '@mui/icons-material';
+
+import DcEdit from './DcEdit';
+export const DcListContent = createContext(null);
 const DcList = () => {
+    const [selectedRows, setSelectedRows] = useState([]);
+    const [dcEditOpen, setDcEditOpen] = useState(false);
 
 
     const [vendorDataList, setVendorDataList] = useState([])
@@ -28,7 +34,8 @@ const DcList = () => {
     const vendorFetDcchData = async () => {
         try {
             const response = await axios.get(
-                `${process.env.REACT_APP_PORT}/vendor/getAllVendors`
+                `${process.env.REACT_APP_PORT}/itemDc/getAllItemDc`
+               
             );
             setVendorDataDcList(response.data.result);
             // setFilteredData(response.data.result);
@@ -41,9 +48,10 @@ const DcList = () => {
     }, []);
 
 
-    const [itemListSelectedRowIds, setItemListSelectedRowIds] = useState([])
+   // const [itemListSelectedRowIds, setItemListSelectedRowIds] = useState([])
     //
     const Columns = [
+         { field: 'button', headerName: 'Edit', width: 60, renderCell: (params) => <Button onClick={()=> {setSelectedRows(params.row); setDcEditOpen(true)}}><Edit color='success' /></Button> },
         { field: 'id', headerName: 'Si. No', width: 70, renderCell: (params) => params.api.getAllRowIds().indexOf(params.id) + 1 },
         { field: 'dcNo', headerName: 'Dc No', width: 90 },
         { field: 'dcDate', headerName: 'Dc Date', width: 90 },
@@ -179,23 +187,23 @@ const DcList = () => {
                                                 "margin-bottom": "1em"
                                             }
                                         }}
-                                        onRowSelectionModelChange={(newRowSelectionModel, event) => {
-                                            setItemListSelectedRowIds(newRowSelectionModel);
+                                        // onRowSelectionModelChange={(newRowSelectionModel, event) => {
+                                        //     setItemListSelectedRowIds(newRowSelectionModel);
 
 
-                                        }}
+                                        // }}
 
                                         slots={{
                                             toolbar: GridToolbar,
                                         }}
 
                                         density="compact"
-                                        //disableColumnMenu={true}
-                                        //clipboardCopyCellDelimiter={true}
-                                        checkboxSelection
-                                        //onRowClick={handleRowClick}
-                                        disableRowSelectionOnClick
-                                        pageSizeOptions={[5]}
+                                    //disableColumnMenu={true}
+                                    //clipboardCopyCellDelimiter={true}
+
+                                    //onRowClick={handleRowClick}
+
+
                                     />
 
                                 </Box>
@@ -275,6 +283,12 @@ const DcList = () => {
                                     </div>
 
                                 </div>
+
+                                <DcListContent.Provider
+                                    value={{ dcEditOpen, setDcEditOpen, selectedRows }}
+                                >
+                                    <DcEdit />
+                                </DcListContent.Provider>
                             </div>
                         </Paper>
 

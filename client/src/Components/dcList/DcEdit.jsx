@@ -7,20 +7,25 @@ import isSameOrAfter from 'dayjs/plugin/isSameOrAfter'
 import isSameOrBefore from 'dayjs/plugin/isSameOrBefore'
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { HomeContent } from '../Home';
-import { Add, Close, Delete } from '@mui/icons-material';
+import { DcListContent } from './DcList';
+import { Add, Close, Delete, DeleteOutline } from '@mui/icons-material';
+import { useParams } from 'react-router-dom';
 
 
-const Dc = () => {
+const DcEdit = () => {
+    const { id } = useParams()
+    console.log(id)
 
-    const dcDatas = useContext(HomeContent)
-    const { dcOpen, setDcOpen, selectedRows } = dcDatas
+    const dcDatas = useContext(DcListContent)
+   const { dcEditOpen, setDcEditOpen, selectedRows } =dcDatas
+   console.log(selectedRows)
 
 
     console.log(selectedRows)
     const [selectedExtraMaster, setSelectedExtraMaster] = useState([])
     const initialDcData = {
         dcPartyId: "",
+        dcPartyType:"",
         dcPartyName: "",
         dcPartyCode: "",
         dcPartyAddress: "",
@@ -34,6 +39,7 @@ const Dc = () => {
 
     const [dcData, setDcData] = useState({
         dcPartyId: "",
+        dcPartyType:"",
         dcPartyName: "",
         dcPartyCode: "",
         dcPartyAddress: "",
@@ -44,12 +50,22 @@ const Dc = () => {
         dcPartyItems: []
 
     })
+    console.log(dcData)
 
     const settingDcData = () => {
         setDcData((prev) => (
             {
                 ...prev,
-                dcPartyItems: selectedRows
+                dcPartyId: selectedRows[0]._id,
+                dcPartyType:selectedRows[0].dcPartyType,
+                dcPartyName: selectedRows[0].dcPartyName,
+                dcPartyCode: selectedRows[0].dcPartyCode,
+                dcPartyAddress:selectedRows[0].dcPartyAddress,
+                dcNo:selectedRows[0].dcNo,
+                dcDate:selectedRows[0].dcDate,
+                dcReason:selectedRows[0].dcReason,
+                dcCommonRemarks:selectedRows[0].dcCommonRemarks,
+                dcPartyItems: selectedRows[0].dcPartyItems
             }
 
         ))
@@ -58,32 +74,53 @@ const Dc = () => {
         settingDcData()
     }, [selectedRows])
 
+    const [filteredData, setFilteredData] = useState([])
+
+    const handleFilterChange = (e) => {
+        const { name, value } = e.target;
+
+        if (value === "all") {
+            setFilteredData(vendorDataList)
+        } else {
+            if (value === "oem") {
+                const vendorType = vendorDataList.filter((item) => (item.oem === "1"))
+                setFilteredData(vendorType)
+            }
+            if (value === "customer") {
+                const vendorType = vendorDataList.filter((item) => (item.customer === "1"))
+                setFilteredData(vendorType)
+            }
+            if (value === "supplier") {
+                const vendorType = vendorDataList.filter((item) => (item.supplier === "1"))
+                setFilteredData(vendorType)
+            }
+            if (value === "subContractor") {
+                const vendorType = vendorDataList.filter((item) => (item.subContractor === "1"))
+                setFilteredData(vendorType)
+            }
 
 
 
-     const addDcValue = () => {
+
+        }
+        setDcData((prev)=> ({...prev, [name]: value}))
+
+
+    };
+
+
+
+
+    const addDcValue = () => {
         if (selectedExtraMaster.length !== 0) {
             setDcData((prev) => ({
                 ...prev,
-                dcPartyItems: [...prev. dcPartyItems, selectedExtraMaster]
+                dcPartyItems: [...prev.dcPartyItems, selectedExtraMaster]
             }))
             setSelectedExtraMaster([])
         }
     }
 
-    const ITEM_HEIGHT = 48;
-    const ITEM_PADDING_TOP = 8;
-    const MenuProps = {
-        PaperProps: {
-            style: {
-                maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
-                width: 250,
-            },
-        },
-    }
-
-
-   
 
 
 
@@ -105,14 +142,31 @@ const Dc = () => {
         { field: 'id', headerName: 'Si. No', width: 70, renderCell: (params) => params.api.getAllRowIds().indexOf(params.id) + 1 },
         { field: 'itemCalFreInMonths', headerName: 'Frequency', type: "number", width: 100 },
         { field: 'dcCommonRemarks', headerName: 'Remarks', width: 100 },
+        { field: 'delete', headerName: 'Delete', width: 100, renderCell: (index) => <Delete onClick={() => deleteAC(index)} /> },
     ]
 
 
-    const [itemListSelectedRowIds, setItemListSelectedRowIds] = useState([])
 
 
+    // const [dcPartyItem, setDcPartyItem] = useState([])
 
     const [vendorDataList, setVendorDataList] = useState([])
+
+    {/*const vendorFetchData = async () => {
+        try {
+            const response = await axios.get(
+                `${process.env.REACT_APP_PORT}/vendor/getAllVendors`
+            );
+            setVendorDataList(response.data.result);
+            const filteredData = response.data.result.filter((dcItem) => !dcData.dcPartyItems.some(vendor => dcName._id === vendor._id === dcCode._id ===vendor._id === dcAddress._id === vendor.id))
+            setFilteredData(filteredData)
+        } catch (err) {
+            console.log(err);
+        }
+    };
+    useEffect(() => {
+        vendorFetchData();
+    }, []);*/}
 
     const vendorFetchData = async () => {
         try {
@@ -120,7 +174,16 @@ const Dc = () => {
                 `${process.env.REACT_APP_PORT}/vendor/getAllVendors`
             );
             setVendorDataList(response.data.result);
-            //setFilteredData(response.data.result);
+
+            // Assuming dcData is defined somewhere in your code
+            const filteredData = response.data.result.filter(dcItem =>
+                !dcData.dcPartyItems.some(vendor =>
+                    dcItem._id === vendor._id
+                    && dcItem.dcCode === vendor._id
+                    && dcItem.dcAddress === vendor.id
+                )
+            );
+            setFilteredData(filteredData);
         } catch (err) {
             console.log(err);
         }
@@ -153,8 +216,8 @@ const Dc = () => {
                 ...prev,
                 dcPartyName: response.data.result.fullName,
                 dcPartyAddress: response.data.result.address,
-                dcPartyCode: response.data.result.vendorCode
-
+                dcPartyCode: response.data.result.vendorCode,
+                dcPartyId: response.data.result._id
             }))
 
         } catch (err) {
@@ -168,7 +231,7 @@ const Dc = () => {
     const getDistinctItemName = async () => {
         try {
             const response = await axios.get(
-                `${process.env.REACT_APP_PORT}/itemAdd/getDistinctItemName`
+                `${process.env.REACT_APP_PORT}/itemAdd/getAllDistinctItemName`
             );
             console.log(response.data)
             setItemMasterDistNames(response.data.result);
@@ -212,15 +275,72 @@ const Dc = () => {
             );
             setAlertMessage(response.data.message)
             setSnackBarOpen(true)
-            setTimeout(() => setDcOpen(false), 3000)
+            setTimeout(() => setDcEditOpen(false), 3000)
         } catch (err) {
             console.log(err);
         }
     };
 
+    const deleteAC = (index) => {
+        setDcData((prev) => {
+            const AC = [...prev.dcPartyItems]
+            AC.splice(index, 1);
+            return {
+                ...prev, dcPartyItems: AC,
+            };
+        })
+    };
+    const [allItemImtes, setAllItemImtes] = useState([])
+    const [itemImtes, setItemImtes] = useState([])
+    const [selectedDcItem, setSelectedDcItem] = useState([])
+
+    const [itemAddDetails, setItemAddDetails] = useState({
+        itemListNames: "",
+        itemImteList: ""
+    })
 
 
+    const getItemByName = async (value) => {
+        try {
+            const response = await axios.post(
+                `${process.env.REACT_APP_PORT}/itemAdd/getItemAddByName`, { itemItemMasterName: value }
+            );
+            console.log(response.data)
+            setAllItemImtes(response.data.result)
+            const filteredImtes = response.data.result.filter((imtes) => !dcData.dcPartyItems.some(dcImte => imtes._id === dcImte._id))
+            setItemImtes(filteredImtes)
 
+        } catch (err) {
+            console.log(err);
+        }
+    };
+
+    const handleDcItemAdd = (e) => {
+        const { name, value } = e.target;
+        if (name === "itemListNames") {
+            getItemByName(value)
+            setItemAddDetails((prev) => ({ ...prev, [name]: value }))
+        }
+        if (name === "itemImteList") {
+            setSelectedDcItem(value)
+            setItemAddDetails((prev) => ({ ...prev, [name]: value }))
+        }
+
+
+    }
+
+    const dcItemAdd = () => {
+        if (selectedDcItem.length !== 0) {
+            setDcData((prev) => ({ ...prev, dcPartyItems: [...prev.dcPartyItems, selectedDcItem] }))
+        }
+    }
+    useEffect(() => {
+        setSelectedDcItem([])
+        setItemAddDetails({
+            itemListNames: "",
+            itemImteList: ""
+        })
+    }, [dcData.dcPartyItems])
 
 
 
@@ -276,22 +396,23 @@ const Dc = () => {
     };
     useEffect(() => {
         itemAddFetch();
+
     }, []);
 
 
 
     return (
-        <Dialog fullWidth={true} keepMounted maxWidth="xl" open={dcOpen} sx={{ color: "#f1f4f4" }}
+        <Dialog fullWidth={true} keepMounted maxWidth="xl" open={dcEditOpen} sx={{ color: "#f1f4f4" }}
             onClose={(e, reason) => {
                 console.log(reason)
                 if (reason !== 'backdropClick' && reason !== 'escapeKeyDown') {
-                    setDcOpen(false)
+                    setDcEditOpen(false)
                 }
             }}>
             <DialogTitle align='center' >DC</DialogTitle>
             <IconButton
                 aria-label="close"
-                onClick={() => setDcOpen(false)}
+                onClick={() => setDcEditOpen(false)}
                 sx={{
                     position: 'absolute',
                     right: 8,
@@ -306,6 +427,18 @@ const Dc = () => {
                 <div>
                     <LocalizationProvider dateAdapter={AdapterDayjs}>
                         <form>
+                            <div className='row'>
+                                <div class="col-3 mb-2">
+                                    <select className="form-select form-select-sm" id="dcPartyTypeId" name="dcPartyType" onChange={handleFilterChange}  >
+                                        <option value="">Select</option>
+                                        <option value="oem">OEM</option>
+                                        <option value="customer">Customer</option>
+                                        <option value="supplier">Supplier</option>
+                                        <option value="subContractor">SubContractor</option>
+                                    </select>
+
+                                </div>
+                            </div>
 
                             <Paper
                                 sx={{
@@ -327,19 +460,22 @@ const Dc = () => {
                                             <div className=" col me-2">
 
                                                 <TextField label="Party Name"
-                                                    id="partyNameId"
-                                                    select
-                                                    // value={dcData.dcPartyName}
-                                                    onChange={(e) => setPartyData(e.target.value)}
+                                                id="partyNameId"
+                                                select
 
-                                                    //  sx={{ width: "100%" }}
-                                                    size="small"
-                                                    fullWidth
-                                                    name="partyName" >
-                                                    {vendorDataList.map((item, index) => (
-                                                        <MenuItem key={index} value={item._id}>{item.fullName}</MenuItem>
-                                                    ))}
-                                                </TextField>
+                                                // value={dcData.dcPartyName}
+                                                onChange={(e) => setPartyData(e.target.value)}
+
+                                                //  sx={{ width: "100%" }}
+                                                size="small"
+                                                fullWidth
+                                                disabled={dcData.dcPartyType === ""}
+                                                name="partyName" >
+                                                {filteredData.map((item, index) => (
+                                                    <MenuItem key={index} value={item._id}>{item.fullName}</MenuItem>
+                                                ))}
+                                            </TextField>
+                                               
 
                                             </div>
                                             <div className="col me-2">
@@ -347,6 +483,7 @@ const Dc = () => {
                                                 <TextField label="Party code"
                                                     id="partyCodeId"
                                                     defaultValue=""
+                                                    disabled={dcData.dcPartyType === ""}
 
                                                     value={dcData.dcPartyCode}
 
@@ -367,6 +504,7 @@ const Dc = () => {
                                                     value={dcData.dcPartyAddress}
 
                                                     defaultValue=""
+                                                    disabled={dcData.dcPartyType === ""}
 
                                                     size="small"
                                                     sx={{ width: "100%" }}
@@ -417,15 +555,15 @@ const Dc = () => {
 
                                         </div>
                                         <div className="col me-2">
-                                        <TextField label="Reason"
-                                                id="reasonId"
+                                            <TextField label="Reason"
+                                                id="dcReasonId"
                                                 select
                                                 defaultValue=""
                                                 //value={dcData.dcReason}
                                                 onChange={handleDcChange}
                                                 size="small"
                                                 sx={{ width: "101%" }}
-                                                name="reason" >
+                                                name="dcReason" >
                                                 <MenuItem value="All">All</MenuItem>
                                                 <MenuItem value="Service">Service</MenuItem>
                                                 <MenuItem value="Service Calibration">Service&Calibration</MenuItem>
@@ -436,13 +574,13 @@ const Dc = () => {
                                         </div>
                                         <div className='col me-2'>
                                             <TextField label="Common Remarks"
-                                                id="commonRemarksId"
-                                              //  value={dcData.dcCommonRemarks}
+                                                id="dcCommonRemarksId"
+                                                //  value={dcData.dcCommonRemarks}
                                                 defaultValue=""
                                                 onChange={handleDcChange}
                                                 size="small"
                                                 sx={{ width: "102%" }}
-                                                name="commonRemarks" />
+                                                name="dcCommonRemarks" />
 
                                         </div>
 
@@ -467,7 +605,7 @@ const Dc = () => {
                                 <div className='row g-2'>
                                     <div className='col d-flex'>
                                         <div className='col me-2'>
-                                            <TextField size='small' select fullWidth variant='outlined' onChange={handleDcChange} label="Select Master" name='itemItemMasterName' >
+                                            <TextField size='small' select fullWidth id='itemListNamesId' value={itemAddDetails.itemListNames} variant='outlined' onChange={handleDcItemAdd} label="Item List" name='itemListNames' >
                                                 <MenuItem value=""><em>--Select--</em></MenuItem>
                                                 {itemMasterDistNames.map((item, index) => (
                                                     <MenuItem key={index} value={item}>{item}</MenuItem>
@@ -475,10 +613,10 @@ const Dc = () => {
                                             </TextField>
                                         </div>
                                         <div className='col'>
-                                        <TextField size='small' select fullWidth variant='outlined' onChange={handleDcChange} label="Item IMTENo" name='itemIMTENo' >
+                                            <TextField disabled={itemAddDetails.itemListNames === ""} size='small' select fullWidth variant='outlined' value={itemAddDetails.itemImteList} id='itemImteListId' onChange={handleDcItemAdd} label="Item IMTENo" name='itemImteList' >
                                                 <MenuItem value=""><em>--Select--</em></MenuItem>
-                                                {imteList.map((item, index) => (
-                                                   <MenuItem key={index} value={item.itemIMTENo}>{item.itemIMTENo}</MenuItem>
+                                                {itemImtes.map((item, index) => (
+                                                    <MenuItem key={index} value={item}>{item.itemIMTENo}</MenuItem>
                                                 ))}
                                             </TextField>
 
@@ -488,7 +626,7 @@ const Dc = () => {
                                     <div className=' col d-flex justify-content-end'>
                                         <div className='me-2 '>
                                             {/*<button type="button" className='btn btn-secondary' onClick={addDcValue} >Add Item</button>*/}
-                                            <Button startIcon={<Add />} onClick={addDcValue} size='small' sx={{ minWidth: "130px" }} variant='contained'>Add Item</Button>
+                                            <Button startIcon={<Add />} onClick={() => dcItemAdd()} size='small' sx={{ minWidth: "130px" }} variant='contained'>Add Item</Button>
                                         </div>
 
                                     </div>
@@ -525,11 +663,7 @@ const Dc = () => {
                                                     "margin-bottom": "1em"
                                                 }
                                             }}
-                                            onRowSelectionModelChange={(newRowSelectionModel, event) => {
-                                                setItemListSelectedRowIds(newRowSelectionModel);
 
-
-                                            }}
 
                                             slots={{
                                                 toolbar: GridToolbar,
@@ -550,35 +684,35 @@ const Dc = () => {
                             </Paper>
 
                             <Dialog
-                        open={confirmSubmit}
-                        onClose={(e, reason) => {
-                            console.log(reason)
-                            if (reason !== 'backdropClick' && reason !== 'escapeKeyDown') {
-                                setConfirmSubmit(false)
-                            }
-                        }}
-                        aria-labelledby="alert-dialog-title"
-                        aria-describedby="alert-dialog-description"
-                    >
-                        <DialogTitle id="alert-dialog-title">
-                            Are you sure to submit ?
-                        </DialogTitle>
+                                open={confirmSubmit}
+                                onClose={(e, reason) => {
+                                    console.log(reason)
+                                    if (reason !== 'backdropClick' && reason !== 'escapeKeyDown') {
+                                        setConfirmSubmit(false)
+                                    }
+                                }}
+                                aria-labelledby="alert-dialog-title"
+                                aria-describedby="alert-dialog-description"
+                            >
+                                <DialogTitle id="alert-dialog-title">
+                                    Are you sure to submit ?
+                                </DialogTitle>
 
-                        <DialogActions className='d-flex justify-content-center'>
-                            <Button onClick={() => setConfirmSubmit(false)}>Cancel</Button>
-                            <Button onClick={() => { submitCalForm(); setConfirmSubmit(false) }} autoFocus>
-                                Submit
-                            </Button>
-                        </DialogActions>
-                    </Dialog>
-                    <Snackbar anchorOrigin={{ vertical: "top", horizontal: "right" }} open={snackBarOpen} autoHideDuration={3000}
-                        onClose={() => setTimeout(() => {
-                            setSnackBarOpen(false)
-                        }, 3000)}>
-                        <Alert onClose={() => setSnackBarOpen(false)} variant='filled' severity="success" sx={{ width: '100%' }}>
-                            {alertMessage}
-                        </Alert>
-                    </Snackbar>
+                                <DialogActions className='d-flex justify-content-center'>
+                                    <Button onClick={() => setConfirmSubmit(false)}>Cancel</Button>
+                                    <Button onClick={() => { submitCalForm(); setConfirmSubmit(false) }} autoFocus>
+                                        Submit
+                                    </Button>
+                                </DialogActions>
+                            </Dialog>
+                            <Snackbar anchorOrigin={{ vertical: "top", horizontal: "right" }} open={snackBarOpen} autoHideDuration={3000}
+                                onClose={() => setTimeout(() => {
+                                    setSnackBarOpen(false)
+                                }, 3000)}>
+                                <Alert onClose={() => setSnackBarOpen(false)} variant='filled' severity="success" sx={{ width: '100%' }}>
+                                    {alertMessage}
+                                </Alert>
+                            </Snackbar>
 
 
                         </form>
@@ -590,8 +724,8 @@ const Dc = () => {
                     <Button variant='contained' color='warning' className='me-3'>Upload Report</Button>
                 </div>
                 <div>
-                    <Button variant='contained' color='error' className='me-3' onClick={() => { setDcOpen(false) }}>Cancel</Button>
-                    <Button variant='contained' color='success'  onClick={() => { setConfirmSubmit(true) }}>Submit</Button>
+                    <Button variant='contained' color='error' className='me-3' onClick={() => { setDcEditOpen(false) }}>Cancel</Button>
+                    <Button variant='contained' color='success' onClick={() => { setConfirmSubmit(true) }}>Submit</Button>
                 </div>
             </DialogActions>
 
@@ -600,4 +734,4 @@ const Dc = () => {
     )
 }
 
-export default Dc
+export default DcEdit

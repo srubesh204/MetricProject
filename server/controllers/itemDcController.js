@@ -14,8 +14,8 @@ const itemDcController = {
       createItemDc: async (req, res) => {
        
         try {
-          const {dcPartyName, dcPartyCode, dcPartyAddress, dcNo, dcDate, dcReason, dccommonRemarks,  dcMasterName, dcPartyItems} = req.body;
-          const itemDcResult = new itemDcModel({dcPartyName, dcPartyCode, dcPartyAddress, dcNo, dcDate, dcReason, dccommonRemarks, dcMasterName, dcPartyItems});
+          const {dcPartyName, dcPartyCode, dcPartyAddress, dcNo, dcDate, dcReason, dcCommonRemarks,  dcMasterName, dcPartyItems} = req.body;
+          const itemDcResult = new itemDcModel({dcPartyName, dcPartyCode, dcPartyAddress, dcNo, dcDate, dcReason, dcCommonRemarks, dcMasterName, dcPartyItems});
           const validationError = itemDcResult.validateSync();
 
           if (validationError) {

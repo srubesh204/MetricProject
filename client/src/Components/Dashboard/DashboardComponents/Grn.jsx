@@ -38,7 +38,7 @@ const Grn = () => {
         grnPartyAddress: "",
         grnNo: "",
         grnDate: "",
-        grncCommonRemarks: "",
+        grnCommonRemarks: "",
         grnPartyItems: []
 
 
@@ -143,6 +143,45 @@ const Grn = () => {
     }, []);
 
 
+    const [itemMasterDistNames, setItemMasterDistNames] = useState([])
+    const getDistinctItemName = async () => {
+        try {
+            const response = await axios.get(
+                `${process.env.REACT_APP_PORT}/itemAdd/getDistinctItemName`
+            );
+            console.log(response.data)
+            setItemMasterDistNames(response.data.result);
+
+        } catch (err) {
+            console.log(err);
+        }
+    };
+    useEffect(() => {
+        getDistinctItemName();
+    }, []);
+
+    const [imteList, setImteList] = useState([])
+    const getImteList = async () => {
+        try {
+            const response = await axios.get(
+                `${process.env.REACT_APP_PORT}/itemAdd/getItemAddByIMTESort`
+            );
+            console.log(response.data)
+            setImteList(response.data.result)
+
+
+        } catch (err) {
+            console.log(err);
+        }
+    };
+
+    useEffect(() => {
+        getImteList();
+    }, []);
+
+
+
+
 
 
 
@@ -185,7 +224,7 @@ const Grn = () => {
                             <Container maxWidth="lg" sx={{ mb: 2 }}>
 
                                 <div className='row'>
-                                    <h1 className='text-center mb-2'>GRN</h1>
+
                                     <div className='col'>
                                         <Paper
                                             sx={{
@@ -213,14 +252,22 @@ const Grn = () => {
                                                 <div className="col-6">
 
                                                     <DatePicker
+
                                                         fullWidth
                                                         id="partyRefDateId"
                                                         name="partyRefDate"
+                                                        value={dayjs(grnData. grnPartyRefDate)}
+                                                        onChange={(newValue) =>
+                                                            setGrnData((prev) => ({ ...prev, grnPartyRefDate: newValue.format("YYYY-MM-DD") }))
+                                                        }
                                                         label="Party Ref Date"
-                                                        value={grnData.grnPartyRefDate}
-                                                        sx={{ width: "100%" }}
+                                                        onChange={handleGrnChange}
+
+
                                                         slotProps={{ textField: { size: 'small' } }}
                                                         format="DD-MM-YYYY" />
+
+                                                    
 
                                                 </div>
 
@@ -233,12 +280,14 @@ const Grn = () => {
                                                         <TextField label="Party Name"
                                                             id="partyNameId"
                                                             select
-                                                            value={grnData.grnPartyName}
+                                                            // value={grnData.grnPartyName}
+                                                            onChange={handleGrnChange}
                                                             onChange={(e) => setPartyData(e.target.value)}
 
                                                             //  sx={{ width: "100%" }}
                                                             size="small"
                                                             fullWidth
+
                                                             name="partyName" >
                                                             {vendorDataList.map((item, index) => (
                                                                 <MenuItem key={index} value={item._id}>{item.fullName}</MenuItem>
@@ -250,6 +299,7 @@ const Grn = () => {
                                                         <TextField label="Party code"
                                                             id="partyCodeId"
                                                             defaultValue=""
+                                                            onChange={handleGrnChange}
                                                             // sx={{ width: "100%" }}
                                                             size="small"
                                                             value={grnData.grnPartyCode}
@@ -270,6 +320,7 @@ const Grn = () => {
                                                         id="partyAddressId"
                                                         defaultValue=""
                                                         size="small"
+                                                        onChange={handleGrnChange}
                                                         value={grnData.grnPartyAddress}
                                                         sx={{ width: "101%" }}
                                                         name="Party Address" />
@@ -295,14 +346,16 @@ const Grn = () => {
                                             <div className='col d-flex mb-2'>
                                                 <div className=" col-6 me-2">
 
-                                                    <TextField label="GRN NO"
+                                                    <TextField
+                                                        label="GRN NO"
                                                         id="grnNoId"
                                                         defaultValue=""
                                                         value={grnData.grnNo}
-                                                        //  sx={{ width: "100%" }}
                                                         size="small"
+                                                        onChange={handleGrnChange}
                                                         fullWidth
-                                                        name="grnNo" />
+                                                        name="grnNo"
+                                                    />
                                                 </div>
                                                 <div className="col-6">
 
@@ -311,7 +364,8 @@ const Grn = () => {
                                                         id="grnDateId"
                                                         name="grnDate"
                                                         label="GRN Date"
-                                                        value={grnData.grnDate}
+                                                        onChange={handleGrnChange}
+                                                        //value={grnData.grnDate}
                                                         sx={{ width: "100%" }}
                                                         slotProps={{ textField: { size: 'small' } }}
                                                         format="DD-MM-YYYY" />
@@ -326,7 +380,8 @@ const Grn = () => {
                                                         id="commonRemarksId"
 
                                                         defaultValue=""
-                                                        value={grnData.grncCommonRemarks}
+                                                        onChange={handleGrnChange}
+                                                        value={grnData.grnCommonRemarks}
                                                         fullWidth
                                                         size="small"
                                                         name="commonRemarks"
@@ -352,6 +407,9 @@ const Grn = () => {
                                             <div className='col me-2'>
                                                 <TextField size='small' fullWidth variant='outlined' defaultValue="all" id="itemListId" select label="Item List" name='itemList'>
                                                     <MenuItem value="all">All</MenuItem>
+                                                    {itemMasterDistNames.map((item, index) => (
+                                                        <MenuItem key={index} value={item}>{item}</MenuItem>
+                                                    ))}
 
                                                 </TextField>
                                             </div>
@@ -364,9 +422,10 @@ const Grn = () => {
                                                     size="small"
                                                     name="imteNo" >
                                                     <MenuItem value="all">All</MenuItem>
-                                                    {itemAddList.map((item, index) => (
+                                                    {imteList.map((item, index) => (
                                                         <MenuItem key={index} value={item.itemIMTENo}>{item.itemIMTENo}</MenuItem>
                                                     ))}
+
                                                 </TextField>
                                             </div>
                                         </div>

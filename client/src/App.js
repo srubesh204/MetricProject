@@ -26,6 +26,7 @@ import Grn from './Components/Dashboard/DashboardComponents/Grn';
 import DcList from './Components/dcList/DcList';
 import GrnList from './Components/grnList/GrnList';
 import CalList from './Components/calList/CalList';
+import DcEdit from './Components/dcList/DcEdit';
 
 
 function App() {
@@ -63,6 +64,7 @@ function App() {
         <Route path="/dcList" element={<DcList/>} />
         <Route path="/grnList" element={<GrnList/>} />
         <Route path="/calList" element={<CalList/>} />
+        <Route path="/dcEdit" element={<DcEdit/>} />
       </Routes>
 
     </div>

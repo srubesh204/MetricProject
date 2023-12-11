@@ -14,5 +14,6 @@ router.delete("/deleteItemAdd", itemAddController.deleteItemAdd)
 router.get("/getDistinctItemDepartments", itemAddController.getDistinctItemDepartments)
 router.post("/getItemAddByDepName", itemAddController.getItemAddByDepName)
 router.post("/getitemAddMasterName", itemAddController.getitemAddMasterName)
- 
+router.get("/getAllDistinctItemName", itemAddController.getAllDistinctItemName)
+   
 module.exports = router;
