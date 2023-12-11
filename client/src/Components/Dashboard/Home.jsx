@@ -12,7 +12,12 @@ import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { Add, Delete } from '@mui/icons-material';
 import CalDialog from './DashboardComponents/CalDialog';
-export const CalDataContent = createContext(null);
+import Dc from './DashboardComponents/Dc'
+import Grn from './DashboardComponents/Grn'
+// import Dc from './DashboardComponents/Dc';
+// import Grn from './DashboardComponents/Grn';
+export const HomeContent = createContext(null);
+
 
 dayjs.extend(isSameOrBefore)
 dayjs.extend(isSameOrAfter)
@@ -50,7 +55,7 @@ const Home = () => {
   const [departmentName, setDepartmentName] = useState("")
   const [allDepartments, setAllDepartments] = useState([])
 
-
+  //get all employess
   const getAllEmployees = async () => {
     try {
       const Departments = await axios.get(
@@ -70,7 +75,9 @@ const Home = () => {
       console.log(err);
     }
   };
+  //
 
+//allActiveEmployees
   const [activeEmps, setActiveEmps] = useState([])
 
   const empFetch = async () => {
@@ -83,8 +90,10 @@ const Home = () => {
       console.log(err);
     }
   };
-
   console.log(activeEmps)
+//
+
+  
 
   const getAllDepartments = async () => {
     try {
@@ -331,7 +340,7 @@ const Home = () => {
     const missingItems = pieDataFilter.filter((item) => item.itemStatus === "Missing");
     const rejectionItems = pieDataFilter.filter((item) => item.itemStatus === "Rejection");
 
-    setCalSrcValue("")
+
 
     const inhouse = pieDataFilter.filter((item) => item.itemCalibrationSource === "InHouse");
     const outSource = pieDataFilter.filter((item) => item.itemCalibrationSource === "OutSource");
@@ -343,6 +352,7 @@ const Home = () => {
       outSource: outSource.length,
       oem: oem.length
     }))
+
 
 
     switch (name) {
@@ -389,6 +399,7 @@ const Home = () => {
 
 
   }
+
 
   const ItemLocationDisplay = (name) => {
     if (name === "Departments") {
@@ -693,10 +704,12 @@ const Home = () => {
   };
 
   const [calOpen, setCalOpen] = useState(false);
+  const [dcOpen, setDcOpen] = useState(false);
+  const [grnOpen, setGrnOpen] = useState(false);
 
   console.log(selectedRows)
 
- 
+
   return (
     <div style={{ backgroundColor: "#f1f4f4", margin: 0, padding: 0 }}>
       <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -1002,8 +1015,8 @@ const Home = () => {
                 <div className="col-md-9">
                   <Button size='small' className='me-2'>Onsite</Button>
                   {(selectedRows.length === 1 && selectedRows[0].itemCalibrationSource === "inhouse") && <Button size='small' className='me-2' onClick={() => setCalOpen(true)}>Cal</Button>}
-                  <Button size='small' className='me-2'>Grn</Button>
-                  <Button size='small'>Create DC</Button>
+                  <Button size='small' onClick={() => setGrnOpen(true)} className='me-2'>Grn</Button>
+                  <Button size='small' onClick={() => setDcOpen(true)}>Create DC</Button>
                 </div>
                 <div className="col-md-3">
                   <Button component={Link} to="/itemmaster" size='small' className='me-2'>Item Master</Button>
@@ -1032,12 +1045,23 @@ const Home = () => {
               </table>
             </Paper>
 
-            <CalDataContent.Provider
-              value={{calOpen,setCalOpen, selectedRows, itemMasters, activeEmps}}
+            <HomeContent.Provider
+              value={{ calOpen, setCalOpen, selectedRows, itemMasters, activeEmps }}
             >
               <CalDialog />
-            </CalDataContent.Provider>
-           
+            </HomeContent.Provider>
+
+            <HomeContent.Provider
+              value={{ dcOpen, setDcOpen, selectedRows }}
+            >
+              <Dc />
+            </HomeContent.Provider>
+            <HomeContent.Provider
+              value={{ grnOpen, setGrnOpen, selectedRows }}
+            >
+              <Grn />
+            </HomeContent.Provider>
+
           </div>
         </div>
 

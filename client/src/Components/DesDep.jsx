@@ -148,8 +148,8 @@ export const Department = () => {
   const updateDepartment = async () => {
     try {
       const response = await axios.put(
-       // "http://localhost:3001/department/updateDepartment/" + depStateId, departmentData
-        `${process.env.REACT_APP_PORT}/department/updateDepartment/${id}`, departmentData
+       "http://localhost:3001/department/updateDepartment/" + depStateId, departmentData
+        //`${process.env.REACT_APP_PORT}/department/updateDepartment/${id}`, departmentData
       );
       depFetchData();
       setDepartmentData(emptyDepartmentData);

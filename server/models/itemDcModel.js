@@ -11,6 +11,7 @@ const itemDcSchema = new mongoose.Schema({
   dcDate:String,
   dcReason:String,
   dcCommonRemarks:String,
+  dcMasterName:String,
   dcPartyItems:[]
 });
 itemDcSchema.plugin(uniqueValidator);

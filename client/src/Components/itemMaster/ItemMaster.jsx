@@ -916,7 +916,7 @@ const ItemMaster = () => {
                                             <MenuItem value="all">All</MenuItem >
                                             <MenuItem value="attribute">Attribute</MenuItem >
                                             <MenuItem value="variable">Variable</MenuItem >
-                                            <MenuItem value="referencestandard">Reference Standard</MenuItem >
+                                            <MenuItem value="referenceStandard">Reference Standard</MenuItem >
 
                                         </TextField>
 

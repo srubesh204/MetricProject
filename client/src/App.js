@@ -21,8 +21,8 @@ import FileViewer from './Components/Test/FileViewer';
 import Login from './Components/Dashboard/Login';
 import InsHisCard from './Components/reports/InsHisCard';
 import Status from './Components/status/Status';
-import Dc from './Components/dc/Dc';
-import Grn from './Components/grn/Grn';
+// import Dc from './Components/dc/Dc';
+import Grn from './Components/Dashboard/DashboardComponents/Grn';
 import DcList from './Components/dcList/DcList';
 import GrnList from './Components/grnList/GrnList';
 import CalList from './Components/calList/CalList';
@@ -58,7 +58,7 @@ function App() {
         <Route path="/login" element={<Login/>} />
         <Route path="/reports" element={<InsHisCard/>} />
         <Route path="/status" element={<Status/>} />
-        <Route path="/dc" element={<Dc/>} />
+        {/* <Route path="/dc" element={<Dc/>} /> */}
         <Route path="/grn" element={<Grn/>} />
         <Route path="/dcList" element={<DcList/>} />
         <Route path="/grnList" element={<GrnList/>} />

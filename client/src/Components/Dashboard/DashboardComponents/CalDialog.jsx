@@ -1,13 +1,13 @@
 import React, { createContext, useEffect, useState, useContext } from 'react'
-import { Alert, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, FormControlLabel, IconButton, MenuItem, Paper, Snackbar, Switch, TextField } from '@mui/material';
+import { Alert, Button, Chip, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, FormControlLabel, IconButton, MenuItem, Paper, Snackbar, Switch, TextField } from '@mui/material';
 import axios from 'axios';
 import dayjs from 'dayjs';
 import isSameOrAfter from 'dayjs/plugin/isSameOrAfter'
 import isSameOrBefore from 'dayjs/plugin/isSameOrBefore'
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { CalDataContent } from '../Home';
-import { Add, Close, Delete } from '@mui/icons-material';
+import { HomeContent } from '../Home';
+import { Add, Close, Delete, ErrorOutline } from '@mui/icons-material';
 
 dayjs.extend(isSameOrBefore)
 dayjs.extend(isSameOrAfter)
@@ -15,7 +15,9 @@ dayjs.extend(isSameOrAfter)
 const CalDialog = () => {
 
 
-
+    const calData = useContext(HomeContent)
+    const [lastResultData, setLastResultData] = useState([])
+    const { calOpen, setCalOpen, selectedRows, itemMasters, activeEmps } = calData
     const [calibrationDatas, setCalibrationDatas] = useState([])
 
     const getAllCalibrationData = async () => {
@@ -25,6 +27,13 @@ const CalDialog = () => {
             );
             console.log(response.data.result)
             setCalibrationDatas(response.data.result)
+            const maxDateObject = response.data.result.reduce((prev, current) => {
+                const prevDate = dayjs(prev.calItemEntryDate);
+                const currentDate = dayjs(current.calItemEntryDate);
+                return currentDate.isAfter(prevDate) ? current : prev;
+            });
+            setLastResultData(maxDateObject)
+
         } catch (err) {
             console.log(err);
         }
@@ -33,10 +42,9 @@ const CalDialog = () => {
         getAllCalibrationData();
     }, [])
 
-    const calData = useContext(CalDataContent)
-    const { calOpen, setCalOpen, selectedRows, itemMasters, activeEmps } = calData
+
     const [selectedExtraMaster, setSelectedExtraMaster] = useState([])
-    console.log(selectedExtraMaster)
+    console.log(calibrationDatas)
 
     const [calibrationData, setCalibrationData] = useState({
         calItemId: "",
@@ -60,6 +68,7 @@ const CalDialog = () => {
         calCalibratedBy: "",
         calApprovedBy: "",
         calBeforeData: "no",
+        calStatus: "status",
         calcalibrationData: [{
             calParameter: "",
             calNominalSize: "",
@@ -74,9 +83,9 @@ const CalDialog = () => {
             calOBError: "",
             calMinPSError: "",
             calMaxPSError: "",
-            calStatus: ""
+            rowStatus: ""
         }],
-        calMasterUsed: []
+        calMasterUsed: [],
     })
 
 
@@ -120,7 +129,8 @@ const CalDialog = () => {
                                 calOBError: item.acOBError,
                                 calMinPSError: item.acMinPSError,
                                 calMaxPSError: item.acMaxPSError,
-                                calStatus: ""
+                                rowStatus: ""
+
                             }
                         )),
 
@@ -155,7 +165,13 @@ const CalDialog = () => {
 
     console.log(calibrationData)
 
+    // const [minColor, setMinColor] = useState("")
+    // const [maxColor, setMaxColor] = useState("")
+
+    const [modifiedFields, setModifiedFields] = useState({ minModified: false, maxModified: false });
+
     const changecalDataValue = (index, name, value) => {
+
 
 
         setCalibrationData((prev) => {
@@ -168,41 +184,154 @@ const CalDialog = () => {
             };
         })
 
-        if (name === "calAverageOB") {
-            const initialStatuses = calibrationData.calcalibrationData.map(item => {
-                const isAverageInRange =
-                    parseFloat(value) >= parseFloat(item.calMinPS) &&
-                    parseFloat(value) <= parseFloat(item.calMaxPS);
+        if (calibrationData.calItemType === "referenceStandard") {
+            if (name === "calAverageOB") {
+                const initialStatuses = calibrationData.calcalibrationData.map(item => {
+                    const isAverageInRange =
+                        parseFloat(value) >= parseFloat(item.calMinPS) &&
+                        parseFloat(value) <= parseFloat(item.calMaxPS);
 
-                return isAverageInRange ? "accepted" : "rejected";
-            });
-            setCalibrationData((prev) => {
-                const updateAC = [...prev.calcalibrationData]
-                updateAC[index] = {
-                    ...updateAC[index], calStatus: initialStatuses[index],
-                };
-                return {
-                    ...prev, calcalibrationData: updateAC,
-                };
-            })
+                    return isAverageInRange ? "ok" : "notOk";
+                });
+                console.log(initialStatuses)
+                setCalibrationData((prev) => {
+                    const updateAC = [...prev.calcalibrationData]
+                    updateAC[index] = {
+                        ...updateAC[index], rowStatus: initialStatuses[index],
+                    };
+                    return {
+                        ...prev, calcalibrationData: updateAC,
+                    };
+                })
+            }
+
+            if (name === "calMinOB" || name === "calMaxOB") {
+                setCalibrationData(prev => {
+                    const updatedData = prev.calcalibrationData.map((item, idx) => {
+                        if (idx === index) {
+
+                            const isMinInRange = parseFloat(item.calMinOB) >= parseFloat(item.calMinPS) &&
+                                parseFloat(item.calMinOB) <= parseFloat(item.calMaxPS);
+                            const isMaxInRange = parseFloat(item.calMaxOB) >= parseFloat(item.calMinPS) &&
+                                parseFloat(item.calMaxOB) <= parseFloat(item.calMaxPS);
+
+
+                            let status = ""
+
+                            if (item.calMaxOB === "" && item.calMinOB === "") {
+                                status = "";
+                            } else if (item.calMaxOB === "") {
+                                status = (isMinInRange) ? "ok" : "notOk";
+                            } else {
+                                status = (isMinInRange && isMaxInRange) ? "ok" : "notOk";
+                            }
+
+                            return {
+                                ...item,
+                                rowStatus: status,
+                            };
+                        }
+                        return item;
+                    });
+                    return {
+                        ...prev,
+                        calcalibrationData: updatedData,
+                    };
+                });
+            }
+
         }
+
+        if (calibrationData.calItemType === "variable") {
+            if (name === "calAverageOB") {
+                const initialStatuses = calibrationData.calcalibrationData.map(item => {
+                    const isAverageInRange =
+                        parseFloat(value) >= parseFloat(item.calMinPS) &&
+                        parseFloat(value) <= parseFloat(item.calMaxPS);
+
+                    return isAverageInRange ? "ok" : "notOk";
+                });
+                console.log(initialStatuses)
+                setCalibrationData((prev) => {
+                    const updateAC = [...prev.calcalibrationData]
+                    updateAC[index] = {
+                        ...updateAC[index], rowStatus: initialStatuses[index],
+                    };
+                    return {
+                        ...prev, calcalibrationData: updateAC,
+                    };
+                })
+            }
+
+            if (name === "calMinOB" || name === "calMaxOB") {
+
+
+                setCalibrationData(prev => {
+                    const updatedData = prev.calcalibrationData.map((item, idx) => {
+                        if (idx === index) {
+                            const isMinInRange = parseFloat(item.calMinOB) >= parseFloat(item.calMinPS) &&
+                                parseFloat(item.calMinOB) <= parseFloat(item.calMaxPS);
+
+                            const isMaxInRange = parseFloat(item.calMaxOB) >= parseFloat(item.calMinPS) &&
+                                parseFloat(item.calMaxOB) <= parseFloat(item.calMaxPS);
+
+
+                            const status = (isMinInRange && isMaxInRange) ? "ok" : "notOk";
+
+                            return {
+                                ...item,
+                                rowStatus: status,
+                            };
+                        }
+                        return item;
+                    });
+                    return {
+                        ...prev,
+                        calcalibrationData: updatedData,
+                    };
+                });
+            }
+
+
+        }
+
+        if (calibrationData.calItemType === "attribute") {
+
+        }
+
+
 
 
     };
 
     useEffect(() => {
-        calibrationData.calcalibrationData.forEach((item, index) => {
-            if (item.calAverageOB !== undefined) {
-                const isAverageInRange =
-                    parseFloat(item.calAverageOB) >= parseFloat(item.calMinPS) &&
-                    parseFloat(item.calAverageOB) <= parseFloat(item.calMaxPS);
-    
-                const status = isAverageInRange ? "accepted" : "rejected";
-    
-                changecalDataValue(index, "calStatus", status);
-            }
-        });
-    }, [calibrationData.calcalibrationData]);
+        const ifRejected = calibrationData.calcalibrationData.some((item) => item.rowStatus === "notOk")
+        if (ifRejected) {
+            setCalibrationData((prev) => ({ ...prev, calStatus: "rejected" }))
+        } else {
+            setCalibrationData((prev) => ({ ...prev, calStatus: "accepted" }))
+        }
+
+    }, [calibrationData.calcalibrationData])
+
+    // useEffect(() => {
+    //     const initialStatuses = calibrationData.calcalibrationData.map(item => {
+    //         const isAverageInRange =
+    //            ( parseFloat(calMinOB) >= parseFloat(item.calMinPS) && parseFloat(value) <= parseFloat(item.calMaxPS)) && (parseFloat(calMinOB) >= parseFloat(item.calMinPS) && parseFloat(value) <= parseFloat(item.calMaxPS))
+
+    //         return isAverageInRange ? "ok" : "notOk";
+    //     });
+    //     console.log(initialStatuses)
+    //     setCalibrationData((prev) => {
+    //         const updateAC = [...prev.calcalibrationData]
+    //         updateAC[index] = {
+    //             ...updateAC[index], rowStatus: initialStatuses[index],
+    //         };
+    //         return {
+    //             ...prev, calcalibrationData: updateAC,
+    //         };
+    //     })
+    // }, [calibrationData.calcalibrationData]);
 
 
 
@@ -233,14 +362,21 @@ const CalDialog = () => {
         getEmployeeByName(calibrationData.calCalibratedBy)
     }, [calibrationData.calCalibratedBy])
 
+    const [lastResultShow, setLastResultShow] = useState(false)
+
     const handleCalData = (e) => {
         const { name, value, checked } = e.target;
         setCalibrationData((prev) => ({ ...prev, [name]: value }))
+        console.log(name)
         if (name === "beforeCalSwitch") {
             setCalibrationData((prev) => ({ ...prev, calBeforeData: checked ? "yes" : "no" }))
         }
+        if (name === "lastResult") {
+            setLastResultShow(checked)
+        }
 
     }
+    console.log(lastResultShow)
 
 
     const addACValue = () => {
@@ -283,33 +419,12 @@ const CalDialog = () => {
 
     const [obStatus, setObStatus] = useState([]);
 
-    // const obStatusChange = (index, name, value) => {
-    //     const initialStatuses = calibrationData.calcalibrationData.map(item => {
-    //         const isAverageInRange =
-    //             parseFloat(item.calAverageOB) >= parseFloat(item.calMinPS) &&
-    //             parseFloat(item.calAverageOB) <= parseFloat(item.calMaxPS);
-
-    //         return isAverageInRange ? "accepted" : "rejected";
-    //     });
-    //     console.log(initialStatuses)
-
-    //     setCalibrationData((prev) => {
-    //         const updateAC = [...prev.calcalibrationData]
-    //         updateAC[index] = {
-    //             ...updateAC[index], [name]: initialStatuses[index],
-    //         };
-    //         return {
-    //             ...prev, calcalibrationData: updateAC,
-    //         };
-    //     })
-    // }
+    const [showLastResult, setShowLastResult] = useState(false)
 
 
 
-    useEffect(() => {
 
 
-    }, [calibrationData.calcalibrationData]);
 
 
 
@@ -532,13 +647,13 @@ const CalDialog = () => {
                                 />
                             </div>
                             <div className="col-md-6">
-                                <DatePicker format="DD-MM-YYYY" slotProps={{ textField: { size: 'small' } }} value={dayjs(calibrationData.calItemCalDate)} onChange={(newValue) => setCalibrationData((prev) => ({ ...prev, calItemCalDate: newValue.format('YYYY-MM-DD') }))} />
+                                <DatePicker format="DD-MM-YYYY" slotProps={{ textField: { size: 'small' } }} value={dayjs(calibrationData.calItemCalDate)} label="Cal Date" onChange={(newValue) => setCalibrationData((prev) => ({ ...prev, calItemCalDate: newValue.format('YYYY-MM-DD') }))} />
                             </div>
                             <div className="col-md-6">
-                                <DatePicker format="DD-MM-YYYY" slotProps={{ textField: { size: 'small' } }} value={dayjs(calibrationData.calItemDueDate)} onChange={(newValue) => setCalibrationData((prev) => ({ ...prev, calItemDueDate: newValue.format('YYYY-MM-DD') }))} />
+                                <DatePicker format="DD-MM-YYYY" slotProps={{ textField: { size: 'small' } }} value={dayjs(calibrationData.calItemDueDate)} label="Due Date" onChange={(newValue) => setCalibrationData((prev) => ({ ...prev, calItemDueDate: newValue.format('YYYY-MM-DD') }))} />
                             </div>
                             <div className="col-md-6">
-                                <DatePicker format="DD-MM-YYYY" slotProps={{ textField: { size: 'small' } }} value={dayjs(calibrationData.calItemEntryDate)} onChange={(newValue) => setCalibrationData((prev) => ({ ...prev, calItemEntryDate: newValue.format('YYYY-MM-DD') }))} />
+                                <DatePicker format="DD-MM-YYYY" slotProps={{ textField: { size: 'small' } }} value={dayjs(calibrationData.calItemEntryDate)} label="Cal Entry Date" onChange={(newValue) => setCalibrationData((prev) => ({ ...prev, calItemEntryDate: newValue.format('YYYY-MM-DD') }))} />
                             </div>
                             <div className="col-md-6">
                                 <TextField
@@ -584,100 +699,142 @@ const CalDialog = () => {
 
                     <Paper elevation={12} sx={{ p: 2 }} className='col-md-12 mb-2'>
                         <div className="d-flex justify-content-between mb-2">
-                            <div> <Button size='small' variant='outlined' color='success' className='me-3'>Last Result</Button>
+                            <div> <FormControlLabel control={<Switch name='lastResult' onChange={handleCalData} />} label="Label" />
                                 <FormControlLabel control={<Switch name='beforeCalSwitch' onChange={handleCalData} />} label="Before Calibration" /></div>
                             <div><h5 className='text-center'>Calibration Data</h5></div>
-                            <div><TextField inputProps={{ sx: { color: "green" } }} InputLabelProps={{ shrink: true }} color='success' label="Cal Status" size="small" value="Ok"></TextField></div>
+                            <div><TextField select inputProps={{ sx: { color: calibrationData.calStatus === "accepted" ? "green" : "red", width: "100px" } }} name='calStatus' onChange={handleCalData} InputLabelProps={{ shrink: true }} label="Cal Status" size="small" value={calibrationData.calStatus}>
+                                <MenuItem value="">Status</MenuItem>
+                                <MenuItem value="accepted">Accepted</MenuItem>
+                                <MenuItem value="rejected">Rejected</MenuItem>
+                            </TextField></div>
 
                         </div>
 
+                        <div className="row">
+                            <div className="col">
+                                <table className=' table table-bordered table-responsive text-center align-middle'>
+                                    {calibrationData.calItemType === "attribute" &&
+                                        <tbody>
+                                            <tr>
 
-                        <table className='table table-bordered table-responsive text-center align-middle'>
-                            {calibrationData.calItemType === "attribute" &&
-                                <tbody>
-                                    <tr>
+                                                <th width="20%" rowSpan={2}>Parameter</th>
+                                                <th width="10%" rowSpan={2}>Range/Size</th>
+                                                <th width="10%" rowSpan={2}>Unit</th>
+                                                <th colSpan={3} width="30%">Permissible Size</th>
+                                                {calibrationData.calBeforeData === "yes" && <th width="5%" rowSpan={2}>Before Calibration</th>}
+                                                <th width="20%" colSpan={calibrationData.calOBType === "average" ? 1 : 2}>Observed Size</th>
+                                                <th width="10%" rowSpan={2}>Status</th>
+                                            </tr>
+                                            <tr>
+                                                <th width="6%">Min</th>
+                                                <th width="6%">Max</th>
+                                                <th width="10%">Wear Limit</th>
+                                                {calibrationData.calOBType === "average" ?
+                                                    <React.Fragment>
+                                                        <th>Average</th>
+                                                    </React.Fragment> :
+                                                    <React.Fragment>
+                                                        <th>Min</th>
+                                                        <th>Max</th>
+                                                    </React.Fragment>}
 
-                                        <th rowSpan={2}>Parameter</th>
-                                        <th rowSpan={2}>Range/Size</th>
-                                        <th rowSpan={2}>Unit</th>
-                                        <th colSpan={3}>Permissible Size</th>
-                                        {calibrationData.calBeforeData === "yes" && <th width="10%" rowSpan={2}>Before Calibration</th>}
-                                        <th width="20%" colSpan={calibrationData.calOBType === "average" ? 1 : 2}>Observed Size</th>
-                                        <th rowSpan={2}>Status</th>
-                                    </tr>
-                                    <tr>
-                                        <th width="6%">Min</th>
-                                        <th width="6%">Max</th>
-                                        <th width="8%">Wear Limit</th>
-                                        {calibrationData.calOBType === "average" ?
-                                            <React.Fragment>
-                                                <th>Average</th>
-                                            </React.Fragment> :
-                                            <React.Fragment>
-                                                <th>Min</th>
-                                                <th>Max</th>
-                                            </React.Fragment>}
+                                            </tr>
+                                            {/* {calibrationData.calcalibrationData.map((item)=> ()} */}
+                                            {calibrationData.calcalibrationData.map((item, index) => {
+                                                let color = "";
+                                                if (item.rowStatus === "ok") {
+                                                    color = "#4cbb17"
+                                                } else if (item.rowStatus === "notOk") {
+                                                    color = "red"
+                                                } else if (item.rowStatus === "conditionallyOk") {
+                                                    color = "orange"
+                                                } else {
+                                                    color = ""
+                                                }
+                                                let minColor = "";
+                                                let minStatus = false;
+                                                let maxStatus = false;
+                                                if (parseFloat(item.calMinOB) >= parseFloat(item.calMinPS) && parseFloat(item.calMinOB) <= parseFloat(item.calMaxPS)) {
+                                                    minColor = "#4cbb17";
+                                                    let minStatus = true;
+                                                } else {
+                                                    minColor = "red"
+                                                    let minStatus = false;
+                                                }
 
-                                    </tr>
-                                    {/* {calibrationData.calcalibrationData.map((item)=> ()} */}
-                                    {calibrationData.calcalibrationData.map((item, index) => (
-                                        <tr key={index}>
-                                            <td>{item.calParameter}</td>
-                                            <td>{item.calNominalSize}</td>
-                                            <td>{item.calNominalSizeUnit}</td>
-                                            <td>{item.calMinPS}</td>
-                                            <td>{item.calMaxPS}</td>
-                                            <td>{item.calWearLimitPS}</td>
-                                            {calibrationData.calBeforeData === "yes" && <td><input className='form-control form-control-sm' name="calBeforeCalibration" onChange={(e, index) => changecalDataValue(index, e.target.name, e.target.value)} /></td>}
-                                            {calibrationData.calOBType === "average" &&
-                                                <td><input name='calAverageOB' onChange={(e, index) => changecalDataValue(index, e.target.name, e.target.value)} className='form-control form-control-sm' /></td>
-                                            }
-                                            {calibrationData.calOBType === "minmax" &&
-                                                <React.Fragment>
-                                                    <td><input className='form-control form-control-sm' onChange={(e, index) => changecalDataValue(index, e.target.name, e.target.value)} />
-                                                    </td> <td><input className='form-control form-control-sm' onChange={(e, index) => changecalDataValue(index, e.target.name, e.target.value)} /></td>
-                                                </React.Fragment>}
-
-
-                                            <td width="15%">
-                                                <select className='form-select form-select-sm' name="" onChange={(e, index) => changecalDataValue(index, e.target.name, e.target.value)}>
-                                                    <option>Status</option>
-                                                    <option value="accepted" color='success'>Accepted</option>
-                                                    <option value="rejected">Rejected</option>
-                                                    <option value="conditionallyAccepted">Conditionally Accepted</option>
-                                                </select>
-                                            </td>
-                                        </tr>
-
-                                    ))}
-
-                                </tbody>}
-                            {calibrationData.calItemType === "variable" &&
-
-                                <tbody>
-                                    <tr>
-                                        <th>Parameter</th>
-                                        <th>Range/Size</th>
-                                        <th>Unit</th>
-                                        <th>Permissible Error</th>
-
-                                        <th>Observed Size/ Observer Error</th>
-                                        <th>Unit</th>
-                                        <th>Status</th>
-                                    </tr>
-                                    {calibrationData.calcalibrationData.map((item, index) => (
-                                        <tr>
+                                                let maxColor = "";
+                                                if (parseFloat(item.calMaxOB) >= parseFloat(item.calMinPS) && parseFloat(item.calMaxOB) <= parseFloat(item.calMaxPS)) {
+                                                    maxColor = "#4cbb17"
+                                                    maxStatus = true;
+                                                } else {
+                                                    maxColor = "red"
+                                                    maxStatus = false;
+                                                }
 
 
+                                                return (
+                                                    <tr key={index}>
+                                                        <td>{item.calParameter}</td>
+                                                        <td>{item.calNominalSize}</td>
+                                                        <td>{item.calNominalSizeUnit}</td>
+                                                        <td>{item.calMinPS}</td>
+                                                        <td>{item.calMaxPS}</td>
+                                                        <td>{item.calWearLimitPS}</td>
+
+                                                        {calibrationData.calBeforeData === "yes" && <td><input className='form-control form-control-sm' onChange={(e) => changecalDataValue(index, e.target.name, e.target.value)} name='calBeforeCalibration' /></td>}
+                                                        {calibrationData.calOBType === "average" &&
+                                                            <td><input className='form-control form-control-sm' name='calAverageOB' style={{ color: color, fontWeight: "bold" }} onChange={(e) => changecalDataValue(index, e.target.name, e.target.value)} /></td>
+                                                        }
+                                                        {calibrationData.calOBType === "minmax" &&
+                                                            <React.Fragment>
+                                                                <td>
+                                                                    <input className='form-control form-control-sm' style={{ color: minColor, fontWeight: "bold" }} name="calMinOB" onChange={(e) => changecalDataValue(index, e.target.name, e.target.value)} />
+                                                                </td>
+                                                                <td>
+                                                                    <input className='form-control form-control-sm' style={{ color: maxColor, fontWeight: "bold" }} name="calMaxOB" onChange={(e) => changecalDataValue(index, e.target.name, e.target.value)} /></td>
+                                                            </React.Fragment>}
+
+
+                                                        <td width="15%">
+                                                            <select className='form-select form-select-sm' name="rowStatus" value={item.rowStatus} onChange={(e) => changecalDataValue(index, e.target.name, e.target.value)}>
+                                                                <option value="">Status</option>
+                                                                <option value="ok">Ok</option>
+                                                                <option value="notOk">Not Ok</option>
+                                                                <option value="conditionallyOk">Conditionally Ok</option>
+                                                            </select>
+                                                        </td>
+                                                    </tr>
+
+                                                )
+                                            })}
+
+                                        </tbody>}
+                                    {calibrationData.calItemType === "variable" &&
+
+                                        <tbody>
+                                            <tr>
+                                                <th>Parameter</th>
+                                                <th>Nominal Size</th>
+                                                <th>Unit</th>
+                                                <th>Permissible Error</th>
+
+                                                <th>Observer Error</th>
+
+                                                <th>Status</th>
+                                            </tr>
+                                            {calibrationData.calcalibrationData.map((item, index) => (
+                                                <tr>
 
 
 
-                                            <td><input type="text" className='form-control form-control-sm' id="acMaxPSId" name="acMaxPS" placeholder='max' value={item.acMaxPS} onChange={(e) => changecalDataValue(index, e.target.name, e.target.value)} /></td>
 
 
-                                            <td><input type="text" className="form-control form-control-sm" id="acWearLimitPSId" name="acWearLimitPS" placeholder='wearLimit' value={item.acWearLimitPS} onChange={(e) => changecalDataValue(index, e.target.name, e.target.value)} /></td>
+                                                    <td><input type="text" className='form-control form-control-sm' id="acMaxPSId" name="acMaxPS" placeholder='max' value={item.acMaxPS} onChange={(e) => changecalDataValue(index, e.target.name, e.target.value)} /></td>
 
-                                            {/* {obCheckedValue === "minmax" &&
+
+                                                    <td><input type="text" className="form-control form-control-sm" id="acWearLimitPSId" name="acWearLimitPS" placeholder='wearLimit' value={item.acWearLimitPS} onChange={(e) => changecalDataValue(index, e.target.name, e.target.value)} /></td>
+
+                                                    {/* {obCheckedValue === "minmax" &&
                   <React.Fragment>
                     <td><input type="text" className="form-control form-control-sm" id="acMinOBId" name="acMinOB" placeholder='min' value={item.acMinOB} onChange={(e) => changecalDataValue(index, e.target.name, e.target.value)} /></td>
                     <td><input type="text" className='form-control form-control-sm' id="acMaxOBId" name="acMaxOB" placeholder='max' value={item.acMaxOB} onChange={(e) => changecalDataValue(index, e.target.name, e.target.value)} /></td>
@@ -688,84 +845,156 @@ const CalDialog = () => {
                     <td colSpan={2}><input type="text" className="form-control form-control-sm" id="acAverageOBId" name="acAverageOB" placeholder='Average' value={item.acAverageOB} onChange={(e) => changecalDataValue(index, e.target.name, e.target.value)} /></td>
                   </React.Fragment>
                 } */}
-                                        </tr>
-                                    ))}
+                                                </tr>
+                                            ))}
 
-                                </tbody>
-                            }
-                            {calibrationData.calItemType === "referencestandard" &&
-                                <tbody>
-                                    <tr>
+                                        </tbody>
+                                    }
+                                    {calibrationData.calItemType === "referenceStandard" &&
+                                        <tbody>
+                                            <tr>
 
-                                        <th rowSpan={2}>Parameter</th>
-                                        <th rowSpan={2}>Range/Size</th>
-                                        <th rowSpan={2}>Unit</th>
-                                        <th colSpan={2}>Permissible Size</th>
-                                        {calibrationData.calBeforeData === "yes" && <th width="10%" rowSpan={2}>Before Calibration</th>}
-                                        <th width="20%" colSpan={calibrationData.calOBType === "average" ? 1 : 2}>Observed Size</th>
-                                        <th rowSpan={2}>Status</th>
-                                    </tr>
-                                    <tr>
-                                        <th width="6%">Min</th>
-                                        <th width="6%">Max</th>
+                                                <th width="20%" rowSpan={2}>Parameter</th>
+                                                <th width="10%" rowSpan={2}>Range/Size</th>
+                                                <th width="10%" rowSpan={2}>Unit</th>
+                                                <th colSpan={2}>Permissible Size</th>
+                                                {calibrationData.calBeforeData === "yes" && <th width="10%" rowSpan={2}>Before Calibration</th>}
+                                                <th width="20%" colSpan={calibrationData.calOBType === "average" ? 1 : 2}>Observed Size</th>
+                                                <th width="10%" rowSpan={2}>Status</th>
+                                            </tr>
+                                            <tr>
+                                                <th width="6%">Min</th>
+                                                <th width="6%">Max</th>
 
-                                        {calibrationData.calOBType === "average" ?
-                                            <React.Fragment>
-                                                <th>Average</th>
-                                            </React.Fragment> :
-                                            <React.Fragment>
-                                                <th>Min</th>
-                                                <th>Max</th>
-                                            </React.Fragment>}
-
-                                    </tr>
-                                    {/* {calibrationData.calcalibrationData.map((item)=> ()} */}
-                                    {calibrationData.calcalibrationData.map((item, index) => {
-                                            let color = "";
-                                            if(item.calStatus === "accepted"){
-                                                color = "#4cbb17"
-                                            }else if(item.calStatus === "rejected"){
-                                                color="red"
-                                            }else if(item.calStatus === "conditionallyAccepted"){
-                                                color="yellow"
-                                            }else{
-                                                color=""
-                                            }
-
-                                        return (
-                                            <tr key={index}>
-                                                <td>{item.calParameter}</td>
-                                                <td>{item.calNominalSize}</td>
-                                                <td>{item.calNominalSizeUnit}</td>
-                                                <td>{item.calMinPS}</td>
-                                                <td>{item.calMaxPS}</td>
-
-                                                {calibrationData.calBeforeData === "yes" && <td><input className='form-control form-control-sm' onChange={(e) => changecalDataValue(index, e.target.name, e.target.value)} name='calBeforeCalibration' /></td>}
-                                                {calibrationData.calOBType === "average" &&
-                                                    <td><input className='form-control form-control-sm' name='calAverageOB' style={{color: color}} onChange={(e) => changecalDataValue(index, e.target.name, e.target.value)} /></td>
-                                                }
-                                                {calibrationData.calOBType === "minmax" &&
+                                                {calibrationData.calOBType === "average" ?
                                                     <React.Fragment>
-                                                        <td><input className='form-control form-control-sm' name="calMinOB"  onChange={(e) => changecalDataValue(index, e.target.name, e.target.value)} />
-                                                        </td> <td><input className='form-control form-control-sm' name="calMaxOB" onChange={(e) => changecalDataValue(index, e.target.name, e.target.value)} /></td>
+                                                        <th>Average</th>
+                                                    </React.Fragment> :
+                                                    <React.Fragment>
+                                                        <th>Min</th>
+                                                        <th>Max</th>
                                                     </React.Fragment>}
 
-
-                                                <td width="15%">
-                                                    <select className='form-select form-select-sm' name="calStatus" value={item.calStatus} onChange={(e) => changecalDataValue(index, e.target.name, e.target.value)}>
-                                                        <option value="">Status</option>
-                                                        <option value="accepted">Accepted</option>
-                                                        <option value="rejected">Rejected</option>
-                                                        <option value="conditionallyAccepted">Conditionally Accepted</option>
-                                                    </select>
-                                                </td>
                                             </tr>
+                                            {/* {calibrationData.calcalibrationData.map((item)=> ()} */}
+                                            {calibrationData.calcalibrationData.map((item, index) => {
+                                                let color = "";
+                                                if (item.rowStatus === "ok") {
+                                                    color = "#4cbb17"
+                                                } else if (item.rowStatus === "notOk") {
+                                                    color = "red"
+                                                } else if (item.rowStatus === "conditionallyOk") {
+                                                    color = "orange"
+                                                } else {
+                                                    color = ""
+                                                }
+                                                let minColor = "";
+                                                let minStatus = false;
+                                                let maxStatus = false;
+                                                if (parseFloat(item.calMinOB) >= parseFloat(item.calMinPS) && parseFloat(item.calMinOB) <= parseFloat(item.calMaxPS)) {
+                                                    minColor = "#4cbb17";
+                                                    let minStatus = true;
+                                                } else {
+                                                    minColor = "red"
+                                                    let minStatus = false;
+                                                }
 
-                                        )
-                                    })}
+                                                let maxColor = "";
+                                                if (parseFloat(item.calMaxOB) >= parseFloat(item.calMinPS) && parseFloat(item.calMaxOB) <= parseFloat(item.calMaxPS)) {
+                                                    maxColor = "#4cbb17"
+                                                    maxStatus = true;
+                                                } else {
+                                                    maxColor = "red"
+                                                    maxStatus = false;
+                                                }
 
-                                </tbody>}
-                        </table>
+
+                                                return (
+                                                    <tr key={index}>
+                                                        <td>{item.calParameter}</td>
+                                                        <td>{item.calNominalSize}</td>
+                                                        <td>{item.calNominalSizeUnit}</td>
+                                                        <td>{item.calMinPS}</td>
+                                                        <td>{item.calMaxPS}</td>
+
+                                                        {calibrationData.calBeforeData === "yes" && <td><input className='form-control form-control-sm' onChange={(e) => changecalDataValue(index, e.target.name, e.target.value)} name='calBeforeCalibration' /></td>}
+                                                        {calibrationData.calOBType === "average" &&
+                                                            <td><input className='form-control form-control-sm' name='calAverageOB' style={{ color: color, fontWeight: "bold" }} onChange={(e) => changecalDataValue(index, e.target.name, e.target.value)} /></td>
+                                                        }
+                                                        {calibrationData.calOBType === "minmax" &&
+                                                            <React.Fragment>
+                                                                <td><input className='form-control form-control-sm' style={{ color: minColor, fontWeight: "bold" }} name="calMinOB" onChange={(e) => changecalDataValue(index, e.target.name, e.target.value)} />
+                                                                </td> <td><input className='form-control form-control-sm' style={{ color: maxColor, fontWeight: "bold" }} name="calMaxOB" onChange={(e) => changecalDataValue(index, e.target.name, e.target.value)} /></td>
+                                                            </React.Fragment>}
+
+
+                                                        <td width="15%">
+                                                            <select className='form-select form-select-sm' name="rowStatus" value={item.rowStatus} onChange={(e) => changecalDataValue(index, e.target.name, e.target.value)}>
+                                                                <option value="">Status</option>
+                                                                <option value="ok">Ok</option>
+                                                                <option value="notOk">Not Ok</option>
+                                                                <option value="conditionallyOk">Conditionally Ok</option>
+                                                            </select>
+                                                        </td>
+                                                    </tr>
+
+                                                )
+                                            })}
+
+                                        </tbody>}
+                                </table>
+                            </div>
+                            {lastResultShow && (lastResultData.length !== 0 ?
+                                <div className="col-md-3">
+                                    <table className='table  table-bordered text-center align-middle'>
+                                        <tbody>
+                                            <tr>
+                                                <th colSpan={4}>Previous Result</th>
+                                            </tr>
+                                            <tr>
+                                                <th colSpan={2}>Permissible Size</th>
+                                                <th colSpan={2} >Observed Size</th>
+                                            </tr>
+                                            <tr>
+                                                <th>Min</th>
+                                                <th>Max</th>
+                                                {lastResultData.calOBType === "minmax" &&
+                                                    <React.Fragment>
+                                                        <th>Min</th>
+                                                        <th>Max</th>
+                                                    </React.Fragment>
+                                                }
+                                                {lastResultData.calOBType === "average" &&
+
+                                                    <th colSpan={2}>Average</th>
+
+                                                }
+                                            </tr>
+                                            {lastResultData && lastResultData.calcalibrationData.map((item) => (
+                                                <tr>
+                                                    <td>{item.calMinPS}</td>
+                                                    <td>{item.calMaxPS}</td>
+                                                    {lastResultData.calOBType === "minmax" &&
+                                                        <React.Fragment>
+                                                            <td>{item.calMinOB}</td>
+                                                            <td>{item.calMaxOB}</td>
+                                                        </React.Fragment>
+                                                    }
+                                                    {lastResultData.calOBType === "average" &&
+
+                                                        <td colSpan={2}>{item.calAverageOB}</td>
+
+
+                                                    }
+                                                </tr>
+                                            ))}
+                                            <tr>
+
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div> : <div><Chip icon={<ErrorOutline />} label="No previous calibration data available" color="error" /></div>)}
+                        </div>
 
 
 
@@ -822,6 +1051,7 @@ const CalDialog = () => {
                             </tbody>
                         </table>
                     </Paper>
+
                     <Dialog
                         open={confirmSubmit}
                         onClose={(e, reason) => {

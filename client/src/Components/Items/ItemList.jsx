@@ -740,7 +740,7 @@ console.log(statusInfo)*/}
                                     <MenuItem value="all">All</MenuItem >
                                     <MenuItem value="Attribute">Attribute</MenuItem >
                                     <MenuItem value="Variable">Variable</MenuItem >
-                                    <MenuItem value="ReferenceStandard">Reference Standard</MenuItem >
+                                    <MenuItem value="referenceStandard">Reference Standard</MenuItem >
                                 </TextField>
 
                             </div>

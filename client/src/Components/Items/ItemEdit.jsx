@@ -869,7 +869,7 @@ const ItemEdit = () => {
 
                                             <MenuItem value="attribute">Attribute</MenuItem>
                                             <MenuItem value="variable">Variable</MenuItem>
-                                            <MenuItem value="referencestandard">Reference Standard</MenuItem>
+                                            <MenuItem value="referenceStandard">Reference Standard</MenuItem>
 
                                         </TextField>
                                     </div>
@@ -908,7 +908,7 @@ const ItemEdit = () => {
                                     <div className="row g-1">
                                         <div className="col-lg-12 me-1">
                                             {itemAddData.itemType === "attribute" && <TextField size='small' variant='outlined' label="Make" onChange={handleItemAddChange} value={itemAddData.itemMake} onKeyDown={handleKeyDown} name='itemMake' id='itemMakeId' fullWidth />}
-                                            {itemAddData.itemType === "referencestandard" && <TextField size='small' variant='outlined' label="Make" onChange={handleItemAddChange} value={itemAddData.itemMake} onKeyDown={handleKeyDown} name='itemMake' id='itemMakeId' fullWidth />}
+                                            {itemAddData.itemType === "referenceStandard" && <TextField size='small' variant='outlined' label="Make" onChange={handleItemAddChange} value={itemAddData.itemMake} onKeyDown={handleKeyDown} name='itemMake' id='itemMakeId' fullWidth />}
                                         </div>
                                         {itemAddData.itemType === "variable" &&
                                             <div className="col-lg me-1">
@@ -1421,7 +1421,7 @@ const ItemEdit = () => {
                                                     <React.Fragment>
                                                         <td colSpan={2} ><input type="text" className="form-control form-control-sm" id="acAverageOBId" name="acAverageOB" placeholder='Average' value={item.acAverageOB} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} /></td>
                                                     </React.Fragment> :
-                                                    
+
                                                     <React.Fragment>
                                                         <td><input type="text" className="form-control form-control-sm" id="acMinOBId" name="acMinOB" placeholder='min' value={item.acMinOB} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} /></td>
                                                         <td><input type="text" className='form-control form-control-sm' id="acMaxOBId" name="acMaxOB" placeholder='max' value={item.acMaxOB} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} /></td>
@@ -1496,7 +1496,7 @@ const ItemEdit = () => {
 
 
 
-                                {itemAddData.itemType === "referencestandard" &&
+                                {itemAddData.itemType === "referenceStandard" &&
 
                                     <tbody >
                                         <tr>
