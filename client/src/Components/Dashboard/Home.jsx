@@ -55,7 +55,7 @@ const Home = () => {
   const [departmentName, setDepartmentName] = useState("")
   const [allDepartments, setAllDepartments] = useState([])
 
-
+  //get all employess
   const getAllEmployees = async () => {
     try {
       const Departments = await axios.get(
@@ -75,7 +75,9 @@ const Home = () => {
       console.log(err);
     }
   };
+  //
 
+//allActiveEmployees
   const [activeEmps, setActiveEmps] = useState([])
 
   const empFetch = async () => {
@@ -88,8 +90,10 @@ const Home = () => {
       console.log(err);
     }
   };
-
   console.log(activeEmps)
+//
+
+  
 
   const getAllDepartments = async () => {
     try {
@@ -336,7 +340,7 @@ const Home = () => {
     const missingItems = pieDataFilter.filter((item) => item.itemStatus === "Missing");
     const rejectionItems = pieDataFilter.filter((item) => item.itemStatus === "Rejection");
 
-    setCalSrcValue("")
+
 
     const inhouse = pieDataFilter.filter((item) => item.itemCalibrationSource === "InHouse");
     const outSource = pieDataFilter.filter((item) => item.itemCalibrationSource === "OutSource");
@@ -348,6 +352,7 @@ const Home = () => {
       outSource: outSource.length,
       oem: oem.length
     }))
+
 
 
     switch (name) {
@@ -394,6 +399,7 @@ const Home = () => {
 
 
   }
+
 
   const ItemLocationDisplay = (name) => {
     if (name === "Departments") {
@@ -703,7 +709,7 @@ const Home = () => {
 
   console.log(selectedRows)
 
- 
+
   return (
     <div style={{ backgroundColor: "#f1f4f4", margin: 0, padding: 0 }}>
       <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -1040,22 +1046,22 @@ const Home = () => {
             </Paper>
 
             <HomeContent.Provider
-              value={{calOpen,setCalOpen, selectedRows, itemMasters, activeEmps}}
+              value={{ calOpen, setCalOpen, selectedRows, itemMasters, activeEmps }}
             >
               <CalDialog />
             </HomeContent.Provider>
 
             <HomeContent.Provider
-              value={{dcOpen,setDcOpen, selectedRows}}
+              value={{ dcOpen, setDcOpen, selectedRows }}
             >
               <Dc />
             </HomeContent.Provider>
-             <HomeContent.Provider
-              value={{grnOpen,setGrnOpen, selectedRows}}
+            <HomeContent.Provider
+              value={{ grnOpen, setGrnOpen, selectedRows }}
             >
               <Grn />
-            </HomeContent.Provider> 
-           
+            </HomeContent.Provider>
+
           </div>
         </div>
 
