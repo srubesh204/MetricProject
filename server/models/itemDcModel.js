@@ -2,6 +2,8 @@ const mongoose = require('mongoose');
 const uniqueValidator = require('mongoose-unique-validator');
 const itemDcSchema = new mongoose.Schema({
   
+  dcPartyId:String,
+  dcPartyType:String,
   dcPartyName:String,
   dcPartyCode:String,
   dcPartyAddress:String,

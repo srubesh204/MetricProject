@@ -1,4 +1,6 @@
+const itemAddModel = require("../models/itemAddModel");
 const itemDcModel = require("../models/itemDcModel")
+const dayjs = require('dayjs')
 
 const itemDcController = {
     getAllItemDc: async (req, res) => {
@@ -14,8 +16,23 @@ const itemDcController = {
       createItemDc: async (req, res) => {
        
         try {
-          const {dcPartyName, dcPartyCode, dcPartyAddress, dcNo, dcDate, dcReason, dcCommonRemarks,  dcMasterName, dcPartyItems} = req.body;
-          const itemDcResult = new itemDcModel({dcPartyName, dcPartyCode, dcPartyAddress, dcNo, dcDate, dcReason, dcCommonRemarks, dcMasterName, dcPartyItems});
+          const {dcPartyName, dcPartyId, dcPartyType, dcPartyCode, dcPartyAddress, dcNo, dcDate, dcReason, dcCommonRemarks,  dcMasterName, dcPartyItems} = req.body;
+          const itemDcResult = new itemDcModel({dcPartyName, dcPartyId, dcPartyType, dcPartyCode, dcPartyAddress, dcNo, dcDate, dcReason, dcCommonRemarks, dcMasterName, dcPartyItems});
+
+          const updatePromises = dcPartyItems.map(async (item) => {
+        
+            const itemData = await itemAddModel.findById(item._id)
+            const {itemIMTENo} = itemData
+            const updateItemFields = {itemIMTENo, dcStatus: "1", dcCreatedOn : dayjs().format("YYYY-MM-DD")}
+            const updateResult = await itemAddModel.findOneAndUpdate(
+              { _id: item._id },
+              { $set: updateItemFields },
+              { new: true }
+            );
+            console.log(updateResult)
+            return updateResult;
+          });
+          const updatedItems = await Promise.all(updatePromises);
           const validationError = itemDcResult.validateSync();
 
           if (validationError) {
@@ -61,7 +78,7 @@ const itemDcController = {
           // Create an object with the fields you want to update
           const updateItemDcFields = {
             /* Specify the fields and their updated values here */
-            dcPartyName : req.body.dcPartyName, dcPartyCode : req.body.dcPartyCode, dcPartyAddress : req.body.dcPartyAddress, dcNo : req.body.dcNo, dcDate : req.body.dcDate, dcReason : req.body.dcReason, dcCommonRemarks : req.body.dcCommonRemarks,  dcMasterName : req.body.dcMasterName, dcPartyItems  : req.body.dcPartyItems // Example: updating the 'name' field
+            dcPartyId: req.body.dcPartyId, dcPartyType: req.body.dcPartyType, dcPartyName : req.body.dcPartyName, dcPartyCode : req.body.dcPartyCode, dcPartyAddress : req.body.dcPartyAddress, dcNo : req.body.dcNo, dcDate : req.body.dcDate, dcReason : req.body.dcReason, dcCommonRemarks : req.body.dcCommonRemarks, dcPartyItems : req.body.dcPartyItems // Example: updating the 'name' field
             // Add more fields as needed
           };
       

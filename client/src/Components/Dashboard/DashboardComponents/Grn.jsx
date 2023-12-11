@@ -46,6 +46,13 @@ const Grn = () => {
 
     })
 
+
+
+    const [itemAddDetails, setItemAddDetails] = useState({
+        grnList: "",
+        grnImteNo: ""
+    })
+
     const settingGrnData = () => {
         setGrnData((prev) => (
             {
@@ -159,6 +166,7 @@ const Grn = () => {
     useEffect(() => {
         getDistinctItemName();
     }, []);
+    // 
 
     const [imteList, setImteList] = useState([])
     const getImteList = async () => {
@@ -178,6 +186,70 @@ const Grn = () => {
     useEffect(() => {
         getImteList();
     }, []);
+
+    const [allItemImtes, setAllItemImtes] = useState([])
+    const [itemImtes, setItemImtes] = useState([])
+    const [selectedGrnItem, setSelectedGrnItem] = useState([])
+    //
+    const getItemByName = async (value) => {
+        try {
+            const response = await axios.post(
+                `${process.env.REACT_APP_PORT}/itemAdd/getItemAddByName`, { itemItemMasterName: value }
+            );
+            console.log(response.data)
+            setAllItemImtes(response.data.result)
+            const filteredImtes = response.data.result.filter((imtes) => !grnData.grnPartyItems.some(grnImte => imtes._id === grnImte._id))
+            setItemImtes(filteredImtes)
+
+        } catch (err) {
+            console.log(err);
+        }
+    };
+
+    const handleGrnItemAdd = (e) => {
+        const { name, value } = e.target;
+        if (name === "grnList") {
+            getItemByName(value)
+            setItemAddDetails((prev) => ({ ...prev, [name]: value }))
+        }
+        if (name === "grnImteNo") {
+            setSelectedGrnItem(value)
+            setItemAddDetails((prev) => ({ ...prev, [name]: value }))
+        }
+
+
+    }
+
+
+    const grnItemAdd = () => {
+        if (setSelectedGrnItem.length !== 0) {
+            setGrnData((prev) => ({ ...prev, grnPartyItems: [...prev.grnPartyItems, selectedGrnItem] }))
+        }
+    }
+    useEffect(() => {
+        setSelectedGrnItem([])
+        setItemAddDetails({
+            itemListNames: "",
+            itemImteList: ""
+        })
+    }, [grnData.grnPartyItems])
+
+
+    const [confirmSubmit, setConfirmSubmit] = useState(false)
+    const [snackBarOpen, setSnackBarOpen] = useState(false)
+    const [alertMessage, setAlertMessage] = useState("")
+    const submitCalForm = async () => {
+        try {
+            const response = await axios.post(
+                `${process.env.REACT_APP_PORT}/itemGRN/createItemGRN`, grnData
+            );
+            setAlertMessage(response.data.message)
+            setSnackBarOpen(true)
+            setTimeout(() => setGrnOpen(false), 3000)
+        } catch (err) {
+            console.log(err);
+        }
+    };
 
 
 
@@ -240,34 +312,34 @@ const Grn = () => {
                                                 <div className=" col-6 me-2">
 
                                                     <TextField label="Party Ref No"
-                                                        id="partyRefNoId"
+                                                        id="grnPartyRefNoId"
                                                         defaultValue=""
                                                         value={grnData.grnPartyRefNo}
                                                         //  sx={{ width: "100%" }}
                                                         size="small"
                                                         fullWidth
                                                         onChange={handleGrnChange}
-                                                        name="partyRefNo" />
+                                                        name="grnPartyRefNo" />
                                                 </div>
                                                 <div className="col-6">
 
                                                     <DatePicker
 
                                                         fullWidth
-                                                        id="partyRefDateId"
-                                                        name="partyRefDate"
-                                                        value={dayjs(grnData. grnPartyRefDate)}
+                                                        id="grnPartyRefDateId"
+                                                        name="grnPartyRefDate"
+                                                        value={dayjs(grnData.grnPartyRefDate)}
                                                         onChange={(newValue) =>
                                                             setGrnData((prev) => ({ ...prev, grnPartyRefDate: newValue.format("YYYY-MM-DD") }))
                                                         }
                                                         label="Party Ref Date"
-                                                        onChange={handleGrnChange}
+                                                        //onChange={handleGrnChange}
 
 
                                                         slotProps={{ textField: { size: 'small' } }}
                                                         format="DD-MM-YYYY" />
 
-                                                    
+
 
                                                 </div>
 
@@ -278,17 +350,17 @@ const Grn = () => {
                                                     <div className=" col-6 me-2">
 
                                                         <TextField label="Party Name"
-                                                            id="partyNameId"
+                                                            id="grnPartyNameId"
                                                             select
-                                                            // value={grnData.grnPartyName}
-                                                            onChange={handleGrnChange}
+                                                            //  value={grnData.grnPartyName}
+
                                                             onChange={(e) => setPartyData(e.target.value)}
 
                                                             //  sx={{ width: "100%" }}
                                                             size="small"
                                                             fullWidth
 
-                                                            name="partyName" >
+                                                            name="grnPartyName" >
                                                             {vendorDataList.map((item, index) => (
                                                                 <MenuItem key={index} value={item._id}>{item.fullName}</MenuItem>
                                                             ))}
@@ -297,7 +369,7 @@ const Grn = () => {
                                                     <div className="col-6">
 
                                                         <TextField label="Party code"
-                                                            id="partyCodeId"
+                                                            id="grnPartyCodeId"
                                                             defaultValue=""
                                                             onChange={handleGrnChange}
                                                             // sx={{ width: "100%" }}
@@ -305,7 +377,7 @@ const Grn = () => {
                                                             value={grnData.grnPartyCode}
 
                                                             fullWidth
-                                                            name="partyCode" />
+                                                            name="grnPartyCode" />
 
                                                     </div>
 
@@ -317,13 +389,13 @@ const Grn = () => {
                                                 <div className="col-12">
 
                                                     <TextField label="PartyAddress"
-                                                        id="partyAddressId"
+                                                        id="grnPartyAddressId"
                                                         defaultValue=""
                                                         size="small"
                                                         onChange={handleGrnChange}
                                                         value={grnData.grnPartyAddress}
                                                         sx={{ width: "101%" }}
-                                                        name="Party Address" />
+                                                        name="grnPartyAddress" />
 
                                                 </div>
                                             </div>
@@ -359,16 +431,25 @@ const Grn = () => {
                                                 </div>
                                                 <div className="col-6">
 
+
+
                                                     <DatePicker
+
                                                         fullWidth
                                                         id="grnDateId"
                                                         name="grnDate"
+                                                        value={dayjs(grnData.grnPartyRefDate)}
+                                                        onChange={(newValue) =>
+                                                            setGrnData((prev) => ({ ...prev, grnDate: newValue.format("YYYY-MM-DD") }))
+                                                        }
                                                         label="GRN Date"
-                                                        onChange={handleGrnChange}
-                                                        //value={grnData.grnDate}
-                                                        sx={{ width: "100%" }}
+                                                        //onChange={handleGrnChange}
+
+
                                                         slotProps={{ textField: { size: 'small' } }}
                                                         format="DD-MM-YYYY" />
+
+
 
                                                 </div>
 
@@ -377,14 +458,14 @@ const Grn = () => {
                                             <div className='row '>
                                                 <div className='mb-5'>
                                                     <TextField label="Common Remarks"
-                                                        id="commonRemarksId"
+                                                        id="grnCommonRemarksId"
 
                                                         defaultValue=""
                                                         onChange={handleGrnChange}
                                                         value={grnData.grnCommonRemarks}
                                                         fullWidth
                                                         size="small"
-                                                        name="commonRemarks"
+                                                        name="grnCommonRemarks"
                                                     >
                                                     </TextField>
                                                 </div>
@@ -405,7 +486,7 @@ const Grn = () => {
                                     <div className='row g-2 mb-2'>
                                         <div className='col d-flex'>
                                             <div className='col me-2'>
-                                                <TextField size='small' fullWidth variant='outlined' defaultValue="all" id="itemListId" select label="Item List" name='itemList'>
+                                                <TextField size='small' fullWidth variant='outlined' defaultValue="all" value={itemAddDetails.grnList} id="grnListId" onChange={handleGrnItemAdd} select label="Item List" name='grnList'>
                                                     <MenuItem value="all">All</MenuItem>
                                                     {itemMasterDistNames.map((item, index) => (
                                                         <MenuItem key={index} value={item}>{item}</MenuItem>
@@ -415,15 +496,18 @@ const Grn = () => {
                                             </div>
                                             <div className='col'>
                                                 <TextField label="Imte No"
-                                                    id="imteNoId"
+                                                    id="grnImteNoId"
                                                     select
                                                     defaultValue="all"
                                                     fullWidth
                                                     size="small"
-                                                    name="imteNo" >
+                                                    // disabled={itemAddDetails.itemListNames === ""}
+                                                    onChange={handleGrnItemAdd}
+                                                    value={itemAddDetails.grnImteNo}
+                                                    name="grnImteNo" >
                                                     <MenuItem value="all">All</MenuItem>
-                                                    {imteList.map((item, index) => (
-                                                        <MenuItem key={index} value={item.itemIMTENo}>{item.itemIMTENo}</MenuItem>
+                                                    {itemImtes.map((item, index) => (
+                                                        <MenuItem key={index} value={item}>{item.itemIMTENo}</MenuItem>
                                                     ))}
 
                                                 </TextField>
@@ -431,7 +515,7 @@ const Grn = () => {
                                         </div>
                                         <div className=' col d-flex justify-content-end'>
                                             <div className='me-2 '>
-                                                <button type="button" className='btn btn-secondary' >Add Item</button>
+                                                <Button startIcon={<Add />} onClick={() => grnItemAdd()} size='small' sx={{ minWidth: "130px" }} variant='contained'>Add Item</Button>
                                             </div>
 
                                         </div>
@@ -536,24 +620,43 @@ const Grn = () => {
                                         </table>
 
                                     </div>
-                                </Paper>
 
-                                <Paper
-                                    sx={{
-                                        p: 2,
-                                        display: 'flex',
-                                        flexDirection: 'column',
-                                        mb: 1,
+                                    <Dialog
+                                        open={confirmSubmit}
+                                        onClose={(e, reason) => {
+                                            console.log(reason)
+                                            if (reason !== 'backdropClick' && reason !== 'escapeKeyDown') {
+                                                setConfirmSubmit(false)
+                                            }
+                                        }}
+                                        aria-labelledby="alert-dialog-title"
+                                        aria-describedby="alert-dialog-description"
+                                    >
+                                        <DialogTitle id="alert-dialog-title">
+                                            Are you sure to submit ?
+                                        </DialogTitle>
 
-                                    }}
-                                    elevation={12}
-                                >
+                                        <DialogActions className='d-flex justify-content-center'>
+                                            <Button onClick={() => setConfirmSubmit(false)}>Cancel</Button>
+                                            <Button onClick={() => { submitCalForm(); setConfirmSubmit(false) }} autoFocus>
+                                                Submit
+                                            </Button>
+                                        </DialogActions>
+                                    </Dialog>
+                                    <Snackbar anchorOrigin={{ vertical: "top", horizontal: "right" }} open={snackBarOpen} autoHideDuration={3000}
+                                        onClose={() => setTimeout(() => {
+                                            setSnackBarOpen(false)
+                                        }, 3000)}>
+                                        <Alert onClose={() => setSnackBarOpen(false)} variant='filled' severity="success" sx={{ width: '100%' }}>
+                                            {alertMessage}
+                                        </Alert>
+                                    </Snackbar>
+
+
                                     <div className='row'>
                                         <div className=' col d-flex '>
 
-                                            <div className='me-2 '>
-                                                <button type="button" className='btn btn-secondary' >Print</button>
-                                            </div>
+
                                             <div className='col-4 me-2'>
                                                 <TextField size='small' fullWidth variant='outlined' id="calibrationStatus" select label="Calibration Status" name='calibrationStatus'>
                                                     <MenuItem value="Active">Active</MenuItem>
@@ -563,18 +666,11 @@ const Grn = () => {
                                             </div>
 
                                         </div>
-                                        <div className=' col d-flex justify-content-end'>
-                                            <div className='me-2 '>
-                                                <button type="button" className='btn btn-secondary' >Save</button>
-                                            </div>
-                                            <div className='me-2 '>
-                                                <button type="button" className='btn btn-secondary' >Close</button>
-                                            </div>
 
-                                        </div>
 
                                     </div>
                                 </Paper>
+
 
 
 
@@ -590,7 +686,7 @@ const Grn = () => {
                 </div>
                 <div>
                     <Button variant='contained' color='error' className='me-3' onClick={() => { setGrnOpen(false) }}>Cancel</Button>
-                    <Button variant='contained' color='success' >Submit</Button>
+                    <Button variant='contained' color='success' onClick={() => { setConfirmSubmit(true) }}>Submit</Button>
                 </div>
             </DialogActions>
 

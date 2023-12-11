@@ -53,26 +53,26 @@ const DcEdit = () => {
     console.log(dcData)
 
     const settingDcData = () => {
-        setDcData((prev) => (
-            {
+        if (selectedRows.length !== 0) { // Check if selectedRows is defined
+            setDcData((prev) => ({
                 ...prev,
-                dcPartyId: selectedRows[0]._id,
-                dcPartyType:selectedRows[0].dcPartyType,
-                dcPartyName: selectedRows[0].dcPartyName,
-                dcPartyCode: selectedRows[0].dcPartyCode,
-                dcPartyAddress:selectedRows[0].dcPartyAddress,
-                dcNo:selectedRows[0].dcNo,
-                dcDate:selectedRows[0].dcDate,
-                dcReason:selectedRows[0].dcReason,
-                dcCommonRemarks:selectedRows[0].dcCommonRemarks,
-                dcPartyItems: selectedRows[0].dcPartyItems
-            }
-
-        ))
+                dcPartyId: selectedRows.dcPartyId,
+                dcPartyType: selectedRows.dcPartyType,
+                dcPartyName: selectedRows.dcPartyName,
+                dcPartyCode: selectedRows.dcPartyCode,
+                dcPartyAddress: selectedRows.dcPartyAddress,
+                dcNo: selectedRows.dcNo,
+                dcDate: selectedRows.dcDate,
+                dcReason: selectedRows.dcReason,
+                dcCommonRemarks: selectedRows.dcCommonRemarks,
+                dcPartyItems: selectedRows.dcPartyItems,
+            }));
+        }
     };
+    
     useEffect(() => {
-        settingDcData()
-    }, [selectedRows])
+        settingDcData();
+    }, [selectedRows]);
 
     const [filteredData, setFilteredData] = useState([])
 
@@ -429,13 +429,15 @@ const DcEdit = () => {
                         <form>
                             <div className='row'>
                                 <div class="col-3 mb-2">
-                                    <select className="form-select form-select-sm" id="dcPartyTypeId" name="dcPartyType" onChange={handleFilterChange}  >
-                                        <option value="">Select</option>
-                                        <option value="oem">OEM</option>
-                                        <option value="customer">Customer</option>
-                                        <option value="supplier">Supplier</option>
-                                        <option value="subContractor">SubContractor</option>
-                                    </select>
+                                <TextField  label="Vendor Type"
+                                        id="dcPartyTypeId" select defaultValue=""onChange={handleFilterChange}  size="small" value={dcData.dcPartyType}  sx={{ width: "101%" }}  name="dcPartyType" >
+                                        <MenuItem value=""><em>--Select--</em></MenuItem>
+                                        <MenuItem value="oem">OEM</MenuItem>
+                                        <MenuItem value="customer">Customer</MenuItem>
+                                        <MenuItem value="supplier">Supplier</MenuItem>
+                                        <MenuItem value="subContractor">SubContractor</MenuItem>
+
+                                    </TextField>
 
                                 </div>
                             </div>
@@ -463,7 +465,7 @@ const DcEdit = () => {
                                                 id="partyNameId"
                                                 select
 
-                                                // value={dcData.dcPartyName}
+                                                value={dcData.dcPartyId}
                                                 onChange={(e) => setPartyData(e.target.value)}
 
                                                 //  sx={{ width: "100%" }}
@@ -559,7 +561,7 @@ const DcEdit = () => {
                                                 id="dcReasonId"
                                                 select
                                                 defaultValue=""
-                                                //value={dcData.dcReason}
+                                                value={dcData.dcReason}
                                                 onChange={handleDcChange}
                                                 size="small"
                                                 sx={{ width: "101%" }}
@@ -575,7 +577,7 @@ const DcEdit = () => {
                                         <div className='col me-2'>
                                             <TextField label="Common Remarks"
                                                 id="dcCommonRemarksId"
-                                                //  value={dcData.dcCommonRemarks}
+                                                 value={dcData.dcCommonRemarks}
                                                 defaultValue=""
                                                 onChange={handleDcChange}
                                                 size="small"

@@ -21,7 +21,7 @@ const Dc = () => {
     const [selectedExtraMaster, setSelectedExtraMaster] = useState([])
     const initialDcData = {
         dcPartyId: "",
-        dcPartyType:"",
+        dcPartyType: "",
         dcPartyName: "",
         dcPartyCode: "",
         dcPartyAddress: "",
@@ -35,7 +35,7 @@ const Dc = () => {
 
     const [dcData, setDcData] = useState({
         dcPartyId: "",
-        dcPartyType:"",
+        dcPartyType: "",
         dcPartyName: "",
         dcPartyCode: "",
         dcPartyAddress: "",
@@ -90,7 +90,7 @@ const Dc = () => {
 
 
         }
-        setDcData((prev)=> ({...prev, [name]: value}))
+        setDcData((prev) => ({ ...prev, [name]: value }))
 
 
     };
@@ -139,22 +139,6 @@ const Dc = () => {
 
     const [vendorDataList, setVendorDataList] = useState([])
 
-    {/*const vendorFetchData = async () => {
-        try {
-            const response = await axios.get(
-                `${process.env.REACT_APP_PORT}/vendor/getAllVendors`
-            );
-            setVendorDataList(response.data.result);
-            const filteredData = response.data.result.filter((dcItem) => !dcData.dcPartyItems.some(vendor => dcName._id === vendor._id === dcCode._id ===vendor._id === dcAddress._id === vendor.id))
-            setFilteredData(filteredData)
-        } catch (err) {
-            console.log(err);
-        }
-    };
-    useEffect(() => {
-        vendorFetchData();
-    }, []);*/}
-
     const vendorFetchData = async () => {
         try {
             const response = await axios.get(
@@ -162,15 +146,6 @@ const Dc = () => {
             );
             setVendorDataList(response.data.result);
 
-            // Assuming dcData is defined somewhere in your code
-            const filteredData = response.data.result.filter(dcItem =>
-                !dcData.dcPartyItems.some(vendor =>
-                    dcItem._id === vendor._id
-                    && dcItem.dcCode === vendor._id
-                    && dcItem.dcAddress === vendor.id
-                )
-            );
-            setFilteredData(filteredData);
         } catch (err) {
             console.log(err);
         }
@@ -178,6 +153,8 @@ const Dc = () => {
     useEffect(() => {
         vendorFetchData();
     }, []);
+
+
 
 
 
@@ -345,46 +322,7 @@ const Dc = () => {
 
 
 
-    const [itemMasterDataList, setItemMasterDataList] = useState([])
-
-    const itemMasterFetchData = async () => {
-        try {
-            const response = await axios.get(
-                `${process.env.REACT_APP_PORT}/itemMaster/getAllItemMasters`
-
-            );
-
-            console.log(response.data)
-            setItemMasterDataList(response.data.result);
-
-        } catch (err) {
-            console.log(err);
-        }
-    };
-    useEffect(() => {
-        itemMasterFetchData();
-    }, []);
-
-    const [itemAddList, setItemAddList] = useState([]);
-
-    const itemAddFetch = async () => {
-        try {
-            const response = await axios.get(
-                `${process.env.REACT_APP_PORT}/itemAdd/getItemAddByIMTESort`
-            );
-            // You can use a different logic for generating the id
-
-            setItemAddList(response.data.result);
-
-
-        } catch (err) {
-            console.log(err);
-        }
-    };
-    useEffect(() => {
-        itemAddFetch();
-
-    }, []);
+  
 
 
 
@@ -416,13 +354,24 @@ const Dc = () => {
                         <form>
                             <div className='row'>
                                 <div class="col-3 mb-2">
-                                    <select className="form-select form-select-sm" id="dcPartyTypeId" name="dcPartyType" onChange={handleFilterChange}  >
-                                        <option value="">Select</option>
-                                        <option value="oem">OEM</option>
-                                        <option value="customer">Customer</option>
-                                        <option value="supplier">Supplier</option>
-                                        <option value="subContractor">SubContractor</option>
-                                    </select>
+
+                                    <TextField  label="Vendor Type"
+                                        id="dcPartyTypeId"
+                                        select
+                                        defaultValue=""
+                                        
+                                        onChange={handleFilterChange} 
+                                        size="small"
+                                        sx={{ width: "101%" }}
+                                        name="dcPartyType" >
+                                        <MenuItem value=""><em>--Select--</em></MenuItem>
+                                        <MenuItem value="oem">OEM</MenuItem>
+                                        <MenuItem value="customer">Customer</MenuItem>
+                                        <MenuItem value="supplier">Supplier</MenuItem>
+                                        <MenuItem value="subContractor">SubContractor</MenuItem>
+
+                                    </TextField>
+                                    
 
                                 </div>
                             </div>
@@ -447,22 +396,22 @@ const Dc = () => {
                                             <div className=" col me-2">
 
                                                 <TextField label="Party Name"
-                                                id="partyNameId"
-                                                select
+                                                    id="partyNameId"
+                                                    select
 
-                                                // value={dcData.dcPartyName}
-                                                onChange={(e) => setPartyData(e.target.value)}
+                                                    // value={dcData.dcPartyName}
+                                                    onChange={(e) => setPartyData(e.target.value)}
 
-                                                //  sx={{ width: "100%" }}
-                                                size="small"
-                                                fullWidth
-                                                disabled={dcData.dcPartyType === ""}
-                                                name="partyName" >
-                                                {filteredData.map((item, index) => (
-                                                    <MenuItem key={index} value={item._id}>{item.fullName}</MenuItem>
-                                                ))}
-                                            </TextField>
-                                               
+                                                    //  sx={{ width: "100%" }}
+                                                    size="small"
+                                                    fullWidth
+                                                    disabled={dcData.dcPartyType === ""}
+                                                    name="partyName" >
+                                                    {filteredData.map((item, index) => (
+                                                        <MenuItem key={index} value={item._id}>{item.fullName}</MenuItem>
+                                                    ))}
+                                                </TextField>
+
 
                                             </div>
                                             <div className="col me-2">
