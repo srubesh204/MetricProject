@@ -95,7 +95,7 @@ const GrnList = () => {
         grnListFetchData();
     }, []);
 
-   
+
     const [grnDataList, setGrnDataList] = useState([])
     const FetchData = async () => {
         try {
@@ -104,7 +104,7 @@ const GrnList = () => {
             );
             console.log(response.data)
             setGrnDataList(response.data.result);
-           // setFilteredData(response.data.result);
+            // setFilteredData(response.data.result);
         } catch (err) {
             console.log(err);
         }
@@ -114,7 +114,7 @@ const GrnList = () => {
     }, []);
 
 
-    
+
 
 
     const [deleteModalItem, setDeleteModalItem] = useState(false);
@@ -122,23 +122,29 @@ const GrnList = () => {
     const [errorhandler, setErrorHandler] = useState({});
     const [itemListSelectedRowIds, setItemListSelectedRowIds] = useState([])
 
+   
+
+console.log(itemListSelectedRowIds)
+
+
     const deleteGrnData = async (id) => {
 
         try {
             const response = await axios.delete(
-                "http://localhost:3001/itemGRN'/deleteItemGRN", {
+                "http://localhost:3001/itemGRN/deleteItemGRN", {
                 data: {
                     itemGRNIds: itemListSelectedRowIds
                 }
             }
             );
+            console.log(response.data)
 
             setSnackBarOpen(true)
 
 
             setErrorHandler({ status: response.data.status, message: response.data.message, code: "success" })
-            console.log(" delete Successfully");
-            setGrnData(initialGrnData)
+         
+           // setGrnData(initialGrnData)
             FetchData()
         } catch (err) {
 
@@ -164,12 +170,13 @@ const GrnList = () => {
         }
     };
 
-
     const handleRowClick = async (params) => {
         console.log(params)
         setGrnData(params.row)
         setGrnStateId(params.id)
     }
+    console.log(grnStateId)
+
 
 
     const grnColumns = [
@@ -339,10 +346,8 @@ const GrnList = () => {
                                                     "margin-bottom": "1em"
                                                 }
                                             }}
-                                            onRowSelectionModelChange={(newRowSelectionModel, event) => {
-                                                setGrnListSelectedRowIds(newRowSelectionModel);
-
-
+                                            onRowSelectionModelChange={(newRowSelectionModel) => {
+                                                setItemListSelectedRowIds(newRowSelectionModel);
                                             }}
 
                                             slots={{
@@ -458,7 +463,7 @@ const GrnList = () => {
                                             </DialogContent>
                                             <DialogActions>
                                                 <Button onClick={() => setDeleteModalItem(false)}>Cancel</Button>
-                                                <Button onClick={() => { deleteGrnData(); setDeleteModalItem(false); }} autoFocus>
+                                                <Button onClick={(e) => { deleteGrnData(e); setDeleteModalItem(false); }} autoFocus>
                                                     Delete
                                                 </Button>
                                             </DialogActions>
