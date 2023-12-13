@@ -531,8 +531,31 @@ const ItemEdit = () => {
 
 
 
+   
+   const [calibrationPointsData, setCalibrationPointsData] = useState([])
+    const itemMasterById = async () => {
+        try {
+            const response = await axios.get(
+                `${process.env.REACT_APP_PORT}/itemMaster/getItemMasterById/${itemAddData.itemMasterRef}`
+            );
+            console.log(response.data)
+            const { _id, itemType, itemDescription, itemPrefix, itemFqInMonths, calAlertInDay, wiNo, uncertainity, standartRef, itemImageName, status, itemMasterImage, workInsName, calibrationPoints } = response.data.result
+            setItemAddData((prev) => ({
+                ...prev,
+               
+                selectedItemMaster: response.data.result
+            }))
+            setCalibrationPointsData(calibrationPoints)
 
-    const [calibrationPointsData, setCalibrationPointsData] = useState([])
+
+        } catch (err) {
+            console.log(err);
+        }
+    };
+
+    useEffect(() => {
+        itemMasterById();
+    }, [itemAddData.itemMasterRef]);
 
 
 
@@ -1388,22 +1411,12 @@ const ItemEdit = () => {
                                         {itemAddData.acceptanceCriteria.map((item, index) => (
                                             <tr key={index}>
                                                 <td>
-                                                    <select
-                                                        className='form-select form-select-sm'
-                                                        id="acParameterId"
-                                                        name="acParameter"
-                                                        value={item.acParameter}
-                                                        onChange={(e) => changeACValue(index, e.target.name, e.target.value)}
-                                                    >
-                                                        <option value="">-Select-</option>
-                                                        {calibrationPointsData.map((item, index) => (
-                                                            // Display both calibrationPoint and acParameter in the option
-                                                            <option key={index} value={item.acParameter}>
-                                                                {`${item.calibrationPoint} - ${item.acParameter}`}
-                                                            </option>
-                                                        ))}
-                                                    </select>
-                                                </td>
+                                                <select className='form-select form-select-sm' id="acParameterId" name="acParameter" value={item.acParameter} onChange={(e) => changeACValue(index, e.target.name, e.target.value)}>
+                                                    <option value="">-Select-</option>
+                                                    {calibrationPointsData.map((item) => (
+                                                        <option>{item.calibrationPoint}</option>
+                                                    ))}
+                                                </select></td>
                                                 <td><input type="text" className='form-control form-control-sm' id="acNominalSizeId" name="acNominalSize" value={item.acNominalSize} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} /></td>
                                                 <td> <select className="form-select form-select-sm" id="acNominalSizeUnitId" name="acNominalSizeUnit" value={item.acNominalSizeUnit} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} >
                                                     <option value="">-Select-</option>
@@ -1504,7 +1517,7 @@ const ItemEdit = () => {
                                             <th>Parameter</th>
                                             <th>Nominal Size</th>
                                             <th>Unit</th>
-                                            <th colspan="3">Permissible Size</th>
+                                            <th colspan="2">Permissible Size</th>
                                             <th width="20%" colspan="2" className='text-center'>Observed size
                                                 <RadioGroup
                                                     className='d-flex justify-content-around'
@@ -1542,7 +1555,6 @@ const ItemEdit = () => {
                                                 </select></td>
                                                 <td><input type="text" className="form-control form-control-sm" id="acMinPSId" name="acMinPS" placeholder='min' value={item.acMinPS} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} /></td>
                                                 <td><input type="text" className='form-control form-control-sm' id="acMaxPSId" name="acMaxPS" placeholder='max' value={item.acMaxPS} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} /></td>
-                                                <td><input type="text" className="form-control form-control-sm" id="acWearLimitPSId" name="acWearLimitPS" placeholder='wearLimit' value={item.acWearLimitPS} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} /></td>
                                                 {itemAddData.itemOBType === "average" ?
                                                     <React.Fragment>
                                                         <td colSpan={2} ><input type="text" className="form-control form-control-sm" id="acAverageOBId" name="acAverageOB" placeholder='Average' value={item.acAverageOB} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} /></td>
@@ -1566,6 +1578,7 @@ const ItemEdit = () => {
                                         ))}
 
                                     </tbody>}
+
                                 <tbody>
                                     <tr>
 

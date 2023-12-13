@@ -27,6 +27,9 @@ import DcList from './Components/dcList/DcList';
 import GrnList from './Components/grnList/GrnList';
 import CalList from './Components/calList/CalList';
 import DcEdit from './Components/dcList/DcEdit';
+import GrnEdit from './Components/grnList/GrnEdit';
+import GrnAdd from './Components/grnList/GrnAdd';
+import OnSiteGrn from './Components/onSiteGrn/OnSiteGrn';
 
 
 
@@ -66,6 +69,10 @@ function App() {
         <Route path="/grnList" element={<GrnList/>} />
         <Route path="/calList" element={<CalList/>} />
         <Route path="/dcEdit" element={<DcEdit/>} />
+        <Route path="/grnEdit" element={<GrnEdit/>} />
+        <Route path="/grnAdd" element={<GrnAdd/>} />
+        <Route path="/onSiteGrn" element={<OnSiteGrn/>} />
+     
        
       </Routes>
 

@@ -7,24 +7,23 @@ import isSameOrAfter from 'dayjs/plugin/isSameOrAfter'
 import isSameOrBefore from 'dayjs/plugin/isSameOrBefore'
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { HomeContent } from '../Home';
-import { useNavigate } from 'react-router-dom';
+import { GrnListContent } from './GrnList';
 import { Add, Close, Delete } from '@mui/icons-material';
 
-const Grn = () => {
-    const grnDatas = useContext(HomeContent)
+const GrnAdd = () => {
+    const grnDatas = useContext(GrnListContent)
     const { grnOpen, setGrnOpen, selectedRows } = grnDatas
 
 
 
     const initialGrnData = {
         grnPartyRefNo: "",
-        grnPartyRefDate:dayjs().format("YYYY-MM-DD"),
+        grnPartyRefDate: "",
         grnPartyName: "",
         grnPartyCode: "",
         grnPartyAddress: "",
         grnNo: "",
-        grnDate: dayjs().format("YYYY-MM-DD"),
+        grnDate: "",
         grncCommonRemarks: "",
         grnPartyItems: []
 
@@ -33,17 +32,19 @@ const Grn = () => {
 
     const [grnData, setGrnData] = useState({
         grnPartyRefNo: "",
-        grnPartyRefDate: dayjs().format("YYYY-MM-DD"),
+        grnPartyRefDate: "",
         grnPartyName: "",
         grnPartyCode: "",
         grnPartyAddress: "",
         grnNo: "",
-        grnDate: dayjs().format("YYYY-MM-DD"),
+        grnDate: "",
         grnCommonRemarks: "",
         grnPartyItems: []
 
+
+
+
     })
-    console.log(grnData)
 
 
 
@@ -64,7 +65,7 @@ const Grn = () => {
     useEffect(() => {
         settingGrnData()
     }, [selectedRows])
-    const navigate = useNavigate();
+
 
     const [vendorDataList, setVendorDataList] = useState([])
 
@@ -240,10 +241,10 @@ const Grn = () => {
     const [snackBarOpen, setSnackBarOpen] = useState(false)
     const [alertMessage, setAlertMessage] = useState("")
 
- const submitGrnForm = async () => {
+    const submitCalForm = async () => {
         try {
             const response = await axios.post(
-                
+                //"http://localhost:3001/itemGRN/createItemGRN/",grnData
                 `${process.env.REACT_APP_PORT}/itemGRN/createItemGRN`, grnData
             );
             setAlertMessage(response.data.message)
@@ -253,46 +254,6 @@ const Grn = () => {
             console.log(err);
         }
     };
-   {/* const submitGrnForm = async (e) => {
-        e.preventDefault();
-        try {
-            const response = await axios.post(
-                `${process.env.REACT_APP_PORT}/itemGRN/createItemGRN`, grnData
-            );
-
-
-            setSnackBarOpen(true)
-
-            console.log(" GRN Created Successfully")
-            setErrorHandler({ status: response.data.status, message: response.data.message, code: "success" })
-
-            setTimeout(() => setGrnOpen(false), 3000)
-
-        } catch (err) {
-
-            setSnackBarOpen(true)
-
-
-
-
-            if (err.response && err.response.status === 400) {
-                // Handle validation errors
-                const errorData400 = err.response.data.errors;
-                const errorMessages400 = Object.values(errorData400).join(', ');
-                console.log(errorMessages400)
-                setErrorHandler({ status: 0, message: errorMessages400, code: "error" });
-            } else if (err.response && err.response.status === 500) {
-                // Handle other errors
-                const errorData500 = err.response.data.error;
-                const errorMessages500 = Object.values(errorData500).join(', ');
-                console.log(errorMessages500)
-                setErrorHandler({ status: 0, message: errorMessages500, code: "error" });
-            } else {
-                console.log(err.response.data.error)
-                setErrorHandler({ status: 0, message: "An error occurred", code: "error" });
-            }
-        }
-    };*/}
 
 
 
@@ -684,7 +645,7 @@ const Grn = () => {
 
                                         <DialogActions className='d-flex justify-content-center'>
                                             <Button onClick={() => setConfirmSubmit(false)}>Cancel</Button>
-                                            <Button onClick={(e) => { submitGrnForm(e); setConfirmSubmit(false) }} autoFocus>
+                                            <Button onClick={() => { submitCalForm(); setConfirmSubmit(false) }} autoFocus>
                                                 Submit
                                             </Button>
                                         </DialogActions>
@@ -740,4 +701,4 @@ const Grn = () => {
     )
 }
 
-export default Grn
+export default GrnAdd

@@ -7,6 +7,7 @@ import isSameOrAfter from 'dayjs/plugin/isSameOrAfter'
 import isSameOrBefore from 'dayjs/plugin/isSameOrBefore'
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { useNavigate } from 'react-router-dom';
 import { DcListContent } from './DcList';
 import { Add, Close, Delete, DeleteOutline } from '@mui/icons-material';
 import { useParams } from 'react-router-dom';
@@ -19,6 +20,7 @@ const DcEdit = () => {
     const dcDatas = useContext(DcListContent)
    const { dcEditOpen, setDcEditOpen, selectedRows } =dcDatas
    console.log(selectedRows)
+   const [errorhandler, setErrorHandler] = useState({});
 
 
     console.log(selectedRows)
@@ -70,10 +72,13 @@ const DcEdit = () => {
         }
     };
     
+    
+
     useEffect(() => {
         settingDcData();
     }, [selectedRows]);
 
+    const navigate = useNavigate();
     const [filteredData, setFilteredData] = useState([])
 
     const handleFilterChange = (e) => {
@@ -110,7 +115,7 @@ const DcEdit = () => {
 
 
 
-
+//
     const addDcValue = () => {
         if (selectedExtraMaster.length !== 0) {
             setDcData((prev) => ({
@@ -264,7 +269,53 @@ const DcEdit = () => {
         getImteList();
     }, []);
 
+    {/*const updateItemData = async (e) => {
+        e.preventDefault();
+        try {
+            const response = await axios.put(
+                `${process.env.REACT_APP_PORT}/itemAdd/updateItemDc/${id}`, dcData
+            );
 
+            setSnackBarOpen(true)
+
+            console.log("Item Update Successfully")
+            setErrorHandler({ status: response.data.status, message: response.data.message, code: "success" })
+            setDcData(initialDcData)
+            setTimeout(() => {
+                navigate('/itemList');
+            }, 3000);
+
+
+        } catch (err) {
+
+            setSnackBarOpen(true)
+
+
+
+
+            if (err.response && err.response.status === 400) {
+                // Handle validation errors
+                const errorData400 = err.response.data.errors;
+                const errorMessages400 = Object.values(errorData400).join(', ');
+                console.log(errorMessages400)
+                setErrorHandler({ status: 0, message: errorMessages400, code: "error" });
+            } else if (err.response && err.response.status === 500) {
+                // Handle other errors
+                const errorData500 = err.response.data.error;
+                const errorMessages500 = Object.values(errorData500).join(', ');
+                console.log(errorMessages500)
+                setErrorHandler({ status: 0, message: errorMessages500, code: "error" });
+            } else {
+                console.log(err.response.data.error)
+                setErrorHandler({ status: 0, message: "An error occurred", code: "error" });
+            }
+        }
+    };*/}
+
+
+
+
+//////
     const [confirmSubmit, setConfirmSubmit] = useState(false)
     const [snackBarOpen, setSnackBarOpen] = useState(false)
     const [alertMessage, setAlertMessage] = useState("")
