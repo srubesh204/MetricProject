@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState, useEffect, useRef, createContext } from 'react'
 import axios from 'axios'
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
@@ -6,32 +6,75 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { TextField, MenuItem, styled, Button, ButtonGroup, Chip, FormControl, OutlinedInput, Fab, Link, Box } from '@mui/material';
 import { DataGrid, GridToolbar } from '@mui/x-data-grid';
 import { Container, Paper } from '@mui/material';
+import { Edit, FilterAlt } from '@mui/icons-material';
+import AddIcon from '@mui/icons-material/Add';
+import GrnEdit from './GrnEdit';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
+import Snackbar from '@mui/material/Snackbar';
+import GrnAdd from './GrnAdd';
+import Alert from '@mui/material/Alert';
+export const GrnListContent = createContext(null);
 
 const GrnList = () => {
 
-    const [vendorDcList, setVendorDcList] = useState([])
-    const FetchData = async () => {
-        try {
-            const response = await axios.get(
-                `${process.env.REACT_APP_PORT}/vendor/getAllVendors`
-            );
-            setVendorDcList(response.data.result);
-            //setFilteredData(response.data.result);
-        } catch (err) {
-            console.log(err);
+    const [selectedRows, setSelectedRows] = useState([]);
+    const [grnEditOpen, setGrnEditOpen] = useState(false);
+    const [grnAddOpen, setGrnAddOpen] = useState(false);
+
+
+    const handleSnackClose = (event, reason) => {
+        if (reason === 'clickaway') {
+            return;
         }
-    };
-    useEffect(() => {
-        FetchData();
-    }, []);
+
+        setSnackBarOpen(false);
+    }
+
+
+    const initialGrnData = {
+        grnPartyRefNo: "",
+        grnPartyRefDate: "",
+        grnPartyName: "",
+        grnPartyCode: "",
+        grnPartyAddress: "",
+        grnNo: "",
+        grnDate: "",
+        grncCommonRemarks: "",
+        grnPartyItems: []
+
+    }
+
+    const [grnStateId, setGrnStateId] = useState(null)
+    const [grnData, setGrnData] = useState({
+        grnPartyRefNo: "",
+        grnPartyRefDate: "",
+        grnPartyName: "",
+        grnPartyCode: "",
+        grnPartyAddress: "",
+        grnNo: "",
+        grnDate: "",
+        grnCommonRemarks: "",
+        grnPartyItems: []
+
+
+
+
+    })
+
 
     const [grnListSelectedRowIds, setGrnListSelectedRowIds] = useState([])
     //
+    console.log()
     const Columns = [
+        { field: 'button', headerName: 'Edit', width: 60, renderCell: (params) => <Button onClick={() => { setSelectedRows(params.row); setGrnEditOpen(true) }}><Edit color='success' /></Button> },
         { field: 'id', headerName: 'Si. No', width: 150, renderCell: (params) => params.api.getAllRowIds().indexOf(params.id) + 1 },
-        { field: 'dcNo', headerName: 'Dc No', width: 200 },
-        { field: 'dcDate', headerName: 'Dc Date', width: 200 },
-        { field: 'fullName', headerName: 'Full Name', width: 400, },
+        { field: 'grnNo', headerName: 'Grn No', width: 200 },
+        { field: 'grnDate', headerName: 'Grn Date', width: 200 },
+        { field: 'grnPartyName', headerName: 'Party Name', width: 400, },
     ]
 
 
@@ -52,9 +95,85 @@ const GrnList = () => {
         grnListFetchData();
     }, []);
 
+   
+    const [grnDataList, setGrnDataList] = useState([])
+    const FetchData = async () => {
+        try {
+            const response = await axios.get(
+                `${process.env.REACT_APP_PORT}/itemGRN/getAllItemGRN`
+            );
+            console.log(response.data)
+            setGrnDataList(response.data.result);
+           // setFilteredData(response.data.result);
+        } catch (err) {
+            console.log(err);
+        }
+    };
+    useEffect(() => {
+        FetchData();
+    }, []);
+
+
+    
+
+
+    const [deleteModalItem, setDeleteModalItem] = useState(false);
+    const [snackBarOpen, setSnackBarOpen] = useState(false)
+    const [errorhandler, setErrorHandler] = useState({});
+    const [itemListSelectedRowIds, setItemListSelectedRowIds] = useState([])
+
+    const deleteGrnData = async (id) => {
+
+        try {
+            const response = await axios.delete(
+                "http://localhost:3001/itemGRN'/deleteItemGRN", {
+                data: {
+                    itemGRNIds: itemListSelectedRowIds
+                }
+            }
+            );
+
+            setSnackBarOpen(true)
+
+
+            setErrorHandler({ status: response.data.status, message: response.data.message, code: "success" })
+            console.log(" delete Successfully");
+            setGrnData(initialGrnData)
+            FetchData()
+        } catch (err) {
+
+            setSnackBarOpen(true)
+
+            if (err.response && err.response.status === 400) {
+                // Handle validation errors
+                const errorData400 = err.response.data.errors;
+                const errorMessages400 = Object.values(errorData400).join(', ');
+                console.log(errorMessages400)
+                setErrorHandler({ status: 0, message: errorMessages400, code: "error" });
+            } else if (err.response && err.response.status === 500) {
+                // Handle other errors
+                const errorData500 = err.response.data.error;
+                const errorMessages500 = Object.values(errorData500).join(', ');
+                console.log(errorMessages500)
+                setErrorHandler({ status: 0, message: errorMessages500, code: "error" });
+            } else {
+                console.log(err.response.data.error)
+                setErrorHandler({ status: 0, message: "An error occurred", code: "error" });
+            }
+            console.log(err);
+        }
+    };
+
+
+    const handleRowClick = async (params) => {
+        console.log(params)
+        setGrnData(params.row)
+        setGrnStateId(params.id)
+    }
 
 
     const grnColumns = [
+
         { field: 'id', headerName: 'Si. No', width: 70, renderCell: (params) => params.api.getAllRowIds().indexOf(params.id) + 1 },
         { field: 'itemIMTENo', headerName: 'Item IMTENo', width: 100 },
         { field: 'itemAddMasterName', headerName: 'Item Description', width: 100 },
@@ -63,29 +182,49 @@ const GrnList = () => {
 
     ]
 
+    const [vendorDataList, setVendorDataList] = useState([])
+    const vendorFetchData = async () => {
+        try {
+            const response = await axios.get(
+                `${process.env.REACT_APP_PORT}/vendor/getAllVendors`
+            );
+            setVendorDataList(response.data.result);
+            setFilteredData(response.data.result);
+        } catch (err) {
+            console.log(err);
+        }
+    };
+    useEffect(() => {
+        vendorFetchData();
+    }, []);
 
 
     const [filteredData, setFilteredData] = useState([])
     const handleFilterChange = (e) => {
         const { name, value } = e.target;
         if (value === "all") {
-            setFilteredData(vendorDcList)
+            setFilteredData(vendorDataList)
         } else {
             if (value === "oem") {
-                const vendorType = vendorDcList.filter((item) => (item.oem === "1"))
+                const vendorType = vendorDataList.filter((item) => (item.oem === "1"))
                 setFilteredData(vendorType)
             }
             if (value === "customer") {
-                const vendorType = vendorDcList.filter((item) => (item.customer === "1"))
+                const vendorType = vendorDataList.filter((item) => (item.customer === "1"))
                 setFilteredData(vendorType)
             }
             if (value === "supplier") {
-                const vendorType = vendorDcList.filter((item) => (item.supplier === "1"))
+                const vendorType = vendorDataList.filter((item) => (item.supplier === "1"))
                 setFilteredData(vendorType)
             }
             if (value === "subContractor") {
-                const vendorType = vendorDcList.filter((item) => (item.subContractor === "1"))
+                const vendorType = vendorDataList.filter((item) => (item.subContractor === "1"))
                 setFilteredData(vendorType)
+            }
+            if (name === "partyName") {
+                const partyName = vendorDataList.filter((item) => (item.dcPartyName === value))
+                setFilteredData(partyName)
+                console.log(value)
             }
 
 
@@ -123,7 +262,7 @@ const GrnList = () => {
                                 >
                                     <div className='row mb-2'>
                                         <div className='col'>
-                                            <TextField fullWidth label="VendorStatus" className="col" select size="small" id="vendorStatusId" onChange={handleFilterChange} name="vendorStatus" defaultValue="" >
+                                            <TextField fullWidth label="Vendor Type" className="col" select size="small" id="vendorTypeId" onChange={handleFilterChange} name="vendorType" defaultValue="" >
                                                 <MenuItem value="all">All</MenuItem>
                                                 <MenuItem value="oem">OEM</MenuItem>
                                                 <MenuItem value="customer">Customer</MenuItem>
@@ -133,11 +272,11 @@ const GrnList = () => {
 
                                         </div>
                                         <div className='col'>
-                                            <TextField fullWidth label="Party Name" className="col" select size="small" id="partyNameId" name="partyName" defaultValue="" >
+                                            <TextField fullWidth label="Party Name" className="col" select size="small" onChange={handleFilterChange} id="partyNameId" name="partyName" defaultValue="" >
 
                                                 <MenuItem value="all">All</MenuItem>
-                                                {vendorDcList.map((item) => (
-                                                    <MenuItem value={item._id}>{item.fullName}</MenuItem>
+                                                {filteredData.map((item) => (
+                                                    <MenuItem value={item._id}>{item.dcPartyName}</MenuItem>
                                                 ))}
 
 
@@ -185,7 +324,7 @@ const GrnList = () => {
                                     <Box sx={{ height: 310, width: '100%', my: 2 }}>
                                         <DataGrid
 
-                                            rows={vendorDcList}
+                                            rows={grnDataList}
                                             columns={Columns}
                                             getRowId={(row) => row._id}
                                             initialState={{
@@ -215,6 +354,7 @@ const GrnList = () => {
                                             //clipboardCopyCellDelimiter={true}
                                             checkboxSelection
                                             //onRowClick={handleRowClick}
+                                            onRowClick={handleRowClick}
                                             disableRowSelectionOnClick
                                             pageSizeOptions={[5]}
                                         />
@@ -276,7 +416,7 @@ const GrnList = () => {
                                             //disableColumnMenu={true}
                                             //clipboardCopyCellDelimiter={true}
                                             checkboxSelection
-                                            //onRowClick={handleRowClick}
+                                            onRowClick={handleRowClick}
                                             disableRowSelectionOnClick
                                             pageSizeOptions={[5]}
                                         />
@@ -296,20 +436,55 @@ const GrnList = () => {
                                     elevation={12}
                                 >
                                     <div className='col d-flex '>
-                                        <div className=' me-2'>
-                                            <button type="button" className='btn btn-secondary' >Modify</button>
-                                        </div>
-                                        <div className=' me-2'>
-                                            <button type="button" className='btn btn-secondary' >Add</button>
-                                        </div>
-                                        <div className=' me-2'>
-                                            <button type="button" className='btn btn-secondary' >Delete</button>
-                                        </div>
+
+                                        <Button component={Link} onClick={() => { setGrnAddOpen(true) }} type='button' variant="contained" color="warning">
+                                            <AddIcon /> Add Item
+                                        </Button>
+                                        <Button variant='contained' type='button' color='error' onClick={() => setDeleteModalItem(true)}>Delete</Button>
+
+                                        <Dialog
+                                            open={deleteModalItem}
+                                            onClose={() => setDeleteModalItem(false)}
+                                            aria-labelledby="alert-dialog-title"
+                                            aria-describedby="alert-dialog-description"
+                                        >
+                                            <DialogTitle id="alert-dialog-title">
+                                                {" ItemAdd delete confirmation?"}
+                                            </DialogTitle>
+                                            <DialogContent>
+                                                <DialogContentText id="alert-dialog-description">
+                                                    Are you sure to delete the
+                                                </DialogContentText>
+                                            </DialogContent>
+                                            <DialogActions>
+                                                <Button onClick={() => setDeleteModalItem(false)}>Cancel</Button>
+                                                <Button onClick={() => { deleteGrnData(); setDeleteModalItem(false); }} autoFocus>
+                                                    Delete
+                                                </Button>
+                                            </DialogActions>
+                                        </Dialog>
+
+                                        <Snackbar anchorOrigin={{ vertical: "top", horizontal: "right" }} open={snackBarOpen} autoHideDuration={6000} onClose={handleSnackClose}>
+                                            <Alert onClose={handleSnackClose} severity={errorhandler.code} sx={{ width: '100%' }}>
+                                                {errorhandler.message}
+                                            </Alert>
+                                        </Snackbar>
                                         <div className=' me-2'>
                                             <button type="button" className='btn btn-secondary' >Back</button>
                                         </div>
                                     </div>
                                 </Paper>
+
+                                <GrnListContent.Provider
+                                    value={{ grnEditOpen, setGrnEditOpen, selectedRows }}
+                                >
+                                    <GrnEdit />
+                                </GrnListContent.Provider>
+                                <GrnListContent.Provider
+                                    value={{ grnAddOpen, setGrnAddOpen, selectedRows }}
+                                >
+                                    <GrnAdd />
+                                </GrnListContent.Provider>
                             </div>
                         </div>
 

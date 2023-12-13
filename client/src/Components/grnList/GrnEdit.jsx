@@ -7,24 +7,26 @@ import isSameOrAfter from 'dayjs/plugin/isSameOrAfter'
 import isSameOrBefore from 'dayjs/plugin/isSameOrBefore'
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { HomeContent } from '../Home';
-import { useNavigate } from 'react-router-dom';
+import { GrnListContent } from './GrnList';
 import { Add, Close, Delete } from '@mui/icons-material';
-
-const Grn = () => {
-    const grnDatas = useContext(HomeContent)
-    const { grnOpen, setGrnOpen, selectedRows } = grnDatas
+import { useParams } from 'react-router-dom';
 
 
-
+const GrnEdit = () => {
+    const grnDatas = useContext(GrnListContent)
+    const { grnEditOpen, setGrnEditOpen, selectedRows } = grnDatas
+   
+    const { id } = useParams()
+    console.log(id)
+    const [selectedExtraMaster, setSelectedExtraMaster] = useState([])
     const initialGrnData = {
         grnPartyRefNo: "",
-        grnPartyRefDate:dayjs().format("YYYY-MM-DD"),
+        grnPartyRefDate: "",
         grnPartyName: "",
         grnPartyCode: "",
         grnPartyAddress: "",
         grnNo: "",
-        grnDate: dayjs().format("YYYY-MM-DD"),
+        grnDate: "",
         grncCommonRemarks: "",
         grnPartyItems: []
 
@@ -33,17 +35,54 @@ const Grn = () => {
 
     const [grnData, setGrnData] = useState({
         grnPartyRefNo: "",
-        grnPartyRefDate: dayjs().format("YYYY-MM-DD"),
+        grnPartyRefDate: "",
         grnPartyName: "",
         grnPartyCode: "",
         grnPartyAddress: "",
         grnNo: "",
-        grnDate: dayjs().format("YYYY-MM-DD"),
+        grnDate: "",
         grnCommonRemarks: "",
         grnPartyItems: []
 
+
+
+
     })
-    console.log(grnData)
+
+
+console.log(selectedRows)
+    const settingGrnData = () => {
+        if (selectedRows.length !== 0) { // Check if selectedRows is defined
+            setGrnData((prev) => ({
+                ...prev,
+                grnPartyId: selectedRows.grnPartyId,
+                grnPartyRefNo: selectedRows.grnPartyRefNo,
+                grnPartyRefDate: selectedRows.grnPartyRefDate,
+                grnPartyName: selectedRows.grnPartyName,
+                grnPartyCode: selectedRows.grnPartyCode,
+                grnPartyAddress: selectedRows.grnPartyAddress,
+                grnNo: selectedRows.grnNo,
+                grnDate: selectedRows.grnDate,
+                grnCommonRemarks: selectedRows.grnCommonRemarks,
+                grnPartyItems: selectedRows.grnPartyItems,
+            }));
+        }
+    };
+
+    useEffect(() => {
+        settingGrnData();
+    }, [selectedRows]);
+
+    const addDcValue = () => {
+        if (selectedExtraMaster.length !== 0) {
+            setGrnData((prev) => ({
+                ...prev,
+                dcPartyItems: [...prev.dcPartyItems, selectedExtraMaster]
+            }))
+            setSelectedExtraMaster([])
+        }
+    }
+
 
 
 
@@ -52,19 +91,8 @@ const Grn = () => {
         grnImteNo: ""
     })
 
-    const settingGrnData = () => {
-        setGrnData((prev) => (
-            {
-                ...prev,
-                grnPartyItems: selectedRows
-            }
+   
 
-        ))
-    };
-    useEffect(() => {
-        settingGrnData()
-    }, [selectedRows])
-    const navigate = useNavigate();
 
     const [vendorDataList, setVendorDataList] = useState([])
 
@@ -228,8 +256,8 @@ const Grn = () => {
     useEffect(() => {
         setSelectedGrnItem([])
         setItemAddDetails({
-            itemListNames: "",
-            itemImteList: ""
+            grnList: "",
+            grnImteNo: ""
         })
     }, [grnData.grnPartyItems])
 
@@ -240,33 +268,24 @@ const Grn = () => {
     const [snackBarOpen, setSnackBarOpen] = useState(false)
     const [alertMessage, setAlertMessage] = useState("")
 
- const submitGrnForm = async () => {
-        try {
-            const response = await axios.post(
-                
-                `${process.env.REACT_APP_PORT}/itemGRN/createItemGRN`, grnData
-            );
-            setAlertMessage(response.data.message)
-            setSnackBarOpen(true)
-            setTimeout(() => setGrnOpen(false), 3000)
-        } catch (err) {
-            console.log(err);
-        }
-    };
-   {/* const submitGrnForm = async (e) => {
+
+
+
+
+    const updateGrnData = async (e) => {
         e.preventDefault();
         try {
-            const response = await axios.post(
-                `${process.env.REACT_APP_PORT}/itemGRN/createItemGRN`, grnData
+            const response = await axios.put(
+                `${process.env.REACT_APP_PORT}/itemGRN/updateItemGRN/${id}`, grnData
             );
-
 
             setSnackBarOpen(true)
 
-            console.log(" GRN Created Successfully")
+            console.log(" Update Successfully")
             setErrorHandler({ status: response.data.status, message: response.data.message, code: "success" })
+            setGrnData(initialGrnData)
+            setTimeout(() => setGrnEditOpen(false), 3000)
 
-            setTimeout(() => setGrnOpen(false), 3000)
 
         } catch (err) {
 
@@ -292,6 +311,21 @@ const Grn = () => {
                 setErrorHandler({ status: 0, message: "An error occurred", code: "error" });
             }
         }
+    };
+
+
+   {/* const submitCalForm = async () => {
+        try {
+            const response = await axios.post(
+                "http://localhost:3001/itemGRN/createItemGRN/", grnData
+                //`${process.env.REACT_APP_PORT}/itemGrn/createItemGRN`, grnData
+            );
+            setAlertMessage(response.data.message)
+            setSnackBarOpen(true)
+            setTimeout(() => setGrnEditOpen(false), 3000)
+        } catch (err) {
+            console.log(err);
+        }
     };*/}
 
 
@@ -310,17 +344,17 @@ const Grn = () => {
 
     return (
 
-        <Dialog fullWidth={true} keepMounted maxWidth="xl" open={grnOpen} sx={{ color: "#f1f4f4" }}
+        <Dialog fullWidth={true} keepMounted maxWidth="xl" open={grnEditOpen} onc sx={{ color: "#f1f4f4" }}
             onClose={(e, reason) => {
                 console.log(reason)
                 if (reason !== 'backdropClick' && reason !== 'escapeKeyDown') {
-                    setGrnOpen(false)
+                    setGrnEditOpen(false)
                 }
             }}>
             <DialogTitle align='center' >GRN</DialogTitle>
             <IconButton
                 aria-label="close"
-                onClick={() => setGrnOpen(false)}
+                onClick={() => setGrnEditOpen(false)}
                 sx={{
                     position: 'absolute',
                     right: 8,
@@ -398,7 +432,7 @@ const Grn = () => {
                                                         <TextField label="Party Name"
                                                             id="grnPartyNameId"
                                                             select
-                                                            //  value={grnData.grnPartyName}
+                                                            value={grnData.grnPartyName}
 
                                                             onChange={(e) => setPartyData(e.target.value)}
 
@@ -417,6 +451,7 @@ const Grn = () => {
                                                         <TextField label="Party code"
                                                             id="grnPartyCodeId"
                                                             defaultValue=""
+
                                                             onChange={handleGrnChange}
                                                             // sx={{ width: "100%" }}
                                                             size="small"
@@ -484,7 +519,7 @@ const Grn = () => {
                                                         fullWidth
                                                         id="grnDateId"
                                                         name="grnDate"
-                                                        value={dayjs(grnData.grnPartyRefDate)}
+                                                        value={dayjs(grnData.grnDate)}
                                                         onChange={(newValue) =>
                                                             setGrnData((prev) => ({ ...prev, grnDate: newValue.format("YYYY-MM-DD") }))
                                                         }
@@ -596,9 +631,9 @@ const Grn = () => {
                                             </div>
                                             <div className='col me-2'>
                                                 <TextField size='small' fullWidth variant='outlined' id="certificateStatusId" select label="Certificate Status" name='certificateStatus'>
-                                                    <MenuItem value="received">Received</MenuItem>
-                                                    <MenuItem value="notreceived">Not Received</MenuItem>
-                                                    
+                                                    <MenuItem value="InHouse">InHouse</MenuItem>
+                                                    <MenuItem value="OutSource">OutSource</MenuItem>
+                                                    <MenuItem value="OEM">OEM</MenuItem>
                                                 </TextField>
                                             </div>
                                             <div className="col me-2">
@@ -684,7 +719,7 @@ const Grn = () => {
 
                                         <DialogActions className='d-flex justify-content-center'>
                                             <Button onClick={() => setConfirmSubmit(false)}>Cancel</Button>
-                                            <Button onClick={(e) => { submitGrnForm(e); setConfirmSubmit(false) }} autoFocus>
+                                            <Button onClick={(e) => { updateGrnData(e); setConfirmSubmit(false) }} autoFocus>
                                                 Submit
                                             </Button>
                                         </DialogActions>
@@ -731,8 +766,8 @@ const Grn = () => {
                     <Button variant='contained' color='warning' className='me-3'>Upload Report</Button>
                 </div>
                 <div>
-                    <Button variant='contained' color='error' className='me-3' onClick={() => { setGrnOpen(false) }}>Cancel</Button>
-                    <Button variant='contained' color='success' onClick={() => { setConfirmSubmit(true) }}>Submit</Button>
+                    <Button variant='contained' color='error' className='me-3' onClick={() => { setGrnEditOpen(false) }}>Cancel</Button>
+                    <Button variant='contained' color='success'onClick={() => { setConfirmSubmit(true) }}>Submit</Button>
                 </div>
             </DialogActions>
 
@@ -740,4 +775,4 @@ const Grn = () => {
     )
 }
 
-export default Grn
+export default GrnEdit

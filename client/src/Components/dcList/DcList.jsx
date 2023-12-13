@@ -16,13 +16,14 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import Alert from '@mui/material/Alert';
 import Snackbar from '@mui/material/Snackbar';
+import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
 
 import DcEdit from './DcEdit';
 export const DcListContent = createContext(null);
 const DcList = () => {
 
 
-    
+
     const [selectedRows, setSelectedRows] = useState([]);
     const [dcEditOpen, setDcEditOpen] = useState(false);
     const [dcAddOpen, setDcAddOpen] = useState(false);
@@ -31,7 +32,7 @@ const DcList = () => {
     const [dcStateId, setDcStateId] = useState(null)
     const initialDcData = {
         dcPartyId: "",
-        dcPartyType:"",
+        dcPartyType: "",
         dcPartyName: "",
         dcPartyCode: "",
         dcPartyAddress: "",
@@ -45,7 +46,7 @@ const DcList = () => {
 
     const [dcData, setDcData] = useState({
         dcPartyId: "",
-        dcPartyType:"",
+        dcPartyType: "",
         dcPartyName: "",
         dcPartyCode: "",
         dcPartyAddress: "",
@@ -60,12 +61,16 @@ const DcList = () => {
 
 
     const [vendorDataList, setVendorDataList] = useState([])
+    
     const vendorFetchData = async () => {
         try {
             const response = await axios.get(
                 `${process.env.REACT_APP_PORT}/vendor/getAllVendors`
             );
+            console.log(response.data)
+            
             setVendorDataList(response.data.result);
+           
             // setFilteredData(response.data.result);
         } catch (err) {
             console.log(err);
@@ -74,6 +79,34 @@ const DcList = () => {
     useEffect(() => {
         vendorFetchData();
     }, []);
+    const [vendorFullList, setVendorFullList] = useState([])
+
+    const FetchData = async () => {
+        try {
+            const response = await axios.get(
+                `${process.env.REACT_APP_PORT}/vendor/getAllVendors`
+            );
+            console.log(response.data)
+            
+            setVendorFullList(response.data.result);
+           
+            // setFilteredData(response.data.result);
+        } catch (err) {
+            console.log(err);
+        }
+    };
+    useEffect(() => {
+        FetchData();
+    }, []);
+
+
+
+  
+
+   
+
+    const [dcListDataList, setDcListDataList] = useState([])
+
     const [vendorDataDcList, setVendorDataDcList] = useState([])
     const vendorFetDcchData = async () => {
         try {
@@ -99,35 +132,43 @@ const DcList = () => {
 
         setSnackBarOpen(false);
     }
-
+    const [selectedRowView, setSelectedRowView] = useState(null);
+    const handleViewClick = (params) => {
+        setSelectedRowView(params); // Set the selected row data
+        setDcListDataList(params.dcPartyItems)
+        
+      };
+    
 
     // const [itemListSelectedRowIds, setItemListSelectedRowIds] = useState([])
     //
     const Columns = [
-        { field: 'button', headerName: 'Edit', width: 60, renderCell: (params) => <Button onClick={() => { setSelectedRows(params.row); setDcEditOpen(true) }}><Edit color='success' /></Button> },
+
         { field: 'id', headerName: 'Si. No', width: 70, renderCell: (params) => params.api.getAllRowIds().indexOf(params.id) + 1 },
-        { field: 'dcNo', headerName: 'Dc No', width: 90 },
-        { field: 'dcDate', headerName: 'Dc Date', width: 90 },
-        { field: 'dcPartyName', headerName: 'Dc PartyName', width: 200, },
+        { field: 'editButton', headerName: 'Edit', width: 100, renderCell: (params) => <Button onClick={() => { setSelectedRows(params.row); setDcEditOpen(true) }}><Edit color='success' /></Button> },
+       // { field: 'viewButton', headerName: 'View', width: '100', renderCell: (params) => <Button><RemoveRedEyeIcon onClick={() => { setSelectedRowView(params.row); setDcEditOpen(true) }} /></Button> },
+        {
+            field: 'viewButton',
+            headerName: 'View',
+            width: 100,
+            
+            renderCell: (params) => (
+                
+              
+                <RemoveRedEyeIcon color="primary" 
+                onClick={() => handleViewClick(params.row)}/>
+              
+            ),
+          },
+        { field: 'dcNo', headerName: 'Dc No', width: 100 },
+        { field: 'dcDate', headerName: 'Dc Date', width: 200 },
+        { field: 'dcPartyName', headerName: 'Dc PartyName', width: 300 },
     ]
 
 
     const [dcListSelectedRowIds, setDcListSelectedRowIds] = useState([])
-    const [dcListDataList, setDcListDataList] = useState([])
-    const dcListFetchData = async () => {
-        try {
-            const response = await axios.get(
-                `${process.env.REACT_APP_PORT}/itemAdd/getAllItemAdds`
-            );
-
-            setDcListDataList(response.data.result);
-        } catch (err) {
-            console.log(err);
-        }
-    };
-    useEffect(() => {
-        dcListFetchData();
-    }, []);
+   
+   
 
 
     const [dcDataList, setDcDataList] = useState([])
@@ -137,7 +178,8 @@ const DcList = () => {
                 `${process.env.REACT_APP_PORT}/itemDc/getAllItemDc`
             );
             setDcDataList(response.data.result);
-            
+            setFilteredData(response.data.result);
+
         } catch (err) {
             console.log(err);
         }
@@ -145,7 +187,7 @@ const DcList = () => {
     useEffect(() => {
         dcFetchData();
     }, []);
-   
+
 
 
     const [deleteModalItem, setDeleteModalItem] = useState(false);
@@ -157,11 +199,11 @@ const DcList = () => {
 
         try {
             const response = await axios.delete(
-                "http://localhost:3001/itemDc/deleteItemDc",{
-                    data: {
-                        itemDcIds: itemListSelectedRowIds
-                    }
-                } 
+                "http://localhost:3001/itemDc/deleteItemDc", {
+                data: {
+                    itemDcIds: itemListSelectedRowIds
+                }
+            }
             );
 
             setSnackBarOpen(true)
@@ -203,6 +245,39 @@ const DcList = () => {
 
 
 
+    const [filteredData, setFilteredData] = useState([])
+
+    const handleFilterChange = (e) => {
+        const { name, value } = e.target;
+        if (value === "all") {
+            setFilteredData(vendorDataDcList)
+        } else {
+            if (name === "vendorStatus") {
+                const vendorStatus = vendorDataDcList.filter((item) => (item.vendorStatus === "1"))
+                console.log(value)
+                setFilteredData(vendorStatus)
+            }
+            if (name === "partyName") {
+                const partyName = vendorDataDcList.filter((item) => (item.fullName === "1"))
+                console.log(value)
+                setFilteredData(partyName)
+                
+            }
+
+
+
+
+        }
+
+
+    };
+
+
+
+
+
+
+
     const dcListColumns = [
         { field: 'id', headerName: 'Si. No', width: 70, renderCell: (params) => params.api.getAllRowIds().indexOf(params.id) + 1 },
         { field: 'itemIMTENo', headerName: 'Item IMTENo', width: 100 },
@@ -210,7 +285,7 @@ const DcList = () => {
         { field: 'reMarks', headerName: 'ReMarks', width: 100 },
 
     ]
-    
+
 
 
 
@@ -238,7 +313,7 @@ const DcList = () => {
                                 <h1 className='text-center '>DC List</h1>
                                 <div className='col d-flex '>
                                     <div className='col me-2'>
-                                        <TextField fullWidth label="VendorStatus" className="col" select size="small" id="vendorStatusId" name="vendorStatus" defaultValue="" >
+                                        <TextField fullWidth label="VendorStatus" className="col" select size="small" onChange={handleFilterChange} id="vendorStatusId" name="vendorStatus" defaultValue="" >
 
                                             <MenuItem value="all">All</MenuItem>
                                             {vendorDataList.map((item) => (
@@ -250,11 +325,11 @@ const DcList = () => {
 
                                     </div>
                                     <div className='col'>
-                                        <TextField fullWidth label="Party Name" className="col" select size="small" id="partyNameId" name="partyName" defaultValue="" >
+                                        <TextField fullWidth label="Party Name" className="col" select size="small" onChange={handleFilterChange} id="partyNameId" name="partyName" defaultValue="" >
 
                                             <MenuItem value="all">All</MenuItem>
-                                            {dcDataList.map((item) => (
-                                                <MenuItem value={item._id}>{item.dcPartyName}</MenuItem>
+                                            {vendorFullList.map((item) => (
+                                                <MenuItem value={item._id}>{item.fullName}</MenuItem>
                                             ))}
 
 
@@ -299,7 +374,7 @@ const DcList = () => {
                                 <Box sx={{ height: 310, width: '100%', my: 2 }}>
                                     <DataGrid
 
-                                        rows={vendorDataDcList}
+                                        rows={filteredData}
                                         columns={Columns}
                                         getRowId={(row) => row._id}
                                         initialState={{
@@ -314,21 +389,20 @@ const DcList = () => {
                                                 "margin-bottom": "1em"
                                             }
                                         }}
-                                     onRowSelectionModelChange={(newRowSelectionModel, event) => {
+                                        onRowSelectionModelChange={(newRowSelectionModel, event) => {
                                             setItemListSelectedRowIds(newRowSelectionModel);
-
-
-                                         }}
-
+                                        }}
+                                        disableRowSelectionOnClick
                                         slots={{
                                             toolbar: GridToolbar,
                                         }}
 
                                         density="compact"
-                                    disableColumnMenu={true}
-                                    clipboardCopyCellDelimiter={true}
+                                        disableColumnMenu={true}
+                                        clipboardCopyCellDelimiter={true}
+                                        checkboxSelection
 
-                                   onRowClick={handleRowClick}
+                                        onRowClick={handleRowClick}
 
 
                                     />
@@ -350,7 +424,6 @@ const DcList = () => {
                             <div className='row'>
                                 <Box sx={{ height: 310, width: '100%', my: 2 }}>
                                     <DataGrid
-
                                         rows={dcListDataList}
                                         columns={dcListColumns}
                                         getRowId={(row) => row._id}
@@ -396,36 +469,37 @@ const DcList = () => {
 
                                 </div>
                                 <div className='col d-flex justify-content-end'>
+                                   
                                     <div className='me-2 '>
-                                        <button type="button" className='btn btn-secondary' >Modify</button>
-                                    </div>
                                     <Button component={Link} onClick={() => { setDcEditOpen(true) }} type='button' variant="contained" color="warning">
                                         <AddIcon /> Add Item
                                     </Button>
+                                    </div>
+                                    <div className='me-2 '>
                                     <Button variant='contained' type='button' color='error' onClick={() => setDeleteModalItem(true)}>Delete</Button>
-
+                                    </div>
 
                                     <Dialog
-                                open={deleteModalItem}
-                                onClose={() => setDeleteModalItem(false)}
-                                aria-labelledby="alert-dialog-title"
-                                aria-describedby="alert-dialog-description"
-                            >
-                                <DialogTitle id="alert-dialog-title">
-                                    {" ItemAdd delete confirmation?"}
-                                </DialogTitle>
-                                <DialogContent>
-                                    <DialogContentText id="alert-dialog-description">
-                                        Are you sure to delete the ItemAdd
-                                    </DialogContentText>
-                                </DialogContent>
-                                <DialogActions>
-                                    <Button onClick={() => setDeleteModalItem(false)}>Cancel</Button>
-                                    <Button onClick={() => { deleteDcData(); setDeleteModalItem(false); }} autoFocus>
-                                        Delete
-                                    </Button>
-                                </DialogActions>
-                            </Dialog>
+                                        open={deleteModalItem}
+                                        onClose={() => setDeleteModalItem(false)}
+                                        aria-labelledby="alert-dialog-title"
+                                        aria-describedby="alert-dialog-description"
+                                    >
+                                        <DialogTitle id="alert-dialog-title">
+                                            {" ItemAdd delete confirmation?"}
+                                        </DialogTitle>
+                                        <DialogContent>
+                                            <DialogContentText id="alert-dialog-description">
+                                                Are you sure to delete the ItemAdd
+                                            </DialogContentText>
+                                        </DialogContent>
+                                        <DialogActions>
+                                            <Button  onClick={() => setDeleteModalItem(false)}>Cancel</Button>
+                                            <Button onClick={() => { deleteDcData(); setDeleteModalItem(false); }} autoFocus>
+                                                Delete
+                                            </Button>
+                                        </DialogActions>
+                                    </Dialog>
                                     <div className='me-2 '>
                                         <button type="button" className='btn btn-secondary' >Back</button>
                                     </div>
@@ -445,10 +519,10 @@ const DcList = () => {
                             </div>
                         </Paper>
                         <Snackbar anchorOrigin={{ vertical: "top", horizontal: "right" }} open={snackBarOpen} autoHideDuration={6000} onClose={handleSnackClose}>
-                                <Alert onClose={handleSnackClose} severity={errorhandler.code} sx={{ width: '100%' }}>
-                                    {errorhandler.message}
-                                </Alert>
-                            </Snackbar>
+                            <Alert onClose={handleSnackClose} severity={errorhandler.code} sx={{ width: '100%' }}>
+                                {errorhandler.message}
+                            </Alert>
+                        </Snackbar>
 
                     </Container>
                 </form>

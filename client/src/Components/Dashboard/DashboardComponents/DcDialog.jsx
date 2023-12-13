@@ -26,7 +26,7 @@ const Dc = () => {
         dcPartyCode: "",
         dcPartyAddress: "",
         dcNo: "",
-        dcDate: "",
+        dcDate: dayjs().format("YYYY-MM-DD"),
         dcReason: "",
         dcCommonRemarks: "",
         dcPartyItems: []
@@ -40,7 +40,7 @@ const Dc = () => {
         dcPartyCode: "",
         dcPartyAddress: "",
         dcNo: "",
-        dcDate: "",
+        dcDate: dayjs().format("YYYY-MM-DD"),
         dcReason: "",
         dcCommonRemarks: "",
         dcPartyItems: []
