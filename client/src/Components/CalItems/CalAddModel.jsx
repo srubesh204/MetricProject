@@ -6,47 +6,45 @@ import isSameOrAfter from 'dayjs/plugin/isSameOrAfter'
 import isSameOrBefore from 'dayjs/plugin/isSameOrBefore'
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { HomeContent } from '../Home';
+import { CalData } from './CalList'
 import { Add, Close, Delete, ErrorOutline } from '@mui/icons-material';
+
 
 dayjs.extend(isSameOrBefore)
 dayjs.extend(isSameOrAfter)
 
-const CalDialog = () => {
+const CalAddModel = () => {
 
 
-    const calData = useContext(HomeContent)
+    const calData = useContext(CalData)
     const [lastResultData, setLastResultData] = useState([])
-    const { calOpen, setCalOpen, selectedRows, itemMasters, activeEmps } = calData
+    const { calAddOpen, setCalAddOpen, itemMasters, activeEmps, calListFetchData } = calData
     const [calibrationDatas, setCalibrationDatas] = useState([])
 
-    const getAllCalibrationData = async () => {
+    const [selectedIMTE, setSelectedIMTE] = useState([]);
+    const [distinctItemNames, setDistinctItemNames] = useState([])
+
+    const getDistinctItemName = async () => {
         try {
             const response = await axios.get(
-                `${process.env.REACT_APP_PORT}/itemCal/getAllItemCals`
+                `${process.env.REACT_APP_PORT}/itemAdd/getAllDistinctItemName`
             );
-            console.log(response.data.result)
-            const imteNoData = response.data.result.filter((item) => item.calIMTENo === selectedRows[0].itemIMTENo)
-            console.log(imteNoData)
-            setCalibrationDatas(response.data.result)
-            const maxDateObject = imteNoData.reduce((prev, current) => {
-                const prevDate = dayjs(prev.calItemEntryDate);
-                const currentDate = dayjs(current.calItemEntryDate);
-                return currentDate.isAfter(prevDate) ? current : prev;
-            });
-            setLastResultData(maxDateObject)
+            console.log(response.data)
+            setDistinctItemNames(response.data.result);
 
         } catch (err) {
             console.log(err);
         }
     };
     useEffect(() => {
-        getAllCalibrationData();
-    }, [selectedRows])
+        getDistinctItemName();
+    }, []);
+
+    
 
 
     const [selectedExtraMaster, setSelectedExtraMaster] = useState([])
-    console.log(selectedRows[0])
+    console.log(selectedIMTE[0])
 
     const [initialCalData, setInitialCalData] = useState({
         calItemId: "",
@@ -133,62 +131,30 @@ const CalDialog = () => {
     })
 
 
-    const setCalData = () => {
-        if (selectedRows.length === 1) {
+    const getAllCalibrationData = async () => {
+        try {
+            const response = await axios.get(
+                `${process.env.REACT_APP_PORT}/itemCal/getAllItemCals`
+            );
+            console.log(response.data.result)
+            const imteNoData = response.data.result.filter((item) => item.calIMTENo === calibrationData.calIMTENo)
+            console.log(imteNoData)
+            setCalibrationDatas(response.data.result)
+            const maxDateObject = imteNoData.reduce((prev, current) => {
+                const prevDate = dayjs(prev.calItemEntryDate);
+                const currentDate = dayjs(current.calItemEntryDate);
+                return currentDate.isAfter(prevDate) ? current : prev;
+            });
+            setLastResultData(maxDateObject)
 
-
-            setCalibrationData((prev) => (
-                {
-                    ...prev,
-                    calItemId: selectedRows[0]._id,
-                    calIMTENo: selectedRows[0].itemIMTENo,
-                    calItemName: selectedRows[0].itemAddMasterName,
-                    calItemType: selectedRows[0].itemType,
-                    calRangeSize: selectedRows[0].itemRangeSize,
-                    calItemMFRNo: selectedRows[0].itemMFRNo,
-                    calLC: selectedRows[0].itemLC,
-                    calItemMake: selectedRows[0].itemMake,
-                    calItemFreInMonths: selectedRows[0].itemCalFreInMonths,
-                    calItemUncertainity: selectedRows[0].selectedItemMaster[0].uncertainty,
-                    calItemSOPNo: selectedRows[0].selectedItemMaster[0].SOPNo,
-                    calStandardRef: selectedRows[0].selectedItemMaster[0].standardRef,
-                    calOBType: selectedRows[0].itemOBType,
-
-                    // calCalibratedBy: selectedRows[0],
-                    // calApprovedBy: selectedRows[0],
-                    calcalibrationData:
-
-                        selectedRows[0].acceptanceCriteria.map((item) => (
-                            {
-                                calParameter: item.acParameter,
-                                calNominalSize: item.acNominalSize,
-                                calNominalSizeUnit: item.acNominalSizeUnit,
-                                calMinPS: item.acMinPS,
-                                calMaxPS: item.acMaxPS,
-                                calWearLimitPS: item.acWearLimitPS,
-                                calBeforeCalibration: "",
-                                calMinOB: item.acMinOB,
-                                calMaxOB: item.acMaxOB,
-                                calAverageOB: item.acAverageOB,
-                                calOBError: item.acOBError,
-                                calMinPSError: item.acMinPSError,
-                                calMaxPSError: item.acMaxPSError,
-                                rowStatus: ""
-
-                            }
-                        )),
-
-                    calMasterUsed: selectedRows[0].itemItemMasterIMTENo
-                }
-
-            ))
+        } catch (err) {
+            console.log(err);
         }
-
     };
-
     useEffect(() => {
-        setCalData();
-    }, [selectedRows])
+        getAllCalibrationData();
+    }, [calibrationData.calIMTENo])
+
 
     const [nonSelectedMaster, setNonSelectedMaster] = useState([])
 
@@ -580,6 +546,75 @@ const CalDialog = () => {
         if (name === "lastResult") {
             setLastResultShow(checked)
         }
+        if(name === "calItemName"){
+            setCalibrationData((prev) => ({...prev, [name]: value}))
+            const itemMasterFetchData = async () => {
+                try {
+                    const response = await axios.post(
+                        `${process.env.REACT_APP_PORT}/itemAdd/getitemAddMasterName`, {itemAddMasterName: value}
+        
+                    );
+                    console.log(response.data.result)
+                    const inhouseIMTEs = response.data.result.filter((item)=> item.itemCalibrationSource === "inhouse")
+                    setItemIMTEs(inhouseIMTEs);
+                   
+        
+                } catch (err) {
+                    console.log(err);
+                }
+            };
+            itemMasterFetchData();
+         
+        }
+        if(name === "calIMTENo"){
+
+            const selectedItem = itemIMTEs.filter((item)=> item.itemIMTENo === value)
+            setCalibrationData((prev) => (
+                {
+                    ...prev,
+                    calItemId: selectedItem[0]._id,
+                    calIMTENo: selectedItem[0].itemIMTENo,
+                    calItemName: selectedItem[0].itemAddMasterName,
+                    calItemType: selectedItem[0].itemType,
+                    calRangeSize: selectedItem[0].itemRangeSize,
+                    calItemMFRNo: selectedItem[0].itemMFRNo,
+                    calLC: selectedItem[0].itemLC,
+                    calItemMake: selectedItem[0].itemMake,
+                    calItemFreInMonths: selectedItem[0].itemCalFreInMonths,
+                    calItemUncertainity: selectedItem[0].selectedItemMaster[0].uncertainty,
+                    calItemSOPNo: selectedItem[0].selectedItemMaster[0].SOPNo,
+                    calStandardRef: selectedItem[0].selectedItemMaster[0].standardRef,
+                    calOBType: selectedItem[0].itemOBType,
+
+                    // calCalibratedBy: selectedItem[0],
+                    // calApprovedBy: selectedItem[0],
+                    calcalibrationData:
+
+                        selectedItem[0].acceptanceCriteria.map((item) => (
+                            {
+                                calParameter: item.acParameter,
+                                calNominalSize: item.acNominalSize,
+                                calNominalSizeUnit: item.acNominalSizeUnit,
+                                calMinPS: item.acMinPS,
+                                calMaxPS: item.acMaxPS,
+                                calWearLimitPS: item.acWearLimitPS,
+                                calBeforeCalibration: "",
+                                calMinOB: item.acMinOB,
+                                calMaxOB: item.acMaxOB,
+                                calAverageOB: item.acAverageOB,
+                                calOBError: item.acOBError,
+                                calMinPSError: item.acMinPSError,
+                                calMaxPSError: item.acMaxPSError,
+                                rowStatus: ""
+
+                            }
+                        )),
+
+                    calMasterUsed: selectedItem[0].itemItemMasterIMTENo
+                }
+
+            ))
+        }
 
     }
     console.log(lastResultShow)
@@ -617,7 +652,8 @@ const CalDialog = () => {
             );
             setAlertMessage(response.data.message)
             setSnackBarOpen(true)
-            setTimeout(() => { setCalOpen(false); setCalibrationData(initialCalData) }, 3000)
+            calListFetchData()
+            setTimeout(() => { setCalAddOpen(false); setCalibrationData(initialCalData) }, 3000)
         } catch (err) {
             console.log(err);
         }
@@ -626,6 +662,9 @@ const CalDialog = () => {
     const [obStatus, setObStatus] = useState([]);
 
     const [showLastResult, setShowLastResult] = useState(false)
+    const [itemIMTEs, setItemIMTEs] = useState([])
+
+    
 
 
 
@@ -635,17 +674,17 @@ const CalDialog = () => {
 
 
     return (
-        <Dialog fullWidth={true} keepMounted maxWidth="xl" open={calOpen} sx={{ color: "#f1f4f4" }}
+        <Dialog fullWidth={true} keepMounted maxWidth="xl" open={calAddOpen} sx={{ color: "#f1f4f4" }}
             onClose={(e, reason) => {
                 console.log(reason)
                 if (reason !== 'backdropClick' && reason !== 'escapeKeyDown') {
-                    setCalOpen(false)
+                    setCalAddOpen(false)
                 }
             }}>
             <DialogTitle align='center'>Calibration</DialogTitle>
             <IconButton
                 aria-label="close"
-                onClick={() => setCalOpen(false)}
+                onClick={() => setCalAddOpen(false)}
                 sx={{
                     position: 'absolute',
                     right: 8,
@@ -662,36 +701,45 @@ const CalDialog = () => {
                     <Paper elevation={12} sx={{ p: 2 }} className='col-md-7 mb-2'>
                         <div className="row">
                             <div className="col-md-7 row g-2 ">
-
                                 <div className="col-md-6">
                                     <TextField
-                                        InputProps={{
-                                            readOnly: true,
-                                        }}
                                         name='calItemName'
                                         id="calItemNameId"
+                                        select
                                         size='small'
                                         label="Item Name"
                                         value={calibrationData.calItemName}
                                         fullWidth
+                                        onChange={handleCalData}
                                         variant="outlined"
-                                    />
+                                    >
+                                        <MenuItem value=""><em>Select Item Name</em></MenuItem>
+                                        {distinctItemNames.map((item)=> (
+                                            <MenuItem value={item}>{item}</MenuItem>
+                                        ))}
+                                    </TextField>
                                 </div>
-
                                 <div className="col-md-6">
                                     <TextField
-                                        InputProps={{
-                                            readOnly: true,
-                                        }}
                                         value={calibrationData.calIMTENo}
                                         id="calIMTENoId"
                                         size='small'
                                         label="Item IMTE No"
                                         name='calIMTENo'
                                         fullWidth
+                                        select
+                                        onChange={handleCalData}
                                         variant="outlined"
-                                    />
+                                        
+                                    >
+                                        <MenuItem value=""><em>Select IMTE</em></MenuItem>
+                                        {itemIMTEs.map((item)=> (
+                                            <MenuItem value={item.itemIMTENo}>{item.itemIMTENo}</MenuItem>
+                                        ))}
+                                    </TextField >
                                 </div>
+
+
                                 <div className="col-md-6">
                                     <TextField
                                         InputProps={{
@@ -1504,7 +1552,7 @@ const CalDialog = () => {
                     <Button variant='contained' color='warning' className='me-3'>Upload Report</Button>
                 </div>
                 <div>
-                    <Button variant='contained' color='error' className='me-3' onClick={() => { setCalOpen(false) }}>Cancel</Button>
+                    <Button variant='contained' color='error' className='me-3' onClick={() => { setCalAddOpen(false) }}>Cancel</Button>
                     <Button variant='contained' color='success' onClick={() => { setConfirmSubmit(true) }}>Submit</Button>
                 </div>
             </DialogActions>
@@ -1514,4 +1562,4 @@ const CalDialog = () => {
     )
 }
 
-export default CalDialog
+export default CalAddModel

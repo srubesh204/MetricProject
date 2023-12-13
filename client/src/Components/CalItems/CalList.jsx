@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { createContext, useEffect, useState } from 'react'
 import axios from 'axios'
 import { TextField, MenuItem, styled, Button, ButtonGroup, Chip, FormControl, OutlinedInput, Fab, Link, Box } from '@mui/material';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
@@ -7,22 +7,29 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DataGrid, GridToolbar } from '@mui/x-data-grid';
 import dayjs from 'dayjs';
 import { Container, Paper } from '@mui/material';
+import { Edit } from '@mui/icons-material';
+
+import CalAddModel from './CalAddModel'
+import CalEditModel from './CalEditModel'
+export const CalData = createContext(null);
+
 
 
 const CalList = () => {
 
     const [itemMasterDataList, setItemMasterDataList] = useState([])
+    const [itemMasters, setItemMasters] = useState([])
 
     const itemMasterFetchData = async () => {
         try {
             const response = await axios.get(
-                `${process.env.REACT_APP_PORT}/itemMaster/getAllItemMasters`
+                `${process.env.REACT_APP_PORT}/itemAdd/getAllItemAdds`
 
             );
-
-            console.log(response.data)
+            const masterItems = response.data.result.filter((item) => item.isItemMaster === "1")
             setItemMasterDataList(response.data.result);
-
+            setItemMasters(masterItems)
+                console.log(response.data.result)
         } catch (err) {
             console.log(err);
         }
@@ -30,6 +37,27 @@ const CalList = () => {
     useEffect(() => {
         itemMasterFetchData();
     }, []);
+
+
+    const [activeEmps, setActiveEmps] = useState([])
+
+    const empFetch = async () => {
+        try {
+            const response = await axios.get(
+                `${process.env.REACT_APP_PORT}/employee/getAllActiveEmployees`
+            );
+            setActiveEmps(response.data.result)
+        } catch (err) {
+            console.log(err);
+        }
+    };
+    useEffect(()=> {
+        empFetch();
+    },[])
+    console.log(activeEmps)
+
+    const [calAddOpen, setCalAddOpen] = useState(false)
+    const [calEditOpen, setCalEditOpen] = useState(false)
 
     const [calDataList, setCalDataList] = useState([])
     const calFetchData = async () => {
@@ -55,7 +83,7 @@ const CalList = () => {
     const calListFetchData = async () => {
         try {
             const response = await axios.get(
-                `${process.env.REACT_APP_PORT}/itemAdd/getAllItemAdds`
+                `${process.env.REACT_APP_PORT}/itemCal/getAllItemCals`
             );
 
             setCalListDataList(response.data.result);
@@ -67,12 +95,21 @@ const CalList = () => {
         calListFetchData();
     }, []);
 
+    const [selectedCalRow, setSelectedCalRow] = useState([])
+
+
+    const setCalEditData = (params) => {
+        setSelectedCalRow(params.row);
+        setCalEditOpen(true)
+    }
+
     const calListColumns = [
         { field: 'id', headerName: 'Entry. No', width: 100, renderCell: (params) => params.api.getAllRowIds().indexOf(params.id) + 1 },
-        { field: 'entryDate', headerName: 'Entry Date', width: 200 },
-        { field: 'itemIMTENo', headerName: 'Item IMTENo', width: 200 },
-        { field: 'itemAddMasterName', headerName: 'Item Description', width: 200 },
-        { field: 'itemRangeSize', headerName: 'Range/Size', width: 200 },
+        { field: 'editButton', headerName: 'Edit', width: 100, renderCell: (params) => <Edit onClick={setCalEditData} /> },
+        { field: 'calItemEntryDate', headerName: 'Entry Date', width: 200, valueGetter: (params) => dayjs(params.row.calItemEntryDate).format('DD-MM-YYYY') },
+        { field: 'calIMTENo', headerName: 'Item IMTENo', width: 200 },
+        { field: 'calItemName', headerName: 'Item Description', width: 200 },
+        { field: 'calRangeSize', headerName: 'Range/Size', width: 200 },
         { field: 'itemCalDate', headerName: 'Calibration On', width: 200, valueGetter: (params) => dayjs(params.row.itemCalDate).format('DD-MM-YYYY') },
         { field: 'itemDueDate', headerName: 'Next Due On', width: 200, valueGetter: (params) => dayjs(params.row.itemDueDate).format('DD-MM-YYYY') },
         { field: 'calStatus', headerName: 'Cal status', width: 200 },
@@ -86,7 +123,7 @@ const CalList = () => {
         <div>
 
             <LocalizationProvider dateAdapter={AdapterDayjs}>
-            
+
                 <form>
                     <Paper
                         sx={{
@@ -210,7 +247,7 @@ const CalList = () => {
                                     <button type="button" className='btn btn-secondary' >Modify</button>
                                 </div>
                                 <div className='me-2 '>
-                                    <button type="button" className='btn btn-secondary' >Add</button>
+                                    <button type="button" className='btn btn-secondary' onClick={()=> setCalAddOpen(true)}>Add</button>
                                 </div>
                                 <div className='me-2 '>
                                     <button type="button" className='btn btn-secondary' >Delete</button>
@@ -222,7 +259,17 @@ const CalList = () => {
                             </div>
                         </div>
                     </Paper>
+                    <CalData.Provider
+                        value={{ calAddOpen, setCalAddOpen, itemMasters, activeEmps, calListFetchData }}
+                    >
+                        <CalAddModel />
+                    </CalData.Provider>
 
+                    <CalData.Provider
+                        value={{ calEditOpen, setCalEditOpen }}
+                    >
+                        <CalEditModel />
+                    </CalData.Provider>
 
 
 
@@ -231,7 +278,7 @@ const CalList = () => {
 
 
                 </form>
-           
+
             </LocalizationProvider>
         </div>
     )

@@ -25,7 +25,7 @@ import Status from './Components/status/Status';
 import Grn from './Components/Dashboard/DashboardComponents/Grn';
 import DcList from './Components/dcList/DcList';
 import GrnList from './Components/grnList/GrnList';
-import CalList from './Components/calList/CalList';
+import CalList from './Components/CalItems/CalList';
 import DcEdit from './Components/dcList/DcEdit';
 
 
