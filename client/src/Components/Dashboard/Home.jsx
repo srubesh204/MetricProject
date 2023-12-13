@@ -467,7 +467,6 @@ const Home = () => {
   };
 
   useEffect(() => {
-
     itemFetch();
     DepartmentFetch();
     getAllDepartments();
