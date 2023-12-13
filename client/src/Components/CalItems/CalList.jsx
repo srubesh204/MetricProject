@@ -102,10 +102,11 @@ const CalList = () => {
         setSelectedCalRow(params.row);
         setCalEditOpen(true)
     }
+    console.log(selectedCalRow)
 
     const calListColumns = [
         { field: 'id', headerName: 'Entry. No', width: 100, renderCell: (params) => params.api.getAllRowIds().indexOf(params.id) + 1 },
-        { field: 'editButton', headerName: 'Edit', width: 100, renderCell: (params) => <Edit onClick={setCalEditData} /> },
+        { field: 'editButton', headerName: 'Edit', width: 100, renderCell: (params) => <Edit onClick={()=>setCalEditData(params)} /> },
         { field: 'calItemEntryDate', headerName: 'Entry Date', width: 200, valueGetter: (params) => dayjs(params.row.calItemEntryDate).format('DD-MM-YYYY') },
         { field: 'calIMTENo', headerName: 'Item IMTENo', width: 200 },
         { field: 'calItemName', headerName: 'Item Description', width: 200 },
@@ -266,9 +267,9 @@ const CalList = () => {
                     </CalData.Provider>
 
                     <CalData.Provider
-                        value={{ calEditOpen, setCalEditOpen }}
+                        value={{ calEditOpen, setCalEditOpen, selectedCalRow, itemMasters, activeEmps ,calListFetchData }}
                     >
-                        <CalEditModel />
+                         {selectedCalRow.length !== 0 && <CalEditModel />}
                     </CalData.Provider>
 
 

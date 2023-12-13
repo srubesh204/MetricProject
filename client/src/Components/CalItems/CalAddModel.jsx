@@ -652,8 +652,9 @@ const CalAddModel = () => {
             );
             setAlertMessage(response.data.message)
             setSnackBarOpen(true)
-            calListFetchData()
-            setTimeout(() => { setCalAddOpen(false); setCalibrationData(initialCalData) }, 3000)
+            calListFetchData();
+            setCalibrationData(initialCalData)
+            setTimeout(() => { setCalAddOpen(false) }, 2000)
         } catch (err) {
             console.log(err);
         }
@@ -663,7 +664,7 @@ const CalAddModel = () => {
 
     const [showLastResult, setShowLastResult] = useState(false)
     const [itemIMTEs, setItemIMTEs] = useState([])
-
+ 
     
 
 
