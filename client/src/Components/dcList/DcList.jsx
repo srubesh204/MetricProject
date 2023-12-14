@@ -109,14 +109,14 @@ const DcList = () => {
     const [dcListDataList, setDcListDataList] = useState([])
 
     const [vendorDataDcList, setVendorDataDcList] = useState([])
-    const  dcListFetchData = async () => {
+    const dcListFetchData = async () => {
         try {
             const response = await axios.get(
                 `${process.env.REACT_APP_PORT}/itemDc/getAllItemDc`
 
             );
             setVendorDataDcList(response.data.result);
-             setFilteredData(response.data.result);
+            setFilteredData(response.data.result);
         } catch (err) {
             console.log(err);
         }
@@ -157,7 +157,7 @@ const DcList = () => {
 
     };*/}
     const [selectedRowView, setSelectedRowView] = useState(null);
-   // const [dcListDataList, setDcListDataList] = useState([]);
+    // const [dcListDataList, setDcListDataList] = useState([]);
 
     const handleViewClick = (params) => {
         setSelectedRowView(params); // Set the selected row data
@@ -241,7 +241,7 @@ const DcList = () => {
 
 
             setErrorHandler({ status: response.data.status, message: response.data.message, code: "success" })
-           
+
             //setItemAddData(initialItemAddData)
             dcListFetchData()
         } catch (err) {
@@ -313,7 +313,17 @@ const DcList = () => {
         { field: 'id', headerName: 'Si. No', width: 70, renderCell: (params) => params.api.getAllRowIds().indexOf(params.id) + 1 },
         { field: 'itemIMTENo', headerName: 'Item IMTENo', width: 100 },
         { field: 'itemAddMasterName', headerName: 'Item Description', width: 150 },
-        { field: 'reMarks', headerName: 'ReMarks', width: 100 },
+        { field: 'itemRangeSize', headerName: 'Range/Size', width: 100 },
+        {
+            field: 'select', headerName: 'ReMarks', width: 100, renderCell: (params) => <select className="form-select form-select-sm col-2" id="re" name="vcStatus" aria-label="Floating label select example">
+               
+                <option value="Calibration">Calibration</option>
+                <option value="service">Service</option>
+                <option value="servicecalibration">Service & Calibration</option>
+              
+            </select>
+        },
+
 
     ]
 
@@ -349,8 +359,8 @@ const DcList = () => {
                                             <MenuItem value="All">All</MenuItem>
                                             <MenuItem value="Active">Active</MenuItem>
                                             <MenuItem value="InActive">InActive</MenuItem>
-                                           
-                                           
+
+
 
 
                                         </TextField>
@@ -484,7 +494,7 @@ const DcList = () => {
                                         density="compact"
                                         //disableColumnMenu={true}
                                         //clipboardCopyCellDelimiter={true}
-                                       // checkboxSelection
+                                        // checkboxSelection
                                         //onRowClick={handleRowClick}
                                         disableRowSelectionOnClick
                                         pageSizeOptions={[5]}
@@ -539,12 +549,12 @@ const DcList = () => {
                                 </div>
 
                                 <DcListContent.Provider
-                                    value={{ dcEditOpen, setDcEditOpen, selectedRows,dcListFetchData }}
+                                    value={{ dcEditOpen, setDcEditOpen, selectedRows, dcListFetchData }}
                                 >
                                     <DcEdit />
                                 </DcListContent.Provider>
                                 <DcListContent.Provider
-                                    value={{ dcOpen, setDcOpen, selectedRows,dcListFetchData }}
+                                    value={{ dcOpen, setDcOpen, selectedRows, dcListFetchData }}
                                 >
                                     <DcAdd />
                                 </DcListContent.Provider>

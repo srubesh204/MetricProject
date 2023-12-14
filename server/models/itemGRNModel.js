@@ -10,6 +10,11 @@ const itemGRNSchema = new mongoose.Schema({
   grnNo:String,
   grnDate:String,
   grnCommonRemarks:String,
+  grnCalDate:String,
+  grnDueDate:String,
+  grnCertificateStatus:String,
+  grnCertificateNo:String,
+  grnUncertainity:String,
   grnPartyItems:[]
 });
 itemGRNSchema.plugin(uniqueValidator);

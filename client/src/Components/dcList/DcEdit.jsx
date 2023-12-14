@@ -358,7 +358,8 @@ const DcEdit = () => {
 
     const [itemAddDetails, setItemAddDetails] = useState({
         itemListNames: "",
-        itemImteList: ""
+        itemImteList: "",
+        itemReMarks:"Calibration",
     })
 
 
@@ -387,6 +388,10 @@ const DcEdit = () => {
             setSelectedDcItem(value)
             setItemAddDetails((prev) => ({ ...prev, [name]: value }))
         }
+        if (name === "itemReMarks") {
+            setSelectedDcItem(value)
+            setItemAddDetails((prev) => ({ ...prev, [name]: value }))
+        }
 
 
     }
@@ -400,7 +405,8 @@ const DcEdit = () => {
         setSelectedDcItem([])
         setItemAddDetails({
             itemListNames: "",
-            itemImteList: ""
+            itemImteList: "",
+            itemReMarks:"",
         })
     }, [dcData.dcPartyItems])
 
@@ -676,7 +682,7 @@ const DcEdit = () => {
                                                 ))}
                                             </TextField>
                                         </div>
-                                        <div className='col'>
+                                        <div className='col me-2'>
                                             <TextField disabled={itemAddDetails.itemListNames === ""} size='small' select fullWidth variant='outlined' value={itemAddDetails.itemImteList} id='itemImteListId' onChange={handleDcItemAdd} label="Item IMTENo" name='itemImteList' >
                                                 <MenuItem value=""><em>--Select--</em></MenuItem>
                                                 {itemImtes.map((item, index) => (
@@ -686,6 +692,26 @@ const DcEdit = () => {
 
 
                                         </div>
+                                        <div className="col ">
+                                            <TextField label="Reason"
+                                                id="itemReMarksId"
+                                                select
+                                                defaultValue="Calibration"
+                                                value={itemAddDetails.itemReMarks}
+                                                onChange={handleDcItemAdd}
+                                                
+                                                size="small"
+                                                sx={{ width: "101%" }}
+                                                name="itemReMarks" >
+                                                <MenuItem value="All">All</MenuItem>
+                                                <MenuItem value="Service">Service</MenuItem>
+                                                <MenuItem value="Service Calibration">Service&Calibration</MenuItem>
+                                                <MenuItem value="Calibration">Calibration</MenuItem>
+
+                                            </TextField>
+
+                                        </div>
+                                        
                                     </div>
                                     <div className=' col d-flex justify-content-end'>
                                         <div className='me-2 '>

@@ -14,7 +14,7 @@ import { useParams } from 'react-router-dom';
 
 const GrnEdit = () => {
     const grnDatas = useContext(GrnListContent)
-    const { grnEditOpen, setGrnEditOpen, selectedRows } = grnDatas
+    const { grnEditOpen, setGrnEditOpen, selectedRows,grnListFetchData } = grnDatas
    
     const { id } = useParams()
     console.log(id)
@@ -282,6 +282,7 @@ console.log(selectedRows)
             );
             setAlertMessage(response.data.message)
             setSnackBarOpen(true)
+            grnListFetchData()
             setGrnData(initialGrnData)
 
             setTimeout(() => setGrnEditOpen(false), 3000)
@@ -394,7 +395,7 @@ console.log(selectedRows)
                                                         <TextField label="Party Name"
                                                             id="grnPartyNameId"
                                                             select
-                                                            value={grnData.grnPartyName}
+                                                            //value={grnData.grnPartyName}
 
                                                             onChange={(e) => setPartyData(e.target.value)}
 

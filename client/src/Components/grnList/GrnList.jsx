@@ -71,9 +71,10 @@ const GrnList = () => {
     //
     console.log()
     const Columns = [
-        { field: 'button', headerName: 'Edit', width: 60, renderCell: (params) => <Button onClick={() => { setSelectedRows(params.row); setGrnEditOpen(true) }}><Edit color='success' /></Button> },
+        { field: 'id', headerName: 'Si. No', width: 100, renderCell: (params) => params.api.getAllRowIds().indexOf(params.id) + 1 },
+        { field: 'button', headerName: 'Edit', width: 90, renderCell: (params) => <Button onClick={() => { setSelectedRows(params.row); setGrnEditOpen(true) }}><Edit color='success' /></Button> },
 
-        { field: 'id', headerName: 'Si. No', width: 150, renderCell: (params) => params.api.getAllRowIds().indexOf(params.id) + 1 },
+       
         {
             field: 'viewButton',
             headerName: 'View',
@@ -87,9 +88,9 @@ const GrnList = () => {
 
             ),
         },
-        { field: 'grnNo', headerName: 'Grn No', width: 200 },
+        { field: 'grnNo', headerName: 'Grn No', width: 100 },
         { field: 'grnDate', headerName: 'Grn Date', width: 200 },
-        { field: 'grnPartyName', headerName: 'Party Name', width: 400, },
+        { field: 'grnPartyName', headerName: 'Party Name', width: 250, },
     ]
 
 
@@ -99,7 +100,7 @@ const GrnList = () => {
 
     const [grnListDataList, setGrnListDataList] = useState([])
     const [grnDataList, setGrnDataList] = useState([])
-    const FetchData = async () => {
+    const grnListFetchData = async () => {
         try {
             const response = await axios.get(
                 `${process.env.REACT_APP_PORT}/itemGRN/getAllItemGRN`
@@ -112,7 +113,7 @@ const GrnList = () => {
         }
     };
     useEffect(() => {
-        FetchData();
+        grnListFetchData();
     }, []);
 
     const [selectedRowView, setSelectedRowView] = useState(null);
@@ -154,7 +155,7 @@ const GrnList = () => {
             setErrorHandler({ status: response.data.status, message: response.data.message, code: "success" })
 
             // setGrnData(initialGrnData)
-            FetchData()
+            grnListFetchData()
         } catch (err) {
 
             setSnackBarOpen(true)
@@ -269,7 +270,7 @@ const GrnList = () => {
 
                         <h1 className='text-center '>GRN List</h1>
                         <div className='col'>
-                            <div className='col-md-12 d-flex'>
+                            <div className='col-12 '>
                                 <Paper
                                     sx={{
                                         p: 2,
@@ -452,13 +453,15 @@ const GrnList = () => {
                                     }}
                                     elevation={12}
                                 >
-                                    <div className='col d-flex '>
-
+                                    <div className='col d-flex mb-1'>
+                                    <div className=' me-2'>
                                         <Button component={Link} onClick={() => { setGrnOpen(true) }} type='button' variant="contained" color="warning">
                                             <AddIcon /> Add Item
                                         </Button>
+                                        </div>
+                                        <div className=' me-2'>
                                         <Button variant='contained' type='button' color='error' onClick={() => setDeleteModalItem(true)}>Delete</Button>
-
+                                         </div>   
                                         <Dialog
                                             open={deleteModalItem}
                                             onClose={() => setDeleteModalItem(false)}
@@ -493,12 +496,12 @@ const GrnList = () => {
                                 </Paper>
 
                                 <GrnListContent.Provider
-                                    value={{ grnEditOpen, setGrnEditOpen, selectedRows }}
+                                    value={{ grnEditOpen, setGrnEditOpen, selectedRows,grnListFetchData}}
                                 >
                                     <GrnEdit />
                                 </GrnListContent.Provider>
                                 <GrnListContent.Provider
-                                    value={{ grnOpen, setGrnOpen, selectedRows }}
+                                    value={{ grnOpen, setGrnOpen, selectedRows,grnListFetchData }}
                                 >
                                     <GrnAdd />
                                 </GrnListContent.Provider>

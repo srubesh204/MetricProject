@@ -12,7 +12,7 @@ import { Add, Close, Delete } from '@mui/icons-material';
 
 const GrnAdd = () => {
     const grnDatas = useContext(GrnListContent)
-    const { grnOpen, setGrnOpen, selectedRows } = grnDatas
+    const { grnOpen, setGrnOpen, selectedRows,grnListFetchData } = grnDatas
 
 
 
@@ -250,6 +250,7 @@ const GrnAdd = () => {
             setAlertMessage(response.data.message)
             setSnackBarOpen(true)
             setTimeout(() => setGrnOpen(false), 3000)
+            grnListFetchData()
             setGrnData(initialGrnData)
         } catch (err) {
             console.log(err);
