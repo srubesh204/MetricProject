@@ -471,7 +471,7 @@ const DcList = () => {
                                 <div className='col d-flex justify-content-end'>
                                    
                                     <div className='me-2 '>
-                                    <Button component={Link} onClick={() => { setDcEditOpen(true) }} type='button' variant="contained" color="warning">
+                                    <Button component={Link} onClick={() => { setDcAddOpen(true) }} type='button' variant="contained" color="warning">
                                         <AddIcon /> Add Item
                                     </Button>
                                     </div>

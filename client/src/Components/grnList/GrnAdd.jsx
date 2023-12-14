@@ -229,8 +229,8 @@ const GrnAdd = () => {
     useEffect(() => {
         setSelectedGrnItem([])
         setItemAddDetails({
-            itemListNames: "",
-            itemImteList: ""
+            grnList: "",
+            grnImteNo: ""
         })
     }, [grnData.grnPartyItems])
 
@@ -244,7 +244,7 @@ const GrnAdd = () => {
     const submitCalForm = async () => {
         try {
             const response = await axios.post(
-                //"http://localhost:3001/itemGRN/createItemGRN/",grnData
+               
                 `${process.env.REACT_APP_PORT}/itemGRN/createItemGRN`, grnData
             );
             setAlertMessage(response.data.message)
