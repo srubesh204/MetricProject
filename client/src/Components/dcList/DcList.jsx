@@ -19,6 +19,7 @@ import Snackbar from '@mui/material/Snackbar';
 import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
 
 import DcEdit from './DcEdit';
+import DcAdd from './DcAdd';
 export const DcListContent = createContext(null);
 const DcList = () => {
 
@@ -26,7 +27,7 @@ const DcList = () => {
 
     const [selectedRows, setSelectedRows] = useState([]);
     const [dcEditOpen, setDcEditOpen] = useState(false);
-    const [dcAddOpen, setDcAddOpen] = useState(false);
+    const [dcOpen, setDcOpen] = useState(false);
 
 
     const [dcStateId, setDcStateId] = useState(null)
@@ -61,16 +62,16 @@ const DcList = () => {
 
 
     const [vendorDataList, setVendorDataList] = useState([])
-    
+
     const vendorFetchData = async () => {
         try {
             const response = await axios.get(
                 `${process.env.REACT_APP_PORT}/vendor/getAllVendors`
             );
             console.log(response.data)
-            
+
             setVendorDataList(response.data.result);
-           
+
             // setFilteredData(response.data.result);
         } catch (err) {
             console.log(err);
@@ -87,9 +88,9 @@ const DcList = () => {
                 `${process.env.REACT_APP_PORT}/vendor/getAllVendors`
             );
             console.log(response.data)
-            
+
             setVendorFullList(response.data.result);
-           
+
             // setFilteredData(response.data.result);
         } catch (err) {
             console.log(err);
@@ -101,28 +102,45 @@ const DcList = () => {
 
 
 
-  
 
-   
+
+
 
     const [dcListDataList, setDcListDataList] = useState([])
 
     const [vendorDataDcList, setVendorDataDcList] = useState([])
-    const vendorFetDcchData = async () => {
+    const  dcListFetchData = async () => {
         try {
             const response = await axios.get(
                 `${process.env.REACT_APP_PORT}/itemDc/getAllItemDc`
 
             );
             setVendorDataDcList(response.data.result);
-            // setFilteredData(response.data.result);
+             setFilteredData(response.data.result);
         } catch (err) {
             console.log(err);
         }
     };
     useEffect(() => {
-        vendorFetDcchData();
+        dcListFetchData();
     }, []);
+
+
+    {/*const [dcListData, setDcListData] = useState([])
+    const dcListFetchData = async () => {
+        try {
+            const response = await axios.get(
+                `${process.env.REACT_APP_PORT}/itemDc/getAllItemDc`
+            );
+
+            setDcListData(response.data.result);
+        } catch (err) {
+            console.log(err);
+        }
+    };
+    useEffect(() => {
+        dcListFetchData();
+    }, []);*/}
 
 
     const handleSnackClose = (event, reason) => {
@@ -136,9 +154,9 @@ const DcList = () => {
     const handleViewClick = (params) => {
         setSelectedRowView(params); // Set the selected row data
         setDcListDataList(params.dcPartyItems)
-        
-      };
-    
+
+    };
+
 
     // const [itemListSelectedRowIds, setItemListSelectedRowIds] = useState([])
     //
@@ -146,20 +164,20 @@ const DcList = () => {
 
         { field: 'id', headerName: 'Si. No', width: 70, renderCell: (params) => params.api.getAllRowIds().indexOf(params.id) + 1 },
         { field: 'editButton', headerName: 'Edit', width: 100, renderCell: (params) => <Button onClick={() => { setSelectedRows(params.row); setDcEditOpen(true) }}><Edit color='success' /></Button> },
-       // { field: 'viewButton', headerName: 'View', width: '100', renderCell: (params) => <Button><RemoveRedEyeIcon onClick={() => { setSelectedRowView(params.row); setDcEditOpen(true) }} /></Button> },
+        // { field: 'viewButton', headerName: 'View', width: '100', renderCell: (params) => <Button><RemoveRedEyeIcon onClick={() => { setSelectedRowView(params.row); setDcEditOpen(true) }} /></Button> },
         {
             field: 'viewButton',
             headerName: 'View',
             width: 100,
-            
+
             renderCell: (params) => (
-                
-              
-                <RemoveRedEyeIcon color="primary" 
-                onClick={() => handleViewClick(params.row)}/>
-              
+
+
+                <RemoveRedEyeIcon color="primary"
+                    onClick={() => handleViewClick(params.row)} />
+
             ),
-          },
+        },
         { field: 'dcNo', headerName: 'Dc No', width: 100 },
         { field: 'dcDate', headerName: 'Dc Date', width: 200 },
         { field: 'dcPartyName', headerName: 'Dc PartyName', width: 300 },
@@ -167,8 +185,8 @@ const DcList = () => {
 
 
     const [dcListSelectedRowIds, setDcListSelectedRowIds] = useState([])
-   
-   
+
+
 
 
     const [dcDataList, setDcDataList] = useState([])
@@ -210,9 +228,9 @@ const DcList = () => {
 
 
             setErrorHandler({ status: response.data.status, message: response.data.message, code: "success" })
-            console.log("ItemAdd delete Successfully");
+           
             //setItemAddData(initialItemAddData)
-            vendorFetDcchData()
+            dcListFetchData()
         } catch (err) {
 
             setSnackBarOpen(true)
@@ -261,7 +279,7 @@ const DcList = () => {
                 const partyName = vendorDataDcList.filter((item) => (item.fullName === "1"))
                 console.log(value)
                 setFilteredData(partyName)
-                
+
             }
 
 
@@ -389,7 +407,7 @@ const DcList = () => {
                                                 "margin-bottom": "1em"
                                             }
                                         }}
-                                        onRowSelectionModelChange={(newRowSelectionModel, event) => {
+                                        onRowSelectionModelChange={(newRowSelectionModel) => {
                                             setItemListSelectedRowIds(newRowSelectionModel);
                                         }}
                                         disableRowSelectionOnClick
@@ -469,14 +487,14 @@ const DcList = () => {
 
                                 </div>
                                 <div className='col d-flex justify-content-end'>
-                                   
+
                                     <div className='me-2 '>
-                                    <Button component={Link} onClick={() => { setDcAddOpen(true) }} type='button' variant="contained" color="warning">
-                                        <AddIcon /> Add Item
-                                    </Button>
+                                        <Button component={Link} onClick={() => { setDcOpen(true) }} type='button' variant="contained" color="warning">
+                                            <AddIcon /> Add Item
+                                        </Button>
                                     </div>
                                     <div className='me-2 '>
-                                    <Button variant='contained' type='button' color='error' onClick={() => setDeleteModalItem(true)}>Delete</Button>
+                                        <Button variant='contained' type='button' color='error' onClick={() => setDeleteModalItem(true)}>Delete</Button>
                                     </div>
 
                                     <Dialog
@@ -494,7 +512,7 @@ const DcList = () => {
                                             </DialogContentText>
                                         </DialogContent>
                                         <DialogActions>
-                                            <Button  onClick={() => setDeleteModalItem(false)}>Cancel</Button>
+                                            <Button onClick={() => setDeleteModalItem(false)}>Cancel</Button>
                                             <Button onClick={() => { deleteDcData(); setDeleteModalItem(false); }} autoFocus>
                                                 Delete
                                             </Button>
@@ -507,14 +525,14 @@ const DcList = () => {
                                 </div>
 
                                 <DcListContent.Provider
-                                    value={{ dcEditOpen, setDcEditOpen, selectedRows }}
+                                    value={{ dcEditOpen, setDcEditOpen, selectedRows,dcListFetchData }}
                                 >
                                     <DcEdit />
                                 </DcListContent.Provider>
                                 <DcListContent.Provider
-                                    value={{ dcAddOpen, setDcAddOpen, selectedRows }}
+                                    value={{ dcOpen, setDcOpen, selectedRows,dcListFetchData }}
                                 >
-                                    <DcEdit />
+                                    <DcAdd />
                                 </DcListContent.Provider>
                             </div>
                         </Paper>

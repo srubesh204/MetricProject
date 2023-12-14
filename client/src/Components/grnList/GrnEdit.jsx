@@ -27,7 +27,7 @@ const GrnEdit = () => {
         grnPartyAddress: "",
         grnNo: "",
         grnDate: "",
-        grncCommonRemarks: "",
+        grnCommonRemarks: "",
         grnPartyItems: []
 
     }
@@ -272,61 +272,23 @@ console.log(selectedRows)
 
 
 
-    const updateGrnData = async (e) => {
-        e.preventDefault();
+
+
+    const updateGrnData = async () => {
         try {
             const response = await axios.put(
-                `${process.env.REACT_APP_PORT}/itemGRN/updateItemGRN/${id}`, grnData
-            );
-
-            setSnackBarOpen(true)
-
-            console.log(" Update Successfully")
-            setErrorHandler({ status: response.data.status, message: response.data.message, code: "success" })
-            setGrnData(initialGrnData)
-            setTimeout(() => setGrnEditOpen(false), 3000)
-
-
-        } catch (err) {
-
-            setSnackBarOpen(true)
-
-
-
-
-            if (err.response && err.response.status === 400) {
-                // Handle validation errors
-                const errorData400 = err.response.data.errors;
-                const errorMessages400 = Object.values(errorData400).join(', ');
-                console.log(errorMessages400)
-                setErrorHandler({ status: 0, message: errorMessages400, code: "error" });
-            } else if (err.response && err.response.status === 500) {
-                // Handle other errors
-                const errorData500 = err.response.data.error;
-                const errorMessages500 = Object.values(errorData500).join(', ');
-                console.log(errorMessages500)
-                setErrorHandler({ status: 0, message: errorMessages500, code: "error" });
-            } else {
-                console.log(err.response.data.error)
-                setErrorHandler({ status: 0, message: "An error occurred", code: "error" });
-            }
-        }
-    };
-
-
-   {/* const submitCalForm = async () => {
-        try {
-            const response = await axios.post(
-                "http://localhost:3001/itemGRN/createItemGRN/", grnData
-                //`${process.env.REACT_APP_PORT}/itemGrn/createItemGRN`, grnData
+              
+                `${process.env.REACT_APP_PORT}/itemGrn/updateItemGRN/${selectedRows._id}`, grnData
             );
             setAlertMessage(response.data.message)
             setSnackBarOpen(true)
+            setGrnData(initialGrnData)
+
             setTimeout(() => setGrnEditOpen(false), 3000)
         } catch (err) {
             console.log(err);
         }
-    };*/}
+    };
 
 
 
@@ -719,7 +681,7 @@ console.log(selectedRows)
 
                                         <DialogActions className='d-flex justify-content-center'>
                                             <Button onClick={() => setConfirmSubmit(false)}>Cancel</Button>
-                                            <Button onClick={(e) => { updateGrnData(e); setConfirmSubmit(false) }} autoFocus>
+                                            <Button onClick={() => { updateGrnData(); setConfirmSubmit(false) }} autoFocus>
                                                 Submit
                                             </Button>
                                         </DialogActions>

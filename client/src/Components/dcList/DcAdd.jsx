@@ -7,14 +7,14 @@ import isSameOrAfter from 'dayjs/plugin/isSameOrAfter'
 import isSameOrBefore from 'dayjs/plugin/isSameOrBefore'
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { HomeContent } from '../Home';
+import { DcListContent } from './DcList';
 import { Add, Close, Delete, DeleteOutline } from '@mui/icons-material';
 
 
 const DcAdd = () => {
 
-    const dcDatas = useContext(HomeContent)
-    const { dcOpen, setDcOpen, selectedRows } = dcDatas
+    const dcDatas = useContext(DcListContent)
+    const { dcOpen, setDcOpen, selectedRows,dcListFetchData } = dcDatas
 
 
     console.log(selectedRows)
@@ -26,7 +26,7 @@ const DcAdd = () => {
         dcPartyCode: "",
         dcPartyAddress: "",
         dcNo: "",
-        dcDate: "",
+        dcDate: dayjs().format("YYYY-MM-DD"),
         dcReason: "",
         dcCommonRemarks: "",
         dcPartyItems: []
@@ -40,7 +40,7 @@ const DcAdd = () => {
         dcPartyCode: "",
         dcPartyAddress: "",
         dcNo: "",
-        dcDate: "",
+        dcDate:dayjs().format("YYYY-MM-DD"),
         dcReason: "",
         dcCommonRemarks: "",
         dcPartyItems: []
@@ -261,6 +261,7 @@ const DcAdd = () => {
                 `${process.env.REACT_APP_PORT}/itemDc/createItemDc`, dcData
             );
             setAlertMessage(response.data.message)
+            dcListFetchData();
             setSnackBarOpen(true)
             setTimeout(() => setDcOpen(false), 3000)
         } catch (err) {

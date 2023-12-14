@@ -228,8 +228,8 @@ const Grn = () => {
     useEffect(() => {
         setSelectedGrnItem([])
         setItemAddDetails({
-            itemListNames: "",
-            itemImteList: ""
+            grnList: "",
+            grnImteNo: ""
         })
     }, [grnData.grnPartyItems])
 

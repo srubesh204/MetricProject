@@ -9,7 +9,7 @@ const itemGRNSchema = new mongoose.Schema({
   grnPartyAddress:String,
   grnNo:String,
   grnDate:String,
-  grncCommonRemarks:String,
+  grnCommonRemarks:String,
   grnPartyItems:[]
 });
 itemGRNSchema.plugin(uniqueValidator);

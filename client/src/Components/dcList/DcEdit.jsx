@@ -18,7 +18,7 @@ const DcEdit = () => {
     console.log(id)
 
     const dcDatas = useContext(DcListContent)
-   const { dcEditOpen, setDcEditOpen, selectedRows } =dcDatas
+   const { dcEditOpen, setDcEditOpen, selectedRows,dcListFetchData } =dcDatas
    console.log(selectedRows)
    const [errorhandler, setErrorHandler] = useState({});
 
@@ -319,19 +319,30 @@ const DcEdit = () => {
     const [confirmSubmit, setConfirmSubmit] = useState(false)
     const [snackBarOpen, setSnackBarOpen] = useState(false)
     const [alertMessage, setAlertMessage] = useState("")
+
     const submitCalForm = async () => {
         try {
-            const response = await axios.post(
-                `${process.env.REACT_APP_PORT}/itemDc/createItemDc`, dcData
+            const response = await axios.put(
+              
+                `${process.env.REACT_APP_PORT}/itemDc/updateItemDc/${selectedRows._id}`, dcData
             );
             setAlertMessage(response.data.message)
             setSnackBarOpen(true)
+            setDcData(initialDcData)
+            dcListFetchData()
+
             setTimeout(() => setDcEditOpen(false), 3000)
         } catch (err) {
             console.log(err);
         }
     };
 
+
+
+
+
+
+  
     const deleteAC = (index) => {
         setDcData((prev) => {
             const AC = [...prev.dcPartyItems]

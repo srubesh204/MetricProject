@@ -18,13 +18,13 @@ const GrnAdd = () => {
 
     const initialGrnData = {
         grnPartyRefNo: "",
-        grnPartyRefDate: "",
+        grnPartyRefDate: dayjs().format("YYYY-MM-DD"),
         grnPartyName: "",
         grnPartyCode: "",
         grnPartyAddress: "",
         grnNo: "",
-        grnDate: "",
-        grncCommonRemarks: "",
+        grnDate:dayjs().format("YYYY-MM-DD"),
+        grnCommonRemarks: "",
         grnPartyItems: []
 
     }
@@ -32,12 +32,12 @@ const GrnAdd = () => {
 
     const [grnData, setGrnData] = useState({
         grnPartyRefNo: "",
-        grnPartyRefDate: "",
+        grnPartyRefDate:dayjs().format("YYYY-MM-DD"),
         grnPartyName: "",
         grnPartyCode: "",
         grnPartyAddress: "",
         grnNo: "",
-        grnDate: "",
+        grnDate:dayjs().format("YYYY-MM-DD"),
         grnCommonRemarks: "",
         grnPartyItems: []
 
@@ -250,6 +250,7 @@ const GrnAdd = () => {
             setAlertMessage(response.data.message)
             setSnackBarOpen(true)
             setTimeout(() => setGrnOpen(false), 3000)
+            setGrnData(initialGrnData)
         } catch (err) {
             console.log(err);
         }

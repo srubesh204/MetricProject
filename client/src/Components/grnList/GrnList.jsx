@@ -15,6 +15,7 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import Snackbar from '@mui/material/Snackbar';
+import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
 import GrnAdd from './GrnAdd';
 import Alert from '@mui/material/Alert';
 export const GrnListContent = createContext(null);
@@ -23,7 +24,7 @@ const GrnList = () => {
 
     const [selectedRows, setSelectedRows] = useState([]);
     const [grnEditOpen, setGrnEditOpen] = useState(false);
-    const [grnAddOpen, setGrnAddOpen] = useState(false);
+    const [grnOpen, setGrnOpen] = useState(false);
 
 
     const handleSnackClose = (event, reason) => {
@@ -43,7 +44,7 @@ const GrnList = () => {
         grnPartyAddress: "",
         grnNo: "",
         grnDate: "",
-        grncCommonRemarks: "",
+        grnCommonRemarks: "",
         grnPartyItems: []
 
     }
@@ -71,7 +72,21 @@ const GrnList = () => {
     console.log()
     const Columns = [
         { field: 'button', headerName: 'Edit', width: 60, renderCell: (params) => <Button onClick={() => { setSelectedRows(params.row); setGrnEditOpen(true) }}><Edit color='success' /></Button> },
+
         { field: 'id', headerName: 'Si. No', width: 150, renderCell: (params) => params.api.getAllRowIds().indexOf(params.id) + 1 },
+        {
+            field: 'viewButton',
+            headerName: 'View',
+            width: 100,
+
+            renderCell: (params) => (
+
+
+                <RemoveRedEyeIcon color="primary"
+                    onClick={() => handleViewClick(params.row)} />
+
+            ),
+        },
         { field: 'grnNo', headerName: 'Grn No', width: 200 },
         { field: 'grnDate', headerName: 'Grn Date', width: 200 },
         { field: 'grnPartyName', headerName: 'Party Name', width: 400, },
@@ -79,23 +94,10 @@ const GrnList = () => {
 
 
     const [grnDataListSelectedRowIds, setgrnDataListSelectedRowIds] = useState([])
+
+
+
     const [grnListDataList, setGrnListDataList] = useState([])
-    const grnListFetchData = async () => {
-        try {
-            const response = await axios.get(
-                `${process.env.REACT_APP_PORT}/itemAdd/getAllItemAdds`
-            );
-
-            setGrnListDataList(response.data.result);
-        } catch (err) {
-            console.log(err);
-        }
-    };
-    useEffect(() => {
-        grnListFetchData();
-    }, []);
-
-
     const [grnDataList, setGrnDataList] = useState([])
     const FetchData = async () => {
         try {
@@ -113,6 +115,13 @@ const GrnList = () => {
         FetchData();
     }, []);
 
+   const [selectedRowView, setSelectedRowView] = useState(null);
+    const handleViewClick = (params) => {
+        setSelectedRowView(params); // Set the selected row data
+        setGrnListDataList(params.dcPartyItems)
+
+    };
+   
 
 
 
@@ -122,9 +131,9 @@ const GrnList = () => {
     const [errorhandler, setErrorHandler] = useState({});
     const [itemListSelectedRowIds, setItemListSelectedRowIds] = useState([])
 
-   
 
-console.log(itemListSelectedRowIds)
+
+    console.log(itemListSelectedRowIds)
 
 
     const deleteGrnData = async (id) => {
@@ -143,8 +152,8 @@ console.log(itemListSelectedRowIds)
 
 
             setErrorHandler({ status: response.data.status, message: response.data.message, code: "success" })
-         
-           // setGrnData(initialGrnData)
+
+            // setGrnData(initialGrnData)
             FetchData()
         } catch (err) {
 
@@ -204,6 +213,9 @@ console.log(itemListSelectedRowIds)
     useEffect(() => {
         vendorFetchData();
     }, []);
+
+
+
 
 
     const [filteredData, setFilteredData] = useState([])
@@ -442,7 +454,7 @@ console.log(itemListSelectedRowIds)
                                 >
                                     <div className='col d-flex '>
 
-                                        <Button component={Link} onClick={() => { setGrnAddOpen(true) }} type='button' variant="contained" color="warning">
+                                        <Button component={Link} onClick={() => { setGrnOpen(true) }} type='button' variant="contained" color="warning">
                                             <AddIcon /> Add Item
                                         </Button>
                                         <Button variant='contained' type='button' color='error' onClick={() => setDeleteModalItem(true)}>Delete</Button>
@@ -486,7 +498,7 @@ console.log(itemListSelectedRowIds)
                                     <GrnEdit />
                                 </GrnListContent.Provider>
                                 <GrnListContent.Provider
-                                    value={{ grnAddOpen, setGrnAddOpen, selectedRows }}
+                                    value={{ grnOpen, setGrnOpen, selectedRows }}
                                 >
                                     <GrnAdd />
                                 </GrnListContent.Provider>
