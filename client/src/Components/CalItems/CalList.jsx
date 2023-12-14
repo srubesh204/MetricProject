@@ -8,17 +8,21 @@ import { DataGrid, GridToolbar } from '@mui/x-data-grid';
 import dayjs from 'dayjs';
 import { Container, Paper } from '@mui/material';
 import { Edit } from '@mui/icons-material';
+import isSameOrAfter from 'dayjs/plugin/isSameOrAfter'
+import isSameOrBefore from 'dayjs/plugin/isSameOrBefore'
 
 import CalAddModel from './CalAddModel'
 import CalEditModel from './CalEditModel'
 export const CalData = createContext(null);
-
+dayjs.extend(isSameOrBefore)
+dayjs.extend(isSameOrAfter)
 
 
 const CalList = () => {
 
     const [itemMasterDataList, setItemMasterDataList] = useState([])
     const [itemMasters, setItemMasters] = useState([])
+    const [IMTENos, setIMTENos] = useState([])
 
     const itemMasterFetchData = async () => {
         try {
@@ -29,7 +33,7 @@ const CalList = () => {
             const masterItems = response.data.result.filter((item) => item.isItemMaster === "1")
             setItemMasterDataList(response.data.result);
             setItemMasters(masterItems)
-                console.log(response.data.result)
+            console.log(response.data.result)
         } catch (err) {
             console.log(err);
         }
@@ -51,9 +55,9 @@ const CalList = () => {
             console.log(err);
         }
     };
-    useEffect(()=> {
+    useEffect(() => {
         empFetch();
-    },[])
+    }, [])
     console.log(activeEmps)
 
     const [calAddOpen, setCalAddOpen] = useState(false)
@@ -63,7 +67,7 @@ const CalList = () => {
     const calFetchData = async () => {
         try {
             const response = await axios.get(
-                `${process.env.REACT_APP_PORT}/itemAdd/getItemAddByIMTESort`
+                `${process.env.REACT_APP_PORT}/itemCal/getAllDistinctCalNames`
             );
             // You can use a different logic for generating the id
 
@@ -80,6 +84,12 @@ const CalList = () => {
 
     const [calListSelectedRowIds, setCalListSelectedRowIds] = useState([])
     const [calListDataList, setCalListDataList] = useState([])
+    const [filteredCalData, setFilteredCalData] = useState([])
+    const oneMonthBefore = dayjs().subtract(dayjs().date()-1, 'day')
+    const [dateData, setDateData] = useState({
+        fromDate: oneMonthBefore.format('YYYY-MM-DD'),
+        toDate: dayjs().format('YYYY-MM-DD')
+    })
     const calListFetchData = async () => {
         try {
             const response = await axios.get(
@@ -87,12 +97,15 @@ const CalList = () => {
             );
 
             setCalListDataList(response.data.result);
+            const filteredItems = response.data.result.filter((item) => dayjs(item.calItemCalDate).isSameOrAfter(dateData.fromDate) && dayjs(item.calItemCalDate).isSameOrBefore(dateData.toDate) )
+            setFilteredCalData(filteredItems);
         } catch (err) {
             console.log(err);
         }
     };
     useEffect(() => {
         calListFetchData();
+       
     }, []);
 
     const [selectedCalRow, setSelectedCalRow] = useState([])
@@ -106,17 +119,52 @@ const CalList = () => {
 
     const calListColumns = [
         { field: 'id', headerName: 'Entry. No', width: 100, renderCell: (params) => params.api.getAllRowIds().indexOf(params.id) + 1 },
-        { field: 'editButton', headerName: 'Edit', width: 100, renderCell: (params) => <Edit onClick={()=>setCalEditData(params)} /> },
+        { field: 'editButton', headerName: 'Edit', width: 100, renderCell: (params) => <Edit onClick={() => setCalEditData(params)} /> },
         { field: 'calItemEntryDate', headerName: 'Entry Date', width: 200, valueGetter: (params) => dayjs(params.row.calItemEntryDate).format('DD-MM-YYYY') },
         { field: 'calIMTENo', headerName: 'Item IMTENo', width: 200 },
         { field: 'calItemName', headerName: 'Item Description', width: 200 },
         { field: 'calRangeSize', headerName: 'Range/Size', width: 200 },
-        { field: 'itemCalDate', headerName: 'Calibration On', width: 200, valueGetter: (params) => dayjs(params.row.itemCalDate).format('DD-MM-YYYY') },
+        { field: 'calItemCalDate', headerName: 'Calibration On', width: 200, valueGetter: (params) => dayjs(params.row.calItemCalDate).format('DD-MM-YYYY') },
         { field: 'itemDueDate', headerName: 'Next Due On', width: 200, valueGetter: (params) => dayjs(params.row.itemDueDate).format('DD-MM-YYYY') },
         { field: 'calStatus', headerName: 'Cal status', width: 200 },
 
     ]
 
+    
+
+    const handleFilter = (e) => {
+        const { name, value } = e.target;
+        if (value === "all") {
+            setFilteredCalData(calListDataList)
+        } else {
+            if (name === "itemName") {
+                const selectedItem = calListDataList.filter((item) => item.calItemName === value)
+
+                const uniqueNames = [...new Set(selectedItem.map(item => item.calIMTENo))];
+                console.log(uniqueNames)
+                setIMTENos(uniqueNames)
+            }
+
+            if (name === "itemIMTENo") {
+                const selectedItem = calListDataList.filter((item) => item.calIMTENo === value)
+                setFilteredCalData(selectedItem)
+            }
+
+            setDateData((prev)=> ({...prev, [name] : value}))
+        }
+
+
+    }
+
+  const dateFilter = () => {
+    const filteredItems = calListDataList.filter((item) => dayjs(item.calItemCalDate).isSameOrAfter(dateData.fromDate) && dayjs(item.calItemCalDate).isSameOrBefore(dateData.toDate) )
+    setFilteredCalData(filteredItems)
+  }
+  useEffect(()=> {
+    dateFilter();
+  }, [dateData.fromDate, dateData.toDate])
+
+  
 
 
 
@@ -131,7 +179,8 @@ const CalList = () => {
                             p: 1,
                             display: 'flex',
                             flexDirection: 'column',
-                            mb: 1
+                            m: 2,
+
                         }}
                         elevation={12}
                     >
@@ -140,19 +189,19 @@ const CalList = () => {
 
                             <div className='col d-flex'>
                                 <div className='col me-2'>
-                                    <TextField label="Imte No"
-                                        id="imteNoId" select defaultValue="all" fullWidth size="small" name="imteNo" >
+                                    <TextField label="Item Description"
+                                        id="imteNoId" select defaultValue="all" fullWidth size="small" name="itemName" onChange={handleFilter}>
                                         <MenuItem value="all">All</MenuItem>
                                         {calDataList.map((item) => (
-                                            <MenuItem value={item._id}>{item.itemIMTENo}</MenuItem>
+                                            <MenuItem value={item}>{item}</MenuItem>
                                         ))}
                                     </TextField>
                                 </div>
                                 <div className='col '>
-                                    <TextField size='small' fullWidth variant='outlined' id="itemListId" select label="Item List" name='itemList'>
+                                    <TextField size='small' fullWidth variant='outlined' id="itemListId" select label="Item IMTE No" onChange={handleFilter} name='itemIMTENo'>
                                         <MenuItem value="all">All</MenuItem>
-                                        {itemMasterDataList.map((item) => (
-                                            <MenuItem value={item._id}>{item.itemDescription}</MenuItem>
+                                        {IMTENos.map((item) => (
+                                            <MenuItem value={item}>{item}</MenuItem>
                                         ))}
                                     </TextField>
                                 </div>
@@ -170,7 +219,12 @@ const CalList = () => {
                                         label="From Date"
                                         sx={{ width: "100%" }}
                                         slotProps={{ textField: { size: 'small' } }}
-                                        format="DD-MM-YYYY" />
+                                        format="DD-MM-YYYY" 
+                                        value={dayjs(dateData.fromDate)}
+                                        onChange={(newValue)=> 
+                                            setDateData((prev)=> ({...prev, fromDate : dayjs(newValue).format('YYYY-MM-DD')}))}
+                                        />
+                                    
 
                                 </div>
                                 <div className="col-3">
@@ -182,18 +236,23 @@ const CalList = () => {
                                         label="To Date"
                                         sx={{ width: "100%" }}
                                         slotProps={{ textField: { size: 'small' } }}
-                                        format="DD-MM-YYYY" />
-
+                                        format="DD-MM-YYYY" 
+                                        value={dayjs(dateData.toDate)}
+                                        onChange={(newValue)=> 
+                                            setDateData((prev)=> ({...prev, toDate : dayjs(newValue).format('YYYY-MM-DD')}))}
+                                    
+                                        />
+                                       
                                 </div>
                             </div>
 
                         </div>
 
                         <div className='row'>
-                            <Box sx={{ height: 310, width: '100%', my: 2 }}>
+                            <Box sx={{ height: "75vh", width: '100%', my: 2 }}>
                                 <DataGrid
 
-                                    rows={calListDataList}
+                                    rows={filteredCalData}
                                     columns={calListColumns}
                                     getRowId={(row) => row._id}
                                     initialState={{
@@ -248,7 +307,7 @@ const CalList = () => {
                                     <button type="button" className='btn btn-secondary' >Modify</button>
                                 </div>
                                 <div className='me-2 '>
-                                    <button type="button" className='btn btn-secondary' onClick={()=> setCalAddOpen(true)}>Add</button>
+                                    <button type="button" className='btn btn-secondary' onClick={() => setCalAddOpen(true)}>Add</button>
                                 </div>
                                 <div className='me-2 '>
                                     <button type="button" className='btn btn-secondary' >Delete</button>
@@ -267,9 +326,9 @@ const CalList = () => {
                     </CalData.Provider>
 
                     <CalData.Provider
-                        value={{ calEditOpen, setCalEditOpen, selectedCalRow, itemMasters, activeEmps ,calListFetchData }}
+                        value={{ calEditOpen, setCalEditOpen, selectedCalRow, itemMasters, activeEmps, calListFetchData }}
                     >
-                         {selectedCalRow.length !== 0 && <CalEditModel />}
+                        {selectedCalRow.length !== 0 && <CalEditModel />}
                     </CalData.Provider>
 
 

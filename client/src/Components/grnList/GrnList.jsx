@@ -1,12 +1,12 @@
-import React, { useState, useEffect, useRef, createContext } from 'react'
+import React, { useState, useEffect, createContext } from 'react'
 import axios from 'axios'
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { TextField, MenuItem, styled, Button, ButtonGroup, Chip, FormControl, OutlinedInput, Fab, Link, Box } from '@mui/material';
+import { TextField, MenuItem, Button, Link, Box } from '@mui/material';
 import { DataGrid, GridToolbar } from '@mui/x-data-grid';
-import { Container, Paper } from '@mui/material';
-import { Edit, FilterAlt } from '@mui/icons-material';
+import { Paper } from '@mui/material';
+import { Edit } from '@mui/icons-material';
 import AddIcon from '@mui/icons-material/Add';
 import GrnEdit from './GrnEdit';
 import Dialog from '@mui/material/Dialog';
@@ -67,9 +67,9 @@ const GrnList = () => {
     })
 
 
-    const [grnListSelectedRowIds, setGrnListSelectedRowIds] = useState([])
+    
     //
-    console.log()
+
     const Columns = [
         { field: 'id', headerName: 'Si. No', width: 100, renderCell: (params) => params.api.getAllRowIds().indexOf(params.id) + 1 },
         { field: 'button', headerName: 'Edit', width: 90, renderCell: (params) => <Button onClick={() => { setSelectedRows(params.row); setGrnEditOpen(true) }}><Edit color='success' /></Button> },
@@ -420,7 +420,7 @@ const GrnList = () => {
                                                     "margin-bottom": "1em"
                                                 }
                                             }}
-                                            onRowSelectionModelChange={(newRowSelectionModel, event) => {
+                                            onRowSelectionModelChange={(newRowSelectionModel) => {
                                                 setgrnDataListSelectedRowIds(newRowSelectionModel);
 
 
