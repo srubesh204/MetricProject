@@ -150,12 +150,25 @@ const DcList = () => {
 
         setSnackBarOpen(false);
     }
-    const [selectedRowView, setSelectedRowView] = useState(null);
+    {/*const [selectedRowView, setSelectedRowView] = useState(null);
     const handleViewClick = (params) => {
         setSelectedRowView(params); // Set the selected row data
         setDcListDataList(params.dcPartyItems)
 
+    };*/}
+    const [selectedRowView, setSelectedRowView] = useState(null);
+   // const [dcListDataList, setDcListDataList] = useState([]);
+
+    const handleViewClick = (params) => {
+        setSelectedRowView(params); // Set the selected row data
     };
+
+    useEffect(() => {
+        if (selectedRowView) {
+            // Assuming params.dcPartyItems is an array
+            setDcListDataList(selectedRowView.dcPartyItems || []);
+        }
+    }, [selectedRowView]);
 
 
     // const [itemListSelectedRowIds, setItemListSelectedRowIds] = useState([])
@@ -276,7 +289,7 @@ const DcList = () => {
                 setFilteredData(vendorStatus)
             }
             if (name === "partyName") {
-                const partyName = vendorDataDcList.filter((item) => (item.fullName === "1"))
+                const partyName = vendorDataDcList.filter((item) => (item.dcPartyItems === "1"))
                 console.log(value)
                 setFilteredData(partyName)
 
@@ -333,10 +346,11 @@ const DcList = () => {
                                     <div className='col me-2'>
                                         <TextField fullWidth label="VendorStatus" className="col" select size="small" onChange={handleFilterChange} id="vendorStatusId" name="vendorStatus" defaultValue="" >
 
-                                            <MenuItem value="all">All</MenuItem>
-                                            {vendorDataList.map((item) => (
-                                                <MenuItem value={item._id}>{item.vendorStatus}</MenuItem>
-                                            ))}
+                                            <MenuItem value="All">All</MenuItem>
+                                            <MenuItem value="Active">Active</MenuItem>
+                                            <MenuItem value="InActive">InActive</MenuItem>
+                                           
+                                           
 
 
                                         </TextField>
@@ -470,7 +484,7 @@ const DcList = () => {
                                         density="compact"
                                         //disableColumnMenu={true}
                                         //clipboardCopyCellDelimiter={true}
-                                        checkboxSelection
+                                       // checkboxSelection
                                         //onRowClick={handleRowClick}
                                         disableRowSelectionOnClick
                                         pageSizeOptions={[5]}
