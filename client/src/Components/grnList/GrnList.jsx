@@ -269,7 +269,7 @@ const GrnList = () => {
 
                         <h1 className='text-center '>GRN List</h1>
                         <div className='col'>
-                            <div className='col-12'>
+                            <div className='col-md-12'>
                                 <Paper
                                     sx={{
                                         p: 2,
@@ -327,7 +327,7 @@ const GrnList = () => {
                                     </div>
                                 </Paper>
                             </div>
-                            <div className='col-12 d-flex '>
+                            <div className='col-md-12 d-flex '>
                                 <Paper
                                     sx={{
                                         p: 1,
