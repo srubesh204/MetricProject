@@ -19,6 +19,7 @@ const CalDialog = () => {
     const [lastResultData, setLastResultData] = useState([])
     const { calOpen, setCalOpen, selectedRows, itemMasters, activeEmps } = calData
     const [calibrationDatas, setCalibrationDatas] = useState([])
+    const [certNo, setCertNo] = useState(0)
 
     const getAllCalibrationData = async () => {
         try {
@@ -26,15 +27,22 @@ const CalDialog = () => {
                 `${process.env.REACT_APP_PORT}/itemCal/getAllItemCals`
             );
             console.log(response.data.result)
-            const imteNoData = response.data.result.filter((item) => item.calIMTENo === selectedRows[0].itemIMTENo)
-            console.log(imteNoData)
-            setCalibrationDatas(response.data.result)
-            const maxDateObject = imteNoData.reduce((prev, current) => {
-                const prevDate = dayjs(prev.calItemEntryDate);
-                const currentDate = dayjs(current.calItemEntryDate);
-                return currentDate.isAfter(prevDate) ? current : prev;
-            });
-            setLastResultData(maxDateObject)
+            try {
+                const imteNoData = response.data.result.filter((item) => item.calIMTENo === selectedRows[0].itemIMTENo)
+                console.log(imteNoData)
+                setCalibrationDatas(response.data.result)
+                const maxDateObject = imteNoData.reduce((prev, current) => {
+                    const prevDate = dayjs(prev.calItemEntryDate);
+                    const currentDate = dayjs(current.calItemEntryDate);
+                    return currentDate.isAfter(prevDate) ? current : prev;
+                });
+                setLastResultData(maxDateObject)
+            } catch {
+                setLastResultData("")
+            }
+
+            const lastOneResult = Math.max(...response.data.result.map((item) => item.calCertificateNo))
+            console.log(lastOneResult)
 
         } catch (err) {
             console.log(err);
@@ -105,7 +113,7 @@ const CalDialog = () => {
         calItemSOPNo: "",
         calStandardRef: "",
         calOBType: "",
-        calCertificateNo: calibrationDatas.length + 1,
+        calCertificateNo: "",
         calItemCalDate: dayjs().format('YYYY-MM-DD'),
         calItemDueDate: "",
         calItemEntryDate: dayjs().format('YYYY-MM-DD'),

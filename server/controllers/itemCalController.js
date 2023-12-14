@@ -5,7 +5,7 @@ const itemCalController = {
   getAllItemCals: async (req, res) => {
     try {
       const getAllItemCals = await itemCalModel.find();
-      
+
       res.status(202).json({ result: getAllItemCals, status: 1 });
       //res.status(200).json(employees);
 
@@ -38,12 +38,12 @@ const itemCalController = {
         calCalibratedBy,
         calApprovedBy,
         calBeforeData,
+        calStatus,
         calcalibrationData,
-        calAcceptanceStatus,
         calMasterUsed,
-        calStatus
+        calItemFreInMonths,
       } = req.body;
-  
+
       const newItemFields = {
         calItemId,
         calIMTENo,
@@ -66,39 +66,39 @@ const itemCalController = {
         calCalibratedBy,
         calApprovedBy,
         calBeforeData,
+        calStatus,
         calcalibrationData,
-        calAcceptanceStatus,
         calMasterUsed,
-        calStatus
+        calItemFreInMonths,
       };
-  
+
       const newItem = new itemCalModel(newItemFields);
-  
+
       const validationError = newItem.validateSync();
       if (validationError) {
         const validationErrors = {};
-  
+
         if (validationError.errors) {
           for (const key in validationError.errors) {
             validationErrors[key] = validationError.errors[key].message;
           }
         }
-  
+
         return res.status(400).json({
           errors: validationErrors
         });
-      } 
-  
+      }
+
       const createdItem = await itemCalModel.create(newItemFields);
       console.log("ItemCal Created Successfully");
       res.status(200).json({ result: createdItem, message: "ItemCal Created Successfully" });
     } catch (error) {
       console.log(error);
-  
+
       if (error.code === 11000) {
         return res.status(500).json({ error: 'Duplicate Value Not Accepted' });
       }
-  
+
       const errors500 = {};
       for (const key in error.errors) {
         errors500[key] = error.errors[key].message;
@@ -107,7 +107,7 @@ const itemCalController = {
       res.status(500).json({ error: error, status: 0 });
     }
   },
-  
+ 
 
   updateItemCal: async (req, res) => {
     try {
@@ -140,11 +140,11 @@ const itemCalController = {
         calCalibratedBy,
         calApprovedBy,
         calBeforeData,
+        calStatus,
         calcalibrationData,
-        calAcceptanceStatus,
         calMasterUsed,
-        calStatus
-        } = req.body;
+        calItemFreInMonths,
+      } = req.body;
       // Create an object with the fields you want to update
       const updateItemFields = {
         calItemId,
@@ -168,10 +168,10 @@ const itemCalController = {
         calCalibratedBy,
         calApprovedBy,
         calBeforeData,
+        calStatus,
         calcalibrationData,
-        calAcceptanceStatus,
         calMasterUsed,
-        calStatus
+        calItemFreInMonths,
       };
 
       // Find the designation by desId and update it
@@ -249,8 +249,8 @@ const itemCalController = {
       res.status(500).send('Internal Server Error');
     }
   },
- 
-  
+
+
 
 
 }

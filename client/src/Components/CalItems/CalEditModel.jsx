@@ -18,13 +18,13 @@ const CalEditModel = () => {
 
     const calData = useContext(CalData)
     const [lastResultData, setLastResultData] = useState([])
-    const { calEditOpen, setCalEditOpen, selectedCalRow, itemMasters, activeEmps, calListFetchData  } = calData
+    const { calEditOpen, setCalEditOpen, selectedCalRow, itemMasters, activeEmps, calListFetchData } = calData
     const [calibrationDatas, setCalibrationDatas] = useState([])
 
     const [selectedIMTE, setSelectedIMTE] = useState([]);
-   
 
-    
+
+
 
 
     const [selectedExtraMaster, setSelectedExtraMaster] = useState([])
@@ -115,55 +115,64 @@ const CalEditModel = () => {
     })
 
     console.log(selectedCalRow)
-useEffect(()=> {
+    useEffect(() => {
 
 
-    setCalibrationData((prev) => (
-      {
-          ...prev,
-          calItemId: selectedCalRow._id,
-          calIMTENo: selectedCalRow.calIMTENo,
-          calItemName: selectedCalRow.calItemName,
-          calItemType: selectedCalRow.calItemType,
-          calRangeSize: selectedCalRow.calRangeSize,
-          calItemMFRNo: selectedCalRow.calItemMFRNo,
-          calLC: selectedCalRow.calLC,
-          calItemMake: selectedCalRow.calItemMake,
-          calItemFreInMonths: selectedCalRow.calItemFreInMonths,
-          calItemUncertainity: selectedCalRow.calItemUncertainity,
-          calItemSOPNo: selectedCalRow.calItemSOPNo,
-          calStandardRef: selectedCalRow.calStandardRef,
-          calOBType: selectedCalRow.calOBType,
+        setCalibrationData((prev) => (
+            {
+                ...prev,
+                calItemId : selectedCalRow.calItemId,
+                calIMTENo : selectedCalRow.calIMTENo,
+                calItemName : selectedCalRow.calItemName,
+                calItemType : selectedCalRow.calItemType,
+                calRangeSize : selectedCalRow.calRangeSize,
+                calItemMFRNo : selectedCalRow.calItemMFRNo,
+                calLC : selectedCalRow.calLC,
+                calItemMake : selectedCalRow.calItemMake,
+                calItemTemperature : selectedCalRow.calItemTemperature,
+                calItemHumidity : selectedCalRow.calItemHumidity,
+                calItemUncertainity : selectedCalRow.calItemUncertainity,
+                calItemSOPNo : selectedCalRow.calItemSOPNo,
+                calStandardRef : selectedCalRow.calStandardRef,
+                calOBType : selectedCalRow.calOBType,
+                calCertificateNo : selectedCalRow.calCertificateNo,
+                calItemCalDate : selectedCalRow.calItemCalDate,
+                calItemDueDate : selectedCalRow.calItemDueDate,
+                calItemEntryDate : selectedCalRow.calItemEntryDate,
+                calCalibratedBy : selectedCalRow.calCalibratedBy,
+                calApprovedBy : selectedCalRow.calApprovedBy,
+                calBeforeData : selectedCalRow.calBeforeData,
+                calStatus : selectedCalRow.calStatus,
 
-          calCalibratedBy: selectedCalRow.calCalibratedBy,
-          calApprovedBy: selectedCalRow.calApprovedBy,
-          calcalibrationData:
 
-              selectedCalRow.calcalibrationData.map((item) => (
-                  {
-                      calParameter: item.calParameter,
-                      calNominalSize: item.calNominalSize,
-                      calNominalSizeUnit: item.calNominalSizeUnit,
-                      calMinPS: item.calMinPS,
-                      calMaxPS: item.calMaxPS,
-                      calWearLimitPS: item.calWearLimitPS,
-                      calBeforeCalibration: item.calBeforeCalibration,
-                      calMinOB: item.calMinOB,
-                      calMaxOB: item.calMaxOB,
-                      calAverageOB: item.calAverageOB,
-                      calOBError: item.calOBError,
-                      calMinPSError: item.calMinPSError,
-                      calMaxPSError: item.calMaxPSError,
-                      rowStatus: item.rowStatus
+                calItemFreInMonths : selectedCalRow.calItemFreInMonths,
+                calcalibrationData:
 
-                  }
-              )),
+                    selectedCalRow.calcalibrationData.map((item) => (
+                        {
+                            calParameter: item.calParameter,
+                            calNominalSize: item.calNominalSize,
+                            calNominalSizeUnit: item.calNominalSizeUnit,
+                            calMinPS: item.calMinPS,
+                            calMaxPS: item.calMaxPS,
+                            calWearLimitPS: item.calWearLimitPS,
+                            calBeforeCalibration: item.calBeforeCalibration,
+                            calMinOB: item.calMinOB,
+                            calMaxOB: item.calMaxOB,
+                            calAverageOB: item.calAverageOB,
+                            calOBError: item.calOBError,
+                            calMinPSError: item.calMinPSError,
+                            calMaxPSError: item.calMaxPSError,
+                            rowStatus: item.rowStatus
 
-          calMasterUsed: selectedCalRow.calMasterUsed
-      }
+                        }
+                    )),
 
-  ))
-}, [selectedCalRow])
+                calMasterUsed: selectedCalRow.calMasterUsed
+            }
+
+        ))
+    }, [selectedCalRow])
 
 
     const getAllCalibrationData = async () => {
@@ -581,7 +590,7 @@ useEffect(()=> {
         if (name === "lastResult") {
             setLastResultShow(checked)
         }
-        
+
 
     }
     console.log(lastResultShow)
@@ -612,16 +621,17 @@ useEffect(()=> {
     const [snackBarOpen, setSnackBarOpen] = useState(false)
     const [alertMessage, setAlertMessage] = useState("")
 
-    const submitCalForm = async () => {
+    const updateItemCal = async () => {
         try {
-            const response = await axios.post(
-                `${process.env.REACT_APP_PORT}/itemCal/createItemCal`, calibrationData
+            const response = await axios.put(
+                `${process.env.REACT_APP_PORT}/itemCal/updateItemCal/${selectedCalRow._id}`, calibrationData
             );
             setAlertMessage(response.data.message)
             setSnackBarOpen(true)
             calListFetchData();
+            
+            setTimeout(() => { setCalEditOpen(false) }, 1000)
             setCalibrationData(initialCalData)
-            setTimeout(() => { setCalEditOpen(false) }, 2000)
         } catch (err) {
             console.log(err);
         }
@@ -631,8 +641,8 @@ useEffect(()=> {
 
     const [showLastResult, setShowLastResult] = useState(false)
     const [itemIMTEs, setItemIMTEs] = useState([])
- 
-    
+
+
 
 
 
@@ -673,15 +683,17 @@ useEffect(()=> {
                                     <TextField
                                         name='calItemName'
                                         id="calItemNameId"
-                                        
+                                        InputProps={{
+                                            readOnly: true,
+                                        }}
                                         size='small'
                                         label="Item Name"
                                         value={calibrationData.calItemName}
                                         fullWidth
-                                        onChange={handleCalData}
+                                        
                                         variant="outlined"
                                     >
-                                        
+
                                     </TextField>
                                 </div>
                                 <div className="col-md-6">
@@ -692,12 +704,14 @@ useEffect(()=> {
                                         label="Item IMTE No"
                                         name='calIMTENo'
                                         fullWidth
-                                       
-                                        onChange={handleCalData}
+                                        InputProps={{
+                                            readOnly: true,
+                                        }}
+                                        
                                         variant="outlined"
-                                        
+
                                     >
-                                        
+
                                     </TextField >
                                 </div>
 
@@ -1090,17 +1104,17 @@ useEffect(()=> {
                                                         <td>{item.calMaxPS}</td>
                                                         <td>{item.calWearLimitPS}</td>
 
-                                                        {calibrationData.calBeforeData === "yes" && <td><input className='form-control form-control-sm' onChange={(e) => changecalDataValue(index, e.target.name, e.target.value)} name='calBeforeCalibration' /></td>}
+                                                        {calibrationData.calBeforeData === "yes" && <td><input className='form-control form-control-sm' value={item.calBeforeCalibration} onChange={(e) => changecalDataValue(index, e.target.name, e.target.value)} name='calBeforeCalibration' /></td>}
                                                         {calibrationData.calOBType === "average" &&
-                                                            <td><input className='form-control form-control-sm' name='calAverageOB' style={{ color: averageColor, fontWeight: "bold" }} onChange={(e) => changecalDataValue(index, e.target.name, e.target.value)} /></td>
+                                                            <td><input className='form-control form-control-sm' name='calAverageOB' style={{ color: averageColor, fontWeight: "bold" }} value={item.calAverageOB} onChange={(e) => changecalDataValue(index, e.target.name, e.target.value)} /></td>
                                                         }
                                                         {calibrationData.calOBType === "minmax" &&
                                                             <React.Fragment>
                                                                 <td>
-                                                                    <input className='form-control form-control-sm' style={{ color: minColor, fontWeight: "bold" }} name="calMinOB" onChange={(e) => changecalDataValue(index, e.target.name, e.target.value)} />
+                                                                    <input className='form-control form-control-sm' style={{ color: minColor, fontWeight: "bold" }} name="calMinOB" value={item.calMinOB} onChange={(e) => changecalDataValue(index, e.target.name, e.target.value)} />
                                                                 </td>
                                                                 <td>
-                                                                    <input className='form-control form-control-sm' style={{ color: maxColor, fontWeight: "bold" }} name="calMaxOB" onChange={(e) => changecalDataValue(index, e.target.name, e.target.value)} /></td>
+                                                                    <input className='form-control form-control-sm' style={{ color: maxColor, fontWeight: "bold" }} name="calMaxOB" value={item.calMaxOB} onChange={(e) => changecalDataValue(index, e.target.name, e.target.value)} /></td>
                                                             </React.Fragment>}
 
 
@@ -1152,7 +1166,7 @@ useEffect(()=> {
                                                         <td>{item.calNominalSizeUnit}</td>
                                                         <td>{item.calMinPSError}</td>
                                                         <td>{item.calMaxPSError}</td>
-                                                        <td><input className='form-control form-control-sm' name='calAverageOB' style={{ color: averageColor, fontWeight: "bold" }} onChange={(e) => changecalDataValue(index, e.target.name, e.target.value)} /></td>
+                                                        <td><input className='form-control form-control-sm' name='calAverageOB' style={{ color: averageColor, fontWeight: "bold" }} value={item.calAverageOB} onChange={(e) => changecalDataValue(index, e.target.name, e.target.value)} /></td>
                                                         <td width="15%">
                                                             <select className='form-select form-select-sm' name="rowStatus" value={item.rowStatus} onChange={(e) => changecalDataValue(index, e.target.name, e.target.value)}>
                                                                 <option value="">Status</option>
@@ -1246,14 +1260,14 @@ useEffect(()=> {
                                                         <td>{item.calMinPS}</td>
                                                         <td>{item.calMaxPS}</td>
 
-                                                        {calibrationData.calBeforeData === "yes" && <td><input className='form-control form-control-sm' onChange={(e) => changecalDataValue(index, e.target.name, e.target.value)} name='calBeforeCalibration' /></td>}
+                                                        {calibrationData.calBeforeData === "yes" && <td><input className='form-control form-control-sm' value={item.calBeforeCalibration} onChange={(e) => changecalDataValue(index, e.target.name, e.target.value)} name='calBeforeCalibration' /></td>}
                                                         {calibrationData.calOBType === "average" &&
-                                                            <td><input className='form-control form-control-sm' name='calAverageOB' style={{ color: averageColor, fontWeight: "bold" }} onChange={(e) => changecalDataValue(index, e.target.name, e.target.value)} /></td>
+                                                            <td><input className='form-control form-control-sm' name='calAverageOB' value={item.calAverageOB} style={{ color: averageColor, fontWeight: "bold" }} onChange={(e) => changecalDataValue(index, e.target.name, e.target.value)} /></td>
                                                         }
                                                         {calibrationData.calOBType === "minmax" &&
                                                             <React.Fragment>
-                                                                <td><input className='form-control form-control-sm' style={{ color: minColor, fontWeight: "bold" }} name="calMinOB" onChange={(e) => changecalDataValue(index, e.target.name, e.target.value)} />
-                                                                </td> <td><input className='form-control form-control-sm' style={{ color: maxColor, fontWeight: "bold" }} name="calMaxOB" onChange={(e) => changecalDataValue(index, e.target.name, e.target.value)} /></td>
+                                                                <td><input className='form-control form-control-sm' value={item.calMinOB} style={{ color: minColor, fontWeight: "bold" }} name="calMinOB" onChange={(e) => changecalDataValue(index, e.target.name, e.target.value)} />
+                                                                </td> <td><input className='form-control form-control-sm' value={item.calMaxOB} style={{ color: maxColor, fontWeight: "bold" }} name="calMaxOB" onChange={(e) => changecalDataValue(index, e.target.name, e.target.value)} /></td>
                                                             </React.Fragment>}
 
 
@@ -1493,7 +1507,7 @@ useEffect(()=> {
 
                         <DialogActions className='d-flex justify-content-center'>
                             <Button onClick={() => setConfirmSubmit(false)}>Cancel</Button>
-                            <Button onClick={() => { submitCalForm(); setConfirmSubmit(false) }} autoFocus>
+                            <Button onClick={() => { updateItemCal(); setConfirmSubmit(false) }} autoFocus>
                                 Submit
                             </Button>
                         </DialogActions>
