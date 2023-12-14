@@ -115,13 +115,13 @@ const GrnList = () => {
         FetchData();
     }, []);
 
-   const [selectedRowView, setSelectedRowView] = useState(null);
+    const [selectedRowView, setSelectedRowView] = useState(null);
     const handleViewClick = (params) => {
         setSelectedRowView(params); // Set the selected row data
         setGrnListDataList(params.dcPartyItems)
 
     };
-   
+
 
 
 
@@ -269,7 +269,7 @@ const GrnList = () => {
 
                         <h1 className='text-center '>GRN List</h1>
                         <div className='col'>
-                            <div className='col-md-12'>
+                            <div className='col-md-12 d-flex'>
                                 <Paper
                                     sx={{
                                         p: 2,
@@ -327,7 +327,7 @@ const GrnList = () => {
                                     </div>
                                 </Paper>
                             </div>
-                            <div className='col-md-12 d-flex '>
+                            <div className='col d-flex '>
                                 <Paper
                                     sx={{
                                         p: 1,
