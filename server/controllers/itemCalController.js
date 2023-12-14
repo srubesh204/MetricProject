@@ -249,6 +249,16 @@ const itemCalController = {
       res.status(500).send('Internal Server Error');
     }
   },
+  getAllDistinctCalNames: async (req, res) => {
+    try {
+      const itemCalResult = await itemCalModel.find().distinct('calItemName');
+      res.status(202).json({ result: itemCalResult, status: 1 });
+      //res.status(200).json(employees);
+    } catch (err) {
+      console.error(err);
+      res.status(500).send('Error on ItemAdd Get');
+    }
+  },
 
 
 
