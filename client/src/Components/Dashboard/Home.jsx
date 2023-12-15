@@ -76,7 +76,7 @@ const Home = () => {
   };
   //
 
-//allActiveEmployees
+  //allActiveEmployees
   const [activeEmps, setActiveEmps] = useState([])
 
   const empFetch = async () => {
@@ -90,9 +90,9 @@ const Home = () => {
     }
   };
   console.log(activeEmps)
-//
+  //
 
-  
+
 
   const getAllDepartments = async () => {
     try {
@@ -184,6 +184,11 @@ const Home = () => {
       const missingItems = allItems.filter((item) => item.itemStatus === "Missing");
       const rejectionItems = allItems.filter((item) => item.itemStatus === "Rejection");
 
+      // const spareItems = allItems.filter((item) => item.itemStatus === "Spare");
+      // const breakDownItems = allItems.filter((item) => item.itemStatus === "BreakDown");
+      // const missingItems = allItems.filter((item) => item.itemStatus === "Missing");
+      // const rejectionItems = allItems.filter((item) => item.itemStatus === "Rejection");
+
 
       setItemStatus([
         { id: 0, value: allItems.length, label: 'Total Items' },
@@ -201,8 +206,14 @@ const Home = () => {
         { id: 4, value: thirtyDaysFilter.length, label: '30 Days' },
         { id: 5, value: AboveThirtyDaysFilter.length, label: '>30 Days' }
       ])
-      setItemLocationData([{ value: allItems.length, label: "Departments" }])
-
+      setItemLocationData([
+        { value: allItems.length, label: "Departments" },
+        { value: 0, label: "Sub Contractors" },
+        { value: 0, label: "Customers" },
+        { value: 0, label: "Suppliers" },
+        { value: 0, label: "OEM" }
+      ]);
+      
 
     } catch (err) {
       console.log(err);
@@ -217,12 +228,7 @@ const Home = () => {
       );
       setDistinctDepartment(Departments.data.result)
       console.log(Departments)
-      setItemLocationData(prev => ([
-        ...prev,
-        { value: 0, label: "Sub Contractors" },
-        { value: 0, label: "Customers" },
-        { value: 0, label: "Suppliers" }
-      ]));
+      
 
     } catch (err) {
       console.log(err);
@@ -416,10 +422,10 @@ const Home = () => {
   const itemLocationLegend = ({ payload }) => {
     return (
 
-      <table className='table table-borderless table-responsive' style={{ marginTop: "35px" }}>
+      <table className='table table-borderless table-responsive' style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
         <tbody>
           {payload.map((entry, index) => (
-            <tr>
+            <tr key={index}>
               <td onClick={() => ItemLocationDisplay(entry.value)}><div style={{ width: '25px', height: '25px', backgroundColor: entry.color, marginRight: '10px', textAlign: "center", display: "flex", justifyContent: "center", alignItems: "center" }}></div></td>
               <td>{entry.value}</td>
               <td style={{ fontWeight: "bolder", color: entry.color }} className='ms-2 ps-3'>{entry.payload.value}</td>
@@ -436,10 +442,10 @@ const Home = () => {
   const itemStatusLegendContent = ({ payload }) => {
     return (
 
-      <table className='table table-borderless table-responsive '>
+      <table className='table table-borderless table-responsive' style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
         <tbody>
           {payload.map((entry, index) => (
-            <tr>
+            <tr key={index} style={{ padding: '25px' }}>
               <td onClick={() => { itemStatusLegend(entry.value); console.log(entry) }}><div style={{ width: '25px', height: '25px', backgroundColor: entry.color, marginRight: '10px', textAlign: "center", display: "flex", justifyContent: "center", alignItems: "center" }}></div></td>
               <td>{entry.value}</td>
               <td style={{ fontWeight: "bolder", color: entry.color }} className='ms-2 ps-3'>{entry.payload.value}</td>
@@ -452,10 +458,10 @@ const Home = () => {
 
   const calibrationStatusLegendContent = ({ payload }) => {
     return (
-      <table className='table table-borderless'>
+      <table className='table table-borderless' style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
         <tbody>
           {payload.map((entry, index) => (
-            <tr>
+            <tr key={index}>
               <td onClick={() => { itemStatusLegend(entry.value) }}><div style={{ width: '25px', height: '25px', backgroundColor: entry.color, marginRight: '10px', textAlign: "center", display: "flex", justifyContent: "center", alignItems: "center" }}></div></td>
               <td>{entry.value}</td>
               <td style={{ fontWeight: "bolder", color: entry.color }} className='ms-2 ps-3'>{entry.payload.value}</td>
@@ -1059,8 +1065,8 @@ const Home = () => {
             >
               <Grn />
             </HomeContent.Provider>
-           
-           
+
+
           </div>
         </div>
 
