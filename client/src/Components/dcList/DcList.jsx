@@ -17,6 +17,7 @@ import DialogTitle from '@mui/material/DialogTitle';
 import Alert from '@mui/material/Alert';
 import Snackbar from '@mui/material/Snackbar';
 import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
+import dayjs from 'dayjs';
 
 import DcEdit from './DcEdit';
 import DcAdd from './DcAdd';
@@ -100,22 +101,29 @@ const DcList = () => {
         FetchData();
     }, []);
 
+    
 
-
+    const oneMonthBefore = dayjs().subtract(dayjs().date()-1, 'day')
+    const [dateData, setDateData] = useState({
+        fromDate: oneMonthBefore.format('YYYY-MM-DD'),
+        toDate: dayjs().format('YYYY-MM-DD')
+    })
 
 
 
 
     const [dcListDataList, setDcListDataList] = useState([])
 
-    const [vendorDataDcList, setVendorDataDcList] = useState([])
+
+    const [dcDataDcList, setDcDataDcList] = useState([])
     const dcListFetchData = async () => {
         try {
             const response = await axios.get(
                 `${process.env.REACT_APP_PORT}/itemDc/getAllItemDc`
 
             );
-            setVendorDataDcList(response.data.result);
+            setDcDataDcList(response.data.result);
+            const filteredItems = response.data.result.filter((item) => dayjs(item.calItemCalDate).isSameOrAfter(dateData.fromDate) && dayjs(item.calItemCalDate).isSameOrBefore(dateData.toDate) )
             setFilteredData(response.data.result);
         } catch (err) {
             console.log(err);
@@ -281,27 +289,35 @@ const DcList = () => {
     const handleFilterChange = (e) => {
         const { name, value } = e.target;
         if (value === "all") {
-            setFilteredData(vendorDataDcList)
+            setFilteredData(dcDataDcList)
         } else {
             if (name === "vendorStatus") {
-                const vendorStatus = vendorDataDcList.filter((item) => (item.vendorStatus === "1"))
+                const vendorStatus = dcDataDcList.filter((item) => (item.vendorStatus === value))
                 console.log(value)
                 setFilteredData(vendorStatus)
-            }
+            } 
             if (name === "partyName") {
-                const partyName = vendorDataDcList.filter((item) => (item.dcPartyItems === "1"))
+                const partyName = dcDataDcList.filter((item) => (item.dcPartyName === value))
                 console.log(value)
                 setFilteredData(partyName)
 
             }
 
-
+            setDateData((prev)=> ({...prev, [name] : value}))
 
 
         }
 
 
-    };
+    }
+
+    const dateFilter = () => {
+        const filteredItems = dcDataDcList.filter((item) => dayjs(item.calItemCalDate).isSameOrAfter(dateData.fromDate) && dayjs(item.calItemCalDate).isSameOrBefore(dateData.toDate) )
+        setFilteredData(filteredItems)
+      }
+      useEffect(()=> {
+        dateFilter();
+      }, [dateData.fromDate, dateData.toDate])
 
 
 
@@ -315,20 +331,13 @@ const DcList = () => {
         { field: 'itemAddMasterName', headerName: 'Item Description', width: 150 },
         { field: 'itemRangeSize', headerName: 'Range/Size', width: 100 },
         {
-            field: 'select', headerName: 'ReMarks', width: 100, renderCell: (params) => <select className="form-select form-select-sm col-2" id="re" name="vcStatus" aria-label="Floating label select example">
-               
-                <option value="Calibration">Calibration</option>
-                <option value="service">Service</option>
-                <option value="servicecalibration">Service & Calibration</option>
-              
-            </select>
-        },
+            field: 'ReMarks', headerName: 'ReMarks', width: 200},
 
 
     ]
 
 
-
+    console.log(dcDataDcList)
 
 
 
@@ -371,7 +380,7 @@ const DcList = () => {
 
                                             <MenuItem value="all">All</MenuItem>
                                             {vendorFullList.map((item) => (
-                                                <MenuItem value={item._id}>{item.fullName}</MenuItem>
+                                                <MenuItem value={item.fullName}>{item.fullName}</MenuItem>
                                             ))}
 
 
@@ -390,7 +399,11 @@ const DcList = () => {
                                             label="From Date"
                                             sx={{ width: "100%" }}
                                             slotProps={{ textField: { size: 'small' } }}
-                                            format="DD-MM-YYYY" />
+                                            format="DD-MM-YYYY"
+                                            value={dayjs(dateData.fromDate)}
+                                        onChange={(newValue)=> 
+                                            setDateData((prev)=> ({...prev, fromDate : dayjs(newValue).format('YYYY-MM-DD')}))}
+                                             />
 
                                     </div>
                                     <div className="col-3">
@@ -402,7 +415,9 @@ const DcList = () => {
                                             label="To Date"
                                             sx={{ width: "100%" }}
                                             slotProps={{ textField: { size: 'small' } }}
-                                            format="DD-MM-YYYY" />
+                                            format="DD-MM-YYYY"  value={dayjs(dateData.toDate)}
+                                            onChange={(newValue)=> 
+                                                setDateData((prev)=> ({...prev, toDate : dayjs(newValue).format('YYYY-MM-DD')}))} />
 
                                     </div>
 
