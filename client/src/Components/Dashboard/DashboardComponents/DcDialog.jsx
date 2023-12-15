@@ -128,7 +128,15 @@ const Dc = () => {
         { field: 'itemMake', headerName: 'Make', width: 90 },
         { field: 'id', headerName: 'Si. No', width: 70, renderCell: (params) => params.api.getAllRowIds().indexOf(params.id) + 1 },
         { field: 'itemCalFreInMonths', headerName: 'Frequency', type: "number", width: 100 },
-        { field: 'dcCommonRemarks', headerName: 'Remarks', width: 100 },
+        {
+            field: 'dcCommonRemarks', headerName: 'Remarks', width: 250,
+            renderCell: (params) =>
+                <select className='form-select form-select-sm' name=""> 
+                    <option>Calibration</option>
+                    <option>Service</option>
+                    <option>Service and Calibration</option>
+                </select>
+        },
         { field: 'delete', headerName: 'Delete', width: 100, renderCell: (index) => <Delete onClick={() => deleteAC(index)} /> },
     ]
 
@@ -322,7 +330,7 @@ const Dc = () => {
 
 
 
-  
+
 
 
 
@@ -355,12 +363,12 @@ const Dc = () => {
                             <div className='row'>
                                 <div class="col-3 mb-2">
 
-                                    <TextField  label="Vendor Type"
+                                    <TextField label="Vendor Type"
                                         id="dcPartyTypeId"
                                         select
                                         defaultValue=""
-                                        
-                                        onChange={handleFilterChange} 
+
+                                        onChange={handleFilterChange}
                                         size="small"
                                         sx={{ width: "101%" }}
                                         name="dcPartyType" >
@@ -371,7 +379,7 @@ const Dc = () => {
                                         <MenuItem value="subContractor">SubContractor</MenuItem>
 
                                     </TextField>
-                                    
+
 
                                 </div>
                             </div>

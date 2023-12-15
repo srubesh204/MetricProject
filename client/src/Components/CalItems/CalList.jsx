@@ -7,7 +7,7 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DataGrid, GridToolbar } from '@mui/x-data-grid';
 import dayjs from 'dayjs';
 import { Container, Paper } from '@mui/material';
-import { Edit } from '@mui/icons-material';
+import { Edit, EditRounded } from '@mui/icons-material';
 import isSameOrAfter from 'dayjs/plugin/isSameOrAfter'
 import isSameOrBefore from 'dayjs/plugin/isSameOrBefore'
 
@@ -85,7 +85,7 @@ const CalList = () => {
     const [calListSelectedRowIds, setCalListSelectedRowIds] = useState([])
     const [calListDataList, setCalListDataList] = useState([])
     const [filteredCalData, setFilteredCalData] = useState([])
-    const oneMonthBefore = dayjs().subtract(dayjs().date()-1, 'day')
+    const oneMonthBefore = dayjs().subtract(dayjs().date() - 1, 'day')
     const [dateData, setDateData] = useState({
         fromDate: oneMonthBefore.format('YYYY-MM-DD'),
         toDate: dayjs().format('YYYY-MM-DD')
@@ -97,7 +97,7 @@ const CalList = () => {
             );
 
             setCalListDataList(response.data.result);
-            const filteredItems = response.data.result.filter((item) => dayjs(item.calItemCalDate).isSameOrAfter(dateData.fromDate) && dayjs(item.calItemCalDate).isSameOrBefore(dateData.toDate) )
+            const filteredItems = response.data.result.filter((item) => dayjs(item.calItemCalDate).isSameOrAfter(dateData.fromDate) && dayjs(item.calItemCalDate).isSameOrBefore(dateData.toDate))
             setFilteredCalData(filteredItems);
         } catch (err) {
             console.log(err);
@@ -105,7 +105,7 @@ const CalList = () => {
     };
     useEffect(() => {
         calListFetchData();
-       
+
     }, []);
 
     const [selectedCalRow, setSelectedCalRow] = useState([])
@@ -119,7 +119,7 @@ const CalList = () => {
 
     const calListColumns = [
         { field: 'id', headerName: 'Entry. No', width: 100, renderCell: (params) => params.api.getAllRowIds().indexOf(params.id) + 1 },
-        { field: 'editButton', headerName: 'Edit', width: 100, renderCell: (params) => <Edit onClick={() => setCalEditData(params)} /> },
+        { field: 'editButton', headerName: 'Edit', width: 100, renderCell: (params) => <EditRounded color='warning' onClick={() => setCalEditData(params)} /> },
         { field: 'calItemEntryDate', headerName: 'Entry Date', width: 200, valueGetter: (params) => dayjs(params.row.calItemEntryDate).format('DD-MM-YYYY') },
         { field: 'calIMTENo', headerName: 'Item IMTENo', width: 200 },
         { field: 'calItemName', headerName: 'Item Description', width: 200 },
@@ -130,7 +130,7 @@ const CalList = () => {
 
     ]
 
-    
+
 
     const handleFilter = (e) => {
         const { name, value } = e.target;
@@ -150,22 +150,35 @@ const CalList = () => {
                 setFilteredCalData(selectedItem)
             }
 
-            setDateData((prev)=> ({...prev, [name] : value}))
+            setDateData((prev) => ({ ...prev, [name]: value }))
         }
 
 
     }
 
-  const dateFilter = () => {
-    const filteredItems = calListDataList.filter((item) => dayjs(item.calItemCalDate).isSameOrAfter(dateData.fromDate) && dayjs(item.calItemCalDate).isSameOrBefore(dateData.toDate) )
-    setFilteredCalData(filteredItems)
-  }
-  useEffect(()=> {
-    dateFilter();
-  }, [dateData.fromDate, dateData.toDate])
+    const dateFilter = () => {
+        const filteredItems = calListDataList.filter((item) => dayjs(item.calItemCalDate).isSameOrAfter(dateData.fromDate) && dayjs(item.calItemCalDate).isSameOrBefore(dateData.toDate))
+        setFilteredCalData(filteredItems)
+    }
+    useEffect(() => {
+        dateFilter();
+    }, [dateData.fromDate, dateData.toDate])
 
-  
 
+    const deleteCal = async () => {
+        try {
+            const response = await axios.delete(
+                `${process.env.REACT_APP_PORT}/itemCal/deleteItemCal`, {data : {itemCalIds: calListSelectedRowIds}}
+            );
+            calListFetchData()
+                console.log("Cal Items Deleted Successfully")
+        } catch (err) {
+            console.log(err);
+        }
+    };
+
+
+    console.log(calListSelectedRowIds)
 
 
     return (
@@ -198,7 +211,7 @@ const CalList = () => {
                                     </TextField>
                                 </div>
                                 <div className='col '>
-                                    <TextField size='small' fullWidth variant='outlined' id="itemListId" select label="Item IMTE No" onChange={handleFilter} name='itemIMTENo'>
+                                    <TextField size='small' fullWidth defaultValue="all" variant='outlined' id="itemListId" select label="Item IMTE No" onChange={handleFilter} name='itemIMTENo'>
                                         <MenuItem value="all">All</MenuItem>
                                         {IMTENos.map((item) => (
                                             <MenuItem value={item}>{item}</MenuItem>
@@ -219,12 +232,12 @@ const CalList = () => {
                                         label="From Date"
                                         sx={{ width: "100%" }}
                                         slotProps={{ textField: { size: 'small' } }}
-                                        format="DD-MM-YYYY" 
+                                        format="DD-MM-YYYY"
                                         value={dayjs(dateData.fromDate)}
-                                        onChange={(newValue)=> 
-                                            setDateData((prev)=> ({...prev, fromDate : dayjs(newValue).format('YYYY-MM-DD')}))}
-                                        />
-                                    
+                                        onChange={(newValue) =>
+                                            setDateData((prev) => ({ ...prev, fromDate: dayjs(newValue).format('YYYY-MM-DD') }))}
+                                    />
+
 
                                 </div>
                                 <div className="col-3">
@@ -236,13 +249,13 @@ const CalList = () => {
                                         label="To Date"
                                         sx={{ width: "100%" }}
                                         slotProps={{ textField: { size: 'small' } }}
-                                        format="DD-MM-YYYY" 
+                                        format="DD-MM-YYYY"
                                         value={dayjs(dateData.toDate)}
-                                        onChange={(newValue)=> 
-                                            setDateData((prev)=> ({...prev, toDate : dayjs(newValue).format('YYYY-MM-DD')}))}
-                                    
-                                        />
-                                       
+                                        onChange={(newValue) =>
+                                            setDateData((prev) => ({ ...prev, toDate: dayjs(newValue).format('YYYY-MM-DD') }))}
+
+                                    />
+
                                 </div>
                             </div>
 
@@ -304,14 +317,14 @@ const CalList = () => {
                             </div>
                             <div className='col d-flex justify-content-end'>
                                 <div className='me-2 '>
-                                    <button type="button" className='btn btn-secondary' >Modify</button>
+                                    <button type="button" className='btn btn-warning' >Modify</button>
                                 </div>
                                 <div className='me-2 '>
-                                    <button type="button" className='btn btn-secondary' onClick={() => setCalAddOpen(true)}>Add</button>
+                                    <button type="button" className='btn btn-success' onClick={() => setCalAddOpen(true)}>Add</button>
                                 </div>
-                                <div className='me-2 '>
-                                    <button type="button" className='btn btn-secondary' >Delete</button>
-                                </div>
+                                {calListSelectedRowIds.length !== 0 && <div className='me-2 '>
+                                    <button type="button" className='btn btn-danger' onClick={()=> deleteCal()}>Delete</button>
+                                </div>}
                                 <div className='me-2 '>
                                     <button type="button" className='btn btn-secondary' >Back</button>
                                 </div>
