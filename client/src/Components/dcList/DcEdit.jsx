@@ -148,7 +148,16 @@ const DcEdit = () => {
         { field: 'itemMake', headerName: 'Make', width: 90 },
         { field: 'id', headerName: 'Si. No', width: 70, renderCell: (params) => params.api.getAllRowIds().indexOf(params.id) + 1 },
         { field: 'itemCalFreInMonths', headerName: 'Frequency', type: "number", width: 100 },
-        { field: 'dcCommonRemarks', headerName: 'Remarks', width: 100 },
+        {
+            field: 'select', headerName: 'ReMarks', width: 200, renderCell: (params) => <select className="form-select form-select-sm col-2" id="reMarks" name="reMarks" aria-label="Floating label select example">
+               
+                <option value="Calibration">Calibration</option>
+                <option value="service">Service</option>
+                <option value="servicecalibration">Service & Calibration</option>
+              
+            </select>
+        },
+      
         { field: 'delete', headerName: 'Delete', width: 100, renderCell: (index) => <Delete onClick={() => deleteAC(index)} /> },
     ]
 

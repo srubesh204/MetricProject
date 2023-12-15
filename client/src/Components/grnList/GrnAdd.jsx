@@ -611,7 +611,9 @@ const GrnAdd = () => {
                                                     <th>Observed Size/Observed Error</th>
                                                     <th>Unit</th>
                                                     <th>Status</th>
+                                                    
                                                 </tr>
+                                               
                                                 <tr>
                                                     <td><input type="text" className='form-control form-control-sm' id="parameterId" name="parameter" /></td>
                                                     <td><input type="text" className='form-control form-control-sm' id="rangeSizeId" name="rangeSize" /></td>
@@ -622,8 +624,12 @@ const GrnAdd = () => {
                                                     <td><input type="text" className='form-control form-control-sm' id="observedSizeId" name="observedSize" /></td>
                                                     <td><input type="text" className='form-control form-control-sm' id="unitId" name="unit" /></td>
                                                     <td><input type="text" className='form-control form-control-sm' id="statusId" name="status" /></td>
+                                                   {/* <td><input type="text" className='form-control form-control-sm' id="grnListId" name="grnList" value={itemAddDetails.grnList} /></td>
+                                                    <td><input type="text" className='form-control form-control-sm' id="grnImteId" name="grnImte" value={itemAddDetails.grnImteNo} /></td>*/}
 
                                                 </tr>
+                                               
+
                                             </tbody>
 
                                         </table>
