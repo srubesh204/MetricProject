@@ -14,13 +14,14 @@ import { useParams } from 'react-router-dom';
 
 const GrnEdit = () => {
     const grnDatas = useContext(GrnListContent)
-    const { grnEditOpen, setGrnEditOpen, selectedRows,grnListFetchData } = grnDatas
-   
+    const { grnEditOpen, setGrnEditOpen, selectedRows, grnListFetchData } = grnDatas
+
     const { id } = useParams()
     console.log(id)
     const [selectedExtraMaster, setSelectedExtraMaster] = useState([])
     const initialGrnData = {
         grnPartyRefNo: "",
+        grnPartyId:"",
         grnPartyRefDate: "",
         grnPartyName: "",
         grnPartyCode: "",
@@ -28,6 +29,11 @@ const GrnEdit = () => {
         grnNo: "",
         grnDate: "",
         grnCommonRemarks: "",
+        grnCalDate: dayjs().format("YYYY-MM-DD"),
+        grnDueDate: "",
+        grnCertificateStatus: "",
+        grnCertificateNo: "",
+        grnUncertainity: "",
         grnPartyItems: []
 
     }
@@ -35,6 +41,7 @@ const GrnEdit = () => {
 
     const [grnData, setGrnData] = useState({
         grnPartyRefNo: "",
+        grnPartyId:"",
         grnPartyRefDate: "",
         grnPartyName: "",
         grnPartyCode: "",
@@ -42,6 +49,11 @@ const GrnEdit = () => {
         grnNo: "",
         grnDate: "",
         grnCommonRemarks: "",
+        grnCalDate: dayjs().format("YYYY-MM-DD"),
+        grnDueDate: "",
+        grnCertificateStatus: "",
+        grnCertificateNo: "",
+        grnUncertainity: "",
         grnPartyItems: []
 
 
@@ -50,7 +62,7 @@ const GrnEdit = () => {
     })
 
 
-console.log(selectedRows)
+    console.log(selectedRows)
     const settingGrnData = () => {
         if (selectedRows.length !== 0) { // Check if selectedRows is defined
             setGrnData((prev) => ({
@@ -64,6 +76,11 @@ console.log(selectedRows)
                 grnNo: selectedRows.grnNo,
                 grnDate: selectedRows.grnDate,
                 grnCommonRemarks: selectedRows.grnCommonRemarks,
+                grnCalDate: selectedRows.grnCalDate,
+                grnDueDate: selectedRows.grnDueDate,
+                grnCertificateStatus: selectedRows.grnCertificateStatus,
+                grnCertificateNo: selectedRows.grnCertificateNo,
+                grnUncertainity: selectedRows.grnUncertainity,
                 grnPartyItems: selectedRows.grnPartyItems,
             }));
         }
@@ -91,7 +108,7 @@ console.log(selectedRows)
         grnImteNo: ""
     })
 
-   
+
 
 
     const [vendorDataList, setVendorDataList] = useState([])
@@ -277,7 +294,7 @@ console.log(selectedRows)
     const updateGrnData = async () => {
         try {
             const response = await axios.put(
-              
+
                 `${process.env.REACT_APP_PORT}/itemGrn/updateItemGRN/${selectedRows._id}`, grnData
             );
             setAlertMessage(response.data.message)
@@ -395,7 +412,7 @@ console.log(selectedRows)
                                                         <TextField label="Party Name"
                                                             id="grnPartyNameId"
                                                             select
-                                                            //value={grnData.grnPartyName}
+                                                            value={grnData.grnPartyId}
 
                                                             onChange={(e) => setPartyData(e.target.value)}
 
@@ -530,8 +547,8 @@ console.log(selectedRows)
                                     <div className='row g-2 mb-2'>
                                         <div className='col d-flex'>
                                             <div className='col me-2'>
-                                                <TextField size='small' fullWidth variant='outlined' defaultValue="all" value={itemAddDetails.grnList} id="grnListId" onChange={handleGrnItemAdd} select label="Item List" name='grnList'>
-                                                    <MenuItem value="all">All</MenuItem>
+                                                <TextField size='small' fullWidth variant='outlined' defaultValue="" value={itemAddDetails.grnList} id="grnListId" onChange={handleGrnItemAdd} select label="Item List" name='grnList'>
+                                                 
                                                     {itemMasterDistNames.map((item, index) => (
                                                         <MenuItem key={index} value={item}>{item}</MenuItem>
                                                     ))}
@@ -542,14 +559,14 @@ console.log(selectedRows)
                                                 <TextField label="Imte No"
                                                     id="grnImteNoId"
                                                     select
-                                                    defaultValue="all"
+                                                    defaultValue=""
                                                     fullWidth
                                                     size="small"
-                                                    // disabled={itemAddDetails.itemListNames === ""}
+                                                    disabled={itemAddDetails.grnList === ""}
                                                     onChange={handleGrnItemAdd}
                                                     value={itemAddDetails.grnImteNo}
                                                     name="grnImteNo" >
-                                                    <MenuItem value="all">All</MenuItem>
+                                               
                                                     {itemImtes.map((item, index) => (
                                                         <MenuItem key={index} value={item}>{item.itemIMTENo}</MenuItem>
                                                     ))}
@@ -572,31 +589,42 @@ console.log(selectedRows)
 
                                                 <DatePicker
                                                     fullWidth
-                                                    id="calDateId"
-                                                    name="calDate"
+                                                    id="grnCalDateId"
+                                                    name="grnCalDate"
                                                     label="Cal Date"
+                                                 
                                                     //sx={{ width: "100%" }}
                                                     slotProps={{ textField: { size: 'small' } }}
-                                                    format="DD-MM-YYYY" />
+                                                    format="DD-MM-YYYY"
+                                                    value={dayjs(grnData.grnCalDate)}
+                                                    onChange={(newValue) =>
+                                                        setGrnData((prev) => ({ ...prev, grnCalDate: newValue.format("YYYY-MM-DD") }))
+                                                    } />
 
                                             </div>
                                             <div className="col-2 me-2">
 
                                                 <DatePicker
                                                     fullWidth
-                                                    id="nextCalDateId"
-                                                    name="nextCalDate"
+                                                    id="grnDueDateId"
+                                                    name="grnDueDate"
                                                     label="Next Cal Date"
                                                     // sx={{ width: "100%" }}
+                                                    
                                                     slotProps={{ textField: { size: 'small' } }}
-                                                    format="DD-MM-YYYY" />
+                                                    format="DD-MM-YYYY"
+                                                    value={dayjs(grnData.grnDueDate)}
+                                                    onChange={(newValue) =>
+                                                        setGrnData((prev) => ({ ...prev, grnDueDate: newValue.format("YYYY-MM-DD") }))
+                                                    }
+                                                />
 
                                             </div>
                                             <div className='col me-2'>
-                                                <TextField size='small' fullWidth variant='outlined' id="certificateStatusId" select label="Certificate Status" name='certificateStatus'>
-                                                    <MenuItem value="InHouse">InHouse</MenuItem>
-                                                    <MenuItem value="OutSource">OutSource</MenuItem>
-                                                    <MenuItem value="OEM">OEM</MenuItem>
+                                                <TextField size='small' fullWidth variant='outlined' id="certificateStatusId" select label="Certificate Status" onChange={handleGrnChange} name='certificateStatus'>
+                                                    <MenuItem value="received">Received</MenuItem>
+                                                    <MenuItem value="notreceived">Not Received</MenuItem>
+                                                    
                                                 </TextField>
                                             </div>
                                             <div className="col me-2">
@@ -604,13 +632,15 @@ console.log(selectedRows)
                                                 <TextField label="CertificateNo"
                                                     id="certificateNoId"
                                                     defaultValue=""
+                                                    value={grnData.grnCertificateNo}
+                                                    onChange={handleGrnChange}
                                                     size="small"
                                                     sx={{ width: "101%" }}
                                                     name="certificateNo" />
 
                                             </div>
                                             <div className='col me-2'>
-                                                <TextField fullWidth label="Uncertainity" variant='outlined' size='small' name='itemUncertainity' />
+                                                <TextField fullWidth label="Uncertainity" variant='outlined' onChange={handleGrnChange} value={grnData.grnUncertainity} size='small' name='itemUncertainity' />
 
                                             </div>
 
@@ -730,7 +760,7 @@ console.log(selectedRows)
                 </div>
                 <div>
                     <Button variant='contained' color='error' className='me-3' onClick={() => { setGrnEditOpen(false) }}>Cancel</Button>
-                    <Button variant='contained' color='success'onClick={() => { setConfirmSubmit(true) }}>Submit</Button>
+                    <Button variant='contained' color='success' onClick={() => { setConfirmSubmit(true) }}>Submit</Button>
                 </div>
             </DialogActions>
 

@@ -14,8 +14,8 @@ const onsiteItemGRNController = {
       createOnsiteItemGRN: async (req, res) => {
        
         try {
-          const {grnPartyRefNo, grnPartyRefDate, grnPartyName, grnPartyCode, grnPartyAddress, grnNo, grnDate, grnCommonRemarks} = req.body;
-          const onsiteItemGRNResult = new onsiteItemGRNModel({ grnPartyRefNo, grnPartyRefDate, grnPartyName, grnPartyCode, grnPartyAddress, grnNo, grnDate, grnCommonRemarks});
+          const {OsGrnPartyRefNo,OsGrnPartyRefDate, OsGrnPartyName, OsGrnPartyCode, OsGrnPartyAddress, OsGrnNo,OsGrnDate, OsGrnCommonRemarks,OsGrnPartItems,OsGrnPartyId} = req.body;
+          const onsiteItemGRNResult = new onsiteItemGRNModel({ OsGrnPartyRefNo, OsGrnPartyRefDate, OsGrnPartyName, OsGrnPartyCode,OsGrnPartyAddress, OsGrnNo, OsGrnDate, OsGrnCommonRemarks,OsGrnPartItems});
           const validationError = onsiteItemGRNResult.validateSync();
 
           if (validationError) {
@@ -61,7 +61,7 @@ const onsiteItemGRNController = {
           // Create an object with the fields you want to update
           const updateOnsiteItemGRNFields = {
             /* Specify the fields and their updated values here */
-            grnPartyRefNo: req.body.grnPartyRefNo, grnPartyRefDate : req.body.grnPartyRefDate, grnPartyName : req.body.grnPartyName, grnPartyCode : req.body.grnPartyCode, grnPartyAddress : req.body.grnPartyAddress, grnNo : req.body.grnNo, grnDate : req.body.grnDate, grnCommonRemarks : req.body.grnCommonRemarks,// Example: updating the 'name' field
+            grnPartyRefNo: req.body.grnPartyRefNo, grnPartyRefDate : req.body.grnPartyRefDate, grnPartyItems: req.body.grnPartItems,  grnPartyName : req.body.grnPartyName, grnPartyCode : req.body.grnPartyCode, grnPartyAddress : req.body.grnPartyAddress, grnNo : req.body.grnNo, grnDate : req.body.grnDate, grnCommonRemarks : req.body.grnCommonRemarks,// Example: updating the 'name' field
             // Add more fields as needed
           };
       

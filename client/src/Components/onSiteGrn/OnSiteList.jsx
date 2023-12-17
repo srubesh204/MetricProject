@@ -8,7 +8,7 @@ import { DataGrid, GridToolbar } from '@mui/x-data-grid';
 import { Paper } from '@mui/material';
 import { Edit } from '@mui/icons-material';
 import AddIcon from '@mui/icons-material/Add';
-import GrnEdit from './GrnEdit';
+
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
@@ -16,15 +16,18 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import Snackbar from '@mui/material/Snackbar';
 import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
-import GrnAdd from './GrnAdd';
 import Alert from '@mui/material/Alert';
-export const GrnListContent = createContext(null);
+import OnSiteGrn from './OnSiteGrn';
+import OnSiteEditGrn from './OnSiteEditGrn';
 
-const GrnList = () => {
+export const OnSiteListContent = createContext(null);
+
+const OnSiteList = () => {
 
     const [selectedRows, setSelectedRows] = useState([]);
-    const [grnEditOpen, setGrnEditOpen] = useState(false);
-    const [grnOpen, setGrnOpen] = useState(false);
+    const [onSiteEditOpen,setOnSiteEditOpen]= useState([])
+ 
+    const [onSiteGrnOpen, setOnSiteGrnOpen] = useState(false);
 
 
     const handleSnackClose = (event, reason) => {
@@ -72,7 +75,7 @@ const GrnList = () => {
 
     const Columns = [
         { field: 'id', headerName: 'Si. No', width: 100, renderCell: (params) => params.api.getAllRowIds().indexOf(params.id) + 1 },
-        { field: 'button', headerName: 'Edit', width: 90, renderCell: (params) => <Button onClick={() => { setSelectedRows(params.row); setGrnEditOpen(true) }}><Edit color='success' /></Button> },
+        { field: 'button', headerName: 'Edit', width: 90, renderCell: (params) => <Button onClick={() => { setSelectedRows(params.row); setOnSiteEditOpen(true) }}><Edit color='success' /></Button> },
 
        
         {
@@ -124,25 +127,7 @@ const GrnList = () => {
     };
 
 
-    const [vendorFullList, setVendorFullList] = useState([])
 
-    const FetchData = async () => {
-        try {
-            const response = await axios.get(
-                `${process.env.REACT_APP_PORT}/vendor/getAllVendors`
-            );
-            console.log(response.data)
-
-            setVendorFullList(response.data.result);
-
-            // setFilteredData(response.data.result);
-        } catch (err) {
-            console.log(err);
-        }
-    };
-    useEffect(() => {
-        FetchData();
-    }, []);
 
 
     const [deleteModalItem, setDeleteModalItem] = useState(false);
@@ -286,7 +271,7 @@ const GrnList = () => {
 
                     <div className='row mb-2'>
 
-                        <h1 className='text-center '>GRN List</h1>
+                        <h3 className='text-center '> ON GRN List</h3>
                         <div className='col'>
                             <div className='col-12 '>
                                 <Paper
@@ -313,9 +298,9 @@ const GrnList = () => {
                                             <TextField fullWidth label="Party Name" className="col" select size="small" onChange={handleFilterChange} id="partyNameId" name="partyName" defaultValue="" >
 
                                                 <MenuItem value="all">All</MenuItem>
-                                                {vendorFullList.map((item) => (
-                                                <MenuItem value={item.fullName}>{item.fullName}</MenuItem>
-                                            ))}
+                                                {filteredData.map((item) => (
+                                                    <MenuItem value={item._id}>{item.dcPartyName}</MenuItem>
+                                                ))}
 
 
                                             </TextField>
@@ -473,7 +458,7 @@ const GrnList = () => {
                                 >
                                     <div className='col d-flex mb-1'>
                                     <div className=' me-2'>
-                                        <Button component={Link} onClick={() => { setGrnOpen(true) }} type='button' variant="contained" color="warning">
+                                        <Button component={Link} onClick={() => { setOnSiteGrnOpen(true) }} type='button' variant="contained" color="warning">
                                             <AddIcon /> Add Item
                                         </Button>
                                         </div>
@@ -513,16 +498,18 @@ const GrnList = () => {
                                     </div>
                                 </Paper>
 
-                                <GrnListContent.Provider
-                                    value={{ grnEditOpen, setGrnEditOpen, selectedRows,grnListFetchData}}
+                                <OnSiteListContent.Provider
+                                    value={{ onSiteGrnOpen, setOnSiteGrnOpen, selectedRows,grnListFetchData}}
                                 >
-                                    <GrnEdit />
-                                </GrnListContent.Provider>
-                                <GrnListContent.Provider
-                                    value={{ grnOpen, setGrnOpen, selectedRows,grnListFetchData }}
+                                    <OnSiteGrn />
+                                </OnSiteListContent.Provider>
+                                
+                                <OnSiteListContent.Provider
+                                    value={{ onSiteEditOpen, setOnSiteEditOpen, selectedRows,grnListFetchData}}
                                 >
-                                    <GrnAdd />
-                                </GrnListContent.Provider>
+                                    <OnSiteEditGrn />
+                                </OnSiteListContent.Provider>
+                                
                             </div>
                         </div>
 
@@ -550,4 +537,4 @@ const GrnList = () => {
     )
 }
 
-export default GrnList
+export default OnSiteList
