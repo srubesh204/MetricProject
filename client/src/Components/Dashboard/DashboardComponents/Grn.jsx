@@ -207,10 +207,7 @@ const Grn = () => {
 
     const handleGrnItemAdd = (e) => {
         const { name, value } = e.target;
-        if (name === "grnList") {
-            getItemByName(value)
-            setItemAddDetails((prev) => ({ ...prev, [name]: value }))
-        }
+       
         if (name === "grnImteNo") {
             setSelectedGrnItem(value)
             setItemAddDetails((prev) => ({ ...prev, [name]: value }))
@@ -253,47 +250,7 @@ const Grn = () => {
             console.log(err);
         }
     };
-   {/* const submitGrnForm = async (e) => {
-        e.preventDefault();
-        try {
-            const response = await axios.post(
-                `${process.env.REACT_APP_PORT}/itemGRN/createItemGRN`, grnData
-            );
-
-
-            setSnackBarOpen(true)
-
-            console.log(" GRN Created Successfully")
-            setErrorHandler({ status: response.data.status, message: response.data.message, code: "success" })
-
-            setTimeout(() => setGrnOpen(false), 3000)
-
-        } catch (err) {
-
-            setSnackBarOpen(true)
-
-
-
-
-            if (err.response && err.response.status === 400) {
-                // Handle validation errors
-                const errorData400 = err.response.data.errors;
-                const errorMessages400 = Object.values(errorData400).join(', ');
-                console.log(errorMessages400)
-                setErrorHandler({ status: 0, message: errorMessages400, code: "error" });
-            } else if (err.response && err.response.status === 500) {
-                // Handle other errors
-                const errorData500 = err.response.data.error;
-                const errorMessages500 = Object.values(errorData500).join(', ');
-                console.log(errorMessages500)
-                setErrorHandler({ status: 0, message: errorMessages500, code: "error" });
-            } else {
-                console.log(err.response.data.error)
-                setErrorHandler({ status: 0, message: "An error occurred", code: "error" });
-            }
-        }
-    };*/}
-
+  
 
 
 
@@ -531,15 +488,7 @@ const Grn = () => {
                                 >
                                     <div className='row g-2 mb-2'>
                                         <div className='col d-flex'>
-                                            <div className='col me-2'>
-                                                <TextField size='small' fullWidth variant='outlined' defaultValue="all" value={itemAddDetails.grnList} id="grnListId" onChange={handleGrnItemAdd} select label="Item List" name='grnList'>
-                                                    <MenuItem value="all">All</MenuItem>
-                                                    {itemMasterDistNames.map((item, index) => (
-                                                        <MenuItem key={index} value={item}>{item}</MenuItem>
-                                                    ))}
-
-                                                </TextField>
-                                            </div>
+                                            
                                             <div className='col'>
                                                 <TextField label="Imte No"
                                                     id="grnImteNoId"
@@ -551,8 +500,7 @@ const Grn = () => {
                                                     onChange={handleGrnItemAdd}
                                                     value={itemAddDetails.grnImteNo}
                                                     name="grnImteNo" >
-                                                    <MenuItem value="all">All</MenuItem>
-                                                    {itemImtes.map((item, index) => (
+                                                    {selectedRows.map((item, index) => (
                                                         <MenuItem key={index} value={item}>{item.itemIMTENo}</MenuItem>
                                                     ))}
 

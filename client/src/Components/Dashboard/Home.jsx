@@ -1,4 +1,4 @@
-import { Autocomplete, Badge, Button, Chip, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, FormControl, FormControlLabel, Grid, InputLabel, List, ListSubheader, MenuItem, Paper, Select, Stack, Switch, TextField, ToggleButton, ToggleButtonGroup, Typography } from '@mui/material';
+import { Alert, Autocomplete, Badge, Button, Chip, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, FormControl, FormControlLabel, Grid, InputLabel, List, ListSubheader, MenuItem, Paper, Select, Snackbar, Stack, Switch, TextField, ToggleButton, ToggleButtonGroup, Typography } from '@mui/material';
 import Box from '@mui/material/Box';
 import { Link } from 'react-router-dom'
 import { DataGrid, GridToolbar } from '@mui/x-data-grid';
@@ -231,6 +231,7 @@ const Home = () => {
 
         return updatedStatus;
       });
+
       setCalStatus([
         { value: pastDue.length, label: 'Past Due' },
         { value: CurrentDue.length, label: 'Today' },
@@ -728,22 +729,24 @@ const Home = () => {
   const updateItemData = async (e) => {
     e.preventDefault();
     try {
-
-      const itemData = selectedRows.map((item) => ({ _id: item._id, itemIMTENo: item.itemIMTENo }))
-      const depData = { itemIds: itemData, itemCurrentLocation: selectedDepartment }
-      if (depData) {
-        const response = await axios.put(
-          `${process.env.REACT_APP_PORT}/itemAdd/changeDepartmentUpdate`, depData
-        );
-
-        setSnackBarOpen(true)
-
-        console.log("Item Update Successfully")
-        setErrorHandler({ status: response.data.status, message: response.data.message, code: "success" })
-        setSelectedRows([])
-        itemFetch();
-
+      if(selectedRows.length !== 0){
+        const itemData = selectedRows.map((item) => ({ _id: item._id, itemIMTENo: item.itemIMTENo }))
+        const depData = { itemIds: itemData, itemCurrentLocation: selectedDepartment }
+        if (depData) {
+          const response = await axios.put(
+            `${process.env.REACT_APP_PORT}/itemAdd/changeDepartmentUpdate`, depData
+          );
+  
+          setSnackBarOpen(true)
+  
+          
+          setErrorHandler({ status: response.data.status, message: "Department Changed Successfully", code: "success" })
+          setSelectedRows([])
+          itemFetch();
+  
+        }
       }
+     
 
 
 
@@ -1236,7 +1239,7 @@ const Home = () => {
             </HomeContent.Provider>
 
             <HomeContent.Provider
-              value={{ dcOpen, setDcOpen, selectedRows, itemFetch }}
+              value={{ dcOpen, setDcOpen, selectedRows, itemFetch, defaultDep }}
             >
               <Dc />
             </HomeContent.Provider>
@@ -1248,6 +1251,15 @@ const Home = () => {
 
 
           </div>
+
+          <Snackbar anchorOrigin={{ vertical: "top", horizontal: "right" }} open={snackBarOpen} autoHideDuration={3000}
+                        onClose={() => setTimeout(() => {
+                            setSnackBarOpen(false)
+                        }, 3000)}>
+                        <Alert onClose={() => setSnackBarOpen(false)} variant='filled' severity="success" sx={{ width: '25%' }}>
+                            {errorhandler.message}
+                        </Alert>
+                    </Snackbar>
         </div>
 
 
