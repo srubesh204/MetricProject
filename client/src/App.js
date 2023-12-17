@@ -76,6 +76,9 @@ function App() {
         <Route path="/onSiteGrn" element={<OnSiteGrn/>} />
         <Route path="/onSiteList" element={<OnSiteList/>} />
         <Route path="/onSiteEditGrn" element={<OnSiteEditGrn/>} />
+        <Route path="/onSiteEditGrn" element={<OnSiteEditGrn/>} />
+        
+
      
        
       </Routes>

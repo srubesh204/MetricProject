@@ -9,7 +9,7 @@ import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { GrnListContent } from './GrnList';
 
-import { Add, Close, } from '@mui/icons-material';
+import { Add, Close, Delete } from '@mui/icons-material';
 
 const GrnAdd = () => {
     const grnDatas = useContext(GrnListContent)
@@ -47,17 +47,117 @@ const GrnAdd = () => {
         grnNo: "",
         grnDate: dayjs().format("YYYY-MM-DD"),
         grnCommonRemarks: "",
-        grnCalDate: dayjs().format("YYYY-MM-DD"),
-        grnDueDate: "",
-        grnCertificateStatus: "",
-        grnCertificateNo: "",
-        grnUncertainity: "",
-        grnPartyItems: []
 
-
-
-
+        grnPartyItems: [{
+            grnItemId: "",
+            grnItemMasterRef: "",
+            grnItemAddMasterName: "",
+            grnItemIMTENo: "",
+            grnItemType: "",
+            grnItemRangeSize: "",
+            grnItemRangeSizeUnit: "",
+            grnItemMFRNo: "",
+            grnItemLC: "",
+            grnItemLCUnit: "",
+            grnItemMake: "",
+            grnItemModelNo: "",
+            grnItemStatus: "",
+            grnItemReceiptDate: "",
+            grnItemDepartment: "",
+            grnItemArea: "",
+            grnItemPlaceOfUsage: "",
+            grnItemCalFreInMonths: "",
+            grnItemCalAlertDays: "",
+            grnItemCalibrationSource: "",
+            grnItemCalibrationDoneAt: "",
+            grnItemCalibratedAt: "",
+            grnItemOBType: "",
+            grnAcCriteria: [
+                {
+                    grnAcParameter: "",
+                    grnAcNominalSize: "",
+                    grnAcNominalSizeUnit: "",
+                    grnAcMinPS: "",
+                    grnAcMaxPS: "",
+                    grnAcWearLimitPS: "",
+                    grnAcMinOB: "",
+                    grnAcMaxOB: "",
+                    grnAcAverageOB: "",
+                    grnAcOBError: "",
+                    grnAcMinPSError: "",
+                    grnAcMaxPSError: "",
+                    rowStatus: ""
+                },
+            ],
+            grnItemUncertainity: "",
+            grnItemCalDate: dayjs().format("YYYY-MM-DD"),
+            grnItemDueDate: "",
+            grnItemCertificateStatus: "",
+            grnItemCertificateNo: "",
+            grnItemCertificate: "",
+            grnUncertainity: "",
+        }
+        ]
     })
+
+
+
+    const setCalData = () => {
+        if (selectedRows.length === 1) {
+
+
+            setGrnData((prev) => (
+                {
+                    ...prev,
+                    grnItemId: selectedRows[0]._id,
+                    grnItemIMTENo: selectedRows[0].itemIMTENo,
+                    grnItemAddMasterName: selectedRows[0].itemAddMasterName,
+                    grnItemType: selectedRows[0].itemType,
+                    grnItemRangeSize: selectedRows[0].itemRangeSize,
+                    grnItemMFRNo: selectedRows[0].itemMFRNo,
+                    grnItemLC: selectedRows[0].itemLC,
+                    grnItemMake: selectedRows[0].itemMake,
+                    grnItemCalFreInMonths: selectedRows[0].itemCalFreInMonths,
+                    grnItemUncertainity: selectedRows[0].selectedItemMaster[0].uncertainty,
+
+                    grnItemOBType: selectedRows[0].itemOBType,
+
+                    // calCalibratedBy: selectedRows[0],
+                    // calApprovedBy: selectedRows[0],
+                    grnAcCriteria:
+
+                        selectedRows[0].acceptanceCriteria.map((item) => (
+                            {
+                                grnAcParameter: item.acParameter,
+                                grnAcNominalSize: item.acNominalSize,
+                                grnAcNominalSizeUnit: item.acNominalSizeUnit,
+                                grnAcMinPS: item.acMinPS,
+                                grnAcMaxPS: item.acMaxPS,
+                                grnAcWearLimitPS: item.acWearLimitPS,
+
+                                grnAcMinOB: item.acMinOB,
+                                grnAcMaxOB: item.acMaxOB,
+                                grnAcAverageOB: item.acAverageOB,
+                                grnAcOBError: item.acOBError,
+                                grnAcMinPSError: item.acMinPSError,
+                                grnAcMaxPSError: item.acMaxPSError,
+                                rowStatus: ""
+
+                            }
+                        )),
+
+                    calMasterUsed: selectedRows[0].itemItemMasterIMTENo
+                }
+
+            ))
+        }
+
+    };
+
+    useEffect(() => {
+        setCalData();
+    }, [selectedRows])
+
 
 
 
@@ -250,6 +350,45 @@ const GrnAdd = () => {
         }
     };
 
+
+
+    const [calibrationDatas, setCalibrationDatas] = useState([])
+    const getAllCalibrationData = async () => {
+        try {
+            const response = await axios.get(
+                `${process.env.REACT_APP_PORT}/itemGRN/getAllItemGRN`
+            );
+            console.log(response.data.result)
+            try {
+                const imteNoData = response.data.result.filter((item) => item.grnItemIMTENo === selectedRows[0].itemIMTENo)
+                console.log(imteNoData)
+                setCalibrationDatas(response.data.result)
+                const maxDateObject = imteNoData.reduce((prev, current) => {
+
+
+
+                });
+
+            } catch {
+
+            }
+
+            const lastOneResult = Math.max(...response.data.result.map((item) => item.calCertificateNo))
+            console.log(lastOneResult)
+
+        } catch (err) {
+            console.log(err);
+        }
+    };
+    useEffect(() => {
+        getAllCalibrationData();
+    }, [selectedRows])
+
+
+
+
+
+
     const handleGrnItemAdd = (e) => {
         const { name, value } = e.target;
         if (name === "grnList") {
@@ -258,6 +397,11 @@ const GrnAdd = () => {
         }
         if (name === "grnImteNo") {
             setItemAddDetails((prev) => ({ ...prev, [name]: value }))
+
+
+
+
+
             const getItemByName = async (value) => {
                 try {
                     const response = await axios.get(
@@ -282,8 +426,8 @@ const GrnAdd = () => {
             setGrnData((prev) => (
                 {
                     ...prev, grnPartyItems: selectedGrnItem
-                        
-                    
+
+
 
                 }
 
@@ -300,18 +444,8 @@ const GrnAdd = () => {
         })
     }, [grnData.grnPartyItems])
 
-    const changeACValue = (index, name, value) => {
 
-        setGrnData((prevGrnData) => {
-            const updateAC = [...prevGrnData.grnPartyItems]
-            updateAC[index] = {
-                ...updateAC[index], [name]: value,
-            };
-            return {
-                ...prevGrnData, grnPartyItems: updateAC,
-            };
-        })
-    };
+
 
 
     const [confirmSubmit, setConfirmSubmit] = useState(false)
@@ -336,6 +470,309 @@ const GrnAdd = () => {
             console.log(err);
         }
     };
+
+    const changeACValue = (index, name, value) => {
+
+        setGrnData((prev) => {
+            const updateAC = [...prev.grnPartyItems.acceptanceCriteria]
+            updateAC[index] = {
+                ...updateAC[index], [name]: value,
+            };
+            return {
+                ...prev.grnPartyItems, acceptanceCriteria: updateAC,
+            };
+        })
+
+        if (grnData.grnPartyItems === "attribute") {
+            if (name === "acAverageOB") {
+                setGrnData(prev => {
+                    const updatedData = prev.acceptanceCriteria.map((item, idx) => {
+                        if (idx === index) {
+                            let status = ""
+                            if (item.acWearLimitPS !== "") {
+
+                                if (item.acWearLimitPS <= item.acMinPS) {
+                                    const isAverageInRange = parseFloat(item.acAverageOB) >= parseFloat(item.acWearLimitPS) &&
+                                        parseFloat(item.acAverageOB) <= parseFloat(item.acMaxPS);
+
+                                    if (item.acAverageOB === "") {
+                                        status = ""
+                                    } else {
+                                        if (isAverageInRange) {
+                                            status = "ok"
+                                        } else {
+                                            status = "notOk"
+                                        }
+                                    }
+                                }
+
+                                if (item.acWearLimitPS >= item.acMaxPS) {
+                                    const isAverageInRange = parseFloat(item.acAverageOB) <= parseFloat(item.acWearLimitPS) &&
+                                        parseFloat(item.acAverageOB) >= parseFloat(item.acMinPS);
+
+                                    if (item.acAverageOB === "") {
+                                        status = ""
+                                    } else {
+                                        if (isAverageInRange) {
+                                            status = "ok"
+                                        } else {
+                                            status = "notOk"
+                                        }
+                                    }
+
+                                }
+
+                                return {
+                                    ...item,
+                                    rowStatus: status,
+                                };
+
+                            } else {
+                                const isAverageInRange = parseFloat(item.acAverageOB) >= parseFloat(item.acMinPS) &&
+                                    parseFloat(item.acAverageOB) <= parseFloat(item.acMaxPS);
+
+                                if (item.acAverageOB === "") {
+                                    status = ""
+                                } else {
+                                    if (isAverageInRange) {
+                                        status = "ok"
+                                    } else {
+                                        status = "notOk"
+                                    }
+                                }
+
+                                return {
+                                    ...item,
+                                    rowStatus: status,
+                                };
+                            }
+
+
+
+
+                        }
+                        return item;
+                    });
+                    return {
+                        ...prev,
+                        acceptanceCriteria: updatedData,
+                    };
+                });
+            }
+
+            if (name === "acMinOB" || name === "acMaxOB") {
+                setGrnData(prev => {
+                    const updatedData = prev.acceptanceCriteria.map((item, idx) => {
+                        if (idx === index) {
+                            let status = ""
+                            if (item.acWearLimitPS !== "") {
+
+                                if (item.acWearLimitPS <= item.acMinPS) {
+
+
+                                    const isMinInRange = parseFloat(item.acMinOB) >= parseFloat(item.acWearLimitPS) &&
+                                        parseFloat(item.acMinOB) <= parseFloat(item.acMaxPS);
+                                    const isMaxInRange = parseFloat(item.acMaxOB) >= parseFloat(item.acWearLimitPS) &&
+                                        parseFloat(item.acMaxOB) <= parseFloat(item.acMinPS);
+
+
+
+                                    if (isMinInRange && isMaxInRange) {
+                                        status = "ok"
+                                    } else {
+                                        status = "notOk"
+                                    }
+
+                                }
+
+                                if (item.acWearLimitPS >= item.acMaxPS) {
+                                    const isMinInRange = parseFloat(item.acMinOB) <= parseFloat(item.acWearLimitPS) &&
+                                        parseFloat(item.acMinOB) >= parseFloat(item.acMinPS);
+                                    const isMaxInRange = parseFloat(item.acMaxOB) <= parseFloat(item.acWearLimitPS) &&
+                                        parseFloat(item.acMaxOB) >= parseFloat(item.acMinPS);
+
+
+
+                                    if (isMinInRange && isMaxInRange) {
+                                        status = "ok"
+                                    } else {
+                                        status = "notOk"
+                                    }
+
+                                }
+                                const isMinInRange = parseFloat(item.acMinOB) >= parseFloat(item.acMinPS) &&
+                                    parseFloat(item.acMinOB) <= parseFloat(item.acMaxPS);
+                                const isMaxInRange = parseFloat(item.acMaxOB) >= parseFloat(item.acMinPS) &&
+                                    parseFloat(item.acMaxOB) <= parseFloat(item.acMaxPS);
+
+                                return {
+                                    ...item,
+                                    rowStatus: status,
+                                };
+
+                            } else {
+                                const isMinInRange = parseFloat(item.acMinOB) >= parseFloat(item.acMinPS) &&
+                                    parseFloat(item.acMinOB) <= parseFloat(item.acMaxPS);
+                                const isMaxInRange = parseFloat(item.acMaxOB) >= parseFloat(item.acMinPS) &&
+                                    parseFloat(item.acMaxOB) <= parseFloat(item.acMaxPS);
+
+
+
+
+                                if (item.acMaxOB === "" && item.acMinOB === "") {
+                                    status = "";
+                                } else if (item.acMaxOB === "") {
+                                    status = (isMinInRange) ? "ok" : "notOk";
+                                } else {
+                                    status = (isMinInRange && isMaxInRange) ? "ok" : "notOk";
+                                }
+                                return {
+                                    ...item,
+                                    rowStatus: status,
+                                };
+                            }
+
+
+
+
+                        }
+                        return item;
+                    });
+                    return {
+                        ...prev,
+                        acceptanceCriteria: updatedData,
+                    };
+                });
+            }
+        }
+
+
+
+
+
+
+
+        // if (grnData.grnPartyItems.itemType === "referenceStandard") {
+        //     if (name === "acAverageOB") {
+        //         setGrnData(prev => {
+        //             const updatedData = prev.grnDate.map((item, idx) => {
+        //                 if (idx === index) {
+        //                     let status = ""
+
+        //                     const isAverageInRange = parseFloat(item.acAverageOB) >= parseFloat(item.acMinPS) &&
+        //                         parseFloat(item.acAverageOB) <= parseFloat(item.acMaxPS);
+
+        //                     if (item.acAverageOB === "") {
+        //                         status = ""
+        //                     } else {
+        //                         if (isAverageInRange) {
+        //                             status = "ok"
+        //                         } else {
+        //                             status = "notOk"
+        //                         }
+        //                     }
+
+        //                     return {
+        //                         ...item,
+        //                         rowStatus: status,
+        //                     };
+        //                 }
+        //                 return item;
+        //             });
+        //             return {
+        //                 ...prev,
+        //                 grnPartyItems: updatedData,
+        //             };
+        //         })
+        //     }
+
+        //     if (name === "acMinOB" || name === "acMaxOB") {
+        //         setGrnData(prev => {
+        //             const updatedData = prev.acceptanceCriteria.map((item, idx) => {
+        //                 if (idx === index) {
+
+        //                     const isMinInRange = parseFloat(item.acMinOB) >= parseFloat(item.acMinPS) &&
+        //                         parseFloat(item.acMinOB) <= parseFloat(item.acMaxPS);
+        //                     const isMaxInRange = parseFloat(item.acMaxOB) >= parseFloat(item.acMinPS) &&
+        //                         parseFloat(item.acMaxOB) <= parseFloat(item.acMaxPS);
+
+
+        //                     let status = ""
+
+        //                     if (item.acMaxOB === "" && item.acMinOB === "") {
+        //                         status = "";
+        //                     } else if (item.acMaxOB === "") {
+        //                         status = (isMinInRange) ? "ok" : "notOk";
+        //                     } else {
+        //                         status = (isMinInRange && isMaxInRange) ? "ok" : "notOk";
+        //                     }
+
+        //                     return {
+        //                         ...item,
+        //                         rowStatus: status,
+        //                     };
+        //                 }
+        //                 return item;
+        //             });
+        //             return {
+        //                 ...prev,
+        //                 acceptanceCriteria: updatedData,
+        //             };
+        //         });
+        //     }
+
+        // }
+
+
+
+
+        // //
+
+
+        if (grnData.grnPartyItems && grnData.grnPartyItems.itemType === "variable") {
+
+            if (name === "acAverageOB") {
+                setGrnData(prev => {
+                    const updatedData = prev.acceptanceCriteria.map((item, idx) => {
+                        if (idx === index) {
+                            let status = ""
+
+                            const isAverageInRange = parseFloat(item.acAverageOB) >= parseFloat(item.acMinPSError) &&
+                                parseFloat(item.acAverageOB) <= parseFloat(item.acMaxPSError);
+
+                            if (item.acAverageOB === "") {
+                                status = ""
+                            } else {
+                                if (isAverageInRange) {
+                                    status = "ok"
+                                } else {
+                                    status = "notOk"
+                                }
+                            }
+                            return {
+                                ...item,
+                                rowStatus: status,
+                            };
+                        }
+                        return item;
+                    });
+                    return {
+                        ...prev,
+                        acceptanceCriteria: updatedData,
+                    };
+                })
+            }
+
+        }
+
+
+
+
+
+
+    };
+
+
 
 
 
@@ -605,36 +1042,19 @@ const GrnAdd = () => {
 
                                                 </TextField>
                                             </div>
+                                            
                                         </div>
                                         <div className=' col d-flex justify-content-end'>
-                                            <div className='me-2 '>
-                                                <Button startIcon={<Add />} onClick={() => grnItemAdd()} size='small' sx={{ minWidth: "130px" }} variant='contained'>Add Item</Button>
-                                            </div>
+                                            
 
                                         </div>
+
 
                                     </div>
 
                                     <div className='row g-2 '>
                                         <div className='col d-flex'>
-                                            <div className="col-2 me-2">
-
-                                                <DatePicker
-                                                    fullWidth
-                                                    id="grnCalDateId"
-                                                    name="grnCalDate"
-                                                    // onChange={handleGrnChange}
-                                                    value={dayjs(grnData.grnCalDate)}
-                                                    label="Cal Date"
-                                                    //sx={{ width: "100%" }}
-                                                    slotProps={{ textField: { size: 'small' } }}
-                                                    onChange={(newValue) =>
-                                                        setGrnData((prev) => ({ ...prev, grnCalDate: newValue.format("YYYY-MM-DD") }))
-                                                    }
-                                                    format="DD-MM-YYYY"
-                                                />
-
-                                            </div>
+                                           
                                             <div className="col-2 me-2">
 
                                                 <DatePicker
@@ -642,12 +1062,12 @@ const GrnAdd = () => {
                                                     id="grnDueDateId"
                                                     name="grnDueDate"
                                                     // onChange={handleGrnChange}
-                                                    value={dayjs(grnData.grnDueDate)}
+                                                    value={dayjs(grnData.grnItemDueDate)}
                                                     label="Next Cal Date"
                                                     // sx={{ width: "100%" }}
                                                     slotProps={{ textField: { size: 'small' } }}
                                                     onChange={(newValue) =>
-                                                        setGrnData((prev) => ({ ...prev, grnDueDate: newValue.format("YYYY-MM-DD") }))
+                                                        setGrnData((prev) => ({ ...prev, grnItemDueDate: newValue.format("YYYY-MM-DD") }))
                                                     }
                                                     format="DD-MM-YYYY"
 
@@ -696,21 +1116,27 @@ const GrnAdd = () => {
                                         </div>
 
                                     </div>
-                                </Paper>
-                                <Paper
-                                    sx={{
-                                        p: 2,
-                                        display: 'flex',
-                                        flexDirection: 'column',
-                                        mb: 1,
 
-                                    }}
-                                    elevation={12}
-                                >
+
                                     <div className='row'>
                                         <h6 className='text-center'>Calibration Data</h6>
+
+                                        <div className=' col d-flex justify-content-end'>
+                                            <div className=' col-2 me-2 '>
+                                                <TextField size='small' fullWidth variant='outlined' id="certificateStatusId" select label="Certificate Status" onChange={handleGrnChange} name='certificateStatus'>
+                                                    <MenuItem value="received">Received</MenuItem>
+                                                    <MenuItem value="notreceived">Not Received</MenuItem>
+
+                                                </TextField>
+                                            </div>
+
+                                        </div>
+
+
+
+
                                         <table className='table table-sm table-bordered table-responsive text-center align-middle'>
-                                            {grnData.grnPartyItems.itemType === "attribute" &&
+                                            {grnData.grnPartyItems.grnItemType === "attribute" &&
 
                                                 <tbody >
                                                     <tr>
@@ -719,16 +1145,16 @@ const GrnAdd = () => {
                                                         <th width="10%" rowSpan={2}>Range/Size</th>
                                                         <th width="10%" rowSpan={2}>Unit</th>
                                                         <th colSpan={3} width="30%">Permissible Size</th>
-                                                        {grnData.calBeforeData === "yes" && <th width="5%" rowSpan={2}>Before Calibration</th>}
 
-                                                        <th width="20%" colSpan={grnData.calOBType === "average" ? 1 : 2}>Observed Size</th>
+
+                                                        <th width="20%" colSpan={grnData.grnPartyItems.grnItemOBType === "average" ? 1 : 2}>Observed Size</th>
                                                         <th width="10%" rowSpan={2}>Status</th>
                                                     </tr>
                                                     <tr>
                                                         <th width="6%">Min</th>
                                                         <th width="6%">Max</th>
                                                         <th width="10%">Wear Limit</th>
-                                                        {grnData.calOBType === "average" ?
+                                                        {grnData.grnPartyItems.grnItemOBType === "average" ?
                                                             <React.Fragment>
                                                                 <th>Average</th>
                                                             </React.Fragment> :
@@ -739,7 +1165,7 @@ const GrnAdd = () => {
 
                                                     </tr>
                                                     {/* {calibrationData.calcalibrationData.map((item)=> ()} */}
-                                                    {grnData.grnPartyItems.acceptanceCriteria.map((item, index) => {
+                                                    {grnData.grnPartyItems.grnAcCriteria.map((item, index) => {
                                                         let color = ""
                                                         if (item.rowStatus === "ok") {
                                                             color = "#4cbb17"
@@ -756,9 +1182,9 @@ const GrnAdd = () => {
                                                         let maxColor = "";
                                                         let averageColor = "";
                                                         let size = "";
-                                                        if (item.calWearLimitPS !== "") {
+                                                        if (item.acWearLimitPS !== "") {
 
-                                                            if (item.calWearLimitPS < item.calMinPS) {
+                                                            if (item.acWearLimitPS < item.acMinPS) {
                                                                 size = "OD"
                                                             } else {
                                                                 size = "ID"
@@ -766,28 +1192,28 @@ const GrnAdd = () => {
 
                                                             if (size === "OD") {
                                                                 //min OD condition
-                                                                if (item.calMinOB >= item.calWearLimitPS && item.calMinOB < item.calMinPS) {
+                                                                if (item.acMinOB >= item.acWearLimitPS && item.acMinOB < item.acMinPS) {
                                                                     minColor = "orange"
                                                                 }
-                                                                else if (item.calMinOB >= item.calMinPS && item.calMinOB <= item.calMaxPS) {
+                                                                else if (item.acMinOB >= item.acMinPS && item.acMinOB <= item.acMaxPS) {
                                                                     minColor = "green"
                                                                 } else {
                                                                     minColor = "red"
                                                                 }
 
-                                                                if (item.calMaxOB >= item.calWearLimitPS && item.calMaxOB < item.calMinPS) {
+                                                                if (item.acMaxOB >= item.acWearLimitPS && item.acMaxOB < item.acMinPS) {
                                                                     maxColor = "orange"
                                                                 }
-                                                                else if (item.calMaxOB >= item.calMinPS && item.calMaxOB <= item.calMaxPS) {
+                                                                else if (item.acMaxOB >= item.acMinPS && item.acMaxOB <= item.acMaxPS) {
                                                                     maxColor = "green"
                                                                 } else {
                                                                     maxColor = "red"
                                                                 }
 
-                                                                if (item.calAverageOB >= item.calWearLimitPS && item.calAverageOB < item.calMinPS) {
+                                                                if (item.acAverageOB >= item.acWearLimitPS && item.acAverageOB < item.acMinPS) {
                                                                     averageColor = "orange"
                                                                 }
-                                                                else if (item.calAverageOB >= item.calMinPS && item.calAverageOB <= item.calMaxPS) {
+                                                                else if (item.acAverageOB >= item.acMinPS && item.acAverageOB <= item.acMaxPS) {
                                                                     averageColor = "green"
                                                                 } else {
                                                                     averageColor = "red"
@@ -798,28 +1224,28 @@ const GrnAdd = () => {
 
                                                             if (size === "ID") {
                                                                 //min Id condition
-                                                                if (item.calMinOB <= item.calWearLimitPS && item.calMinOB > item.calMaxPS) {
+                                                                if (item.acMinOB <= item.acWearLimitPS && item.acMinOB > item.acMaxPS) {
                                                                     minColor = "orange"
                                                                 }
-                                                                else if (item.calMinOB >= item.calMinPS && item.calMinOB <= item.calMaxPS) {
+                                                                else if (item.acMinOB >= item.acMinPS && item.acMinOB <= item.acMaxPS) {
                                                                     minColor = "green"
                                                                 } else {
                                                                     minColor = "red"
                                                                 }
                                                                 //max ID condition
-                                                                if (item.calMaxOB <= item.calWearLimitPS && item.calMaxOB > item.calMaxPS) {
+                                                                if (item.acMaxOB <= item.acWearLimitPS && item.acMaxOB > item.acMaxPS) {
                                                                     maxColor = "orange"
                                                                 }
-                                                                else if (item.calMaxOB >= item.calMinPS && item.calMaxOB <= item.calMaxPS) {
+                                                                else if (item.acMaxOB >= item.acMinPS && item.acMaxOB <= item.acMaxPS) {
                                                                     maxColor = "green"
                                                                 } else {
                                                                     maxColor = "red"
                                                                 }
 
-                                                                if (item.calAverageOB <= item.calWearLimitPS && item.calAverageOB > item.calMaxPS) {
+                                                                if (item.acAverageOB <= item.acWearLimitPS && item.acAverageOB > item.acMaxPS) {
                                                                     averageColor = "orange"
                                                                 }
-                                                                else if (item.calAverageOB >= item.calMinPS && item.calAverageOB <= item.calMaxPS) {
+                                                                else if (item.acAverageOB >= item.acMinPS && item.acAverageOB <= item.acMaxPS) {
                                                                     averageColor = "green"
                                                                 } else {
                                                                     averageColor = "red"
@@ -833,7 +1259,7 @@ const GrnAdd = () => {
                                                         } else {
 
 
-                                                            if (parseFloat(item.calMinOB) >= parseFloat(item.calMinPS) && parseFloat(item.calMinOB) <= parseFloat(item.calMaxPS)) {
+                                                            if (parseFloat(item.acMinOB) >= parseFloat(item.acMinPS) && parseFloat(item.acMinOB) <= parseFloat(item.acMaxPS)) {
                                                                 minColor = "#4cbb17";
 
                                                             } else {
@@ -842,7 +1268,7 @@ const GrnAdd = () => {
                                                             }
 
 
-                                                            if (parseFloat(item.calMaxOB) >= parseFloat(item.calMinPS) && parseFloat(item.calMaxOB) <= parseFloat(item.calMaxPS)) {
+                                                            if (parseFloat(item.acMaxOB) >= parseFloat(item.acMinPS) && parseFloat(item.acMaxOB) <= parseFloat(item.acMaxPS)) {
                                                                 maxColor = "#4cbb17"
 
                                                             } else {
@@ -850,7 +1276,7 @@ const GrnAdd = () => {
 
                                                             }
 
-                                                            if (parseFloat(item.calAverageOB) >= parseFloat(item.calMinPS) && parseFloat(item.calAverageOB) <= parseFloat(item.calMaxPS)) {
+                                                            if (parseFloat(item.acAverageOB) >= parseFloat(item.acMinPS) && parseFloat(item.acAverageOB) <= parseFloat(item.acMaxPS)) {
                                                                 averageColor = "#4cbb17";
 
                                                             } else {
@@ -865,24 +1291,24 @@ const GrnAdd = () => {
 
                                                         return (
                                                             <tr key={index}>
-                                                                <td>{item.calParameter}</td>
-                                                                <td>{item.calNominalSize}</td>
-                                                                <td>{item.calNominalSizeUnit}</td>
-                                                                <td>{item.calMinPS}</td>
-                                                                <td>{item.calMaxPS}</td>
-                                                                <td>{item.calWearLimitPS}</td>
+                                                                <td>{item.grnAcParameter}</td>
+                                                                <td>{item.grnAcNominalSize}</td>
+                                                                <td>{item.grnAcNominalSizeUnit}</td>
+                                                                <td>{item.grnAcMinPS}</td>
+                                                                <td>{item.grnAcMaxPS}</td>
+                                                                <td>{item.grnAcWearLimitPS}</td>
 
                                                                 {grnData.calBeforeData === "yes" && <td><input className='form-control form-control-sm' onChange={(e) => changeACValue(index, e.target.name, e.target.value)} name='calBeforeCalibration' /></td>}
-                                                                {grnData.calOBType === "average" &&
-                                                                    <td><input className='form-control form-control-sm' name='calAverageOB' style={{ color: averageColor, fontWeight: "bold" }} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} /></td>
+                                                                {grnData.grnPartyItems.grnItemOBType === "average" &&
+                                                                    <td><input className='form-control form-control-sm' name='acAverageOB' style={{ color: averageColor, fontWeight: "bold" }} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} /></td>
                                                                 }
-                                                                {grnData.calOBType === "minmax" &&
+                                                                {grnData.grnPartyItems.grnItemOBType === "minmax" &&
                                                                     <React.Fragment>
                                                                         <td>
-                                                                            <input className='form-control form-control-sm' style={{ color: minColor, fontWeight: "bold" }} name="calMinOB" onChange={(e) => changeACValue(index, e.target.name, e.target.value)} />
+                                                                            <input className='form-control form-control-sm' style={{ color: minColor, fontWeight: "bold" }} name="acMinOB" onChange={(e) => changeACValue(index, e.target.name, e.target.value)} />
                                                                         </td>
                                                                         <td>
-                                                                            <input className='form-control form-control-sm' style={{ color: maxColor, fontWeight: "bold" }} name="calMaxOB" onChange={(e) => changeACValue(index, e.target.name, e.target.value)} /></td>
+                                                                            <input className='form-control form-control-sm' style={{ color: maxColor, fontWeight: "bold" }} name="acMaxOB" onChange={(e) => changeACValue(index, e.target.name, e.target.value)} /></td>
                                                                     </React.Fragment>}
 
 
@@ -912,54 +1338,8 @@ const GrnAdd = () => {
                                                 </tbody>}
 
 
-                                            {grnData.grnPartyItems.itemType === "variable" &&
 
-                                                <tbody>
-                                                    <tr>
-                                                        <th width="20%" rowSpan={2}>Parameter</th>
-                                                        <th width="10%" rowSpan={2}>NominalSize</th>
-                                                        <th width="10%" rowSpan={2}>Unit</th>
-                                                        <th colSpan={3} width="30%">Permissible Erro</th>
-                                                        <th width="20%" colSpan={2}>Observed Error</th>
-                                                        <th width="10%" rowSpan={2}>Status</th>
-                                                    </tr>
-                                                    <tr>
-                                                        <td><input type="text" className='form-control form-control-sm' id="parameterId" name="parameter" /></td>
-                                                        <td><input type="text" className='form-control form-control-sm' id="rangeSizeId" name="rangeSize" /></td>
-                                                        <td><input type="text" className='form-control form-control-sm' id="unitId" name="unit" /></td>
-                                                        <td><input type="text" className='form-control form-control-sm' id="minId" name="min" /></td>
-                                                        <td><input type="text" className='form-control form-control-sm' id="maxId" name="max" /></td>
-                                                        <td><input type="text" className='form-control form-control-sm' id="wearLimitId" name="wearLimit" /></td>
-                                                        <td><input type="text" className='form-control form-control-sm' id="observedSizeId" name="observedSize" /></td>
-                                                        <td><input type="text" className='form-control form-control-sm' id="statusId" name="status" /></td>
 
-                                                    </tr>
-                                                </tbody>}
-
-                                            {grnData.grnPartyItems.itemType === "referenceStandard" &&
-
-                                                <tbody>
-                                                    <tr>
-                                                        <th width="20%" rowSpan={2}>Parameter</th>
-                                                        <th width="10%" rowSpan={2}>Range/Size</th>
-                                                        <th width="10%" rowSpan={2}>Unit</th>
-                                                        <th colSpan={2} width="30%">Permissible Erro</th>
-                                                        <th width="20%" colSpan={2}>Observed Error</th>
-                                                        <th width="10%" rowSpan={2}>Status</th>
-                                                    </tr>
-                                                    <tr>
-                                                        <td><input type="text" className='form-control form-control-sm' id="parameterId" name="parameter" /></td>
-                                                        <td><input type="text" className='form-control form-control-sm' id="rangeSizeId" name="rangeSize" /></td>
-                                                        <td><input type="text" className='form-control form-control-sm' id="unitId" name="unit" /></td>
-                                                        <td><input type="text" className='form-control form-control-sm' id="minId" name="min" /></td>
-                                                        <td><input type="text" className='form-control form-control-sm' id="maxId" name="max" /></td>
-                                                        {/*<td><input type="text" className='form-control form-control-sm' id="observedSizeId" name="observedSize" /></td>*/}
-                                                        <td><input type="text" className='form-control form-control-sm' id="minId" name="min" /></td>
-                                                        <td><input type="text" className='form-control form-control-sm' id="maxId" name="max" /></td>
-                                                        <td><input type="text" className='form-control form-control-sm' id="statusId" name="status" /></td>
-
-                                                    </tr>
-                                                </tbody>}
 
 
 
@@ -971,6 +1351,9 @@ const GrnAdd = () => {
                                         </table>
 
                                     </div>
+
+
+
 
                                     <Dialog
                                         open={confirmSubmit}
@@ -1005,21 +1388,54 @@ const GrnAdd = () => {
 
 
                                     <div className='row'>
-                                        <div className=' col d-flex '>
 
 
-                                            <div className='col-4 me-2'>
-                                                <TextField size='small' fullWidth variant='outlined' id="calibrationStatus" select label="Calibration Status" name='calibrationStatus'>
-                                                    <MenuItem value="Active">Active</MenuItem>
-                                                    <MenuItem value="InActive">InActive</MenuItem>
 
-                                                </TextField>
+                                    </div>
+                                </Paper>
+
+                                <Paper elevation={12} sx={{ p: 2 }} className='col-md-12'>
+                                    <div className="row mb-2">
+
+                                        <div className='col-md'> <h5 className='text-start'>Master Used</h5></div>
+                                        <div className=' col d-flex justify-content-end'>
+                                            <div className='me-2 '>
+                                                <Button startIcon={<Add />} onClick={() => grnItemAdd()} size='small' sx={{ minWidth: "130px" }} variant='contained'>Add Item</Button>
                                             </div>
 
                                         </div>
 
-
                                     </div>
+
+                                    <table className='table table-bordered table-responsive text-center align-middle'>
+                                        <tbody>
+                                            <tr>
+                                                <th>Si No</th>
+                                                <th>IMTE No</th>
+                                                <th>Master Name</th>
+                                                <th>Range/Size</th>
+                                                <th>Cal Certificate No</th>
+                                                <th>Cal Date</th>
+                                                <th>Next Due</th>
+                                                <th>Calibrated At</th>
+                                                <th>Remove</th>
+                                            </tr>
+
+                                            {grnData.grnPartyItems.map((item, index) => {
+                                                <tr key={index}>
+                                                    <td>{index + 1}</td>
+                                                    <td>{item.grnItemIMTENo}</td>
+                                                    <td>{item.grnItemAddMasterName}</td>
+                                                    <td>{item.grnItemRangeSize}</td>
+
+                                                    <td>{item.grnItemCalDate}</td>
+                                                    <td>{item.grnItemDueDate}</td>
+                                                    <td>{item.grnItemCalibratedAt}</td>
+                                                    <td width="5%"><Delete color='error' /></td>
+                                                </tr>
+                                            })}
+                                        </tbody>
+                                    </table>
                                 </Paper>
 
 
