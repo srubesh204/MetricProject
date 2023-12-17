@@ -30,6 +30,8 @@ import DcEdit from './Components/dcList/DcEdit';
 import GrnEdit from './Components/grnList/GrnEdit';
 import GrnAdd from './Components/grnList/GrnAdd';
 import OnSiteGrn from './Components/onSiteGrn/OnSiteGrn';
+import OnSiteList from './Components/onSiteGrn/OnSiteList';
+import OnSiteEditGrn from './Components/onSiteGrn/OnSiteEditGrn';
 
 
 
@@ -72,6 +74,8 @@ function App() {
         <Route path="/grnEdit" element={<GrnEdit/>} />
         <Route path="/grnAdd" element={<GrnAdd/>} />
         <Route path="/onSiteGrn" element={<OnSiteGrn/>} />
+        <Route path="/onSiteList" element={<OnSiteList/>} />
+        <Route path="/onSiteEditGrn" element={<OnSiteEditGrn/>} />
      
        
       </Routes>
