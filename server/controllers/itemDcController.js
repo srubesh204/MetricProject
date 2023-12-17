@@ -42,24 +42,25 @@ const itemDcController = {
                 const result = await itemDcResult.save();
 
                 if(Object.keys(result).length !== 0){
+                  console.log(dcPartyType)
                   const updatePromises = dcPartyItems.map(async (item) => {
         
                     const itemData = await itemAddModel.findById(item._id)
                     const {itemIMTENo} = itemData
-                    const updateItemFields = {itemIMTENo, itemCurrentLocation: dcPartyType, dcId: result._id, dcStatus: "1", dcCreatedOn : dcDate}
+                    const updateItemFields = {itemIMTENo, itemCurrentLocation: dcPartyName, itemDcLocation: dcPartyType, dcId: result._id, dcStatus: "1", dcCreatedOn : dcDate}
                     const updateResult = await itemAddModel.findOneAndUpdate(
                       { _id: item._id },
                       { $set: updateItemFields },
                       { new: true }
                     );
-                    console.log(updateResult)
+                    console.log("itemUpdated")
                     return updateResult;
                   });
                   const updatedItems = await Promise.all(updatePromises);
                 }
 
                
-                console.log(result)
+                
                 return res.status(200).json({ message: "Item Dc Data Successfully Saved", status: 1, result: result });
             } catch (error) {
                 console.log(error)
@@ -83,11 +84,8 @@ const itemDcController = {
           // }
       
           // Create an object with the fields you want to update
-          const updateItemDcFields = {
-            /* Specify the fields and their updated values here */
-            dcPartyId: req.body.dcPartyId, dcPartyType: req.body.dcPartyType, dcPartyName : req.body.dcPartyName, dcPartyCode : req.body.dcPartyCode, dcPartyAddress : req.body.dcPartyAddress, dcNo : req.body.dcNo, dcDate : req.body.dcDate, dcReason : req.body.dcReason, dcCommonRemarks : req.body.dcCommonRemarks, dcPartyItems : req.body.dcPartyItems // Example: updating the 'name' field
-            // Add more fields as needed
-          };
+          const {dcPartyName, dcPartyId, dcPartyType, dcPartyCode, dcPartyAddress, dcNo, dcDate, dcReason, dcCommonRemarks,  dcMasterName, dcPartyItems} = req.body;
+          const updateItemDcFields = {dcPartyName, dcPartyId, dcPartyType, dcPartyCode, dcPartyAddress, dcNo, dcDate, dcReason, dcCommonRemarks, dcMasterName, dcPartyItems};
       
           // Find the designation by desId and update it
           const itemDcUpdate = new itemDcModel(updateItemDcFields);

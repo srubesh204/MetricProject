@@ -259,6 +259,7 @@ const ItemEdit = () => {
         itemStatus: "Active",
         itemReceiptDate: dayjs().format("YYYY-MM-DD"),
         itemDepartment: "",
+        itemCurrentLocation: "",
         itemArea: "N/A",
         itemPlaceOfUsage: "N/A",
         itemCalFreInMonths: "",
@@ -320,7 +321,7 @@ const ItemEdit = () => {
                 itemStatus: itemData.itemStatus,
                 itemReceiptDate: itemData.itemReceiptDate,
                 itemDepartment: itemData.itemDepartment,
-                itemCurrentLocation: itemData.itemCurrentLocation,
+                // itemCurrentLocation: itemData.itemCurrentLocation,
                 itemArea: itemData.itemArea,
                 itemPlaceOfUsage: itemData.itemPlaceOfUsage,
                 itemCalFreInMonths: itemData.itemCalFreInMonths,
@@ -345,7 +346,7 @@ const ItemEdit = () => {
             console.log(err);
         }
     };
-
+    console.log(itemAddData)
     //
 
     const handleKeyDown = (e) => {
@@ -407,7 +408,12 @@ const ItemEdit = () => {
         }));*/}
 
         if(name === "itemDepartment"){
-            setItemAddData((prev) => ({ ...prev, [name]: value , itemCurrentLocation: value}));
+          
+            setItemAddData((prev) => ({
+                ...prev,
+                [name]: value,
+                itemCurrentLocation: value, // Ensure 'value' is correct here
+              }));
         }
         const selectedIndex = itemAddData.itemPartName.indexOf(value);
         let updatedValues = [...itemAddData.itemPartName];
@@ -446,6 +452,17 @@ const ItemEdit = () => {
 
 
         }
+        if(name === "itemCalDate"){
+            const parsedDate = dayjs(itemAddData.itemCalDate);
+            if (parsedDate.isValid() && !isNaN(parseInt(itemAddData.itemCalFreInMonths))) {
+                const calculatedDate = parsedDate.add(parseInt(itemAddData.itemCalFreInMonths, 10), 'month').subtract(1, 'day');
+                setItemAddData((prev) => ({
+                    ...prev,
+                    itemDueDate: calculatedDate.format('YYYY-MM-DD'),
+                }));
+            }
+        }
+
         if (name === "itemItemMasterName") {
             setItemAddData((prev) => ({ ...prev, itemItemMasterName: value }));
         }
@@ -499,6 +516,13 @@ const ItemEdit = () => {
         setItemAddData({ ...itemAddData, itemPartName: newSelected });
     };*/}
 
+    useEffect(()=> {
+        setItemAddData((prev) => ({
+            ...prev,
+            
+            itemCurrentLocation: itemAddData.itemDepartment, // Ensure 'value' is correct here
+          }));
+    },[itemAddData.itemDepartment])
 
 
 
@@ -815,24 +839,24 @@ const ItemEdit = () => {
 
 
 
-    useEffect(() => {
-        calculateResultDate(itemAddData.itemCalDate, itemAddData.itemCalFreInMonths);
-    }, [itemAddData.itemCalDate, itemAddData.itemCalFreInMonths]);
+   
 
 
 
-    const calculateResultDate = (itemCalDate, itemCalFreInMonths) => {
+    const calculateResultDate = (newValue) => {
+        const itemCalDate = dayjs(newValue).format('YYYY-MM-DD') 
         const parsedDate = dayjs(itemCalDate);
-        if (parsedDate.isValid() && !isNaN(parseInt(itemCalFreInMonths))) {
-            const calculatedDate = parsedDate.add(parseInt(itemCalFreInMonths, 10), 'month').subtract(1, 'day');
+        if (parsedDate.isValid() && !isNaN(parseInt(itemAddData.itemCalFreInMonths))) {
+            const calculatedDate = parsedDate.add(parseInt(itemAddData.itemCalFreInMonths, 10), 'month').subtract(1, 'day');
             setItemAddData((prev) => ({
                 ...prev,
+                itemCalData: itemCalDate,
                 itemDueDate: calculatedDate.format('YYYY-MM-DD'),
             }));
         }
     };
 
-    const [obCheckedValue, setObCheckedValue] = useState("average")
+    
 
     return (
         <div style={{ margin: "2rem", backgroundColor: "#f5f5f5" }}>
@@ -1266,10 +1290,7 @@ const ItemEdit = () => {
                                             id="itemCalDateId"
                                             name="itemCalDate"
                                             value={dayjs(itemAddData.itemCalDate)}
-                                            onChange={(newValue) =>
-                                                setItemAddData((prev) => ({ ...prev, itemCalDate: newValue.format("YYYY-MM-DD") }))
-
-                                            }
+                                            onChange={(newValue)=> calculateResultDate(newValue)}
                                             label="Calibration Date"
 
                                             slotProps={{ textField: { size: 'small' } }}

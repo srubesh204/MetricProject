@@ -10,7 +10,7 @@ import isSameOrAfter from 'dayjs/plugin/isSameOrAfter'
 import isSameOrBefore from 'dayjs/plugin/isSameOrBefore'
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { Add, Delete } from '@mui/icons-material';
+import { Add, Delete, Error } from '@mui/icons-material';
 import CalDialog from './DashboardComponents/CalDialog';
 import Dc from './DashboardComponents/DcDialog';
 import Grn from './DashboardComponents/Grn';
@@ -47,33 +47,46 @@ const Home = () => {
   //
 
 
-  const [locationTableData, setLocationTableData] = useState([])
+  const [departmentTable, setDepartmentTable] = useState([])
+  const [subConTable, setSubConTable] = useState([])
+  const [supplierTable, setSupplierTable] = useState([])
+  const [oemTable, setOemTable] = useState([])
+  const [customerTable, setCustomerTable] = useState([])
+
   const [itemStatus, setItemStatus] = useState([])
-  const [calStatus, setCalStatus] = useState([])
+  const [calStatus, setCalStatus] = useState(
+    [
+      { value: 0, label: 'Total Items' },
+      { value: 0, label: 'Active' },
+      { value: 0, label: 'Spare' },
+      { value: 0, label: 'BreakDown' },
+      { value: 0, label: 'Missing' },
+      { value: 0, label: 'Rejection' }
+    ])
   const [distinctDepartment, setDistinctDepartment] = useState([])
   const [departmentName, setDepartmentName] = useState("")
   const [allDepartments, setAllDepartments] = useState([])
 
   //get all employess
-  const getAllEmployees = async () => {
-    try {
-      const Departments = await axios.get(
-        `${process.env.REACT_APP_PORT}/employee/getAllEmployees`
-      );
-      console.log(Departments)
-      const defaultDepartment = Departments.data.result.filter((dep) => dep.defaultdep === "yes");
-      const otherDepartment = Departments.data.result.filter((dep) => dep.defaultdep === "no")
+  // const getAllEmployees = async () => {
+  //   try {
+  //     const Departments = await axios.get(
+  //       `${process.env.REACT_APP_PORT}/employee/getAllEmployees`
+  //     );
+  //     console.log(Departments)
+  //     const defaultDepartment = Departments.data.result.filter((dep) => dep.defaultdep === "yes");
+  //     const otherDepartment = Departments.data.result.filter((dep) => dep.defaultdep === "no")
 
 
-      setAllDepartments([...defaultDepartment, ...otherDepartment])
+  //     setAllDepartments([...defaultDepartment, ...otherDepartment])
 
 
 
 
-    } catch (err) {
-      console.log(err);
-    }
-  };
+  //   } catch (err) {
+  //     console.log(err);
+  //   }
+  // };
   //
 
   //allActiveEmployees
@@ -91,6 +104,7 @@ const Home = () => {
   };
   console.log(activeEmps)
   //
+  const [defaultDep, setDefaultDep] = useState([])
 
 
 
@@ -105,7 +119,7 @@ const Home = () => {
 
 
       setAllDepartments([...defaultDepartment, ...otherDepartment])
-
+      setDefaultDep(defaultDepartment)
 
 
 
@@ -151,8 +165,9 @@ const Home = () => {
     }
   };
   console.log(customers)
+  console.log(oems)
 
-  const itemFetch = async () => {
+  const itemFetch = async (departments) => {
     try {
       const response = await axios.get(
         `${process.env.REACT_APP_PORT}/itemAdd/getAllItemAdds`
@@ -172,9 +187,9 @@ const Home = () => {
 
       const pastDue = allItems.filter((item) => dayjs(item.itemDueDate).isBefore(currentDate.format("YYYY-MM-DD")))
       const CurrentDue = allItems.filter((item) => dayjs(item.itemDueDate).isSame(currentDate.format("YYYY-MM-DD")))
-      const sevenDaysFilter = allItems.filter((item) => dayjs(item.itemDueDate).isBefore(sevenDaysAgo) && dayjs(item.itemDueDate).isAfter(currentDate.format("YYYY-MM-DD")))
-      const fifteenDaysFilter = allItems.filter((item) => dayjs(item.itemDueDate).isBetween(currentDate.format("YYYY-MM-DD"), fifteenDaysAgo))
-      const thirtyDaysFilter = allItems.filter((item) => dayjs(item.itemDueDate).isBetween(currentDate.format("YYYY-MM-DD"), thirtyDaysAgo))
+      const sevenDaysFilter = allItems.filter((item) => dayjs(item.itemDueDate).isSameOrBefore(sevenDaysAgo) && dayjs(item.itemDueDate).isAfter(currentDate.format("YYYY-MM-DD")))
+      const fifteenDaysFilter = allItems.filter((item) => dayjs(item.itemDueDate).isBetween(sevenDaysAgo, fifteenDaysAgo))
+      const thirtyDaysFilter = allItems.filter((item) => dayjs(item.itemDueDate).isBetween(fifteenDaysAgo, thirtyDaysAgo))
       const AboveThirtyDaysFilter = allItems.filter((item) => dayjs(item.itemDueDate).isAfter(thirtyDaysAgo))
 
 
@@ -188,32 +203,50 @@ const Home = () => {
       // const breakDownItems = allItems.filter((item) => item.itemStatus === "BreakDown");
       // const missingItems = allItems.filter((item) => item.itemStatus === "Missing");
       // const rejectionItems = allItems.filter((item) => item.itemStatus === "Rejection");
+      const depLength = allItems.filter((item) => item.itemDcLocation === "department")
+      const oemLength = allItems.filter((item) => item.itemDcLocation === "oem")
+      const customersLength = allItems.filter((item) => item.itemDcLocation === "customer")
+      const subContractorLength = allItems.filter((item) => item.itemDcLocation === "subContractor")
+      const supplierLength = allItems.filter((item) => item.itemDcLocation === "supplier")
+      console.log(depLength)
 
+      setItemStatus((prev) => {
+        const updatedStatus = [...prev];
 
-      setItemStatus([
-        { id: 0, value: allItems.length, label: 'Total Items' },
-        { id: 1, value: activeItems.length, label: 'Active' },
-        { id: 2, value: spareItems.length, label: 'Spare' },
-        { id: 3, value: breakDownItems.length, label: 'BreakDown' },
-        { id: 4, value: missingItems.length, label: 'Missing' },
-        { id: 5, value: rejectionItems.length, label: 'Rejection' }
-      ])
+        const updateIfExists = (label, value) => {
+          const existingIndex = updatedStatus.findIndex((item) => item.label === label);
+          if (existingIndex !== -1) {
+            updatedStatus[existingIndex].value = value;
+          } else {
+            updatedStatus.push({ value, label });
+          }
+        };
+
+        updateIfExists('Total Items', allItems.length);
+        updateIfExists('Active', activeItems.length);
+        updateIfExists('Spare', spareItems.length);
+        updateIfExists('BreakDown', breakDownItems.length);
+        updateIfExists('Missing', missingItems.length);
+        updateIfExists('Rejection', rejectionItems.length);
+
+        return updatedStatus;
+      });
       setCalStatus([
-        { id: 0, value: pastDue.length, label: 'Past Due' },
-        { id: 1, value: CurrentDue.length, label: 'Today' },
-        { id: 2, value: sevenDaysFilter.length, label: '7 Days' },
-        { id: 3, value: fifteenDaysFilter.length, label: '15 Days' },
-        { id: 4, value: thirtyDaysFilter.length, label: '30 Days' },
-        { id: 5, value: AboveThirtyDaysFilter.length, label: '>30 Days' }
+        { value: pastDue.length, label: 'Past Due' },
+        { value: CurrentDue.length, label: 'Today' },
+        { value: sevenDaysFilter.length, label: 'Next 7 Days' },
+        { value: fifteenDaysFilter.length, label: '>7 to 15 Days' },
+        { value: thirtyDaysFilter.length, label: '>15 to 30 Days' },
+        { value: AboveThirtyDaysFilter.length, label: '>30 Days' }
       ])
       setItemLocationData([
-        { value: allItems.length, label: "Departments" },
-        { value: 0, label: "Sub Contractors" },
-        { value: 0, label: "Customers" },
-        { value: 0, label: "Suppliers" },
-        { value: 0, label: "OEM" }
+        { value: depLength.length, label: "Departments" },
+        { value: subContractorLength.length, label: "Sub Contractors" },
+        { value: customersLength.length, label: "Customers" },
+        { value: supplierLength.length, label: "Suppliers" },
+        { value: oemLength.length, label: "OEM" }
       ]);
-      
+
 
     } catch (err) {
       console.log(err);
@@ -221,19 +254,7 @@ const Home = () => {
   };
 
 
-  const DepartmentFetch = async () => {
-    try {
-      const Departments = await axios.get(
-        `${process.env.REACT_APP_PORT}/itemAdd/getDistinctItemDepartments`
-      );
-      setDistinctDepartment(Departments.data.result)
-      console.log(Departments)
-      
 
-    } catch (err) {
-      console.log(err);
-    }
-  };
 
   console.log(itemLocationData)
 
@@ -266,7 +287,7 @@ const Home = () => {
       width: 100,
     },
     {
-      field: 'itemDepartment',
+      field: 'itemCurrentLocation',
       headerName: 'Current Location',
       width: 100,
     },
@@ -323,7 +344,11 @@ const Home = () => {
 
 
   const [activeIndex, setActiveIndex] = useState(null);
-
+  const [calSourceCount, setCalSourceCount] = useState({
+    inHouse: "",
+    outSource: "",
+    oem: ""
+  })
 
 
   const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', "#aca8c8", "#78787a"];
@@ -347,8 +372,8 @@ const Home = () => {
 
 
 
-    const inhouse = pieDataFilter.filter((item) => item.itemCalibrationSource === "InHouse");
-    const outSource = pieDataFilter.filter((item) => item.itemCalibrationSource === "OutSource");
+    const inhouse = pieDataFilter.filter((item) => item.itemCalibrationSource === "inhouse");
+    const outSource = pieDataFilter.filter((item) => item.itemCalibrationSource === "outsource");
     const oem = pieDataFilter.filter((item) => item.itemCalibrationSource === "OEM");
 
     setCalSourceCount((prev) => ({
@@ -357,6 +382,8 @@ const Home = () => {
       outSource: outSource.length,
       oem: oem.length
     }))
+
+
 
 
 
@@ -404,21 +431,93 @@ const Home = () => {
 
 
   }
-
+  console.log(calSourceCount)
+  const [selectedLoc, setSelectedLoc] = useState("")
 
   const ItemLocationDisplay = (name) => {
-    if (name === "Departments") {
-      const aggregatedData = distinctDepartment.map((department) => {
-        const filteredData = itemList.filter((item) => item.itemDepartment === department);
-        return { departmentName: department, quantity: filteredData.length };
-      });
 
-      setLocationTableData(aggregatedData);
+    setSelectedLoc(name)
+    if (name === "Departments") {
+      const depTable = allDepartments.map((dep) => {
+        const filteredData = itemList.filter((item) => item.itemCurrentLocation === dep.department);
+        
+        const quantity = filteredData.length;
+        if (quantity !== 0) {
+          return { departmentName: dep.department, quantity };
+        }
+        return null; // Return null for zero quantity
+      }).filter(Boolean);
+      setDepartmentTable(depTable);
     }
+
+    if (name === "Sub Contractors") {
+      const subTable = oems.map((sub) => {
+        const filteredByDcLocation = itemList.filter((item) => item.itemDcLocation === "subContractor");
+        const filteredByOEM = filteredByDcLocation.filter((item) => item.itemCurrentLocation === sub.fullName);
+        
+        const quantity = filteredByOEM.length;
+        
+        if (quantity !== 0) {
+          return { subContractorName: sub.fullName, quantity };
+        }
+        return null; // Return null for zero quantity
+      }).filter(Boolean);
+      setSubConTable(subTable)
+    }
+
+    if (name === "Customers") {
+     const cusTable = customers.map((customer) => {
+        const filteredByDcLocation = itemList.filter((item) => item.itemDcLocation === "customer");
+        const filteredByOEM = filteredByDcLocation.filter((item) => item.itemCurrentLocation === customer.fullName);
+        
+        const quantity = filteredByOEM.length;
+        
+        
+        if (quantity !== 0) {
+          return { customerName: customer.fullName, quantity };
+        }
+        return null; // Return null for zero quantity
+      }).filter(Boolean);
+      setCustomerTable(cusTable)
+    }
+
+    if (name === "Suppliers") {
+      const supTable = suppliers.map((sup) => {
+        const filteredByDcLocation = itemList.filter((item) => item.itemDcLocation === "supplier");
+        const filteredByOEM = filteredByDcLocation.filter((item) => item.itemCurrentLocation === sup.fullName);
+  
+        const quantity = filteredByOEM.length;
+      
+       
+        if (quantity !== 0) {
+          return { supName: sup.fullName, quantity };
+        }
+        return null; // Return null for zero quantity
+      }).filter(Boolean);
+      setSupplierTable(supTable)
+    }
+
+    if (name === "OEM") {
+      const oemTable = oems.map((oem) => {
+        const filteredByDcLocation = itemList.filter((item) => item.itemDcLocation === "oem");
+        const filteredByOEM = filteredByDcLocation.filter((item) => item.itemCurrentLocation === oem.fullName);
+        
+        const quantity = filteredByOEM.length;
+        
+        if (quantity !== 0) {
+          return { oemName: oem.fullName, quantity };
+        }
+        return null; // Return null for zero quantity
+      }).filter(Boolean); // Remove null entries from the array
+      
+      setOemTable(oemTable);
+    }
+    
+
   };
 
 
-  console.log(locationTableData)
+ 
   const itemLocationLegend = ({ payload }) => {
     return (
 
@@ -473,37 +572,25 @@ const Home = () => {
   };
 
   useEffect(() => {
-    itemFetch();
-    DepartmentFetch();
+    itemFetch(allDepartments);
+
     getAllDepartments();
     getVendorsByType();
     empFetch();
   }, [])
 
 
-  const DepartmentDataShow = async (name) => {
-    try {
-      const DepartmentData = await axios.post(
-        `${process.env.REACT_APP_PORT}/itemAdd/getItemAddByDepName`, { itemDepartment: name }
-      );
-      console.log(name)
-      setDepartmentName(name)
-      console.log(DepartmentData)
-      setFilteredData(DepartmentData.data.result)
-
-    } catch (err) {
-      console.log(err);
-    }
+  const DepartmentDataShow =  (name, value) => {
+    
+      const filter = itemList.filter((item)=> item.itemCurrentLocation === value);
+      setFilteredData(filter)
+   
   };
 
   const [pieDataFilter, setPieDataFilter] = useState([])
   const [selectedFilterName, setSelectedFilterName] = useState("")
   const [selectedFilterValue, setSelectedFilterValue] = useState("")
-  const [calSourceCount, setCalSourceCount] = useState({
-    inHouse: "",
-    outSource: "",
-    oem: ""
-  })
+
 
   const handlePieData = (name, value) => {
     setSelectedFilterName(name)
@@ -530,20 +617,20 @@ const Home = () => {
 
 
     setCalStatus([
-      { id: 0, value: pastDue.length, label: 'Past Due' },
-      { id: 1, value: CurrentDue.length, label: 'Today' },
-      { id: 2, value: sevenDaysFilter.length, label: '7 Days' },
-      { id: 3, value: fifteenDaysFilter.length, label: '15 Days' },
-      { id: 4, value: thirtyDaysFilter.length, label: '30 Days' },
-      { id: 5, value: AboveThirtyDaysFilter.length, label: '>30 Days' }
+      { value: pastDue.length, label: 'Past Due' },
+      { value: CurrentDue.length, label: 'Today' },
+      { value: sevenDaysFilter.length, label: '7 Days' },
+      { value: fifteenDaysFilter.length, label: '15 Days' },
+      { value: thirtyDaysFilter.length, label: '30 Days' },
+      { value: AboveThirtyDaysFilter.length, label: '>30 Days' }
     ])
     setItemStatus([
-      { id: 0, value: filter.length, label: 'Total Items' },
-      { id: 1, value: activeItems.length, label: 'Active' },
-      { id: 2, value: spareItems.length, label: 'Spare' },
-      { id: 3, value: breakDownItems.length, label: 'BreakDown' },
-      { id: 4, value: missingItems.length, label: 'Missing' },
-      { id: 5, value: rejectionItems.length, label: 'Rejection' }
+      { value: filter.length, label: 'Total Items' },
+      { value: activeItems.length, label: 'Active' },
+      { value: spareItems.length, label: 'Spare' },
+      { value: breakDownItems.length, label: 'BreakDown' },
+      { value: missingItems.length, label: 'Missing' },
+      { value: rejectionItems.length, label: 'Rejection' }
     ])
   }
 
@@ -635,7 +722,7 @@ const Home = () => {
     const { value } = e.target;
     setSelectedDepartment(value)
     const itemData = selectedRows.map((item) => item._id)
-    setDepUpdateData({ itemIds: itemData, itemDepartment: value })
+    setDepUpdateData({ itemIds: itemData, itemCurrentLocation: value })
   }
   console.log(DepUpdateData)
   const updateItemData = async (e) => {
@@ -643,7 +730,7 @@ const Home = () => {
     try {
 
       const itemData = selectedRows.map((item) => ({ _id: item._id, itemIMTENo: item.itemIMTENo }))
-      const depData = { itemIds: itemData, itemDepartment: selectedDepartment }
+      const depData = { itemIds: itemData, itemCurrentLocation: selectedDepartment }
       if (depData) {
         const response = await axios.put(
           `${process.env.REACT_APP_PORT}/itemAdd/changeDepartmentUpdate`, depData
@@ -655,7 +742,7 @@ const Home = () => {
         setErrorHandler({ status: response.data.status, message: response.data.message, code: "success" })
         setSelectedRows([])
         itemFetch();
-        DepartmentFetch();
+
       }
 
 
@@ -705,6 +792,8 @@ const Home = () => {
   const handleRowSelectionChange = (newSelection) => {
     const selectedRowsData = filteredData.filter((row) => newSelection.includes(row._id));
     setSelectedRows(selectedRowsData);
+
+
   };
 
   const [calOpen, setCalOpen] = useState(false);
@@ -712,6 +801,28 @@ const Home = () => {
   const [grnOpen, setGrnOpen] = useState(false);
 
   console.log(selectedRows)
+
+  const [dcStatusMsg, setDcStatusMsg] = useState("")
+
+  const dcCheck = () => {
+    const defaultDepartmentCheck = selectedRows.every(item =>
+      defaultDep.some(dep => item.itemCurrentLocation === dep.department)
+    );
+
+    console.log(defaultDepartmentCheck)
+    if (defaultDepartmentCheck) {
+      setDcStatusMsg("");
+      setDcOpen(true);
+    } else {
+      setDcStatusMsg("Selected item are not in default location, To create a DC move the item to the default location")
+    }
+  }
+
+
+
+
+
+
 
 
   return (
@@ -848,8 +959,8 @@ const Home = () => {
                   aria-label="Platform"
                   onChange={handleCalSrc}
                 >
-                  <ToggleButton value="InHouse">In House&nbsp;{(calSourceCount.inHouse !== "" && calSourceCount.inHouse !== 0) && <Chip label={calSourceCount.inHouse}></Chip>}</ToggleButton>
-                  <ToggleButton value="OutSource">Out Source&nbsp;{(calSourceCount.outSource !== "" && calSourceCount.outSource !== 0) && <Chip label={calSourceCount.outSource}></Chip>}</ToggleButton>
+                  <ToggleButton value="inhouse">In House&nbsp;{(calSourceCount.inHouse !== "" && calSourceCount.inHouse !== 0) && <Chip label={calSourceCount.inHouse}></Chip>}</ToggleButton>
+                  <ToggleButton value="outsource">Out Source&nbsp;{(calSourceCount.outSource !== "" && calSourceCount.outSource !== 0) && <Chip label={calSourceCount.outSource}></Chip>}</ToggleButton>
                   <ToggleButton value="OEM">OEM&nbsp;{(calSourceCount.oem !== "" && calSourceCount.oem !== 0) && <Chip label={calSourceCount.oem}></Chip>}</ToggleButton>
                 </ToggleButtonGroup>
 
@@ -1020,7 +1131,10 @@ const Home = () => {
                   <Button size='small' className='me-2'>Onsite</Button>
                   {(selectedRows.length === 1 && selectedRows[0].itemCalibrationSource === "inhouse") && <Button size='small' className='me-2' onClick={() => setCalOpen(true)}>Cal</Button>}
                   <Button size='small' onClick={() => setGrnOpen(true)} className='me-2'>Grn</Button>
-                  <Button size='small' onClick={() => setDcOpen(true)}>Create DC</Button>
+
+
+                  <Button size='small' onClick={() => dcCheck()}>Create DC</Button>
+                  {dcStatusMsg !== "" && <Chip icon={<Error />} color='error' label={dcStatusMsg} />}
                 </div>
                 <div className="col-md-3">
                   <Button component={Link} to="/itemmaster" size='small' className='me-2'>Item Master</Button>
@@ -1032,20 +1146,86 @@ const Home = () => {
           <div className="col-md-4">
             <Paper className='col' elevation={12} sx={{ p: 2, height: "100%" }}>
               <table className='table table-bordered table-sm text-center align-middle table-hover'>
-                <tbody>
-                  <tr>
-                    <th>Si. No</th>
-                    <th>Name</th>
-                    <th>Quantity</th>
-                  </tr>
-                  {locationTableData.map((item, index) => (
-                    <tr className={`${item.departmentName === departmentName ? "table-active" : ""}`} key={index} onClick={() => DepartmentDataShow(item.departmentName)}>
-                      <td>{index + 1}</td>
-                      <td>{item.departmentName}</td>
-                      <td>{item.quantity}</td>
+                {selectedLoc === "Departments" &&
+                  <tbody>
+                    <tr>
+                      <th>Si. No</th>
+                      <th>Name</th>
+                      <th>Quantity</th>
                     </tr>
-                  ))}
-                </tbody>
+                    {departmentTable.map((item, index) => (
+                      <tr className={`${item.departmentName === departmentName ? "table-active" : ""}`} key={index} onClick={() => DepartmentDataShow("department",item.departmentName)}>
+                        <td>{index + 1}</td>
+                        <td>{item.departmentName}</td>
+                        <td>{item.quantity}</td>
+                      </tr>
+                    ))}
+                  </tbody>}
+
+                  {selectedLoc === "Sub Contractors" &&
+                  <tbody>
+                    <tr>
+                      <th>Si. No</th>
+                      <th>Name</th>
+                      <th>Quantity</th>
+                    </tr>
+                    {subConTable.map((item, index) => (
+                      <tr className={`${item.departmentName === departmentName ? "table-active" : ""}`} key={index} onClick={() => DepartmentDataShow("subContractor",item.subContractorName)}>
+                        <td>{index + 1}</td>
+                        <td>{item.subContractorName}</td>
+                        <td>{item.quantity}</td>
+                      </tr>
+                    ))}
+                  </tbody>}
+
+                  {selectedLoc === "Customers" &&
+                  <tbody>
+                    <tr>
+                      <th>Si. No</th>
+                      <th>Name</th>
+                      <th>Quantity</th>
+                    </tr>
+                    {customerTable.map((item, index) => (
+                      <tr className={`${item.departmentName === departmentName ? "table-active" : ""}`} key={index} onClick={() => DepartmentDataShow("customer",item.customerName)}>
+                        <td>{index + 1}</td>
+                        <td>{item.customerName}</td>
+                        <td>{item.quantity}</td>
+                      </tr>
+                    ))}
+                  </tbody>}
+
+                  {selectedLoc === "Suppliers" &&
+                  <tbody>
+                    <tr>
+                      <th>Si. No</th>
+                      <th>Name</th>
+                      <th>Quantity</th>
+                    </tr>
+                    {supplierTable.map((item, index) => (
+                      <tr className={`${item.departmentName === departmentName ? "table-active" : ""}`} key={index} onClick={() => DepartmentDataShow("supplier",item.supName)}>
+                        <td>{index + 1}</td>
+                        <td>{item.supName}</td>
+                        <td>{item.quantity}</td>
+                      </tr>
+                    ))}
+                  </tbody>}
+
+                  {selectedLoc === "OEM" &&
+                  <tbody>
+                    <tr>
+                      <th>Si. No</th>
+                      <th>Name</th>
+                      <th>Quantity</th>
+                    </tr>
+                    {oemTable.map((item, index) => (
+                      <tr className={`${item.departmentName === departmentName ? "table-active" : ""}`} key={index} onClick={() => DepartmentDataShow("oem",item.oemName)}>
+                        <td>{index + 1}</td>
+                        <td>{item.oemName}</td>
+                        <td>{item.quantity}</td>
+                      </tr>
+                    ))}
+                  </tbody>}
+
               </table>
             </Paper>
 
@@ -1056,7 +1236,7 @@ const Home = () => {
             </HomeContent.Provider>
 
             <HomeContent.Provider
-              value={{ dcOpen, setDcOpen, selectedRows }}
+              value={{ dcOpen, setDcOpen, selectedRows, itemFetch }}
             >
               <Dc />
             </HomeContent.Provider>

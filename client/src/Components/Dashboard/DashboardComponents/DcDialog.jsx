@@ -14,7 +14,7 @@ import { Add, Close, Delete, DeleteOutline } from '@mui/icons-material';
 const Dc = () => {
 
     const dcDatas = useContext(HomeContent)
-    const { dcOpen, setDcOpen, selectedRows } = dcDatas
+    const { dcOpen, setDcOpen, selectedRows, itemFetch } = dcDatas
 
 
     console.log(selectedRows)
@@ -247,6 +247,7 @@ const Dc = () => {
             );
             setAlertMessage(response.data.message)
             setSnackBarOpen(true)
+            itemFetch();
             setTimeout(() => setDcOpen(false), 3000)
         } catch (err) {
             console.log(err);
