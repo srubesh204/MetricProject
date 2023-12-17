@@ -34,15 +34,16 @@ const itemAddController = {
         itemStatus,
         itemReceiptDate,
         itemDepartment,
+        itemCurrentLocation,
+        itemLastLocation,
         itemArea,
         itemPlaceOfUsage,
         itemCalFreInMonths,
         itemCalAlertDays,
         itemCalibrationSource,
+        itemCalibrationDoneAt,
         itemItemMasterName,
         itemItemMasterIMTENo,
-        itemItemMasterDue,
-        itemCalibrationDoneAt,
         itemSupplier,
         itemOEM,
         itemCalDate,
@@ -51,10 +52,20 @@ const itemAddController = {
         itemCertificateName,
         itemCertificateNo,
         itemPartName,
-        itemUncertainity,
         itemOBType,
+        dcId,
+        dcStatus,
+        dcCreatedOn,
+        grnId,
+        grnStatus,
+        grnCreatedOn,
         acceptanceCriteria,
-        createdAt // Assuming createdAt is part of the request body
+        acMinOB,
+        acMaxOB,
+        acAverageOB,
+        acOBError,
+        acMinPSError,
+        acMaxPSError, // Assuming createdAt is part of the request body
       } = req.body;
   
       const newItemFields = {
@@ -75,15 +86,16 @@ const itemAddController = {
         itemStatus,
         itemReceiptDate,
         itemDepartment,
+        itemCurrentLocation,
+        itemLastLocation,
         itemArea,
         itemPlaceOfUsage,
         itemCalFreInMonths,
         itemCalAlertDays,
         itemCalibrationSource,
+        itemCalibrationDoneAt,
         itemItemMasterName,
         itemItemMasterIMTENo,
-        itemItemMasterDue,
-        itemCalibrationDoneAt,
         itemSupplier,
         itemOEM,
         itemCalDate,
@@ -92,10 +104,20 @@ const itemAddController = {
         itemCertificateName,
         itemCertificateNo,
         itemPartName,
-        itemUncertainity,
         itemOBType,
+        dcId,
+        dcStatus,
+        dcCreatedOn,
+        grnId,
+        grnStatus,
+        grnCreatedOn,
         acceptanceCriteria,
-        createdAt // If createdAt is necessary for the creation, include it here
+        acMinOB,
+        acMaxOB,
+        acAverageOB,
+        acOBError,
+        acMinPSError,
+        acMaxPSError,
       };
   
       const newItem = new itemAddModel(newItemFields);
@@ -146,9 +168,9 @@ const itemAddController = {
       // }
       const { 
         itemMasterRef,
-        itemAddMasterName,
         selectedItemMaster,
         isItemMaster,
+        itemAddMasterName,
         itemIMTENo,
         itemImage,
         itemType,
@@ -162,15 +184,16 @@ const itemAddController = {
         itemStatus,
         itemReceiptDate,
         itemDepartment,
+        itemCurrentLocation,
+        itemLastLocation,
         itemArea,
         itemPlaceOfUsage,
         itemCalFreInMonths,
         itemCalAlertDays,
         itemCalibrationSource,
+        itemCalibrationDoneAt,
         itemItemMasterName,
         itemItemMasterIMTENo,
-        itemItemMasterDue,
-        itemCalibrationDoneAt,
         itemSupplier,
         itemOEM,
         itemCalDate,
@@ -179,16 +202,27 @@ const itemAddController = {
         itemCertificateName,
         itemCertificateNo,
         itemPartName,
-        itemUncertainity,
         itemOBType,
+        dcId,
+        dcStatus,
+        dcCreatedOn,
+        grnId,
+        grnStatus,
+        grnCreatedOn,
         acceptanceCriteria,
+        acMinOB,
+        acMaxOB,
+        acAverageOB,
+        acOBError,
+        acMinPSError,
+        acMaxPSError,
         } = req.body;
       // Create an object with the fields you want to update
       const updateItemFields = {
-        itemMasterRef,
-        itemAddMasterName,
+         itemMasterRef,
         selectedItemMaster,
         isItemMaster,
+        itemAddMasterName,
         itemIMTENo,
         itemImage,
         itemType,
@@ -202,15 +236,17 @@ const itemAddController = {
         itemStatus,
         itemReceiptDate,
         itemDepartment,
+        itemCurrentLocation,
+        itemLastLocation,
+        itemDcLocation: "department",
         itemArea,
         itemPlaceOfUsage,
         itemCalFreInMonths,
         itemCalAlertDays,
         itemCalibrationSource,
+        itemCalibrationDoneAt,
         itemItemMasterName,
         itemItemMasterIMTENo,
-        itemItemMasterDue,
-        itemCalibrationDoneAt,
         itemSupplier,
         itemOEM,
         itemCalDate,
@@ -219,9 +255,20 @@ const itemAddController = {
         itemCertificateName,
         itemCertificateNo,
         itemPartName,
-        itemUncertainity,
         itemOBType,
+        dcId,
+        dcStatus,
+        dcCreatedOn,
+        grnId,
+        grnStatus,
+        grnCreatedOn,
         acceptanceCriteria,
+        acMinOB,
+        acMaxOB,
+        acAverageOB,
+        acOBError,
+        acMinPSError,
+        acMaxPSError,
       };
 
       // Find the designation by desId and update it
@@ -411,13 +458,13 @@ const itemAddController = {
       //   return res.status(400).json({ error: 'Invalid desId value' });
       // }
      
-      const {itemIds, itemDepartment} = req.body
+      const {itemIds, itemCurrentLocation} = req.body
 
       const updatePromises = itemIds.map(async (itemId) => {
         
         const itemData = await itemAddModel.findById(itemId)
-        const {itemDepartment: itemLastLocation , itemIMTENo} = itemData
-        const updateItemFields = {itemIMTENo, itemDepartment, itemLastLocation}
+        const {itemCurrentLocation: itemLastLocation , itemIMTENo} = itemData
+        const updateItemFields = {itemIMTENo, itemCurrentLocation, itemLastLocation}
         const updateResult = await itemAddModel.findOneAndUpdate(
           { _id: itemId._id },
           { $set: updateItemFields },
