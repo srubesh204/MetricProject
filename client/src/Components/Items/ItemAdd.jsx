@@ -226,6 +226,7 @@ const ItemAdd = () => {
         itemStatus: "Active",
         itemReceiptDate: dayjs().format("YYYY-MM-DD"),
         itemDepartment: "",
+        itemCurrentLocation: "",
         itemArea: "N/A",
         itemPlaceOfUsage: "N/A",
         itemCalFreInMonths: "",
@@ -292,6 +293,10 @@ const ItemAdd = () => {
         const { name, value, checked } = e.target;
         if (name === "itemRangeSizeUnit") {
             setItemAddData((prev) => ({ ...prev, [name]: value, acceptanceCriteria: [{ acAccuracyUnit: value, acRangeSizeUnit: value }] }))
+        }
+
+        if(name === "itemDepartment"){
+            setItemAddData((prev) => ({ ...prev, [name]: value , itemCurrentLocation: value}));
         }
         if (name === "itemCalibrationSource") {
             if (value === "inhouse") {

@@ -301,7 +301,7 @@ const ItemEdit = () => {
                 `${process.env.REACT_APP_PORT}/itemAdd/getItemAddById/${id}`
             );
             const itemData = response.data.result
-            console.log(itemData.itemType)
+            console.log(itemData)
             setItemAddData((prev) => ({
                 ...prev,
                 itemMasterRef: itemData.itemMasterRef,
@@ -320,6 +320,7 @@ const ItemEdit = () => {
                 itemStatus: itemData.itemStatus,
                 itemReceiptDate: itemData.itemReceiptDate,
                 itemDepartment: itemData.itemDepartment,
+                itemCurrentLocation: itemData.itemCurrentLocation,
                 itemArea: itemData.itemArea,
                 itemPlaceOfUsage: itemData.itemPlaceOfUsage,
                 itemCalFreInMonths: itemData.itemCalFreInMonths,
@@ -404,6 +405,10 @@ const ItemEdit = () => {
             [name]: value,
             previousItemRangeSizeUnit: prevData.itemRangeSizeUnit, // Store the previous value
         }));*/}
+
+        if(name === "itemDepartment"){
+            setItemAddData((prev) => ({ ...prev, [name]: value , itemCurrentLocation: value}));
+        }
         const selectedIndex = itemAddData.itemPartName.indexOf(value);
         let updatedValues = [...itemAddData.itemPartName];
 

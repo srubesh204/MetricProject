@@ -24,6 +24,7 @@ const itemAddSchema = new mongoose.Schema({
   itemStatus: String,
   itemReceiptDate: String,
   itemDepartment: String,
+  itemCurrentLocation: String,
   itemLastLocation: String,
   itemArea: String,
   itemPlaceOfUsage: String,
@@ -42,8 +43,12 @@ const itemAddSchema = new mongoose.Schema({
   itemCertificateNo: String,
   itemPartName: [],
   itemOBType: String,
+  dcId: String,
   dcStatus: String,
   dcCreatedOn: String,
+  grnId: String,
+  grnStatus: String,
+  grnCreatedOn: String,
   acceptanceCriteria: [
     {
       acParameter: String,

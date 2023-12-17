@@ -71,6 +71,8 @@ const DcEdit = () => {
             }));
         }
     };
+
+    console.log(dcData)
     
     
 

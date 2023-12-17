@@ -19,20 +19,7 @@ const itemDcController = {
           const {dcPartyName, dcPartyId, dcPartyType, dcPartyCode, dcPartyAddress, dcNo, dcDate, dcReason, dcCommonRemarks,  dcMasterName, dcPartyItems} = req.body;
           const itemDcResult = new itemDcModel({dcPartyName, dcPartyId, dcPartyType, dcPartyCode, dcPartyAddress, dcNo, dcDate, dcReason, dcCommonRemarks, dcMasterName, dcPartyItems});
 
-          const updatePromises = dcPartyItems.map(async (item) => {
-        
-            const itemData = await itemAddModel.findById(item._id)
-            const {itemIMTENo} = itemData
-            const updateItemFields = {itemIMTENo, dcStatus: "1", dcCreatedOn : dayjs().format("YYYY-MM-DD")}
-            const updateResult = await itemAddModel.findOneAndUpdate(
-              { _id: item._id },
-              { $set: updateItemFields },
-              { new: true }
-            );
-            console.log(updateResult)
-            return updateResult;
-          });
-          const updatedItems = await Promise.all(updatePromises);
+          
           const validationError = itemDcResult.validateSync();
 
           if (validationError) {
@@ -52,8 +39,28 @@ const itemDcController = {
           }
           console.log("success")
     
-                await itemDcResult.save();
-                return res.status(200).json({ message: "Item Dc Data Successfully Saved", status: 1 });
+                const result = await itemDcResult.save();
+
+                if(Object.keys(result).length !== 0){
+                  const updatePromises = dcPartyItems.map(async (item) => {
+        
+                    const itemData = await itemAddModel.findById(item._id)
+                    const {itemIMTENo} = itemData
+                    const updateItemFields = {itemIMTENo, itemCurrentLocation: dcPartyType, dcId: result._id, dcStatus: "1", dcCreatedOn : dcDate}
+                    const updateResult = await itemAddModel.findOneAndUpdate(
+                      { _id: item._id },
+                      { $set: updateItemFields },
+                      { new: true }
+                    );
+                    console.log(updateResult)
+                    return updateResult;
+                  });
+                  const updatedItems = await Promise.all(updatePromises);
+                }
+
+               
+                console.log(result)
+                return res.status(200).json({ message: "Item Dc Data Successfully Saved", status: 1, result: result });
             } catch (error) {
                 console.log(error)
                 if (error.errors) {
@@ -108,6 +115,23 @@ const itemDcController = {
               updateItemDcFields,
               { new: true } // To return the updated document
           );
+
+          if(Object.keys(updateItemDc).length !== 0){
+            const updatePromises = dcPartyItems.map(async (item) => {
+  
+              const itemData = await itemAddModel.findById(item._id)
+              const {itemIMTENo} = itemData
+              const updateItemFields = {itemIMTENo, itemCurrentLocation: dcPartyType, dcId: itemDcId, dcStatus: "1", dcCreatedOn : dcDate}
+              const updateResult = await itemAddModel.findOneAndUpdate(
+                { _id: item._id },
+                { $set: updateItemFields },
+                { new: true }
+              );
+              console.log(updateResult)
+              return updateResult;
+            });
+            const updatedItems = await Promise.all(updatePromises);
+          }
 
           if (!updateItemDc) {
               return res.status(404).json({ error: 'Item Dc not found' });
