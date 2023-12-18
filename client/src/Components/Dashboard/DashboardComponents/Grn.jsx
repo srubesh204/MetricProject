@@ -607,9 +607,8 @@ const Grn = () => {
                                                     <td><input type="text" className='form-control form-control-sm' id="observedSizeId" name="observedSize" /></td>
                                                     <td><input type="text" className='form-control form-control-sm' id="unitId" name="unit" /></td>
                                                     <td><input type="text" className='form-control form-control-sm' id="statusId" name="status" /></td>
-
                                                 </tr>
-                                            </tbody>
+                                            </tbody> 
 
                                         </table>
 

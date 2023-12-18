@@ -1,5 +1,5 @@
 import React, { createContext, useEffect, useState, useContext } from 'react'
-import { Container, Box, Alert, Button, Dialog, DialogActions, DialogContent, InputLabel, DialogContentText, Radio, RadioGroup, FormControl, Select, DialogTitle, OutlinedInput, FormControlLabel, IconButton, MenuItem, Paper, Checkbox, ListItemText, Snackbar, Switch, TextField } from '@mui/material';
+import { Container, Box, Alert, Button, Dialog, DialogActions, DialogContent, InputLabel, DialogContentText, Radio, RadioGroup, FormControl, Select, DialogTitle, OutlinedInput, FormControlLabel, IconButton, MenuItem, Paper, Checkbox, ListItemText, Snackbar, Switch, TextField, Slide } from '@mui/material';
 import axios from 'axios';
 import { DataGrid, GridToolbar } from '@mui/x-data-grid';
 import dayjs from 'dayjs';
@@ -10,6 +10,12 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { GrnListContent } from './GrnList';
 
 import { Add, Close, Delete } from '@mui/icons-material';
+
+const Transition = React.forwardRef(function Transition(props, ref) {
+    return <Slide direction="up" ref={ref} {...props} />;
+});
+
+
 
 const GrnAdd = () => {
     const grnDatas = useContext(GrnListContent)
@@ -790,11 +796,9 @@ const GrnAdd = () => {
 
 
 
-
-
     return (
 
-        <Dialog fullWidth={true} keepMounted maxWidth="xl" open={grnOpen} sx={{ color: "#f1f4f4" }}
+        <Dialog fullScreen keepMounted maxWidth="xl" TransitionComponent={Transition} open={grnOpen} sx={{ color: "#f1f4f4" }}
             onClose={(e, reason) => {
                 console.log(reason)
                 if (reason !== 'backdropClick' && reason !== 'escapeKeyDown') {
@@ -819,11 +823,11 @@ const GrnAdd = () => {
 
 
 
-            <DialogContent >
+            <DialogContent sx={{ width: "100%" }}>
                 <div>
                     <LocalizationProvider dateAdapter={AdapterDayjs}>
                         <form>
-                            <Container maxWidth="lg" sx={{ mb: 2 }}>
+                            
 
                                 <div className='row'>
 
@@ -838,8 +842,8 @@ const GrnAdd = () => {
                                             }}
                                             elevation={12}
                                         >
-                                            <div className='col d-flex mb-2'>
-                                                <div className=" col-6 me-2">
+                                            <div className='row g-2 mb-2'>
+                                                <div className=" col-6">
 
                                                     <TextField label="Party Ref No"
                                                         id="grnPartyRefNoId"
@@ -866,7 +870,7 @@ const GrnAdd = () => {
                                                         //onChange={handleGrnChange}
 
 
-                                                        slotProps={{ textField: { size: 'small' } }}
+                                                        slotProps={{ textField: { size: 'small', fullWidth: true }}}
                                                         format="DD-MM-YYYY" />
 
 
@@ -874,10 +878,10 @@ const GrnAdd = () => {
                                                 </div>
 
 
-                                            </div>
-                                            <div className='row'>
-                                                <div className='col d-flex mb-2'>
-                                                    <div className=" col-6 me-2">
+                                          
+                                           
+                                               
+                                                    <div className=" col-6 ">
 
                                                         <TextField label="Party Name"
                                                             id="grnPartyNameId"
@@ -912,10 +916,10 @@ const GrnAdd = () => {
                                                     </div>
 
 
-                                                </div>
+                                                    </div>
 
-                                            </div>
-                                            <div className='row '>
+                                            
+                                            
                                                 <div className="col-12">
 
                                                     <TextField label="PartyAddress"
@@ -928,7 +932,7 @@ const GrnAdd = () => {
                                                         name="grnPartyAddress" />
 
                                                 </div>
-                                            </div>
+                                           
                                         </Paper>
 
                                     </div>
@@ -945,8 +949,8 @@ const GrnAdd = () => {
                                             elevation={12}
                                         >
 
-                                            <div className='col d-flex mb-2'>
-                                                <div className=" col-6 me-2">
+                                            <div className='col row g-2 d-flex mb-2'>
+                                                <div className="col-6">
 
                                                     <TextField
                                                         label="GRN NO"
@@ -976,17 +980,13 @@ const GrnAdd = () => {
                                                         //onChange={handleGrnChange}
 
 
-                                                        slotProps={{ textField: { size: 'small' } }}
+                                                        slotProps={{ textField: { size: 'small', fullWidth: true } }}
                                                         format="DD-MM-YYYY" />
 
 
 
                                                 </div>
-
-
-                                            </div>
-                                            <div className='row '>
-                                                <div className='mb-5'>
+                                                <div className='col-md-12'>
                                                     <TextField label="Common Remarks"
                                                         id="grnCommonRemarksId"
 
@@ -999,7 +999,12 @@ const GrnAdd = () => {
                                                     >
                                                     </TextField>
                                                 </div>
+
+
                                             </div>
+                                            
+                                                
+                                          
                                         </Paper>
                                     </div>
                                 </div>
@@ -1042,10 +1047,10 @@ const GrnAdd = () => {
 
                                                 </TextField>
                                             </div>
-                                            
+
                                         </div>
                                         <div className=' col d-flex justify-content-end'>
-                                            
+
 
                                         </div>
 
@@ -1054,7 +1059,7 @@ const GrnAdd = () => {
 
                                     <div className='row g-2 '>
                                         <div className='col d-flex'>
-                                           
+
                                             <div className="col-2 me-2">
 
                                                 <DatePicker
@@ -1441,7 +1446,7 @@ const GrnAdd = () => {
 
 
 
-                            </Container>
+                            
                         </form>
                     </LocalizationProvider>
 
