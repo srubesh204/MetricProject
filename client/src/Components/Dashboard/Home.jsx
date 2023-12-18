@@ -14,6 +14,7 @@ import { Add, Delete, Error } from '@mui/icons-material';
 import CalDialog from './DashboardComponents/CalDialog';
 import Dc from './DashboardComponents/DcDialog';
 import Grn from './DashboardComponents/Grn';
+import OnSiteDialog from './DashboardComponents/OnSiteDialog';
 import DcEdit from '../dcList/DcEdit';
 export const HomeContent = createContext(null);
 
@@ -440,7 +441,7 @@ const Home = () => {
     if (name === "Departments") {
       const depTable = allDepartments.map((dep) => {
         const filteredData = itemList.filter((item) => item.itemCurrentLocation === dep.department);
-        
+
         const quantity = filteredData.length;
         if (quantity !== 0) {
           return { departmentName: dep.department, quantity };
@@ -454,9 +455,9 @@ const Home = () => {
       const subTable = oems.map((sub) => {
         const filteredByDcLocation = itemList.filter((item) => item.itemDcLocation === "subContractor");
         const filteredByOEM = filteredByDcLocation.filter((item) => item.itemCurrentLocation === sub.fullName);
-        
+
         const quantity = filteredByOEM.length;
-        
+
         if (quantity !== 0) {
           return { subContractorName: sub.fullName, quantity };
         }
@@ -466,13 +467,13 @@ const Home = () => {
     }
 
     if (name === "Customers") {
-     const cusTable = customers.map((customer) => {
+      const cusTable = customers.map((customer) => {
         const filteredByDcLocation = itemList.filter((item) => item.itemDcLocation === "customer");
         const filteredByOEM = filteredByDcLocation.filter((item) => item.itemCurrentLocation === customer.fullName);
-        
+
         const quantity = filteredByOEM.length;
-        
-        
+
+
         if (quantity !== 0) {
           return { customerName: customer.fullName, quantity };
         }
@@ -485,10 +486,10 @@ const Home = () => {
       const supTable = suppliers.map((sup) => {
         const filteredByDcLocation = itemList.filter((item) => item.itemDcLocation === "supplier");
         const filteredByOEM = filteredByDcLocation.filter((item) => item.itemCurrentLocation === sup.fullName);
-  
+
         const quantity = filteredByOEM.length;
-      
-       
+
+
         if (quantity !== 0) {
           return { supName: sup.fullName, quantity };
         }
@@ -501,23 +502,23 @@ const Home = () => {
       const oemTable = oems.map((oem) => {
         const filteredByDcLocation = itemList.filter((item) => item.itemDcLocation === "oem");
         const filteredByOEM = filteredByDcLocation.filter((item) => item.itemCurrentLocation === oem.fullName);
-        
+
         const quantity = filteredByOEM.length;
-        
+
         if (quantity !== 0) {
           return { oemName: oem.fullName, quantity };
         }
         return null; // Return null for zero quantity
       }).filter(Boolean); // Remove null entries from the array
-      
+
       setOemTable(oemTable);
     }
-    
+
 
   };
 
 
- 
+
   const itemLocationLegend = ({ payload }) => {
     return (
 
@@ -580,11 +581,11 @@ const Home = () => {
   }, [])
 
 
-  const DepartmentDataShow =  (name, value) => {
-    
-      const filter = itemList.filter((item)=> item.itemCurrentLocation === value);
-      setFilteredData(filter)
-   
+  const DepartmentDataShow = (name, value) => {
+
+    const filter = itemList.filter((item) => item.itemCurrentLocation === value);
+    setFilteredData(filter)
+
   };
 
   const [pieDataFilter, setPieDataFilter] = useState([])
@@ -799,6 +800,7 @@ const Home = () => {
   const [calOpen, setCalOpen] = useState(false);
   const [dcOpen, setDcOpen] = useState(false);
   const [grnOpen, setGrnOpen] = useState(false);
+  const [onSiteOpen, setOnSiteOpen] = useState(false);
 
   console.log(selectedRows)
 
@@ -1154,7 +1156,7 @@ const Home = () => {
                       <th>Quantity</th>
                     </tr>
                     {departmentTable.map((item, index) => (
-                      <tr className={`${item.departmentName === departmentName ? "table-active" : ""}`} key={index} onClick={() => DepartmentDataShow("department",item.departmentName)}>
+                      <tr className={`${item.departmentName === departmentName ? "table-active" : ""}`} key={index} onClick={() => DepartmentDataShow("department", item.departmentName)}>
                         <td>{index + 1}</td>
                         <td>{item.departmentName}</td>
                         <td>{item.quantity}</td>
@@ -1162,7 +1164,7 @@ const Home = () => {
                     ))}
                   </tbody>}
 
-                  {selectedLoc === "Sub Contractors" &&
+                {selectedLoc === "Sub Contractors" &&
                   <tbody>
                     <tr>
                       <th>Si. No</th>
@@ -1170,7 +1172,7 @@ const Home = () => {
                       <th>Quantity</th>
                     </tr>
                     {subConTable.map((item, index) => (
-                      <tr className={`${item.departmentName === departmentName ? "table-active" : ""}`} key={index} onClick={() => DepartmentDataShow("subContractor",item.subContractorName)}>
+                      <tr className={`${item.departmentName === departmentName ? "table-active" : ""}`} key={index} onClick={() => DepartmentDataShow("subContractor", item.subContractorName)}>
                         <td>{index + 1}</td>
                         <td>{item.subContractorName}</td>
                         <td>{item.quantity}</td>
@@ -1178,7 +1180,7 @@ const Home = () => {
                     ))}
                   </tbody>}
 
-                  {selectedLoc === "Customers" &&
+                {selectedLoc === "Customers" &&
                   <tbody>
                     <tr>
                       <th>Si. No</th>
@@ -1186,7 +1188,7 @@ const Home = () => {
                       <th>Quantity</th>
                     </tr>
                     {customerTable.map((item, index) => (
-                      <tr className={`${item.departmentName === departmentName ? "table-active" : ""}`} key={index} onClick={() => DepartmentDataShow("customer",item.customerName)}>
+                      <tr className={`${item.departmentName === departmentName ? "table-active" : ""}`} key={index} onClick={() => DepartmentDataShow("customer", item.customerName)}>
                         <td>{index + 1}</td>
                         <td>{item.customerName}</td>
                         <td>{item.quantity}</td>
@@ -1194,7 +1196,7 @@ const Home = () => {
                     ))}
                   </tbody>}
 
-                  {selectedLoc === "Suppliers" &&
+                {selectedLoc === "Suppliers" &&
                   <tbody>
                     <tr>
                       <th>Si. No</th>
@@ -1202,7 +1204,7 @@ const Home = () => {
                       <th>Quantity</th>
                     </tr>
                     {supplierTable.map((item, index) => (
-                      <tr className={`${item.departmentName === departmentName ? "table-active" : ""}`} key={index} onClick={() => DepartmentDataShow("supplier",item.supName)}>
+                      <tr className={`${item.departmentName === departmentName ? "table-active" : ""}`} key={index} onClick={() => DepartmentDataShow("supplier", item.supName)}>
                         <td>{index + 1}</td>
                         <td>{item.supName}</td>
                         <td>{item.quantity}</td>
@@ -1210,7 +1212,7 @@ const Home = () => {
                     ))}
                   </tbody>}
 
-                  {selectedLoc === "OEM" &&
+                {selectedLoc === "OEM" &&
                   <tbody>
                     <tr>
                       <th>Si. No</th>
@@ -1218,7 +1220,7 @@ const Home = () => {
                       <th>Quantity</th>
                     </tr>
                     {oemTable.map((item, index) => (
-                      <tr className={`${item.departmentName === departmentName ? "table-active" : ""}`} key={index} onClick={() => DepartmentDataShow("oem",item.oemName)}>
+                      <tr className={`${item.departmentName === departmentName ? "table-active" : ""}`} key={index} onClick={() => DepartmentDataShow("oem", item.oemName)}>
                         <td>{index + 1}</td>
                         <td>{item.oemName}</td>
                         <td>{item.quantity}</td>
@@ -1242,6 +1244,11 @@ const Home = () => {
             </HomeContent.Provider>
             <HomeContent.Provider
               value={{ grnOpen, setGrnOpen, selectedRows }}
+            >
+              <Grn />
+            </HomeContent.Provider>
+            <HomeContent.Provider
+              value={{ onSiteOpen, setOnSiteOpen, selectedRows }}
             >
               <Grn />
             </HomeContent.Provider>
