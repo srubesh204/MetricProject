@@ -14,7 +14,7 @@ import { Add, Close, Delete, DeleteOutline } from '@mui/icons-material';
 const Dc = () => {
 
     const dcDatas = useContext(HomeContent)
-    const { dcOpen, setDcOpen, selectedRows, itemFetch } = dcDatas
+    const { dcOpen, setDcOpen, selectedRows, itemFetch, defaultDep } = dcDatas
 
 
     console.log(selectedRows)
@@ -281,7 +281,8 @@ const Dc = () => {
             console.log(response.data)
             setAllItemImtes(response.data.result)
             const filteredImtes = response.data.result.filter((imtes) => !dcData.dcPartyItems.some(dcImte => imtes._id === dcImte._id))
-            setItemImtes(filteredImtes)
+            const dcStatusFilter = filteredImtes.filter((item)=> item.dcStatus !== "1")
+            setItemImtes(dcStatusFilter)
 
         } catch (err) {
             console.log(err);
@@ -290,16 +291,17 @@ const Dc = () => {
 
     const handleDcItemAdd = (e) => {
         const { name, value } = e.target;
+
         if (name === "itemListNames") {
             getItemByName(value)
             setItemAddDetails((prev) => ({ ...prev, [name]: value }))
         }
+
         if (name === "itemImteList") {
             setSelectedDcItem(value)
             setItemAddDetails((prev) => ({ ...prev, [name]: value }))
         }
-
-
+                           
     }
 
     const dcItemAdd = () => {
@@ -507,7 +509,7 @@ const Dc = () => {
                                                 //value={dcData.dcReason}
                                                 onChange={handleDcChange}
                                                 size="small"
-                                                sx={{ width: "101%" }}
+                                                sx={{ width: "100%" }}
                                                 name="dcReason" >
                                                 <MenuItem value="All">All</MenuItem>
                                                 <MenuItem value="Service">Service</MenuItem>
@@ -520,11 +522,11 @@ const Dc = () => {
                                         <div className='col me-2'>
                                             <TextField label="Common Remarks"
                                                 id="dcCommonRemarksId"
-                                                //  value={dcData.dcCommonRemarks}
+                                                //value={dcData.dcCommonRemarks}
                                                 defaultValue=""
                                                 onChange={handleDcChange}
                                                 size="small"
-                                                sx={{ width: "102%" }}
+                                                sx={{ width: "100%" }}
                                                 name="dcCommonRemarks" />
 
                                         </div>
