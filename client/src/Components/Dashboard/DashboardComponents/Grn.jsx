@@ -186,8 +186,8 @@ const Grn = () => {
         grnItemId: "",
         grnItemMasterRef: "",
         grnItemAddMasterName: "",
-        grnItemIMTENo: "",
         grnItemType: "",
+        grnItemIMTENo: "",
         grnItemRangeSize: "",
         grnItemRangeSizeUnit: "",
         grnItemMFRNo: "",
@@ -234,15 +234,17 @@ const Grn = () => {
         grnItemCalStatus: "",
     })
     //
-    useEffect(() => {
-        const filteredImtes = selectedRows.filter((imtes) => !grnData.grnPartyItems.some(grnImte => imtes._id === grnImte._id))
-        setItemImtes(filteredImtes)
-    }, [])
+    // useEffect(() => {
+    //     const filteredImtes = selectedRows.filter((imtes) => !grnData.grnPartyItems.some(grnImte => imtes._id === grnImte._id))
+    //     setItemImtes(filteredImtes)
+    // }, [])
 
-    const handleGrnItemAdd = (e) => {
+    const handleGrnItemChange = (e) => {
         const { name, value } = e.target;
 
+        setSelectedGrnItem((prev) => ({ ...prev, [name]: value }))
         if (name === "grnImteNo") {
+            
             setSelectedGrnItem({
                 grnItemId: value._id,
 
@@ -294,12 +296,12 @@ const Grn = () => {
                 grnUncertainity: "",
                 grnItemCalStatus: ""
             })
-            setItemAddDetails((prev) => ({ ...prev, [name]: value }))
+            
         }
 
 
     }
-    console.log(selectedGrnItem)
+    console.log(selectedGrnItem.grnItemIMTENo)
 
 
     const changeGrnData = (index, name, value) => {
@@ -594,6 +596,8 @@ const Grn = () => {
 
     };
 
+    
+
     useEffect(() => {
         if (selectedGrnItem.length !== 0) {
             const ifRejected = selectedGrnItem.grnAcCriteria.some((item) => item.rowStatus === "notOk")
@@ -616,6 +620,7 @@ const Grn = () => {
         if (setSelectedGrnItem.length !== 0) {
             setGrnData((prev) => ({ ...prev, grnPartyItems: [...prev.grnPartyItems, selectedGrnItem] }))
         }
+        setSelectedGrnItem([])
     }
     useEffect(() => {
         setSelectedGrnItem([])
@@ -842,8 +847,6 @@ const Grn = () => {
                                                     }
                                                     label="GRN Date"
                                                     //onChange={handleGrnChange}
-
-
                                                     slotProps={{ textField: { size: 'small', fullWidth: true } }}
                                                     format="DD-MM-YYYY" />
 
@@ -881,10 +884,10 @@ const Grn = () => {
                                 }}
                                 elevation={12}
                             >
-                                <div className='row g-2 mb-2'>
-                                    <div className='col d-flex'>
+                                <div className='row g-2'>
+                                    <div className='col-md'>
 
-                                        <div className='col'>
+                                        
                                             <TextField label="Imte No"
                                                 id="grnImteNoId"
                                                 select
@@ -892,76 +895,95 @@ const Grn = () => {
                                                 fullWidth
                                                 size="small"
                                                 // disabled={itemAddDetails.itemListNames === ""}
-                                                onChange={handleGrnItemAdd}
-                                                value={itemAddDetails.grnImteNo}
+                                                onChange={handleGrnItemChange}
+                                               
                                                 name="grnImteNo" >
                                                 {selectedRows.map((item, index) => (
                                                     <MenuItem key={index} value={item}>{item.itemIMTENo}</MenuItem>
                                                 ))}
 
                                             </TextField>
-                                        </div>
+                                        
                                     </div>
                                     
 
-                                </div>
+                                                    <div className="col">
+                                                        <TextField size='small' disabled={selectedGrnItem.grnItemIMTENo === "" || selectedGrnItem.grnItemIMTENo === undefined} fullWidth variant='outlined' id="grnItemStatusId" onChange={handleGrnItemChange} select label="Grn Item Status" name='grnItemStatus' >
+                                                            <MenuItem value="calibrated">Calibrated</MenuItem>
+                                                            <MenuItem value="serviced">Serviced</MenuItem>
+                                                            <MenuItem value="notServicable">Not Servicable</MenuItem>
+                                                            <MenuItem value="notCalibrated">Not Calibrated</MenuItem>
+                                                        </TextField>
+                                                    </div>
 
-                                <div className='row g-2 '>
-                                    <div className='col d-flex'>
-                                        <div className="col-2 me-2">
+                                
+                                    
+                                        <div className="col-md">
 
                                             <DatePicker
                                                 fullWidth
-                                                id="calDateId"
-                                                name="calDate"
+                                                id="grnItemCalDateId"
+                                                name="grnItemCalDate"
                                                 label="Cal Date"
-                                                //sx={{ width: "100%" }}
+                                                disabled={selectedGrnItem.grnItemIMTENo === "" || selectedGrnItem.grnItemIMTENo === undefined}
                                                 slotProps={{ textField: { size: 'small' } }}
-                                                format="DD-MM-YYYY" />
-
+                                                format="DD-MM-YYYY" 
+                                                value={dayjs(selectedGrnItem.grnItemCalDate)}
+                                                onChange={ (newValue)=> selectedGrnItem.length !== 0 && setSelectedGrnItem((prev)=> ({...prev, grnItemCalDate: newValue.format('YYYY-MM-DD')}))}
+                                                />
+                                                
                                         </div>
-                                        <div className="col-2 me-2">
+                                        <div className="col-md">
 
                                             <DatePicker
                                                 fullWidth
-                                                id="nextCalDateId"
-                                                name="nextCalDate"
+                                                id="grnItemDueDateId"
+                                                name="grnItemDueDate"
                                                 label="Next Cal Date"
                                                 // sx={{ width: "100%" }}
+                                                disabled={selectedGrnItem.grnItemIMTENo === "" || selectedGrnItem.grnItemIMTENo === undefined}
                                                 slotProps={{ textField: { size: 'small' } }}
-                                                format="DD-MM-YYYY" />
+                                                format="DD-MM-YYYY" 
+                                                onChange={ (newValue)=> selectedGrnItem.length !== 0 && setSelectedGrnItem((prev)=> ({...prev, grnItemDueDate: newValue.format('YYYY-MM-DD')}))}
+                                                />
+                                                
 
                                         </div>
-                                        <div className='col me-2'>
-                                            <TextField size='small' fullWidth variant='outlined' id="certificateStatusId" select label="Certificate Status" name='certificateStatus'>
+                                        <div className='col-md'>
+                                            <TextField size='small' disabled={selectedGrnItem.grnItemIMTENo === "" || selectedGrnItem.grnItemIMTENo === undefined} fullWidth variant='outlined' id="grnItemCertificateStatusId" onChange={handleGrnItemChange} select label="Certificate Status" name='grnItemCertificateStatus'>
                                                 <MenuItem value="received">Received</MenuItem>
-                                                <MenuItem value="notreceived">Not Received</MenuItem>
+                                                <MenuItem value="notReceived">Not Received</MenuItem>
 
                                             </TextField>
                                         </div>
-                                        <div className="col me-2">
+                                        <div className="col-md">
 
-                                            <TextField label="CertificateNo"
-                                                id="certificateNoId"
+                                            <TextField label="Certificate No"
+                                                disabled={selectedGrnItem.grnItemIMTENo === "" || selectedGrnItem.grnItemIMTENo === undefined}
+                                                id="grnItemCertificateNoId"
                                                 defaultValue=""
                                                 size="small"
                                                 sx={{ width: "101%" }}
-                                                name="certificateNo" />
+                                                onChange={handleGrnItemChange}
+                                                name="grnItemCertificateNo" />
 
                                         </div>
-                                        <div className='col me-2'>
-                                            <TextField fullWidth label="Uncertainity" variant='outlined' size='small' name='itemUncertainity' />
+                                        <div className='col-md'>
+                                            <TextField fullWidth disabled={selectedGrnItem.grnItemIMTENo === "" || selectedGrnItem.grnItemIMTENo === undefined} label="Uncertainity" id='grnUncertainityId' variant='outlined' size='small' onChange={handleGrnItemChange} name='grnUncertainity' />
 
                                         </div>
 
-                                        <div className='me-2' >
+                                        <div className='col-md' >
                                             <label className='itemlistloade'>
-                                                <input className="form-control itemlistdownload" type="file" id="upload" />Upload Certificate</label>
+                                                <input disabled={selectedGrnItem.grnItemIMTENo === "" || selectedGrnItem.grnItemIMTENo === undefined} className="form-control itemlistdownload" type="file" id="upload" />Upload Certificate</label>
                                         </div>
+                                    
                                     </div>
 
-                                </div>
+                                
                             </Paper>
+
+                            {selectedGrnItem.length !== 0 ?
                             <Paper
                                 sx={{
                                     p: 2,
@@ -1124,10 +1146,6 @@ const Grn = () => {
 
                                                         }
                                                     }
-
-
-
-
 
                                                     return (
                                                         <tr key={index}>
@@ -1327,7 +1345,42 @@ const Grn = () => {
 
                                 </div>
 
-                                <Dialog
+                                
+
+
+                                <div className='row'>
+                                    <div className=' col d-flex justify-content-between '>
+
+
+                                        <div className='col-4 me-2'>
+                                            <TextField size='small' fullWidth variant='outlined' id="grnItemCalStatusId" select label="Calibration Status" name='grnItemCalStatus' value={selectedGrnItem.grnItemCalStatus}>
+                                                <MenuItem value="status">Status</MenuItem>
+                                                <MenuItem value="accepted">Accepted</MenuItem>
+                                                <MenuItem value="rejected">Rejected</MenuItem>
+
+
+                                            </TextField>
+                                        </div>
+
+                                        
+                                        <div className='me-2'>
+                                            <Button startIcon={<Add />} onClick={() => grnItemAdd()} sx={{ minWidth: "130px" }} variant='contained'>Add Item</Button>
+                                        </div>
+
+                               
+
+                                    </div>
+
+
+                                </div>
+                            </Paper>: ""}
+
+
+
+
+
+                        </form>
+                        <Dialog
                                     open={confirmSubmit}
                                     onClose={(e, reason) => {
                                         console.log(reason)
@@ -1357,40 +1410,6 @@ const Grn = () => {
                                         {alertMessage}
                                     </Alert>
                                 </Snackbar>
-
-
-                                <div className='row'>
-                                    <div className=' col d-flex '>
-
-
-                                        <div className='col-4 me-2'>
-                                            <TextField size='small' fullWidth variant='outlined' id="grnItemCalStatusId" select label="Calibration Status" name='grnItemCalStatus' value={selectedGrnItem.grnItemCalStatus}>
-                                                <MenuItem value="status">Status</MenuItem>
-                                                <MenuItem value="accepted">Accepted</MenuItem>
-                                                <MenuItem value="rejected">Rejected</MenuItem>
-
-
-                                            </TextField>
-                                        </div>
-
-                                        
-                                        <div className='me-2'>
-                                            <Button startIcon={<Add />} onClick={() => grnItemAdd()} size='small' sx={{ minWidth: "130px" }} variant='contained'>Add Item</Button>
-                                        </div>
-
-                               
-
-                                    </div>
-
-
-                                </div>
-                            </Paper>
-
-
-
-
-
-                        </form>
                     </LocalizationProvider>
 
                 </div>

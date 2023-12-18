@@ -342,10 +342,10 @@ const DcList = () => {
 
 
     return (
-        <div>
+        <div className='px-5 pt-3'>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
                 <form>
-                    <Container maxWidth="lg" sx={{ mb: 2 }}>
+                  
 
 
 
@@ -581,7 +581,7 @@ const DcList = () => {
                             </Alert>
                         </Snackbar>
 
-                    </Container>
+                  
                 </form>
 
             </LocalizationProvider>
