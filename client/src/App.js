@@ -32,6 +32,7 @@ import GrnAdd from './Components/grnList/GrnAdd';
 import OnSiteGrn from './Components/onSiteGrn/OnSiteGrn';
 import OnSiteList from './Components/onSiteGrn/OnSiteList';
 import OnSiteEditGrn from './Components/onSiteGrn/OnSiteEditGrn';
+import OnSiteDialog from './Components/Dashboard/DashboardComponents/OnSiteDialog';
 
 
 
@@ -76,7 +77,7 @@ function App() {
         <Route path="/onSiteGrn" element={<OnSiteGrn/>} />
         <Route path="/onSiteList" element={<OnSiteList/>} />
         <Route path="/onSiteEditGrn" element={<OnSiteEditGrn/>} />
-        <Route path="/onSiteEditGrn" element={<OnSiteEditGrn/>} />
+        <Route path="/onSiteDialog" element={<OnSiteDialog/>} />
         
 
      
