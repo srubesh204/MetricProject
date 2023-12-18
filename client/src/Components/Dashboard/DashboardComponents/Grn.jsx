@@ -1421,9 +1421,33 @@ const Grn = () => {
                             </Paper>
 
                             <Paper>
-                                <table>
+                            <table className='table table-bordered table-responsive text-center align-middle'>
                                     <tbody>
-                                        
+                                        <tr>
+                                            <th>Si No</th>
+                                            <th>IMTE No</th>
+                                            <th>Master Name</th>
+                                            <th>Range/Size</th>
+                                            <th>Cal Certificate No</th>
+                                            <th>Cal Date</th>
+                                            <th>Next Due</th>
+                                            <th>Calibrated At</th>
+                                            <th>Remove</th>
+                                        </tr>
+
+                                        {grnData.grnPartyItems.map((item, index) => (
+                                            <tr key={index}>
+                                                <td>{index + 1}</td>
+                                                <td>{item.grnItemIMTENo}</td>
+                                                <td>{item.grnItemAddMasterName}</td>
+                                                <td>{item.grnItemRangeSize}</td>
+
+                                                <td>{item.grnItemCalDate}</td>
+                                                <td>{item.grnItemDueDate}</td>
+                                                <td>{item.grnItemCalibratedAt}</td>
+                                                <td width="5%"><Delete color='error' /></td>
+                                            </tr>
+                                        ))}
                                     </tbody>
                                 </table>
                             </Paper>
