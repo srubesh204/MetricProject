@@ -17,29 +17,41 @@ const OnSiteGrn = () => {
 
 
     const initialGrnData = {
-        grnPartyRefNo: "",
-        grnPartyRefDate: "",
-        grnPartyName: "",
-        grnPartyCode: "",
-        grnPartyAddress: "",
-        grnNo: "",
-        grnDate: "",
-        grncCommonRemarks: "",
-         grnPartyItems:[]
+       osGrnPartyRefNo: "",
+       osGrnPartyId: "",
+       osGrnPartyRefDate: "",
+       osGrnPartyName: "",
+       osGrnPartyCode: "",
+       osGrnPartyAddress: "",
+       osGrnNo: "",
+       osGrnDate: "",
+       osGrnCommonRemarks: "",
+       osGrnDueDate: "",
+       osGrnCalDate: "",
+       osGrnCertificateStatus: "",
+       osGrnCertificateNo: "",
+       osGrnUncertainity: "",
+       osGrnPartyItems: []
 
     }
 
 
     const [onSiteGrnData, setOnSiteGrnData] = useState({
-        grnPartyRefNo: "",
-        grnPartyRefDate: "",
-        grnPartyName: "",
-        grnPartyCode: "",
-        grnPartyAddress: "",
-        grnNo: "",
-        grnDate: "",
-        grncCommonRemarks: "",
-        grnPartyItems:[]
+        osGrnPartyRefNo: "",
+        osGrnPartyId: "",
+        osGrnPartyRefDate: "",
+        osGrnPartyName: "",
+        osGrnPartyCode: "",
+        osGrnPartyAddress: "",
+        osGrnNo: "",
+        osGrnDate: "",
+        osGrnCommonRemarks: "",
+        osGrnDueDate: "",
+        osGrnCalDate: "",
+        osGrnCertificateStatus: "",
+        osGrnCertificateNo: "",
+        osGrnUncertainity: "",
+        osGrnPartyItems: []
 
 
 
@@ -92,40 +104,12 @@ const OnSiteGrn = () => {
     }, []);
 
 
-   {/* const handleGrnChange = (e) => {
-        const { name, value, checked } = e.target;
-        // Ensure onSiteGrnData is a function before invoking it
-        if (typeof onSiteGrnData === 'function') {
-            onSiteGrnData((prev) => ({ ...prev, [name]: value }));
-        }
-    };*/}
+    
 
-    const handleGrnChange = (e) => {
-        const { name, value } = e.target;
-        // Assuming onSiteGrnData is a state variable
-        setOnSiteGrnData((prev) => ({ ...prev, [name]: value }));
-    };
+   
 
 
-  {/* const setPartyData = async (id) => {
-        try {
-            const response = await axios.get(
-                `${process.env.REACT_APP_PORT}/vendor/getVendorById/${id}`
-            );
-            console.log(response)
-            onSiteGrnData((prev) => ({
-                ...prev,
-                grnPartyName: response.data.result.fullName,
-                grnPartyAddress: response.data.result.address,
-                grnPartyCode: response.data.result.vendorCode,
-                grnPartyId: response.data.result._id
-
-            }))
-
-        } catch (err) {
-            console.log(err);
-        }
-    };*/}
+   
     const setPartyData = async (id) => {
         try {
             const response = await axios.get(
@@ -134,16 +118,20 @@ const OnSiteGrn = () => {
             console.log(response)
             setOnSiteGrnData((prev) => ({
                 ...prev,
-                dcPartyName: response.data.result.fullName,
-                dcPartyAddress: response.data.result.address,
-                dcPartyCode: response.data.result.vendorCode,
-                dcPartyId: response.data.result._id
+                osGrnPartyName: response.data.result.fullName,
+                osGrnPartyAddress: response.data.result.address,
+                osGrnPartyCode: response.data.result.vendorCode,
+                osGrnPartyId: response.data.result._id
             }))
 
         } catch (err) {
             console.log(err);
         }
     };
+
+
+    
+
 
 
 
@@ -297,6 +285,11 @@ const OnSiteGrn = () => {
     };
 
 
+    const handleGrnChange = (e) => {
+        const { name, value, checked } = e.target;
+        setOnSiteGrnData((prev) => ({ ...prev, [name]: value }));
+    }
+
 
 
 
@@ -360,14 +353,14 @@ const OnSiteGrn = () => {
                                                 <div className=" col-6 me-2">
 
                                                     <TextField label="Party Ref No"
-                                                        id="grnPartyRefNoId"
+                                                        id="osGrnPartyRefNId"
                                                         defaultValue=""
-                                                        value={onSiteGrnData.grnPartyRefNo}
+                                                        value={onSiteGrnData.osGrnPartyRefNo}
                                                         //  sx={{ width: "100%" }}
                                                         size="small"
                                                         fullWidth
-                                                       onChange={handleGrnChange}
-                                                        name="grnPartyRefNo" />
+                                                        onChange={handleGrnChange}
+                                                        name="osGrnPartyRefN" />
                                                 </div>
                                                 <div className="col-6">
 
@@ -376,9 +369,9 @@ const OnSiteGrn = () => {
                                                         fullWidth
                                                         id="grnPartyRefDateId"
                                                         name="grnPartyRefDate"
-                                                        value={dayjs(onSiteGrnData.grnPartyRefDate)}
+                                                        value={dayjs(onSiteGrnData.osGrnPartyRefDate)}
                                                         onChange={(newValue) =>
-                                                            setOnSiteGrnData((prev) => ({ ...prev, grnPartyRefDate: newValue.format("YYYY-MM-DD") }))
+                                                            setOnSiteGrnData((prev) => ({ ...prev, osGrnPartyRefDate: newValue.format("YYYY-MM-DD") }))
                                                         }
                                                         label="Party Ref Date"
                                                         //onChange={handleGrnChange}
@@ -400,11 +393,11 @@ const OnSiteGrn = () => {
                                                         <TextField label="Party Name"
                                                             id="grnPartyNameId"
                                                             select
-                                                            //  value={grnData.grnPartyName}
+                                                            // value={onSiteGrnData.osGrnPartyName}
 
                                                             onChange={(e) => setPartyData(e.target.value)}
 
-                                                            //  sx={{ width: "100%" }}
+                                                             sx={{ width: "100%" }}
                                                             size="small"
                                                             fullWidth
 
@@ -417,15 +410,15 @@ const OnSiteGrn = () => {
                                                     <div className="col-6">
 
                                                         <TextField label="Party code"
-                                                            id="grnPartyCodeId"
+                                                            id="osGrnPartyCodeId"
                                                             defaultValue=""
-                                                          
+
                                                             // sx={{ width: "100%" }}
                                                             size="small"
-                                                            value={onSiteGrnData.grnPartyCode}
+                                                            value={onSiteGrnData.osGrnPartyCode}
 
                                                             fullWidth
-                                                            name="grnPartyCode" />
+                                                            name="osGrnPartyCode" />
 
                                                     </div>
 
@@ -437,13 +430,13 @@ const OnSiteGrn = () => {
                                                 <div className="col-12">
 
                                                     <TextField label="PartyAddress"
-                                                        id="grnPartyAddressId"
+                                                        id="osGrnPartyAddressId"
                                                         defaultValue=""
                                                         size="small"
-                                                     
-                                                        value={onSiteGrnData.grnPartyAddress}
+
+                                                        value={onSiteGrnData.osGrnPartyAddress}
                                                         sx={{ width: "101%" }}
-                                                        name="grnPartyAddress" />
+                                                        name="osGrnPartyAddress" />
 
                                                 </div>
                                             </div>
@@ -468,13 +461,13 @@ const OnSiteGrn = () => {
 
                                                     <TextField
                                                         label="GRN NO"
-                                                        id="grnNoId"
+                                                        id="osGrnNoId"
                                                         defaultValue=""
-                                                        value={onSiteGrnData.grnNo}
+                                                       value={onSiteGrnData.osGrnNo}
                                                         size="small"
-                                                        onChange={handleGrnChange}
+                                                       // onChange={handleGrnChange}
                                                         fullWidth
-                                                        name="grnNo"
+                                                        name="osGrnNo"
                                                     />
                                                 </div>
                                                 <div className="col-6">
@@ -484,15 +477,14 @@ const OnSiteGrn = () => {
                                                     <DatePicker
 
                                                         fullWidth
-                                                        id="grnDateId"
-                                                        name="grnDate"
-                                                        value={dayjs(onSiteGrnData.grnPartyRefDate)}
+                                                        id="osGrnDateId"
+                                                        name="osGrnDate"
+                                                        value={dayjs(onSiteGrnData.osGrnDate)}
                                                         onChange={(newValue) =>
-                                                            setOnSiteGrnData((prev) => ({ ...prev, grnDate: newValue.format("YYYY-MM-DD") }))
+                                                            setOnSiteGrnData((prev) => ({ ...prev, osGrnDate: newValue.format("YYYY-MM-DD") }))
                                                         }
-                                                        label="GRN Date"
-                                                        //onChange={handleGrnChange}
-
+                                                        label="OnSite GRN Date"
+                                                       
 
                                                         slotProps={{ textField: { size: 'small' } }}
                                                         format="DD-MM-YYYY" />
@@ -506,14 +498,14 @@ const OnSiteGrn = () => {
                                             <div className='row '>
                                                 <div className='mb-5'>
                                                     <TextField label="Common Remarks"
-                                                        id="grnCommonRemarksId"
+                                                        id="osGrnCommonRemarksId"
 
                                                         defaultValue=""
                                                         onChange={handleGrnChange}
-                                                        value={onSiteGrnData.grnCommonRemarks}
+                                                        value={onSiteGrnData.osGrnCommonRemarks}
                                                         fullWidth
                                                         size="small"
-                                                        name="grnCommonRemarks"
+                                                        name="osGrnCommonRemarks"
                                                     >
                                                     </TextField>
                                                 </div>
@@ -579,7 +571,7 @@ const OnSiteGrn = () => {
                                                     id="grnCalDateId"
                                                     name="grnCalDate"
                                                     // onChange={handleGrnChange}
-                                                    value={dayjs(onSiteGrnData.grnCalDate)}
+                                                    value={dayjs(onSiteGrnData.osGrnCalDate)}
                                                     label="Cal Date"
                                                     //sx={{ width: "100%" }}
                                                     slotProps={{ textField: { size: 'small' } }}
@@ -597,12 +589,12 @@ const OnSiteGrn = () => {
                                                     id="grnDueDateId"
                                                     name="grnDueDate"
                                                     // onChange={handleGrnChange}
-                                                    value={dayjs(onSiteGrnData.grnDueDate)}
+                                                    value={dayjs(onSiteGrnData.osGrnDueDate)}
                                                     label="Next Cal Date"
                                                     // sx={{ width: "100%" }}
                                                     slotProps={{ textField: { size: 'small' } }}
                                                     onChange={(newValue) =>
-                                                        setOnSiteGrnData((prev) => ({ ...prev, grnDueDate: newValue.format("YYYY-MM-DD") }))
+                                                        setOnSiteGrnData((prev) => ({ ...prev, osGrnDueDate: newValue.format("YYYY-MM-DD") }))
                                                     }
                                                     format="DD-MM-YYYY"
 
@@ -616,7 +608,7 @@ const OnSiteGrn = () => {
                                                     variant='outlined'
                                                     id="grnCertificateStatusId"
                                                     onChange={handleGrnChange}
-                                                    value={onSiteGrnData.grnCertificateStatus}
+                                                    value={onSiteGrnData.osGrnCertificateStatus}
                                                     select
                                                     label="Certificate Status"
                                                     name='grnCertificateStatus'
@@ -629,9 +621,9 @@ const OnSiteGrn = () => {
 
                                                 <TextField label="CertificateNo"
                                                     id="grnCertificateNoId"
-                                                    value={onSiteGrnData.grnCertificateNo}
+                                                    value={onSiteGrnData.osGrnCertificateNo}
                                                     onChange={handleGrnChange}
-                                                  
+
                                                     defaultValue=""
                                                     size="small"
                                                     sx={{ width: "101%" }}
@@ -640,7 +632,7 @@ const OnSiteGrn = () => {
 
                                             </div>
                                             <div className='col me-2'>
-                                                <TextField fullWidth label="Uncertainity" variant='outlined' id="grnUncertainityId" value={onSiteGrnData.grnUncertainity} onChange={handleGrnChange} size='small' name='grnUncertainity' />
+                                                <TextField fullWidth label="Uncertainity" variant='outlined' id="grnUncertainityId" value={onSiteGrnData.osGrnUncertainity} onChange={handleGrnChange} size='small' name='grnUncertainity' />
 
                                             </div>
 

@@ -298,7 +298,7 @@ const GrnList = () => {
                                     }}
                                     elevation={12}
                                 >
-                                    <div className='row mb-2'>
+                                    <div className='row g-2 mb-2'>
                                         <div className='col'>
                                             <TextField fullWidth label="Vendor Type" className="col" select size="small" id="vendorTypeId" onChange={handleFilterChange} name="vendorType" defaultValue="" >
                                                 <MenuItem value="all">All</MenuItem>
@@ -322,7 +322,7 @@ const GrnList = () => {
 
                                         </div>
                                     </div>
-                                    <div className='row mb-2'>
+                                    <div className='row g-2 mb-2'>
                                         <div className="form-floating col">
                                             <DatePicker
                                                 fullWidth

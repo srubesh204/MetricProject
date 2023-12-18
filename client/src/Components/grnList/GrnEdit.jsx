@@ -21,7 +21,7 @@ const GrnEdit = () => {
     const [selectedExtraMaster, setSelectedExtraMaster] = useState([])
     const initialGrnData = {
         grnPartyRefNo: "",
-        grnPartyId:"",
+        grnPartyId: "",
         grnPartyRefDate: "",
         grnPartyName: "",
         grnPartyCode: "",
@@ -41,7 +41,7 @@ const GrnEdit = () => {
 
     const [grnData, setGrnData] = useState({
         grnPartyRefNo: "",
-        grnPartyId:"",
+        grnPartyId: "",
         grnPartyRefDate: "",
         grnPartyName: "",
         grnPartyCode: "",
@@ -353,402 +353,435 @@ const GrnEdit = () => {
                 <div>
                     <LocalizationProvider dateAdapter={AdapterDayjs}>
                         <form>
-                            <Container maxWidth="lg" sx={{ mb: 2 }}>
-
-                                <div className='row'>
-
-                                    <div className='col'>
-                                        <Paper
-                                            sx={{
-                                                p: 2,
-                                                display: 'flex',
-                                                flexDirection: 'column',
-                                                mb: 1,
-
-                                            }}
-                                            elevation={12}
-                                        >
-                                            <div className='col d-flex mb-2'>
-                                                <div className=" col-6 me-2">
-
-                                                    <TextField label="Party Ref No"
-                                                        id="grnPartyRefNoId"
-                                                        defaultValue=""
-                                                        value={grnData.grnPartyRefNo}
-                                                        //  sx={{ width: "100%" }}
-                                                        size="small"
-                                                        fullWidth
-                                                        onChange={handleGrnChange}
-                                                        name="grnPartyRefNo" />
-                                                </div>
-                                                <div className="col-6">
-
-                                                    <DatePicker
-
-                                                        fullWidth
-                                                        id="grnPartyRefDateId"
-                                                        name="grnPartyRefDate"
-                                                        value={dayjs(grnData.grnPartyRefDate)}
-                                                        onChange={(newValue) =>
-                                                            setGrnData((prev) => ({ ...prev, grnPartyRefDate: newValue.format("YYYY-MM-DD") }))
-                                                        }
-                                                        label="Party Ref Date"
-                                                        //onChange={handleGrnChange}
-
-
-                                                        slotProps={{ textField: { size: 'small' } }}
-                                                        format="DD-MM-YYYY" />
 
 
 
-                                                </div>
+                            <div className='row'>
 
+                                <div className='col'>
+                                    <Paper
+                                        sx={{
+                                            p: 2,
+                                            display: 'flex',
+                                            flexDirection: 'column',
+                                            mb: 1,
 
-                                            </div>
-                                            <div className='row'>
-                                                <div className='col d-flex mb-2'>
-                                                    <div className=" col-6 me-2">
-
-                                                        <TextField label="Party Name"
-                                                            id="grnPartyNameId"
-                                                            select
-                                                            value={grnData.grnPartyId}
-
-                                                            onChange={(e) => setPartyData(e.target.value)}
-
-                                                            //  sx={{ width: "100%" }}
-                                                            size="small"
-                                                            fullWidth
-
-                                                            name="grnPartyName" >
-                                                            {vendorDataList.map((item, index) => (
-                                                                <MenuItem key={index} value={item._id}>{item.fullName}</MenuItem>
-                                                            ))}
-                                                        </TextField>
-                                                    </div>
-                                                    <div className="col-6">
-
-                                                        <TextField label="Party code"
-                                                            id="grnPartyCodeId"
-                                                            defaultValue=""
-
-                                                            onChange={handleGrnChange}
-                                                            // sx={{ width: "100%" }}
-                                                            size="small"
-                                                            value={grnData.grnPartyCode}
-
-                                                            fullWidth
-                                                            name="grnPartyCode" />
-
-                                                    </div>
-
-
-                                                </div>
-
-                                            </div>
-                                            <div className='row '>
-                                                <div className="col-12">
-
-                                                    <TextField label="PartyAddress"
-                                                        id="grnPartyAddressId"
-                                                        defaultValue=""
-                                                        size="small"
-                                                        onChange={handleGrnChange}
-                                                        value={grnData.grnPartyAddress}
-                                                        sx={{ width: "101%" }}
-                                                        name="grnPartyAddress" />
-
-                                                </div>
-                                            </div>
-                                        </Paper>
-
-                                    </div>
-
-                                    <div className='col'>
-                                        <Paper
-                                            sx={{
-                                                p: 2,
-                                                display: 'flex',
-                                                flexDirection: 'column',
-                                                mb: 1,
-
-                                            }}
-                                            elevation={12}
-                                        >
-
-                                            <div className='col d-flex mb-2'>
-                                                <div className=" col-6 me-2">
-
-                                                    <TextField
-                                                        label="GRN NO"
-                                                        id="grnNoId"
-                                                        defaultValue=""
-                                                        value={grnData.grnNo}
-                                                        size="small"
-                                                        onChange={handleGrnChange}
-                                                        fullWidth
-                                                        name="grnNo"
-                                                    />
-                                                </div>
-                                                <div className="col-6">
-
-
-
-                                                    <DatePicker
-
-                                                        fullWidth
-                                                        id="grnDateId"
-                                                        name="grnDate"
-                                                        value={dayjs(grnData.grnDate)}
-                                                        onChange={(newValue) =>
-                                                            setGrnData((prev) => ({ ...prev, grnDate: newValue.format("YYYY-MM-DD") }))
-                                                        }
-                                                        label="GRN Date"
-                                                        //onChange={handleGrnChange}
-
-
-                                                        slotProps={{ textField: { size: 'small' } }}
-                                                        format="DD-MM-YYYY" />
-
-
-
-                                                </div>
-
-
-                                            </div>
-                                            <div className='row '>
-                                                <div className='mb-5'>
-                                                    <TextField label="Common Remarks"
-                                                        id="grnCommonRemarksId"
-
-                                                        defaultValue=""
-                                                        onChange={handleGrnChange}
-                                                        value={grnData.grnCommonRemarks}
-                                                        fullWidth
-                                                        size="small"
-                                                        name="grnCommonRemarks"
-                                                    >
-                                                    </TextField>
-                                                </div>
-                                            </div>
-                                        </Paper>
-                                    </div>
-                                </div>
-                                <Paper
-                                    sx={{
-                                        p: 2,
-                                        display: 'flex',
-                                        flexDirection: 'column',
-                                        mb: 1,
-
-                                    }}
-                                    elevation={12}
-                                >
-                                    <div className='row g-2 mb-2'>
-                                        <div className='col d-flex'>
-                                            <div className='col me-2'>
-                                                <TextField size='small' fullWidth variant='outlined' defaultValue="" value={itemAddDetails.grnList} id="grnListId" onChange={handleGrnItemAdd} select label="Item List" name='grnList'>
-                                                 
-                                                    {itemMasterDistNames.map((item, index) => (
-                                                        <MenuItem key={index} value={item}>{item}</MenuItem>
-                                                    ))}
-
-                                                </TextField>
-                                            </div>
-                                            <div className='col'>
-                                                <TextField label="Imte No"
-                                                    id="grnImteNoId"
-                                                    select
-                                                    defaultValue=""
-                                                    fullWidth
-                                                    size="small"
-                                                    disabled={itemAddDetails.grnList === ""}
-                                                    onChange={handleGrnItemAdd}
-                                                    value={itemAddDetails.grnImteNo}
-                                                    name="grnImteNo" >
-                                               
-                                                    {itemImtes.map((item, index) => (
-                                                        <MenuItem key={index} value={item}>{item.itemIMTENo}</MenuItem>
-                                                    ))}
-
-                                                </TextField>
-                                            </div>
-                                        </div>
-                                        <div className=' col d-flex justify-content-end'>
-                                            <div className='me-2 '>
-                                                <Button startIcon={<Add />} onClick={() => grnItemAdd()} size='small' sx={{ minWidth: "130px" }} variant='contained'>Add Item</Button>
-                                            </div>
-
-                                        </div>
-
-                                    </div>
-
-                                    <div className='row g-2 '>
-                                        <div className='col d-flex'>
-                                            <div className="col-2 me-2">
-
-                                                <DatePicker
-                                                    fullWidth
-                                                    id="grnCalDateId"
-                                                    name="grnCalDate"
-                                                    label="Cal Date"
-                                                 
-                                                    //sx={{ width: "100%" }}
-                                                    slotProps={{ textField: { size: 'small' } }}
-                                                    format="DD-MM-YYYY"
-                                                    value={dayjs(grnData.grnCalDate)}
-                                                    onChange={(newValue) =>
-                                                        setGrnData((prev) => ({ ...prev, grnCalDate: newValue.format("YYYY-MM-DD") }))
-                                                    } />
-
-                                            </div>
-                                            <div className="col-2 me-2">
-
-                                                <DatePicker
-                                                    fullWidth
-                                                    id="grnDueDateId"
-                                                    name="grnDueDate"
-                                                    label="Next Cal Date"
-                                                    // sx={{ width: "100%" }}
-                                                    
-                                                    slotProps={{ textField: { size: 'small' } }}
-                                                    format="DD-MM-YYYY"
-                                                    value={dayjs(grnData.grnDueDate)}
-                                                    onChange={(newValue) =>
-                                                        setGrnData((prev) => ({ ...prev, grnDueDate: newValue.format("YYYY-MM-DD") }))
-                                                    }
-                                                />
-
-                                            </div>
-                                            <div className='col me-2'>
-                                                <TextField size='small' fullWidth variant='outlined' id="certificateStatusId" select label="Certificate Status" onChange={handleGrnChange} name='certificateStatus'>
-                                                    <MenuItem value="received">Received</MenuItem>
-                                                    <MenuItem value="notreceived">Not Received</MenuItem>
-                                                    
-                                                </TextField>
-                                            </div>
-                                            <div className="col me-2">
-
-                                                <TextField label="CertificateNo"
-                                                    id="certificateNoId"
-                                                    defaultValue=""
-                                                    value={grnData.grnCertificateNo}
-                                                    onChange={handleGrnChange}
-                                                    size="small"
-                                                    sx={{ width: "101%" }}
-                                                    name="certificateNo" />
-
-                                            </div>
-                                            <div className='col me-2'>
-                                                <TextField fullWidth label="Uncertainity" variant='outlined' onChange={handleGrnChange} value={grnData.grnUncertainity} size='small' name='itemUncertainity' />
-
-                                            </div>
-
-                                            <div className='me-2' >
-                                                <label className='itemlistloade'>
-                                                    <input className="form-control itemlistdownload" type="file" id="upload" />Upload Certificate</label>
-                                            </div>
-                                        </div>
-
-                                    </div>
-                                </Paper>
-                                <Paper
-                                    sx={{
-                                        p: 2,
-                                        display: 'flex',
-                                        flexDirection: 'column',
-                                        mb: 1,
-
-                                    }}
-                                    elevation={12}
-                                >
-                                    <div className='row'>
-                                        <h6 className='text-center'>Calibration Data</h6>
-                                        <table className='table table-sm table-bordered table-responsive text-center align-middle'>
-                                            <tbody>
-                                                <tr>
-                                                    <th>Parameter</th>
-                                                    <th>Range/Size</th>
-                                                    <th>Unit</th>
-                                                    <th>Min</th>
-                                                    <th>Max</th>
-                                                    <th>Wear Limit</th>
-                                                    <th>Observed Size/Observed Error</th>
-                                                    <th>Unit</th>
-                                                    <th>Status</th>
-                                                </tr>
-                                                <tr>
-                                                    <td><input type="text" className='form-control form-control-sm' id="parameterId" name="parameter" /></td>
-                                                    <td><input type="text" className='form-control form-control-sm' id="rangeSizeId" name="rangeSize" /></td>
-                                                    <td><input type="text" className='form-control form-control-sm' id="unitId" name="unit" /></td>
-                                                    <td><input type="text" className='form-control form-control-sm' id="minId" name="min" /></td>
-                                                    <td><input type="text" className='form-control form-control-sm' id="maxId" name="max" /></td>
-                                                    <td><input type="text" className='form-control form-control-sm' id="wearLimitId" name="wearLimit" /></td>
-                                                    <td><input type="text" className='form-control form-control-sm' id="observedSizeId" name="observedSize" /></td>
-                                                    <td><input type="text" className='form-control form-control-sm' id="unitId" name="unit" /></td>
-                                                    <td><input type="text" className='form-control form-control-sm' id="statusId" name="status" /></td>
-
-                                                </tr>
-                                            </tbody>
-
-                                        </table>
-
-                                    </div>
-
-                                    <Dialog
-                                        open={confirmSubmit}
-                                        onClose={(e, reason) => {
-                                            console.log(reason)
-                                            if (reason !== 'backdropClick' && reason !== 'escapeKeyDown') {
-                                                setConfirmSubmit(false)
-                                            }
                                         }}
-                                        aria-labelledby="alert-dialog-title"
-                                        aria-describedby="alert-dialog-description"
+                                        elevation={12}
                                     >
-                                        <DialogTitle id="alert-dialog-title">
-                                            Are you sure to submit ?
-                                        </DialogTitle>
+                                        <div className='row g-2 mb-2'>
+                                            <div className=" col-6">
 
-                                        <DialogActions className='d-flex justify-content-center'>
-                                            <Button onClick={() => setConfirmSubmit(false)}>Cancel</Button>
-                                            <Button onClick={() => { updateGrnData(); setConfirmSubmit(false) }} autoFocus>
-                                                Submit
-                                            </Button>
-                                        </DialogActions>
-                                    </Dialog>
-                                    <Snackbar anchorOrigin={{ vertical: "top", horizontal: "right" }} open={snackBarOpen} autoHideDuration={3000}
-                                        onClose={() => setTimeout(() => {
-                                            setSnackBarOpen(false)
-                                        }, 3000)}>
-                                        <Alert onClose={() => setSnackBarOpen(false)} variant='filled' severity="success" sx={{ width: '100%' }}>
-                                            {alertMessage}
-                                        </Alert>
-                                    </Snackbar>
+                                                <TextField label="Party Ref No"
+                                                    id="grnPartyRefNoId"
+                                                    defaultValue=""
+                                                    value={grnData.grnPartyRefNo}
+                                                    //  sx={{ width: "100%" }}
+                                                    size="small"
+                                                    fullWidth
+                                                    onChange={handleGrnChange}
+                                                    name="grnPartyRefNo" />
+                                            </div>
+                                            <div className="col-6">
+
+                                                <DatePicker
+
+                                                    fullWidth
+                                                    id="grnPartyRefDateId"
+                                                    name="grnPartyRefDate"
+                                                    value={dayjs(grnData.grnPartyRefDate)}
+                                                    onChange={(newValue) =>
+                                                        setGrnData((prev) => ({ ...prev, grnPartyRefDate: newValue.format("YYYY-MM-DD") }))
+                                                    }
+                                                    label="Party Ref Date"
+                                                    //onChange={handleGrnChange}
 
 
-                                    <div className='row'>
-                                        <div className=' col d-flex '>
+                                                    slotProps={{ textField: { size: 'small', fullWidth: true } }}
+                                                    format="DD-MM-YYYY" />
 
 
-                                            <div className='col-4 me-2'>
-                                                <TextField size='small' fullWidth variant='outlined' id="calibrationStatus" select label="Calibration Status" name='calibrationStatus'>
-                                                    <MenuItem value="Active">Active</MenuItem>
-                                                    <MenuItem value="InActive">InActive</MenuItem>
 
+                                            </div>
+
+
+
+
+
+                                            <div className=" col-6 ">
+
+                                                <TextField label="Party Name"
+                                                    id="grnPartyNameId"
+                                                    select
+                                                    //  value={grnData.grnPartyName}
+
+                                                    onChange={(e) => setPartyData(e.target.value)}
+
+                                                    //  sx={{ width: "100%" }}
+                                                    size="small"
+                                                    fullWidth
+
+                                                    name="grnPartyName" >
+                                                    {vendorDataList.map((item, index) => (
+                                                        <MenuItem key={index} value={item._id}>{item.fullName}</MenuItem>
+                                                    ))}
                                                 </TextField>
                                             </div>
+                                            <div className="col-6">
+
+                                                <TextField label="Party code"
+                                                    id="grnPartyCodeId"
+                                                    defaultValue=""
+                                                    onChange={handleGrnChange}
+                                                    // sx={{ width: "100%" }}
+                                                    size="small"
+                                                    value={grnData.grnPartyCode}
+
+                                                    fullWidth
+                                                    name="grnPartyCode" />
+
+                                            </div>
+
 
                                         </div>
 
 
+
+                                        <div className="col-12">
+
+                                            <TextField label="PartyAddress"
+                                                id="grnPartyAddressId"
+                                                defaultValue=""
+                                                size="small"
+                                                onChange={handleGrnChange}
+                                                value={grnData.grnPartyAddress}
+                                                sx={{ width: "100%" }}
+                                                name="grnPartyAddress" />
+
+                                        </div>
+
+                                    </Paper>
+
+                                </div>
+
+                                <div className='col'>
+                                    <Paper
+                                        sx={{
+                                            p: 2,
+                                            display: 'flex',
+                                            flexDirection: 'column',
+                                            mb: 1,
+
+                                        }}
+                                        elevation={12}
+                                    >
+
+                                        <div className='col row g-2 d-flex mb-2'>
+                                            <div className="col-6">
+
+                                                <TextField
+                                                    label="GRN NO"
+                                                    id="grnNoId"
+                                                    defaultValue=""
+                                                    value={grnData.grnNo}
+                                                    size="small"
+                                                    onChange={handleGrnChange}
+                                                    fullWidth
+                                                    name="grnNo"
+                                                />
+                                            </div>
+                                            <div className="col-6">
+
+
+
+                                                <DatePicker
+
+                                                    fullWidth
+                                                    id="grnDateId"
+                                                    name="grnDate"
+                                                    value={dayjs(grnData.grnPartyRefDate)}
+                                                    onChange={(newValue) =>
+                                                        setGrnData((prev) => ({ ...prev, grnDate: newValue.format("YYYY-MM-DD") }))
+                                                    }
+                                                    label="GRN Date"
+                                                    //onChange={handleGrnChange}
+
+
+                                                    slotProps={{ textField: { size: 'small', fullWidth: true } }}
+                                                    format="DD-MM-YYYY" />
+
+
+
+                                            </div>
+                                            <div className='col-md-12'>
+                                                <TextField label="Common Remarks"
+                                                    id="grnCommonRemarksId"
+
+                                                    defaultValue=""
+                                                    onChange={handleGrnChange}
+                                                    value={grnData.grnCommonRemarks}
+                                                    fullWidth
+                                                    size="small"
+                                                    name="grnCommonRemarks"
+                                                >
+                                                </TextField>
+                                            </div>
+
+
+                                        </div>
+
+
+
+                                    </Paper>
+                                </div>
+                            </div>
+                            <Paper
+                                sx={{
+                                    p: 2,
+                                    display: 'flex',
+                                    flexDirection: 'column',
+                                    mb: 1,
+
+                                }}
+                                elevation={12}
+                            >
+                                <div className='row g-2 mb-2'>
+                                    <div className='col d-flex'>
+                                        <div className='col me-2'>
+                                            <TextField size='small' fullWidth variant='outlined' defaultValue="" value={itemAddDetails.grnList} id="grnListId" onChange={handleGrnItemAdd} select label="Item List" name='grnList'>
+
+                                                {itemMasterDistNames.map((item, index) => (
+                                                    <MenuItem key={index} value={item}>{item}</MenuItem>
+                                                ))}
+
+                                            </TextField>
+                                        </div>
+                                        <div className='col'>
+                                            <TextField label="Imte No"
+                                                id="grnImteNoId"
+                                                select
+                                                defaultValue=""
+                                                fullWidth
+                                                size="small"
+                                                disabled={itemAddDetails.grnList === ""}
+                                                onChange={handleGrnItemAdd}
+                                                value={itemAddDetails.grnImteNo}
+                                                name="grnImteNo" >
+
+                                                {itemImtes.map((item, index) => (
+                                                    <MenuItem key={index} value={item}>{item.itemIMTENo}</MenuItem>
+                                                ))}
+
+                                            </TextField>
+                                        </div>
                                     </div>
-                                </Paper>
+                                    <div className=' col d-flex justify-content-end'>
+                                    </div>
+
+                                </div>
+
+                                <div className='row g-2 '>
+                                    <div className='col d-flex'>
+                                        <div className="col-2 me-2">
+
+                                            <DatePicker
+                                                fullWidth
+                                                id="grnCalDateId"
+                                                name="grnCalDate"
+                                                label="Cal Date"
+
+                                                //sx={{ width: "100%" }}
+                                                slotProps={{ textField: { size: 'small' } }}
+                                                format="DD-MM-YYYY"
+                                                value={dayjs(grnData.grnCalDate)}
+                                                onChange={(newValue) =>
+                                                    setGrnData((prev) => ({ ...prev, grnCalDate: newValue.format("YYYY-MM-DD") }))
+                                                } />
+
+                                        </div>
+                                        <div className="col-2 me-2">
+
+                                            <DatePicker
+                                                fullWidth
+                                                id="grnDueDateId"
+                                                name="grnDueDate"
+                                                label="Next Cal Date"
+                                                // sx={{ width: "100%" }}
+
+                                                slotProps={{ textField: { size: 'small' } }}
+                                                format="DD-MM-YYYY"
+                                                value={dayjs(grnData.grnDueDate)}
+                                                onChange={(newValue) =>
+                                                    setGrnData((prev) => ({ ...prev, grnDueDate: newValue.format("YYYY-MM-DD") }))
+                                                }
+                                            />
+
+                                        </div>
+                                        <div className='col me-2'>
+                                            <TextField size='small' fullWidth variant='outlined' id="certificateStatusId" select label="Certificate Status" onChange={handleGrnChange} name='certificateStatus'>
+                                                <MenuItem value="received">Received</MenuItem>
+                                                <MenuItem value="notreceived">Not Received</MenuItem>
+
+                                            </TextField>
+                                        </div>
+                                        <div className="col me-2">
+
+                                            <TextField label="CertificateNo"
+                                                id="certificateNoId"
+                                                defaultValue=""
+                                                value={grnData.grnCertificateNo}
+                                                onChange={handleGrnChange}
+                                                size="small"
+                                                sx={{ width: "101%" }}
+                                                name="certificateNo" />
+
+                                        </div>
+                                        <div className='col me-2'>
+                                            <TextField fullWidth label="Uncertainity" variant='outlined' onChange={handleGrnChange} value={grnData.grnUncertainity} size='small' name='itemUncertainity' />
+
+                                        </div>
+
+                                        <div className='me-2' >
+                                            <label className='itemlistloade'>
+                                                <input className="form-control itemlistdownload" type="file" id="upload" />Upload Certificate</label>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </Paper>
+                            <Paper
+                                sx={{
+                                    p: 2,
+                                    display: 'flex',
+                                    flexDirection: 'column',
+                                    mb: 1,
+
+                                }}
+                                elevation={12}
+                            >
+                                <div className='row'>
+                                    <h4 className='text-center'>Calibration Data</h4>
+                                    <div className=' col d-flex justify-content-end mb-2'>
+                                        <div className=' col-2 me-2 '>
+                                            <TextField size='small' fullWidth variant='outlined' id="certificateStatusId" select label="Certificate Status" onChange={handleGrnChange} name='certificateStatus'>
+                                                <MenuItem value="received">Received</MenuItem>
+                                                <MenuItem value="notreceived">Not Received</MenuItem>
+
+                                            </TextField>
+                                        </div>
+
+                                    </div>
+                                    <table className='table table-sm table-bordered table-responsive text-center align-middle'>
+                                        <tbody>
+                                            <tr>
+                                                <th>Parameter</th>
+                                                <th>Range/Size</th>
+                                                <th>Unit</th>
+                                                <th>Min</th>
+                                                <th>Max</th>
+                                                <th>Wear Limit</th>
+                                                <th>Observed Size/Observed Error</th>
+                                                <th>Unit</th>
+                                                <th>Status</th>
+                                            </tr>
+                                            <tr>
+                                                <td><input type="text" className='form-control form-control-sm' id="parameterId" name="parameter" /></td>
+                                                <td><input type="text" className='form-control form-control-sm' id="rangeSizeId" name="rangeSize" /></td>
+                                                <td><input type="text" className='form-control form-control-sm' id="unitId" name="unit" /></td>
+                                                <td><input type="text" className='form-control form-control-sm' id="minId" name="min" /></td>
+                                                <td><input type="text" className='form-control form-control-sm' id="maxId" name="max" /></td>
+                                                <td><input type="text" className='form-control form-control-sm' id="wearLimitId" name="wearLimit" /></td>
+                                                <td><input type="text" className='form-control form-control-sm' id="observedSizeId" name="observedSize" /></td>
+                                                <td><input type="text" className='form-control form-control-sm' id="unitId" name="unit" /></td>
+                                                <td><input type="text" className='form-control form-control-sm' id="statusId" name="status" /></td>
+
+                                            </tr>
+                                        </tbody>
+
+                                    </table>
+
+                                </div>
+
+                                <Dialog
+                                    open={confirmSubmit}
+                                    onClose={(e, reason) => {
+                                        console.log(reason)
+                                        if (reason !== 'backdropClick' && reason !== 'escapeKeyDown') {
+                                            setConfirmSubmit(false)
+                                        }
+                                    }}
+                                    aria-labelledby="alert-dialog-title"
+                                    aria-describedby="alert-dialog-description"
+                                >
+                                    <DialogTitle id="alert-dialog-title">
+                                        Are you sure to submit ?
+                                    </DialogTitle>
+
+                                    <DialogActions className='d-flex justify-content-center'>
+                                        <Button onClick={() => setConfirmSubmit(false)}>Cancel</Button>
+                                        <Button onClick={() => { updateGrnData(); setConfirmSubmit(false) }} autoFocus>
+                                            Submit
+                                        </Button>
+                                    </DialogActions>
+                                </Dialog>
+                                <Snackbar anchorOrigin={{ vertical: "top", horizontal: "right" }} open={snackBarOpen} autoHideDuration={3000}
+                                    onClose={() => setTimeout(() => {
+                                        setSnackBarOpen(false)
+                                    }, 3000)}>
+                                    <Alert onClose={() => setSnackBarOpen(false)} variant='filled' severity="success" sx={{ width: '100%' }}>
+                                        {alertMessage}
+                                    </Alert>
+                                </Snackbar>
+                            </Paper>
+
+                            <Paper elevation={12} sx={{ p: 2 }} className='col-md-12'>
+                                <div className="row mb-2">
+
+                                    <div className='col-md'> <h5 className='text-start'>Master Used</h5></div>
+                                    <div className=' col d-flex justify-content-end'>
+                                        <div className='me-2 '>
+                                            <Button startIcon={<Add />} onClick={() => grnItemAdd()} size='small' sx={{ minWidth: "130px" }} variant='contained'>Add Item</Button>
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
+                                <table className='table table-bordered table-responsive text-center align-middle'>
+                                    <tbody>
+                                        <tr>
+                                            <th>Si No</th>
+                                            <th>IMTE No</th>
+                                            <th>Master Name</th>
+                                            <th>Range/Size</th>
+                                            <th>Cal Certificate No</th>
+                                            <th>Cal Date</th>
+                                            <th>Next Due</th>
+                                            <th>Calibrated At</th>
+                                            <th>Remove</th>
+                                        </tr>
+
+                                        {grnData.grnPartyItems.map((item, index) => {
+                                            <tr key={index}>
+                                                <td>{index + 1}</td>
+                                                <td>{item.grnItemIMTENo}</td>
+                                                <td>{item.grnItemAddMasterName}</td>
+                                                <td>{item.grnItemRangeSize}</td>
+
+                                                <td>{item.grnItemCalDate}</td>
+                                                <td>{item.grnItemDueDate}</td>
+                                                <td>{item.grnItemCalibratedAt}</td>
+                                                <td width="5%"><Delete color='error' /></td>
+                                            </tr>
+                                        })}
+                                    </tbody>
+                                </table>
+                            </Paper>
 
 
 
 
-                            </Container>
+
                         </form>
                     </LocalizationProvider>
 
