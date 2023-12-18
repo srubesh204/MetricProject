@@ -1124,7 +1124,7 @@ const GrnAdd = () => {
 
 
                                     <div className='row'>
-                                        <h6 className='text-center'>Calibration Data</h6>
+                                        <h4 className='text-center'>Calibration Data</h4>
 
                                         <div className=' col d-flex justify-content-end'>
                                             <div className=' col-2 me-2 '>
@@ -1392,11 +1392,7 @@ const GrnAdd = () => {
                                     </Snackbar>
 
 
-                                    <div className='row'>
-
-
-
-                                    </div>
+                                    
                                 </Paper>
 
                                 <Paper elevation={12} sx={{ p: 2 }} className='col-md-12'>
