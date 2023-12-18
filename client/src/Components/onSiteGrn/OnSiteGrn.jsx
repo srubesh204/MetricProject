@@ -74,7 +74,7 @@ const OnSiteGrn = () => {
         if (typeof onSiteGrnData === 'function') {
             onSiteGrnData((prev) => ({
                 ...prev,
-                grnPartyItems: selectedRows
+                osGrnPartyItems: selectedRows
             }));
         }
     };
@@ -223,7 +223,7 @@ const OnSiteGrn = () => {
             );
             console.log(response.data)
             setAllItemImtes(response.data.result)
-            const filteredImtes = response.data.result.filter((imtes) => !onSiteGrnData.grnPartyItems.some(grnImte => imtes._id === grnImte._id))
+            const filteredImtes = response.data.result.filter((imtes) => !onSiteGrnData.osGrnPartyItems.some(grnImte => imtes._id === grnImte._id))
             setItemImtes(filteredImtes)
             console.log()
 
@@ -249,7 +249,7 @@ const OnSiteGrn = () => {
 
     const grnItemAdd = () => {
         if (setSelectedGrnItem.length !== 0) {
-            onSiteGrnData((prev) => ({ ...prev, grnPartyItems: [...prev.grnPartyItems, selectedGrnItem] }))
+            onSiteGrnData((prev) => ({ ...prev, osGrnPartyItems: [...prev.osGrnPartyItems, selectedGrnItem] }))
         }
     }
     useEffect(() => {
@@ -258,7 +258,7 @@ const OnSiteGrn = () => {
             grnList: "",
             grnImteNo: ""
         })
-    }, [onSiteGrnData.grnPartyItems])
+    }, [onSiteGrnData.osGrnPartyItems])
 
 
     const [confirmSubmit, setConfirmSubmit] = useState(false)
@@ -576,7 +576,7 @@ const OnSiteGrn = () => {
                                                     //sx={{ width: "100%" }}
                                                     slotProps={{ textField: { size: 'small' } }}
                                                     onChange={(newValue) =>
-                                                        setOnSiteGrnData((prev) => ({ ...prev, grnCalDate: newValue.format("YYYY-MM-DD") }))
+                                                        setOnSiteGrnData((prev) => ({ ...prev, osGrnCalDate: newValue.format("YYYY-MM-DD") }))
                                                     }
                                                     format="DD-MM-YYYY"
                                                 />
@@ -586,8 +586,8 @@ const OnSiteGrn = () => {
 
                                                 <DatePicker
                                                     fullWidth
-                                                    id="grnDueDateId"
-                                                    name="grnDueDate"
+                                                    id="osGrnDueDateId"
+                                                    name="osGrnDueDate"
                                                     // onChange={handleGrnChange}
                                                     value={dayjs(onSiteGrnData.osGrnDueDate)}
                                                     label="Next Cal Date"
@@ -606,12 +606,12 @@ const OnSiteGrn = () => {
                                                     size='small'
                                                     fullWidth
                                                     variant='outlined'
-                                                    id="grnCertificateStatusId"
+                                                    id="osGrnCertificateStatusId"
                                                     onChange={handleGrnChange}
                                                     value={onSiteGrnData.osGrnCertificateStatus}
                                                     select
                                                     label="Certificate Status"
-                                                    name='grnCertificateStatus'
+                                                    name='osGrnCertificateStatus'
                                                 >
                                                     <MenuItem value="received">Received</MenuItem>
                                                     <MenuItem value="notreceived">Not Received</MenuItem>
@@ -620,19 +620,19 @@ const OnSiteGrn = () => {
                                             <div className="col me-2">
 
                                                 <TextField label="CertificateNo"
-                                                    id="grnCertificateNoId"
+                                                    id="osGrnCertificateNoId"
                                                     value={onSiteGrnData.osGrnCertificateNo}
                                                     onChange={handleGrnChange}
 
                                                     defaultValue=""
                                                     size="small"
                                                     sx={{ width: "101%" }}
-                                                    name="grnCertificateNo" />
+                                                    name="osGrnCertificateNo" />
 
 
                                             </div>
                                             <div className='col me-2'>
-                                                <TextField fullWidth label="Uncertainity" variant='outlined' id="grnUncertainityId" value={onSiteGrnData.osGrnUncertainity} onChange={handleGrnChange} size='small' name='grnUncertainity' />
+                                                <TextField fullWidth label="Uncertainity" variant='outlined' id="osGrnUncertainityId" value={onSiteGrnData.osGrnUncertainity} onChange={handleGrnChange} size='small' name='osGrnUncertainity' />
 
                                             </div>
 
@@ -657,7 +657,7 @@ const OnSiteGrn = () => {
                                     <div className='row'>
                                         <h6 className='text-center'>Calibration Data</h6>
                                         <table className='table table-sm table-bordered table-responsive text-center align-middle'>
-                                            {onSiteGrnData.grnPartyItems === "attribute" &&
+                                            {onSiteGrnData.osGrnPartyItems === "attribute" &&
 
                                                 <tbody>
                                                     <tr>
@@ -682,7 +682,7 @@ const OnSiteGrn = () => {
                                                 </tbody>}
 
 
-                                            {onSiteGrnData.grnPartyItems === "variable" &&
+                                            {onSiteGrnData.osGrnPartyItems === "variable" &&
 
                                                 <tbody>
                                                     <tr>
@@ -706,7 +706,7 @@ const OnSiteGrn = () => {
                                                     </tr>
                                                 </tbody>}
 
-                                            {onSiteGrnData.grnPartyItems === "reFerenceStandard" &&
+                                            {onSiteGrnData.osGrnPartyItems === "reFerenceStandard" &&
 
                                                 <tbody>
                                                     <tr>
