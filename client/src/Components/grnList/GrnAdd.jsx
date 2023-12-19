@@ -339,6 +339,8 @@ const GrnAdd = () => {
                 }
 
             ))
+        }else{
+            setSelectedGrnItem([])
         }
     }
 

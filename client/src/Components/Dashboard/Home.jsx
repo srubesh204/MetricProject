@@ -716,6 +716,7 @@ const Home = () => {
   console.log(selectedFilterValue)
 
   const [selectedRows, setSelectedRows] = useState([]);
+  const [selectedGrnRows, setSelectedGrnRows] = useState([])
 
   const [DepUpdateData, setDepUpdateData] = useState("")
   const [selectedDepartment, setSelectedDepartment] = useState()
@@ -796,6 +797,7 @@ const Home = () => {
   const handleRowSelectionChange = (newSelection) => {
     const selectedRowsData = filteredData.filter((row) => newSelection.includes(row._id));
     setSelectedRows(selectedRowsData);
+    setSelectedGrnRows(selectedRowsData)
 
 
   };
@@ -1250,11 +1252,7 @@ const Home = () => {
             >
               <Grn />
             </HomeContent.Provider>
-            <HomeContent.Provider
-              value={{ onSiteOpen, setOnSiteOpen, selectedRows }}
-            >
-              <Grn />
-            </HomeContent.Provider>
+          
 
 
           </div>
