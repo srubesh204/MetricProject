@@ -47,7 +47,7 @@ const itemDcController = {
         
                     const itemData = await itemAddModel.findById(item._id)
                     const {itemIMTENo} = itemData
-                    const updateItemFields = {itemIMTENo, itemCurrentLocation: dcPartyName, itemDcLocation: dcPartyType, dcId: result._id, dcStatus: "1", dcCreatedOn : dcDate}
+                    const updateItemFields = {itemIMTENo, itemCurrentLocation: dcPartyName, itemLocation: dcPartyType, dcId: result._id, dcStatus: "1", dcCreatedOn : dcDate, dcNo: dcNo }
                     const updateResult = await itemAddModel.findOneAndUpdate(
                       { _id: item._id },
                       { $set: updateItemFields },
@@ -119,7 +119,7 @@ const itemDcController = {
   
               const itemData = await itemAddModel.findById(item._id)
               const {itemIMTENo} = itemData
-              const updateItemFields = {itemIMTENo, itemCurrentLocation: dcPartyType, dcId: itemDcId, dcStatus: "1", dcCreatedOn : dcDate}
+              const updateItemFields = {itemIMTENo, itemCurrentLocation: dcPartyName, itemLocation: dcPartyType, dcId: result._id, dcStatus: "1", dcCreatedOn : dcDate, dcNo: dcNo}
               const updateResult = await itemAddModel.findOneAndUpdate(
                 { _id: item._id },
                 { $set: updateItemFields },
@@ -157,6 +157,24 @@ const itemDcController = {
 
       for (const itemDcId of itemDcIds) {
         // Find and remove each vendor by _id
+        if(Object.keys(result).length !== 0){
+          console.log(dcPartyType)
+          const updatePromises = dcPartyItems.map(async (item) => {
+
+            const itemData = await itemAddModel.findById(itemDcId)
+            const {itemIMTENo} = itemData
+            const updateItemFields = {itemIMTENo, itemCurrentLocation: dcPartyName, itemLocation: dcPartyType, dcId: result._id, dcStatus: "1", dcCreatedOn : dcDate, dcNo: dcNo }
+            const updateResult = await itemAddModel.findOneAndUpdate(
+              { _id: item._id },
+              { $set: updateItemFields },
+              { new: true }
+            );
+            console.log("itemUpdated")
+            return updateResult;
+          });
+          const updatedItems = await Promise.all(updatePromises);
+        }
+
         const deletedItemDc = await itemDcModel.findOneAndRemove({ _id: itemDcId });
         console.log(deletedItemDc)
         if (!deletedItemDc) {
