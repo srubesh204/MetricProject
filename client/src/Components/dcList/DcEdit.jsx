@@ -822,7 +822,7 @@ const DcEdit = () => {
             </DialogContent>
             <DialogActions className='d-flex justify-content-between'>
                 <div>
-                    <Button variant='contained' color='warning' className='me-3'>Upload Report</Button>
+                    <Button variant='contained' color='warning' className='me-3'>Print</Button>
                 </div>
                 <div>
                     <Button variant='contained' color='error' className='me-3' onClick={() => { setDcEditOpen(false) }}>Cancel</Button>
