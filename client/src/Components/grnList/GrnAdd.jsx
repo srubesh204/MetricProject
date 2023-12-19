@@ -21,6 +21,13 @@ const GrnAdd = () => {
     const grnDatas = useContext(GrnListContent)
     const { grnOpen, setGrnOpen, selectedRows, grnListFetchData } = grnDatas
 
+    const [grnImtes, setGrnImtes] = useState(selectedRows)
+
+    useEffect(()=> {
+        setGrnImtes(selectedRows)
+    }, [selectedRows])
+    
+
 
 
     const initialGrnData = {
@@ -33,11 +40,6 @@ const GrnAdd = () => {
         grnNo: "",
         grnDate: dayjs().format("YYYY-MM-DD"),
         grnCommonRemarks: "",
-        grnCalDate: dayjs().format("YYYY-MM-DD"),
-        grnDueDate: "",
-        grnCertificateStatus: "",
-        grnCertificateNo: "",
-        grnUncertainity: "",
         grnPartyItems: []
 
     }
@@ -297,8 +299,9 @@ const GrnAdd = () => {
                     grnItemItemMFRNo: value.itemMFRNo,
                     grnItemLC: value.itemLC,
                     grnItemMake: value.itemMake,
-                    grnItemFreInMonths: value.itemCalFreInMonths,
+                    grnItemCalFreInMonths: value.itemCalFreInMonths,
                     grnItemUncertainity: value.uncertainty,
+                    grnItemCalibratedAt: value.itemCalibratedAt,
                     grnItemSOPNo: value.SOPNo,
                     grnStandardRef: value.standardRef,
                     grnItemOBType: value.itemOBType,
@@ -325,24 +328,27 @@ const GrnAdd = () => {
 
                             }
                         )),
-                        grnItemCalDate: dayjs().format("YYYY-MM-DD"),
-                        grnItemDueDate: "",
-                        grnItemCertificateStatus: "",
-                        grnItemCertificateNo: "",
-                        grnItemCertificate: "",
-                        grnUncertainity: "",
-                        grnItemCalStatus: ""
+                    grnItemCalDate: dayjs().format("YYYY-MM-DD"),
+                    grnItemDueDate: "",
+                    grnItemCertificateStatus: "",
+                    grnItemCertificateNo: "",
+                    grnItemCertificate: "",
+                    grnUncertainity: "",
+                    grnItemCalStatus: ""
 
-                   
+
                 }
             )
             )
 
-        };
+
+
+        } else {
+            setSelectedGrnItem((prev) => ({ ...prev, [name]: value }))
+        }
 
 
     }
-
     console.log(selectedGrnItem)
 
     const grnItemAdd = () => {
@@ -350,14 +356,34 @@ const GrnAdd = () => {
             setGrnData((prev) => ({ ...prev, grnPartyItems: [...prev.grnPartyItems, selectedGrnItem] }))
         }
         setSelectedGrnItem([])
+        nonSelectedItems()
     }
     useEffect(() => {
+        nonSelectedItems()
         setSelectedGrnItem([])
         setItemAddDetails({
             grnList: "",
             grnImteNo: ""
         })
     }, [grnData.grnPartyItems])
+
+
+//nonSelecte 
+    const nonSelectedItems = () => {
+
+        const remainingMasters = selectedRows.filter(item =>
+            !grnData.grnPartyItems.some(grn => grn.grnItemId === item._id)
+        );
+        setAllItemImtes(remainingMasters)
+
+
+    }
+
+
+    useEffect(() => {
+        nonSelectedItems()
+    }, [grnData.grnPartyItems])
+
 
     //row delete
 
@@ -370,6 +396,23 @@ const GrnAdd = () => {
             };
         })
     };
+
+    const calculateResultDate = (itemCalDate, itemCalFreInMonths) => {
+        const parsedDate = dayjs(itemCalDate);
+        if (parsedDate.isValid() && !isNaN(parseInt(itemCalFreInMonths))) {
+            const calculatedDate = parsedDate.add(parseInt(itemCalFreInMonths, 10), 'month').subtract(1, 'day');
+            console.log(calculatedDate)
+            setSelectedGrnItem((prev) => ({
+                ...prev,
+                grnItemDueDate: calculatedDate.format('YYYY-MM-DD'),
+            }));
+        }
+    };
+
+
+    useEffect(() => {
+        calculateResultDate(selectedGrnItem.grnItemCalDate, selectedGrnItem.grnItemCalFreInMonths);
+    }, [selectedGrnItem.grnItemCalDate, selectedGrnItem.grnItemCalFreInMonths]);
 
 
 
@@ -1027,18 +1070,14 @@ const GrnAdd = () => {
 
                                             <DatePicker
                                                 fullWidth
-                                                id="grnDueDateId"
-                                                name="grnDueDate"
-                                                // onChange={handleGrnChange}
-                                                value={dayjs(grnData.grnItemCalDate)}
+                                                id="grnItemCalDateId"
+                                                name="grnItemCalDate"
                                                 label="Cal Date"
-                                                // sx={{ width: "100%" }}
-                                                slotProps={{ textField: { size: 'small' } }}
-                                                onChange={(newValue) =>
-                                                    setSelectedGrnItem((prev) => ({ ...prev, grnItemCalDate: newValue.format("YYYY-MM-DD") }))
-                                                }
-                                                format="DD-MM-YYYY"
 
+                                                slotProps={{ textField: { size: 'small', fullWidth: true } }}
+                                                format="DD-MM-YYYY"
+                                                value={dayjs(selectedGrnItem.grnItemCalDate)}
+                                                onChange={(newValue) => setSelectedGrnItem((prev) => ({ ...prev, grnItemCalDate: newValue.format('YYYY-MM-DD') }))}
                                             />
 
                                         </div>
@@ -1047,18 +1086,14 @@ const GrnAdd = () => {
 
                                             <DatePicker
                                                 fullWidth
-                                                id="grnDueDateId"
-                                                name="grnDueDate"
-                                                // onChange={handleGrnChange}
-                                                value={dayjs(grnData.grnItemDueDate)}
+                                                id="grnItemDueDateId"
+                                                name="grnItemDueDate"
                                                 label="Next Cal Date"
                                                 // sx={{ width: "100%" }}
-                                                slotProps={{ textField: { size: 'small' } }}
-                                                onChange={(newValue) =>
-                                                    setSelectedGrnItem((prev) => ({ ...prev, grnItemDueDate: newValue.format("YYYY-MM-DD") }))
-                                                }
+                                                value={dayjs(selectedGrnItem.grnItemDueDate)}
+                                                slotProps={{ textField: { size: 'small', fullWidth: true } }}
                                                 format="DD-MM-YYYY"
-
+                                                onChange={(newValue) => setSelectedGrnItem((prev) => ({ ...prev, grnItemDueDate: newValue.format('YYYY-MM-DD') }))}
                                             />
 
                                         </div>
@@ -1068,21 +1103,21 @@ const GrnAdd = () => {
                                                 fullWidth
                                                 variant='outlined'
                                                 id="grnCertificateStatusId"
-                                                onChange={handleGrnChange}
-                                                value={grnData.grnCertificateStatus}
+                                                onChange={handleGrnItemAdd}
+                                                // value={grnData.grnCertificateStatus}
                                                 select
                                                 label="Certificate Status"
                                                 name='grnCertificateStatus'
                                             >
-                                                <MenuItem value="received" disabled={grnData.certificate === "true"}>Received</MenuItem>
-                                                <MenuItem value="notreceived" disabled={grnData.certificate === "false"}>Not Received</MenuItem>
+                                                <MenuItem value="received">Received</MenuItem>
+                                                <MenuItem value="notreceived">Not Received</MenuItem>
                                             </TextField>
                                         </div>
                                         <div className="col me-2">
 
                                             <TextField label="CertificateNo"
                                                 id="grnItemCertificateNoId"
-                                                value={selectedGrnItem.grnItemCertificateNo}
+                                                //   value={selectedGrnItem.grnItemCertificateNo}
                                                 onChange={handleGrnItemAdd}
                                                 defaultValue=""
                                                 size="small"
@@ -1092,7 +1127,7 @@ const GrnAdd = () => {
 
                                         </div>
                                         <div className='col me-2'>
-                                            <TextField fullWidth label="Uncertainity" variant='outlined' id="grnUncertainityId" value={grnData.grnUncertainity} onChange={handleGrnChange} size='small' name='grnUncertainity' />
+                                            <TextField fullWidth label="Uncertainity" variant='outlined' id="grnUncertainityId" onChange={handleGrnItemAdd} size='small' name='grnUncertainity' />
 
                                         </div>
 
@@ -1188,7 +1223,7 @@ const GrnAdd = () => {
                                                                 minColor = "red"
                                                             }
 
-                                                            if (item.grnAcMaxOB >= item.grnWearLimitPS && item.grnAcMaxOB < item.grnAcMinPS) {
+                                                            if (item.grnAcMaxOB >= item.grnAcWearLimitPS && item.grnAcMaxOB < item.grnAcMinPS) {
                                                                 maxColor = "orange"
                                                             }
                                                             else if (item.grnAcMaxOB >= item.grnAcMinPS && item.grnAcMaxOB <= item.grnAcMaxPS) {
