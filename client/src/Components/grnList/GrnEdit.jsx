@@ -198,7 +198,7 @@ const GrnEdit = () => {
     const getDistinctItemName = async () => {
         try {
             const response = await axios.get(
-                `${process.env.REACT_APP_PORT}/itemAdd/getDistinctItemName`
+                `${process.env.REACT_APP_PORT}/itemAdd/getAllDistinctItemName`
             );
             console.log(response.data)
             setItemMasterDistNames(response.data.result);
