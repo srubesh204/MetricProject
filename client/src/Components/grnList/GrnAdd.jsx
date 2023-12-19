@@ -1046,7 +1046,7 @@ const GrnAdd = () => {
                                                 value={itemAddDetails.grnImteNo}
                                                 name="grnImteNo" >
 
-                                                {grnImtes.map((item, index) => (
+                                                {allItemImtes.map((item, index) => (
                                                     <MenuItem key={index} value={item}>{item.itemIMTENo}</MenuItem>
                                                 ))}
 
