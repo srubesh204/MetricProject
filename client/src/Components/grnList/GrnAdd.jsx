@@ -217,19 +217,19 @@ const GrnAdd = () => {
         grnItemOBType: "",
         grnAcCriteria: [
             {
-                grnParameter: "",
-                grnNominalSize: "",
-                grnNominalSizeUnit: "",
-                grnMinPS: "",
-                grnMaxPS: "",
-                grnWearLimitPS: "",
-                grnBeforegrnibration: "",
-                grnMinOB: "",
-                grnMaxOB: "",
-                grnAverageOB: "",
-                grnOBError: "",
-                grnMinPSError: "",
-                grnMaxPSError: "",
+                grnAcParameter: "",
+                grnAcNominalSize: "",
+                grnAcNominalSizeUnit: "",
+                grnAcMinPS: "",
+                grnAcMaxPS: "",
+                grnAcWearLimitPS: "",
+
+                grnAcMinOB: "",
+                grnAcMaxOB: "",
+                grnAcAverageOB: "",
+                grnAcOBError: "",
+                grnAcMinPSError: "",
+                grnAcMaxPSError: "",
                 rowStatus: ""
             },
         ],
@@ -243,6 +243,16 @@ const GrnAdd = () => {
         grnItemCalStatus: "",
 
     })
+
+
+
+
+
+
+
+
+
+
     //
     const getItemByName = async (value) => {
         try {
@@ -291,7 +301,7 @@ const GrnAdd = () => {
                     grnItemUncertainity: value.uncertainty,
                     grnItemSOPNo: value.SOPNo,
                     grnStandardRef: value.standardRef,
-                    grnOBType: value.itemOBType,
+                    grnItemOBType: value.itemOBType,
 
 
                     grnAcCriteria:
@@ -330,21 +340,10 @@ const GrnAdd = () => {
 
     const grnItemAdd = () => {
         if (setSelectedGrnItem.length !== 0) {
-            setGrnData((prev) => (
-                {
-                    ...prev, grnPartyItems: selectedGrnItem
-
-
-
-                }
-
-            ))
-        }else{
-            setSelectedGrnItem([])
+            setGrnData((prev) => ({ ...prev, grnPartyItems: [...prev.grnPartyItems, selectedGrnItem] }))
         }
+        setSelectedGrnItem([])
     }
-
-    console.log(grnData)
     useEffect(() => {
         setSelectedGrnItem([])
         setItemAddDetails({
@@ -352,6 +351,18 @@ const GrnAdd = () => {
             grnImteNo: ""
         })
     }, [grnData.grnPartyItems])
+
+    //row delete
+
+    const deleteAC = (index) => {
+        setGrnData((prev) => {
+            const AC = [...prev.grnPartyItems]
+            AC.splice(index, 1);
+            return {
+                ...prev, grnPartyItems: AC,
+            };
+        })
+    };
 
 
 
@@ -382,29 +393,30 @@ const GrnAdd = () => {
 
     const changeACValue = (index, name, value) => {
 
-        setGrnData((prev) => {
-            const updateAC = [...prev.grnPartyItems.acceptanceCriteria]
+        setSelectedGrnItem((prev) => {
+            const updateAC = [...prev.grnAcCriteria]
             updateAC[index] = {
                 ...updateAC[index], [name]: value,
             };
             return {
-                ...prev.grnPartyItems, acceptanceCriteria: updateAC,
+                ...prev, grnAcCriteria: updateAC,
             };
         })
 
-        if (grnData.grnPartyItems === "attribute") {
-            if (name === "acAverageOB") {
-                setGrnData(prev => {
-                    const updatedData = prev.acceptanceCriteria.map((item, idx) => {
+
+        if (selectedGrnItem.grnItemType === "attribute") {
+            if (name === "grnAverageOB") {
+                setSelectedGrnItem(prev => {
+                    const updatedData = prev.grnAcAcCriteria.map((item, idx) => {
                         if (idx === index) {
                             let status = ""
-                            if (item.acWearLimitPS !== "") {
+                            if (item.grnAcWearLimitPS !== "") {
 
-                                if (item.acWearLimitPS <= item.acMinPS) {
-                                    const isAverageInRange = parseFloat(item.acAverageOB) >= parseFloat(item.acWearLimitPS) &&
-                                        parseFloat(item.acAverageOB) <= parseFloat(item.acMaxPS);
+                                if (item.grnAcWearLimitPS <= item.grnAcMinPS) {
+                                    const isAverageInRange = parseFloat(item.grnAcAverageOB) >= parseFloat(item.grnAcWearLimitPS) &&
+                                        parseFloat(item.grnAcAverageOB) <= parseFloat(item.grnAcMaxPS);
 
-                                    if (item.acAverageOB === "") {
+                                    if (item.grnAcAverageOB === "") {
                                         status = ""
                                     } else {
                                         if (isAverageInRange) {
@@ -415,11 +427,11 @@ const GrnAdd = () => {
                                     }
                                 }
 
-                                if (item.acWearLimitPS >= item.acMaxPS) {
-                                    const isAverageInRange = parseFloat(item.acAverageOB) <= parseFloat(item.acWearLimitPS) &&
-                                        parseFloat(item.acAverageOB) >= parseFloat(item.acMinPS);
+                                if (item.grnAcWearLimitPS >= item.grnAcMaxPS) {
+                                    const isAverageInRange = parseFloat(item.grnAcAverageOB) <= parseFloat(item.grnAcWearLimitPS) &&
+                                        parseFloat(item.grnAcAverageOB) >= parseFloat(item.grnAcMinPS);
 
-                                    if (item.acAverageOB === "") {
+                                    if (item.grnAcAverageOB === "") {
                                         status = ""
                                     } else {
                                         if (isAverageInRange) {
@@ -437,10 +449,10 @@ const GrnAdd = () => {
                                 };
 
                             } else {
-                                const isAverageInRange = parseFloat(item.acAverageOB) >= parseFloat(item.acMinPS) &&
-                                    parseFloat(item.acAverageOB) <= parseFloat(item.acMaxPS);
+                                const isAverageInRange = parseFloat(item.grnAcAverageOB) >= parseFloat(item.grnAcMinPS) &&
+                                    parseFloat(item.grnAcAverageOB) <= parseFloat(item.grnAcMaxPS);
 
-                                if (item.acAverageOB === "") {
+                                if (item.grnAcAverageOB === "") {
                                     status = ""
                                 } else {
                                     if (isAverageInRange) {
@@ -464,41 +476,25 @@ const GrnAdd = () => {
                     });
                     return {
                         ...prev,
-                        acceptanceCriteria: updatedData,
+                        grnAcCriteria: updatedData,
                     };
                 });
             }
 
-            if (name === "acMinOB" || name === "acMaxOB") {
-                setGrnData(prev => {
-                    const updatedData = prev.acceptanceCriteria.map((item, idx) => {
+            if (name === "grnMinOB" || name === "grnMaxOB") {
+                setSelectedGrnItem(prev => {
+                    const updatedData = prev.grnAcCriteria.map((item, idx) => {
                         if (idx === index) {
                             let status = ""
-                            if (item.acWearLimitPS !== "") {
+                            if (item.grnAcWearLimitPS !== "") {
 
-                                if (item.acWearLimitPS <= item.acMinPS) {
-
-
-                                    const isMinInRange = parseFloat(item.acMinOB) >= parseFloat(item.acWearLimitPS) &&
-                                        parseFloat(item.acMinOB) <= parseFloat(item.acMaxPS);
-                                    const isMaxInRange = parseFloat(item.acMaxOB) >= parseFloat(item.acWearLimitPS) &&
-                                        parseFloat(item.acMaxOB) <= parseFloat(item.acMinPS);
+                                if (item.grnAcWearLimitPS <= item.grnAcMinPS) {
 
 
-
-                                    if (isMinInRange && isMaxInRange) {
-                                        status = "ok"
-                                    } else {
-                                        status = "notOk"
-                                    }
-
-                                }
-
-                                if (item.acWearLimitPS >= item.acMaxPS) {
-                                    const isMinInRange = parseFloat(item.acMinOB) <= parseFloat(item.acWearLimitPS) &&
-                                        parseFloat(item.acMinOB) >= parseFloat(item.acMinPS);
-                                    const isMaxInRange = parseFloat(item.acMaxOB) <= parseFloat(item.acWearLimitPS) &&
-                                        parseFloat(item.acMaxOB) >= parseFloat(item.acMinPS);
+                                    const isMinInRange = parseFloat(item.grnAcMinOB) >= parseFloat(item.grnAcWearLimitPS) &&
+                                        parseFloat(item.grnAcMinOB) <= parseFloat(item.grnAcMaxPS);
+                                    const isMaxInRange = parseFloat(item.grnAcMaxOB) >= parseFloat(item.grnAcWearLimitPS) &&
+                                        parseFloat(item.grnAcMaxOB) <= parseFloat(item.grnAcMaxPS);
 
 
 
@@ -509,10 +505,26 @@ const GrnAdd = () => {
                                     }
 
                                 }
-                                const isMinInRange = parseFloat(item.acMinOB) >= parseFloat(item.acMinPS) &&
-                                    parseFloat(item.acMinOB) <= parseFloat(item.acMaxPS);
-                                const isMaxInRange = parseFloat(item.acMaxOB) >= parseFloat(item.acMinPS) &&
-                                    parseFloat(item.acMaxOB) <= parseFloat(item.acMaxPS);
+
+                                if (item.grnAcWearLimitPS >= item.grnAcMaxPS) {
+                                    const isMinInRange = parseFloat(item.grnAcMinOB) <= parseFloat(item.grnAcWearLimitPS) &&
+                                        parseFloat(item.grnAcMinOB) >= parseFloat(item.grnAcMinPS);
+                                    const isMaxInRange = parseFloat(item.grnAcMaxOB) <= parseFloat(item.grnAcWearLimitPS) &&
+                                        parseFloat(item.grnAcMaxOB) >= parseFloat(item.grnAcMinPS);
+
+
+
+                                    if (isMinInRange && isMaxInRange) {
+                                        status = "ok"
+                                    } else {
+                                        status = "notOk"
+                                    }
+
+                                }
+                                const isMinInRange = parseFloat(item.grnAcMinOB) >= parseFloat(item.grnAcMinPS) &&
+                                    parseFloat(item.grnAcMinOB) <= parseFloat(item.grnAcMaxPS);
+                                const isMaxInRange = parseFloat(item.grnAcMaxOB) >= parseFloat(item.grnAcMinPS) &&
+                                    parseFloat(item.grnAcMaxOB) <= parseFloat(item.grnAcMaxPS);
 
                                 return {
                                     ...item,
@@ -520,17 +532,17 @@ const GrnAdd = () => {
                                 };
 
                             } else {
-                                const isMinInRange = parseFloat(item.acMinOB) >= parseFloat(item.acMinPS) &&
-                                    parseFloat(item.acMinOB) <= parseFloat(item.acMaxPS);
-                                const isMaxInRange = parseFloat(item.acMaxOB) >= parseFloat(item.acMinPS) &&
-                                    parseFloat(item.acMaxOB) <= parseFloat(item.acMaxPS);
+                                const isMinInRange = parseFloat(item.grnAcMinOB) >= parseFloat(item.grnAcMinPS) &&
+                                    parseFloat(item.grnAcMinOB) <= parseFloat(item.grnAcMaxPS);
+                                const isMaxInRange = parseFloat(item.grnAcMaxOB) >= parseFloat(item.grnAcMinPS) &&
+                                    parseFloat(item.grnAcMaxOB) <= parseFloat(item.grnAcMaxPS);
 
 
 
 
-                                if (item.acMaxOB === "" && item.acMinOB === "") {
+                                if (item.grnAcMaxOB === "" && item.grnAcMinOB === "") {
                                     status = "";
-                                } else if (item.acMaxOB === "") {
+                                } else if (item.grnAcMaxOB === "") {
                                     status = (isMinInRange) ? "ok" : "notOk";
                                 } else {
                                     status = (isMinInRange && isMaxInRange) ? "ok" : "notOk";
@@ -549,11 +561,51 @@ const GrnAdd = () => {
                     });
                     return {
                         ...prev,
-                        acceptanceCriteria: updatedData,
+                        grnAcCriteria: updatedData,
                     };
                 });
             }
         }
+
+
+        //
+        if (selectedGrnItem.grnItemType === "variable") {
+
+            if (name === "grnAcAverageOB") {
+                setSelectedGrnItem(prev => {
+                    const updatedData = prev.grnAcCriteria.map((item, idx) => {
+                        if (idx === index) {
+                            let status = ""
+
+                            const isAverageInRange = parseFloat(item.grnAcAverageOB) >= parseFloat(item.grnAcMinPSError) &&
+                                parseFloat(item.grnAcAverageOB) <= parseFloat(item.grnAcMaxPSError);
+
+                            if (item.grAcAverageOB === "") {
+                                status = ""
+                            } else {
+                                if (isAverageInRange) {
+                                    status = "ok"
+                                } else {
+                                    status = "notOk"
+                                }
+                            }
+                            return {
+                                ...item,
+                                rowStatus: status,
+                            };
+                        }
+                        return item;
+                    });
+                    return {
+                        ...prev,
+                        grnAcCriteria: updatedData,
+                    };
+                })
+            }
+
+        }
+
+
 
 
 
@@ -963,6 +1015,27 @@ const GrnAdd = () => {
                                 <div className='row g-2 '>
                                     <div className='col d-flex'>
 
+
+                                        <div className="col-2 me-2">
+
+                                            <DatePicker
+                                                fullWidth
+                                                id="grnDueDateId"
+                                                name="grnDueDate"
+                                                // onChange={handleGrnChange}
+                                                value={dayjs(grnData.grnItemCalDate)}
+                                                label="Cal Date"
+                                                // sx={{ width: "100%" }}
+                                                slotProps={{ textField: { size: 'small' } }}
+                                                onChange={(newValue) =>
+                                                    setSelectedGrnItem((prev) => ({ ...prev, grnItemCalDate: newValue.format("YYYY-MM-DD") }))
+                                                }
+                                                format="DD-MM-YYYY"
+
+                                            />
+
+                                        </div>
+
                                         <div className="col-2 me-2">
 
                                             <DatePicker
@@ -975,7 +1048,7 @@ const GrnAdd = () => {
                                                 // sx={{ width: "100%" }}
                                                 slotProps={{ textField: { size: 'small' } }}
                                                 onChange={(newValue) =>
-                                                    setGrnData((prev) => ({ ...prev, grnItemDueDate: newValue.format("YYYY-MM-DD") }))
+                                                    setSelectedGrnItem((prev) => ({ ...prev, grnItemDueDate: newValue.format("YYYY-MM-DD") }))
                                                 }
                                                 format="DD-MM-YYYY"
 
@@ -1001,14 +1074,13 @@ const GrnAdd = () => {
                                         <div className="col me-2">
 
                                             <TextField label="CertificateNo"
-                                                id="grnCertificateNoId"
-                                                value={grnData.grnCertificateNo}
-                                                onChange={handleGrnChange}
-                                                disabled={grnData.grnCertificateStatus === "" ? false : true}
+                                                id="grnItemCertificateNoId"
+                                                value={selectedGrnItem.grnItemCertificateNo}
+                                                onChange={handleGrnItemAdd}
                                                 defaultValue=""
                                                 size="small"
                                                 sx={{ width: "101%" }}
-                                                name="grnCertificateNo" />
+                                                name="grnItemCertificateNo" />
 
 
                                         </div>
@@ -1090,9 +1162,9 @@ const GrnAdd = () => {
                                                     let maxColor = "";
                                                     let averageColor = "";
                                                     let size = "";
-                                                    if (item.grnWearLimitPS !== "") {
+                                                    if (item.grnAcWearLimitPS !== "") {
 
-                                                        if (item.grnWearLimitPS < item.grnMinPS) {
+                                                        if (item.grnAcWearLimitPS < item.grnAcMinPS) {
                                                             size = "OD"
                                                         } else {
                                                             size = "ID"
@@ -1100,28 +1172,28 @@ const GrnAdd = () => {
 
                                                         if (size === "OD") {
                                                             //min OD condition
-                                                            if (item.grnMinOB >= item.grnWearLimitPS && item.grnMinOB < item.grnMinPS) {
+                                                            if (item.grnAcMinOB >= item.grnAcWearLimitPS && item.grnAcMinOB < item.grnAcMinPS) {
                                                                 minColor = "orange"
                                                             }
-                                                            else if (item.grnMinOB >= item.grnMinPS && item.grnMinOB <= item.grnMaxPS) {
+                                                            else if (item.grnAcMinOB >= item.grnAcMinPS && item.grnAcMinOB <= item.grnAcMaxPS) {
                                                                 minColor = "green"
                                                             } else {
                                                                 minColor = "red"
                                                             }
 
-                                                            if (item.grnMaxOB >= item.grnWearLimitPS && item.grnMaxOB < item.grnMinPS) {
+                                                            if (item.grnAcMaxOB >= item.grnWearLimitPS && item.grnAcMaxOB < item.grnAcMinPS) {
                                                                 maxColor = "orange"
                                                             }
-                                                            else if (item.grnMaxOB >= item.grnMinPS && item.grnMaxOB <= item.grnMaxPS) {
+                                                            else if (item.grnAcMaxOB >= item.grnAcMinPS && item.grnAcMaxOB <= item.grnAcMaxPS) {
                                                                 maxColor = "green"
                                                             } else {
                                                                 maxColor = "red"
                                                             }
 
-                                                            if (item.grnAverageOB >= item.grnWearLimitPS && item.grnAverageOB < item.grnMinPS) {
+                                                            if (item.grnAcAverageOB >= item.grnAcWearLimitPS && item.grnAcAverageOB < item.grnAcMinPS) {
                                                                 averageColor = "orange"
                                                             }
-                                                            else if (item.grnAverageOB >= item.grnMinPS && item.grnAverageOB <= item.grnMaxPS) {
+                                                            else if (item.grnAcAverageOB >= item.grnAcMinPS && item.grnAcAverageOB <= item.grnAcMaxPS) {
                                                                 averageColor = "green"
                                                             } else {
                                                                 averageColor = "red"
@@ -1132,28 +1204,28 @@ const GrnAdd = () => {
 
                                                         if (size === "ID") {
                                                             //min Id condition
-                                                            if (item.grnMinOB <= item.grnWearLimitPS && item.grnMinOB > item.grnMaxPS) {
+                                                            if (item.grnAcMinOB <= item.grnAcWearLimitPS && item.grnAcMinOB > item.grnAcMaxPS) {
                                                                 minColor = "orange"
                                                             }
-                                                            else if (item.grnMinOB >= item.grnMinPS && item.grnMinOB <= item.grnMaxPS) {
+                                                            else if (item.grnAcMinOB >= item.grnAcMinPS && item.grnAcMinOB <= item.grnAcMaxPS) {
                                                                 minColor = "green"
                                                             } else {
                                                                 minColor = "red"
                                                             }
                                                             //max ID condition
-                                                            if (item.grnMaxOB <= item.grnWearLimitPS && item.grnMaxOB > item.grnMaxPS) {
+                                                            if (item.grnAcMaxOB <= item.grnAcWearLimitPS && item.grnAcMaxOB > item.grnAcMaxPS) {
                                                                 maxColor = "orange"
                                                             }
-                                                            else if (item.grnMaxOB >= item.grnMinPS && item.grnMaxOB <= item.grnMaxPS) {
+                                                            else if (item.grnAcMaxOB >= item.grnAcMinPS && item.grnAcMaxOB <= item.grnAcMaxPS) {
                                                                 maxColor = "green"
                                                             } else {
                                                                 maxColor = "red"
                                                             }
 
-                                                            if (item.grnAverageOB <= item.grnWearLimitPS && item.grnAverageOB > item.grnMaxPS) {
+                                                            if (item.grnAcAverageOB <= item.grnAcWearLimitPS && item.grnAcAverageOB > item.grnAcMaxPS) {
                                                                 averageColor = "orange"
                                                             }
-                                                            else if (item.grnAverageOB >= item.grnMinPS && item.grnAverageOB <= item.grnMaxPS) {
+                                                            else if (item.grnAcAverageOB >= item.grnAcMinPS && item.grnAcAverageOB <= item.grnAcMaxPS) {
                                                                 averageColor = "green"
                                                             } else {
                                                                 averageColor = "red"
@@ -1167,7 +1239,7 @@ const GrnAdd = () => {
                                                     } else {
 
 
-                                                        if (parseFloat(item.grnMinOB) >= parseFloat(item.grnMinPS) && parseFloat(item.grnMinOB) <= parseFloat(item.grnMaxPS)) {
+                                                        if (parseFloat(item.grnAcMinOB) >= parseFloat(item.grnAcMinPS) && parseFloat(item.grnAcMinOB) <= parseFloat(item.grnAcMaxPS)) {
                                                             minColor = "#4cbb17";
 
                                                         } else {
@@ -1176,7 +1248,7 @@ const GrnAdd = () => {
                                                         }
 
 
-                                                        if (parseFloat(item.grnMaxOB) >= parseFloat(item.grnMinPS) && parseFloat(item.grnMaxOB) <= parseFloat(item.grnMaxPS)) {
+                                                        if (parseFloat(item.grnAcMaxOB) >= parseFloat(item.grnAcMinPS) && parseFloat(item.grnAcMaxOB) <= parseFloat(item.grnAcMaxPS)) {
                                                             maxColor = "#4cbb17"
 
                                                         } else {
@@ -1184,7 +1256,7 @@ const GrnAdd = () => {
 
                                                         }
 
-                                                        if (parseFloat(item.grnAverageOB) >= parseFloat(item.grnMinPS) && parseFloat(item.grnAverageOB) <= parseFloat(item.grnMaxPS)) {
+                                                        if (parseFloat(item.grnAcAverageOB) >= parseFloat(item.grnAcMinPS) && parseFloat(item.grnAcAverageOB) <= parseFloat(item.grnAcMaxPS)) {
                                                             averageColor = "#4cbb17";
 
                                                         } else {
@@ -1199,24 +1271,167 @@ const GrnAdd = () => {
 
                                                     return (
                                                         <tr key={index}>
-                                                            <td>{item.grnParameter}</td>
-                                                            <td>{item.grnNominalSize}</td>
-                                                            <td>{item.grnNominalSizeUnit}</td>
-                                                            <td>{item.grnMinPS}</td>
-                                                            <td>{item.grnMaxPS}</td>
-                                                            <td>{item.grnWearLimitPS}</td>
+                                                            <td>{item.grnAcParameter}</td>
+                                                            <td>{item.grnAcNominalSize}</td>
+                                                            <td>{item.grnAcNominalSizeUnit}</td>
+                                                            <td>{item.grnAcMinPS}</td>
+                                                            <td>{item.grnAcMaxPS}</td>
+                                                            <td>{item.grnAcWearLimitPS}</td>
 
                                                             {selectedGrnItem.grnBeforeData === "yes" && <td><input className='form-control form-control-sm' onChange={(e) => changeACValue(index, e.target.name, e.target.value)} name='grnBeforegrnibration' /></td>}
                                                             {selectedGrnItem.grnItemOBType === "average" &&
-                                                                <td><input className='form-control form-control-sm' name='grnAverageOB' style={{ color: averageColor, fontWeight: "bold" }} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} /></td>
+                                                                <td><input className='form-control form-control-sm' name='grnAcAverageOB' style={{ color: averageColor, fontWeight: "bold" }} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} /></td>
                                                             }
                                                             {selectedGrnItem.grnItemOBType === "minmax" &&
                                                                 <React.Fragment>
                                                                     <td>
-                                                                        <input className='form-control form-control-sm' style={{ color: minColor, fontWeight: "bold" }} name="grnMinOB" onChange={(e) => changeACValue(index, e.target.name, e.target.value)} />
+                                                                        <input className='form-control form-control-sm' style={{ color: minColor, fontWeight: "bold" }} name="grnAcMinOB" onChange={(e) => changeACValue(index, e.target.name, e.target.value)} />
                                                                     </td>
                                                                     <td>
-                                                                        <input className='form-control form-control-sm' style={{ color: maxColor, fontWeight: "bold" }} name="grnMaxOB" onChange={(e) => changeACValue(index, e.target.name, e.target.value)} /></td>
+                                                                        <input className='form-control form-control-sm' style={{ color: maxColor, fontWeight: "bold" }} name="grnAcMaxOB" onChange={(e) => changeACValue(index, e.target.name, e.target.value)} /></td>
+                                                                </React.Fragment>}
+
+
+                                                            <td width="15%">
+                                                                <select className='form-select form-select-sm' name="rowStatus" value={item.rowStatus} onChange={(e) => changeACValue(index, e.target.name, e.target.value)}>
+                                                                    <option value="">Status</option>
+                                                                    <option value="ok">Ok</option>
+                                                                    <option value="notOk">Not Ok</option>
+                                                                    <option value="conditionallyOk">Conditionally Ok</option>
+                                                                </select>
+                                                            </td>
+                                                        </tr>
+
+                                                    )
+                                                })}
+                                            </tbody>}
+                                        {selectedGrnItem.grnItemType === "variable" &&
+
+                                            <tbody>
+                                                <tr>
+                                                    <th rowSpan={2}>Parameter</th>
+                                                    <th rowSpan={2}>Nominal Size</th>
+                                                    <th rowSpan={2}>Unit</th>
+                                                    <th colSpan={2}>Permissible Error</th>
+
+                                                    <th rowSpan={2}>Observer Error</th>
+
+                                                    <th rowSpan={2}>Status</th>
+                                                </tr>
+                                                <tr>
+                                                    <th>Min</th>
+                                                    <th>Max</th>
+                                                </tr>
+                                                {selectedGrnItem.grnAcCriteria.map((item, index) => {
+
+                                                    let averageColor = "";
+                                                    if (parseFloat(item.grnAcAverageOB) >= parseFloat(item.grnAcMinPSError) && parseFloat(item.grnAcAverageOB) <= parseFloat(item.grnAcMaxPSError)) {
+                                                        averageColor = "#4cbb17";
+                                                    } else {
+                                                        averageColor = "red"
+                                                    }
+
+                                                    return (
+                                                        <tr key={index}>
+
+                                                            <td>{item.grnAcParameter}</td>
+                                                            <td>{item.grnAcNominalSize}</td>
+                                                            <td>{item.grnAcNominalSizeUnit}</td>
+                                                            <td>{item.grnAcMinPSError}</td>
+                                                            <td>{item.grnAcMaxPSError}</td>
+                                                            <td><input className='form-control form-control-sm' name='grnAcAverageOB' style={{ color: averageColor, fontWeight: "bold" }} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} /></td>
+                                                            <td width="15%">
+                                                                <select className='form-select form-select-sm' name="rowStatus" value={item.rowStatus} onChange={(e) => changeACValue(index, e.target.name, e.target.value)}>
+                                                                    <option value="">Status</option>
+                                                                    <option value="ok">Ok</option>
+                                                                    <option value="notOk">Not Ok</option>
+                                                                    <option value="conditionallyOk">Conditionally Ok</option>
+                                                                </select>
+                                                            </td>
+
+
+
+                                                        </tr>
+                                                    )
+                                                })}
+
+                                            </tbody>
+                                        }
+
+                                        {selectedGrnItem.grnItemType === "referenceStandard" &&
+                                            <tbody>
+                                                <tr>
+
+                                                    <th width="20%" rowSpan={2}>Parameter</th>
+                                                    <th width="10%" rowSpan={2}>Range/Size</th>
+                                                    <th width="10%" rowSpan={2}>Unit</th>
+                                                    <th colSpan={2}>Permissible Size</th>
+                                                    {selectedGrnItem.grnBeforeData === "yes" && <th width="10%" rowSpan={2}>Before Calibration</th>}
+                                                    <th width="20%" colSpan={selectedGrnItem.grnItemOBType === "average" ? 1 : 2}>Observed Size</th>
+                                                    <th width="10%" rowSpan={2}>Status</th>
+                                                </tr>
+                                                <tr>
+                                                    <th width="6%">Min</th>
+                                                    <th width="6%">Max</th>
+
+                                                    {selectedGrnItem.grnItemOBType === "average" ?
+                                                        <React.Fragment>
+                                                            <th>Average</th>
+                                                        </React.Fragment> :
+                                                        <React.Fragment>
+                                                            <th>Min</th>
+                                                            <th>Max</th>
+                                                        </React.Fragment>}
+
+                                                </tr>
+                                                {/* {selectedGrnItem.grnselectedGrnItem.map((item)=> ()} */}
+                                                {selectedGrnItem.grnAcCriteria.map((item, index) => {
+                                                    let averageColor = "";
+
+                                                    if (parseFloat(item.grnAcAverageOB) >= parseFloat(item.grnAcMinPS) && parseFloat(item.grnAcAverageOB) <= parseFloat(item.grnAcMaxPS)) {
+                                                        averageColor = "#4cbb17";
+
+                                                    } else {
+                                                        averageColor = "red"
+
+                                                    }
+
+                                                    let minColor = "";
+
+                                                    if (parseFloat(item.grnAcMinOB) >= parseFloat(item.grnAcMinPS) && parseFloat(item.grnAcMinOB) <= parseFloat(item.grnAcMaxPS)) {
+                                                        minColor = "#4cbb17";
+
+                                                    } else {
+                                                        minColor = "red"
+
+                                                    }
+
+                                                    let maxColor = "";
+                                                    if (parseFloat(item.grnAcMaxOB) >= parseFloat(item.grnAcMinPS) && parseFloat(item.grnAcMaxOB) <= parseFloat(item.grnAcMaxPS)) {
+                                                        maxColor = "#4cbb17"
+
+                                                    } else {
+                                                        maxColor = "red"
+
+                                                    }
+
+
+                                                    return (
+                                                        <tr key={index}>
+                                                            <td>{item.grnAcParameter}</td>
+                                                            <td>{item.grnAcNominalSize}</td>
+                                                            <td>{item.grnAcNominalSizeUnit}</td>
+                                                            <td>{item.grnAcMinPS}</td>
+                                                            <td>{item.grnAcMaxPS}</td>
+
+                                                            {selectedGrnItem.grnBeforeData === "yes" && <td><input className='form-control form-control-sm' onChange={(e) => changeACValue(index, e.target.name, e.target.value)} name='grnBeforeCalibration' /></td>}
+                                                            {selectedGrnItem.grnItemOBType === "average" &&
+                                                                <td><input className='form-control form-control-sm' name='grnAcAverageOB' style={{ color: averageColor, fontWeight: "bold" }} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} /></td>
+                                                            }
+                                                            {selectedGrnItem.grnItemOBType === "minmax" &&
+                                                                <React.Fragment>
+                                                                    <td><input className='form-control form-control-sm' style={{ color: minColor, fontWeight: "bold" }} name="grnAcMinOB" onChange={(e) => changeACValue(index, e.target.name, e.target.value)} />
+                                                                    </td> <td><input className='form-control form-control-sm' style={{ color: maxColor, fontWeight: "bold" }} name="grnAcMaxOB" onChange={(e) => changeACValue(index, e.target.name, e.target.value)} /></td>
                                                                 </React.Fragment>}
 
 
@@ -1233,16 +1448,6 @@ const GrnAdd = () => {
                                                     )
                                                 })}
 
-
-
-
-
-
-
-
-
-
-
                                             </tbody>}
 
 
@@ -1256,7 +1461,15 @@ const GrnAdd = () => {
 
 
 
+
                                     </table>
+
+                                    <div className=' col d-flex justify-content-end'>
+                                        <div className='me-2 '>
+                                            <Button startIcon={<Add />} onClick={() => grnItemAdd()} size='small' sx={{ minWidth: "130px" }} variant='contained'>Add Item</Button>
+                                        </div>
+
+                                    </div>
 
                                 </div>
 
@@ -1293,24 +1506,8 @@ const GrnAdd = () => {
                                         {alertMessage}
                                     </Alert>
                                 </Snackbar>
-
-
-
                             </Paper>
-
                             <Paper elevation={12} sx={{ p: 2 }} className='col-md-12'>
-                                <div className="row mb-2">
-
-                                    <div className='col-md'> <h5 className='text-start'>Master Used</h5></div>
-                                    <div className=' col d-flex justify-content-end'>
-                                        <div className='me-2 '>
-                                            <Button startIcon={<Add />} onClick={() => grnItemAdd()} size='small' sx={{ minWidth: "130px" }} variant='contained'>Add Item</Button>
-                                        </div>
-
-                                    </div>
-
-                                </div>
-
                                 <table className='table table-bordered table-responsive text-center align-middle'>
                                     <tbody>
                                         <tr>
@@ -1319,33 +1516,27 @@ const GrnAdd = () => {
                                             <th>Master Name</th>
                                             <th>Range/Size</th>
                                             <th>Cal Certificate No</th>
-                                            <th>Cal Date</th>
+                                            <th>cal Due</th>
                                             <th>Next Due</th>
                                             <th>Calibrated At</th>
                                             <th>Remove</th>
                                         </tr>
-
-                                        {grnData.grnPartyItems.map((item, index) => {
+                                        {grnData.grnPartyItems.map((item, index) => (
                                             <tr key={index}>
                                                 <td>{index + 1}</td>
                                                 <td>{item.grnItemIMTENo}</td>
                                                 <td>{item.grnItemAddMasterName}</td>
                                                 <td>{item.grnItemRangeSize}</td>
-
+                                                <td>{item.grnItemCertificateNo}</td>
                                                 <td>{item.grnItemCalDate}</td>
                                                 <td>{item.grnItemDueDate}</td>
                                                 <td>{item.grnItemCalibratedAt}</td>
-                                                <td width="5%"><Delete color='error' /></td>
+                                                <td width="5%"><Delete color='error' onClick={() => deleteAC(index)} /></td>
                                             </tr>
-                                        })}
+                                        ))}
                                     </tbody>
                                 </table>
                             </Paper>
-
-
-
-
-
                         </form>
                     </LocalizationProvider>
 

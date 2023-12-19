@@ -277,7 +277,7 @@ const GrnList = () => {
 
 
     return (
-        <div>
+        <div className='px-5 pt-3'>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
                 <form>
 
@@ -346,10 +346,10 @@ const GrnList = () => {
                             </Paper>
                        
 
-                        <div className='row  '>
+                        <div className='row g-2'>
                             <Paper
                                 sx={{
-                                    p: 1,
+                                    p: 2,
                                     display: 'flex',
                                     flexDirection: 'column',
                                     mb: 1

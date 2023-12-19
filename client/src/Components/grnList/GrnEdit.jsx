@@ -198,7 +198,7 @@ const GrnEdit = () => {
     const getDistinctItemName = async () => {
         try {
             const response = await axios.get(
-                `${process.env.REACT_APP_PORT}/itemAdd/getDistinctItemName`
+                `${process.env.REACT_APP_PORT}/itemAdd/getAllDistinctItemName`
             );
             console.log(response.data)
             setItemMasterDistNames(response.data.result);
@@ -582,7 +582,7 @@ const GrnEdit = () => {
 
                                 <div className='row g-2 '>
                                     <div className='col d-flex'>
-                                        <div className="col-2 me-2">
+                                        <div className="me-2">
 
                                             <DatePicker
                                                 fullWidth
@@ -599,7 +599,7 @@ const GrnEdit = () => {
                                                 } />
 
                                         </div>
-                                        <div className="col-2 me-2">
+                                        <div className="me-2">
 
                                             <DatePicker
                                                 fullWidth
@@ -789,7 +789,7 @@ const GrnEdit = () => {
             </DialogContent>
             <DialogActions className='d-flex justify-content-between'>
                 <div>
-                    <Button variant='contained' color='warning' className='me-3'>Upload Report</Button>
+                    <Button variant='contained' color='warning' className='me-3'>Print</Button>
                 </div>
                 <div>
                     <Button variant='contained' color='error' className='me-3' onClick={() => { setGrnEditOpen(false) }}>Cancel</Button>
