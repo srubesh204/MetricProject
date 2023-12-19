@@ -1,5 +1,5 @@
 import React, { createContext, useEffect, useState, useContext } from 'react'
-import { Container, Box, Alert, Button, Dialog, DialogActions, DialogContent, InputLabel, DialogContentText, FormControl, Select, DialogTitle, OutlinedInput, FormControlLabel, IconButton, MenuItem, Paper, Checkbox, ListItemText, Snackbar, Switch, TextField } from '@mui/material';
+import { Container, Box, Alert, Button, Dialog, DialogActions, DialogContent, InputLabel, DialogContentText, FormControl, Select, DialogTitle, OutlinedInput, FormControlLabel, IconButton, MenuItem, Paper, Checkbox, ListItemText, Snackbar, Switch, TextField, Chip } from '@mui/material';
 import axios from 'axios';
 import { DataGrid, GridToolbar } from '@mui/x-data-grid';
 import dayjs from 'dayjs';
@@ -9,7 +9,7 @@ import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { HomeContent } from '../Home';
 import { useNavigate } from 'react-router-dom';
-import { Add, Close, CloudUpload, Delete } from '@mui/icons-material';
+import { Add, Close, CloudUpload, Delete, Done } from '@mui/icons-material';
 import styled from '@emotion/styled';
 
 const Grn = () => {
@@ -18,10 +18,10 @@ const Grn = () => {
 
     const [grnImtes, setGrnImtes] = useState(selectedRows)
 
-    useEffect(()=> {
+    useEffect(() => {
         setGrnImtes(selectedRows)
     }, [selectedRows])
-    
+
 
     const VisuallyHiddenInput = styled('input')({
         clip: 'rect(0 0 0 0)',
@@ -33,12 +33,12 @@ const Grn = () => {
         left: 0,
         whiteSpace: 'nowrap',
         width: 1,
-      });
+    });
 
 
-      useEffect(()=> {
+    useEffect(() => {
 
-      },[])
+    }, [])
 
 
 
@@ -317,77 +317,131 @@ const Grn = () => {
     // }, [])
 
 
-    
+
 
     const handleGrnItemChange = (e) => {
         const { name, value } = e.target;
 
 
-        if (name === "grnItemId") {
-            const fetchedData = selectedRows.filter((item)=> item._id === value)
+        if (name === "grnItemStatus") {
+            const fetchedData = selectedRows.filter((item) => item._id === selectedGrnItem.grnItemId)
             console.log(fetchedData)
-            setSelectedGrnItem({
-                grnItemId: fetchedData[0]._id,
-                grnItemAddMasterName: fetchedData[0].itemAddMasterName,
-                grnItemIMTENo: fetchedData[0].itemIMTENo,
-                grnItemType: fetchedData[0].itemType,
-                grnItemRangeSize: fetchedData[0].itemRangeSize,
-                grnItemRangeSizeUnit: fetchedData[0].itemRangeSizeUnit,
-                grnItemMFRNo: fetchedData[0].itemMFRNo,
-                grnItemLC: fetchedData[0].itemLC,
-                grnItemLCUnit: fetchedData[0].itemLCUnit,
-                grnItemMake: fetchedData[0].itemMake,
-                grnItemModelNo: fetchedData[0].itemModelNo,
+            setSelectedGrnItem((prev) => ({ ...prev, [name]: value }))
+            if (value === "Calibrated") {
+                setSelectedGrnItem({
+                    [name]: value,
+                    grnItemId: fetchedData[0]._id,
+                    grnItemAddMasterName: fetchedData[0].itemAddMasterName,
+                    grnItemIMTENo: fetchedData[0].itemIMTENo,
+                    grnItemType: fetchedData[0].itemType,
+                    grnItemRangeSize: fetchedData[0].itemRangeSize,
+                    grnItemRangeSizeUnit: fetchedData[0].itemRangeSizeUnit,
+                    grnItemMFRNo: fetchedData[0].itemMFRNo,
+                    grnItemLC: fetchedData[0].itemLC,
+                    grnItemLCUnit: fetchedData[0].itemLCUnit,
+                    grnItemMake: fetchedData[0].itemMake,
+                    grnItemModelNo: fetchedData[0].itemModelNo,
 
+                    grnItemDepartment: fetchedData[0].itemDepartment,
+                    grnItemArea: fetchedData[0].itemArea,
+                    grnItemPlaceOfUsage: fetchedData[0].itemPlaceOfUsage,
+                    grnItemCalFreInMonths: fetchedData[0].itemCalFreInMonths,
+                    grnItemCalAlertDays: fetchedData[0].itemCalAlertDays,
+                    grnItemCalibrationSource: fetchedData[0].itemCalibrationSource,
+                    grnItemCalibrationDoneAt: fetchedData[0].itemCalibrationDoneAt,
+                    grnItemCalibratedAt: fetchedData[0].itemCalibratedAt,
+                    grnItemOBType: fetchedData[0].itemOBType,
+                    grnAcCriteria: fetchedData[0].acceptanceCriteria.map((item) => (
+                        {
+                            grnParameter: item.acParameter,
+                            grnNominalSize: item.acNominalSize,
+                            grnNominalSizeUnit: item.acNominalSizeUnit,
+                            grnMinPS: item.acMinPS,
+                            grnMaxPS: item.acMaxPS,
+                            grnWearLimitPS: item.acWearLimitPS,
+                            grnBeforegrnibration: "",
+                            grnMinOB: item.acMinOB,
+                            grnMaxOB: item.acMaxOB,
+                            grnAverageOB: item.acAverageOB,
+                            grnOBError: item.acOBError,
+                            grnMinPSError: item.acMinPSError,
+                            grnMaxPSError: item.acMaxPSError,
+                            rowStatus: ""
+                        }
+                    )),
+                    grnItemUncertainity: fetchedData[0].itemUncertainity,
+                    grnItemCalDate: dayjs().format("YYYY-MM-DD"),
+                    grnItemDueDate: "",
+                    grnItemCertificateStatus: "",
+                    grnItemCertificateNo: "",
+                    grnItemCertificate: "",
+                    grnUncertainity: "",
+                    grnItemCalStatus: ""
+                })
+            }else{
+                setSelectedGrnItem({
+                    [name]: value,
+                    grnItemId: fetchedData[0]._id,
+                    grnItemAddMasterName: fetchedData[0].itemAddMasterName,
+                    grnItemIMTENo: fetchedData[0].itemIMTENo,
+                    grnItemType: fetchedData[0].itemType,
+                    grnItemRangeSize: fetchedData[0].itemRangeSize,
+                    grnItemRangeSizeUnit: fetchedData[0].itemRangeSizeUnit,
+                    grnItemMFRNo: fetchedData[0].itemMFRNo,
+                    grnItemLC: fetchedData[0].itemLC,
+                    grnItemLCUnit: fetchedData[0].itemLCUnit,
+                    grnItemMake: fetchedData[0].itemMake,
+                    grnItemModelNo: fetchedData[0].itemModelNo,
 
-                grnItemDepartment: fetchedData[0].itemDepartment,
-                grnItemArea: fetchedData[0].itemArea,
-                grnItemPlaceOfUsage: fetchedData[0].itemPlaceOfUsage,
-                grnItemCalFreInMonths: fetchedData[0].itemCalFreInMonths,
-                grnItemCalAlertDays: fetchedData[0].itemCalAlertDays,
-                grnItemCalibrationSource: fetchedData[0].itemCalibrationSource,
-                grnItemCalibrationDoneAt: fetchedData[0].itemCalibrationDoneAt,
-                grnItemCalibratedAt: fetchedData[0].itemCalibratedAt,
-                grnItemOBType: fetchedData[0].itemOBType,
-                grnAcCriteria: fetchedData[0].acceptanceCriteria.map((item) => (
-                    {
-                        grnParameter: item.acParameter,
-                        grnNominalSize: item.acNominalSize,
-                        grnNominalSizeUnit: item.acNominalSizeUnit,
-                        grnMinPS: item.acMinPS,
-                        grnMaxPS: item.acMaxPS,
-                        grnWearLimitPS: item.acWearLimitPS,
-                        grnBeforegrnibration: "",
-                        grnMinOB: item.acMinOB,
-                        grnMaxOB: item.acMaxOB,
-                        grnAverageOB: item.acAverageOB,
-                        grnOBError: item.acOBError,
-                        grnMinPSError: item.acMinPSError,
-                        grnMaxPSError: item.acMaxPSError,
-                        rowStatus: ""
-                    }
-                )),
-                grnItemUncertainity: fetchedData[0].itemUncertainity,
-                grnItemCalDate: dayjs().format("YYYY-MM-DD"),
-                grnItemDueDate: "",
-                grnItemCertificateStatus: "",
-                grnItemCertificateNo: "",
-                grnItemCertificate: "",
-                grnUncertainity: "",
-                grnItemCalStatus: ""
-            })
+                    grnItemDepartment: fetchedData[0].itemDepartment,
+                    grnItemArea: fetchedData[0].itemArea,
+                    grnItemPlaceOfUsage: fetchedData[0].itemPlaceOfUsage,
+                    grnItemCalFreInMonths: fetchedData[0].itemCalFreInMonths,
+                    grnItemCalAlertDays: fetchedData[0].itemCalAlertDays,
+                    grnItemCalibrationSource: fetchedData[0].itemCalibrationSource,
+                    grnItemCalibrationDoneAt: fetchedData[0].itemCalibrationDoneAt,
+                    grnItemCalibratedAt: "",
+                    grnItemOBType: fetchedData[0].itemOBType,
+                    grnAcCriteria: fetchedData[0].acceptanceCriteria.map((item) => (
+                        {
+                            grnParameter: item.acParameter,
+                            grnNominalSize: item.acNominalSize,
+                            grnNominalSizeUnit: item.acNominalSizeUnit,
+                            grnMinPS: item.acMinPS,
+                            grnMaxPS: item.acMaxPS,
+                            grnWearLimitPS: item.acWearLimitPS,
+                            grnBeforegrnibration: "",
+                            grnMinOB: item.acMinOB,
+                            grnMaxOB: item.acMaxOB,
+                            grnAverageOB: item.acAverageOB,
+                            grnOBError: item.acOBError,
+                            grnMinPSError: item.acMinPSError,
+                            grnMaxPSError: item.acMaxPSError,
+                            rowStatus: ""
+                        }
+                    )),
+                    grnItemUncertainity: fetchedData[0].itemUncertainity,
+                    grnItemCalDate: "",
+                    grnItemDueDate: "",
+                    grnItemCertificateStatus: "",
+                    grnItemCertificateNo: "",
+                    grnItemCertificate: "",
+                    grnUncertainity: "",
+                    grnItemCalStatus: ""
+                })
+            }
 
-        }else{
+        } else {
             setSelectedGrnItem((prev) => ({ ...prev, [name]: value }))
         }
-       
+
 
 
     }
     console.log(selectedGrnItem)
     console.log(grnData)
 
-    
+
 
 
     const changeGrnData = (index, name, value) => {
@@ -713,7 +767,7 @@ const Grn = () => {
     }, [selectedGrnItem.grnAcCriteria])
 
 
-    
+
     useEffect(() => {
         calculateResultDate(selectedGrnItem.grnItemCalDate, selectedGrnItem.grnItemCalFreInMonths);
     }, [selectedGrnItem.grnItemCalDate, selectedGrnItem.grnItemCalFreInMonths]);
@@ -740,9 +794,9 @@ const Grn = () => {
             nonSelectedItems();
             setSelectedGrnItem([]);
         }
-        
+
     }
-   
+
 
 
     const [confirmSubmit, setConfirmSubmit] = useState(false)
@@ -769,23 +823,48 @@ const Grn = () => {
 
 
     const nonSelectedItems = () => {
-        
-            const remainingMasters = selectedRows.filter(item =>
-                !grnData.grnPartyItems.some(grn => grn.grnItemId === item._id)
-            );
-            setGrnImtes(remainingMasters)
-        
+
+        const remainingMasters = selectedRows.filter(item =>
+            !grnData.grnPartyItems.some(grn => grn.grnItemId === item._id)
+        );
+        setGrnImtes(remainingMasters)
+
 
     }
 
-   
+
     useEffect(() => {
         nonSelectedItems()
     }, [grnData.grnPartyItems])
 
+    const [certMessage, setCertMessage] = useState(null)
+
+    const handleGrnCertificate = (event) => {
+        const selectedFile = event.target.files[0];
+        if (selectedFile) {
+            console.log("working")
+            setSelectedGrnItem((prev) => ({ ...prev, grnItemCertificate: selectedFile.name }));
+            const fileURL = URL.createObjectURL(selectedFile);
 
 
+            const formData = new FormData();
+            formData.append('file', selectedFile);
+            try {
+                axios.post(`${process.env.REACT_APP_PORT}/upload/grnItemCertificateUp`, formData)
+                    .then(response => {
+                        setCertMessage("Certificate Uploaded Successfully")
+                        console.log("Certificate Uploaded Successfully")
+                    })
+                    .catch(error => {
+                        setCertMessage("Error Uploading Certificate")
+                        console.log("Error")
+                    });
+            } catch (error) {
+                console.error('Error uploading the file:', error);
+            }
 
+        }
+    };
 
 
 
@@ -1036,10 +1115,10 @@ const Grn = () => {
 
                                         <TextField size='small' fullWidth variant='outlined' defaultValue="" id="grnItemStatusId" value={selectedGrnItem.grnItemStatus} onChange={handleGrnItemChange} select label="Grn Item Status" name='grnItemStatus' >
                                             <MenuItem value="">Select</MenuItem>
-                                            <MenuItem value="calibrated">Calibrated</MenuItem>
-                                            <MenuItem value="serviced">Serviced</MenuItem>
-                                            <MenuItem value="notServicable">Not Servicable</MenuItem>
-                                            <MenuItem value="notCalibrated">Not Calibrated</MenuItem>
+                                            <MenuItem value="Calibrated">Calibrated</MenuItem>
+                                            <MenuItem value="Serviced">Serviced</MenuItem>
+                                            <MenuItem value="Not Servicable">Not Servicable</MenuItem>
+                                            <MenuItem value="Not Calibrated">Not Calibrated</MenuItem>
                                         </TextField>
 
                                     </div>
@@ -1053,7 +1132,7 @@ const Grn = () => {
                                     </div>
 
                                 </div>
-                                {selectedGrnItem.grnItemStatus === "calibrated" ?
+                                {selectedGrnItem.grnItemStatus === "Calibrated" ?
                                     <React.Fragment>
                                         <div className="row g-2 mt-1">
                                             <div className="col-md">
@@ -1063,7 +1142,7 @@ const Grn = () => {
                                                     id="grnItemCalDateId"
                                                     name="grnItemCalDate"
                                                     label="Cal Date"
-                                                    
+
                                                     slotProps={{ textField: { size: 'small', fullWidth: true } }}
                                                     format="DD-MM-YYYY"
                                                     value={dayjs(selectedGrnItem.grnItemCalDate)}
@@ -1088,7 +1167,7 @@ const Grn = () => {
 
                                             </div>
                                             <div className='col-md'>
-                                                <TextField size='small'  fullWidth variant='outlined' id="grnItemCertificateStatusId" onChange={handleGrnItemChange} select label="Certificate Status" name='grnItemCertificateStatus'>
+                                                <TextField size='small' fullWidth variant='outlined' id="grnItemCertificateStatusId" onChange={handleGrnItemChange} select label="Certificate Status" name='grnItemCertificateStatus'>
                                                     <MenuItem value="received">Received</MenuItem>
                                                     <MenuItem value="notReceived">Not Received</MenuItem>
 
@@ -1097,7 +1176,7 @@ const Grn = () => {
                                             <div className="col-md">
 
                                                 <TextField label="Certificate No"
-                                                   
+
                                                     id="grnItemCertificateNoId"
                                                     defaultValue=""
                                                     size="small"
@@ -1107,15 +1186,28 @@ const Grn = () => {
 
                                             </div>
                                             <div className='col'>
-                                                <TextField fullWidth  label="Uncertainity" id='grnUncertainityId' variant='outlined' size='small' onChange={handleGrnItemChange} name='grnUncertainity' />
+                                                <TextField fullWidth label="Uncertainity" id='grnUncertainityId' variant='outlined' size='small' onChange={handleGrnItemChange} name='grnUncertainity' />
 
                                             </div>
 
                                             <div className='col' >
-                                                <Button component="label" fullWidth variant="contained" startIcon={<CloudUpload />}>
+                                                <Button helperText="Hello" component="label" fullWidth variant="contained" startIcon={<CloudUpload />} >
                                                     Upload Certificate
-                                                    <VisuallyHiddenInput type="file" />
+                                                    <VisuallyHiddenInput type="file" onChange={handleGrnCertificate} />
                                                 </Button>
+                                                <div className='d-flex justify-content-center mt-2'>
+                                                    {(selectedGrnItem.grnItemCertificate !== "" && selectedGrnItem.grnItemCertificate !== undefined) &&
+                                                        <Chip
+                                                            icon={<Done />}
+                                                            color="success"
+                                                            label={selectedGrnItem.grnItemCertificate}
+                                                            onClick={() => {
+                                                                const fileUrl = `${process.env.REACT_APP_PORT}/grnCertificates/${selectedGrnItem.grnItemCertificate}`;
+                                                                window.open(fileUrl, '_blank'); // Opens the file in a new tab/window
+                                                            }}
+                                                            onDelete={() => setSelectedGrnItem((prev) => ({ ...prev, grnItemCertificate: "" }))}
+                                                        />}
+                                                </div>
                                             </div>
 
 
@@ -1124,7 +1216,7 @@ const Grn = () => {
 
 
 
-                                        <div className='row'>
+                                        <div className='row mt-3'>
                                             <h6 className='text-center'>Calibration Data</h6>
                                             <table className='table table-sm table-bordered table-responsive text-center align-middle'>
 
@@ -1483,7 +1575,7 @@ const Grn = () => {
 
 
                                                 <div className='col-4 me-2'>
-                                                    <TextField size='small' inputProps={{sx : { color: selectedGrnItem.grnItemCalStatus === "status" ? "" : selectedGrnItem.grnItemCalStatus === "accepted" ? "green" : "red" }}} fullWidth variant='outlined' id="grnItemCalStatusId" select label="Calibration Status" name='grnItemCalStatus' value={selectedGrnItem.grnItemCalStatus}>
+                                                    <TextField size='small' inputProps={{ sx: { color: selectedGrnItem.grnItemCalStatus === "status" ? "" : selectedGrnItem.grnItemCalStatus === "accepted" ? "green" : "red" } }} fullWidth variant='outlined' id="grnItemCalStatusId" select label="Calibration Status" name='grnItemCalStatus' value={selectedGrnItem.grnItemCalStatus}>
                                                         <MenuItem value="status">Status</MenuItem>
                                                         <MenuItem value="accepted">Accepted</MenuItem>
                                                         <MenuItem value="rejected">Rejected</MenuItem>
@@ -1505,7 +1597,7 @@ const Grn = () => {
                             </Paper>
 
                             <Paper>
-                            <table className='table table-bordered table-responsive text-center align-middle'>
+                                <table className='table table-bordered table-responsive text-center align-middle'>
                                     <tbody>
                                         <tr>
                                             <th>Si No</th>
@@ -1531,7 +1623,7 @@ const Grn = () => {
                                                 <td>{item.grnItemDueDate}</td>
                                                 <td>{item.grnItemCalibratedAt}</td>
                                                 <td>{item.grnItemStatus}</td>
-                                                <td width="5%"><Delete  onClick={() => deleteGrnPartyItems(index)} color='error' /></td>
+                                                <td width="5%"><Delete onClick={() => deleteGrnPartyItems(index)} color='error' /></td>
                                             </tr>
                                         ))}
                                     </tbody>
