@@ -3,36 +3,37 @@ const multer = require('multer');
 const router = express.Router();
 const path = require('path');
 
-const VendorCertificateStorage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, 'storage/vendorCertificates');
-  },
-  filename: (req, file, cb) => {
-    cb(null, file.originalname);
-  },
-});
+const createDiskStorage = (destinationFolder) => {
+  return multer.diskStorage({
+    destination: (req, file, cb) => {
+      cb(null, `storage/${destinationFolder}`);
+    },
+    filename: (req, file, cb) => {
+      cb(null, file.originalname);
+    },
+  });
+};
 
-const WorkInstructionStorage =  multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, 'storage/workInstructions');
-  },
-  filename: (req, file, cb) => {
-    cb(null, file.originalname);
-  },
-});
+const VendorCertificateStorage = createDiskStorage('vendorCertificates');
+const WorkInstructionStorage = createDiskStorage('workInstructions');
+const itemCertificateStorage = createDiskStorage('itemCertificates');
+const grnItemCertificates = createDiskStorage('grnItemCertificates');
 
-const itemCertificateStorage =  multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, 'storage/itemCertificates');
-  },
-  filename: (req, file, cb) => {
-    cb(null, file.originalname);
-  },
-});
 
 const vendorCertificateUpload = multer({ storage: VendorCertificateStorage });
 const workInsUploadFolder = multer({ storage: WorkInstructionStorage });
 const itemCertificateFolder = multer({ storage: itemCertificateStorage });
+const grnItemCertificateFolder = multer({ storage: grnItemCertificates });
+
+router.post('/grnItemCertificateUp', grnItemCertificateFolder.single('file'), (req, res) => {
+  if (!req.file) {
+    // No file was provided in the request
+    return res.status(400).json({ error: 'No file selected for upload' });
+  }
+
+  // File was provided, proceed with processing
+  res.status(200).json({ message: 'Grn Cal Certificate uploaded successfully' });
+});
 
 router.post('/VendorCertificateUpload', vendorCertificateUpload.single('file'), (req, res) => {
   if (!req.file) {
