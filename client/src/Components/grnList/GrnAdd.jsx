@@ -325,8 +325,15 @@ const GrnAdd = () => {
 
                             }
                         )),
+                        grnItemCalDate: dayjs().format("YYYY-MM-DD"),
+                        grnItemDueDate: "",
+                        grnItemCertificateStatus: "",
+                        grnItemCertificateNo: "",
+                        grnItemCertificate: "",
+                        grnUncertainity: "",
+                        grnItemCalStatus: ""
 
-                    calMasterUsed: value.itemItemMasterIMTENo
+                   
                 }
             )
             )
