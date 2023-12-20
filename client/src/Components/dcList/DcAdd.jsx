@@ -111,8 +111,8 @@ const DcAdd = () => {
     }
 
     const remarksChange = (event, rowId) => {
-        const {name, value} = event.target;
-        if(dcData.dcPartyItems.length !== 0){
+        const { name, value } = event.target;
+        if (dcData.dcPartyItems.length !== 0) {
             setDcData((prev) => {
                 const updateAC = [...prev.dcPartyItems]
                 updateAC[rowId] = {
@@ -123,10 +123,10 @@ const DcAdd = () => {
                 };
             })
         }
-       
-      };
 
-      console.log(dcData.dcPartyItems)
+    };
+
+    console.log(dcData.dcPartyItems)
     const Columns = [
         { field: 'id', headerName: 'Si. No', width: 70, renderCell: (params) => params.api.getAllRowIds().indexOf(params.id) + 1 },
 
@@ -142,7 +142,7 @@ const DcAdd = () => {
                 `${params.row.itemRangeSize || ''} ${params.row.itemLCUnit || ''}`,
         },
         { field: 'itemMake', headerName: 'Make', width: 90 },
-        
+
         { field: 'itemCalFreInMonths', headerName: 'Frequency', type: "number", width: 100 },
         {
             field: 'dcItemRemarks', headerName: 'ReMarks', width: 200, renderCell: (params) =>
@@ -690,13 +690,13 @@ const DcAdd = () => {
                                 elevation={12}
                             >
                                 <div className='row'>
-                                    <Box sx={{ height: 350, width: '100%', my: 2 }}>
+                                   {/*<Box sx={{ height: 350, width: '100%', my: 2 }}>
                                         <DataGrid
 
                                             rows={dcData.dcPartyItems}
                                             columns={Columns}
                                             getRowId={(row) => row._id}
-                                            
+
                                             initialState={{
                                                 pagination: {
                                                     paginationModel: { page: 0, pageSize: 5 },
@@ -724,7 +724,41 @@ const DcAdd = () => {
                                             pageSizeOptions={[5]}
                                         />
 
-                                    </Box>
+                                        </Box>*/}
+
+                                    <table className='table table-bordered table-responsive text-center align-middle'>
+                                        <tbody>
+                                            <tr>
+                                                <th>Si No</th>
+                                                <th>IMTE No</th>
+                                                <th>Item Name</th>
+                                                <th>Range/Size</th>
+                                                <th>Make</th>
+                                                <th>Frequency</th>
+                                                <th>Remarks</th>
+                                               
+                                                <th>Remove</th>
+                                            </tr>
+                                            {dcData.dcPartyItems.map((item, index) => (
+                                                <tr key={index}>
+                                                    <td>{index + 1}</td>
+                                                    <td>{item.itemIMTENo}</td>
+                                                    <td>{item.itemAddMasterName}</td>
+                                                    <td>{item.itemRangeSize}</td>
+                                                    <td>{item.itemMake}</td>
+                                                    <td>{dayjs(item.itemCalFreInMonths).format("DD-MM-YYYY")}</td>
+                                                    <td> <select className="form-select form-select-sm" id="reMarksId" name="reMarks"  aria-label="Floating label select example">
+                                                        <option value="calibration">Calibration</option>
+                                                        <option value="service">Service</option>
+                                                        <option value="calibration&service">Calibration&Service</option>
+
+
+                                                    </select></td>
+                                                    <td width="5%"><Delete color='error' onClick={() => deleteAC(index)} /></td>
+                                                </tr>
+                                            ))}
+                                        </tbody>
+                                    </table>
 
                                 </div>
                             </Paper>
