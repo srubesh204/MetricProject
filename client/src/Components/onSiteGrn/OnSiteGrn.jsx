@@ -43,7 +43,7 @@ const OnSiteGrn = () => {
 
     }
 
-    const [allItemImtes, setAllItemImtes] = useState(selectedRows)
+
     const [onSiteGrnData, setOnSiteGrnData] = useState({
         osGrnPartyRefNo: "",
         osGrnPartyId: "",
@@ -63,9 +63,69 @@ const OnSiteGrn = () => {
     })
 
     const [itemAddOSiteDetails, setItemAddOnsiteDetails] = useState({
-        grnList: "",
+        onSiteList: "",
         grnImteNo: ""
     })
+
+
+
+
+    const [allItemImtes, setAllItemImtes] = useState(selectedRows)
+    const [selectedGrnItem, setSelectedGrnItem] = useState({
+        osGrnItemId: "",
+        osGrnItemMasterRef: "",
+        osGrnItemAddMasterName: "",
+        osGrnItemIMTENo: "",
+        osGrnItemType: "",
+        osGrnItemRangeSize: "",
+        osGrnItemRangeSizeUnit: "",
+        osGrnItemMFRNo: "",
+        osGrnItemLC: "",
+        osGrnItemLCUnit: "",
+        osGrnItemMake: "",
+        osGrnItemModelNo: "",
+        osGrnItemStatus: "",
+        osGrnItemReceiptDate: "",
+        osGrnItemDepartment: "",
+        osGrnItemArea: "",
+        osGrnItemPlaceOfUsage: "",
+        osGrnItemCalFreInMonths: "",
+        osGrnItemCalAlertDays: "",
+        osGrnItemCalibrationSource: "",
+        osGrnItemCalibrationDoneAt: "",
+        osGrnItemCalibratedAt: "",
+        osGrnItemOBType: "",
+        osGrnAcCriteria: [
+            {
+                osGrnAcParameter: "",
+                osGrnAcNominalSize: "",
+                osGrnAcNominalSizeUnit: "",
+                osGrnAcMinPS: "",
+                osGrnAcMaxPS: "",
+                osGrnAcWearLimitPS: "",
+                osGrnAcMinOB: "",
+                osGrnAcMaxOB: "",
+                osGrnAcAverageOB: "",
+                osGrnAcOBError: "",
+                osGrnAcMinPSError: "",
+                osGrnAcMaxPSError: "",
+                rowStatus: ""
+            },
+        ],
+        osGrnItemUncertainity: "",
+        osGrnItemCalDate: dayjs().format("YYYY-MM-DD"),
+        osGrnItemDueDate: "",
+        osGrnItemCertificateStatus: "",
+        osGrnItemCertificateNo: "",
+        osGrnItemCertificate: "",
+        osGrnUncertainity: "",
+        osGrnItemCalStatus: "",
+
+    })
+
+
+
+
 
 
 
@@ -86,6 +146,16 @@ const OnSiteGrn = () => {
     useEffect(() => {
         vendorFetchData();
     }, []);
+
+
+
+
+
+
+
+
+
+
 
 
     const setPartyData = async (id) => {
@@ -126,7 +196,24 @@ const OnSiteGrn = () => {
     }, []);
     // 
 
+    const [imteList, setImteList] = useState([])
+    const getImteList = async () => {
+        try {
+            const response = await axios.get(
+                `${process.env.REACT_APP_PORT}/itemAdd/getItemAddByIMTESort`
+            );
+            console.log(response.data)
+            setImteList(response.data.result)
 
+
+        } catch (err) {
+            console.log(err);
+        }
+    };
+
+    useEffect(() => {
+        getImteList();
+    }, []);
 
 
 
@@ -144,6 +231,153 @@ const OnSiteGrn = () => {
             console.log(err);
         }
     };
+
+
+    const OnSiteGrnAdd = () => {
+        if (setSelectedGrnItem.length !== 0) {
+            setOnSiteGrnData((prev) => ({ ...prev, osGrnPartyItems: [...prev.osGrnPartyItems, selectedGrnItem] }))
+        }
+        setItemAddOnsiteDetails([])
+
+    }
+    useEffect(() => {
+
+        setSelectedGrnItem([])
+        setItemAddOnsiteDetails({
+            onSiteList: "",
+            grnImteNo: ""
+        })
+    }, [onSiteGrnData.osGrnPartyItems])
+
+
+    const handleOnSiteGrnItemAdd = (e) => {
+        const { name, value } = e.target;
+        setItemAddOnsiteDetails((prev) => ({ ...prev, [name]: value }))
+        if (name === "onSiteList") {
+            getItemByName(value)
+
+        }
+
+        if (name === "osGrnItemStatus") {
+
+            const fetchedData = allItemImtes.filter((item) => item._id === selectedGrnItem.osGrnItemId)
+            console.log(fetchedData)
+            if (value === "Calibrated") {
+                setSelectedGrnItem(
+                    {
+                        [name]: value,
+                        osGrnItemId: fetchedData[0]._id,
+                        osGrnItemIMTENo: fetchedData[0].itemIMTENo,
+                        osGrnItemAddMasterName: fetchedData[0].itemAddMasterName,
+                        osGrnItemType: fetchedData[0].itemType,
+                        osGrnItemRangeSize: fetchedData[0].itemRangeSize,
+                        osGrnItemItemMFRNo: fetchedData[0].itemMFRNo,
+                        osGrnItemLC: fetchedData[0].itemLC,
+                        osGrnItemMake: fetchedData[0].itemMake,
+                        osGrnItemStatus: fetchedData[0].itemStatus,
+                        osGrnItemCalFreInMonths: fetchedData[0].itemCalFreInMonths,
+                        osGrnItemUncertainity: fetchedData[0].uncertainty,
+                        osGrnItemCalibratedAt: fetchedData[0].itemCalibratedAt,
+                        osGrnItemSOPNo: fetchedData[0].SOPNo,
+                        osGrnStandardRef: fetchedData[0].standardRef,
+                        osGrnItemOBType: fetchedData[0].itemOBType,
+
+
+                        osGrnAcCriteria:
+
+                            fetchedData[0].acceptanceCriteria.map((item) => (
+                                {
+                                    osGrnAcParameter: item.acParameter,
+                                    osGrnAcNominalSize: item.acNominalSize,
+                                    osGrnAcNominalSizeUnit: item.acNominalSizeUnit,
+                                    osGrnAcMinPS: item.acMinPS,
+                                    osGrnAcMaxPS: item.acMaxPS,
+                                    osGrnAcWearLimitPS: item.acWearLimitPS,
+
+                                    osGrnAcMinOB: item.acMinOB,
+                                    osGrnAcMaxOB: item.acMaxOB,
+                                    osGrnAcAverageOB: item.acAverageOB,
+                                    osGrnAcOBError: item.acOBError,
+                                    osGrnAcMinPSError: item.acMinPSError,
+                                    osGrnAcMaxPSError: item.acMaxPSError,
+                                    rowStatus: ""
+
+                                }
+                            )),
+                        osGrnItemCalDate: dayjs().format("YYYY-MM-DD"),
+                        osGrnItemDueDate: "",
+                        osGrnItemCertificateStatus: "",
+                        osGrnItemCertificateNo: "",
+                        osGrnItemCertificate: "",
+                        osGrnUncertainity: "",
+                        osGrnItemCalStatus: ""
+
+
+                    }
+
+                )
+            } else {
+                setSelectedGrnItem({
+                    [name]: value,
+                    osGrnItemId: fetchedData[0]._id,
+                    osGrnItemIMTENo: fetchedData[0].itemIMTENo,
+                    osGrnItemAddMasterName: fetchedData[0].itemAddMasterName,
+                    osGrnItemType: fetchedData[0].itemType,
+                    osGrnItemRangeSize: fetchedData[0].itemRangeSize,
+                    osGrnItemItemMFRNo: fetchedData[0].itemMFRNo,
+                    osGrnItemLC: fetchedData[0].itemLC,
+                    osGrnItemMake: fetchedData[0].itemMake,
+                    osGrnItemCalFreInMonths: fetchedData[0].itemCalFreInMonths,
+                    osGrnItemUncertainity: fetchedData[0].uncertainty,
+                    osGrnItemCalibratedAt: fetchedData[0].itemCalibratedAt,
+                    osGrnItemSOPNo: fetchedData[0].SOPNo,
+                    osGrnStandardRef: fetchedData[0].standardRef,
+                    osGrnItemOBType: fetchedData[0].itemOBType,
+                    osGrnAcCriteria:
+                        fetchedData[0].acceptanceCriteria.map((item) => (
+                            {
+                                osGrnAcParameter: item.acParameter,
+                                osGrnAcNominalSize: item.acNominalSize,
+                                osGrnAcNominalSizeUnit: item.acNominalSizeUnit,
+                                osGrnAcMinPS: item.acMinPS,
+                                osGrnAcMaxPS: item.acMaxPS,
+                                osGrnAcWearLimitPS: item.acWearLimitPS,
+
+                                osGrnAcMinOB: item.acMinOB,
+                                osGrnAcMaxOB: item.acMaxOB,
+                                osGrnAcAverageOB: item.acAverageOB,
+                                osGrnAcOBError: item.acOBError,
+                                osGrnAcMinPSError: item.acMinPSError,
+                                osGrnAcMaxPSError: item.acMaxPSError,
+                                rowStatus: ""
+
+                            }
+                        )),
+                    osGrnItemCalDate: dayjs().format("YYYY-MM-DD"),
+                    osGrnItemDueDate: "",
+                    osGrnItemCertificateStatus: "",
+                    osGrnItemCertificateNo: "",
+                    osGrnItemCertificate: "",
+                    osGrnUncertainity: "",
+                    osGrnItemCalStatus: ""
+
+
+                })
+
+
+            }
+
+
+
+        } else {
+            setSelectedGrnItem((prev) => ({ ...prev, [name]: value }))
+        }
+
+
+    }
+    console.log(selectedGrnItem)
+
+
 
 
 
@@ -164,12 +398,11 @@ const OnSiteGrn = () => {
         grnFetchData();
     }, []);
 
+
+
     const handleOnSiteChange = (e) => {
         const { name, value, checked } = e.target;
         setOnSiteGrnData((prev) => ({ ...prev, [name]: value }));
-
-
-
 
 
     }
@@ -197,6 +430,193 @@ const OnSiteGrn = () => {
             console.log(err);
         }
     };
+
+    const changeOnSiteValue = (index, name, value) => {
+        setSelectedGrnItem((prev) => {
+            const updateAC = [...prev.osGrnAcCriteria]
+            updateAC[index] = {
+                ...updateAC[index], [name]: value,
+            };
+            return {
+                ...prev, osGrnAcCriteria: updateAC,
+            };
+        })
+
+
+        if (selectedGrnItem.osGrnItemType === "attribute") {
+            if (name === "grnAverageOB") {
+                setSelectedGrnItem(prev => {
+                    const updatedData = prev.osGrnAcCriteria.map((item, idx) => {
+                        if (idx === index) {
+                            let status = ""
+                            if (item.osGrnAcWearLimitPS !== "") {
+
+                                if (item.osGrnAcWearLimitPS <= item.osGrnAcMinPS) {
+                                    const isAverageInRange = parseFloat(item.osGrnAcAverageOB) >= parseFloat(item.osGrnAcWearLimitPS) &&
+                                        parseFloat(item.osGrnAcAverageOB) <= parseFloat(item.osGrnAcMaxPS);
+
+                                    if (item.osGrnAcAverageOB === "") {
+                                        status = ""
+                                    } else {
+                                        if (isAverageInRange) {
+                                            status = "ok"
+                                        } else {
+                                            status = "notOk"
+                                        }
+                                    }
+                                }
+
+                                if (item.osGrnAcWearLimitPS >= item.osGrnAcMaxPS) {
+                                    const isAverageInRange = parseFloat(item.osGrnAcAverageOB) <= parseFloat(item.osGrnAcWearLimitPS) &&
+                                        parseFloat(item.osGrnAcAverageOB) >= parseFloat(item.osGrnAcMinPS);
+
+                                    if (item.osGrnAcAverageOB === "") {
+                                        status = ""
+                                    } else {
+                                        if (isAverageInRange) {
+                                            status = "ok"
+                                        } else {
+                                            status = "notOk"
+                                        }
+                                    }
+
+                                }
+
+                                return {
+                                    ...item,
+                                    rowStatus: status,
+                                };
+
+                            } else {
+                                const isAverageInRange = parseFloat(item.osGrnAcAverageOB) >= parseFloat(item.osGrnAcMinPS) &&
+                                    parseFloat(item.osGrnAcAverageOB) <= parseFloat(item.osGrnAcMaxPS);
+
+                                if (item.osGrnAcAverageOB === "") {
+                                    status = ""
+                                } else {
+                                    if (isAverageInRange) {
+                                        status = "ok"
+                                    } else {
+                                        status = "notOk"
+                                    }
+                                }
+
+                                return {
+                                    ...item,
+                                    rowStatus: status,
+                                };
+                            }
+
+
+
+
+                        }
+                        return item;
+                    });
+                    return {
+                        ...prev,
+                        osGrnAcCriteria: updatedData,
+                    };
+                });
+            }
+
+            if (name === "grnMinOB" || name === "grnMaxOB") {
+                setSelectedGrnItem(prev => {
+                    const updatedData = prev.osGrnAcCriteria.map((item, idx) => {
+                        if (idx === index) {
+                            let status = ""
+                            if (item.osGrnAcWearLimitPS !== "") {
+
+                                if (item.osGrnAcWearLimitPS <= item.osGrnAcMinPS) {
+
+
+                                    const isMinInRange = parseFloat(item.osGrnAcMinOB) >= parseFloat(item.osGrnAcWearLimitPS) &&
+                                        parseFloat(item.osGrnAcMinOB) <= parseFloat(item.osGrnAcMaxPS);
+                                    const isMaxInRange = parseFloat(item.osGrnAcMaxOB) >= parseFloat(item.osGrnAcWearLimitPS) &&
+                                        parseFloat(item.osGrnAcMaxOB) <= parseFloat(item.osGrnAcMaxPS);
+
+
+
+                                    if (isMinInRange && isMaxInRange) {
+                                        status = "ok"
+                                    } else {
+                                        status = "notOk"
+                                    }
+
+                                }
+
+                                if (item.osGrnAcWearLimitPS >= item.osGrnAcMaxPS) {
+                                    const isMinInRange = parseFloat(item.osGrnAcMinOB) <= parseFloat(item.osGrnAcWearLimitPS) &&
+                                        parseFloat(item.osGrnAcMinOB) >= parseFloat(item.osGrnAcMinPS);
+                                    const isMaxInRange = parseFloat(item.osGrnAcMaxOB) <= parseFloat(item.osGrnAcWearLimitPS) &&
+                                        parseFloat(item.osGrnAcMaxOB) >= parseFloat(item.osGrnAcMinPS);
+
+
+
+                                    if (isMinInRange && isMaxInRange) {
+                                        status = "ok"
+                                    } else {
+                                        status = "notOk"
+                                    }
+
+                                }
+                                const isMinInRange = parseFloat(item.osGrnAcMinOB) >= parseFloat(item.osGrnAcMinPS) &&
+                                    parseFloat(item.osGrnAcMinOB) <= parseFloat(item.osGrnAcMaxPS);
+                                const isMaxInRange = parseFloat(item.osGrnAcMaxOB) >= parseFloat(item.osGrnAcMinPS) &&
+                                    parseFloat(item.osGrnAcMaxOB) <= parseFloat(item.osGrnAcMaxPS);
+
+                                return {
+                                    ...item,
+                                    rowStatus: status,
+                                };
+
+                            } else {
+                                const isMinInRange = parseFloat(item.osGrnAcMinOB) >= parseFloat(item.osGrnAcMinPS) &&
+                                    parseFloat(item.osGrnAcMinOB) <= parseFloat(item.osGrnAcMaxPS);
+                                const isMaxInRange = parseFloat(item.osGrnAcMaxOB) >= parseFloat(item.osGrnAcMinPS) &&
+                                    parseFloat(item.osGrnAcMaxOB) <= parseFloat(item.osGrnAcMaxPS);
+
+
+
+
+                                if (item.osGrnAcMaxOB === "" && item.osGrnAcMinOB === "") {
+                                    status = "";
+                                } else if (item.osGrnAcMaxOB === "") {
+                                    status = (isMinInRange) ? "ok" : "notOk";
+                                } else {
+                                    status = (isMinInRange && isMaxInRange) ? "ok" : "notOk";
+                                }
+                                return {
+                                    ...item,
+                                    rowStatus: status,
+                                };
+                            }
+
+
+
+
+                        }
+                        return item;
+                    });
+                    return {
+                        ...prev,
+                        osGrnAcCriteria: updatedData,
+                    };
+                });
+            }
+        }
+
+
+
+
+
+    };
+
+
+
+
+
+
 
 
 
@@ -417,7 +837,7 @@ const OnSiteGrn = () => {
                                 <div className='row g-2 mb-2'>
                                     <div className='col d-flex'>
                                         <div className='col me-2'>
-                                            <TextField size='small' fullWidth variant='outlined' defaultValue="" id="grnListId" select label="Item List" name='grnList'>
+                                            <TextField size='small' fullWidth variant='outlined' defaultValue="" id="grnListId" value={itemAddOSiteDetails.onSiteList} onChange={handleOnSiteGrnItemAdd} select label="Item List" name='onSiteList'>
                                                 {itemMasterDistNames.map((item, index) => (
                                                     <MenuItem key={index} value={item}>{item}</MenuItem>
                                                 ))}
@@ -425,19 +845,21 @@ const OnSiteGrn = () => {
                                         </div>
                                         <div className='col me-2 '>
                                             <TextField label="Imte No"
-                                                id="grnItemIdId"
+                                                id="osGrnItemIdId"
                                                 select
                                                 defaultValue=""
                                                 fullWidth
                                                 size="small"
-                                                name="grnItemId" >
+                                                onChange={handleOnSiteGrnItemAdd}
+                                                value={selectedGrnItem.osGrnItemId}
+                                                name="osGrnItemId" >
                                                 {allItemImtes.map((item, index) => (
                                                     <MenuItem key={index} value={item._id}>{item.itemIMTENo}</MenuItem>
                                                 ))}
                                             </TextField>
                                         </div>
                                         <div className='col me-2 '>
-                                            <TextField size='small' fullWidth variant='outlined' defaultValue="" id="grnItemStatusId" select label="Grn Item Status" name='grnItemStatus' >
+                                            <TextField size='small' fullWidth variant='outlined' onChange={handleOnSiteGrnItemAdd} value={selectedGrnItem.osGrnItemStatus} defaultValue="" id="osGrnItemStatusId" select label="Grn Item Status" name='osGrnItemStatus' >
                                                 <MenuItem value="">Select</MenuItem>
                                                 <MenuItem value="Calibrated">Calibrated</MenuItem>
                                                 <MenuItem value="Serviced">Serviced</MenuItem>
@@ -479,6 +901,7 @@ const OnSiteGrn = () => {
                                                 name="grnItemDueDate"
                                                 label="Next Cal Date"
                                                 // sx={{ width: "100%" }}
+                                                slotProps={{ textField: { size: 'small', fullWidth: true } }}
                                                 format="DD-MM-YYYY"
 
                                             />
@@ -528,35 +951,248 @@ const OnSiteGrn = () => {
                                     <table className='table table-sm table-bordered table-responsive text-center align-middle'>
 
 
-                                        <tbody >
-                                            <tr>
+                                        {selectedGrnItem.osGrnItemType === "attribute" &&
 
-                                                <th width="20%" rowSpan={2}>Parameter</th>
-                                                <th width="10%" rowSpan={2}>Range/Size</th>
-                                                <th width="10%" rowSpan={2}>Unit</th>
-                                                <th colSpan={3} width="30%">Permissible Size</th>
+                                            <tbody >
+                                                <tr>
+
+                                                    <th width="20%" rowSpan={2}>Parameter</th>
+                                                    <th width="10%" rowSpan={2}>Range/Size</th>
+                                                    <th width="10%" rowSpan={2}>Unit</th>
+                                                    <th colSpan={3} width="30%">Permissible Size</th>
 
 
-                                                <th width="20%" colSpan={2}>Observed Size</th>
-                                                <th width="10%" rowSpan={2}>Status</th>
-                                            </tr>
-                                            <tr>
-                                                <th width="6%">Min</th>
-                                                <th width="6%">Max</th>
-                                                <th width="10%">Wear Limit</th>
+                                                    <th width="20%" colSpan={selectedGrnItem.osGrnItemOBType === "average" ? 1 : 2}>Observed Size</th>
+                                                    <th width="10%" rowSpan={2}>Status</th>
+                                                </tr>
+                                                <tr>
+                                                    <th width="6%">Min</th>
+                                                    <th width="6%">Max</th>
+                                                    <th width="10%">Wear Limit</th>
+                                                    {selectedGrnItem.osGrnItemOBType === "average" ?
+                                                        <React.Fragment>
+                                                            <th>Average</th>
+                                                        </React.Fragment> :
+                                                        <React.Fragment>
+                                                            <th>Min</th>
+                                                            <th>Max</th>
+                                                        </React.Fragment>}
 
-                                                <React.Fragment>
-                                                    <th>Average</th>
-                                                </React.Fragment>
-                                                <React.Fragment>
+                                                </tr>
+                                                {/* {selectedGrnItem.grnAcCriteria.map((item)=> ()} */}
+                                                {selectedGrnItem.osGrnAcCriteria.map((item, index) => {
+                                                    let color = ""
+                                                    if (item.rowStatus === "ok") {
+                                                        color = "#4cbb17"
+                                                    } else if (item.rowStatus === "notOk") {
+                                                        color = "red"
+                                                    } else if (item.rowStatus === "conditionallyOk") {
+                                                        color = "orange"
+                                                    } else {
+                                                        color = ""
+                                                    }
+
+                                                    //color changer
+                                                    let minColor = "";
+                                                    let maxColor = "";
+                                                    let averageColor = "";
+                                                    let size = "";
+                                                    if (item.osGrnAcWearLimitPS !== "") {
+
+                                                        if (item.osGrnAcWearLimitPS < item.osGrnAcMinPS) {
+                                                            size = "OD"
+                                                        } else {
+                                                            size = "ID"
+                                                        }
+
+                                                        if (size === "OD") {
+                                                            //min OD condition
+                                                            if (item.osGrnAcMinOB >= item.osGrnAcWearLimitPS && item.osGrnAcMinOB < item.osGrnAcMinPS) {
+                                                                minColor = "orange"
+                                                            }
+                                                            else if (item.osGrnAcMinOB >= item.osGrnAcMinPS && item.osGrnAcMinOB <= item.osGrnAcMaxPS) {
+                                                                minColor = "green"
+                                                            } else {
+                                                                minColor = "red"
+                                                            }
+
+                                                            if (item.osGrnAcMaxOB >= item.osGrnAcWearLimitPS && item.osGrnAcMaxOB < item.osGrnAcMinPS) {
+                                                                maxColor = "orange"
+                                                            }
+                                                            else if (item.osGrnAcMaxOB >= item.osGrnAcMinPS && item.osGrnAcMaxOB <= item.osGrnAcMaxPS) {
+                                                                maxColor = "green"
+                                                            } else {
+                                                                maxColor = "red"
+                                                            }
+
+                                                            if (item.osGrnAcAverageOB >= item.osGrnAcWearLimitPS && item.osGrnAcAverageOB < item.osGrnAcMinPS) {
+                                                                averageColor = "orange"
+                                                            }
+                                                            else if (item.osGrnAcAverageOB >= item.osGrnAcMinPS && item.osGrnAcAverageOB <= item.osGrnAcMaxPS) {
+                                                                averageColor = "green"
+                                                            } else {
+                                                                averageColor = "red"
+                                                            }
+
+
+                                                        }
+
+                                                        if (size === "ID") {
+                                                            //min Id condition
+                                                            if (item.osGrnAcMinOB <= item.osGrnAcWearLimitPS && item.osGrnAcMinOB > item.osGrnAcMaxPS) {
+                                                                minColor = "orange"
+                                                            }
+                                                            else if (item.osGrnAcMinOB >= item.osGrnAcMinPS && item.osGrnAcMinOB <= item.osGrnAcMaxPS) {
+                                                                minColor = "green"
+                                                            } else {
+                                                                minColor = "red"
+                                                            }
+                                                            //max ID condition
+                                                            if (item.osGrnAcMaxOB <= item.osGrnAcWearLimitPS && item.osGrnAcMaxOB > item.osGrnAcMaxPS) {
+                                                                maxColor = "orange"
+                                                            }
+                                                            else if (item.osGrnAcMaxOB >= item.osGrnAcMinPS && item.osGrnAcMaxOB <= item.osGrnAcMaxPS) {
+                                                                maxColor = "green"
+                                                            } else {
+                                                                maxColor = "red"
+                                                            }
+
+                                                            if (item.osGrnAcAverageOB <= item.osGrnAcWearLimitPS && item.osGrnAcAverageOB > item.osGrnAcMaxPS) {
+                                                                averageColor = "orange"
+                                                            }
+                                                            else if (item.osGrnAcAverageOB >= item.osGrnAcMinPS && item.osGrnAcAverageOB <= item.osGrnAcMaxPS) {
+                                                                averageColor = "green"
+                                                            } else {
+                                                                averageColor = "red"
+                                                            }
+                                                        }
+
+                                                        //   handleStatus(index, minColor, maxColor);
+
+
+
+                                                    } else {
+
+
+                                                        if (parseFloat(item.osGrnAcMinOB) >= parseFloat(item.osGrnAcMinPS) && parseFloat(item.osGrnAcMinOB) <= parseFloat(item.osGrnAcMaxPS)) {
+                                                            minColor = "#4cbb17";
+
+                                                        } else {
+                                                            minColor = "red"
+
+                                                        }
+
+
+                                                        if (parseFloat(item.osGrnAcMaxOB) >= parseFloat(item.osGrnAcMinPS) && parseFloat(item.osGrnAcMaxOB) <= parseFloat(item.osGrnAcMaxPS)) {
+                                                            maxColor = "#4cbb17"
+
+                                                        } else {
+                                                            maxColor = "red"
+
+                                                        }
+
+                                                        if (parseFloat(item.osGrnAcAverageOB) >= parseFloat(item.osGrnAcMinPS) && parseFloat(item.osGrnAcAverageOB) <= parseFloat(item.osGrnAcMaxPS)) {
+                                                            averageColor = "#4cbb17";
+
+                                                        } else {
+                                                            averageColor = "red"
+
+                                                        }
+                                                    }
+
+
+
+
+
+                                                    return (
+                                                        <tr key={index}>
+                                                            <td>{item.osGrnAcParameter}</td>
+                                                            <td>{item.osGrnAcNominalSize}</td>
+                                                            <td>{item.osGrnAcNominalSizeUnit}</td>
+                                                            <td>{item.osGrnAcMinPS}</td>
+                                                            <td>{item.osGrnAcMaxPS}</td>
+                                                            <td>{item.osGrnAcWearLimitPS}</td>
+
+                                                            {selectedGrnItem.osGrnBeforeData === "yes" && <td><input className='form-control form-control-sm' onChange={(e) => changeOnSiteValue(index, e.target.name, e.target.value)} name='grnBeforegrnibration' /></td>}
+                                                            {selectedGrnItem.osGrnItemOBType === "average" &&
+                                                                <td><input className='form-control form-control-sm' name='osGrnAcAverageOB' style={{ color: averageColor, fontWeight: "bold" }} onChange={(e) => changeOnSiteValue(index, e.target.name, e.target.value)} /></td>
+                                                            }
+                                                            {selectedGrnItem.osGrnItemOBType === "minmax" &&
+                                                                <React.Fragment>
+                                                                    <td>
+                                                                        <input className='form-control form-control-sm' style={{ color: minColor, fontWeight: "bold" }} name="osGrnAcMinOB" onChange={(e) => changeOnSiteValue(index, e.target.name, e.target.value)} />
+                                                                    </td>
+                                                                    <td>
+                                                                        <input className='form-control form-control-sm' style={{ color: maxColor, fontWeight: "bold" }} name="osGrnAcMaxOB" onChange={(e) => changeOnSiteValue(index, e.target.name, e.target.value)} /></td>
+                                                                </React.Fragment>}
+
+
+                                                            <td width="15%">
+                                                                <select className='form-select form-select-sm' name="rowStatus" value={item.rowStatus} onChange={(e) => changeOnSiteValue(index, e.target.name, e.target.value)}>
+                                                                    <option value="">Status</option>
+                                                                    <option value="ok">Ok</option>
+                                                                    <option value="notOk">Not Ok</option>
+                                                                    <option value="conditionallyOk">Conditionally Ok</option>
+                                                                </select>
+                                                            </td>
+                                                        </tr>
+
+                                                    )
+                                                })}
+                                            </tbody>}
+
+                                        {selectedGrnItem.osGrnItemType === "variable" &&
+
+                                            <tbody>
+                                                <tr>
+                                                    <th rowSpan={2}>Parameter</th>
+                                                    <th rowSpan={2}>Nominal Size</th>
+                                                    <th rowSpan={2}>Unit</th>
+                                                    <th colSpan={2}>Permissible Error</th>
+
+                                                    <th rowSpan={2}>Observer Error</th>
+
+                                                    <th rowSpan={2}>Status</th>
+                                                </tr>
+                                                <tr>
                                                     <th>Min</th>
                                                     <th>Max</th>
-                                                </React.Fragment>
+                                                </tr>
+                                                {selectedGrnItem.osGrnAcCriteria.map((item, index) => {
 
-                                            </tr>
-                                            {/* {selectedGrnItem.grnAcCriteria.map((item)=> ()} */}
+                                                    let averageColor = "";
+                                                    if (parseFloat(item.grnAcAverageOB) >= parseFloat(item.grnAcMinPSError) && parseFloat(item.grnAcAverageOB) <= parseFloat(item.grnAcMaxPSError)) {
+                                                        averageColor = "#4cbb17";
+                                                    } else {
+                                                        averageColor = "red"
+                                                    }
 
-                                        </tbody>
+                                                    return (
+                                                        <tr key={index}>
+
+                                                            <td>{item.osGrnAcParameter}</td>
+                                                            <td>{item.osGrnAcNominalSize}</td>
+                                                            <td>{item.osGrnAcNominalSizeUnit}</td>
+                                                            <td>{item.osGrnAcMinPSError}</td>
+                                                            <td>{item.osGrnAcMaxPSError}</td>
+                                                            <td><input className='form-control form-control-sm' name='grnAcAverageOB' style={{ color: averageColor, fontWeight: "bold" }} onChange={(e) => changeOnSiteValue(index, e.target.name, e.target.value)} /></td>
+                                                            <td width="15%">
+                                                                <select className='form-select form-select-sm' name="rowStatus" value={item.rowStatus} onChange={(e) => changeOnSiteValue(index, e.target.name, e.target.value)}>
+                                                                    <option value="">Status</option>
+                                                                    <option value="ok">Ok</option>
+                                                                    <option value="notOk">Not Ok</option>
+                                                                    <option value="conditionallyOk">Conditionally Ok</option>
+                                                                </select>
+                                                            </td>
+
+
+
+                                                        </tr>
+                                                    )
+                                                })}
+
+                                            </tbody>
+                                        }
                                     </table>
                                     <div className=' col d-flex justify-content-between'>
                                         <div className='col-6 me-2 '>
@@ -571,7 +1207,7 @@ const OnSiteGrn = () => {
 
                                     <div className=' col d-flex justify-content-end'>
                                         <div className='me-2 '>
-                                            <Button startIcon={<Add />} size='small' sx={{ minWidth: "130px" }} variant='contained'>Add Item</Button>
+                                            <Button startIcon={<Add />} onClick={() => OnSiteGrnAdd()} size='small' sx={{ minWidth: "130px" }} variant='contained'>Add Item</Button>
                                         </div>
 
                                     </div>
@@ -626,6 +1262,19 @@ const OnSiteGrn = () => {
                                             <th>Calibrated At</th>
                                             <th>Remove</th>
                                         </tr>
+                                        {onSiteGrnData.osGrnPartyItems.map((item, index) => (
+                                            <tr key={index}>
+                                                <td>{index + 1}</td>
+                                                <td>{item.osGrnItemIMTENo}</td>
+                                                <td>{item.osGrnItemAddMasterName}</td>
+                                                <td>{item.osGrnItemRangeSize}</td>
+                                                <td>{item.osGrnItemCertificateNo}</td>
+                                                <td>{dayjs(item.osGrnItemCalDate).format("DD-MM-YYYY")}</td>
+                                                <td>{item.osGrnItemDueDate}</td>
+                                                <td>{item.osGrnItemCalibratedAt}</td>
+                                                <td width="5%"><Delete color='error' /></td>
+                                            </tr>
+                                        ))}
 
                                     </tbody>
                                 </table>

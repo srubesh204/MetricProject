@@ -314,6 +314,7 @@ const GrnAdd = () => {
                         grnItemItemMFRNo: fetchedData[0].itemMFRNo,
                         grnItemLC: fetchedData[0].itemLC,
                         grnItemMake: fetchedData[0].itemMake,
+                        
                         grnItemCalFreInMonths: fetchedData[0].itemCalFreInMonths,
                         grnItemUncertainity: fetchedData[0].uncertainty,
                         grnItemCalibratedAt: fetchedData[0].itemCalibratedAt,
@@ -384,7 +385,6 @@ const GrnAdd = () => {
                                 grnAcMinPS: item.acMinPS,
                                 grnAcMaxPS: item.acMaxPS,
                                 grnAcWearLimitPS: item.acWearLimitPS,
-
                                 grnAcMinOB: item.acMinOB,
                                 grnAcMaxOB: item.acMaxOB,
                                 grnAcAverageOB: item.acAverageOB,
@@ -551,7 +551,7 @@ const GrnAdd = () => {
         if (selectedGrnItem.grnItemType === "attribute") {
             if (name === "grnAverageOB") {
                 setSelectedGrnItem(prev => {
-                    const updatedData = prev.grnAcAcCriteria.map((item, idx) => {
+                    const updatedData = prev.grnAcCriteria.map((item, idx) => {
                         if (idx === index) {
                             let status = ""
                             if (item.grnAcWearLimitPS !== "") {
@@ -1609,7 +1609,7 @@ const GrnAdd = () => {
                                                 <td>{item.grnItemAddMasterName}</td>
                                                 <td>{item.grnItemRangeSize}</td>
                                                 <td>{item.grnItemCertificateNo}</td>
-                                                <td>{item.grnItemCalDate}</td>
+                                                <td>{dayjs(item.grnItemCalDate).format("DD-MM-YYYY")}</td>
                                                 <td>{item.grnItemDueDate}</td>
                                                 <td>{item.grnItemCalibratedAt}</td>
                                                 <td width="5%"><Delete color='error' onClick={() => deleteAC(index)} /></td>

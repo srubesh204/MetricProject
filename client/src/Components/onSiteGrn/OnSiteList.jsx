@@ -25,7 +25,7 @@ export const OnSiteListContent = createContext(null);
 const OnSiteList = () => {
 
     const [selectedRows, setSelectedRows] = useState([]);
-    const [onSiteEditOpen,setOnSiteEditOpen]= useState([])
+    const [onSiteEditOpen,setOnSiteEditOpen]= useState(false)
  
     const [ onSietAddOpen, setOnSiteAddOpen] = useState(false);
 
