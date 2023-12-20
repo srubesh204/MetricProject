@@ -15,8 +15,8 @@ dayjs.extend(isSameOrAfter)
 
 const DcAdd = () => {
 
-    const dcDatas = useContext(DcListContent)
-    const { dcOpen, setDcOpen, selectedRows, dcListFetchData } = dcDatas
+    const dcAddDatas = useContext(DcListContent)
+    const { dcOpen, setDcOpen, selectedRows, dcListFetchData } = dcAddDatas
 
 
     console.log(selectedRows)
@@ -29,13 +29,13 @@ const DcAdd = () => {
         dcPartyAddress: "",
         dcNo: "",
         dcDate: dayjs().format("YYYY-MM-DD"),
-        dcReason: "",
+        dcReason: "Calibration",
         dcCommonRemarks: "",
         dcPartyItems: []
 
     }
 
-    const [dcData, setDcData] = useState({
+    const [dcAddData, setDcAddData] = useState({
         dcPartyId: "",
         dcPartyType: "",
         dcPartyName: "",
@@ -43,25 +43,15 @@ const DcAdd = () => {
         dcPartyAddress: "",
         dcNo: "",
         dcDate: dayjs().format("YYYY-MM-DD"),
-        dcReason: "",
+        dcReason: "Calibration",
         dcCommonRemarks: "",
         dcPartyItems: []
 
     })
-    console.log(dcData)
+    console.log(dcAddData)
 
-    const settingDcData = () => {
-        setDcData((prev) => (
-            {
-                ...prev,
-                dcPartyItems: selectedRows
-            }
-
-        ))
-    };
-    useEffect(() => {
-        settingDcData()
-    }, [selectedRows])
+    
+    
 
     const [filteredData, setFilteredData] = useState([])
 
@@ -92,7 +82,7 @@ const DcAdd = () => {
 
 
         }
-        setDcData((prev) => ({ ...prev, [name]: value }))
+        setDcAddData((prev) => ({ ...prev, [name]: value }))
 
 
     };
@@ -102,7 +92,7 @@ const DcAdd = () => {
 
     const addDcValue = () => {
         if (selectedExtraMaster.length !== 0) {
-            setDcData((prev) => ({
+            setDcAddData((prev) => ({
                 ...prev,
                 dcPartyItems: [...prev.dcPartyItems, selectedExtraMaster]
             }))
@@ -112,8 +102,8 @@ const DcAdd = () => {
 
     const remarksChange = (event, rowId) => {
         const { name, value } = event.target;
-        if (dcData.dcPartyItems.length !== 0) {
-            setDcData((prev) => {
+        if (dcAddData.dcPartyItems.length !== 0) {
+            setDcAddData((prev) => {
                 const updateAC = [...prev.dcPartyItems]
                 updateAC[rowId] = {
                     ...updateAC[rowId], [name]: value,
@@ -126,7 +116,7 @@ const DcAdd = () => {
 
     };
 
-    console.log(dcData.dcPartyItems)
+    console.log(dcAddData.dcPartyItems)
     const Columns = [
         { field: 'id', headerName: 'Si. No', width: 70, renderCell: (params) => params.api.getAllRowIds().indexOf(params.id) + 1 },
 
@@ -170,7 +160,7 @@ const DcAdd = () => {
                 `${process.env.REACT_APP_PORT}/vendor/getAllVendors`
             );
             setVendorDataList(response.data.result);
-            const filteredData = response.data.result.filter((dcItem) => !dcData.dcPartyItems.some(vendor => dcName._id === vendor._id === dcCode._id ===vendor._id === dcAddress._id === vendor.id))
+            const filteredData = response.data.result.filter((dcItem) => !dcAddData.dcPartyItems.some(vendor => dcName._id === vendor._id === dcCode._id ===vendor._id === dcAddress._id === vendor.id))
             setFilteredData(filteredData)
         } catch (err) {
             console.log(err);
@@ -187,9 +177,9 @@ const DcAdd = () => {
             );
             setVendorDataList(response.data.result);
 
-            // Assuming dcData is defined somewhere in your code
+            // Assuming dcAddData is defined somewhere in your code
             const filteredData = response.data.result.filter(dcItem =>
-                !dcData.dcPartyItems.some(vendor =>
+                !dcAddData.dcPartyItems.some(vendor =>
                     dcItem._id === vendor._id
                     && dcItem.dcCode === vendor._id
                     && dcItem.dcAddress === vendor.id
@@ -215,7 +205,7 @@ const DcAdd = () => {
 
     const handleDcChange = (e) => {
         const { name, value, checked } = e.target;
-        setDcData((prev) => ({ ...prev, [name]: value }));
+        setDcAddData((prev) => ({ ...prev, [name]: value }));
     }
 
     const setPartyData = async (id) => {
@@ -224,7 +214,7 @@ const DcAdd = () => {
                 `${process.env.REACT_APP_PORT}/vendor/getVendorById/${id}`
             );
             console.log(response)
-            setDcData((prev) => ({
+            setDcAddData((prev) => ({
                 ...prev,
                 dcPartyName: response.data.result.fullName,
                 dcPartyAddress: response.data.result.address,
@@ -286,12 +276,12 @@ const DcAdd = () => {
     console.log(alertMessage)
     const submitDcForm = async () => {
         try {
-            if (dcData.dcPartyItems.length === 0) {
+            if (dcAddData.dcPartyItems.length === 0) {
                 setAlertMessage({ dcMessage: "Cannot create DC without a Item", dcType: "error" })
                 setSnackBarOpen(true)
             } else {
                 const response = await axios.post(
-                    `${process.env.REACT_APP_PORT}/itemDc/createItemDc`, dcData
+                    `${process.env.REACT_APP_PORT}/itemDc/createItemDc`, dcAddData
                 );
                 setAlertMessage({ dcMessage: response.data.message, dcType: "success" })
                 dcListFetchData();
@@ -306,7 +296,7 @@ const DcAdd = () => {
     };
 
     const deleteAC = (index) => {
-        setDcData((prev) => {
+        setDcAddData((prev) => {
             const AC = [...prev.dcPartyItems]
             AC.splice(index, 1);
             return {
@@ -319,9 +309,8 @@ const DcAdd = () => {
     const [selectedDcItem, setSelectedDcItem] = useState([])
 
     const [itemAddDetails, setItemAddDetails] = useState({
-        itemListNames: "",
-        itemImteList: "",
-        itemReMarks: ""
+        itemListNames: "--",
+        itemImteList: "--"
     })
 
 
@@ -332,7 +321,7 @@ const DcAdd = () => {
             );
             console.log(response.data)
             setAllItemImtes(response.data.result)
-            const filteredImtes = response.data.result.filter((imtes) => !dcData.dcPartyItems.some(dcImte => imtes._id === dcImte._id))
+            const filteredImtes = response.data.result.filter((imtes) => !dcAddData.dcPartyItems.some(dcImte => imtes._id === dcImte._id))
             setItemImtes(filteredImtes)
 
         } catch (err) {
@@ -356,7 +345,7 @@ const DcAdd = () => {
 
     const dcItemAdd = () => {
         if (selectedDcItem.length !== 0) {
-            setDcData((prev) => ({ ...prev, dcPartyItems: [...prev.dcPartyItems, selectedDcItem] }))
+            setDcAddData((prev) => ({ ...prev, dcPartyItems: [...prev.dcPartyItems, selectedDcItem] }))
         }
     }
     useEffect(() => {
@@ -366,7 +355,7 @@ const DcAdd = () => {
             itemImteList: "",
             itemReMarks: ""
         })
-    }, [dcData.dcPartyItems])
+    }, [dcAddData.dcPartyItems])
 
 
 
@@ -489,13 +478,13 @@ const DcAdd = () => {
                                                     id="dcPartyNameId"
                                                     select
 
-                                                    // value={dcData.dcPartyName}
+                                                    // value={dcAddData.dcPartyName}
                                                     onChange={(e) => setPartyData(e.target.value)}
 
                                                     //  sx={{ width: "100%" }}
                                                     size="small"
                                                     fullWidth
-                                                    disabled={dcData.dcPartyType === ""}
+                                                    disabled={dcAddData.dcPartyType === ""}
                                                     name="dcPartyName" >
                                                     {filteredData.map((item, index) => (
                                                         <MenuItem key={index} value={item._id}>{item.fullName}</MenuItem>
@@ -509,9 +498,9 @@ const DcAdd = () => {
                                                 <TextField label="Party code"
                                                     id="dcPartyCodeId"
                                                     defaultValue=""
-                                                    disabled={dcData.dcPartyType === ""}
+                                                    disabled={dcAddData.dcPartyType === ""}
 
-                                                    value={dcData.dcPartyCode}
+                                                    value={dcAddData.dcPartyCode}
 
 
                                                     // sx={{ width: "100%" }}
@@ -527,10 +516,10 @@ const DcAdd = () => {
 
                                                 <TextField label="Party Address"
                                                     id="dcPartyAddressId"
-                                                    value={dcData.dcPartyAddress}
+                                                    value={dcAddData.dcPartyAddress}
 
                                                     defaultValue=""
-                                                    disabled={dcData.dcPartyType === ""}
+                                                    disabled={dcAddData.dcPartyType === ""}
 
                                                     size="small"
                                                     sx={{ width: "100%" }}
@@ -555,7 +544,7 @@ const DcAdd = () => {
                                             <TextField label="Dc No"
                                                 id="dcNoId"
                                                 defaultValue=""
-                                                value={dcData.dcNo}
+                                                value={dcAddData.dcNo}
                                                 onChange={handleDcChange}
                                                 size="small"
                                                 sx={{ width: "101%" }}
@@ -568,9 +557,9 @@ const DcAdd = () => {
                                                 fullWidth
                                                 id="dcDateId"
                                                 name="dcDate"
-                                                value={dayjs(dcData.dcDate)}
+                                                value={dayjs(dcAddData.dcDate)}
                                                 onChange={(newValue) =>
-                                                    setDcData((prev) => ({ ...prev, dcDate: newValue.format("YYYY-MM-DD") }))
+                                                    setDcAddData((prev) => ({ ...prev, dcDate: newValue.format("YYYY-MM-DD") }))
                                                 }
                                                 label="Dc Date"
 
@@ -584,16 +573,15 @@ const DcAdd = () => {
                                             <TextField label="Reason"
                                                 id="dcReasonId"
                                                 select
-                                                value={dcData.dcReason}
-                                                
+                                                value={dcAddData.dcReason}
+                                                fullWidth
                                                 onChange={handleDcChange}
                                                 size="small"
-                                                sx={{ width: "101%" }}
+
                                                 name="dcReason" >
-                                                <MenuItem value="All">All</MenuItem>
+                                                <MenuItem value="Calibration">Calibration</MenuItem>
                                                 <MenuItem value="Service">Service</MenuItem>
                                                 <MenuItem value="Service Calibration">Service&Calibration</MenuItem>
-                                                <MenuItem value="Calibration">Calibration</MenuItem>
 
                                             </TextField>
 
@@ -601,7 +589,7 @@ const DcAdd = () => {
                                         <div className='col me-2'>
                                             <TextField label="Common Remarks"
                                                 id="dcCommonRemarksId"
-                                                value={dcData.dcCommonRemarks}
+                                                value={dcAddData.dcCommonRemarks}
                                                 defaultValue=""
                                                 onChange={handleDcChange}
                                                 size="small"
@@ -632,7 +620,7 @@ const DcAdd = () => {
                                     <div className='col d-flex'>
                                         <div className='col me-2'>
                                             <TextField size='small' select fullWidth id='itemListNamesId' value={itemAddDetails.itemListNames} variant='outlined' onChange={handleDcItemAdd} label="Item List" name='itemListNames' >
-                                                <MenuItem value=""><em>--Select--</em></MenuItem>
+                                                <MenuItem value="--"><em>--Select--</em></MenuItem>
                                                 {itemMasterDistNames.map((item, index) => (
                                                     <MenuItem key={index} value={item}>{item}</MenuItem>
                                                 ))}
@@ -640,7 +628,7 @@ const DcAdd = () => {
                                         </div>
                                         <div className='col me-2'>
                                             <TextField disabled={itemAddDetails.itemListNames === ""} size='small' select fullWidth variant='outlined' value={itemAddDetails.itemImteList} id='itemImteListId' onChange={handleDcItemAdd} label="Item IMTENo" name='itemImteList' >
-                                                <MenuItem value=""><em>--Select--</em></MenuItem>
+                                                <MenuItem value="--"><em>--Select--</em></MenuItem>
                                                 {itemImtes.map((item, index) => (
                                                     <MenuItem key={index} value={item}>{item.itemIMTENo}</MenuItem>
                                                 ))}
@@ -648,25 +636,7 @@ const DcAdd = () => {
 
 
                                         </div>
-                                        <div className="col ">
-                                            <TextField label="Reason"
-                                                id="itemReMarksId"
-                                                select
-                                                defaultValue="Calibration"
-                                                value={itemAddDetails.itemReMarks}
-                                                onChange={handleDcItemAdd}
 
-                                                size="small"
-                                                sx={{ width: "101%" }}
-                                                name="itemReMarks" >
-                                                <MenuItem value="All">All</MenuItem>
-                                                <MenuItem value="Service">Service</MenuItem>
-                                                <MenuItem value="Service Calibration">Service&Calibration</MenuItem>
-                                                <MenuItem value="Calibration">Calibration</MenuItem>
-
-                                            </TextField>
-
-                                        </div>
                                     </div>
                                     <div className=' col d-flex justify-content-end'>
                                         <div className='me-2 '>
@@ -690,10 +660,10 @@ const DcAdd = () => {
                                 elevation={12}
                             >
                                 <div className='row'>
-                                   {/*<Box sx={{ height: 350, width: '100%', my: 2 }}>
+                                    {/*<Box sx={{ height: 350, width: '100%', my: 2 }}>
                                         <DataGrid
 
-                                            rows={dcData.dcPartyItems}
+                                            rows={dcAddData.dcPartyItems}
                                             columns={Columns}
                                             getRowId={(row) => row._id}
 
@@ -736,10 +706,9 @@ const DcAdd = () => {
                                                 <th>Make</th>
                                                 <th>Frequency</th>
                                                 <th>Remarks</th>
-                                               
                                                 <th>Remove</th>
                                             </tr>
-                                            {dcData.dcPartyItems.map((item, index) => (
+                                            {dcAddData.dcPartyItems.map((item, index) => (
                                                 <tr key={index}>
                                                     <td>{index + 1}</td>
                                                     <td>{item.itemIMTENo}</td>
@@ -747,7 +716,7 @@ const DcAdd = () => {
                                                     <td>{item.itemRangeSize}</td>
                                                     <td>{item.itemMake}</td>
                                                     <td>{dayjs(item.itemCalFreInMonths).format("DD-MM-YYYY")}</td>
-                                                    <td> <select className="form-select form-select-sm" id="dcItemRemarksId" name="dcItemRemarks" value={item.dcItemRemarks} onChange={(e)=> remarksChange(e, index)}  aria-label="Floating label select example">
+                                                    <td> <select className="form-select form-select-sm" id="dcItemRemarksId" name="dcItemRemarks" value={item.dcItemRemarks} onChange={(e) => remarksChange(e, index)} aria-label="Floating label select example">
                                                         <option value="calibration">Calibration</option>
                                                         <option value="service">Service</option>
                                                         <option value="calibration&service">Calibration&Service</option>
@@ -804,7 +773,7 @@ const DcAdd = () => {
                     <Button variant='contained' color='warning' className='me-3'>Print</Button>
                 </div>
                 <div>
-                    <Button variant='contained' color='error' className='me-3' onClick={() => { setDcOpen(false) }}>Cancel</Button>
+                    <Button variant='contained' color='error' className='me-3' onClick={() => { setDcOpen(false); setDcAddData(initialDcData)}}>Cancel</Button>
                     <Button variant='contained' color='success' onClick={() => { setConfirmSubmit(true) }}>Submit</Button>
                 </div>
             </DialogActions>

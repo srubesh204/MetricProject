@@ -17,8 +17,8 @@ const DcEdit = () => {
     const { id } = useParams()
     console.log(id)
 
-    const dcDatas = useContext(DcListContent)
-   const { dcEditOpen, setDcEditOpen, selectedRows,dcListFetchData } =dcDatas
+    const dcEditDatas = useContext(DcListContent)
+   const { dcEditOpen, setDcEditOpen, selectedRows, dcListFetchData } =dcEditDatas
    console.log(selectedRows)
    const [errorhandler, setErrorHandler] = useState({});
 
@@ -39,7 +39,7 @@ const DcEdit = () => {
 
     }
 
-    const [dcData, setDcData] = useState({
+    const [dcEditData, setDcEditData] = useState({
         dcPartyId: "",
         dcPartyType:"",
         dcPartyName: "",
@@ -52,11 +52,11 @@ const DcEdit = () => {
         dcPartyItems: []
 
     })
-    console.log(dcData)
+    console.log(dcEditData)
 
     const settingDcData = () => {
         if (selectedRows.length !== 0) { // Check if selectedRows is defined
-            setDcData((prev) => ({
+            setDcEditData((prev) => ({
                 ...prev,
                 dcPartyId: selectedRows.dcPartyId,
                 dcPartyType: selectedRows.dcPartyType,
@@ -72,7 +72,7 @@ const DcEdit = () => {
         }
     };
 
-    console.log(dcData)
+    console.log(dcEditData)
     
     
 
@@ -110,7 +110,7 @@ const DcEdit = () => {
 
 
         }
-        setDcData((prev)=> ({...prev, [name]: value}))
+        setDcEditData((prev)=> ({...prev, [name]: value}))
 
 
     };
@@ -120,7 +120,7 @@ const DcEdit = () => {
 //
     const addDcValue = () => {
         if (selectedExtraMaster.length !== 0) {
-            setDcData((prev) => ({
+            setDcEditData((prev) => ({
                 ...prev,
                 dcPartyItems: [...prev.dcPartyItems, selectedExtraMaster]
             }))
@@ -174,7 +174,7 @@ const DcEdit = () => {
                 `${process.env.REACT_APP_PORT}/vendor/getAllVendors`
             );
             setVendorDataList(response.data.result);
-            const filteredData = response.data.result.filter((dcItem) => !dcData.dcPartyItems.some(vendor => dcName._id === vendor._id === dcCode._id ===vendor._id === dcAddress._id === vendor.id))
+            const filteredData = response.data.result.filter((dcItem) => !dcEditData.dcPartyItems.some(vendor => dcName._id === vendor._id === dcCode._id ===vendor._id === dcAddress._id === vendor.id))
             setFilteredData(filteredData)
         } catch (err) {
             console.log(err);
@@ -191,9 +191,9 @@ const DcEdit = () => {
             );
             setVendorDataList(response.data.result);
 
-            // Assuming dcData is defined somewhere in your code
+            // Assuming dcEditData is defined somewhere in your code
             const filteredData = response.data.result.filter(dcItem =>
-                !dcData.dcPartyItems.some(vendor =>
+                !dcEditData.dcPartyItems.some(vendor =>
                     dcItem._id === vendor._id
                     && dcItem.dcCode === vendor._id
                     && dcItem.dcAddress === vendor.id
@@ -219,7 +219,7 @@ const DcEdit = () => {
 
     const handleDcChange = (e) => {
         const { name, value, checked } = e.target;
-        setDcData((prev) => ({ ...prev, [name]: value }));
+        setDcEditData((prev) => ({ ...prev, [name]: value }));
     }
 
     const setPartyData = async (id) => {
@@ -228,7 +228,7 @@ const DcEdit = () => {
                 `${process.env.REACT_APP_PORT}/vendor/getVendorById/${id}`
             );
             console.log(response)
-            setDcData((prev) => ({
+            setDcEditData((prev) => ({
                 ...prev,
                 dcPartyName: response.data.result.fullName,
                 dcPartyAddress: response.data.result.address,
@@ -284,14 +284,14 @@ const DcEdit = () => {
         e.preventDefault();
         try {
             const response = await axios.put(
-                `${process.env.REACT_APP_PORT}/itemAdd/updateItemDc/${id}`, dcData
+                `${process.env.REACT_APP_PORT}/itemAdd/updateItemDc/${id}`, dcEditData
             );
 
             setSnackBarOpen(true)
 
             console.log("Item Update Successfully")
             setErrorHandler({ status: response.data.status, message: response.data.message, code: "success" })
-            setDcData(initialDcData)
+            setDcEditData(initialDcData)
             setTimeout(() => {
                 navigate('/itemList');
             }, 3000);
@@ -336,17 +336,17 @@ const DcEdit = () => {
 
     const submitDcForm = async () => {
         try {
-            if (dcData.dcPartyItems.length === 0) {
+            if (dcEditData.dcPartyItems.length === 0) {
                 setAlertMessage({dcMessage: "Cannot create DC without a Item", dcType: "error"})
                 setSnackBarOpen(true)
             } else {
             const response = await axios.put(
               
-                `${process.env.REACT_APP_PORT}/itemDc/updateItemDc/${selectedRows._id}`, dcData
+                `${process.env.REACT_APP_PORT}/itemDc/updateItemDc/${selectedRows._id}`, dcEditData
             );
             setAlertMessage({dcMessage: response.data.message, dcType: "success"})
             setSnackBarOpen(true)
-            setDcData(initialDcData)
+            setDcEditData(initialDcData)
             dcListFetchData()
 
             setTimeout(() => setDcEditOpen(false), 1000)
@@ -364,7 +364,7 @@ const DcEdit = () => {
 
   
     const deleteAC = (index) => {
-        setDcData((prev) => {
+        setDcEditData((prev) => {
             const AC = [...prev.dcPartyItems]
             AC.splice(index, 1);
             return {
@@ -390,7 +390,7 @@ const DcEdit = () => {
             );
             console.log(response.data)
             setAllItemImtes(response.data.result)
-            const filteredImtes = response.data.result.filter((imtes) => !dcData.dcPartyItems.some(dcImte => imtes._id === dcImte._id))
+            const filteredImtes = response.data.result.filter((imtes) => !dcEditData.dcPartyItems.some(dcImte => imtes._id === dcImte._id))
             setItemImtes(filteredImtes)
 
         } catch (err) {
@@ -418,7 +418,7 @@ const DcEdit = () => {
 
     const dcItemAdd = () => {
         if (selectedDcItem.length !== 0) {
-            setDcData((prev) => ({ ...prev, dcPartyItems: [...prev.dcPartyItems, selectedDcItem] }))
+            setDcEditData((prev) => ({ ...prev, dcPartyItems: [...prev.dcPartyItems, selectedDcItem] }))
         }
     }
     useEffect(() => {
@@ -428,7 +428,7 @@ const DcEdit = () => {
             itemImteList: "",
             itemReMarks:"",
         })
-    }, [dcData.dcPartyItems])
+    }, [dcEditData.dcPartyItems])
 
 
 
@@ -518,7 +518,7 @@ const DcEdit = () => {
                             <div className='row'>
                                 <div className="col-3 mb-2">
                                 <TextField  label="Vendor Type"
-                                        id="dcPartyTypeId" select defaultValue=""onChange={handleFilterChange}  size="small" value={dcData.dcPartyType}  sx={{ width: "101%" }}  name="dcPartyType" >
+                                        id="dcPartyTypeId" select defaultValue=""onChange={handleFilterChange}  size="small" value={dcEditData.dcPartyType}  sx={{ width: "101%" }}  name="dcPartyType" >
                                         <MenuItem value=""><em>--Select--</em></MenuItem>
                                         <MenuItem value="oem">OEM</MenuItem>
                                         <MenuItem value="customer">Customer</MenuItem>
@@ -553,13 +553,13 @@ const DcEdit = () => {
                                                 id="partyNameId"
                                                 select
 
-                                                value={dcData.dcPartyId}
+                                                value={dcEditData.dcPartyId}
                                                 onChange={(e) => setPartyData(e.target.value)}
 
                                                 //  sx={{ width: "100%" }}
                                                 size="small"
                                                 fullWidth
-                                                disabled={dcData.dcPartyType === ""}
+                                                disabled={dcEditData.dcPartyType === ""}
                                                 name="partyName" >
                                                 {filteredData.map((item, index) => (
                                                     <MenuItem key={index} value={item._id}>{item.fullName}</MenuItem>
@@ -573,9 +573,9 @@ const DcEdit = () => {
                                                 <TextField label="Party code"
                                                     id="partyCodeId"
                                                     defaultValue=""
-                                                    disabled={dcData.dcPartyType === ""}
+                                                    disabled={dcEditData.dcPartyType === ""}
 
-                                                    value={dcData.dcPartyCode}
+                                                    value={dcEditData.dcPartyCode}
 
 
                                                     // sx={{ width: "100%" }}
@@ -591,10 +591,10 @@ const DcEdit = () => {
 
                                                 <TextField label="Party Address"
                                                     id="partyAddressId"
-                                                    value={dcData.dcPartyAddress}
+                                                    value={dcEditData.dcPartyAddress}
 
                                                     defaultValue=""
-                                                    disabled={dcData.dcPartyType === ""}
+                                                    disabled={dcEditData.dcPartyType === ""}
 
                                                     size="small"
                                                     sx={{ width: "100%" }}
@@ -619,7 +619,7 @@ const DcEdit = () => {
                                             <TextField label="Dc No"
                                                 id="dcNoId"
                                                 defaultValue=""
-                                                value={dcData.dcNo}
+                                                value={dcEditData.dcNo}
                                                 onChange={handleDcChange}
                                                 size="small"
                                                 sx={{ width: "101%" }}
@@ -632,9 +632,9 @@ const DcEdit = () => {
                                                 fullWidth
                                                 id="dcDateId"
                                                 name="dcDate"
-                                                value={dayjs(dcData.dcDate)}
+                                                value={dayjs(dcEditData.dcDate)}
                                                 onChange={(newValue) =>
-                                                    setDcData((prev) => ({ ...prev, dcDate: newValue.format("YYYY-MM-DD") }))
+                                                    setDcEditData((prev) => ({ ...prev, dcDate: newValue.format("YYYY-MM-DD") }))
                                                 }
                                                 label="Dc Date"
 
@@ -649,7 +649,7 @@ const DcEdit = () => {
                                                 id="dcReasonId"
                                                 select
                                                 defaultValue=""
-                                                value={dcData.dcReason}
+                                                value={dcEditData.dcReason}
                                                 onChange={handleDcChange}
                                                 size="small"
                                                 sx={{ width: "101%" }}
@@ -665,7 +665,7 @@ const DcEdit = () => {
                                         <div className='col me-2'>
                                             <TextField label="Common Remarks"
                                                 id="dcCommonRemarksId"
-                                                 value={dcData.dcCommonRemarks}
+                                                 value={dcEditData.dcCommonRemarks}
                                                 defaultValue=""
                                                 onChange={handleDcChange}
                                                 size="small"
@@ -758,7 +758,7 @@ const DcEdit = () => {
                                     <Box sx={{ height: 350, width: '100%', my: 2 }}>
                                         <DataGrid
 
-                                            rows={dcData.dcPartyItems}
+                                            rows={dcEditData.dcPartyItems}
                                             columns={Columns}
                                             getRowId={(row) => row._id}
                                             initialState={{
