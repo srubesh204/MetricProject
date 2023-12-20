@@ -146,7 +146,7 @@ const DcEdit = () => {
                 `${params.row.itemRangeSize || ''} ${params.row.itemLCUnit || ''}`,
         },
         { field: 'itemMake', headerName: 'Make', width: 90 },
-        { field: 'id', headerName: 'Si. No', width: 70, renderCell: (params) => params.api.getAllRowIds().indexOf(params.id) + 1 },
+       
         { field: 'itemCalFreInMonths', headerName: 'Frequency', type: "number", width: 100 },
         {
             field: 'select', headerName: 'ReMarks', width: 200, renderCell: (params) => <select className="form-select form-select-sm col-2" id="reMarks" name="reMarks" aria-label="Floating label select example">
@@ -344,15 +344,16 @@ const DcEdit = () => {
               
                 `${process.env.REACT_APP_PORT}/itemDc/updateItemDc/${selectedRows._id}`, dcData
             );
-            setAlertMessage(response.data.message)
+            setAlertMessage({dcMessage: response.data.message, dcType: "success"})
             setSnackBarOpen(true)
             setDcData(initialDcData)
             dcListFetchData()
 
-            setTimeout(() => setDcEditOpen(false), 3000)
+            setTimeout(() => setDcEditOpen(false), 1000)
             }
         } catch (err) {
             console.log(err);
+            setAlertMessage({dcMessage: err.message, dcType: "error"})
         }
     };
 

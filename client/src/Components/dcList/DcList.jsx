@@ -442,8 +442,8 @@ const DcList = () => {
                                         sx={{
                                             ".MuiTablePagination-displayedRows": {
 
-                                                "margin-top": "1em",
-                                                "margin-bottom": "1em"
+                                                "marginTop": "1em",
+                                                "marginBottom": "1em"
                                             }
                                         }}
                                         onRowSelectionModelChange={(newRowSelectionModel) => {
@@ -576,7 +576,7 @@ const DcList = () => {
                             </div>
                         </Paper>
                         <Snackbar anchorOrigin={{ vertical: "top", horizontal: "right" }} open={snackBarOpen} autoHideDuration={6000} onClose={handleSnackClose}>
-                            <Alert onClose={handleSnackClose} severity={errorhandler.code} sx={{ width: '100%' }}>
+                            <Alert onClose={handleSnackClose} severity={errorhandler.code} variant='filled' sx={{ width: '100%' }}>
                                 {errorhandler.message}
                             </Alert>
                         </Snackbar>

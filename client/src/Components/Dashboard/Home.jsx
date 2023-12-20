@@ -815,7 +815,7 @@ const Home = () => {
 
   console.log(selectedRows)
 
-  const [dcStatusMsg, setDcStatusMsg] = useState("")
+  const [StatusCheckMsg, setStatusCheckMsg] = useState("")
 
   const dcCheck = () => {
     const defaultDepartmentCheck = selectedRows.every(item =>
@@ -824,10 +824,23 @@ const Home = () => {
 
     console.log(defaultDepartmentCheck)
     if (defaultDepartmentCheck) {
-      setDcStatusMsg("");
+      setStatusCheckMsg("");
       setDcOpen(true);
     } else {
-      setDcStatusMsg("Selected item are not in default location, To create a DC move the item to the default location")
+      setStatusCheckMsg("Selected item are not in default location, To create a DC move the item to the default location")
+    }
+  }
+
+  const grnCheck = () => {
+    const dcStatusCheck = selectedRows.every(item => item.dcStatus === "1")
+   
+
+    console.log(dcStatusCheck)
+    if (dcStatusCheck) {
+      setStatusCheckMsg("");
+      setDcOpen(true);
+    } else {
+      setStatusCheckMsg("Selected Item are not DC ed")
     }
   }
 
@@ -1123,8 +1136,8 @@ const Home = () => {
                   sx={{
                     ".MuiTablePagination-displayedRows": {
 
-                      "margin-top": "1em",
-                      "margin-bottom": "1em"
+                      "marginTop": "1em",
+                      "marginBottom": "1em"
                     }
                   }}
 
@@ -1143,11 +1156,11 @@ const Home = () => {
                 <div className="col-md-9">
                   <Button size='small' className='me-2'>Onsite</Button>
                   {(selectedRows.length === 1 && selectedRows[0].itemCalibrationSource === "inhouse") && <Button size='small' className='me-2' onClick={() => setCalOpen(true)}>Cal</Button>}
-                  <Button size='small' onClick={() => setGrnOpen(true)} className='me-2'>Grn</Button>
+                  <Button size='small' onClick={() => grnCheck()} className='me-2'>Grn</Button>
 
 
                   <Button size='small' onClick={() => dcCheck()}>Create DC</Button>
-                  {dcStatusMsg !== "" && <Chip icon={<Error />} color='error' label={dcStatusMsg} />}
+                  {StatusCheckMsg !== "" && <Chip icon={<Error />} color='error' label={StatusCheckMsg} />}
                 </div>
                 <div className="col-md-3">
                   <Button component={Link} to="/itemmaster" size='small' className='me-2'>Item Master</Button>

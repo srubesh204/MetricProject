@@ -486,7 +486,7 @@ const DcAdd = () => {
                                             <div className=" col me-2">
 
                                                 <TextField label="Party Name"
-                                                    id="partyNameId"
+                                                    id="dcPartyNameId"
                                                     select
 
                                                     // value={dcData.dcPartyName}
@@ -496,7 +496,7 @@ const DcAdd = () => {
                                                     size="small"
                                                     fullWidth
                                                     disabled={dcData.dcPartyType === ""}
-                                                    name="partyName" >
+                                                    name="dcPartyName" >
                                                     {filteredData.map((item, index) => (
                                                         <MenuItem key={index} value={item._id}>{item.fullName}</MenuItem>
                                                     ))}
@@ -507,7 +507,7 @@ const DcAdd = () => {
                                             <div className="col me-2">
 
                                                 <TextField label="Party code"
-                                                    id="partyCodeId"
+                                                    id="dcPartyCodeId"
                                                     defaultValue=""
                                                     disabled={dcData.dcPartyType === ""}
 
@@ -517,7 +517,7 @@ const DcAdd = () => {
                                                     // sx={{ width: "100%" }}
                                                     size="small"
                                                     fullWidth
-                                                    name="partyCode" >
+                                                    name="dcPartyCode" >
 
                                                 </TextField>
 
@@ -526,7 +526,7 @@ const DcAdd = () => {
                                             <div className="col">
 
                                                 <TextField label="Party Address"
-                                                    id="partyAddressId"
+                                                    id="dcPartyAddressId"
                                                     value={dcData.dcPartyAddress}
 
                                                     defaultValue=""
@@ -534,7 +534,7 @@ const DcAdd = () => {
 
                                                     size="small"
                                                     sx={{ width: "100%" }}
-                                                    name="Party Address" >
+                                                    name="dcPartyAddress" >
 
                                                 </TextField>
 
@@ -584,8 +584,8 @@ const DcAdd = () => {
                                             <TextField label="Reason"
                                                 id="dcReasonId"
                                                 select
-                                                defaultValue=""
-                                                //value={dcData.dcReason}
+                                                value={dcData.dcReason}
+                                                
                                                 onChange={handleDcChange}
                                                 size="small"
                                                 sx={{ width: "101%" }}
@@ -601,7 +601,7 @@ const DcAdd = () => {
                                         <div className='col me-2'>
                                             <TextField label="Common Remarks"
                                                 id="dcCommonRemarksId"
-                                                //  value={dcData.dcCommonRemarks}
+                                                value={dcData.dcCommonRemarks}
                                                 defaultValue=""
                                                 onChange={handleDcChange}
                                                 size="small"

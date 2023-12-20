@@ -1507,8 +1507,8 @@ export const Department = () => {
                       sx={{
                         ".MuiTablePagination-displayedRows": {
 
-                          "margin-top": "1em",
-                          "margin-bottom": "1em"
+                          "marginTop": "1em",
+                          "marginBottom": "1em"
                         }
                       }}
                       slots={{

@@ -407,17 +407,17 @@ const Dc = () => {
                                             <div className=" col me-2">
 
                                                 <TextField label="Party Name"
-                                                    id="partyNameId"
+                                                    id="dcPartyNameId"
                                                     select
 
                                                     // value={dcData.dcPartyName}
                                                     onChange={(e) => setPartyData(e.target.value)}
-
+                                                    value={dcData.dcPartyName}
                                                     //  sx={{ width: "100%" }}
                                                     size="small"
                                                     fullWidth
                                                     disabled={dcData.dcPartyType === ""}
-                                                    name="partyName" >
+                                                    name="dcartyName" >
                                                     {filteredData.map((item, index) => (
                                                         <MenuItem key={index} value={item._id}>{item.fullName}</MenuItem>
                                                     ))}
