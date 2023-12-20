@@ -209,8 +209,8 @@ const GrnList = () => {
 
     const grnColumns = [
 
-        { field: 'id', headerName: 'Si. No', width: 70, renderCell: (params) => params.api.getAllRowIds().indexOf(params.id) + 1 },
-        { field: 'itemIMTENo', headerName: 'Item IMTENo', width: 100 },
+        { field: 'grmItemId', headerName: 'Si. No', width: 70, renderCell: (params) => params.api.getAllRowIds().indexOf(params.id) + 1 },
+        { field: 'grnItemIMTENo', headerName: 'Item IMTENo', width: 100 },
         { field: 'itemAddMasterName', headerName: 'Item Description', width: 100 },
         { field: 'itemRangeSize', headerName: 'Range/Size', width: 100 },
         { field: 'dcRef', headerName: 'Dc Ref', width: 100 },

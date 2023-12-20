@@ -331,7 +331,7 @@ const DcList = () => {
         { field: 'itemAddMasterName', headerName: 'Item Description', width: 150 },
         { field: 'itemRangeSize', headerName: 'Range/Size', width: 100 },
         {
-            field: 'ReMarks', headerName: 'ReMarks', width: 200},
+            field: 'dcItemRemarks', headerName: 'ReMarks', width: 200},
 
 
     ]

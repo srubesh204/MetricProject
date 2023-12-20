@@ -18,16 +18,16 @@ const DcEdit = () => {
     console.log(id)
 
     const dcEditDatas = useContext(DcListContent)
-   const { dcEditOpen, setDcEditOpen, selectedRows, dcListFetchData } =dcEditDatas
-   console.log(selectedRows)
-   const [errorhandler, setErrorHandler] = useState({});
+    const { dcEditOpen, setDcEditOpen, selectedRows, dcListFetchData } = dcEditDatas
+    console.log(selectedRows)
+    const [errorhandler, setErrorHandler] = useState({});
 
 
     console.log(selectedRows)
     const [selectedExtraMaster, setSelectedExtraMaster] = useState([])
     const initialDcData = {
         dcPartyId: "",
-        dcPartyType:"",
+        dcPartyType: "",
         dcPartyName: "",
         dcPartyCode: "",
         dcPartyAddress: "",
@@ -41,7 +41,7 @@ const DcEdit = () => {
 
     const [dcEditData, setDcEditData] = useState({
         dcPartyId: "",
-        dcPartyType:"",
+        dcPartyType: "",
         dcPartyName: "",
         dcPartyCode: "",
         dcPartyAddress: "",
@@ -73,8 +73,8 @@ const DcEdit = () => {
     };
 
     console.log(dcEditData)
-    
-    
+
+
 
     useEffect(() => {
         settingDcData();
@@ -110,14 +110,14 @@ const DcEdit = () => {
 
 
         }
-        setDcEditData((prev)=> ({...prev, [name]: value}))
+        setDcEditData((prev) => ({ ...prev, [name]: value }))
 
 
     };
 
 
 
-//
+    //
     const addDcValue = () => {
         if (selectedExtraMaster.length !== 0) {
             setDcEditData((prev) => ({
@@ -128,7 +128,21 @@ const DcEdit = () => {
         }
     }
 
+    const remarksChange = (event, rowId) => {
+        const { name, value } = event.target;
+        if (dcEditData.dcPartyItems.length !== 0) {
+            setDcEditData((prev) => {
+                const updateAC = [...prev.dcPartyItems]
+                updateAC[rowId] = {
+                    ...updateAC[rowId], [name]: value,
+                };
+                return {
+                    ...prev, dcPartyItems: updateAC,
+                };
+            })
+        }
 
+    };
 
 
     const Columns = [
@@ -146,18 +160,18 @@ const DcEdit = () => {
                 `${params.row.itemRangeSize || ''} ${params.row.itemLCUnit || ''}`,
         },
         { field: 'itemMake', headerName: 'Make', width: 90 },
-       
+
         { field: 'itemCalFreInMonths', headerName: 'Frequency', type: "number", width: 100 },
         {
             field: 'select', headerName: 'ReMarks', width: 200, renderCell: (params) => <select className="form-select form-select-sm col-2" id="reMarks" name="reMarks" aria-label="Floating label select example">
-               
+
                 <option value="Calibration">Calibration</option>
                 <option value="service">Service</option>
                 <option value="servicecalibration">Service & Calibration</option>
-              
+
             </select>
         },
-      
+
         { field: 'delete', headerName: 'Delete', width: 100, renderCell: (index) => <Delete onClick={() => deleteAC(index)} /> },
     ]
 
@@ -326,7 +340,7 @@ const DcEdit = () => {
 
 
 
-//////
+    //////
     const [confirmSubmit, setConfirmSubmit] = useState(false)
     const [snackBarOpen, setSnackBarOpen] = useState(false)
     const [alertMessage, setAlertMessage] = useState({
@@ -337,23 +351,23 @@ const DcEdit = () => {
     const submitDcForm = async () => {
         try {
             if (dcEditData.dcPartyItems.length === 0) {
-                setAlertMessage({dcMessage: "Cannot create DC without a Item", dcType: "error"})
+                setAlertMessage({ dcMessage: "Cannot create DC without a Item", dcType: "error" })
                 setSnackBarOpen(true)
             } else {
-            const response = await axios.put(
-              
-                `${process.env.REACT_APP_PORT}/itemDc/updateItemDc/${selectedRows._id}`, dcEditData
-            );
-            setAlertMessage({dcMessage: response.data.message, dcType: "success"})
-            setSnackBarOpen(true)
-            setDcEditData(initialDcData)
-            dcListFetchData()
+                const response = await axios.put(
 
-            setTimeout(() => setDcEditOpen(false), 1000)
+                    `${process.env.REACT_APP_PORT}/itemDc/updateItemDc/${selectedRows._id}`, dcEditData
+                );
+                setAlertMessage({ dcMessage: response.data.message, dcType: "success" })
+                setSnackBarOpen(true)
+                setDcEditData(initialDcData)
+                dcListFetchData()
+
+                setTimeout(() => setDcEditOpen(false), 1000)
             }
         } catch (err) {
             console.log(err);
-            setAlertMessage({dcMessage: err.message, dcType: "error"})
+            setAlertMessage({ dcMessage: err.message, dcType: "error" })
         }
     };
 
@@ -362,7 +376,7 @@ const DcEdit = () => {
 
 
 
-  
+
     const deleteAC = (index) => {
         setDcEditData((prev) => {
             const AC = [...prev.dcPartyItems]
@@ -379,7 +393,7 @@ const DcEdit = () => {
     const [itemAddDetails, setItemAddDetails] = useState({
         itemListNames: "",
         itemImteList: "",
-        itemReMarks:"Calibration",
+        itemReMarks: "Calibration",
     })
 
 
@@ -426,7 +440,7 @@ const DcEdit = () => {
         setItemAddDetails({
             itemListNames: "",
             itemImteList: "",
-            itemReMarks:"",
+
         })
     }, [dcEditData.dcPartyItems])
 
@@ -517,8 +531,8 @@ const DcEdit = () => {
                         <form>
                             <div className='row'>
                                 <div className="col-3 mb-2">
-                                <TextField  label="Vendor Type"
-                                        id="dcPartyTypeId" select defaultValue=""onChange={handleFilterChange}  size="small" value={dcEditData.dcPartyType}  sx={{ width: "101%" }}  name="dcPartyType" >
+                                    <TextField label="Vendor Type"
+                                        id="dcPartyTypeId" select defaultValue="" onChange={handleFilterChange} size="small" value={dcEditData.dcPartyType} sx={{ width: "101%" }} name="dcPartyType" >
                                         <MenuItem value=""><em>--Select--</em></MenuItem>
                                         <MenuItem value="oem">OEM</MenuItem>
                                         <MenuItem value="customer">Customer</MenuItem>
@@ -550,22 +564,22 @@ const DcEdit = () => {
                                             <div className=" col me-2">
 
                                                 <TextField label="Party Name"
-                                                id="partyNameId"
-                                                select
+                                                    id="partyNameId"
+                                                    select
 
-                                                value={dcEditData.dcPartyId}
-                                                onChange={(e) => setPartyData(e.target.value)}
+                                                    value={dcEditData.dcPartyId}
+                                                    onChange={(e) => setPartyData(e.target.value)}
 
-                                                //  sx={{ width: "100%" }}
-                                                size="small"
-                                                fullWidth
-                                                disabled={dcEditData.dcPartyType === ""}
-                                                name="partyName" >
-                                                {filteredData.map((item, index) => (
-                                                    <MenuItem key={index} value={item._id}>{item.fullName}</MenuItem>
-                                                ))}
-                                            </TextField>
-                                               
+                                                    //  sx={{ width: "100%" }}
+                                                    size="small"
+                                                    fullWidth
+                                                    disabled={dcEditData.dcPartyType === ""}
+                                                    name="partyName" >
+                                                    {filteredData.map((item, index) => (
+                                                        <MenuItem key={index} value={item._id}>{item.fullName}</MenuItem>
+                                                    ))}
+                                                </TextField>
+
 
                                             </div>
                                             <div className="col me-2">
@@ -665,7 +679,7 @@ const DcEdit = () => {
                                         <div className='col me-2'>
                                             <TextField label="Common Remarks"
                                                 id="dcCommonRemarksId"
-                                                 value={dcEditData.dcCommonRemarks}
+                                                value={dcEditData.dcCommonRemarks}
                                                 defaultValue=""
                                                 onChange={handleDcChange}
                                                 size="small"
@@ -719,7 +733,7 @@ const DcEdit = () => {
                                                 defaultValue="Calibration"
                                                 value={itemAddDetails.itemReMarks}
                                                 onChange={handleDcItemAdd}
-                                                
+
                                                 size="small"
                                                 sx={{ width: "101%" }}
                                                 name="itemReMarks" >
@@ -731,7 +745,7 @@ const DcEdit = () => {
                                             </TextField>
 
                                         </div>
-                                        
+
                                     </div>
                                     <div className=' col d-flex justify-content-end'>
                                         <div className='me-2 '>
@@ -755,7 +769,7 @@ const DcEdit = () => {
                                 elevation={12}
                             >
                                 <div className='row'>
-                                    <Box sx={{ height: 350, width: '100%', my: 2 }}>
+                                    {/* <Box sx={{ height: 350, width: '100%', my: 2 }}>
                                         <DataGrid
 
                                             rows={dcEditData.dcPartyItems}
@@ -788,7 +802,41 @@ const DcEdit = () => {
                                             pageSizeOptions={[5]}
                                         />
 
-                                    </Box>
+                                        </Box>*/}
+
+
+                                    <table className='table table-bordered table-responsive text-center align-middle'>
+                                        <tbody>
+                                            <tr>
+                                                <th>Si No</th>
+                                                <th>IMTE No</th>
+                                                <th>Item Name</th>
+                                                <th>Range/Size</th>
+                                                <th>Make</th>
+                                                <th>Frequency</th>
+                                                <th>Remarks</th>
+                                                <th>Remove</th>
+                                            </tr>
+                                            {dcEditData.dcPartyItems.map((item, index) => (
+                                                <tr key={index}>
+                                                    <td>{index + 1}</td>
+                                                    <td>{item.itemIMTENo}</td>
+                                                    <td>{item.itemAddMasterName}</td>
+                                                    <td>{item.itemRangeSize}</td>
+                                                    <td>{item.itemMake}</td>
+                                                    <td>{dayjs(item.itemCalFreInMonths).format("DD-MM-YYYY")}</td>
+                                                    <td> <select className="form-select form-select-sm" id="dcItemRemarksId" name="dcItemRemarks" value={item.dcItemRemarks} onChange={(e) => remarksChange(e, index)} aria-label="Floating label select example">
+                                                        <option value="calibration">Calibration</option>
+                                                        <option value="service">Service</option>
+                                                        <option value="calibration&service">Calibration&Service</option>
+
+
+                                                    </select></td>
+                                                    <td width="5%"><Delete color='error' onClick={() => deleteAC(index)} /></td>
+                                                </tr>
+                                            ))}
+                                        </tbody>
+                                    </table>
 
                                 </div>
                             </Paper>
