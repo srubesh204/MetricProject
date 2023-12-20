@@ -19,14 +19,12 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 
 
 const GrnAdd = () => {
-    const grnDatas = useContext(GrnListContent)
-    const { grnOpen, setGrnOpen, selectedRows, grnListFetchData } = grnDatas
+    const grnAddDatas = useContext(GrnListContent)
+    const { grnOpen, setGrnOpen, selectedRows, grnListFetchData } = grnAddDatas
 
     // const [grnImtes, setGrnImtes] = useState(selectedRows)
 
-    useEffect(() => {
-        setAllItemImtes(selectedRows)
-    }, [selectedRows])
+    
 
     const VisuallyHiddenInput = styled('input')({
         clip: 'rect(0 0 0 0)',
@@ -56,7 +54,7 @@ const GrnAdd = () => {
     }
 
 
-    const [grnData, setGrnData] = useState({
+    const [grnAddData, setGrnAddData] = useState({
         grnPartyRefNo: "",
         grnPartyId: "",
         grnPartyRefDate: dayjs().format("YYYY-MM-DD"),
@@ -100,7 +98,7 @@ const GrnAdd = () => {
 
     const handleGrnChange = (e) => {
         const { name, value, checked } = e.target;
-        setGrnData((prev) => ({ ...prev, [name]: value }));
+        setGrnAddData((prev) => ({ ...prev, [name]: value }));
     }
 
     const setPartyData = async (id) => {
@@ -109,7 +107,7 @@ const GrnAdd = () => {
                 `${process.env.REACT_APP_PORT}/vendor/getVendorById/${id}`
             );
             console.log(response)
-            setGrnData((prev) => ({
+            setGrnAddData((prev) => ({
                 ...prev,
                 grnPartyName: response.data.result.fullName,
                 grnPartyAddress: response.data.result.address,
@@ -145,6 +143,8 @@ const GrnAdd = () => {
 
 
     const [itemAddList, setItemAddList] = useState([]);
+
+   
 
     const itemAddFetch = async () => {
         try {
@@ -456,7 +456,7 @@ const GrnAdd = () => {
     const nonSelectedItems = () => {
 
         const remainingMasters = selectedRows.filter(item =>
-            !grnData.grnPartyItems.some(grn => grn.grnItemId === item._id)
+            !grnAddData.grnPartyItems.some(grn => grn.grnItemId === item._id)
         );
         setAllItemImtes(remainingMasters)
 
@@ -466,12 +466,12 @@ const GrnAdd = () => {
 
     useEffect(() => {
         nonSelectedItems()
-    }, [grnData.grnPartyItems])
+    }, [grnAddData.grnPartyItems])
 
     //row delete
 
     const deleteAC = (index) => {
-        setGrnData((prev) => {
+        setGrnAddData((prev) => {
             const AC = [...prev.grnPartyItems]
             AC.splice(index, 1);
             return {
@@ -513,14 +513,14 @@ const GrnAdd = () => {
         try {
             const response = await axios.post(
 
-                `${process.env.REACT_APP_PORT}/itemGRN/createItemGRN`, grnData
+                `${process.env.REACT_APP_PORT}/itemGRN/createItemGRN`, grnAddData
             );
             console.log(response.data)
             setAlertMessage(response.data.message)
             setSnackBarOpen(true)
             setTimeout(() => setGrnOpen(false), 3000)
             grnListFetchData()
-            setGrnData(initialGrnData)
+            setGrnAddData(initialGrnData)
         } catch (err) {
             console.log(err);
         }
@@ -920,7 +920,7 @@ const GrnAdd = () => {
                                                 <TextField label="Party Ref No"
                                                     id="grnPartyRefNoId"
                                                     defaultValue=""
-                                                    value={grnData.grnPartyRefNo}
+                                                    value={grnAddData.grnPartyRefNo}
                                                     //  sx={{ width: "100%" }}
                                                     size="small"
                                                     fullWidth
@@ -934,9 +934,9 @@ const GrnAdd = () => {
                                                     fullWidth
                                                     id="grnPartyRefDateId"
                                                     name="grnPartyRefDate"
-                                                    value={dayjs(grnData.grnPartyRefDate)}
+                                                    value={dayjs(grnAddData.grnPartyRefDate)}
                                                     onChange={(newValue) =>
-                                                        setGrnData((prev) => ({ ...prev, grnPartyRefDate: newValue.format("YYYY-MM-DD") }))
+                                                        setGrnAddData((prev) => ({ ...prev, grnPartyRefDate: newValue.format("YYYY-MM-DD") }))
                                                     }
                                                     label="Party Ref Date"
                                                     //onChange={handleGrnChange}
@@ -958,7 +958,7 @@ const GrnAdd = () => {
                                                 <TextField label="Party Name"
                                                     id="grnPartyNameId"
                                                     select
-                                                    //  value={grnData.grnPartyName}
+                                                    //  value={grnAddData.grnPartyName}
 
                                                     onChange={(e) => setPartyData(e.target.value)}
 
@@ -980,7 +980,7 @@ const GrnAdd = () => {
                                                     onChange={handleGrnChange}
                                                     // sx={{ width: "100%" }}
                                                     size="small"
-                                                    value={grnData.grnPartyCode}
+                                                    value={grnAddData.grnPartyCode}
 
                                                     fullWidth
                                                     name="grnPartyCode" />
@@ -999,7 +999,7 @@ const GrnAdd = () => {
                                                 defaultValue=""
                                                 size="small"
                                                 onChange={handleGrnChange}
-                                                value={grnData.grnPartyAddress}
+                                                value={grnAddData.grnPartyAddress}
                                                 sx={{ width: "100%" }}
                                                 name="grnPartyAddress" />
 
@@ -1028,7 +1028,7 @@ const GrnAdd = () => {
                                                     label="GRN NO"
                                                     id="grnNoId"
                                                     defaultValue=""
-                                                    value={grnData.grnNo}
+                                                    value={grnAddData.grnNo}
                                                     size="small"
                                                     onChange={handleGrnChange}
                                                     fullWidth
@@ -1044,9 +1044,9 @@ const GrnAdd = () => {
                                                     fullWidth
                                                     id="grnDateId"
                                                     name="grnDate"
-                                                    value={dayjs(grnData.grnPartyRefDate)}
+                                                    value={dayjs(grnAddData.grnPartyRefDate)}
                                                     onChange={(newValue) =>
-                                                        setGrnData((prev) => ({ ...prev, grnDate: newValue.format("YYYY-MM-DD") }))
+                                                        setGrnAddData((prev) => ({ ...prev, grnDate: newValue.format("YYYY-MM-DD") }))
                                                     }
                                                     label="GRN Date"
                                                     //onChange={handleGrnChange}
@@ -1064,7 +1064,7 @@ const GrnAdd = () => {
 
                                                     defaultValue=""
                                                     onChange={handleGrnChange}
-                                                    value={grnData.grnCommonRemarks}
+                                                    value={grnAddData.grnCommonRemarks}
                                                     fullWidth
                                                     size="small"
                                                     name="grnCommonRemarks"
@@ -1620,7 +1620,7 @@ const GrnAdd = () => {
                                             <th>Calibrated At</th>
                                             <th>Remove</th>
                                         </tr>
-                                        {grnData.grnPartyItems.map((item, index) => (
+                                        {grnAddData.grnPartyItems.map((item, index) => (
                                             <tr key={index}>
                                                 <td>{index + 1}</td>
                                                 <td>{item.grnItemIMTENo}</td>
