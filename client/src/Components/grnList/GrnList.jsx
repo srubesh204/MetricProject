@@ -416,7 +416,7 @@ const GrnList = () => {
 
                                         rows={grnListDataList}
                                         columns={grnColumns}
-                                        getRowId={(row) => row.grmItemId}
+                                        getRowId={(row) => row.grnItemId}
                                         initialState={{
                                             pagination: {
                                                 paginationModel: { page: 0, pageSize: 5 },
@@ -431,8 +431,6 @@ const GrnList = () => {
                                         }}
                                         onRowSelectionModelChange={(newRowSelectionModel) => {
                                             setgrnDataListSelectedRowIds(newRowSelectionModel);
-
-
                                         }}
 
                                         slots={{

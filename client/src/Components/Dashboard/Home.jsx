@@ -832,13 +832,13 @@ const Home = () => {
   }
 
   const grnCheck = () => {
-    const dcStatusCheck = selectedRows.every(item => item.dcStatus === "1")
+    const grnCheck = selectedRows.every(item => item.dcStatus === "1")
    
 
-    console.log(dcStatusCheck)
-    if (dcStatusCheck) {
+    console.log(grnCheck)
+    if (grnCheck) {
       setStatusCheckMsg("");
-      setDcOpen(true);
+      setGrnOpen(true);
     } else {
       setStatusCheckMsg("Selected Item are not DC ed")
     }
