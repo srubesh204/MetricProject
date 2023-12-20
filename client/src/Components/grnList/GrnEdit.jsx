@@ -1,5 +1,5 @@
 import React, { createContext, useEffect, useState, useContext } from 'react'
-import { Container, Box, Alert, Button, Dialog, DialogActions, DialogContent, InputLabel, DialogContentText, FormControl, Select, DialogTitle, OutlinedInput, FormControlLabel, IconButton, MenuItem, Paper, Checkbox, ListItemText, Snackbar, Switch, TextField } from '@mui/material';
+import { Container, Box, Alert, Button, Dialog, DialogActions, DialogContent, InputLabel, DialogContentText, FormControl, Select, DialogTitle, OutlinedInput, FormControlLabel, IconButton, MenuItem, Paper, Checkbox, ListItemText, Snackbar, Switch, TextField, Chip } from '@mui/material';
 import axios from 'axios';
 import { DataGrid, GridToolbar } from '@mui/x-data-grid';
 import dayjs from 'dayjs';
@@ -8,15 +8,30 @@ import isSameOrBefore from 'dayjs/plugin/isSameOrBefore'
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { GrnListContent } from './GrnList';
-import { Add, Close, Delete } from '@mui/icons-material';
+import { Add, Close, CloudUpload, Delete, Done } from '@mui/icons-material';
 import { useParams } from 'react-router-dom';
+import styled from '@emotion/styled';
 
 
 const GrnEdit = () => {
     const grnEditDatas = useContext(GrnListContent)
     const { grnEditOpen, setGrnEditOpen, selectedRows, grnListFetchData } = grnEditDatas
 
+
     const { id } = useParams()
+
+    const VisuallyHiddenInput = styled('input')({
+        clip: 'rect(0 0 0 0)',
+        clipPath: 'inset(50%)',
+        height: 1,
+        overflow: 'hidden',
+        position: 'absolute',
+        bottom: 0,
+        left: 0,
+        whiteSpace: 'nowrap',
+        width: 1,
+    });
+
     console.log(id)
     const [selectedExtraMaster, setSelectedExtraMaster] = useState([])
     const initialGrnEditData = {
@@ -86,20 +101,7 @@ const GrnEdit = () => {
         settingGrnData();
     }, [selectedRows]);
 
-    const nonSelectedItems = () => {
 
-        // const remainingMasters = selectedRows.filter(item =>
-        //     !grnData.grnPartyItems.some(grn => grn.grnItemId === item._id)
-        // );
-        // setGrnImtes(remainingMasters)
-
-
-    }
-
-
-    useEffect(() => {
-        nonSelectedItems()
-    }, [grnEditData.grnPartyItems])
 
     const addDcValue = () => {
         if (selectedExtraMaster.length !== 0) {
@@ -119,7 +121,7 @@ const GrnEdit = () => {
                 ...prev, grnPartyItems: AC,
             };
         })
-        nonSelectedItems();
+
     };
 
 
@@ -266,7 +268,7 @@ const GrnEdit = () => {
             console.log(response.data)
             setAllItemImtes(response.data.result)
             // const filteredImtes = response.data.result.filter((imtes) => !grnEditData.grnPartyItems.some(grnImte => imtes._id === grnImte._id))
-            const dcStatus = response.data.result.filter((item)=> item.dcStatus === "1" && (item.grnStatus === "0" || item.grnStatus === "" || item.grnStatus === undefined))
+            const dcStatus = response.data.result.filter((item) => item.dcStatus === "1" && (item.grnStatus === "0" || item.grnStatus === "" || item.grnStatus === undefined))
             setItemImtes(dcStatus)
 
         } catch (err) {
@@ -274,19 +276,19 @@ const GrnEdit = () => {
         }
     };
 
-    const handleGrnItemAdd = (e) => {
-        const { name, value } = e.target;
-        if (name === "grnList") {
-            getItemByName(value)
-            setItemAddDetails((prev) => ({ ...prev, [name]: value }))
-        }
-        if (name === "grnImteNo") {
-            setSelectedGrnItem(value)
-            setItemAddDetails((prev) => ({ ...prev, [name]: value }))
-        }
+    const nonSelectedItems = () => {
 
-
+        const remainingMasters = itemImtes.filter(item =>
+            !grnEditData.grnPartyItems.some(grn => grn.grnItemId === item._id)
+        );
+        setItemImtes(remainingMasters)
     }
+    useEffect(() => {
+        nonSelectedItems()
+    }, [grnEditData.grnPartyItems])
+
+
+    
 
 
     const grnItemAdd = () => {
@@ -309,6 +311,446 @@ const GrnEdit = () => {
     const [snackBarOpen, setSnackBarOpen] = useState(false)
     const [alertMessage, setAlertMessage] = useState("")
 
+    const handleGrnItemChange = (e) => {
+        const { name, value } = e.target;
+
+
+        if (name === "grnItemStatus") {
+            const fetchedData = selectedRows.filter((item) => item._id === selectedGrnItem.grnItemId)
+            console.log(fetchedData)
+            setSelectedGrnItem((prev) => ({ ...prev, [name]: value }))
+            if (value === "Calibrated") {
+                setSelectedGrnItem({
+                    [name]: value,
+                    grnItemId: fetchedData[0]._id,
+                    grnItemAddMasterName: fetchedData[0].itemAddMasterName,
+                    grnItemIMTENo: fetchedData[0].itemIMTENo,
+                    grnItemType: fetchedData[0].itemType,
+                    grnItemRangeSize: fetchedData[0].itemRangeSize,
+                    grnItemRangeSizeUnit: fetchedData[0].itemRangeSizeUnit,
+                    grnItemMFRNo: fetchedData[0].itemMFRNo,
+                    grnItemLC: fetchedData[0].itemLC,
+                    grnItemLCUnit: fetchedData[0].itemLCUnit,
+                    grnItemMake: fetchedData[0].itemMake,
+                    grnItemModelNo: fetchedData[0].itemModelNo,
+
+                    grnItemDepartment: fetchedData[0].itemDepartment,
+                    grnItemArea: fetchedData[0].itemArea,
+                    grnItemPlaceOfUsage: fetchedData[0].itemPlaceOfUsage,
+                    grnItemCalFreInMonths: fetchedData[0].itemCalFreInMonths,
+                    grnItemCalAlertDays: fetchedData[0].itemCalAlertDays,
+                    grnItemCalibrationSource: fetchedData[0].itemCalibrationSource,
+                    grnItemCalibrationDoneAt: fetchedData[0].itemCalibrationDoneAt,
+                    grnItemCalibratedAt: fetchedData[0].itemCalibratedAt,
+                    grnItemOBType: fetchedData[0].itemOBType,
+                    grnAcCriteria: fetchedData[0].acceptanceCriteria.map((item) => (
+                        {
+                            grnParameter: item.acParameter,
+                            grnNominalSize: item.acNominalSize,
+                            grnNominalSizeUnit: item.acNominalSizeUnit,
+                            grnMinPS: item.acMinPS,
+                            grnMaxPS: item.acMaxPS,
+                            grnWearLimitPS: item.acWearLimitPS,
+                            grnBeforegrnibration: "",
+                            grnMinOB: item.acMinOB,
+                            grnMaxOB: item.acMaxOB,
+                            grnAverageOB: item.acAverageOB,
+                            grnOBError: item.acOBError,
+                            grnMinPSError: item.acMinPSError,
+                            grnMaxPSError: item.acMaxPSError,
+                            rowStatus: ""
+                        }
+                    )),
+                    grnItemUncertainity: fetchedData[0].itemUncertainity,
+                    grnItemCalDate: dayjs().format("YYYY-MM-DD"),
+                    grnItemDueDate: "",
+                    grnItemCertificateStatus: "",
+                    grnItemCertificateNo: "",
+                    grnItemCertificate: "",
+                    grnUncertainity: "",
+                    grnItemCalStatus: ""
+                })
+            } else {
+                setSelectedGrnItem({
+                    [name]: value,
+                    grnItemId: fetchedData[0]._id,
+                    grnItemAddMasterName: fetchedData[0].itemAddMasterName,
+                    grnItemIMTENo: fetchedData[0].itemIMTENo,
+                    grnItemType: fetchedData[0].itemType,
+                    grnItemRangeSize: fetchedData[0].itemRangeSize,
+                    grnItemRangeSizeUnit: fetchedData[0].itemRangeSizeUnit,
+                    grnItemMFRNo: fetchedData[0].itemMFRNo,
+                    grnItemLC: fetchedData[0].itemLC,
+                    grnItemLCUnit: fetchedData[0].itemLCUnit,
+                    grnItemMake: fetchedData[0].itemMake,
+                    grnItemModelNo: fetchedData[0].itemModelNo,
+
+                    grnItemDepartment: fetchedData[0].itemDepartment,
+                    grnItemArea: fetchedData[0].itemArea,
+                    grnItemPlaceOfUsage: fetchedData[0].itemPlaceOfUsage,
+                    grnItemCalFreInMonths: fetchedData[0].itemCalFreInMonths,
+                    grnItemCalAlertDays: fetchedData[0].itemCalAlertDays,
+                    grnItemCalibrationSource: fetchedData[0].itemCalibrationSource,
+                    grnItemCalibrationDoneAt: fetchedData[0].itemCalibrationDoneAt,
+                    grnItemCalibratedAt: "",
+                    grnItemOBType: fetchedData[0].itemOBType,
+                    grnAcCriteria: fetchedData[0].acceptanceCriteria.map((item) => (
+                        {
+                            grnParameter: item.acParameter,
+                            grnNominalSize: item.acNominalSize,
+                            grnNominalSizeUnit: item.acNominalSizeUnit,
+                            grnMinPS: item.acMinPS,
+                            grnMaxPS: item.acMaxPS,
+                            grnWearLimitPS: item.acWearLimitPS,
+                            grnBeforegrnibration: "",
+                            grnMinOB: item.acMinOB,
+                            grnMaxOB: item.acMaxOB,
+                            grnAverageOB: item.acAverageOB,
+                            grnOBError: item.acOBError,
+                            grnMinPSError: item.acMinPSError,
+                            grnMaxPSError: item.acMaxPSError,
+                            rowStatus: ""
+                        }
+                    )),
+                    grnItemUncertainity: fetchedData[0].itemUncertainity,
+                    grnItemCalDate: "",
+                    grnItemDueDate: "",
+                    grnItemCertificateStatus: "",
+                    grnItemCertificateNo: "",
+                    grnItemCertificate: "",
+                    grnUncertainity: "",
+                    grnItemCalStatus: ""
+                })
+            }
+
+        } else {
+            setSelectedGrnItem((prev) => ({ ...prev, [name]: value }))
+        }
+
+
+
+    }
+
+
+    const handleGrnCertificate = (event) => {
+        const selectedFile = event.target.files[0];
+        if (selectedFile) {
+            console.log("working")
+            setSelectedGrnItem((prev) => ({ ...prev, grnItemCertificate: selectedFile.name }));
+            const fileURL = URL.createObjectURL(selectedFile);
+
+
+            const formData = new FormData();
+            formData.append('file', selectedFile);
+            try {
+                axios.post(`${process.env.REACT_APP_PORT}/upload/grnItemCertificateUp`, formData)
+                    .then(response => {
+                        // setCertMessage("Certificate Uploaded Successfully")
+                        console.log("Certificate Uploaded Successfully")
+                    })
+                    .catch(error => {
+                        // setCertMessage("Error Uploading Certificate")
+                        console.log("Error")
+                    });
+            } catch (error) {
+                console.error('Error uploading the file:', error);
+            }
+
+        }
+    };
+
+
+    const changeGrnData = (index, name, value) => {
+
+
+
+        setSelectedGrnItem((prev) => {
+            const updateAC = [...prev.grnAcCriteria]
+            updateAC[index] = {
+                ...updateAC[index], [name]: value,
+            };
+            return {
+                ...prev, grnAcCriteria: updateAC,
+            };
+        })
+
+
+        //setting rowStatus for referenceStandard
+        if (selectedGrnItem.grnItemType === "referenceStandard") {
+            if (name === "grnAverageOB") {
+                setSelectedGrnItem(prev => {
+                    const updatedData = prev.grnAcCriteria.map((item, idx) => {
+                        if (idx === index) {
+                            let status = ""
+
+                            const isAverageInRange = parseFloat(item.grnAverageOB) >= parseFloat(item.grnMinPS) &&
+                                parseFloat(item.grnAverageOB) <= parseFloat(item.grnMaxPS);
+
+                            if (item.grnAverageOB === "") {
+                                status = ""
+                            } else {
+                                if (isAverageInRange) {
+                                    status = "ok"
+                                } else {
+                                    status = "notOk"
+                                }
+                            }
+
+                            return {
+                                ...item,
+                                rowStatus: status,
+                            };
+                        }
+                        return item;
+                    });
+                    return {
+                        ...prev,
+                        grnAcCriteria: updatedData,
+                    };
+                })
+            }
+
+            if (name === "grnMinOB" || name === "grnMaxOB") {
+                setSelectedGrnItem(prev => {
+                    const updatedData = prev.grnAcCriteria.map((item, idx) => {
+                        if (idx === index) {
+
+                            const isMinInRange = parseFloat(item.grnMinOB) >= parseFloat(item.grnMinPS) &&
+                                parseFloat(item.grnMinOB) <= parseFloat(item.grnMaxPS);
+                            const isMaxInRange = parseFloat(item.grnMaxOB) >= parseFloat(item.grnMinPS) &&
+                                parseFloat(item.grnMaxOB) <= parseFloat(item.grnMaxPS);
+
+
+                            let status = ""
+
+                            if (item.grnMaxOB === "" && item.grnMinOB === "") {
+                                status = "";
+                            } else if (item.grnMaxOB === "") {
+                                status = (isMinInRange) ? "ok" : "notOk";
+                            } else {
+                                status = (isMinInRange && isMaxInRange) ? "ok" : "notOk";
+                            }
+
+                            return {
+                                ...item,
+                                rowStatus: status,
+                            };
+                        }
+                        return item;
+                    });
+                    return {
+                        ...prev,
+                        grnAcCriteria: updatedData,
+                    };
+                });
+            }
+
+        }
+
+
+        //rowStatus for varialble
+
+        // attribute rowstatus  
+        if (selectedGrnItem.grnItemType === "attribute") {
+            if (name === "grnAverageOB") {
+                setSelectedGrnItem(prev => {
+                    const updatedData = prev.grnAcCriteria.map((item, idx) => {
+                        if (idx === index) {
+                            let status = ""
+                            if (item.grnWearLimitPS !== "") {
+
+                                if (item.grnWearLimitPS <= item.grnMinPS) {
+                                    const isAverageInRange = parseFloat(item.grnAverageOB) >= parseFloat(item.grnWearLimitPS) &&
+                                        parseFloat(item.grnAverageOB) <= parseFloat(item.grnMaxPS);
+
+                                    if (item.grnAverageOB === "") {
+                                        status = ""
+                                    } else {
+                                        if (isAverageInRange) {
+                                            status = "ok"
+                                        } else {
+                                            status = "notOk"
+                                        }
+                                    }
+                                }
+
+                                if (item.grnWearLimitPS >= item.grnMaxPS) {
+                                    const isAverageInRange = parseFloat(item.grnAverageOB) <= parseFloat(item.grnWearLimitPS) &&
+                                        parseFloat(item.grnAverageOB) >= parseFloat(item.grnMinPS);
+
+                                    if (item.grnAverageOB === "") {
+                                        status = ""
+                                    } else {
+                                        if (isAverageInRange) {
+                                            status = "ok"
+                                        } else {
+                                            status = "notOk"
+                                        }
+                                    }
+
+                                }
+
+                                return {
+                                    ...item,
+                                    rowStatus: status,
+                                };
+
+                            } else {
+                                const isAverageInRange = parseFloat(item.grnAverageOB) >= parseFloat(item.grnMinPS) &&
+                                    parseFloat(item.grnAverageOB) <= parseFloat(item.grnMaxPS);
+
+                                if (item.grnAverageOB === "") {
+                                    status = ""
+                                } else {
+                                    if (isAverageInRange) {
+                                        status = "ok"
+                                    } else {
+                                        status = "notOk"
+                                    }
+                                }
+
+                                return {
+                                    ...item,
+                                    rowStatus: status,
+                                };
+                            }
+
+
+
+
+                        }
+                        return item;
+                    });
+                    return {
+                        ...prev,
+                        grnAcCriteria: updatedData,
+                    };
+                });
+            }
+
+            if (name === "grnMinOB" || name === "grnMaxOB") {
+                setSelectedGrnItem(prev => {
+                    const updatedData = prev.grnAcCriteria.map((item, idx) => {
+                        if (idx === index) {
+                            let status = ""
+                            if (item.grnWearLimitPS !== "") {
+
+                                if (item.grnWearLimitPS <= item.grnMinPS) {
+
+
+                                    const isMinInRange = parseFloat(item.grnMinOB) >= parseFloat(item.grnWearLimitPS) &&
+                                        parseFloat(item.grnMinOB) <= parseFloat(item.grnMaxPS);
+                                    const isMaxInRange = parseFloat(item.grnMaxOB) >= parseFloat(item.grnWearLimitPS) &&
+                                        parseFloat(item.grnMaxOB) <= parseFloat(item.grnMaxPS);
+
+
+
+                                    if (isMinInRange && isMaxInRange) {
+                                        status = "ok"
+                                    } else {
+                                        status = "notOk"
+                                    }
+
+                                }
+
+                                if (item.grnWearLimitPS >= item.grnMaxPS) {
+                                    const isMinInRange = parseFloat(item.grnMinOB) <= parseFloat(item.grnWearLimitPS) &&
+                                        parseFloat(item.grnMinOB) >= parseFloat(item.grnMinPS);
+                                    const isMaxInRange = parseFloat(item.grnMaxOB) <= parseFloat(item.grnWearLimitPS) &&
+                                        parseFloat(item.grnMaxOB) >= parseFloat(item.grnMinPS);
+
+
+
+                                    if (isMinInRange && isMaxInRange) {
+                                        status = "ok"
+                                    } else {
+                                        status = "notOk"
+                                    }
+
+                                }
+                                const isMinInRange = parseFloat(item.grnMinOB) >= parseFloat(item.grnMinPS) &&
+                                    parseFloat(item.grnMinOB) <= parseFloat(item.grnMaxPS);
+                                const isMaxInRange = parseFloat(item.grnMaxOB) >= parseFloat(item.grnMinPS) &&
+                                    parseFloat(item.grnMaxOB) <= parseFloat(item.grnMaxPS);
+
+                                return {
+                                    ...item,
+                                    rowStatus: status,
+                                };
+
+                            } else {
+                                const isMinInRange = parseFloat(item.grnMinOB) >= parseFloat(item.grnMinPS) &&
+                                    parseFloat(item.grnMinOB) <= parseFloat(item.grnMaxPS);
+                                const isMaxInRange = parseFloat(item.grnMaxOB) >= parseFloat(item.grnMinPS) &&
+                                    parseFloat(item.grnMaxOB) <= parseFloat(item.grnMaxPS);
+
+
+
+
+                                if (item.grnMaxOB === "" && item.grnMinOB === "") {
+                                    status = "";
+                                } else if (item.grnMaxOB === "") {
+                                    status = (isMinInRange) ? "ok" : "notOk";
+                                } else {
+                                    status = (isMinInRange && isMaxInRange) ? "ok" : "notOk";
+                                }
+                                return {
+                                    ...item,
+                                    rowStatus: status,
+                                };
+                            }
+
+
+
+
+                        }
+                        return item;
+                    });
+                    return {
+                        ...prev,
+                        grnAcCriteria: updatedData,
+                    };
+                });
+            }
+        }
+
+        if (selectedGrnItem.grnItemType === "variable") {
+
+            if (name === "grnAverageOB") {
+                setSelectedGrnItem(prev => {
+                    const updatedData = prev.grnAcCriteria.map((item, idx) => {
+                        if (idx === index) {
+                            let status = ""
+
+                            const isAverageInRange = parseFloat(item.grnAverageOB) >= parseFloat(item.grnMinPSError) &&
+                                parseFloat(item.grnAverageOB) <= parseFloat(item.grnMaxPSError);
+
+                            if (item.grnAverageOB === "") {
+                                status = ""
+                            } else {
+                                if (isAverageInRange) {
+                                    status = "ok"
+                                } else {
+                                    status = "notOk"
+                                }
+                            }
+                            return {
+                                ...item,
+                                rowStatus: status,
+                            };
+                        }
+                        return item;
+                    });
+                    return {
+                        ...prev,
+                        grnAcCriteria: updatedData,
+                    };
+                })
+            }
+
+        }
+
+    };
 
 
 
@@ -569,165 +1011,528 @@ const GrnEdit = () => {
                                 }}
                                 elevation={12}
                             >
-                                <div className='row g-2 mb-2'>
-                                    <div className='col d-flex'>
-                                        <div className='col me-2'>
-                                            <TextField size='small' fullWidth variant='outlined' defaultValue="" value={itemAddDetails.grnList} id="grnListId" onChange={handleGrnItemAdd} select label="Item List" name='grnList'>
+                                <div className='row g-2'>
+                                    <div className="col-md-2">
 
-                                                {itemMasterDistNames.map((item, index) => (
-                                                    <MenuItem key={index} value={item}>{item}</MenuItem>
-                                                ))}
 
-                                            </TextField>
-                                        </div>
-                                        <div className='col'>
-                                            <TextField label="Imte No"
-                                                id="grnImteNoId"
-                                                select
-                                                defaultValue=""
-                                                fullWidth
-                                                size="small"
-                                                disabled={itemAddDetails.grnList === ""}
-                                                onChange={handleGrnItemAdd}
-                                                value={itemAddDetails.grnImteNo}
-                                                name="grnImteNo" >
 
-                                                {itemImtes.map((item, index) => (
-                                                    <MenuItem key={index} value={item}>{item.itemIMTENo}</MenuItem>
-                                                ))}
+                                        <TextField size='small' fullWidth variant='outlined' defaultValue="" value={itemAddDetails.grnList} id="grnListId" onChange={handleGrnItemChange} select label="Item List" name='grnList'>
 
-                                            </TextField>
-                                        </div>
+                                            {itemMasterDistNames.map((item, index) => (
+                                                <MenuItem key={index} value={item}>{item}</MenuItem>
+                                            ))}
+
+                                        </TextField>
                                     </div>
-                                    <div className=' col d-flex justify-content-end'>
+                                    <div className="col">
+
+                                        <TextField label="Imte No"
+                                            id="grnItemIdId"
+                                            select
+                                            defaultValue=""
+                                            fullWidth
+                                            size="small"
+                                            disabled={itemAddDetails.grnList === ""}
+                                            onChange={handleGrnItemChange}
+                                            value={selectedGrnItem.grnItemId}
+                                            name="grnItemId" >
+
+                                            {allItemImtes.map((item, index) => (
+                                                <MenuItem key={index} value={item._id}>{item.itemIMTENo}</MenuItem>
+                                            ))}
+
+                                        </TextField>
                                     </div>
 
-                                </div>
+                                    <div className="col">
+                                        <TextField size='small' fullWidth variant='outlined' defaultValue="" id="grnItemStatusId" value={selectedGrnItem.grnItemStatus} onChange={handleGrnItemChange} select label="Grn Item Status" name='grnItemStatus' >
+                                            <MenuItem value="">Select</MenuItem>
+                                            <MenuItem value="Calibrated">Calibrated</MenuItem>
+                                            <MenuItem value="Serviced">Serviced</MenuItem>
+                                            <MenuItem value="Not Servicable">Not Servicable</MenuItem>
+                                            <MenuItem value="Not Calibrated">Not Calibrated</MenuItem>
+                                            <MenuItem value="Other Reason">Other Reason</MenuItem>
+                                        </TextField>
+                                    </div> 
 
-                                <div className='row g-2 '>
-                                    <div className='col d-flex'>
-                                        <div className="me-2">
 
-                                            <DatePicker
-                                                fullWidth
-                                                id="grnCalDateId"
-                                                name="grnCalDate"
-                                                label="Cal Date"
 
-                                                //sx={{ width: "100%" }}
-                                                slotProps={{ textField: { size: 'small' } }}
-                                                format="DD-MM-YYYY"
-                                                value={dayjs(grnEditData.grnCalDate)}
-                                                onChange={(newValue) =>
-                                                    setGrnEditData((prev) => ({ ...prev, grnCalDate: newValue.format("YYYY-MM-DD") }))
-                                                } />
+                                    <div className="col-md-6 d-flex justify-content-end">
 
-                                        </div>
-                                        <div className="me-2">
 
-                                            <DatePicker
-                                                fullWidth
-                                                id="grnDueDateId"
-                                                name="grnDueDate"
-                                                label="Next Cal Date"
-                                                // sx={{ width: "100%" }}
+                                        <Button disabled={selectedGrnItem.grnItemStatus === "" || selectedGrnItem.grnItemStatus === undefined} startIcon={<Add />} color='warning' onClick={() => grnItemAdd()} sx={{ minWidth: "130px" }} variant='contained'>Add Item</Button>
 
-                                                slotProps={{ textField: { size: 'small' } }}
-                                                format="DD-MM-YYYY"
-                                                value={dayjs(grnEditData.grnDueDate)}
-                                                onChange={(newValue) =>
-                                                    setGrnEditData((prev) => ({ ...prev, grnDueDate: newValue.format("YYYY-MM-DD") }))
-                                                }
-                                            />
-
-                                        </div>
-                                        <div className='col me-2'>
-                                            <TextField size='small' fullWidth variant='outlined' id="certificateStatusId" select label="Certificate Status" onChange={handleGrnChange} name='certificateStatus'>
-                                                <MenuItem value="received">Received</MenuItem>
-                                                <MenuItem value="notreceived">Not Received</MenuItem>
-
-                                            </TextField>
-                                        </div>
-                                        <div className="col me-2">
-
-                                            <TextField label="CertificateNo"
-                                                id="certificateNoId"
-                                                defaultValue=""
-                                                value={grnEditData.grnCertificateNo}
-                                                onChange={handleGrnChange}
-                                                size="small"
-                                                sx={{ width: "101%" }}
-                                                name="certificateNo" />
-
-                                        </div>
-                                        <div className='col me-2'>
-                                            <TextField fullWidth label="Uncertainity" variant='outlined' onChange={handleGrnChange} value={grnEditData.grnUncertainity} size='small' name='itemUncertainity' />
-
-                                        </div>
-
-                                        <div className='me-2' >
-                                            <label className='itemlistloade'>
-                                                <input className="form-control itemlistdownload" type="file" id="upload" />Upload Certificate</label>
-                                        </div>
                                     </div>
 
                                 </div>
-                            </Paper>
-                            <Paper
-                                sx={{
-                                    p: 2,
-                                    display: 'flex',
-                                    flexDirection: 'column',
-                                    mb: 1,
+                                {selectedGrnItem.grnItemStatus === "Calibrated" ?
+                                    <React.Fragment>
+                                        <div className="row g-2 mt-1">
+                                            <div className="col-md-2">
 
-                                }}
-                                elevation={12}
-                            >
-                                <div className='row'>
-                                    <h4 className='text-center'>Calibration Data</h4>
-                                    <div className=' col d-flex justify-content-end mb-2'>
-                                        <div className=' col-2 me-2 '>
-                                            <TextField size='small' fullWidth variant='outlined' id="certificateStatusId" select label="Certificate Status" onChange={handleGrnChange} name='certificateStatus'>
-                                                <MenuItem value="received">Received</MenuItem>
-                                                <MenuItem value="notreceived">Not Received</MenuItem>
+                                                <DatePicker
+                                                    fullWidth
+                                                    id="grnItemCalDateId"
+                                                    name="grnItemCalDate"
+                                                    label="Cal Date"
 
-                                            </TextField>
+                                                    slotProps={{ textField: { size: 'small', fullWidth: true } }}
+                                                    format="DD-MM-YYYY"
+                                                    value={dayjs(selectedGrnItem.grnItemCalDate)}
+                                                    onChange={(newValue) => setSelectedGrnItem((prev) => ({ ...prev, grnItemCalDate: newValue.format('YYYY-MM-DD') }))}
+                                                />
+
+                                            </div>
+                                            <div className="col-md-2">
+
+                                                <DatePicker
+                                                    fullWidth
+                                                    id="grnItemDueDateId"
+                                                    name="grnItemDueDate"
+                                                    label="Next Cal Date"
+                                                    // sx={{ width: "100%" }}
+                                                    value={dayjs(selectedGrnItem.grnItemDueDate)}
+                                                    slotProps={{ textField: { size: 'small', fullWidth: true } }}
+                                                    format="DD-MM-YYYY"
+                                                    onChange={(newValue) => setSelectedGrnItem((prev) => ({ ...prev, grnItemDueDate: newValue.format('YYYY-MM-DD') }))}
+                                                />
+
+
+                                            </div>
+                                            <div className='col-md-2'>
+                                                <TextField size='small' fullWidth variant='outlined' id="grnItemCertificateStatusId" onChange={handleGrnItemChange} select label="Certificate Status" name='grnItemCertificateStatus'>
+                                                    <MenuItem value="received">Received</MenuItem>
+                                                    <MenuItem value="notReceived">Not Received</MenuItem>
+
+                                                </TextField>
+                                            </div>
+
+                                            {selectedGrnItem.grnItemCertificateStatus === "received" ? <React.Fragment>
+                                                <div className="col-md-2">
+
+                                                    <TextField label="Certificate No"
+
+                                                        id="grnItemCertificateNoId"
+                                                        defaultValue=""
+                                                        size="small"
+                                                        fullWidth
+                                                        onChange={handleGrnItemChange}
+                                                        name="grnItemCertificateNo" />
+
+                                                </div>
+                                                <div className='col-md-2'>
+                                                    <TextField fullWidth label="Uncertainity" id='grnUncertainityId' variant='outlined' size='small' onChange={handleGrnItemChange} name='grnUncertainity' />
+
+                                                </div>
+
+                                                <div className='col-md-2' >
+                                                    <Button helperText="Hello" component="label" fullWidth variant="contained" startIcon={<CloudUpload />} >
+                                                        Upload Certificate
+                                                        <VisuallyHiddenInput type="file" onChange={handleGrnCertificate} />
+                                                    </Button>
+                                                    <div className='d-flex justify-content-center '>
+                                                        {(selectedGrnItem.grnItemCertificate !== "" && selectedGrnItem.grnItemCertificate !== undefined) &&
+                                                            <Chip
+                                                                className='mt-2'
+                                                                icon={<Done />}
+                                                                color="success"
+                                                                label={selectedGrnItem.grnItemCertificate}
+                                                                onClick={() => {
+                                                                    const fileUrl = `${process.env.REACT_APP_PORT}/grnCertificates/${selectedGrnItem.grnItemCertificate}`;
+                                                                    window.open(fileUrl, '_blank'); // Opens the file in a new tab/window
+                                                                }}
+                                                                onDelete={() => setSelectedGrnItem((prev) => ({ ...prev, grnItemCertificate: "" }))}
+                                                            />}
+                                                    </div>
+                                                </div>
+                                            </React.Fragment> : ""}
+
+
                                         </div>
 
-                                    </div>
-                                   
-                                </div>
 
-                                <Dialog
-                                    open={confirmSubmit}
-                                    onClose={(e, reason) => {
-                                        console.log(reason)
-                                        if (reason !== 'backdropClick' && reason !== 'escapeKeyDown') {
-                                            setConfirmSubmit(false)
-                                        }
-                                    }}
-                                    aria-labelledby="alert-dialog-title"
-                                    aria-describedby="alert-dialog-description"
-                                >
-                                    <DialogTitle id="alert-dialog-title">
-                                        Are you sure to submit ?
-                                    </DialogTitle>
 
-                                    <DialogActions className='d-flex justify-content-center'>
-                                        <Button onClick={() => setConfirmSubmit(false)}>Cancel</Button>
-                                        <Button onClick={() => { updateGrnData(); setConfirmSubmit(false) }} autoFocus>
-                                            Submit
-                                        </Button>
-                                    </DialogActions>
-                                </Dialog>
-                                <Snackbar anchorOrigin={{ vertical: "top", horizontal: "right" }} open={snackBarOpen} autoHideDuration={3000}
-                                    onClose={() => setTimeout(() => {
-                                        setSnackBarOpen(false)
-                                    }, 3000)}>
-                                    <Alert onClose={() => setSnackBarOpen(false)} variant='filled' severity="success" sx={{ width: '100%' }}>
-                                        {alertMessage}
-                                    </Alert>
-                                </Snackbar>
+
+                                        <div className='row mt-3'>
+                                            <div className="col-md">
+                                                <h5>Calibration Data</h5>
+                                                <table className='table table-sm table-bordered table-responsive text-center align-middle'>
+
+                                                    {selectedGrnItem.grnItemType === "attribute" &&
+
+                                                        <tbody >
+                                                            <tr>
+
+                                                                <th width="20%" rowSpan={2}>Parameter</th>
+                                                                <th width="10%" rowSpan={2}>Range/Size</th>
+                                                                <th width="10%" rowSpan={2}>Unit</th>
+                                                                <th colSpan={3} width="30%">Permissible Size</th>
+
+
+                                                                <th width="20%" colSpan={selectedGrnItem.grnItemOBType === "average" ? 1 : 2}>Observed Size</th>
+                                                                <th width="10%" rowSpan={2}>Status</th>
+                                                            </tr>
+                                                            <tr>
+                                                                <th width="6%">Min</th>
+                                                                <th width="6%">Max</th>
+                                                                <th width="10%">Wear Limit</th>
+                                                                {selectedGrnItem.grnItemOBType === "average" ?
+                                                                    <React.Fragment>
+                                                                        <th>Average</th>
+                                                                    </React.Fragment> :
+                                                                    <React.Fragment>
+                                                                        <th>Min</th>
+                                                                        <th>Max</th>
+                                                                    </React.Fragment>}
+
+                                                            </tr>
+                                                            {/* {selectedGrnItem.grnAcCriteria.map((item)=> ()} */}
+                                                            {selectedGrnItem.grnAcCriteria.map((item, index) => {
+                                                                let color = ""
+                                                                if (item.rowStatus === "ok") {
+                                                                    color = "#4cbb17"
+                                                                } else if (item.rowStatus === "notOk") {
+                                                                    color = "red"
+                                                                } else if (item.rowStatus === "conditionallyOk") {
+                                                                    color = "orange"
+                                                                } else {
+                                                                    color = ""
+                                                                }
+
+                                                                //color changer
+                                                                let minColor = "";
+                                                                let maxColor = "";
+                                                                let averageColor = "";
+                                                                let size = "";
+                                                                if (item.grnWearLimitPS !== "") {
+
+                                                                    if (item.grnWearLimitPS < item.grnMinPS) {
+                                                                        size = "OD"
+                                                                    } else {
+                                                                        size = "ID"
+                                                                    }
+
+                                                                    if (size === "OD") {
+                                                                        //min OD condition
+                                                                        if (item.grnMinOB >= item.grnWearLimitPS && item.grnMinOB < item.grnMinPS) {
+                                                                            minColor = "orange"
+                                                                        }
+                                                                        else if (item.grnMinOB >= item.grnMinPS && item.grnMinOB <= item.grnMaxPS) {
+                                                                            minColor = "green"
+                                                                        } else {
+                                                                            minColor = "red"
+                                                                        }
+
+                                                                        if (item.grnMaxOB >= item.grnWearLimitPS && item.grnMaxOB < item.grnMinPS) {
+                                                                            maxColor = "orange"
+                                                                        }
+                                                                        else if (item.grnMaxOB >= item.grnMinPS && item.grnMaxOB <= item.grnMaxPS) {
+                                                                            maxColor = "green"
+                                                                        } else {
+                                                                            maxColor = "red"
+                                                                        }
+
+                                                                        if (item.grnAverageOB >= item.grnWearLimitPS && item.grnAverageOB < item.grnMinPS) {
+                                                                            averageColor = "orange"
+                                                                        }
+                                                                        else if (item.grnAverageOB >= item.grnMinPS && item.grnAverageOB <= item.grnMaxPS) {
+                                                                            averageColor = "green"
+                                                                        } else {
+                                                                            averageColor = "red"
+                                                                        }
+
+
+                                                                    }
+
+                                                                    if (size === "ID") {
+                                                                        //min Id condition
+                                                                        if (item.grnMinOB <= item.grnWearLimitPS && item.grnMinOB > item.grnMaxPS) {
+                                                                            minColor = "orange"
+                                                                        }
+                                                                        else if (item.grnMinOB >= item.grnMinPS && item.grnMinOB <= item.grnMaxPS) {
+                                                                            minColor = "green"
+                                                                        } else {
+                                                                            minColor = "red"
+                                                                        }
+                                                                        //max ID condition
+                                                                        if (item.grnMaxOB <= item.grnWearLimitPS && item.grnMaxOB > item.grnMaxPS) {
+                                                                            maxColor = "orange"
+                                                                        }
+                                                                        else if (item.grnMaxOB >= item.grnMinPS && item.grnMaxOB <= item.grnMaxPS) {
+                                                                            maxColor = "green"
+                                                                        } else {
+                                                                            maxColor = "red"
+                                                                        }
+
+                                                                        if (item.grnAverageOB <= item.grnWearLimitPS && item.grnAverageOB > item.grnMaxPS) {
+                                                                            averageColor = "orange"
+                                                                        }
+                                                                        else if (item.grnAverageOB >= item.grnMinPS && item.grnAverageOB <= item.grnMaxPS) {
+                                                                            averageColor = "green"
+                                                                        } else {
+                                                                            averageColor = "red"
+                                                                        }
+                                                                    }
+
+                                                                    //   handleStatus(index, minColor, maxColor);
+
+
+
+                                                                } else {
+
+
+                                                                    if (parseFloat(item.grnMinOB) >= parseFloat(item.grnMinPS) && parseFloat(item.grnMinOB) <= parseFloat(item.grnMaxPS)) {
+                                                                        minColor = "#4cbb17";
+
+                                                                    } else {
+                                                                        minColor = "red"
+
+                                                                    }
+
+
+                                                                    if (parseFloat(item.grnMaxOB) >= parseFloat(item.grnMinPS) && parseFloat(item.grnMaxOB) <= parseFloat(item.grnMaxPS)) {
+                                                                        maxColor = "#4cbb17"
+
+                                                                    } else {
+                                                                        maxColor = "red"
+
+                                                                    }
+
+                                                                    if (parseFloat(item.grnAverageOB) >= parseFloat(item.grnMinPS) && parseFloat(item.grnAverageOB) <= parseFloat(item.grnMaxPS)) {
+                                                                        averageColor = "#4cbb17";
+
+                                                                    } else {
+                                                                        averageColor = "red"
+
+                                                                    }
+                                                                }
+
+                                                                return (
+                                                                    <tr key={index}>
+                                                                        <td>{item.grnParameter}</td>
+                                                                        <td>{item.grnNominalSize}</td>
+                                                                        <td>{item.grnNominalSizeUnit}</td>
+                                                                        <td>{item.grnMinPS}</td>
+                                                                        <td>{item.grnMaxPS}</td>
+                                                                        <td>{item.grnWearLimitPS}</td>
+
+                                                                        {selectedGrnItem.grnBeforeData === "yes" && <td><input className='form-control form-control-sm' onChange={(e) => changeGrnData(index, e.target.name, e.target.value)} name='grnBeforegrnibration' /></td>}
+                                                                        {selectedGrnItem.grnItemOBType === "average" &&
+                                                                            <td><input className='form-control form-control-sm' name='grnAverageOB' style={{ color: averageColor, fontWeight: "bold" }} onChange={(e) => changeGrnData(index, e.target.name, e.target.value)} /></td>
+                                                                        }
+                                                                        {selectedGrnItem.grnItemOBType === "minmax" &&
+                                                                            <React.Fragment>
+                                                                                <td>
+                                                                                    <input className='form-control form-control-sm' style={{ color: minColor, fontWeight: "bold" }} name="grnMinOB" onChange={(e) => changeGrnData(index, e.target.name, e.target.value)} />
+                                                                                </td>
+                                                                                <td>
+                                                                                    <input className='form-control form-control-sm' style={{ color: maxColor, fontWeight: "bold" }} name="grnMaxOB" onChange={(e) => changeGrnData(index, e.target.name, e.target.value)} /></td>
+                                                                            </React.Fragment>}
+
+
+                                                                        <td width="15%">
+                                                                            <select className='form-select form-select-sm' name="rowStatus" value={item.rowStatus} onChange={(e) => changeGrnData(index, e.target.name, e.target.value)}>
+                                                                                <option value="">Status</option>
+                                                                                <option value="ok">Ok</option>
+                                                                                <option value="notOk">Not Ok</option>
+                                                                                <option value="conditionallyOk">Conditionally Ok</option>
+                                                                            </select>
+                                                                        </td>
+                                                                    </tr>
+
+                                                                )
+                                                            })}
+
+
+
+
+
+
+
+
+
+
+
+                                                        </tbody>}
+
+
+                                                    {selectedGrnItem.grnItemType === "variable" &&
+
+                                                        <tbody>
+                                                            <tr>
+                                                                <th rowSpan={2}>Parameter</th>
+                                                                <th rowSpan={2}>Nominal Size</th>
+                                                                <th rowSpan={2}>Unit</th>
+                                                                <th colSpan={2}>Permissible Error</th>
+
+                                                                <th rowSpan={2}>Observer Error</th>
+
+                                                                <th rowSpan={2}>Status</th>
+                                                            </tr>
+                                                            <tr>
+                                                                <th>Min</th>
+                                                                <th>Max</th>
+                                                            </tr>
+                                                            {selectedGrnItem.grnAcCriteria.map((item, index) => {
+
+                                                                let averageColor = "";
+                                                                if (parseFloat(item.grnAverageOB) >= parseFloat(item.grnMinPSError) && parseFloat(item.grnAverageOB) <= parseFloat(item.grnMaxPSError)) {
+                                                                    averageColor = "#4cbb17";
+                                                                } else {
+                                                                    averageColor = "red"
+                                                                }
+
+                                                                return (
+                                                                    <tr key={index}>
+
+                                                                        <td>{item.grnParameter}</td>
+                                                                        <td>{item.grnNominalSize}</td>
+                                                                        <td>{item.grnNominalSizeUnit}</td>
+                                                                        <td>{item.grnMinPSError}</td>
+                                                                        <td>{item.grnMaxPSError}</td>
+                                                                        <td><input className='form-control form-control-sm' name='grnAverageOB' style={{ color: averageColor, fontWeight: "bold" }} onChange={(e) => changeGrnData(index, e.target.name, e.target.value)} /></td>
+                                                                        <td width="15%">
+                                                                            <select className='form-select form-select-sm' name="rowStatus" value={item.rowStatus} onChange={(e) => changeGrnData(index, e.target.name, e.target.value)}>
+                                                                                <option value="">Status</option>
+                                                                                <option value="ok">Ok</option>
+                                                                                <option value="notOk">Not Ok</option>
+                                                                                <option value="conditionallyOk">Conditionally Ok</option>
+                                                                            </select>
+                                                                        </td>
+
+
+
+                                                                    </tr>
+                                                                )
+                                                            })}
+
+                                                        </tbody>
+                                                    }
+
+                                                    {selectedGrnItem.grnItemType === "referenceStandard" &&
+                                                        <tbody>
+                                                            <tr>
+
+                                                                <th width="20%" rowSpan={2}>Parameter</th>
+                                                                <th width="10%" rowSpan={2}>Range/Size</th>
+                                                                <th width="10%" rowSpan={2}>Unit</th>
+                                                                <th colSpan={2}>Permissible Size</th>
+                                                                {selectedGrnItem.grnBeforeData === "yes" && <th width="10%" rowSpan={2}>Before Calibration</th>}
+                                                                <th width="20%" colSpan={selectedGrnItem.grnItemOBType === "average" ? 1 : 2}>Observed Size</th>
+                                                                <th width="10%" rowSpan={2}>Status</th>
+                                                            </tr>
+                                                            <tr>
+                                                                <th width="6%">Min</th>
+                                                                <th width="6%">Max</th>
+
+                                                                {selectedGrnItem.grnItemOBType === "average" ?
+                                                                    <React.Fragment>
+                                                                        <th>Average</th>
+                                                                    </React.Fragment> :
+                                                                    <React.Fragment>
+                                                                        <th>Min</th>
+                                                                        <th>Max</th>
+                                                                    </React.Fragment>}
+
+                                                            </tr>
+                                                            {/* {selectedGrnItem.grnselectedGrnItem.map((item)=> ()} */}
+                                                            {selectedGrnItem.grnAcCriteria.map((item, index) => {
+                                                                let averageColor = "";
+
+                                                                if (parseFloat(item.grnAverageOB) >= parseFloat(item.grnMinPS) && parseFloat(item.grnAverageOB) <= parseFloat(item.grnMaxPS)) {
+                                                                    averageColor = "#4cbb17";
+
+                                                                } else {
+                                                                    averageColor = "red"
+
+                                                                }
+
+                                                                let minColor = "";
+
+                                                                if (parseFloat(item.grnMinOB) >= parseFloat(item.grnMinPS) && parseFloat(item.grnMinOB) <= parseFloat(item.grnMaxPS)) {
+                                                                    minColor = "#4cbb17";
+
+                                                                } else {
+                                                                    minColor = "red"
+
+                                                                }
+
+                                                                let maxColor = "";
+                                                                if (parseFloat(item.grnMaxOB) >= parseFloat(item.grnMinPS) && parseFloat(item.grnMaxOB) <= parseFloat(item.grnMaxPS)) {
+                                                                    maxColor = "#4cbb17"
+
+                                                                } else {
+                                                                    maxColor = "red"
+
+                                                                }
+
+
+                                                                return (
+                                                                    <tr key={index}>
+                                                                        <td>{item.grnParameter}</td>
+                                                                        <td>{item.grnNominalSize}</td>
+                                                                        <td>{item.grnNominalSizeUnit}</td>
+                                                                        <td>{item.grnMinPS}</td>
+                                                                        <td>{item.grnMaxPS}</td>
+
+                                                                        {selectedGrnItem.grnBeforeData === "yes" && <td><input className='form-control form-control-sm' onChange={(e) => changeGrnData(index, e.target.name, e.target.value)} name='grnBeforeCalibration' /></td>}
+                                                                        {selectedGrnItem.grnItemOBType === "average" &&
+                                                                            <td><input className='form-control form-control-sm' name='grnAverageOB' style={{ color: averageColor, fontWeight: "bold" }} onChange={(e) => changeGrnData(index, e.target.name, e.target.value)} /></td>
+                                                                        }
+                                                                        {selectedGrnItem.grnItemOBType === "minmax" &&
+                                                                            <React.Fragment>
+                                                                                <td><input className='form-control form-control-sm' style={{ color: minColor, fontWeight: "bold" }} name="grnMinOB" onChange={(e) => changeGrnData(index, e.target.name, e.target.value)} />
+                                                                                </td> <td><input className='form-control form-control-sm' style={{ color: maxColor, fontWeight: "bold" }} name="grnMaxOB" onChange={(e) => changeGrnData(index, e.target.name, e.target.value)} /></td>
+                                                                            </React.Fragment>}
+
+
+                                                                        <td width="15%">
+                                                                            <select className='form-select form-select-sm' name="rowStatus" value={item.rowStatus} onChange={(e) => changeGrnData(index, e.target.name, e.target.value)}>
+                                                                                <option value="">Status</option>
+                                                                                <option value="ok">Ok</option>
+                                                                                <option value="notOk">Not Ok</option>
+                                                                                <option value="conditionallyOk">Conditionally Ok</option>
+                                                                            </select>
+                                                                        </td>
+                                                                    </tr>
+
+                                                                )
+                                                            })}
+
+                                                        </tbody>}
+
+                                                </table>
+                                            </div>
+
+                                        </div>
+
+
+
+
+                                        <div className='row'>
+                                            <div className=' col d-flex justify-content-between '>
+
+
+                                                <div className='col-4 me-2'>
+                                                    <TextField size='small' inputProps={{ sx: { color: selectedGrnItem.grnItemCalStatus === "status" ? "" : selectedGrnItem.grnItemCalStatus === "accepted" ? "green" : "red" } }} fullWidth variant='outlined' id="grnItemCalStatusId" select label="Calibration Status" name='grnItemCalStatus' value={selectedGrnItem.grnItemCalStatus}>
+                                                        <MenuItem value="status">Status</MenuItem>
+                                                        <MenuItem value="accepted">Accepted</MenuItem>
+                                                        <MenuItem value="rejected">Rejected</MenuItem>
+
+
+                                                    </TextField>
+                                                </div>
+
+
+
+
+
+
+                                            </div>
+
+
+                                        </div>
+                                    </React.Fragment> : ""}
                             </Paper>
 
                             <Paper elevation={12} sx={{ p: 2 }} className='col-md-12'>
@@ -744,36 +1549,36 @@ const GrnEdit = () => {
                                 </div>
 
                                 <table className='table table-bordered table-responsive text-center align-middle'>
-                                        <tbody>
-                                            <tr>
-                                                <th>Si No</th>
-                                                <th>IMTE No</th>
-                                                <th>Master Name</th>
-                                                <th>Range/Size</th>
-                                                <th>Cal Certificate No</th>
-                                                <th>Cal Date</th>
-                                                <th>Next Due</th>
-                                                <th>Calibrated At</th>
-                                                <th>Remarks</th>
-                                                <th>Remove</th>
-                                            </tr>
+                                    <tbody>
+                                        <tr>
+                                            <th>Si No</th>
+                                            <th>IMTE No</th>
+                                            <th>Master Name</th>
+                                            <th>Range/Size</th>
+                                            <th>Cal Certificate No</th>
+                                            <th>Cal Date</th>
+                                            <th>Next Due</th>
+                                            <th>Calibrated At</th>
+                                            <th>Remarks</th>
+                                            <th>Remove</th>
+                                        </tr>
 
-                                            {grnEditData.grnPartyItems.map((item, index) => (
-                                                <tr key={index}>
-                                                    <td>{index + 1}</td>
-                                                    <td>{item.grnItemIMTENo}</td>
-                                                    <td>{item.grnItemAddMasterName}</td>
-                                                    <td>{item.grnItemRangeSize}</td>
-                                                    <td>{item.grnItemCertificateNo}</td>
-                                                    <td>{item.grnItemCalDate}</td>
-                                                    <td>{item.grnItemDueDate}</td>
-                                                    <td>{item.grnItemCalibratedAt}</td>
-                                                    <td>{item.grnItemStatus}</td>
-                                                    <td width="5%"><Delete onClick={() => deleteGrnPartyItems(index)} color='error' /></td>
-                                                </tr>
-                                            ))}
-                                        </tbody>
-                                    </table>
+                                        {grnEditData.grnPartyItems.map((item, index) => (
+                                            <tr key={index}>
+                                                <td>{index + 1}</td>
+                                                <td>{item.grnItemIMTENo}</td>
+                                                <td>{item.grnItemAddMasterName}</td>
+                                                <td>{item.grnItemRangeSize}</td>
+                                                <td>{item.grnItemCertificateNo}</td>
+                                                <td>{item.grnItemCalDate}</td>
+                                                <td>{item.grnItemDueDate}</td>
+                                                <td>{item.grnItemCalibratedAt}</td>
+                                                <td>{item.grnItemStatus}</td>
+                                                <td width="5%"><Delete onClick={() => deleteGrnPartyItems(index)} color='error' /></td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
                             </Paper>
 
 
