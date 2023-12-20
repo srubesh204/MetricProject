@@ -10,7 +10,7 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { GrnListContent } from './GrnList';
 import styled from '@emotion/styled';
 
-import { Add, Close, CloudUpload, Delete, Done } from '@mui/icons-material';
+import { Add, Close, CloudUpload, Delete, Done, OtherHouses } from '@mui/icons-material';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
@@ -24,7 +24,7 @@ const GrnAdd = () => {
 
     // const [grnImtes, setGrnImtes] = useState(selectedRows)
 
-    
+
 
     const VisuallyHiddenInput = styled('input')({
         clip: 'rect(0 0 0 0)',
@@ -144,7 +144,7 @@ const GrnAdd = () => {
 
     const [itemAddList, setItemAddList] = useState([]);
 
-   
+
 
     const itemAddFetch = async () => {
         try {
@@ -173,6 +173,7 @@ const GrnAdd = () => {
             );
             console.log(response.data)
             setItemMasterDistNames(response.data.result);
+            nonSelectedItems()
 
         } catch (err) {
             console.log(err);
@@ -202,7 +203,7 @@ const GrnAdd = () => {
         getImteList();
     }, []);
 
-    const [allItemImtes, setAllItemImtes] = useState()
+    const [allItemImtes, setAllItemImtes] = useState([])
 
     const [selectedGrnItem, setSelectedGrnItem] = useState({
         grnItemId: "",
@@ -273,7 +274,11 @@ const GrnAdd = () => {
                 `${process.env.REACT_APP_PORT}/itemAdd/getItemAddByName`, { itemItemMasterName: value }
             );
             console.log(response.data)
-            setAllItemImtes(response.data.result)
+            const dcFilter = response.data.result.filter((item) => item.dcStatus === "1")
+            const remainingIMTE = dcFilter.filter(item =>
+                !grnAddData.grnPartyItems.some(grn => grn.grnItemId === item._id)
+            );
+            setAllItemImtes(remainingIMTE)
 
             console.log()
 
@@ -444,26 +449,30 @@ const GrnAdd = () => {
 
     const grnItemAdd = () => {
         if (setSelectedGrnItem.length !== 0) {
-            setGrnData((prev) => ({ ...prev, grnPartyItems: [...prev.grnPartyItems, selectedGrnItem] }))
+            setGrnAddData((prev) => ({ ...prev, grnPartyItems: [...prev.grnPartyItems, selectedGrnItem] }))
             nonSelectedItems();
             setSelectedGrnItem([]);
         }
 
     }
+    useEffect(() => {
+        setSelectedGrnItem([])
+        nonSelectedItems();
+        setItemAddDetails({
+            grnList: "",
+            grnImteNo: ""
+        })
+    }, [grnAddData.grnPartyItems])
+
 
 
     //nonSelecte 
     const nonSelectedItems = () => {
-
-        const remainingMasters = selectedRows.filter(item =>
+        const remainingMasters = allItemImtes.filter(item =>
             !grnAddData.grnPartyItems.some(grn => grn.grnItemId === item._id)
         );
         setAllItemImtes(remainingMasters)
-
-
     }
-
-
     useEffect(() => {
         nonSelectedItems()
     }, [grnAddData.grnPartyItems])
@@ -1113,14 +1122,16 @@ const GrnAdd = () => {
                                             value={selectedGrnItem.grnItemId}
                                             name="grnItemId" >
 
-                                            {allItemImtes.map((item, index) => (
-                                                <MenuItem key={index} value={item._id}>{item.itemIMTENo}</MenuItem>
-                                            ))}
+                                            {allItemImtes.length === 0 ?
+                                                <MenuItem disabled><em>No IMTE Available</em></MenuItem> :
+                                                allItemImtes.map((item, index) => (
+                                                    <MenuItem key={index} value={item._id}>{item.itemIMTENo}</MenuItem>
+                                                ))}
 
                                         </TextField>
                                     </div>
                                     <div className='col '>
-                                        <TextField size='small' fullWidth variant='outlined' disabled={selectedGrnItem.grnItemId === ""} defaultValue="" id="grnItemStatusId" value={selectedGrnItem.grnItemStatus} onChange={handleGrnItemAdd} select label="Grn Item Status" name='grnItemStatus' >
+                                        <TextField size='small' fullWidth variant='outlined' disabled={selectedGrnItem.grnItemId === "" || selectedGrnItem.grnItemId === undefined} defaultValue="" id="grnItemStatusId" value={selectedGrnItem.grnItemStatus} onChange={handleGrnItemAdd} select label="Grn Item Status" name='grnItemStatus' >
                                             <MenuItem value="">Select</MenuItem>
                                             <MenuItem value="Calibrated">Calibrated</MenuItem>
                                             <MenuItem value="Serviced">Serviced</MenuItem>
