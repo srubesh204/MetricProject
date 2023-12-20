@@ -1,5 +1,5 @@
 import React, { createContext, useEffect, useState, useContext } from 'react'
-import { Container, Box, Alert, Button, Dialog, DialogActions, DialogContent,InputLabel,Chip,DialogContentText, Radio, RadioGroup, FormControl, Select, DialogTitle, OutlinedInput,  IconButton, MenuItem, Paper, Checkbox, ListItemText, Snackbar, Switch, TextField, Slide } from '@mui/material';
+import { Container, Box, Alert, Button, Dialog, DialogActions, DialogContent, InputLabel, Chip, DialogContentText, Radio, RadioGroup, FormControl, Select, DialogTitle, OutlinedInput, IconButton, MenuItem, Paper, Checkbox, ListItemText, Snackbar, Switch, TextField, Slide } from '@mui/material';
 import axios from 'axios';
 import { DataGrid, GridToolbar } from '@mui/x-data-grid';
 import dayjs from 'dayjs';
@@ -10,7 +10,7 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { GrnListContent } from './GrnList';
 import styled from '@emotion/styled';
 
-import { Add, Close,CloudUpload, Delete,Done } from '@mui/icons-material';
+import { Add, Close, CloudUpload, Delete, Done } from '@mui/icons-material';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
@@ -1103,10 +1103,7 @@ const GrnAdd = () => {
                                         </div>
 
                                     </div>
-                                    <div className=' col d-flex justify-content-end'>
-
-
-                                    </div>
+                                   
 
 
                                 </div>
@@ -1146,59 +1143,53 @@ const GrnAdd = () => {
                                             />
 
                                         </div>
-                                        <div className='col me-2'>
-                                            <TextField
-                                                size='small'
-                                                fullWidth
-                                                variant='outlined'
-                                                id="grnCertificateStatusId"
-                                                onChange={handleGrnItemAdd}
-                                                // value={grnData.grnCertificateStatus}
-                                                select
-                                                label="Certificate Status"
-                                                name='grnCertificateStatus'
-                                            >
+
+                                        <div className='col-md-2'>
+                                            <TextField size='small' fullWidth variant='outlined' id="grnItemCertificateStatusId" onChange={handleGrnItemAdd} select label="Certificate Status" name='grnItemCertificateStatus'>
                                                 <MenuItem value="received">Received</MenuItem>
-                                                <MenuItem value="notreceived">Not Received</MenuItem>
+                                                <MenuItem value="notReceived">Not Received</MenuItem>
+
                                             </TextField>
                                         </div>
-                                        <div className="col me-2">
+                                        {selectedGrnItem.grnItemCertificateStatus === "received" ? <React.Fragment>
+                                            <div className="col-md-2">
 
-                                            <TextField label="CertificateNo"
-                                                id="grnItemCertificateNoId"
-                                                //   value={selectedGrnItem.grnItemCertificateNo}
-                                                onChange={handleGrnItemAdd}
-                                                defaultValue=""
-                                                size="small"
-                                                sx={{ width: "101%" }}
-                                                name="grnItemCertificateNo" />
+                                                <TextField label="Certificate No"
 
+                                                    id="grnItemCertificateNoId"
+                                                    defaultValue=""
+                                                    size="small"
+                                                    fullWidth
+                                                    onChange={handleGrnItemAdd}
+                                                    name="grnItemCertificateNo" />
 
-                                        </div>
-                                        <div className='col me-2'>
-                                            <TextField fullWidth label="Uncertainity" variant='outlined' id="grnUncertainityId" onChange={handleGrnItemAdd} size='small' name='grnUncertainity' />
-
-                                        </div>
-
-                                        <div className='me-2' >
-                                            <Button helperText="Hello" component="label" fullWidth variant="contained" startIcon={<CloudUpload />} >
-                                                Upload Certificate
-                                                <VisuallyHiddenInput type="file" onChange={handleGrnCertificate} />
-                                            </Button>
-                                            <div className='d-flex justify-content-center mt-2'>
-                                                {(selectedGrnItem.grnItemCertificate !== "" && selectedGrnItem.grnItemCertificate !== undefined) &&
-                                                    <Chip
-                                                        icon={<Done />}
-                                                        color="success"
-                                                        label={selectedGrnItem.grnItemCertificate}
-                                                        onClick={() => {
-                                                            const fileUrl = `${process.env.REACT_APP_PORT}/grnCertificates/${selectedGrnItem.grnItemCertificate}`;
-                                                            window.open(fileUrl, '_blank'); // Opens the file in a new tab/window
-                                                        }}
-                                                        onDelete={() => setSelectedGrnItem((prev) => ({ ...prev, grnItemCertificate: "" }))}
-                                                    />}
                                             </div>
-                                        </div>
+                                            <div className='col-md-2'>
+                                                <TextField fullWidth label="Uncertainity" id='grnUncertainityId' variant='outlined' size='small' onChange={handleGrnItemAdd} name='grnUncertainity' />
+
+                                            </div>
+
+                                            <div className='col-md-2' >
+                                                <Button helperText="Hello" component="label" fullWidth variant="contained" startIcon={<CloudUpload />} >
+                                                    Upload Certificate
+                                                    <VisuallyHiddenInput type="file" onChange={handleGrnCertificate} />
+                                                </Button>
+                                                <div className='d-flex justify-content-center '>
+                                                    {(selectedGrnItem.grnItemCertificate !== "" && selectedGrnItem.grnItemCertificate !== undefined) &&
+                                                        <Chip
+                                                            className='mt-2'
+                                                            icon={<Done />}
+                                                            color="success"
+                                                            label={selectedGrnItem.grnItemCertificate}
+                                                            onClick={() => {
+                                                                const fileUrl = `${process.env.REACT_APP_PORT}/grnCertificates/${selectedGrnItem.grnItemCertificate}`;
+                                                                window.open(fileUrl, '_blank'); // Opens the file in a new tab/window
+                                                            }}
+                                                            onDelete={() => setSelectedGrnItem((prev) => ({ ...prev, grnItemCertificate: "" }))}
+                                                        />}
+                                                </div>
+                                            </div>
+                                        </React.Fragment> : ""}
                                     </div>
 
                                 </div>
@@ -1634,7 +1625,7 @@ const GrnAdd = () => {
             </DialogContent>
             <DialogActions className='d-flex justify-content-between'>
                 <div>
-                    <Button variant='contained' color='warning' className='me-3'>Upload Report</Button>
+                    <Button variant='contained' color='warning' className='me-3'>Print</Button>
                 </div>
                 <div>
                     <Button variant='contained' color='error' className='me-3' onClick={() => { setGrnOpen(false) }}>Cancel</Button>

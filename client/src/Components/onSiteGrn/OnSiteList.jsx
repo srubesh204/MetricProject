@@ -27,7 +27,7 @@ const OnSiteList = () => {
     const [selectedRows, setSelectedRows] = useState([]);
     const [onSiteEditOpen,setOnSiteEditOpen]= useState([])
  
-    const [onSiteGrnOpen, setOnSiteGrnOpen] = useState(false);
+    const [ onSietAddOpen, setOnSiteAddOpen] = useState(false);
 
 
     const handleSnackClose = (event, reason) => {
@@ -458,7 +458,7 @@ const OnSiteList = () => {
                                 >
                                     <div className='col d-flex mb-1'>
                                     <div className=' me-2'>
-                                        <Button component={Link} onClick={() => { setOnSiteGrnOpen(true) }} type='button' variant="contained" color="warning">
+                                        <Button component={Link} onClick={() => { setOnSiteAddOpen(true) }} type='button' variant="contained" color="warning">
                                             <AddIcon /> Add Item
                                         </Button>
                                         </div>
@@ -499,7 +499,7 @@ const OnSiteList = () => {
                                 </Paper>
 
                                 <OnSiteListContent.Provider
-                                    value={{ onSiteGrnOpen, setOnSiteGrnOpen, selectedRows,grnListFetchData}}
+                                    value={{ onSietAddOpen, setOnSiteAddOpen, selectedRows,grnListFetchData}}
                                 >
                                     <OnSiteGrn />
                                 </OnSiteListContent.Provider>
