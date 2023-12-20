@@ -813,7 +813,7 @@ const Grn = () => {
             );
             setAlertMessage(response.data.message)
             setSnackBarOpen(true)
-            setTimeout(() => setGrnOpen(false), 2000)
+            setTimeout(() => setGrnOpen(false), 1000)
         } catch (err) {
             console.log(err);
         }

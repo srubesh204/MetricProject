@@ -119,7 +119,7 @@ const GrnList = () => {
     const [selectedRowView, setSelectedRowView] = useState(null);
     const handleViewClick = (params) => {
         setSelectedRowView(params); // Set the selected row data
-        setGrnListDataList(params.dcPartyItems)
+        setGrnListDataList(params.grnPartyItems)
 
     };
 
@@ -416,7 +416,7 @@ const GrnList = () => {
 
                                         rows={grnListDataList}
                                         columns={grnColumns}
-                                        getRowId={(row) => row._id}
+                                        getRowId={(row) => row.grnItemId}
                                         initialState={{
                                             pagination: {
                                                 paginationModel: { page: 0, pageSize: 5 },
@@ -431,8 +431,6 @@ const GrnList = () => {
                                         }}
                                         onRowSelectionModelChange={(newRowSelectionModel) => {
                                             setgrnDataListSelectedRowIds(newRowSelectionModel);
-
-
                                         }}
 
                                         slots={{
