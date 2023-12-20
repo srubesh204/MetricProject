@@ -518,7 +518,7 @@ const GrnAdd = () => {
     const [snackBarOpen, setSnackBarOpen] = useState(false)
     const [alertMessage, setAlertMessage] = useState("")
 
-    const submitCalForm = async () => {
+    const submitGrnForm = async () => {
         try {
             const response = await axios.post(
 
@@ -886,7 +886,7 @@ const GrnAdd = () => {
                     setGrnOpen(false)
                 }
             }}>
-            <DialogTitle align='center' >GRN</DialogTitle>
+            <DialogTitle align='center' >GRN Add</DialogTitle>
             <IconButton
                 aria-label="close"
                 onClick={() => setGrnOpen(false)}
@@ -1602,7 +1602,7 @@ const GrnAdd = () => {
 
                                             <DialogActions className='d-flex justify-content-center'>
                                                 <Button onClick={() => setConfirmSubmit(false)}>Cancel</Button>
-                                                <Button onClick={() => { submitCalForm(); setConfirmSubmit(false) }} autoFocus>
+                                                <Button onClick={() => { submitGrnForm(); setConfirmSubmit(false) }} autoFocus>
                                                     Submit
                                                 </Button>
                                             </DialogActions>
