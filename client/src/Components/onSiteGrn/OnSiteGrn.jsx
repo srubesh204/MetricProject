@@ -1,5 +1,5 @@
 import React, { createContext, useEffect, useState, useContext } from 'react'
-import { Container, Box, Alert, Button, Dialog, DialogActions, DialogContent, InputLabel, DialogContentText, FormControl, Select, DialogTitle, OutlinedInput, FormControlLabel, IconButton, MenuItem, Paper, Checkbox, ListItemText, Snackbar, Switch, TextField } from '@mui/material';
+import { Container, Box, Alert, Button, Dialog, DialogActions, DialogContent, InputLabel, Chip, DialogContentText, Radio, RadioGroup, FormControl, Select, DialogTitle, OutlinedInput, IconButton, MenuItem, Paper, Checkbox, ListItemText, Snackbar, Switch, TextField, Slide } from '@mui/material';
 import axios from 'axios';
 import { DataGrid, GridToolbar } from '@mui/x-data-grid';
 import dayjs from 'dayjs';
@@ -8,35 +8,23 @@ import isSameOrBefore from 'dayjs/plugin/isSameOrBefore'
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { OnSiteListContent } from './OnSiteList';
-import { Add, Close, } from '@mui/icons-material';
+import styled from '@emotion/styled';
+
+import { Add, Close, CloudUpload, Delete, Done } from '@mui/icons-material';
+
+const Transition = React.forwardRef(function Transition(props, ref) {
+    return <Slide direction="up" ref={ref} {...props} />;
+});
+
+
 
 const OnSiteGrn = () => {
-    const grnDatas = useContext(OnSiteListContent)
-    const { onSiteGrnOpen, setOnSiteGrnOpen, selectedRows, grnListFetchData } = grnDatas
+    const onSiteDatas = useContext(OnSiteListContent)
+    const { onSietAddOpen, setOnSiteAddOpen, selectedRows, grnListFetchData } = onSiteDatas
 
 
 
-    const initialGrnData = {
-       osGrnPartyRefNo: "",
-       osGrnPartyId: "",
-       osGrnPartyRefDate: "",
-       osGrnPartyName: "",
-       osGrnPartyCode: "",
-       osGrnPartyAddress: "",
-       osGrnNo: "",
-       osGrnDate: "",
-       osGrnCommonRemarks: "",
-       osGrnDueDate: "",
-       osGrnCalDate: "",
-       osGrnCertificateStatus: "",
-       osGrnCertificateNo: "",
-       osGrnUncertainity: "",
-       osGrnPartyItems: []
-
-    }
-
-
-    const [onSiteGrnData, setOnSiteGrnData] = useState({
+    const initialOnSiteData = {
         osGrnPartyRefNo: "",
         osGrnPartyId: "",
         osGrnPartyRefDate: "",
@@ -53,35 +41,31 @@ const OnSiteGrn = () => {
         osGrnUncertainity: "",
         osGrnPartyItems: []
 
+    }
 
-
-
-
+    const [allItemImtes, setAllItemImtes] = useState(selectedRows)
+    const [onSiteGrnData, setOnSiteGrnData] = useState({
+        osGrnPartyRefNo: "",
+        osGrnPartyId: "",
+        osGrnPartyRefDate: "",
+        osGrnPartyName: "",
+        osGrnPartyCode: "",
+        osGrnPartyAddress: "",
+        osGrnNo: "",
+        osGrnDate: "",
+        osGrnCommonRemarks: "",
+        osGrnDueDate: "",
+        osGrnCalDate: "",
+        osGrnCertificateStatus: "",
+        osGrnCertificateNo: "",
+        osGrnUncertainity: "",
+        osGrnPartyItems: []
     })
 
-
-
-
-    const [itemAddDetails, setItemAddDetails] = useState({
+    const [itemAddOSiteDetails, setItemAddOnsiteDetails] = useState({
         grnList: "",
         grnImteNo: ""
     })
-
-
-
-    const settingDcData = () => {
-        // Ensure onSiteGrnData is a function
-        if (typeof onSiteGrnData === 'function') {
-            onSiteGrnData((prev) => ({
-                ...prev,
-                osGrnPartyItems: selectedRows
-            }));
-        }
-    };
-
-    useEffect(() => {
-        settingDcData();
-    }, [selectedRows]);
 
 
 
@@ -104,12 +88,6 @@ const OnSiteGrn = () => {
     }, []);
 
 
-    
-
-   
-
-
-   
     const setPartyData = async (id) => {
         try {
             const response = await axios.get(
@@ -120,8 +98,8 @@ const OnSiteGrn = () => {
                 ...prev,
                 osGrnPartyName: response.data.result.fullName,
                 osGrnPartyAddress: response.data.result.address,
-                osGrnPartyCode: response.data.result.vendorCode,
-                osGrnPartyId: response.data.result._id
+                osGrnPartyCode: response.data.result.vendorCode
+
             }))
 
         } catch (err) {
@@ -130,56 +108,11 @@ const OnSiteGrn = () => {
     };
 
 
-    
-
-
-
-
-
-
-    const [grnList, setGrnList] = useState({})
-    const grnFetchData = async () => {
-        try {
-            const response = await axios.get(
-                `${process.env.REACT_APP_PORT}/onsiteItemGRN/getAllOnsiteItemGRN`
-            );
-            setGrnList(response.data.result);
-        } catch (err) {
-            console.log(err);
-        }
-    };
-    useEffect(() => {
-        grnFetchData();
-    }, []);
-
-
-
-    const [itemAddList, setItemAddList] = useState([]);
-
-    const itemAddFetch = async () => {
-        try {
-            const response = await axios.get(
-                `${process.env.REACT_APP_PORT}/itemAdd/getItemAddByIMTESort`
-            );
-            // You can use a different logic for generating the id
-
-            setItemAddList(response.data.result);
-
-
-        } catch (err) {
-            console.log(err);
-        }
-    };
-    useEffect(() => {
-        itemAddFetch();
-    }, []);
-
-
     const [itemMasterDistNames, setItemMasterDistNames] = useState([])
     const getDistinctItemName = async () => {
         try {
             const response = await axios.get(
-                `${process.env.REACT_APP_PORT}/itemAdd/getDistinctItemName`
+                `${process.env.REACT_APP_PORT}/itemAdd/getAllDistinctItemName`
             );
             console.log(response.data)
             setItemMasterDistNames(response.data.result);
@@ -193,29 +126,10 @@ const OnSiteGrn = () => {
     }, []);
     // 
 
-    const [imteList, setImteList] = useState([])
-    const getImteList = async () => {
-        try {
-            const response = await axios.get(
-                `${process.env.REACT_APP_PORT}/itemAdd/getItemAddByIMTESort`
-            );
-            console.log(response.data)
-            setImteList(response.data.result)
 
 
-        } catch (err) {
-            console.log(err);
-        }
-    };
 
-    useEffect(() => {
-        getImteList();
-    }, []);
 
-    const [allItemImtes, setAllItemImtes] = useState([])
-    const [itemImtes, setItemImtes] = useState([])
-    const [selectedGrnItem, setSelectedGrnItem] = useState([])
-    //
     const getItemByName = async (value) => {
         try {
             const response = await axios.post(
@@ -223,8 +137,7 @@ const OnSiteGrn = () => {
             );
             console.log(response.data)
             setAllItemImtes(response.data.result)
-            const filteredImtes = response.data.result.filter((imtes) => !onSiteGrnData.osGrnPartyItems.some(grnImte => imtes._id === grnImte._id))
-            setItemImtes(filteredImtes)
+
             console.log()
 
         } catch (err) {
@@ -232,33 +145,34 @@ const OnSiteGrn = () => {
         }
     };
 
-    const handleGrnItemAdd = (e) => {
-        const { name, value } = e.target;
-        if (name === "grnList") {
-            getItemByName(value)
-            setItemAddDetails((prev) => ({ ...prev, [name]: value }))
+
+
+
+
+    const [onSiteList, setOnSiteList] = useState({})
+    const grnFetchData = async () => {
+        try {
+            const response = await axios.get(
+                `${process.env.REACT_APP_PORT}/onsiteItemGRN/getAllOnsiteItemGRN`
+            );
+            setOnSiteList(response.data.result);
+        } catch (err) {
+            console.log(err);
         }
-        if (name === "grnImteNo") {
-            setSelectedGrnItem(value)
-            setItemAddDetails((prev) => ({ ...prev, [name]: value }))
-        }
-
-
-    }
-
-
-    const grnItemAdd = () => {
-        if (setSelectedGrnItem.length !== 0) {
-            onSiteGrnData((prev) => ({ ...prev, osGrnPartyItems: [...prev.osGrnPartyItems, selectedGrnItem] }))
-        }
-    }
+    };
     useEffect(() => {
-        setSelectedGrnItem([])
-        setItemAddDetails({
-            grnList: "",
-            grnImteNo: ""
-        })
-    }, [onSiteGrnData.osGrnPartyItems])
+        grnFetchData();
+    }, []);
+
+    const handleOnSiteChange = (e) => {
+        const { name, value, checked } = e.target;
+        setOnSiteGrnData((prev) => ({ ...prev, [name]: value }));
+
+
+
+
+
+    }
 
 
     const [confirmSubmit, setConfirmSubmit] = useState(false)
@@ -267,7 +181,7 @@ const OnSiteGrn = () => {
     const [snackBarOpen, setSnackBarOpen] = useState(false)
     const [alertMessage, setAlertMessage] = useState("")
 
-    const submitCalForm = async () => {
+    const submitOnSiteForm = async () => {
         try {
             const response = await axios.post(
 
@@ -276,27 +190,13 @@ const OnSiteGrn = () => {
             console.log(response.data)
             setAlertMessage(response.data.message)
             setSnackBarOpen(true)
-            setTimeout(() => setOnSiteGrnOpen(false), 3000)
+            setTimeout(() => setOnSiteAddOpen(false), 3000)
             grnListFetchData()
-            onSiteGrnData(initialGrnData)
+            setOnSiteGrnData(initialOnSiteData)
         } catch (err) {
             console.log(err);
         }
     };
-
-
-    const handleGrnChange = (e) => {
-        const { name, value, checked } = e.target;
-        setOnSiteGrnData((prev) => ({ ...prev, [name]: value }));
-    }
-
-
-
-
-
-
-
-
 
 
 
@@ -305,17 +205,17 @@ const OnSiteGrn = () => {
 
     return (
 
-        <Dialog fullWidth={true} keepMounted maxWidth="xl" open={onSiteGrnOpen} sx={{ color: "#f1f4f4" }}
+        <Dialog fullScreen keepMounted maxWidth="xl" TransitionComponent={Transition} open={onSietAddOpen} sx={{ color: "#f1f4f4" }}
             onClose={(e, reason) => {
                 console.log(reason)
                 if (reason !== 'backdropClick' && reason !== 'escapeKeyDown') {
-                    setOnSiteGrnOpen(false)
+                    setOnSiteAddOpen(false)
                 }
             }}>
-            <DialogTitle align='center' >ON GRN</DialogTitle>
+            <DialogTitle align='center' >OnSite GRN</DialogTitle>
             <IconButton
                 aria-label="close"
-                onClick={() => setOnSiteGrnOpen(false)}
+                onClick={() => setOnSiteAddOpen(false)}
                 sx={{
                     position: 'absolute',
                     right: 8,
@@ -330,472 +230,406 @@ const OnSiteGrn = () => {
 
 
 
-            <DialogContent >
+            <DialogContent sx={{ width: "100%" }}>
                 <div>
                     <LocalizationProvider dateAdapter={AdapterDayjs}>
                         <form>
-                            <Container maxWidth="lg" sx={{ mb: 2 }}>
+
+
+                            <div className='row'>
+
+                                <div className='col'>
+                                    <Paper
+                                        sx={{
+                                            p: 2,
+                                            display: 'flex',
+                                            flexDirection: 'column',
+                                            mb: 1,
+
+                                        }}
+                                        elevation={12}
+                                    >
+                                        <div className='row g-2 mb-2'>
+                                            <div className=" col-6">
+
+                                                <TextField label="Party Ref No"
+                                                    id="osGrnPartyRefNoId"
+                                                    defaultValue=""
+                                                    size="small"
+                                                    value={onSiteGrnData.osGrnPartyRefNo}
+                                                    onChange={handleOnSiteChange}
+                                                    fullWidth
+                                                    name="osGrnPartyRefNo" />
+                                            </div>
+                                            <div className="col-6">
+
+                                                <DatePicker
+
+                                                    fullWidth
+                                                    id="osGrnPartyRefDateId"
+                                                    name="osGrnPartyRefDate"
+                                                    value={dayjs(onSiteGrnData.osGrnPartyRefDate)}
+                                                    onChange={(newValue) =>
+                                                        setOnSiteGrnData((prev) => ({ ...prev, osGrnPartyRefDate: newValue.format("YYYY-MM-DD") }))
+                                                    }
+                                                    label="Party Ref Date"
+                                                    slotProps={{ textField: { size: 'small', fullWidth: true } }}
+                                                    format="DD-MM-YYYY" />
+
+
+
+                                            </div>
+
+
+
+
+
+                                            <div className=" col-6 ">
+
+                                                <TextField label="Party Name"
+                                                    id="osGrnPartyNameId"
+                                                    select
+                                                    // value={onSiteGrnData.osGrnPartyName}
+                                                    // onChange={handleOnSiteChange}
+                                                    onChange={(e) => setPartyData(e.target.value)}
+                                                    size="small"
+                                                    fullWidth
+                                                    name="osGrnPartyName" >
+                                                    {vendorDataList.map((item, index) => (
+                                                        <MenuItem key={index} value={item._id}>{item.fullName}</MenuItem>
+                                                    ))}
+
+                                                </TextField>
+                                            </div>
+                                            <div className="col-6">
+
+                                                <TextField label="Party code"
+                                                    id="osGrnPartyCodeId"
+                                                    defaultValue=""
+                                                    value={onSiteGrnData.osGrnPartyCode}
+                                                    //  onChange={handleOnSiteChange}
+                                                    // sx={{ width: "100%" }}
+                                                    size="small"
+                                                    fullWidth
+                                                    name="osGrnPartyCode" />
+
+                                            </div>
+
+
+                                        </div>
+
+
+
+                                        <div className="col-12">
+
+                                            <TextField label="PartyAddress"
+                                                id="osGrnPartyAddressId"
+                                                defaultValue=""
+                                                value={onSiteGrnData.osGrnPartyAddress}
+                                                onChange={handleOnSiteChange}
+                                                size="small"
+                                                sx={{ width: "100%" }}
+                                                name="osGrnPartyAddress" />
+
+                                        </div>
+
+                                    </Paper>
+
+                                </div>
+
+                                <div className='col'>
+                                    <Paper
+                                        sx={{
+                                            p: 2,
+                                            display: 'flex',
+                                            flexDirection: 'column',
+                                            mb: 1,
+
+                                        }}
+                                        elevation={12}
+                                    >
+
+                                        <div className='col row g-2 d-flex mb-2'>
+                                            <div className="col-6">
+
+                                                <TextField
+                                                    label="GRN NO"
+                                                    id="osGrnNoId"
+                                                    defaultValue=""
+                                                    size="small"
+                                                    value={onSiteGrnData.osGrnNo}
+                                                    onChange={handleOnSiteChange}
+                                                    fullWidth
+                                                    name="osGrnNo"
+                                                />
+                                            </div>
+                                            <div className="col-6">
+
+
+
+                                                <DatePicker
+
+                                                    fullWidth
+                                                    id="osGrnDateId"
+                                                    name="osGrnDate"
+                                                    label="GRN Date"
+                                                    value={dayjs(onSiteGrnData.osGrnDate)}
+                                                    onChange={(newValue) =>
+                                                        setOnSiteGrnData((prev) => ({ ...prev, osGrnDate: newValue.format("YYYY-MM-DD") }))
+                                                    }
+                                                    slotProps={{ textField: { size: 'small', fullWidth: true } }}
+                                                    format="DD-MM-YYYY" />
+
+
+
+                                            </div>
+                                            <div className='col-md-12'>
+                                                <TextField label="Common Remarks"
+                                                    id="osGrnCommonRemarksId"
+                                                    defaultValue=""
+                                                    value={onSiteGrnData.osGrnCommonRemarks}
+                                                    onChange={handleOnSiteChange}
+                                                    fullWidth
+                                                    size="small"
+                                                    name="osGrnCommonRemarks"
+                                                >
+                                                </TextField>
+                                            </div>
+
+
+                                        </div>
+
+
+
+                                    </Paper>
+                                </div>
+                            </div>
+                            <Paper
+                                sx={{
+                                    p: 2,
+                                    display: 'flex',
+                                    flexDirection: 'column',
+                                    mb: 1,
+
+                                }}
+                                elevation={12}
+                            >
+                                <div className='row g-2 mb-2'>
+                                    <div className='col d-flex'>
+                                        <div className='col me-2'>
+                                            <TextField size='small' fullWidth variant='outlined' defaultValue="" id="grnListId" select label="Item List" name='grnList'>
+                                                {itemMasterDistNames.map((item, index) => (
+                                                    <MenuItem key={index} value={item}>{item}</MenuItem>
+                                                ))}
+                                            </TextField>
+                                        </div>
+                                        <div className='col me-2 '>
+                                            <TextField label="Imte No"
+                                                id="grnItemIdId"
+                                                select
+                                                defaultValue=""
+                                                fullWidth
+                                                size="small"
+                                                name="grnItemId" >
+                                                {allItemImtes.map((item, index) => (
+                                                    <MenuItem key={index} value={item._id}>{item.itemIMTENo}</MenuItem>
+                                                ))}
+                                            </TextField>
+                                        </div>
+                                        <div className='col me-2 '>
+                                            <TextField size='small' fullWidth variant='outlined' defaultValue="" id="grnItemStatusId" select label="Grn Item Status" name='grnItemStatus' >
+                                                <MenuItem value="">Select</MenuItem>
+                                                <MenuItem value="Calibrated">Calibrated</MenuItem>
+                                                <MenuItem value="Serviced">Serviced</MenuItem>
+                                                <MenuItem value="Not Servicable">Not Servicable</MenuItem>
+                                                <MenuItem value="Not Calibrated">Not Calibrated</MenuItem>
+                                            </TextField>
+                                        </div>
+
+                                    </div>
+
+
+
+                                </div>
+
+                                <div className='row g-2 '>
+                                    <div className='col d-flex'>
+
+
+                                        <div className="col-2 me-2">
+
+                                            <DatePicker
+                                                fullWidth
+                                                id="grnItemCalDateId"
+                                                name="grnItemCalDate"
+                                                label="Cal Date"
+
+                                                slotProps={{ textField: { size: 'small', fullWidth: true } }}
+                                                format="DD-MM-YYYY"
+
+                                            />
+
+                                        </div>
+
+                                        <div className="col-2 me-2">
+
+                                            <DatePicker
+                                                fullWidth
+                                                id="grnItemDueDateId"
+                                                name="grnItemDueDate"
+                                                label="Next Cal Date"
+                                                // sx={{ width: "100%" }}
+                                                format="DD-MM-YYYY"
+
+                                            />
+
+                                        </div>
+
+                                        <div className='col-md-2'>
+                                            <TextField size='small' fullWidth variant='outlined' id="grnItemCertificateStatusId" select label="Certificate Status" name='grnItemCertificateStatus'>
+                                                <MenuItem value="received">Received</MenuItem>
+                                                <MenuItem value="notReceived">Not Received</MenuItem>
+
+                                            </TextField>
+                                        </div>
+
+                                        <div className="col-md-2">
+
+                                            <TextField label="Certificate No"
+
+                                                id="grnItemCertificateNoId"
+                                                defaultValue=""
+                                                size="small"
+                                                fullWidth
+
+                                                name="grnItemCertificateNo" />
+
+                                        </div>
+                                        <div className='col-md-2'>
+                                            <TextField fullWidth label="Uncertainity" id='grnUncertainityId' variant='outlined' size='small' name='grnUncertainity' />
+
+                                        </div>
+
+                                        <div className='col-md-2' >
+                                            <Button helperText="Hello" component="label" fullWidth variant="contained" startIcon={<CloudUpload />} >
+                                                Upload Certificate
+
+                                            </Button>
+
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
 
                                 <div className='row'>
-
-                                    <div className='col'>
-                                        <Paper
-                                            sx={{
-                                                p: 2,
-                                                display: 'flex',
-                                                flexDirection: 'column',
-                                                mb: 1,
-
-                                            }}
-                                            elevation={12}
-                                        >
-                                            <div className='col d-flex mb-2'>
-                                                <div className=" col-6 me-2">
-
-                                                    <TextField label="Party Ref No"
-                                                        id="osGrnPartyRefNId"
-                                                        defaultValue=""
-                                                        value={onSiteGrnData.osGrnPartyRefNo}
-                                                        //  sx={{ width: "100%" }}
-                                                        size="small"
-                                                        fullWidth
-                                                        onChange={handleGrnChange}
-                                                        name="osGrnPartyRefN" />
-                                                </div>
-                                                <div className="col-6">
-
-                                                    <DatePicker
-
-                                                        fullWidth
-                                                        id="grnPartyRefDateId"
-                                                        name="grnPartyRefDate"
-                                                        value={dayjs(onSiteGrnData.osGrnPartyRefDate)}
-                                                        onChange={(newValue) =>
-                                                            setOnSiteGrnData((prev) => ({ ...prev, osGrnPartyRefDate: newValue.format("YYYY-MM-DD") }))
-                                                        }
-                                                        label="Party Ref Date"
-                                                        //onChange={handleGrnChange}
+                                    <h4 className='text-center'>Calibration Data</h4>
+                                    <table className='table table-sm table-bordered table-responsive text-center align-middle'>
 
 
-                                                        slotProps={{ textField: { size: 'small' } }}
-                                                        format="DD-MM-YYYY" />
+                                        <tbody >
+                                            <tr>
+
+                                                <th width="20%" rowSpan={2}>Parameter</th>
+                                                <th width="10%" rowSpan={2}>Range/Size</th>
+                                                <th width="10%" rowSpan={2}>Unit</th>
+                                                <th colSpan={3} width="30%">Permissible Size</th>
 
 
+                                                <th width="20%" colSpan={2}>Observed Size</th>
+                                                <th width="10%" rowSpan={2}>Status</th>
+                                            </tr>
+                                            <tr>
+                                                <th width="6%">Min</th>
+                                                <th width="6%">Max</th>
+                                                <th width="10%">Wear Limit</th>
 
-                                                </div>
+                                                <React.Fragment>
+                                                    <th>Average</th>
+                                                </React.Fragment>
+                                                <React.Fragment>
+                                                    <th>Min</th>
+                                                    <th>Max</th>
+                                                </React.Fragment>
 
+                                            </tr>
+                                            {/* {selectedGrnItem.grnAcCriteria.map((item)=> ()} */}
 
-                                            </div>
-                                            <div className='row'>
-                                                <div className='col d-flex mb-2'>
-                                                    <div className=" col-6 me-2">
-
-                                                        <TextField label="Party Name"
-                                                            id="grnPartyNameId"
-                                                            select
-                                                            // value={onSiteGrnData.osGrnPartyName}
-
-                                                            onChange={(e) => setPartyData(e.target.value)}
-
-                                                             sx={{ width: "100%" }}
-                                                            size="small"
-                                                            fullWidth
-
-                                                            name="grnPartyName" >
-                                                            {vendorDataList.map((item, index) => (
-                                                                <MenuItem key={index} value={item._id}>{item.fullName}</MenuItem>
-                                                            ))}
-                                                        </TextField>
-                                                    </div>
-                                                    <div className="col-6">
-
-                                                        <TextField label="Party code"
-                                                            id="osGrnPartyCodeId"
-                                                            defaultValue=""
-
-                                                            // sx={{ width: "100%" }}
-                                                            size="small"
-                                                            value={onSiteGrnData.osGrnPartyCode}
-
-                                                            fullWidth
-                                                            name="osGrnPartyCode" />
-
-                                                    </div>
-
-
-                                                </div>
-
-                                            </div>
-                                            <div className='row '>
-                                                <div className="col-12">
-
-                                                    <TextField label="PartyAddress"
-                                                        id="osGrnPartyAddressId"
-                                                        defaultValue=""
-                                                        size="small"
-
-                                                        value={onSiteGrnData.osGrnPartyAddress}
-                                                        sx={{ width: "101%" }}
-                                                        name="osGrnPartyAddress" />
-
-                                                </div>
-                                            </div>
-                                        </Paper>
+                                        </tbody>
+                                    </table>
+                                    <div className=' col d-flex justify-content-between'>
+                                        <div className='col-6 me-2 '>
+                                            <TextField size='small' fullWidth variant='outlined' id="grnItemCalStatusId" select label="Calibration Status" name='grnItemCalStatus' >
+                                                <MenuItem value="status">Status</MenuItem>
+                                                <MenuItem value="accepted">Accepted</MenuItem>
+                                                <MenuItem value="rejected">Rejected</MenuItem>
+                                            </TextField>
+                                        </div>
 
                                     </div>
 
-                                    <div className='col'>
-                                        <Paper
-                                            sx={{
-                                                p: 2,
-                                                display: 'flex',
-                                                flexDirection: 'column',
-                                                mb: 1,
+                                    <div className=' col d-flex justify-content-end'>
+                                        <div className='me-2 '>
+                                            <Button startIcon={<Add />} size='small' sx={{ minWidth: "130px" }} variant='contained'>Add Item</Button>
+                                        </div>
 
-                                            }}
-                                            elevation={12}
-                                        >
-
-                                            <div className='col d-flex mb-2'>
-                                                <div className=" col-6 me-2">
-
-                                                    <TextField
-                                                        label="GRN NO"
-                                                        id="osGrnNoId"
-                                                        defaultValue=""
-                                                       value={onSiteGrnData.osGrnNo}
-                                                        size="small"
-                                                       // onChange={handleGrnChange}
-                                                        fullWidth
-                                                        name="osGrnNo"
-                                                    />
-                                                </div>
-                                                <div className="col-6">
-
-
-
-                                                    <DatePicker
-
-                                                        fullWidth
-                                                        id="osGrnDateId"
-                                                        name="osGrnDate"
-                                                        value={dayjs(onSiteGrnData.osGrnDate)}
-                                                        onChange={(newValue) =>
-                                                            setOnSiteGrnData((prev) => ({ ...prev, osGrnDate: newValue.format("YYYY-MM-DD") }))
-                                                        }
-                                                        label="OnSite GRN Date"
-                                                       
-
-                                                        slotProps={{ textField: { size: 'small' } }}
-                                                        format="DD-MM-YYYY" />
-
-
-
-                                                </div>
-
-
-                                            </div>
-                                            <div className='row '>
-                                                <div className='mb-5'>
-                                                    <TextField label="Common Remarks"
-                                                        id="osGrnCommonRemarksId"
-
-                                                        defaultValue=""
-                                                        onChange={handleGrnChange}
-                                                        value={onSiteGrnData.osGrnCommonRemarks}
-                                                        fullWidth
-                                                        size="small"
-                                                        name="osGrnCommonRemarks"
-                                                    >
-                                                    </TextField>
-                                                </div>
-                                            </div>
-                                        </Paper>
                                     </div>
+
                                 </div>
-                                <Paper
-                                    sx={{
-                                        p: 2,
-                                        display: 'flex',
-                                        flexDirection: 'column',
-                                        mb: 1,
 
+
+
+
+                                <Dialog
+                                    open={confirmSubmit}
+                                    onClose={(e, reason) => {
+                                        console.log(reason)
+                                        if (reason !== 'backdropClick' && reason !== 'escapeKeyDown') {
+                                            setConfirmSubmit(false)
+                                        }
                                     }}
-                                    elevation={12}
+                                    aria-labelledby="alert-dialog-title"
+                                    aria-describedby="alert-dialog-description"
                                 >
-                                    <div className='row g-2 mb-2'>
-                                        <div className='col d-flex'>
-                                            <div className='col me-2'>
-                                                <TextField size='small' fullWidth variant='outlined' defaultValue="" value={itemAddDetails.grnList} id="grnListId" onChange={handleGrnItemAdd} select label="Item List" name='grnList'>
+                                    <DialogTitle id="alert-dialog-title">
+                                        Are you sure to submit ?
+                                    </DialogTitle>
 
-                                                    {itemMasterDistNames.map((item, index) => (
-                                                        <MenuItem key={index} value={item}>{item}</MenuItem>
-                                                    ))}
+                                    <DialogActions className='d-flex justify-content-center'>
+                                        <Button >Cancel</Button>
+                                        <Button autoFocus>
+                                            Submit
+                                        </Button>
+                                    </DialogActions>
+                                </Dialog>
+                                <Snackbar anchorOrigin={{ vertical: "top", horizontal: "right" }} open={snackBarOpen} autoHideDuration={3000}
+                                    onClose={() => setTimeout(() => {
+                                        setSnackBarOpen(false)
+                                    }, 3000)}>
+                                    <Alert onClose={() => setSnackBarOpen(false)} variant='filled' severity="success" sx={{ width: '100%' }}>
+                                        {alertMessage}
+                                    </Alert>
+                                </Snackbar>
+                            </Paper>
+                            <Paper elevation={12} sx={{ p: 2 }} className='col-md-12'>
+                                <table className='table table-bordered table-responsive text-center align-middle'>
+                                    <tbody>
+                                        <tr>
+                                            <th>Si No</th>
+                                            <th>IMTE No</th>
+                                            <th>Master Name</th>
+                                            <th>Range/Size</th>
+                                            <th>Cal Certificate No</th>
+                                            <th>Cal Due</th>
+                                            <th>Next Due</th>
+                                            <th>Calibrated At</th>
+                                            <th>Remove</th>
+                                        </tr>
 
-                                                </TextField>
-                                            </div>
-                                            <div className='col'>
-                                                <TextField label="Imte No"
-                                                    id="grnImteNoId"
-                                                    select
-                                                    defaultValue=""
-                                                    fullWidth
-                                                    size="small"
-                                                    disabled={itemAddDetails.grnList === ""}
-                                                    onChange={handleGrnItemAdd}
-                                                    value={itemAddDetails.grnImteNo}
-                                                    name="grnImteNo" >
-
-                                                    {itemImtes.map((item, index) => (
-                                                        <MenuItem key={index} value={item}>{item.itemIMTENo}</MenuItem>
-                                                    ))}
-
-                                                </TextField>
-                                            </div>
-                                        </div>
-                                        <div className=' col d-flex justify-content-end'>
-                                            <div className='me-2 '>
-                                                <Button startIcon={<Add />} onClick={() => grnItemAdd()} size='small' sx={{ minWidth: "130px" }} variant='contained'>Add Item</Button>
-                                            </div>
-
-                                        </div>
-
-                                    </div>
-
-                                    <div className='row g-2 '>
-                                        <div className='col d-flex'>
-                                            <div className="col-2 me-2">
-
-                                                <DatePicker
-                                                    fullWidth
-                                                    id="grnCalDateId"
-                                                    name="grnCalDate"
-                                                    // onChange={handleGrnChange}
-                                                    value={dayjs(onSiteGrnData.osGrnCalDate)}
-                                                    label="Cal Date"
-                                                    //sx={{ width: "100%" }}
-                                                    slotProps={{ textField: { size: 'small' } }}
-                                                    onChange={(newValue) =>
-                                                        setOnSiteGrnData((prev) => ({ ...prev, osGrnCalDate: newValue.format("YYYY-MM-DD") }))
-                                                    }
-                                                    format="DD-MM-YYYY"
-                                                />
-
-                                            </div>
-                                            <div className="col-2 me-2">
-
-                                                <DatePicker
-                                                    fullWidth
-                                                    id="osGrnDueDateId"
-                                                    name="osGrnDueDate"
-                                                    // onChange={handleGrnChange}
-                                                    value={dayjs(onSiteGrnData.osGrnDueDate)}
-                                                    label="Next Cal Date"
-                                                    // sx={{ width: "100%" }}
-                                                    slotProps={{ textField: { size: 'small' } }}
-                                                    onChange={(newValue) =>
-                                                        setOnSiteGrnData((prev) => ({ ...prev, osGrnDueDate: newValue.format("YYYY-MM-DD") }))
-                                                    }
-                                                    format="DD-MM-YYYY"
-
-                                                />
-
-                                            </div>
-                                            <div className='col me-2'>
-                                                <TextField
-                                                    size='small'
-                                                    fullWidth
-                                                    variant='outlined'
-                                                    id="osGrnCertificateStatusId"
-                                                    onChange={handleGrnChange}
-                                                    value={onSiteGrnData.osGrnCertificateStatus}
-                                                    select
-                                                    label="Certificate Status"
-                                                    name='osGrnCertificateStatus'
-                                                >
-                                                    <MenuItem value="received">Received</MenuItem>
-                                                    <MenuItem value="notreceived">Not Received</MenuItem>
-                                                </TextField>
-                                            </div>
-                                            <div className="col me-2">
-
-                                                <TextField label="CertificateNo"
-                                                    id="osGrnCertificateNoId"
-                                                    value={onSiteGrnData.osGrnCertificateNo}
-                                                    onChange={handleGrnChange}
-
-                                                    defaultValue=""
-                                                    size="small"
-                                                    sx={{ width: "101%" }}
-                                                    name="osGrnCertificateNo" />
-
-
-                                            </div>
-                                            <div className='col me-2'>
-                                                <TextField fullWidth label="Uncertainity" variant='outlined' id="osGrnUncertainityId" value={onSiteGrnData.osGrnUncertainity} onChange={handleGrnChange} size='small' name='osGrnUncertainity' />
-
-                                            </div>
-
-                                            <div className='me-2' >
-                                                <label className='itemlistloade'>
-                                                    <input className="form-control itemlistdownload" type="file" id="upload" />Upload Certificate</label>
-                                            </div>
-                                        </div>
-
-                                    </div>
-                                </Paper>
-                                <Paper
-                                    sx={{
-                                        p: 2,
-                                        display: 'flex',
-                                        flexDirection: 'column',
-                                        mb: 1,
-
-                                    }}
-                                    elevation={12}
-                                >
-                                    <div className='row'>
-                                        <h6 className='text-center'>Calibration Data</h6>
-                                        <table className='table table-sm table-bordered table-responsive text-center align-middle'>
-                                            {onSiteGrnData.osGrnPartyItems === "attribute" &&
-
-                                                <tbody>
-                                                    <tr>
-                                                        <th width="20%" rowSpan={2}>Parameter</th>
-                                                        <th width="10%" rowSpan={2}>Range/Size</th>
-                                                        <th width="10%" rowSpan={2}>Unit</th>
-                                                        <th colSpan={3} width="30%">Permissible Size</th>
-                                                        <th width="20%" colSpan={2}>Observed Size</th>
-                                                        <th width="10%" rowSpan={2}>Status</th>
-                                                    </tr>
-                                                    <tr>
-                                                        <td><input type="text" className='form-control form-control-sm' id="parameterId" name="parameter" /></td>
-                                                        <td><input type="text" className='form-control form-control-sm' id="rangeSizeId" name="rangeSize" /></td>
-                                                        <td><input type="text" className='form-control form-control-sm' id="unitId" name="unit" /></td>
-                                                        <td><input type="text" className='form-control form-control-sm' id="minId" name="min" /></td>
-                                                        <td><input type="text" className='form-control form-control-sm' id="maxId" name="max" /></td>
-                                                        <td><input type="text" className='form-control form-control-sm' id="wearLimitId" name="wearLimit" /></td>
-                                                        <td><input type="text" className='form-control form-control-sm' id="observedSizeId" name="observedSize" /></td>
-                                                        <td><input type="text" className='form-control form-control-sm' id="statusId" name="status" /></td>
-
-                                                    </tr>
-                                                </tbody>}
-
-
-                                            {onSiteGrnData.osGrnPartyItems === "variable" &&
-
-                                                <tbody>
-                                                    <tr>
-                                                        <th width="20%" rowSpan={2}>Parameter</th>
-                                                        <th width="10%" rowSpan={2}>NominalSize</th>
-                                                        <th width="10%" rowSpan={2}>Unit</th>
-                                                        <th colSpan={3} width="30%">Permissible Erro</th>
-                                                        <th width="20%" colSpan={2}>Observed Error</th>
-                                                        <th width="10%" rowSpan={2}>Status</th>
-                                                    </tr>
-                                                    <tr>
-                                                        <td><input type="text" className='form-control form-control-sm' id="parameterId" name="parameter" /></td>
-                                                        <td><input type="text" className='form-control form-control-sm' id="rangeSizeId" name="rangeSize" /></td>
-                                                        <td><input type="text" className='form-control form-control-sm' id="unitId" name="unit" /></td>
-                                                        <td><input type="text" className='form-control form-control-sm' id="minId" name="min" /></td>
-                                                        <td><input type="text" className='form-control form-control-sm' id="maxId" name="max" /></td>
-                                                        <td><input type="text" className='form-control form-control-sm' id="wearLimitId" name="wearLimit" /></td>
-                                                        <td><input type="text" className='form-control form-control-sm' id="observedSizeId" name="observedSize" /></td>
-                                                        <td><input type="text" className='form-control form-control-sm' id="statusId" name="status" /></td>
-
-                                                    </tr>
-                                                </tbody>}
-
-                                            {onSiteGrnData.osGrnPartyItems === "reFerenceStandard" &&
-
-                                                <tbody>
-                                                    <tr>
-                                                        <th width="20%" rowSpan={2}>Parameter</th>
-                                                        <th width="10%" rowSpan={2}>Range/Size</th>
-                                                        <th width="10%" rowSpan={2}>Unit</th>
-                                                        <th colSpan={2} width="30%">Permissible Erro</th>
-                                                        <th width="20%" colSpan={2}>Observed Error</th>
-                                                        <th width="10%" rowSpan={2}>Status</th>
-                                                    </tr>
-                                                    <tr>
-                                                        <td><input type="text" className='form-control form-control-sm' id="parameterId" name="parameter" /></td>
-                                                        <td><input type="text" className='form-control form-control-sm' id="rangeSizeId" name="rangeSize" /></td>
-                                                        <td><input type="text" className='form-control form-control-sm' id="unitId" name="unit" /></td>
-                                                        <td><input type="text" className='form-control form-control-sm' id="minId" name="min" /></td>
-                                                        <td><input type="text" className='form-control form-control-sm' id="maxId" name="max" /></td>
-                                                        {/*<td><input type="text" className='form-control form-control-sm' id="observedSizeId" name="observedSize" /></td>*/}
-                                                        <td><input type="text" className='form-control form-control-sm' id="minId" name="min" /></td>
-                                                        <td><input type="text" className='form-control form-control-sm' id="maxId" name="max" /></td>
-                                                        <td><input type="text" className='form-control form-control-sm' id="statusId" name="status" /></td>
-
-                                                    </tr>
-                                                </tbody>}
-
-
-
-
-
-
-
-
-                                        </table>
-
-                                    </div>
-
-                                    <Dialog
-                                        open={confirmSubmit}
-                                        onClose={(e, reason) => {
-                                            console.log(reason)
-                                            if (reason !== 'backdropClick' && reason !== 'escapeKeyDown') {
-                                                setConfirmSubmit(false)
-                                            }
-                                        }}
-                                        aria-labelledby="alert-dialog-title"
-                                        aria-describedby="alert-dialog-description"
-                                    >
-                                        <DialogTitle id="alert-dialog-title">
-                                            Are you sure to submit ?
-                                        </DialogTitle>
-
-                                        <DialogActions className='d-flex justify-content-center'>
-                                            <Button onClick={() => setConfirmSubmit(false)}>Cancel</Button>
-                                            <Button onClick={() => { submitCalForm(); setConfirmSubmit(false) }} autoFocus>
-                                                Submit
-                                            </Button>
-                                        </DialogActions>
-                                    </Dialog>
-                                    <Snackbar anchorOrigin={{ vertical: "top", horizontal: "right" }} open={snackBarOpen} autoHideDuration={3000}
-                                        onClose={() => setTimeout(() => {
-                                            setSnackBarOpen(false)
-                                        }, 3000)}>
-                                        <Alert onClose={() => setSnackBarOpen(false)} variant='filled' severity="success" sx={{ width: '100%' }}>
-                                            {alertMessage}
-                                        </Alert>
-                                    </Snackbar>
-
-
-                                    <div className='row'>
-                                        <div className=' col d-flex '>
-
-
-                                            <div className='col-4 me-2'>
-                                                <TextField size='small' fullWidth variant='outlined' id="calibrationStatus" select label="Calibration Status" name='calibrationStatus'>
-                                                    <MenuItem value="Active">Active</MenuItem>
-                                                    <MenuItem value="InActive">InActive</MenuItem>
-
-                                                </TextField>
-                                            </div>
-
-                                        </div>
-
-
-                                    </div>
-                                </Paper>
-
-
-
-
-                            </Container>
+                                    </tbody>
+                                </table>
+                            </Paper>
                         </form>
                     </LocalizationProvider>
 
@@ -803,11 +637,11 @@ const OnSiteGrn = () => {
             </DialogContent>
             <DialogActions className='d-flex justify-content-between'>
                 <div>
-                    <Button variant='contained' color='warning' className='me-3'>Upload Report</Button>
+                    <Button variant='contained' color='warning' className='me-3'>Print</Button>
                 </div>
                 <div>
-                    <Button variant='contained' color='error' className='me-3' onClick={() => { setOnSiteGrnOpen(false) }}>Cancel</Button>
-                    <Button variant='contained' color='success' onClick={() => { setConfirmSubmit(true) }}>Submit</Button>
+                    <Button variant='contained' color='error' className='me-3' onClick={() => { setOnSiteAddOpen(false) }}>Cancel</Button>
+                    <Button variant='contained' color='success' onClick={() => { submitOnSiteForm(true) }} >Submit</Button>
                 </div>
             </DialogActions>
 
