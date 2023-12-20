@@ -298,8 +298,8 @@ const OnSiteList = () => {
                                             <TextField fullWidth label="Party Name" className="col" select size="small" onChange={handleFilterChange} id="partyNameId" name="partyName" defaultValue="" >
 
                                                 <MenuItem value="all">All</MenuItem>
-                                                {filteredData.map((item) => (
-                                                    <MenuItem value={item._id}>{item.dcPartyName}</MenuItem>
+                                                {filteredData.map((item, index) => (
+                                                    <MenuItem key={index} value={item._id}>{item.dcPartyName}</MenuItem>
                                                 ))}
 
 
@@ -358,8 +358,8 @@ const OnSiteList = () => {
                                             sx={{
                                                 ".MuiTablePagination-displayedRows": {
 
-                                                    "margin-top": "1em",
-                                                    "margin-bottom": "1em"
+                                                    "marginTop": "1em",
+                                                    "marginBottom": "1em"
                                                 }
                                             }}
                                             onRowSelectionModelChange={(newRowSelectionModel) => {
@@ -372,7 +372,7 @@ const OnSiteList = () => {
 
                                             density="compact"
                                             //disableColumnMenu={true}
-                                            //clipboardCopyCellDelimiter={true}
+                                            
                                             checkboxSelection
                                             //onRowClick={handleRowClick}
                                             onRowClick={handleRowClick}
@@ -435,7 +435,7 @@ const OnSiteList = () => {
 
                                             density="compact"
                                             //disableColumnMenu={true}
-                                            //clipboardCopyCellDelimiter={true}
+                                            
                                             checkboxSelection
                                             onRowClick={handleRowClick}
                                             disableRowSelectionOnClick

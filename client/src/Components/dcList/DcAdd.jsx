@@ -16,14 +16,14 @@ dayjs.extend(isSameOrAfter)
 const DcAdd = () => {
 
     const dcDatas = useContext(DcListContent)
-    const { dcOpen, setDcOpen, selectedRows,dcListFetchData } = dcDatas
+    const { dcOpen, setDcOpen, selectedRows, dcListFetchData } = dcDatas
 
 
     console.log(selectedRows)
     const [selectedExtraMaster, setSelectedExtraMaster] = useState([])
     const initialDcData = {
         dcPartyId: "",
-        dcPartyType:"",
+        dcPartyType: "",
         dcPartyName: "",
         dcPartyCode: "",
         dcPartyAddress: "",
@@ -37,12 +37,12 @@ const DcAdd = () => {
 
     const [dcData, setDcData] = useState({
         dcPartyId: "",
-        dcPartyType:"",
+        dcPartyType: "",
         dcPartyName: "",
         dcPartyCode: "",
         dcPartyAddress: "",
         dcNo: "",
-        dcDate:dayjs().format("YYYY-MM-DD"),
+        dcDate: dayjs().format("YYYY-MM-DD"),
         dcReason: "",
         dcCommonRemarks: "",
         dcPartyItems: []
@@ -92,7 +92,7 @@ const DcAdd = () => {
 
 
         }
-        setDcData((prev)=> ({...prev, [name]: value}))
+        setDcData((prev) => ({ ...prev, [name]: value }))
 
 
     };
@@ -110,9 +110,23 @@ const DcAdd = () => {
         }
     }
 
+    const remarksChange = (event, rowId) => {
+        const {name, value} = event.target;
+        if(dcData.dcPartyItems.length !== 0){
+            setDcData((prev) => {
+                const updateAC = [...prev.dcPartyItems]
+                updateAC[rowId] = {
+                    ...updateAC[rowId], [name]: value,
+                };
+                return {
+                    ...prev, dcPartyItems: updateAC,
+                };
+            })
+        }
+       
+      };
 
-
-
+      console.log(dcData.dcPartyItems)
     const Columns = [
         { field: 'id', headerName: 'Si. No', width: 70, renderCell: (params) => params.api.getAllRowIds().indexOf(params.id) + 1 },
 
@@ -128,16 +142,17 @@ const DcAdd = () => {
                 `${params.row.itemRangeSize || ''} ${params.row.itemLCUnit || ''}`,
         },
         { field: 'itemMake', headerName: 'Make', width: 90 },
-        { field: 'id', headerName: 'Si. No', width: 70, renderCell: (params) => params.api.getAllRowIds().indexOf(params.id) + 1 },
+        
         { field: 'itemCalFreInMonths', headerName: 'Frequency', type: "number", width: 100 },
         {
-            field: 'select', headerName: 'ReMarks', width: 200, renderCell: (params) => <select className="form-select form-select-sm col-2" id="reMarks" name="reMarks" aria-label="Floating label select example">
-               
-                <option value="Calibration">Calibration</option>
-                <option value="service">Service</option>
-                <option value="servicecalibration">Service & Calibration</option>
-              
-            </select>
+            field: 'dcItemRemarks', headerName: 'ReMarks', width: 200, renderCell: (params) =>
+                <select className="form-select form-select-sm col-2" id="dcItemRemarksId" onChange={(event) => remarksChange(event, params.row.id)} name="dcItemRemarks" value={params.row.dcItemRemarks} aria-label="Floating label select example">
+
+                    <option value="Calibration">Calibration</option>
+                    <option value="Service">Service</option>
+                    <option value="Service&Calibration">Service & Calibration</option>
+
+                </select>
         },
         { field: 'delete', headerName: 'Delete', width: 100, renderCell: (index) => <Delete onClick={() => deleteAC(index)} /> },
     ]
@@ -264,19 +279,30 @@ const DcAdd = () => {
 
     const [confirmSubmit, setConfirmSubmit] = useState(false)
     const [snackBarOpen, setSnackBarOpen] = useState(false)
-    const [alertMessage, setAlertMessage] = useState("")
-    const submitCalForm = async () => {
+    const [alertMessage, setAlertMessage] = useState({
+        dcMessage: "",
+        dcType: "info"
+    })
+    console.log(alertMessage)
+    const submitDcForm = async () => {
         try {
-            const response = await axios.post(
-                `${process.env.REACT_APP_PORT}/itemDc/createItemDc`, dcData
-            );
-            setAlertMessage(response.data.message)
-            dcListFetchData();
-            setSnackBarOpen(true)
-            setTimeout(() => setDcOpen(false), 3000)
+            if (dcData.dcPartyItems.length === 0) {
+                setAlertMessage({ dcMessage: "Cannot create DC without a Item", dcType: "error" })
+                setSnackBarOpen(true)
+            } else {
+                const response = await axios.post(
+                    `${process.env.REACT_APP_PORT}/itemDc/createItemDc`, dcData
+                );
+                setAlertMessage({ dcMessage: response.data.message, dcType: "success" })
+                dcListFetchData();
+                setSnackBarOpen(true)
+                setTimeout(() => setDcOpen(false), 3000)
+            }
         } catch (err) {
             console.log(err);
+            setAlertMessage({ dcMessage: "Error Occurred", dcType: "error" })
         }
+
     };
 
     const deleteAC = (index) => {
@@ -295,7 +321,7 @@ const DcAdd = () => {
     const [itemAddDetails, setItemAddDetails] = useState({
         itemListNames: "",
         itemImteList: "",
-        itemReMarks:""
+        itemReMarks: ""
     })
 
 
@@ -338,7 +364,7 @@ const DcAdd = () => {
         setItemAddDetails({
             itemListNames: "",
             itemImteList: "",
-            itemReMarks:""
+            itemReMarks: ""
         })
     }, [dcData.dcPartyItems])
 
@@ -428,7 +454,7 @@ const DcAdd = () => {
                     <LocalizationProvider dateAdapter={AdapterDayjs}>
                         <form>
                             <div className='row'>
-                                <div class="col-3 mb-2">
+                                <div className="col-3 mb-2">
                                     <select className="form-select form-select-sm" id="dcPartyTypeId" name="dcPartyType" onChange={handleFilterChange}  >
                                         <option value="">Select</option>
                                         <option value="oem">OEM</option>
@@ -460,22 +486,22 @@ const DcAdd = () => {
                                             <div className=" col me-2">
 
                                                 <TextField label="Party Name"
-                                                id="partyNameId"
-                                                select
+                                                    id="partyNameId"
+                                                    select
 
-                                                // value={dcData.dcPartyName}
-                                                onChange={(e) => setPartyData(e.target.value)}
+                                                    // value={dcData.dcPartyName}
+                                                    onChange={(e) => setPartyData(e.target.value)}
 
-                                                //  sx={{ width: "100%" }}
-                                                size="small"
-                                                fullWidth
-                                                disabled={dcData.dcPartyType === ""}
-                                                name="partyName" >
-                                                {filteredData.map((item, index) => (
-                                                    <MenuItem key={index} value={item._id}>{item.fullName}</MenuItem>
-                                                ))}
-                                            </TextField>
-                                               
+                                                    //  sx={{ width: "100%" }}
+                                                    size="small"
+                                                    fullWidth
+                                                    disabled={dcData.dcPartyType === ""}
+                                                    name="partyName" >
+                                                    {filteredData.map((item, index) => (
+                                                        <MenuItem key={index} value={item._id}>{item.fullName}</MenuItem>
+                                                    ))}
+                                                </TextField>
+
 
                                             </div>
                                             <div className="col me-2">
@@ -629,7 +655,7 @@ const DcAdd = () => {
                                                 defaultValue="Calibration"
                                                 value={itemAddDetails.itemReMarks}
                                                 onChange={handleDcItemAdd}
-                                                
+
                                                 size="small"
                                                 sx={{ width: "101%" }}
                                                 name="itemReMarks" >
@@ -670,6 +696,7 @@ const DcAdd = () => {
                                             rows={dcData.dcPartyItems}
                                             columns={Columns}
                                             getRowId={(row) => row._id}
+                                            
                                             initialState={{
                                                 pagination: {
                                                     paginationModel: { page: 0, pageSize: 5 },
@@ -678,8 +705,8 @@ const DcAdd = () => {
                                             sx={{
                                                 ".MuiTablePagination-displayedRows": {
 
-                                                    "margin-top": "1em",
-                                                    "margin-bottom": "1em"
+                                                    "marginTop": "1em",
+                                                    "marginBottom": "1em"
                                                 }
                                             }}
 
@@ -689,10 +716,10 @@ const DcAdd = () => {
                                             }}
 
                                             density="compact"
-                                            //disableColumnMenu={true}
-                                            //clipboardCopyCellDelimiter={true}
+
+
                                             checkboxSelection
-                                            //onRowClick={handleRowClick}
+
                                             disableRowSelectionOnClick
                                             pageSizeOptions={[5]}
                                         />
@@ -719,7 +746,7 @@ const DcAdd = () => {
 
                                 <DialogActions className='d-flex justify-content-center'>
                                     <Button onClick={() => setConfirmSubmit(false)}>Cancel</Button>
-                                    <Button onClick={() => { submitCalForm(); setConfirmSubmit(false) }} autoFocus>
+                                    <Button onClick={() => { submitDcForm(); setConfirmSubmit(false) }} autoFocus>
                                         Submit
                                     </Button>
                                 </DialogActions>
@@ -728,8 +755,8 @@ const DcAdd = () => {
                                 onClose={() => setTimeout(() => {
                                     setSnackBarOpen(false)
                                 }, 3000)}>
-                                <Alert onClose={() => setSnackBarOpen(false)} variant='filled' severity="success" sx={{ width: '100%' }}>
-                                    {alertMessage}
+                                <Alert onClose={() => setSnackBarOpen(false)} variant='filled' severity={alertMessage.dcType} sx={{ width: '100%' }}>
+                                    {alertMessage.dcMessage}
                                 </Alert>
                             </Snackbar>
 

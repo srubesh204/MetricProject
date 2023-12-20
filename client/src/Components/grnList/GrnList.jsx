@@ -373,8 +373,8 @@ const GrnList = () => {
                                         sx={{
                                             ".MuiTablePagination-displayedRows": {
 
-                                                "margin-top": "1em",
-                                                "margin-bottom": "1em"
+                                                "marginTop": "1em",
+                                                "marginBottom": "1em"
                                             }
                                         }}
                                         onRowSelectionModelChange={(newRowSelectionModel) => {
@@ -387,7 +387,7 @@ const GrnList = () => {
 
                                         density="compact"
                                         //disableColumnMenu={true}
-                                        //clipboardCopyCellDelimiter={true}
+                                        
                                         checkboxSelection
                                         //onRowClick={handleRowClick}
                                         onRowClick={handleRowClick}
@@ -441,7 +441,7 @@ const GrnList = () => {
 
                                         density="compact"
                                         //disableColumnMenu={true}
-                                        //clipboardCopyCellDelimiter={true}
+                                        
                                         checkboxSelection
                                         onRowClick={handleRowClick}
                                         disableRowSelectionOnClick

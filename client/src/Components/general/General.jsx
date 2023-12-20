@@ -203,25 +203,7 @@ export const UnitDataBase = ({ style }) => {
 
 
 
-    // const handleKeyDown = (event) => {
-    //     const { name, value } = event.target
-    //     console.log(name)
-    //     if (event.key === 'Tab') {
-    //         // Prevent default Tab behavior
-
-    //         const formattedValue = value.toLowerCase().
-    //             split(' ')
-    //             .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-    //             .join(' ');
-    //         console.log(formattedValue)
-    //         // Format the input value (capitalization)
-    //         // Update the state to show the formatted value
-    //         setUnitData((prev) => ({ ...prev, [name]: formattedValue })); // Update the state with the formatted value
-
-
-    //     }
-    // };
-
+    
 
 
     const updateUnit = async (params) => {
@@ -429,7 +411,7 @@ export const UnitDataBase = ({ style }) => {
                                                     <tr onClick={() => updateUnit(item)}>
                                                         <td>{index + 1}</td>
                                                         <td>{item.unitName}</td>
-                                                        <td><button type='button' className='btn btn-danger' onClick={() => setDeleteModal(true)}><i class="bi bi-trash-fill"></i></button></td>
+                                                        <td><button type='button' className='btn btn-danger' onClick={() => setDeleteModal(true)}><i className="bi bi-trash-fill"></i></button></td>
                                                     </tr>
                                                 ))}
                                             </tbody>
@@ -945,8 +927,8 @@ export const PartDataBase = ({ style }) => {
                                             sx={{
                                                 ".MuiTablePagination-displayedRows": {
                             
-                                                  "margin-top": "1em",
-                                                  "margin-bottom": "1em"
+                                                  "marginTop": "1em",
+                                                  "marginBottom": "1em"
                                                 }
                                               }}
                                             slots={{
@@ -977,32 +959,6 @@ export const PartDataBase = ({ style }) => {
 
 
 
-
-                                    {/*<div style={style} className='table-responsive'>
-                                        <table className='table table-bordered text-center'>
-                                            <tbody>
-                                                <tr>
-                                                    <th>Sr.No</th>
-                                                    <th>Part No</th>
-                                                    <th width="20%">Part Name</th>
-                                                    <th width="25%">Customer</th>
-                                                    <th>Operation No.</th>
-                                                    <th>Status</th>
-                                                    <th>Delete</th>
-                                                </tr>
-                                                {partDataList.map((item, index) => (
-                                                    <tr onClick={() => updatePart(item)} >
-                                                        <td>{index + 1}</td>
-                                                        <td>{item.partNo}</td>
-                                                        <td>{item.partName}</td>
-                                                        <td>{item.customer}</td>
-                                                        <td>{item.operationNo}</td>
-                                                        <td>{item.partStatus}</td>
-                                                        <td><button type="button" className='btn btn-danger' onClick={() => setDeleteModal(true)}><i class="bi bi-trash-fill"></i></button></td>
-                                                    </tr>
-                                                ))}
-                                            </tbody>
-                                        </table></div>*/}
                                     <Dialog
                                         open={deleteModal}
                                         onClose={() => setDeleteModal(false)}

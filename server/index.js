@@ -66,6 +66,7 @@ app.use('/vendorCertificates', express.static('storage/vendorCertificates'));
 app.use('/workInstructions', express.static('storage/workInstructions'));
 app.use('/itemCertificates', express.static('storage/itemCertificates'));
 app.use('/grnCertificates', express.static('storage/grnItemCertificates'));
+app.use('/itemMasterImages', express.static('storage/Images/itemMasterImages'));
 app.use('/itemAdd', itemAddRoute);
 app.use('/itemCal', itemCalRoute);
 app.use('/itemGRN', itemGRNRoute);

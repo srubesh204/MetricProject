@@ -379,8 +379,8 @@ const DcList = () => {
                                         <TextField fullWidth label="Party Name" className="col" select size="small" onChange={handleFilterChange} id="partyNameId" name="partyName" defaultValue="" >
 
                                             <MenuItem value="all">All</MenuItem>
-                                            {vendorFullList.map((item) => (
-                                                <MenuItem value={item.fullName}>{item.fullName}</MenuItem>
+                                            {vendorFullList.map((item, index) => (
+                                                <MenuItem key={index} value={item.fullName}>{item.fullName}</MenuItem>
                                             ))}
 
 
@@ -456,7 +456,7 @@ const DcList = () => {
 
                                         density="compact"
                                         disableColumnMenu={true}
-                                        clipboardCopyCellDelimiter={true}
+                                       
                                         checkboxSelection
 
                                         onRowClick={handleRowClick}
@@ -492,8 +492,8 @@ const DcList = () => {
                                         sx={{
                                             ".MuiTablePagination-displayedRows": {
 
-                                                "margin-top": "1em",
-                                                "margin-bottom": "1em"
+                                                "marginTop": "1em",
+                                                "marginBottom": "1em"
                                             }
                                         }}
                                         onRowSelectionModelChange={(newRowSelectionModel, event) => {
@@ -508,7 +508,7 @@ const DcList = () => {
 
                                         density="compact"
                                         //disableColumnMenu={true}
-                                        //clipboardCopyCellDelimiter={true}
+                                        
                                         // checkboxSelection
                                         //onRowClick={handleRowClick}
                                         disableRowSelectionOnClick

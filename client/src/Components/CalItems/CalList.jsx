@@ -205,16 +205,16 @@ const CalList = () => {
                                     <TextField label="Item Description"
                                         id="imteNoId" select defaultValue="all" fullWidth size="small" name="itemName" onChange={handleFilter}>
                                         <MenuItem value="all">All</MenuItem>
-                                        {calDataList.map((item) => (
-                                            <MenuItem value={item}>{item}</MenuItem>
+                                        {calDataList.map((item, index) => (
+                                            <MenuItem key={index} value={item}>{item}</MenuItem>
                                         ))}
                                     </TextField>
                                 </div>
                                 <div className='col '>
                                     <TextField size='small' fullWidth defaultValue="all" variant='outlined' id="itemListId" select label="Item IMTE No" onChange={handleFilter} name='itemIMTENo'>
                                         <MenuItem value="all">All</MenuItem>
-                                        {IMTENos.map((item) => (
-                                            <MenuItem value={item}>{item}</MenuItem>
+                                        {IMTENos.map((item, index) => (
+                                            <MenuItem key={index} value={item}>{item}</MenuItem>
                                         ))}
                                     </TextField>
                                 </div>
@@ -276,8 +276,8 @@ const CalList = () => {
                                     sx={{
                                         ".MuiTablePagination-displayedRows": {
 
-                                            "margin-top": "1em",
-                                            "margin-bottom": "1em"
+                                            "marginTop": "1em",
+                                            "marginBottom": "1em"
                                         }
                                     }}
                                     onRowSelectionModelChange={(newRowSelectionModel, event) => {
@@ -292,7 +292,7 @@ const CalList = () => {
 
                                     density="compact"
                                     //disableColumnMenu={true}
-                                    //clipboardCopyCellDelimiter={true}
+                                    
                                     checkboxSelection
                                     //onRowClick={handleRowClick}
                                     disableRowSelectionOnClick

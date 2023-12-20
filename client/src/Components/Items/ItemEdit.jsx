@@ -868,8 +868,8 @@ const ItemEdit = () => {
                             <div className='col-9'>
                                 <TextField size='small' select variant='outlined' label="Item Master" name='itemMasterRef' value={itemAddData.itemMasterRef} fullWidth onChange={handleItemAddChange}>
                                     <MenuItem value=""><em>Select</em></MenuItem>
-                                    {itemMasterDataList.map((item) => (
-                                        <MenuItem value={item._id}>{item.itemDescription}</MenuItem>
+                                    {itemMasterDataList.map((item, index) => (
+                                        <MenuItem value={index}>{item.itemDescription}</MenuItem>
                                     ))}
                                 </TextField>
                             </div>
@@ -904,7 +904,7 @@ const ItemEdit = () => {
                         <div className="col-lg-5 d-flex justify-content-end">
                             {itemAddData.itemImage && <Card elevation={12} sx={{ width: "110px", height: "110px" }}>
 
-                                <img src={itemAddData.itemImage} style={{ width: "100%", height: "100%" }} />
+                                <img src={`${process.env.REACT_APP_PORT}/itemMasterImages/${itemAddData.itemImage}`} style={{ width: "100%", height: "100%" }} />
 
                             </Card>}
                         </div>
@@ -1196,8 +1196,8 @@ const ItemEdit = () => {
                                                 MenuProps={MenuProps}
                                                 fullWidth
                                             >
-                                                {oemList.map((name) => (
-                                                    <MenuItem key={name} value={name.aliasName}>
+                                                {oemList.map((name, index) => (
+                                                    <MenuItem key={index} value={name.aliasName}>
                                                         <Checkbox checked={itemAddData.itemoem.indexOf(name.aliasName) > -1} />
                                                         <ListItemText primary={name.aliasName} />
                                                     </MenuItem>
@@ -1439,8 +1439,8 @@ const ItemEdit = () => {
                                                 <td>
                                                 <select className='form-select form-select-sm' id="acParameterId" name="acParameter" value={item.acParameter} onChange={(e) => changeACValue(index, e.target.name, e.target.value)}>
                                                     <option value="">-Select-</option>
-                                                    {calibrationPointsData.map((item) => (
-                                                        <option>{item.calibrationPoint}</option>
+                                                    {calibrationPointsData.map((item, idx) => (
+                                                        <option key={idx}>{item.calibrationPoint}</option>
                                                     ))}
                                                 </select></td>
                                                 <td><input type="text" className='form-control form-control-sm' id="acNominalSizeId" name="acNominalSize" value={item.acNominalSize} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} /></td>
@@ -1502,8 +1502,8 @@ const ItemEdit = () => {
                                             <tr key={index}>
                                                 <td><select className='form-select form-select-sm' id="acParameterId" name="acParameter" value={item.acParameter} onChange={(e) => changeACValue(index, e.target.name, e.target.value)}>
                                                     <option value="">-Select-</option>
-                                                    {calibrationPointsData.map((item) => (
-                                                        <option>{item.calibrationPoint}</option>
+                                                    {calibrationPointsData.map((item, idx) => (
+                                                        <option key={idx}>{item.calibrationPoint}</option>
                                                     ))}
                                                 </select></td>
                                                 <td><input type="text" className='form-control form-control-sm' id="acNominalSizeId" name="acNominalSize" value={item.acNominalSize} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} /></td>
@@ -1565,8 +1565,8 @@ const ItemEdit = () => {
                                             <tr key={index}>
                                                 <td><select className='form-select form-select-sm' id="acParameterId" name="acParameter" value={item.acParameter} onChange={(e) => changeACValue(index, e.target.name, e.target.value)}>
                                                     <option value="">-Select-</option>
-                                                    {calibrationPointsData.map((item) => (
-                                                        <option>{item.calibrationPoint}</option>
+                                                    {calibrationPointsData.map((item, index) => (
+                                                        <option key={index}>{item.calibrationPoint}</option>
                                                     ))}
                                                 </select></td>
                                                 <td><input type="text" className='form-control form-control-sm' id="acNominalSizeId" name="acNominalSize" value={item.acNominalSize} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} /></td>

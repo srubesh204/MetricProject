@@ -667,8 +667,8 @@ const ItemAdd = () => {
                             <div className='col-9'>
                                 <TextField size='small' select variant='outlined' label="Item Master" name='itemMasterRef' value={itemAddData.itemMasterRef} fullWidth onChange={handleItemAddChange}>
                                     <MenuItem value=""><em>Select</em></MenuItem>
-                                    {itemMasterDataList.map((item) => (
-                                        <MenuItem value={item._id}>{item.itemDescription}</MenuItem>
+                                    {itemMasterDataList.map((item, index) => (
+                                        <MenuItem key={index} value={item._id}>{item.itemDescription}</MenuItem>
                                     ))}
                                 </TextField>
                             </div>
@@ -712,7 +712,7 @@ const ItemAdd = () => {
                         <div className="col-lg-5 d-flex justify-content-end">
                             {itemAddData.itemImage && <Card elevation={12} sx={{ width: "110px", height: "110px" }}>
 
-                                <img src={itemAddData.itemImage} style={{ width: "100%", height: "100%" }} />
+                                <img src={`${process.env.REACT_APP_PORT}/itemMasterImages/${itemAddData.itemImage}`} style={{ width: "100%", height: "100%" }} />
 
                             </Card>}
                         </div>
@@ -750,14 +750,14 @@ const ItemAdd = () => {
                                     </div>
                                 </div>
                                 <div className="row g-2">
-                                    <div className="col-lg-9">
+                                    <div className={itemAddData.itemType === "variable" ? "col-md-5" : "col-md-9"}>
                                         <TextField size='small' variant='outlined' label="MFR.Si.No." onChange={handleItemAddChange} name='itemMFRNo' id='itemMFRNoId' fullWidth />
                                     </div>
-                                    <div className='col-lg-3 d-flex justify-content-between'>
+                                    <div className={itemAddData.itemType === "variable" ? "col-md-7 d-flex justify-content-between" : "col-md-3 d-flex justify-content-between"}>
                                         {itemAddData.itemType === "variable" && <TextField size='small' variant='outlined' name='itemLC' onChange={handleItemAddChange} id="itemLCId" label="Least Count" fullWidth />}
 
 
-                                        <TextField select size='small' variant='outlined' label="Unit" name='itemLCUnit' onChange={handleItemAddChange} style={{ width: "100%" }} >
+                                        <TextField select size='small' variant='outlined' label="Unit" name='itemLCUnit' onChange={handleItemAddChange} fullWidth >
                                             <MenuItem value=""><em>None</em></MenuItem>
                                             {units.map((unit, index) => (
                                                 <MenuItem key={index} value={unit.unitName}>{unit.unitName}</MenuItem>
@@ -801,7 +801,7 @@ const ItemAdd = () => {
                                                     setItemAddData((prev) => ({ ...prev, itemReceiptDate: newValue.format("YYYY-MM-DD") }))
                                                 }
                                                 label="Item Receipt Date"
-                                                slotProps={{ textField: { size: 'small' } }}
+                                                slotProps={{ textField: { size: 'small', fullWidth: true } }}
                                                 format="DD-MM-YYYY" />
                                         </div>
                                     </div>
@@ -1005,8 +1005,8 @@ const ItemAdd = () => {
                                                 MenuProps={MenuProps}
                                                 fullWidth
                                             >
-                                                {OEMList.map((name) => (
-                                                    <MenuItem key={name} value={name.aliasName}>
+                                                {OEMList.map((name, index) => (
+                                                    <MenuItem key={index} value={name.aliasName}>
                                                         <Checkbox checked={itemAddData.itemOEM.indexOf(name.aliasName) > -1} />
                                                         <ListItemText primary={name.aliasName} />
                                                     </MenuItem>
@@ -1104,7 +1104,7 @@ const ItemAdd = () => {
                                             }
                                             label="Calibration Date"
 
-                                            slotProps={{ textField: { size: 'small' } }}
+                                            slotProps={{ textField: { size: 'small', fullWidth: true  } }}
                                             format="DD-MM-YYYY" />
                                     </div>
                                     <div className="col-md-6">
@@ -1120,7 +1120,7 @@ const ItemAdd = () => {
                                             }
                                             label="Due Date"
 
-                                            slotProps={{ textField: { size: 'small' } }}
+                                            slotProps={{ textField: { size: 'small', fullWidth: true  } }}
                                             format="DD-MM-YYYY" />
                                     </div>
                                     <div className="col-lg-12 d-flex justify-content-between">
@@ -1261,8 +1261,8 @@ const ItemAdd = () => {
                                             <tr key={index}>
                                                 <td><select className='form-select form-select-sm' id="acParameterId" name="acParameter" value={item.acParameter} onChange={(e) => changeACValue(index, e.target.name, e.target.value)}>
                                                     <option value="">-Select-</option>
-                                                    {calibrationPointsData.map((item) => (
-                                                        <option>{item.calibrationPoint}</option>
+                                                    {calibrationPointsData.map((item, index) => (
+                                                        <option key={index} value={item.calibrationPoint}>{item.calibrationPoint}</option>
                                                     ))}
                                                 </select></td>
                                                 <td><input type="text" className='form-control form-control-sm' id="acNominalSizeId" name="acNominalSize" value={item.acNominalSize} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} /></td>
@@ -1326,8 +1326,8 @@ const ItemAdd = () => {
                                             <tr key={index}>
                                                 <td><select className='form-select form-select-sm' id="acParameterId" name="acParameter" value={item.acParameter} onChange={(e) => changeACValue(index, e.target.name, e.target.value)}>
                                                     <option value="">-Select-</option>
-                                                    {calibrationPointsData.map((item) => (
-                                                        <option>{item.calibrationPoint}</option>
+                                                    {calibrationPointsData.map((item, index) => (
+                                                        <option key={index} value={item.calibrationPoint}>{item.calibrationPoint}</option>
                                                     ))}
                                                 </select></td>
                                                 <td><input type="text" className='form-control form-control-sm' id="acNominalSizeId" name="acNominalSize" value={item.acNominalSize} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} /></td>
@@ -1389,8 +1389,8 @@ const ItemAdd = () => {
                                             <tr key={index}>
                                                 <td><select className='form-select form-select-sm' id="acParameterId" name="acParameter" value={item.acParameter} onChange={(e) => changeACValue(index, e.target.name, e.target.value)}>
                                                     <option value="">-Select-</option>
-                                                    {calibrationPointsData.map((item) => (
-                                                        <option>{item.calibrationPoint}</option>
+                                                    {calibrationPointsData.map((item, index) => (
+                                                        <option key={index} value={item.calibrationPoint}>{item.calibrationPoint}</option>
                                                     ))}
                                                 </select></td>
                                                 <td><input type="text" className='form-control form-control-sm' id="acNominalSizeId" name="acNominalSize" value={item.acNominalSize} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} /></td>
@@ -1498,7 +1498,7 @@ const ItemAdd = () => {
                                     </tr>
 
                                     {itemAddData.acceptanceCriteria ? itemAddData.acceptanceCriteria.map((item, index) => (
-                                        <tr>
+                                        <tr key={index}>
                                             {/*<td><select className='form-select form-select-sm' id="acParameterId" name="acParameter" value={item.acParameter} onChange={(e) => changeACValue(index, e.target.name, e.target.value)}>
                                                 <option value="">-Select-</option>
                                                 {calibrationPointsData.map((item) => (

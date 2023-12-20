@@ -217,8 +217,8 @@ const InsHisCard = () => {
                             <TextField fullWidth label="Instrument History Card" className="form-select" select size="small" id="instrumentHistoryCardId" name="instrumentHistoryCard" defaultValue="" >
 
                                 <MenuItem value="all">All</MenuItem >
-                                {itemMasterDataList.map((item) => (
-                                    <MenuItem value={item._id}>{item.itemDescription}</MenuItem>
+                                {itemMasterDataList.map((item, index) => (
+                                    <MenuItem key={index} value={item._id}>{item.itemDescription}</MenuItem>
                                 ))}
                             </TextField>
 
@@ -246,8 +246,8 @@ const InsHisCard = () => {
                         <div className='col d-flex'>
                             <div className=' col-5 mb-2 me-1'>
                                 <TextField fullWidth label="Imte No" className="form-select" select size="small" id="imteNoId" name="imteNo" defaultValue="" >
-                                    {itemMasterDataPrefix.map((item) => (
-                                        <MenuItem value={item._id}>{item.itemPrefix}</MenuItem>
+                                    {itemMasterDataPrefix.map((item, index) => (
+                                        <MenuItem key={index} value={item._id}>{item.itemPrefix}</MenuItem>
                                     ))}
 
                                 </TextField>

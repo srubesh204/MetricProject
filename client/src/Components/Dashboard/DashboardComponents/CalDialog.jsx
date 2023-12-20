@@ -529,24 +529,7 @@ const CalDialog = () => {
 
     }, [calibrationData.calcalibrationData])
 
-    // useEffect(() => {
-    //     const initialStatuses = calibrationData.calcalibrationData.map(item => {
-    //         const isAverageInRange =
-    //            ( parseFloat(calMinOB) >= parseFloat(item.calMinPS) && parseFloat(value) <= parseFloat(item.calMaxPS)) && (parseFloat(calMinOB) >= parseFloat(item.calMinPS) && parseFloat(value) <= parseFloat(item.calMaxPS))
-
-    //         return isAverageInRange ? "ok" : "notOk";
-    //     });
-    //     console.log(initialStatuses)
-    //     setCalibrationData((prev) => {
-    //         const updateAC = [...prev.calcalibrationData]
-    //         updateAC[index] = {
-    //             ...updateAC[index], rowStatus: initialStatuses[index],
-    //         };
-    //         return {
-    //             ...prev, calcalibrationData: updateAC,
-    //         };
-    //     })
-    // }, [calibrationData.calcalibrationData]);
+    
 
 
 
@@ -1288,8 +1271,8 @@ const CalDialog = () => {
 
                                                     }
                                                 </tr>
-                                                {lastResultData && lastResultData.calcalibrationData.map((item) => (
-                                                    <tr>
+                                                {lastResultData && lastResultData.calcalibrationData.map((item, index) => (
+                                                    <tr key={index}>
                                                         <td>{item.calMinPS}</td>
                                                         <td>{item.calMaxPS}</td>
                                                         {lastResultData.calOBType === "minmax" &&
@@ -1335,8 +1318,8 @@ const CalDialog = () => {
 
                                                     }
                                                 </tr>
-                                                {lastResultData && lastResultData.calcalibrationData.map((item) => (
-                                                    <tr>
+                                                {lastResultData && lastResultData.calcalibrationData.map((item, index) => (
+                                                    <tr key={index}>
                                                         <td>{item.calMinPSError}</td>
                                                         <td>{item.calMaxPSError}</td>
                                                         {lastResultData.calOBType === "minmax" &&
@@ -1382,8 +1365,8 @@ const CalDialog = () => {
 
                                                     }
                                                 </tr>
-                                                {lastResultData && lastResultData.calcalibrationData.map((item) => (
-                                                    <tr>
+                                                {lastResultData && lastResultData.calcalibrationData.map((item, index) => (
+                                                    <tr key={index}>
                                                         <td>{item.calMinPS}</td>
                                                         <td>{item.calMaxPS}</td>
                                                         {lastResultData.calOBType === "minmax" &&

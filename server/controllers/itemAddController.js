@@ -269,6 +269,7 @@ const itemAddController = {
         acOBError,
         acMinPSError,
         acMaxPSError,
+        itemLocation: "department"
       };
 
       // Find the designation by desId and update it
