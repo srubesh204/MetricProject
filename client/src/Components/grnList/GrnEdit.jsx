@@ -13,13 +13,13 @@ import { useParams } from 'react-router-dom';
 
 
 const GrnEdit = () => {
-    const grnDatas = useContext(GrnListContent)
-    const { grnEditOpen, setGrnEditOpen, selectedRows, grnListFetchData } = grnDatas
+    const grnEditDatas = useContext(GrnListContent)
+    const { grnEditOpen, setGrnEditOpen, selectedRows, grnListFetchData } = grnEditDatas
 
     const { id } = useParams()
     console.log(id)
     const [selectedExtraMaster, setSelectedExtraMaster] = useState([])
-    const initialGrnData = {
+    const initialGrnEditData = {
         grnPartyRefNo: "",
         grnPartyId: "",
         grnPartyRefDate: "",
@@ -39,7 +39,7 @@ const GrnEdit = () => {
     }
 
 
-    const [grnData, setGrnData] = useState({
+    const [grnEditData, setGrnEditData] = useState({
         grnPartyRefNo: "",
         grnPartyId: "",
         grnPartyRefDate: "",
@@ -55,17 +55,13 @@ const GrnEdit = () => {
         grnCertificateNo: "",
         grnUncertainity: "",
         grnPartyItems: []
-
-
-
-
     })
 
 
     console.log(selectedRows)
     const settingGrnData = () => {
         if (selectedRows.length !== 0) { // Check if selectedRows is defined
-            setGrnData((prev) => ({
+            setGrnEditData((prev) => ({
                 ...prev,
                 grnPartyId: selectedRows.grnPartyId,
                 grnPartyRefNo: selectedRows.grnPartyRefNo,
@@ -90,15 +86,42 @@ const GrnEdit = () => {
         settingGrnData();
     }, [selectedRows]);
 
+    const nonSelectedItems = () => {
+
+        // const remainingMasters = selectedRows.filter(item =>
+        //     !grnData.grnPartyItems.some(grn => grn.grnItemId === item._id)
+        // );
+        // setGrnImtes(remainingMasters)
+
+
+    }
+
+
+    useEffect(() => {
+        nonSelectedItems()
+    }, [grnEditData.grnPartyItems])
+
     const addDcValue = () => {
         if (selectedExtraMaster.length !== 0) {
-            setGrnData((prev) => ({
+            setGrnEditData((prev) => ({
                 ...prev,
                 dcPartyItems: [...prev.dcPartyItems, selectedExtraMaster]
             }))
             setSelectedExtraMaster([])
         }
     }
+
+    const deleteGrnPartyItems = (index) => {
+        setGrnEditData((prev) => {
+            const AC = [...prev.grnPartyItems]
+            AC.splice(index, 1);
+            return {
+                ...prev, grnPartyItems: AC,
+            };
+        })
+        nonSelectedItems();
+    };
+
 
 
 
@@ -131,7 +154,7 @@ const GrnEdit = () => {
 
     const handleGrnChange = (e) => {
         const { name, value, checked } = e.target;
-        setGrnData((prev) => ({ ...prev, [name]: value }));
+        setGrnEditData((prev) => ({ ...prev, [name]: value }));
     }
 
     const setPartyData = async (id) => {
@@ -140,7 +163,7 @@ const GrnEdit = () => {
                 `${process.env.REACT_APP_PORT}/vendor/getVendorById/${id}`
             );
             console.log(response)
-            setGrnData((prev) => ({
+            setGrnEditData((prev) => ({
                 ...prev,
                 grnPartyName: response.data.result.fullName,
                 grnPartyAddress: response.data.result.address,
@@ -242,8 +265,9 @@ const GrnEdit = () => {
             );
             console.log(response.data)
             setAllItemImtes(response.data.result)
-            const filteredImtes = response.data.result.filter((imtes) => !grnData.grnPartyItems.some(grnImte => imtes._id === grnImte._id))
-            setItemImtes(filteredImtes)
+            // const filteredImtes = response.data.result.filter((imtes) => !grnEditData.grnPartyItems.some(grnImte => imtes._id === grnImte._id))
+            const dcStatus = response.data.result.filter((item)=> item.dcStatus === "1" && (item.grnStatus === "0" || item.grnStatus === "" || item.grnStatus === undefined))
+            setItemImtes(dcStatus)
 
         } catch (err) {
             console.log(err);
@@ -267,7 +291,7 @@ const GrnEdit = () => {
 
     const grnItemAdd = () => {
         if (setSelectedGrnItem.length !== 0) {
-            setGrnData((prev) => ({ ...prev, grnPartyItems: [...prev.grnPartyItems, selectedGrnItem] }))
+            setGrnEditData((prev) => ({ ...prev, grnPartyItems: [...prev.grnPartyItems, selectedGrnItem] }))
         }
     }
     useEffect(() => {
@@ -276,7 +300,7 @@ const GrnEdit = () => {
             grnList: "",
             grnImteNo: ""
         })
-    }, [grnData.grnPartyItems])
+    }, [grnEditData.grnPartyItems])
 
 
     const [confirmSubmit, setConfirmSubmit] = useState(false)
@@ -295,12 +319,12 @@ const GrnEdit = () => {
         try {
             const response = await axios.put(
 
-                `${process.env.REACT_APP_PORT}/itemGrn/updateItemGRN/${selectedRows._id}`, grnData
+                `${process.env.REACT_APP_PORT}/itemGrn/updateItemGRN/${selectedRows._id}`, grnEditData
             );
             setAlertMessage(response.data.message)
             setSnackBarOpen(true)
             grnListFetchData()
-            setGrnData(initialGrnData)
+            setGrnEditData(initialGrnEditData)
 
             setTimeout(() => setGrnEditOpen(false), 3000)
         } catch (err) {
@@ -375,7 +399,7 @@ const GrnEdit = () => {
                                                 <TextField label="Party Ref No"
                                                     id="grnPartyRefNoId"
                                                     defaultValue=""
-                                                    value={grnData.grnPartyRefNo}
+                                                    value={grnEditData.grnPartyRefNo}
                                                     //  sx={{ width: "100%" }}
                                                     size="small"
                                                     fullWidth
@@ -389,9 +413,9 @@ const GrnEdit = () => {
                                                     fullWidth
                                                     id="grnPartyRefDateId"
                                                     name="grnPartyRefDate"
-                                                    value={dayjs(grnData.grnPartyRefDate)}
+                                                    value={dayjs(grnEditData.grnPartyRefDate)}
                                                     onChange={(newValue) =>
-                                                        setGrnData((prev) => ({ ...prev, grnPartyRefDate: newValue.format("YYYY-MM-DD") }))
+                                                        setGrnEditData((prev) => ({ ...prev, grnPartyRefDate: newValue.format("YYYY-MM-DD") }))
                                                     }
                                                     label="Party Ref Date"
                                                     //onChange={handleGrnChange}
@@ -413,7 +437,7 @@ const GrnEdit = () => {
                                                 <TextField label="Party Name"
                                                     id="grnPartyNameId"
                                                     select
-                                                    //  value={grnData.grnPartyName}
+                                                    //  value={grnEditData.grnPartyName}
 
                                                     onChange={(e) => setPartyData(e.target.value)}
 
@@ -435,7 +459,7 @@ const GrnEdit = () => {
                                                     onChange={handleGrnChange}
                                                     // sx={{ width: "100%" }}
                                                     size="small"
-                                                    value={grnData.grnPartyCode}
+                                                    value={grnEditData.grnPartyCode}
 
                                                     fullWidth
                                                     name="grnPartyCode" />
@@ -454,7 +478,7 @@ const GrnEdit = () => {
                                                 defaultValue=""
                                                 size="small"
                                                 onChange={handleGrnChange}
-                                                value={grnData.grnPartyAddress}
+                                                value={grnEditData.grnPartyAddress}
                                                 sx={{ width: "100%" }}
                                                 name="grnPartyAddress" />
 
@@ -483,7 +507,7 @@ const GrnEdit = () => {
                                                     label="GRN NO"
                                                     id="grnNoId"
                                                     defaultValue=""
-                                                    value={grnData.grnNo}
+                                                    value={grnEditData.grnNo}
                                                     size="small"
                                                     onChange={handleGrnChange}
                                                     fullWidth
@@ -499,9 +523,9 @@ const GrnEdit = () => {
                                                     fullWidth
                                                     id="grnDateId"
                                                     name="grnDate"
-                                                    value={dayjs(grnData.grnPartyRefDate)}
+                                                    value={dayjs(grnEditData.grnPartyRefDate)}
                                                     onChange={(newValue) =>
-                                                        setGrnData((prev) => ({ ...prev, grnDate: newValue.format("YYYY-MM-DD") }))
+                                                        setGrnEditData((prev) => ({ ...prev, grnDate: newValue.format("YYYY-MM-DD") }))
                                                     }
                                                     label="GRN Date"
                                                     //onChange={handleGrnChange}
@@ -519,7 +543,7 @@ const GrnEdit = () => {
 
                                                     defaultValue=""
                                                     onChange={handleGrnChange}
-                                                    value={grnData.grnCommonRemarks}
+                                                    value={grnEditData.grnCommonRemarks}
                                                     fullWidth
                                                     size="small"
                                                     name="grnCommonRemarks"
@@ -593,9 +617,9 @@ const GrnEdit = () => {
                                                 //sx={{ width: "100%" }}
                                                 slotProps={{ textField: { size: 'small' } }}
                                                 format="DD-MM-YYYY"
-                                                value={dayjs(grnData.grnCalDate)}
+                                                value={dayjs(grnEditData.grnCalDate)}
                                                 onChange={(newValue) =>
-                                                    setGrnData((prev) => ({ ...prev, grnCalDate: newValue.format("YYYY-MM-DD") }))
+                                                    setGrnEditData((prev) => ({ ...prev, grnCalDate: newValue.format("YYYY-MM-DD") }))
                                                 } />
 
                                         </div>
@@ -610,9 +634,9 @@ const GrnEdit = () => {
 
                                                 slotProps={{ textField: { size: 'small' } }}
                                                 format="DD-MM-YYYY"
-                                                value={dayjs(grnData.grnDueDate)}
+                                                value={dayjs(grnEditData.grnDueDate)}
                                                 onChange={(newValue) =>
-                                                    setGrnData((prev) => ({ ...prev, grnDueDate: newValue.format("YYYY-MM-DD") }))
+                                                    setGrnEditData((prev) => ({ ...prev, grnDueDate: newValue.format("YYYY-MM-DD") }))
                                                 }
                                             />
 
@@ -629,7 +653,7 @@ const GrnEdit = () => {
                                             <TextField label="CertificateNo"
                                                 id="certificateNoId"
                                                 defaultValue=""
-                                                value={grnData.grnCertificateNo}
+                                                value={grnEditData.grnCertificateNo}
                                                 onChange={handleGrnChange}
                                                 size="small"
                                                 sx={{ width: "101%" }}
@@ -637,7 +661,7 @@ const GrnEdit = () => {
 
                                         </div>
                                         <div className='col me-2'>
-                                            <TextField fullWidth label="Uncertainity" variant='outlined' onChange={handleGrnChange} value={grnData.grnUncertainity} size='small' name='itemUncertainity' />
+                                            <TextField fullWidth label="Uncertainity" variant='outlined' onChange={handleGrnChange} value={grnEditData.grnUncertainity} size='small' name='itemUncertainity' />
 
                                         </div>
 
@@ -671,35 +695,7 @@ const GrnEdit = () => {
                                         </div>
 
                                     </div>
-                                    <table className='table table-sm table-bordered table-responsive text-center align-middle'>
-                                        <tbody>
-                                            <tr>
-                                                <th>Parameter</th>
-                                                <th>Range/Size</th>
-                                                <th>Unit</th>
-                                                <th>Min</th>
-                                                <th>Max</th>
-                                                <th>Wear Limit</th>
-                                                <th>Observed Size/Observed Error</th>
-                                                <th>Unit</th>
-                                                <th>Status</th>
-                                            </tr>
-                                            <tr>
-                                                <td><input type="text" className='form-control form-control-sm' id="parameterId" name="parameter" /></td>
-                                                <td><input type="text" className='form-control form-control-sm' id="rangeSizeId" name="rangeSize" /></td>
-                                                <td><input type="text" className='form-control form-control-sm' id="unitId" name="unit" /></td>
-                                                <td><input type="text" className='form-control form-control-sm' id="minId" name="min" /></td>
-                                                <td><input type="text" className='form-control form-control-sm' id="maxId" name="max" /></td>
-                                                <td><input type="text" className='form-control form-control-sm' id="wearLimitId" name="wearLimit" /></td>
-                                                <td><input type="text" className='form-control form-control-sm' id="observedSizeId" name="observedSize" /></td>
-                                                <td><input type="text" className='form-control form-control-sm' id="unitId" name="unit" /></td>
-                                                <td><input type="text" className='form-control form-control-sm' id="statusId" name="status" /></td>
-
-                                            </tr>
-                                        </tbody>
-
-                                    </table>
-
+                                   
                                 </div>
 
                                 <Dialog
@@ -748,34 +744,36 @@ const GrnEdit = () => {
                                 </div>
 
                                 <table className='table table-bordered table-responsive text-center align-middle'>
-                                    <tbody>
-                                        <tr>
-                                            <th>Si No</th>
-                                            <th>IMTE No</th>
-                                            <th>Master Name</th>
-                                            <th>Range/Size</th>
-                                            <th>Cal Certificate No</th>
-                                            <th>Cal Date</th>
-                                            <th>Next Due</th>
-                                            <th>Calibrated At</th>
-                                            <th>Remove</th>
-                                        </tr>
-
-                                        {grnData.grnPartyItems.map((item, index) => {
-                                            <tr key={index}>
-                                                <td>{index + 1}</td>
-                                                <td>{item.grnItemIMTENo}</td>
-                                                <td>{item.grnItemAddMasterName}</td>
-                                                <td>{item.grnItemRangeSize}</td>
-
-                                                <td>{item.grnItemCalDate}</td>
-                                                <td>{item.grnItemDueDate}</td>
-                                                <td>{item.grnItemCalibratedAt}</td>
-                                                <td width="5%"><Delete color='error' /></td>
+                                        <tbody>
+                                            <tr>
+                                                <th>Si No</th>
+                                                <th>IMTE No</th>
+                                                <th>Master Name</th>
+                                                <th>Range/Size</th>
+                                                <th>Cal Certificate No</th>
+                                                <th>Cal Date</th>
+                                                <th>Next Due</th>
+                                                <th>Calibrated At</th>
+                                                <th>Remarks</th>
+                                                <th>Remove</th>
                                             </tr>
-                                        })}
-                                    </tbody>
-                                </table>
+
+                                            {grnEditData.grnPartyItems.map((item, index) => (
+                                                <tr key={index}>
+                                                    <td>{index + 1}</td>
+                                                    <td>{item.grnItemIMTENo}</td>
+                                                    <td>{item.grnItemAddMasterName}</td>
+                                                    <td>{item.grnItemRangeSize}</td>
+                                                    <td>{item.grnItemCertificateNo}</td>
+                                                    <td>{item.grnItemCalDate}</td>
+                                                    <td>{item.grnItemDueDate}</td>
+                                                    <td>{item.grnItemCalibratedAt}</td>
+                                                    <td>{item.grnItemStatus}</td>
+                                                    <td width="5%"><Delete onClick={() => deleteGrnPartyItems(index)} color='error' /></td>
+                                                </tr>
+                                            ))}
+                                        </tbody>
+                                    </table>
                             </Paper>
 
 

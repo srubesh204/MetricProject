@@ -19,14 +19,12 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 
 
 const GrnAdd = () => {
-    const grnDatas = useContext(GrnListContent)
-    const { grnOpen, setGrnOpen, selectedRows, grnListFetchData } = grnDatas
+    const grnAddDatas = useContext(GrnListContent)
+    const { grnOpen, setGrnOpen, selectedRows, grnListFetchData } = grnAddDatas
 
     // const [grnImtes, setGrnImtes] = useState(selectedRows)
 
-    useEffect(() => {
-        setAllItemImtes(selectedRows)
-    }, [selectedRows])
+    
 
     const VisuallyHiddenInput = styled('input')({
         clip: 'rect(0 0 0 0)',
@@ -56,7 +54,7 @@ const GrnAdd = () => {
     }
 
 
-    const [grnData, setGrnData] = useState({
+    const [grnAddData, setGrnAddData] = useState({
         grnPartyRefNo: "",
         grnPartyId: "",
         grnPartyRefDate: dayjs().format("YYYY-MM-DD"),
@@ -100,7 +98,7 @@ const GrnAdd = () => {
 
     const handleGrnChange = (e) => {
         const { name, value, checked } = e.target;
-        setGrnData((prev) => ({ ...prev, [name]: value }));
+        setGrnAddData((prev) => ({ ...prev, [name]: value }));
     }
 
     const setPartyData = async (id) => {
@@ -109,7 +107,7 @@ const GrnAdd = () => {
                 `${process.env.REACT_APP_PORT}/vendor/getVendorById/${id}`
             );
             console.log(response)
-            setGrnData((prev) => ({
+            setGrnAddData((prev) => ({
                 ...prev,
                 grnPartyName: response.data.result.fullName,
                 grnPartyAddress: response.data.result.address,
@@ -145,6 +143,8 @@ const GrnAdd = () => {
 
 
     const [itemAddList, setItemAddList] = useState([]);
+
+   
 
     const itemAddFetch = async () => {
         try {
@@ -445,7 +445,7 @@ const GrnAdd = () => {
 
     const grnItemAdd = () => {
         if (setSelectedGrnItem.length !== 0) {
-            setGrnData((prev) => ({ ...prev, grnPartyItems: [...prev.grnPartyItems, selectedGrnItem] }))
+            setGrnAddData((prev) => ({ ...prev, grnPartyItems: [...prev.grnPartyItems, selectedGrnItem] }))
         }
         setSelectedGrnItem([])
 
@@ -457,14 +457,14 @@ const GrnAdd = () => {
             grnList: "",
             grnImteNo: ""
         })
-    }, [grnData.grnPartyItems])
+    }, [grnAddData.grnPartyItems])
 
 
     //nonSelecte 
     const nonSelectedItems = () => {
 
         const remainingMasters = selectedRows.filter(item =>
-            !grnData.grnPartyItems.some(grn => grn.grnItemId === item._id)
+            !grnAddData.grnPartyItems.some(grn => grn.grnItemId === item._id)
         );
         setAllItemImtes(remainingMasters)
 
@@ -474,13 +474,13 @@ const GrnAdd = () => {
 
     useEffect(() => {
         nonSelectedItems()
-    }, [grnData.grnPartyItems])
+    }, [grnAddData.grnPartyItems])
 
 
     //row delete
 
     const deleteAC = (index) => {
-        setGrnData((prev) => {
+        setGrnAddData((prev) => {
             const AC = [...prev.grnPartyItems]
             AC.splice(index, 1);
             return {
@@ -522,14 +522,14 @@ const GrnAdd = () => {
         try {
             const response = await axios.post(
 
-                `${process.env.REACT_APP_PORT}/itemGRN/createItemGRN`, grnData
+                `${process.env.REACT_APP_PORT}/itemGRN/createItemGRN`, grnAddData
             );
             console.log(response.data)
             setAlertMessage(response.data.message)
             setSnackBarOpen(true)
             setTimeout(() => setGrnOpen(false), 3000)
             grnListFetchData()
-            setGrnData(initialGrnData)
+            setGrnAddData(initialGrnData)
         } catch (err) {
             console.log(err);
         }
@@ -750,10 +750,10 @@ const GrnAdd = () => {
         }
 
 
-        if (grnData.grnPartyItems && grnData.grnPartyItems.itemType === "variable") {
+        if (grnAddData.grnPartyItems && grnAddData.grnPartyItems.itemType === "variable") {
 
             if (name === "acAverageOB") {
-                setGrnData(prev => {
+                setGrnAddData(prev => {
                     const updatedData = prev.acceptanceCriteria.map((item, idx) => {
                         if (idx === index) {
                             let status = ""
@@ -893,7 +893,7 @@ const GrnAdd = () => {
                                                 <TextField label="Party Ref No"
                                                     id="grnPartyRefNoId"
                                                     defaultValue=""
-                                                    value={grnData.grnPartyRefNo}
+                                                    value={grnAddData.grnPartyRefNo}
                                                     //  sx={{ width: "100%" }}
                                                     size="small"
                                                     fullWidth
@@ -907,9 +907,9 @@ const GrnAdd = () => {
                                                     fullWidth
                                                     id="grnPartyRefDateId"
                                                     name="grnPartyRefDate"
-                                                    value={dayjs(grnData.grnPartyRefDate)}
+                                                    value={dayjs(grnAddData.grnPartyRefDate)}
                                                     onChange={(newValue) =>
-                                                        setGrnData((prev) => ({ ...prev, grnPartyRefDate: newValue.format("YYYY-MM-DD") }))
+                                                        setGrnAddData((prev) => ({ ...prev, grnPartyRefDate: newValue.format("YYYY-MM-DD") }))
                                                     }
                                                     label="Party Ref Date"
                                                     //onChange={handleGrnChange}
@@ -931,7 +931,7 @@ const GrnAdd = () => {
                                                 <TextField label="Party Name"
                                                     id="grnPartyNameId"
                                                     select
-                                                    //  value={grnData.grnPartyName}
+                                                    //  value={grnAddData.grnPartyName}
 
                                                     onChange={(e) => setPartyData(e.target.value)}
 
@@ -953,7 +953,7 @@ const GrnAdd = () => {
                                                     onChange={handleGrnChange}
                                                     // sx={{ width: "100%" }}
                                                     size="small"
-                                                    value={grnData.grnPartyCode}
+                                                    value={grnAddData.grnPartyCode}
 
                                                     fullWidth
                                                     name="grnPartyCode" />
@@ -972,7 +972,7 @@ const GrnAdd = () => {
                                                 defaultValue=""
                                                 size="small"
                                                 onChange={handleGrnChange}
-                                                value={grnData.grnPartyAddress}
+                                                value={grnAddData.grnPartyAddress}
                                                 sx={{ width: "100%" }}
                                                 name="grnPartyAddress" />
 
@@ -1001,7 +1001,7 @@ const GrnAdd = () => {
                                                     label="GRN NO"
                                                     id="grnNoId"
                                                     defaultValue=""
-                                                    value={grnData.grnNo}
+                                                    value={grnAddData.grnNo}
                                                     size="small"
                                                     onChange={handleGrnChange}
                                                     fullWidth
@@ -1017,9 +1017,9 @@ const GrnAdd = () => {
                                                     fullWidth
                                                     id="grnDateId"
                                                     name="grnDate"
-                                                    value={dayjs(grnData.grnPartyRefDate)}
+                                                    value={dayjs(grnAddData.grnPartyRefDate)}
                                                     onChange={(newValue) =>
-                                                        setGrnData((prev) => ({ ...prev, grnDate: newValue.format("YYYY-MM-DD") }))
+                                                        setGrnAddData((prev) => ({ ...prev, grnDate: newValue.format("YYYY-MM-DD") }))
                                                     }
                                                     label="GRN Date"
                                                     //onChange={handleGrnChange}
@@ -1037,7 +1037,7 @@ const GrnAdd = () => {
 
                                                     defaultValue=""
                                                     onChange={handleGrnChange}
-                                                    value={grnData.grnCommonRemarks}
+                                                    value={grnAddData.grnCommonRemarks}
                                                     fullWidth
                                                     size="small"
                                                     name="grnCommonRemarks"
@@ -1064,8 +1064,8 @@ const GrnAdd = () => {
                                 elevation={12}
                             >
                                 <div className='row g-2 mb-2'>
-                                    <div className='col d-flex'>
-                                        <div className='col me-2'>
+                                  
+                                        <div className='col'>
                                             <TextField size='small' fullWidth variant='outlined' defaultValue="" value={itemAddDetails.grnList} id="grnListId" onChange={handleGrnItemAdd} select label="Item List" name='grnList'>
 
                                                 {itemMasterDistNames.map((item, index) => (
@@ -1074,7 +1074,7 @@ const GrnAdd = () => {
 
                                             </TextField>
                                         </div>
-                                        <div className='col me-2 '>
+                                        <div className='col'>
                                             <TextField label="Imte No"
                                                 id="grnItemIdId"
                                                 select
@@ -1092,7 +1092,7 @@ const GrnAdd = () => {
 
                                             </TextField>
                                         </div>
-                                        <div className='col me-2 '>
+                                        <div className='col'>
                                             <TextField size='small' fullWidth variant='outlined' disabled={itemAddDetails.grnList === ""} defaultValue="" id="grnItemStatusId" value={selectedGrnItem.grnItemStatus} onChange={handleGrnItemAdd} select label="Grn Item Status" name='grnItemStatus' >
                                                 <MenuItem value="">Select</MenuItem>
                                                 <MenuItem value="Calibrated">Calibrated</MenuItem>
@@ -1102,17 +1102,17 @@ const GrnAdd = () => {
                                             </TextField>
                                         </div>
 
-                                    </div>
+                               
                                    
 
 
                                 </div>
 
                                 <div className='row g-2 '>
-                                    <div className='col d-flex'>
+                                    
 
 
-                                        <div className="col-2 me-2">
+                                        <div className="col-2 ">
 
                                             <DatePicker
                                                 fullWidth
@@ -1128,7 +1128,7 @@ const GrnAdd = () => {
 
                                         </div>
 
-                                        <div className="col-2 me-2">
+                                        <div className="col-2">
 
                                             <DatePicker
                                                 fullWidth
@@ -1190,13 +1190,13 @@ const GrnAdd = () => {
                                                 </div>
                                             </div>
                                         </React.Fragment> : ""}
-                                    </div>
+                                    
 
                                 </div>
 
 
-                                <div className='row'>
-                                    <h4 className='text-center'>Calibration Data</h4>
+                                <div className='row mt-2'>
+                                    <h5 className='text-center'>Calibration Data</h5>
                                     <table className='table table-sm table-bordered table-responsive text-center align-middle'>
                                         {selectedGrnItem.grnItemType === "attribute" &&
 
@@ -1602,7 +1602,7 @@ const GrnAdd = () => {
                                             <th>Calibrated At</th>
                                             <th>Remove</th>
                                         </tr>
-                                        {grnData.grnPartyItems.map((item, index) => (
+                                        {grnAddData.grnPartyItems.map((item, index) => (
                                             <tr key={index}>
                                                 <td>{index + 1}</td>
                                                 <td>{item.grnItemIMTENo}</td>
