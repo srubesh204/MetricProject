@@ -247,10 +247,10 @@ export default function Dashboard() {
                 <Collapse in={dataBaseOpen} timeout="auto" unmountOnExit>
 
                   <List component="div" disablePadding>
-                    {MenuItems.databaseMaster.map((item) => {
+                    {MenuItems.databaseMaster.map((item, index) => {
                       console.log(item)
                       return (
-                        <ListItemButton sx={{ pl: 6 }} onClick={() => onFileChange(item)}>
+                        <ListItemButton key={index} sx={{ pl: 6 }} onClick={() => onFileChange(item)}>
                           <ListItemIcon>
                             {item.icon}
                           </ListItemIcon>
@@ -274,10 +274,10 @@ export default function Dashboard() {
                 <Collapse in={systemOpen} timeout="auto" unmountOnExit>
 
                   <List component="div" disablePadding>
-                    {MenuItems.system.map((item) => {
+                    {MenuItems.system.map((item, index) => {
                       console.log(item)
                       return (
-                        <ListItemButton sx={{ pl: 6 }} onClick={() => onFileChange(item)}>
+                        <ListItemButton key={index} sx={{ pl: 6 }} onClick={() => onFileChange(item)}>
                           <ListItemIcon>
 
                           </ListItemIcon>

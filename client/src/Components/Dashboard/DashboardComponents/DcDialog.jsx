@@ -364,7 +364,7 @@ const Dc = () => {
                     <LocalizationProvider dateAdapter={AdapterDayjs}>
                         <form>
                             <div className='row'>
-                                <div class="col-3 mb-2">
+                                <div className="col-3 mb-2">
 
                                     <TextField label="Vendor Type"
                                         id="dcPartyTypeId"
@@ -606,8 +606,8 @@ const Dc = () => {
                                             sx={{
                                                 ".MuiTablePagination-displayedRows": {
 
-                                                    "margin-top": "1em",
-                                                    "margin-bottom": "1em"
+                                                    "marginTop": "1em",
+                                                    "marginBottom": "1em"
                                                 }
                                             }}
 
@@ -618,7 +618,7 @@ const Dc = () => {
 
                                             density="compact"
                                             //disableColumnMenu={true}
-                                            //clipboardCopyCellDelimiter={true}
+                                            
                                             checkboxSelection
                                             //onRowClick={handleRowClick}
                                             disableRowSelectionOnClick

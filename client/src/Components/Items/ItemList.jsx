@@ -944,7 +944,7 @@ console.log(statusInfo)*/}
 
                                     density="compact"
                                     //disableColumnMenu={true}
-                                    //clipboardCopyCellDelimiter={true}
+                                    
                                     checkboxSelection
                                     onRowClick={handleRowClick}
                                     disableRowSelectionOnClick

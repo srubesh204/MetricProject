@@ -204,11 +204,11 @@ const Home = () => {
       // const breakDownItems = allItems.filter((item) => item.itemStatus === "BreakDown");
       // const missingItems = allItems.filter((item) => item.itemStatus === "Missing");
       // const rejectionItems = allItems.filter((item) => item.itemStatus === "Rejection");
-      const depLength = allItems.filter((item) => item.itemDcLocation === "department")
-      const oemLength = allItems.filter((item) => item.itemDcLocation === "oem")
-      const customersLength = allItems.filter((item) => item.itemDcLocation === "customer")
-      const subContractorLength = allItems.filter((item) => item.itemDcLocation === "subContractor")
-      const supplierLength = allItems.filter((item) => item.itemDcLocation === "supplier")
+      const depLength = allItems.filter((item) => item.itemLocation === "department")
+      const oemLength = allItems.filter((item) => item.itemLocation === "oem")
+      const customersLength = allItems.filter((item) => item.itemLocation === "customer")
+      const subContractorLength = allItems.filter((item) => item.itemLocation === "subContractor")
+      const supplierLength = allItems.filter((item) => item.itemLocation === "supplier")
       console.log(depLength)
 
       setItemStatus((prev) => {
@@ -355,24 +355,14 @@ const Home = () => {
 
   const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', "#aca8c8", "#78787a"];
 
+  const calStatusFunction = (name) => {
 
-
-  const itemStatusLegend = (name) => {
-    console.log(name)
     const pastDue = pieDataFilter.filter((item) => dayjs(item.itemDueDate).isBefore(currentDate.format("YYYY-MM-DD")))
     const CurrentDue = pieDataFilter.filter((item) => dayjs(item.itemDueDate).isSame(currentDate.format("YYYY-MM-DD")))
     const sevenDaysFilter = pieDataFilter.filter((item) => dayjs(item.itemDueDate).isBefore(sevenDaysAgo) && dayjs(item.itemDueDate).isAfter(currentDate.format("YYYY-MM-DD")))
     const fifteenDaysFilter = pieDataFilter.filter((item) => dayjs(item.itemDueDate).isBetween(currentDate.format("YYYY-MM-DD"), fifteenDaysAgo))
     const thirtyDaysFilter = pieDataFilter.filter((item) => dayjs(item.itemDueDate).isBetween(currentDate.format("YYYY-MM-DD"), thirtyDaysAgo))
     const AboveThirtyDaysFilter = pieDataFilter.filter((item) => dayjs(item.itemDueDate).isAfter(thirtyDaysAgo))
-
-    const activeItems = pieDataFilter.filter((item) => item.itemStatus === "Active");
-    const spareItems = pieDataFilter.filter((item) => item.itemStatus === "Spare");
-    const breakDownItems = pieDataFilter.filter((item) => item.itemStatus === "BreakDown");
-    const missingItems = pieDataFilter.filter((item) => item.itemStatus === "Missing");
-    const rejectionItems = pieDataFilter.filter((item) => item.itemStatus === "Rejection");
-
-
 
     const inhouse = pieDataFilter.filter((item) => item.itemCalibrationSource === "inhouse");
     const outSource = pieDataFilter.filter((item) => item.itemCalibrationSource === "outsource");
@@ -384,10 +374,6 @@ const Home = () => {
       outSource: outSource.length,
       oem: oem.length
     }))
-
-
-
-
 
     switch (name) {
       case "Past Due":
@@ -408,6 +394,26 @@ const Home = () => {
       case ">30 Days":
         setFilteredData(AboveThirtyDaysFilter);
         break;
+      default:
+        setFilteredData(itemList)
+        break;
+    }
+  }
+
+
+
+  const itemStatusLegend = (name) => {
+    console.log(name)
+
+
+    const activeItems = pieDataFilter.filter((item) => item.itemStatus === "Active");
+    const spareItems = pieDataFilter.filter((item) => item.itemStatus === "Spare");
+    const breakDownItems = pieDataFilter.filter((item) => item.itemStatus === "BreakDown");
+    const missingItems = pieDataFilter.filter((item) => item.itemStatus === "Missing");
+    const rejectionItems = pieDataFilter.filter((item) => item.itemStatus === "Rejection");
+
+    switch (name) {
+
       case "Total Items":
         setFilteredData(pieDataFilter);
         break;
@@ -454,7 +460,7 @@ const Home = () => {
 
     if (name === "Sub Contractors") {
       const subTable = oems.map((sub) => {
-        const filteredByDcLocation = itemList.filter((item) => item.itemDcLocation === "subContractor");
+        const filteredByDcLocation = itemList.filter((item) => item.itemLocation === "subContractor");
         const filteredByOEM = filteredByDcLocation.filter((item) => item.itemCurrentLocation === sub.fullName);
 
         const quantity = filteredByOEM.length;
@@ -469,7 +475,7 @@ const Home = () => {
 
     if (name === "Customers") {
       const cusTable = customers.map((customer) => {
-        const filteredByDcLocation = itemList.filter((item) => item.itemDcLocation === "customer");
+        const filteredByDcLocation = itemList.filter((item) => item.itemLocation === "customer");
         const filteredByOEM = filteredByDcLocation.filter((item) => item.itemCurrentLocation === customer.fullName);
 
         const quantity = filteredByOEM.length;
@@ -485,7 +491,7 @@ const Home = () => {
 
     if (name === "Suppliers") {
       const supTable = suppliers.map((sup) => {
-        const filteredByDcLocation = itemList.filter((item) => item.itemDcLocation === "supplier");
+        const filteredByDcLocation = itemList.filter((item) => item.itemLocation === "supplier");
         const filteredByOEM = filteredByDcLocation.filter((item) => item.itemCurrentLocation === sup.fullName);
 
         const quantity = filteredByOEM.length;
@@ -501,7 +507,7 @@ const Home = () => {
 
     if (name === "OEM") {
       const oemTable = oems.map((oem) => {
-        const filteredByDcLocation = itemList.filter((item) => item.itemDcLocation === "oem");
+        const filteredByDcLocation = itemList.filter((item) => item.itemLocation === "oem");
         const filteredByOEM = filteredByDcLocation.filter((item) => item.itemCurrentLocation === oem.fullName);
 
         const quantity = filteredByOEM.length;
@@ -526,7 +532,7 @@ const Home = () => {
       <table className='table table-borderless table-responsive' style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
         <tbody>
           {payload.map((entry, index) => (
-            <tr key={index}>
+            <tr key={index} >
               <td onClick={() => ItemLocationDisplay(entry.value)}><div style={{ width: '25px', height: '25px', backgroundColor: entry.color, marginRight: '10px', textAlign: "center", display: "flex", justifyContent: "center", alignItems: "center" }}></div></td>
               <td>{entry.value}</td>
               <td style={{ fontWeight: "bolder", color: entry.color }} className='ms-2 ps-3'>{entry.payload.value}</td>
@@ -546,7 +552,7 @@ const Home = () => {
       <table className='table table-borderless table-responsive' style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
         <tbody>
           {payload.map((entry, index) => (
-            <tr key={index} style={{ padding: '25px' }}>
+            <tr key={index} height={entry.value === "Total Items" ? "50px" : ""}>
               <td onClick={() => { itemStatusLegend(entry.value); console.log(entry) }}><div style={{ width: '25px', height: '25px', backgroundColor: entry.color, marginRight: '10px', textAlign: "center", display: "flex", justifyContent: "center", alignItems: "center" }}></div></td>
               <td>{entry.value}</td>
               <td style={{ fontWeight: "bolder", color: entry.color }} className='ms-2 ps-3'>{entry.payload.value}</td>
@@ -563,7 +569,7 @@ const Home = () => {
         <tbody>
           {payload.map((entry, index) => (
             <tr key={index}>
-              <td onClick={() => { itemStatusLegend(entry.value) }}><div style={{ width: '25px', height: '25px', backgroundColor: entry.color, marginRight: '10px', textAlign: "center", display: "flex", justifyContent: "center", alignItems: "center" }}></div></td>
+              <td onClick={() => { calStatusFunction(entry.value) }}><div style={{ width: '25px', height: '25px', backgroundColor: entry.color, marginRight: '10px', textAlign: "center", display: "flex", justifyContent: "center", alignItems: "center" }}></div></td>
               <td>{entry.value}</td>
               <td style={{ fontWeight: "bolder", color: entry.color }} className='ms-2 ps-3'>{entry.payload.value}</td>
             </tr>
@@ -731,24 +737,24 @@ const Home = () => {
   const updateItemData = async (e) => {
     e.preventDefault();
     try {
-      if(selectedRows.length !== 0){
+      if (selectedRows.length !== 0) {
         const itemData = selectedRows.map((item) => ({ _id: item._id, itemIMTENo: item.itemIMTENo }))
         const depData = { itemIds: itemData, itemCurrentLocation: selectedDepartment }
         if (depData) {
           const response = await axios.put(
             `${process.env.REACT_APP_PORT}/itemAdd/changeDepartmentUpdate`, depData
           );
-  
+
           setSnackBarOpen(true)
-  
-          
+
+
           setErrorHandler({ status: response.data.status, message: "Department Changed Successfully", code: "success" })
           setSelectedRows([])
           itemFetch();
-  
+
         }
       }
-     
+
 
 
 
@@ -1252,19 +1258,19 @@ const Home = () => {
             >
               <Grn />
             </HomeContent.Provider>
-          
+
 
 
           </div>
 
           <Snackbar anchorOrigin={{ vertical: "top", horizontal: "right" }} open={snackBarOpen} autoHideDuration={3000}
-                        onClose={() => setTimeout(() => {
-                            setSnackBarOpen(false)
-                        }, 3000)}>
-                        <Alert onClose={() => setSnackBarOpen(false)} variant='filled' severity="success" sx={{ width: '25%' }}>
-                            {errorhandler.message}
-                        </Alert>
-                    </Snackbar>
+            onClose={() => setTimeout(() => {
+              setSnackBarOpen(false)
+            }, 3000)}>
+            <Alert onClose={() => setSnackBarOpen(false)} variant='filled' severity="success" sx={{ width: '25%' }}>
+              {errorhandler.message}
+            </Alert>
+          </Snackbar>
         </div>
 
 

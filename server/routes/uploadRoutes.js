@@ -2,6 +2,7 @@ const express = require('express');
 const multer = require('multer');
 const router = express.Router();
 const path = require('path');
+const dayjs = require('dayjs')
 
 const createDiskStorage = (destinationFolder) => {
   return multer.diskStorage({
@@ -14,16 +15,50 @@ const createDiskStorage = (destinationFolder) => {
   });
 };
 
+const ItemImageStorage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, 'storage/Images/itemMasterImages'); // Specify the folder where images will be stored
+  },
+  filename: (req, file, cb) => {
+    const ext = path.extname(file.originalname);
+    cb(null, file.originalname); // Rename the uploaded image file
+  },
+});
+
 const VendorCertificateStorage = createDiskStorage('vendorCertificates');
 const WorkInstructionStorage = createDiskStorage('workInstructions');
 const itemCertificateStorage = createDiskStorage('itemCertificates');
 const grnItemCertificates = createDiskStorage('grnItemCertificates');
 
 
+
+
 const vendorCertificateUpload = multer({ storage: VendorCertificateStorage });
 const workInsUploadFolder = multer({ storage: WorkInstructionStorage });
 const itemCertificateFolder = multer({ storage: itemCertificateStorage });
 const grnItemCertificateFolder = multer({ storage: grnItemCertificates });
+const itemMasterImagesFolder = multer({ storage: ItemImageStorage });
+
+router.post('/itemMasterImage', itemMasterImagesFolder.single('image'), (req, res) => {
+  if (!req.file) {
+    // No file was provided in the request
+    return res.status(400).json({ error: 'No image selected for upload' });
+  }
+
+  // File was provided, proceed with processing
+  res.status(200).json({ message: 'Item Image uploaded successfully' });
+});
+
+
+router.post('/VendorCertificateUpload', vendorCertificateUpload.single('file'), (req, res) => {
+  if (!req.file) {
+    // No file was provided in the request
+    return res.status(400).json({ error: 'No file selected for upload' });
+  }
+
+  // File was provided, proceed with processing
+  res.status(200).json({ message: 'Vendor Certificate uploaded successfully' });
+});
 
 router.post('/grnItemCertificateUp', grnItemCertificateFolder.single('file'), (req, res) => {
   if (!req.file) {

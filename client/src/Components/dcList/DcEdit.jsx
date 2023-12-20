@@ -329,10 +329,17 @@ const DcEdit = () => {
 //////
     const [confirmSubmit, setConfirmSubmit] = useState(false)
     const [snackBarOpen, setSnackBarOpen] = useState(false)
-    const [alertMessage, setAlertMessage] = useState("")
+    const [alertMessage, setAlertMessage] = useState({
+        dcMessage: "",
+        dcType: "info"
+    })
 
-    const submitCalForm = async () => {
+    const submitDcForm = async () => {
         try {
+            if (dcData.dcPartyItems.length === 0) {
+                setAlertMessage({dcMessage: "Cannot create DC without a Item", dcType: "error"})
+                setSnackBarOpen(true)
+            } else {
             const response = await axios.put(
               
                 `${process.env.REACT_APP_PORT}/itemDc/updateItemDc/${selectedRows._id}`, dcData
@@ -343,6 +350,7 @@ const DcEdit = () => {
             dcListFetchData()
 
             setTimeout(() => setDcEditOpen(false), 3000)
+            }
         } catch (err) {
             console.log(err);
         }
@@ -507,7 +515,7 @@ const DcEdit = () => {
                     <LocalizationProvider dateAdapter={AdapterDayjs}>
                         <form>
                             <div className='row'>
-                                <div class="col-3 mb-2">
+                                <div className="col-3 mb-2">
                                 <TextField  label="Vendor Type"
                                         id="dcPartyTypeId" select defaultValue=""onChange={handleFilterChange}  size="small" value={dcData.dcPartyType}  sx={{ width: "101%" }}  name="dcPartyType" >
                                         <MenuItem value=""><em>--Select--</em></MenuItem>
@@ -760,8 +768,8 @@ const DcEdit = () => {
                                             sx={{
                                                 ".MuiTablePagination-displayedRows": {
 
-                                                    "margin-top": "1em",
-                                                    "margin-bottom": "1em"
+                                                    "marginTop": "1em",
+                                                    "marginBottom": "1em"
                                                 }
                                             }}
 
@@ -772,7 +780,7 @@ const DcEdit = () => {
 
                                             density="compact"
                                             //disableColumnMenu={true}
-                                            //clipboardCopyCellDelimiter={true}
+                                            
                                             checkboxSelection
                                             //onRowClick={handleRowClick}
                                             disableRowSelectionOnClick
@@ -801,7 +809,7 @@ const DcEdit = () => {
 
                                 <DialogActions className='d-flex justify-content-center'>
                                     <Button onClick={() => setConfirmSubmit(false)}>Cancel</Button>
-                                    <Button onClick={() => { submitCalForm(); setConfirmSubmit(false) }} autoFocus>
+                                    <Button onClick={() => { submitDcForm(); setConfirmSubmit(false) }} autoFocus>
                                         Submit
                                     </Button>
                                 </DialogActions>
@@ -810,8 +818,8 @@ const DcEdit = () => {
                                 onClose={() => setTimeout(() => {
                                     setSnackBarOpen(false)
                                 }, 3000)}>
-                                <Alert onClose={() => setSnackBarOpen(false)} variant='filled' severity="success" sx={{ width: '100%' }}>
-                                    {alertMessage}
+                                <Alert onClose={() => setSnackBarOpen(false)} variant='filled' severity={alertMessage.dcType} sx={{ width: '100%' }}>
+                                    {alertMessage.dcMessage}
                                 </Alert>
                             </Snackbar>
 
@@ -825,7 +833,7 @@ const DcEdit = () => {
                     <Button variant='contained' color='warning' className='me-3'>Print</Button>
                 </div>
                 <div>
-                    <Button variant='contained' color='error' className='me-3' onClick={() => { setDcEditOpen(false) }}>Cancel</Button>
+                    <Button variant='contained' color='error' className='me-3' onClick={() => { setDcEditOpen(false); settingDcData() }}>Cancel</Button>
                     <Button variant='contained' color='success' onClick={() => { setConfirmSubmit(true) }}>Submit</Button>
                 </div>
             </DialogActions>

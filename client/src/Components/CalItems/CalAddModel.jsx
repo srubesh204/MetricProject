@@ -487,24 +487,7 @@ const CalAddModel = () => {
 
     }, [calibrationData.calcalibrationData])
 
-    // useEffect(() => {
-    //     const initialStatuses = calibrationData.calcalibrationData.map(item => {
-    //         const isAverageInRange =
-    //            ( parseFloat(calMinOB) >= parseFloat(item.calMinPS) && parseFloat(value) <= parseFloat(item.calMaxPS)) && (parseFloat(calMinOB) >= parseFloat(item.calMinPS) && parseFloat(value) <= parseFloat(item.calMaxPS))
-
-    //         return isAverageInRange ? "ok" : "notOk";
-    //     });
-    //     console.log(initialStatuses)
-    //     setCalibrationData((prev) => {
-    //         const updateAC = [...prev.calcalibrationData]
-    //         updateAC[index] = {
-    //             ...updateAC[index], rowStatus: initialStatuses[index],
-    //         };
-    //         return {
-    //             ...prev, calcalibrationData: updateAC,
-    //         };
-    //     })
-    // }, [calibrationData.calcalibrationData]);
+    
 
 
 
@@ -715,8 +698,8 @@ const CalAddModel = () => {
                                         variant="outlined"
                                     >
                                         <MenuItem value=""><em>Select Item Name</em></MenuItem>
-                                        {distinctItemNames.map((item)=> (
-                                            <MenuItem value={item}>{item}</MenuItem>
+                                        {distinctItemNames.map((item, index)=> (
+                                            <MenuItem key={index} value={item}>{item}</MenuItem>
                                         ))}
                                     </TextField>
                                 </div>
@@ -734,8 +717,8 @@ const CalAddModel = () => {
                                         
                                     >
                                         <MenuItem value=""><em>Select IMTE</em></MenuItem>
-                                        {itemIMTEs.map((item)=> (
-                                            <MenuItem value={item.itemIMTENo}>{item.itemIMTENo}</MenuItem>
+                                        {itemIMTEs.map((item, index)=> (
+                                            <MenuItem key={index} value={item.itemIMTENo}>{item.itemIMTENo}</MenuItem>
                                         ))}
                                     </TextField >
                                 </div>
@@ -1339,8 +1322,8 @@ const CalAddModel = () => {
 
                                                     }
                                                 </tr>
-                                                {lastResultData && lastResultData.calcalibrationData.map((item) => (
-                                                    <tr>
+                                                {lastResultData && lastResultData.calcalibrationData.map((item, index) => (
+                                                    <tr key={index}>
                                                         <td>{item.calMinPS}</td>
                                                         <td>{item.calMaxPS}</td>
                                                         {lastResultData.calOBType === "minmax" &&
@@ -1386,8 +1369,8 @@ const CalAddModel = () => {
 
                                                     }
                                                 </tr>
-                                                {lastResultData && lastResultData.calcalibrationData.map((item) => (
-                                                    <tr>
+                                                {lastResultData && lastResultData.calcalibrationData.map((item, index) => (
+                                                    <tr key={index}>
                                                         <td>{item.calMinPSError}</td>
                                                         <td>{item.calMaxPSError}</td>
                                                         {lastResultData.calOBType === "minmax" &&
@@ -1433,8 +1416,8 @@ const CalAddModel = () => {
 
                                                     }
                                                 </tr>
-                                                {lastResultData && lastResultData.calcalibrationData.map((item) => (
-                                                    <tr>
+                                                {lastResultData && lastResultData.calcalibrationData.map((item, index) => (
+                                                    <tr key={index}>
                                                         <td>{item.calMinPS}</td>
                                                         <td>{item.calMaxPS}</td>
                                                         {lastResultData.calOBType === "minmax" &&
