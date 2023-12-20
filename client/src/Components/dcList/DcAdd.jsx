@@ -728,8 +728,8 @@ const DcAdd = () => {
                                                     <td>{item.itemAddMasterName}</td>
                                                     <td>{item.itemRangeSize}</td>
                                                     <td>{item.itemMake}</td>
-                                                 <td>{item.itemCalFreInMonths}</td>
-                                                    <td> <select className="form-select form-select-sm" id="reMarksId" name="reMarks"  aria-label="Floating label select example">
+                                                    <td>{dayjs(item.itemCalFreInMonths).format("DD-MM-YYYY")}</td>
+                                                    <td> <select className="form-select form-select-sm" id="dcItemRemarksId" name="dcItemRemarks" value={item.dcItemRemarks} onChange={(e)=> remarksChange(e, index)}  aria-label="Floating label select example">
                                                         <option value="calibration">Calibration</option>
                                                         <option value="service">Service</option>
                                                         <option value="calibration&service">Calibration&Service</option>
