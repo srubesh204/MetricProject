@@ -45,6 +45,7 @@ const Grn = () => {
 
     const initialGrnData = {
         grnPartyRefNo: "",
+        grnPartyId: "",
         grnPartyRefDate: dayjs().format("YYYY-MM-DD"),
         grnPartyName: "",
         grnPartyCode: "",
@@ -59,6 +60,7 @@ const Grn = () => {
 
     const [grnData, setGrnData] = useState({
         grnPartyRefNo: "",
+        grnPartyId: "",
         grnPartyRefDate: dayjs().format("YYYY-MM-DD"),
         grnPartyName: "",
         grnPartyCode: "",
@@ -114,8 +116,8 @@ const Grn = () => {
                 ...prev,
                 grnPartyName: response.data.result.fullName,
                 grnPartyAddress: response.data.result.address,
-                grnPartyCode: response.data.result.vendorCode
-
+                grnPartyCode: response.data.result.vendorCode,
+                grnPartyId: response.data.result._id
             }))
 
         } catch (err) {

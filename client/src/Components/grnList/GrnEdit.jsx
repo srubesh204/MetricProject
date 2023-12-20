@@ -169,8 +169,8 @@ const GrnEdit = () => {
                 ...prev,
                 grnPartyName: response.data.result.fullName,
                 grnPartyAddress: response.data.result.address,
-                grnPartyCode: response.data.result.vendorCode
-
+                grnPartyCode: response.data.result.vendorCode,
+                grnPartyId: response.data.result._id
             }))
 
         } catch (err) {
@@ -313,7 +313,10 @@ const GrnEdit = () => {
 
     const handleGrnItemChange = (e) => {
         const { name, value } = e.target;
+        if (name === "grnList") {
+            getItemByName(value)
 
+        }
 
         if (name === "grnItemStatus") {
             const fetchedData = selectedRows.filter((item) => item._id === selectedGrnItem.grnItemId)
@@ -797,7 +800,7 @@ const GrnEdit = () => {
                     setGrnEditOpen(false)
                 }
             }}>
-            <DialogTitle align='center' >GRN</DialogTitle>
+            <DialogTitle align='center' >GRN Edit</DialogTitle>
             <IconButton
                 aria-label="close"
                 onClick={() => setGrnEditOpen(false)}
@@ -879,7 +882,7 @@ const GrnEdit = () => {
                                                 <TextField label="Party Name"
                                                     id="grnPartyNameId"
                                                     select
-                                                    //  value={grnEditData.grnPartyName}
+                                                    value={grnEditData.grnPartyId}
 
                                                     onChange={(e) => setPartyData(e.target.value)}
 
@@ -1580,7 +1583,36 @@ const GrnEdit = () => {
                                     </tbody>
                                 </table>
                             </Paper>
+                            <Dialog
+                            open={confirmSubmit}
+                            onClose={(e, reason) => {
+                                console.log(reason)
+                                if (reason !== 'backdropClick' && reason !== 'escapeKeyDown') {
+                                    setConfirmSubmit(false)
+                                }
+                            }}
+                            aria-labelledby="alert-dialog-title"
+                            aria-describedby="alert-dialog-description"
+                        >
+                            <DialogTitle id="alert-dialog-title">
+                                Are you sure to submit ?
+                            </DialogTitle>
 
+                            <DialogActions className='d-flex justify-content-center'>
+                                <Button onClick={() => setConfirmSubmit(false)}>Cancel</Button>
+                                <Button onClick={(e) => { updateGrnData(e); setConfirmSubmit(false) }} autoFocus>
+                                    Update
+                                </Button>
+                            </DialogActions>
+                        </Dialog>
+                        <Snackbar anchorOrigin={{ vertical: "top", horizontal: "right" }} open={snackBarOpen} autoHideDuration={3000}
+                            onClose={() => setTimeout(() => {
+                                setSnackBarOpen(false)
+                            }, 3000)}>
+                            <Alert onClose={() => setSnackBarOpen(false)} variant='filled' severity="success" sx={{ width: '100%' }}>
+                                {alertMessage}
+                            </Alert>
+                        </Snackbar>
 
 
 
@@ -1596,7 +1628,7 @@ const GrnEdit = () => {
                 </div>
                 <div>
                     <Button variant='contained' color='error' className='me-3' onClick={() => { setGrnEditOpen(false) }}>Cancel</Button>
-                    <Button variant='contained' color='success' onClick={() => { setConfirmSubmit(true) }}>Submit</Button>
+                    <Button variant='contained' color='success' onClick={() => { setConfirmSubmit(true) }}>Update</Button>
                 </div>
             </DialogActions>
 
