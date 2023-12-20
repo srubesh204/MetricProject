@@ -313,7 +313,10 @@ const GrnEdit = () => {
 
     const handleGrnItemChange = (e) => {
         const { name, value } = e.target;
+        if (name === "grnList") {
+            getItemByName(value)
 
+        }
 
         if (name === "grnItemStatus") {
             const fetchedData = selectedRows.filter((item) => item._id === selectedGrnItem.grnItemId)
