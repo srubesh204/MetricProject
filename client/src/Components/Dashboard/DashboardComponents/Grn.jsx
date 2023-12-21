@@ -805,17 +805,41 @@ const Grn = () => {
     const [errorhandler, setErrorHandler] = useState({})
 
     const [snackBarOpen, setSnackBarOpen] = useState(false)
-    const [alertMessage, setAlertMessage] = useState("")
+    const [alertMessage, setAlertMessage] = useState({
+        message: "",
+        type: ""
+    })
 
+    const [errors, setErrors] = useState({})
+    const validateFunction = () => {
+        let tempErrors = {};
+        
+        tempErrors.grnPartyName = grnData.grnPartyName ? "": "GRN Party Name is Required"
+        tempErrors.grnPartyCode = grnData.grnPartyCode ? "": "GRN Party Code is Required"
+        tempErrors.grnPartyAddress = grnData.grnPartyAddress ? "": "GRN Party Address is Required"
+        tempErrors.grnNo = grnData.grnNo ? "": "GRN Number is Required"
+        tempErrors.grnPartyItems = grnData.grnPartyItems.length !== 0 ? "": "GRN Item Required"
+
+        setErrors({...tempErrors})
+
+        return Object.values(tempErrors).every(x => x === "")
+    }
+    
+    console.log(errors)
     const submitGrnForm = async () => {
         try {
-            const response = await axios.post(
+            if(validateFunction()){
+                const response = await axios.post(
 
-                `${process.env.REACT_APP_PORT}/itemGRN/createItemGRN`, grnData
-            );
-            setAlertMessage(response.data.message)
-            setSnackBarOpen(true)
-            setTimeout(() => setGrnOpen(false), 1000)
+                    `${process.env.REACT_APP_PORT}/itemGRN/createItemGRN`, grnData
+                );
+                setAlertMessage({message: response.data.message, type: "success"})
+                setSnackBarOpen(true)
+                setTimeout(() => setGrnOpen(false), 1000)
+            }else{
+                setAlertMessage({message: "Fill the required fields to submit", type: "error"})
+                setSnackBarOpen(true)
+            }
         } catch (err) {
             console.log(err);
         }
@@ -967,7 +991,7 @@ const Grn = () => {
                                                         //  sx={{ width: "100%" }}
                                                         size="small"
                                                         fullWidth
-
+                                                        {...(errors.grnPartyName !== "" && {helperText: errors.grnPartyName, error: true})}
                                                         name="grnPartyName" >
                                                         {vendorDataList.map((item, index) => (
                                                             <MenuItem key={index} value={item._id}>{item.fullName}</MenuItem>
@@ -1200,14 +1224,14 @@ const Grn = () => {
                                                             className='mt-2'
                                                             icon={<Done />}
                                                             size='large'
-                                                            color="success"
+                                                            color="primary"
                                                             label={selectedGrnItem.grnItemCertificate}
                                                             onClick={() => {
                                                                 const fileUrl = `${process.env.REACT_APP_PORT}/grnCertificates/${selectedGrnItem.grnItemCertificate}`;
                                                                 window.open(fileUrl, '_blank'); // Opens the file in a new tab/window
                                                             }}
                                                             onDelete={() => setSelectedGrnItem((prev) => ({ ...prev, grnItemCertificate: "" }))}
-                                                            deleteIcon={<Delete color='error'/>}
+                                                            deleteIcon={<Delete color='error' />}
                                                         ></Chip> : <Button helperText="Hello" component="label" fullWidth variant="contained" startIcon={<CloudUpload />} >
                                                             Upload Certificate
                                                             <VisuallyHiddenInput type="file" onChange={handleGrnCertificate} />
@@ -1677,8 +1701,8 @@ const Grn = () => {
                             onClose={() => setTimeout(() => {
                                 setSnackBarOpen(false)
                             }, 3000)}>
-                            <Alert onClose={() => setSnackBarOpen(false)} variant='filled' severity="success" sx={{ width: '100%' }}>
-                                {alertMessage}
+                            <Alert onClose={() => setSnackBarOpen(false)} variant='filled' severity={alertMessage.type} sx={{ width: '100%' }}>
+                                {alertMessage.message}
                             </Alert>
                         </Snackbar>
                     </LocalizationProvider>
