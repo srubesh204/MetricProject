@@ -1573,19 +1573,19 @@ const GrnEdit = () => {
                                 </table>
                             </Paper>
                             <Dialog
-                                open={confirmSubmit}
-                                onClose={(e, reason) => {
-                                    console.log(reason)
-                                    if (reason !== 'backdropClick' && reason !== 'escapeKeyDown') {
-                                        setConfirmSubmit(false)
-                                    }
-                                }}
-                                aria-labelledby="alert-dialog-title"
-                                aria-describedby="alert-dialog-description"
-                            >
-                                <DialogTitle id="alert-dialog-title">
-                                    Are you sure to submit ?
-                                </DialogTitle>
+                            open={confirmSubmit}
+                            onClose={(e, reason) => {
+                                console.log(reason)
+                                if (reason !== 'backdropClick' && reason !== 'escapeKeyDown') {
+                                    setConfirmSubmit(false)
+                                }
+                            }}
+                            aria-labelledby="alert-dialog-title"
+                            aria-describedby="alert-dialog-description"
+                        >
+                            <DialogTitle id="alert-dialog-title">
+                                Are you sure to Update ?
+                            </DialogTitle>
 
                                 <DialogActions className='d-flex justify-content-center'>
                                     <Button onClick={() => setConfirmSubmit(false)}>Cancel</Button>

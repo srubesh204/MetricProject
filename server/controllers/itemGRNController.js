@@ -14,8 +14,8 @@ const itemGRNController = {
       createItemGRN: async (req, res) => {
          
         try {
-          const {grnPartyRefNo, grnPartyId, grnPartyRefDate, grnPartyName, grnPartyCode, grnPartyAddress, grnNo, grnDate, grnCommonRemarks, grnPartyItems,grnCalDate, grnDueDate,grnCertificateStatus,grnCertificateNo, grnUncertainity} = req.body;
-          const itemGRNResult = new itemGRNModel({ grnPartyRefNo, grnPartyId, grnPartyRefDate, grnPartyName, grnPartyCode, grnPartyAddress, grnNo, grnDate, grnCommonRemarks, grnPartyItems,grnCalDate,grnDueDate,grnCertificateStatus,grnCertificateNo,grnUncertainity});
+          const {grnPartyRefNo, grnPartyId, grnPartyRefDate, grnPartyName, grnPartyCode, grnPartyAddress, grnNo, grnDate, grnCommonRemarks, grnPartyItems} = req.body;
+          const itemGRNResult = new itemGRNModel({ grnPartyRefNo, grnPartyId, grnPartyRefDate, grnPartyName, grnPartyCode, grnPartyAddress, grnNo, grnDate, grnCommonRemarks, grnPartyItems,});
           const validationError = itemGRNResult.validateSync();
 
           if (validationError) {
