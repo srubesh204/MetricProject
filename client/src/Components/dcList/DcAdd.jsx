@@ -301,6 +301,7 @@ const DcAdd = () => {
                 );
                 setAlertMessage({ message: response.data.message, type: "success" })
                 setSnackBarOpen(true)
+                dcListFetchData()
                 setTimeout(() => setDcOpen(false), 3000)
             } else {
                 setAlertMessage({ message: "Fill the required fields to submit", type: "error" })
@@ -339,7 +340,8 @@ const DcAdd = () => {
             );
             console.log(response.data)
             setAllItemImtes(response.data.result)
-            const filteredImtes = response.data.result.filter((imtes) => !dcAddData.dcPartyItems.some(dcImte => imtes._id === dcImte._id))
+            const nonDcItem = response.data.result.filter(item => item.dcStatus !== "1")
+            const filteredImtes = nonDcItem.filter((imtes) => !dcAddData.dcPartyItems.some(dcImte => imtes._id === dcImte._id))
             setItemImtes(filteredImtes)
 
         } catch (err) {
