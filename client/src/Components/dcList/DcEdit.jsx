@@ -723,29 +723,7 @@ const DcEdit = () => {
                                                     <MenuItem key={index} value={item}>{item.itemIMTENo}</MenuItem>
                                                 ))}
                                             </TextField>
-
-
                                         </div>
-                                        <div className="col ">
-                                            <TextField label="Reason"
-                                                id="itemReMarksId"
-                                                select
-                                                defaultValue="Calibration"
-                                                value={itemAddDetails.itemReMarks}
-                                                onChange={handleDcItemAdd}
-
-                                                size="small"
-                                                sx={{ width: "101%" }}
-                                                name="itemReMarks" >
-                                                <MenuItem value="All">All</MenuItem>
-                                                <MenuItem value="Service">Service</MenuItem>
-                                                <MenuItem value="Service Calibration">Service&Calibration</MenuItem>
-                                                <MenuItem value="Calibration">Calibration</MenuItem>
-
-                                            </TextField>
-
-                                        </div>
-
                                     </div>
                                     <div className=' col d-flex justify-content-end'>
                                         <div className='me-2 '>
@@ -824,7 +802,7 @@ const DcEdit = () => {
                                                     <td>{item.itemAddMasterName}</td>
                                                     <td>{item.itemRangeSize}</td>
                                                     <td>{item.itemMake}</td>
-                                                    <td>{dayjs(item.itemCalFreInMonths).format("DD-MM-YYYY")}</td>
+                                                    <td>{item.itemCalFreInMonths}</td>
                                                     <td> <select className="form-select form-select-sm" id="dcItemRemarksId" name="dcItemRemarks" value={item.dcItemRemarks} onChange={(e) => remarksChange(e, index)} aria-label="Floating label select example">
                                                         <option value="calibration">Calibration</option>
                                                         <option value="service">Service</option>

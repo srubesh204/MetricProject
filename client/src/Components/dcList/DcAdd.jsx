@@ -295,7 +295,7 @@ const DcAdd = () => {
     const submitDcForm = async () => {
         try {
             if (validateFunction()) {
-                
+
                 const response = await axios.post(
                     `${process.env.REACT_APP_PORT}/itemDc/createItemDc`, dcAddData
                 );
@@ -308,7 +308,7 @@ const DcAdd = () => {
             }
         } catch (err) {
             console.log(err);
-            
+
         }
 
     };
@@ -360,6 +360,8 @@ const DcAdd = () => {
 
 
     }
+
+   
 
     const dcItemAdd = () => {
         if (selectedDcItem.length !== 0) {
@@ -469,7 +471,7 @@ const DcAdd = () => {
                                         onChange={handleFilterChange}
                                         size="small"
                                         sx={{ width: "101%" }}
-                                        {...(errors.dcPartyType !== "" && { helperText: errors.dcPartyType, error: true })} 
+                                        {...(errors.dcPartyType !== "" && { helperText: errors.dcPartyType, error: true })}
                                         name="dcPartyType" >
                                         <MenuItem value=""><em>--Select--</em></MenuItem>
                                         <MenuItem value="oem">OEM</MenuItem>
@@ -511,7 +513,7 @@ const DcAdd = () => {
                                                     size="small"
                                                     fullWidth
                                                     disabled={dcAddData.dcPartyType === ""}
-                                                    {...(errors.dcPartyName !== "" && { helperText: errors.dcPartyName, error: true })} 
+                                                    {...(errors.dcPartyName !== "" && { helperText: errors.dcPartyName, error: true })}
                                                     name="dcPartyName">
                                                     {filteredData.map((item, index) => (
                                                         <MenuItem key={index} value={item._id}>{item.fullName}</MenuItem>
@@ -526,7 +528,7 @@ const DcAdd = () => {
                                                     id="dcPartyCodeId"
                                                     defaultValue=""
                                                     disabled={dcAddData.dcPartyType === ""}
-                                                    {...(errors.dcPartyCode !== "" && { helperText: errors.dcPartyCode, error: true })} 
+                                                    {...(errors.dcPartyCode !== "" && { helperText: errors.dcPartyCode, error: true })}
 
                                                     value={dcAddData.dcPartyCode}
 
@@ -551,7 +553,7 @@ const DcAdd = () => {
 
                                                     size="small"
                                                     sx={{ width: "100%" }}
-                                                    {...(errors.dcPartyAddress !== "" && { helperText: errors.dcPartyAddress, error: true })} 
+                                                    {...(errors.dcPartyAddress !== "" && { helperText: errors.dcPartyAddress, error: true })}
                                                     name="dcPartyAddress" >
 
                                                 </TextField>
@@ -575,7 +577,7 @@ const DcAdd = () => {
                                                 defaultValue=""
                                                 value={dcAddData.dcNo}
                                                 onChange={handleDcChange}
-                                                {...(errors.dcNo !== "" && { helperText: errors.dcNo, error: true })} 
+                                                {...(errors.dcNo !== "" && { helperText: errors.dcNo, error: true })}
                                                 size="small"
                                                 sx={{ width: "101%" }}
                                                 name="dcNo" />
@@ -607,7 +609,7 @@ const DcAdd = () => {
                                                 fullWidth
                                                 onChange={handleDcChange}
                                                 size="small"
-                                                {...(errors.dcReason !== "" && { helperText: errors.dcReason, error: true })} 
+                                                {...(errors.dcReason !== "" && { helperText: errors.dcReason, error: true })}
 
                                                 name="dcReason" >
                                                 <MenuItem value="Calibration">Calibration</MenuItem>
@@ -650,7 +652,7 @@ const DcAdd = () => {
                                 <div className='row g-2'>
                                     <div className='col d-flex'>
                                         <div className='col me-2'>
-                                            <TextField size='small' select fullWidth id='itemListNamesId' value={itemAddDetails.itemListNames} variant='outlined' onChange={handleDcItemAdd} label="Item List" name='itemListNames' >
+                                            <TextField size='small' select fullWidth id='itemListNamesId' value={itemAddDetails.itemListNames}  {...(errors.dcPartyItems !== "" && { helperText: errors.dcPartyItems, error: true })} variant='outlined' onChange={handleDcItemAdd} label="Item List" name='itemListNames' >
                                                 <MenuItem value="--"><em>--Select--</em></MenuItem>
                                                 {itemMasterDistNames.map((item, index) => (
                                                     <MenuItem key={index} value={item}>{item}</MenuItem>
@@ -779,7 +781,12 @@ const DcAdd = () => {
                                 </DialogTitle>
 
                                 <DialogActions className='d-flex justify-content-center'>
-                                    <Button onClick={() => setConfirmSubmit(false)}>Cancel</Button>
+                                    <Button onClick={() => {
+                                        setConfirmSubmit(false);
+                                        setAlertMessage();
+                                    }}>
+                                        Cancel
+                                    </Button>
                                     <Button onClick={() => { submitDcForm(); setConfirmSubmit(false) }} autoFocus>
                                         Submit
                                     </Button>

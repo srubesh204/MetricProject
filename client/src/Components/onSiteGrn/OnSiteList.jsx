@@ -40,29 +40,29 @@ const OnSiteList = () => {
 
 
     const initialGrnData = {
-        grnPartyRefNo: "",
-        grnPartyRefDate: "",
-        grnPartyName: "",
-        grnPartyCode: "",
-        grnPartyAddress: "",
-        grnNo: "",
-        grnDate: "",
-        grnCommonRemarks: "",
-        grnPartyItems: []
+        osGrnPartyRefNo: "",
+        osGrnPartyRefDate: "",
+        osGrnPartyName: "",
+        osGrnPartyCode: "",
+        osGrnPartyAddress: "",
+        osGrnNo: "",
+        osGrnDate: "",
+        osGrnCommonRemarks: "",
+        osGrnPartyItems: []
 
     }
 
     const [grnStateId, setGrnStateId] = useState(null)
     const [grnData, setGrnData] = useState({
-        grnPartyRefNo: "",
-        grnPartyRefDate: "",
-        grnPartyName: "",
-        grnPartyCode: "",
-        grnPartyAddress: "",
-        grnNo: "",
-        grnDate: "",
-        grnCommonRemarks: "",
-        grnPartyItems: []
+        osGrnPartyRefNo: "",
+        osGrnPartyRefDate: "",
+        osGrnPartyName: "",
+        osGrnPartyCode: "",
+        osGrnPartyAddress: "",
+        osGrnNo: "",
+        osGrnDate: "",
+        osGrnCommonRemarks: "",
+        osGrnPartyItems: []
 
 
 
@@ -91,9 +91,9 @@ const OnSiteList = () => {
 
             ),
         },
-        { field: 'grnNo', headerName: 'Grn No', width: 100 },
-        { field: 'grnDate', headerName: 'Grn Date', width: 200 },
-        { field: 'grnPartyName', headerName: 'Party Name', width: 250, },
+        { field:'osGrnNo', headerName: 'Grn No', width: 100 },
+        { field:'osGrnDate', headerName: 'Grn Date', width: 200 },
+        { field:'osGrnPartyName', headerName: 'Party Name', width: 250, },
     ]
 
 
@@ -106,7 +106,7 @@ const OnSiteList = () => {
     const grnListFetchData = async () => {
         try {
             const response = await axios.get(
-                `${process.env.REACT_APP_PORT}/itemGRN/getAllItemGRN`
+                `${process.env.REACT_APP_PORT}/onsiteItemGRN/getAllOnsiteItemGRN`
             );
             console.log(response.data)
             setGrnDataList(response.data.result);
