@@ -1176,7 +1176,6 @@ const GrnEdit = () => {
                                                 id="grnItemDueDateId"
                                                 name="grnItemDueDate"
                                                 label="Next Cal Date"
-                                                // sx={{ width: "100%" }}
                                                 value={dayjs(editableSelectedGrn.grnItemDueDate)}
                                                 slotProps={{ textField: { size: 'small', fullWidth: true } }}
                                                 format="DD-MM-YYYY"
@@ -1192,10 +1191,7 @@ const GrnEdit = () => {
 
                                         
                                         <div className="col-md-3 d-flex justify-content-end">
-
-
                                             <Button disabled={editableSelectedGrn.grnItemStatus === "" || editableSelectedGrn.grnItemStatus === undefined} startIcon={<Add />} color='warning' onClick={() => grnItemAdd()} sx={{ minWidth: "130px" }} variant='contained'>Add Item</Button>
-
                                         </div>
                                     </div>
 
