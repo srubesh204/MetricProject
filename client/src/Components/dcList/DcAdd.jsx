@@ -299,10 +299,12 @@ const DcAdd = () => {
                 const response = await axios.post(
                     `${process.env.REACT_APP_PORT}/itemDc/createItemDc`, dcAddData
                 );
-                setAlertMessage({ message: response.data.message, type: "success" })
-                setSnackBarOpen(true)
-                dcListFetchData()
-                setTimeout(() => setDcOpen(false), 3000)
+                setAlertMessage({ message: response.data.message, type: "success" });
+                setSnackBarOpen(true);
+                dcListFetchData();
+                dcAddData(initialDcData);
+                setErrors({});
+                setTimeout(() => setDcOpen(false), 2000)
             } else {
                 setAlertMessage({ message: "Fill the required fields to submit", type: "error" })
                 setSnackBarOpen(true)

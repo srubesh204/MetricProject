@@ -177,7 +177,8 @@ const itemDcController = {
       for (const itemDcId of itemDcIds) {
         // Find and remove each vendor by _id
         const dcData = await itemDcModel.findById(itemDcId)
-        if (!dcData._id) {
+       
+        if (dcData.dcPartyItems.length !== 0) {
 
           const updatePromises = dcData.dcPartyItems.map(async (item) => {
 
