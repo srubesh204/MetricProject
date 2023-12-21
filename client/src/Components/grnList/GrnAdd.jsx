@@ -111,8 +111,8 @@ const GrnAdd = () => {
                 ...prev,
                 grnPartyName: response.data.result.fullName,
                 grnPartyAddress: response.data.result.address,
-                grnPartyCode: response.data.result.vendorCode
-
+                grnPartyCode: response.data.result.vendorCode,
+                grnPartyId: response.data.result._id
             }))
 
         } catch (err) {
@@ -512,7 +512,7 @@ const GrnAdd = () => {
 
 
 
-    const [confirmSubmit, setConfirmSubmit] = useState(false)
+    const [addConfirmSubmit, setAddConfirmSubmit] = useState(false)
     const [errorhandler, setErrorHandler] = useState({})
 
     const [snackBarOpen, setSnackBarOpen] = useState(false)
@@ -1584,13 +1584,13 @@ const GrnAdd = () => {
 
 
 
-
+                                        </React.Fragment> : ""}
                                         <Dialog
-                                            open={confirmSubmit}
+                                            open={addConfirmSubmit}
                                             onClose={(e, reason) => {
                                                 console.log(reason)
                                                 if (reason !== 'backdropClick' && reason !== 'escapeKeyDown') {
-                                                    setConfirmSubmit(false)
+                                                    setAddConfirmSubmit(false)
                                                 }
                                             }}
                                             aria-labelledby="alert-dialog-title"
@@ -1601,8 +1601,8 @@ const GrnAdd = () => {
                                             </DialogTitle>
 
                                             <DialogActions className='d-flex justify-content-center'>
-                                                <Button onClick={() => setConfirmSubmit(false)}>Cancel</Button>
-                                                <Button onClick={() => { submitGrnForm(); setConfirmSubmit(false) }} autoFocus>
+                                                <Button onClick={() => setAddConfirmSubmit(false)}>Cancel</Button>
+                                                <Button onClick={(e) => { submitGrnForm(e); setAddConfirmSubmit(false) }} autoFocus>
                                                     Submit
                                                 </Button>
                                             </DialogActions>
@@ -1615,7 +1615,7 @@ const GrnAdd = () => {
                                                 {alertMessage}
                                             </Alert>
                                         </Snackbar>
-                                    </React.Fragment> : ""}
+                                   
                             </Paper>
                             <Paper elevation={12} sx={{ p: 2 }} className='col-md-12'>
                                 <table className='table table-bordered table-responsive text-center align-middle'>
@@ -1639,7 +1639,7 @@ const GrnAdd = () => {
                                                 <td>{item.grnItemRangeSize}</td>
                                                 <td>{item.grnItemCertificateNo}</td>
                                                 <td>{dayjs(item.grnItemCalDate).format("DD-MM-YYYY")}</td>
-                                                <td>{item.grnItemDueDate}</td>
+                                                <td>{dayjs(item.grnItemDueDate).format("DD-MM-YYYY")}</td>
                                                 <td>{item.grnItemCalibratedAt}</td>
                                                 <td width="5%"><Delete color='error' onClick={() => deleteAC(index)} /></td>
                                             </tr>
@@ -1658,7 +1658,7 @@ const GrnAdd = () => {
                 </div>
                 <div>
                     <Button variant='contained' color='error' className='me-3' onClick={() => { setGrnOpen(false) }}>Cancel</Button>
-                    <Button variant='contained' color='success' onClick={() => { setConfirmSubmit(true) }}>Submit</Button>
+                    <Button variant='contained' color='success' onClick={() => { setAddConfirmSubmit(true) }}>Submit</Button>
                 </div>
             </DialogActions>
 

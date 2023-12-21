@@ -1595,7 +1595,7 @@ const GrnEdit = () => {
                             aria-describedby="alert-dialog-description"
                         >
                             <DialogTitle id="alert-dialog-title">
-                                Are you sure to submit ?
+                                Are you sure to Update ?
                             </DialogTitle>
 
                             <DialogActions className='d-flex justify-content-center'>

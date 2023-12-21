@@ -845,10 +845,6 @@ const Grn = () => {
         const selectedFile = event.target.files[0];
         if (selectedFile) {
             console.log("working")
-            setSelectedGrnItem((prev) => ({ ...prev, grnItemCertificate: selectedFile.name }));
-            const fileURL = URL.createObjectURL(selectedFile);
-
-
             const formData = new FormData();
             formData.append('file', selectedFile);
             try {
@@ -856,6 +852,7 @@ const Grn = () => {
                     .then(response => {
                         setCertMessage("Certificate Uploaded Successfully")
                         console.log("Certificate Uploaded Successfully")
+                        setSelectedGrnItem((prev) => ({ ...prev, grnItemCertificate: selectedFile.name }));
                     })
                     .catch(error => {
                         setCertMessage("Error Uploading Certificate")
@@ -1195,25 +1192,27 @@ const Grn = () => {
 
                                                 </div>
 
-                                                <div className='col-md-2' >
-                                                    <Button helperText="Hello" component="label" fullWidth variant="contained" startIcon={<CloudUpload />} >
-                                                        Upload Certificate
-                                                        <VisuallyHiddenInput type="file" onChange={handleGrnCertificate} />
-                                                    </Button>
-                                                    <div className='d-flex justify-content-center '>
-                                                        {(selectedGrnItem.grnItemCertificate !== "" && selectedGrnItem.grnItemCertificate !== undefined) &&
-                                                            <Chip
-                                                                className='mt-2'
-                                                                icon={<Done />}
-                                                                color="success"
-                                                                label={selectedGrnItem.grnItemCertificate}
-                                                                onClick={() => {
-                                                                    const fileUrl = `${process.env.REACT_APP_PORT}/grnCertificates/${selectedGrnItem.grnItemCertificate}`;
-                                                                    window.open(fileUrl, '_blank'); // Opens the file in a new tab/window
-                                                                }}
-                                                                onDelete={() => setSelectedGrnItem((prev) => ({ ...prev, grnItemCertificate: "" }))}
-                                                            />}
-                                                    </div>
+                                                <div className='col-md-2 d-flex justify-content-center ' >
+
+
+                                                    {(selectedGrnItem.grnItemCertificate !== "" && selectedGrnItem.grnItemCertificate !== undefined) ?
+                                                        <Chip
+                                                            className='mt-2'
+                                                            icon={<Done />}
+                                                            size='large'
+                                                            color="success"
+                                                            label={selectedGrnItem.grnItemCertificate}
+                                                            onClick={() => {
+                                                                const fileUrl = `${process.env.REACT_APP_PORT}/grnCertificates/${selectedGrnItem.grnItemCertificate}`;
+                                                                window.open(fileUrl, '_blank'); // Opens the file in a new tab/window
+                                                            }}
+                                                            onDelete={() => setSelectedGrnItem((prev) => ({ ...prev, grnItemCertificate: "" }))}
+                                                            deleteIcon={<Delete color='error'/>}
+                                                        ></Chip> : <Button helperText="Hello" component="label" fullWidth variant="contained" startIcon={<CloudUpload />} >
+                                                            Upload Certificate
+                                                            <VisuallyHiddenInput type="file" onChange={handleGrnCertificate} />
+                                                        </Button>}
+
                                                 </div>
                                             </React.Fragment> : ""}
 
