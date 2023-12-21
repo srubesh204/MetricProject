@@ -300,7 +300,7 @@ const GrnList = () => {
                             >
                                 <div className='row g-2'>
                                     <div className='col'>
-                                        <TextField fullWidth label="Vendor Type" select size="small" id="vendorTypeId" onChange={handleFilterChange} name="vendorType" defaultValue="" >
+                                        <TextField fullWidth label="Vendor Type" select size="small" id="vendorTypeId" onChange={handleFilterChange} name="vendorType" defaultValue="all" >
                                             <MenuItem value="all">All</MenuItem>
                                             <MenuItem value="oem">OEM</MenuItem>
                                             <MenuItem value="customer">Customer</MenuItem>
@@ -310,11 +310,11 @@ const GrnList = () => {
 
                                     </div>
                                     <div className='col'>
-                                        <TextField fullWidth label="Party Name" select size="small" onChange={handleFilterChange} id="partyNameId" name="partyName" defaultValue="" >
+                                        <TextField fullWidth label="Party Name" select size="small" onChange={handleFilterChange} id="partyNameId" name="partyName" defaultValue="all" >
 
                                             <MenuItem value="all">All</MenuItem>
-                                            {vendorFullList.map((item) => (
-                                                <MenuItem value={item.fullName}>{item.fullName}</MenuItem>
+                                            {vendorFullList.map((item, index) => (
+                                                <MenuItem key={index} value={item.fullName}>{item.fullName}</MenuItem>
                                             ))}
 
 
