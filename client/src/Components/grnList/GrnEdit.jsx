@@ -8,7 +8,7 @@ import isSameOrBefore from 'dayjs/plugin/isSameOrBefore'
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { GrnListContent } from './GrnList';
-import { Add, Close, CloudUpload, Delete, Done } from '@mui/icons-material';
+import { Add, Close, CloudUpload, Delete, Done,Edit } from '@mui/icons-material';
 import { useParams } from 'react-router-dom';
 import styled from '@emotion/styled';
 
@@ -288,7 +288,7 @@ const GrnEdit = () => {
     }, [grnEditData.grnPartyItems])
 
 
-    
+
 
 
     const grnItemAdd = () => {
@@ -313,13 +313,14 @@ const GrnEdit = () => {
 
     const handleGrnItemChange = (e) => {
         const { name, value } = e.target;
+        setItemAddDetails((prev) => ({ ...prev, [name]: value }))
         if (name === "grnList") {
             getItemByName(value)
 
         }
-
+       
         if (name === "grnItemStatus") {
-            const fetchedData = selectedRows.filter((item) => item._id === selectedGrnItem.grnItemId)
+            const fetchedData = allItemImtes.filter((item) => item._id === selectedGrnItem.grnItemId)
             console.log(fetchedData)
             setSelectedGrnItem((prev) => ({ ...prev, [name]: value }))
             if (value === "Calibrated") {
@@ -766,6 +767,7 @@ const GrnEdit = () => {
 
                 `${process.env.REACT_APP_PORT}/itemGrn/updateItemGRN/${selectedRows._id}`, grnEditData
             );
+            console.log(response.data)
             setAlertMessage(response.data.message)
             setSnackBarOpen(true)
             grnListFetchData()
@@ -793,7 +795,7 @@ const GrnEdit = () => {
 
     return (
 
-        <Dialog fullWidth={true} keepMounted maxWidth="xl" open={grnEditOpen} onc sx={{ color: "#f1f4f4" }}
+        <Dialog fullScreen keepMounted maxWidth="xl" open={grnEditOpen} onc sx={{ color: "#f1f4f4" }}
             onClose={(e, reason) => {
                 console.log(reason)
                 if (reason !== 'backdropClick' && reason !== 'escapeKeyDown') {
@@ -1016,10 +1018,7 @@ const GrnEdit = () => {
                             >
                                 <div className='row g-2'>
                                     <div className="col-md-2">
-
-
-
-                                        <TextField size='small' fullWidth variant='outlined' defaultValue="" value={itemAddDetails.grnList} id="grnListId" onChange={handleGrnItemChange} select label="Item List" name='grnList'>
+                                        <TextField size='small' fullWidth variant='outlined' value={itemAddDetails.grnList} id="grnListId" onChange={handleGrnItemChange} select label="Item List" name='grnList'>
 
                                             {itemMasterDistNames.map((item, index) => (
                                                 <MenuItem key={index} value={item}>{item}</MenuItem>
@@ -1049,14 +1048,14 @@ const GrnEdit = () => {
 
                                     <div className="col">
                                         <TextField size='small' fullWidth variant='outlined' defaultValue="" id="grnItemStatusId" value={selectedGrnItem.grnItemStatus} onChange={handleGrnItemChange} select label="Grn Item Status" name='grnItemStatus' >
-                                            <MenuItem value="">Select</MenuItem>
+                                            <MenuItem value="select">Select</MenuItem>
                                             <MenuItem value="Calibrated">Calibrated</MenuItem>
                                             <MenuItem value="Serviced">Serviced</MenuItem>
                                             <MenuItem value="Not Servicable">Not Servicable</MenuItem>
                                             <MenuItem value="Not Calibrated">Not Calibrated</MenuItem>
                                             <MenuItem value="Other Reason">Other Reason</MenuItem>
                                         </TextField>
-                                    </div> 
+                                    </div>
 
 
 
@@ -1539,18 +1538,6 @@ const GrnEdit = () => {
                             </Paper>
 
                             <Paper elevation={12} sx={{ p: 2 }} className='col-md-12'>
-                                <div className="row mb-2">
-
-                                    <div className='col-md'> <h5 className='text-start'>Master Used</h5></div>
-                                    <div className=' col d-flex justify-content-end'>
-                                        <div className='me-2 '>
-                                            <Button startIcon={<Add />} onClick={() => grnItemAdd()} size='small' sx={{ minWidth: "130px" }} variant='contained'>Add Item</Button>
-                                        </div>
-
-                                    </div>
-
-                                </div>
-
                                 <table className='table table-bordered table-responsive text-center align-middle'>
                                     <tbody>
                                         <tr>
@@ -1564,6 +1551,7 @@ const GrnEdit = () => {
                                             <th>Calibrated At</th>
                                             <th>Remarks</th>
                                             <th>Remove</th>
+                                            <th>Edit</th>
                                         </tr>
 
                                         {grnEditData.grnPartyItems.map((item, index) => (
@@ -1578,6 +1566,7 @@ const GrnEdit = () => {
                                                 <td>{item.grnItemCalibratedAt}</td>
                                                 <td>{item.grnItemStatus}</td>
                                                 <td width="5%"><Delete onClick={() => deleteGrnPartyItems(index)} color='error' /></td>
+                                                <th><Edit color='success' /></th>
                                             </tr>
                                         ))}
                                     </tbody>
@@ -1598,21 +1587,21 @@ const GrnEdit = () => {
                                 Are you sure to Update ?
                             </DialogTitle>
 
-                            <DialogActions className='d-flex justify-content-center'>
-                                <Button onClick={() => setConfirmSubmit(false)}>Cancel</Button>
-                                <Button onClick={(e) => { updateGrnData(e); setConfirmSubmit(false) }} autoFocus>
-                                    Update
-                                </Button>
-                            </DialogActions>
-                        </Dialog>
-                        <Snackbar anchorOrigin={{ vertical: "top", horizontal: "right" }} open={snackBarOpen} autoHideDuration={3000}
-                            onClose={() => setTimeout(() => {
-                                setSnackBarOpen(false)
-                            }, 3000)}>
-                            <Alert onClose={() => setSnackBarOpen(false)} variant='filled' severity="success" sx={{ width: '100%' }}>
-                                {alertMessage}
-                            </Alert>
-                        </Snackbar>
+                                <DialogActions className='d-flex justify-content-center'>
+                                    <Button onClick={() => setConfirmSubmit(false)}>Cancel</Button>
+                                    <Button onClick={(e) => { updateGrnData(e); setConfirmSubmit(false) }} autoFocus>
+                                        Update
+                                    </Button>
+                                </DialogActions>
+                            </Dialog>
+                            <Snackbar anchorOrigin={{ vertical: "top", horizontal: "right" }} open={snackBarOpen} autoHideDuration={3000}
+                                onClose={() => setTimeout(() => {
+                                    setSnackBarOpen(false)
+                                }, 3000)}>
+                                <Alert onClose={() => setSnackBarOpen(false)} variant='filled' severity="success" sx={{ width: '100%' }}>
+                                    {alertMessage}
+                                </Alert>
+                            </Snackbar>
 
 
 
