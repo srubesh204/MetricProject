@@ -543,10 +543,12 @@ const GrnAdd = () => {
                     `${process.env.REACT_APP_PORT}/itemGRN/createItemGRN`, grnAddData
                 );
                 console.log(response.data)
+                setAlertMessage({ message: response.data.message, type: "success" })
                 setSnackBarOpen(true)
-                setTimeout(() => setGrnOpen(false), 3000)
+
                 grnListFetchData()
                 setGrnAddData(initialGrnData)
+                setTimeout(() => setGrnOpen(false), 1000)
             } else {
                 setAlertMessage({ message: "Fill the required fields to submit", type: "error" })
                 setSnackBarOpen(true)
@@ -947,7 +949,7 @@ const GrnAdd = () => {
                                         <div className='row g-2 mb-2'>
                                             <div className=" col-6">
 
-                                                <TextField label="Party Ref No"
+                                                {/* <TextField label="Party Ref No"
                                                     id="grnPartyRefNoId"
                                                     defaultValue=""
                                                     value={grnAddData.grnPartyRefNo}
@@ -956,7 +958,29 @@ const GrnAdd = () => {
                                                     size="small"
                                                     fullWidth
                                                     onChange={handleGrnChange}
-                                                    name="grnPartyRefNo" />
+                                    name="grnPartyRefNo" />*/}
+
+                                                <TextField
+                                                    label="Party Ref No"
+                                                    id="grnPartyRefNoId"
+                                                    defaultValue=""
+                                                    value={grnAddData.grnPartyRefNo}
+                                                    {...(errors.grnPartyRefNo !== "" && { helperText: errors.grnPartyRefNo, error: true })}
+                                                    size="small"
+                                                    fullWidth
+                                                    onChange={handleGrnChange}
+                                                    name="grnPartyRefNo"
+                                                    onBlur={() => {
+                                                        if (grnAddData.grnPartyRefNo !== '') {
+                                                            // Set errors to an empty string if the value is provided
+                                                            // This prevents the error message from displaying when the field has content
+                                                            setErrors((prevErrors) => ({
+                                                                ...prevErrors,
+                                                                grnPartyRefNo: '',
+                                                            }));
+                                                        }
+                                                    }}
+                                                />
                                             </div>
                                             <div className="col-6">
 
@@ -1125,7 +1149,7 @@ const GrnAdd = () => {
                                 <div className='row g-2 mb-2'>
 
                                     <div className='col '>
-                                        <TextField size='small' fullWidth variant='outlined' defaultValue="" value={itemAddDetails.grnList} id="grnListId" onChange={handleGrnItemAdd} select label="Item List" name='grnList'>
+                                        <TextField size='small' fullWidth variant='outlined' defaultValue="" value={itemAddDetails.grnList} id="grnListId" onChange={handleGrnItemAdd} {...(errors.grnPartyItems !== "" && { helperText: errors.grnPartyItems, error: true })}  select label="Item List" name='grnList'>
 
                                             {itemMasterDistNames.map((item, index) => (
                                                 <MenuItem key={index} value={item}>{item}</MenuItem>
@@ -1624,7 +1648,7 @@ const GrnAdd = () => {
                                     </DialogTitle>
 
                                     <DialogActions className='d-flex justify-content-center'>
-                                        <Button onClick={() => setAddConfirmSubmit(false)}>Cancel</Button>
+                                        <Button onClick={() => setAddConfirmSubmit(false)} >Cancel</Button>
                                         <Button onClick={(e) => { submitGrnForm(e); setAddConfirmSubmit(false) }} autoFocus>
                                             Submit
                                         </Button>

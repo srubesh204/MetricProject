@@ -1161,7 +1161,7 @@ const OnSiteGrn = () => {
                                                 {selectedGrnItem.osGrnAcCriteria.map((item, index) => {
 
                                                     let averageColor = "";
-                                                    if (parseFloat(item.grnAcAverageOB) >= parseFloat(item.grnAcMinPSError) && parseFloat(item.grnAcAverageOB) <= parseFloat(item.grnAcMaxPSError)) {
+                                                    if (parseFloat(item.osGrnAcAverageOB) >= parseFloat(item.osGrnAcMinPSError) && parseFloat(item.osGrnAcAverageOB) <= parseFloat(item.osGrnAcMaxPSError)) {
                                                         averageColor = "#4cbb17";
                                                     } else {
                                                         averageColor = "red"
