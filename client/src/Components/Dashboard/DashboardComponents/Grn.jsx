@@ -1224,7 +1224,7 @@ const Grn = () => {
                                                             className='mt-2'
                                                             icon={<Done />}
                                                             size='large'
-                                                            color="primary"
+                                                            color="success"
                                                             label={selectedGrnItem.grnItemCertificate}
                                                             onClick={() => {
                                                                 const fileUrl = `${process.env.REACT_APP_PORT}/grnCertificates/${selectedGrnItem.grnItemCertificate}`;
