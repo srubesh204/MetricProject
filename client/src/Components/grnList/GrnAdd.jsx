@@ -516,20 +516,41 @@ const GrnAdd = () => {
     const [errorhandler, setErrorHandler] = useState({})
 
     const [snackBarOpen, setSnackBarOpen] = useState(false)
-    const [alertMessage, setAlertMessage] = useState("")
+    const [alertMessage, setAlertMessage] = useState({
+        message: "",
+        type: ""
+    })
+    const [errors, setErrors] = useState({})
+    const validateFunction = () => {
+        let tempErrors = {};
+        tempErrors.grnPartyRefNo = grnAddData.grnPartyRefNo ? "" : "GRN Party Name is Required"
+        tempErrors.grnPartyName = grnAddData.grnPartyName ? "" : "GRN Party Name is Required"
+        tempErrors.grnPartyCode = grnAddData.grnPartyCode ? "" : "GRN Party Code is Required"
+        tempErrors.grnPartyAddress = grnAddData.grnPartyAddress ? "" : "GRN Party Address is Required"
+        tempErrors.grnNo = grnAddData.grnNo ? "" : "GRN Number is Required"
+        tempErrors.grnPartyItems = grnAddData.grnPartyItems.length !== 0 ? "" : "GRN Item Required"
+
+        setErrors({ ...tempErrors })
+
+        return Object.values(tempErrors).every(x => x === "")
+    }
 
     const submitGrnForm = async () => {
         try {
-            const response = await axios.post(
+            if (validateFunction()) {
+                const response = await axios.post(
 
-                `${process.env.REACT_APP_PORT}/itemGRN/createItemGRN`, grnAddData
-            );
-            console.log(response.data)
-            setAlertMessage(response.data.message)
-            setSnackBarOpen(true)
-            setTimeout(() => setGrnOpen(false), 3000)
-            grnListFetchData()
-            setGrnAddData(initialGrnData)
+                    `${process.env.REACT_APP_PORT}/itemGRN/createItemGRN`, grnAddData
+                );
+                console.log(response.data)
+                setSnackBarOpen(true)
+                setTimeout(() => setGrnOpen(false), 3000)
+                grnListFetchData()
+                setGrnAddData(initialGrnData)
+            } else {
+                setAlertMessage({ message: "Fill the required fields to submit", type: "error" })
+                setSnackBarOpen(true)
+            }
         } catch (err) {
             console.log(err);
         }
@@ -930,6 +951,7 @@ const GrnAdd = () => {
                                                     id="grnPartyRefNoId"
                                                     defaultValue=""
                                                     value={grnAddData.grnPartyRefNo}
+                                                    {...(errors.grnPartyRefNo !== "" && { helperText: errors.grnPartyRefNo, error: true })}
                                                     //  sx={{ width: "100%" }}
                                                     size="small"
                                                     fullWidth
@@ -949,8 +971,6 @@ const GrnAdd = () => {
                                                     }
                                                     label="Party Ref Date"
                                                     //onChange={handleGrnChange}
-
-
                                                     slotProps={{ textField: { size: 'small', fullWidth: true } }}
                                                     format="DD-MM-YYYY" />
 
@@ -974,7 +994,7 @@ const GrnAdd = () => {
                                                     //  sx={{ width: "100%" }}
                                                     size="small"
                                                     fullWidth
-
+                                                    {...(errors.grnPartyName !== "" && { helperText: errors.grnPartyName, error: true })}
                                                     name="grnPartyName" >
                                                     {vendorDataList.map((item, index) => (
                                                         <MenuItem key={index} value={item._id}>{item.fullName}</MenuItem>
@@ -990,6 +1010,7 @@ const GrnAdd = () => {
                                                     // sx={{ width: "100%" }}
                                                     size="small"
                                                     value={grnAddData.grnPartyCode}
+                                                    {...(errors.grnPartyCode !== "" && { helperText: errors.grnPartyCode, error: true })}
 
                                                     fullWidth
                                                     name="grnPartyCode" />
@@ -1010,6 +1031,7 @@ const GrnAdd = () => {
                                                 onChange={handleGrnChange}
                                                 value={grnAddData.grnPartyAddress}
                                                 sx={{ width: "100%" }}
+                                                {...(errors.grnPartyAddress !== "" && { helperText: errors.grnPartyAddress, error: true })}
                                                 name="grnPartyAddress" />
 
                                         </div>
@@ -1039,6 +1061,7 @@ const GrnAdd = () => {
                                                     defaultValue=""
                                                     value={grnAddData.grnNo}
                                                     size="small"
+                                                    {...(errors.grnPartyCode !== "" && { helperText: errors.grnPartyCode, error: true })}
                                                     onChange={handleGrnChange}
                                                     fullWidth
                                                     name="grnNo"
@@ -1584,38 +1607,38 @@ const GrnAdd = () => {
 
 
 
-                                        </React.Fragment> : ""}
-                                        <Dialog
-                                            open={addConfirmSubmit}
-                                            onClose={(e, reason) => {
-                                                console.log(reason)
-                                                if (reason !== 'backdropClick' && reason !== 'escapeKeyDown') {
-                                                    setAddConfirmSubmit(false)
-                                                }
-                                            }}
-                                            aria-labelledby="alert-dialog-title"
-                                            aria-describedby="alert-dialog-description"
-                                        >
-                                            <DialogTitle id="alert-dialog-title">
-                                                Are you sure to submit ?
-                                            </DialogTitle>
+                                    </React.Fragment> : ""}
+                                <Dialog
+                                    open={addConfirmSubmit}
+                                    onClose={(e, reason) => {
+                                        console.log(reason)
+                                        if (reason !== 'backdropClick' && reason !== 'escapeKeyDown') {
+                                            setAddConfirmSubmit(false)
+                                        }
+                                    }}
+                                    aria-labelledby="alert-dialog-title"
+                                    aria-describedby="alert-dialog-description"
+                                >
+                                    <DialogTitle id="alert-dialog-title">
+                                        Are you sure to submit ?
+                                    </DialogTitle>
 
-                                            <DialogActions className='d-flex justify-content-center'>
-                                                <Button onClick={() => setAddConfirmSubmit(false)}>Cancel</Button>
-                                                <Button onClick={(e) => { submitGrnForm(e); setAddConfirmSubmit(false) }} autoFocus>
-                                                    Submit
-                                                </Button>
-                                            </DialogActions>
-                                        </Dialog>
-                                        <Snackbar anchorOrigin={{ vertical: "top", horizontal: "right" }} open={snackBarOpen} autoHideDuration={3000}
-                                            onClose={() => setTimeout(() => {
-                                                setSnackBarOpen(false)
-                                            }, 3000)}>
-                                            <Alert onClose={() => setSnackBarOpen(false)} variant='filled' severity="success" sx={{ width: '100%' }}>
-                                                {alertMessage}
-                                            </Alert>
-                                        </Snackbar>
-                                   
+                                    <DialogActions className='d-flex justify-content-center'>
+                                        <Button onClick={() => setAddConfirmSubmit(false)}>Cancel</Button>
+                                        <Button onClick={(e) => { submitGrnForm(e); setAddConfirmSubmit(false) }} autoFocus>
+                                            Submit
+                                        </Button>
+                                    </DialogActions>
+                                </Dialog>
+                                <Snackbar anchorOrigin={{ vertical: "top", horizontal: "right" }} open={snackBarOpen} autoHideDuration={3000}
+                                    onClose={() => setTimeout(() => {
+                                        setSnackBarOpen(false)
+                                    }, 3000)}>
+                                    <Alert onClose={() => setSnackBarOpen(false)} variant='filled' severity={alertMessage.type} sx={{ width: '100%' }}>
+                                        {alertMessage.message}
+                                    </Alert>
+                                </Snackbar>
+
                             </Paper>
                             <Paper elevation={12} sx={{ p: 2 }} className='col-md-12'>
                                 <table className='table table-bordered table-responsive text-center align-middle'>
