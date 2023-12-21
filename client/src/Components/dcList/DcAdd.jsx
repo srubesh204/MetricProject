@@ -50,8 +50,8 @@ const DcAdd = () => {
     })
     console.log(dcAddData)
 
-    
-    
+
+
 
     const [filteredData, setFilteredData] = useState([])
 
@@ -270,27 +270,45 @@ const DcAdd = () => {
     const [confirmSubmit, setConfirmSubmit] = useState(false)
     const [snackBarOpen, setSnackBarOpen] = useState(false)
     const [alertMessage, setAlertMessage] = useState({
-        dcMessage: "",
-        dcType: "info"
+        message: "",
+        type: ""
     })
-    console.log(alertMessage)
+    const [errors, setErrors] = useState({})
+    const validateFunction = () => {
+        let tempErrors = {};
+        tempErrors.dcPartyType = dcAddData.dcPartyType ? "" : "GRN Party Type is Required"
+        tempErrors.dcPartyName = dcAddData.dcPartyName ? "" : "GRN Party Name is Required"
+        tempErrors.dcPartyCode = dcAddData.dcPartyCode ? "" : "GRN Party Code is Required"
+        tempErrors.dcPartyAddress = dcAddData.dcPartyAddress ? "" : "GRN Party Address is Required"
+        tempErrors.dcNo = dcAddData.dcNo ? "" : "GRN Number is Required"
+        tempErrors.dcReason = dcAddData.dcReason ? "" : "GRN Reason is Required"
+        tempErrors.dcPartyItems = dcAddData.dcPartyItems.length !== 0 ? "" : "GRN Item Required"
+
+        setErrors({ ...tempErrors })
+
+        return Object.values(tempErrors).every(x => x === "")
+    }
+
+    console.log(errors)
+
+
     const submitDcForm = async () => {
         try {
-            if (dcAddData.dcPartyItems.length === 0) {
-                setAlertMessage({ dcMessage: "Cannot create DC without a Item", dcType: "error" })
-                setSnackBarOpen(true)
-            } else {
+            if (validateFunction()) {
+                
                 const response = await axios.post(
                     `${process.env.REACT_APP_PORT}/itemDc/createItemDc`, dcAddData
                 );
-                setAlertMessage({ dcMessage: response.data.message, dcType: "success" })
-                dcListFetchData();
+                setAlertMessage({ message: response.data.message, type: "success" })
                 setSnackBarOpen(true)
                 setTimeout(() => setDcOpen(false), 3000)
+            } else {
+                setAlertMessage({ message: "Fill the required fields to submit", type: "error" })
+                setSnackBarOpen(true)
             }
         } catch (err) {
             console.log(err);
-            setAlertMessage({ dcMessage: "Error Occurred", dcType: "error" })
+            
         }
 
     };
@@ -444,14 +462,22 @@ const DcAdd = () => {
                         <form>
                             <div className='row'>
                                 <div className="col-3 mb-2">
-                                    <select className="form-select form-select-sm" id="dcPartyTypeId" name="dcPartyType" onChange={handleFilterChange}  >
-                                        <option value="">Select</option>
-                                        <option value="oem">OEM</option>
-                                        <option value="customer">Customer</option>
-                                        <option value="supplier">Supplier</option>
-                                        <option value="subContractor">SubContractor</option>
-                                    </select>
+                                    <TextField label="Vendor Type"
+                                        id="dcPartyTypeId"
+                                        select
+                                        defaultValue=""
+                                        onChange={handleFilterChange}
+                                        size="small"
+                                        sx={{ width: "101%" }}
+                                        {...(errors.dcPartyType !== "" && { helperText: errors.dcPartyType, error: true })} 
+                                        name="dcPartyType" >
+                                        <MenuItem value=""><em>--Select--</em></MenuItem>
+                                        <MenuItem value="oem">OEM</MenuItem>
+                                        <MenuItem value="customer">Customer</MenuItem>
+                                        <MenuItem value="supplier">Supplier</MenuItem>
+                                        <MenuItem value="subContractor">SubContractor</MenuItem>
 
+                                    </TextField>
                                 </div>
                             </div>
 
@@ -485,7 +511,8 @@ const DcAdd = () => {
                                                     size="small"
                                                     fullWidth
                                                     disabled={dcAddData.dcPartyType === ""}
-                                                    name="dcPartyName" >
+                                                    {...(errors.dcPartyName !== "" && { helperText: errors.dcPartyName, error: true })} 
+                                                    name="dcPartyName">
                                                     {filteredData.map((item, index) => (
                                                         <MenuItem key={index} value={item._id}>{item.fullName}</MenuItem>
                                                     ))}
@@ -499,6 +526,7 @@ const DcAdd = () => {
                                                     id="dcPartyCodeId"
                                                     defaultValue=""
                                                     disabled={dcAddData.dcPartyType === ""}
+                                                    {...(errors.dcPartyCode !== "" && { helperText: errors.dcPartyCode, error: true })} 
 
                                                     value={dcAddData.dcPartyCode}
 
@@ -523,6 +551,7 @@ const DcAdd = () => {
 
                                                     size="small"
                                                     sx={{ width: "100%" }}
+                                                    {...(errors.dcPartyAddress !== "" && { helperText: errors.dcPartyAddress, error: true })} 
                                                     name="dcPartyAddress" >
 
                                                 </TextField>
@@ -546,6 +575,7 @@ const DcAdd = () => {
                                                 defaultValue=""
                                                 value={dcAddData.dcNo}
                                                 onChange={handleDcChange}
+                                                {...(errors.dcNo !== "" && { helperText: errors.dcNo, error: true })} 
                                                 size="small"
                                                 sx={{ width: "101%" }}
                                                 name="dcNo" />
@@ -577,6 +607,7 @@ const DcAdd = () => {
                                                 fullWidth
                                                 onChange={handleDcChange}
                                                 size="small"
+                                                {...(errors.dcReason !== "" && { helperText: errors.dcReason, error: true })} 
 
                                                 name="dcReason" >
                                                 <MenuItem value="Calibration">Calibration</MenuItem>
@@ -636,7 +667,7 @@ const DcAdd = () => {
 
 
                                         </div>
-                                        
+
                                     </div>
                                     <div className=' col d-flex justify-content-end'>
                                         <div className='me-2 '>
@@ -715,7 +746,7 @@ const DcAdd = () => {
                                                     <td>{item.itemAddMasterName}</td>
                                                     <td>{item.itemRangeSize}</td>
                                                     <td>{item.itemMake}</td>
-                                                    <td>{dayjs(item.itemCalFreInMonths).format("DD-MM-YYYY")}</td>
+                                                    <td>{item.itemCalFreInMonths}</td>
                                                     <td> <select className="form-select form-select-sm" id="dcItemRemarksId" name="dcItemRemarks" value={item.dcItemRemarks} onChange={(e) => remarksChange(e, index)} aria-label="Floating label select example">
                                                         <option value="calibration">Calibration</option>
                                                         <option value="service">Service</option>
@@ -758,8 +789,8 @@ const DcAdd = () => {
                                 onClose={() => setTimeout(() => {
                                     setSnackBarOpen(false)
                                 }, 3000)}>
-                                <Alert onClose={() => setSnackBarOpen(false)} variant='filled' severity={alertMessage.dcType} sx={{ width: '100%' }}>
-                                    {alertMessage.dcMessage}
+                                <Alert onClose={() => setSnackBarOpen(false)} variant='filled' severity={alertMessage.type} sx={{ width: '100%' }}>
+                                    {alertMessage.message}
                                 </Alert>
                             </Snackbar>
 
@@ -773,7 +804,7 @@ const DcAdd = () => {
                     <Button variant='contained' color='warning' className='me-3'>Print</Button>
                 </div>
                 <div>
-                    <Button variant='contained' color='error' className='me-3' onClick={() => { setDcOpen(false); setDcAddData(initialDcData)}}>Cancel</Button>
+                    <Button variant='contained' color='error' className='me-3' onClick={() => { setDcOpen(false); setDcAddData(initialDcData) }}>Cancel</Button>
                     <Button variant='contained' color='success' onClick={() => { setConfirmSubmit(true) }}>Submit</Button>
                 </div>
             </DialogActions>

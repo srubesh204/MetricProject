@@ -210,8 +210,8 @@ const GrnList = () => {
     const grnColumns = [
 
         { field: 'grmItemId', headerName: 'Si. No', width: 70, renderCell: (params) => params.api.getAllRowIds().indexOf(params.id) + 1 },
-        { field: 'grnItemIMTENo', headerName: 'Item IMTENo', width: 100 },
-        { field: 'grnItemAddMasterName', headerName: 'Item Description', width: 100 },
+        { field: 'grnItemIMTENo', headerName: 'Item IMTENo', width: 150 },
+        { field: 'grnItemAddMasterName', headerName: 'Item Description', width: 200 },
         { field: 'grnItemRangeSize', headerName: 'Range/Size', width: 100 },
         { field: 'grnPartyRefNo', headerName: 'Dc Ref', width: 100 },
 
@@ -458,9 +458,9 @@ const GrnList = () => {
                                         <AddIcon /> Add Item
                                     </Button>
                                 </div>
-                                <div className=' me-2'>
+                                {itemListSelectedRowIds.length !== 0 &&    <div className=' me-2'>
                                     <Button variant='contained' type='button' color='error' onClick={() => setDeleteModalItem(true)}>Delete</Button>
-                                </div>
+                                </div>}
                                 <Dialog
                                     open={deleteModalItem}
                                     onClose={() => setDeleteModalItem(false)}

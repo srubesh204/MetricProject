@@ -532,9 +532,9 @@ const DcList = () => {
                                             <AddIcon /> Add Item
                                         </Button>
                                     </div>
-                                    <div className='me-2 '>
+                                    {itemListSelectedRowIds.length !== 0 &&     <div className='me-2 '>
                                         <Button variant='contained' type='button' color='error' onClick={() => setDeleteModalItem(true)}>Delete</Button>
-                                    </div>
+                                    </div>}
 
                                     <Dialog
                                         open={deleteModalItem}

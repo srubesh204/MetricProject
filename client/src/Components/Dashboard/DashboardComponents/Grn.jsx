@@ -813,31 +813,31 @@ const Grn = () => {
     const [errors, setErrors] = useState({})
     const validateFunction = () => {
         let tempErrors = {};
-        
-        tempErrors.grnPartyName = grnData.grnPartyName ? "": "GRN Party Name is Required"
-        tempErrors.grnPartyCode = grnData.grnPartyCode ? "": "GRN Party Code is Required"
-        tempErrors.grnPartyAddress = grnData.grnPartyAddress ? "": "GRN Party Address is Required"
-        tempErrors.grnNo = grnData.grnNo ? "": "GRN Number is Required"
-        tempErrors.grnPartyItems = grnData.grnPartyItems.length !== 0 ? "": "GRN Item Required"
+        tempErrors.grnPartyRefNo = grnData.grnPartyRefNo ? "" : "GRN Party Name is Required"
+        tempErrors.grnPartyName = grnData.grnPartyName ? "" : "GRN Party Name is Required"
+        tempErrors.grnPartyCode = grnData.grnPartyCode ? "" : "GRN Party Code is Required"
+        tempErrors.grnPartyAddress = grnData.grnPartyAddress ? "" : "GRN Party Address is Required"
+        tempErrors.grnNo = grnData.grnNo ? "" : "GRN Number is Required"
+        tempErrors.grnPartyItems = grnData.grnPartyItems.length !== 0 ? "" : "GRN Item Required"
 
-        setErrors({...tempErrors})
+        setErrors({ ...tempErrors })
 
         return Object.values(tempErrors).every(x => x === "")
     }
-    
+
     console.log(errors)
     const submitGrnForm = async () => {
         try {
-            if(validateFunction()){
+            if (validateFunction()) {
                 const response = await axios.post(
 
                     `${process.env.REACT_APP_PORT}/itemGRN/createItemGRN`, grnData
                 );
-                setAlertMessage({message: response.data.message, type: "success"})
+                setAlertMessage({ message: response.data.message, type: "success" })
                 setSnackBarOpen(true)
                 setTimeout(() => setGrnOpen(false), 1000)
-            }else{
-                setAlertMessage({message: "Fill the required fields to submit", type: "error"})
+            } else {
+                setAlertMessage({ message: "Fill the required fields to submit", type: "error" })
                 setSnackBarOpen(true)
             }
         } catch (err) {
@@ -950,6 +950,7 @@ const Grn = () => {
                                                     //  sx={{ width: "100%" }}
                                                     size="small"
                                                     fullWidth
+                                                    {...(errors.grnPartyRefNo !== "" && { helperText: errors.grnPartyRefNo, error: true })}
                                                     onChange={handleGrnChange}
                                                     name="grnPartyRefNo" />
                                             </div>
@@ -991,7 +992,7 @@ const Grn = () => {
                                                         //  sx={{ width: "100%" }}
                                                         size="small"
                                                         fullWidth
-                                                        {...(errors.grnPartyName !== "" && {helperText: errors.grnPartyName, error: true})}
+                                                        {...(errors.grnPartyName !== "" && { helperText: errors.grnPartyName, error: true })}
                                                         name="grnPartyName" >
                                                         {vendorDataList.map((item, index) => (
                                                             <MenuItem key={index} value={item._id}>{item.fullName}</MenuItem>
@@ -1007,6 +1008,7 @@ const Grn = () => {
                                                         // sx={{ width: "100%" }}
                                                         size="small"
                                                         value={grnData.grnPartyCode}
+                                                        {...(errors.grnPartyCode !== "" && { helperText: errors.grnPartyCode, error: true })}
 
                                                         fullWidth
                                                         name="grnPartyCode" />
@@ -1026,6 +1028,7 @@ const Grn = () => {
                                                     size="small"
                                                     onChange={handleGrnChange}
                                                     value={grnData.grnPartyAddress}
+                                                    {...(errors.grnPartyAddress !== "" && { helperText: errors.grnPartyAddress, error: true })}
                                                     sx={{ width: "101%" }}
                                                     name="grnPartyAddress" />
 
@@ -1057,6 +1060,7 @@ const Grn = () => {
                                                     value={grnData.grnNo}
                                                     size="small"
                                                     onChange={handleGrnChange}
+                                                    {...(errors.grnNo !== "" && { helperText: errors.grnNo, error: true })}
                                                     fullWidth
                                                     name="grnNo"
                                                 />
