@@ -252,7 +252,7 @@ const ItemMaster = () => {
     const updateItemMasterData = async () => {
         try {
             const response = await axios.put(
-                "http://localhost:3001/itemMaster/updateItemMaster/" + itemMasterStateId, itemMasterData
+                `${process.env.REACT_APP_PORT}/itemMaster/updateItemMaster/${itemMasterStateId}`, itemMasterData
             );
             itemMasterFetchData();
             setItemMasterStateId(null)
@@ -289,7 +289,7 @@ const ItemMaster = () => {
     const deleteItemMasterData = async () => {
         try {
             const response = await axios.delete(
-                "http://localhost:3001/ItemMaster/deleteItemMaster/", {
+                `${process.env.REACT_APP_PORT}/ItemMaster/deleteItemMaster`, {
                 data: {
                     itemMasterIds: itemMasteSelectedRowIds
                 }
