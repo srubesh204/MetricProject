@@ -259,6 +259,7 @@ const ItemEdit = () => {
         itemStatus: "Active",
         itemReceiptDate: dayjs().format("YYYY-MM-DD"),
         itemDepartment: "",
+        itemCurrentLocation: "",
         itemArea: "N/A",
         itemPlaceOfUsage: "N/A",
         itemCalFreInMonths: "",
@@ -301,7 +302,7 @@ const ItemEdit = () => {
                 `${process.env.REACT_APP_PORT}/itemAdd/getItemAddById/${id}`
             );
             const itemData = response.data.result
-            console.log(itemData.itemType)
+            console.log(itemData)
             setItemAddData((prev) => ({
                 ...prev,
                 itemMasterRef: itemData.itemMasterRef,
@@ -320,6 +321,7 @@ const ItemEdit = () => {
                 itemStatus: itemData.itemStatus,
                 itemReceiptDate: itemData.itemReceiptDate,
                 itemDepartment: itemData.itemDepartment,
+                // itemCurrentLocation: itemData.itemCurrentLocation,
                 itemArea: itemData.itemArea,
                 itemPlaceOfUsage: itemData.itemPlaceOfUsage,
                 itemCalFreInMonths: itemData.itemCalFreInMonths,
@@ -344,7 +346,7 @@ const ItemEdit = () => {
             console.log(err);
         }
     };
-
+    console.log(itemAddData)
     //
 
     const handleKeyDown = (e) => {
@@ -404,6 +406,15 @@ const ItemEdit = () => {
             [name]: value,
             previousItemRangeSizeUnit: prevData.itemRangeSizeUnit, // Store the previous value
         }));*/}
+
+        if(name === "itemDepartment"){
+          
+            setItemAddData((prev) => ({
+                ...prev,
+                [name]: value,
+                itemCurrentLocation: value, // Ensure 'value' is correct here
+              }));
+        }
         const selectedIndex = itemAddData.itemPartName.indexOf(value);
         let updatedValues = [...itemAddData.itemPartName];
 
@@ -441,6 +452,17 @@ const ItemEdit = () => {
 
 
         }
+        if(name === "itemCalDate"){
+            const parsedDate = dayjs(itemAddData.itemCalDate);
+            if (parsedDate.isValid() && !isNaN(parseInt(itemAddData.itemCalFreInMonths))) {
+                const calculatedDate = parsedDate.add(parseInt(itemAddData.itemCalFreInMonths, 10), 'month').subtract(1, 'day');
+                setItemAddData((prev) => ({
+                    ...prev,
+                    itemDueDate: calculatedDate.format('YYYY-MM-DD'),
+                }));
+            }
+        }
+
         if (name === "itemItemMasterName") {
             setItemAddData((prev) => ({ ...prev, itemItemMasterName: value }));
         }
@@ -494,6 +516,13 @@ const ItemEdit = () => {
         setItemAddData({ ...itemAddData, itemPartName: newSelected });
     };*/}
 
+    useEffect(()=> {
+        setItemAddData((prev) => ({
+            ...prev,
+            
+            itemCurrentLocation: itemAddData.itemDepartment, // Ensure 'value' is correct here
+          }));
+    },[itemAddData.itemDepartment])
 
 
 
@@ -531,8 +560,31 @@ const ItemEdit = () => {
 
 
 
+   
+   const [calibrationPointsData, setCalibrationPointsData] = useState([])
+    const itemMasterById = async () => {
+        try {
+            const response = await axios.get(
+                `${process.env.REACT_APP_PORT}/itemMaster/getItemMasterById/${itemAddData.itemMasterRef}`
+            );
+            console.log(response.data)
+            const { _id, itemType, itemDescription, itemPrefix, itemFqInMonths, calAlertInDay, wiNo, uncertainity, standartRef, itemImageName, status, itemMasterImage, workInsName, calibrationPoints } = response.data.result
+            setItemAddData((prev) => ({
+                ...prev,
+               
+                selectedItemMaster: response.data.result
+            }))
+            setCalibrationPointsData(calibrationPoints)
 
-    const [calibrationPointsData, setCalibrationPointsData] = useState([])
+
+        } catch (err) {
+            console.log(err);
+        }
+    };
+
+    useEffect(() => {
+        itemMasterById();
+    }, [itemAddData.itemMasterRef]);
 
 
 
@@ -787,24 +839,24 @@ const ItemEdit = () => {
 
 
 
-    useEffect(() => {
-        calculateResultDate(itemAddData.itemCalDate, itemAddData.itemCalFreInMonths);
-    }, [itemAddData.itemCalDate, itemAddData.itemCalFreInMonths]);
+   
 
 
 
-    const calculateResultDate = (itemCalDate, itemCalFreInMonths) => {
+    const calculateResultDate = (newValue) => {
+        const itemCalDate = dayjs(newValue).format('YYYY-MM-DD') 
         const parsedDate = dayjs(itemCalDate);
-        if (parsedDate.isValid() && !isNaN(parseInt(itemCalFreInMonths))) {
-            const calculatedDate = parsedDate.add(parseInt(itemCalFreInMonths, 10), 'month').subtract(1, 'day');
+        if (parsedDate.isValid() && !isNaN(parseInt(itemAddData.itemCalFreInMonths))) {
+            const calculatedDate = parsedDate.add(parseInt(itemAddData.itemCalFreInMonths, 10), 'month').subtract(1, 'day');
             setItemAddData((prev) => ({
                 ...prev,
+                itemCalData: itemCalDate,
                 itemDueDate: calculatedDate.format('YYYY-MM-DD'),
             }));
         }
     };
 
-    const [obCheckedValue, setObCheckedValue] = useState("average")
+    
 
     return (
         <div style={{ margin: "2rem", backgroundColor: "#f5f5f5" }}>
@@ -816,8 +868,8 @@ const ItemEdit = () => {
                             <div className='col-9'>
                                 <TextField size='small' select variant='outlined' label="Item Master" name='itemMasterRef' value={itemAddData.itemMasterRef} fullWidth onChange={handleItemAddChange}>
                                     <MenuItem value=""><em>Select</em></MenuItem>
-                                    {itemMasterDataList.map((item) => (
-                                        <MenuItem value={item._id}>{item.itemDescription}</MenuItem>
+                                    {itemMasterDataList.map((item, index) => (
+                                        <MenuItem value={index}>{item.itemDescription}</MenuItem>
                                     ))}
                                 </TextField>
                             </div>
@@ -852,7 +904,7 @@ const ItemEdit = () => {
                         <div className="col-lg-5 d-flex justify-content-end">
                             {itemAddData.itemImage && <Card elevation={12} sx={{ width: "110px", height: "110px" }}>
 
-                                <img src={itemAddData.itemImage} style={{ width: "100%", height: "100%" }} />
+                                <img src={`${process.env.REACT_APP_PORT}/itemMasterImages/${itemAddData.itemImage}`} style={{ width: "100%", height: "100%" }} />
 
                             </Card>}
                         </div>
@@ -1144,8 +1196,8 @@ const ItemEdit = () => {
                                                 MenuProps={MenuProps}
                                                 fullWidth
                                             >
-                                                {oemList.map((name) => (
-                                                    <MenuItem key={name} value={name.aliasName}>
+                                                {oemList.map((name, index) => (
+                                                    <MenuItem key={index} value={name.aliasName}>
                                                         <Checkbox checked={itemAddData.itemoem.indexOf(name.aliasName) > -1} />
                                                         <ListItemText primary={name.aliasName} />
                                                     </MenuItem>
@@ -1238,10 +1290,7 @@ const ItemEdit = () => {
                                             id="itemCalDateId"
                                             name="itemCalDate"
                                             value={dayjs(itemAddData.itemCalDate)}
-                                            onChange={(newValue) =>
-                                                setItemAddData((prev) => ({ ...prev, itemCalDate: newValue.format("YYYY-MM-DD") }))
-
-                                            }
+                                            onChange={(newValue)=> calculateResultDate(newValue)}
                                             label="Calibration Date"
 
                                             slotProps={{ textField: { size: 'small' } }}
@@ -1388,22 +1437,12 @@ const ItemEdit = () => {
                                         {itemAddData.acceptanceCriteria.map((item, index) => (
                                             <tr key={index}>
                                                 <td>
-                                                    <select
-                                                        className='form-select form-select-sm'
-                                                        id="acParameterId"
-                                                        name="acParameter"
-                                                        value={item.acParameter}
-                                                        onChange={(e) => changeACValue(index, e.target.name, e.target.value)}
-                                                    >
-                                                        <option value="">-Select-</option>
-                                                        {calibrationPointsData.map((item, index) => (
-                                                            // Display both calibrationPoint and acParameter in the option
-                                                            <option key={index} value={item.acParameter}>
-                                                                {`${item.calibrationPoint} - ${item.acParameter}`}
-                                                            </option>
-                                                        ))}
-                                                    </select>
-                                                </td>
+                                                <select className='form-select form-select-sm' id="acParameterId" name="acParameter" value={item.acParameter} onChange={(e) => changeACValue(index, e.target.name, e.target.value)}>
+                                                    <option value="">-Select-</option>
+                                                    {calibrationPointsData.map((item, idx) => (
+                                                        <option key={idx}>{item.calibrationPoint}</option>
+                                                    ))}
+                                                </select></td>
                                                 <td><input type="text" className='form-control form-control-sm' id="acNominalSizeId" name="acNominalSize" value={item.acNominalSize} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} /></td>
                                                 <td> <select className="form-select form-select-sm" id="acNominalSizeUnitId" name="acNominalSizeUnit" value={item.acNominalSizeUnit} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} >
                                                     <option value="">-Select-</option>
@@ -1463,8 +1502,8 @@ const ItemEdit = () => {
                                             <tr key={index}>
                                                 <td><select className='form-select form-select-sm' id="acParameterId" name="acParameter" value={item.acParameter} onChange={(e) => changeACValue(index, e.target.name, e.target.value)}>
                                                     <option value="">-Select-</option>
-                                                    {calibrationPointsData.map((item) => (
-                                                        <option>{item.calibrationPoint}</option>
+                                                    {calibrationPointsData.map((item, idx) => (
+                                                        <option key={idx}>{item.calibrationPoint}</option>
                                                     ))}
                                                 </select></td>
                                                 <td><input type="text" className='form-control form-control-sm' id="acNominalSizeId" name="acNominalSize" value={item.acNominalSize} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} /></td>
@@ -1504,7 +1543,7 @@ const ItemEdit = () => {
                                             <th>Parameter</th>
                                             <th>Nominal Size</th>
                                             <th>Unit</th>
-                                            <th colspan="3">Permissible Size</th>
+                                            <th colspan="2">Permissible Size</th>
                                             <th width="20%" colspan="2" className='text-center'>Observed size
                                                 <RadioGroup
                                                     className='d-flex justify-content-around'
@@ -1526,8 +1565,8 @@ const ItemEdit = () => {
                                             <tr key={index}>
                                                 <td><select className='form-select form-select-sm' id="acParameterId" name="acParameter" value={item.acParameter} onChange={(e) => changeACValue(index, e.target.name, e.target.value)}>
                                                     <option value="">-Select-</option>
-                                                    {calibrationPointsData.map((item) => (
-                                                        <option>{item.calibrationPoint}</option>
+                                                    {calibrationPointsData.map((item, index) => (
+                                                        <option key={index}>{item.calibrationPoint}</option>
                                                     ))}
                                                 </select></td>
                                                 <td><input type="text" className='form-control form-control-sm' id="acNominalSizeId" name="acNominalSize" value={item.acNominalSize} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} /></td>
@@ -1542,7 +1581,6 @@ const ItemEdit = () => {
                                                 </select></td>
                                                 <td><input type="text" className="form-control form-control-sm" id="acMinPSId" name="acMinPS" placeholder='min' value={item.acMinPS} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} /></td>
                                                 <td><input type="text" className='form-control form-control-sm' id="acMaxPSId" name="acMaxPS" placeholder='max' value={item.acMaxPS} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} /></td>
-                                                <td><input type="text" className="form-control form-control-sm" id="acWearLimitPSId" name="acWearLimitPS" placeholder='wearLimit' value={item.acWearLimitPS} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} /></td>
                                                 {itemAddData.itemOBType === "average" ?
                                                     <React.Fragment>
                                                         <td colSpan={2} ><input type="text" className="form-control form-control-sm" id="acAverageOBId" name="acAverageOB" placeholder='Average' value={item.acAverageOB} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} /></td>
@@ -1566,6 +1604,7 @@ const ItemEdit = () => {
                                         ))}
 
                                     </tbody>}
+
                                 <tbody>
                                     <tr>
 

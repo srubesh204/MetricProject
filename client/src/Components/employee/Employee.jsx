@@ -674,8 +674,8 @@ const Employee = () => {
                                         <Grid item xs={6}>
                                             <TextField fullWidth label="Designation" onChange={handleChange} value={employeeData.designation} className="form-select" select size="small" id="designationId" name="designation" defaultValue="" >
 
-                                                {designationList.map((item) => (
-                                                    <MenuItem key={item._id} value={item.designation}>{item.designation}</MenuItem>
+                                                {designationList.map((item, index) => (
+                                                    <MenuItem key={index} value={item.designation}>{item.designation}</MenuItem>
                                                 ))}
 
                                             </TextField>
@@ -684,8 +684,8 @@ const Employee = () => {
                                         <Grid item xs={6}>
                                             <TextField fullWidth label="Department" onChange={handleChange} value={employeeData.department} className="form-select" select size="small" id="DepartmentId" name="department" defaultValue="" >
 
-                                                {departmentList.map((item) => (
-                                                    <MenuItem key={item._id} value={item.department}>{item.department}</MenuItem>
+                                                {departmentList.map((item, index) => (
+                                                    <MenuItem key={index} value={item.department}>{item.department}</MenuItem>
                                                 ))}
                                             </TextField>
 
@@ -750,8 +750,8 @@ const Employee = () => {
                                         <Grid item xs={3}>
                                             <TextField fullWidth label="Report To" onChange={handleChange} value={employeeData.reportTo} className="form-select" select size="small" id="reportToId" name="reportTo" defaultValue="" >
                                                 <MenuItem value="N/A">N/A</MenuItem>
-                                                {employeeList.map((item) => (
-                                                    <MenuItem value={item.firstName}>{`${item.firstName} ${item.lastName}`}</MenuItem>
+                                                {employeeList.map((item, index) => (
+                                                    <MenuItem key={index} value={item.firstName}>{`${item.firstName} ${item.lastName}`}</MenuItem>
                                                 ))}
                                             </TextField>
                                         </Grid>
@@ -917,7 +917,7 @@ const Employee = () => {
                                     {/* <div className="form-floating col">
                                         <select className="form-select" id="reportToFilterId" name="reportToFilter" onChange={handleFilterChange}>
                                             <option value="all">All</option>
-                                            {employeeList.map((item) => (
+                                            {employeeList.((item) => (
                                                 <option>{item.firstName}</option>
                                             ))}
                                         </select>
@@ -939,8 +939,8 @@ const Employee = () => {
                                             sx={{
                                                 ".MuiTablePagination-displayedRows": {
         
-                                                    "margin-top": "1em",
-                                                    "margin-bottom": "1em"
+                                                    "marginTop": "1em",
+                                                    "marginBottom": "1em"
                                                 }
                                             }}
                                             slots={{
@@ -955,7 +955,7 @@ const Employee = () => {
 
                                             density="compact"
                                             //disableColumnMenu={true}
-                                            //clipboardCopyCellDelimiter={true}
+                                            
                                             checkboxSelection
                                             pageSizeOptions={[5]}
 

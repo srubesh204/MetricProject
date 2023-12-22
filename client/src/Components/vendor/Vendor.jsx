@@ -700,19 +700,19 @@ const Vendor = () => {
 
                                 <Grid item xs={6} >
                                     <div className='col  d-flex justify-content-end '>
-                                        <div class="form-check form-check-inline ">
+                                        <div className="form-check form-check-inline ">
                                             <input className="form-check-input" type="checkbox" checked={vendorData.oem === "1"} onChange={handleVendorDataBaseChange} id="oemId" name="oem" />
                                             <label className="form-check-label" htmlFor="oemId">OEM</label>
                                         </div>
-                                        <div class="form-check form-check-inline ">
+                                        <div className="form-check form-check-inline ">
                                             <input className="form-check-input" type="checkbox" checked={vendorData.customer === "1"} onChange={handleVendorDataBaseChange} id="customerId" name="customer" />
                                             <label className="form-check-label" htmlFor="customerId">Customer</label>
                                         </div>
-                                        <div class="form-check form-check-inline ">
+                                        <div className="form-check form-check-inline ">
                                             <input className="form-check-input" type="checkbox" checked={vendorData.supplier === "1"} onChange={handleVendorDataBaseChange} id="supplierId" name="supplier" />
                                             <label className="form-check-label" htmlFor="supplierId">Supplier</label>
                                         </div>
-                                        <div class="form-check form-check-inline">
+                                        <div className="form-check form-check-inline">
                                             <input className="form-check-input" type="checkbox" checked={vendorData.subContractor === "1"} onChange={handleVendorDataBaseChange} id="subContractorId" name="subContractor" />
                                             <label className="form-check-label" htmlFor="subContractorId">SubContractor</label>
                                         </div>
@@ -1101,7 +1101,7 @@ const Vendor = () => {
                             <h4 className='text-center'>Vendor List</h4>
                             <div className="d-flex justify-content-between">
 
-                                <div class="col-3 mb-2">
+                                <div className="col-3 mb-2">
                                     <select className="form-select form-select-sm" id="vendorTypeId" name="vendorType" aria-label="Floating label select example" onChange={handleFilterChange} >
                                         <option value="all">All</option>
                                         <option value="oem">OEM</option>
@@ -1127,8 +1127,8 @@ const Vendor = () => {
                                     sx={{
                                         ".MuiTablePagination-displayedRows": {
 
-                                            "margin-top": "1em",
-                                            "margin-bottom": "1em"
+                                            "marginTop": "1em",
+                                            "marginBottom": "1em"
                                         }
                                     }}
 
@@ -1146,7 +1146,7 @@ const Vendor = () => {
 
                                     density="compact"
                                     //disableColumnMenu={true}
-                                    //clipboardCopyCellDelimiter={true}
+                                    
                                     checkboxSelection
                                     pageSizeOptions={[10]}
 

@@ -26,13 +26,6 @@ const employeeController = {
 
     try {
       const { employeeCode, title, firstName, lastName, dob, address, city, state, contactNumber, designation, department, mailId, doj, employmentStatus, reportTo } = req.body;
-
-      // if (contactNumber.length !== 10) {
-      //   return res.status(403).json({
-      //     message: "Contact Number Should be exactly 10 digits",
-      //     status: 0
-      //   });
-      // }
      
       const employeeResult = new employeeModel({ employeeCode, title, firstName, lastName, dob, address, city, state, contactNumber, designation, department, mailId, doj, employmentStatus, reportTo });
 

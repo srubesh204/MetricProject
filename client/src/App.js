@@ -25,7 +25,15 @@ import Status from './Components/status/Status';
 import Grn from './Components/Dashboard/DashboardComponents/Grn';
 import DcList from './Components/dcList/DcList';
 import GrnList from './Components/grnList/GrnList';
-import CalList from './Components/calList/CalList';
+import CalList from './Components/CalItems/CalList';
+import DcEdit from './Components/dcList/DcEdit';
+import GrnEdit from './Components/grnList/GrnEdit';
+import GrnAdd from './Components/grnList/GrnAdd';
+import OnSiteGrn from './Components/onSiteGrn/OnSiteGrn';
+import OnSiteList from './Components/onSiteGrn/OnSiteList';
+import OnSiteEditGrn from './Components/onSiteGrn/OnSiteEditGrn';
+import OnSiteDialog from './Components/Dashboard/DashboardComponents/OnSiteDialog';
+
 
 
 function App() {
@@ -42,7 +50,7 @@ function App() {
 
       
       {/* {fullList.includes(location.pathname) ? "":""} */}
-      <Dashboard/>
+      {/* <Dashboard /> */}
       <Routes>
         <Route path="/desdep" element={<Department />} />
         <Route path="/des" element={<Designation />} />
@@ -64,6 +72,17 @@ function App() {
         <Route path="/dcList" element={<DcList/>} />
         <Route path="/grnList" element={<GrnList/>} />
         <Route path="/calList" element={<CalList/>} />
+        <Route path="/dcEdit" element={<DcEdit/>} />
+        <Route path="/grnEdit" element={<GrnEdit/>} />
+        <Route path="/grnAdd" element={<GrnAdd/>} />
+        <Route path="/onSiteGrn" element={<OnSiteGrn/>} />
+        <Route path="/onSiteList" element={<OnSiteList/>} />
+        <Route path="/onSiteEditGrn" element={<OnSiteEditGrn/>} />
+        <Route path="/onSiteDialog" element={<OnSiteDialog/>} />
+        
+
+     
+       
       </Routes>
 
     </div>

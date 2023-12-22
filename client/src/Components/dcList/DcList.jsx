@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState, useEffect, useRef, createContext } from 'react'
 import axios from 'axios'
 import { TextField, MenuItem, styled, Button, ButtonGroup, Chip, FormControl, OutlinedInput, Fab, Link, Box } from '@mui/material';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
@@ -6,16 +6,73 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DataGrid, GridToolbar } from '@mui/x-data-grid';
 import { Container, Paper } from '@mui/material';
+import { Edit, FilterAlt } from '@mui/icons-material';
+import AddIcon from '@mui/icons-material/Add';
+import { Link as RouterLink } from 'react-router-dom';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
+import Alert from '@mui/material/Alert';
+import Snackbar from '@mui/material/Snackbar';
+import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
+import dayjs from 'dayjs';
+
+import DcEdit from './DcEdit';
+import DcAdd from './DcAdd';
+export const DcListContent = createContext(null);
 const DcList = () => {
 
 
+
+    const [selectedRows, setSelectedRows] = useState([]);
+    const [dcEditOpen, setDcEditOpen] = useState(false);
+    const [dcOpen, setDcOpen] = useState(false);
+
+
+    const [dcStateId, setDcStateId] = useState(null)
+    const initialDcData = {
+        dcPartyId: "",
+        dcPartyType: "",
+        dcPartyName: "",
+        dcPartyCode: "",
+        dcPartyAddress: "",
+        dcNo: "",
+        dcDate: "",
+        dcReason: "",
+        dcCommonRemarks: "",
+        dcPartyItems: []
+
+    }
+
+    const [dcData, setDcData] = useState({
+        dcPartyId: "",
+        dcPartyType: "",
+        dcPartyName: "",
+        dcPartyCode: "",
+        dcPartyAddress: "",
+        dcNo: "",
+        dcDate: "",
+        dcReason: "",
+        dcCommonRemarks: "",
+        dcPartyItems: []
+
+    })
+    console.log(dcData)
+
+
     const [vendorDataList, setVendorDataList] = useState([])
+
     const vendorFetchData = async () => {
         try {
             const response = await axios.get(
                 `${process.env.REACT_APP_PORT}/vendor/getAllVendors`
             );
+            console.log(response.data)
+
             setVendorDataList(response.data.result);
+
             // setFilteredData(response.data.result);
         } catch (err) {
             console.log(err);
@@ -24,42 +81,50 @@ const DcList = () => {
     useEffect(() => {
         vendorFetchData();
     }, []);
-    const [vendorDataDcList, setVendorDataDcList] = useState([])
-    const vendorFetDcchData = async () => {
+    const [vendorFullList, setVendorFullList] = useState([])
+
+    const FetchData = async () => {
         try {
             const response = await axios.get(
                 `${process.env.REACT_APP_PORT}/vendor/getAllVendors`
             );
-            setVendorDataDcList(response.data.result);
+            console.log(response.data)
+
+            setVendorFullList(response.data.result);
+
             // setFilteredData(response.data.result);
         } catch (err) {
             console.log(err);
         }
     };
     useEffect(() => {
-        vendorFetDcchData();
+        FetchData();
     }, []);
 
+    
 
-    const [itemListSelectedRowIds, setItemListSelectedRowIds] = useState([])
-    //
-    const Columns = [
-        { field: 'id', headerName: 'Si. No', width: 70, renderCell: (params) => params.api.getAllRowIds().indexOf(params.id) + 1 },
-        { field: 'dcNo', headerName: 'Dc No', width: 90 },
-        { field: 'dcDate', headerName: 'Dc Date', width: 90 },
-        { field: 'fullName', headerName: 'Full Name', width: 200, },
-    ]
+    const oneMonthBefore = dayjs().subtract(dayjs().date()-1, 'day')
+    const [dateData, setDateData] = useState({
+        fromDate: oneMonthBefore.format('YYYY-MM-DD'),
+        toDate: dayjs().format('YYYY-MM-DD')
+    })
 
 
-    const [dcListSelectedRowIds, setDcListSelectedRowIds] = useState([])
+
+
     const [dcListDataList, setDcListDataList] = useState([])
+
+
+    const [dcDataDcList, setDcDataDcList] = useState([])
     const dcListFetchData = async () => {
         try {
             const response = await axios.get(
-                `${process.env.REACT_APP_PORT}/itemAdd/getAllItemAdds`
-            );
+                `${process.env.REACT_APP_PORT}/itemDc/getAllItemDc`
 
-            setDcListDataList(response.data.result);
+            );
+            setDcDataDcList(response.data.result);
+            const filteredItems = response.data.result.filter((item) => dayjs(item.calItemCalDate).isSameOrAfter(dateData.fromDate) && dayjs(item.calItemCalDate).isSameOrBefore(dateData.toDate) )
+            setFilteredData(response.data.result);
         } catch (err) {
             console.log(err);
         }
@@ -69,23 +134,218 @@ const DcList = () => {
     }, []);
 
 
+    {/*const [dcListData, setDcListData] = useState([])
+    const dcListFetchData = async () => {
+        try {
+            const response = await axios.get(
+                `${process.env.REACT_APP_PORT}/itemDc/getAllItemDc`
+            );
+
+            setDcListData(response.data.result);
+        } catch (err) {
+            console.log(err);
+        }
+    };
+    useEffect(() => {
+        dcListFetchData();
+    }, []);*/}
+
+
+    const handleSnackClose = (event, reason) => {
+        if (reason === 'clickaway') {
+            return;
+        }
+
+        setSnackBarOpen(false);
+    }
+    {/*const [selectedRowView, setSelectedRowView] = useState(null);
+    const handleViewClick = (params) => {
+        setSelectedRowView(params); // Set the selected row data
+        setDcListDataList(params.dcPartyItems)
+
+    };*/}
+    const [selectedRowView, setSelectedRowView] = useState(null);
+    // const [dcListDataList, setDcListDataList] = useState([]);
+
+    const handleViewClick = (params) => {
+        setSelectedRowView(params); // Set the selected row data
+    };
+
+    useEffect(() => {
+        if (selectedRowView) {
+            // Assuming params.dcPartyItems is an array
+            setDcListDataList(selectedRowView.dcPartyItems || []);
+        }
+    }, [selectedRowView]);
+
+
+    // const [itemListSelectedRowIds, setItemListSelectedRowIds] = useState([])
+    //
+    const Columns = [
+
+        { field: 'id', headerName: 'Si. No', width: 70, renderCell: (params) => params.api.getAllRowIds().indexOf(params.id) + 1 },
+        { field: 'editButton', headerName: 'Edit', width: 100, renderCell: (params) => <Button onClick={() => { setSelectedRows(params.row); setDcEditOpen(true) }}><Edit color='success' /></Button> },
+        // { field: 'viewButton', headerName: 'View', width: '100', renderCell: (params) => <Button><RemoveRedEyeIcon onClick={() => { setSelectedRowView(params.row); setDcEditOpen(true) }} /></Button> },
+        {
+            field: 'viewButton',
+            headerName: 'View',
+            width: 100,
+
+            renderCell: (params) => (
+
+
+                <RemoveRedEyeIcon color="primary"
+                    onClick={() => handleViewClick(params.row)} />
+
+            ),
+        },
+        { field: 'dcNo', headerName: 'Dc No', width: 100 },
+        { field: 'dcDate', headerName: 'Dc Date', width: 200 },
+        { field: 'dcPartyName', headerName: 'Dc PartyName', width: 300 },
+    ]
+
+
+    const [dcListSelectedRowIds, setDcListSelectedRowIds] = useState([])
+
+
+
+
+    const [dcDataList, setDcDataList] = useState([])
+    const dcFetchData = async () => {
+        try {
+            const response = await axios.get(
+                `${process.env.REACT_APP_PORT}/itemDc/getAllItemDc`
+            );
+            setDcDataList(response.data.result);
+            setFilteredData(response.data.result);
+
+        } catch (err) {
+            console.log(err);
+        }
+    };
+    useEffect(() => {
+        dcFetchData();
+    }, []);
+
+
+
+    const [deleteModalItem, setDeleteModalItem] = useState(false);
+    const [snackBarOpen, setSnackBarOpen] = useState(false)
+    const [errorhandler, setErrorHandler] = useState({});
+    const [itemListSelectedRowIds, setItemListSelectedRowIds] = useState([])
+
+    const deleteDcData = async (id) => {
+
+        try {
+            const response = await axios.delete(
+                "http://localhost:3001/itemDc/deleteItemDc", {
+                data: {
+                    itemDcIds: itemListSelectedRowIds
+                }
+            }
+            );
+
+            setSnackBarOpen(true)
+
+
+            setErrorHandler({ status: response.data.status, message: response.data.message, code: "success" })
+
+            //setItemAddData(initialItemAddData)
+            dcListFetchData()
+        } catch (err) {
+
+            setSnackBarOpen(true)
+
+            if (err.response && err.response.status === 400) {
+                // Handle validation errors
+                const errorData400 = err.response.data.errors;
+                const errorMessages400 = Object.values(errorData400).join(', ');
+                console.log(errorMessages400)
+                setErrorHandler({ status: 0, message: errorMessages400, code: "error" });
+            } else if (err.response && err.response.status === 500) {
+                // Handle other errors
+                const errorData500 = err.response.data.error;
+                const errorMessages500 = Object.values(errorData500).join(', ');
+                console.log(errorMessages500)
+                setErrorHandler({ status: 0, message: errorMessages500, code: "error" });
+            } else {
+                console.log(err.response.data.error)
+                setErrorHandler({ status: 0, message: "An error occurred", code: "error" });
+            }
+            console.log(err);
+        }
+    };
+
+    const handleRowClick = async (params) => {
+        console.log(params)
+        setDcData(params.row)
+        setDcStateId(params.id)
+    }
+
+
+
+    const [filteredData, setFilteredData] = useState([])
+
+    const handleFilterChange = (e) => {
+        const { name, value } = e.target;
+        if (value === "all") {
+            setFilteredData(dcDataDcList)
+        } else {
+            if (name === "vendorStatus") {
+                const vendorStatus = dcDataDcList.filter((item) => (item.vendorStatus === value))
+                console.log(value)
+                setFilteredData(vendorStatus)
+            } 
+            if (name === "partyName") {
+                const partyName = dcDataDcList.filter((item) => (item.dcPartyName === value))
+                console.log(value)
+                setFilteredData(partyName)
+
+            }
+
+            setDateData((prev)=> ({...prev, [name] : value}))
+
+
+        }
+
+
+    }
+
+    const dateFilter = () => {
+        const filteredItems = dcDataDcList.filter((item) => dayjs(item.calItemCalDate).isSameOrAfter(dateData.fromDate) && dayjs(item.calItemCalDate).isSameOrBefore(dateData.toDate) )
+        setFilteredData(filteredItems)
+      }
+      useEffect(()=> {
+        dateFilter();
+      }, [dateData.fromDate, dateData.toDate])
+
+
+
+
+
+
+
     const dcListColumns = [
         { field: 'id', headerName: 'Si. No', width: 70, renderCell: (params) => params.api.getAllRowIds().indexOf(params.id) + 1 },
         { field: 'itemIMTENo', headerName: 'Item IMTENo', width: 100 },
         { field: 'itemAddMasterName', headerName: 'Item Description', width: 150 },
-        { field: 'reMarks', headerName: 'ReMarks', width: 100 },
+        { field: 'itemRangeSize', headerName: 'Range/Size', width: 100 },
+        {
+            field: 'dcItemRemarks', headerName: 'ReMarks', width: 200},
+
 
     ]
 
 
+    console.log(dcDataDcList)
 
 
 
     return (
-        <div>
+        <div className='px-5 pt-3'>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
                 <form>
-                    <Container maxWidth="lg" sx={{ mb: 2 }}>
+                  
 
 
 
@@ -103,23 +363,24 @@ const DcList = () => {
                                 <h1 className='text-center '>DC List</h1>
                                 <div className='col d-flex '>
                                     <div className='col me-2'>
-                                        <TextField fullWidth label="VendorStatus" className="col" select size="small" id="vendorStatusId" name="vendorStatus" defaultValue="" >
+                                        <TextField fullWidth label="VendorStatus" className="col" select size="small" onChange={handleFilterChange} id="vendorStatusId" name="vendorStatus" defaultValue="" >
 
-                                            <MenuItem value="all">All</MenuItem>
-                                            {vendorDataList.map((item) => (
-                                                <MenuItem value={item._id}>{item.vendorStatus}</MenuItem>
-                                            ))}
+                                            <MenuItem value="All">All</MenuItem>
+                                            <MenuItem value="Active">Active</MenuItem>
+                                            <MenuItem value="InActive">InActive</MenuItem>
+
+
 
 
                                         </TextField>
 
                                     </div>
                                     <div className='col'>
-                                        <TextField fullWidth label="Party Name" className="col" select size="small" id="partyNameId" name="partyName" defaultValue="" >
+                                        <TextField fullWidth label="Party Name" className="col" select size="small" onChange={handleFilterChange} id="partyNameId" name="partyName" defaultValue="" >
 
                                             <MenuItem value="all">All</MenuItem>
-                                            {vendorDataDcList.map((item) => (
-                                                <MenuItem value={item._id}>{item.fullName}</MenuItem>
+                                            {vendorFullList.map((item, index) => (
+                                                <MenuItem key={index} value={item.fullName}>{item.fullName}</MenuItem>
                                             ))}
 
 
@@ -138,7 +399,11 @@ const DcList = () => {
                                             label="From Date"
                                             sx={{ width: "100%" }}
                                             slotProps={{ textField: { size: 'small' } }}
-                                            format="DD-MM-YYYY" />
+                                            format="DD-MM-YYYY"
+                                            value={dayjs(dateData.fromDate)}
+                                        onChange={(newValue)=> 
+                                            setDateData((prev)=> ({...prev, fromDate : dayjs(newValue).format('YYYY-MM-DD')}))}
+                                             />
 
                                     </div>
                                     <div className="col-3">
@@ -150,7 +415,9 @@ const DcList = () => {
                                             label="To Date"
                                             sx={{ width: "100%" }}
                                             slotProps={{ textField: { size: 'small' } }}
-                                            format="DD-MM-YYYY" />
+                                            format="DD-MM-YYYY"  value={dayjs(dateData.toDate)}
+                                            onChange={(newValue)=> 
+                                                setDateData((prev)=> ({...prev, toDate : dayjs(newValue).format('YYYY-MM-DD')}))} />
 
                                     </div>
 
@@ -164,7 +431,7 @@ const DcList = () => {
                                 <Box sx={{ height: 310, width: '100%', my: 2 }}>
                                     <DataGrid
 
-                                        rows={vendorDataDcList}
+                                        rows={filteredData}
                                         columns={Columns}
                                         getRowId={(row) => row._id}
                                         initialState={{
@@ -175,27 +442,26 @@ const DcList = () => {
                                         sx={{
                                             ".MuiTablePagination-displayedRows": {
 
-                                                "margin-top": "1em",
-                                                "margin-bottom": "1em"
+                                                "marginTop": "1em",
+                                                "marginBottom": "1em"
                                             }
                                         }}
-                                        onRowSelectionModelChange={(newRowSelectionModel, event) => {
+                                        onRowSelectionModelChange={(newRowSelectionModel) => {
                                             setItemListSelectedRowIds(newRowSelectionModel);
-
-
                                         }}
-
+                                        disableRowSelectionOnClick
                                         slots={{
                                             toolbar: GridToolbar,
                                         }}
 
                                         density="compact"
-                                        //disableColumnMenu={true}
-                                        //clipboardCopyCellDelimiter={true}
+                                        disableColumnMenu={true}
+                                       
                                         checkboxSelection
-                                        //onRowClick={handleRowClick}
-                                        disableRowSelectionOnClick
-                                        pageSizeOptions={[5]}
+
+                                        onRowClick={handleRowClick}
+
+
                                     />
 
                                 </Box>
@@ -215,7 +481,6 @@ const DcList = () => {
                             <div className='row'>
                                 <Box sx={{ height: 310, width: '100%', my: 2 }}>
                                     <DataGrid
-
                                         rows={dcListDataList}
                                         columns={dcListColumns}
                                         getRowId={(row) => row._id}
@@ -227,8 +492,8 @@ const DcList = () => {
                                         sx={{
                                             ".MuiTablePagination-displayedRows": {
 
-                                                "margin-top": "1em",
-                                                "margin-bottom": "1em"
+                                                "marginTop": "1em",
+                                                "marginBottom": "1em"
                                             }
                                         }}
                                         onRowSelectionModelChange={(newRowSelectionModel, event) => {
@@ -243,8 +508,8 @@ const DcList = () => {
 
                                         density="compact"
                                         //disableColumnMenu={true}
-                                        //clipboardCopyCellDelimiter={true}
-                                        checkboxSelection
+                                        
+                                        // checkboxSelection
                                         //onRowClick={handleRowClick}
                                         disableRowSelectionOnClick
                                         pageSizeOptions={[5]}
@@ -261,24 +526,62 @@ const DcList = () => {
 
                                 </div>
                                 <div className='col d-flex justify-content-end'>
+
                                     <div className='me-2 '>
-                                        <button type="button" className='btn btn-secondary' >Modify</button>
+                                        <Button component={Link} onClick={() => { setDcOpen(true) }} type='button' variant="contained" color="warning">
+                                            <AddIcon /> Add Item
+                                        </Button>
                                     </div>
-                                    <div className='me-2 '>
-                                        <button type="button" className='btn btn-secondary' >Add</button>
-                                    </div>
-                                    <div className='me-2 '>
-                                        <button type="button" className='btn btn-secondary' >Delete</button>
-                                    </div>
+                                    {itemListSelectedRowIds.length !== 0 &&     <div className='me-2 '>
+                                        <Button variant='contained' type='button' color='error' onClick={() => setDeleteModalItem(true)}>Delete</Button>
+                                    </div>}
+
+                                    <Dialog
+                                        open={deleteModalItem}
+                                        onClose={() => setDeleteModalItem(false)}
+                                        aria-labelledby="alert-dialog-title"
+                                        aria-describedby="alert-dialog-description"
+                                    >
+                                        <DialogTitle id="alert-dialog-title">
+                                            {" ItemAdd delete confirmation?"}
+                                        </DialogTitle>
+                                        <DialogContent>
+                                            <DialogContentText id="alert-dialog-description">
+                                                Are you sure to delete the ItemAdd
+                                            </DialogContentText>
+                                        </DialogContent>
+                                        <DialogActions>
+                                            <Button onClick={() => setDeleteModalItem(false)}>Cancel</Button>
+                                            <Button onClick={() => { deleteDcData(); setDeleteModalItem(false); }} autoFocus>
+                                                Delete
+                                            </Button>
+                                        </DialogActions>
+                                    </Dialog>
                                     <div className='me-2 '>
                                         <button type="button" className='btn btn-secondary' >Back</button>
                                     </div>
 
                                 </div>
+
+                                <DcListContent.Provider
+                                    value={{ dcEditOpen, setDcEditOpen, selectedRows, dcListFetchData }}
+                                >
+                                    <DcEdit />
+                                </DcListContent.Provider>
+                                <DcListContent.Provider
+                                    value={{ dcOpen, setDcOpen, selectedRows, dcListFetchData }}
+                                >
+                                    <DcAdd />
+                                </DcListContent.Provider>
                             </div>
                         </Paper>
+                        <Snackbar anchorOrigin={{ vertical: "top", horizontal: "right" }} open={snackBarOpen} autoHideDuration={6000} onClose={handleSnackClose}>
+                            <Alert onClose={handleSnackClose} severity={errorhandler.code} variant='filled' sx={{ width: '100%' }}>
+                                {errorhandler.message}
+                            </Alert>
+                        </Snackbar>
 
-                    </Container>
+                  
                 </form>
 
             </LocalizationProvider>

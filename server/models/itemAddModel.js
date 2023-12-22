@@ -24,6 +24,8 @@ const itemAddSchema = new mongoose.Schema({
   itemStatus: String,
   itemReceiptDate: String,
   itemDepartment: String,
+  itemCurrentLocation: String,
+  itemLocation: String,
   itemLastLocation: String,
   itemArea: String,
   itemPlaceOfUsage: String,
@@ -41,7 +43,15 @@ const itemAddSchema = new mongoose.Schema({
   itemCertificateName: String,
   itemCertificateNo: String,
   itemPartName: [],
-  itemOBType: String,
+  itemOBType: String, 
+  dcId: String,
+  dcStatus: String,
+  dcCreatedOn: String,
+  dcNo: String,
+  grnId: String,
+  grnNo: String,
+  grnStatus: String,
+  grnCreatedOn: String,
   acceptanceCriteria: [
     {
       acParameter: String,
@@ -71,7 +81,6 @@ const itemAddSchema = new mongoose.Schema({
     type: String,
     default: () => dayjs().format("YYYY-MM-DD")
   }
-
 });
 itemAddSchema.plugin(uniqueValidator);
 

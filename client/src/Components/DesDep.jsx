@@ -819,7 +819,7 @@ export const Department = () => {
 
                     <TextField label="Department"
                       id="departmentId"
-                      defaultValue=""
+                      
                       fullWidth
                       size="small"
                       onChange={handleDepChange}
@@ -992,8 +992,8 @@ export const Department = () => {
                       sx={{
                         ".MuiTablePagination-displayedRows": {
 
-                          "margin-top": "1em",
-                          "margin-bottom": "1em",
+                          "marginTop": "1em",
+                          "marginBottom": "1em",
 
 
 
@@ -1011,8 +1011,7 @@ export const Department = () => {
                       onRowClick={handleDepRowClick}
 
                       density="compact"
-                      //disableColumnMenu={true}
-                      //clipboardCopyCellDelimiter={true}
+                      
                       checkboxSelection
                       pageSizeOptions={[5]}
 
@@ -1026,40 +1025,6 @@ export const Department = () => {
 
                   </div>
 
-
-
-
-
-
-                  {/* <div className="table-responsive col">
-                    <table className="table table-bordered text-center">
-                      <tbody>
-                        <tr>
-                          <th>Si.No</th>
-                          <th>Department </th>
-                          <th>Delete</th>
-                        </tr>
-                        {departmentList.map((item, index) => (
-                          <tr key={item._id} onClick={() => handleDepRowClick(item)} className={item._id === depStateId ? "table-active" : ""}>
-                            <td >{index + 1}</td>
-                            <td>{item.department}</td>
-
-                            <td>
-                              <button
-                                type="button"
-                                className="btn btn-sm btn-danger"
-                                onClick={() => setDeleteDepModal(true)}
-                              >
-                                <i className="bi bi-trash"></i>
-                              </button>
-                            </td>
-                          </tr>
-                        ))}
-
-
-                      </tbody>
-                    </table>
-                  </div>*/}
                   <Dialog
                     open={deleteDepModal}
                     onClose={() => setDeleteDepModal(false)}
@@ -1114,7 +1079,7 @@ export const Department = () => {
 
                       <TextField label="Area"
                         id="areaId"
-                        defaultValue=""
+                        
                         fullWidth
                         size="small"
 
@@ -1146,16 +1111,7 @@ export const Department = () => {
 
 
 
-                  {/* <TextField label="Area"
-                            id="area"
-                            defaultValue=""
-                            fullWidth
-                            size="small"
-                            onChange={handleAreaChange}
-                            onKeyDown={handleKeyDown}
-                            value={areaData.area}
-                            name="area" ></TextField>
-                        </Grid>*/}
+                 
 
 
                   <div className="row g-2 mb-3">
@@ -1279,8 +1235,8 @@ export const Department = () => {
                         sx={{
                           ".MuiTablePagination-displayedRows": {
 
-                            "margin-top": "1em",
-                            "margin-bottom": "1em"
+                            "marginTop": "1em",
+                            "marginBottom": "1em"
                           }
                         }}
                         slots={{
@@ -1294,8 +1250,7 @@ export const Department = () => {
                         onRowClick={handleAreaRowClick}
 
                         density="compact"
-                        //disableColumnMenu={true}
-                        //clipboardCopyCellDelimiter={true}
+                       
                         checkboxSelection
                         pageSizeOptions={[5]}
 
@@ -1415,7 +1370,7 @@ export const Department = () => {
                     <TextField label="Status"
                       id="placeOfUsageStatusId"
                       select
-                      defaultValue="Active"
+                      
                       fullWidth
                       size="small"
                       onChange={handlePouChange}
@@ -1552,8 +1507,8 @@ export const Department = () => {
                       sx={{
                         ".MuiTablePagination-displayedRows": {
 
-                          "margin-top": "1em",
-                          "margin-bottom": "1em"
+                          "marginTop": "1em",
+                          "marginBottom": "1em"
                         }
                       }}
                       slots={{
@@ -1567,8 +1522,7 @@ export const Department = () => {
                       onRowClick={updatePof}
 
                       density="compact"
-                      //disableColumnMenu={true}
-                      //clipboardCopyCellDelimiter={true}
+                   
                       checkboxSelection
                       pageSizeOptions={[5]}
 
@@ -1588,35 +1542,6 @@ export const Department = () => {
 
 
 
-                  {/* <div className="table-responsive col">
-                    <table className="table table-bordered text-center">
-                      <tbody>
-                        <tr>
-                          <th>Si.No</th>
-                          <th>PlaceOfUsage</th>
-                          <th>Delete</th>
-                        </tr>
-                        {placeOfUsageList.map((item, index) => (
-                          <tr key={item._id} onClick={() => updatePof(item)} className={item._id === placeOfUsageId ? "table-active" : ""}>
-                            <td >{index + 1}</td>
-                            <td>{item.placeOfUsage}</td>
-
-                            <td>
-                              <button
-                                type="button"
-                                className="btn btn-sm btn-danger"
-                                onClick={() => setDeletePouModal(true)}
-                              >
-                                <i className="bi bi-trash"></i>
-                              </button>
-                            </td>
-                          </tr>
-                        ))}
-
-
-                      </tbody>
-                    </table>
-                  </div>*/}
 
                   <Dialog
                     open={deletePouModal}
@@ -1775,36 +1700,7 @@ export const Designation = () => {
   };
 
 
-  {/*} const handleChanges = (e) => {
-    const { name, value } = e.target;
-    let formattedValue = value;
-  
-    if (name === 'designation') {
-      formattedValue = value
-        .toLowerCase()
-        .split(' ')
-        .map(word => {
-          const capitalizedWord = word.charAt(0).toUpperCase() + word.slice(1);
-          // Check if the word was originally capitalized
-          if (word.charAt(0) === word.charAt(0).toUpperCase()) {
-            return '.' + capitalizedWord;
-            // Replace with your desired special character and capitalized word
-          }
-          return capitalizedWord;
-        })
-        .join(' ');
-    }
-  
-    setDesignationData(prev => ({ ...prev, [name]: formattedValue }));
-  };*/}
 
-  //get Departments
-
-  //
-  //Submit Department
-
-
-  //
 
 
   const desFetchData = async () => {
@@ -2093,7 +1989,7 @@ export const Designation = () => {
                   <TextField label="Status"
                     id="designationStatusId"
                     select
-                    defaultValue="Active"
+                    
                     fullWidth
                     size="small"
                     onChange={handleChange}
@@ -2254,8 +2150,8 @@ export const Designation = () => {
                   sx={{
                     ".MuiTablePagination-displayedRows": {
 
-                      "margin-top": "1em",
-                      "margin-bottom": "1em"
+                      "marginTop": "1em",
+                      "marginBottom": "1em"
                     }
                   }}
                   slots={{
@@ -2269,8 +2165,7 @@ export const Designation = () => {
                   onRowClick={handleDesRowClick}
 
                   density="compact"
-                  //disableColumnMenu={true}
-                  //clipboardCopyCellDelimiter={true}
+                  
                   checkboxSelection
                   pageSizeOptions={[5]}
 
@@ -2292,28 +2187,7 @@ export const Designation = () => {
 
 
 
-              {/*<div className="table-responsive">
-                <table className="table table-bordered text-center table-hover">
-                  <tbody>
-                    <tr className="text-center">
-                      <th>S.No</th>
-                      <th width="50%">Designation</th>
-                      <th>Delete</th>
-                    </tr>
-                    {designationList.map((item, index) => (
-                      <tr key={item._id} onClick={() => handleDesRowClick(item)} className={item._id === desStateId ? "table-active" : ""}>
-                        <td>{index + 1}</td>
-                        <td>{item.designation}</td>
-                        <td>
-                          <button type="button" className="btn btn-sm btn-danger" onClick={() => setDeleteModal(true)}>
-                            <i className="bi bi-trash"></i>
-                          </button>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>*/}
+              
               <Dialog
                 open={deleteModal}
                 onClose={() => setDeleteModal(false)}

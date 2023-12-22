@@ -928,8 +928,8 @@ console.log(statusInfo)*/}
                                     sx={{
                                         ".MuiTablePagination-displayedRows": {
 
-                                            "margin-top": "1em",
-                                            "margin-bottom": "1em"
+                                            "marginTop": "1em",
+                                            "marginBottom": "1em"
                                         }
                                     }}
                                     onRowSelectionModelChange={(newRowSelectionModel, event) => {
@@ -944,7 +944,7 @@ console.log(statusInfo)*/}
 
                                     density="compact"
                                     //disableColumnMenu={true}
-                                    //clipboardCopyCellDelimiter={true}
+                                    
                                     checkboxSelection
                                     onRowClick={handleRowClick}
                                     disableRowSelectionOnClick
