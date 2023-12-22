@@ -77,10 +77,6 @@ const DcAdd = () => {
                 const vendorType = vendorDataList.filter((item) => (item.subContractor === "1"))
                 setFilteredData(vendorType)
             }
-
-
-
-
         }
         setDcAddData((prev) => ({ ...prev, [name]: value }))
 
@@ -273,7 +269,10 @@ const DcAdd = () => {
         message: "",
         type: ""
     })
+
+    //validate function
     const [errors, setErrors] = useState({})
+    
     const validateFunction = () => {
         let tempErrors = {};
         tempErrors.dcPartyType = dcAddData.dcPartyType ? "" : "GRN Party Type is Required"
@@ -288,8 +287,11 @@ const DcAdd = () => {
 
         return Object.values(tempErrors).every(x => x === "")
     }
-
     console.log(errors)
+
+    ///
+
+
 
 
     const submitDcForm = async () => {
@@ -302,9 +304,13 @@ const DcAdd = () => {
                 setAlertMessage({ message: response.data.message, type: "success" });
                 setSnackBarOpen(true);
                 dcListFetchData();
-                dcAddData(initialDcData);
+                setDcAddData(initialDcData);
                 setErrors({});
-                setTimeout(() => setDcOpen(false), 2000)
+                setItemAddDetails({
+                    itemListNames: "",
+                    itemImteList: ""
+                })
+                setTimeout(() => setDcOpen(false), 1000)
             } else {
                 setAlertMessage({ message: "Fill the required fields to submit", type: "error" })
                 setSnackBarOpen(true)

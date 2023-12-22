@@ -877,14 +877,14 @@ const Home = () => {
                   renderInput={(params) => <TextField {...params} label="IMTE No" />}
                   defaultValue={(e) => console.log(e)}
                 />
-                <TextField select onChange={(e) => MainFilter(e.target.value, "itemType")} fullWidth size='small' value={selectedFilterName === 'itemType' ? selectedFilterValue : 'all'} name='itemType' defaultValue="all" label="Item Type">
+                <TextField select onChange={(e) => MainFilter(e.target.value, "itemType")} fullWidth size='small' value={selectedFilterName === 'itemType' ? selectedFilterValue : 'all'} name='itemType'  label="Item Type">
                   <MenuItem value="all">All</MenuItem>
                   <MenuItem value="Variable">Variable</MenuItem>
                   <MenuItem value="Attribute">Attribute</MenuItem>
                   <MenuItem value="Ref Standard">Ref Standard</MenuItem>
                 </TextField>
 
-                <TextField select onChange={(e) => MainFilter(e.target.value, "itemAddMasterName")} fullWidth size='small' value={selectedFilterName === 'itemAddMasterName' ? selectedFilterValue : 'all'} defaultValue="all" name='itemAddMasterName' label="Item Description">
+                <TextField select onChange={(e) => MainFilter(e.target.value, "itemAddMasterName")} fullWidth size='small' value={selectedFilterName === 'itemAddMasterName' ? selectedFilterValue : 'all'}  name='itemAddMasterName' label="Item Description">
                   <MenuItem value="all">All</MenuItem>
                   {itemDistinctNames.map((item, index) => (<MenuItem key={index} value={item}>{item}</MenuItem>))}
                 </TextField>

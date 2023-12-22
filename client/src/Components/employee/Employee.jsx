@@ -584,7 +584,7 @@ const Employee = () => {
                                         id="stateId"
                                         onChange={(event, newValue) => {
                                             setStateName(newValue);
-                                            setEmployeeData((prev) => ({ ...prev, state: newValue }))
+                                            setEmployeeData((prev) => ({ ...prev, state: newValue, city: "" }))
                                         }}
                                         // name="state"
                                         size='small'

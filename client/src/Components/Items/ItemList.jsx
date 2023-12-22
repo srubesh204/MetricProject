@@ -714,6 +714,7 @@ console.log(statusInfo)*/}
 
                                 <TextField label="Imte No"
                                     id="imteNoId"
+                                    required
                                     select
                                     defaultValue="all"
                                     fullWidth
