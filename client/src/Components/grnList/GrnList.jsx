@@ -159,7 +159,7 @@ const GrnList = () => {
 
         try {
             const response = await axios.delete(
-                "http://localhost:3001/itemGRN/deleteItemGRN", {
+                `${process.env.REACT_APP_PORT}/itemGRN/deleteItemGRN`, {
                 data: {
                     itemGRNIds: itemListSelectedRowIds
                 }

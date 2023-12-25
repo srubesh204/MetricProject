@@ -270,7 +270,7 @@ const Vendor = () => {
     const updateVendorData = async () => {
         try {
             const response = await axios.put(
-                "http://localhost:3001/vendor/updateVendor/" + vendorStateId, vendorData
+                `${process.env.REACT_APP_PORT}/vendor/updateVendor/${vendorStateId}`, vendorData
             );
             setSnackBarOpen(true)
             vendorFetchData();
@@ -312,7 +312,7 @@ const Vendor = () => {
     const deleteVendorData = async () => {
         try {
             const response = await axios.delete(
-                "http://localhost:3001/vendor/deleteVendor", {
+                `${process.env.REACT_APP_PORT}/vendor/deleteVendor`, {
                 data: {
                     vendorIds: selectedRowIds
                 }

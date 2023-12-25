@@ -101,7 +101,7 @@ const DcList = () => {
         FetchData();
     }, []);
 
-    
+    const [filteredData, setFilteredData] = useState([])
 
     const oneMonthBefore = dayjs().subtract(dayjs().date()-1, 'day')
     const [dateData, setDateData] = useState({
@@ -123,7 +123,7 @@ const DcList = () => {
 
             );
             setDcDataDcList(response.data.result);
-            const filteredItems = response.data.result.filter((item) => dayjs(item.calItemCalDate).isSameOrAfter(dateData.fromDate) && dayjs(item.calItemCalDate).isSameOrBefore(dateData.toDate) )
+            
             setFilteredData(response.data.result);
         } catch (err) {
             console.log(err);
@@ -132,6 +132,12 @@ const DcList = () => {
     useEffect(() => {
         dcListFetchData();
     }, []);
+
+    useEffect(()=> {
+        const filteredItems = dcDataDcList.filter((item) => dayjs(item.dcDate).isSameOrAfter(dateData.fromDate) && dayjs(item.dcDate).isSameOrBefore(dateData.toDate) )
+        console.log(filteredItems)
+        setFilteredData(filteredItems)
+    }, [dateData.fromDate, dateData.toDate])
 
 
     {/*const [dcListData, setDcListData] = useState([])
@@ -210,23 +216,7 @@ const DcList = () => {
 
 
 
-    const [dcDataList, setDcDataList] = useState([])
-    const dcFetchData = async () => {
-        try {
-            const response = await axios.get(
-                `${process.env.REACT_APP_PORT}/itemDc/getAllItemDc`
-            );
-            setDcDataList(response.data.result);
-            setFilteredData(response.data.result);
-
-        } catch (err) {
-            console.log(err);
-        }
-    };
-    useEffect(() => {
-        dcFetchData();
-    }, []);
-
+   
 
 
     const [deleteModalItem, setDeleteModalItem] = useState(false);
@@ -238,7 +228,7 @@ const DcList = () => {
 
         try {
             const response = await axios.delete(
-                "http://localhost:3001/itemDc/deleteItemDc", {
+                `${process.env.REACT_APP_PORT}/itemDc/deleteItemDc`, {
                 data: {
                     itemDcIds: itemListSelectedRowIds
                 }
@@ -250,7 +240,7 @@ const DcList = () => {
 
             setErrorHandler({ status: response.data.status, message: response.data.message, code: "success" })
 
-            //setItemAddData(initialItemAddData)
+           
             dcListFetchData()
         } catch (err) {
 
@@ -284,7 +274,7 @@ const DcList = () => {
 
 
 
-    const [filteredData, setFilteredData] = useState([])
+   
 
     const handleFilterChange = (e) => {
         const { name, value } = e.target;
@@ -311,13 +301,7 @@ const DcList = () => {
 
     }
 
-    const dateFilter = () => {
-        const filteredItems = dcDataDcList.filter((item) => dayjs(item.calItemCalDate).isSameOrAfter(dateData.fromDate) && dayjs(item.calItemCalDate).isSameOrBefore(dateData.toDate) )
-        setFilteredData(filteredItems)
-      }
-      useEffect(()=> {
-        dateFilter();
-      }, [dateData.fromDate, dateData.toDate])
+   
 
 
 
