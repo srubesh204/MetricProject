@@ -33,6 +33,7 @@ import OnSiteGrn from './Components/onSiteGrn/OnSiteGrn';
 import OnSiteList from './Components/onSiteGrn/OnSiteList';
 import OnSiteEditGrn from './Components/onSiteGrn/OnSiteEditGrn';
 import OnSiteDialog from './Components/Dashboard/DashboardComponents/OnSiteDialog';
+import Instrument_History_Card from './Components/Instrument_History_Card';
 
 
 
@@ -79,7 +80,7 @@ function App() {
         <Route path="/onSiteList" element={<OnSiteList/>} />
         <Route path="/onSiteEditGrn" element={<OnSiteEditGrn/>} />
         <Route path="/onSiteDialog" element={<OnSiteDialog/>} />
-        
+        <Route path="/instrumentHistoryCard" element={<Instrument_History_Card/>} />
 
      
        
