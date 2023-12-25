@@ -85,10 +85,10 @@ const Vendor = () => {
         address: "",
         state: "",
         city: "",
-        oem: "",
-        customer: "",
-        supplier: "",
-        subContractor: "",
+        oem: "0",
+        customer: "0",
+        supplier: "0",
+        subContractor: "0",
         vendorContacts: [{
             name: "",
             contactNumber: "",
@@ -100,6 +100,7 @@ const Vendor = () => {
         vendorStatus: "Active",
     }
 
+    const [checkboxSelected, setCheckboxSelected] = useState(false);
     const [vendorData, setVendorData] = useState({
         vendorCode: "",
         aliasName: "",
@@ -108,10 +109,10 @@ const Vendor = () => {
         address: "",
         state: "",
         city: "",
-        oem: "",
-        customer: "",
-        supplier: "",
-        subContractor: "",
+        oem: "0",
+        customer: "0",
+        supplier: "0",
+        subContractor: "0",
         vendorContacts: [{
             name: "",
             contactNumber: "",
@@ -218,22 +219,55 @@ const Vendor = () => {
         vendorFetchData();
     }, []);
 
-    
+
     console.log(vendorDataList)
+
+
+    //validate function 
+    const [errors, setErrors] = useState({})
+
+    const validateFunction = () => {
+        let tempErrors = {};
+        tempErrors.vendorCode = vendorData.vendorCode ? "" : "Vendor Code is Required"
+        tempErrors.aliasName = vendorData.aliasName ? "" : "Alias Name is Required"
+        tempErrors.fullName = vendorData.fullName ? "" : "Full Name is Required"
+        tempErrors.address = vendorData.address ? "" : "Address is Required"
+        tempErrors.state = vendorData.state ? "" : "State is Required"
+        tempErrors.city = vendorData.city ? "" : "City is Required"
+
+        if (vendorData.oem === "1" || vendorData.customer === "1" || vendorData.supplier === "1" || vendorData.subContractor === "1") {
+            tempErrors.vendorType = ""
+        } else {
+            tempErrors.vendorType = "Type is Required"
+        }
+
+
+        setErrors({ ...tempErrors })
+
+        return Object.values(tempErrors).every(x => x === "")
+    }
+    console.log(errors)
+
+
 
     const vendorSubmit = async (e) => {
         e.preventDefault();
         try {
-            const response = await axios.post(
-                `${process.env.REACT_APP_PORT}/vendor/createVendor`, vendorData
-            );
-            {/*console.log(response.data.message)*/ }
-            console.log(response)
-            setSnackBarOpen(true)
-            vendorFetchData();
-            setVendorData(initialVendorData);
-            console.log("Vendor Create successfully");
-            setErrorHandler({ status: response.data.status, message: response.data.message, code: "success" })
+            if (validateFunction()) {
+                const response = await axios.post(
+                    `${process.env.REACT_APP_PORT}/vendor/createVendor`, vendorData
+                );
+                {/*console.log(response.data.message)*/ }
+                console.log(response)
+                setSnackBarOpen(true)
+                vendorFetchData();
+                setVendorData(initialVendorData);
+                console.log("Vendor Create successfully");
+                setErrorHandler({ status: response.data.status, message: response.data.message, code: "success" })
+
+            } else {
+                setErrorHandler({ status: 0, message: "Fill the required fields", code: "error" })
+            }
         } catch (err) {
 
 
@@ -433,6 +467,7 @@ const Vendor = () => {
 
 
 
+
     const VisuallyHiddenInput = styled('input')({
         clip: 'rect(0 0 0 0)',
         clipPath: 'inset(50%)',
@@ -626,6 +661,7 @@ const Vendor = () => {
                                 <Grid item xs={2}>
 
                                     <TextField label="Vendor Code"
+                                        {...(errors.vendorCode !== "" && { helperText: errors.vendorCode, error: true })}
                                         id="vendorCodeId"
                                         defaultValue=""
                                         size="small"
@@ -638,6 +674,7 @@ const Vendor = () => {
                                 <Grid item xs={3}>
 
                                     <TextField label="Alias Name"
+                                        {...(errors.aliasName !== "" && { helperText: errors.aliasName, error: true })}
                                         id="aliasNameId"
                                         defaultValue=""
                                         size="small"
@@ -650,6 +687,7 @@ const Vendor = () => {
                                 </Grid>
                                 <Grid item xs={4}>
                                     <TextField label="Full Name"
+                                        {...(errors.fullName !== "" && { helperText: errors.fullName, error: true })}
                                         id="fullNameId"
                                         defaultValue=""
                                         size="small"
@@ -686,6 +724,7 @@ const Vendor = () => {
 
                                 <Grid item xs={6}>
                                     <TextField label="Address"
+                                        {...(errors.address !== "" && { helperText: errors.address, error: true })}
                                         id="addressId"
                                         defaultValue=""
                                         size="small"
@@ -717,6 +756,9 @@ const Vendor = () => {
                                             <label className="form-check-label" htmlFor="subContractorId">SubContractor</label>
                                         </div>
                                     </div>
+                                        {errors.vendorType !== "" && (
+                                            <div style={{ color: 'red', textAlign: "center" }}>{errors.vendorType}</div>
+                                        )}
                                 </Grid>
                             </Grid>
 
@@ -761,7 +803,8 @@ const Vendor = () => {
 
                                         value={vendorData.state}
                                         isOptionEqualToValue={(option) => option}
-                                        renderInput={(params) => <TextField {...params} label="State" name="State" />} // Set the name attribute to "state"
+                                        renderInput={(params) => <TextField {...params} label="State" name="State" 
+                                        {...(errors.state !== "" && { helperText: errors.state, error: true })} />} // Set the name attribute to "state"
                                     />
 
 
@@ -779,7 +822,8 @@ const Vendor = () => {
                                         className='col'
                                         fullWidth
                                         isOptionEqualToValue={(option) => option}
-                                        renderInput={(params) => <TextField {...params} label="City" name="City" />} // Set the name attribute to "state"
+                                        renderInput={(params) => <TextField {...params} label="City" name="City" 
+                                        {...(errors.city !== "" && { helperText: errors.city, error: true })} />} // Set the name attribute to "state"
                                     />
                                 </div>
 
@@ -1146,7 +1190,7 @@ const Vendor = () => {
 
                                     density="compact"
                                     //disableColumnMenu={true}
-                                    
+
                                     checkboxSelection
                                     pageSizeOptions={[10]}
 
