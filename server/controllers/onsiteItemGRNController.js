@@ -14,8 +14,8 @@ const onsiteItemGRNController = {
       createOnsiteItemGRN: async (req, res) => {
        
         try {
-          const {osGrnPartyRefNo,osGrnPartyRefDate, osGrnPartyName, osGrnPartyCode, osGrnPartyAddress, osGrnNo,osGrnDate, osGrnCommonRemarks,osGrnPartItems,osGrnPartyId} = req.body;
-          const onsiteItemGRNResult = new onsiteItemGRNModel({ osGrnPartyRefNo, osGrnPartyRefDate, osGrnPartyName,osGrnPartyCode,osGrnPartyAddress, osGrnNo, osGrnDate, osGrnCommonRemarks,osGrnPartItems});
+          const {osGrnPartyRefNo,osGrnPartyRefDate, osGrnPartyName, osGrnPartyCode, osGrnPartyAddress, osGrnNo,osGrnDate, osGrnCommonRemarks,osGrnPartyItems,osGrnPartyId} = req.body;
+          const onsiteItemGRNResult = new onsiteItemGRNModel({ osGrnPartyRefNo, osGrnPartyRefDate, osGrnPartyName,osGrnPartyCode,osGrnPartyAddress, osGrnNo, osGrnDate, osGrnCommonRemarks,osGrnPartyItems,osGrnPartyId});
           const validationError = onsiteItemGRNResult.validateSync();
 
           if (validationError) {

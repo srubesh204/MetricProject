@@ -18,7 +18,7 @@ import '@fontsource/roboto/500.css';
 import '@fontsource/roboto/700.css';
 import ItemList from './Components/Items/ItemList';
 import FileViewer from './Components/Test/FileViewer';
-import Login from './Components/Dashboard/Login';
+import Login from './Components/Login';
 import InsHisCard from './Components/reports/InsHisCard';
 import Status from './Components/status/Status';
 // import Dc from './Components/dc/Dc';
@@ -36,55 +36,106 @@ import OnSiteDialog from './Components/Dashboard/DashboardComponents/OnSiteDialo
 import Roles from './Components/Login/Roles';
 
 
+const roleAccessRules = {
+  admin: ['/home', "/desdep", "/general","/vendor","/itemMaster","/itemadd","/itemEdit/:id","/itemList","/grnList","/calList","/onSiteList", '/roles'],
+  plantadmin: ['/dashboard', '/create'],
+  creator: ['/create'],
+  viewer: ['/view'],
+};
+
+// Function to generate routes based on user role and access rules
+const generateRoutes = (employee) => {
+  const allowedRoutes = roleAccessRules[employee] || []; // Get allowed routes for the userRole
+
+  const routes = [
+    { path: '/home', element: <Home /> },
+    { path: "/employee", element: <Employee /> },
+    { path: "/general", element: <PartDataBase /> },
+    { path: "/vendor", element: <Vendor /> },
+    { path: "/itemMaster", element: <ItemMaster /> },
+    { path: "/devi", element: <Devi /> },
+    { path: "/itemadd", element: <ItemAdd /> },
+    { path: "/itemEdit/:id", element: <ItemEdit />},
+    { path: "/itemList", element: <ItemList /> },
+    { path: "/test", element: <FileViewer /> },
+    { path: "/reports", element: <InsHisCard /> },
+    { path: "/status", element: <Status /> },
+    { path: "/grn", element: <Grn /> },
+    { path: "/dcList", element: <DcList /> },
+    { path: "/grnList", element: <GrnList /> },
+    { path: "/calList", element: <CalList /> },
+    { path: "/dcEdit", element: <DcEdit /> },
+    { path: "/grnEdit", element: <GrnEdit /> },
+    { path: "/grnAdd", element: <GrnAdd /> },
+    { path: "/onSiteGrn", element: <OnSiteGrn /> },
+    { path: "/onSiteList", element: <OnSiteList /> },
+    { path: "/onSiteEditGrn", element: <OnSiteEditGrn /> },
+    { path: "/onSiteDialog", element: <OnSiteDialog /> },
+    { path: "/roles", element: <Roles /> },
+    // Add more common routes...
+  ];
+
+  // Generate routes based on allowed routes for the userRole
+  const generatedRoutes = routes
+    .filter(route => allowedRoutes.includes(route.path))
+    .map(({ path, element }) => (
+      <Route key={path} path={path} element={element} />
+    ));
+
+  return generatedRoutes;
+};
+
+const AccessDenied = () => <div>Access Denied</div>;
+
+const PrivateRoute = ({ element: Element, employee, ...rest }) => {
+  const isLoggedIn = sessionStorage.getItem('loggedIn');
+
+  if (!isLoggedIn) {
+    return <Navigate to="/login" />;
+  }
+
+  const routes = generateRoutes(employee);
+  
+  return (
+    <Routes>
+      
+      {routes}
+      <Route path="*" element={<AccessDenied />} /> {/* Catch-all route for restricted access */}
+    </Routes>
+  );
+};
+
 
 function App() {
+
+
+  // Custom function to render the PrivateRoute component
+  const isLoggedIn = sessionStorage.getItem('loggedIn'); // Retrieve session storage data
+  const employee = sessionStorage.getItem('employee');
+  console.log(isLoggedIn, employee)
   const location = useLocation();
 
   console.log('hash', location.hash);
   console.log(location.pathname);
   console.log('search', location.search);
 
-  const fullList =['/itemadd', '/itemedit/:id', '/itemList', '/test','/home', '/login']
-  console.log(fullList.includes(location.pathname))
+ 
+  
   return (
     <div className="App">
 
-      
+
       {/* {fullList.includes(location.pathname) ? "":""} */}
       {/* <Dashboard /> */}
+      
       <Routes>
-        <Route path="/desdep" element={<Department />} />
-        <Route path="/des" element={<Designation />} />
-        <Route path="/employee" element={<Employee />} />
-        <Route path="/general" element={<PartDataBase />} />
-        <Route path="/vendor" element={<Vendor />} />
-        <Route path="/itemMaster" element={<ItemMaster />} />
-        <Route path="/devi" element={<Devi />} />
-        <Route path="/home" element={<Home />} />
-        <Route path="/itemadd" element={<ItemAdd />} />
-        <Route path="/itemEdit/:id" element={<ItemEdit />} />
-        <Route path="/itemList" element={<ItemList />} />
-        <Route path="/test" element={<FileViewer />} />
-        <Route path="/login" element={<Login/>} />
-        <Route path="/reports" element={<InsHisCard/>} />
-        <Route path="/status" element={<Status/>} />
-        {/* <Route path="/dc" element={<Dc/>} /> */}
-        <Route path="/grn" element={<Grn/>} />
-        <Route path="/dcList" element={<DcList/>} />
-        <Route path="/grnList" element={<GrnList/>} />
-        <Route path="/calList" element={<CalList/>} />
-        <Route path="/dcEdit" element={<DcEdit/>} />
-        <Route path="/grnEdit" element={<GrnEdit/>} />
-        <Route path="/grnAdd" element={<GrnAdd/>} />
-        <Route path="/onSiteGrn" element={<OnSiteGrn/>} />
-        <Route path="/onSiteList" element={<OnSiteList/>} />
-        <Route path="/onSiteEditGrn" element={<OnSiteEditGrn/>} />
-        <Route path="/onSiteDialog" element={<OnSiteDialog/>} />
-        <Route path="/roles" element={<Roles/>} />
-        
-
-     
-       
+      <Route path="/" element={isLoggedIn ? <Dashboard /> : <Navigate to="/login" />} />
+        <Route
+          path="/*"
+          element={<PrivateRoute employee={employee} />}
+        />
+        <Route path="/login" element={isLoggedIn ? <Navigate to="/" /> : <Login />} />
+        <Route path="/accessDenied" element={<AccessDenied />} />
       </Routes>
 
     </div>
