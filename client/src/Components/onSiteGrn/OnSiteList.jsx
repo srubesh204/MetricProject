@@ -144,9 +144,9 @@ const OnSiteList = () => {
 
         try {
             const response = await axios.delete(
-                "http://localhost:3001/itemGRN/deleteItemGRN", {
+                "http://localhost:3001/onsiteItemGRN/deleteOnsiteItemGRN", {
                 data: {
-                    itemGRNIds: itemListSelectedRowIds
+                    onsiteItemGRNIds: itemListSelectedRowIds
                 }
             }
             );

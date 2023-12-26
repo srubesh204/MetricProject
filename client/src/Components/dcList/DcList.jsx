@@ -228,7 +228,7 @@ const DcList = () => {
 
         try {
             const response = await axios.delete(
-                "http://localhost:3001/itemDc/deleteItemDc", {
+                `${process.env.REACT_APP_PORT}/itemDc/deleteItemDc`, {
                 data: {
                     itemDcIds: itemListSelectedRowIds
                 }
@@ -240,7 +240,7 @@ const DcList = () => {
 
             setErrorHandler({ status: response.data.status, message: response.data.message, code: "success" })
 
-            //setItemAddData(initialItemAddData)
+           
             dcListFetchData()
         } catch (err) {
 

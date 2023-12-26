@@ -179,7 +179,7 @@ const ItemList = () => {
     const updateItemStatus = async () => {
         try {
             const response = await axios.put(
-                "http://localhost:3001/itemAdd/updateItemAdd/" + statusInfo._id, statusInfo
+                `${process.env.REACT_APP_PORT}itemAdd/updateItemAdd/${statusInfo._id}`, statusInfo
             );
             setSnackBarOpen(true)
             itemAddFetch();
@@ -526,7 +526,7 @@ const ItemList = () => {
 
         try {
             const response = await axios.delete(
-                "http://localhost:3001/itemAdd/deleteItemAdd", {
+                `${process.env.REACT_APP_PORT}/itemAdd/deleteItemAdd`, {
                 data: {
                     itemAddIds: itemListSelectedRowIds
                 }

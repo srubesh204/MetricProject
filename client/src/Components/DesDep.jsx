@@ -148,8 +148,8 @@ export const Department = () => {
   const updateDepartment = async () => {
     try {
       const response = await axios.put(
-       "http://localhost:3001/department/updateDepartment/" + depStateId, departmentData
-        //`${process.env.REACT_APP_PORT}/department/updateDepartment/${id}`, departmentData
+       `${process.env.REACT_APP_PORT}/department/updateDepartment/${depStateId}`, departmentData
+        
       );
       depFetchData();
       setDepartmentData(emptyDepartmentData);
@@ -191,7 +191,8 @@ export const Department = () => {
   const deleteDepartment = async () => {
     try {
       const response = await axios.delete(
-        "http://localhost:3001/department/deleteDepartment/", {
+       
+        `${process.env.REACT_APP_PORT}/department/deleteDepartment`, {
         data: {
           departmentIds: selectedRowIds
         }
@@ -337,7 +338,8 @@ export const Department = () => {
   const updateArea = async () => {
     try {
       const response = await axios.put(
-        "http://localhost:3001/area/updateArea/" + areaStateId, areaData
+        `${process.env.REACT_APP_PORT}/area/updateArea/${ areaStateId}`, areaData
+       
       );
       areaFetchData();
       setArea(initialAreaData);
@@ -378,7 +380,7 @@ export const Department = () => {
   const deleteArea = async () => {
     try {
       const response = await axios.delete(
-        "http://localhost:3001/area/deleteArea/", {
+        `${process.env.REACT_APP_PORT}/area/deleteArea`, {
         data: {
           areaIds: areaSelectedRowIds
         }
@@ -656,7 +658,8 @@ export const Department = () => {
   const updatePlaceofUsagedata = async () => {
     try {
       const response = await axios.put(
-        "http://localhost:3001/placeOfUsage/updatePlaceOfUsage/" + placeOfUsageId, placeOfUsageDatas
+        `${process.env.REACT_APP_PORT}/placeOfUsage/updatePlaceOfUsage/${placeOfUsageId}`, placeOfUsageDatas
+       
       );
       placeOfUsageData();
       setPlaceOfUsageData(initialPlaceOfUsageData);
@@ -703,7 +706,7 @@ export const Department = () => {
   const deletePlaceOfUsage = async () => {
     try {
       const response = await axios.delete(
-        "http://localhost:3001/PlaceOfUsage/deletePlaceOfUsage/", {
+       `${process.env.REACT_APP_PORT}/PlaceOfUsage/deletePlaceOfUsage`, {
         data: {
           placeOfUsageIds: placeOfUsageselectedRowIds
         }
@@ -1750,7 +1753,7 @@ export const Designation = () => {
     e.preventDefault();
     try {
       const response = await axios.post(
-        "http://localhost:3001/designation/createDesignation",
+        `${process.env.REACT_APP_PORT}/designation/createDesignation`,
         designationData
       );
       desFetchData();
@@ -1789,7 +1792,7 @@ export const Designation = () => {
   const updateDesignation = async () => {
     try {
       const response = await axios.put(
-        "http://localhost:3001/designation/updateDesignation/" + desStateId, designationData
+        `${process.env.REACT_APP_PORT}/designation/updateDesignation/${desStateId}`, designationData
       );
       desFetchData();
       setSnackBarOpen(true)
@@ -1839,7 +1842,7 @@ export const Designation = () => {
   const deleteDesignation = async () => {
     try {
       const response = await axios.delete(
-        "http://localhost:3001/designation/deleteDesignation/", {
+        `${process.env.REACT_APP_PORT}/designation/deleteDesignation`, {
         data: {
           designationIds: designationselectedRowIds
         }

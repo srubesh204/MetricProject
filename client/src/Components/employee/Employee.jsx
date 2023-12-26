@@ -298,22 +298,48 @@ const Employee = () => {
     }
     console.log(showPassword)
 
+    
+    const [errors, setErrors] = useState({})
+    const validateFunction = () => {
+        let tempErrors = {};
+        tempErrors.employeeCode = employeeData.employeeCode ? "" : "EmpCode is Required"
+        tempErrors.title = employeeData.title ? "" : "* Title"
+        tempErrors.firstName = employeeData.firstName ? "" : "First Name is Required"
+        tempErrors.lastName = employeeData.lastName ? "" : "Last Name is Required"
+        tempErrors.address = employeeData.address ? "" : "Address is Required"
+        tempErrors.city = employeeData.city ? "" : "City is Required"
+        tempErrors.state = employeeData.state ? "" : "State is Required"
+        tempErrors.contactNumber = employeeData.contactNumber ? "" : "Contact Number is Required"
+        tempErrors.mailId = employeeData.mailId ? "" : "Mail Id is Required"
+        tempErrors.designation = employeeData.designation ? "" : "Designation is Required"
+        tempErrors.department = employeeData.department ? "" : "Department is Required"
+
+        setErrors({ ...tempErrors })
+
+        return Object.values(tempErrors).every(x => x === "")
+    }
+
+    console.log(errors)
 
 
 
     const EmployeeSubmit = async (e) => {
         e.preventDefault();
         try {
-            const response = await axios.post(
-                `${process.env.REACT_APP_PORT}/employee/createEmployee`, employeeData
-            );
-
-            setSnackBarOpen(true)
-            empFetch();
-            console.log("Employee Created Successfully")
-            setErrorHandler({ status: response.data.status, message: response.data.message, code: "success" })
-            setEmployeeData(initialEmpData)
-            setEmpDataId(null)
+            if (validateFunction()) {
+                const response = await axios.post(
+                    `${process.env.REACT_APP_PORT}/employee/createEmployee`, employeeData
+                );
+    
+                setSnackBarOpen(true)
+                empFetch();
+                console.log("Employee Created Successfully")
+                setErrorHandler({ status: response.data.status, message: response.data.message, code: "success" })
+                setEmployeeData(initialEmpData)
+                setEmpDataId(null)
+            } else {
+                setErrorHandler({ status: 0, message: "Fill the required fields", code: "error" })
+            }
         } catch (err) {
 
             setSnackBarOpen(true)
@@ -460,7 +486,75 @@ const Employee = () => {
     return (
         <div>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
-                <form className='m-3'>
+                <form >
+
+                    <Container maxWidth="lg" sx={{ mb: 2, mt: 2 }}>
+
+                        <Paper sx={{ p: 1, flexGrow: 1, mb: 1 }}  elevation={12} >
+
+
+                            <Grid container spacing={1} className='mb-2' >
+                                <Grid item xs={2}>
+                                    <TextField label="EmpCode"  {...(errors.employeeCode !== "" && { helperText: errors.employeeCode, error: true })}
+                                        id="employeeCodeId"
+                                        defaultValue=""
+                                        fullWidth
+                                        size="small"
+                                        onChange={handleChange}
+                                        value={employeeData.employeeCode}
+                                        name="employeeCode" ></TextField>
+                                </Grid>
+                                <Grid item xs={1}>
+                                    <TextField fullWidth label="Title"  {...(errors.title !== "" && { helperText: errors.title, error: true })}
+                                     onChange={handleChange} value={employeeData.title} className="form-select" select size="small" id="titleId" name="title" defaultValue="" >
+
+                                        <MenuItem value="">Title</MenuItem >
+                                        <MenuItem value="1">Mr.</MenuItem >
+                                        <MenuItem value="2">Ms.</MenuItem >
+
+                                    </TextField>
+
+                                </Grid>
+                                <Grid item xs={3}>
+
+                                    <TextField label="First Name" {...(errors.firstName !== "" && { helperText: errors.firstName, error: true })}
+                                        id="firstNameId"
+                                        defaultValue=""
+                                        fullWidth
+                                        size="small"
+                                        sx={{ width: "100%" }}
+                                        onChange={handleChange}
+                                        onKeyDown={handleKeyDown}
+                                        value={employeeData.firstName}
+                                        name="firstName" />
+                                </Grid>
+
+                                <Grid item xs={4}>
+                                    <TextField label="Last Name"  {...(errors.lastName !== "" && { helperText: errors.lastName, error: true })}
+                                        id="lastNameId"
+                                        defaultValue=""
+                                        size="small"
+                                        fullWidth
+                                        onChange={handleChange}
+                                        onKeyDown={handleKeyDown}
+                                        value={employeeData.lastName}
+                                        name="lastName" />
+                                </Grid>
+                                <Grid item xs={2}>
+
+                                    <DatePicker
+                                        disableFuture
+                                        fullWidth
+                                        id="dobId"
+                                        name="dob"
+                                        value={dayjs(employeeData.dob)}
+                                        onChange={(newValue) =>
+                                            setEmployeeData((prev) => ({ ...prev, dob: newValue.format("YYYY-MM-DD") }))
+                                        }
+                                        label="DOB"
+
+                                        slotProps={{ textField: { size: 'small' } }}
+                                        format="DD-MM-YYYY" />
 
 
 
@@ -488,18 +582,103 @@ const Employee = () => {
                                 </TextField>
 
                             </Grid>
-                            <Grid item xs={3}>
+                            <div className='row mb-2'>
+                                <Grid item xs={2}>
+                                    <TextField label="Address"  {...(errors.address !== "" && { helperText: errors.address, error: true })}
+                                        id="addressId"
+                                        defaultValue=""
+                                        size="small"
+                                        fullWidth
+                                        sx={{ width: "100%" }}
+                                        value={employeeData.address}
+                                        onKeyDown={handleKeyDown}
+                                        onChange={handleChange}
+                                        name="address" />
 
-                                <TextField label="First Name"
-                                    id="firstNameId"
-                                    defaultValue=""
-                                    fullWidth
-                                    size="small"
-                                    sx={{ width: "100%" }}
-                                    onChange={handleChange}
-                                    onKeyDown={handleKeyDown}
-                                    value={employeeData.firstName}
-                                    name="firstName" />
+                                </Grid>
+                            </div>
+
+
+
+
+
+                            <Grid container rowSpacing={3} columnSpacing={{ xs: 1 }} className=' g-2 mb-2'>
+
+
+
+                                <Grid item xs={3}>
+                                    <Autocomplete
+                                        id="stateId"
+                                        onChange={(event, newValue) => {
+                                            setStateName(newValue);
+                                            setEmployeeData((prev) => ({ ...prev, state: newValue, city: "" }))
+                                        }}
+                                        // name="state"
+                                        size='small'
+                                        options={AllStates}
+                                        sx={{ width: 275 }}
+                                        value={employeeData.state}
+                                        isOptionEqualToValue={(option) => option}
+                                        renderInput={(params) => <TextField {...params} label="State" name="State"  {...(errors.state !== "" && { helperText: errors.state, error: true })} />} // Set the name attribute to "state"
+                                    />
+                                </Grid>
+                                <Grid item xs={3}>
+                                    <Autocomplete
+                                        id="cityId"
+                                        onChange={(event, newValue) => {
+                                            setStateName(newValue);
+                                            setEmployeeData((prev) => ({ ...prev, city: newValue }))
+                                        }}
+                                        size='small'
+                                        // name="state"
+                                        options={cityByState.map((item) => item.name)}
+                                        sx={{ width: 275 }}
+                                        value={employeeData.city}
+                                        isOptionEqualToValue={(option) => option}
+                                        renderInput={(params) => <TextField {...params} label="City" name="City"  {...(errors.city !== "" && { helperText: errors.city, error: true })} />} // Set the name attribute to "state"
+                                    />
+                                </Grid>
+                                {/*<Grid item xs={3}>
+                                        <div className="form-floating ">
+                                            <input onChange={handleChange} value={employeeData.contactNumber} type="number" maxLength={10} className={employeeData.contactNumber.length === 10 ? `form-control is-valid` : `form-control is-invalid`} id="contactNumberId" placeholder="contactNumber" name='contactNumber' />
+                                            <label htmlFor="contactNumberId">Contact Number</label>
+                                            {employeeData.contactNumber.length === 10 ? "" : <div className='invalid-feedback'>Contact must be in 10 digits</div>}
+                                        </div>
+                                    </Grid>*/}
+
+                                <Grid item xs={3}>
+
+                                    <TextField label="Contact Number "  {...(errors.firstName !== "" && { helperText: errors.firstName, error: true })}
+                                        id="contactNumberId"
+                                        color={employeeData.contactNumber.length !== 10 ? "error" : "success"}
+                                        defaultValue=""
+                                        sx={{ width: "100%" }}
+                                        size="small"
+                                        onChange={handleChange}
+                                        type='number'
+                                        value={employeeData.contactNumber}
+                                        name="contactNumber" />
+
+                                </Grid>
+
+                                {/* <Grid item xs={3}>
+                                        <div className="form-floating">
+                                            <input onChange={handleChange} style={{ textTransform: "lowercase" }} value={employeeData.mailId} type="mail" className="form-control" id="mailid" placeholder="name@example.com" name='mailId' />
+                                            <label htmlFor="mailId">Mail Id</label>
+                                        </div>
+                                    </Grid>*/}
+                                <Grid item xs={3}>
+                                    <TextField label="MailId "  {...(errors.firstName !== "" && { helperText: errors.firstName, error: true })}
+                                        id="mailId"
+                                        defaultValue=""
+                                        sx={{ width: "100%" }}
+                                        size="small"
+                                        onChange={handleChange}
+                                        onKeyDown={handleKeyDown}
+                                        value={employeeData.mailId}
+                                        name="mailId" />
+
+                                </Grid>
                             </Grid>
 
                             <Grid item xs={4}>
@@ -529,6 +708,40 @@ const Employee = () => {
                                     slotProps={{ textField: { size: 'small' } }}
                                     format="DD-MM-YYYY" />
 
+
+                        <Grid container spacing={2} >
+                            <Grid item xs={6}>
+                                <Paper sx={{
+                                    p: 1,
+                                    display: 'flex',
+                                    flexDirection: 'column',
+                                    mb: 1
+                                }}
+                                elevation={12}
+                                 >
+                                    <Grid container rowSpacing={1} columnSpacing={{ xs: 1 }} className=' g-2 mb-2'>
+
+                                        <Grid item xs={6}>
+                                            <TextField fullWidth label="Designation"  {...(errors.designation !== "" && { helperText: errors.designation, error: true })} onChange={handleChange} value={employeeData.designation} className="form-select" select size="small" id="designationId" name="designation" defaultValue="" >
+
+                                                {designationList.map((item, index) => (
+                                                    <MenuItem key={index} value={item.designation}>{item.designation}</MenuItem>
+                                                ))}
+
+                                            </TextField>
+
+                                        </Grid>
+                                        <Grid item xs={6}>
+                                            <TextField fullWidth label="Department"  {...(errors.department !== "" && { helperText: errors.department, error: true })} onChange={handleChange} value={employeeData.department} className="form-select" select size="small" id="DepartmentId" name="department" defaultValue="" >
+
+                                                {departmentList.map((item, index) => (
+                                                    <MenuItem key={index} value={item.department}>{item.department}</MenuItem>
+                                                ))}
+                                            </TextField>
+
+                                        </Grid>
+                                    </Grid>
+                                </Paper>
                             </Grid>
 
 
@@ -746,7 +959,8 @@ const Employee = () => {
                                             <label htmlFor="employmentStatusId">Employment Status</label>
                                         </div>*/}
                                     <Grid item xs={3}>
-                                        <TextField fullWidth label="Report To" onChange={handleChange} value={employeeData.reportTo} select size="small" id="reportToId" name="reportTo">
+                                        <TextField fullWidth label="Report To"  onChange={handleFilterChange} className="form-select" select size="small" id="reportToFilterId" name="reportToFilter" defaultValue="" >
+                                            <MenuItem value="all">All</MenuItem>
                                             <MenuItem value="N/A">N/A</MenuItem>
                                             {employeeList.map((item, index) => (
                                                 <MenuItem key={index} value={item.firstName}>{`${item.firstName} ${item.lastName}`}</MenuItem>
