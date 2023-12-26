@@ -29,10 +29,17 @@ const employeeSchema = new mongoose.Schema({
     designation : String,
     department : String,
     mailId : String,
-      
+    empRole: {
+        type: String,
+        required: [true, "empRole is required"]
+    },
     doj : String,
     employmentStatus : String,
-    reportTo : String
+    reportTo : String,
+    password: {
+        type: String,
+        required: [true, "Password is required"]
+    }
 });
 employeeSchema.plugin(uniqueValidator);
 
