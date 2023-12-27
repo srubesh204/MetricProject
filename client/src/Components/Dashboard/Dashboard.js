@@ -41,6 +41,8 @@ import { useEmployee } from '../../App';
 import DcList from '../dcList/DcList';
 import GrnList from '../grnList/GrnList';
 import CalList from '../CalItems/CalList';
+import { Logout } from '@mui/icons-material';
+import { Tooltip } from '@mui/material';
 //
 
 // function Copyright(props) {
@@ -239,6 +241,7 @@ export default function Dashboard() {
             >
               <MenuIcon />
             </IconButton>
+            <Tooltip title={fileName.name}>
             <Typography
               component="h1"
               variant="h6"
@@ -248,11 +251,23 @@ export default function Dashboard() {
             >
               {fileName.name}
             </Typography>
-            <IconButton color="inherit">
-              <Badge badgeContent={4} color="secondary">
-                <NotificationsIcon />
-              </Badge>
-            </IconButton>
+            </Tooltip>
+           
+            <Tooltip title="Notifications">
+              <IconButton color="inherit">
+                <Badge badgeContent={4} color="secondary">
+                  <NotificationsIcon />
+                </Badge>
+              </IconButton>
+            </Tooltip>
+
+            <Tooltip title="Logout">
+              <IconButton color="inherit" >
+
+                <Logout color="error" />
+              </IconButton>
+            </Tooltip>
+
           </Toolbar>
         </AppBar>
         <Drawer variant="permanent" open={togglerOpen}>
