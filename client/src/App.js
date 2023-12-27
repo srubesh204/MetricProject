@@ -35,13 +35,30 @@ import OnSiteEditGrn from './Components/onSiteGrn/OnSiteEditGrn';
 import OnSiteDialog from './Components/Dashboard/DashboardComponents/OnSiteDialog';
 import Instrument_History_Card from './Components/Instrument_History_Card';
 import Roles from './Components/Login/Roles';
+import { createContext, useContext } from 'react';
+import AccessDenied from './Components/ErrorComponents/AccessDenied';
+export const empRole = createContext(null);
 
+
+const EmployeeContext = createContext();
+
+export const useEmployee = () => {
+  return useContext(EmployeeContext);
+};
+
+export const EmployeeProvider = ({ children, employee }) => {
+  return (
+    <EmployeeContext.Provider value={employee}>
+      {children}
+    </EmployeeContext.Provider>
+  );
+};
 
 const roleAccessRules = {
-  admin: ['/home', "/desdep", "/general","/vendor","/itemMaster","/itemadd","/itemEdit/:id","/itemList","/grnList","/calList","/onSiteList", '/roles'],
-  plantadmin: ['/dashboard', '/create'],
-  creator: ['/create'],
-  viewer: ['/view'],
+  admin: ['/home', "/desdep", "/general", "/vendor", "/itemMaster", "/itemadd", "/itemEdit/:id", "/itemList", "/grnList", "/calList", "/onSiteList", '/roles'],
+  plantAdmin: ['/dashboard', '/home', '/itemList', ],
+  creator: ['/home', ],
+  viewer: ['/itemlist'],
 };
 
 // Function to generate routes based on user role and access rules
@@ -56,8 +73,8 @@ const generateRoutes = (employee) => {
     { path: "/itemMaster", element: <ItemMaster /> },
     { path: "/devi", element: <Devi /> },
     { path: "/itemadd", element: <ItemAdd /> },
-    { path: "/itemEdit/:id", element: <ItemEdit />},
-    { path: "/itemList", element: <ItemList /> },
+    { path: "/itemEdit/:id", element: <ItemEdit /> },
+    { path: "/itemlist", element: <ItemList /> },
     { path: "/test", element: <FileViewer /> },
     { path: "/reports", element: <InsHisCard /> },
     { path: "/status", element: <Status /> },
@@ -86,20 +103,21 @@ const generateRoutes = (employee) => {
   return generatedRoutes;
 };
 
-const AccessDenied = () => <div>Access Denied</div>;
+
 
 const PrivateRoute = ({ element: Element, employee, ...rest }) => {
   const isLoggedIn = sessionStorage.getItem('loggedIn');
+
 
   if (!isLoggedIn) {
     return <Navigate to="/login" />;
   }
 
   const routes = generateRoutes(employee);
-  
+
   return (
     <Routes>
-      
+
       {routes}
       <Route path="*" element={<AccessDenied />} /> {/* Catch-all route for restricted access */}
     </Routes>
@@ -113,6 +131,7 @@ function App() {
   // Custom function to render the PrivateRoute component
   const isLoggedIn = sessionStorage.getItem('loggedIn'); // Retrieve session storage data
   const employee = sessionStorage.getItem('employee');
+
   console.log(isLoggedIn, employee)
   const location = useLocation();
 
@@ -120,25 +139,25 @@ function App() {
   console.log(location.pathname);
   console.log('search', location.search);
 
- 
-  
+
+
   return (
     <div className="App">
 
+      <EmployeeProvider employee={employee}>
+        {/* {fullList.includes(location.pathname) ? "":""} */}
+        {/* <Dashboard /> */}
 
-      {/* {fullList.includes(location.pathname) ? "":""} */}
-      {/* <Dashboard /> */}
-      
-      <Routes>
-      <Route path="/" element={isLoggedIn ? <Dashboard /> : <Navigate to="/login" />} />
-        <Route
-          path="/*"
-          element={<PrivateRoute employee={employee} />}
-        />
-        <Route path="/login" element={isLoggedIn ? <Navigate to="/" /> : <Login />} />
-        <Route path="/accessDenied" element={<AccessDenied />} />
-      </Routes>
-
+        <Routes>
+          <Route path="/" element={isLoggedIn ? <Dashboard /> : <Navigate to="/login" />} />
+          <Route
+            path="/*"
+            element={<PrivateRoute employee={employee} />}
+          />
+          <Route path="/login" element={isLoggedIn ? <Navigate to="/" /> : <Login />} />
+          <Route path="/accessDenied" element={<AccessDenied />} />
+        </Routes>
+      </EmployeeProvider>
     </div>
   );
 }

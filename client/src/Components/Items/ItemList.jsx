@@ -22,10 +22,13 @@ import { Link as RouterLink } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import isSameOrAfter from 'dayjs/plugin/isSameOrAfter'
 import isSameOrBefore from 'dayjs/plugin/isSameOrBefore'
+import { useEmployee } from '../../App';
 dayjs.extend(isSameOrBefore)
 dayjs.extend(isSameOrAfter)
 
 const ItemList = () => {
+
+    const employee = useEmployee()
 
     console.log(dayjs("2023-11-17").isSameOrBefore("2023-11-21"))
     const [itemList, setItemList] = useState([]);
@@ -260,7 +263,7 @@ const ItemList = () => {
 
 
     const columns = [
-        { field: 'button', headerName: 'Edit', width: 60, renderCell: (params) => <Button component={Link} to={`/itemedit/${params.id}`}><Edit color='success' /></Button> },
+        { field: 'button', headerName: 'Edit', width: 60, renderCell: (params) => <Button disabled={employee && employee === "viewer"} component={Link} to={`/itemedit/${params.id}`}><Edit color='success' /></Button> },
         { field: 'id', headerName: 'Si. No', width: 60, renderCell: (params) => params.api.getAllRowIds().indexOf(params.id) + 1 },
         { field: 'itemIMTENo', headerName: 'IMTE No', width: 100 },
         { field: 'itemAddMasterName', headerName: 'Description', width: 120 },

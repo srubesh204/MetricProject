@@ -338,6 +338,7 @@ const Employee = () => {
                 setEmployeeData(initialEmpData)
                 setEmpDataId(null)
             } else {
+                setSnackBarOpen(true)
                 setErrorHandler({ status: 0, message: "Fill the required fields", code: "error" })
             }
         } catch (err) {

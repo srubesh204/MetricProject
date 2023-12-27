@@ -344,7 +344,7 @@ const DcList = () => {
                             elevation={12}
                         >
                             <div className='row '>
-                                <h1 className='text-center '>DC List</h1>
+                              
                                 <div className='col d-flex '>
                                     <div className='col me-2'>
                                         <TextField fullWidth label="VendorStatus" className="col" select size="small" onChange={handleFilterChange} id="vendorStatusId" name="vendorStatus" defaultValue="" >

@@ -11,10 +11,7 @@ import Typography from '@mui/material/Typography';
 import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
 import Badge from '@mui/material/Badge';
-import Container from '@mui/material/Container';
-import Grid from '@mui/material/Grid';
-import Paper from '@mui/material/Paper';
-import Link from '@mui/material/Link';
+
 import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import NotificationsIcon from '@mui/icons-material/Notifications';
@@ -40,6 +37,10 @@ import ItemMaster from '../itemMaster/ItemMaster'
 import { PartDataBase, UnitDataBase } from '../general/General'
 import { Department, Designation } from '../DesDep';
 import Home from './Home';
+import { useEmployee } from '../../App';
+import DcList from '../dcList/DcList';
+import GrnList from '../grnList/GrnList';
+import CalList from '../CalItems/CalList';
 //
 
 // function Copyright(props) {
@@ -97,7 +98,7 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
           width: theme.spacing(9),
         },
       }),
-      height: "100vh"
+      height: "100%"
     },
   }),
 );
@@ -107,10 +108,13 @@ const defaultTheme = createTheme();
 
 export default function Dashboard() {
 
+  const empRole = useEmployee()
+
   const [fileName, setFileName] = useState({
     name: "Dashboard",
     file: "",
   });
+  console.log(empRole)
 
   const MenuItems = {
     databaseMaster: [
@@ -134,9 +138,9 @@ export default function Dashboard() {
 
     ],
     Reports: [
-      { name: "DC List" },
-      { name: "GRN List" },
-      { name: "Cal Data" },
+      { name: "DC List", file: <DcList /> },
+      { name: "GRN List", file: <GrnList /> },
+      { name: "Cal Data", file: <CalList /> },
       { name: "History Card" },
       { name: "Gauge List" },
       { name: "Cal Due Report" },
@@ -175,7 +179,7 @@ export default function Dashboard() {
     // Add other drawer names with initial status here
   });
 
-  
+
   const [adminOpen, setAdminOpen] = useState(false);
   const [itemOpen, setItemOpen] = useState(false);
   const [systemOpen, setSystemOpen] = useState(false);
@@ -275,75 +279,78 @@ export default function Dashboard() {
 
             </ListItemButton>
 
-            <ListItemButton onClick={handleAdminOpen}>
-              <ListItemIcon>
-                <AdminPanelSettingsIcon />
-              </ListItemIcon>
-              <ListItemText primary="Admin" />
-              {adminOpen ? <ExpandLess /> : <ExpandMore />}
-            </ListItemButton>
-            <Collapse in={adminOpen} timeout="auto" unmountOnExit>
-
-              <List component="div" disablePadding>
-
-                <ListItemButton sx={{ pl: 4 }} onClick={() => handleAdminList("databaseMaster")}>
+            {empRole && (empRole === "admin" || empRole === "plantAdmin") &&
+              <React.Fragment>
+                <ListItemButton onClick={handleAdminOpen}>
                   <ListItemIcon>
                     <AdminPanelSettingsIcon />
                   </ListItemIcon>
-                  <ListItemText primary="Database Master" />
-                  {adminListNames["databaseMaster"].status ? <ExpandLess /> : <ExpandMore />}
+                  <ListItemText primary="Admin" />
+                  {adminOpen ? <ExpandLess /> : <ExpandMore />}
                 </ListItemButton>
-                <Collapse in={adminListNames["databaseMaster"].status} timeout="auto" unmountOnExit>
+                <Collapse in={adminOpen} timeout="auto" unmountOnExit>
 
                   <List component="div" disablePadding>
-                    {MenuItems.databaseMaster.map((item, index) => {
-                      console.log(item)
-                      return (
-                        <ListItemButton key={index} sx={{ pl: 6 }} onClick={() => onFileChange(item)}>
-                          <ListItemIcon>
-                            {item.icon}
-                          </ListItemIcon>
-                          <ListItemText primary={item.name} />
-                        </ListItemButton>
-                      )
-                    })}
+
+                    <ListItemButton sx={{ pl: 4 }} onClick={() => handleAdminList("databaseMaster")}>
+                      <ListItemIcon>
+                        <AdminPanelSettingsIcon />
+                      </ListItemIcon>
+                      <ListItemText primary="Database Master" />
+                      {adminListNames["databaseMaster"].status ? <ExpandLess /> : <ExpandMore />}
+                    </ListItemButton>
+                    <Collapse in={adminListNames["databaseMaster"].status} timeout="auto" unmountOnExit>
+
+                      <List component="div" disablePadding>
+                        {MenuItems.databaseMaster.map((item, index) => {
+                          console.log(item)
+                          return (
+                            <ListItemButton key={index} sx={{ pl: 6 }} onClick={() => onFileChange(item)}>
+                              <ListItemIcon>
+                                {item.icon}
+                              </ListItemIcon>
+                              <ListItemText primary={item.name} />
+                            </ListItemButton>
+                          )
+                        })}
+
+
+                      </List>
+                    </Collapse>
+
+
+                    <ListItemButton sx={{ pl: 4 }} onClick={() => handleAdminList("system")}>
+                      <ListItemIcon>
+                        <AdminPanelSettingsIcon />
+                      </ListItemIcon>
+                      <ListItemText primary="System" />
+                      {adminListNames["system"].status ? <ExpandLess /> : <ExpandMore />}
+                    </ListItemButton>
+                    <Collapse in={adminListNames["system"].status} timeout="auto" unmountOnExit>
+
+                      <List component="div" disablePadding>
+                        {MenuItems.system.map((item, index) => {
+                          console.log(item)
+                          return (
+                            <ListItemButton key={index} sx={{ pl: 6 }} onClick={() => onFileChange(item)}>
+                              <ListItemIcon>
+
+                              </ListItemIcon>
+                              <ListItemText primary={item.name} />
+                            </ListItemButton>
+                          )
+                        })}
+
+                      </List>
+                    </Collapse>
+
+
+
 
 
                   </List>
                 </Collapse>
-
-
-                <ListItemButton sx={{ pl: 4 }} onClick={() => handleAdminList("system")}>
-                  <ListItemIcon>
-                    <AdminPanelSettingsIcon />
-                  </ListItemIcon>
-                  <ListItemText primary="System" />
-                  {adminListNames["system"].status ? <ExpandLess /> : <ExpandMore />}
-                </ListItemButton>
-                <Collapse in={adminListNames["system"].status} timeout="auto" unmountOnExit>
-
-                  <List component="div" disablePadding>
-                    {MenuItems.system.map((item, index) => {
-                      console.log(item)
-                      return (
-                        <ListItemButton key={index} sx={{ pl: 6 }} onClick={() => onFileChange(item)}>
-                          <ListItemIcon>
-
-                          </ListItemIcon>
-                          <ListItemText primary={item.name} />
-                        </ListItemButton>
-                      )
-                    })}
-
-                  </List>
-                </Collapse>
-
-
-
-
-
-              </List>
-            </Collapse>
+              </React.Fragment>}
             <ListItemButton onClick={handleItemOpen}>
               <ListItemIcon>
                 <AdminPanelSettingsIcon />
@@ -360,14 +367,15 @@ export default function Dashboard() {
                   <ListItemText primary="Item List" />
 
                 </ListItemButton>
-                <ListItemButton sx={{ pl: 4 }} to="/itemAdd" >
-                  <ListItemIcon>
-                    <AdminPanelSettingsIcon />
-                  </ListItemIcon>
-                  <ListItemText primary="Item Add" />
+                {empRole && (empRole === "admin" || empRole === "plantAdmin") &&
+                  <ListItemButton sx={{ pl: 4 }} to="/itemAdd" >
+                    <ListItemIcon>
+                      <AdminPanelSettingsIcon />
+                    </ListItemIcon>
+                    <ListItemText primary="Item Add" />
 
-                </ListItemButton>
-                
+                  </ListItemButton>}
+
 
               </List>
 
@@ -437,7 +445,7 @@ export default function Dashboard() {
         </Drawer>
         <Box
           component="main"
-          style={{ flexGrow: 1, height: "100%" }}
+          style={{ flexGrow: 1, height: "100%", width: "75%" }}
         // sx={{
         //   backgroundColor: (theme) =>
         //     theme.palette.mode === 'light'
