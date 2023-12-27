@@ -43,6 +43,7 @@ import GrnList from '../grnList/GrnList';
 import CalList from '../CalItems/CalList';
 import { Logout } from '@mui/icons-material';
 import { Tooltip } from '@mui/material';
+import dashboard from '../assets/dashboard.png'
 //
 
 // function Copyright(props) {
@@ -242,17 +243,17 @@ export default function Dashboard() {
               <MenuIcon />
             </IconButton>
             <Tooltip title={fileName.name}>
-            <Typography
-              component="h1"
-              variant="h6"
-              color="inherit"
-              noWrap
-              sx={{ flexGrow: 1, textAlign: "center" }}
-            >
-              {fileName.name}
-            </Typography>
+              <Typography
+                component="h1"
+                variant="h6"
+                color="inherit"
+                noWrap
+                sx={{ flexGrow: 1, textAlign: "center" }}
+              >
+                {fileName.name}
+              </Typography>
             </Tooltip>
-           
+
             <Tooltip title="Notifications">
               <IconButton color="inherit">
                 <Badge badgeContent={4} color="secondary">
@@ -286,12 +287,12 @@ export default function Dashboard() {
           <Divider />
           <List component="nav" >
 
-            <ListItemButton >
+            <ListItemButton to="/home">
               <ListItemIcon>
-                <AdminPanelSettingsIcon />
+                <img src={dashboard} alt="Dashboard Icon" style={{ width: '24px', height: '24px' }} />
+                {/* Adjust width and height as per your icon's size */}
               </ListItemIcon>
               <ListItemText primary="Dashboard" />
-
             </ListItemButton>
 
             {empRole && (empRole === "admin" || empRole === "plantAdmin") &&
