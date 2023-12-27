@@ -44,6 +44,8 @@ import CalList from '../CalItems/CalList';
 import { Logout } from '@mui/icons-material';
 import { Tooltip } from '@mui/material';
 import dashboard from '../assets/dashboard.png'
+import admin from '../assets/admin.png'
+import secretary from '../assets/secretary.gif'
 //
 
 // function Copyright(props) {
@@ -123,7 +125,7 @@ export default function Dashboard() {
     databaseMaster: [
       { name: "Department", file: <Department />, icon: <CategoryIcon /> },
       { name: "Designation", file: <Designation />, icon: <CategoryIcon /> },
-      { name: "Employee", file: <Employee />, icon: <BadgeIcon /> },
+      { name: "Employee", file: <Employee />, icon: <img src={secretary} alt="Dashboard Icon" style={{ width: '25px', height: '25px' }} /> },
       { name: "Vendor", file: <Vendor />, icon: <ContactPageIcon /> },
       { name: "Unit", file: <UnitDataBase />, icon: <CategoryIcon /> },
       { name: "Part", file: <PartDataBase />, icon: <CategoryIcon /> },
@@ -299,14 +301,15 @@ export default function Dashboard() {
               <React.Fragment>
                 <ListItemButton onClick={handleAdminOpen}>
                   <ListItemIcon>
-                    <AdminPanelSettingsIcon />
+                    
+
                   </ListItemIcon>
                   <ListItemText primary="Admin" />
                   {adminOpen ? <ExpandLess /> : <ExpandMore />}
                 </ListItemButton>
                 <Collapse in={adminOpen} timeout="auto" unmountOnExit>
 
-                  <List component="div" disablePadding>
+                  <List component="div" disablePadding> 
 
                     <ListItemButton sx={{ pl: 4 }} onClick={() => handleAdminList("databaseMaster")}>
                       <ListItemIcon>
