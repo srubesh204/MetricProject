@@ -43,6 +43,13 @@ import GrnList from '../grnList/GrnList';
 import CalList from '../CalItems/CalList';
 import { Logout } from '@mui/icons-material';
 import { Tooltip } from '@mui/material';
+import MailConfi from '../mailConfi/MailConfi';
+import BackUp from '../mailConfi/BackUp';
+import CompanyDetails from '../mailConfi/CompanyDetails';
+import FormatNumber from '../mailConfi/FormatNumber';
+import AlertConfi from '../mailConfi/AlertConfi';
+
+
 //
 
 // function Copyright(props) {
@@ -131,11 +138,11 @@ export default function Dashboard() {
     ],
     system: [
       { name: "Version" },
-      { name: "Backup" },
-      { name: "Alerts Configuration" },
-      { name: "Mail Configuration" },
-      { name: "Format Number" },
-      { name: "Company Details" },
+      { name: "Backup",file:<BackUp/>},
+      { name: "Alerts Configuration",file: <AlertConfi/> },
+      { name: "Mail Configuration", file: <MailConfi/> },
+      { name: "Format Number",file: <FormatNumber/> },
+      { name: "Company Details",file:<CompanyDetails/> },
       { name: "Label Print" },
 
     ],
