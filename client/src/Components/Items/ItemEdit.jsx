@@ -722,6 +722,19 @@ const ItemEdit = () => {
     const navigate = useNavigate();
 
 
+    
+        //validate function 
+        const [errors, setErrors] = useState({})
+    
+        const validateFunction = () => {
+            let tempErrors = {};
+            tempErrors.itemMasterRef = itemAddData.itemMasterRef ? "" : "Item Master is Required"
+    
+            setErrors({ ...tempErrors })
+    
+            return Object.values(tempErrors).every(x => x === "")
+        }
+        console.log(errors)
 
 
     const updateItemData = async (e) => {
@@ -866,7 +879,9 @@ const ItemEdit = () => {
                         <div className="col-lg-5 row g-2">
 
                             <div className='col-9'>
-                                <TextField size='small' select variant='outlined' label="Item Master" name='itemMasterRef' value={itemAddData.itemMasterRef} fullWidth onChange={handleItemAddChange}>
+                                <TextField
+                                        {...(errors.itemMasterRef !== "" && { helperText: errors.itemMasterRef, error: true })}
+                                         size='small' select variant='outlined' label="Item Master" name='itemMasterRef' value={itemAddData.itemMasterRef} fullWidth onChange={handleItemAddChange}>
                                     <MenuItem value=""><em>Select</em></MenuItem>
                                     {itemMasterDataList.map((item, index) => (
                                         <MenuItem value={index}>{item.itemDescription}</MenuItem>

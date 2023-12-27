@@ -284,8 +284,6 @@ const GrnList = () => {
 
                     <div className='row mb-2'>
 
-                        <h1 className='text-center '>GRN List</h1>
-
                      
                             <Paper
                                 sx={{

@@ -208,7 +208,7 @@ const ItemAdd = () => {
 
 
 
-    const [itemAddData, setItemAddData] = useState({
+    const [itemAddData, setItemAddData] = useState({ 
         itemMasterRef: "",
         selectedItemMaster: [],
         isItemMaster: "",
@@ -520,21 +520,61 @@ const ItemAdd = () => {
     const [open, setOpen] = useState(false)
     const navigate = useNavigate();
 
+
+
+    
+        //validate function 
+        const [errors, setErrors] = useState({})
+    
+        const validateFunction = () => {
+            let tempErrors = {};
+            tempErrors.itemMasterRef = itemAddData.itemMasterRef ? "" : "Item Master is Required"
+            tempErrors.itemIMTENo = itemAddData.itemIMTENo ? "" : "IMTE No is Required"
+            tempErrors.itemType = itemAddData.itemType ? "" : "Item Type is Required"
+            tempErrors.itemCalibrationSource = itemAddData.itemCalibrationSource ? "" : "Calibration Source is Required"
+            tempErrors.itemCalFreInMonths = itemAddData.itemCalFreInMonths ? "" : "Cal Frequency In Months is Required"
+            tempErrors.itemCalAlertDays = itemAddData.itemCalAlertDays ? "" : "Cal Alert Days is Required"
+            tempErrors.itemCalDate = itemAddData.itemCalDate ? "" : "Calibration Date is Required"
+            tempErrors.itemDueDate = itemAddData.itemDueDate ? "" : "Due Date is Required"
+
+            if (itemAddData.itemCalDate!== "") {
+                tempErrors.itemCalDate = ""
+            } else {
+                tempErrors.itemCalDate = "Calibration Date is Required"
+            }
+            
+            if (itemAddData.itemDueDate!== "") {
+                tempErrors.itemDueDate = ""
+            } else {
+                tempErrors.itemDueDate = "Due Date is Required"
+            }
+    
+            setErrors({ ...tempErrors })
+    
+            return Object.values(tempErrors).every(x => x === "")
+        }
+        console.log(errors)
+
+
     const handleItemAddSubmit = async (e) => {
         e.preventDefault();
         try {
-            const response = await axios.post(
-                `${process.env.REACT_APP_PORT}/itemAdd/createItemAdd`, itemAddData
-            );
-
-            setSnackBarOpen(true)
-
-            console.log("Item Created Successfully")
-            setErrorHandler({ status: response.data.status, message: response.data.message, code: "success" })
-
-            setTimeout(() => {
-                navigate('/itemList');
-            }, 2000);
+            if (validateFunction()) {
+                const response = await axios.post(
+                    `${process.env.REACT_APP_PORT}/itemAdd/createItemAdd`, itemAddData
+                );
+    
+                setSnackBarOpen(true)
+    
+                console.log("Item Created Successfully")
+                setErrorHandler({ status: response.data.status, message: response.data.message, code: "success" })
+    
+                setTimeout(() => {
+                    navigate('/itemList');
+                }, 2000);
+            } else {                
+                setErrorHandler({ status: 0, message: "Fill the required fields", code: "error" })
+            }
 
         } catch (err) {
 
@@ -665,7 +705,9 @@ const ItemAdd = () => {
                         <div className="col-lg-5 row g-2">
 
                             <div className='col-9'>
-                                <TextField size='small' select variant='outlined' label="Item Master" name='itemMasterRef' value={itemAddData.itemMasterRef} fullWidth onChange={handleItemAddChange}>
+                                <TextField 
+                                        {...(errors.itemMasterRef !== "" && { helperText: errors.itemMasterRef, error: true })}
+                                        size='small' select variant='outlined' label="Item Master" name='itemMasterRef' value={itemAddData.itemMasterRef} fullWidth onChange={handleItemAddChange}>
                                     <MenuItem value=""><em>Select</em></MenuItem>
                                     {itemMasterDataList.map((item, index) => (
                                         <MenuItem key={index} value={item._id}>{item.itemDescription}</MenuItem>
@@ -679,7 +721,9 @@ const ItemAdd = () => {
                                     value={itemAddData.itemIMTENo}
                                     options={imteList.map((item) => ({ label: item.itemIMTENo }))}
                                     size='small'
-                                    renderInput={(params) => <TextField name='itemIMTENo' onChange={handleItemAddChange}  {...params} label="IMTE No" />}
+                                    renderInput={(params) => <TextField 
+                                        {...(errors.itemIMTENo !== "" && { helperText: errors.itemIMTENo, error: true })}
+                                        name='itemIMTENo' onChange={handleItemAddChange}  {...params} label="IMTE No" />}
                                     getOptionDisabled={option => true}
                                     clearOnBlur={false}
                                 //getOptionDisabled={options => true}
@@ -725,7 +769,9 @@ const ItemAdd = () => {
                                 <Typography variant='h6' className='text-center'>Item General Details</Typography>
                                 <div className="row g-2 mb-2">
                                     <div className="col-lg-4">
-                                        <TextField size='small' select variant='outlined' onChange={handleItemAddChange} label="Item Type" name='itemType' fullWidth value={itemAddData.itemType || ""}>
+                                        <TextField
+                                        {...(errors.itemType !== "" && { helperText: errors.itemType, error: true })}
+                                         size='small' select variant='outlined' onChange={handleItemAddChange} label="Item Type" name='itemType' fullWidth value={itemAddData.itemType || ""}>
                                             <MenuItem><em>Select Type</em></MenuItem>
                                             <MenuItem value="attribute">Attribute</MenuItem>
                                             <MenuItem value="variable">Variable</MenuItem>
@@ -782,7 +828,9 @@ const ItemAdd = () => {
                                     </div>
                                     <div className="row g-1">
                                         <div className="col-lg me-1">
-                                            <TextField size='small' select variant='outlined' value={itemAddData.itemStatus} onChange={handleItemAddChange} label="Item Status" name='itemStatus' id='itemStatusId' fullWidth >
+                                            <TextField
+                                                    {...(errors.itemStatus !== "" && { helperText: errors.itemStatus, error: true })}
+                                                     size='small' select variant='outlined' value={itemAddData.itemStatus} onChange={handleItemAddChange} label="Item Status" name='itemStatus' id='itemStatusId' fullWidth >
                                                 <MenuItem value="Active">Active</MenuItem>
                                                 <MenuItem value="Spare">Spare</MenuItem>
                                                 <MenuItem value="Breakdown">Breakdown</MenuItem>
@@ -858,17 +906,23 @@ const ItemAdd = () => {
                             <Typography variant='h6' className='text-center'>Calibration</Typography>
                             <div className="row g-2 mb-2">
                                 <div className='col-lg-6'>
-                                    <TextField value={itemAddData.itemCalFreInMonths} onChange={handleItemAddChange} size='small' fullWidth variant='outlined' label="Cal Frequency in months" id='itemCalFreInMonthsId' name='itemCalFreInMonths' type='number'>
+                                    <TextField 
+                                                    {...(errors.itemCalFreInMonths !== "" && { helperText: errors.itemCalFreInMonths, error: true })}
+                                                     value={itemAddData.itemCalFreInMonths} onChange={handleItemAddChange} size='small' fullWidth variant='outlined' label="Cal Frequency in months" id='itemCalFreInMonthsId' name='itemCalFreInMonths' type='number'>
 
                                     </TextField>
                                 </div>
                                 <div className='col-lg-6'>
-                                    <TextField size='small' value={itemAddData.itemCalAlertDays} onChange={handleItemAddChange} fullWidth variant='outlined' label="Cal Alert Days" id='itemCalAlertDaysId' name='itemCalAlertDays' type='number'>
+                                    <TextField 
+                                                    {...(errors.itemCalAlertDays !== "" && { helperText: errors.itemCalAlertDays, error: true })}
+                                                     size='small' value={itemAddData.itemCalAlertDays} onChange={handleItemAddChange} fullWidth variant='outlined' label="Cal Alert Days" id='itemCalAlertDaysId' name='itemCalAlertDays' type='number'>
 
                                     </TextField>
                                 </div>
                                 <div className='col-lg-12'>
-                                    <TextField size='small' value={itemAddData.itemCalibrationSource} onChange={handleItemAddChange} fullWidth variant='outlined' select label="Calibration Source" name='itemCalibrationSource'>
+                                    <TextField 
+                                        {...(errors.itemCalibrationSource !== "" && { helperText: errors.itemCalibrationSource, error: true })}
+                                        size='small' value={itemAddData.itemCalibrationSource} onChange={handleItemAddChange} fullWidth variant='outlined' select label="Calibration Source" name='itemCalibrationSource'>
                                         <MenuItem value=""><em>--Select--</em></MenuItem>
                                         <MenuItem value="inhouse">InHouse</MenuItem>
                                         <MenuItem value="outsource">OutSource</MenuItem>
@@ -1106,6 +1160,9 @@ const ItemAdd = () => {
 
                                             slotProps={{ textField: { size: 'small', fullWidth: true  } }}
                                             format="DD-MM-YYYY" />
+                                            {errors.itemCalDate !== "" && (
+                                                <div style={{ color: 'red', textAlign: "center" }}>{errors.itemCalDate}</div>
+                                            )}
                                     </div>
                                     <div className="col-md-6">
                                         <DatePicker
@@ -1122,6 +1179,9 @@ const ItemAdd = () => {
 
                                             slotProps={{ textField: { size: 'small', fullWidth: true  } }}
                                             format="DD-MM-YYYY" />
+                                            {errors.itemDueDate !== "" && (
+                                                <div style={{ color: 'red', textAlign: "center" }}>{errors.itemDueDate}</div>
+                                            )}
                                     </div>
                                     <div className="col-lg-12 d-flex justify-content-between">
                                         <TextField size='small' fullWidth variant='outlined' onChange={handleItemAddChange} label="Calibrated at" select name='itemCalibratedAt'>

@@ -19,6 +19,7 @@ const itemCalRoute = require("./routes/itemCalRoute");
 const itemGRNRoute = require("./routes/itemGRNRoute");
 const onsiteItemGRNRoute = require("./routes/onsiteItemGRNRoute");
 const itemDcRoute = require("./routes/itemDcRoute");
+const employeeController = require("./controllers/employeeController");
 //
 mongoose.connect('mongodb://localhost/metric', {
   useNewUrlParser: true,
@@ -67,12 +68,17 @@ app.use('/workInstructions', express.static('storage/workInstructions'));
 app.use('/itemCertificates', express.static('storage/itemCertificates'));
 app.use('/grnCertificates', express.static('storage/grnItemCertificates'));
 app.use('/itemMasterImages', express.static('storage/Images/itemMasterImages'));
+app.use('/error', express.static('storage/Images/errorImages'));
 app.use('/itemAdd', itemAddRoute);
 app.use('/itemCal', itemCalRoute);
 app.use('/itemGRN', itemGRNRoute);
 app.use('/itemDc', itemDcRoute);
 app.use('/area', areaRoute);
 app.use('/placeOfUsage', placeOfUsageRoute);
+
+
+//
+app.post('/login', employeeController.employeeLoginCheck)
 const port = 3001;
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);

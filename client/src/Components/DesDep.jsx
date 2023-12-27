@@ -100,6 +100,42 @@ export const Department = () => {
 
 
 
+// Validate function
+const [errors, setErrors] = useState({
+  department: "",
+  area: "",
+  placeOfUsage: "",
+});
+
+const departmentValidateFunction = () => {
+  let departtempErrors = { ...errors };
+  departtempErrors.department = departmentData.department ? "" : "Department is Required";
+
+  setErrors({ ...departtempErrors });
+
+  return departtempErrors.department === "";
+};
+
+const areaValidateFunction = () => {
+  let areatempErrors = { ...errors };
+  areatempErrors.area = areaData.area ? "" : "Area is Required";
+
+  setErrors({ ...areatempErrors });
+
+  return areatempErrors.area === "";
+};
+
+const placeOfUsageValidateFunction = () => {
+  let tempErrors = { ...errors };
+  tempErrors.placeOfUsage = placeOfUsageDatas.placeOfUsage ? "" : "Place Of Usage is Required";
+
+  setErrors({ ...tempErrors });
+
+  return tempErrors.placeOfUsage === "";
+};
+
+console.log(errors);
+
 
 
 
@@ -108,15 +144,19 @@ export const Department = () => {
   const DepartmentSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post(
-        `${process.env.REACT_APP_PORT}/department/createDepartment`, departmentData
-      );
-      console.log(response.data.message)
-      depFetchData();
-      setDepartmentData(emptyDepartmentData);
-      setSnackBarOpen(true)
-      setErrorHandler({ status: response.data.status, message: response.data.message, code: "success" })
-      console.log("Department create Successfully");
+      if (departmentValidateFunction()) {
+        const response = await axios.post(
+          `${process.env.REACT_APP_PORT}/department/createDepartment`, departmentData
+        );
+        console.log(response.data.message)
+        depFetchData();
+        setDepartmentData(emptyDepartmentData);
+        setSnackBarOpen(true)
+        setErrorHandler({ status: response.data.status, message: response.data.message, code: "success" })
+        console.log("Department create Successfully");
+      } else {
+        setErrorHandler({ status: 0, message: "Fill the required fields", code: "error" })
+      }
     } catch (err) {
       setSnackBarOpen(true)
 
@@ -242,11 +282,11 @@ export const Department = () => {
 
 
   const initialAreaData = {
-    area: "N/A",
+    area: "",
     areaStatus: "Active"
   }
   const [areaData, setArea] = useState({
-    area: "N/A",
+    area: "",
     areaStatus: "Active"
   });
   const [areaList, setAreaList] = useState([]);
@@ -298,6 +338,9 @@ export const Department = () => {
   const AreaSubmit = async (e) => {
     e.preventDefault();
     try {
+      if (areaValidateFunction()) {
+
+      }
       const response = await axios.post(
         `${process.env.REACT_APP_PORT}/area/createArea`, areaData
       );
@@ -444,7 +487,7 @@ export const Department = () => {
 
 
   const initialPlaceOfUsageData = {
-    placeOfUsage: "N/A",
+    placeOfUsage: "",
     placeOfUsageStatus: "Active"
 
   }
@@ -557,7 +600,7 @@ export const Department = () => {
 
 
   const [placeOfUsageDatas, setPlaceOfUsageData] = useState({
-    placeOfUsage: "N/A",
+    placeOfUsage: "",
     placeOfUsageStatus: "Active"
 
   });
@@ -618,6 +661,9 @@ export const Department = () => {
   const placeOfUsageSubmit = async (e) => {
     e.preventDefault();
     try {
+      if (placeOfUsageValidateFunction()) {
+
+      }
       const response = await axios.post(
         `${process.env.REACT_APP_PORT}/placeOfUsage/createPlaceOfUsage`, placeOfUsageDatas
       );
@@ -821,6 +867,7 @@ export const Department = () => {
                   <div className="col-md-6">
 
                     <TextField label="Department"
+                                                    {...(errors.department !== "" && { helperText: errors.department, error: true })}
                       id="departmentId"
                       
                       fullWidth
@@ -950,7 +997,7 @@ export const Department = () => {
                           onClick={() => setDepOpenModal(true)}
 
                         >
-                          <i className="bi bi-plus"></i>Add Department
+                          <i className="bi bi-plus"></i>Add Department 
                         </button>
                       </div>
                     }
@@ -1081,6 +1128,7 @@ export const Department = () => {
 
 
                       <TextField label="Area"
+                                                    {...(errors.area !== "" && { helperText: errors.area, error: true })}
                         id="areaId"
                         
                         fullWidth
@@ -1358,6 +1406,7 @@ export const Department = () => {
                   <div className="col-md-8 d-felx ">
 
                     <TextField label="Place Of Usage"
+                                                    {...(errors.placeOfUsage !== "" && { helperText: errors.placeOfUsage, error: true })}
                       id="placeOfUsageId"
                       defaultValue=""
                       fullWidth
@@ -1746,12 +1795,37 @@ export const Designation = () => {
 
 
 
+    //validate function 
+    const [errors, setErrors] = useState({})
+
+    const validateFunction = () => {
+        let tempErrors = {};
+        tempErrors.designation = designationData.designation ? "" : "Designation is Required"
+
+        setErrors({ ...tempErrors })
+
+        return Object.values(tempErrors).every(x => x === "")
+    }
+    console.log(errors)
+
+
 
 
   //Submit Designation
   const DesignationSubmit = async (e) => {
     e.preventDefault();
     try {
+      if (validateFunction()) {
+        const response = await axios.post(
+          `${process.env.REACT_APP_PORT}/designation/createDesignation`,
+          designationData
+        );
+        desFetchData();
+        setSnackBarOpen(true)
+        setErrorHandler({ status: response.data.status, message: response.data.message, code: "success" })
+        console.log("designation Created Successfully")
+        setDesignationData(initialDesignationData);
+      }
       const response = await axios.post(
         `${process.env.REACT_APP_PORT}/designation/createDesignation`,
         designationData
@@ -1977,6 +2051,7 @@ export const Designation = () => {
               <div className="row g-2">
                 <div className="col-md-8 d-felx ">
                   <TextField label="Designation"
+                                                    {...(errors.designation !== "" && { helperText: errors.designation, error: true })}
                     id="designation"
                     defaultValue=""
                     fullWidth
