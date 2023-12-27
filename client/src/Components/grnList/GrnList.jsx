@@ -131,8 +131,6 @@ const GrnList = () => {
             const response = await axios.get(
                 `${process.env.REACT_APP_PORT}/vendor/getAllVendors`
             );
-            console.log(response.data)
-
             setVendorFullList(response.data.result);
 
             // setFilteredData(response.data.result);

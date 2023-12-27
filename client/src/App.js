@@ -34,6 +34,13 @@ import OnSiteList from './Components/onSiteGrn/OnSiteList';
 import OnSiteEditGrn from './Components/onSiteGrn/OnSiteEditGrn';
 import OnSiteDialog from './Components/Dashboard/DashboardComponents/OnSiteDialog';
 import Roles from './Components/Login/Roles';
+import MailConfi from './Components/mailConfi/MailConfi';
+
+
+
+
+
+
 
 
 
@@ -81,6 +88,12 @@ function App() {
         <Route path="/onSiteEditGrn" element={<OnSiteEditGrn/>} />
         <Route path="/onSiteDialog" element={<OnSiteDialog/>} />
         <Route path="/roles" element={<Roles/>} />
+        <Route path="/mailConfi" element={<MailConfi/>} />
+
+     
+        
+       
+ 
         
 
      

@@ -25,9 +25,9 @@ export const OnSiteListContent = createContext(null);
 const OnSiteList = () => {
 
     const [selectedRows, setSelectedRows] = useState([]);
-    const [onSiteEditOpen,setOnSiteEditOpen]= useState(false)
- 
-    const [ onSietAddOpen, setOnSiteAddOpen] = useState(false);
+    const [onSiteEditOpen, setOnSiteEditOpen] = useState(false)
+
+    const [onSietAddOpen, setOnSiteAddOpen] = useState(false);
 
 
     const handleSnackClose = (event, reason) => {
@@ -70,14 +70,14 @@ const OnSiteList = () => {
     })
 
 
-    
+
     //
 
     const Columns = [
         { field: 'id', headerName: 'Si. No', width: 100, renderCell: (params) => params.api.getAllRowIds().indexOf(params.id) + 1 },
         { field: 'button', headerName: 'Edit', width: 90, renderCell: (params) => <Button onClick={() => { setSelectedRows(params.row); setOnSiteEditOpen(true) }}><Edit color='success' /></Button> },
 
-       
+
         {
             field: 'viewButton',
             headerName: 'View',
@@ -91,9 +91,9 @@ const OnSiteList = () => {
 
             ),
         },
-        { field:'osGrnNo', headerName: 'Grn No', width: 100 },
-        { field:'osGrnDate', headerName: 'Grn Date', width: 200 },
-        { field:'osGrnPartyName', headerName: 'Party Name', width: 250, },
+        { field: 'osGrnNo', headerName: 'Grn No', width: 100 },
+        { field: 'osGrnDate', headerName: 'Grn Date', width: 200 },
+        { field: 'osGrnPartyName', headerName: 'Party Name', width: 250, },
     ]
 
 
@@ -268,13 +268,7 @@ const OnSiteList = () => {
 
 
 
-
-                    <div className='row mb-2'>
-
-                        <h3 className='text-center '> ON GRN List</h3>
-                        <div className='col'>
-                            <div className='col-12 '>
-                                <Paper
+                <Paper
                                     sx={{
                                         p: 2,
                                         display: 'flex',
@@ -283,7 +277,8 @@ const OnSiteList = () => {
                                     }}
                                     elevation={12}
                                 >
-                                    <div className='row mb-2'>
+                    <div className='row g-2'>
+                        <h3 className='text-center '> ON GRN List</h3>
                                         <div className='col'>
                                             <TextField fullWidth label="Vendor Type" className="col" select size="small" id="vendorTypeId" onChange={handleFilterChange} name="vendorType" defaultValue="" >
                                                 <MenuItem value="all">All</MenuItem>
@@ -306,8 +301,8 @@ const OnSiteList = () => {
                                             </TextField>
 
                                         </div>
-                                    </div>
-                                    <div className='row mb-2'>
+                                   
+                                   
                                         <div className="form-floating col">
                                             <DatePicker
                                                 fullWidth
@@ -328,10 +323,12 @@ const OnSiteList = () => {
                                                 slotProps={{ textField: { size: 'small' } }}
                                                 format="DD-MM-YYYY" />
                                         </div>
-                                    </div>
+                                    
+                               
+                                </div>
                                 </Paper>
-                            </div>
-                            <div className='col d-flex '>
+                         
+                           
                                 <Paper
                                     sx={{
                                         p: 1,
@@ -372,7 +369,7 @@ const OnSiteList = () => {
 
                                             density="compact"
                                             //disableColumnMenu={true}
-                                            
+
                                             checkboxSelection
                                             //onRowClick={handleRowClick}
                                             onRowClick={handleRowClick}
@@ -383,134 +380,123 @@ const OnSiteList = () => {
                                     </Box>
                                 </Paper>
 
-                            </div>
+                           
+
+                        <div className='row'>
+                            <Paper
+                                sx={{
+                                    p: 2,
+                                    display: 'flex',
+                                    flexDirection: 'column',
+                                    mb: 1
+                                }}
+                                elevation={12}
+                            >
+                                <Box sx={{ height: 310, width: '100%', my: 2 }}>
+                                    <DataGrid
+
+                                        rows={grnListDataList}
+                                        columns={grnColumns}
+                                        getRowId={(row) => row._id}
+                                        initialState={{
+                                            pagination: {
+                                                paginationModel: { page: 0, pageSize: 5 },
+                                            },
+                                        }}
+                                        sx={{
+                                            ".MuiTablePagination-displayedRows": {
+
+                                                "marginTop": "1em",
+                                                "marginBottom": "1em"
+                                            }
+                                        }}
+                                        onRowSelectionModelChange={(newRowSelectionModel) => {
+                                            setgrnDataListSelectedRowIds(newRowSelectionModel);
+
+
+                                        }}
+
+                                        slots={{
+                                            toolbar: GridToolbar,
+                                        }}
+
+                                        density="compact"
+                                        //disableColumnMenu={true}
+
+                                        checkboxSelection
+                                        onRowClick={handleRowClick}
+                                        disableRowSelectionOnClick
+                                        pageSizeOptions={[5]}
+                                    />
+
+                                </Box>
+                            </Paper>
+
                         </div>
-
-
-
-
-
-
-
-
-
                         <div className='col'>
-                            <div className='col'>
-                                <Paper
-                                    sx={{
-                                        p: 2,
-                                        display: 'flex',
-                                        flexDirection: 'column',
-                                        mb: 1
-                                    }}
-                                    elevation={12}
-                                >
-                                    <Box sx={{ height: 310, width: '100%', my: 2 }}>
-                                        <DataGrid
-
-                                            rows={grnListDataList}
-                                            columns={grnColumns}
-                                            getRowId={(row) => row._id}
-                                            initialState={{
-                                                pagination: {
-                                                    paginationModel: { page: 0, pageSize: 5 },
-                                                },
-                                            }}
-                                            sx={{
-                                                ".MuiTablePagination-displayedRows": {
-
-                                                    "marginTop": "1em",
-                                                    "marginBottom": "1em"
-                                                }
-                                            }}
-                                            onRowSelectionModelChange={(newRowSelectionModel) => {
-                                                setgrnDataListSelectedRowIds(newRowSelectionModel);
-
-
-                                            }}
-
-                                            slots={{
-                                                toolbar: GridToolbar,
-                                            }}
-
-                                            density="compact"
-                                            //disableColumnMenu={true}
-                                            
-                                            checkboxSelection
-                                            onRowClick={handleRowClick}
-                                            disableRowSelectionOnClick
-                                            pageSizeOptions={[5]}
-                                        />
-
-                                    </Box>
-                                </Paper>
-
-                            </div>
-                            <div className='col'>
-                                <Paper
-                                    sx={{
-                                        p: "35Px",
-                                        display: 'flex',
-                                        flexDirection: 'column',
-                                        mb: 1
-                                    }}
-                                    elevation={12}
-                                >
-                                    <div className='col d-flex mb-1'>
+                            <Paper
+                                sx={{
+                                    p: "35Px",
+                                    display: 'flex',
+                                    flexDirection: 'column',
+                                    mb: 1
+                                }}
+                                elevation={12}
+                            >
+                                <div className='col d-flex mb-1'>
                                     <div className=' me-2'>
                                         <Button component={Link} onClick={() => { setOnSiteAddOpen(true) }} type='button' variant="contained" color="warning">
                                             <AddIcon /> Add Item
                                         </Button>
-                                        </div>
-                                        <div className=' me-2'>
-                                        <Button variant='contained' type='button' color='error' onClick={() => setDeleteModalItem(true)}>Delete</Button>
-                                         </div>   
-                                        <Dialog
-                                            open={deleteModalItem}
-                                            onClose={() => setDeleteModalItem(false)}
-                                            aria-labelledby="alert-dialog-title"
-                                            aria-describedby="alert-dialog-description"
-                                        >
-                                            <DialogTitle id="alert-dialog-title">
-                                                {" ItemAdd delete confirmation?"}
-                                            </DialogTitle>
-                                            <DialogContent>
-                                                <DialogContentText id="alert-dialog-description">
-                                                    Are you sure to delete the
-                                                </DialogContentText>
-                                            </DialogContent>
-                                            <DialogActions>
-                                                <Button onClick={() => setDeleteModalItem(false)}>Cancel</Button>
-                                                <Button onClick={(e) => { deleteGrnData(e); setDeleteModalItem(false); }} autoFocus>
-                                                    Delete
-                                                </Button>
-                                            </DialogActions>
-                                        </Dialog>
-
-                                        <Snackbar anchorOrigin={{ vertical: "top", horizontal: "right" }} open={snackBarOpen} autoHideDuration={6000} onClose={handleSnackClose}>
-                                            <Alert onClose={handleSnackClose} severity={errorhandler.code} sx={{ width: '100%' }}>
-                                                {errorhandler.message}
-                                            </Alert>
-                                        </Snackbar>
-                                        <div className=' me-2'>
-                                            <button type="button" className='btn btn-secondary' >Back</button>
-                                        </div>
                                     </div>
-                                </Paper>
+                                    <div className=' me-2'>
+                                        <Button variant='contained' type='button' color='error' onClick={() => setDeleteModalItem(true)}>Delete</Button>
+                                    </div>
+                                    <Dialog
+                                        open={deleteModalItem}
+                                        onClose={() => setDeleteModalItem(false)}
+                                        aria-labelledby="alert-dialog-title"
+                                        aria-describedby="alert-dialog-description"
+                                    >
+                                        <DialogTitle id="alert-dialog-title">
+                                            {" ItemAdd delete confirmation?"}
+                                        </DialogTitle>
+                                        <DialogContent>
+                                            <DialogContentText id="alert-dialog-description">
+                                                Are you sure to delete the
+                                            </DialogContentText>
+                                        </DialogContent>
+                                        <DialogActions>
+                                            <Button onClick={() => setDeleteModalItem(false)}>Cancel</Button>
+                                            <Button onClick={(e) => { deleteGrnData(e); setDeleteModalItem(false); }} autoFocus>
+                                                Delete
+                                            </Button>
+                                        </DialogActions>
+                                    </Dialog>
 
-                                <OnSiteListContent.Provider
-                                    value={{ onSietAddOpen, setOnSiteAddOpen, selectedRows,grnListFetchData}}
-                                >
-                                    <OnSiteGrn />
-                                </OnSiteListContent.Provider>
-                                
-                                <OnSiteListContent.Provider
-                                    value={{ onSiteEditOpen, setOnSiteEditOpen, selectedRows,grnListFetchData}}
-                                >
-                                    <OnSiteEditGrn />
-                                </OnSiteListContent.Provider>
-                                
-                            </div>
+                                    <Snackbar anchorOrigin={{ vertical: "top", horizontal: "right" }} open={snackBarOpen} autoHideDuration={6000} onClose={handleSnackClose}>
+                                        <Alert onClose={handleSnackClose} severity={errorhandler.code} sx={{ width: '100%' }}>
+                                            {errorhandler.message}
+                                        </Alert>
+                                    </Snackbar>
+                                    <div className=' me-2'>
+                                        <button type="button" className='btn btn-secondary' >Back</button>
+                                    </div>
+                                </div>
+                            </Paper>
+
+                            <OnSiteListContent.Provider
+                                value={{ onSietAddOpen, setOnSiteAddOpen, selectedRows, grnListFetchData }}
+                            >
+                                <OnSiteGrn />
+                            </OnSiteListContent.Provider>
+
+                            <OnSiteListContent.Provider
+                                value={{ onSiteEditOpen, setOnSiteEditOpen, selectedRows, grnListFetchData }}
+                            >
+                                <OnSiteEditGrn />
+                            </OnSiteListContent.Provider>
+
                         </div>
 
 
@@ -519,7 +505,8 @@ const OnSiteList = () => {
 
 
 
-                    </div>
+
+                   
 
 
 

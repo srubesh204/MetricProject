@@ -476,8 +476,8 @@ const GrnEdit = () => {
     }
 
     const [editableSelectedGrn, setEditableSelectedGrn] = useState()
-    const [tempItem, setTempItem] = useState([])
-    console.log(tempItem)
+   {/* const [tempItem, setTempItem] = useState([])
+console.log(tempItem)*/}
     console.log(selectedGrnItem)
     const handleEditGrnItemChange = (e) => {
         const { name, value } = e.target;

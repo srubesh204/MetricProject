@@ -14,8 +14,8 @@ const onsiteItemGRNController = {
       createOnsiteItemGRN: async (req, res) => {
        
         try {
-          const {osGrnPartyRefNo,osGrnPartyRefDate, osGrnPartyName, osGrnPartyCode, osGrnPartyAddress, osGrnNo,osGrnDate, osGrnCommonRemarks,osGrnPartItems,osGrnPartyId} = req.body;
-          const onsiteItemGRNResult = new onsiteItemGRNModel({ osGrnPartyRefNo, osGrnPartyRefDate, osGrnPartyName,osGrnPartyCode,osGrnPartyAddress, osGrnNo, osGrnDate, osGrnCommonRemarks,osGrnPartItems});
+          const { osGrnPartyRefNo,osGrnPartyRefDate,  osGrnPartyName, osGrnPartyCode, osGrnPartyAddress,  osGrnNo, osGrnDate, osGrnCommonRemarks, osGrnPartyItems, osGrnPartyId} = req.body;
+          const onsiteItemGRNResult = new onsiteItemGRNModel({  osGrnPartyRefNo, osGrnPartyRefDate,  osGrnPartyName,osGrnPartyCode,osGrnPartyAddress,  osGrnNo, osGrnDate, osGrnCommonRemarks, osGrnPartyItems, osGrnPartyId});
           const validationError = onsiteItemGRNResult.validateSync();
 
           if (validationError) {
@@ -35,7 +35,9 @@ const onsiteItemGRNController = {
           }
           console.log("success")
     
-                await onsiteItemGRNResult.save();
+                const response = await onsiteItemGRNResult.save();
+             
+                console.log(response)
                 return res.status(200).json({ message: "Onsite GRN Data Successfully Saved", status: 1 });
             } catch (error) {
                 console.log(error)
@@ -61,7 +63,7 @@ const onsiteItemGRNController = {
           // Create an object with the fields you want to update
           const updateOnsiteItemGRNFields = {
             /* Specify the fields and their updated values here */
-            osGrnPartyRefNo: req.body.osGrnPartyRefNo, osGrnPartyRefDate : req.body.osGrnPartyRefDate, osGrnPartItems: req.body.osGrnPartItems,  osGrnPartyName : req.body.osGrnPartyName, osGrnPartyCode : req.body.osGrnPartyCode, osGrnPartyAddress : req.body.osGrnPartyAddress, osGrnNo : req.body.osGrnNo, osGrnDate : req.body.osGrnDate, osGrnCommonRemarks : req.body.osGrnCommonRemarks,// Example: updating the 'name' field
+            osGrnPartyRefNo: req.body.osGrnPartyRefNo, osGrnPartyRefDate : req.body.osGrnPartyRefDate, osGrnPartyItems: req.body.osGrnPartyItems,  osGrnPartyName : req.body.osGrnPartyName, osGrnPartyCode : req.body.osGrnPartyCode, osGrnPartyAddress : req.body.osGrnPartyAddress, osGrnNo : req.body.osGrnNo, osGrnDate : req.body.osGrnDate, osGrnCommonRemarks : req.body.osGrnCommonRemarks, osGrnPartyId: req.body.osGrnPartyId,// Example: updating the 'name' field
             // Add more fields as needed
           };
       
@@ -72,7 +74,7 @@ const onsiteItemGRNController = {
           if (validationError) {
             // Handle validation errors
             const validationErrors = {};
-    
+     
             if (validationError.errors) {
               // Convert Mongoose validation error details to a more user-friendly format
               for (const key in validationError.errors) {
