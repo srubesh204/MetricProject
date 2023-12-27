@@ -90,18 +90,35 @@ export const UnitDataBase = ({ style }) => {
 
     };
 
+        //validate function 
+        const [errors, setErrors] = useState({})
+    
+        const validateFunction = () => {
+            let tempErrors = {};
+            tempErrors.unitName = unitData.unitName ? "" : "Unit Name is Required"
+    
+            setErrors({ ...tempErrors })
+    
+            return Object.values(tempErrors).every(x => x === "")
+        }
+        console.log(errors)
+
     const unitSubmit = async (e) => {
         e.preventDefault();
         try {
-            const response = await axios.post(
-                `${process.env.REACT_APP_PORT}/unit/createUnit`, unitData
-            );
-            {/*console.log(response.data.message)*/ }
-            console.log(response)
-            setUnitSnackBar(true)
-            setErrorHandler({ status: response.data.status, message: response.data.message, code: "success" })
-            unitFetchData();
-            setUnitData(initialUnitData);
+            if (validateFunction()) {
+                const response = await axios.post(
+                    `${process.env.REACT_APP_PORT}/unit/createUnit`, unitData
+                );
+                {/*console.log(response.data.message)*/ }
+                console.log(response)
+                setUnitSnackBar(true)
+                setErrorHandler({ status: response.data.status, message: response.data.message, code: "success" })
+                unitFetchData();
+                setUnitData(initialUnitData);
+            } else {
+                setErrorHandler({ status: 0, message: "Fill the required fields", code: "error" })
+            }
         } catch (err) {
             setUnitSnackBar(true)
 
@@ -305,6 +322,7 @@ export const UnitDataBase = ({ style }) => {
                                     <div className="form-floating col-md-10">
 
                                         <TextField label="Unit Name"
+                                                    {...(errors.unitName !== "" && { helperText: errors.unitName, error: true })}
                                             id="unitNameId"
                                             defaultValue=""
                                             fullWidth
@@ -541,6 +559,24 @@ export const PartDataBase = ({ style }) => {
 
 
 
+    
+    //validate function 
+    const [errors, setErrors] = useState({})
+
+    const validateFunction = () => {
+        let tempErrors = {};
+        tempErrors.partNo = partData.partNo ? "" : "Part No is Required"
+        tempErrors.partName = partData.partName ? "" : "Part Name is Required"
+        tempErrors.customer = partData.customer ? "" : "Customer is Required"
+        tempErrors.operationNo = partData.operationNo ? "" : "Operation No is Required"
+
+
+        setErrors({ ...tempErrors })
+
+        return Object.values(tempErrors).every(x => x === "")
+    }
+    console.log(errors)
+
 
 
 
@@ -548,6 +584,7 @@ export const PartDataBase = ({ style }) => {
     const partSubmit = async (e) => {
         e.preventDefault();
         try {
+            if (validateFunction()) {}
             const response = await axios.post(
                 `${process.env.REACT_APP_PORT}/part/createPart`, partData
             );
@@ -747,6 +784,7 @@ export const PartDataBase = ({ style }) => {
                                         </div>
                                         <div className="form-floating col d-flex-md-5">
                                             <TextField label="Part No"
+                                        {...(errors.partNo !== "" && { helperText: errors.partNo, error: true })} 
                                                 id="partNoId"
                                                 defaultValue=""
 
@@ -758,6 +796,7 @@ export const PartDataBase = ({ style }) => {
                                         </div>
                                         <div className="form-floating col-md-6">
                                             <TextField label="Part Name"
+                                        {...(errors.partName !== "" && { helperText: errors.partName, error: true })}
                                                 id="partNameId"
                                                 defaultValue=""
                                                 fullWidth
@@ -775,6 +814,7 @@ export const PartDataBase = ({ style }) => {
                                     <div className="row mb-2 g-2">
                                         <div className="form-floating col-md-6"  >
                                             <TextField label="Customer"
+                                        {...(errors.customer !== "" && { helperText: errors.customer, error: true })}
                                                 select
                                                 id="customerId"
                                                 defaultValue=""
@@ -795,6 +835,7 @@ export const PartDataBase = ({ style }) => {
                                         </div>
                                         <div className="form-floating col-md-4" >
                                             <TextField label="Operation No"
+                                        {...(errors.operationNo !== "" && { helperText: errors.operationNo, error: true })}
                                                 id="operationNoId"
                                                 defaultValue=""
                                                 placeholder="operationNo"

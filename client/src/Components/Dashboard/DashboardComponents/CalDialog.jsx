@@ -601,14 +601,37 @@ const CalDialog = () => {
     const [snackBarOpen, setSnackBarOpen] = useState(false)
     const [alertMessage, setAlertMessage] = useState("")
 
+
+
+    
+        //validate function 
+        const [errors, setErrors] = useState({})
+    
+        const validateFunction = () => {
+            let tempErrors = {};
+            tempErrors.calItemTemperature = calibrationData.calItemTemperature ? "" : "* Required"
+            tempErrors.calItemHumidity = calibrationData.calItemHumidity ? "" : "Humidity is Required"
+            // tempErrors.calCertificateNo = calibrationData.calCertificateNo ? "" : "Certificate No. is Required"
+            tempErrors.calCalibratedBy = calibrationData.calCalibratedBy ? "" : "Calibrated By is Required"
+            tempErrors.calApprovedBy = calibrationData.calApprovedBy ? "" : "Approved By is Required"
+    
+            setErrors({ ...tempErrors })
+    
+            return Object.values(tempErrors).every(x => x === "")
+        }
+        console.log(errors)
+
+
     const submitCalForm = async () => {
         try {
-            const response = await axios.post(
-                `${process.env.REACT_APP_PORT}/itemCal/createItemCal`, calibrationData
-            );
-            setAlertMessage(response.data.message)
-            setSnackBarOpen(true)
-            setTimeout(() => { setCalOpen(false); setCalibrationData(initialCalData) }, 3000)
+            if (validateFunction()) {
+                const response = await axios.post(
+                    `${process.env.REACT_APP_PORT}/itemCal/createItemCal`, calibrationData
+                );
+                setAlertMessage(response.data.message)
+                setSnackBarOpen(true)
+                setTimeout(() => { setCalOpen(false); setCalibrationData(initialCalData) }, 3000)
+            }
         } catch (err) {
             console.log(err);
         }
@@ -761,6 +784,7 @@ const CalDialog = () => {
 
                                 <div className="col-md-6">
                                     <TextField
+                                        {...(errors.calItemTemperature !== "" && { helperText: errors.calItemTemperature, error: true })}
                                         id="calItemTemperatureId"
                                         size='small'
                                         label="Temperature"
@@ -774,6 +798,7 @@ const CalDialog = () => {
                                 </div>
                                 <div className="col-md-6">
                                     <TextField
+                                        {...(errors.calItemHumidity !== "" && { helperText: errors.calItemHumidity, error: true })}
                                         id="calItemHumidityId"
                                         size='small'
                                         label="Humidity"
@@ -835,6 +860,7 @@ const CalDialog = () => {
                         <div className="row g-2 ">
                             <div className="col-md-6">
                                 <TextField
+                                        // {...(errors.calCertificateNo !== "" && { helperText: errors.calCertificateNo, error: true })}
                                     id="calCertificateNoId"
                                     size='small'
                                     label="Certificate No."
@@ -855,6 +881,7 @@ const CalDialog = () => {
                             </div>
                             <div className="col-md-6">
                                 <TextField
+                                        {...(errors.calCalibratedBy !== "" && { helperText: errors.calCalibratedBy, error: true })}
                                     id="calCalibratedById"
                                     size='small'
                                     label="Calibrated By"
@@ -874,6 +901,7 @@ const CalDialog = () => {
                             </div>
                             <div className="col-md-6">
                                 <TextField
+                                        {...(errors.calApprovedBy !== "" && { helperText: errors.calApprovedBy, error: true })}
                                     InputProps={{
                                         disabled: selectedEmp.length === 0,
                                     }}
