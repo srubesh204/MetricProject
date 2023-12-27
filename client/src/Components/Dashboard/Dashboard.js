@@ -42,10 +42,11 @@ import DcList from '../dcList/DcList';
 import GrnList from '../grnList/GrnList';
 import CalList from '../CalItems/CalList';
 import { Logout } from '@mui/icons-material';
-import { Tooltip } from '@mui/material';
+import { Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Tooltip } from '@mui/material';
 import dashboard from '../assets/dashboard.png'
 import admin from '../assets/admin.png'
 import secretary from '../assets/secretary.gif'
+import { Button } from 'bootstrap';
 //
 
 // function Copyright(props) {
@@ -129,7 +130,6 @@ export default function Dashboard() {
       { name: "Vendor", file: <Vendor />, icon: <ContactPageIcon /> },
       { name: "Unit", file: <UnitDataBase />, icon: <CategoryIcon /> },
       { name: "Part", file: <PartDataBase />, icon: <CategoryIcon /> },
-      { name: "Dashboard", file: <Home />, icon: <CategoryIcon /> },
       { name: "Item Master", file: <ItemMaster />, icon: <CategoryIcon /> },
     ],
     system: [
@@ -221,6 +221,19 @@ export default function Dashboard() {
   };
 
   console.log(fileName)
+  const [logOutDialog, setLogOutDialog] = useState(false)
+
+  const logOut = () => {
+    sessionStorage.clear();
+    // Check if session storage is empty
+    setTimeout(() => {
+      window.location.reload();
+    }, 500);
+
+
+
+
+  }
 
   return (
     <ThemeProvider theme={defaultTheme}>
@@ -244,17 +257,18 @@ export default function Dashboard() {
             >
               <MenuIcon />
             </IconButton>
-            <Tooltip title={fileName.name}>
-              <Typography
-                component="h1"
-                variant="h6"
-                color="inherit"
-                noWrap
-                sx={{ flexGrow: 1, textAlign: "center" }}
-              >
-                {fileName.name}
-              </Typography>
-            </Tooltip>
+
+            <Typography
+              component="h1"
+              variant="h6"
+              color="inherit"
+              noWrap
+
+              sx={{ flexGrow: 1, textAlign: "center", pointerEvents: true }}
+            >
+              <Tooltip title={fileName.name}>{fileName.name}</Tooltip>
+            </Typography>
+
 
             <Tooltip title="Notifications">
               <IconButton color="inherit">
@@ -265,12 +279,13 @@ export default function Dashboard() {
             </Tooltip>
 
             <Tooltip title="Logout">
-              <IconButton color="inherit" >
+              <IconButton color="inherit" onClick={() => setLogOutDialog(true)}>
 
                 <Logout color="error" />
               </IconButton>
             </Tooltip>
 
+            
           </Toolbar>
         </AppBar>
         <Drawer variant="permanent" open={togglerOpen}>
@@ -301,7 +316,7 @@ export default function Dashboard() {
               <React.Fragment>
                 <ListItemButton onClick={handleAdminOpen}>
                   <ListItemIcon>
-                    
+
 
                   </ListItemIcon>
                   <ListItemText primary="Admin" />
@@ -309,7 +324,7 @@ export default function Dashboard() {
                 </ListItemButton>
                 <Collapse in={adminOpen} timeout="auto" unmountOnExit>
 
-                  <List component="div" disablePadding> 
+                  <List component="div" disablePadding>
 
                     <ListItemButton sx={{ pl: 4 }} onClick={() => handleAdminList("databaseMaster")}>
                       <ListItemIcon>
@@ -482,6 +497,27 @@ export default function Dashboard() {
 
 
         </Box>
+        <Dialog
+              open={logOutDialog}
+              onClose={()=> setLogOutDialog(false)}
+            >
+              <DialogTitle id="alert-dialog-title">
+                {"Use Google's location service?"}
+              </DialogTitle>
+              <DialogContent>
+                <DialogContentText id="alert-dialog-description">
+                  Let Google help apps determine location. This means sending anonymous
+                  location data to Google, even when no apps are running.
+                </DialogContentText>
+              </DialogContent>
+              <DialogActions>
+                <Button onClick={()=> setLogOutDialog(false)}>Disagree</Button>
+                <Button onClick={()=> logOut()} autoFocus>
+                  Agree
+                </Button>
+              </DialogActions>
+            </Dialog>
+
       </Box>
     </ThemeProvider>
   );

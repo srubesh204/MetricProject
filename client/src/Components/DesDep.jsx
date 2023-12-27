@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import Alert from '@mui/material/Alert';
 import Snackbar from '@mui/material/Snackbar';
-import { Box, Checkbox, Container, FormControlLabel, Grid, IconButton, Paper, Typography } from "@mui/material";
+import { Autocomplete, Box, Checkbox, Container, FormControlLabel, Grid, IconButton, Paper, Typography } from "@mui/material";
 import { TextField, MenuItem, FormControl } from '@mui/material';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
@@ -74,12 +74,12 @@ export const Department = () => {
 
   const columns = [
 
-    { field: 'id', headerName: 'Si. No', width: 70, renderCell: (params) => params.api.getAllRowIds().indexOf(params.id) + 1, align: "center" },
+    { field: 'id', headerName: 'Si.No', width: 30, renderCell: (params) => params.api.getAllRowIds().indexOf(params.id) + 1, align: "center" },
 
     { field: 'department', headerName: 'Department', width: "90" },
-    { field: 'departmentStatus', headerName: 'Department Status', width: "90" },
+    { field: 'departmentStatus', headerName: 'Status', width: "70" },
     {
-      field: 'defaultdep', headerName: 'Default', width: "90",
+      field: 'defaultdep', headerName: 'Default', width: "50",
       renderCell: (params) => params.row.defaultdep === "yes" ? <Check color="success" /> : <Clear color="error" />
     },
     {
@@ -100,41 +100,41 @@ export const Department = () => {
 
 
 
-// Validate function
-const [errors, setErrors] = useState({
-  department: "",
-  area: "",
-  placeOfUsage: "",
-});
+  // Validate function
+  const [errors, setErrors] = useState({
+    department: "",
+    area: "",
+    placeOfUsage: "",
+  });
 
-const departmentValidateFunction = () => {
-  let departtempErrors = { ...errors };
-  departtempErrors.department = departmentData.department ? "" : "Department is Required";
+  const departmentValidateFunction = () => {
+    let departtempErrors = { ...errors };
+    departtempErrors.department = departmentData.department ? "" : "Department is Required";
 
-  setErrors({ ...departtempErrors });
+    setErrors({ ...departtempErrors });
 
-  return departtempErrors.department === "";
-};
+    return departtempErrors.department === "";
+  };
 
-const areaValidateFunction = () => {
-  let areatempErrors = { ...errors };
-  areatempErrors.area = areaData.area ? "" : "Area is Required";
+  const areaValidateFunction = () => {
+    let areatempErrors = { ...errors };
+    areatempErrors.area = areaData.area ? "" : "Area is Required";
 
-  setErrors({ ...areatempErrors });
+    setErrors({ ...areatempErrors });
 
-  return areatempErrors.area === "";
-};
+    return areatempErrors.area === "";
+  };
 
-const placeOfUsageValidateFunction = () => {
-  let tempErrors = { ...errors };
-  tempErrors.placeOfUsage = placeOfUsageDatas.placeOfUsage ? "" : "Place Of Usage is Required";
+  const placeOfUsageValidateFunction = () => {
+    let tempErrors = { ...errors };
+    tempErrors.placeOfUsage = placeOfUsageDatas.placeOfUsage ? "" : "Place Of Usage is Required";
 
-  setErrors({ ...tempErrors });
+    setErrors({ ...tempErrors });
 
-  return tempErrors.placeOfUsage === "";
-};
+    return tempErrors.placeOfUsage === "";
+  };
 
-console.log(errors);
+  console.log(errors);
 
 
 
@@ -188,8 +188,8 @@ console.log(errors);
   const updateDepartment = async () => {
     try {
       const response = await axios.put(
-       `${process.env.REACT_APP_PORT}/department/updateDepartment/${depStateId}`, departmentData
-        
+        `${process.env.REACT_APP_PORT}/department/updateDepartment/${depStateId}`, departmentData
+
       );
       depFetchData();
       setDepartmentData(emptyDepartmentData);
@@ -231,7 +231,7 @@ console.log(errors);
   const deleteDepartment = async () => {
     try {
       const response = await axios.delete(
-       
+
         `${process.env.REACT_APP_PORT}/department/deleteDepartment`, {
         data: {
           departmentIds: selectedRowIds
@@ -381,8 +381,8 @@ console.log(errors);
   const updateArea = async () => {
     try {
       const response = await axios.put(
-        `${process.env.REACT_APP_PORT}/area/updateArea/${ areaStateId}`, areaData
-       
+        `${process.env.REACT_APP_PORT}/area/updateArea/${areaStateId}`, areaData
+
       );
       areaFetchData();
       setArea(initialAreaData);
@@ -705,7 +705,7 @@ console.log(errors);
     try {
       const response = await axios.put(
         `${process.env.REACT_APP_PORT}/placeOfUsage/updatePlaceOfUsage/${placeOfUsageId}`, placeOfUsageDatas
-       
+
       );
       placeOfUsageData();
       setPlaceOfUsageData(initialPlaceOfUsageData);
@@ -752,7 +752,7 @@ console.log(errors);
   const deletePlaceOfUsage = async () => {
     try {
       const response = await axios.delete(
-       `${process.env.REACT_APP_PORT}/PlaceOfUsage/deletePlaceOfUsage`, {
+        `${process.env.REACT_APP_PORT}/PlaceOfUsage/deletePlaceOfUsage`, {
         data: {
           placeOfUsageIds: placeOfUsageselectedRowIds
         }
@@ -864,12 +864,12 @@ console.log(errors);
                 <Typography variant="h5" component="h5" className="text-center">Department</Typography>
                 <div className="row g-2" >
 
-                  <div className="col-md-6">
+                  <div className="col-md-5">
 
                     <TextField label="Department"
-                                                    {...(errors.department !== "" && { helperText: errors.department, error: true })}
+                      {...(errors.department !== "" && { helperText: errors.department, error: true })}
                       id="departmentId"
-                      
+
                       fullWidth
                       size="small"
                       onChange={handleDepChange}
@@ -878,7 +878,7 @@ console.log(errors);
                       name="department" ></TextField>
 
                   </div>
-                  <div className="col">
+                  <div className="col-md-4">
 
                     <TextField label="Status"
                       id="departmentStatusId"
@@ -896,8 +896,8 @@ console.log(errors);
                     </TextField>
 
                   </div>
-                  <div className="col">
-                    <FormControlLabel control={<Checkbox name="defaultdep" checked={departmentData.defaultdep === "yes"} onChange={handleDepChange} />} label="Default" />
+                  <div className="col-md-3">
+                    <FormControlLabel control={<Checkbox size="small" name="defaultdep" checked={departmentData.defaultdep === "yes"} onChange={handleDepChange} />} label="Default" />
                   </div>
 
                 </div>
@@ -997,7 +997,7 @@ console.log(errors);
                           onClick={() => setDepOpenModal(true)}
 
                         >
-                          <i className="bi bi-plus"></i>Add Department 
+                          <i className="bi bi-plus"></i>Add Department
                         </button>
                       </div>
                     }
@@ -1033,6 +1033,8 @@ console.log(errors);
                     <DataGrid
                       rows={departmentList}
                       columns={columns}
+                      disableDensitySelector
+                      disableColumnSelector
                       getRowId={(row) => row._id}
                       initialState={{
                         pagination: {
@@ -1061,7 +1063,7 @@ console.log(errors);
                       onRowClick={handleDepRowClick}
 
                       density="compact"
-                      
+
                       checkboxSelection
                       pageSizeOptions={[5]}
 
@@ -1128,9 +1130,9 @@ console.log(errors);
 
 
                       <TextField label="Area"
-                                                    {...(errors.area !== "" && { helperText: errors.area, error: true })}
+                        {...(errors.area !== "" && { helperText: errors.area, error: true })}
                         id="areaId"
-                        
+
                         fullWidth
                         size="small"
 
@@ -1162,7 +1164,7 @@ console.log(errors);
 
 
 
-                 
+
 
 
                   <div className="row g-2 mb-3">
@@ -1301,7 +1303,7 @@ console.log(errors);
                         onRowClick={handleAreaRowClick}
 
                         density="compact"
-                       
+
                         checkboxSelection
                         pageSizeOptions={[5]}
 
@@ -1406,7 +1408,7 @@ console.log(errors);
                   <div className="col-md-8 d-felx ">
 
                     <TextField label="Place Of Usage"
-                                                    {...(errors.placeOfUsage !== "" && { helperText: errors.placeOfUsage, error: true })}
+                      {...(errors.placeOfUsage !== "" && { helperText: errors.placeOfUsage, error: true })}
                       id="placeOfUsageId"
                       defaultValue=""
                       fullWidth
@@ -1422,7 +1424,7 @@ console.log(errors);
                     <TextField label="Status"
                       id="placeOfUsageStatusId"
                       select
-                      
+
                       fullWidth
                       size="small"
                       onChange={handlePouChange}
@@ -1574,7 +1576,7 @@ console.log(errors);
                       onRowClick={updatePof}
 
                       density="compact"
-                   
+
                       checkboxSelection
                       pageSizeOptions={[5]}
 
@@ -1726,7 +1728,7 @@ export const Designation = () => {
   });
 
 
-
+console.log(designationData)
 
   const handleDesRowClick = async (params) => {
     console.log(params)
@@ -1795,18 +1797,18 @@ export const Designation = () => {
 
 
 
-    //validate function 
-    const [errors, setErrors] = useState({})
+  //validate function 
+  const [errors, setErrors] = useState({})
 
-    const validateFunction = () => {
-        let tempErrors = {};
-        tempErrors.designation = designationData.designation ? "" : "Designation is Required"
+  const validateFunction = () => {
+    let tempErrors = {};
+    tempErrors.designation = designationData.designation ? "" : "Designation is Required"
 
-        setErrors({ ...tempErrors })
+    setErrors({ ...tempErrors })
 
-        return Object.values(tempErrors).every(x => x === "")
-    }
-    console.log(errors)
+    return Object.values(tempErrors).every(x => x === "")
+  }
+  console.log(errors)
 
 
 
@@ -1826,15 +1828,7 @@ export const Designation = () => {
         console.log("designation Created Successfully")
         setDesignationData(initialDesignationData);
       }
-      const response = await axios.post(
-        `${process.env.REACT_APP_PORT}/designation/createDesignation`,
-        designationData
-      );
-      desFetchData();
-      setSnackBarOpen(true)
-      setErrorHandler({ status: response.data.status, message: response.data.message, code: "success" })
-      console.log("designation Created Successfully")
-      setDesignationData(initialDesignationData);
+
     } catch (err) {
       setSnackBarOpen(true)
 
@@ -2050,24 +2044,24 @@ export const Designation = () => {
             >
               <div className="row g-2">
                 <div className="col-md-8 d-felx ">
-                  <TextField label="Designation"
-                                                    {...(errors.designation !== "" && { helperText: errors.designation, error: true })}
-                    id="designation"
-                    defaultValue=""
-                    fullWidth
+                  <Autocomplete label="Designation"
+                    disablePortal
                     size="small"
-                    onChange={handleChange}
-                    onKeyDown={handleKeyDown}
-
+                    getOptionDisabled={option => true}
+                    options={designationList.map((des)=> ({label: des.designation}))}
+                    fullWidth
+                    clearOnBlur={false}
                     value={designationData.designation}
-                    name="designation" ></TextField>
+                    renderInput={(params) =>
+                      <TextField {...(errors.designation !== "" && { helperText: errors.designation, error: true })} onChange={handleChange} value={designationData.designation}
+                        name="designation" {...params} label="Designation" />} />
                 </div>
                 <div className="col d-flex mb-2">
 
                   <TextField label="Status"
                     id="designationStatusId"
                     select
-                    
+
                     fullWidth
                     size="small"
                     onChange={handleChange}
@@ -2078,6 +2072,8 @@ export const Designation = () => {
                     <MenuItem value="Active">Active</MenuItem>
                     <MenuItem value="InActive">InActive</MenuItem>
                   </TextField>
+
+                
 
                 </div>
               </div>
@@ -2108,15 +2104,7 @@ export const Designation = () => {
                       Upload
                     </lable>
                   </div>
-                  <div>
-                    <lable
-                      className="uplable"
 
-                    >
-                      <input type="file" className="downlable" />
-                      Download
-                    </lable>
-                  </div>
                 </div>
 
 
@@ -2241,9 +2229,9 @@ export const Designation = () => {
 
                   }}
                   onRowClick={handleDesRowClick}
-
+                  disableRowSelectionOnClick
                   density="compact"
-                  
+
                   checkboxSelection
                   pageSizeOptions={[5]}
 
@@ -2265,7 +2253,7 @@ export const Designation = () => {
 
 
 
-              
+
               <Dialog
                 open={deleteModal}
                 onClose={() => setDeleteModal(false)}
