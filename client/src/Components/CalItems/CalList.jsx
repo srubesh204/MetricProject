@@ -198,7 +198,7 @@ const CalList = () => {
                         elevation={12}
                     >
                         <div className='row g-2 '>
-                            <h1 className='text-center '>Calibration Data List</h1>
+                            
 
                             <div className='col d-flex'>
                                 <div className='col me-2'>

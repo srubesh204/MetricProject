@@ -329,7 +329,7 @@ const Employee = () => {
     const EmployeeSubmit = async (e) => {
         e.preventDefault();
         try {
-            if (validateFunction()) { }
+            if (validateFunction()) { 
                 const response = await axios.post(
                     `${process.env.REACT_APP_PORT}/employee/createEmployee`, employeeData
                 );
@@ -340,7 +340,10 @@ const Employee = () => {
                 setErrorHandler({ status: response.data.status, message: response.data.message, code: "success" })
                 setEmployeeData(initialEmpData)
                 setEmpDataId(null)
-            
+            } else {
+                setSnackBarOpen(true)
+                setErrorHandler({ status: 0, message: "Fill the required fields", code: "error" })
+            }
         } catch (err) {
 
             setSnackBarOpen(true)
