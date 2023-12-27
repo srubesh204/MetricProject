@@ -64,9 +64,9 @@ export const EmployeeProvider = ({ children, employee }) => {
 
 const roleAccessRules = {
   admin: ['/home', "/desdep", "/general", "/vendor", "/itemMaster", "/itemadd", "/itemEdit/:id", "/itemList", "/grnList", "/calList", "/onSiteList", '/roles'],
-  plantAdmin: ['/dashboard', '/home', '/itemList', ],
-  creator: ['/home', ],
-  viewer: ['/itemlist'],
+  plantAdmin: ['/dashboard', '/home', '/itemlist', '/itemedit/:id',"/grnList", "/calList", "/onSiteList", "/itemadd"],
+  creator: ['/home', '/itemlist', '/itemadd', '/itemedit/:id', "/grnList", "/calList", "/onSiteList" ],
+  viewer: ['/itemlist', '/home'],
 };
 
 // Function to generate routes based on user role and access rules
@@ -81,7 +81,7 @@ const generateRoutes = (employee) => {
     { path: "/itemMaster", element: <ItemMaster /> },
     { path: "/devi", element: <Devi /> },
     { path: "/itemadd", element: <ItemAdd /> },
-    { path: "/itemEdit/:id", element: <ItemEdit /> },
+    { path: "/itemedit/:id", element: <ItemEdit /> },
     { path: "/itemlist", element: <ItemList /> },
     { path: "/test", element: <FileViewer /> },
     { path: "/reports", element: <InsHisCard /> },

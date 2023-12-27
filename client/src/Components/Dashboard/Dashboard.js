@@ -50,6 +50,11 @@ import FormatNumber from '../mailConfi/FormatNumber';
 import AlertConfi from '../mailConfi/AlertConfi';
 
 
+import { Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Tooltip } from '@mui/material';
+import dashboard from '../assets/dashboard.png'
+import admin from '../assets/admin.png'
+import secretary from '../assets/secretary.gif'
+import { Button } from 'bootstrap';
 //
 
 // function Copyright(props) {
@@ -129,11 +134,10 @@ export default function Dashboard() {
     databaseMaster: [
       { name: "Department", file: <Department />, icon: <CategoryIcon /> },
       { name: "Designation", file: <Designation />, icon: <CategoryIcon /> },
-      { name: "Employee", file: <Employee />, icon: <BadgeIcon /> },
+      { name: "Employee", file: <Employee />, icon: <img src={secretary} alt="Dashboard Icon" style={{ width: '25px', height: '25px' }} /> },
       { name: "Vendor", file: <Vendor />, icon: <ContactPageIcon /> },
       { name: "Unit", file: <UnitDataBase />, icon: <CategoryIcon /> },
       { name: "Part", file: <PartDataBase />, icon: <CategoryIcon /> },
-      { name: "Dashboard", file: <Home />, icon: <CategoryIcon /> },
       { name: "Item Master", file: <ItemMaster />, icon: <CategoryIcon /> },
     ],
     system: [
@@ -225,6 +229,19 @@ export default function Dashboard() {
   };
 
   console.log(fileName)
+  const [logOutDialog, setLogOutDialog] = useState(false)
+
+  const logOut = () => {
+    sessionStorage.clear();
+    // Check if session storage is empty
+    setTimeout(() => {
+      window.location.reload();
+    }, 500);
+
+
+
+
+  }
 
   return (
     <ThemeProvider theme={defaultTheme}>
@@ -248,18 +265,19 @@ export default function Dashboard() {
             >
               <MenuIcon />
             </IconButton>
-            <Tooltip title={fileName.name}>
+
             <Typography
               component="h1"
               variant="h6"
               color="inherit"
               noWrap
-              sx={{ flexGrow: 1, textAlign: "center" }}
+
+              sx={{ flexGrow: 1, textAlign: "center", pointerEvents: true }}
             >
-              {fileName.name}
+              <Tooltip title={fileName.name}>{fileName.name}</Tooltip>
             </Typography>
-            </Tooltip>
-           
+
+
             <Tooltip title="Notifications">
               <IconButton color="inherit">
                 <Badge badgeContent={4} color="secondary">
@@ -269,12 +287,13 @@ export default function Dashboard() {
             </Tooltip>
 
             <Tooltip title="Logout">
-              <IconButton color="inherit" >
+              <IconButton color="inherit" onClick={() => setLogOutDialog(true)}>
 
                 <Logout color="error" />
               </IconButton>
             </Tooltip>
 
+            
           </Toolbar>
         </AppBar>
         <Drawer variant="permanent" open={togglerOpen}>
@@ -293,19 +312,20 @@ export default function Dashboard() {
           <Divider />
           <List component="nav" >
 
-            <ListItemButton >
+            <ListItemButton to="/home">
               <ListItemIcon>
-                <AdminPanelSettingsIcon />
+                <img src={dashboard} alt="Dashboard Icon" style={{ width: '24px', height: '24px' }} />
+                {/* Adjust width and height as per your icon's size */}
               </ListItemIcon>
               <ListItemText primary="Dashboard" />
-
             </ListItemButton>
 
             {empRole && (empRole === "admin" || empRole === "plantAdmin") &&
               <React.Fragment>
                 <ListItemButton onClick={handleAdminOpen}>
                   <ListItemIcon>
-                    <AdminPanelSettingsIcon />
+
+
                   </ListItemIcon>
                   <ListItemText primary="Admin" />
                   {adminOpen ? <ExpandLess /> : <ExpandMore />}
@@ -485,6 +505,27 @@ export default function Dashboard() {
 
 
         </Box>
+        <Dialog
+              open={logOutDialog}
+              onClose={()=> setLogOutDialog(false)}
+            >
+              <DialogTitle id="alert-dialog-title">
+                {"Use Google's location service?"}
+              </DialogTitle>
+              <DialogContent>
+                <DialogContentText id="alert-dialog-description">
+                  Let Google help apps determine location. This means sending anonymous
+                  location data to Google, even when no apps are running.
+                </DialogContentText>
+              </DialogContent>
+              <DialogActions>
+                <Button onClick={()=> setLogOutDialog(false)}>Disagree</Button>
+                <Button onClick={()=> logOut()} autoFocus>
+                  Agree
+                </Button>
+              </DialogActions>
+            </Dialog>
+
       </Box>
     </ThemeProvider>
   );

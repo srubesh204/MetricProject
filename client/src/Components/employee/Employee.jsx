@@ -70,9 +70,8 @@ const Employee = () => {
         { field: 'contactNumber', headerName: 'Contact No', type: "number", width: 120, },
         { field: 'designation', headerName: 'Designation', width: 120, },
         { field: 'department', headerName: 'Department', width: 130, },
-        { field: 'address', headerName: 'Address', width: 150, },
-        { field: 'city', headerName: 'City', width: 130, },
-        { field: 'state', headerName: 'State', width: 100, },
+        { field: 'empRole', headerName: 'Role', width: 150, },
+        { field: 'reportTo', headerName: 'Report To', width: 100, },
 
 
     ];
@@ -978,7 +977,7 @@ const Employee = () => {
                                         rows={filteredData}
                                         columns={employeeColumns}
                                         getRowId={(row) => row._id}
-
+                                        disableDensitySelector
                                         initialState={{
                                             pagination: {
                                                 paginationModel: { page: 0, pageSize: 5 },
