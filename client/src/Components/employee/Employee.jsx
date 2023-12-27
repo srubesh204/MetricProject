@@ -314,6 +314,8 @@ const Employee = () => {
         tempErrors.mailId = employeeData.mailId ? "" : "Mail Id is Required"
         tempErrors.designation = employeeData.designation ? "" : "Designation is Required"
         tempErrors.department = employeeData.department ? "" : "Department is Required"
+        tempErrors.doj = employeeData.doj ? "" : "DOJ is Required"
+        tempErrors.employmentStatus = employeeData.employmentStatus ? "" : "Employment Status is Required"
 
         setErrors({ ...tempErrors })
 
@@ -772,7 +774,9 @@ const Employee = () => {
                                             <label htmlFor="dojId">Date Of joining</label>
                                         </div>*/}
                                     <Grid item xs={5}>
-                                        <TextField fullWidth label="Employment Status" onChange={handleChange} value={employeeData.employmentStatus} select size="small" id="employmentStatusId" name="employmentStatus" defaultValue="" >
+                                        <TextField
+                                        {...(errors.employmentStatus !== "" && { helperText: errors.employmentStatus, error: true })}
+                                         fullWidth label="Employment Status" onChange={handleChange} value={employeeData.employmentStatus} select size="small" id="employmentStatusId" name="employmentStatus" defaultValue="" >
                                             <MenuItem value="Active">Active</MenuItem >
                                             <MenuItem value="InActive">InActive</MenuItem >
                                         </TextField>
