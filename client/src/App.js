@@ -35,6 +35,7 @@ import OnSiteEditGrn from './Components/onSiteGrn/OnSiteEditGrn';
 import OnSiteDialog from './Components/Dashboard/DashboardComponents/OnSiteDialog';
 import Instrument_History_Card from './Components/Instrument_History_Card';
 import Roles from './Components/Login/Roles';
+import MailConfi from './Components/mailConfi/MailConfi';
 import { createContext, useContext } from 'react';
 import AccessDenied from './Components/ErrorComponents/AccessDenied';
 export const empRole = createContext(null);
