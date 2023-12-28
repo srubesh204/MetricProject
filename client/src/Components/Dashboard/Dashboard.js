@@ -41,6 +41,7 @@ import { useEmployee } from '../../App';
 import DcList from '../dcList/DcList';
 import GrnList from '../grnList/GrnList';
 import CalList from '../CalItems/CalList';
+import Instrument_History_Card from '../Instrument_History_Card';
 //
 
 // function Copyright(props) {
@@ -141,7 +142,7 @@ export default function Dashboard() {
       { name: "DC List", file: <DcList /> },
       { name: "GRN List", file: <GrnList /> },
       { name: "Cal Data", file: <CalList /> },
-      { name: "History Card" },
+      { name: "History Card", file: <Instrument_History_Card /> },
       { name: "Gauge List" },
       { name: "Cal Due Report" },
       { name: "Gauge Movement Report" },

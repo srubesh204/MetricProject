@@ -308,10 +308,12 @@ const Employee = () => {
         tempErrors.firstName = employeeData.firstName ? "" : "First Name is Required"
         tempErrors.lastName = employeeData.lastName ? "" : "Last Name is Required"
         tempErrors.address = employeeData.address ? "" : "Address is Required"
+        tempErrors.empRole = employeeData.empRole ? "" : "Role is Required"
         tempErrors.city = employeeData.city ? "" : "City is Required"
         tempErrors.state = employeeData.state ? "" : "State is Required"
         tempErrors.contactNumber = employeeData.contactNumber ? "" : "Contact Number is Required"
         tempErrors.mailId = employeeData.mailId ? "" : "Mail Id is Required"
+        tempErrors.password = employeeData.password ? "" : "Password is Required"
         tempErrors.designation = employeeData.designation ? "" : "Designation is Required"
         tempErrors.department = employeeData.department ? "" : "Department is Required"
         tempErrors.doj = employeeData.doj ? "" : "DOJ is Required"
@@ -329,7 +331,7 @@ const Employee = () => {
     const EmployeeSubmit = async (e) => {
         e.preventDefault();
         try {
-            if (validateFunction()) { 
+            if (validateFunction()) { }
                 const response = await axios.post(
                     `${process.env.REACT_APP_PORT}/employee/createEmployee`, employeeData
                 );
@@ -340,10 +342,7 @@ const Employee = () => {
                 setErrorHandler({ status: response.data.status, message: response.data.message, code: "success" })
                 setEmployeeData(initialEmpData)
                 setEmpDataId(null)
-            } else {
-                setSnackBarOpen(true)
-                setErrorHandler({ status: 0, message: "Fill the required fields", code: "error" })
-            }
+            
         } catch (err) {
 
             setSnackBarOpen(true)
@@ -587,6 +586,7 @@ const Employee = () => {
                             </div>
                             <div className="col">
                                 <TextField label="Role"
+                                        {...(errors.empRole !== "" && { helperText: errors.empRole, error: true })}
                                          size='small' id='empRoleId' onChange={handleChange} fullWidth name='empRole' value={employeeData.empRole} select>
                                     <MenuItem value="admin">Admin</MenuItem>
                                     <MenuItem value="plantAdmin">Plant Admin</MenuItem>
@@ -672,6 +672,7 @@ const Employee = () => {
                             </Grid>
                             <Grid item xs={2}>
                                 <TextField label="Password "
+                                        {...(errors.password !== "" && { helperText: errors.password, error: true })}
                                     id="passwordId"
                                     InputLabelProps={{ shrink: true }}
                                     InputProps={{
