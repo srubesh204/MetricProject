@@ -2245,7 +2245,7 @@ export const Designation = () => {
                   rows={designationList}
                   columns={designationColumns}
                   getRowId={(row) => row._id}
-
+                  
                   initialState={{
                     pagination: {
                       paginationModel: { page: 0, pageSize: 10 },
@@ -2268,6 +2268,7 @@ export const Designation = () => {
                   }}
                   onRowClick={handleDesRowClick}
                   disableRowSelectionOnClick
+                  getRowClassName={(params)=> params.id === desStateId ? {backgroundColor : "green"} : {}}
                   density="compact"
 
                   checkboxSelection
