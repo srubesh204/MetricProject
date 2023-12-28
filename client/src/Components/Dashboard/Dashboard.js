@@ -50,11 +50,12 @@ import FormatNumber from '../mailConfi/FormatNumber';
 import AlertConfi from '../mailConfi/AlertConfi';
 
 
-import { Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Tooltip } from '@mui/material';
+import { Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@mui/material';
 import dashboard from '../assets/dashboard.png'
 import admin from '../assets/admin.png'
 import secretary from '../assets/secretary.gif'
 import { Button } from 'bootstrap';
+import Version from '../mailConfi/Version';
 //
 
 // function Copyright(props) {
@@ -141,7 +142,7 @@ export default function Dashboard() {
       { name: "Item Master", file: <ItemMaster />, icon: <CategoryIcon /> },
     ],
     system: [
-      { name: "Version" },
+      { name: "Version",file: <Version/> },
       { name: "Backup",file:<BackUp/>},
       { name: "Alerts Configuration",file: <AlertConfi/> },
       { name: "Mail Configuration", file: <MailConfi/> },

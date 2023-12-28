@@ -42,6 +42,7 @@ import BackUp from './Components/mailConfi/BackUp';
 import CompanyDetails from './Components/mailConfi/CompanyDetails';
 import FormatNumber from './Components/mailConfi/FormatNumber';
 import AlertConfi from './Components/mailConfi/AlertConfi';
+import Version from './Components/mailConfi/Version';
 
 
 
@@ -102,6 +103,7 @@ const generateRoutes = (employee) => {
     { path: "/companyDetails", element: <CompanyDetails /> },
     { path: "/formatNumber", element: <FormatNumber /> },
     { path: "/alertConfi", element: <AlertConfi /> },
+    { path: "/version", element: <Version /> },
    
     // Add more common routes...
   ];

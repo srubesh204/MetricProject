@@ -6,24 +6,36 @@ const AlertConfi = () => {
     return (
         <div>
 
-            <div className='row mt-3'>
+            <Container maxWidth="lg" sx={{ mt: 4 }}>
 
-                <div className='col'>
-                    <RadioGroup
-                        row
-                        aria-labelledby="demo-row-radio-buttons-group-label"
-                        name="row-radio-buttons-group"
+                <form>
+                    <Paper
+                        sx={{
+                            p: 2,
+                            display: 'flex',
+                            flexDirection: 'column',
+                            mb: 1,
+
+                        }}
+                        elevation={12}
                     >
-                        <FormControlLabel value="manual" control={<Radio />} label="Manual" />
-                        <FormControlLabel value="auto" control={<Radio />} label="Auto" />
+                        <div className='row mt-3'>
 
-                    </RadioGroup>
-                </div>
+                            <div className='col d-flex'>
+                                <div className='me-2 '>
+                                    <Button size='small' sx={{ minWidth: "130px" }} variant='contained'>Manual</Button>
+                                </div>
+                                <div className='me-2 '>
+                                    <Button size='small' sx={{ minWidth: "130px" }} variant='contained'>Auto</Button>
+                                </div>
+                            </div>
 
 
-            </div>
+                        </div>
+                    </Paper>
 
-
+                </form>
+            </Container>
 
         </div>
     )

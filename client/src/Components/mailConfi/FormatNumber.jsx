@@ -29,7 +29,7 @@ const FormatNumber = () => {
                                 <tbody>
                                     <tr>
                                         <th>RePort Name</th>
-                                        <th> Format No</th>
+                                        <th>Format No</th>
                                         <th>Amendment No</th>
                                         <th>Amendment Date</th>
                                     </tr>

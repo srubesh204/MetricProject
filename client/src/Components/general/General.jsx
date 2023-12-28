@@ -14,7 +14,8 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
-import { DataGrid,GridToolbar } from '@mui/x-data-grid';
+import { DataGrid, GridToolbar } from '@mui/x-data-grid';
+import Autocomplete from '@mui/material/Autocomplete';
 import { Delete } from '@mui/icons-material';
 
 
@@ -64,20 +65,20 @@ export const UnitDataBase = ({ style }) => {
     const [unitSelectedRowIds, setUnitSelectedRowIds] = useState([]);
 
     const unitColumns = [
-    {/*{ field: 'id', headerName: 'Si. No', width: 100, renderCell: (params) => params.api.getRowIndexRelativeToVisibleRows(params.id) + 1 }*/},
-    {
-        field: 'id',
-        headerName: 'Si. No',
-        width: 100,
-        renderCell: (params) => {
-          const rowIndex = params.api.getRowIndexRelativeToVisibleRows(params.id);
-          return Number.isInteger(rowIndex) ? rowIndex + 1 : '';
-        }
-      },
+        {/*{ field: 'id', headerName: 'Si. No', width: 100, renderCell: (params) => params.api.getRowIndexRelativeToVisibleRows(params.id) + 1 }*/ },
+        {
+            field: 'id',
+            headerName: 'Si. No',
+            width: 100,
+            renderCell: (params) => {
+                const rowIndex = params.api.getRowIndexRelativeToVisibleRows(params.id);
+                return Number.isInteger(rowIndex) ? rowIndex + 1 : '';
+            }
+        },
 
         { field: 'unitName', headerName: 'UnitName', width: "150" },
 
-        
+
 
 
     ];
@@ -90,18 +91,18 @@ export const UnitDataBase = ({ style }) => {
 
     };
 
-        //validate function 
-        const [errors, setErrors] = useState({})
-    
-        const validateFunction = () => {
-            let tempErrors = {};
-            tempErrors.unitName = unitData.unitName ? "" : "Unit Name is Required"
-    
-            setErrors({ ...tempErrors })
-    
-            return Object.values(tempErrors).every(x => x === "")
-        }
-        console.log(errors)
+    //validate function 
+    const [errors, setErrors] = useState({})
+
+    const validateFunction = () => {
+        let tempErrors = {};
+        tempErrors.unitName = unitData.unitName ? "" : "Unit Name is Required"
+
+        setErrors({ ...tempErrors })
+
+        return Object.values(tempErrors).every(x => x === "")
+    }
+    console.log(errors)
 
     const unitSubmit = async (e) => {
         e.preventDefault();
@@ -220,7 +221,7 @@ export const UnitDataBase = ({ style }) => {
 
 
 
-    
+
 
 
     const updateUnit = async (params) => {
@@ -257,8 +258,8 @@ export const UnitDataBase = ({ style }) => {
                                 display: 'flex',
                                 flexDirection: 'column',
                                 pb: 5
-                            }} 
-                            elevation={12}
+                            }}
+                                elevation={12}
                             >
                                 <h6 className='text-center'>Unit DataBase</h6>
                                 <div className='row g-2 mb-2'>
@@ -321,8 +322,8 @@ export const UnitDataBase = ({ style }) => {
 
                                     <div className="form-floating col-md-10">
 
-                                        <TextField label="Unit Name"
-                                                    {...(errors.unitName !== "" && { helperText: errors.unitName, error: true })}
+                                        {/* <TextField label="Unit Name"
+                                            {...(errors.unitName !== "" && { helperText: errors.unitName, error: true })}
                                             id="unitNameId"
                                             defaultValue=""
                                             fullWidth
@@ -331,7 +332,18 @@ export const UnitDataBase = ({ style }) => {
                                             onChange={handleUnitDataBaseChange}
 
                                             value={unitData.unitName}
-                                            name="unitName" ></TextField>
+                                    name="unitName" ></TextField>*/}
+                                        <Autocomplete label="Unit Name"
+                                            disablePortal
+                                            size="small"
+                                            getOptionDisabled={option => true}
+                                            options={unitDataList.map((unit) => ({ label: unit.unitName }))}
+                                            fullWidth
+                                            clearOnBlur={false}
+                                            value={unitData.unitName}
+                                            renderInput={(params) =>
+                                                <TextField     {...(errors.unitName !== "" && { helperText: errors.unitName, error: true })} onChange={handleUnitDataBaseChange}
+                                                    name="unitName" {...params} label="Unit Name" />} />
 
                                     </div>
                                 </div>
@@ -364,8 +376,8 @@ export const UnitDataBase = ({ style }) => {
                                 flexDirection: 'column',
 
                             }}
-                            elevation={12}
-                             >
+                                elevation={12}
+                            >
                                 <div>
                                     <h6 className='text-center'>Unit List</h6>
                                     <div className="row mb-2">
@@ -386,22 +398,23 @@ export const UnitDataBase = ({ style }) => {
                                             }}
                                             sx={{
                                                 ".MuiTablePagination-displayedRows": {
-                            
-                                                  "marginTop": "1em",
-                                                  "marginBottom": "1em"
+
+                                                    "marginTop": "1em",
+                                                    "marginBottom": "1em"
                                                 }
-                                              }}
+                                            }}
                                             slots={{
                                                 toolbar: GridToolbar,
                                             }}
-                                            
-                                            
+
+
                                             onRowSelectionModelChange={(newRowSelectionModel, event) => {
                                                 setUnitSelectedRowIds(newRowSelectionModel);
                                                 console.log(event)
 
                                             }}
                                             onRowClick={updateUnit}
+                                            density="compact"
 
                                             checkboxSelection
 
@@ -544,7 +557,7 @@ export const PartDataBase = ({ style }) => {
 
     const [partSelectedRowIds, setPartSelectedRowIds] = useState([]);
     const partColumns = [
-        { field: 'id', headerName: 'Si. No', width: 100, renderCell: (params) => params.api.getAllRowIds().indexOf(params.id)+1  },
+        { field: 'id', headerName: 'Si. No', width: 100, renderCell: (params) => params.api.getAllRowIds().indexOf(params.id) + 1 },
 
         { field: 'partNo', headerName: 'PartNo', width: "150" },
         { field: 'partName', headerName: 'partName', width: "190" },
@@ -559,7 +572,7 @@ export const PartDataBase = ({ style }) => {
 
 
 
-    
+
     //validate function 
     const [errors, setErrors] = useState({})
 
@@ -584,7 +597,7 @@ export const PartDataBase = ({ style }) => {
     const partSubmit = async (e) => {
         e.preventDefault();
         try {
-            if (validateFunction()) {}
+            if (validateFunction()) { }
             const response = await axios.post(
                 `${process.env.REACT_APP_PORT}/part/createPart`, partData
             );
@@ -762,7 +775,7 @@ export const PartDataBase = ({ style }) => {
                                 flexDirection: 'column',
 
                             }}
-                            elevation={12}
+                                elevation={12}
                                 className="d-flex justify-content-center"
                             >
 
@@ -784,7 +797,7 @@ export const PartDataBase = ({ style }) => {
                                         </div>
                                         <div className="form-floating col d-flex-md-5">
                                             <TextField label="Part No"
-                                        {...(errors.partNo !== "" && { helperText: errors.partNo, error: true })} 
+                                                {...(errors.partNo !== "" && { helperText: errors.partNo, error: true })}
                                                 id="partNoId"
                                                 defaultValue=""
 
@@ -795,7 +808,7 @@ export const PartDataBase = ({ style }) => {
 
                                         </div>
                                         <div className="form-floating col-md-6">
-                                            <TextField label="Part Name"
+                                            {/* <TextField label="Part Name"
                                         {...(errors.partName !== "" && { helperText: errors.partName, error: true })}
                                                 id="partNameId"
                                                 defaultValue=""
@@ -804,7 +817,19 @@ export const PartDataBase = ({ style }) => {
                                                 onChange={handlePartDataBaseChange}
                                                 onKeyDown={handleKeyDown}
                                                 value={partData.partName}
-                                                name="partName" ></TextField>
+                        name="partName" ></TextField>*/}
+                                            <Autocomplete label="Part Name"
+                                                disablePortal
+                                                size="small"
+                                                getOptionDisabled={option => true}
+                                                options={partDataList.map((part) => ({ label: part.partName }))}
+                                                fullWidth
+                                                clearOnBlur={false}
+                                                value={partData.partName}
+                                                renderInput={(params) =>
+                                                    <TextField    {...(errors.partName !== "" && { helperText: errors.partName, error: true })} onKeyDown={handleKeyDown} onChange={handlePartDataBaseChange}
+                                                        name="partName" {...params} label="Part Name" />} />
+
 
 
                                         </div>
@@ -814,7 +839,7 @@ export const PartDataBase = ({ style }) => {
                                     <div className="row mb-2 g-2">
                                         <div className="form-floating col-md-6"  >
                                             <TextField label="Customer"
-                                        {...(errors.customer !== "" && { helperText: errors.customer, error: true })}
+                                                {...(errors.customer !== "" && { helperText: errors.customer, error: true })}
                                                 select
                                                 id="customerId"
                                                 defaultValue=""
@@ -835,7 +860,7 @@ export const PartDataBase = ({ style }) => {
                                         </div>
                                         <div className="form-floating col-md-4" >
                                             <TextField label="Operation No"
-                                        {...(errors.operationNo !== "" && { helperText: errors.operationNo, error: true })}
+                                                {...(errors.operationNo !== "" && { helperText: errors.operationNo, error: true })}
                                                 id="operationNoId"
                                                 defaultValue=""
                                                 placeholder="operationNo"
@@ -945,8 +970,8 @@ export const PartDataBase = ({ style }) => {
                                 flexDirection: 'column',
 
                             }}
-                            elevation={12}
-                             >
+                                elevation={12}
+                            >
                                 <div>
                                     <h5 className='text-center'>Part List</h5>
                                     <div className="row mb-2">
@@ -962,26 +987,27 @@ export const PartDataBase = ({ style }) => {
                                             getRowId={(row) => row._id}
                                             initialState={{
                                                 pagination: {
-                                                    paginationModel: { pageSize: 5},
+                                                    paginationModel: { pageSize: 5 },
                                                 },
                                             }}
                                             sx={{
                                                 ".MuiTablePagination-displayedRows": {
-                            
-                                                  "marginTop": "1em",
-                                                  "marginBottom": "1em"
+
+                                                    "marginTop": "1em",
+                                                    "marginBottom": "1em"
                                                 }
-                                              }}
+                                            }}
                                             slots={{
                                                 toolbar: GridToolbar,
                                             }}
-                                            
+
                                             onRowSelectionModelChange={(newRowSelectionModel, event) => {
                                                 setPartSelectedRowIds(newRowSelectionModel);
                                                 console.log(event)
 
                                             }}
                                             onRowClick={updatePart}
+                                            density="compact"
 
                                             checkboxSelection
 
