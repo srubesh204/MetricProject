@@ -19,6 +19,11 @@ const itemCalRoute = require("./routes/itemCalRoute");
 const itemGRNRoute = require("./routes/itemGRNRoute");
 const onsiteItemGRNRoute = require("./routes/onsiteItemGRNRoute");
 const itemDcRoute = require("./routes/itemDcRoute");
+const mailConfigRoute = require("./routes/mailConfigRoute");
+const backupRoutes = require("./routes/backupRoutes");
+const versionRoute = require("./routes/versionRoute");
+const compDetailsRoute = require("./routes/compDetailsRoute");
+const formatNoRoute = require("./routes/formatNoRoute");
 const employeeController = require("./controllers/employeeController");
 //
 mongoose.connect('mongodb://localhost/metric', {
@@ -74,8 +79,12 @@ app.use('/itemCal', itemCalRoute);
 app.use('/itemGRN', itemGRNRoute);
 app.use('/itemDc', itemDcRoute);
 app.use('/area', areaRoute);
+app.use('/version', versionRoute);
+app.use('/backup', backupRoutes);
+app.use('/formatNo', formatNoRoute);
+app.use('/compDetails', compDetailsRoute);
 app.use('/placeOfUsage', placeOfUsageRoute);
-
+app.use('/mailConfig', mailConfigRoute);
 
 //
 app.post('/login', employeeController.employeeLoginCheck)
