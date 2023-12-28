@@ -10,19 +10,23 @@ import isSameOrAfter from 'dayjs/plugin/isSameOrAfter'
 import isSameOrBefore from 'dayjs/plugin/isSameOrBefore'
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { Add, Delete, Error } from '@mui/icons-material';
+import { Add, ArrowBack, Delete, Error, HomeMax, House } from '@mui/icons-material';
 import CalDialog from './DashboardComponents/CalDialog';
 import Dc from './DashboardComponents/DcDialog';
 import Grn from './DashboardComponents/Grn';
 import OnSiteDialog from './DashboardComponents/OnSiteDialog';
-import DcEdit from '../dcList/DcEdit';
+
+import { useEmployee } from '../../App';
 export const HomeContent = createContext(null);
+
 
 
 dayjs.extend(isSameOrBefore)
 dayjs.extend(isSameOrAfter)
 
 const Home = () => {
+
+  const empRole = useEmployee();
 
   const [itemDistinctNames, setItemDistinctNames] = useState([])
   const [errorhandler, setErrorHandler] = useState({});
@@ -833,7 +837,7 @@ const Home = () => {
 
   const grnCheck = () => {
     const grnCheck = selectedRows.every(item => item.dcStatus === "1")
-   
+
 
     console.log(grnCheck)
     if (grnCheck) {
@@ -877,14 +881,14 @@ const Home = () => {
                   renderInput={(params) => <TextField {...params} label="IMTE No" />}
                   defaultValue={(e) => console.log(e)}
                 />
-                <TextField select onChange={(e) => MainFilter(e.target.value, "itemType")} fullWidth size='small' value={selectedFilterName === 'itemType' ? selectedFilterValue : 'all'} name='itemType'  label="Item Type">
+                <TextField select onChange={(e) => MainFilter(e.target.value, "itemType")} fullWidth size='small' value={selectedFilterName === 'itemType' ? selectedFilterValue : 'all'} name='itemType' label="Item Type">
                   <MenuItem value="all">All</MenuItem>
                   <MenuItem value="Variable">Variable</MenuItem>
                   <MenuItem value="Attribute">Attribute</MenuItem>
                   <MenuItem value="Ref Standard">Ref Standard</MenuItem>
                 </TextField>
 
-                <TextField select onChange={(e) => MainFilter(e.target.value, "itemAddMasterName")} fullWidth size='small' value={selectedFilterName === 'itemAddMasterName' ? selectedFilterValue : 'all'}  name='itemAddMasterName' label="Item Description">
+                <TextField select onChange={(e) => MainFilter(e.target.value, "itemAddMasterName")} fullWidth size='small' value={selectedFilterName === 'itemAddMasterName' ? selectedFilterValue : 'all'} name='itemAddMasterName' label="Item Description">
                   <MenuItem value="all">All</MenuItem>
                   {itemDistinctNames.map((item, index) => (<MenuItem key={index} value={item}>{item}</MenuItem>))}
                 </TextField>
@@ -1152,125 +1156,135 @@ const Home = () => {
 
                 />
               </Box>
-              <div className="row">
-                <div className="col-md-9">
-                  <Button size='small' className='me-2'>Onsite</Button>
-                  {(selectedRows.length === 1 && selectedRows[0].itemCalibrationSource === "inhouse") && <Button size='small' className='me-2' onClick={() => setCalOpen(true)}>Cal</Button>}
-                  <Button size='small' onClick={() => grnCheck()} className='me-2'>Grn</Button>
+              {empRole && empRole !== "viewer" &&
+                <div className="row">
+
+                  <div className="col-md-9">
+                    <Button size='small' className='me-2'>Onsite</Button>
+                    {(selectedRows.length === 1 && selectedRows[0].itemCalibrationSource === "inhouse") && <Button size='small' className='me-2' onClick={() => setCalOpen(true)}>Cal</Button>}
+                    <Button size='small' onClick={() => grnCheck()} className='me-2'>Grn</Button>
 
 
-                  <Button size='small' onClick={() => dcCheck()}>Create DC</Button>
-                  {StatusCheckMsg !== "" && <Chip icon={<Error />} color='error' label={StatusCheckMsg} />}
-                </div>
-                <div className="col-md-3">
-                  <Button component={Link} to="/itemmaster" size='small' className='me-2'>Item Master</Button>
-                  <Button component={Link} to="/itemList" size='small'>Item Entry</Button>
-                </div>
-              </div>
+                    <Button size='small' onClick={() => dcCheck()}>Create DC</Button>
+                    {StatusCheckMsg !== "" && <Chip icon={<Error />} color='error' label={StatusCheckMsg} />}
+                  </div>
+                  <div className="col-md-3">
+                    <Button component={Link} to="/itemmaster" size='small' className='me-2'>Item Master</Button>
+                    <Button component={Link} to="/itemList" size='small'>Item Entry</Button>
+                  </div>
+                </div>}
             </Paper>
           </div>
           <div className="col-md-4">
             <Paper className='col' elevation={12} sx={{ p: 2, height: "100%" }}>
-              <table className='table table-bordered table-sm text-center align-middle table-hover'>
-                {selectedLoc === "Departments" &&
-                  <tbody>
-                    <tr>
-                      <th>Si. No</th>
-                      <th>Name</th>
-                      <th>Quantity</th>
-                    </tr>
-                    {departmentTable.map((item, index) => (
-                      <tr className={`${item.departmentName === departmentName ? "table-active" : ""}`} key={index} onClick={() => DepartmentDataShow("department", item.departmentName)}>
-                        <td>{index + 1}</td>
-                        <td>{item.departmentName}</td>
-                        <td>{item.quantity}</td>
+              <div style={{ width: "100%", height: "80%" }}>
+                <table className='m-0 table table-bordered table-sm text-center align-middle table-hover'>
+                  {selectedLoc === "Departments" &&
+                    <tbody>
+                      <tr>
+                        <th>Si. No</th>
+                        <th>Name</th>
+                        <th>Quantity</th>
                       </tr>
-                    ))}
-                  </tbody>}
+                      {departmentTable.map((item, index) => (
+                        <tr className={`${item.departmentName === departmentName ? "table-active" : ""}`} key={index} onClick={() => DepartmentDataShow("department", item.departmentName)}>
+                          <td>{index + 1}</td>
+                          <td>{item.departmentName}</td>
+                          <td>{item.quantity}</td>
+                        </tr>
+                      ))}
+                    </tbody>}
 
-                {selectedLoc === "Sub Contractors" &&
-                  <tbody>
-                    <tr>
-                      <th>Si. No</th>
-                      <th>Name</th>
-                      <th>Quantity</th>
-                    </tr>
-                    {subConTable.map((item, index) => (
-                      <tr className={`${item.departmentName === departmentName ? "table-active" : ""}`} key={index} onClick={() => DepartmentDataShow("subContractor", item.subContractorName)}>
-                        <td>{index + 1}</td>
-                        <td>{item.subContractorName}</td>
-                        <td>{item.quantity}</td>
+                  {selectedLoc === "Sub Contractors" &&
+                    <tbody>
+                      <tr>
+                        <th>Si. No</th>
+                        <th>Name</th>
+                        <th>Quantity</th>
                       </tr>
-                    ))}
-                  </tbody>}
+                      {subConTable.map((item, index) => (
+                        <tr className={`${item.departmentName === departmentName ? "table-active" : ""}`} key={index} onClick={() => DepartmentDataShow("subContractor", item.subContractorName)}>
+                          <td>{index + 1}</td>
+                          <td>{item.subContractorName}</td>
+                          <td>{item.quantity}</td>
+                        </tr>
+                      ))}
+                    </tbody>}
 
-                {selectedLoc === "Customers" &&
-                  <tbody>
-                    <tr>
-                      <th>Si. No</th>
-                      <th>Name</th>
-                      <th>Quantity</th>
-                    </tr>
-                    {customerTable.map((item, index) => (
-                      <tr className={`${item.departmentName === departmentName ? "table-active" : ""}`} key={index} onClick={() => DepartmentDataShow("customer", item.customerName)}>
-                        <td>{index + 1}</td>
-                        <td>{item.customerName}</td>
-                        <td>{item.quantity}</td>
+                  {selectedLoc === "Customers" &&
+                    <tbody>
+                      <tr>
+                        <th>Si. No</th>
+                        <th>Name</th>
+                        <th>Quantity</th>
                       </tr>
-                    ))}
-                  </tbody>}
+                      {customerTable.map((item, index) => (
+                        <tr className={`${item.departmentName === departmentName ? "table-active" : ""}`} key={index} onClick={() => DepartmentDataShow("customer", item.customerName)}>
+                          <td>{index + 1}</td>
+                          <td>{item.customerName}</td>
+                          <td>{item.quantity}</td>
+                        </tr>
+                      ))}
+                    </tbody>}
 
-                {selectedLoc === "Suppliers" &&
-                  <tbody>
-                    <tr>
-                      <th>Si. No</th>
-                      <th>Name</th>
-                      <th>Quantity</th>
-                    </tr>
-                    {supplierTable.map((item, index) => (
-                      <tr className={`${item.departmentName === departmentName ? "table-active" : ""}`} key={index} onClick={() => DepartmentDataShow("supplier", item.supName)}>
-                        <td>{index + 1}</td>
-                        <td>{item.supName}</td>
-                        <td>{item.quantity}</td>
+                  {selectedLoc === "Suppliers" &&
+                    <tbody>
+                      <tr>
+                        <th>Si. No</th>
+                        <th>Name</th>
+                        <th>Quantity</th>
                       </tr>
-                    ))}
-                  </tbody>}
+                      {supplierTable.map((item, index) => (
+                        <tr className={`${item.departmentName === departmentName ? "table-active" : ""}`} key={index} onClick={() => DepartmentDataShow("supplier", item.supName)}>
+                          <td>{index + 1}</td>
+                          <td>{item.supName}</td>
+                          <td>{item.quantity}</td>
+                        </tr>
+                      ))}
+                    </tbody>}
 
-                {selectedLoc === "OEM" &&
-                  <tbody>
-                    <tr>
-                      <th>Si. No</th>
-                      <th>Name</th>
-                      <th>Quantity</th>
-                    </tr>
-                    {oemTable.map((item, index) => (
-                      <tr className={`${item.departmentName === departmentName ? "table-active" : ""}`} key={index} onClick={() => DepartmentDataShow("oem", item.oemName)}>
-                        <td>{index + 1}</td>
-                        <td>{item.oemName}</td>
-                        <td>{item.quantity}</td>
+                  {selectedLoc === "OEM" &&
+                    <tbody>
+                      <tr>
+                        <th>Si. No</th>
+                        <th>Name</th>
+                        <th>Quantity</th>
                       </tr>
-                    ))}
-                  </tbody>}
+                      {oemTable.map((item, index) => (
+                        <tr className={`${item.departmentName === departmentName ? "table-active" : ""}`} key={index} onClick={() => DepartmentDataShow("oem", item.oemName)}>
+                          <td>{index + 1}</td>
+                          <td>{item.oemName}</td>
+                          <td>{item.quantity}</td>
+                        </tr>
+                      ))}
+                    </tbody>}
 
-              </table>
+                </table>
+              </div>
+              <div style={{ height: "20%", width: "100%", display: "flex", alignItems: "end", justifyContent: 'end' }}>
+                <Button component={Link} to="/" variant='contained' startIcon={<ArrowBack />} endIcon={<House />} color='secondary'>Home</Button>
+              </div>
             </Paper>
+            {empRole && empRole !== "viewer" &&
+              <React.Fragment>
 
-            <HomeContent.Provider
-              value={{ calOpen, setCalOpen, selectedRows, itemMasters, activeEmps }}
-            >
-              <CalDialog />
-            </HomeContent.Provider>
+                <HomeContent.Provider
+                  value={{ calOpen, setCalOpen, selectedRows, itemMasters, activeEmps }}
+                >
+                  <CalDialog />
+                </HomeContent.Provider>
 
-            <HomeContent.Provider
-              value={{ dcOpen, setDcOpen, selectedRows, itemFetch, defaultDep }}
-            >
-              <Dc />
-            </HomeContent.Provider>
-            <HomeContent.Provider
-              value={{ grnOpen, setGrnOpen, selectedRows }}
-            >
-              <Grn />
-            </HomeContent.Provider>
+                <HomeContent.Provider
+                  value={{ dcOpen, setDcOpen, selectedRows, itemFetch, defaultDep }}
+                >
+                  <Dc />
+                </HomeContent.Provider>
+                <HomeContent.Provider
+                  value={{ grnOpen, setGrnOpen, selectedRows }}
+                >
+                  <Grn />
+                </HomeContent.Provider>
+              </React.Fragment>}
 
 
 

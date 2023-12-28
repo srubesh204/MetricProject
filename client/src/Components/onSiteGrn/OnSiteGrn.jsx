@@ -47,7 +47,7 @@ const OnSiteGrn = () => {
     const [onSiteGrnData, setOnSiteGrnData] = useState({
         osGrnPartyRefNo: "",
         osGrnPartyId: "",
-        osGrnPartyRefDate:  dayjs().format("YYYY-MM-DD"),
+        osGrnPartyRefDate: dayjs().format("YYYY-MM-DD"),
         osGrnPartyName: "",
         osGrnPartyCode: "",
         osGrnPartyAddress: "",
@@ -125,8 +125,7 @@ const OnSiteGrn = () => {
 
 
 
-
-
+console.log(onSiteGrnData)
 
 
 
@@ -223,7 +222,7 @@ const OnSiteGrn = () => {
             const response = await axios.post(
                 `${process.env.REACT_APP_PORT}/itemAdd/getItemAddByName`, { itemItemMasterName: value }
             );
-          
+
             console.log(response.data)
             const dcFilter = response.data.result.filter((item) => item.dcStatus === "1")
             const remainingIMTE = dcFilter.filter(item =>
@@ -398,6 +397,22 @@ const OnSiteGrn = () => {
             }
         }
     }, [selectedGrnItem.osGrnAcCriteria])
+
+    const calculateResultDate = (itemCalDate, itemCalFreInMonths) => {
+        const parsedDate = dayjs(itemCalDate);
+        if (parsedDate.isValid() && !isNaN(parseInt(itemCalFreInMonths))) {
+            const calculatedDate = parsedDate.add(parseInt(itemCalFreInMonths, 10), 'month').subtract(1, 'day');
+            console.log(calculatedDate)
+            setSelectedGrnItem((prev) => ({
+                ...prev,
+                osGrnItemDueDate: calculatedDate.format('YYYY-MM-DD'),
+            }));
+        }
+    };
+    useEffect(() => {
+        calculateResultDate(selectedGrnItem.osGrnItemCalDate, selectedGrnItem.osGrnItemCalFreInMonths);
+    }, [selectedGrnItem.osGrnItemCalDate, selectedGrnItem.osGrnItemCalFreInMonths]);
+
 
 
 
@@ -574,7 +589,7 @@ const OnSiteGrn = () => {
                 });
             }
 
-            if (name === "osGrnMinOB" || name === "osGrnMaxOB") {
+            if (name === "osGrnAcMinOB" || name === "osGrnAcMaxOB") {
                 setSelectedGrnItem(prev => {
                     const updatedData = prev.osGrnAcCriteria.map((item, idx) => {
                         if (idx === index) {
@@ -1033,14 +1048,14 @@ const OnSiteGrn = () => {
                                                 value={selectedGrnItem.osGrnItemId}
                                                 name="osGrnItemId" >
                                                 {allItemImtes.length === 0 ?
-                                                <MenuItem disabled><em>No IMTE Available</em></MenuItem> :
-                                                allItemImtes.map((item, index) => (
-                                                    <MenuItem key={index} value={item._id}>{item.itemIMTENo}</MenuItem>
-                                                ))}
+                                                    <MenuItem disabled><em>No IMTE Available</em></MenuItem> :
+                                                    allItemImtes.map((item, index) => (
+                                                        <MenuItem key={index} value={item._id}>{item.itemIMTENo}</MenuItem>
+                                                    ))}
                                             </TextField>
                                         </div>
                                         <div className='col me-2 '>
-                                            <TextField size='small' fullWidth variant='outlined'  disabled={selectedGrnItem.osGrnItemId === "" || selectedGrnItem.osGrnItemId === undefined} onChange={handleOnSiteGrnItemAdd} value={selectedGrnItem.osGrnItemStatus} defaultValue="" id="osGrnItemStatusId" select label="Grn Item Status" name='osGrnItemStatus' >
+                                            <TextField size='small' fullWidth variant='outlined' disabled={selectedGrnItem.osGrnItemId === "" || selectedGrnItem.osGrnItemId === undefined} onChange={handleOnSiteGrnItemAdd} value={selectedGrnItem.osGrnItemStatus} defaultValue="" id="osGrnItemStatusId" select label="Grn Item Status" name='osGrnItemStatus' >
                                                 <MenuItem value="">Select</MenuItem>
                                                 <MenuItem value="Calibrated">Calibrated</MenuItem>
                                                 <MenuItem value="Serviced">Serviced</MenuItem>
@@ -1067,13 +1082,14 @@ const OnSiteGrn = () => {
                                             <div className="col-md-2">
                                                 <DatePicker
                                                     fullWidth
-                                                    id="grnItemCalDateId"
-                                                    name="grnItemCalDate"
+                                                    id="osGrnItemCalDateId"
+                                                    name="osGrnItemCalDate"
                                                     label="Cal Date"
 
                                                     slotProps={{ textField: { size: 'small', fullWidth: true } }}
-                                                    onChange={handleOnSiteGrnItemAdd}
                                                     format="DD-MM-YYYY"
+                                                    value={dayjs(selectedGrnItem.osGrnItemCalDate)}
+                                                    onChange={(newValue) => setSelectedGrnItem((prev) => ({ ...prev, osGrnItemCalDate: newValue.format('YYYY-MM-DD') }))}
                                                 />
                                             </div>
                                             <div className="col-md-2">
@@ -1082,9 +1098,11 @@ const OnSiteGrn = () => {
                                                     id="osGrnItemDueDateId"
                                                     name="osGrnItemDueDate"
                                                     label="Next Cal Date"
+                                                    // sx={{ width: "100%" }}
+                                                    value={dayjs(selectedGrnItem.osGrnItemDueDate)}
                                                     slotProps={{ textField: { size: 'small', fullWidth: true } }}
-                                                    onChange={handleOnSiteGrnItemAdd}
                                                     format="DD-MM-YYYY"
+                                                    onChange={(newValue) => setSelectedGrnItem((prev) => ({ ...prev, osGrnItemDueDate: newValue.format('YYYY-MM-DD') }))}
                                                 />
                                             </div>
 
@@ -1106,7 +1124,7 @@ const OnSiteGrn = () => {
                                                         name="osGrnItemCertificateNo" />
                                                 </div>
                                                 <div className='col-md-2'>
-                                                    <TextField fullWidth label="Uncertainity" id='osGrnUncertainityId' variant='outlined' size='small' name='osGrnUncertainity' />
+                                                    <TextField fullWidth label="Uncertainity" id='osGrnUncertainityId'   onChange={handleOnSiteGrnItemAdd} variant='outlined' size='small' name='osGrnUncertainity' />
                                                 </div>
                                                 <div className='col-md-2' >
                                                     <Button helperText="Hello" component="label" fullWidth variant="contained" startIcon={<CloudUpload />} >
@@ -1536,7 +1554,7 @@ const OnSiteGrn = () => {
                                                 <td>{dayjs(item.osGrnItemCalDate).format("DD-MM-YYYY")}</td>
                                                 <td>{item.osGrnItemDueDate}</td>
                                                 <td>{item.osGrnItemCalibratedAt}</td>
-                                                <td width="5%"><Delete color='error'  onClick={() => deleteOnSite(index)} /></td>
+                                                <td width="5%"><Delete color='error' onClick={() => deleteOnSite(index)} /></td>
                                             </tr>
                                         ))}
 

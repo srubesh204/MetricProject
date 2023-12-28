@@ -560,7 +560,7 @@ const ItemEdit = () => {
 
 
 
-   
+   console.log(itemAddData)
    const [calibrationPointsData, setCalibrationPointsData] = useState([])
     const itemMasterById = async () => {
         try {
@@ -571,7 +571,12 @@ const ItemEdit = () => {
             const { _id, itemType, itemDescription, itemPrefix, itemFqInMonths, calAlertInDay, wiNo, uncertainity, standartRef, itemImageName, status, itemMasterImage, workInsName, calibrationPoints } = response.data.result
             setItemAddData((prev) => ({
                 ...prev,
-               
+                
+                itemType: itemType,
+                itemImage: itemMasterImage,
+                itemAddMasterName: itemDescription,
+                itemCalFreInMonths: itemFqInMonths,
+                itemCalAlertDays: calAlertInDay,
                 selectedItemMaster: response.data.result
             }))
             setCalibrationPointsData(calibrationPoints)
@@ -884,7 +889,7 @@ const ItemEdit = () => {
                                          size='small' select variant='outlined' label="Item Master" name='itemMasterRef' value={itemAddData.itemMasterRef} fullWidth onChange={handleItemAddChange}>
                                     <MenuItem value=""><em>Select</em></MenuItem>
                                     {itemMasterDataList.map((item, index) => (
-                                        <MenuItem value={index}>{item.itemDescription}</MenuItem>
+                                        <MenuItem key={index} value={item._id}>{item.itemDescription}</MenuItem>
                                     ))}
                                 </TextField>
                             </div>

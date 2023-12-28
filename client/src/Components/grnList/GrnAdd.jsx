@@ -997,14 +997,7 @@ const GrnAdd = () => {
                                                     //onChange={handleGrnChange}
                                                     slotProps={{ textField: { size: 'small', fullWidth: true } }}
                                                     format="DD-MM-YYYY" />
-
-
-
                                             </div>
-
-
-
-
 
                                             <div className=" col-6 ">
 
@@ -1038,14 +1031,8 @@ const GrnAdd = () => {
 
                                                     fullWidth
                                                     name="grnPartyCode" />
-
                                             </div>
-
-
                                         </div>
-
-
-
                                         <div className="col-12">
 
                                             <TextField label="PartyAddress"
@@ -1057,13 +1044,9 @@ const GrnAdd = () => {
                                                 sx={{ width: "100%" }}
                                                 {...(errors.grnPartyAddress !== "" && { helperText: errors.grnPartyAddress, error: true })}
                                                 name="grnPartyAddress" />
-
                                         </div>
-
                                     </Paper>
-
                                 </div>
-
                                 <div className='col'>
                                     <Paper
                                         sx={{
@@ -1075,10 +1058,8 @@ const GrnAdd = () => {
                                         }}
                                         elevation={12}
                                     >
-
                                         <div className='col row g-2 d-flex mb-2'>
                                             <div className="col-6">
-
                                                 <TextField
                                                     label="GRN NO"
                                                     id="grnNoId"
@@ -1092,11 +1073,7 @@ const GrnAdd = () => {
                                                 />
                                             </div>
                                             <div className="col-6">
-
-
-
                                                 <DatePicker
-
                                                     fullWidth
                                                     id="grnDateId"
                                                     name="grnDate"
@@ -1106,13 +1083,8 @@ const GrnAdd = () => {
                                                     }
                                                     label="GRN Date"
                                                     //onChange={handleGrnChange}
-
-
                                                     slotProps={{ textField: { size: 'small', fullWidth: true } }}
                                                     format="DD-MM-YYYY" />
-
-
-
                                             </div>
                                             <div className='col-md-12'>
                                                 <TextField label="Common Remarks"

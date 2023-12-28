@@ -35,8 +35,17 @@ import OnSiteEditGrn from './Components/onSiteGrn/OnSiteEditGrn';
 import OnSiteDialog from './Components/Dashboard/DashboardComponents/OnSiteDialog';
 import Instrument_History_Card from './Components/Instrument_History_Card';
 import Roles from './Components/Login/Roles';
+import MailConfi from './Components/mailConfi/MailConfi';
 import { createContext, useContext } from 'react';
 import AccessDenied from './Components/ErrorComponents/AccessDenied';
+import BackUp from './Components/mailConfi/BackUp';
+import CompanyDetails from './Components/mailConfi/CompanyDetails';
+import FormatNumber from './Components/mailConfi/FormatNumber';
+import AlertConfi from './Components/mailConfi/AlertConfi';
+import Version from './Components/mailConfi/Version';
+
+
+
 export const empRole = createContext(null);
 
 
@@ -56,9 +65,9 @@ export const EmployeeProvider = ({ children, employee }) => {
 
 const roleAccessRules = {
   admin: ['/home', "/desdep", "/general", "/vendor", "/itemMaster", "/itemadd", "/itemEdit/:id", "/itemList", "/grnList", "/calList", "/onSiteList", '/roles'],
-  plantAdmin: ['/dashboard', '/home', '/itemList', ],
-  creator: ['/home', ],
-  viewer: ['/itemlist'],
+  plantAdmin: ['/dashboard', '/home', '/itemlist', '/itemedit/:id',"/grnList", "/calList", "/onSiteList", "/itemadd"],
+  creator: ['/home', '/itemlist', '/itemadd', '/itemedit/:id', "/grnList", "/calList", "/onSiteList" ],
+  viewer: ['/itemlist', '/home'],
 };
 
 // Function to generate routes based on user role and access rules
@@ -73,7 +82,7 @@ const generateRoutes = (employee) => {
     { path: "/itemMaster", element: <ItemMaster /> },
     { path: "/devi", element: <Devi /> },
     { path: "/itemadd", element: <ItemAdd /> },
-    { path: "/itemEdit/:id", element: <ItemEdit /> },
+    { path: "/itemedit/:id", element: <ItemEdit /> },
     { path: "/itemlist", element: <ItemList /> },
     { path: "/test", element: <FileViewer /> },
     { path: "/reports", element: <InsHisCard /> },
@@ -90,6 +99,12 @@ const generateRoutes = (employee) => {
     { path: "/onSiteEditGrn", element: <OnSiteEditGrn /> },
     { path: "/onSiteDialog", element: <OnSiteDialog /> },
     { path: "/roles", element: <Roles /> },
+    { path: "/backUp", element: <BackUp /> },
+    { path: "/companyDetails", element: <CompanyDetails /> },
+    { path: "/formatNumber", element: <FormatNumber /> },
+    { path: "/alertConfi", element: <AlertConfi /> },
+    { path: "/version", element: <Version /> },
+   
     // Add more common routes...
   ];
 

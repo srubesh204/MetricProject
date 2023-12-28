@@ -673,7 +673,7 @@ const Vendor = () => {
                                 </Grid>
                                 <Grid item xs={3}>
 
-                                    <TextField label="Alias Name"
+                                    {/*<TextField label="Alias Name"
                                         {...(errors.aliasName !== "" && { helperText: errors.aliasName, error: true })}
                                         id="aliasNameId"
                                         defaultValue=""
@@ -682,11 +682,23 @@ const Vendor = () => {
                                         onKeyDown={handleKeyDown}
                                         value={vendorData.aliasName}
                                         onChange={handleVendorDataBaseChange}
-                                        name="aliasName" />
+                        name="aliasName" />*/}
+                                    <Autocomplete label="Alias Name"
+                                        disablePortal
+                                        size="small"
+                                        getOptionDisabled={option => true}
+                                        options={vendorDataList.map((ven) => ({ label: ven.aliasName }))}
+                                        fullWidth
+                                        clearOnBlur={false}
+                                        onKeyDown={handleKeyDown}
+                                        value={vendorData.aliasName}
+                                        renderInput={(params) =>
+                                            <TextField {...(errors.aliasName !== "" && { helperText: errors.aliasName, error: true })} onChange={handleVendorDataBaseChange} value={vendorData.aliasName}
+                                                name="aliasName" {...params} label="AliasName" />} />
 
                                 </Grid>
                                 <Grid item xs={4}>
-                                    <TextField label="Full Name"
+                                    {/* <TextField label="Full Name"
                                         {...(errors.fullName !== "" && { helperText: errors.fullName, error: true })}
                                         id="fullNameId"
                                         defaultValue=""
@@ -695,7 +707,21 @@ const Vendor = () => {
                                         value={vendorData.fullName}
                                         onKeyDown={handleKeyDown}
                                         onChange={handleVendorDataBaseChange}
-                                        name="fullName" />
+                                        name="fullName" />*/}
+
+                                    <Autocomplete label="Full Name"
+                                        disablePortal
+                                        size="small"
+                                        getOptionDisabled={option => true}
+                                        options={vendorDataList.map((ven) => ({ label: ven.fullName }))}
+                                        fullWidth
+                                        clearOnBlur={false}
+                                        onKeyDown={handleKeyDown}
+                                        value={vendorData.fullName}
+                                        renderInput={(params) =>
+                                            <TextField {...(errors.fullName !== "" && { helperText: errors.fullName, error: true })} onChange={handleVendorDataBaseChange} value={vendorData.fullName}
+                                                name="fullName" {...params} label="Full Name" />} />
+
 
                                 </Grid>
 
@@ -756,9 +782,9 @@ const Vendor = () => {
                                             <label className="form-check-label" htmlFor="subContractorId">SubContractor</label>
                                         </div>
                                     </div>
-                                        {errors.vendorType !== "" && (
-                                            <div style={{ color: 'red', textAlign: "center" }}>{errors.vendorType}</div>
-                                        )}
+                                    {errors.vendorType !== "" && (
+                                        <div style={{ color: 'red', textAlign: "center" }}>{errors.vendorType}</div>
+                                    )}
                                 </Grid>
                             </Grid>
 
@@ -803,8 +829,8 @@ const Vendor = () => {
 
                                         value={vendorData.state}
                                         isOptionEqualToValue={(option) => option}
-                                        renderInput={(params) => <TextField {...params} label="State" name="State" 
-                                        {...(errors.state !== "" && { helperText: errors.state, error: true })} />} // Set the name attribute to "state"
+                                        renderInput={(params) => <TextField {...params} label="State" name="State"
+                                            {...(errors.state !== "" && { helperText: errors.state, error: true })} />} // Set the name attribute to "state"
                                     />
 
 
@@ -822,8 +848,8 @@ const Vendor = () => {
                                         className='col'
                                         fullWidth
                                         isOptionEqualToValue={(option) => option}
-                                        renderInput={(params) => <TextField {...params} label="City" name="City" 
-                                        {...(errors.city !== "" && { helperText: errors.city, error: true })} />} // Set the name attribute to "state"
+                                        renderInput={(params) => <TextField {...params} label="City" name="City"
+                                            {...(errors.city !== "" && { helperText: errors.city, error: true })} />} // Set the name attribute to "state"
                                     />
                                 </div>
 
