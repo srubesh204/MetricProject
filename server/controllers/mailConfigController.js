@@ -15,7 +15,7 @@ const mailConfigController = {
        
         try {
           const { mailId, password, partNumber, inMailServer, outMailServer} = req.body;
-          const mailConfigResult = new mailConfigModel({mailId, password, partNumber, inMailServer, outMailServer});
+          const mailConfigResult = new mailConfigModel({mailId, password, portNumber, inMailServer, outMailServer});
           const validationError = mailConfigResult.validateSync();
 
           if (validationError) {
@@ -61,7 +61,7 @@ const mailConfigController = {
             // Create an object with the fields you want to update
             const updateMailConfigFields = {
               /* Specify the fields and their updated values here */
-              mailId: req.body.mailId, password : req.body.password,  partNumber: req.body.partNumber, inMailServer : req.body.inMailServer, outMailServer : req.body.outMailServer// Example: updating the 'name' field
+              mailId: req.body.mailId, password : req.body.password,  portNumber: req.body.portNumber, inMailServer : req.body.inMailServer, outMailServer : req.body.outMailServer// Example: updating the 'name' field
               // Add more fields as needed
             };
         
