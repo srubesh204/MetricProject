@@ -54,6 +54,7 @@ import AlertConfi from '../mailConfi/AlertConfi';
 import MailConfi from '../mailConfi/MailConfi';
 import FormatNumber from '../mailConfi/FormatNumber';
 import CompanyDetails from '../mailConfi/CompanyDetails';
+import InsHistoryCard from '../InsHistoryCard';
 //
 
 // function Copyright(props) {
@@ -155,7 +156,7 @@ const Dashboard = () => {
       { name: "DC List", file: <DcList /> },
       { name: "GRN List", file: <GrnList /> },
       { name: "Cal Data", file: <CalList /> },
-      { name: "History Card" },
+      { name: "History Card", file: <InsHistoryCard/>},
       { name: "Gauge List" },
       { name: "Cal Due Report" },
       { name: "Gauge Movement Report" },
@@ -359,7 +360,7 @@ const Dashboard = () => {
                 <ListItemText primary="Dashboard" />
               </ListItemButton>
 
-              {empRole && (empRole === "admin" || empRole === "plantAdmin") &&
+              {empRole && (empRole.employee === "admin" || empRole.employee === "plantAdmin") &&
                 <React.Fragment>
                   <ListItemButton onClick={handleAdminOpen}>
                     <ListItemIcon>
@@ -448,7 +449,7 @@ const Dashboard = () => {
                     <ListItemText primary="Item List" />
 
                   </ListItemButton>
-                  {empRole && (empRole === "admin" || empRole === "plantAdmin") &&
+                  {empRole && (empRole.employee === "admin" || empRole.employee === "plantAdmin") &&
                     <ListItemButton sx={{ pl: 4 }} to="/itemAdd" >
                       <ListItemIcon>
                         <AdminPanelSettingsIcon />

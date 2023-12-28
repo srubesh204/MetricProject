@@ -19,7 +19,7 @@ import '@fontsource/roboto/700.css';
 import ItemList from './Components/Items/ItemList';
 import FileViewer from './Components/Test/FileViewer';
 import Login from './Components/Login';
-import InsHisCard from './Components/reports/InsHisCard';
+
 import Status from './Components/status/Status';
 // import Dc from './Components/dc/Dc';
 import Grn from './Components/Dashboard/DashboardComponents/Grn';
@@ -33,19 +33,12 @@ import OnSiteGrn from './Components/onSiteGrn/OnSiteGrn';
 import OnSiteList from './Components/onSiteGrn/OnSiteList';
 import OnSiteEditGrn from './Components/onSiteGrn/OnSiteEditGrn';
 import OnSiteDialog from './Components/Dashboard/DashboardComponents/OnSiteDialog';
-import Instrument_History_Card from './Components/Instrument_History_Card';
+
 import Roles from './Components/Login/Roles';
 import MailConfi from './Components/mailConfi/MailConfi';
-import { createContext, useContext } from 'react';
+import { createContext, useContext, useEffect, useState } from 'react';
 import AccessDenied from './Components/ErrorComponents/AccessDenied';
-import BackUp from './Components/mailConfi/BackUp';
-import CompanyDetails from './Components/mailConfi/CompanyDetails';
-import FormatNumber from './Components/mailConfi/FormatNumber';
-import AlertConfi from './Components/mailConfi/AlertConfi';
-import Version from './Components/mailConfi/Version';
-
-
-
+import axios from 'axios';
 export const empRole = createContext(null);
 
 
@@ -65,8 +58,8 @@ export const EmployeeProvider = ({ children, employee }) => {
 
 const roleAccessRules = {
   admin: ['/home', "/desdep", "/general", "/vendor", "/itemMaster", "/itemadd", "/itemEdit/:id", "/itemList", "/grnList", "/calList", "/onSiteList", '/roles'],
-  plantAdmin: ['/dashboard', '/home', '/itemlist', '/itemedit/:id',"/grnList", "/calList", "/onSiteList", "/itemadd"],
-  creator: ['/home', '/itemlist', '/itemadd', '/itemedit/:id', "/grnList", "/calList", "/onSiteList" ],
+  plantAdmin: ['/dashboard', '/home', '/itemlist', '/itemedit/:id', "/grnList", "/calList", "/onSiteList", "/itemadd"],
+  creator: ['/home', '/itemlist', '/itemadd', '/itemedit/:id', "/grnList", "/calList", "/onSiteList"],
   viewer: ['/itemlist', '/home'],
 };
 
@@ -85,7 +78,7 @@ const generateRoutes = (employee) => {
     { path: "/itemedit/:id", element: <ItemEdit /> },
     { path: "/itemlist", element: <ItemList /> },
     { path: "/test", element: <FileViewer /> },
-    { path: "/reports", element: <InsHisCard /> },
+    
     { path: "/status", element: <Status /> },
     { path: "/grn", element: <Grn /> },
     { path: "/dcList", element: <DcList /> },
@@ -99,12 +92,6 @@ const generateRoutes = (employee) => {
     { path: "/onSiteEditGrn", element: <OnSiteEditGrn /> },
     { path: "/onSiteDialog", element: <OnSiteDialog /> },
     { path: "/roles", element: <Roles /> },
-    { path: "/backUp", element: <BackUp /> },
-    { path: "/companyDetails", element: <CompanyDetails /> },
-    { path: "/formatNumber", element: <FormatNumber /> },
-    { path: "/alertConfi", element: <AlertConfi /> },
-    { path: "/version", element: <Version /> },
-   
     // Add more common routes...
   ];
 
@@ -142,12 +129,34 @@ const PrivateRoute = ({ element: Element, employee, ...rest }) => {
 
 function App() {
 
-
+  const [loggedEmp, setLoggedEmp] = useState([])
   // Custom function to render the PrivateRoute component
   const isLoggedIn = sessionStorage.getItem('loggedIn'); // Retrieve session storage data
   const employee = sessionStorage.getItem('employee');
+  const empId = sessionStorage.getItem('empId')
+  console.log(empId)
 
-  console.log(isLoggedIn, employee)
+  
+  useEffect(() => {
+    const fetchEmployeeData = async () => {
+      try {
+        const response = await axios.get(
+          `${process.env.REACT_APP_PORT}/employee/getEmployeeById/${empId}`
+        );
+        setLoggedEmp(response.data.result);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+
+    if (empId) {
+      fetchEmployeeData();
+    }
+  }, [empId]);
+  
+
+
+  console.log(isLoggedIn, employee, loggedEmp)
   const location = useLocation();
 
   console.log('hash', location.hash);
@@ -159,7 +168,7 @@ function App() {
   return (
     <div className="App">
 
-      <EmployeeProvider employee={employee}>
+      <EmployeeProvider employee={{employee, loggedEmp}}>
         {/* {fullList.includes(location.pathname) ? "":""} */}
         {/* <Dashboard /> */}
 
