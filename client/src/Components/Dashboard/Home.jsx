@@ -816,6 +816,7 @@ const Home = () => {
   const [dcOpen, setDcOpen] = useState(false);
   const [grnOpen, setGrnOpen] = useState(false);
   const [onSiteOpen, setOnSiteOpen] = useState(false);
+  
 
   console.log(selectedRows)
 
@@ -843,6 +844,20 @@ const Home = () => {
     if (grnCheck) {
       setStatusCheckMsg("");
       setGrnOpen(true);
+    } else {
+      setStatusCheckMsg("Selected Item are not DC ed")
+    }
+  }
+
+
+  const onSiteCheck = () => {
+    const onSiteCheck = selectedRows.every(item => item.dcStatus === "1")
+
+
+    console.log(onSiteCheck)
+    if (onSiteCheck) {
+      setStatusCheckMsg("");
+      setOnSiteOpen(true);
     } else {
       setStatusCheckMsg("Selected Item are not DC ed")
     }
@@ -1160,7 +1175,7 @@ const Home = () => {
                 <div className="row">
 
                   <div className="col-md-9">
-                    <Button size='small' className='me-2'>Onsite</Button>
+                    <Button size='small' onClick={() => onSiteCheck()}>Onsite</Button>
                     {(selectedRows.length === 1 && selectedRows[0].itemCalibrationSource === "inhouse") && <Button size='small' className='me-2' onClick={() => setCalOpen(true)}>Cal</Button>}
                     <Button size='small' onClick={() => grnCheck()} className='me-2'>Grn</Button>
 
@@ -1283,6 +1298,12 @@ const Home = () => {
                   value={{ grnOpen, setGrnOpen, selectedRows }}
                 >
                   <Grn />
+                </HomeContent.Provider>
+
+                <HomeContent.Provider
+                  value={{ onSiteOpen, setOnSiteOpen, selectedRows  }}
+                >
+                  <OnSiteDialog />
                 </HomeContent.Provider>
               </React.Fragment>}
 

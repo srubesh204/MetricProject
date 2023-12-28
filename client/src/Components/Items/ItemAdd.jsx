@@ -796,19 +796,19 @@ const ItemAdd = () => {
                                     </div>
                                 </div>
                                 <div className="row g-2">
-                                    <div className={itemAddData.itemType === "variable" ? "col-md-5" : "col-md-9"}>
+                                    <div className={itemAddData.itemType === "variable" ? "col-md-5" : "col-md-12"}>
                                         <TextField size='small' variant='outlined' label="MFR.Si.No." onChange={handleItemAddChange} name='itemMFRNo' id='itemMFRNoId' fullWidth />
                                     </div>
                                     <div className={itemAddData.itemType === "variable" ? "col-md-7 d-flex justify-content-between" : "col-md-3 d-flex justify-content-between"}>
                                         {itemAddData.itemType === "variable" && <TextField size='small' variant='outlined' name='itemLC' onChange={handleItemAddChange} id="itemLCId" label="Least Count" fullWidth />}
 
 
-                                        <TextField select size='small' variant='outlined' label="Unit" name='itemLCUnit' onChange={handleItemAddChange} fullWidth >
+                                       {itemAddData.itemType === "variable" && <TextField select size='small' variant='outlined' label="Unit" name='itemLCUnit' onChange={handleItemAddChange} fullWidth >
                                             <MenuItem value=""><em>None</em></MenuItem>
                                             {units.map((unit, index) => (
                                                 <MenuItem key={index} value={unit.unitName}>{unit.unitName}</MenuItem>
                                             ))}
-                                        </TextField>
+                                        </TextField>}
 
                                     </div>
                                     <div className="row g-1">

@@ -866,16 +866,28 @@ export const Department = () => {
 
                   <div className="col-md-5">
 
-                    <TextField label="Department"
+                    {/* <TextField label="Department"
                       {...(errors.department !== "" && { helperText: errors.department, error: true })}
                       id="departmentId"
 
                       fullWidth
                       size="small"
                       onChange={handleDepChange}
-                      onKeyDown={handleKeyDown}
+                     
                       value={departmentData.department}
-                      name="department" ></TextField>
+              name="department" ></TextField>*/}
+
+                    <Autocomplete label="Department"
+                      disablePortal
+                      size="small"
+                      getOptionDisabled={option => true}
+                      options={departmentList.map((dep) => ({ label: dep.department }))}
+                      fullWidth
+                      clearOnBlur={false}
+                      value={departmentData.department}
+                      renderInput={(params) =>
+                        <TextField  {...(errors.department !== "" && { helperText: errors.department, error: true })} onKeyDown={handleKeyDown} onChange={handleDepChange}
+                          name="department" {...params} label="Department" />} />
 
                   </div>
                   <div className="col-md-4">
@@ -1129,7 +1141,7 @@ export const Department = () => {
                     <div className="col-md-8 d-flex ">
 
 
-                      <TextField label="Area"
+                      {/* <TextField label="Area"
                         {...(errors.area !== "" && { helperText: errors.area, error: true })}
                         id="areaId"
 
@@ -1140,7 +1152,18 @@ export const Department = () => {
                         onChange={handleAreaChange}
                         onKeyDown={handleAreaKeyDown}
                         value={areaData.area}
-                        name="area" ></TextField>
+              name="area" ></TextField>*/}
+                      <Autocomplete label="Area"
+                        disablePortal
+                        size="small"
+                        getOptionDisabled={option => true}
+                        options={areaList.map((area) => ({ label: area.area }))}
+                        fullWidth
+                        clearOnBlur={false}
+                        value={areaData.area}
+                        renderInput={(params) =>
+                          <TextField  {...(errors.area !== "" && { helperText: errors.area, error: true })} onKeyDown={handleAreaKeyDown} onChange={handleAreaChange}
+                            name="area" {...params} label="Area" />} />
                     </div>
                     <div className="col d-flex mb-3">
 
@@ -1278,6 +1301,8 @@ export const Department = () => {
                         className="MuiDataGrid-root"
                         rows={areaList}
                         columns={areaColumns}
+                        disableDensitySelector
+                        disableColumnSelector
                         getRowId={(row) => row._id}
 
                         initialState={{
@@ -1407,7 +1432,7 @@ export const Department = () => {
 
                   <div className="col-md-8 d-felx ">
 
-                    <TextField label="Place Of Usage"
+                    {/* <TextField label="Place Of Usage"
                       {...(errors.placeOfUsage !== "" && { helperText: errors.placeOfUsage, error: true })}
                       id="placeOfUsageId"
                       defaultValue=""
@@ -1416,7 +1441,18 @@ export const Department = () => {
                       onChange={handlePouChange}
                       onKeyDown={handlePlaceOfKeyDown}
                       value={placeOfUsageDatas.placeOfUsage}
-                      name="placeOfUsage" ></TextField>
+              name="placeOfUsage" ></TextField>*/}
+                    <Autocomplete label="Place Of Usage"
+                      disablePortal
+                      size="small"
+                      getOptionDisabled={option => true}
+                      options={placeOfUsageList.map((place) => ({ label: place.placeOfUsage }))}
+                      fullWidth
+                      clearOnBlur={false}
+                      value={placeOfUsageDatas.placeOfUsage}
+                      renderInput={(params) =>
+                        <TextField   {...(errors.placeOfUsage !== "" && { helperText: errors.placeOfUsage, error: true })} onKeyDown={handlePlaceOfKeyDown}   onChange={handlePouChange}
+                          name="placeOfUsage" {...params} label="Place Of Usage" />} />
 
                   </div>
                   <div className="col d-flex ">
@@ -1551,6 +1587,8 @@ export const Department = () => {
                     <DataGrid
                       rows={placeOfUsageList}
                       columns={placeOfUsageColumns}
+                      disableDensitySelector
+                      disableColumnSelector
                       getRowId={(row) => row._id}
 
                       initialState={{
@@ -1728,7 +1766,7 @@ export const Designation = () => {
   });
 
 
-console.log(designationData)
+  console.log(designationData)
 
   const handleDesRowClick = (params) => {
     console.log(params)
@@ -2048,7 +2086,7 @@ console.log(designationData)
                     disablePortal
                     size="small"
                     getOptionDisabled={option => true}
-                    options={designationList.map((des)=> ({label: des.designation}))}
+                    options={designationList.map((des) => ({ label: des.designation }))}
                     fullWidth
                     clearOnBlur={false}
                     value={designationData.designation}
@@ -2073,7 +2111,7 @@ console.log(designationData)
                     <MenuItem value="InActive">InActive</MenuItem>
                   </TextField>
 
-                
+
 
                 </div>
               </div>

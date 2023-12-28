@@ -20,6 +20,7 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import { DataGrid, GridToolbar } from '@mui/x-data-grid';
+import Autocomplete from '@mui/material/Autocomplete';
 
 
 
@@ -215,7 +216,7 @@ const ItemMaster = () => {
         tempErrors.uncertaintyUnit = itemMasterData.uncertaintyUnit ? "" : "Uncertainty is Required"
         tempErrors.calAlertInDay = itemMasterData.calAlertInDay ? "" : "Cal Alert In Days is Required"
         tempErrors.standardRef = itemMasterData.standardRef ? "" : "StardardRef is Required"
-        
+
 
 
         setErrors({ ...tempErrors })
@@ -551,7 +552,7 @@ const ItemMaster = () => {
                                 </div>
                                 <div className="col">
 
-                                    <TextField label="Item Description "   {...(errors.itemDescription !== "" && { helperText: errors.itemDescription, error: true })}
+                                    {/* <TextField label="Item Description "   {...(errors.itemDescription !== "" && { helperText: errors.itemDescription, error: true })}
                                         id="itemDescriptionId"
                                         defaultValue=""
                                         sx={{ width: "100%" }}
@@ -560,7 +561,20 @@ const ItemMaster = () => {
                                         onKeyDown={handleKeyDown}
                                         value={itemMasterData.itemDescription}
                                         onChange={handleItemMasterBaseChange}
-                                        name="itemDescription" />
+                        name="itemDescription" />*/}
+
+                                    <Autocomplete label="Item Description"
+                                        disablePortal
+                                        size="small"
+                                        getOptionDisabled={option => true}
+                                        options={itemMasterDataList.map((item) => ({ label: item.itemDescription }))}
+                                        fullWidth
+                                        clearOnBlur={false}
+                                        onKeyDown={handleKeyDown}
+                                        value={itemMasterData.itemDescription}
+                                        renderInput={(params) =>
+                                            <TextField {...(errors.itemDescription !== "" && { helperText: errors.itemDescription, error: true })} onChange={handleItemMasterBaseChange} value={itemMasterData.itemDescription}
+                                                name="itemDescription" {...params} label="Item Description" />} />
                                 </div>
 
                                 <div className="form-floating col">
@@ -652,7 +666,7 @@ const ItemMaster = () => {
                                             </div>
 
                                             {(Object.keys(errors).length !== 0 && (errors.uncertainty !== "" || errors.uncertaintyUnit !== "")) && <div style={{ color: "red", fontSize: "small", marginLeft: "10px" }}>Uncertainity is Required</div>}
-                                           
+
 
                                         </div>
                                         <div className="form-floating col">

@@ -38,6 +38,14 @@ import Roles from './Components/Login/Roles';
 import MailConfi from './Components/mailConfi/MailConfi';
 import { createContext, useContext } from 'react';
 import AccessDenied from './Components/ErrorComponents/AccessDenied';
+import BackUp from './Components/mailConfi/BackUp';
+import CompanyDetails from './Components/mailConfi/CompanyDetails';
+import FormatNumber from './Components/mailConfi/FormatNumber';
+import AlertConfi from './Components/mailConfi/AlertConfi';
+import Version from './Components/mailConfi/Version';
+
+
+
 export const empRole = createContext(null);
 
 
@@ -91,6 +99,12 @@ const generateRoutes = (employee) => {
     { path: "/onSiteEditGrn", element: <OnSiteEditGrn /> },
     { path: "/onSiteDialog", element: <OnSiteDialog /> },
     { path: "/roles", element: <Roles /> },
+    { path: "/backUp", element: <BackUp /> },
+    { path: "/companyDetails", element: <CompanyDetails /> },
+    { path: "/formatNumber", element: <FormatNumber /> },
+    { path: "/alertConfi", element: <AlertConfi /> },
+    { path: "/version", element: <Version /> },
+   
     // Add more common routes...
   ];
 

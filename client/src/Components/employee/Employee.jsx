@@ -292,13 +292,13 @@ const Employee = () => {
         setEmployeeData((prev) => ({ ...prev, [name]: value }));
 
     };
-    const [showPassword, setShowPassword] =  useState(false)
-    const handleShowPassword = ()=> {
+    const [showPassword, setShowPassword] = useState(false)
+    const handleShowPassword = () => {
         setShowPassword((show) => !show)
     }
     console.log(showPassword)
 
-    
+
     const [errors, setErrors] = useState({})
     const validateFunction = () => {
         let tempErrors = {};
@@ -307,10 +307,12 @@ const Employee = () => {
         tempErrors.firstName = employeeData.firstName ? "" : "First Name is Required"
         tempErrors.lastName = employeeData.lastName ? "" : "Last Name is Required"
         tempErrors.address = employeeData.address ? "" : "Address is Required"
+        tempErrors.empRole = employeeData.empRole ? "" : "Role is Required"
         tempErrors.city = employeeData.city ? "" : "City is Required"
         tempErrors.state = employeeData.state ? "" : "State is Required"
         tempErrors.contactNumber = employeeData.contactNumber ? "" : "Contact Number is Required"
         tempErrors.mailId = employeeData.mailId ? "" : "Mail Id is Required"
+        tempErrors.password = employeeData.password ? "" : "Password is Required"
         tempErrors.designation = employeeData.designation ? "" : "Designation is Required"
         tempErrors.department = employeeData.department ? "" : "Department is Required"
         tempErrors.doj = employeeData.doj ? "" : "DOJ is Required"
@@ -328,21 +330,19 @@ const Employee = () => {
     const EmployeeSubmit = async (e) => {
         e.preventDefault();
         try {
-            if (validateFunction()) { 
+            if (validateFunction()){
                 const response = await axios.post(
                     `${process.env.REACT_APP_PORT}/employee/createEmployee`, employeeData
                 );
-    
+
                 setSnackBarOpen(true)
                 empFetch();
                 console.log("Employee Created Successfully")
                 setErrorHandler({ status: response.data.status, message: response.data.message, code: "success" })
                 setEmployeeData(initialEmpData)
                 setEmpDataId(null)
-            } else {
-                setSnackBarOpen(true)
-                setErrorHandler({ status: 0, message: "Fill the required fields", code: "error" })
             }
+            
         } catch (err) {
 
             setSnackBarOpen(true)
@@ -498,8 +498,8 @@ const Employee = () => {
 
                         <Grid container spacing={1} className='mb-2' >
                             <Grid item xs={2}>
-                                <TextField label="EmpCode" 
-                                        {...(errors.employeeCode !== "" && { helperText: errors.employeeCode, error: true })}
+                                <TextField label="EmpCode"
+                                    {...(errors.employeeCode !== "" && { helperText: errors.employeeCode, error: true })}
                                     id="employeeCodeId"
                                     defaultValue=""
                                     fullWidth
@@ -510,8 +510,8 @@ const Employee = () => {
                             </Grid>
                             <Grid item xs={1}>
                                 <TextField
-                                        {...(errors.title !== "" && { helperText: errors.title, error: true })}
-                                         fullWidth label="Title" onChange={handleChange} value={employeeData.title} select size="small" id="titleId" name="title" >
+                                    {...(errors.title !== "" && { helperText: errors.title, error: true })}
+                                    fullWidth label="Title" onChange={handleChange} value={employeeData.title} select size="small" id="titleId" name="title" >
 
                                     <MenuItem value="">Title</MenuItem >
                                     <MenuItem value="1">Mr.</MenuItem >
@@ -522,8 +522,8 @@ const Employee = () => {
                             </Grid>
                             <Grid item xs={3}>
 
-                                <TextField label="First Name"
-                                        {...(errors.firstName !== "" && { helperText: errors.firstName, error: true })}
+                                {/* <TextField label="First Name"
+                                    {...(errors.firstName !== "" && { helperText: errors.firstName, error: true })}
                                     id="firstNameId"
                                     defaultValue=""
                                     fullWidth
@@ -532,12 +532,29 @@ const Employee = () => {
                                     onChange={handleChange}
                                     onKeyDown={handleKeyDown}
                                     value={employeeData.firstName}
-                                    name="firstName" />
+    name="firstName" />*/}
+
+                                <Autocomplete label="First Name"
+                                    disablePortal
+                                    size="small"
+                                    getOptionDisabled={option => true}
+                                    options={employeeList.map((emp) => ({ label: emp.firstName }))}
+                                    fullWidth
+                                    clearOnBlur={false}
+                                    onKeyDown={handleKeyDown}
+                                    value={employeeData.firstName}
+                                    renderInput={(params) =>
+                                        <TextField {...(errors.firstName !== "" && { helperText: errors.firstName, error: true })} onChange={handleChange} value={employeeData.firstName}
+                                            name="firstName" {...params} label="First Name" />} />
+
+
+
+
                             </Grid>
 
                             <Grid item xs={4}>
                                 <TextField label="Last Name"
-                                        {...(errors.lastName !== "" && { helperText: errors.lastName, error: true })}
+                                    {...(errors.lastName !== "" && { helperText: errors.lastName, error: true })}
                                     id="lastNameId"
                                     defaultValue=""
                                     size="small"
@@ -573,7 +590,7 @@ const Employee = () => {
                         <div className='row g-2 mb-2'>
                             <div className="col-md-10">
                                 <TextField label="Address"
-                                        {...(errors.address !== "" && { helperText: errors.address, error: true })}
+                                    {...(errors.address !== "" && { helperText: errors.address, error: true })}
                                     id="addressId"
                                     defaultValue=""
                                     size="small"
@@ -586,6 +603,7 @@ const Employee = () => {
                             </div>
                             <div className="col">
                                 <TextField label="Role"
+                                        {...(errors.empRole !== "" && { helperText: errors.empRole, error: true })}
                                          size='small' id='empRoleId' onChange={handleChange} fullWidth name='empRole' value={employeeData.empRole} select>
                                     <MenuItem value="admin">Admin</MenuItem>
                                     <MenuItem value="plantAdmin">Plant Admin</MenuItem>
@@ -618,7 +636,7 @@ const Employee = () => {
                                     isOptionEqualToValue={(option) => option}
                                     renderInput={(params) => <TextField
                                         {...(errors.state !== "" && { helperText: errors.state, error: true })}
-                                         {...params} label="State" name="State" />} // Set the name attribute to "state"
+                                        {...params} label="State" name="State" />} // Set the name attribute to "state"
                                 />
                             </Grid>
                             <Grid item xs={2}>
@@ -635,7 +653,7 @@ const Employee = () => {
                                     isOptionEqualToValue={(option) => option}
                                     renderInput={(params) => <TextField
                                         {...(errors.city !== "" && { helperText: errors.city, error: true })}
-                                         {...params} label="City" name="City" />} // Set the name attribute to "state"
+                                        {...params} label="City" name="City" />} // Set the name attribute to "state"
                                 />
                             </Grid>
 
@@ -643,7 +661,7 @@ const Employee = () => {
                             <Grid item xs={2}>
 
                                 <TextField label="Contact Number "
-                                        {...(errors.contactNumber !== "" && { helperText: errors.contactNumber, error: true })}
+                                    {...(errors.contactNumber !== "" && { helperText: errors.contactNumber, error: true })}
                                     id="contactNumberId"
                                     color={employeeData.contactNumber.length !== 10 ? "error" : "success"}
                                     fullWidth
@@ -658,7 +676,7 @@ const Employee = () => {
 
                             <Grid item xs={3}>
                                 <TextField label="MailId "
-                                        {...(errors.mailId !== "" && { helperText: errors.mailId, error: true })}
+                                    {...(errors.mailId !== "" && { helperText: errors.mailId, error: true })}
                                     id="mailId"
                                     defaultValue=""
                                     sx={{ width: "100%" }}
@@ -671,6 +689,7 @@ const Employee = () => {
                             </Grid>
                             <Grid item xs={2}>
                                 <TextField label="Password "
+                                        {...(errors.password !== "" && { helperText: errors.password, error: true })}
                                     id="passwordId"
                                     InputLabelProps={{ shrink: true }}
                                     InputProps={{
@@ -682,16 +701,16 @@ const Employee = () => {
                                                 edge="end"
                                                 onClick={handleShowPassword}
                                             >
-                                                {showPassword ? <VisibilityOff/>: <Visibility/>}
+                                                {showPassword ? <VisibilityOff /> : <Visibility />}
                                             </IconButton>
 
-                                            </InputAdornment>,
+                                        </InputAdornment>,
                                     }}
                                     type={showPassword ? "text" : "password"}
                                     fullWidth
                                     size="small"
                                     onChange={handleChange}
-                                 
+
                                     value={employeeData.password}
                                     name="password" />
                             </Grid>
@@ -716,8 +735,8 @@ const Employee = () => {
 
                                     <Grid item xs={6}>
                                         <TextField
-                                        {...(errors.designation !== "" && { helperText: errors.designation, error: true })}
-                                         fullWidth label="Designation" onChange={handleChange} value={employeeData.designation} select size="small" id="designationId" name="designation" defaultValue="" >
+                                            {...(errors.designation !== "" && { helperText: errors.designation, error: true })}
+                                            fullWidth label="Designation" onChange={handleChange} value={employeeData.designation} select size="small" id="designationId" name="designation" defaultValue="" >
 
                                             {designationList.map((item, index) => (
                                                 <MenuItem key={index} value={item.designation}>{item.designation}</MenuItem>
@@ -728,8 +747,8 @@ const Employee = () => {
                                     </Grid>
                                     <Grid item xs={6}>
                                         <TextField
-                                        {...(errors.department !== "" && { helperText: errors.department, error: true })}
-                                         fullWidth label="Department" onChange={handleChange} value={employeeData.department} select size="small" id="DepartmentId" name="department" defaultValue="" >
+                                            {...(errors.department !== "" && { helperText: errors.department, error: true })}
+                                            fullWidth label="Department" onChange={handleChange} value={employeeData.department} select size="small" id="DepartmentId" name="department" defaultValue="" >
 
                                             {departmentList.map((item, index) => (
                                                 <MenuItem key={index} value={item.department}>{item.department}</MenuItem>
@@ -777,8 +796,8 @@ const Employee = () => {
                                         </div>*/}
                                     <Grid item xs={5}>
                                         <TextField
-                                        {...(errors.employmentStatus !== "" && { helperText: errors.employmentStatus, error: true })}
-                                         fullWidth label="Employment Status" onChange={handleChange} value={employeeData.employmentStatus} select size="small" id="employmentStatusId" name="employmentStatus" defaultValue="" >
+                                            {...(errors.employmentStatus !== "" && { helperText: errors.employmentStatus, error: true })}
+                                            fullWidth label="Employment Status" onChange={handleChange} value={employeeData.employmentStatus} select size="small" id="employmentStatusId" name="employmentStatus" defaultValue="" >
                                             <MenuItem value="Active">Active</MenuItem >
                                             <MenuItem value="InActive">InActive</MenuItem >
                                         </TextField>

@@ -73,7 +73,7 @@ const DcList = () => {
 
             setVendorDataList(response.data.result);
 
-            // setFilteredData(response.data.result);
+            setFilteredData(response.data.result);
         } catch (err) {
             console.log(err);
         }
@@ -103,7 +103,7 @@ const DcList = () => {
 
     const [filteredData, setFilteredData] = useState([])
 
-    const oneMonthBefore = dayjs().subtract(dayjs().date()-1, 'day')
+    const oneMonthBefore = dayjs().subtract(dayjs().date() - 1, 'day')
     const [dateData, setDateData] = useState({
         fromDate: oneMonthBefore.format('YYYY-MM-DD'),
         toDate: dayjs().format('YYYY-MM-DD')
@@ -123,7 +123,7 @@ const DcList = () => {
 
             );
             setDcDataDcList(response.data.result);
-            
+
             setFilteredData(response.data.result);
         } catch (err) {
             console.log(err);
@@ -133,8 +133,8 @@ const DcList = () => {
         dcListFetchData();
     }, []);
 
-    useEffect(()=> {
-        const filteredItems = dcDataDcList.filter((item) => dayjs(item.dcDate).isSameOrAfter(dateData.fromDate) && dayjs(item.dcDate).isSameOrBefore(dateData.toDate) )
+    useEffect(() => {
+        const filteredItems = dcDataDcList.filter((item) => dayjs(item.dcDate).isSameOrAfter(dateData.fromDate) && dayjs(item.dcDate).isSameOrBefore(dateData.toDate))
         console.log(filteredItems)
         setFilteredData(filteredItems)
     }, [dateData.fromDate, dateData.toDate])
@@ -216,7 +216,7 @@ const DcList = () => {
 
 
 
-   
+
 
 
     const [deleteModalItem, setDeleteModalItem] = useState(false);
@@ -240,7 +240,7 @@ const DcList = () => {
 
             setErrorHandler({ status: response.data.status, message: response.data.message, code: "success" })
 
-           
+
             dcListFetchData()
         } catch (err) {
 
@@ -274,18 +274,18 @@ const DcList = () => {
 
 
 
-   
 
-    const handleFilterChange = (e) => {
+
+   const handleFilterChange = (e) => {
         const { name, value } = e.target;
         if (value === "all") {
             setFilteredData(dcDataDcList)
         } else {
-            if (name === "vendorStatus") {
-                const vendorStatus = dcDataDcList.filter((item) => (item.vendorStatus === value))
+            if (name === "dcPartyType") {
+                const dcPartyType = dcDataDcList.filter((item) => (item.dcPartyType === value))
                 console.log(value)
-                setFilteredData(vendorStatus)
-            } 
+                setFilteredData(dcPartyType)
+            }
             if (name === "partyName") {
                 const partyName = dcDataDcList.filter((item) => (item.dcPartyName === value))
                 console.log(value)
@@ -293,7 +293,7 @@ const DcList = () => {
 
             }
 
-            setDateData((prev)=> ({...prev, [name] : value}))
+            setDateData((prev) => ({ ...prev, [name]: value }))
 
 
         }
@@ -301,7 +301,41 @@ const DcList = () => {
 
     }
 
-   
+  {/*  const handleFilterChange = (e) => {
+        const { name, value } = e.target;
+
+        if (value === "all") {
+            setFilteredData(vendorDataList)
+        } else {
+            if (value === "oem") {
+                const vendorType = vendorDataList.filter((item) => (item.oem === "1"))
+                setFilteredData(vendorType)
+            }
+            if (value === "customer") {
+                const vendorType = vendorDataList.filter((item) => (item.customer === "1"))
+                setFilteredData(vendorType)
+            }
+            if (value === "supplier") {
+                const vendorType = vendorDataList.filter((item) => (item.supplier === "1"))
+                setFilteredData(vendorType)
+            }
+            if (value === "subContractor") {
+                const vendorType = vendorDataList.filter((item) => (item.subContractor === "1"))
+                setFilteredData(vendorType)
+            }
+            if (name === "partyName") {
+                const partyName = vendorDataList.filter((item) => (item.dcPartyName === value))
+                console.log(value)
+                setFilteredData(partyName)
+
+            }
+        }
+        setDateData((prev) => ({ ...prev, [name]: value }))
+
+
+    };*/}
+
+
 
 
 
@@ -315,7 +349,8 @@ const DcList = () => {
         { field: 'itemAddMasterName', headerName: 'Item Description', width: 150 },
         { field: 'itemRangeSize', headerName: 'Range/Size', width: 100 },
         {
-            field: 'dcItemRemarks', headerName: 'ReMarks', width: 200},
+            field: 'dcItemRemarks', headerName: 'ReMarks', width: 200
+        },
 
 
     ]
@@ -329,243 +364,249 @@ const DcList = () => {
         <div className='px-5 pt-3'>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
                 <form>
-                  
 
 
 
 
-                        <Paper
-                            sx={{
-                                p: 1,
-                                display: 'flex',
-                                flexDirection: 'column',
-                                mb: 1
-                            }}
-                            elevation={12}
-                        >
-                            <div className='row '>
-                              
-                                <div className='col d-flex '>
-                                    <div className='col me-2'>
-                                        <TextField fullWidth label="VendorStatus" className="col" select size="small" onChange={handleFilterChange} id="vendorStatusId" name="vendorStatus" defaultValue="" >
 
-                                            <MenuItem value="All">All</MenuItem>
-                                            <MenuItem value="Active">Active</MenuItem>
-                                            <MenuItem value="InActive">InActive</MenuItem>
+                    <Paper
+                        sx={{
+                            p: 1,
+                            display: 'flex',
+                            flexDirection: 'column',
+                            mb: 1
+                        }}
+                        elevation={12}
+                    >
+                        <div className='row '>
 
-
-
-
-                                        </TextField>
-
-                                    </div>
-                                    <div className='col'>
-                                        <TextField fullWidth label="Party Name" className="col" select size="small" onChange={handleFilterChange} id="partyNameId" name="partyName" defaultValue="" >
-
-                                            <MenuItem value="all">All</MenuItem>
-                                            {vendorFullList.map((item, index) => (
-                                                <MenuItem key={index} value={item.fullName}>{item.fullName}</MenuItem>
-                                            ))}
-
-
-                                        </TextField>
-
-                                    </div>
-                                </div>
-                                <div className=' col d-flex justify-content-end'>
-                                    <div className="col-3 me-2">
-
-                                        <DatePicker
-                                            fullWidth
-                                            id="fromDateId"
-                                            name="fromDate"
-                                            size="small"
-                                            label="From Date"
-                                            sx={{ width: "100%" }}
-                                            slotProps={{ textField: { size: 'small' } }}
-                                            format="DD-MM-YYYY"
-                                            value={dayjs(dateData.fromDate)}
-                                        onChange={(newValue)=> 
-                                            setDateData((prev)=> ({...prev, fromDate : dayjs(newValue).format('YYYY-MM-DD')}))}
-                                             />
-
-                                    </div>
-                                    <div className="col-3">
-
-                                        <DatePicker
-                                            fullWidth
-                                            id="toDateId"
-                                            name="toDate"
-                                            label="To Date"
-                                            sx={{ width: "100%" }}
-                                            slotProps={{ textField: { size: 'small' } }}
-                                            format="DD-MM-YYYY"  value={dayjs(dateData.toDate)}
-                                            onChange={(newValue)=> 
-                                                setDateData((prev)=> ({...prev, toDate : dayjs(newValue).format('YYYY-MM-DD')}))} />
-
-                                    </div>
-
-                                </div>
-
-                            </div>
-
-
-
-                            <div className='row'>
-                                <Box sx={{ height: 310, width: '100%', my: 2 }}>
-                                    <DataGrid
-
-                                        rows={filteredData}
-                                        columns={Columns}
-                                        getRowId={(row) => row._id}
-                                        initialState={{
-                                            pagination: {
-                                                paginationModel: { page: 0, pageSize: 5 },
-                                            },
-                                        }}
-                                        sx={{
-                                            ".MuiTablePagination-displayedRows": {
-
-                                                "marginTop": "1em",
-                                                "marginBottom": "1em"
-                                            }
-                                        }}
-                                        onRowSelectionModelChange={(newRowSelectionModel) => {
-                                            setItemListSelectedRowIds(newRowSelectionModel);
-                                        }}
-                                        disableRowSelectionOnClick
-                                        slots={{
-                                            toolbar: GridToolbar,
-                                        }}
-
-                                        density="compact"
-                                        disableColumnMenu={true}
-                                       
-                                        checkboxSelection
-
-                                        onRowClick={handleRowClick}
-
-
-                                    />
-
-                                </Box>
-
-                            </div>
-                        </Paper>
-                        <Paper
-                            sx={{
-                                p: 1,
-                                display: 'flex',
-                                flexDirection: 'column',
-                                mb: 1
-                            }}
-                            elevation={12}
-                        >
-
-                            <div className='row'>
-                                <Box sx={{ height: 310, width: '100%', my: 2 }}>
-                                    <DataGrid
-                                        rows={dcListDataList}
-                                        columns={dcListColumns}
-                                        getRowId={(row) => row._id}
-                                        initialState={{
-                                            pagination: {
-                                                paginationModel: { page: 0, pageSize: 5 },
-                                            },
-                                        }}
-                                        sx={{
-                                            ".MuiTablePagination-displayedRows": {
-
-                                                "marginTop": "1em",
-                                                "marginBottom": "1em"
-                                            }
-                                        }}
-                                        onRowSelectionModelChange={(newRowSelectionModel, event) => {
-                                            setDcListSelectedRowIds(newRowSelectionModel);
-
-
-                                        }}
-
-                                        slots={{
-                                            toolbar: GridToolbar,
-                                        }}
-
-                                        density="compact"
-                                        //disableColumnMenu={true}
+                            <div className='col d-flex '>
+                                <div className='col me-2'>
+                                    <TextField label="Vendor Type"
+                                        id="dcPartyTypeId"
+                                        select
+                                        defaultValue=""
+                                        onChange={handleFilterChange}
+                                        size="small"
+                                        sx={{ width: "101%" }}
                                         
-                                        // checkboxSelection
-                                        //onRowClick={handleRowClick}
-                                        disableRowSelectionOnClick
-                                        pageSizeOptions={[5]}
+                                        name="dcPartyType" >
+                                        <MenuItem value=""><em>--Select--</em></MenuItem>
+                                        <MenuItem value="oem">OEM</MenuItem>
+                                        <MenuItem value="customer">Customer</MenuItem>
+                                        <MenuItem value="supplier">Supplier</MenuItem>
+                                        <MenuItem value="subContractor">SubContractor</MenuItem>
+
+                                    </TextField>
+
+                                </div>
+                                <div className='col'>
+                                    <TextField fullWidth label="Party Name" className="col" select size="small" onChange={handleFilterChange} id="partyNameId" name="partyName" defaultValue="" >
+
+                                        <MenuItem value="all">All</MenuItem>
+                                        {vendorFullList.map((item, index) => (
+                                            <MenuItem key={index} value={item.fullName}>{item.fullName}</MenuItem>
+                                        ))}
+
+
+                                    </TextField>
+
+                                </div>
+                            </div>
+                            <div className=' col d-flex justify-content-end'>
+                                <div className="col-3 me-2">
+
+                                    <DatePicker
+                                        fullWidth
+                                        id="fromDateId"
+                                        name="fromDate"
+                                        size="small"
+                                        label="From Date"
+                                        sx={{ width: "100%" }}
+                                        slotProps={{ textField: { size: 'small' } }}
+                                        format="DD-MM-YYYY"
+                                        value={dayjs(dateData.fromDate)}
+                                        onChange={(newValue) =>
+                                            setDateData((prev) => ({ ...prev, fromDate: dayjs(newValue).format('YYYY-MM-DD') }))}
                                     />
 
-                                </Box>
+                                </div>
+                                <div className="col-3">
 
-                            </div>
-                            <div className='row'>
-                                <div className='col d-flex '>
-                                    <div className='me-2 '>
-                                        <button type="button" className='btn btn-secondary' >Print</button>
-                                    </div>
+                                    <DatePicker
+                                        fullWidth
+                                        id="toDateId"
+                                        name="toDate"
+                                        label="To Date"
+                                        sx={{ width: "100%" }}
+                                        slotProps={{ textField: { size: 'small' } }}
+                                        format="DD-MM-YYYY" value={dayjs(dateData.toDate)}
+                                        onChange={(newValue) =>
+                                            setDateData((prev) => ({ ...prev, toDate: dayjs(newValue).format('YYYY-MM-DD') }))} />
 
                                 </div>
-                                <div className='col d-flex justify-content-end'>
 
-                                    <div className='me-2 '>
-                                        <Button component={Link} onClick={() => { setDcOpen(true) }} type='button' variant="contained" color="warning">
-                                            <AddIcon /> Add Item
+                            </div>
+
+                        </div>
+
+
+
+                        <div className='row'>
+                            <Box sx={{ height: 310, width: '100%', my: 2 }}>
+                                <DataGrid
+
+                                    rows={filteredData}
+                                    columns={Columns}
+                                    getRowId={(row) => row._id}
+                                    initialState={{
+                                        pagination: {
+                                            paginationModel: { page: 0, pageSize: 5 },
+                                        },
+                                    }}
+                                    sx={{
+                                        ".MuiTablePagination-displayedRows": {
+
+                                            "marginTop": "1em",
+                                            "marginBottom": "1em"
+                                        }
+                                    }}
+                                    onRowSelectionModelChange={(newRowSelectionModel) => {
+                                        setItemListSelectedRowIds(newRowSelectionModel);
+                                    }}
+                                    disableRowSelectionOnClick
+                                    slots={{
+                                        toolbar: GridToolbar,
+                                    }}
+
+                                    density="compact"
+                                    disableColumnMenu={true}
+
+                                    checkboxSelection
+
+                                    onRowClick={handleRowClick}
+
+
+                                />
+
+                            </Box>
+
+                        </div>
+                    </Paper>
+                    <Paper
+                        sx={{
+                            p: 1,
+                            display: 'flex',
+                            flexDirection: 'column',
+                            mb: 1
+                        }}
+                        elevation={12}
+                    >
+
+                        <div className='row'>
+                            <Box sx={{ height: 310, width: '100%', my: 2 }}>
+                                <DataGrid
+                                    rows={dcListDataList}
+                                    columns={dcListColumns}
+                                    getRowId={(row) => row._id}
+                                    initialState={{
+                                        pagination: {
+                                            paginationModel: { page: 0, pageSize: 5 },
+                                        },
+                                    }}
+                                    sx={{
+                                        ".MuiTablePagination-displayedRows": {
+
+                                            "marginTop": "1em",
+                                            "marginBottom": "1em"
+                                        }
+                                    }}
+                                    onRowSelectionModelChange={(newRowSelectionModel, event) => {
+                                        setDcListSelectedRowIds(newRowSelectionModel);
+
+
+                                    }}
+
+                                    slots={{
+                                        toolbar: GridToolbar,
+                                    }}
+
+                                    density="compact"
+                                    //disableColumnMenu={true}
+
+                                    // checkboxSelection
+                                    //onRowClick={handleRowClick}
+                                    disableRowSelectionOnClick
+                                    pageSizeOptions={[5]}
+                                />
+
+                            </Box>
+
+                        </div>
+                        <div className='row'>
+                            <div className='col d-flex '>
+                                <div className='me-2 '>
+                                    <button type="button" className='btn btn-secondary' >Print</button>
+                                </div>
+
+                            </div>
+                            <div className='col d-flex justify-content-end'>
+
+                                <div className='me-2 '>
+                                    <Button component={Link} onClick={() => { setDcOpen(true) }} type='button' variant="contained" color="warning">
+                                        <AddIcon /> Add Item
+                                    </Button>
+                                </div>
+                                {itemListSelectedRowIds.length !== 0 && <div className='me-2 '>
+                                    <Button variant='contained' type='button' color='error' onClick={() => setDeleteModalItem(true)}>Delete</Button>
+                                </div>}
+
+                                <Dialog
+                                    open={deleteModalItem}
+                                    onClose={() => setDeleteModalItem(false)}
+                                    aria-labelledby="alert-dialog-title"
+                                    aria-describedby="alert-dialog-description"
+                                >
+                                    <DialogTitle id="alert-dialog-title">
+                                        {" ItemAdd delete confirmation?"}
+                                    </DialogTitle>
+                                    <DialogContent>
+                                        <DialogContentText id="alert-dialog-description">
+                                            Are you sure to delete the ItemAdd
+                                        </DialogContentText>
+                                    </DialogContent>
+                                    <DialogActions>
+                                        <Button onClick={() => setDeleteModalItem(false)}>Cancel</Button>
+                                        <Button onClick={() => { deleteDcData(); setDeleteModalItem(false); }} autoFocus>
+                                            Delete
                                         </Button>
-                                    </div>
-                                    {itemListSelectedRowIds.length !== 0 &&     <div className='me-2 '>
-                                        <Button variant='contained' type='button' color='error' onClick={() => setDeleteModalItem(true)}>Delete</Button>
-                                    </div>}
-
-                                    <Dialog
-                                        open={deleteModalItem}
-                                        onClose={() => setDeleteModalItem(false)}
-                                        aria-labelledby="alert-dialog-title"
-                                        aria-describedby="alert-dialog-description"
-                                    >
-                                        <DialogTitle id="alert-dialog-title">
-                                            {" ItemAdd delete confirmation?"}
-                                        </DialogTitle>
-                                        <DialogContent>
-                                            <DialogContentText id="alert-dialog-description">
-                                                Are you sure to delete the ItemAdd
-                                            </DialogContentText>
-                                        </DialogContent>
-                                        <DialogActions>
-                                            <Button onClick={() => setDeleteModalItem(false)}>Cancel</Button>
-                                            <Button onClick={() => { deleteDcData(); setDeleteModalItem(false); }} autoFocus>
-                                                Delete
-                                            </Button>
-                                        </DialogActions>
-                                    </Dialog>
-                                    <div className='me-2 '>
-                                        <button type="button" className='btn btn-secondary' >Back</button>
-                                    </div>
-
+                                    </DialogActions>
+                                </Dialog>
+                                <div className='me-2 '>
+                                    <button type="button" className='btn btn-secondary' >Back</button>
                                 </div>
 
-                                <DcListContent.Provider
-                                    value={{ dcEditOpen, setDcEditOpen, selectedRows, dcListFetchData }}
-                                >
-                                    <DcEdit />
-                                </DcListContent.Provider>
-                                <DcListContent.Provider
-                                    value={{ dcOpen, setDcOpen, selectedRows, dcListFetchData }}
-                                >
-                                    <DcAdd />
-                                </DcListContent.Provider>
                             </div>
-                        </Paper>
-                        <Snackbar anchorOrigin={{ vertical: "top", horizontal: "right" }} open={snackBarOpen} autoHideDuration={6000} onClose={handleSnackClose}>
-                            <Alert onClose={handleSnackClose} severity={errorhandler.code} variant='filled' sx={{ width: '100%' }}>
-                                {errorhandler.message}
-                            </Alert>
-                        </Snackbar>
 
-                  
+                            <DcListContent.Provider
+                                value={{ dcEditOpen, setDcEditOpen, selectedRows, dcListFetchData }}
+                            >
+                                <DcEdit />
+                            </DcListContent.Provider>
+                            <DcListContent.Provider
+                                value={{ dcOpen, setDcOpen, selectedRows, dcListFetchData }}
+                            >
+                                <DcAdd />
+                            </DcListContent.Provider>
+                        </div>
+                    </Paper>
+                    <Snackbar anchorOrigin={{ vertical: "top", horizontal: "right" }} open={snackBarOpen} autoHideDuration={6000} onClose={handleSnackClose}>
+                        <Alert onClose={handleSnackClose} severity={errorhandler.code} variant='filled' sx={{ width: '100%' }}>
+                            {errorhandler.message}
+                        </Alert>
+                    </Snackbar>
+
+
                 </form>
 
             </LocalizationProvider>
