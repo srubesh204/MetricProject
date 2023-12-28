@@ -28,7 +28,7 @@ dayjs.extend(isSameOrAfter)
 
 const ItemList = () => {
 
-    const employee = useEmployee()
+    const employeeRole = useEmployee()
 
     console.log(dayjs("2023-11-17").isSameOrBefore("2023-11-21"))
     const [itemList, setItemList] = useState([]);
@@ -250,7 +250,7 @@ const ItemList = () => {
     useEffect(() => {
         itemAddFetch();
     }, []);
-    
+
 
     const handleSnackClose = (event, reason) => {
         if (reason === 'clickaway') {
@@ -263,7 +263,20 @@ const ItemList = () => {
 
 
     const columns = [
-        { field: 'button', headerName: 'Edit', width: 60, renderCell: (params) => <Button disabled={employee && employee === "viewer"} component={Link} to={`/itemedit/${params.id}`}><Edit color='success' /></Button> },
+        ...(employeeRole !== 'viewer'
+            ? [
+                {
+                    field: 'button',
+                    headerName: 'Edit',
+                    width: 60,
+                    renderCell: (params) => (
+                        <Button component={Link} to={`/itemedit/${params.id}`}>
+                            <Edit color='success' />
+                        </Button>
+                    ),
+                },
+            ]
+            : []),
         { field: 'id', headerName: 'Si. No', width: 60, renderCell: (params) => params.api.getAllRowIds().indexOf(params.id) + 1 },
         { field: 'itemIMTENo', headerName: 'IMTE No', width: 100 },
         { field: 'itemAddMasterName', headerName: 'Description', width: 120 },
@@ -643,7 +656,7 @@ const ItemList = () => {
     const [itemId, setItemId] = useState("")
     const [statusInfo, setStatusInfo] = useState([])
 
-   {/* const handleRowClick = async (params) => {
+    {/* const handleRowClick = async (params) => {
         console.log(params)
 
         setItemId(params.id)
@@ -654,15 +667,15 @@ const ItemList = () => {
 console.log(statusInfo)*/}
 
 
- const handleRowClick = async (params) => {
+    const handleRowClick = async (params) => {
         if (itemListSelectedRowIds.length > 0) {
 
             setShowDialog(true);
-         } else {
+        } else {
 
             setItemId(params.id);
-           setStatusInfo(params.row);
-             setItemListSelectedRowIds([params.id]);
+            setStatusInfo(params.row);
+            setItemListSelectedRowIds([params.id]);
         }
     };
 
@@ -948,7 +961,7 @@ console.log(statusInfo)*/}
 
                                     density="compact"
                                     //disableColumnMenu={true}
-                                    
+
                                     checkboxSelection
                                     onRowClick={handleRowClick}
                                     disableRowSelectionOnClick
@@ -998,7 +1011,7 @@ console.log(statusInfo)*/}
                                     <button type="button" className='btn btn' >History Card</button>
                                 </div>
                                 <div className='me-2' >
-                                {itemListSelectedRowIds.length !== 0 &&  <button type="button" className='btn btn-' onClick={() => setOpenModalStatus(true)} >Change status</button>}
+                                    {itemListSelectedRowIds.length !== 0 && <button type="button" className='btn btn-' onClick={() => setOpenModalStatus(true)} >Change status</button>}
                                     {/*  {itemStatusStateId &&  (
                                         <Button
                                             type="button"
@@ -1140,15 +1153,15 @@ console.log(statusInfo)*/}
 
 
 
-                                <div className='me-2' >
+                                {employeeRole !== "viewer" && <div className='me-2' >
                                     <Button component={RouterLink} to={`/itemMaster`} variant="contained" color="secondary">
                                         Item Master
                                     </Button>
 
-                                </div>
+                                </div>}
                             </div>
                             <div className=' col d-flex justify-content-end'>
-                                <div className='me-2'>
+                                {employeeRole !== "viewer" && <React.Fragment> <div className='me-2'>
                                     {/* <Button component={Link} to={`/itemAdd/`}><AddIcon color='warning' /> Add ItemAdd</Button> */}
                                     <Button component={Link} to={`/itemAdd`} variant="contained" color="warning">
                                         <AddIcon /> Add Item
@@ -1156,9 +1169,11 @@ console.log(statusInfo)*/}
                                     {/* <button type="button" component={Link} to={`/itemAdd/`} className='btn btn-warning' > <AddIcon color='warning' /> Add ItemAdd</button>*/}
                                 </div>
 
-                                <div className='me-2'>
-                                    {itemListSelectedRowIds.length !== 0 && <Button variant='contained' type='button' color='error' onClick={() => setDeleteModalItem(true)}><DeleteIcon /> Delete </Button>}
-                                </div>
+                                    <div className='me-2'>
+                                        {itemListSelectedRowIds.length !== 0 && <Button variant='contained' type='button' color='error' onClick={() => setDeleteModalItem(true)}><DeleteIcon /> Delete </Button>}
+                                    </div>
+                                </React.Fragment>
+                                }
 
 
                                 <div className='me-2'>
@@ -1174,17 +1189,17 @@ console.log(statusInfo)*/}
                         </div>
                         <div className='row'>
                             <div className='col d-flex '>
-                                <div className='me-2' >
-                                    <label className='itemlistloade'>
-                                        <input className="form-control itemlistdownload" type="file" id="upload" />Upload</label>
-                                </div>
-                                <div className='me-2'>
-                                    <label className='itemlistloade'>
-                                        <input className="form-control itemlistdownload" type="file" id="download" />Download </label>
-                                </div>
-                                <div className='me-2 '>
-                                    <button type="button" className='btn btn-secondary' >Print</button>
-                                </div>
+                                {employeeRole !== "viewer" && <React.Fragment>
+                                    <div className='me-2' >
+                                        <label className='itemlistloade'>
+                                            <input className="form-control itemlistdownload" type="file" id="upload" />Upload</label>
+                                    </div>
+                                    <div className='me-2'>
+                                        <label className='itemlistloade'>
+                                            <input className="form-control itemlistdownload" type="file" id="download" />Download </label>
+                                    </div>
+                                </React.Fragment>}
+
                                 <div className='me-2 '>
                                     <button type="button" className='btn btn-secondary' >Sticker Print</button>
                                 </div>

@@ -100,6 +100,7 @@ const GrnList = () => {
 
     const [grnListDataList, setGrnListDataList] = useState([])
     const [grnDataList, setGrnDataList] = useState([])
+    const [filteredData, setFilteredData] = useState([])
     const grnListFetchData = async () => {
         try {
             const response = await axios.get(
@@ -107,7 +108,7 @@ const GrnList = () => {
             );
             console.log(response.data)
             setGrnDataList(response.data.result);
-            // setFilteredData(response.data.result);
+            setFilteredData(response.data.result);
         } catch (err) {
             console.log(err);
         }
@@ -115,6 +116,8 @@ const GrnList = () => {
     useEffect(() => {
         grnListFetchData();
     }, []);
+
+    console.log(filteredData)
 
     const [selectedRowView, setSelectedRowView] = useState(null);
     const handleViewClick = (params) => {
@@ -125,6 +128,7 @@ const GrnList = () => {
 
 
     const [vendorFullList, setVendorFullList] = useState([])
+    const [vendorTypeList, setVendorTypeList] = useState([])
 
     const FetchData = async () => {
         try {
@@ -132,7 +136,7 @@ const GrnList = () => {
                 `${process.env.REACT_APP_PORT}/vendor/getAllVendors`
             );
             setVendorFullList(response.data.result);
-
+            setVendorTypeList(response.data.result)
             // setFilteredData(response.data.result);
         } catch (err) {
             console.log(err);
@@ -222,7 +226,7 @@ const GrnList = () => {
                 `${process.env.REACT_APP_PORT}/vendor/getAllVendors`
             );
             setVendorDataList(response.data.result);
-            setFilteredData(response.data.result);
+            
         } catch (err) {
             console.log(err);
         }
@@ -235,37 +239,23 @@ const GrnList = () => {
 
 
 
-    const [filteredData, setFilteredData] = useState([])
+   
     const handleFilterChange = (e) => {
         const { name, value } = e.target;
-        if (value === "all") {
-            setFilteredData(vendorDataList)
-        } else {
-            if (value === "oem") {
-                const vendorType = vendorDataList.filter((item) => (item.oem === "1"))
-                setFilteredData(vendorType)
+        if(name === "vendorType"){
+            if(value === "all"){
+                setVendorTypeList(vendorFullList)
+            }else{
+                const vendorType = vendorDataList.filter((item) => (item[value] === "1"))
+                setVendorTypeList(vendorType)
             }
-            if (value === "customer") {
-                const vendorType = vendorDataList.filter((item) => (item.customer === "1"))
-                setFilteredData(vendorType)
-            }
-            if (value === "supplier") {
-                const vendorType = vendorDataList.filter((item) => (item.supplier === "1"))
-                setFilteredData(vendorType)
-            }
-            if (value === "subContractor") {
-                const vendorType = vendorDataList.filter((item) => (item.subContractor === "1"))
-                setFilteredData(vendorType)
-            }
-            if (name === "partyName") {
-                const partyName = vendorDataList.filter((item) => (item.dcPartyName === value))
-                setFilteredData(partyName)
-                console.log(value)
-            }
-
-
-
         }
+        if (name === "partyName") {
+            const partyName = grnDataList.filter((item) => (item.grnPartyName === value))
+            setFilteredData(partyName)
+            console.log(value)
+        }
+       
 
 
     };
@@ -309,7 +299,7 @@ const GrnList = () => {
                                         <TextField fullWidth label="Party Name" select size="small" onChange={handleFilterChange} id="partyNameId" name="partyName" defaultValue="all" >
 
                                             <MenuItem value="all">All</MenuItem>
-                                            {vendorFullList.map((item, index) => (
+                                            {vendorTypeList.map((item, index) => (
                                                 <MenuItem key={index} value={item.fullName}>{item.fullName}</MenuItem>
                                             ))}
 
@@ -358,9 +348,9 @@ const GrnList = () => {
                                 <Box sx={{ height: 310, width: '100%', my: 2 }}>
                                     <DataGrid
 
-                                        rows={grnDataList}
+                                        rows={filteredData}
                                         columns={Columns}
-                                        getRowId={(row) => row._id}
+                                        getRowId={(row)=> row._id}
                                         initialState={{
                                             pagination: {
                                                 paginationModel: { page: 0, pageSize: 5 },
