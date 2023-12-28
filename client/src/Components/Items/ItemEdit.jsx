@@ -962,19 +962,19 @@ const ItemEdit = () => {
                                     </div>
                                 </div>
                                 <div className="row g-2">
-                                    <div className="col-lg-4">
+                                    <div className="col-lg-12">
                                         <TextField size='small' variant='outlined' label="MFR.Si.No." onChange={handleItemAddChange} name='itemMFRNo' value={itemAddData.itemMFRNo} id='itemMFRNoId' fullWidth />
                                     </div>
                                     <div className='col-lg-8 d-flex justify-content-between'>
                                         {itemAddData.itemType === "variable" && <TextField size='small' variant='outlined' name='itemLC' onChange={handleItemAddChange} id="itemLCId" value={itemAddData.itemLC} label="Least Count" fullWidth />}
 
 
-                                        <TextField select size='small' variant='outlined' label="Unit" name='itemLCUnit' onChange={handleItemAddChange} value={itemAddData.itemLCUnit} style={{ width: "100%" }} >
+                                        {itemAddData.itemType === "variable" &&  <TextField select size='small' variant='outlined' label="Unit" name='itemLCUnit' onChange={handleItemAddChange} value={itemAddData.itemLCUnit} style={{ width: "100%" }} >
                                             <MenuItem value=""><em>None</em></MenuItem>
                                             {units.map((unit, index) => (
                                                 <MenuItem key={index} value={unit.unitName}>{unit.unitName}</MenuItem>
                                             ))}
-                                        </TextField>
+                                        </TextField>}
 
                                     </div>
                                     <div className="row g-1">
@@ -1364,7 +1364,7 @@ const ItemEdit = () => {
                                 </div>
 
                             </Paper >
-                            <Paper className='row-6-lg' elevation={12} sx={{ p: 2, mt: 2, height: "inherit" }} >
+                            {(itemAddData.isItemMaster === "0" && itemAddData.itemType !== "referenceStandard") &&  <Paper className='row-6-lg' elevation={12} sx={{ p: 2, mt: 2, height: "inherit" }} >
 
                                 <h5 className='text-center'>Part</h5>
                                 <div className="row">
@@ -1416,7 +1416,7 @@ const ItemEdit = () => {
 
 
                                 </div>
-                            </Paper>
+                            </Paper>}
                         </div>
                         {itemAddData.itemAddMasterName && <Paper sx={{ m: 2, p: 2 }} elevation={12}>
                             <div className="d-flex justify-content-between mb-2">

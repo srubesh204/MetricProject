@@ -125,7 +125,7 @@ const OnSiteGrn = () => {
 
 
 
-console.log(onSiteGrnData)
+    console.log(onSiteGrnData)
 
 
 
@@ -1124,7 +1124,7 @@ console.log(onSiteGrnData)
                                                         name="osGrnItemCertificateNo" />
                                                 </div>
                                                 <div className='col-md-2'>
-                                                    <TextField fullWidth label="Uncertainity" id='osGrnUncertainityId'   onChange={handleOnSiteGrnItemAdd} variant='outlined' size='small' name='osGrnUncertainity' />
+                                                    <TextField fullWidth label="Uncertainity" id='osGrnUncertainityId' onChange={handleOnSiteGrnItemAdd} variant='outlined' size='small' name='osGrnUncertainity' />
                                                 </div>
                                                 <div className='col-md-2' >
                                                     <Button helperText="Hello" component="label" fullWidth variant="contained" startIcon={<CloudUpload />} >
@@ -1515,8 +1515,8 @@ console.log(onSiteGrnData)
                                 </DialogTitle>
 
                                 <DialogActions className='d-flex justify-content-center'>
-                                    <Button >Cancel</Button>
-                                    <Button autoFocus>
+                                    <Button onClick={() => setConfirmSubmit(false)} >Cancel</Button>
+                                    <Button onClick={(e) => { submitOnSiteForm(e); setConfirmSubmit(false) }} autoFocus>
                                         Submit
                                     </Button>
                                 </DialogActions>
