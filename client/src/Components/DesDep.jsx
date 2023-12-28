@@ -1768,7 +1768,7 @@ export const Designation = () => {
 
   console.log(designationData)
 
-  const handleDesRowClick = async (params) => {
+  const handleDesRowClick = (params) => {
     console.log(params)
     setDesignationData(params.row)
     setDesStateId(params.id)

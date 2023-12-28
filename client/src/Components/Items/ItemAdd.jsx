@@ -211,7 +211,7 @@ const ItemAdd = () => {
     const [itemAddData, setItemAddData] = useState({ 
         itemMasterRef: "",
         selectedItemMaster: [],
-        isItemMaster: "",
+        isItemMaster: "0",
         itemAddMasterName: "",
         itemIMTENo: "",
         itemImage: "",
@@ -1224,7 +1224,7 @@ const ItemAdd = () => {
                                 </div>
 
                             </Paper >
-                            <Paper className='row-6-lg' elevation={12} sx={{ p: 2, mt: 2, height: "inherit" }} >
+                           {(itemAddData.isItemMaster === "0" && itemAddData.itemType !== "referenceStandard") &&  <Paper className='row-6-lg' elevation={12} sx={{ p: 2, mt: 2, height: "inherit" }} >
 
                                 <h5 className='text-center'>Part</h5>
                                 <div className="row">
@@ -1279,7 +1279,7 @@ const ItemAdd = () => {
 
 
                                 </div>
-                            </Paper>
+                            </Paper>}
                         </div>
                         {itemAddData.itemAddMasterName && <Paper sx={{ m: 2, p: 2 }} elevation={12}>
                             <div className="d-flex justify-content-between mb-2">
