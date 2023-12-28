@@ -260,7 +260,8 @@ const ItemAdd = () => {
                 acMaxPSError: "",
             }
         ],
-        itemUncertainity: ""
+        itemUncertainity: "",
+        itemUncertainityUnit: "",
     })
 
     //upload Button
@@ -1145,7 +1146,14 @@ const ItemAdd = () => {
                         <div className="col">
                             <Paper className='row-md-6' elevation={12} sx={{ p: 2, }}>
                                 <Typography variant='h6' className='text-center'>Enter Previous Calibration Data</Typography>
-                                <div className="row g-2">
+                                <div className="row g-2 p-2">
+                                        <TextField
+                                         size='small' select variant='outlined' label="Previous Calibration Data" name='prevcaldata' fullWidth>
+                                            <MenuItem>Select Type</MenuItem>
+                                            <MenuItem value="available">Available</MenuItem>
+                                            <MenuItem value="notavailable">Not Available</MenuItem>
+
+                                        </TextField>
                                     <div className="col-md-6">
                                         <DatePicker
 
@@ -1184,16 +1192,53 @@ const ItemAdd = () => {
                                             )}
                                     </div>
                                     <div className="col-lg-12 d-flex justify-content-between">
-                                        <TextField size='small' fullWidth variant='outlined' onChange={handleItemAddChange} label="Calibrated at" select name='itemCalibratedAt'>
-                                            <MenuItem value="inhouse">InHouse</MenuItem>
-                                            {suppOEM.map((item, index) => (
-                                                <MenuItem key={index} value={item.fullName}>{item.aliasName}</MenuItem>
-                                            ))}
+  <TextField
+    size='small'
+    fullWidth
+    variant='outlined'
+    onChange={handleItemAddChange}
+    label="Calibrated at"
+    select
+    name='itemCalibratedAt'
+  >
+    <MenuItem value="inhouse">InHouse</MenuItem>
+    {suppOEM.map((item, index) => (
+      <MenuItem key={index} value={item.fullName}>{item.aliasName}</MenuItem>
+    ))}
+  </TextField>
 
-                                        </TextField>
-                                        {itemAddData.isItemMaster === "1" && <TextField className='ms-2' fullWidth label="Uncertainity" variant='outlined' size='small' onChange={handleItemAddChange} name='itemUncertainity' value={itemAddData.itemUncertainity} />}
+  {itemAddData.isItemMaster === "1" && (
+    <React.Fragment>
+      <TextField
+        className='ms-2'
+        fullWidth
+        label="Uncertainty"
+        variant='outlined'
+        size='small'
+        onChange={handleItemAddChange}
+        name='itemUncertainty'
+        value={itemAddData.itemUncertainity}
+      />
 
-                                    </div>
+      <TextField
+        select
+        size='small'
+        variant='outlined'
+        label="Unit"
+        name='itemUncertainityUnit'
+        onChange={handleItemAddChange}
+        style={{ width: "60%" }}
+        value={itemAddData.itemUncertainityUnit}
+      >
+        <MenuItem value=""><em>None</em></MenuItem>
+        {units.map((unit, index) => (
+          <MenuItem key={index} value={unit.unitName}>{unit.unitName}</MenuItem>
+        ))}
+      </TextField>
+    </React.Fragment>
+  )}
+</div>
+
 
 
                                     <div className="col-md-12 d-flex justify-content-between">
@@ -1635,7 +1680,7 @@ const ItemAdd = () => {
                         <div className="d-flex justify-content-end">
 
                             <Button variant='contained' color='warning' onClick={() => setOpen(true)} className='me-3' type="button">
-                                Item Add
+                                Item Create
                             </Button>
                             <Button component={RouterLink} to={`/itemList/`} variant="contained" color="error">
                                 <ArrowBackIcon /> Back To List

@@ -48,6 +48,7 @@ import admin from '../assets/admin.png'
 import secretary from '../assets/secretary.gif'
 import { Button } from 'bootstrap';
 import Swal from 'sweetalert2';
+import InsHistoryCard from '../InsHistoryCard';
 //
 
 // function Copyright(props) {
@@ -149,7 +150,7 @@ const Dashboard = () => {
       { name: "DC List", file: <DcList /> },
       { name: "GRN List", file: <GrnList /> },
       { name: "Cal Data", file: <CalList /> },
-      { name: "History Card" },
+      { name: "History Card", file: <InsHistoryCard/>},
       { name: "Gauge List" },
       { name: "Cal Due Report" },
       { name: "Gauge Movement Report" },

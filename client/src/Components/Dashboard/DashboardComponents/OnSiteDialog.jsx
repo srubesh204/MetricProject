@@ -15,6 +15,10 @@ const OnSiteDialog = () => {
   const grnDatas = useContext(HomeContent)
   const { onSiteOpen, setOnSiteOpen, selectedRows } = grnDatas
 
+  useEffect(() => {
+    setAllItemImtes(selectedRows)
+}, [selectedRows])
+
 
 
   console.log(selectedRows)
@@ -58,7 +62,7 @@ const OnSiteDialog = () => {
   })
 
 
-  const settingDcData = () => {
+ {/* const settingDcData = () => {
     setOnSiteGrnData((prev) => (
       {
         ...prev,
@@ -69,7 +73,7 @@ const OnSiteDialog = () => {
   };
   useEffect(() => {
     settingDcData()
-  }, [selectedRows])
+  }, [selectedRows])*/}
 
   const [itemAddOSiteDetails, setItemAddOnsiteDetails] = useState({
     onSiteList: "",
@@ -836,7 +840,7 @@ const OnSiteDialog = () => {
           setOnSiteOpen(false)
         }
       }}>
-      <DialogTitle align='center' >GRN</DialogTitle>
+      <DialogTitle align='center' >OnSite GRN</DialogTitle>
       <IconButton
         aria-label="close"
         onClick={() => setOnSiteOpen(false)}
@@ -1058,9 +1062,9 @@ const OnSiteDialog = () => {
                         onChange={handleOnSiteGrnItemAdd}
                         value={selectedGrnItem.osGrnItemId}
                         name="osGrnItemId" >
-                        {allItemImtes.length === 0 ?
-                          <MenuItem disabled><em>No IMTE Available</em></MenuItem> :
-                          allItemImtes.map((item, index) => (
+                       
+                          <MenuItem ><em></em></MenuItem> :
+                          {allItemImtes.map((item, index) => (
                             <MenuItem key={index} value={item._id}>{item.itemIMTENo}</MenuItem>
                           ))}
                       </TextField>
