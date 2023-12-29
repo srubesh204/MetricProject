@@ -74,7 +74,7 @@ const DcList = () => {
 
             setVendorDataList(response.data.result);
 
-            setFilteredData(response.data.result);
+           // setFilteredData(response.data.result);
         } catch (err) {
             console.log(err);
         }
@@ -82,7 +82,10 @@ const DcList = () => {
     useEffect(() => {
         vendorFetchData();
     }, []);
+    
     const [vendorFullList, setVendorFullList] = useState([])
+    const [vendorTypeList, setVendorTypeList] = useState([])
+    const [filteredData, setFilteredData] = useState([])
 
     const FetchData = async () => {
         try {
@@ -92,8 +95,9 @@ const DcList = () => {
             console.log(response.data)
 
             setVendorFullList(response.data.result);
+            setVendorTypeList(response.data.result)
 
-            // setFilteredData(response.data.result);
+           // setFilteredData(response.data.result);
         } catch (err) {
             console.log(err);
         }
@@ -102,7 +106,7 @@ const DcList = () => {
         FetchData();
     }, []);
 
-    const [filteredData, setFilteredData] = useState([])
+    
 
     const oneMonthBefore = dayjs().subtract(dayjs().date() - 1, 'day')
     const [dateData, setDateData] = useState({
@@ -124,8 +128,9 @@ const DcList = () => {
 
             );
             setDcDataDcList(response.data.result);
-
             setFilteredData(response.data.result);
+
+          
         } catch (err) {
             console.log(err);
         }
@@ -275,9 +280,29 @@ const DcList = () => {
 
 
 
-
-
     const handleFilterChange = (e) => {
+        const { name, value } = e.target;
+        if (name === "vendorType") {
+            if (value === "all") {
+                setVendorTypeList(vendorFullList)
+            } else {
+                const vendorType = vendorDataList.filter((item) => (item[value] === "1"))
+                setVendorTypeList(vendorType)
+            }
+        }
+        if (name === "partyName") {
+            const partyName = dcDataDcList.filter((item) => (item.dcPartyName === value))
+            setFilteredData(partyName)
+            console.log(value)
+        }
+        setDateData((prev) => ({ ...prev, [name]: value }))
+
+
+
+
+    };
+
+   {/* const handleFilterChange = (e) => {
         const { name, value } = e.target;
         if (value === "all") {
             setFilteredData(dcDataDcList)
@@ -300,7 +325,7 @@ const DcList = () => {
         }
 
 
-    }
+    }*/}
 
     {/*  const handleFilterChange = (e) => {
         const { name, value } = e.target;
@@ -384,14 +409,14 @@ const DcList = () => {
                             <div className='col d-flex '>
                                 <div className='col me-2'>
                                     <TextField label="Vendor Type"
-                                        id="dcPartyTypeId"
+                                        id="vendorTypeId"
                                         select
                                         defaultValue=""
                                         onChange={handleFilterChange}
                                         size="small"
                                         sx={{ width: "101%" }}
 
-                                        name="dcPartyType" >
+                                        name="vendorType" >
                                         <MenuItem value=""><em>--Select--</em></MenuItem>
                                         <MenuItem value="oem">OEM</MenuItem>
                                         <MenuItem value="customer">Customer</MenuItem>
@@ -405,7 +430,7 @@ const DcList = () => {
                                     <TextField fullWidth label="Party Name" className="col" select size="small" onChange={handleFilterChange} id="partyNameId" name="partyName" defaultValue="" >
 
                                         <MenuItem value="all">All</MenuItem>
-                                        {vendorFullList.map((item, index) => (
+                                        {vendorTypeList.map((item, index) => (
                                             <MenuItem key={index} value={item.fullName}>{item.fullName}</MenuItem>
                                         ))}
 
@@ -455,7 +480,7 @@ const DcList = () => {
 
                         <div className='row'>
                             <Box sx={{ height: 310, width: '100%', my: 2 }}>
-                                <DataGrid
+                                <DataGrid  disableDensitySelector
 
                                     rows={filteredData}
                                     columns={Columns}
@@ -506,7 +531,7 @@ const DcList = () => {
 
                         <div className='row'>
                             <Box sx={{ height: 310, width: '100%', my: 2 }}>
-                                <DataGrid
+                                <DataGrid  disableDensitySelector
                                     rows={dcListDataList}
                                     columns={dcListColumns}
                                     getRowId={(row) => row._id}

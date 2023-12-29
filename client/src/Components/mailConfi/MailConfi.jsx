@@ -22,31 +22,42 @@ const MailConfi = () => {
     }
     const initialMailData = {
         mailId: "",
-        password: "",
+        mailPassword: "",
         portNumber: "",
         inMailServer: "",
-        outMainServer: ""
+        outMailServer: ""
 
     }
-    const [mailStateId, setMailStateId] = useState("")
+    const [isEditable, setIsEditable] = useState(false)
     const [mailData, setMailData] = useState({
         mailId: "",
-        password: "",
+        mailPassword: "",
         portNumber: "",
         inMailServer: "",
-        outMainServer: ""
+        outMailServer: ""
 
     })
     console.log(mailData)
-   
 
-    const [mailList, setMailList] = useState({})
+    // const[mailDetails,setMailDetails]= useState[]
+
+
+   
     const mailFetchData = async () => {
         try {
             const response = await axios.get(
-                `${process.env.REACT_APP_PORT}/mailConfig/getAllMailConfig`
+                `${process.env.REACT_APP_PORT}/mailConfig/getMailConfigById/658bef57308988e77396ef64`
             );
-            setMailList(response.data.result);
+            const mail = response.data.result
+            console.log(mail)
+            setMailData((prev) => ({
+                ...prev,
+                mailId: mail.mailId,
+                mailPassword: mail.mailPassword,
+                portNumber: mail.portNumber,
+                inMailServer: mail.inMailServer,
+                outMailServer: mail.outMailServer
+            }));
         } catch (err) {
             console.log(err);
         }
@@ -58,7 +69,7 @@ const MailConfi = () => {
 
 
     const handleOnSiteChange = (e) => {
-        const { name, value, checked } = e.target;
+        const { name, value } = e.target;
         setMailData((prev) => ({ ...prev, [name]: value }));
 
 
@@ -75,7 +86,7 @@ const MailConfi = () => {
             setMailData(initialMailData);
             setMailSnackBar(true)
             setErrorHandler({ status: response.data.status, message: response.data.message, code: "success" })
-            setMailStateId(null)
+            setIsEditable(false)
             console.log(response);
         } catch (err) {
             console.log(err);
@@ -128,12 +139,20 @@ const MailConfi = () => {
                         elevation={12}
                     >
                         <div className='row g-2'>
-                            <h6 className='text-center mb-2'>Mail Configuration</h6>
+                            <h6 className='text-center mb-2'>Mail Details</h6>
+
+                            <div className='row'>
+                                <div className='col d-flex justify-content-end'>
+                                    <Button onClick={()=> setIsEditable(true)}><Edit color='success' /></Button>
+                                </div>
+                            </div>
+
                             <div className='col'>
                                 <TextField label="Mail Id"
                                     id="mailIdId"
-                                    defaultValue=""
+                                   
                                     size="small"
+                                    disabled={!isEditable}
                                     onChange={handleOnSiteChange}
                                     value={mailData.mailId}
                                     sx={{ width: "100%" }}
@@ -142,20 +161,22 @@ const MailConfi = () => {
                             </div>
                             <div className='col'>
                                 <TextField label="PassWord"
-                                    id="passwordId"
-                                    defaultValue=""
+                                    id="mailPasswordId"
+                                  
+                                    disabled={!isEditable}
                                     size="small"
                                     onChange={handleOnSiteChange}
-                                    value={mailData.password}
+                                    value={mailData.mailPassword}
                                     sx={{ width: "100%" }}
-                                    name="password" />
+                                    name="mailPassword" />
 
                             </div>
                             <div className='col'>
-                                <TextField label="Part Number"
+                                <TextField label="Port Number"
                                     id="portNumberId"
-                                    defaultValue=""
+                                    
                                     size="small"
+                                    disabled={!isEditable}
                                     onChange={handleOnSiteChange}
                                     value={mailData.portNumber}
                                     sx={{ width: "100%" }}
@@ -180,8 +201,9 @@ const MailConfi = () => {
                             <div className='col'>
                                 <TextField label="Incoming Mail Server"
                                     id="inMailServerId"
-                                    defaultValue=""
+                                  
                                     size="small"
+                                    disabled={!isEditable}
                                     onChange={handleOnSiteChange}
                                     value={mailData.inMailServer}
                                     sx={{ width: "100%" }}
@@ -190,13 +212,14 @@ const MailConfi = () => {
                             </div>
                             <div className='col'>
                                 <TextField label="outGoing Mail Server"
-                                    id="outMainServerId"
-                                    defaultValue=""
+                                    id="outMailServerId"
+                                    
                                     size="small"
+                                    disabled={!isEditable}
                                     onChange={handleOnSiteChange}
-                                    value={mailData.outMainServer}
+                                    value={mailData.outMailServer}
                                     sx={{ width: "100%" }}
-                                    name="outMainServer" />
+                                    name="outMailServer" />
 
                             </div>
 
@@ -204,16 +227,16 @@ const MailConfi = () => {
                         </div>
 
 
-                        <div className=' col d-flex justify-content-end'>
+                        {isEditable && <div className=' col d-flex justify-content-end'>
                             <div className='me-2 '>
                                 <Button size='small' sx={{ minWidth: "130px" }} variant='contained' onClick={() => setOpenModal(true)}>Modify</Button>
                             </div>
                             <div className='me-2 '>
-                                <Button size='small' color='error' sx={{ minWidth: "130px" }} variant='contained'>Cencel</Button>
+                                <Button size='small' color='error' sx={{ minWidth: "130px" }} variant='contained' onClick={()=> setIsEditable(false)}>Cancel</Button>
                             </div>
 
 
-                        </div>
+                        </div>}
 
                         <Dialog
                             open={openModal}
