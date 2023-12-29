@@ -6,7 +6,7 @@ const mailConfigSchema = new mongoose.Schema({
   
   mailId : String,
   password : String,
-  partNumber : String,
+  portNumber : String,
   inMailServer : String,
   outMainServer : String
 

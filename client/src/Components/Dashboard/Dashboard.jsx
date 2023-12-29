@@ -48,6 +48,12 @@ import admin from '../assets/admin.png'
 import secretary from '../assets/secretary.gif'
 import { Button } from 'bootstrap';
 import Swal from 'sweetalert2';
+import Version from '../mailConfi/Version';
+import BackUp from '../mailConfi/BackUp';
+import AlertConfi from '../mailConfi/AlertConfi';
+import MailConfi from '../mailConfi/MailConfi';
+import FormatNumber from '../mailConfi/FormatNumber';
+import CompanyDetails from '../mailConfi/CompanyDetails';
 import InsHistoryCard from '../InsHistoryCard';
 //
 
@@ -137,12 +143,12 @@ const Dashboard = () => {
       { name: "Item Master", file: <ItemMaster />, icon: <CategoryIcon /> },
     ],
     system: [
-      { name: "Version" },
-      { name: "Backup" },
-      { name: "Alerts Configuration" },
-      { name: "Mail Configuration" },
-      { name: "Format Number" },
-      { name: "Company Details" },
+      { name: "Version" ,file: <Version />,},
+      { name: "Backup",file: <BackUp />,},
+      { name: "Alerts Configuration",file: <AlertConfi />,},
+      { name: "Mail Configuration" ,file: <MailConfi />,},
+      { name: "Format Number" ,file: <FormatNumber />,},
+      { name: "Company Details",file: <CompanyDetails />, },
       { name: "Label Print" },
 
     ],

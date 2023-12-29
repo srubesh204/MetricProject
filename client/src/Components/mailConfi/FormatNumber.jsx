@@ -25,16 +25,17 @@ const FormatNumber = () => {
 
                             <h4 className='text-center mb-2'>Company Name</h4>
 
+                            <div className='col'>
                             <table className='table table-sm table table-bordered table-responsive text-center align-middle' >
                                 <tbody>
                                     <tr>
-                                        <th>RePort Name</th>
+                                        <th>Report Name</th>
                                         <th>Format No</th>
                                         <th>Amendment No</th>
                                         <th>Amendment Date</th>
                                     </tr>
                                     <tr>
-                                        <th>Dc</th>
+                                        <th>DC</th>
                                         <tr>
                                             <td><input type="text" className='form-control form-control-sm' id="formatNoId" name="formatNo" /></td>
                                             <td><input type="text" className='form-control form-control-sm' id="amendmentNoId" name="amendmentNo" /></td>
@@ -80,9 +81,22 @@ const FormatNumber = () => {
 
                                         </tr>
                                     </tr>
+                                    <tr>
+                                        <th>Cal Due Report</th>
+                                        <tr>
+                                            <td><input type="text" className='form-control form-control-sm' id="formatNoId" name="formatNo" /></td>
+                                            <td><input type="text" className='form-control form-control-sm' id="amendmentNoId" name="amendmentNo" /></td>
+                                            <td><input type="text" className='form-control form-control-sm' id="amendmentDateId" name="amendmentDate" /></td>
+
+                                        </tr>
+                                    </tr>
+
+
 
                                 </tbody>
                             </table>
+                            </div>
+                            
 
 
                         </div>
@@ -129,7 +143,7 @@ const FormatNumber = () => {
 
 
                         </div>
-                        </Paper>
+                    </Paper>
                 </form>
             </Container>
 
