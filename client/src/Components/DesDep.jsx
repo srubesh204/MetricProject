@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import Alert from '@mui/material/Alert';
 import Snackbar from '@mui/material/Snackbar';
-import { Autocomplete, Box, Checkbox, Container, FormControlLabel, Grid, IconButton, Paper, Typography } from "@mui/material";
+import { Autocomplete, Box, ButtonGroup, Checkbox, Container, FormControlLabel, Grid, IconButton, Paper, Typography } from "@mui/material";
 import { TextField, MenuItem, FormControl } from '@mui/material';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
@@ -11,9 +11,10 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import { DataGrid, GridToolbar } from '@mui/x-data-grid';
-import { Delete } from '@mui/icons-material';
+import { CloudDownload, CloudUpload, Delete } from '@mui/icons-material';
 import { Check, Clear } from '@mui/icons-material';
 import { useParams } from 'react-router-dom';
+import styled from "@emotion/styled";
 
 
 
@@ -1451,7 +1452,7 @@ export const Department = () => {
                       clearOnBlur={false}
                       value={placeOfUsageDatas.placeOfUsage}
                       renderInput={(params) =>
-                        <TextField   {...(errors.placeOfUsage !== "" && { helperText: errors.placeOfUsage, error: true })} onKeyDown={handlePlaceOfKeyDown}   onChange={handlePouChange}
+                        <TextField   {...(errors.placeOfUsage !== "" && { helperText: errors.placeOfUsage, error: true })} onKeyDown={handlePlaceOfKeyDown} onChange={handlePouChange}
                           name="placeOfUsage" {...params} label="Place Of Usage" />} />
 
                   </div>
@@ -1732,7 +1733,61 @@ export const Department = () => {
   );
 };
 
+
+// Designation
+
 export const Designation = () => {
+
+  const VisuallyHiddenInput = styled('input')({
+    clip: 'rect(0 0 0 0)',
+    clipPath: 'inset(50%)',
+    height: 1,
+    overflow: 'hidden',
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    whiteSpace: 'nowrap',
+    width: 1,
+  });
+
+  const [file, setFile] = useState(null);
+  const [desExcelStatus, setDesExcelStatus] = useState('');
+
+  const handleDesExcel = (e) => {
+    const selectedFile = e.target.files[0];
+    console.log(selectedFile)
+    setFile(selectedFile);
+  };
+
+  const handleDesUpload = async () => {
+    try {
+      if (!file) {
+        setDesExcelStatus('No file selected');
+        return;
+      }
+
+      const formData = new FormData();
+      formData.append('file', file);
+
+      const response = await axios.post(`${process.env.REACT_APP_PORT}/designation/uploadDesignationsInExcel`, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+
+      setDesExcelStatus(response.data.message || 'Excel file uploaded successfully');
+    } catch (error) {
+      if (error.response) {
+        setDesExcelStatus(`Error: ${error.response.data.error || 'Something went wrong'}`);
+      } else if (error.request) {
+        setDesExcelStatus('Network error. Please try again.');
+      } else {
+        setDesExcelStatus('Error uploading the file.');
+      }
+      console.error('Error uploading Excel file:', error);
+    }
+  };
+
 
 
   const [snackBarOpen, setSnackBarOpen] = useState(false)
@@ -2136,11 +2191,23 @@ export const Designation = () => {
 
               <div className="row mb-1">
                 <div className="col d-flex">
-                  <div className="me-3">
-                    <lable className="uplable">
-                      <input type="file" className="downlable" />
-                      Upload
-                    </lable>
+                  <div className="d-flex justify-content-center">
+                    <ButtonGroup className='me-3'>
+                      <Button component="label" variant="contained" >
+                        Upload
+                        <VisuallyHiddenInput type="file" onChange={handleDesExcel} />
+                      </Button>
+                      <Button onClick={handleDesUpload}><CloudUpload /></Button>
+                    </ButtonGroup>
+
+                    <ButtonGroup>
+                      <Button component="label" variant="contained" color='secondary'>
+                        Download
+                        <VisuallyHiddenInput type="file" />
+                      </Button>
+                      <Button color='secondary'><CloudDownload /></Button>
+                    </ButtonGroup>
+                    {desExcelStatus && <p>{desExcelStatus}</p>}
                   </div>
 
                 </div>
@@ -2245,7 +2312,7 @@ export const Designation = () => {
                   rows={designationList}
                   columns={designationColumns}
                   getRowId={(row) => row._id}
-                  
+
                   initialState={{
                     pagination: {
                       paginationModel: { page: 0, pageSize: 10 },
@@ -2268,7 +2335,7 @@ export const Designation = () => {
                   }}
                   onRowClick={handleDesRowClick}
                   disableRowSelectionOnClick
-                  getRowClassName={(params)=> params.id === desStateId ? {backgroundColor : "green"} : {}}
+                  getRowClassName={(params) => params.id === desStateId ? { backgroundColor: "green" } : {}}
                   density="compact"
 
                   checkboxSelection
