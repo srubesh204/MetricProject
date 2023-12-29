@@ -480,7 +480,7 @@ const DcList = () => {
 
                         <div className='row'>
                             <Box sx={{ height: 310, width: '100%', my: 2 }}>
-                                <DataGrid
+                                <DataGrid  disableDensitySelector
 
                                     rows={filteredData}
                                     columns={Columns}
@@ -531,7 +531,7 @@ const DcList = () => {
 
                         <div className='row'>
                             <Box sx={{ height: 310, width: '100%', my: 2 }}>
-                                <DataGrid
+                                <DataGrid  disableDensitySelector
                                     rows={dcListDataList}
                                     columns={dcListColumns}
                                     getRowId={(row) => row._id}

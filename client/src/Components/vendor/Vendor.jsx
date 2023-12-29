@@ -1185,7 +1185,7 @@ const Vendor = () => {
                             </div>
 
                             <div style={{ height: 400, width: '100%', marginTop: "0.5rem" }}>
-                                <DataGrid
+                                <DataGrid  disableDensitySelector
                                     rows={filteredData}
                                     columns={vendorListColumns}
                                     getRowId={(row) => row._id}
