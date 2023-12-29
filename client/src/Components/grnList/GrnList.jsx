@@ -18,10 +18,12 @@ import Snackbar from '@mui/material/Snackbar';
 import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
 import GrnAdd from './GrnAdd';
 import Alert from '@mui/material/Alert';
-import dayjs from 'dayjs';
+import { useEmployee } from '../../App';
 export const GrnListContent = createContext(null);
 
 const GrnList = () => {
+
+    const employeeRole = useEmployee()
 
     const [selectedRows, setSelectedRows] = useState([]);
     const [grnEditOpen, setGrnEditOpen] = useState(false);
@@ -73,7 +75,7 @@ const GrnList = () => {
 
     const Columns = [
         { field: 'id', headerName: 'Si. No', width: 100, renderCell: (params) => params.api.getAllRowIds().indexOf(params.id) + 1 },
-        { field: 'button', headerName: 'Edit', width: 90, renderCell: (params) => <Button onClick={() => { setSelectedRows(params.row); setGrnEditOpen(true) }}><Edit color='success' /></Button> },
+        ...(employeeRole && employeeRole.employee !== "viewer" ? [{ field: 'button', headerName: 'Edit', width: 90, renderCell: (params) => <Button onClick={() => { setSelectedRows(params.row); setGrnEditOpen(true) }}><Edit color='success' /></Button> }] : []),
 
 
         {
@@ -454,7 +456,47 @@ const GrnList = () => {
 
                                 </Box>
 
+                    </div>
+                   
+                    <div className='row'>
+                       
+                            <div className='col d-flex justify-content-end mb-1'>
+                                {employeeRole && employeeRole.employee !== "viewer" && <div className=' me-2'>
+                                    <Button component={Link} onClick={() => { setGrnOpen(true) }} type='button' variant="contained" color="warning">
+                                        <AddIcon /> Add GRN
+                                    </Button>
+                                </div>}
+                                {itemListSelectedRowIds.length !== 0 &&    <div className=' me-2'>
+                                    <Button variant='contained' type='button' color='error' onClick={() => setDeleteModalItem(true)}>Delete</Button>
+                                </div>}
+                                <Dialog
+                                    open={deleteModalItem}
+                                    onClose={() => setDeleteModalItem(false)}
+                                    aria-labelledby="alert-dialog-title"
+                                    aria-describedby="alert-dialog-description"
+                                >
+                                    <DialogTitle id="alert-dialog-title">
+                                        {" ItemAdd delete confirmation?"}
+                                    </DialogTitle>
+                                    <DialogContent>
+                                        <DialogContentText id="alert-dialog-description">
+                                            Are you sure to delete the
+                                        </DialogContentText>
+                                    </DialogContent>
+                                    <DialogActions>
+                                        <Button onClick={() => setDeleteModalItem(false)}>Cancel</Button>
+                                        <Button onClick={(e) => { deleteGrnData(e); setDeleteModalItem(false); }} autoFocus>
+                                            Delete
+                                        </Button>
+                                    </DialogActions>
+                                </Dialog>
 
+                                <Snackbar anchorOrigin={{ vertical: "top", horizontal: "right" }} open={snackBarOpen} autoHideDuration={6000} onClose={handleSnackClose}>
+                                    <Alert onClose={handleSnackClose} severity={errorhandler.code} sx={{ width: '100%' }}>
+                                        {errorhandler.message}
+                                    </Alert>
+                                </Snackbar>
+                                
                             </div>
 
                             <div className='row'>
