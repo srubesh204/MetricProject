@@ -15,5 +15,5 @@ router.get("/getDistinctItemDepartments", itemAddController.getDistinctItemDepar
 router.post("/getItemAddByDepName", itemAddController.getItemAddByDepName)
 router.post("/getitemAddMasterName", itemAddController.getitemAddMasterName)
 router.get("/getAllDistinctItemName", itemAddController.getAllDistinctItemName)
-   
+router.get("/uploadItemAddExcelData", itemAddController.uploadItemAddExcelData)
 module.exports = router;

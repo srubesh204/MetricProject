@@ -18,6 +18,7 @@ import Snackbar from '@mui/material/Snackbar';
 import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
 import GrnAdd from './GrnAdd';
 import Alert from '@mui/material/Alert';
+import dayjs from 'dayjs';
 import { useEmployee } from '../../App';
 export const GrnListContent = createContext(null);
 
@@ -104,6 +105,12 @@ const GrnList = () => {
     const [grnListDataList, setGrnListDataList] = useState([])
     const [grnDataList, setGrnDataList] = useState([])
     const [filteredData, setFilteredData] = useState([])
+
+    const oneMonthBefore = dayjs().subtract(dayjs().date() - 1, 'day')
+    const [dateData, setDateData] = useState({
+        fromDate: oneMonthBefore.format('YYYY-MM-DD'),
+        toDate: dayjs().format('YYYY-MM-DD')
+    })
     const grnListFetchData = async () => {
         try {
             const response = await axios.get(
@@ -119,8 +126,14 @@ const GrnList = () => {
     useEffect(() => {
         grnListFetchData();
     }, []);
+    useEffect(() => {
+        const filteredItems = grnDataList.filter((item) => dayjs(item.grnDate).isSameOrAfter(dateData.fromDate) && dayjs(item.grnDate).isSameOrBefore(dateData.toDate))
+        console.log(filteredItems)
+        setFilteredData(filteredItems)
+    }, [dateData.fromDate, dateData.toDate])
 
-    console.log(filteredData)
+
+
 
     const [selectedRowView, setSelectedRowView] = useState(null);
     const handleViewClick = (params) => {
@@ -229,7 +242,7 @@ const GrnList = () => {
                 `${process.env.REACT_APP_PORT}/vendor/getAllVendors`
             );
             setVendorDataList(response.data.result);
-            
+
         } catch (err) {
             console.log(err);
         }
@@ -242,13 +255,13 @@ const GrnList = () => {
 
 
 
-   
+
     const handleFilterChange = (e) => {
         const { name, value } = e.target;
-        if(name === "vendorType"){
-            if(value === "all"){
+        if (name === "vendorType") {
+            if (value === "all") {
                 setVendorTypeList(vendorFullList)
-            }else{
+            } else {
                 const vendorType = vendorDataList.filter((item) => (item[value] === "1"))
                 setVendorTypeList(vendorType)
             }
@@ -258,7 +271,9 @@ const GrnList = () => {
             setFilteredData(partyName)
             console.log(value)
         }
-       
+        setDateData((prev) => ({ ...prev, [name]: value }))
+
+
 
 
     };
@@ -277,63 +292,69 @@ const GrnList = () => {
 
                     <div className='row mb-2'>
 
-                     
-                            <Paper
-                                sx={{
-                                    p: 2,
-                                    display: 'flex',
-                                    flexDirection: 'column',
-                                    mb: 1
-                                }}
-                                elevation={12}
-                            >
-                                <div className='row g-2'>
-                                    <div className='col'>
-                                        <TextField fullWidth label="Vendor Type" select size="small" id="vendorTypeId" onChange={handleFilterChange} name="vendorType" defaultValue="all" >
-                                            <MenuItem value="all">All</MenuItem>
-                                            <MenuItem value="oem">OEM</MenuItem>
-                                            <MenuItem value="customer">Customer</MenuItem>
-                                            <MenuItem value="supplier">Supplier</MenuItem>
-                                            <MenuItem value="subContractor">SubContractor</MenuItem>
-                                        </TextField>
 
-                                    </div>
-                                    <div className='col'>
-                                        <TextField fullWidth label="Party Name" select size="small" onChange={handleFilterChange} id="partyNameId" name="partyName" defaultValue="all" >
+                        <Paper
+                            sx={{
+                                p: 2,
+                                display: 'flex',
+                                flexDirection: 'column',
+                                mb: 1
+                            }}
+                            elevation={12}
+                        >
+                            <div className='row g-2'>
+                                <div className='col'>
+                                    <TextField fullWidth label="Vendor Type" select size="small" id="vendorTypeId" onChange={handleFilterChange} name="vendorType" defaultValue="all" >
+                                        <MenuItem value="all">All</MenuItem>
+                                        <MenuItem value="oem">OEM</MenuItem>
+                                        <MenuItem value="customer">Customer</MenuItem>
+                                        <MenuItem value="supplier">Supplier</MenuItem>
+                                        <MenuItem value="subContractor">SubContractor</MenuItem>
+                                    </TextField>
 
-                                            <MenuItem value="all">All</MenuItem>
-                                            {vendorTypeList.map((item, index) => (
-                                                <MenuItem key={index} value={item.fullName}>{item.fullName}</MenuItem>
-                                            ))}
-
-
-                                        </TextField>
-
-                                    </div>
-                                    <div className="form-floating col">
-                                        <DatePicker
-                                            fullWidth
-                                            id="fromDateId"
-                                            name="fromDate"
-                                            label="From Date"
-                                            sx={{ width: "100%" }}
-                                            slotProps={{ textField: { size: 'small' } }}
-                                            format="DD-MM-YYYY" />
-                                    </div>
-                                    <div className="col">
-                                        <DatePicker
-                                            fullWidth
-                                            id="toDateId"
-                                            name="toDate"
-                                            sx={{ width: "100%" }}
-                                            label="To Date"
-                                            slotProps={{ textField: { size: 'small' } }}
-                                            format="DD-MM-YYYY" />
-                                    </div>
                                 </div>
+                                <div className='col'>
+                                    <TextField fullWidth label="Party Name" select size="small" onChange={handleFilterChange} id="partyNameId" name="partyName" defaultValue="all" >
 
-                            </Paper>
-                       
+                                        <MenuItem value="all">All</MenuItem>
+                                        {vendorTypeList.map((item, index) => (
+                                            <MenuItem key={index} value={item.fullName}>{item.fullName}</MenuItem>
+                                        ))}
+
+
+                                    </TextField>
+
+                                </div>
+                                <div className="form-floating col">
+                                    <DatePicker
+                                        fullWidth
+                                        id="fromDateId"
+                                        name="fromDate"
+                                        label="From Date"
+                                        sx={{ width: "100%" }}
+                                        slotProps={{ textField: { size: 'small' } }}
+                                        value={dayjs(dateData.fromDate)}
+                                        onChange={(newValue) =>
+                                            setDateData((prev) => ({ ...prev, fromDate: dayjs(newValue).format('YYYY-MM-DD') }))}
+                                        format="DD-MM-YYYY" />
+                                </div>
+                                <div className="col">
+                                    <DatePicker
+                                        fullWidth
+                                        id="toDateId"
+                                        name="toDate"
+                                        sx={{ width: "100%" }}
+                                        label="To Date"
+                                        slotProps={{ textField: { size: 'small' } }}
+                                        value={dayjs(dateData.toDate)}
+                                        onChange={(newValue) =>
+                                            setDateData((prev) => ({ ...prev, toDate: dayjs(newValue).format('YYYY-MM-DD') }))}
+                                        format="DD-MM-YYYY" />
+                                </div>
+                            </div>
+
+                        </Paper>
+
 
                         <div className='row g-2'>
                             <Paper
@@ -349,11 +370,11 @@ const GrnList = () => {
 
 
                                 <Box sx={{ height: 310, width: '100%', my: 2 }}>
-                                    <DataGrid  disableDensitySelector
+                                    <DataGrid
 
                                         rows={filteredData}
                                         columns={Columns}
-                                        getRowId={(row)=> row._id}
+                                        getRowId={(row) => row._id}
                                         initialState={{
                                             pagination: {
                                                 paginationModel: { page: 0, pageSize: 5 },
@@ -376,7 +397,7 @@ const GrnList = () => {
 
                                         density="compact"
                                         //disableColumnMenu={true}
-                                        
+
                                         checkboxSelection
                                         //onRowClick={handleRowClick}
                                         onRowClick={handleRowClick}
@@ -401,7 +422,7 @@ const GrnList = () => {
                             <div className='row'>
 
                                 <Box sx={{ height: 310, width: '100%', my: 2 }}>
-                                    <DataGrid  disableDensitySelector
+                                    <DataGrid
 
                                         rows={grnListDataList}
                                         columns={grnColumns}
@@ -427,7 +448,7 @@ const GrnList = () => {
 
                                         density="compact"
                                         //disableColumnMenu={true}
-                                        
+
                                         checkboxSelection
                                         onRowClick={handleRowClick}
                                         disableRowSelectionOnClick
@@ -435,63 +456,74 @@ const GrnList = () => {
                                     />
 
                                 </Box>
-                        
 
-                    </div>
-                   
-                    <div className='row'>
-                       
-                            <div className='col d-flex justify-content-end mb-1'>
-                                {employeeRole && employeeRole.employee !== "viewer" && <div className=' me-2'>
-                                    <Button component={Link} onClick={() => { setGrnOpen(true) }} type='button' variant="contained" color="warning">
-                                        <AddIcon /> Add GRN
-                                    </Button>
-                                </div>}
-                                {itemListSelectedRowIds.length !== 0 &&    <div className=' me-2'>
-                                    <Button variant='contained' type='button' color='error' onClick={() => setDeleteModalItem(true)}>Delete</Button>
-                                </div>}
-                                <Dialog
-                                    open={deleteModalItem}
-                                    onClose={() => setDeleteModalItem(false)}
-                                    aria-labelledby="alert-dialog-title"
-                                    aria-describedby="alert-dialog-description"
-                                >
-                                    <DialogTitle id="alert-dialog-title">
-                                        {" ItemAdd delete confirmation?"}
-                                    </DialogTitle>
-                                    <DialogContent>
-                                        <DialogContentText id="alert-dialog-description">
-                                            Are you sure to delete the
-                                        </DialogContentText>
-                                    </DialogContent>
-                                    <DialogActions>
-                                        <Button onClick={() => setDeleteModalItem(false)}>Cancel</Button>
-                                        <Button onClick={(e) => { deleteGrnData(e); setDeleteModalItem(false); }} autoFocus>
-                                            Delete
-                                        </Button>
-                                    </DialogActions>
-                                </Dialog>
-
-                                <Snackbar anchorOrigin={{ vertical: "top", horizontal: "right" }} open={snackBarOpen} autoHideDuration={6000} onClose={handleSnackClose}>
-                                    <Alert onClose={handleSnackClose} severity={errorhandler.code} sx={{ width: '100%' }}>
-                                        {errorhandler.message}
-                                    </Alert>
-                                </Snackbar>
-                                
                             </div>
-                       
-                        <GrnListContent.Provider
-                            value={{ grnEditOpen, setGrnEditOpen, selectedRows, grnListFetchData }}
-                        >
-                            <GrnEdit />
-                        </GrnListContent.Provider>
-                        <GrnListContent.Provider
-                            value={{ grnOpen, setGrnOpen, selectedRows, grnListFetchData }}
-                        >
-                            <GrnAdd />
-                        </GrnListContent.Provider>
+
+                            <div className='row'>
+
+                                <div className='col d-flex mb-1'>
+                                    <div className=' me-2'>
+                                        <Button component={Link} onClick={() => { setGrnOpen(true) }} type='button' variant="contained" color="warning">
+                                            <AddIcon /> Add Item
+                                        </Button>
+                                    </div>
+                                    {itemListSelectedRowIds.length !== 0 && <div className=' me-2'>
+                                        <Button variant='contained' type='button' color='error' onClick={() => setDeleteModalItem(true)}>Delete</Button>
+                                    </div>}
+                                    <Dialog
+                                        open={deleteModalItem}
+                                        onClose={() => setDeleteModalItem(false)}
+                                        aria-labelledby="alert-dialog-title"
+                                        aria-describedby="alert-dialog-description"
+                                    >
+                                        <DialogTitle id="alert-dialog-title">
+                                            {" ItemAdd delete confirmation?"}
+                                        </DialogTitle>
+                                        <DialogContent>
+                                            <DialogContentText id="alert-dialog-description">
+                                                Are you sure to delete the
+                                            </DialogContentText>
+                                        </DialogContent>
+                                        <DialogActions>
+                                            <Button onClick={() => setDeleteModalItem(false)}>Cancel</Button>
+                                            <Button onClick={(e) => { deleteGrnData(e); setDeleteModalItem(false); }} autoFocus>
+                                                Delete
+                                            </Button>
+                                        </DialogActions>
+                                    </Dialog>
+
+                                    <Snackbar anchorOrigin={{ vertical: "top", horizontal: "right" }} open={snackBarOpen} autoHideDuration={6000} onClose={handleSnackClose}>
+                                        <Alert onClose={handleSnackClose} severity={errorhandler.code} sx={{ width: '100%' }}>
+                                            {errorhandler.message}
+                                        </Alert>
+                                    </Snackbar>
+                                    <div className=' me-2'>
+                                        <button type="button" className='btn btn-secondary' >Back</button>
+                                    </div>
+                                </div>
+
+                                <GrnListContent.Provider
+                                    value={{ grnEditOpen, setGrnEditOpen, selectedRows, grnListFetchData }}
+                                >
+                                    <GrnEdit />
+                                </GrnListContent.Provider>
+                                <GrnListContent.Provider
+                                    value={{ grnOpen, setGrnOpen, selectedRows, grnListFetchData }}
+                                >
+                                    <GrnAdd />
+                                </GrnListContent.Provider>
+                            </div>
+                        </Paper>
+
+
+
+
+
+
+
+
+
                     </div>
-                    </Paper>
 
 
 
@@ -501,19 +533,9 @@ const GrnList = () => {
 
 
 
-                </div>
+                </form>
 
-
-
-
-
-
-
-
-
-            </form>
-
-        </LocalizationProvider>
+            </LocalizationProvider>
 
         </div >
     )

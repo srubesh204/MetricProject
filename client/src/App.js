@@ -39,6 +39,7 @@ import MailConfi from './Components/mailConfi/MailConfi';
 import { createContext, useContext, useEffect, useState } from 'react';
 import AccessDenied from './Components/ErrorComponents/AccessDenied';
 import axios from 'axios';
+import RubeshTest from './Components/Test/RubeshTest';
 export const empRole = createContext(null);
 
 
@@ -57,8 +58,8 @@ export const EmployeeProvider = ({ children, employee }) => {
 };
 
 const roleAccessRules = {
-  admin: ['/home', "/desdep", "/general", '/test', "/vendor", "/itemMaster", "/itemadd", "/itemEdit/:id", "/itemList", "/grnList", "/calList", "/onSiteList", '/roles',"/employee"],
-  plantAdmin: ['/home', "/desdep", "/general", "/vendor", "/itemMaster", "/itemadd", "/itemEdit/:id", "/itemList", "/grnList", "/calList", "/onSiteList", '/roles',"/employee"],
+  admin: ['/home', "/desdep", "/general", "/vendor", "/itemMaster", "/itemadd", "/itemEdit/:id", "/itemList", "/grnList", "/calList", "/onSiteList", '/roles',"/employee", '/rubyTest'],
+  plantAdmin: ['/home', "/desdep", "/general", "/vendor", "/itemMaster", "/itemadd", "/itemEdit/:id", "/itemList", "/grnList", "/calList", "/onSiteList", '/roles',"/employee", '/rubyTest'],
   creator: ['/home', '/itemlist', '/itemadd', '/itemedit/:id', "/grnList", "/calList", "/onSiteList"],
   viewer: ['/itemlist', '/home'],
 };
@@ -78,7 +79,7 @@ const generateRoutes = (employee) => {
     { path: "/itemedit/:id", element: <ItemEdit /> },
     { path: "/itemlist", element: <ItemList /> },
     { path: "/test", element: <FileViewer /> },
-    
+    { path: "/rubyTest", element: <RubeshTest /> },
     { path: "/status", element: <Status /> },
     { path: "/grn", element: <Grn /> },
     { path: "/dcList", element: <DcList /> },

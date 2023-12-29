@@ -493,6 +493,44 @@ const itemAddController = {
       res.status(500).json({ error: error, status: 0 });
     }
   },
+  uploadItemAddExcelData: async (req, res) => {
+    try {
+      if (!req.file) {
+        return res.status(400).json({ error: 'No file uploaded' });
+      }
+
+      const excelData = req.file.buffer; // Access the file buffer
+
+      // Convert Excel data to JSON
+      const jsonData = excelToJson({
+        source: excelData,
+        header: {
+          rows: 1 // Assuming the first row contains headers
+        }
+      });
+
+      const uploadPromises = jsonData.Sheet1.map(async (item) => {
+        try {
+          // Create an instance of itemAddModel and save it to the database
+          const newItem = new itemAddModel(item); // Assuming 'item' conforms to your itemAddModel schema
+          const savedItem = await newItem.save();
+          return savedItem;
+        } catch (error) {
+          console.error('Error saving item:', error);
+          return null;
+        }
+      });
+
+      // Execute all upload promises
+      const uploadedItems = await Promise.all(uploadPromises);
+
+      res.status(200).json({ uploadedItems, message: 'Excel data uploaded successfully' });
+    } catch (error) {
+      console.error('Error uploading Excel data:', error);
+      res.status(500).json({ error: 'Internal Server Error' });
+    }
+  }
+
   
 
 
