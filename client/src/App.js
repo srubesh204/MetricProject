@@ -57,7 +57,7 @@ export const EmployeeProvider = ({ children, employee }) => {
 };
 
 const roleAccessRules = {
-  admin: ['/home', "/desdep", "/general", "/vendor", "/itemMaster", "/itemadd", "/itemEdit/:id", "/itemList", "/grnList", "/calList", "/onSiteList", '/roles',"/employee"],
+  admin: ['/home', "/desdep", "/general", '/test', "/vendor", "/itemMaster", "/itemadd", "/itemEdit/:id", "/itemList", "/grnList", "/calList", "/onSiteList", '/roles',"/employee"],
   plantAdmin: ['/home', "/desdep", "/general", "/vendor", "/itemMaster", "/itemadd", "/itemEdit/:id", "/itemList", "/grnList", "/calList", "/onSiteList", '/roles',"/employee"],
   creator: ['/home', '/itemlist', '/itemadd', '/itemedit/:id', "/grnList", "/calList", "/onSiteList"],
   viewer: ['/itemlist', '/home'],
