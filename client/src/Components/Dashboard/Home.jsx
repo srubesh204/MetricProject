@@ -1139,7 +1139,7 @@ const Home = () => {
             <Paper sx={{ p: 2, }} elevation={12}>
               <Box sx={{ height: 400, mb: 2 }}>
                 <DataGrid
-                  density='compact'
+                  density='compact'    disableDensitySelector
                   rows={filteredData}
                   columns={ItemListColumns}
                   getRowId={(row) => row._id}

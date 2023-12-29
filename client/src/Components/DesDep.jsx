@@ -2241,7 +2241,7 @@ export const Designation = () => {
               </div>
 
               <div style={{ height: 500, width: '100%' }}>
-                <DataGrid
+                <DataGrid  disableDensitySelector
                   rows={designationList}
                   columns={designationColumns}
                   getRowId={(row) => row._id}

@@ -387,7 +387,7 @@ export const UnitDataBase = ({ style }) => {
                                     </div>
 
                                     <div style={{ height: 400, width: '100%' }}>
-                                        <DataGrid
+                                        <DataGrid disableDensitySelector
                                             rows={unitDataList}
                                             columns={unitColumns}
                                             getRowId={(row) => row._id}
@@ -981,7 +981,7 @@ export const PartDataBase = ({ style }) => {
                                     </div>
 
                                     <div style={{ height: 400, width: '100%' }}>
-                                        <DataGrid
+                                        <DataGrid   disableDensitySelector
                                             rows={partDataList}
                                             columns={partColumns}
                                             getRowId={(row) => row._id}

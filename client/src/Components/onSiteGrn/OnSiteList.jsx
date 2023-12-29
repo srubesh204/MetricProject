@@ -342,7 +342,7 @@ const OnSiteList = () => {
 
 
                                     <Box sx={{ height: 310, width: '100%', my: 2 }}>
-                                        <DataGrid
+                                        <DataGrid   disableDensitySelector
 
                                             rows={grnDataList}
                                             columns={Columns}
@@ -393,7 +393,7 @@ const OnSiteList = () => {
                                 elevation={12}
                             >
                                 <Box sx={{ height: 310, width: '100%', my: 2 }}>
-                                    <DataGrid
+                                    <DataGrid    disableDensitySelector
 
                                         rows={grnListDataList}
                                         columns={grnColumns}

@@ -469,7 +469,7 @@ const ItemMaster = () => {
         const selectedFile = event.target.files[0];
         if (selectedFile) {
             console.log("working")
-            setItemMasterData((prev) => ({ ...prev, workInsName: selectedFile.name }));
+            
             const fileURL = URL.createObjectURL(selectedFile);
             setIframeURL({ fileURL: fileURL, fileName: selectedFile.name, file: selectedFile });
             const formData = new FormData();
@@ -477,6 +477,7 @@ const ItemMaster = () => {
             try {
                 axios.post(`${process.env.REACT_APP_PORT}/upload/workInstructions`, formData)
                     .then(response => {
+                        setItemMasterData((prev) => ({ ...prev, workInsName: selectedFile.name }));
                         setUploadMessage(response.data.message)
                         console.log(response);
                     })
@@ -713,11 +714,12 @@ const ItemMaster = () => {
                                     </div>
                                     <div className="">
                                         <div className="d-flex">
+                                        {!itemMasterData.workInsName ? (
                                             <Button fullWidth color='secondary' component="label" variant="contained" startIcon={<UploadFileIcon />} size="small">
                                                 Work Instruction Upload
                                                 <VisuallyHiddenInput type="file" onChange={handleWorkInstructionUpload} />
 
-                                            </Button>
+                                            </Button>) : null}
                                             {/* <Button className='ms-2' variant='contained' onClick={handleWorkInstructionUpload}>Upload</Button>*/}
                                             {/*<button type='button' style={{ display: "none" }}  value={itemMasterData.workInsName}>Select File</button>*/}
                                         </div>
@@ -983,6 +985,7 @@ const ItemMaster = () => {
 
                                     <div style={{ height: 440, width: '100%' }}>
                                         <DataGrid
+                                        density='compact'    disableDensitySelector
                                             rows={filteredData}
                                             columns={itemMasterColumns}
                                             getRowId={(row) => row._id}
