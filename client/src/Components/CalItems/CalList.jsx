@@ -13,13 +13,14 @@ import isSameOrBefore from 'dayjs/plugin/isSameOrBefore'
 
 import CalAddModel from './CalAddModel'
 import CalEditModel from './CalEditModel'
+import { useEmployee } from '../../App';
 export const CalData = createContext(null);
 dayjs.extend(isSameOrBefore)
 dayjs.extend(isSameOrAfter)
 
 
 const CalList = () => {
-
+    const employeeRole = useEmployee()
     const [itemMasterDataList, setItemMasterDataList] = useState([])
     const [itemMasters, setItemMasters] = useState([])
     const [IMTENos, setIMTENos] = useState([])
@@ -119,7 +120,7 @@ const CalList = () => {
 
     const calListColumns = [
         { field: 'id', headerName: 'Entry. No', width: 100, renderCell: (params) => params.api.getAllRowIds().indexOf(params.id) + 1 },
-        { field: 'editButton', headerName: 'Edit', width: 100, renderCell: (params) => <EditRounded color='warning' onClick={() => setCalEditData(params)} /> },
+        ...(employeeRole && employeeRole.employee !== "viewer" ? [{ field: 'editButton', headerName: 'Edit', width: 100, renderCell: (params) => <EditRounded color='warning' onClick={() => setCalEditData(params)} /> }] : []),
         { field: 'calItemEntryDate', headerName: 'Entry Date', width: 200, valueGetter: (params) => dayjs(params.row.calItemEntryDate).format('DD-MM-YYYY') },
         { field: 'calIMTENo', headerName: 'Item IMTENo', width: 200 },
         { field: 'calItemName', headerName: 'Item Description', width: 200 },
@@ -315,34 +316,33 @@ const CalList = () => {
                                 </div>
 
                             </div>
+                            {employeeRole && employeeRole.employee !== "viewer" && 
                             <div className='col d-flex justify-content-end'>
-                                <div className='me-2 '>
-                                    <button type="button" className='btn btn-warning' >Modify</button>
-                                </div>
+                                
                                 <div className='me-2 '>
                                     <button type="button" className='btn btn-success' onClick={() => setCalAddOpen(true)}>Add</button>
                                 </div>
                                 {calListSelectedRowIds.length !== 0 && <div className='me-2 '>
                                     <button type="button" className='btn btn-danger' onClick={()=> deleteCal()}>Delete</button>
                                 </div>}
-                                <div className='me-2 '>
-                                    <button type="button" className='btn btn-secondary' >Back</button>
-                                </div>
+                               
 
-                            </div>
+                            </div>}
                         </div>
                     </Paper>
+                    {employeeRole && employeeRole.employee !== "viewer" &&
                     <CalData.Provider
                         value={{ calAddOpen, setCalAddOpen, itemMasters, activeEmps, calListFetchData }}
                     >
                         <CalAddModel />
-                    </CalData.Provider>
+                    </CalData.Provider> }
 
+                    {employeeRole && employeeRole.employee !== "viewer" &&
                     <CalData.Provider
                         value={{ calEditOpen, setCalEditOpen, selectedCalRow, itemMasters, activeEmps, calListFetchData }}
                     >
                         {selectedCalRow.length !== 0 && <CalEditModel />}
-                    </CalData.Provider>
+                    </CalData.Provider>}
 
 
 

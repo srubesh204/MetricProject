@@ -18,9 +18,12 @@ import Snackbar from '@mui/material/Snackbar';
 import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
 import GrnAdd from './GrnAdd';
 import Alert from '@mui/material/Alert';
+import { useEmployee } from '../../App';
 export const GrnListContent = createContext(null);
 
 const GrnList = () => {
+
+    const employeeRole = useEmployee()
 
     const [selectedRows, setSelectedRows] = useState([]);
     const [grnEditOpen, setGrnEditOpen] = useState(false);
@@ -72,7 +75,7 @@ const GrnList = () => {
 
     const Columns = [
         { field: 'id', headerName: 'Si. No', width: 100, renderCell: (params) => params.api.getAllRowIds().indexOf(params.id) + 1 },
-        { field: 'button', headerName: 'Edit', width: 90, renderCell: (params) => <Button onClick={() => { setSelectedRows(params.row); setGrnEditOpen(true) }}><Edit color='success' /></Button> },
+        ...(employeeRole && employeeRole.employee !== "viewer" ? [{ field: 'button', headerName: 'Edit', width: 90, renderCell: (params) => <Button onClick={() => { setSelectedRows(params.row); setGrnEditOpen(true) }}><Edit color='success' /></Button> }] : []),
 
 
         {
@@ -438,12 +441,12 @@ const GrnList = () => {
                    
                     <div className='row'>
                        
-                            <div className='col d-flex mb-1'>
-                                <div className=' me-2'>
+                            <div className='col d-flex justify-content-end mb-1'>
+                                {employeeRole && employeeRole.employee !== "viewer" && <div className=' me-2'>
                                     <Button component={Link} onClick={() => { setGrnOpen(true) }} type='button' variant="contained" color="warning">
-                                        <AddIcon /> Add Item
+                                        <AddIcon /> Add GRN
                                     </Button>
-                                </div>
+                                </div>}
                                 {itemListSelectedRowIds.length !== 0 &&    <div className=' me-2'>
                                     <Button variant='contained' type='button' color='error' onClick={() => setDeleteModalItem(true)}>Delete</Button>
                                 </div>}
@@ -474,9 +477,7 @@ const GrnList = () => {
                                         {errorhandler.message}
                                     </Alert>
                                 </Snackbar>
-                                <div className=' me-2'>
-                                    <button type="button" className='btn btn-secondary' >Back</button>
-                                </div>
+                                
                             </div>
                        
                         <GrnListContent.Provider

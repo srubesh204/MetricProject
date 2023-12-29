@@ -263,7 +263,7 @@ const ItemList = () => {
 
 
     const columns = [
-        ...(employeeRole !== 'viewer'
+        ...(employeeRole.employee !== 'viewer'
             ? [
                 {
                     field: 'button',
@@ -1006,69 +1006,14 @@ console.log(statusInfo)*/}
 
                         </div>
                         <div className='row'>
-                            <div className=' col d-flex '>
+                            <div className=' col d-flex mb-2'>
                                 <div className='me-2' >
                                     <button type="button" className='btn btn' >History Card</button>
                                 </div>
+                                {employeeRole && employeeRole.employee !== "viewer" && 
                                 <div className='me-2' >
-                                    {itemListSelectedRowIds.length !== 0 && <button type="button" className='btn btn-' onClick={() => setOpenModalStatus(true)} >Change status</button>}
-                                    {/*  {itemStatusStateId &&  (
-                                        <Button
-                                            type="button"
-                                            onRowClick={handleRowStatusClick}
-                                            className="btn btn-"
-                                            onClick={() => setOpenModalStatus(true)}
-                                        >
-                                            Change status
-                                        </Button>
-                                  )}*/}
-                                </div>
-                                {/* <Dialog>
-                                    <DialogContent sx={{ display: "flex", flexDirection: "column" }}>
-                                        <TextField
-                                            id="item-name"
-                                            label="Item Name"
-                                        />
-                                        <TextField
-                                            id="item-description"
-                                            label="Item Description"
-                                            multiline
-                                        />
-                                    </DialogContent>
-                                    <DialogActions>
-                                    <Button onClick={() => setOpenModalStatus(false)}>Cancel</Button>
-                                        <Button onClick={() => { updateItemStatus(); setOpenModalStatus(false); }} autoFocus></Button>
-                                    </DialogActions>
-                                </Dialog>*/}
+                                    {itemListSelectedRowIds.length !== 0 && <button type="button" className='btn btn-warning' onClick={() => setOpenModalStatus(true)} >Change status</button>} </div>}
 
-                                {/* <DialogTitle id="alert-dialog-title">
-                                    </DialogTitle>
-                                    <DialogContent>
-                                        <DialogContentText id="alert-dialog-description">
-                                        <TextField
-                                            id="itemIMTEID"
-                                            label="ItemIMTE"
-                                            className='mb-2'
-                                            size='small'
-                                            value={itemStatusData.itemIMTENo}
-                                           
-                                        />
-                                         <TextField
-                                            id="itemMaster"
-                                            size='small'
-                                            label="Instrument Name"
-                                            value={itemStatusData.itemAddMasterName}
-                                           
-                                        />
-                                        </DialogContentText>
-                                        
-                                    </DialogContent>
-                                    <DialogActions>
-                                        <Button onClick={() => setOpenModalStatus(false)}>Cancel</Button>
-                                        <Button onClick={() => { updateItemStatus(); setOpenModalStatus(false); }} autoFocus>
-                                        Change status
-                                        </Button>
-                            </DialogActions>*/}
                                 <Dialog
                                     open={openModalStatus}
                                     onClose={() => setOpenModalStatus(false)}
@@ -1131,29 +1076,12 @@ console.log(statusInfo)*/}
                                         </Button>
                                     </DialogActions>
                                 </Dialog>
-                                {/* <Dialog >
-                                    <DialogContent>
-                                        <DialogContentText>
-                                           
-                                        </DialogContentText>
-                                        <TextField
-                                            autoFocus
-                                            margin="dense"
-                                            id="name"
-                                            label="IMTE"
-
-                                        />
-                                    </DialogContent>
-                                    <DialogActions>
-                                        <Button onClick={updateItemStatus}>Cancel</Button>
-                                        <Button onClick={updateItemStatus}>Subscribe</Button>
-                                    </DialogActions>
-                                </Dialog>*/}
 
 
 
 
-                                {employeeRole !== "viewer" && <div className='me-2' >
+
+                                {employeeRole.employee !== "viewer" && <div className='me-2' >
                                     <Button component={RouterLink} to={`/itemMaster`} variant="contained" color="secondary">
                                         Item Master
                                     </Button>
@@ -1161,12 +1089,12 @@ console.log(statusInfo)*/}
                                 </div>}
                             </div>
                             <div className=' col d-flex justify-content-end'>
-                                {employeeRole !== "viewer" && <React.Fragment> <div className='me-2'>
-                                    {/* <Button component={Link} to={`/itemAdd/`}><AddIcon color='warning' /> Add ItemAdd</Button> */}
+                                {employeeRole.employee !== "viewer" && <React.Fragment> <div className='me-2'>
+
                                     <Button component={Link} to={`/itemAdd`} variant="contained" color="warning">
                                         <AddIcon /> Add Item
                                     </Button>
-                                    {/* <button type="button" component={Link} to={`/itemAdd/`} className='btn btn-warning' > <AddIcon color='warning' /> Add ItemAdd</button>*/}
+
                                 </div>
 
                                     <div className='me-2'>
@@ -1189,7 +1117,7 @@ console.log(statusInfo)*/}
                         </div>
                         <div className='row'>
                             <div className='col d-flex '>
-                                {employeeRole !== "viewer" && <React.Fragment>
+                                {employeeRole.employee !== "viewer" && <React.Fragment>
                                     <div className='me-2' >
                                         <label className='itemlistloade'>
                                             <input className="form-control itemlistdownload" type="file" id="upload" />Upload</label>

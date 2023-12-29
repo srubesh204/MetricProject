@@ -150,7 +150,7 @@ const Dashboard = () => {
       { name: "DC List", file: <DcList /> },
       { name: "GRN List", file: <GrnList /> },
       { name: "Cal Data", file: <CalList /> },
-      { name: "History Card", file: <InsHistoryCard/>},
+      { name: "History Card", file: <InsHistoryCard /> },
       { name: "Gauge List" },
       { name: "Cal Due Report" },
       { name: "Gauge Movement Report" },
@@ -309,7 +309,14 @@ const Dashboard = () => {
                 <Tooltip title={fileName.name}>{fileName.name}</Tooltip>
               </Typography>
 
+              <Typography component="h1"
+                variant="h6"
+                color="inherit"
+                noWrap
 
+                sx={{ flexGrow: 0, textAlign: "end", pointerEvents: true }}>
+                  Welcome {empRole.loggedEmp.firstName}
+              </Typography>
               <Tooltip title="Notifications">
                 <IconButton color="inherit">
                   <Badge badgeContent={4} color="secondary">
