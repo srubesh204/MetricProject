@@ -330,7 +330,7 @@ const Employee = () => {
     const EmployeeSubmit = async (e) => {
         e.preventDefault();
         try {
-            if (validateFunction()){
+            if (validateFunction()) {
                 const response = await axios.post(
                     `${process.env.REACT_APP_PORT}/employee/createEmployee`, employeeData
                 );
@@ -342,7 +342,7 @@ const Employee = () => {
                 setEmployeeData(initialEmpData)
                 setEmpDataId(null)
             }
-            
+
         } catch (err) {
 
             setSnackBarOpen(true)
@@ -577,7 +577,7 @@ const Employee = () => {
                                     }
                                     label="DOB"
 
-                                    slotProps={{ textField: { size: 'small' } }}
+                                    slotProps={{ textField: { size: 'small', fullWidth: true } }}
                                     format="DD-MM-YYYY" />
 
                             </Grid>
@@ -588,7 +588,7 @@ const Employee = () => {
 
                         </Grid>
                         <div className='row g-2 mb-2'>
-                            <div className="col-md-10">
+                            <div className="col-md-9">
                                 <TextField label="Address"
                                     {...(errors.address !== "" && { helperText: errors.address, error: true })}
                                     id="addressId"
@@ -603,8 +603,18 @@ const Employee = () => {
                             </div>
                             <div className="col">
                                 <TextField label="Role"
-                                        {...(errors.empRole !== "" && { helperText: errors.empRole, error: true })}
-                                         size='small' id='empRoleId' onChange={handleChange} fullWidth name='empRole' value={employeeData.empRole} select>
+                                    {...(errors.empRole !== "" && { helperText: errors.empRole, error: true })}
+                                    size='small' id='empRoleId' onChange={handleChange} fullWidth name='empRole' value={employeeData.empRole} select>
+                                    <MenuItem value="admin">Admin</MenuItem>
+                                    <MenuItem value="plantAdmin">Plant Admin</MenuItem>
+                                    <MenuItem value="creator">Creator</MenuItem>
+                                    <MenuItem value="viewer">Viewer</MenuItem>
+                                </TextField>
+                            </div>
+                            <div className="col">
+                                <TextField label="Role"
+
+                                    size='small' id='empRoleId' onChange={handleChange} fullWidth name='empRole' value={employeeData.empRole} select>
                                     <MenuItem value="admin">Admin</MenuItem>
                                     <MenuItem value="plantAdmin">Plant Admin</MenuItem>
                                     <MenuItem value="creator">Creator</MenuItem>
@@ -689,7 +699,7 @@ const Employee = () => {
                             </Grid>
                             <Grid item xs={2}>
                                 <TextField label="Password "
-                                        {...(errors.password !== "" && { helperText: errors.password, error: true })}
+                                    {...(errors.password !== "" && { helperText: errors.password, error: true })}
                                     id="passwordId"
                                     InputLabelProps={{ shrink: true }}
                                     InputProps={{

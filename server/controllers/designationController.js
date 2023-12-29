@@ -1,4 +1,5 @@
 const designationModel = require("../models/designationModel")
+const excelToJson = require('convert-excel-to-json');
 
 const designationController = {
   getAllDesignations: async (req, res) => {
@@ -153,6 +154,46 @@ const designationController = {
     } catch (error) {
       console.log(error);
       res.status(500).json({ error: error, status: 0 });
+    }
+  },
+  uploadDesignationsInExcel: async (req, res) => {
+    try {
+      if (!req.file) {
+        return res.status(400).json({ error: 'No file uploaded' });
+      }
+      
+      const excelData = req.file.buffer; // Access the file buffer
+  
+      // Convert Excel data to JSON
+      const jsonData = excelToJson({
+        source: excelData,
+        columnToKey: {
+          A: 'designation',
+          B: 'designationStatus'
+      }
+      });
+      console.log(jsonData)
+  
+      const uploadPromises = jsonData.Sheet1.map(async (item) => {
+        try {
+          // Create an instance of designationModel and save it to the database
+          const newDesignation = new designationModel(item); // Assuming 'item' conforms to your designationModel schema
+          const savedDesignation = await newDesignation.save();
+          return savedDesignation;
+
+        } catch (error) {
+          console.error('Error saving designation:', error);
+          return res.status(500).json({ error: 'Internal Server Error' });
+        }
+      });
+  
+      // Execute all upload promises
+      const uploadedDesignations = await Promise.all(uploadPromises);
+  
+      res.status(200).json({ uploadedDesignations, message: 'Excel data uploaded successfully' });
+    } catch (error) {
+      console.error('Error uploading Excel data:', error);
+      res.status(500).json({ error: 'Internal Server Error' });
     }
   }
 }
