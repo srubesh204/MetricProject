@@ -876,6 +876,7 @@ const Home = () => {
 
 
         <div className="row gx-3 m-3" >
+          
           <div className="col-8 mb-2">
             <Paper sx={{ p: 2 }} elevation={12} className=''>
 
@@ -1103,6 +1104,7 @@ const Home = () => {
                 </PieChart>
 
               </ResponsiveContainer>
+              {empRole && empRole.employee !== "viewer" && 
               <div className='row mx-2'>
                 <FormControl className='col-md-8 me-2' size='small'>
                   <InputLabel htmlFor="grouped-select">Select Department</InputLabel>
@@ -1128,7 +1130,7 @@ const Home = () => {
                 </FormControl>
                 <Button className='col' size='small' fullWidth variant='contained' onClick={(e) => updateItemData(e)}>Move</Button>
 
-              </div>
+              </div>}
 
             </Paper>
           </div>
@@ -1171,7 +1173,7 @@ const Home = () => {
 
                 />
               </Box>
-              {empRole && empRole !== "viewer" &&
+              {empRole.employee && empRole.employee !== "viewer" &&
                 <div className="row">
 
                   <div className="col-md-9">

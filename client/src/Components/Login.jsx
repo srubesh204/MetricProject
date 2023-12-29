@@ -42,6 +42,7 @@ export default function Login() {
       );
 
       sessionStorage.setItem('employee', response.data.employee.empRole);
+      sessionStorage.setItem('empId', response.data.employee._id);
       sessionStorage.setItem('loggedIn', true);
       console.log(response)
       navigate("/")

@@ -48,6 +48,12 @@ import admin from '../assets/admin.png'
 import secretary from '../assets/secretary.gif'
 import { Button } from 'bootstrap';
 import Swal from 'sweetalert2';
+import Version from '../mailConfi/Version';
+import BackUp from '../mailConfi/BackUp';
+import AlertConfi from '../mailConfi/AlertConfi';
+import MailConfi from '../mailConfi/MailConfi';
+import FormatNumber from '../mailConfi/FormatNumber';
+import CompanyDetails from '../mailConfi/CompanyDetails';
 import InsHistoryCard from '../InsHistoryCard';
 //
 
@@ -137,12 +143,12 @@ const Dashboard = () => {
       { name: "Item Master", file: <ItemMaster />, icon: <CategoryIcon /> },
     ],
     system: [
-      { name: "Version" },
-      { name: "Backup" },
-      { name: "Alerts Configuration" },
-      { name: "Mail Configuration" },
-      { name: "Format Number" },
-      { name: "Company Details" },
+      { name: "Version" ,file: <Version />,},
+      { name: "Backup",file: <BackUp />,},
+      { name: "Alerts Configuration",file: <AlertConfi />,},
+      { name: "Mail Configuration" ,file: <MailConfi />,},
+      { name: "Format Number" ,file: <FormatNumber />,},
+      { name: "Company Details",file: <CompanyDetails />, },
       { name: "Label Print" },
 
     ],
@@ -150,7 +156,7 @@ const Dashboard = () => {
       { name: "DC List", file: <DcList /> },
       { name: "GRN List", file: <GrnList /> },
       { name: "Cal Data", file: <CalList /> },
-      { name: "History Card", file: <InsHistoryCard/>},
+      { name: "History Card", file: <InsHistoryCard /> },
       { name: "Gauge List" },
       { name: "Cal Due Report" },
       { name: "Gauge Movement Report" },
@@ -309,7 +315,14 @@ const Dashboard = () => {
                 <Tooltip title={fileName.name}>{fileName.name}</Tooltip>
               </Typography>
 
+              <Typography component="h1"
+                variant="h6"
+                color="inherit"
+                noWrap
 
+                sx={{ flexGrow: 0, textAlign: "end", pointerEvents: true }}>
+                  Welcome {empRole.loggedEmp.firstName}
+              </Typography>
               <Tooltip title="Notifications">
                 <IconButton color="inherit">
                   <Badge badgeContent={4} color="secondary">
@@ -354,7 +367,7 @@ const Dashboard = () => {
                 <ListItemText primary="Dashboard" />
               </ListItemButton>
 
-              {empRole && (empRole === "admin" || empRole === "plantAdmin") &&
+              {empRole && (empRole.employee === "admin" || empRole.employee === "plantAdmin") &&
                 <React.Fragment>
                   <ListItemButton onClick={handleAdminOpen}>
                     <ListItemIcon>
@@ -443,7 +456,7 @@ const Dashboard = () => {
                     <ListItemText primary="Item List" />
 
                   </ListItemButton>
-                  {empRole && (empRole === "admin" || empRole === "plantAdmin") &&
+                  {empRole && (empRole.employee === "admin" || empRole.employee === "plantAdmin") &&
                     <ListItemButton sx={{ pl: 4 }} to="/itemAdd" >
                       <ListItemIcon>
                         <AdminPanelSettingsIcon />

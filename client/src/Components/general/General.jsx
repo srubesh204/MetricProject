@@ -145,7 +145,8 @@ export const UnitDataBase = ({ style }) => {
     const updateUnitData = async () => {
         try {
             const response = await axios.put(
-                "http://localhost:3001/unit/updateUnit/" + unitStateId, unitData
+                `${process.env.REACT_APP_PORT}/unit/updateUnit/${unitStateId}`, unitData
+                
             );
             unitFetchData();
             setUnitData({
@@ -179,7 +180,8 @@ export const UnitDataBase = ({ style }) => {
     const deleteUnitData = async () => {
         try {
             const response = await axios.delete(
-                "http://localhost:3001/unit/deleteUnit/", {
+                `${process.env.REACT_APP_PORT}/unit/deleteUnit`, {
+                    
                 data: {
                     unitIds: unitSelectedRowIds
                 }
@@ -632,7 +634,8 @@ export const PartDataBase = ({ style }) => {
     const updatePartData = async () => {
         try {
             const response = await axios.put(
-                "http://localhost:3001/part/updatePart/" + partStateId, partData
+                `${process.env.REACT_APP_PORT}/part/updatePart/${partStateId}`, partData
+               
             );
             partFetchData();
             setPartData(initialPartData);
@@ -668,7 +671,7 @@ export const PartDataBase = ({ style }) => {
     const deletePartData = async (id) => {
         try {
             const response = await axios.delete(
-                "http://localhost:3001/part/deletePart/", {
+               ` ${process.env.REACT_APP_PORT}/part/deletePart`, {
                 data: {
                     partIds: partSelectedRowIds
                 }

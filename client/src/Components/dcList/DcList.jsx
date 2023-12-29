@@ -21,10 +21,11 @@ import dayjs from 'dayjs';
 
 import DcEdit from './DcEdit';
 import DcAdd from './DcAdd';
+import { useEmployee } from '../../App';
 export const DcListContent = createContext(null);
 const DcList = () => {
 
-
+    const empRole = useEmployee()
 
     const [selectedRows, setSelectedRows] = useState([]);
     const [dcEditOpen, setDcEditOpen] = useState(false);
@@ -190,8 +191,8 @@ const DcList = () => {
     const Columns = [
 
         { field: 'id', headerName: 'Si. No', width: 70, renderCell: (params) => params.api.getAllRowIds().indexOf(params.id) + 1 },
-        { field: 'editButton', headerName: 'Edit', width: 100, renderCell: (params) => <Button onClick={() => { setSelectedRows(params.row); setDcEditOpen(true) }}><Edit color='success' /></Button> },
-        // { field: 'viewButton', headerName: 'View', width: '100', renderCell: (params) => <Button><RemoveRedEyeIcon onClick={() => { setSelectedRowView(params.row); setDcEditOpen(true) }} /></Button> },
+        ...(empRole && empRole.employee !== 'viewer'
+            ? [{ field: 'editButton', headerName: 'Edit', width: 100, renderCell: (params) => <Button onClick={() => { setSelectedRows(params.row); setDcEditOpen(true) }}><Edit color='success' /></Button> }] : []),
         {
             field: 'viewButton',
             headerName: 'View',
@@ -276,7 +277,7 @@ const DcList = () => {
 
 
 
-   const handleFilterChange = (e) => {
+    const handleFilterChange = (e) => {
         const { name, value } = e.target;
         if (value === "all") {
             setFilteredData(dcDataDcList)
@@ -301,7 +302,7 @@ const DcList = () => {
 
     }
 
-  {/*  const handleFilterChange = (e) => {
+    {/*  const handleFilterChange = (e) => {
         const { name, value } = e.target;
 
         if (value === "all") {
@@ -389,7 +390,7 @@ const DcList = () => {
                                         onChange={handleFilterChange}
                                         size="small"
                                         sx={{ width: "101%" }}
-                                        
+
                                         name="dcPartyType" >
                                         <MenuItem value=""><em>--Select--</em></MenuItem>
                                         <MenuItem value="oem">OEM</MenuItem>
@@ -552,14 +553,16 @@ const DcList = () => {
                             </div>
                             <div className='col d-flex justify-content-end'>
 
-                                <div className='me-2 '>
-                                    <Button component={Link} onClick={() => { setDcOpen(true) }} type='button' variant="contained" color="warning">
-                                        <AddIcon /> Add Item
-                                    </Button>
-                                </div>
-                                {itemListSelectedRowIds.length !== 0 && <div className='me-2 '>
-                                    <Button variant='contained' type='button' color='error' onClick={() => setDeleteModalItem(true)}>Delete</Button>
-                                </div>}
+                                {empRole.employee !== "viewer" && <React.Fragment>
+                                    <div className='me-2 '>
+                                        <Button component={Link} onClick={() => { setDcOpen(true) }} type='button' variant="contained" color="warning">
+                                            <AddIcon /> Add Item
+                                        </Button>
+                                    </div>
+                                    {itemListSelectedRowIds.length !== 0 && <div className='me-2 '>
+                                        <Button variant='contained' type='button' color='error' onClick={() => setDeleteModalItem(true)}>Delete</Button>
+                                    </div>}</React.Fragment>
+                                }
 
                                 <Dialog
                                     open={deleteModalItem}
@@ -582,10 +585,7 @@ const DcList = () => {
                                         </Button>
                                     </DialogActions>
                                 </Dialog>
-                                <div className='me-2 '>
-                                    <button type="button" className='btn btn-secondary' >Back</button>
-                                </div>
-
+                               
                             </div>
 
                             <DcListContent.Provider
