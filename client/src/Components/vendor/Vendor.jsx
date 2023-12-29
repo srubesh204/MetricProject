@@ -558,7 +558,7 @@ const Vendor = () => {
         formData.append('file', iframeURL.file);
 
         try {
-            axios.post("http://localhost:3001/upload/VendorCertificateUpload", formData, {
+            axios.post(`${process.env.REACT_APP_PORT}/upload/VendorCertificateUpload`, formData, {
                 onUploadProgress: (progressEvent) => {
                     const percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total);
                     setUploadProgress(percentCompleted);
