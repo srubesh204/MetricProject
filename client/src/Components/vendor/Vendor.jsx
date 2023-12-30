@@ -23,6 +23,7 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import { Delete, Done } from '@mui/icons-material';
+import { CloudDownload, CloudUpload,  } from '@mui/icons-material';
 
 
 const Vendor = () => {
@@ -639,6 +640,64 @@ const Vendor = () => {
 
     const [selectedRowIds, setSelectedRowIds] = useState([]);
 
+
+    const VisuallyHiddenInputs = styled('input')({
+        clip: 'rect(0 0 0 0)',
+        clipPath: 'inset(50%)',
+        height: 1,
+        overflow: 'hidden',
+        position: 'absolute',
+        bottom: 0,
+        left: 0,
+        whiteSpace: 'nowrap',
+        width: 1,
+    });
+
+    const [file, setFile] = useState(null);
+    const [vendorExcelStatus, setVendorExcelStatus] = useState('');
+
+    const handleVendorExcel = (e) => {
+        const selectedFile = e.target.files[0];
+        console.log(selectedFile)
+        setFile(selectedFile);
+    };
+
+    const handleVendorUpload = async () => {
+        try {
+            if (!file) {
+                setVendorExcelStatus('No file selected');
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append('file', file);
+
+            const response = await axios.post(`${process.env.REACT_APP_PORT}/vendor/uploadVendorInExcel`, formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                },
+            });
+
+            setVendorExcelStatus(response.data.message || 'Excel file uploaded successfully');
+        } catch (error) {
+            if (error.response) {
+                setVendorExcelStatus(`Error: ${error.response.data.error || 'Something went wrong'}`);
+            } else if (error.request) {
+                setVendorExcelStatus('Network error. Please try again.');
+            } else {
+                setVendorExcelStatus('Error uploading the file.');
+            }
+            console.error('Error uploading Excel file:', error);
+        }
+    };
+
+
+
+
+
+
+
+
     return (
         <div >
             <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -1084,13 +1143,23 @@ const Vendor = () => {
                             <div className='row' >
                                 <div className='col  d-flex justify-content-end mb-2'>
                                     <div className='col  d-flex'>
-                                        <div className='me-2' >
-                                            <label className='upload'>
-                                                <input className="form-control download" type="file" id="upload" />Upload</label>
-                                        </div>
-                                        <div className='me-2'>
-                                            <label className='upload'>
-                                                <input className="form-control download" type="file" id="download" />Download </label>
+                                        <div className="d-flex justify-content-center">
+                                            <ButtonGroup className='me-3'>
+                                                <Button component="label" variant="contained" >
+                                                    Upload
+                                                    <VisuallyHiddenInputs type="file" onChange={handleVendorExcel} />
+                                                </Button>
+                                                <Button onClick={handleVendorUpload}><CloudUpload /></Button>
+                                            </ButtonGroup>
+
+                                            <ButtonGroup>
+                                                <Button component="label" variant="contained" color='secondary'>
+                                                    Download
+                                                    <VisuallyHiddenInputs type="file" />
+                                                </Button>
+                                                <Button color='secondary'><CloudDownload /></Button>
+                                            </ButtonGroup>
+                                            {vendorExcelStatus && <p>{vendorExcelStatus}</p>}
                                         </div>
                                     </div>
                                     {vendorStateId ?
@@ -1185,7 +1254,7 @@ const Vendor = () => {
                             </div>
 
                             <div style={{ height: 400, width: '100%', marginTop: "0.5rem" }}>
-                                <DataGrid  disableDensitySelector
+                                <DataGrid disableDensitySelector
                                     rows={filteredData}
                                     columns={vendorListColumns}
                                     getRowId={(row) => row._id}

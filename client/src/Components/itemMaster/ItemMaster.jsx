@@ -3,15 +3,14 @@ import axios from 'axios';
 import { styled } from '@mui/material/styles';
 import Button from '@mui/material/Button';
 
-import { AddToPhotos, CloudUpload, DeleteOutlined, Delete, DomainVerification } from '@mui/icons-material';
+import { AddToPhotos, CloudUpload,CloudDownload, DeleteOutlined, Delete, DomainVerification } from '@mui/icons-material';
 import Stack from '@mui/material/Stack';
 import FileDownloadIcon from '@mui/icons-material/FileDownload';
 import UploadFileIcon from '@mui/icons-material/UploadFile';
 import Alert from '@mui/material/Alert';
 import Snackbar from '@mui/material/Snackbar';
 import { TextField, MenuItem, FormControl, Fab, Link, Typography, Badge, LinearProgress } from '@mui/material';
-import { Box, Grid, Paper, Container, Chip } from '@mui/material';
-
+import { Box, Grid,ButtonGroup, Paper, Container, Chip } from '@mui/material';
 import { Add, Remove, HighlightOffRounded } from '@mui/icons-material';
 import { Done } from '@mui/icons-material';
 import Dialog from '@mui/material/Dialog';
@@ -469,7 +468,7 @@ const ItemMaster = () => {
         const selectedFile = event.target.files[0];
         if (selectedFile) {
             console.log("working")
-            
+
             const fileURL = URL.createObjectURL(selectedFile);
             setIframeURL({ fileURL: fileURL, fileName: selectedFile.name, file: selectedFile });
             const formData = new FormData();
@@ -514,11 +513,60 @@ const ItemMaster = () => {
         }
     };*/}
 
+    const VisuallyHiddenInputs = styled('input')({
+        clip: 'rect(0 0 0 0)',
+        clipPath: 'inset(50%)',
+        height: 1,
+        overflow: 'hidden',
+        position: 'absolute',
+        bottom: 0,
+        left: 0,
+        whiteSpace: 'nowrap',
+        width: 1,
+    });
+
+    const [file, setFile] = useState(null);
+    const [itemMasterExcelStatus, setItemMasterExcelStatus] = useState('');
+
+    const handleItemMasterExcel = (e) => {
+        const selectedFile = e.target.files[0];
+        console.log(selectedFile)
+        setFile(selectedFile);
+    };
+
+    const handleItemMasterUpload = async () => {
+        try {
+            if (!file) {
+                setItemMasterExcelStatus('No file selected');
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append('file', file);
+
+            const response = await axios.post(`${process.env.REACT_APP_PORT}/itemMaster/uploadItemMasterInExcel`, formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                },
+            });
+
+            setItemMasterExcelStatus(response.data.message || 'Excel file uploaded successfully');
+        } catch (error) {
+            if (error.response) {
+                setItemMasterExcelStatus(`Error: ${error.response.data.error || 'Something went wrong'}`);
+            } else if (error.request) {
+                setItemMasterExcelStatus('Network error. Please try again.');
+            } else {
+                setItemMasterExcelStatus('Error uploading the file.');
+            }
+            console.error('Error uploading Excel file:', error);
+        }
+    };
 
 
 
 
-    //
+
 
 
     return (
@@ -714,12 +762,12 @@ const ItemMaster = () => {
                                     </div>
                                     <div className="">
                                         <div className="d-flex">
-                                        {!itemMasterData.workInsName ? (
-                                            <Button fullWidth color='secondary' component="label" variant="contained" startIcon={<UploadFileIcon />} size="small">
-                                                Work Instruction Upload
-                                                <VisuallyHiddenInput type="file" onChange={handleWorkInstructionUpload} />
+                                            {!itemMasterData.workInsName ? (
+                                                <Button fullWidth color='secondary' component="label" variant="contained" startIcon={<UploadFileIcon />} size="small">
+                                                    Work Instruction Upload
+                                                    <VisuallyHiddenInput type="file" onChange={handleWorkInstructionUpload} />
 
-                                            </Button>) : null}
+                                                </Button>) : null}
                                             {/* <Button className='ms-2' variant='contained' onClick={handleWorkInstructionUpload}>Upload</Button>*/}
                                             {/*<button type='button' style={{ display: "none" }}  value={itemMasterData.workInsName}>Select File</button>*/}
                                         </div>
@@ -844,20 +892,23 @@ const ItemMaster = () => {
                             <div className='row'>
 
                                 <div className="col-md-7">
-                                    <div>
-                                        <Stack direction="row"
-                                            justifyContent="flex-start"
-                                            alignItems="flex-start"
-                                            spacing={2} >
-                                            <Button component="label" variant="contained" startIcon={<CloudUpload />} size="small" font>
-                                                Upload file
-                                                <VisuallyHiddenInput type="file" />
+                                    <div className="d-flex justify">
+                                        <ButtonGroup className='me-3'>
+                                            <Button component="label" variant="contained" >
+                                                Upload
+                                                <VisuallyHiddenInputs type="file" onChange={handleItemMasterExcel} />
                                             </Button>
-                                            <Button component="label" variant="contained" startIcon={<FileDownloadIcon />} size="small">
-                                                Download file
-                                                <VisuallyHiddenInput type="file" />
+                                            <Button onClick={handleItemMasterUpload}><CloudUpload /></Button>
+                                        </ButtonGroup>
+
+                                        <ButtonGroup>
+                                            <Button component="label" variant="contained" color='secondary'>
+                                                Download
+                                                <VisuallyHiddenInputs type="file" />
                                             </Button>
-                                        </Stack>
+                                            <Button color='secondary'><CloudDownload /></Button>
+                                        </ButtonGroup>
+                                        {itemMasterExcelStatus && <p>{itemMasterExcelStatus}</p>}
                                     </div>
 
 
@@ -985,7 +1036,7 @@ const ItemMaster = () => {
 
                                     <div style={{ height: 440, width: '100%' }}>
                                         <DataGrid
-                                        density='compact'    disableDensitySelector
+                                            density='compact' disableDensitySelector
                                             rows={filteredData}
                                             columns={itemMasterColumns}
                                             getRowId={(row) => row._id}
