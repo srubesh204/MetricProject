@@ -192,12 +192,16 @@ const Dashboard = () => {
     // Add other drawer names with initial status here
   });
 
-  const [mainList, setMainList] = useState({
+  const [mailList, setMainList] = useState({
     databaseMaster: { name: "databaseMaster", status: false },
     system: { name: "system", status: false },
     report: { name: "report", status: false },
     // Add other drawer names with initial status here
   });
+
+  
+
+  
 
 
   const [adminOpen, setAdminOpen] = useState(false);
@@ -219,6 +223,7 @@ const Dashboard = () => {
     });
   };
 
+
   const handleAdminOpen = () => {
     setAdminOpen(!adminOpen);
   };
@@ -228,9 +233,7 @@ const Dashboard = () => {
   };
 
 
-  const handleSystemOpen = () => {
-    setSystemOpen(!systemOpen);
-  };
+  
   const handleToolOpen = () => {
     setToolOpen(!toolOpen);
   };
