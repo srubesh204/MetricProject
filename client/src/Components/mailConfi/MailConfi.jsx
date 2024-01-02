@@ -68,7 +68,7 @@ const MailConfi = () => {
 
 
 
-    const handleOnSiteChange = (e) => {
+    const handleMailChange = (e) => {
         const { name, value } = e.target;
         setMailData((prev) => ({ ...prev, [name]: value }));
 
@@ -153,7 +153,7 @@ const MailConfi = () => {
                                    
                                     size="small"
                                     disabled={!isEditable}
-                                    onChange={handleOnSiteChange}
+                                    onChange={handleMailChange}
                                     value={mailData.mailId}
                                     sx={{ width: "100%" }}
                                     name="mailId" />
@@ -165,7 +165,7 @@ const MailConfi = () => {
                                   
                                     disabled={!isEditable}
                                     size="small"
-                                    onChange={handleOnSiteChange}
+                                    onChange={handleMailChange}
                                     value={mailData.mailPassword}
                                     sx={{ width: "100%" }}
                                     name="mailPassword" />
@@ -177,7 +177,7 @@ const MailConfi = () => {
                                     
                                     size="small"
                                     disabled={!isEditable}
-                                    onChange={handleOnSiteChange}
+                                    onChange={handleMailChange}
                                     value={mailData.portNumber}
                                     sx={{ width: "100%" }}
                                     name="portNumber" />
@@ -204,7 +204,7 @@ const MailConfi = () => {
                                   
                                     size="small"
                                     disabled={!isEditable}
-                                    onChange={handleOnSiteChange}
+                                    onChange={handleMailChange}
                                     value={mailData.inMailServer}
                                     sx={{ width: "100%" }}
                                     name="inMailServer" />
@@ -216,7 +216,7 @@ const MailConfi = () => {
                                     
                                     size="small"
                                     disabled={!isEditable}
-                                    onChange={handleOnSiteChange}
+                                    onChange={handleMailChange}
                                     value={mailData.outMailServer}
                                     sx={{ width: "100%" }}
                                     name="outMailServer" />

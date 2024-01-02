@@ -1,4 +1,5 @@
 const vendorModel = require("../models/vendorModel")
+const excelToJson = require('convert-excel-to-json');
 
 const vendorController = {
   getAllVendors: async (req, res) => {
@@ -197,10 +198,70 @@ const vendorController = {
       res.status(500).send('Error on VendorSegragation Data');
     }
   },
+
+  uploadVendorInExcel: async (req, res) => {
+    try {
+      if (!req.file) {
+        return res.status(400).json({ error: 'No file uploaded' });
+      }
+      
+      const excelData = req.file.buffer; // Access the file buffer
+  
+      // Convert Excel data to JSON
+      const jsonData = excelToJson({
+        source: excelData,
+        header: {
+          rows: 1
+        },
+        columnToKey: {
+          A: 'vendorCode',   
+          B: 'aliasName',
+          C: 'fullName',
+          D: 'dor',
+          E: 'address',
+          F: 'state',
+          G: 'city',
+          H: 'oem',
+          I: 'customer',
+          J: 'supplier',
+          K: 'subContractor',
+          L: 'certificate',
+          M: 'certificateValidity',
+          N: 'vendorStatus',
+          
+        
+
+      }
+      });
+      console.log(jsonData)
+  
+      const uploadPromises = jsonData.Sheet1.map(async (item) => {
+        try {
+          // Create an instance of designationModel and save it to the database
+          const newVendor = new vendorModel(item); // Assuming 'item' conforms to your designationModel schema
+          const savedVendor = await newVendor.save();
+          return savedVendor;
+
+        } catch (error) {
+          console.error('Error saving vendor:', error);
+         
+        }
+      });
+  
+      // Execute all upload promises
+      const uploadedVendor = await Promise.all(uploadPromises);
+  
+      res.status(200).json({ uploadedVendor, message: 'Excel data uploaded successfully' });
+    } catch (error) {
+      console.error('Error uploading Excel data:', error);
+      res.status(500).json({ error: 'Internal Server Error' });
+    }
+  }
   
   
   
 }
+
 
 
 module.exports = vendorController;

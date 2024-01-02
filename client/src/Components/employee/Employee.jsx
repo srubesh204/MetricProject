@@ -15,10 +15,12 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
 import Autocomplete from '@mui/material/Autocomplete';
-import { Box, Grid, Paper, IconButton, Container } from '@mui/material';
+import { Box, Grid, Paper, IconButton,ButtonGroup, Container } from '@mui/material';
 import dayjs from 'dayjs';
 import { DataGrid, GridToolbar } from '@mui/x-data-grid';
 import { Delete, Visibility, VisibilityOff } from '@mui/icons-material';
+import { CloudDownload, CloudUpload,  } from '@mui/icons-material';
+import styled from "@emotion/styled";
 
 
 
@@ -479,6 +481,59 @@ const Employee = () => {
         }
     }
 
+    const VisuallyHiddenInput = styled('input')({
+        clip: 'rect(0 0 0 0)',
+        clipPath: 'inset(50%)',
+        height: 1,
+        overflow: 'hidden',
+        position: 'absolute',
+        bottom: 0,
+        left: 0,
+        whiteSpace: 'nowrap',
+        width: 1,
+    });
+
+    const [file, setFile] = useState(null);
+    const [empExcelStatus, setEmpExcelStatus] = useState('');
+
+    const handleEmpExcel = (e) => {
+        const selectedFile = e.target.files[0];
+        console.log(selectedFile)
+        setFile(selectedFile);
+    };
+
+    const handleEmpUpload = async () => {
+        try {
+            if (!file) {
+                setEmpExcelStatus('No file selected');
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append('file', file);
+
+            const response = await axios.post(`${process.env.REACT_APP_PORT}/employee/uploadEmployeeInExcel`, formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                },
+            });
+
+            setEmpExcelStatus(response.data.message || 'Excel file uploaded successfully');
+        } catch (error) {
+            if (error.response) {
+                setEmpExcelStatus(`Error: ${error.response.data.error || 'Something went wrong'}`);
+            } else if (error.request) {
+                setEmpExcelStatus('Network error. Please try again.');
+            } else {
+                setEmpExcelStatus('Error uploading the file.');
+            }
+            console.error('Error uploading Excel file:', error);
+        }
+    };
+
+
+
+
 
     const [value, setValue] = useState(null)
 
@@ -848,15 +903,23 @@ const Employee = () => {
 
                             <div className="row g-2" >
                                 <div className="col d-flex ">
-                                    <div className='me-2' >
-                                        <label className='uplable'>
-                                            <input className="form-control downlable" type="file" id="uploadExcel" />Upload
-                                        </label>
-                                    </div>
-                                    <div >
-                                        <label className='uplable'>
-                                            <input className="form-control downlable" type="file" id="downloadExcel" />Download
-                                        </label>
+                                    <div className="d-flex justify-content-center">
+                                        <ButtonGroup className='me-3'>
+                                            <Button component="label" variant="contained" >
+                                                Upload
+                                                <VisuallyHiddenInput type="file" onChange={handleEmpExcel} />
+                                            </Button>
+                                            <Button onClick={handleEmpUpload}><CloudUpload /></Button>
+                                        </ButtonGroup>
+
+                                        <ButtonGroup>
+                                            <Button component="label" variant="contained" color='secondary'>
+                                                Download
+                                                <VisuallyHiddenInput type="file" />
+                                            </Button>
+                                            <Button color='secondary'><CloudDownload /></Button>
+                                        </ButtonGroup>
+                                        {empExcelStatus && <p>{empExcelStatus}</p>}
                                     </div>
                                 </div>
                                 {empDataId ? <Dialog
