@@ -38,9 +38,9 @@ import { PartDataBase, UnitDataBase } from '../DatabaseMaster/General'
 import { Department, Designation } from '../DatabaseMaster/DesDep';
 import Home from './Home';
 import { useEmployee } from '../../App';
-import DcList from '../dcList/DcList';
-import GrnList from '../grnList/GrnList';
-import CalList from '../CalItems/CalList';
+import DcList from '../Reports/dcList/DcList';
+import GrnList from '../Reports/grnList/GrnList';
+import CalList from '../Reports/CalItems/CalList';
 import { Logout } from '@mui/icons-material';
 import { Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Tooltip } from '@mui/material';
 import dashboard from '../assets/dashboard.png'

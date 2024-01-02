@@ -21,7 +21,7 @@ import dayjs from 'dayjs';
 
 import DcEdit from './DcEdit';
 import DcAdd from './DcAdd';
-import { useEmployee } from '../../App';
+import { useEmployee } from '../../../App';
 export const DcListContent = createContext(null);
 const DcList = () => {
 

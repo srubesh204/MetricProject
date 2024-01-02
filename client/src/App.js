@@ -21,21 +21,20 @@ import FileViewer from './Components/Test/FileViewer';
 import Login from './Components/Login Components/Login';
 
 import Status from './Components/DatabaseMaster/status/Status';
-// import Dc from './Components/dc/Dc';
 import Grn from './Components/Dashboard/DashboardComponents/Grn';
-import DcList from './Components/dcList/DcList';
-import GrnList from './Components/grnList/GrnList';
-import CalList from './Components/CalItems/CalList';
-import DcEdit from './Components/dcList/DcEdit';
-import GrnEdit from './Components/grnList/GrnEdit';
-import GrnAdd from './Components/grnList/GrnAdd';
+import DcList from './Components/Reports/dcList/DcList';
+import GrnList from './Components/Reports/grnList/GrnList';
+import CalList from './Components/Reports/CalItems/CalList';
+import DcEdit from './Components/Reports/dcList/DcEdit';
+import GrnEdit from './Components/Reports/grnList/GrnEdit';
+import GrnAdd from './Components/Reports/grnList/GrnAdd';
 import OnSiteGrn from './Components/Reports/onSiteGrn/OnSiteGrn';
 import OnSiteList from './Components/Reports/onSiteGrn/OnSiteList';
 import OnSiteEditGrn from './Components/Reports/onSiteGrn/OnSiteEditGrn';
 import OnSiteDialog from './Components/Dashboard/DashboardComponents/OnSiteDialog';
 
 import Roles from './Components/system/Permissions';
-import MailConfi from './Components/system/MailConfig';
+
 import { createContext, useContext, useEffect, useState } from 'react';
 import AccessDenied from './Components/ErrorComponents/AccessDenied';
 import axios from 'axios';

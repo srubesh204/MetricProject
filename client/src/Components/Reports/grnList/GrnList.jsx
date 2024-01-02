@@ -19,7 +19,7 @@ import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
 import GrnAdd from './GrnAdd';
 import Alert from '@mui/material/Alert';
 import dayjs from 'dayjs';
-import { useEmployee } from '../../App';
+import { useEmployee } from '../../../App';
 export const GrnListContent = createContext(null);
 
 const GrnList = () => {
