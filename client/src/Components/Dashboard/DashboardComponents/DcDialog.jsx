@@ -439,7 +439,7 @@ const Dc = () => {
 
                                                     // value={dcData.dcPartyName}
                                                     onChange={(e) => setPartyData(e.target.value)}
-                                                    value={dcData.dcPartyName}
+                                                   // value={dcData.dcPartyName}
                                                     //  sx={{ width: "100%" }}
                                                     size="small"
                                                     fullWidth

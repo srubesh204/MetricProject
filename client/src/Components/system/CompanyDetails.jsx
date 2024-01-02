@@ -2,6 +2,7 @@ import React, { createContext, useEffect, useState, useContext } from 'react'
 import { Card, CardContent, CardActions, Button, Container, Grid, Paper, TextField, Typography, Fab, CardMedia, InputLabel, Input, FormControl, FormHelperText, FormGroup, FormLabel, MenuItem, Select, Menu, FormControlLabel, Radio, RadioGroup, TableContainer, Table, TableHead, TableRow, TableCell, TableBody, IconButton, OutlinedInput, Box, Chip, Snackbar, Alert, Dialog, DialogTitle, DialogContent, DialogActions, DialogContentText, Checkbox, ListItemText, Autocomplete } from '@mui/material'
 import { Add, Close, CloudUpload, Delete, Done, Edit, Receipt, Remove } from '@mui/icons-material';
 import axios from 'axios'
+import { styled } from '@mui/material/styles';
 
 const CompanyDetails = () => {
 
@@ -22,6 +23,7 @@ const CompanyDetails = () => {
     const initialMailData = {
         userType: "",
         companyName: "",
+        companyAddress: "",
         companyPlants: [],
         companyLogo: "",
         companyImage: ""
@@ -30,6 +32,7 @@ const CompanyDetails = () => {
     const [companyData, setCompanyData] = useState({
         userType: "",
         companyName: "",
+        companyAddress: "",
         companyPlants: [],
         companyLogo: "",
         companyImage: ""
@@ -37,7 +40,7 @@ const CompanyDetails = () => {
     })
     console.log(companyData)
 
-    const mailFetchData = async () => {
+    const companysFetchData = async () => {
         try {
             const response = await axios.get(
                 `${process.env.REACT_APP_PORT}/compDetails/getCompDetailsById/658c12ca19f2c8564204a6af`
@@ -46,8 +49,9 @@ const CompanyDetails = () => {
             console.log(details)
             setCompanyData((prev) => ({
                 ...prev,
-                userType: details.mailId,
+                userType: details.userType,
                 companyName: details.companyName,
+                companyAddress: details.companyAddress,
                 companyPlants: details.companyPlants,
                 companyLogo: details.companyLogo,
                 companyImage: details.companyImage
@@ -57,7 +61,7 @@ const CompanyDetails = () => {
         }
     };
     useEffect(() => {
-        mailFetchData();
+        companysFetchData();
     }, []);
 
 
@@ -84,7 +88,7 @@ const CompanyDetails = () => {
 
             );
             console.log(response.data)
-            companyFetchData();
+            companysFetchData();
             setCompanyData(initialMailData);
             setMailSnackBar(true)
             setErrorHandler({ status: response.data.status, message: response.data.message, code: "success" })
@@ -115,14 +119,42 @@ const CompanyDetails = () => {
         }
     };
 
+    const VisuallyHiddenInput = styled('input')({
+        clip: 'rect(0 0 0 0)',
+        clipPath: 'inset(50%)',
+        height: 1,
+        overflow: 'hidden',
+        position: 'absolute',
+        bottom: 0,
+        left: 0,
+        whiteSpace: 'nowrap',
+        width: 1,
+    });
+    const [file, setFile] = useState(null);
+    const handleCompany = (e) => {
+        const selectedFile = e.target.files[0];
+        console.log(selectedFile)
+        setFile(selectedFile);
+    };
 
 
-    const handleCompanyChange = (e) => {
+
+    {/* const handleCompanyChanges = (e) => {
         const { name, value } = e.target;
         setCompanyData((prev) => ({ ...prev, [name]: value }));
 
 
-    }
+    }*/}
+    const handleCompanyChange = (e) => {
+        const { name, checked, value, type } = e.target;
+        let updatedValue = value;
+        if (type === "checkbox") {
+            updatedValue = checked ? "1" : "0";
+        }
+
+        setCompanyData((prev) => ({ ...prev, [name]: updatedValue }));
+    };
+
 
     const addPlantDataRow = () => {
         setCompanyData((prevCompanyData) => ({
@@ -187,12 +219,12 @@ const CompanyDetails = () => {
                                     row
                                     aria-labelledby="demo-row-radio-buttons-group-label"
                                     disabled={!isEditable}
-                                    name="row-radio-buttons-group"
-
+                                    value={companyData.userType}
+                                    name="userType"
+                                    onChange={handleCompanyChange}
                                 >
-                                    <FormControlLabel value="singleUser" disabled={!isEditable} control={<Radio />} label="SingleUser" />
-                                    <FormControlLabel value="multiUser" disabled={!isEditable} control={<Radio />} label="MultiUser" />
-
+                                    <FormControlLabel value="singleUser" checked={companyData.userType === "singleUser"} disabled={!isEditable} control={<Radio />} label="SingleUser" />
+                                    <FormControlLabel value="multiUser" checked={companyData.userType === "multiUser"} disabled={!isEditable} control={<Radio />} label="MultiUser" />
                                 </RadioGroup>
                             </div>
                             <div className=' col d-flex justify-content-end'>
@@ -206,7 +238,7 @@ const CompanyDetails = () => {
 
 
                         </div>
-                        <div className='row g-2'>
+                        <div className='row g-2 mb-2'>
                             <div className='col-6'>
                                 <TextField label="Company Name"
                                     id="companyNameId"
@@ -219,47 +251,63 @@ const CompanyDetails = () => {
 
 
                             </div>
-                            <table className='table  table-sm table table-bordered table-responsive text-center align-middle' disabled={!isEditable} >
+                            {companyData.userType === "singleUser" &&    <div className='col-6'>
+                                <TextField label="Company Address"
+                                    id="companyNameId"
+                                    value={companyData.companyAddress}
+                                    disabled={!isEditable}
+                                    onChange={handleCompanyChange}
+                                    size="small"
+                                    sx={{ width: "100%" }}
+                                    name="companyAddress" />
+
+
+                            </div>}
+                            {companyData.userType === "multiUser" &&     <table className='table  table-sm table table-bordered table-responsive text-center align-middle' disabled={!isEditable} >
                                 <tbody>
                                     <tr>
                                         <th>Si No</th>
+                                        <th>Plant Name</th>
                                         <th> Plant Address</th>
-                                        <th width={"10%"}> <Fab size='small' color="primary" aria-label="add" disabled={!isEditable} onClick={() => addPlantDataRow()}>
+                                        {companyData.userType === "multiUser" && <th width={"10%"}> <Fab size='small' color="primary" aria-label="add" disabled={!isEditable} onClick={() => addPlantDataRow()}>
                                             <Add />
-                                        </Fab></th>
+                                        </Fab></th>}
                                     </tr>
 
                                     {companyData.companyPlants.map((item, index) => (
                                         <tr key={index}>
                                             <td>{index + 1}</td>
-                                            <td><input type='text' className='form-control form-control-sm' name='companyPlants' disabled={!isEditable} value={item.companyPlants} onChange={(e) => changeCompanyRow(index, e.target.name, e.target.value)} /></td>
+                                            <td><input type='text' className='form-control form-control-sm' name='plantName' disabled={!isEditable} value={item.plantName} onChange={(e) => changeCompanyRow(index, e.target.name, e.target.value)} /></td>
+                                            <td><input type='text' className='form-control form-control-sm' name='plantAddress' disabled={!isEditable} value={item.plantAddress} onChange={(e) => changeCompanyRow(index, e.target.name, e.target.value)} /></td>
                                             {/* Other table cells */}
-                                            <td style={{ width: "2%" }}>
+                                            {companyData.userType === "multiUser" && <td style={{ width: "2%" }}>
                                                 <Button size='small' color="success" disabled={!isEditable} aria-label="add" onClick={() => deletePlantRow(index)} >
                                                     <Remove sx={{ m: 0, p: 0 }} />
                                                 </Button>
-                                            </td>
+                                            </td>}
                                         </tr>
                                     ))}
 
                                 </tbody>
-                            </table>
+                            </table>}
 
                         </div>
 
-                        <div className='row'>
+                        <div className='row g-2'>
                             <div className='col-4'>
-                                <Button helperText="Hello" component="label" fullWidth variant="contained" startIcon={<CloudUpload />} >
+                                <Button helperText="Hello" component="label" fullWidth variant="contained" disabled={!isEditable} startIcon={<CloudUpload />} >
                                     Upload ComPany Logo
+                                    <VisuallyHiddenInput type="file" onChange={handleCompany} />
                                 </Button>
                             </div>
 
                             <div className='col-4'>
-                                <Button helperText="Hello" component="label" fullWidth variant="contained" startIcon={<CloudUpload />} >
+                                <Button helperText="Hello" component="label" fullWidth variant="contained" disabled={!isEditable} startIcon={<CloudUpload />} >
                                     Company Image
+                                    <VisuallyHiddenInput type="file" />
                                 </Button>
                             </div>
-                            {isEditable &&     <div className=' col d-flex justify-content-end'>
+                            {isEditable && <div className=' col d-flex justify-content-end'>
                                 <div className='me-2 '>
                                     <Button size='small' sx={{ minWidth: "130px" }} variant='contained' onClick={() => setOpenModal(true)}>Modify</Button>
                                 </div>

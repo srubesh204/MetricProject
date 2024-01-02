@@ -6,7 +6,13 @@ const compDetailsSchema = new mongoose.Schema({
   
   userType : String,
   companyName: String,
-  companyPlants : [],
+  companyAddress: String,
+  companyPlants : [{
+    plantName: String,
+    plantAddress: String,
+  }
+
+  ],
   companyLogo : String,
   companyImage : String
 
