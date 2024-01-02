@@ -1,26 +1,13 @@
 import React, { useState } from 'react'
-import { FormControlLabel, FormGroup, Paper, Checkbox, TextField, MenuItem } from '@mui/material'
+import { FormControlLabel, FormGroup, Paper, Checkbox, TextField, MenuItem, Tabs, Tab } from '@mui/material'
+import axios from 'axios'
 
 
-
-const Roles = () => {
+const ExtraRole = () => {
 
     const initialRoleData = {
-        roleName: "",
-        roleStatus: "",
-        depdes: [],
-        areaPof: [],
-        unitPart: [],
-        employees: [],
-        vendor: [],
-        itemMaster: [],
-        itemEntry: [],
-        cal: [],
-        dc: [],
-        grn: [],
-        onsiteGrn: []
-    }
 
+    }
 
     const [roleData, setRoleData] = useState({
         roleName: "",
@@ -38,10 +25,6 @@ const Roles = () => {
         onsiteGrn: []
     })
     console.log(roleData)
-
-
-
-
 
     const handleRoleData = (e, pageName) => {
         const { name, value, checked } = e.target;
@@ -65,34 +48,13 @@ const Roles = () => {
             setRoleData((prev) => ({ ...prev, employees: updatedEmployees }));
         }
 
-        // if(pageName === "Department"){
-        //     if (checked && !updatedEmployees.includes(value)) {
-        //         updatedEmployees.push(value);
-        //     } else {
-        //         // If the checkbox is unchecked, remove the value from the array
-        //         const index = updatedEmployees.indexOf(value);
-        //         if (index !== -1) {
-        //             updatedEmployees.splice(index, 1);
-        //         }
-        //     }
-        //     setRoleData((prev) => ({ ...prev, employees: updatedEmployees }));
-        // }
-        // If the checkbox is checked, add the value to the array
 
-
-        // Update the roleData state with the modified employees array
 
     }
-
-
-
 
     return (
         <div >
 
-            <h3 className='text-center'>
-                Roles
-            </h3>
             <Paper sx={{
                 p: 2,
                 m: 2
@@ -210,4 +172,4 @@ const Roles = () => {
     )
 }
 
-export default Roles
+export default ExtraRole

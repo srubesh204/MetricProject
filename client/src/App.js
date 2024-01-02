@@ -34,7 +34,7 @@ import OnSiteList from './Components/Reports/onSiteGrn/OnSiteList';
 import OnSiteEditGrn from './Components/Reports/onSiteGrn/OnSiteEditGrn';
 import OnSiteDialog from './Components/Dashboard/DashboardComponents/OnSiteDialog';
 
-import Roles from './Components/Login Components/Roles';
+import Roles from './Components/system/Permissions';
 import MailConfi from './Components/system/MailConfig';
 import { createContext, useContext, useEffect, useState } from 'react';
 import AccessDenied from './Components/ErrorComponents/AccessDenied';

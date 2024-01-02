@@ -26,8 +26,14 @@ const employeeSchema = new mongoose.Schema({
         maxLength: [10, "Phone should not more than 10 digits"]
           
     },
-    designation : String,
-    department : String,
+    designation : {
+        type: String,
+        required : [true, "Designation required"]
+    },
+    department : {
+        type: String,
+        required : [true, "Department required"]
+    },
     mailId : String,
     empRole: {
         type: String,
@@ -44,7 +50,8 @@ const employeeSchema = new mongoose.Schema({
     plant: {
         type: String,
         required: [true, "Please select plant"]
-    }
+    },
+    extraPermissions : []
 });
 employeeSchema.plugin(uniqueValidator);
 

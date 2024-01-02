@@ -57,6 +57,8 @@ import MailConfig from '../system/MailConfig';
 import FormatNumber from '../system/FormatNumber';
 import CompanyDetails from '../system/CompanyDetails';
 import InsHistoryCard from '../Reports/InsHistoryCard';
+import Roles from '../system/Permissions';
+import Permissions from '../system/Permissions';
 //
 
 // function Copyright(props) {
@@ -151,6 +153,7 @@ const Dashboard = () => {
       { name: "Mail Configuration" ,file: <MailConfig />,},
       { name: "Format Number" ,file: <FormatNumber />,},
       { name: "Company Details",file: <CompanyDetails />, },
+      { name: "Permissions",file: <Permissions />, },
       { name: "Label Print" },
 
     ],
