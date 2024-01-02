@@ -1160,9 +1160,11 @@ const Vendor = () => {
                                                 </Button>
                                                 <Button color='secondary'><CloudDownload /></Button>
                                             </ButtonGroup>
-                                            {vendorExcelStatus && <p>{vendorExcelStatus}</p>}
                                         </div>
                                     </div>
+                                            
+
+
                                     {vendorStateId ?
                                         <div className='d-flex justify-content-end'>
                                             <div className='me-2' >
@@ -1172,9 +1174,9 @@ const Vendor = () => {
                                                 <button type="button" className='btn btn-danger' onClick={() => { setVendorStateId(null); setVendorData(initialVendorData) }}>Cancel</button>
                                             </div>
                                         </div> : <div className='col d-flex justify-content-end mb-2'>
-                                            <div >
-                                                <button type="button" className='btn btn-warning' onClick={() => setOpenModalVendor(true)}>+ Add Vendor</button>
-                                            </div>
+                                            <div>
+                  <Button variant='contained' size="small" color='warning' onClick={() => setOpenModalVendor(true)}>+ Add Vendor</Button>
+                  </div>
                                         </div>}
 
                                 </div>
@@ -1220,6 +1222,7 @@ const Vendor = () => {
                                             </Button>
                                         </DialogActions>
                                     </Dialog>}
+                                    <div>{vendorExcelStatus && <p>{vendorExcelStatus}</p>}</div>
 
                             </div>
                         </Paper>

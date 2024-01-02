@@ -1072,10 +1072,10 @@ if(name === "pou") {
                         </Button>
                         <Button color='secondary'><CloudDownload /></Button>
                       </ButtonGroup>
-                      {depExcelStatus && <p>{depExcelStatus}</p>}
                     </div>
 
                   </div>
+                      {depExcelStatus && <p>{depExcelStatus}</p>}
 
 
 
@@ -1145,19 +1145,9 @@ if(name === "pou") {
                         className="btn text-end"
                         onClick={() => { setDepStateId(null); setDepartmentData(emptyDepartmentData) }}
                       >Cancel</button>
-                    </div>) :
-                      <div className="d-flex justify-content-end">
-                        <button
-                          type="button"
-                          style={{ backgroundColor: "#e6e6e6", color: "black", fontWeight: "bolder" }}
-                          className="btn text-end hover"
-                          onClick={() => setDepOpenModal(true)}
-
-                        >
-                          <i className="bi bi-plus"></i>Add Department
-                        </button>
-                      </div>
-                    }
+                    </div>) : <div>
+                                                <Button variant='contained' size="small" color='warning' onClick={() => setDepOpenModal(true)}>+ Add Department</Button>
+                                                </div> }
 
 
 
@@ -1353,10 +1343,10 @@ if(name === "pou") {
                           </Button>
                           <Button color='secondary'><CloudDownload /></Button>
                         </ButtonGroup>
-                        {areaExcelStatus && <p>{areaExcelStatus}</p>}
                       </div>
 
                     </div>
+                        {areaExcelStatus && <p>{areaExcelStatus}</p>}
 
 
                     {areaStateId ? <Dialog
@@ -1427,16 +1417,9 @@ if(name === "pou") {
                           className="btn text-end"
                           onClick={() => { setareaStateId(null); setArea(initialAreaData) }}
                         >Cancel</button>
-                      </div>) : <div className="d-flex justify-content-end">
-                        <button
-                          type="button"
-                          style={{ backgroundColor: "#e6e6e6", color: "black", fontWeight: "bolder" }}
-                          className="btn text-end hover"
-                          onClick={() => setAreaOpenModal(true)}
-
-                        >
-                          <i className="bi bi-plus"></i>Add Area
-                        </button></div>}
+                      </div>) : <div>
+                                                <Button variant='contained' size="small" color='warning' onClick={() => setAreaOpenModal(true)}>+ Add Area</Button>
+                                                </div> }
 
 
 
@@ -1645,10 +1628,12 @@ if(name === "pou") {
                         </Button>
                         <Button color='secondary'><CloudDownload /></Button>
                       </ButtonGroup>
-                      {pouExcelStatus && <p>{pouExcelStatus}</p>}
                     </div>
 
                   </div>
+                      {pouExcelStatus && <p>{pouExcelStatus}</p>}
+
+
                   {placeOfUsageId ? <Dialog
                     open={pouOpenModal}
                     onClose={() => setPouOpenModal(false)}
@@ -1696,7 +1681,7 @@ if(name === "pou") {
 
 
 
-                  <div className="col-md p-0">
+                  <div className="col-md p-0 d-flex justify-content-end">
 
                     {placeOfUsageId ? (<div className="d-flex justify-content-end">
                       <button
@@ -1713,16 +1698,9 @@ if(name === "pou") {
                         className="btn text-end "
                         onClick={() => { setPlaceOfUsageId(null); setPlaceOfUsageData(initialPlaceOfUsageData) }}
                       >Cancel</button>
-                    </div>) :
-                      <div className="d-flex justify-content-end"><button
-                        type="button"
-                        style={{ backgroundColor: "#e6e6e6", color: "black", fontWeight: "bolder" }}
-                        className="btn hover"
-                        onClick={() => setPouOpenModal(true)}
-
-                      >
-                        <i className="bi bi-plus"></i>Add Place
-                      </button></div>}
+                    </div>) : <div>
+                      <Button variant='contained' size="small" color='warning' onClick={() => setPouOpenModal(true)}>+ Add Place</Button>
+                      </div> }
 
 
 
@@ -2358,10 +2336,10 @@ export const Designation = () => {
                       </Button>
                       <Button color='secondary'><CloudDownload /></Button>
                     </ButtonGroup>
-                    {desExcelStatus && <p>{desExcelStatus}</p>}
                   </div>
 
                 </div>
+                    {desExcelStatus && <p>{desExcelStatus}</p>}
 
 
                 {desStateId ? <Dialog
@@ -2422,14 +2400,9 @@ export const Designation = () => {
                       className="btn text-end me-3"
                       onClick={() => { setDesStateId(null); setDesignationData(initialDesignationData) }}
                     >Cancel</button>
-                  </div>) : <button
-                    type="button"
-                    className="btn text-end hover"
-                    onClick={() => setOpenModal(true)}
-                    style={{ backgroundColor: "#e6e6e6", color: "black", fontWeight: "bolder" }}
-                  >
-                    <i className="bi bi-plus"></i>Add Designation</button>
-                  }
+                  </div>) : <div>
+                  <Button variant='contained' size="small" color='warning' onClick={() => setOpenModal(true)}>+ Add Designation</Button>
+                  </div> }
                 </div>
               </div>
 

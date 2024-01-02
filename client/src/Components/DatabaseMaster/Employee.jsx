@@ -919,9 +919,10 @@ const Employee = () => {
                                             </Button>
                                             <Button color='secondary'><CloudDownload /></Button>
                                         </ButtonGroup>
-                                        {empExcelStatus && <p>{empExcelStatus}</p>}
                                     </div>
                                 </div>
+
+
                                 {empDataId ? <Dialog
                                     open={open}
                                     onClose={handleClose}
@@ -986,11 +987,12 @@ const Employee = () => {
                                         </div>
                                     </div> :
                                         <div>
-                                            <button onClick={handleClickOpen} type="button" className='btn btn-warning'>+ Add Employee</button>
-                                        </div>
+                  <Button variant='contained' size="small" color='warning' onClick={handleClickOpen}>+ Add Employee</Button>
+                  </div>
                                     }
                                 </div>
                             </div>
+                                        {empExcelStatus && <p>{empExcelStatus}</p>}
                         </Paper>
                     </Grid>
 

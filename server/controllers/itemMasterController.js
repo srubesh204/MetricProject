@@ -223,7 +223,7 @@ const itemMasterController = {
       // Execute all upload promises
       const uploadedItemMaster = await Promise.all(uploadPromises);
 
-      res.status(200).json({ uploadedItemMaster, message: 'Excel data uploaded successfully' });
+      res.status(200).json({ uploadedItemMaster, message: 'Uploaded successfully' });
     } catch (error) {
       console.error('Error uploading Excel data:', error);
       res.status(500).json({ error: 'Internal Server Error' });
