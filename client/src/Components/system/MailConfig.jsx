@@ -4,7 +4,7 @@ import { Add, Close, Delete, CloudUpload, Edit, Done } from '@mui/icons-material
 import axios from 'axios'
 
 
-const MailConfi = () => {
+const MailConfig = () => {
 
 
 
@@ -277,4 +277,4 @@ const MailConfi = () => {
     )
 }
 
-export default MailConfi
+export default MailConfig
