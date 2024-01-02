@@ -549,6 +549,7 @@ const ItemMaster = () => {
                     'Content-Type': 'multipart/form-data',
                 },
             });
+            itemMasterFetchData()
 
             setItemMasterExcelStatus(response.data.message || 'Excel file uploaded successfully');
         } catch (error) {

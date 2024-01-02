@@ -517,7 +517,7 @@ const Employee = () => {
                     'Content-Type': 'multipart/form-data',
                 },
             });
-
+            empFetch();
             setEmpExcelStatus(response.data.message || 'Excel file uploaded successfully');
         } catch (error) {
             if (error.response) {
