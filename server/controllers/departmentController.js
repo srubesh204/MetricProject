@@ -1,4 +1,5 @@
 const departmentModel = require("../models/departmentModel")
+const excelToJson = require('convert-excel-to-json');
 
 const departmentController = {
   getAllDepartment: async (req, res) => {
@@ -154,6 +155,47 @@ const departmentController = {
     } catch (error) {
       console.log(error);
       res.status(500).json({ error: error, status: 0 });
+    }
+  },
+  uploadDepartmentInExcel: async (req, res) => {
+    try {
+      if (!req.file) {
+        console.log("hi")
+        return res.status(400).json({ error: 'No file uploaded' });
+      }
+      
+      const excelData = req.file.buffer; // Access the file buffer
+  
+      // Convert Excel data to JSON
+      const jsonData = excelToJson({
+        source: excelData,
+        columnToKey: {
+          A: 'department',
+          B: 'departmentStatus',
+          C: 'defaultdep'
+      }
+      });
+      console.log(jsonData)
+  
+      const uploadPromises = jsonData.Sheet1.map(async (item) => {
+        try {
+          // Create an instance of departmentModel and save it to the database
+          const newDepartment = new departmentModel(item); // Assuming 'item' conforms to your DepartmentModel schema
+          const savedDepartment = await newDepartment.save();
+          return savedDepartment;
+
+        } catch (error) {
+          console.error('Error saving department:', error);   
+        }
+      });
+  
+      // Execute all upload promises
+      const uploadedDepartments = await Promise.all(uploadPromises);
+  
+      res.status(200).json({ uploadedDepartments, message: 'Excel data uploaded successfully' });
+    } catch (error) {
+      console.error('Error uploading Excel data:', error);
+      res.status(500).json({ error: 'Internal Server Error' });
     }
   }
 

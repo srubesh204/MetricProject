@@ -187,15 +187,17 @@ const itemMasterController = {
           rows: 1
         },
         columnToKey: {
-          A: 'itemDescription',
-          B: 'itemPrefix',
-          C: 'itemFqInMonths',
-          D: 'calAlertInDay',
-          E: 'SOPNo',
-          F: 'uncertainty',
-          G: 'uncertaintyUnit',
-          H: 'standardRef',
-          I: 'status',
+          A: 'itemType',
+          B: 'itemDescription',
+          C: 'itemPrefix',
+          D: 'itemFqInMonths',
+          E: 'calAlertInDay',
+          F: 'SOPNo',
+          G: 'uncertainty',
+          H: 'uncertaintyUnit',
+          I: 'standardRef',
+          J: 'status'
+        
         
           
 

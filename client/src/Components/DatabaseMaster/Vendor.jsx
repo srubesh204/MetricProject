@@ -677,6 +677,7 @@ const Vendor = () => {
                     'Content-Type': 'multipart/form-data',
                 },
             });
+            vendorFetchData();
 
             setVendorExcelStatus(response.data.message || 'Excel file uploaded successfully');
         } catch (error) {
