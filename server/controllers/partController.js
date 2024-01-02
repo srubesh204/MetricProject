@@ -1,4 +1,5 @@
 const partModel = require("../models/partModel")
+const excelToJson = require('convert-excel-to-json');
 
 const partController = {
     getAllParts: async (req, res) => {
@@ -158,6 +159,53 @@ const partController = {
     } catch (error) {
         console.log(error);
         res.status(500).json({ error: error, status: 0 });
+    }
+  },
+  uploadPartInExcel: async (req, res) => {
+    try {
+      if (!req.file) {
+        console.log("hi")
+        return res.status(400).json({ error: 'No file uploaded' });
+      }
+  
+      const excelData = req.file.buffer; // Access the file buffer
+  
+      // Convert Excel data to JSON
+      const jsonData = excelToJson({
+        source: excelData,
+        header: {
+          // Is the number of rows that will be skipped and will not be present at our result object. Counting from top to bottom
+          rows: 1 // 2, 3, 4, etc.
+        },
+        columnToKey: {
+          A: 'partNo',
+          B: 'partName',
+          C: 'customer',
+          D: 'operationNo',
+          E: 'partStatus',
+        }
+      });
+      console.log(jsonData)
+  
+      const uploadPromises = jsonData.Sheet1.map(async (item) => {
+        try {
+          // Create an instance of departmentModel and save it to the database
+          const newPart = new partModel(item); // Assuming 'item' conforms to your DepartmentModel schema
+          const savedPart = await newPart.save();
+          return savedPart;
+  
+        } catch (error) {
+          console.error('Error saving department:', error);
+        }
+      });
+  
+      // Execute all upload promises
+      const uploadedPart = await Promise.all(uploadPromises);
+  
+      res.status(200).json({ uploadedPart, message: 'Excel data uploaded successfully' });
+    } catch (error) {
+      console.error('Error uploading Excel data:', error);
+      res.status(500).json({ error: 'Internal Server Error' });
     }
   }
 }
