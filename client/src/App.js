@@ -1,26 +1,26 @@
 
 import './App.css';
 import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom';
-import { Department, Designation } from './Components/DesDep';
-import Employee from './Components/employee/Employee';
+import { Department, Designation } from './Components/DatabaseMaster/DesDep';
+import Employee from './Components/DatabaseMaster/Employee';
 
-import { UnitDataBase, PartDataBase } from './Components/general/General';
-import Vendor from './Components/vendor/Vendor';
-import ItemMaster from './Components/itemMaster/ItemMaster';
-import Devi from './Components/devi/Devi';
+import { UnitDataBase, PartDataBase } from './Components/DatabaseMaster/General';
+import Vendor from './Components/DatabaseMaster/Vendor';
+import ItemMaster from './Components/DatabaseMaster/ItemMaster';
+
 import Dashboard from './Components/Dashboard/Dashboard';
 import Home from './Components/Dashboard/Home';
-import ItemAdd from './Components/Items/ItemAdd';
-import ItemEdit from './Components/Items/ItemEdit';
+import ItemAdd from './Components/ItemCreation/ItemAdd';
+import ItemEdit from './Components/ItemCreation/ItemEdit';
 import '@fontsource/roboto/300.css';
 import '@fontsource/roboto/400.css';
 import '@fontsource/roboto/500.css';
 import '@fontsource/roboto/700.css';
-import ItemList from './Components/Items/ItemList';
+import ItemList from './Components/ItemCreation/ItemList';
 import FileViewer from './Components/Test/FileViewer';
-import Login from './Components/Login';
+import Login from './Components/Login Components/Login';
 
-import Status from './Components/status/Status';
+import Status from './Components/DatabaseMaster/status/Status';
 // import Dc from './Components/dc/Dc';
 import Grn from './Components/Dashboard/DashboardComponents/Grn';
 import DcList from './Components/dcList/DcList';
@@ -29,13 +29,13 @@ import CalList from './Components/CalItems/CalList';
 import DcEdit from './Components/dcList/DcEdit';
 import GrnEdit from './Components/grnList/GrnEdit';
 import GrnAdd from './Components/grnList/GrnAdd';
-import OnSiteGrn from './Components/onSiteGrn/OnSiteGrn';
-import OnSiteList from './Components/onSiteGrn/OnSiteList';
-import OnSiteEditGrn from './Components/onSiteGrn/OnSiteEditGrn';
+import OnSiteGrn from './Components/Reports/onSiteGrn/OnSiteGrn';
+import OnSiteList from './Components/Reports/onSiteGrn/OnSiteList';
+import OnSiteEditGrn from './Components/Reports/onSiteGrn/OnSiteEditGrn';
 import OnSiteDialog from './Components/Dashboard/DashboardComponents/OnSiteDialog';
 
-import Roles from './Components/Login/Roles';
-import MailConfi from './Components/mailConfi/MailConfi';
+import Roles from './Components/Login Components/Roles';
+import MailConfi from './Components/system/MailConfig';
 import { createContext, useContext, useEffect, useState } from 'react';
 import AccessDenied from './Components/ErrorComponents/AccessDenied';
 import axios from 'axios';
@@ -74,7 +74,6 @@ const generateRoutes = (employee) => {
     { path: "/general", element: <PartDataBase /> },
     { path: "/vendor", element: <Vendor /> },
     { path: "/itemMaster", element: <ItemMaster /> },
-    { path: "/devi", element: <Devi /> },
     { path: "/itemadd", element: <ItemAdd /> },
     { path: "/itemedit/:id", element: <ItemEdit /> },
     { path: "/itemlist", element: <ItemList /> },

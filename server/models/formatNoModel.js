@@ -29,6 +29,12 @@ const formatNoSchema = new mongoose.Schema({
     amNo:String,
     amDate:String,
   },
+  fCalDueDate :  {
+    frNo:String,
+    amNo:String,
+    amDate:String,
+  },
+
   fCertificatePrefix : String,
   fDeTemperature : String,
   fDeHumidity : String

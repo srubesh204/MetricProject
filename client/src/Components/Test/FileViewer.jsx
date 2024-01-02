@@ -1,7 +1,6 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { FormControl, InputLabel, Select, MenuItem, TextField, Button, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from '@mui/material';
-import { jsPDF } from 'jspdf';
-import 'jspdf-autotable';
+
 
 const FileViewer = () => {
   const [selectedOption, setSelectedOption] = useState('');
@@ -66,12 +65,7 @@ const FileViewer = () => {
     setAddress('');
   };
 
-  const downloadPDF = () => {
-    const pdf = new jsPDF();
-    pdf.text('Submitted Data', 20, 10);
-    pdf.autoTable({ html: '#data-table' });
-    pdf.save('submitted_data.pdf');
-  };
+  
 
   const handlePageChange = (newPage) => {
     setCurrentPage(newPage);
@@ -188,9 +182,7 @@ const FileViewer = () => {
             </Button>
           </div>
 
-          <Button variant="contained" color="secondary" onClick={downloadPDF}>
-            Download PDF
-          </Button>
+          
         </div>
       )}
     </div>

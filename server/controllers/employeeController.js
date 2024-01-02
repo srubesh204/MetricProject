@@ -1,4 +1,5 @@
 const employeeModel = require("../models/employeeModel")
+const excelToJson = require('convert-excel-to-json');
 
 const employeeController = {
   getAllEmployee: async (req, res) => {
@@ -183,7 +184,69 @@ const employeeController = {
       res.status(500).json({ message: 'Internal server error' });
       console.log(error)
     }
+  },
+  uploadEmployeeInExcel: async (req, res) => {
+    try {
+      if (!req.file) {
+        return res.status(400).json({ error: 'No file uploaded' });
+      }
+      
+      const excelData = req.file.buffer; // Access the file buffer
+  
+      // Convert Excel data to JSON
+      const jsonData = excelToJson({
+        source: excelData,
+        columnToKey: {
+          A: 'employeeCode',
+          B: 'title',
+          C: 'firstName',
+          D: 'lastName',
+          E: 'dob',
+          F: 'address',
+          G: 'city',
+          H: 'state',
+          I: 'contactNumber',
+          J: 'designation',
+          K: 'department',
+          L: 'mailId',
+          M: 'empRole',
+          N: 'doj',
+          O: 'employmentStatus',
+          P: 'reportTo',
+          Q: "password"
+
+
+           
+
+
+      }
+      });
+      console.log(jsonData)
+  
+      const uploadPromises = jsonData.Sheet1.map(async (item) => {
+        try {
+          // Create an instance of designationModel and save it to the database
+          const newEmployee = new employeeModel(item); // Assuming 'item' conforms to your designationModel schema
+          const savedEmployee = await newEmployee.save();
+          return savedEmployee;
+
+        } catch (error) {
+          console.error('Error saving employee:', error);
+         
+        }
+      });
+  
+      // Execute all upload promises
+      const uploadedEmployee = await Promise.all(uploadPromises);
+  
+      res.status(200).json({ uploadedEmployee, message: 'Excel data uploaded successfully' });
+    } catch (error) {
+      console.error('Error uploading Excel data:', error);
+      res.status(500).json({ error: 'Internal Server Error' });
+    }
   }
+
+  
 
 }
 module.exports = employeeController; 

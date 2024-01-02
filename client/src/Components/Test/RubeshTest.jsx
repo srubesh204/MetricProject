@@ -6,6 +6,7 @@ import axios from 'axios';
 
 
 
+
 const RubeshTest = () => {
 
     const VisuallyHiddenInput = styled('input')({
@@ -30,6 +31,8 @@ const RubeshTest = () => {
         setFile(selectedFile);
     };
 
+    const [isLoading, setIsLoading] = useState(false)
+
     const handleUpload = async () => {
         try {
           if (!file) {
@@ -39,8 +42,8 @@ const RubeshTest = () => {
     
           const formData = new FormData();
           formData.append('file', file);
-    
-          const response = await axios.post(`${process.env.REACT_APP_PORT}/designation/uploadDesignationsInExcel`, formData, {
+          setIsLoading(true)
+          const response = await axios.post(`${process.env.REACT_APP_PORT}/test/uploadTestData`, formData, {
             headers: {
               'Content-Type': 'multipart/form-data',
             },
@@ -56,6 +59,8 @@ const RubeshTest = () => {
             setUploadStatus('Error uploading the file.');
           }
           console.error('Error uploading Excel file:', error);
+        }finally{
+          setIsLoading(false)
         }
       };
 
@@ -70,7 +75,7 @@ const RubeshTest = () => {
             <div className='w-100 d-flex justify-content-center p-5'>
                 <div>
                     <ButtonGroup className='me-3'>
-                    <Button component="label"  variant="contained" >
+                    <Button loadin component="label"  variant="contained" >
                         Upload file
                         <VisuallyHiddenInput type="file" onChange={handleFileChange}/>
                     </Button>
