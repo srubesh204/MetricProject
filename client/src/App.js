@@ -7,7 +7,7 @@ import Employee from './Components/DatabaseMaster/Employee';
 import { UnitDataBase, PartDataBase } from './Components/DatabaseMaster/General';
 import Vendor from './Components/DatabaseMaster/Vendor';
 import ItemMaster from './Components/DatabaseMaster/ItemMaster';
-import Devi from './Components/devi/Devi';
+
 import Dashboard from './Components/Dashboard/Dashboard';
 import Home from './Components/Dashboard/Home';
 import ItemAdd from './Components/ItemCreation/ItemAdd';
@@ -18,7 +18,7 @@ import '@fontsource/roboto/500.css';
 import '@fontsource/roboto/700.css';
 import ItemList from './Components/ItemCreation/ItemList';
 import FileViewer from './Components/Test/FileViewer';
-import Login from './Components/Login/Login';
+import Login from './Components/Login Components/Login';
 
 import Status from './Components/DatabaseMaster/status/Status';
 // import Dc from './Components/dc/Dc';
@@ -34,7 +34,7 @@ import OnSiteList from './Components/Reports/onSiteGrn/OnSiteList';
 import OnSiteEditGrn from './Components/Reports/onSiteGrn/OnSiteEditGrn';
 import OnSiteDialog from './Components/Dashboard/DashboardComponents/OnSiteDialog';
 
-import Roles from './Components/Login/Roles';
+import Roles from './Components/Login Components/Roles';
 import MailConfi from './Components/system/MailConfig';
 import { createContext, useContext, useEffect, useState } from 'react';
 import AccessDenied from './Components/ErrorComponents/AccessDenied';
@@ -74,7 +74,6 @@ const generateRoutes = (employee) => {
     { path: "/general", element: <PartDataBase /> },
     { path: "/vendor", element: <Vendor /> },
     { path: "/itemMaster", element: <ItemMaster /> },
-    { path: "/devi", element: <Devi /> },
     { path: "/itemadd", element: <ItemAdd /> },
     { path: "/itemedit/:id", element: <ItemEdit /> },
     { path: "/itemlist", element: <ItemList /> },
