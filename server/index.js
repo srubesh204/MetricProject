@@ -16,6 +16,7 @@ const itemAddRoute = require('./routes/itemAddRoute')
 const areaRoute = require('./routes/areaRoute')
 const placeOfUsageRoute = require('./routes/placeOfUsageRoute');
 const itemCalRoute = require("./routes/itemCalRoute");
+const testRoute = require("./routes/testRoute");
 const itemGRNRoute = require("./routes/itemGRNRoute");
 const onsiteItemGRNRoute = require("./routes/onsiteItemGRNRoute");
 const itemDcRoute = require("./routes/itemDcRoute");
@@ -67,6 +68,7 @@ app.use('/part', partRoute);
 app.use('/vendor', vendorRoute);
 app.use('/itemMaster', itemMasterRoute);
 app.use('/onsiteItemGRN', onsiteItemGRNRoute);
+app.use('/test', testRoute);
 app.use('/upload', uploadRoute);
 app.use('/vendorCertificates', express.static('storage/vendorCertificates'));
 app.use('/workInstructions', express.static('storage/workInstructions'));
@@ -88,7 +90,7 @@ app.use('/mailConfig', mailConfigRoute);
 
 //
 app.post('/login', employeeController.employeeLoginCheck)
-const port = 3001;
+const port = 3002;
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
 });

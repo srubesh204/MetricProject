@@ -31,11 +31,11 @@ import ContactPageIcon from '@mui/icons-material/ContactPage';
 import CategoryIcon from '@mui/icons-material/Category';
 
 //
-import Vendor from '../vendor/Vendor';
-import Employee from '../employee/Employee'
-import ItemMaster from '../itemMaster/ItemMaster'
-import { PartDataBase, UnitDataBase } from '../general/General'
-import { Department, Designation } from '../DesDep';
+import Vendor from '../DatabaseMaster/Vendor';
+import Employee from '../DatabaseMaster/Employee'
+import ItemMaster from '../DatabaseMaster/ItemMaster'
+import { PartDataBase, UnitDataBase } from '../DatabaseMaster/General'
+import { Department, Designation } from '../DatabaseMaster/DesDep';
 import Home from './Home';
 import { useEmployee } from '../../App';
 import DcList from '../dcList/DcList';
@@ -48,13 +48,15 @@ import admin from '../assets/admin.png'
 import secretary from '../assets/secretary.gif'
 import { Button } from 'bootstrap';
 import Swal from 'sweetalert2';
-import Version from '../mailConfi/Version';
-import BackUp from '../mailConfi/BackUp';
-import AlertConfi from '../mailConfi/AlertConfi';
-import MailConfi from '../mailConfi/MailConfi';
-import FormatNumber from '../mailConfi/FormatNumber';
-import CompanyDetails from '../mailConfi/CompanyDetails';
-import InsHistoryCard from '../InsHistoryCard';
+
+//System
+import Version from '../system/Version';
+import BackUp from '../system/BackUp';
+import AlertConfig from '../system/AlertConfig';
+import MailConfig from '../system/MailConfig';
+import FormatNumber from '../system/FormatNumber';
+import CompanyDetails from '../system/CompanyDetails';
+import InsHistoryCard from '../Reports/InsHistoryCard';
 //
 
 // function Copyright(props) {
@@ -70,7 +72,7 @@ import InsHistoryCard from '../InsHistoryCard';
 //   );
 // }
 
-const drawerWidth = 280;
+const drawerWidth = 300;
 
 const AppBar = styled(MuiAppBar, {
   shouldForwardProp: (prop) => prop !== 'open',
@@ -145,8 +147,8 @@ const Dashboard = () => {
     system: [
       { name: "Version" ,file: <Version />,},
       { name: "Backup",file: <BackUp />,},
-      { name: "Alerts Configuration",file: <AlertConfi />,},
-      { name: "Mail Configuration" ,file: <MailConfi />,},
+      { name: "Alerts Configuration",file: <AlertConfig />,},
+      { name: "Mail Configuration" ,file: <MailConfig />,},
       { name: "Format Number" ,file: <FormatNumber />,},
       { name: "Company Details",file: <CompanyDetails />, },
       { name: "Label Print" },
@@ -283,12 +285,12 @@ const Dashboard = () => {
   return (
     <div>
       <ThemeProvider theme={defaultTheme}>
-        <Box sx={{ display: 'flex', }}>
+        <Box sx={{ display: 'flex', width: "100%"}}>
           <CssBaseline />
           <AppBar position="absolute" open={togglerOpen}>
             <Toolbar
               sx={{
-                pr: '24px', height: "100%" // keep right padding when drawer closed
+                pr: '24px', height: "100%", width: "100%" // keep right padding when drawer closed
               }}
             >
               <IconButton

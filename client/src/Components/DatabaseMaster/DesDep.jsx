@@ -20,6 +20,144 @@ import styled from "@emotion/styled";
 
 export const Department = () => {
 
+
+  const VisuallyHiddenInput = styled('input')({
+    clip: 'rect(0 0 0 0)',
+    clipPath: 'inset(50%)',
+    height: 1,
+    overflow: 'hidden',
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    whiteSpace: 'nowrap',
+    width: 1,
+  });
+
+  const [depFile, setDepFile] = useState(null);
+  const [areaFile, setAreaFile] = useState(null);
+  const [pouFile, setPouFile] = useState(null);
+  const [depExcelStatus, setDepExcelStatus] = useState('');
+  const [areaExcelStatus, setAreaExcelStatus] = useState('');
+  const [pouExcelStatus, setPouExcelStatus] = useState('');
+
+  const handleExcel = (e, name) => {
+    if (name === "dep") {
+      const selectedFile = e.target.files[0];
+      console.log(selectedFile)
+      setDepFile(selectedFile);
+    }
+    if (name === "area") {
+      const selectedFile = e.target.files[0];
+      console.log(selectedFile)
+      setAreaFile(selectedFile);
+    }
+    if (name === "pou") {
+      const selectedFile = e.target.files[0];
+      console.log(selectedFile)
+      setPouFile(selectedFile);
+    }
+
+  };
+
+  const handleUpload = async (e, name) => {
+    
+    try {
+      if(name === "dep") {
+        if (!depFile) {
+          setDepExcelStatus('No file selected');
+          return;
+        }
+  
+        const formData = new FormData();
+        formData.append('file', depFile);
+  
+        const response = await axios.post(`${process.env.REACT_APP_PORT}/department/uploadDepartmentInExcel`, formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+        });
+  
+        setDepExcelStatus(response.data.message || 'Excel file uploaded successfully');
+        depFetchData();
+  
+      }
+      if(name === "area") {
+        if (!areaFile) {
+          setAreaExcelStatus('No file selected');
+          return;
+        }
+  
+        const formData = new FormData();
+        formData.append('file', areaFile);
+  
+        const response = await axios.post(`${process.env.REACT_APP_PORT}/area/uploadAreaInExcel`, formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+        });
+  
+        setAreaExcelStatus(response.data.message || 'Excel file uploaded successfully');
+        areaFetchData();
+        
+      }
+      if(name === "pou") {
+        if (!pouFile) {
+          setPouExcelStatus('No file selected');
+          return;
+        }
+  
+        const formData = new FormData();
+        formData.append('file', pouFile);
+  
+        const response = await axios.post(`${process.env.REACT_APP_PORT}/placeOfUsage/uploadPlaceOfUsageInExcel`, formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+        });
+  
+        setPouExcelStatus(response.data.message || 'Excel file uploaded successfully');
+        placeOfUsageData();
+        
+      }
+
+    } catch (error) {
+      if(name === "dep") {
+      if (error.response) {
+        setDepExcelStatus(`Error: ${error.response.data.error || 'Something went wrong'}`);
+      } else if (error.request) {
+        setDepExcelStatus('Network error. Please try again.');
+      } else {
+        setDepExcelStatus('Error uploading the file.');
+      }
+      console.error('Error uploading Excel file:', error);
+    }
+
+  if(name === "area") {
+  if (error.response) {
+    setAreaExcelStatus(`Error: ${error.response.data.error || 'Something went wrong'}`);
+  } else if (error.request) {
+    setAreaExcelStatus('Network error. Please try again.');
+  } else {
+    setAreaExcelStatus('Error uploading the file.');
+  }
+  console.error('Error uploading Excel file:', error);
+}
+
+if(name === "pou") {
+  if (error.response) {
+    setPouExcelStatus(`Error: ${error.response.data.error || 'Something went wrong'}`);
+  } else if (error.request) {
+    setPouExcelStatus('Network error. Please try again.');
+  } else {
+    setPouExcelStatus('Error uploading the file.');
+  }
+  console.error('Error uploading Excel file:', error);
+}
+    }
+  };
+
+
+
   const { id } = useParams()
   console.log(id)
 
@@ -840,34 +978,21 @@ export const Department = () => {
 
       <form>
         <div className="row">
-          <Box sx={{ flexGrow: 1, m: 2 }}>
+          
+            <Paper
+              sx={{
+                p: 1,
+                m: 2
+              }}
+              elevation={12}
+              className="col-md"
+            >
+              <Typography variant="h5" component="h5" className="text-center mb-3">Department</Typography>
+              <div className="row mb-2 g-2" >
 
+                <div className="col-md-5">
 
-
-
-
-            <div className="row">
-
-
-
-              <Paper
-                sx={{
-                  p: 1,
-                  display: 'flex',
-                  flexDirection: 'column',
-                  m: 2,
-
-
-                }}
-                elevation={12}
-                className='col row'
-              >
-                <Typography variant="h5" component="h5" className="text-center">Department</Typography>
-                <div className="row g-2" >
-
-                  <div className="col-md-5">
-
-                    {/* <TextField label="Department"
+                  {/* <TextField label="Department"
                       {...(errors.department !== "" && { helperText: errors.department, error: true })}
                       id="departmentId"
 
@@ -878,101 +1003,351 @@ export const Department = () => {
                       value={departmentData.department}
               name="department" ></TextField>*/}
 
-                    <Autocomplete label="Department"
-                      disablePortal
-                      size="small"
-                      getOptionDisabled={option => true}
-                      options={departmentList.map((dep) => ({ label: dep.department }))}
-                      fullWidth
-                      clearOnBlur={false}
-                      value={departmentData.department}
-                      renderInput={(params) =>
-                        <TextField  {...(errors.department !== "" && { helperText: errors.department, error: true })} onKeyDown={handleKeyDown} onChange={handleDepChange}
-                          name="department" {...params} label="Department" />} />
-
-                  </div>
-                  <div className="col-md-4">
-
-                    <TextField label="Status"
-                      id="departmentStatusId"
-                      select
-                      defaultValue="Active"
-                      fullWidth
-                      size="small"
-                      onChange={handleDepChange}
-
-                      value={departmentData.departmentStatus}
-                      name="departmentStatus" >
-
-                      <MenuItem value="Active">Active</MenuItem>
-                      <MenuItem value="InActive">InActive</MenuItem>
-                    </TextField>
-
-                  </div>
-                  <div className="col-md-3">
-                    <FormControlLabel control={<Checkbox size="small" name="defaultdep" checked={departmentData.defaultdep === "yes"} onChange={handleDepChange} />} label="Default" />
-                  </div>
+                  <Autocomplete label="Department"
+                    disablePortal
+                    size="small"
+                    getOptionDisabled={option => true}
+                    options={departmentList.map((dep) => ({ label: dep.department }))}
+                    fullWidth
+                    clearOnBlur={false}
+                    value={departmentData.department}
+                    renderInput={(params) =>
+                      <TextField  {...(errors.department !== "" && { helperText: errors.department, error: true })} onKeyDown={handleKeyDown} onChange={handleDepChange}
+                        name="department" {...params} label="Department" />} />
 
                 </div>
+                <div className="col-md-4">
 
-                <div className="row g-2 ">
-                  <div className="col-md-6 d-flex justify-content-start">
-                    <div className="me-2">
-                      <lable className="uplable">
-                        <input type="file" className="downlable" />
-                        Upload
-                      </lable>
-                    </div>
-                    <div>
-                      <lable
-                        className="uplable"
+                  <TextField label="Status"
+                    id="departmentStatusId"
+                    select
+                    defaultValue="Active"
+                    fullWidth
+                    size="small"
+                    onChange={handleDepChange}
 
-                      >
-                        <input type="file" className="downlable" cusor="pointer" />
-                        Download
-                      </lable>
-                    </div>
+                    value={departmentData.departmentStatus}
+                    name="departmentStatus" >
+
+                    <MenuItem value="Active">Active</MenuItem>
+                    <MenuItem value="InActive">InActive</MenuItem>
+                  </TextField>
+
+                </div>
+                <div className="col-md-3">
+                  <FormControlLabel control={<Checkbox size="small" name="defaultdep" checked={departmentData.defaultdep === "yes"} onChange={handleDepChange} />} label="Default" />
+                </div>
+
+              </div>
+
+              <div className="row g-2 mb-2">
+                <div className="col-md-6 d-flex justify-content-start">
+                  <div className="me-2">
+                    <lable className="uplable">
+                      <input type="file" className="downlable" />
+                      Upload
+                    </lable>
                   </div>
+                  <div>
+                    <lable
+                      className="uplable"
+
+                    >
+                      <input type="file" className="downlable" cusor="pointer" />
+                      Download
+                    </lable>
+                  </div>
+                </div>
 
 
-                  {depStateId ? <Dialog
+                {depStateId ? <Dialog
+                  open={depOpenModal}
+                  onClose={() => setDepOpenModal(false)}
+                  aria-labelledby="alert-dialog-title"
+                  aria-describedby="alert-dialog-description"
+                >
+                  <DialogTitle id="alert-dialog-title">
+                    {" Department update confirmation?"}
+                  </DialogTitle>
+                  <DialogContent>
+                    <DialogContentText id="alert-dialog-description">
+                      Are you sure to update the Department
+                    </DialogContentText>
+                  </DialogContent>
+                  <DialogActions>
+                    <Button onClick={() => setDepOpenModal(false)}>Cancel</Button>
+                    <Button onClick={(e) => { updateDepartment(); setDepOpenModal(false); }} autoFocus>
+                      Update
+                    </Button>
+                  </DialogActions>
+                </Dialog> :
+                  <Dialog
                     open={depOpenModal}
                     onClose={() => setDepOpenModal(false)}
                     aria-labelledby="alert-dialog-title"
                     aria-describedby="alert-dialog-description"
                   >
                     <DialogTitle id="alert-dialog-title">
-                      {" Department update confirmation?"}
+                      {" Department create confirmation?"}
                     </DialogTitle>
                     <DialogContent>
                       <DialogContentText id="alert-dialog-description">
-                        Are you sure to update the Department
+                        Are you sure to add the Department
                       </DialogContentText>
                     </DialogContent>
                     <DialogActions>
                       <Button onClick={() => setDepOpenModal(false)}>Cancel</Button>
-                      <Button onClick={(e) => { updateDepartment(); setDepOpenModal(false); }} autoFocus>
+                      <Button onClick={(e) => { DepartmentSubmit(e); setDepOpenModal(false); }} autoFocus>
+                        Add
+                      </Button>
+                    </DialogActions>
+                  </Dialog>}
+
+
+
+
+
+
+
+                <div className="col-md text-end">
+
+                  {depStateId ? (<div className="d-flex justify-content-end">
+                    <button
+                      type="button"
+                      style={{ backgroundColor: "#e6e6e6", color: "black", fontWeight: "bolder" }}
+                      className="btn text-end me-2 hover"
+                      onClick={() => setDepOpenModal(true)}
+                    //   disabled={!depStateId}
+                    >
+                      Modify
+                    </button >
+                    <button type="button" onMouseEnter={(e) => { e.target.style.background = 'red' }} onMouseOut={(e) => { e.target.style.background = '#e6e6e6' }}
+                      style={{ backgroundColor: "#e6e6e6", color: "black", fontWeight: "bolder" }}
+                      className="btn text-end"
+                      onClick={() => { setDepStateId(null); setDepartmentData(emptyDepartmentData) }}
+                    >Cancel</button>
+                  </div>) :
+                    <div className="d-flex justify-content-end">
+                      <button
+                        type="button"
+                        style={{ backgroundColor: "#e6e6e6", color: "black", fontWeight: "bolder" }}
+                        className="btn text-end hover"
+                        onClick={() => setDepOpenModal(true)}
+
+                      >
+                        <i className="bi bi-plus"></i>Add Department
+                      </button>
+                    </div>
+                  }
+
+
+
+
+                </div>
+
+
+
+              </div>
+
+              <div className="row g-2">
+
+                {/* <div style={{ height: 400, width: '100%' }}>
+                    <DataGrid
+                      rows={departmentList}
+                      columns={columns}
+                      getRowId={(row) => row._id}
+                      initialState={{
+                        pagination: {
+                          paginationModel: { page: 0, pageSize: 5 },
+                        },
+                      }}
+                      pageSizeOptions={[5, 10]}
+                      checkboxSelection
+                    />
+                  </div>*/}
+
+
+                <div style={{ height: 480, width: '100%' }}>
+                  <DataGrid
+                    rows={departmentList}
+                    columns={columns}
+                    disableDensitySelector
+                    disableColumnSelector
+                    getRowId={(row) => row._id}
+                    initialState={{
+                      pagination: {
+                        paginationModel: { page: 0, pageSize: 10 },
+                      },
+                    }}
+                    sx={{
+                      ".MuiTablePagination-displayedRows": {
+
+                        "marginTop": "1em",
+                        "marginBottom": "1em",
+                      }
+                    }}
+                    slots={{
+                      toolbar: GridToolbar,
+                    }}
+
+                    onRowSelectionModelChange={(newRowSelectionModel, event) => {
+                      setSelectedRowIds(newRowSelectionModel);
+                      console.log(event)
+
+                    }}
+                    onRowClick={handleDepRowClick}
+
+                    density="compact"
+
+                    checkboxSelection
+                    pageSizeOptions={[5]}
+                  >
+
+                  </DataGrid>
+
+
+
+
+                </div>
+
+                <Dialog
+                  open={deleteDepModal}
+                  onClose={() => setDeleteDepModal(false)}
+                  aria-labelledby="alert-dialog-title"
+                  aria-describedby="alert-dialog-description"
+                >
+                  <DialogTitle id="alert-dialog-title">
+                    {" Department delete confirmation?"}
+                  </DialogTitle>
+                  <DialogContent>
+                    <DialogContentText id="alert-dialog-description">
+                      Are you sure to delete the Department
+                    </DialogContentText>
+                  </DialogContent>
+                  <DialogActions>
+                    <Button onClick={() => setDeleteDepModal(false)}>Cancel</Button>
+                    <Button onClick={(e) => { deleteDepartment(e); setDeleteDepModal(false); }} autoFocus>
+                      Delete
+                    </Button>
+                  </DialogActions>
+                </Dialog>
+
+
+
+              </div>
+
+
+
+            </Paper>
+         
+
+
+          
+            <Paper
+              sx={{
+                p: 1,
+                my: 2,
+                marginRight: "1rem"
+              }}
+              elevation={12}
+              className="col"
+            >
+              <Typography variant="h5" className="text-center mb-3">Area</Typography>
+
+                <div className="row g-2 mb-2">
+                  <div className="col-md-8">
+                    <Autocomplete label="Area"
+                      disablePortal
+                      size="small"
+                      getOptionDisabled={option => true}
+                      options={areaList.map((area) => ({ label: area.area }))}
+                      fullWidth
+                      clearOnBlur={false}
+                      value={areaData.area}
+                      renderInput={(params) =>
+                        <TextField  {...(errors.area !== "" && { helperText: errors.area, error: true })} onKeyDown={handleAreaKeyDown} onChange={handleAreaChange}
+                          name="area" {...params} label="Area" />} />
+                  </div>
+                  <div className="col-md-4">
+                    <TextField label="Status"
+                      id="areaStatusID"
+                      select
+                      defaultValue="Active"
+                      fullWidth
+                      size="small"
+                      onChange={handleAreaChange}
+
+                      value={areaData.areaStatus}
+                      name="areaStatus" >
+
+                      <MenuItem value="Active">Active</MenuItem>
+                      <MenuItem value="InActive">InActive</MenuItem>
+                    </TextField>
+                  </div>
+                </div>
+
+                <div className="row g-2 ">
+                  <div className="col d-flex">
+                    <div className="d-flex justify-content-center">
+                      <ButtonGroup className='me-3'>
+                        <Button component="label" variant="contained" >
+                          Upload
+                          <VisuallyHiddenInput type="file" onChange={(e) => handleExcel(e, "dep")} />
+                        </Button>
+                        <Button onClick={(e) => handleUpload(e, "dep")}><CloudUpload /></Button>
+                      </ButtonGroup>
+
+                      <ButtonGroup>
+                        <Button component="label" variant="contained" color='secondary'>
+                          Download
+                          <VisuallyHiddenInput type="file" />
+                        </Button>
+                        <Button color='secondary'><CloudDownload /></Button>
+                      </ButtonGroup>
+                      {depExcelStatus && <p>{depExcelStatus}</p>}
+                    </div>
+
+                  </div>
+
+
+                  {areaStateId ? <Dialog
+                    open={areaOpenModal}
+                    onClose={() => setAreaOpenModal(false)}
+                    aria-labelledby="alert-dialog-title"
+                    aria-describedby="alert-dialog-description"
+                  >
+                    <DialogTitle id="alert-dialog-title">
+                      {" Area update confirmation?"}
+                    </DialogTitle>
+                    <DialogContent>
+                      <DialogContentText id="alert-dialog-description">
+                        Are you sure to update the Area
+                      </DialogContentText>
+                    </DialogContent>
+                    <DialogActions>
+                      <Button onClick={() => setAreaOpenModal(false)}>Cancel</Button>
+                      <Button onClick={(e) => { updateArea(e); setAreaOpenModal(false); }} autoFocus>
                         Update
                       </Button>
                     </DialogActions>
                   </Dialog> :
                     <Dialog
-                      open={depOpenModal}
-                      onClose={() => setDepOpenModal(false)}
+                      open={areaOpenModal}
+                      onClose={() => setAreaOpenModal(false)}
                       aria-labelledby="alert-dialog-title"
                       aria-describedby="alert-dialog-description"
                     >
                       <DialogTitle id="alert-dialog-title">
-                        {" Department create confirmation?"}
+                        {" Area create confirmation?"}
                       </DialogTitle>
                       <DialogContent>
                         <DialogContentText id="alert-dialog-description">
-                          Are you sure to add the Department
+                          Are you sure to add the Area
                         </DialogContentText>
                       </DialogContent>
                       <DialogActions>
-                        <Button onClick={() => setDepOpenModal(false)}>Cancel</Button>
-                        <Button onClick={(e) => { DepartmentSubmit(e); setDepOpenModal(false); }} autoFocus>
+                        <Button onClick={() => setAreaOpenModal(false)}>Cancel</Button>
+                        <Button onClick={(e) => { AreaSubmit(e); setAreaOpenModal(false); }} autoFocus>
                           Add
                         </Button>
                       </DialogActions>
@@ -984,14 +1359,16 @@ export const Department = () => {
 
 
 
+
+
                   <div className="col-md text-end">
 
-                    {depStateId ? (<div className="d-flex justify-content-end">
+                    {areaStateId ? (<div className="d-flex justify-content-end">
                       <button
                         type="button"
                         style={{ backgroundColor: "#e6e6e6", color: "black", fontWeight: "bolder" }}
-                        className="btn text-end me-2 hover"
-                        onClick={() => setDepOpenModal(true)}
+                        className="btn text-end me-2  hover"
+                        onClick={() => setAreaOpenModal(true)}
                       //   disabled={!depStateId}
                       >
                         Modify
@@ -999,7 +1376,7 @@ export const Department = () => {
                       <button type="button" onMouseEnter={(e) => { e.target.style.background = 'red' }} onMouseOut={(e) => { e.target.style.background = '#e6e6e6' }}
                         style={{ backgroundColor: "#e6e6e6", color: "black", fontWeight: "bolder" }}
                         className="btn text-end"
-                        onClick={() => { setDepStateId(null); setDepartmentData(emptyDepartmentData) }}
+                        onClick={() => { setareaStateId(null); setArea(initialAreaData) }}
                       >Cancel</button>
                     </div>) :
                       <div className="d-flex justify-content-end">
@@ -1192,22 +1569,26 @@ export const Department = () => {
 
 
                   <div className="row g-2 mb-3">
-                    <div className="col-md-6 d-flex justify-content-start">
-                      <div className="me-2">
-                        <lable className="uplable">
-                          <input type="file" className="downlable" />
-                          Upload
-                        </lable>
-                      </div>
-                      <div>
-                        <lable
-                          className="uplable"
+                    <div className="col d-flex">
+                      <div className="d-flex justify-content-center">
+                        <ButtonGroup className='me-3'>
+                          <Button component="label" variant="contained" >
+                            Upload
+                            <VisuallyHiddenInput type="file" onChange={(e) => handleExcel(e, "area")} />
+                          </Button>
+                          <Button onClick={(e) => handleUpload(e, "area")}><CloudUpload /></Button>
+                        </ButtonGroup>
 
-                        >
-                          <input type="file" className="downlable" cusor="pointer" />
-                          Download
-                        </lable>
+                        <ButtonGroup>
+                          <Button component="label" variant="contained" color='secondary'>
+                            Download
+                            <VisuallyHiddenInput type="file" />
+                          </Button>
+                          <Button color='secondary'><CloudDownload /></Button>
+                        </ButtonGroup>
+                        {areaExcelStatus && <p>{areaExcelStatus}</p>}
                       </div>
+
                     </div>
 
 
@@ -1480,23 +1861,26 @@ export const Department = () => {
 
 
                 <div className="row g-2 ">
-                  <div className="col d-flex justify-content-start">
+                  <div className="col d-flex">
+                    <div className="d-flex justify-content-center">
+                      <ButtonGroup className='me-3'>
+                        <Button component="label" variant="contained" >
+                          Upload
+                          <VisuallyHiddenInput type="file" onChange={(e) => handleExcel(e, "pou")} />
+                        </Button>
+                        <Button onClick={(e) => handleUpload(e, "pou")}><CloudUpload /></Button>
+                      </ButtonGroup>
 
-                    <div className="me-2">
-                      <lable className="uplable">
-                        <input type="file" className="downlable" />
-                        Upload
-                      </lable>
+                      <ButtonGroup>
+                        <Button component="label" variant="contained" color='secondary'>
+                          Download
+                          <VisuallyHiddenInput type="file" />
+                        </Button>
+                        <Button color='secondary'><CloudDownload /></Button>
+                      </ButtonGroup>
+                      {pouExcelStatus && <p>{pouExcelStatus}</p>}
                     </div>
-                    <div>
-                      <lable
-                        className="uplable"
 
-                      >
-                        <input type="file" className="downlable" cusor="pointer" />
-                        Download
-                      </lable>
-                    </div>
                   </div>
                   {placeOfUsageId ? <Dialog
                     open={pouOpenModal}
@@ -1551,43 +1935,25 @@ export const Department = () => {
                       <button
                         type="button"
                         style={{ backgroundColor: "#e6e6e6", color: "black", fontWeight: "bolder" }}
-                        className="btn text-end me-2 hover"
-                        onClick={() => setPouOpenModal(true)}
-                      //   disabled={!depStateId}
-                      >
-                        Modify
-                      </button >
-                      <button type="button" onMouseEnter={(e) => { e.target.style.background = 'red' }} onMouseOut={(e) => { e.target.style.background = '#e6e6e6' }}
-                        style={{ backgroundColor: "#e6e6e6", color: "black", fontWeight: "bolder" }}
-                        className="btn text-end "
-                        onClick={() => { setPlaceOfUsageId(null); setPlaceOfUsageData(initialPlaceOfUsageData) }}
-                      >Cancel</button>
-                    </div>) :
-                      <div className="d-flex justify-content-end"><button
-                        type="button"
-                        style={{ backgroundColor: "#e6e6e6", color: "black", fontWeight: "bolder" }}
-                        className="btn hover"
-                        onClick={() => setPouOpenModal(true)}
+                        className="btn text-end hover"
+                        onClick={() => setAreaOpenModal(true)}
 
                       >
-                        <i className="bi bi-plus"></i>Add Place
+                        <i className="bi bi-plus"></i>Add Area
                       </button></div>}
 
 
 
 
                   </div>
-
-
-
                 </div>
-                <div className="row g-2">
-
+                <div className="row ">
 
                   <div style={{ height: 480, width: '100%' }}>
                     <DataGrid
-                      rows={placeOfUsageList}
-                      columns={placeOfUsageColumns}
+                      className="MuiDataGrid-root"
+                      rows={areaList}
+                      columns={areaColumns}
                       disableDensitySelector
                       disableColumnSelector
                       getRowId={(row) => row._id}
@@ -1608,17 +1974,16 @@ export const Department = () => {
                         toolbar: GridToolbar,
                       }}
                       onRowSelectionModelChange={(newRowSelectionModel, event) => {
-                        setPlaceOfUsageSelectedRowIds(newRowSelectionModel);
+                        setAreaSelectedRowIds(newRowSelectionModel);
                         console.log(event)
 
                       }}
-                      onRowClick={updatePof}
+                      onRowClick={handleAreaRowClick}
 
                       density="compact"
 
                       checkboxSelection
                       pageSizeOptions={[5]}
-
 
                     >
 
@@ -1636,33 +2001,296 @@ export const Department = () => {
 
 
 
+
+
+
                   <Dialog
-                    open={deletePouModal}
-                    onClose={() => setDeletePouModal(false)}
+                    open={deleteAreaModal}
+                    onClose={() => setDeleteAreaModal(false)}
                     aria-labelledby="alert-dialog-title"
                     aria-describedby="alert-dialog-description"
                   >
                     <DialogTitle id="alert-dialog-title">
-                      {"Place of usage delete confirmation?"}
+                      {" Area delete confirmation?"}
                     </DialogTitle>
                     <DialogContent>
                       <DialogContentText id="alert-dialog-description">
-                        Are you sure to delete the Place of usage
+                        Are you sure to delete the Area
                       </DialogContentText>
                     </DialogContent>
                     <DialogActions>
-                      <Button onClick={() => setDeletePouModal(false)}>Cancel</Button>
-                      <Button onClick={(e) => { deletePlaceOfUsage(e); setDeletePouModal(false); }} autoFocus>
+                      <Button onClick={() => setDeleteAreaModal(false)}>Cancel</Button>
+                      <Button onClick={(e) => { deleteArea(e); setDeleteAreaModal(false); }} autoFocus>
                         Delete
                       </Button>
                     </DialogActions>
                   </Dialog>
 
+
+
+
+
                 </div>
 
 
-              </Paper>
-            </div>
+
+
+              
+            </Paper>
+        
+
+      
+            <Paper
+              sx={{
+                p: 1,
+                my: 2,
+              }}
+              elevation={12}
+              className='col-md-4'
+            >
+              <Typography variant="h5" className="text-center">Place Of Usage</Typography>
+              <div className="row g-2" >
+
+                <div className="col-md-8">
+
+
+                  <Autocomplete label="Place Of Usage"
+                    disablePortal
+                    size="small"
+                    getOptionDisabled={option => true}
+                    options={placeOfUsageList.map((place) => ({ label: place.placeOfUsage }))}
+                    fullWidth
+                    clearOnBlur={false}
+                    value={placeOfUsageDatas.placeOfUsage}
+                    renderInput={(params) =>
+                      <TextField   {...(errors.placeOfUsage !== "" && { helperText: errors.placeOfUsage, error: true })} onKeyDown={handlePlaceOfKeyDown} onChange={handlePouChange}
+                        name="placeOfUsage" {...params} label="Place Of Usage" />} />
+
+                </div>
+                <div className="col d-flex ">
+
+                  <TextField label="Status"
+                    id="placeOfUsageStatusId"
+                    select
+
+                    fullWidth
+                    size="small"
+                    onChange={handlePouChange}
+                    onKeyDown={handlePlaceOfKeyDown}
+
+                    value={placeOfUsageDatas.placeOfUsageStatus}
+                    name="placeOfUsageStatus" >
+
+                    <MenuItem value="Active">Active</MenuItem>
+                    <MenuItem value="InActive">InActive</MenuItem>
+                  </TextField>
+
+                </div>
+              </div>
+
+
+
+              <div className="row g-2 ">
+                <div className="col d-flex justify-content-start">
+
+                  <div className="me-2">
+                    <lable className="uplable">
+                      <input type="file" className="downlable" />
+                      Upload
+                    </lable>
+                  </div>
+                  <div>
+                    <lable
+                      className="uplable"
+
+                    >
+                      <input type="file" className="downlable" cusor="pointer" />
+                      Download
+                    </lable>
+                  </div>
+                </div>
+                {placeOfUsageId ? <Dialog
+                  open={pouOpenModal}
+                  onClose={() => setPouOpenModal(false)}
+                  aria-labelledby="alert-dialog-title"
+                  aria-describedby="alert-dialog-description"
+                >
+                  <DialogTitle id="alert-dialog-title">
+                    {" Place of usage update confirmation?"}
+                  </DialogTitle>
+                  <DialogContent>
+                    <DialogContentText id="alert-dialog-description">
+                      Are you sure to update the Place of usage
+                    </DialogContentText>
+                  </DialogContent>
+                  <DialogActions>
+                    <Button onClick={() => setPouOpenModal(false)}>Cancel</Button>
+                    <Button onClick={(e) => { updatePlaceofUsagedata(e); setPouOpenModal(false); }} autoFocus>
+                      Update
+                    </Button>
+                  </DialogActions>
+                </Dialog> :
+                  <Dialog
+                    open={pouOpenModal}
+                    onClose={() => setPouOpenModal(false)}
+                    aria-labelledby="alert-dialog-title"
+                    aria-describedby="alert-dialog-description"
+                  >
+                    <DialogTitle id="alert-dialog-title">
+                      {" Place of usage create confirmation?"}
+                    </DialogTitle>
+                    <DialogContent>
+                      <DialogContentText id="alert-dialog-description">
+                        Are you sure to add the Place of usage
+                      </DialogContentText>
+                    </DialogContent>
+                    <DialogActions>
+                      <Button onClick={() => setPouOpenModal(false)}>Cancel</Button>
+                      <Button onClick={(e) => { placeOfUsageSubmit(e); setPouOpenModal(false); }} autoFocus>
+                        Add
+                      </Button>
+                    </DialogActions>
+                  </Dialog>}
+
+
+
+
+
+                <div className="col-md p-0">
+
+                  {placeOfUsageId ? (<div className="d-flex justify-content-end">
+                    <button
+                      type="button"
+                      style={{ backgroundColor: "#e6e6e6", color: "black", fontWeight: "bolder" }}
+                      className="btn text-end me-2 hover"
+                      onClick={() => setPouOpenModal(true)}
+                    //   disabled={!depStateId}
+                    >
+                      Modify
+                    </button >
+                    <button type="button" onMouseEnter={(e) => { e.target.style.background = 'red' }} onMouseOut={(e) => { e.target.style.background = '#e6e6e6' }}
+                      style={{ backgroundColor: "#e6e6e6", color: "black", fontWeight: "bolder" }}
+                      className="btn text-end "
+                      onClick={() => { setPlaceOfUsageId(null); setPlaceOfUsageData(initialPlaceOfUsageData) }}
+                    >Cancel</button>
+                  </div>) :
+                    <div className="d-flex justify-content-end"><button
+                      type="button"
+                      style={{ backgroundColor: "#e6e6e6", color: "black", fontWeight: "bolder" }}
+                      className="btn hover"
+                      onClick={() => setPouOpenModal(true)}
+
+                    >
+                      <i className="bi bi-plus"></i>Add Place
+                    </button></div>}
+
+
+
+
+                </div>
+
+
+
+              </div>
+              <div className="row g-2">
+
+
+                <div style={{ height: 480, width: '100%' }}>
+                  <DataGrid
+                    rows={placeOfUsageList}
+                    columns={placeOfUsageColumns}
+                    disableDensitySelector
+                    disableColumnSelector
+                    getRowId={(row) => row._id}
+
+                    initialState={{
+                      pagination: {
+                        paginationModel: { page: 0, pageSize: 10 },
+                      },
+                    }}
+                    sx={{
+                      ".MuiTablePagination-displayedRows": {
+
+                        "marginTop": "1em",
+                        "marginBottom": "1em"
+                      }
+                    }}
+                    slots={{
+                      toolbar: GridToolbar,
+                    }}
+                    onRowSelectionModelChange={(newRowSelectionModel, event) => {
+                      setPlaceOfUsageSelectedRowIds(newRowSelectionModel);
+                      console.log(event)
+
+                    }}
+                    onRowClick={updatePof}
+
+                    density="compact"
+
+                    checkboxSelection
+                    pageSizeOptions={[5]}
+
+
+                  >
+
+                  </DataGrid>
+
+
+
+
+                </div>
+
+
+
+
+
+
+
+
+                <Dialog
+                  open={deletePouModal}
+                  onClose={() => setDeletePouModal(false)}
+                  aria-labelledby="alert-dialog-title"
+                  aria-describedby="alert-dialog-description"
+                >
+                  <DialogTitle id="alert-dialog-title">
+                    {"Place of usage delete confirmation?"}
+                  </DialogTitle>
+                  <DialogContent>
+                    <DialogContentText id="alert-dialog-description">
+                      Are you sure to delete the Place of usage
+                    </DialogContentText>
+                  </DialogContent>
+                  <DialogActions>
+                    <Button onClick={() => setDeletePouModal(false)}>Cancel</Button>
+                    <Button onClick={(e) => { deletePlaceOfUsage(e); setDeletePouModal(false); }} autoFocus>
+                      Delete
+                    </Button>
+                  </DialogActions>
+                </Dialog>
+
+              </div>
+
+
+            </Paper>
+
+
+         
+
+
+
+
+
+
+
+
+
+
+          <Snackbar anchorOrigin={{ vertical: "top", horizontal: "right" }} open={snackBarOpen} autoHideDuration={6000} onClose={handleSnackClose}>
+            <Alert variant="filled" onClose={handleSnackClose} severity={errorhandler.code} sx={{ width: '100%' }}>
+              {errorhandler.message}
+            </Alert>
+          </Snackbar>
 
 
 
@@ -1675,57 +2303,7 @@ export const Department = () => {
 
 
 
-            {/*<h4 className="text-center mb-3">Department List</h4>*/}
-            {/* <div className="table-responsive">
-                  <table className="table table-bordered text-center table-hover">
-                    <tbody>
-                      <tr className="text-center">
-                        <th>S.No</th>
-                        <th>Department</th>
-                        <th>Area</th>
-                        <th>Place Of Usage</th>
 
-                        <th>Delete</th>
-                      </tr>
-                      {departmentList.map((item, index) => (
-                        <tr key={item._id} onClick={() => handleDepRowClick(item)} className={item._id === depStateId ? "table-active" : ""}>
-                          <td >{index + 1}</td>
-                          <td>{item.department}</td>
-                          <td>{item.area}</td>
-                          <td>{item.placeOfUsage}</td>
-
-                          <td>
-                            <button
-                              type="button"
-                              className="btn btn-sm btn-danger"
-                              onClick={() => deleteDepartment(item._id)}
-                            >
-                              <i className="bi bi-trash"></i>
-                            </button>
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>*/}
-            <Snackbar anchorOrigin={{ vertical: "top", horizontal: "right" }} open={snackBarOpen} autoHideDuration={6000} onClose={handleSnackClose}>
-              <Alert variant="filled" onClose={handleSnackClose} severity={errorhandler.code} sx={{ width: '100%' }}>
-                {errorhandler.message}
-              </Alert>
-            </Snackbar>
-
-
-
-
-
-
-
-
-
-
-
-
-          </Box>
         </div>
       </form>
 
@@ -2308,7 +2886,7 @@ export const Designation = () => {
               </div>
 
               <div style={{ height: 500, width: '100%' }}>
-                <DataGrid  disableDensitySelector
+                <DataGrid disableDensitySelector
                   rows={designationList}
                   columns={designationColumns}
                   getRowId={(row) => row._id}
