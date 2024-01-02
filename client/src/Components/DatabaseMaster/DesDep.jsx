@@ -1931,7 +1931,7 @@ if(name === "pou") {
 
                   <div className="col-md p-0">
 
-                    {placeOfUsageId ? (<div className="d-flex justify-content-end">
+                    {placeOfUsageId ? <div className="d-flex justify-content-end">
                       <button
                         type="button"
                         style={{ backgroundColor: "#e6e6e6", color: "black", fontWeight: "bolder" }}
@@ -1940,7 +1940,7 @@ if(name === "pou") {
 
                       >
                         <i className="bi bi-plus"></i>Add Area
-                      </button></div>}
+                      </button></div>: ""}
 
 
 
