@@ -213,18 +213,18 @@ if(name === "pou") {
 
   const columns = [
 
-    { field: 'id', headerName: 'Si.No', width: 30, renderCell: (params) => params.api.getAllRowIds().indexOf(params.id) + 1, align: "center" },
+    { field: 'id', headerName: 'Si.No', width: 30, renderCell: (params) => params.api.getAllRowIds().indexOf(params.id) + 1,headerAlign:"center", align: "center" },
 
-    { field: 'department', headerName: 'Department', width: "90" },
-    { field: 'departmentStatus', headerName: 'Status', width: "70" },
+    { field: 'department', headerName: 'Department',headerAlign:"center",align: "center", width: "90" },
+    { field: 'departmentStatus', headerName: 'Status',headerAlign:"center",align: "center", width: "70" },
     {
-      field: 'defaultdep', headerName: 'Default', width: "50",
+      field: 'defaultdep', headerName: 'Default', width: "50",headerAlign:"center",align: "center",
       renderCell: (params) => params.row.defaultdep === "yes" ? <Check color="success" /> : <Clear color="error" />
     },
     {
       field: 'delete',
       headerName: 'Delete',
-      width: 80,
+      width: 80,headerAlign:"center",align: "center",
       sortable: false,
       renderHeader: () => (
         <IconButton color='error' aria-label="Delete" onClick={() => setDeleteDepModal(true)}>

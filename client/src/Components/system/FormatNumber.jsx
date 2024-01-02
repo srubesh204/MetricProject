@@ -43,7 +43,11 @@ const FormatNumber = () => {
             amNo: "",
             amDate: "",
         },
-       
+        fCalDueDate: {
+            frNo: "",
+            amNo: "",
+            amDate: "",
+        },
         fCertificatePrefix: "",
         fDeTemperature: "",
         fDeHumidity: "",
@@ -60,11 +64,11 @@ const FormatNumber = () => {
             amNo: "",
             amDate: "",
         },
-        fCertificate : {
-            frNo:"",
-            amNo:"",
-            amDate:"",
-          },
+        fCertificate: {
+            frNo: "",
+            amNo: "",
+            amDate: "",
+        },
         fHistoryCard: {
             frNo: "",
             amNo: "",
@@ -75,7 +79,11 @@ const FormatNumber = () => {
             amNo: "",
             amDate: "",
         },
-       
+        fCalDueDate: {
+            frNo: "",
+            amNo: "",
+            amDate: "",
+        },
         fCertificatePrefix: "",
         fDeTemperature: "",
         fDeHumidity: "",
@@ -141,7 +149,13 @@ const FormatNumber = () => {
                     amNo: format.fTotalList.amNo,
                     amDate: format.fTotalList.amDate,
                 },
-                
+                fCalDueDate: {
+                    ...prev.fCalDueDate,
+                    frNo: format.fCalDueDate.frNo,
+                    amNo: formatData.fCalDueDate.amNo,
+                    amDate: formatData.fCalDueDate.amDate,
+                  
+                },
                 fCertificatePrefix: format.fCertificatePrefix,
                 fDeTemperature: format.fDeTemperature,
                 fDeHumidity: format.fDeHumidity,
@@ -221,92 +235,92 @@ const FormatNumber = () => {
                         elevation={12}
                     >
 
-                       
-                           
-                           
-
-                                <div className="col d-flex justify-content-end">
-                                    <Button onClick={() => setIsEditable(true)}><Edit color='success' /></Button>
-                                </div>
-                                <table className='table table-sm table table-bordered table-responsive text-center align-middle border border-black' disabled={!isEditable} >
-                                    <tbody>
-                                        <tr  >
-                                            <th style={{width:"25%"}}>Report Name</th>
-                                            <th>Format No</th>
-                                            <th>Amendment No</th>
-                                            <th>Amendment Date</th>
-                                        </tr>
-
-                                        <tr>
-                                            <th>DC</th>
-
-
-                                            <td><input type="text" className='form-control form-control-sm' disabled={!isEditable} id="frNoId" name="frNo" value={formatData.fDc.frNo} onChange={(e) => handleInputChange(e, 'fDc')} /></td>
-                                            <td><input type="text" className='form-control form-control-sm' disabled={!isEditable} id="amNoId" name="amNo" value={formatData.fDc.amNo} onChange={(e) => handleInputChange(e, 'fDc')} /></td>
-                                            <td><input type="text" className='form-control form-control-sm' disabled={!isEditable} id="amDateId" name="amDate" value={formatData.fDc.amDate} onChange={(e) => handleInputChange(e, 'fDc')} /></td>
-
-
-                                        </tr>
 
 
 
-                                        <tr>
-                                            <th>GRN</th>
 
-                                            <td><input type="text" className='form-control form-control-sm' disabled={!isEditable} id="frNoId" value={formatData.fGrn.frNo} onChange={(e) => handleInputChange(e, 'fGrn')} name="frNo" /></td>
-                                            <td><input type="text" className='form-control form-control-sm' disabled={!isEditable} id="amNoId" value={formatData.fGrn.amNo} onChange={(e) => handleInputChange(e, 'fGrn')} name="amNo" /></td>
-                                            <td><input type="text" className='form-control form-control-sm' disabled={!isEditable} id="amDateId" value={formatData.fGrn.amDate} onChange={(e) => handleInputChange(e, 'fGrn')} name="amDate" /></td>
+                        <div className="col d-flex justify-content-end">
+                            <Button onClick={() => setIsEditable(true)}><Edit color='success' /></Button>
+                        </div>
+                        <table className='table table-sm table table-bordered table-responsive text-center align-middle border border-black' disabled={!isEditable} >
+                            <tbody>
+                                <tr  >
+                                    <th style={{ width: "25%" }}>Report Name</th>
+                                    <th>Format No</th>
+                                    <th>Amendment No</th>
+                                    <th>Amendment Date</th>
+                                </tr>
+
+                                <tr>
+                                    <th>DC</th>
 
 
-
-                                        </tr>
-                                        <tr>
-                                            <th>Certificate</th>
-
-                                            <td><input type="text" className='form-control form-control-sm' disabled={!isEditable} id="frNoId" value={formatData.fCertificate.frNo} onChange={(e) => handleInputChange(e, 'fCertificate')} name="frNo" /></td>
-                                            <td><input type="text" className='form-control form-control-sm' disabled={!isEditable} id="amNoId" value={formatData.fCertificate.amNo} onChange={(e) => handleInputChange(e, 'fCertificate')} name="amNo" /></td>
-                                            <td><input type="text" className='form-control form-control-sm' disabled={!isEditable} id="amDateId" value={formatData.fCertificate.amDate} onChange={(e) => handleInputChange(e, 'fCertificate')} name="amDate" /></td>
+                                    <td><input type="text" className='form-control form-control-sm' disabled={!isEditable} id="frNoId" name="frNo" value={formatData.fDc.frNo} onChange={(e) => handleInputChange(e, 'fDc')} /></td>
+                                    <td><input type="text" className='form-control form-control-sm' disabled={!isEditable} id="amNoId" name="amNo" value={formatData.fDc.amNo} onChange={(e) => handleInputChange(e, 'fDc')} /></td>
+                                    <td><input type="text" className='form-control form-control-sm' disabled={!isEditable} id="amDateId" name="amDate" value={formatData.fDc.amDate} onChange={(e) => handleInputChange(e, 'fDc')} /></td>
 
 
-                                        </tr>
-                                        <tr>
-                                            <th>History Card</th>
-
-                                            <td><input type="text" className='form-control form-control-sm' disabled={!isEditable} id="frNoId" value={formatData.fHistoryCard.frNo} onChange={(e) => handleInputChange(e, 'fHistoryCard')} name="frNo" /></td>
-                                            <td><input type="text" className='form-control form-control-sm' disabled={!isEditable} id="amNoId" value={formatData.fHistoryCard.amNo} onChange={(e) => handleInputChange(e, 'fHistoryCard')} name="amNo" /></td>
-                                            <td><input type="text" className='form-control form-control-sm' disabled={!isEditable} id="amDateId" value={formatData.fHistoryCard.amDate} onChange={(e) => handleInputChange(e, 'fHistoryCard')} name="amDate" /></td>
+                                </tr>
 
 
 
-                                        </tr>
-                                        <tr>
-                                            <th>Total List</th>
+                                <tr>
+                                    <th>GRN</th>
 
-                                            <td><input type="text" className='form-control form-control-sm' disabled={!isEditable} id="frNoId" value={formatData.fTotalList.frNo} onChange={(e) => handleInputChange(e, 'fTotalList')} name="frNo" /></td>
-                                            <td><input type="text" className='form-control form-control-sm' disabled={!isEditable} id="amNoId" value={formatData.fTotalList.amNo} onChange={(e) => handleInputChange(e, 'fTotalList')} name="amNo" /></td>
-                                            <td><input type="text" className='form-control form-control-sm' disabled={!isEditable} id="amDateId" value={formatData.fTotalList.amDate} onChange={(e) => handleInputChange(e, 'fTotalList')} name="amDate" /></td>
-
-
-                                        </tr>
-                                        <tr>
-                                            <th>Cal Due Report</th>
-
-                                            <td><input type="text" className='form-control form-control-sm' disabled={!isEditable} id="frNoId"name="frNo" /></td>
-                                            <td><input type="text" className='form-control form-control-sm' disabled={!isEditable} id="amNoId" name="amNo" /></td>
-                                            <td><input type="text" className='form-control form-control-sm' disabled={!isEditable} id="amDateId" name="amDate" /></td>
-
-
-                                        </tr>
+                                    <td><input type="text" className='form-control form-control-sm' disabled={!isEditable} id="frNoId" value={formatData.fGrn.frNo} onChange={(e) => handleInputChange(e, 'fGrn')} name="frNo" /></td>
+                                    <td><input type="text" className='form-control form-control-sm' disabled={!isEditable} id="amNoId" value={formatData.fGrn.amNo} onChange={(e) => handleInputChange(e, 'fGrn')} name="amNo" /></td>
+                                    <td><input type="text" className='form-control form-control-sm' disabled={!isEditable} id="amDateId" value={formatData.fGrn.amDate} onChange={(e) => handleInputChange(e, 'fGrn')} name="amDate" /></td>
 
 
 
-                                    </tbody>
-                                </table>
-                           
+                                </tr>
+                                <tr>
+                                    <th>Certificate</th>
+
+                                    <td><input type="text" className='form-control form-control-sm' disabled={!isEditable} id="frNoId" value={formatData.fCertificate.frNo} onChange={(e) => handleInputChange(e, 'fCertificate')} name="frNo" /></td>
+                                    <td><input type="text" className='form-control form-control-sm' disabled={!isEditable} id="amNoId" value={formatData.fCertificate.amNo} onChange={(e) => handleInputChange(e, 'fCertificate')} name="amNo" /></td>
+                                    <td><input type="text" className='form-control form-control-sm' disabled={!isEditable} id="amDateId" value={formatData.fCertificate.amDate} onChange={(e) => handleInputChange(e, 'fCertificate')} name="amDate" /></td>
+
+
+                                </tr>
+                                <tr>
+                                    <th>History Card</th>
+
+                                    <td><input type="text" className='form-control form-control-sm' disabled={!isEditable} id="frNoId" value={formatData.fHistoryCard.frNo} onChange={(e) => handleInputChange(e, 'fHistoryCard')} name="frNo" /></td>
+                                    <td><input type="text" className='form-control form-control-sm' disabled={!isEditable} id="amNoId" value={formatData.fHistoryCard.amNo} onChange={(e) => handleInputChange(e, 'fHistoryCard')} name="amNo" /></td>
+                                    <td><input type="text" className='form-control form-control-sm' disabled={!isEditable} id="amDateId" value={formatData.fHistoryCard.amDate} onChange={(e) => handleInputChange(e, 'fHistoryCard')} name="amDate" /></td>
 
 
 
-                        
+                                </tr>
+                                <tr>
+                                    <th>Total List</th>
+
+                                    <td><input type="text" className='form-control form-control-sm' disabled={!isEditable} id="frNoId" value={formatData.fTotalList.frNo} onChange={(e) => handleInputChange(e, 'fTotalList')} name="frNo" /></td>
+                                    <td><input type="text" className='form-control form-control-sm' disabled={!isEditable} id="amNoId" value={formatData.fTotalList.amNo} onChange={(e) => handleInputChange(e, 'fTotalList')} name="amNo" /></td>
+                                    <td><input type="text" className='form-control form-control-sm' disabled={!isEditable} id="amDateId" value={formatData.fTotalList.amDate} onChange={(e) => handleInputChange(e, 'fTotalList')} name="amDate" /></td>
+
+
+                                </tr>
+                                <tr>
+                                    <th>Cal Due Report</th>
+
+                                    <td><input type="text" className='form-control form-control-sm' disabled={!isEditable} value={formatData.fCalDueDate.frNo} id="frNoId" onChange={(e) => handleInputChange(e, 'fCalDueDate')} name="frNo" /></td>
+                                    <td><input type="text" className='form-control form-control-sm' disabled={!isEditable} value={formatData.fCalDueDate.amNo} id="amNoId" onChange={(e) => handleInputChange(e, 'fCalDueDate')} name="amNo" /></td>
+                                    <td><input type="text" className='form-control form-control-sm' disabled={!isEditable} value={formatData.fCalDueDate.amDate} id="amDateId" onChange={(e) => handleInputChange(e, 'fCalDueDate')} name="amDate" /></td>
+
+
+                                </tr>
+
+
+
+                            </tbody>
+                        </table>
+
+
+
+
+
                     </Paper>
 
                     <Paper
@@ -328,7 +342,7 @@ const FormatNumber = () => {
                                     <tbody>
 
                                         <tr>
-                                            <th style={{width:"50%"}}>Certificate Prefix</th>
+                                            <th style={{ width: "50%" }}>Certificate Prefix</th>
 
                                             <td><input type="text" className='form-control form-control-sm' disabled={!isEditable} id="fCertificatePrefixId" value={formatData.fCertificatePrefix} name="fCertificatePrefix" onChange={handleFormatChange} /></td>
 
@@ -355,10 +369,10 @@ const FormatNumber = () => {
                             </div>
                             {isEditable && <div className='col-md d-flex justify-content-end'>
                                 <div className='me-2 '>
-                                    <Button size='small'  variant='contained' onClick={() => setOpenModal(true)} >Modify</Button>
+                                    <Button size='small' variant='contained' onClick={() => setOpenModal(true)} >Modify</Button>
                                 </div>
                                 <div>
-                                    <Button size='small' color='error'  variant='contained' onClick={() => setIsEditable(false)} >Cancel</Button>
+                                    <Button size='small' color='error' variant='contained' onClick={() => setIsEditable(false)} >Cancel</Button>
                                 </div>
 
 

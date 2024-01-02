@@ -375,7 +375,7 @@ const DcList = () => {
         { field: 'itemAddMasterName', headerName: 'Item Description', width: 150 },
         { field: 'itemRangeSize', headerName: 'Range/Size', width: 100 },
         {
-            field: 'dcItemRemarks', headerName: 'ReMarks', width: 200
+            field: 'dcItemRemarks', headerName: 'Remarks', width: 200
         },
 
 
@@ -581,7 +581,7 @@ const DcList = () => {
                                 {empRole.employee !== "viewer" && <React.Fragment>
                                     <div className='me-2 '>
                                         <Button component={Link} onClick={() => { setDcOpen(true) }} type='button' variant="contained" color="warning">
-                                            <AddIcon /> Add Item
+                                            <AddIcon /> New Dc
                                         </Button>
                                     </div>
                                     {itemListSelectedRowIds.length !== 0 && <div className='me-2 '>

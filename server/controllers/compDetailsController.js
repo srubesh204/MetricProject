@@ -14,8 +14,8 @@ const compDetailsController = {
       createCompDetails: async (req, res) => {
        
         try {
-          const { userType, companyName, companyPlants, companyLogo, companyImage} = req.body;
-          const compDetailsResult = new compDetailsModel({userType, companyName, companyPlants, companyLogo, companyImage});
+          const { userType, companyName,companyAddress, companyPlants, companyLogo, companyImage} = req.body;
+          const compDetailsResult = new compDetailsModel({userType, companyName,companyAddress, companyPlants, companyLogo, companyImage});
           const validationError = compDetailsResult.validateSync();
 
           if (validationError) {
@@ -61,7 +61,7 @@ const compDetailsController = {
             // Create an object with the fields you want to update
             const updateCompDetailsFields = {
               /* Specify the fields and their updated values here */
-             userType: req.body.userType, companyName : req.body.companyName,  companyPlants: req.body.companyPlants, companyLogo : req.body.companyLogo, companyImage : req.body.companyImage,// Example: updating the 'name' field
+             userType: req.body.userType, companyName : req.body.companyName, companyAddress : req.body.companyAddress,  companyPlants: req.body.companyPlants, companyLogo : req.body.companyLogo, companyImage : req.body.companyImage,// Example: updating the 'name' field
               // Add more fields as needed
             };
         
