@@ -59,8 +59,8 @@ export const EmployeeProvider = ({ children, employee }) => {
 const roleAccessRules = {
   admin: ['/home', "/desdep", "/general", "/vendor", "/itemMaster", "/itemadd", "/itemEdit/:id", "/itemList", "/grnList", "/calList", "/onSiteList", '/roles',"/employee", '/rubyTest'],
   plantAdmin: ['/home', "/desdep", "/general", "/vendor", "/itemMaster", "/itemadd", "/itemEdit/:id", "/itemList", "/grnList", "/calList", "/onSiteList", '/roles',"/employee", '/rubyTest'],
-  creator: ['/home', '/itemlist', '/itemadd', '/itemedit/:id', "/grnList", "/calList", "/onSiteList"],
-  viewer: ['/itemlist', '/home'],
+  creator: ['/home', '/itemList', '/itemadd', '/itemedit/:id', "/grnList", "/calList", "/onSiteList"],
+  viewer: ['/itemList', '/home'],
 };
 
 // Function to generate routes based on user role and access rules
@@ -75,7 +75,7 @@ const generateRoutes = (employee) => {
     { path: "/itemMaster", element: <ItemMaster /> },
     { path: "/itemadd", element: <ItemAdd /> },
     { path: "/itemedit/:id", element: <ItemEdit /> },
-    { path: "/itemlist", element: <ItemList /> },
+    { path: "/itemList", element: <ItemList /> },
     { path: "/test", element: <FileViewer /> },
     { path: "/rubyTest", element: <RubeshTest /> },
     { path: "/status", element: <Status /> },
