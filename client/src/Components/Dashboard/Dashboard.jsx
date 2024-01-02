@@ -70,7 +70,7 @@ import InsHistoryCard from '../InsHistoryCard';
 //   );
 // }
 
-const drawerWidth = 280;
+const drawerWidth = 300;
 
 const AppBar = styled(MuiAppBar, {
   shouldForwardProp: (prop) => prop !== 'open',
@@ -283,12 +283,12 @@ const Dashboard = () => {
   return (
     <div>
       <ThemeProvider theme={defaultTheme}>
-        <Box sx={{ display: 'flex', }}>
+        <Box sx={{ display: 'flex', width: "100%"}}>
           <CssBaseline />
           <AppBar position="absolute" open={togglerOpen}>
             <Toolbar
               sx={{
-                pr: '24px', height: "100%" // keep right padding when drawer closed
+                pr: '24px', height: "100%", width: "100%" // keep right padding when drawer closed
               }}
             >
               <IconButton

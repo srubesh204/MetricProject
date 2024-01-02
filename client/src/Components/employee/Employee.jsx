@@ -487,7 +487,7 @@ const Employee = () => {
 
 
     return (
-        <div>
+        <div style={{width: "100%"}}>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
                 <form className='m-3'>
 
@@ -611,16 +611,7 @@ const Employee = () => {
                                     <MenuItem value="viewer">Viewer</MenuItem>
                                 </TextField>
                             </div>
-                            <div className="col">
-                                <TextField label="Role"
 
-                                    size='small' id='empRoleId' onChange={handleChange} fullWidth name='empRole' value={employeeData.empRole} select>
-                                    <MenuItem value="admin">Admin</MenuItem>
-                                    <MenuItem value="plantAdmin">Plant Admin</MenuItem>
-                                    <MenuItem value="creator">Creator</MenuItem>
-                                    <MenuItem value="viewer">Viewer</MenuItem>
-                                </TextField>
-                            </div>
 
                         </div>
 
@@ -742,6 +733,13 @@ const Employee = () => {
                                 elevation={12}
                             >
                                 <Grid container rowSpacing={1} columnSpacing={{ xs: 1 }} className=' g-2 mb-2'>
+                                    <Grid item xs={6}>
+                                        <TextField label="Company Plant"
+                                            size='small' id='empRoleId' onChange={handleChange} fullWidth name='empRole' value={employeeData.plant} select>
+                                            <MenuItem value="">Select Plant</MenuItem>
+                                            
+                                        </TextField>
+                                    </Grid>
 
                                     <Grid item xs={6}>
                                         <TextField
