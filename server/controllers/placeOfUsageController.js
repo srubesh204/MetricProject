@@ -1,5 +1,4 @@
 const placeOfUsageModel = require("../models/placeOfUsageModel")
-const excelToJson = require('convert-excel-to-json');
 
 const placeOfUsageController = {
     getAllPlaceOfUsages: async (req, res) => {
@@ -155,50 +154,6 @@ const placeOfUsageController = {
   } catch (error) {
       console.log(error);
       res.status(500).json({ error: error, status: 0 });
-  }
-},
-uploadPlaceOfUsageInExcel: async (req, res) => {
-  try {
-    if (!req.file) {
-      console.log("hi")
-      return res.status(400).json({ error: 'No file uploaded' });
-    }
-    
-    const excelData = req.file.buffer; // Access the file buffer
-
-    // Convert Excel data to JSON
-    const jsonData = excelToJson({
-      source: excelData,
-      header: {
-        // Is the number of rows that will be skipped and will not be present at our result object. Counting from top to bottom
-        rows: 1 // 2, 3, 4, etc.
-      },
-      columnToKey: {
-        A: 'placeOfUsage',
-        B: 'placeOfUsageStatus',
-    }
-    });
-    console.log(jsonData)
-
-    const uploadPromises = jsonData.Sheet1.map(async (item) => {
-      try {
-        // Create an instance of departmentModel and save it to the database
-        const newPlaceOfUsage = new placeOfUsageModel(item); // Assuming 'item' conforms to your DepartmentModel schema
-        const savedPlaceOfUsage = await newPlaceOfUsage.save();
-        return savedPlaceOfUsage;
-
-      } catch (error) {
-        console.error('Error saving department:', error);   
-      }
-    });
-
-    // Execute all upload promises
-    const uploadedPlaceOfUsage = await Promise.all(uploadPromises);
-
-    res.status(200).json({ uploadedPlaceOfUsage, message: 'Excel data uploaded successfully' });
-  } catch (error) {
-    console.error('Error uploading Excel data:', error);
-    res.status(500).json({ error: 'Internal Server Error' });
   }
 }
 }

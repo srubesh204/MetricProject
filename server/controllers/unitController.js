@@ -1,5 +1,4 @@
 const unitModel = require("../models/unitModel")
-const excelToJson = require('convert-excel-to-json');
 
 const unitController = {
   getAllUnits: async (req, res) => {
@@ -155,51 +154,7 @@ const unitController = {
       console.log(error);
       res.status(500).json({ error: error, status: 0 });
   }
-},
-uploadUnitInExcel: async (req, res) => {
-  try {
-    if (!req.file) {
-      console.log("hi")
-      return res.status(400).json({ error: 'No file uploaded' });
-    }
-
-    const excelData = req.file.buffer; // Access the file buffer
-
-    // Convert Excel data to JSON
-    const jsonData = excelToJson({
-      source: excelData,
-      header: {
-        // Is the number of rows that will be skipped and will not be present at our result object. Counting from top to bottom
-        rows: 1 // 2, 3, 4, etc.
-      },
-      columnToKey: {
-        A: 'unitName',
-      }
-    });
-    console.log(jsonData)
-
-    const uploadPromises = jsonData.Sheet1.map(async (item) => {
-      try {
-        // Create an instance of departmentModel and save it to the database
-        const newUnit = new unitModel(item); // Assuming 'item' conforms to your DepartmentModel schema
-        const savedUnit = await newUnit.save();
-        return savedUnit;
-
-      } catch (error) {
-        console.error('Error saving department:', error);
-      }
-    });
-
-    // Execute all upload promises
-    const uploadedUnit = await Promise.all(uploadPromises);
-
-    res.status(200).json({ uploadedUnit, message: 'Excel data uploaded successfully' });
-  } catch (error) {
-    console.error('Error uploading Excel data:', error);
-    res.status(500).json({ error: 'Internal Server Error' });
-  }
 }
-
 
 }
 

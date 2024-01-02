@@ -183,7 +183,7 @@ const designationController = {
 
         } catch (error) {
           console.error('Error saving designation:', error);
-          // return res.status(500).json({ error: 'Internal Server Error' });
+          return res.status(500).json({ error: 'Internal Server Error' });
         }
       });
   

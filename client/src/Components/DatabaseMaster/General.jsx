@@ -7,7 +7,7 @@ import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
 import { Container, Paper } from '@mui/material';
 import Grid from '@mui/material/Unstable_Grid2';
-import { TextField, MenuItem, IconButton, FormControl, ButtonGroup,  } from '@mui/material';
+import { TextField, MenuItem, IconButton, FormControl } from '@mui/material';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
@@ -16,8 +16,9 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import { DataGrid, GridToolbar } from '@mui/x-data-grid';
 import Autocomplete from '@mui/material/Autocomplete';
-import styled from '@emotion/styled';
-import { CloudDownload, CloudUpload, Delete } from '@mui/icons-material';
+import { Delete } from '@mui/icons-material';
+
+
 
 
 
@@ -89,59 +90,6 @@ export const UnitDataBase = ({ style }) => {
         setUnitData((prev) => ({ ...prev, [name]: value }));
 
     };
-
-    
-    const VisuallyHiddenInput = styled('input')({
-        clip: 'rect(0 0 0 0)',
-        clipPath: 'inset(50%)',
-        height: 1,
-        overflow: 'hidden',
-        position: 'absolute',
-        bottom: 0,
-        left: 0,
-        whiteSpace: 'nowrap',
-        width: 1,
-      });
-    
-      const [file, setFile] = useState(null);
-      const [generalExcelStatus, setGeneralExcelStatus] = useState('');
-    
-      const handleGeneralExcel = (e) => {
-        const selectedFile = e.target.files[0];
-        console.log(selectedFile)
-        setFile(selectedFile);
-      };
-    
-      const handleGeneralUpload = async () => {
-        try {
-          if (!file) {
-            setGeneralExcelStatus('No file selected');
-            return;
-          }
-    
-          const formData = new FormData();
-          formData.append('file', file);
-    
-          const response = await axios.post(`${process.env.REACT_APP_PORT}/unit/uploadUnitInExcel`, formData, {
-            headers: {
-              'Content-Type': 'multipart/form-data',
-            },
-          });
-          unitFetchData();
-    
-          setGeneralExcelStatus(response.data.message || 'Excel file uploaded successfully');
-        } catch (error) {
-          if (error.response) {
-            setGeneralExcelStatus(`Error: ${error.response.data.error || 'Something went wrong'}`);
-          } else if (error.request) {
-            setGeneralExcelStatus('Network error. Please try again.');
-          } else {
-            setGeneralExcelStatus('Error uploading the file.');
-          }
-          console.error('Error uploading Excel file:', error);
-        }
-      };
-
 
     //validate function 
     const [errors, setErrors] = useState({})
@@ -402,30 +350,7 @@ export const UnitDataBase = ({ style }) => {
                                     </div>
                                 </div>
 
-                                                
-                <div className="row g-2 ">
-                  <div className="col d-flex">
-                    <div className="d-flex justify-content-center">
-                      <ButtonGroup className='me-3'>
-                        <Button component="label" variant="contained" >
-                          Upload
-                          <VisuallyHiddenInput type="file" onChange={handleGeneralExcel} />
-                        </Button>
-                        <Button onClick={handleGeneralUpload}><CloudUpload /></Button>
-                      </ButtonGroup>
 
-                      <ButtonGroup>
-                        <Button component="label" variant="contained" color='secondary'>
-                          Download
-                          <VisuallyHiddenInput type="file" />
-                        </Button>
-                        <Button color='secondary'><CloudDownload /></Button>
-                      </ButtonGroup>
-                      {generalExcelStatus && <p>{generalExcelStatus}</p>}
-                    </div>
-
-                  </div>
-                  </div>
                                 <div className='col d-flex justify-content-end'>
                                     {unitStateId ? <div className='d-flex justify-content-end'><div className='me-2' >
                                         <button type="button" className='btn btn-secondary' onClick={() => setOpenModal(true)}>Modify</button>
@@ -646,58 +571,6 @@ export const PartDataBase = ({ style }) => {
 
 
     ];
-
-
-    const VisuallyHiddenInput = styled('input')({
-        clip: 'rect(0 0 0 0)',
-        clipPath: 'inset(50%)',
-        height: 1,
-        overflow: 'hidden',
-        position: 'absolute',
-        bottom: 0,
-        left: 0,
-        whiteSpace: 'nowrap',
-        width: 1,
-      });
-    
-      const [file, setFile] = useState(null);
-      const [generalExcelStatus, setGeneralExcelStatus] = useState('');
-    
-      const handleGeneralExcel = (e) => {
-        const selectedFile = e.target.files[0];
-        console.log(selectedFile)
-        setFile(selectedFile);
-      };
-    
-      const handleGeneralUpload = async () => {
-        try {
-          if (!file) {
-            setGeneralExcelStatus('No file selected');
-            return;
-          }
-    
-          const formData = new FormData();
-          formData.append('file', file);
-    
-          const response = await axios.post(`${process.env.REACT_APP_PORT}/part/uploadPartInExcel`, formData, {
-            headers: {
-              'Content-Type': 'multipart/form-data',
-            },
-          });
-          partFetchData();
-    
-          setGeneralExcelStatus(response.data.message || 'Excel file uploaded successfully');
-        } catch (error) {
-          if (error.response) {
-            setGeneralExcelStatus(`Error: ${error.response.data.error || 'Something went wrong'}`);
-          } else if (error.request) {
-            setGeneralExcelStatus('Network error. Please try again.');
-          } else {
-            setGeneralExcelStatus('Error uploading the file.');
-          }
-          console.error('Error uploading Excel file:', error);
-        }
-      };
 
 
 
@@ -1029,31 +902,6 @@ export const PartDataBase = ({ style }) => {
                                         {errorHandler.message}
                                     </Alert>
                                 </Snackbar>
-
-                                
-                <div className="row g-2 ">
-                  <div className="col d-flex">
-                    <div className="d-flex justify-content-center">
-                      <ButtonGroup className='me-3'>
-                        <Button component="label" variant="contained" >
-                          Upload
-                          <VisuallyHiddenInput type="file" onChange={handleGeneralExcel} />
-                        </Button>
-                        <Button onClick={handleGeneralUpload}><CloudUpload /></Button>
-                      </ButtonGroup>
-
-                      <ButtonGroup>
-                        <Button component="label" variant="contained" color='secondary'>
-                          Download
-                          <VisuallyHiddenInput type="file" />
-                        </Button>
-                        <Button color='secondary'><CloudDownload /></Button>
-                      </ButtonGroup>
-                      {generalExcelStatus && <p>{generalExcelStatus}</p>}
-                    </div>
-
-                  </div>
-                  </div>
 
                                 {partStateId ?
                                     <div className="d-flex justify-content-end">

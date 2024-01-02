@@ -20,144 +20,6 @@ import styled from "@emotion/styled";
 
 export const Department = () => {
 
-
-  const VisuallyHiddenInput = styled('input')({
-    clip: 'rect(0 0 0 0)',
-    clipPath: 'inset(50%)',
-    height: 1,
-    overflow: 'hidden',
-    position: 'absolute',
-    bottom: 0,
-    left: 0,
-    whiteSpace: 'nowrap',
-    width: 1,
-  });
-
-  const [depFile, setDepFile] = useState(null);
-  const [areaFile, setAreaFile] = useState(null);
-  const [pouFile, setPouFile] = useState(null);
-  const [depExcelStatus, setDepExcelStatus] = useState('');
-  const [areaExcelStatus, setAreaExcelStatus] = useState('');
-  const [pouExcelStatus, setPouExcelStatus] = useState('');
-
-  const handleExcel = (e, name) => {
-    if (name === "dep") {
-      const selectedFile = e.target.files[0];
-      console.log(selectedFile)
-      setDepFile(selectedFile);
-    }
-    if (name === "area") {
-      const selectedFile = e.target.files[0];
-      console.log(selectedFile)
-      setAreaFile(selectedFile);
-    }
-    if (name === "pou") {
-      const selectedFile = e.target.files[0];
-      console.log(selectedFile)
-      setPouFile(selectedFile);
-    }
-
-  };
-
-  const handleUpload = async (e, name) => {
-    
-    try {
-      if(name === "dep") {
-        if (!depFile) {
-          setDepExcelStatus('No file selected');
-          return;
-        }
-  
-        const formData = new FormData();
-        formData.append('file', depFile);
-  
-        const response = await axios.post(`${process.env.REACT_APP_PORT}/department/uploadDepartmentInExcel`, formData, {
-          headers: {
-            'Content-Type': 'multipart/form-data',
-          },
-        });
-  
-        setDepExcelStatus(response.data.message || 'Excel file uploaded successfully');
-        depFetchData();
-  
-      }
-      if(name === "area") {
-        if (!areaFile) {
-          setAreaExcelStatus('No file selected');
-          return;
-        }
-  
-        const formData = new FormData();
-        formData.append('file', areaFile);
-  
-        const response = await axios.post(`${process.env.REACT_APP_PORT}/area/uploadAreaInExcel`, formData, {
-          headers: {
-            'Content-Type': 'multipart/form-data',
-          },
-        });
-  
-        setAreaExcelStatus(response.data.message || 'Excel file uploaded successfully');
-        areaFetchData();
-        
-      }
-      if(name === "pou") {
-        if (!pouFile) {
-          setPouExcelStatus('No file selected');
-          return;
-        }
-  
-        const formData = new FormData();
-        formData.append('file', pouFile);
-  
-        const response = await axios.post(`${process.env.REACT_APP_PORT}/placeOfUsage/uploadPlaceOfUsageInExcel`, formData, {
-          headers: {
-            'Content-Type': 'multipart/form-data',
-          },
-        });
-  
-        setPouExcelStatus(response.data.message || 'Excel file uploaded successfully');
-        placeOfUsageData();
-        
-      }
-
-    } catch (error) {
-      if(name === "dep") {
-      if (error.response) {
-        setDepExcelStatus(`Error: ${error.response.data.error || 'Something went wrong'}`);
-      } else if (error.request) {
-        setDepExcelStatus('Network error. Please try again.');
-      } else {
-        setDepExcelStatus('Error uploading the file.');
-      }
-      console.error('Error uploading Excel file:', error);
-    }
-
-  if(name === "area") {
-  if (error.response) {
-    setAreaExcelStatus(`Error: ${error.response.data.error || 'Something went wrong'}`);
-  } else if (error.request) {
-    setAreaExcelStatus('Network error. Please try again.');
-  } else {
-    setAreaExcelStatus('Error uploading the file.');
-  }
-  console.error('Error uploading Excel file:', error);
-}
-
-if(name === "pou") {
-  if (error.response) {
-    setPouExcelStatus(`Error: ${error.response.data.error || 'Something went wrong'}`);
-  } else if (error.request) {
-    setPouExcelStatus('Network error. Please try again.');
-  } else {
-    setPouExcelStatus('Error uploading the file.');
-  }
-  console.error('Error uploading Excel file:', error);
-}
-    }
-  };
-
-
-
   const { id } = useParams()
   console.log(id)
 
@@ -1287,26 +1149,22 @@ if(name === "pou") {
                 </div>
 
                 <div className="row g-2 ">
-                  <div className="col d-flex">
-                    <div className="d-flex justify-content-center">
-                      <ButtonGroup className='me-3'>
-                        <Button component="label" variant="contained" >
-                          Upload
-                          <VisuallyHiddenInput type="file" onChange={(e) => handleExcel(e, "dep")} />
-                        </Button>
-                        <Button onClick={(e) => handleUpload(e, "dep")}><CloudUpload /></Button>
-                      </ButtonGroup>
-
-                      <ButtonGroup>
-                        <Button component="label" variant="contained" color='secondary'>
-                          Download
-                          <VisuallyHiddenInput type="file" />
-                        </Button>
-                        <Button color='secondary'><CloudDownload /></Button>
-                      </ButtonGroup>
-                      {depExcelStatus && <p>{depExcelStatus}</p>}
+                  <div className="col-md-6 d-flex justify-content-start">
+                    <div className="me-2">
+                      <lable className="uplable">
+                        <input type="file" className="downlable" />
+                        Upload
+                      </lable>
                     </div>
+                    <div>
+                      <lable
+                        className="uplable"
 
+                      >
+                        <input type="file" className="downlable" cusor="pointer" />
+                        Download
+                      </lable>
+                    </div>
                   </div>
 
 
@@ -1569,26 +1427,22 @@ if(name === "pou") {
 
 
                   <div className="row g-2 mb-3">
-                    <div className="col d-flex">
-                      <div className="d-flex justify-content-center">
-                        <ButtonGroup className='me-3'>
-                          <Button component="label" variant="contained" >
-                            Upload
-                            <VisuallyHiddenInput type="file" onChange={(e) => handleExcel(e, "area")} />
-                          </Button>
-                          <Button onClick={(e) => handleUpload(e, "area")}><CloudUpload /></Button>
-                        </ButtonGroup>
-
-                        <ButtonGroup>
-                          <Button component="label" variant="contained" color='secondary'>
-                            Download
-                            <VisuallyHiddenInput type="file" />
-                          </Button>
-                          <Button color='secondary'><CloudDownload /></Button>
-                        </ButtonGroup>
-                        {areaExcelStatus && <p>{areaExcelStatus}</p>}
+                    <div className="col-md-6 d-flex justify-content-start">
+                      <div className="me-2">
+                        <lable className="uplable">
+                          <input type="file" className="downlable" />
+                          Upload
+                        </lable>
                       </div>
+                      <div>
+                        <lable
+                          className="uplable"
 
+                        >
+                          <input type="file" className="downlable" cusor="pointer" />
+                          Download
+                        </lable>
+                      </div>
                     </div>
 
 
@@ -1861,26 +1715,23 @@ if(name === "pou") {
 
 
                 <div className="row g-2 ">
-                  <div className="col d-flex">
-                    <div className="d-flex justify-content-center">
-                      <ButtonGroup className='me-3'>
-                        <Button component="label" variant="contained" >
-                          Upload
-                          <VisuallyHiddenInput type="file" onChange={(e) => handleExcel(e, "pou")} />
-                        </Button>
-                        <Button onClick={(e) => handleUpload(e, "pou")}><CloudUpload /></Button>
-                      </ButtonGroup>
+                  <div className="col d-flex justify-content-start">
 
-                      <ButtonGroup>
-                        <Button component="label" variant="contained" color='secondary'>
-                          Download
-                          <VisuallyHiddenInput type="file" />
-                        </Button>
-                        <Button color='secondary'><CloudDownload /></Button>
-                      </ButtonGroup>
-                      {pouExcelStatus && <p>{pouExcelStatus}</p>}
+                    <div className="me-2">
+                      <lable className="uplable">
+                        <input type="file" className="downlable" />
+                        Upload
+                      </lable>
                     </div>
+                    <div>
+                      <lable
+                        className="uplable"
 
+                      >
+                        <input type="file" className="downlable" cusor="pointer" />
+                        Download
+                      </lable>
+                    </div>
                   </div>
                   {placeOfUsageId ? <Dialog
                     open={pouOpenModal}
@@ -2886,7 +2737,7 @@ export const Designation = () => {
               </div>
 
               <div style={{ height: 500, width: '100%' }}>
-                <DataGrid disableDensitySelector
+                <DataGrid  disableDensitySelector
                   rows={designationList}
                   columns={designationColumns}
                   getRowId={(row) => row._id}
