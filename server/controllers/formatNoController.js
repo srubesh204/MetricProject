@@ -79,7 +79,7 @@ const formatNoController = {
                   validationErrors[key] = validationError.errors[key].message;
                 }
               }
-      
+              console.log(validationError)
               return res.status(400).json({
                 errors: validationErrors
               });

@@ -6,7 +6,7 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DataGrid, GridToolbar } from '@mui/x-data-grid';
 import { Container, Paper } from '@mui/material';
-import { Edit, FilterAlt } from '@mui/icons-material';
+import { Edit, FilterAlt, Pages, PictureAsPdf, Print, PrintRounded } from '@mui/icons-material';
 import AddIcon from '@mui/icons-material/Add';
 import { Link as RouterLink } from 'react-router-dom';
 import Dialog from '@mui/material/Dialog';
@@ -22,6 +22,7 @@ import dayjs from 'dayjs';
 import DcEdit from './DcEdit';
 import DcAdd from './DcAdd';
 import { useEmployee } from '../../../App';
+import DcPrint from './DcPrint';
 export const DcListContent = createContext(null);
 const DcList = () => {
 
@@ -30,6 +31,26 @@ const DcList = () => {
     const [selectedRows, setSelectedRows] = useState([]);
     const [dcEditOpen, setDcEditOpen] = useState(false);
     const [dcOpen, setDcOpen] = useState(false);
+
+    //
+    const [dcPrintOpen, setDcPrintOpen] = useState(false);
+
+    const [formatNoData, setFormatNoData] = useState([])
+    const formatFetchData = async () => {
+        try {
+            const response = await axios.get(
+                `${process.env.REACT_APP_PORT}/formatNo/getFormatNoById/6595064f151cbe07fdd7fab7`
+            );
+            const format = response.data.result
+            console.log(format)
+            setFormatNoData(format)
+        } catch (err) {
+            console.log(err);
+        }
+    };
+    useEffect(() => {
+        formatFetchData();
+    }, []);
 
 
     const [dcStateId, setDcStateId] = useState(null)
@@ -74,7 +95,7 @@ const DcList = () => {
 
             setVendorDataList(response.data.result);
 
-           // setFilteredData(response.data.result);
+            // setFilteredData(response.data.result);
         } catch (err) {
             console.log(err);
         }
@@ -82,7 +103,7 @@ const DcList = () => {
     useEffect(() => {
         vendorFetchData();
     }, []);
-    
+
     const [vendorFullList, setVendorFullList] = useState([])
     const [vendorTypeList, setVendorTypeList] = useState([])
     const [filteredData, setFilteredData] = useState([])
@@ -97,7 +118,7 @@ const DcList = () => {
             setVendorFullList(response.data.result);
             setVendorTypeList(response.data.result)
 
-           // setFilteredData(response.data.result);
+            // setFilteredData(response.data.result);
         } catch (err) {
             console.log(err);
         }
@@ -106,7 +127,7 @@ const DcList = () => {
         FetchData();
     }, []);
 
-    
+
 
     const oneMonthBefore = dayjs().subtract(dayjs().date() - 1, 'day')
     const [dateData, setDateData] = useState({
@@ -130,7 +151,7 @@ const DcList = () => {
             setDcDataDcList(response.data.result);
             setFilteredData(response.data.result);
 
-          
+
         } catch (err) {
             console.log(err);
         }
@@ -195,11 +216,13 @@ const DcList = () => {
     //
     const Columns = [
 
-        { field: 'id', headerName: 'Si. No', width: 70, renderCell: (params) => params.api.getAllRowIds().indexOf(params.id) + 1 },
+        { field: 'id', headerName: 'Si. No', headerAlign: "center", align: "center", width: 70, renderCell: (params) => params.api.getAllRowIds().indexOf(params.id) + 1 },
         ...(empRole && empRole.employee !== 'viewer'
-            ? [{ field: 'editButton', headerName: 'Edit', width: 100, renderCell: (params) => <Button onClick={() => { setSelectedRows(params.row); setDcEditOpen(true) }}><Edit color='success' /></Button> }] : []),
+            ? [{ field: 'editButton', headerAlign: "center", align: "center", headerName: 'Edit', width: 100, renderCell: (params) => <Button onClick={() => { setSelectedRows(params.row); setDcEditOpen(true) }}><Edit color='success' /></Button> }] : []),
         {
             field: 'viewButton',
+            headerAlign: "center",
+            align: "center",
             headerName: 'View',
             width: 100,
 
@@ -211,9 +234,10 @@ const DcList = () => {
 
             ),
         },
-        { field: 'dcNo', headerName: 'Dc No', width: 100 },
-        { field: 'dcDate', headerName: 'Dc Date', width: 200 },
-        { field: 'dcPartyName', headerName: 'Dc PartyName', width: 300 },
+        { field: 'dcNo', headerName: 'Dc No', headerAlign: "center", align: "center", width: 100 },
+        { field: 'dcDate', headerName: 'Dc Date', headerAlign: "center", align: "center", width: 200 },
+        { field: 'dcPartyName', headerName: 'Dc PartyName', headerAlign: "center", align: "center", width: 300 },
+        { field: 'printButton', headerName: 'Print', headerAlign: "center", align: "center", width: 100, renderCell: (params) => <Button onClick={() => { setSelectedRows(params.row); setDcPrintOpen(true) }}><PrintRounded color='success' /></Button> }
     ]
 
 
@@ -302,7 +326,7 @@ const DcList = () => {
 
     };
 
-   {/* const handleFilterChange = (e) => {
+    {/* const handleFilterChange = (e) => {
         const { name, value } = e.target;
         if (value === "all") {
             setFilteredData(dcDataDcList)
@@ -480,7 +504,7 @@ const DcList = () => {
 
                         <div className='row'>
                             <Box sx={{ height: 310, width: '100%', my: 2 }}>
-                                <DataGrid  disableDensitySelector
+                                <DataGrid disableDensitySelector
 
                                     rows={filteredData}
                                     columns={Columns}
@@ -531,7 +555,7 @@ const DcList = () => {
 
                         <div className='row'>
                             <Box sx={{ height: 310, width: '100%', my: 2 }}>
-                                <DataGrid  disableDensitySelector
+                                <DataGrid disableDensitySelector
                                     rows={dcListDataList}
                                     columns={dcListColumns}
                                     getRowId={(row) => row._id}
@@ -610,7 +634,7 @@ const DcList = () => {
                                         </Button>
                                     </DialogActions>
                                 </Dialog>
-                               
+
                             </div>
 
                             <DcListContent.Provider
@@ -622,6 +646,15 @@ const DcList = () => {
                                 value={{ dcOpen, setDcOpen, selectedRows, dcListFetchData }}
                             >
                                 <DcAdd />
+                            </DcListContent.Provider>
+
+
+
+                            <DcListContent.Provider
+                                value={{ dcPrintOpen, setDcPrintOpen, selectedRows, formatNoData }}
+                            >
+                                {selectedRows.length !== 0 &&
+                                    <DcPrint />}
                             </DcListContent.Provider>
                         </div>
                     </Paper>
