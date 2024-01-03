@@ -1139,7 +1139,9 @@ if(name === "pou") {
                       //   disabled={!depStateId}
                       >
                         Modify
-                      </button >
+                      </button ><div>
+                                                <Button variant='contained' size="small" color='danger' onClick={() => setDepOpenModal(true)}>Modify</Button>
+                                                </div>
                       <button type="button" onMouseEnter={(e) => { e.target.style.background = 'red' }} onMouseOut={(e) => { e.target.style.background = '#e6e6e6' }}
                         style={{ backgroundColor: "#e6e6e6", color: "black", fontWeight: "bolder" }}
                         className="btn text-end"
@@ -2256,10 +2258,12 @@ export const Designation = () => {
           <Grid item xs={6} >
             <Paper
               sx={{
-                p: 2,
+                py: 2,
+                px: 1,
                 display: 'flex',
                 flexDirection: 'column',
-                m: 2,
+                my: 2,
+                mx: 0.5,
 
               }}
               elevation={12}
@@ -2339,7 +2343,6 @@ export const Designation = () => {
                   </div>
 
                 </div>
-                    {desExcelStatus && <p>{desExcelStatus}</p>}
 
 
                 {desStateId ? <Dialog
@@ -2400,11 +2403,12 @@ export const Designation = () => {
                       className="btn text-end me-3"
                       onClick={() => { setDesStateId(null); setDesignationData(initialDesignationData) }}
                     >Cancel</button>
-                  </div>) : <div>
-                  <Button variant='contained' size="small" color='warning' onClick={() => setOpenModal(true)}>+ Add Designation</Button>
+                  </div>) : <div className="ms-auto">
+                  <Button  className="ms-auto" variant='contained' size="small" color='warning' onClick={() => setOpenModal(true)}>+ Add Designation</Button>
                   </div> }
                 </div>
               </div>
+                    {desExcelStatus && <p>{desExcelStatus}</p>}
 
             </Paper>
           </Grid>

@@ -424,25 +424,26 @@ export const UnitDataBase = ({ style }) => {
                     </div>
 
                   </div>
-                  </div>
-                      {generalExcelStatus && <p>{generalExcelStatus}</p>}
                                 <div className='col d-flex justify-content-end'>
                                     {unitStateId ? <div className='d-flex justify-content-end'><div className='me-2' >
                                         <button type="button" className='btn btn-secondary' onClick={() => setOpenModal(true)}>Modify</button>
                                     </div>
                                         <div className='me-2' >
                                             <button type="button" className='btn btn-danger' onClick={() => { setUnitStateId(null); setUnitData(initialUnitData) }}>Cancel</button>
-                                        </div></div> : <div>
-                  <Button variant='contained' size="small" color='warning' onClick={() => setOpenModal(true)}>+ Add UnitDataBase</Button>
+                                        </div></div> : <div  className="ms-auto">
+                  <Button variant='contained' size="small" color='warning' onClick={() => setOpenModal(true)}>+ Add Unit</Button>
                   </div>}
 
 
                                 </div>
+                                
+                  </div>
                                 <Snackbar anchorOrigin={{ vertical: "top", horizontal: "right" }} open={unitSnackBar} autoHideDuration={6000} onClose={handleSnackClose}>
                                     <Alert variant="filled" onClose={handleSnackClose} severity={errorHandler.code} sx={{ width: '100%' }}>
                                         {errorHandler.message}
                                     </Alert>
                                 </Snackbar>
+                      {generalExcelStatus && <p>{generalExcelStatus}</p>}
                             </Paper>
                         </Grid>
 
@@ -1050,11 +1051,7 @@ export const PartDataBase = ({ style }) => {
                         <Button color='secondary'><CloudDownload /></Button>
                       </ButtonGroup>
                     </div>
-
-                  </div>
-                  </div>
-
-                                {partStateId ?
+                    {partStateId ?
                                     <div className="d-flex justify-content-end">
                                         <div className='me-2'>
                                             <button type="button" className='btn btn-secondary' onClick={() => setOpenModal(true)}>Modify</button>
@@ -1062,9 +1059,14 @@ export const PartDataBase = ({ style }) => {
                                         <div className='me-2'>
                                             <button type="button" className='btn btn-danger' onClick={() => { setPartStateId(null); setPartData(initialPartData) }}>Cancel</button>
                                         </div>
-                                    </div> : <div className="d-flex justify-content-end">
-                  <Button variant='contained' size="small" color='warning' onClick={() => setOpenModal(true)}>+ Add PartDataBase</Button>
+                                    </div> : <div className="ms-auto">
+                  <Button variant='contained' size="small" color='warning' onClick={() => setOpenModal(true)}>+ Add Part</Button>
                   </div>}
+
+                  </div>
+                  </div>
+
+                                
                       {generalExcelStatus && <p>{generalExcelStatus}</p>}
                                 {partStateId ? <Dialog
                                     open={openModal}
