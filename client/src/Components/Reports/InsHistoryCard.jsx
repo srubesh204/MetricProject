@@ -49,6 +49,7 @@ function InsHistoryCard() {
                     return false;
                 });
                 setDistCalName(instrumentName);
+                console.log(filterData, "Hi")
 
 
             } catch (error) {
@@ -64,21 +65,55 @@ function InsHistoryCard() {
     const handleHistoryCard = (params) => {
         console.log(params)
         console.log(params.row)
-        setSelectedRow((prev)=> ({...prev, rangeSize: params.row.calRangeSize,
+        setSelectedRow((prev) => ({
+            ...prev,
+            serialNo: params.row.calItemMFRNo,
+            rangeSize: params.row.calRangeSize,
             make: params.row.calItemMake,
-            
+
         }))
     }
 
     const handleCalDetails = (e) => {
         const { name, value } = e.target;
-
+    
+        setCalDetails((prev) => ({ ...prev, [name]: value }));
+    
         if (name === "calInsName") {
-            const imte = itemList.filter((item) => item.calItemName === value)
-            setFilteredIMTEs(imte)
+            const imte = itemList.filter((item) => item.calItemName === value);
+            setFilteredIMTEs(imte);
         }
-        setCalDetails((prev) => ({ ...prev, [name]: value }))
-    }
+    
+        // Check if both Instrument Name and IMTENo are selected
+        if (calDetails.calInsName && calDetails.calInsIMTENo) {
+            const selectedSlNo = filteredIMTEs.length > 0 ? filteredIMTEs[0].calItemMFRNo : '';
+            const selectedMake = filteredIMTEs.length > 0 ? filteredIMTEs[0].calItemMake : '';
+            const selectedRangeSize = filteredIMTEs.length > 0 ? filteredIMTEs[0].calRangeSize : '';
+            console.log("Selected calItemMFRNo:", selectedSlNo);
+            console.log("Selected calItemMake:", selectedMake);
+            console.log("Selected calRangeSize:", selectedRangeSize);
+    
+            // Update the state for 'make' and 'rangeSize'
+            setSelectedRow((prev) => ({
+                ...prev,
+                serialNo: selectedSlNo,
+                make: selectedMake,
+                rangeSize: selectedRangeSize,
+            }));
+    
+            // Filter the data based on Instrument Name and IMTENo
+            const updatedData = itemList.filter((item) => {
+                return item.calItemName === calDetails.calInsName && item.calIMTENo === calDetails.calInsIMTENo;
+            });
+            setFilteredData(updatedData);
+        } else {
+            // If either Instrument Name or IMTENo is not selected, reset filteredData
+            setFilteredData(itemList);
+        }
+    };
+    
+
+
 
 
 
@@ -90,7 +125,7 @@ function InsHistoryCard() {
         { field: 'col5', headerName: 'Certificate Status', width: 150 },
         { field: 'calCertificateNo', headerName: 'Certificate No', width: 150 },
         { field: 'col7', headerName: 'Observed Size 1', width: 150 },
-        { field: 'calUpdatedAt', headerName: 'Calibrated At', width: 150 },
+        { field: 'col8', headerName: 'Calibrated At', width: 150 },
     ];
 
 
@@ -124,14 +159,14 @@ function InsHistoryCard() {
                                     </TextField>
                                 </div>
                                 <div className="col-2">
-                                    <TextField label="IMTE No" size="small" select onChange={handleCalDetails} name="calInsIMTENo" value={calDetails.calInsIMTENo} fullWidth >
-                                        <MenuItem value="all">All</MenuItem >
-                                        {filteredIMTEs.map((cal) => (
-                                            <MenuItem value={cal.calIMTENo}>{cal.calIMTENo}</MenuItem >
-                                        )
-                                        )}
-                                    </TextField>
-                                </div>
+    <TextField label="IMTE No" size="small" select onChange={handleCalDetails} name="calInsIMTENo" value={calDetails.calInsIMTENo} fullWidth>
+        <MenuItem value="all">All</MenuItem>
+        {Array.from(new Set(filteredIMTEs.map(cal => cal.calIMTENo))).map((calIMTENo, index) => (
+            <MenuItem key={index} value={calIMTENo}>{calIMTENo}</MenuItem>
+        ))}
+    </TextField>
+</div>
+
 
                                 <div className="col-2 offset-3">
                                     <DatePicker
@@ -182,48 +217,66 @@ function InsHistoryCard() {
                             elevation={12}>
                             <div className="row g-2 mb-2">
                                 <div className="form-floating col-3">
-                                    <TextField label="Serial No." size="small" name="serialNo" InputProps={{ readOnly: true}} InputLabelProps={{ shrink:true}}></TextField>
+                                    <TextField label="Serial No." 
+                                        value={selectedRow.serialNo} size="small" name="serialNo" InputProps={{ readOnly: true }} InputLabelProps={{ shrink: true }}></TextField>
                                 </div>
                                 <div className="form-floating col-3">
-                                    <TextField label="Model No." size="small" name="modelNo" InputProps={{ readOnly: true}} InputLabelProps={{ shrink:true}}></TextField>
+                                    <TextField label="Model No." size="small" name="modelNo" InputProps={{ readOnly: true }} InputLabelProps={{ shrink: true }}></TextField>
                                 </div>
                                 <div className="form-floating col-3">
-                                    <TextField label="Range / Size" value={selectedRow.rangeSize} size="small" name="rangeSize" InputProps={{ readOnly: true}} InputLabelProps={{ shrink:true}}></TextField>
+                                    <TextField
+                                        label="Range / Size"
+                                        value={selectedRow.rangeSize}
+                                        size="small"
+                                        name="rangeSize"
+                                        InputProps={{ readOnly: true }}
+                                        InputLabelProps={{ shrink: true }}
+                                    ></TextField>
+
                                 </div>
                                 <div className="form-floating col-3">
-                                    <TextField label="Calibration Source" size="small" name="calSource" InputProps={{ readOnly: true}} InputLabelProps={{ shrink:true}}></TextField>
+                                    <TextField label="Calibration Source" size="small" name="calSource" InputProps={{ readOnly: true }} InputLabelProps={{ shrink: true }}></TextField>
                                 </div>
                             </div>
                             <div className="row g-2 mb-2">
                                 <div className="form-floating col d-flex-md-5">
-                                    <TextField label="Premissible Size" size="small" name="premissibleSize" InputProps={{ readOnly: true}} InputLabelProps={{ shrink:true}}></TextField>
+                                    <TextField label="Premissible Size" size="small" name="premissibleSize" InputProps={{ readOnly: true }} InputLabelProps={{ shrink: true }}></TextField>
                                 </div>
                                 <div className="form-floating col d-flex-md-5">
-                                    <TextField label="Location" size="small" name="location" InputProps={{ readOnly: true}} InputLabelProps={{ shrink:true}}></TextField>
+                                    <TextField label="Location" size="small" name="location" InputProps={{ readOnly: true }} InputLabelProps={{ shrink: true }}></TextField>
                                 </div>
                                 <div className="form-floating col d-flex-md-5">
-                                    <TextField label="Frequency In Months" size="small" name="freqInMonths" InputProps={{ readOnly: true}} InputLabelProps={{ shrink:true}}></TextField>
+                                    <TextField label="Frequency In Months" size="small" name="freqInMonths" InputProps={{ readOnly: true }} InputLabelProps={{ shrink: true }}></TextField>
                                 </div>
                                 <div className="form-floating col d-flex-md-5">
-                                    <TextField label="Make" value={selectedRow.make} size="small" name="make" InputProps={{ readOnly: true}} InputLabelProps={{ shrink:true}}></TextField>
+                                    <TextField
+                                        label="Make"
+                                        value={selectedRow.make}
+                                        size="small"
+                                        name="make"
+                                        InputProps={{ readOnly: true }}
+                                        InputLabelProps={{ shrink: true }}
+                                    ></TextField>
                                 </div>
                             </div>
                         </Paper>
 
                         <Paper>
-                            <DataGrid
-                                rows={filteredData}
-                                columns={columns}
-                                initialState={{
-                                    pagination: {
-                                        paginationModel: { page: 0, pageSize: 5 },
-                                    },
-                                }}
-                                getRowId={(row) => row._id}
-                                pageSizeOptions={[5, 10]}
-                                checkboxSelection
-                                onRowClick={handleHistoryCard}
-                            />
+                            {calDetails.calInsName && calDetails.calInsIMTENo ? (
+                                <DataGrid
+                                    rows={filteredData}
+                                    columns={columns}
+                                    initialState={{
+                                        pagination: {
+                                            paginationModel: { page: 0, pageSize: 5 },
+                                        },
+                                    }}
+                                    getRowId={(row) => row._id}
+                                    pageSizeOptions={[5, 10]}
+                                    checkboxSelection
+                                    onRowClick={handleHistoryCard}
+                                />
+                            ) : null}
                         </Paper>
                     </Container>
                 </form>
