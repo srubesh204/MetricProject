@@ -4,7 +4,7 @@ import { Button, Dialog, DialogActions, DialogContent, DialogTitle, IconButton }
 import { Close } from '@mui/icons-material';
 import { PDFViewer, Document, Font, Page, Text, View, StyleSheet } from '@react-pdf/renderer';
 import dayjs from 'dayjs';
-import axios from 'axios';
+
 
 
 const DcPrint = () => {
@@ -31,8 +31,10 @@ const DcPrint = () => {
     const styles = StyleSheet.create({
         table: {
             display: "table",
-            border: "0.5px 0px 0.5px 0px solid black",
-
+            borderStyle: "solid", 
+            borderWidth: 0.5, 
+            borderRightWidth: 0, 
+            borderLeftWidth: 0 
         },
         tableRow: {
             margin: "auto",
@@ -58,15 +60,12 @@ const DcPrint = () => {
             left: "15px",
             right: "15px",
             fontSize: "8px",
-            border: "1px solid black"
+            borderStyle: "solid",
+            borderWidth: 1,
+
         },
     });
 
-    const data = [
-        { id: 1, name: 'John Doe', age: 30, city: 'New York' },
-        { id: 2, name: 'Jane Smith', age: 25, city: 'Los Angeles' },
-        // Add more data as needed
-    ];
 
     const renderTableRows = () => {
 
@@ -87,7 +86,7 @@ const DcPrint = () => {
 
                     </View>
                     <View style={styles.tableRow}>
-                        <Text style={styles.inLineTableCell}>Range/Size : {row.itemRangeSize}, L.C. : {row.itemLC}, Make : {row.itemMake}</Text>
+                        <Text style={styles.inLineTableCell}>Range/Size : {row.itemRangeSize+" "+ row.itemRangeSizeUnit}, L.C. : {row.itemLC + " "+ row.itemLCUnit}, Make : {row.itemMake}</Text>
 
 
                     </View>
@@ -118,7 +117,7 @@ const DcPrint = () => {
                         <Text style={{ position: "absolute", margin: "80px 0px 5px 200px", fontSize: 6 }}> <Text style={{ fontWeight: 800 }}>Ammendment Date.</Text> : {data.value.fDc.amDate}</Text>
                     </View>
                     <View >
-                        <Text style={{ margin: "5px", fontFamily: 'Open Sans', fontSize: 10, fontWeight: 800 }}>For {selectedRows.dcPartyName}</Text>
+                        <Text style={{ margin: "5px", fontFamily: 'Open Sans', fontSize: 10, fontWeight: 600 }}>For {selectedRows.dcPartyName}</Text>
                         <Text style={{ margin: "45px 0px 5px 45px", fontSize: 9 }}>Authorised Signature</Text>
                     </View>
                 </View>
