@@ -119,15 +119,15 @@ const CalList = () => {
     console.log(selectedCalRow)
 
     const calListColumns = [
-        { field: 'id', headerName: 'Entry. No', width: 100, renderCell: (params) => params.api.getAllRowIds().indexOf(params.id) + 1 },
-        ...(employeeRole && employeeRole.employee !== "viewer" ? [{ field: 'editButton', headerName: 'Edit', width: 100, renderCell: (params) => <EditRounded color='warning' onClick={() => setCalEditData(params)} /> }] : []),
-        { field: 'calItemEntryDate', headerName: 'Entry Date', width: 200, valueGetter: (params) => dayjs(params.row.calItemEntryDate).format('DD-MM-YYYY') },
-        { field: 'calIMTENo', headerName: 'Item IMTENo', width: 200 },
-        { field: 'calItemName', headerName: 'Item Description', width: 200 },
-        { field: 'calRangeSize', headerName: 'Range/Size', width: 200 },
-        { field: 'calItemCalDate', headerName: 'Calibration On', width: 200, valueGetter: (params) => dayjs(params.row.calItemCalDate).format('DD-MM-YYYY') },
-        { field: 'itemDueDate', headerName: 'Next Due On', width: 200, valueGetter: (params) => dayjs(params.row.itemDueDate).format('DD-MM-YYYY') },
-        { field: 'calStatus', headerName: 'Cal status', width: 200 },
+        { field: 'id', headerName: 'Entry. No', width: 100, renderCell: (params) => params.api.getAllRowIds().indexOf(params.id) + 1 ,headerAlign:"center",align: "center",},
+        ...(employeeRole && employeeRole.employee !== "viewer" ? [{ field: 'editButton',headerAlign:"center",align: "center", headerName: 'Edit', width: 100, renderCell: (params) => <EditRounded color='warning' onClick={() => setCalEditData(params)} /> }] : []),
+        { field: 'calItemEntryDate', headerName: 'Entry Date', width: 200, valueGetter: (params) => dayjs(params.row.calItemEntryDate).format('DD-MM-YYYY') ,headerAlign:"center",align: "center",},
+        { field: 'calIMTENo', headerName: 'Item IMTENo', width: 200,headerAlign:"center",align: "center", },
+        { field: 'calItemName', headerName: 'Item Description', width: 200,headerAlign:"center",align: "center", },
+        { field: 'calRangeSize', headerName: 'Range/Size', width: 200,headerAlign:"center",align: "center",},
+        { field: 'calItemCalDate', headerName: 'Calibration On', width: 200, valueGetter: (params) => dayjs(params.row.calItemCalDate).format('DD-MM-YYYY') ,headerAlign:"center",align: "center",},
+        { field: 'itemDueDate', headerName: 'Next Due On', width: 200, valueGetter: (params) => dayjs(params.row.itemDueDate).format('DD-MM-YYYY') ,headerAlign:"center",align: "center",},
+        { field: 'calStatus', headerName: 'Cal status', width: 200,headerAlign:"center",align: "center", },
 
     ]
 
