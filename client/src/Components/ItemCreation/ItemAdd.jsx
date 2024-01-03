@@ -293,6 +293,7 @@ const ItemAdd = () => {
 
     const handleItemAddChange = (e) => {
         const { name, value, checked } = e.target;
+       
         if (name === "itemRangeSizeUnit") {
             setItemAddData((prev) => ({ ...prev, [name]: value, acceptanceCriteria: [{ acAccuracyUnit: value, acRangeSizeUnit: value }] }))
         }
@@ -766,6 +767,8 @@ const ItemAdd = () => {
 
 
                     </Paper>
+
+                    {itemAddData.itemMasterRef !== "" && <React.Fragment>
                     <div className="row ">
                         <div className="col">
                             <Paper className='mb-2 row-md-6' elevation={12} sx={{ p: 2 }}>
@@ -1158,7 +1161,7 @@ const ItemAdd = () => {
                                     </TextField>
                                     <div className="col-md-6">
                                         <DatePicker
-                                            disabled={itemAddData.itemPrevCalData === "notAvailable"}
+                                            disabled={itemAddData.itemPrevCalData !== "available"}
                                             fullWidth
                                             id="itemCalDateId"
                                             name="itemCalDate"
@@ -1176,7 +1179,7 @@ const ItemAdd = () => {
                                     </div>
                                     <div className="col-md-6">
                                         <DatePicker
-                                            disabled={itemAddData.itemPrevCalData === "notAvailable"}
+                                            disabled={itemAddData.itemPrevCalData !== "available"}
                                             fullWidth
                                             id="itemDueDateId"
                                             name="itemDueDate"
@@ -1194,7 +1197,7 @@ const ItemAdd = () => {
                                         )}
                                     </div>
                                     <div className="col-lg-12 d-flex justify-content-between">
-                                        <TextField disabled={itemAddData.itemPrevCalData === "notAvailable"}
+                                        <TextField disabled={itemAddData.itemPrevCalData !== "available"}
                                             size='small'
                                             fullWidth
                                             variant='outlined'
@@ -1210,18 +1213,18 @@ const ItemAdd = () => {
                                         </TextField>
 
                                         <React.Fragment>
-                                            <TextField disabled={itemAddData.itemPrevCalData === "notAvailable"}
+                                            <TextField disabled={itemAddData.itemPrevCalData !== "available"}
                                                 className='ms-2'
                                                 fullWidth
-                                                label="Uncertainty"
+                                                label="Uncertainity"
                                                 variant='outlined'
                                                 size='small'
                                                 onChange={handleItemAddChange}
-                                                name='itemUncertainty'
+                                                name='itemUncertainity'
                                                 value={itemAddData.itemUncertainity}
                                             />
 
-                                            <TextField disabled={itemAddData.itemPrevCalData === "notAvailable"}
+                                            <TextField disabled={itemAddData.itemPrevCalData !== "available"}
                                                 select
                                                 size='small'
                                                 variant='outlined'
@@ -1242,9 +1245,9 @@ const ItemAdd = () => {
 
 
                                     <div className="col-md-12 d-flex justify-content-between">
-                                        <TextField disabled={itemAddData.itemPrevCalData === "notAvailable"} size='small' fullWidth variant='outlined' onChange={handleItemAddChange} label="Certificate No" name='itemCertificateNo'></TextField>
+                                        <TextField disabled={itemAddData.itemPrevCalData !== "available"} size='small' fullWidth variant='outlined' onChange={handleItemAddChange} label="Certificate No" name='itemCertificateNo'></TextField>
 
-                                        <Button disabled={itemAddData.itemPrevCalData === "notAvailable"} className='ms-2' startIcon={<UploadFile />} size="small" fullWidth component="label" value={itemAddData.itemCertificateName} variant="contained" >
+                                        <Button disabled={itemAddData.itemPrevCalData !== "available"} className='ms-2' startIcon={<UploadFile />} size="small" fullWidth component="label" value={itemAddData.itemCertificateName} variant="contained" >
 
                                             Certificate Upload
                                             <VisuallyHiddenInput type="file" onChange={handleCertificateUpload} />
@@ -1715,7 +1718,7 @@ const ItemAdd = () => {
                             </DialogActions>
                         </Dialog>
                     </div>
-
+                    </React.Fragment>}
 
 
 
