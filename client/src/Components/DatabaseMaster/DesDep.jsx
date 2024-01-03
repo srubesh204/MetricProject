@@ -15,6 +15,7 @@ import { CloudDownload, CloudUpload, Delete } from '@mui/icons-material';
 import { Check, Clear } from '@mui/icons-material';
 import { useParams } from 'react-router-dom';
 import styled from "@emotion/styled";
+import { Link } from 'react-router-dom';
 
 
 
@@ -225,7 +226,7 @@ if(name === "pou") {
     {
       field: 'delete',
       headerName: 'Delete',
-      width: 80,headerAlign:"center",align: "center",
+      width: 80,headerAlign:"center",
       sortable: false,
       renderHeader: () => (
         <IconButton color='error' aria-label="Delete" onClick={() => setDeleteDepModal(true)}>
@@ -453,14 +454,15 @@ if(name === "pou") {
 
 
   const areaColumns = [
-    { field: 'id', headerName: 'Si. No', width: 70, renderCell: (params) => params.api.getAllRowIds().indexOf(params.id) + 1, align: "center" },
+    { field: 'id', headerName: 'Si. No', width: 70, renderCell: (params) => params.api.getAllRowIds().indexOf(params.id) + 1,headerAlign:"center",align: "center", },
 
-    { field: 'area', headerName: 'Area', width: "90" },
-    { field: 'areaStatus', headerName: ' Area Status', width: "90" },
+    { field: 'area', headerName: 'Area', width: "90",headerAlign:"center",align: "center", },
+    { field: 'areaStatus', headerName: ' Area Status', width: "90",headerAlign:"center",align: "center", },
     {
       field: 'delete',
       headerName: 'Delete',
       width: 80,
+      headerAlign:"center",
       sortable: false,
       renderHeader: () => (
         <IconButton color='error' aria-label="Delete" onClick={() => setDeleteAreaModal(true)}>
@@ -775,14 +777,15 @@ if(name === "pou") {
 
 
   const placeOfUsageColumns = [
-    { field: 'id', headerName: 'Si. No', width: 70, renderCell: (params) => params.api.getAllRowIds().indexOf(params.id) + 1, align: "center" },
+    { field: 'id', headerName: 'Si. No', width: 70, renderCell: (params) => params.api.getAllRowIds().indexOf(params.id) + 1, headerAlign:"center",align: "center" },
 
-    { field: 'placeOfUsage', headerName: 'Place Of Usage', width: "70" },
-    { field: 'placeOfUsageStatus', headerName: ' Place Of Usage Status', width: "90" },
+    { field: 'placeOfUsage', headerName: 'Place Of Usage', width: "70",headerAlign:"center",align: "center", },
+    { field: 'placeOfUsageStatus', headerName: ' Place Of Usage Status', width: "120",headerAlign:"center",align: "center", },
     {
       field: 'delete',
       headerName: 'Delete',
-      width: 80,
+      width: 60,
+      headerAlign:"center",
       sortable: false,
       renderHeader: () => (
         <IconButton color='error' aria-label="Delete" onClick={() => setDeletePouModal(true)}>
@@ -2020,10 +2023,10 @@ export const Designation = () => {
 
 
   const designationColumns = [
-    { field: 'id', headerName: 'Si. No', width: 70, renderCell: (params) => params.api.getAllRowIds().indexOf(params.id) + 1, align: "center" },
+    { field: 'id', headerName: 'Si. No', width: 70, renderCell: (params) => params.api.getAllRowIds().indexOf(params.id) + 1,headerAlign:"center", align: "center" },
 
-    { field: 'designation', headerName: 'Designation', width: "200" },
-    { field: 'designationStatus', headerName: 'Designation Status', width: "150" },
+    { field: 'designation', headerName: 'Designation', width: "200" ,headerAlign:"center",align: "center", },
+    { field: 'designationStatus', headerName: 'Designation Status', width: "150",headerAlign:"center",align: "center", },
     {/*{
       field: 'delete',
       headerName: 'Delete',
@@ -2409,28 +2412,32 @@ export const Designation = () => {
                 <div className="text-end col">
 
                   {desStateId ? (<div>
-                    <button
+                    <Button
+                    component={Link}
                       type="button"
+                      variant="contained"
                       className="btn text-end me-3 hover"
                       onClick={() => setOpenModal(true)}
                       style={{ backgroundColor: "#e6e6e6", color: "black", fontWeight: "bolder" }}
                     >
                       Modify
-                    </button>
-                    <button type="button" onMouseEnter={(e) => { e.target.style.background = 'red' }} onMouseOut={(e) => { e.target.style.background = '#e6e6e6' }}
+                    </Button>
+                    <Button  component={Link} size="small" variant="contained" type="button" onMouseEnter={(e) => { e.target.style.background = 'red' }} onMouseOut={(e) => { e.target.style.background = '#e6e6e6' }}
                       style={{ backgroundColor: "#e6e6e6", color: "black", fontWeight: "bolder" }}
                       className="btn text-end me-3"
                       onClick={() => { setDesStateId(null); setDesignationData(initialDesignationData) }}
-                    >Cancel</button>
-                  </div>) : <button
+                    >Cancel</Button>
+                  </div>) : <Button    variant="contained"
                     type="button"
+                    size="small"
                     className="btn text-end hover"
                     onClick={() => setOpenModal(true)}
                     style={{ backgroundColor: "#e6e6e6", color: "black", fontWeight: "bolder" }}
                   >
-                    <i className="bi bi-plus"></i>Add Designation</button>
+                    <i className="bi bi-plus"></i>Add Designation</Button>
                   }
                 </div>
+                
               </div>
 
             </Paper>

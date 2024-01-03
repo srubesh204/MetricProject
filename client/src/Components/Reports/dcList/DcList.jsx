@@ -370,18 +370,12 @@ const DcList = () => {
 
 
     const dcListColumns = [
-        { field: 'id', headerName: 'Si. No', width: 70, renderCell: (params) => params.api.getAllRowIds().indexOf(params.id) + 1 },
-        { field: 'itemIMTENo', headerName: 'Item IMTENo', width: 100 },
-        { field: 'itemAddMasterName', headerName: 'Item Description', width: 150 },
-        { field: 'itemRangeSize', headerName: 'Range/Size', width: 100 },
-        {
-            field: 'dcItemRemarks', headerName: 'Remarks', width: 200
-        },
-
-
+        { field: 'id', headerName: 'Si. No', width: 70, renderCell: (params) => params.api.getAllRowIds().indexOf(params.id) + 1,headerAlign:"center",align: "center", },
+        { field: 'itemIMTENo', headerName: 'Item IMTENo', width: 100 ,headerAlign:"center",align: "center",},
+        { field: 'itemAddMasterName', headerName: 'Item Description',headerAlign:"center",align: "center", width: 150 },
+        { field: 'itemRangeSize', headerName: 'Range/Size',headerAlign:"center",align: "center", width: 100 },
+        { field: 'dcItemRemarks', headerName: 'Remarks',headerAlign:"center",align: "center", width: 200 },
     ]
-
-
     console.log(dcDataDcList)
 
 

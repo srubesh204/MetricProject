@@ -69,13 +69,14 @@ export const UnitDataBase = ({ style }) => {
             field: 'id',
             headerName: 'Si. No',
             width: 100,
+            headerAlign:"center",align: "center",
             renderCell: (params) => {
                 const rowIndex = params.api.getRowIndexRelativeToVisibleRows(params.id);
                 return Number.isInteger(rowIndex) ? rowIndex + 1 : '';
             }
         },
 
-        { field: 'unitName', headerName: 'UnitName', width: "150" },
+        { field: 'unitName', headerName: 'UnitName', width: "150",headerAlign:"center",align: "center", },
 
 
 
@@ -634,13 +635,13 @@ export const PartDataBase = ({ style }) => {
 
     const [partSelectedRowIds, setPartSelectedRowIds] = useState([]);
     const partColumns = [
-        { field: 'id', headerName: 'Si. No', width: 100, renderCell: (params) => params.api.getAllRowIds().indexOf(params.id) + 1 },
+        { field: 'id', headerName: 'Si. No', width: 100, renderCell: (params) => params.api.getAllRowIds().indexOf(params.id) + 1 ,headerAlign:"center",align: "center",},
 
-        { field: 'partNo', headerName: 'PartNo', width: "150" },
-        { field: 'partName', headerName: 'partName', width: "190" },
-        { field: 'customer', headerName: 'Customer', width: "200" },
-        { field: 'operationNo', headerName: 'Operation No', width: "200" },
-        { field: 'partStatus', headerName: 'Part Status', width: "200" },
+        { field: 'partNo', headerName: 'PartNo', width: "150",headerAlign:"center",align: "center" },
+        { field: 'partName', headerName: 'partName', width: "190",headerAlign:"center",align: "center" },
+        { field: 'customer', headerName: 'Customer', width: "200" ,headerAlign:"center",align: "center"},
+        { field: 'operationNo', headerName: 'Operation No', width: "200" ,headerAlign:"center",align: "center"},
+        { field: 'partStatus', headerName: 'Part Status', width: "200",headerAlign:"center",align: "center" },
 
 
 

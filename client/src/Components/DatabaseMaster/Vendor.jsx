@@ -586,37 +586,42 @@ const Vendor = () => {
 
     const vendorListColumns = [
 
-        { field: 'id', headerName: 'Si. No', width: 70, renderCell: (params) => params.api.getAllRowIds().indexOf(params.id) + 1 },
-        { field: 'vendorCode', headerName: 'VendorCode', width: 130 },
+        { field: 'id', headerName: 'Si. No', width: 70, renderCell: (params) => params.api.getAllRowIds().indexOf(params.id) + 1 ,headerAlign:"center",align: "center",},
+        { field: 'vendorCode', headerName: 'VendorCode', width: 130,headerAlign:"center",align: "center", },
 
         {
             field: 'fullName',
             headerName: 'Full Name',
             width: 200,
+            headerAlign:"center",align: "center",
         },
         {
             field: 'city',
             headerName: 'City',
             //   description: 'This column has a value getter and is not sortable.',
             width: 100,
+            headerAlign:"center",align: "center",
         },
         {
             field: 'state',
             headerName: 'State',
             // description: 'This column has a value getter and is not sortable.',
             width: 100,
+            headerAlign:"center",align: "center",
         },
         {
             field: 'vendorStatus',
             headerName: 'Status',
             // description: 'This column has a value getter and is not sortable.',
             width: 100,
+            headerAlign:"center",align: "center",
 
         },
         {
             field: 'vendorType',
             headerName: 'Vendor Type',
             headerAlign: "center",
+            align: "center",
 
             width: 300,
 
