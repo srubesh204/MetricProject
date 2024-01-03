@@ -2264,10 +2264,12 @@ export const Designation = () => {
           <Grid item xs={6} >
             <Paper
               sx={{
-                p: 2,
+                py: 2,
+                px: 1,
                 display: 'flex',
                 flexDirection: 'column',
-                m: 2,
+                my: 2,
+                mx: 0.5,
 
               }}
               elevation={12}
@@ -2424,6 +2426,7 @@ export const Designation = () => {
                 </div>
 
               </div>
+                    {desExcelStatus && <p>{desExcelStatus}</p>}
 
             </Paper>
           </Grid>
