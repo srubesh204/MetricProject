@@ -1058,14 +1058,15 @@ export const PartDataBase = ({ style }) => {
                                 {partStateId ?
                                     <div className="d-flex justify-content-end">
                                         <div className='me-2'>
-                                            <button type="button" className='btn btn-secondary' onClick={() => setOpenModal(true)}>Modify</button>
+                                            <Button type="button" variant='contained' size="small"  className='btn btn-secondary' onClick={() => setOpenModal(true)}>Modify</Button>
                                         </div>
                                         <div className='me-2'>
-                                            <button type="button" className='btn btn-danger' onClick={() => { setPartStateId(null); setPartData(initialPartData) }}>Cancel</button>
+                                            <Button type="button" variant='contained' size="small" className='btn btn-danger' onClick={() => { setPartStateId(null); setPartData(initialPartData) }}>Cancel</Button>
                                         </div>
                                     </div> : <div className="d-flex justify-content-end">
-                  <Button variant='contained' size="small" color='warning' onClick={() => setOpenModal(true)}>+ Add PartDataBase</Button>
+                  <Button variant='contained' size="small" color='warning' onClick={() => setOpenModal(true)}>+ Add Part</Button>
                   </div>}
+                  
                       {generalExcelStatus && <p>{generalExcelStatus}</p>}
                                 {partStateId ? <Dialog
                                     open={openModal}

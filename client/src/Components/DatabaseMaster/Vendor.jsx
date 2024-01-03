@@ -23,7 +23,7 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import { Delete, Done } from '@mui/icons-material';
-import { CloudDownload, CloudUpload,  } from '@mui/icons-material';
+import { CloudDownload, CloudUpload, } from '@mui/icons-material';
 
 
 const Vendor = () => {
@@ -586,35 +586,35 @@ const Vendor = () => {
 
     const vendorListColumns = [
 
-        { field: 'id', headerName: 'Si. No', width: 70, renderCell: (params) => params.api.getAllRowIds().indexOf(params.id) + 1 ,headerAlign:"center",align: "center",},
-        { field: 'vendorCode', headerName: 'VendorCode', width: 130,headerAlign:"center",align: "center", },
+        { field: 'id', headerName: 'Si. No', width: 70, renderCell: (params) => params.api.getAllRowIds().indexOf(params.id) + 1, headerAlign: "center", align: "center", },
+        { field: 'vendorCode', headerName: 'VendorCode', width: 130, headerAlign: "center", align: "center", },
 
         {
             field: 'fullName',
             headerName: 'Full Name',
             width: 200,
-            headerAlign:"center",align: "center",
+            headerAlign: "center", align: "center",
         },
         {
             field: 'city',
             headerName: 'City',
             //   description: 'This column has a value getter and is not sortable.',
             width: 100,
-            headerAlign:"center",align: "center",
+            headerAlign: "center", align: "center",
         },
         {
             field: 'state',
             headerName: 'State',
             // description: 'This column has a value getter and is not sortable.',
             width: 100,
-            headerAlign:"center",align: "center",
+            headerAlign: "center", align: "center",
         },
         {
             field: 'vendorStatus',
             headerName: 'Status',
             // description: 'This column has a value getter and is not sortable.',
             width: 100,
-            headerAlign:"center",align: "center",
+            headerAlign: "center", align: "center",
 
         },
         {
@@ -1167,21 +1167,21 @@ const Vendor = () => {
                                             </ButtonGroup>
                                         </div>
                                     </div>
-                                            
+
 
 
                                     {vendorStateId ?
                                         <div className='d-flex justify-content-end'>
                                             <div className='me-2' >
-                                                <button type="button" className='btn btn-info' onClick={() => setOpenModalVendor(true)}>Modify</button>
+                                                <Button type="button" variant='contained' size="small" className='btn btn-info' onClick={() => setOpenModalVendor(true)}>Modify</Button>
                                             </div>
                                             <div className='me-2' >
-                                                <button type="button" className='btn btn-danger' onClick={() => { setVendorStateId(null); setVendorData(initialVendorData) }}>Cancel</button>
+                                                <Button type="button" variant='contained' size="small" className='btn btn-danger' onClick={() => { setVendorStateId(null); setVendorData(initialVendorData) }}>Cancel</Button>
                                             </div>
                                         </div> : <div className='col d-flex justify-content-end mb-2'>
                                             <div>
-                  <Button variant='contained' size="small" color='warning' onClick={() => setOpenModalVendor(true)}>+ Add Vendor</Button>
-                  </div>
+                                                <Button variant='contained' size="small" color='warning' onClick={() => setOpenModalVendor(true)}>+ Add Vendor</Button>
+                                            </div>
                                         </div>}
 
                                 </div>
@@ -1227,7 +1227,7 @@ const Vendor = () => {
                                             </Button>
                                         </DialogActions>
                                     </Dialog>}
-                                    <div>{vendorExcelStatus && <p>{vendorExcelStatus}</p>}</div>
+                                <div>{vendorExcelStatus && <p>{vendorExcelStatus}</p>}</div>
 
                             </div>
                         </Paper>

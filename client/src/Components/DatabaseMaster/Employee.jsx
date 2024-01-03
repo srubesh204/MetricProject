@@ -15,11 +15,11 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
 import Autocomplete from '@mui/material/Autocomplete';
-import { Box, Grid, Paper, IconButton,ButtonGroup, Container } from '@mui/material';
+import { Box, Grid, Paper, IconButton, ButtonGroup, Container } from '@mui/material';
 import dayjs from 'dayjs';
 import { DataGrid, GridToolbar } from '@mui/x-data-grid';
 import { Delete, Visibility, VisibilityOff } from '@mui/icons-material';
-import { CloudDownload, CloudUpload,  } from '@mui/icons-material';
+import { CloudDownload, CloudUpload, } from '@mui/icons-material';
 import styled from "@emotion/styled";
 
 
@@ -55,26 +55,26 @@ const Employee = () => {
     const [employeeSelectedRowIds, setEmployeeSelectedRowIds] = useState([]);
 
     const employeeColumns = [
-        { field: 'id', headerName: 'Si. No', width: 50, renderCell: (params) => params.api.getAllRowIds().indexOf(params.id) + 1, headerAlign:"center",align: "center"},
+        { field: 'id', headerName: 'Si. No', width: 50, renderCell: (params) => params.api.getAllRowIds().indexOf(params.id) + 1, headerAlign: "center", align: "center" },
 
-        { field: 'employeeCode', headerName: 'Emp.Code', width: 80, headerAlign:"center",align: "center"},
+        { field: 'employeeCode', headerName: 'Emp.Code', width: 80, headerAlign: "center", align: "center" },
         {
             field: 'Name',
             headerName: 'Name',
             description: 'This column has a value getter and is not sortable.',
             sortable: false,
-            headerAlign:"center",align: "center",
+            headerAlign: "center", align: "center",
             width: 120,
             valueGetter: (params) =>
                 `${params.row.firstName || ''} ${params.row.lastName || ''}`,
         },
 
-        { field: 'dob', headerName: 'DOB', width: 100,headerAlign:"center",align: "center", valueGetter: (params) => dayjs(params.row.itemCalDate).format('DD-MM-YYYY') },
-        { field: 'contactNumber', headerName: 'Contact No',headerAlign:"center",align: "center", type: "number", width: 120, },
-        { field: 'designation', headerName: 'Designation',headerAlign:"center",align: "center", width: 120, },
-        { field: 'department', headerName: 'Department',headerAlign:"center",align: "center", width: 130, },
-        { field: 'empRole', headerName: 'Role', width: 150,headerAlign:"center",align: "center" },
-        { field: 'reportTo', headerName: 'Report To', width: 100,headerAlign:"center",align: "center", },
+        { field: 'dob', headerName: 'DOB', width: 100, headerAlign: "center", align: "center", valueGetter: (params) => dayjs(params.row.itemCalDate).format('DD-MM-YYYY') },
+        { field: 'contactNumber', headerName: 'Contact No', headerAlign: "center", align: "center", type: "number", width: 120, },
+        { field: 'designation', headerName: 'Designation', headerAlign: "center", align: "center", width: 120, },
+        { field: 'department', headerName: 'Department', headerAlign: "center", align: "center", width: 130, },
+        { field: 'empRole', headerName: 'Role', width: 150, headerAlign: "center", align: "center" },
+        { field: 'reportTo', headerName: 'Report To', width: 100, headerAlign: "center", align: "center", },
 
 
     ];
@@ -543,7 +543,7 @@ const Employee = () => {
 
 
     return (
-        <div style={{width: "100%"}}>
+        <div style={{ width: "100%" }}>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
                 <form className='m-3'>
 
@@ -717,17 +717,29 @@ const Employee = () => {
 
                             <Grid item xs={2}>
 
-                                <TextField label="Contact Number "
+                                {/* <TextField label="Contact Number "
                                     {...(errors.contactNumber !== "" && { helperText: errors.contactNumber, error: true })}
                                     id="contactNumberId"
                                     color={employeeData.contactNumber.length !== 10 ? "error" : "success"}
+                                    
                                     fullWidth
-
                                     size="small"
                                     onChange={handleChange}
                                     type='number'
                                     value={employeeData.contactNumber}
-                                    name="contactNumber" />
+                                    name="contactNumber" />*/}
+                                <TextField
+                                    label="Contact Number"
+                                    {...(errors.contactNumber !== "" && { helperText: errors.contactNumber, error: true })}
+                                    id="contactNumberId"
+                                    color={employeeData.contactNumber.length === 10 ? "success" : "error"}
+                                    fullWidth
+                                    size="small"
+                                    onChange={handleChange}
+                                    type='text' // Changed from 'number' to 'text'
+                                    value={employeeData.contactNumber}
+                                    name="contactNumber"
+                                />
 
                             </Grid>
 
@@ -793,7 +805,7 @@ const Employee = () => {
                                         <TextField label="Company Plant"
                                             size='small' id='empRoleId' onChange={handleChange} fullWidth name='empRole' value={employeeData.plant} select>
                                             <MenuItem value="">Select Plant</MenuItem>
-                                            
+
                                         </TextField>
                                     </Grid>
 
@@ -981,19 +993,19 @@ const Employee = () => {
                                 <div className='col d-flex justify-content-end'>
                                     {empDataId ? <div className='col d-flex justify-content-end'>
                                         <div className='me-2' >
-                                            <button type="button" onClick={handleClickOpen} className='btn btn-secondary' >Modify</button>
+                                            <Button type="button" variant='contained' size="small" onClick={handleClickOpen} className='btn btn-secondary' >Modify</Button>
                                         </div>
                                         <div className='me-2' >
-                                            <button type="button" className='btn btn-danger' onClick={() => { setEmpDataId(null); setEmployeeData(initialEmpData) }} >Cancel</button>
+                                            <Button type="button" variant='contained' size="small" className='btn btn-danger' onClick={() => { setEmpDataId(null); setEmployeeData(initialEmpData) }} >Cancel</Button>
                                         </div>
                                     </div> :
                                         <div>
-                  <Button variant='contained' size="small" color='warning' onClick={handleClickOpen}>+ Add Employee</Button>
-                  </div>
+                                            <Button variant='contained' size="small" color='warning' onClick={handleClickOpen}>+ Add Employee</Button>
+                                        </div>
                                     }
                                 </div>
                             </div>
-                                        {empExcelStatus && <p>{empExcelStatus}</p>}
+                            {empExcelStatus && <p>{empExcelStatus}</p>}
                         </Paper>
                     </Grid>
 
