@@ -113,7 +113,7 @@ const FormatNumber = () => {
     const formatFetchData = async () => {
         try {
             const response = await axios.get(
-                `${process.env.REACT_APP_PORT}/formatNo/getFormatNoById/658fc81079d5ab4d42451023`
+                `${process.env.REACT_APP_PORT}/formatNo/getFormatNoById/6595064f151cbe07fdd7fab7`
             );
             const format = response.data.result
             console.log(format)
@@ -172,7 +172,7 @@ const FormatNumber = () => {
     const updateMailData = async () => {
         try {
             const response = await axios.put(
-                `${process.env.REACT_APP_PORT}/formatNo/updateFormatNo/658fc81079d5ab4d42451023`, formatData
+                `${process.env.REACT_APP_PORT}/formatNo/updateFormatNo/6595064f151cbe07fdd7fab7`, formatData
 
             );
             console.log(response.data)

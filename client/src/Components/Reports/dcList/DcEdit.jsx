@@ -670,7 +670,7 @@ const DcEdit = () => {
                                                 name="dcReason" >
                                                 <MenuItem value="All">All</MenuItem>
                                                 <MenuItem value="Service">Service</MenuItem>
-                                                <MenuItem value="Service Calibration">Service&Calibration</MenuItem>
+                                                <MenuItem value="Service & Calibration">Service & Calibration</MenuItem>
                                                 <MenuItem value="Calibration">Calibration</MenuItem>
 
                                             </TextField>
@@ -804,9 +804,9 @@ const DcEdit = () => {
                                                     <td>{item.itemMake}</td>
                                                     <td>{item.itemCalFreInMonths}</td>
                                                     <td> <select className="form-select form-select-sm" id="dcItemRemarksId" name="dcItemRemarks" value={item.dcItemRemarks} onChange={(e) => remarksChange(e, index)} aria-label="Floating label select example">
-                                                        <option value="calibration">Calibration</option>
-                                                        <option value="service">Service</option>
-                                                        <option value="calibration&service">Calibration&Service</option>
+                                                        <option value="Calibration">Calibration</option>
+                                                        <option value="Service">Service</option>
+                                                        <option value="Calibration & Service">Calibration & Service</option>
 
 
                                                     </select></td>

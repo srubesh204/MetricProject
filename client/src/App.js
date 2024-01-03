@@ -39,6 +39,7 @@ import { createContext, useContext, useEffect, useState } from 'react';
 import AccessDenied from './Components/ErrorComponents/AccessDenied';
 import axios from 'axios';
 import RubeshTest from './Components/Test/RubeshTest';
+import DcPrint from './Components/Reports/dcList/DcPrint';
 export const empRole = createContext(null);
 
 
@@ -57,10 +58,10 @@ export const EmployeeProvider = ({ children, employee }) => {
 };
 
 const roleAccessRules = {
-  admin: ['/home', "/desdep", "/general", "/vendor", "/itemMaster", "/itemadd", "/itemEdit/:id", "/itemList", "/grnList", "/calList", "/onSiteList", '/roles',"/employee", '/test', '/rubyTest'],
-  plantAdmin: ['/home', "/desdep", "/general", "/vendor", "/itemMaster", "/itemadd", "/itemEdit/:id", "/itemList", "/grnList", "/calList", "/onSiteList", '/roles',"/employee", '/rubyTest'],
-  creator: ['/home', '/itemList', '/itemadd', '/itemedit/:id', "/grnList", "/calList", "/onSiteList"],
-  viewer: ['/itemList', '/home'],
+  admin: ['/home', "/desdep", "/general", "/vendor", "/itemMaster", "/itemadd", "/itemEdit/:id", "/itemList", "/grnList", "/calList", "/onSiteList", '/roles',"/employee", '/test', '/rubyTest', '/dcPrint'],
+  plantAdmin: ['/home', "/desdep", "/general", "/vendor", "/itemMaster", "/itemadd", "/itemEdit/:id", "/itemList", "/grnList", "/calList", "/onSiteList", '/roles',"/employee", '/rubyTest', '/dcPrint', '/dcList'],
+  creator: ['/home', '/itemList', '/itemadd', '/itemedit/:id', "/grnList", "/calList", "/onSiteList", '/dcPrint'],
+  viewer: ['/itemList', '/home', '/dcPrint'],
 };
 
 // Function to generate routes based on user role and access rules
@@ -81,16 +82,15 @@ const generateRoutes = (employee) => {
     { path: "/status", element: <Status /> },
     { path: "/grn", element: <Grn /> },
     { path: "/dcList", element: <DcList /> },
+    { path: "/dcPrint", element: <DcPrint /> },
     { path: "/grnList", element: <GrnList /> },
     { path: "/calList", element: <CalList /> },
-    { path: "/dcEdit", element: <DcEdit /> },
-    { path: "/grnEdit", element: <GrnEdit /> },
-    { path: "/grnAdd", element: <GrnAdd /> },
     { path: "/onSiteGrn", element: <OnSiteGrn /> },
     { path: "/onSiteList", element: <OnSiteList /> },
     { path: "/onSiteEditGrn", element: <OnSiteEditGrn /> },
     { path: "/onSiteDialog", element: <OnSiteDialog /> },
     { path: "/roles", element: <Roles /> },
+
     // Add more common routes...
   ];
 
