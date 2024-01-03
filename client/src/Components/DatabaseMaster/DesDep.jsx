@@ -1060,20 +1060,20 @@ export const Department = () => {
                 <div className="row g-2">
                   <div className="col d-flex">
                     <div className="d-flex justify-content-center">
-                      <ButtonGroup className='me-2'>
-                        <Button component="label" size="small" variant="contained" >
+                      <ButtonGroup  style={{ marginRight: '10px' }}>
+                        <Button component="label" size="small" sx={{width: "50%"}} variant="contained" >
                           Upload
                           <VisuallyHiddenInput type="file" onChange={(e) => handleExcel(e, "dep")} />
                         </Button>
-                        <Button  onClick={(e) => handleUpload(e, "dep")}><CloudUpload /></Button>
+                        <Button sx={{width: "20%"}} onClick={(e) => handleUpload(e, "dep")}><CloudUpload /></Button>
                       </ButtonGroup>
 
                       <ButtonGroup>
-                        <Button component="label" size="small"  variant="contained" color='secondary'>
+                        <Button component="label" size="small"  sx={{width: "50%"}} variant="contained" color='secondary'>
                           Download
                           <VisuallyHiddenInput type="file" />
                         </Button>
-                        <Button color='secondary'  ><CloudDownload /></Button>
+                        <Button color='secondary'sx={{width: "20%"}}  ><CloudDownload /></Button>
                       </ButtonGroup>
                     </div>
 
@@ -1149,10 +1149,11 @@ export const Department = () => {
                         className="btn text-end"
                         onClick={() => { setDepStateId(null); setDepartmentData(emptyDepartmentData) }}
                       >Cancel</Button>
-                    </div>) : <div>
+                    </div>) : <div >
                       <Button variant="contained" type="button"
                         size="small"
                         color='warning'
+                        
                         className="btn text-end hover" onClick={() => setDepOpenModal(true)}
                        >+ Add Department</Button>
                     </div>}
@@ -1334,20 +1335,20 @@ export const Department = () => {
                   <div className="row g-2 mb-3">
                     <div className="col d-flex">
                       <div className="d-flex justify-content-center">
-                        <ButtonGroup className='me-3'>
-                          <Button component="label" variant="contained" >
+                        <ButtonGroup >
+                          <Button component="label" sx={{width: "50%"}} variant="contained" >
                             Upload
                             <VisuallyHiddenInput type="file" onChange={(e) => handleExcel(e, "area")} />
                           </Button>
-                          <Button onClick={(e) => handleUpload(e, "area")}><CloudUpload /></Button>
+                          <Button sx={{width: "25%"}} onClick={(e) => handleUpload(e, "area")}><CloudUpload /></Button>
                         </ButtonGroup>
 
                         <ButtonGroup>
-                          <Button component="label" variant="contained" color='secondary'>
+                          <Button component="label" sx={{width: "50%"}} variant="contained" color='secondary'>
                             Download
                             <VisuallyHiddenInput type="file" />
                           </Button>
-                          <Button color='secondary'><CloudDownload /></Button>
+                          <Button sx={{width: "25%"}} color='secondary'><CloudDownload /></Button>
                         </ButtonGroup>
                       </div>
 
