@@ -909,7 +909,6 @@ const ItemMaster = () => {
                                             </Button>
                                             <Button color='secondary'><CloudDownload /></Button>
                                         </ButtonGroup>
-                                        {itemMasterExcelStatus && <p>{itemMasterExcelStatus}</p>}
                                     </div>
 
 
@@ -959,6 +958,7 @@ const ItemMaster = () => {
                                         </Button>
                                     </DialogActions>
                                 </Dialog>}
+                                       
 
 
 
@@ -980,6 +980,7 @@ const ItemMaster = () => {
                                         </div>
                                     }
                                 </div>
+                                <div>{itemMasterExcelStatus && <p>{itemMasterExcelStatus}</p>}</div>
 
                             </div>
                         </Paper>
