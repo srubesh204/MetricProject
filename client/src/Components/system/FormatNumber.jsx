@@ -113,7 +113,7 @@ const FormatNumber = () => {
     const formatFetchData = async () => {
         try {
             const response = await axios.get(
-                `${process.env.REACT_APP_PORT}/formatNo/getFormatNoById/6595064f151cbe07fdd7fab7`
+                `${process.env.REACT_APP_PORT}/formatNo/getFormatNoById/1`
             );
             const format = response.data.result
             console.log(format)
@@ -172,7 +172,7 @@ const FormatNumber = () => {
     const updateMailData = async () => {
         try {
             const response = await axios.put(
-                `${process.env.REACT_APP_PORT}/formatNo/updateFormatNo/6595064f151cbe07fdd7fab7`, formatData
+                `${process.env.REACT_APP_PORT}/formatNo/updateFormatNo/1`, formatData
 
             );
             console.log(response.data)
@@ -182,6 +182,7 @@ const FormatNumber = () => {
             setErrorHandler({ status: response.data.status, message: response.data.message, code: "success" })
             setIsEditable(false)
             console.log(response);
+            formatFetchData();
         } catch (err) {
             console.log(err);
             setMailSnackBar(true)
@@ -372,7 +373,7 @@ const FormatNumber = () => {
                                     <Button size='small' variant='contained' onClick={() => setOpenModal(true)} >Modify</Button>
                                 </div>
                                 <div>
-                                    <Button size='small' color='error' variant='contained' onClick={() => setIsEditable(false)} >Cancel</Button>
+                                    <Button size='small' color='error' variant='contained' onClick={() => {setIsEditable(false); formatFetchData();}} >Cancel</Button>
                                 </div>
 
 

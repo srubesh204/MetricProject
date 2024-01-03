@@ -14,8 +14,8 @@ const formatNoController = {
       createFormatNo: async (req, res) => {
        
         try {
-          const { fDc, fGrn, fCertficate, fHistoryCard, fTotalList,fCalDueDate, fCertificatePrefix,  fDeTemperature, fDeHumidity} = req.body;
-          const formatNoResult = new formatNoModel({fDc, fGrn, fCertficate, fHistoryCard, fTotalList,fCalDueDate, fCertificatePrefix,  fDeTemperature, fDeHumidity});
+          const { fDc, fGrn, fCertificate, fHistoryCard, fTotalList, fCalDueDate, fCertificatePrefix,  fDeTemperature, fDeHumidity} = req.body;
+          const formatNoResult = new formatNoModel({fDc, fGrn, fCertificate, fHistoryCard, fTotalList, fCalDueDate, fCertificatePrefix,  fDeTemperature, fDeHumidity});
           const validationError = formatNoResult.validateSync();
 
           if (validationError) {
@@ -61,7 +61,7 @@ const formatNoController = {
             // Create an object with the fields you want to update
             const updateFormatNoFields = {
               /* Specify the fields and their updated values here */
-             fDc: req.body.fDc, fGrn: req.body.fGrn, fCertficate: req.body.fCertficate, fHistoryCard: req.body.fHistoryCard, fTotalList: req.body.fTotalList, fCalDueDate: req.body.fCalDueDate, fCertificatePrefix: req.body.fCertificatePrefix,  fDeTemperature: req.body. fDeTemperature, fDeHumidity: req.body.fDeHumidity,// Example: updating the 'name' field
+             fDc: req.body.fDc, fGrn: req.body.fGrn, fCertificate: req.body.fCertificate, fHistoryCard: req.body.fHistoryCard, fTotalList: req.body.fTotalList, fCalDueDate: req.body.fCalDueDate, fCertificatePrefix: req.body.fCertificatePrefix,  fDeTemperature: req.body. fDeTemperature, fDeHumidity: req.body.fDeHumidity,// Example: updating the 'name' field
               // Add more fields as needed
             };
         
@@ -87,7 +87,7 @@ const formatNoController = {
   
             // Find the designation by desId and update it
             const updateFormatNo = await formatNoModel.findOneAndUpdate(
-                { _id: formatNoId },
+                { formatId: formatNoId },
                 updateFormatNoFields,
                 { new: true } // To return the updated document
             );
@@ -143,7 +143,7 @@ const formatNoController = {
       // if (isNaN(desId)) {
       // Find the designation by desId and update it
       const getFormatNoById = await formatNoModel.findOne(
-          { _id: formatNoId }// To return the updated document
+          { formatId : formatNoId }// To return the updated document
       );
 
       if (!getFormatNoById) {

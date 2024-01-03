@@ -3,7 +3,10 @@ const uniqueValidator = require('mongoose-unique-validator');
 
 const formatNoSchema = new mongoose.Schema({
  
-  
+  formatId : {
+    type: String,
+    default: 1
+  },
   fDc : {
     frNo:String,
     amNo:String,
