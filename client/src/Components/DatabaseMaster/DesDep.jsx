@@ -61,99 +61,99 @@ export const Department = () => {
   };
 
   const handleUpload = async (e, name) => {
-    
+
     try {
-      if(name === "dep") {
+      if (name === "dep") {
         if (!depFile) {
           setDepExcelStatus('No file selected');
           return;
         }
-  
+
         const formData = new FormData();
         formData.append('file', depFile);
-  
+
         const response = await axios.post(`${process.env.REACT_APP_PORT}/department/uploadDepartmentInExcel`, formData, {
           headers: {
             'Content-Type': 'multipart/form-data',
           },
         });
-  
+
         setDepExcelStatus(response.data.message || 'Excel file uploaded successfully');
         depFetchData();
-  
+
       }
-      if(name === "area") {
+      if (name === "area") {
         if (!areaFile) {
           setAreaExcelStatus('No file selected');
           return;
         }
-  
+
         const formData = new FormData();
         formData.append('file', areaFile);
-  
+
         const response = await axios.post(`${process.env.REACT_APP_PORT}/area/uploadAreaInExcel`, formData, {
           headers: {
             'Content-Type': 'multipart/form-data',
           },
         });
-  
+
         setAreaExcelStatus(response.data.message || 'Excel file uploaded successfully');
         areaFetchData();
-        
+
       }
-      if(name === "pou") {
+      if (name === "pou") {
         if (!pouFile) {
           setPouExcelStatus('No file selected');
           return;
         }
-  
+
         const formData = new FormData();
         formData.append('file', pouFile);
-  
+
         const response = await axios.post(`${process.env.REACT_APP_PORT}/placeOfUsage/uploadPlaceOfUsageInExcel`, formData, {
           headers: {
             'Content-Type': 'multipart/form-data',
           },
         });
-  
+
         setPouExcelStatus(response.data.message || 'Excel file uploaded successfully');
         placeOfUsageData();
-        
+
       }
 
     } catch (error) {
-      if(name === "dep") {
-      if (error.response) {
-        setDepExcelStatus(`Error: ${error.response.data.error || 'Something went wrong'}`);
-      } else if (error.request) {
-        setDepExcelStatus('Network error. Please try again.');
-      } else {
-        setDepExcelStatus('Error uploading the file.');
+      if (name === "dep") {
+        if (error.response) {
+          setDepExcelStatus(`Error: ${error.response.data.error || 'Something went wrong'}`);
+        } else if (error.request) {
+          setDepExcelStatus('Network error. Please try again.');
+        } else {
+          setDepExcelStatus('Error uploading the file.');
+        }
+        console.error('Error uploading Excel file:', error);
       }
-      console.error('Error uploading Excel file:', error);
-    }
 
-  if(name === "area") {
-  if (error.response) {
-    setAreaExcelStatus(`Error: ${error.response.data.error || 'Something went wrong'}`);
-  } else if (error.request) {
-    setAreaExcelStatus('Network error. Please try again.');
-  } else {
-    setAreaExcelStatus('Error uploading the file.');
-  }
-  console.error('Error uploading Excel file:', error);
-}
+      if (name === "area") {
+        if (error.response) {
+          setAreaExcelStatus(`Error: ${error.response.data.error || 'Something went wrong'}`);
+        } else if (error.request) {
+          setAreaExcelStatus('Network error. Please try again.');
+        } else {
+          setAreaExcelStatus('Error uploading the file.');
+        }
+        console.error('Error uploading Excel file:', error);
+      }
 
-if(name === "pou") {
-  if (error.response) {
-    setPouExcelStatus(`Error: ${error.response.data.error || 'Something went wrong'}`);
-  } else if (error.request) {
-    setPouExcelStatus('Network error. Please try again.');
-  } else {
-    setPouExcelStatus('Error uploading the file.');
-  }
-  console.error('Error uploading Excel file:', error);
-}
+      if (name === "pou") {
+        if (error.response) {
+          setPouExcelStatus(`Error: ${error.response.data.error || 'Something went wrong'}`);
+        } else if (error.request) {
+          setPouExcelStatus('Network error. Please try again.');
+        } else {
+          setPouExcelStatus('Error uploading the file.');
+        }
+        console.error('Error uploading Excel file:', error);
+      }
     }
   };
 
@@ -215,18 +215,18 @@ if(name === "pou") {
 
   const columns = [
 
-    { field: 'id', headerName: 'Si.No', width: 30, renderCell: (params) => params.api.getAllRowIds().indexOf(params.id) + 1,headerAlign:"center", align: "center" },
+    { field: 'id', headerName: 'Si.No', width: 30, renderCell: (params) => params.api.getAllRowIds().indexOf(params.id) + 1, headerAlign: "center", align: "center" },
 
-    { field: 'department', headerName: 'Department',headerAlign:"center",align: "center", width: "90" },
-    { field: 'departmentStatus', headerName: 'Status',headerAlign:"center",align: "center", width: "70" },
+    { field: 'department', headerName: 'Department', headerAlign: "center", align: "center", width: "90" },
+    { field: 'departmentStatus', headerName: 'Status', headerAlign: "center", align: "center", width: "70" },
     {
-      field: 'defaultdep', headerName: 'Default', width: "50",headerAlign:"center",align: "center",
+      field: 'defaultdep', headerName: 'Default', width: "50", headerAlign: "center", align: "center",
       renderCell: (params) => params.row.defaultdep === "yes" ? <Check color="success" /> : <Clear color="error" />
     },
     {
       field: 'delete',
       headerName: 'Delete',
-      width: 80,headerAlign:"center",
+      width: 80, headerAlign: "center",
       sortable: false,
       renderHeader: () => (
         <IconButton color='error' aria-label="Delete" onClick={() => setDeleteDepModal(true)}>
@@ -454,15 +454,15 @@ if(name === "pou") {
 
 
   const areaColumns = [
-    { field: 'id', headerName: 'Si. No', width: 70, renderCell: (params) => params.api.getAllRowIds().indexOf(params.id) + 1,headerAlign:"center",align: "center", },
+    { field: 'id', headerName: 'Si. No', width: 70, renderCell: (params) => params.api.getAllRowIds().indexOf(params.id) + 1, headerAlign: "center", align: "center", },
 
-    { field: 'area', headerName: 'Area', width: "90",headerAlign:"center",align: "center", },
-    { field: 'areaStatus', headerName: ' Area Status', width: "90",headerAlign:"center",align: "center", },
+    { field: 'area', headerName: 'Area', width: "90", headerAlign: "center", align: "center", },
+    { field: 'areaStatus', headerName: ' Area Status', width: "90", headerAlign: "center", align: "center", },
     {
       field: 'delete',
       headerName: 'Delete',
       width: 80,
-      headerAlign:"center",
+      headerAlign: "center",
       sortable: false,
       renderHeader: () => (
         <IconButton color='error' aria-label="Delete" onClick={() => setDeleteAreaModal(true)}>
@@ -777,15 +777,15 @@ if(name === "pou") {
 
 
   const placeOfUsageColumns = [
-    { field: 'id', headerName: 'Si. No', width: 70, renderCell: (params) => params.api.getAllRowIds().indexOf(params.id) + 1, headerAlign:"center",align: "center" },
+    { field: 'id', headerName: 'Si. No', width: 70, renderCell: (params) => params.api.getAllRowIds().indexOf(params.id) + 1, headerAlign: "center", align: "center" },
 
-    { field: 'placeOfUsage', headerName: 'Place Of Usage', width: "70",headerAlign:"center",align: "center", },
-    { field: 'placeOfUsageStatus', headerName: ' Place Of Usage Status', width: "120",headerAlign:"center",align: "center", },
+    { field: 'placeOfUsage', headerName: 'Place Of Usage', width: "70", headerAlign: "center", align: "center", },
+    { field: 'placeOfUsageStatus', headerName: ' Place Of Usage Status', width: "120", headerAlign: "center", align: "center", },
     {
       field: 'delete',
       headerName: 'Delete',
       width: 60,
-      headerAlign:"center",
+      headerAlign: "center",
       sortable: false,
       renderHeader: () => (
         <IconButton color='error' aria-label="Delete" onClick={() => setDeletePouModal(true)}>
@@ -1060,25 +1060,25 @@ if(name === "pou") {
                 <div className="row g-2">
                   <div className="col d-flex">
                     <div className="d-flex justify-content-center">
-                      <ButtonGroup className='me-3'>
-                        <Button component="label" variant="contained" >
+                      <ButtonGroup  style={{ marginRight: '10px' }}>
+                        <Button component="label" size="small" sx={{width: "50%"}} variant="contained" >
                           Upload
                           <VisuallyHiddenInput type="file" onChange={(e) => handleExcel(e, "dep")} />
                         </Button>
-                        <Button onClick={(e) => handleUpload(e, "dep")}><CloudUpload /></Button>
+                        <Button sx={{width: "20%"}} onClick={(e) => handleUpload(e, "dep")}><CloudUpload /></Button>
                       </ButtonGroup>
 
                       <ButtonGroup>
-                        <Button component="label" variant="contained" color='secondary'>
+                        <Button component="label" size="small"  sx={{width: "50%"}} variant="contained" color='secondary'>
                           Download
                           <VisuallyHiddenInput type="file" />
                         </Button>
-                        <Button color='secondary'><CloudDownload /></Button>
+                        <Button color='secondary'sx={{width: "20%"}}  ><CloudDownload /></Button>
                       </ButtonGroup>
                     </div>
 
                   </div>
-                      {depExcelStatus && <p>{depExcelStatus}</p>}
+                  {depExcelStatus && <p>{depExcelStatus}</p>}
 
 
 
@@ -1134,27 +1134,29 @@ if(name === "pou") {
                   <div className="col-md text-end">
 
                     {depStateId ? (<div className="d-flex justify-content-end">
-                      <button
+                      <Button
                         type="button"
+                        variant="contained"  size="small"
                         style={{ backgroundColor: "#e6e6e6", color: "black", fontWeight: "bolder" }}
                         className="btn text-end me-2 hover"
                         onClick={() => setDepOpenModal(true)}
                       //   disabled={!depStateId}
                       >
                         Modify
-                      </button ><div>
-                                                <Button variant='contained' size="small" color='danger' onClick={() => setDepOpenModal(true)}>Modify</Button>
-                                                </div>
-                      <button type="button" onMouseEnter={(e) => { e.target.style.background = 'red' }} onMouseOut={(e) => { e.target.style.background = '#e6e6e6' }}
+                      </Button >
+                      <Button type="button" variant="contained"  size="small"  onMouseEnter={(e) => { e.target.style.background = 'red' }} onMouseOut={(e) => { e.target.style.background = '#e6e6e6' }}
                         style={{ backgroundColor: "#e6e6e6", color: "black", fontWeight: "bolder" }}
                         className="btn text-end"
                         onClick={() => { setDepStateId(null); setDepartmentData(emptyDepartmentData) }}
-                      >Cancel</button>
-                    </div>) : <div>
-                                                <Button variant='contained' size="small" color='warning' onClick={() => setDepOpenModal(true)}>+ Add Department</Button>
-                                                </div> }
-
-
+                      >Cancel</Button>
+                    </div>) : <div >
+                      <Button variant="contained" type="button"
+                        size="small"
+                        color='warning'
+                        
+                        className="btn text-end hover" onClick={() => setDepOpenModal(true)}
+                       >+ Add Department</Button>
+                    </div>}
 
 
                   </div>
@@ -1333,25 +1335,25 @@ if(name === "pou") {
                   <div className="row g-2 mb-3">
                     <div className="col d-flex">
                       <div className="d-flex justify-content-center">
-                        <ButtonGroup className='me-3'>
-                          <Button component="label" variant="contained" >
+                        <ButtonGroup >
+                          <Button component="label" sx={{width: "50%"}} variant="contained" >
                             Upload
                             <VisuallyHiddenInput type="file" onChange={(e) => handleExcel(e, "area")} />
                           </Button>
-                          <Button onClick={(e) => handleUpload(e, "area")}><CloudUpload /></Button>
+                          <Button sx={{width: "25%"}} onClick={(e) => handleUpload(e, "area")}><CloudUpload /></Button>
                         </ButtonGroup>
 
                         <ButtonGroup>
-                          <Button component="label" variant="contained" color='secondary'>
+                          <Button component="label" sx={{width: "50%"}} variant="contained" color='secondary'>
                             Download
                             <VisuallyHiddenInput type="file" />
                           </Button>
-                          <Button color='secondary'><CloudDownload /></Button>
+                          <Button sx={{width: "25%"}} color='secondary'><CloudDownload /></Button>
                         </ButtonGroup>
                       </div>
 
                     </div>
-                        {areaExcelStatus && <p>{areaExcelStatus}</p>}
+                    {areaExcelStatus && <p>{areaExcelStatus}</p>}
 
 
                     {areaStateId ? <Dialog
@@ -1408,23 +1410,24 @@ if(name === "pou") {
                     <div className="col-md text-end">
 
                       {areaStateId ? (<div className="d-flex justify-content-end">
-                        <button
+                        <Button
                           type="button"
+                          variant='contained' size="small"
                           style={{ backgroundColor: "#e6e6e6", color: "black", fontWeight: "bolder" }}
                           className="btn text-end me-2  hover"
                           onClick={() => setAreaOpenModal(true)}
                         //   disabled={!depStateId}
                         >
                           Modify
-                        </button >
-                        <button type="button" onMouseEnter={(e) => { e.target.style.background = 'red' }} onMouseOut={(e) => { e.target.style.background = '#e6e6e6' }}
+                        </Button >
+                        <Button type="button"  variant='contained' size="small" onMouseEnter={(e) => { e.target.style.background = 'red' }} onMouseOut={(e) => { e.target.style.background = '#e6e6e6' }}
                           style={{ backgroundColor: "#e6e6e6", color: "black", fontWeight: "bolder" }}
                           className="btn text-end"
                           onClick={() => { setareaStateId(null); setArea(initialAreaData) }}
-                        >Cancel</button>
+                        >Cancel</Button>
                       </div>) : <div>
-                                                <Button variant='contained' size="small" color='warning' onClick={() => setAreaOpenModal(true)}>+ Add Area</Button>
-                                                </div> }
+                        <Button variant='contained' size="small" color='warning' onClick={() => setAreaOpenModal(true)}>+ Add Area</Button>
+                      </div>}
 
 
 
@@ -1636,7 +1639,7 @@ if(name === "pou") {
                     </div>
 
                   </div>
-                      {pouExcelStatus && <p>{pouExcelStatus}</p>}
+                  {pouExcelStatus && <p>{pouExcelStatus}</p>}
 
 
                   {placeOfUsageId ? <Dialog
@@ -1689,23 +1692,24 @@ if(name === "pou") {
                   <div className="col-md p-0 d-flex justify-content-end">
 
                     {placeOfUsageId ? (<div className="d-flex justify-content-end">
-                      <button
+                      <Button
                         type="button"
+                        variant='contained' size="small"
                         style={{ backgroundColor: "#e6e6e6", color: "black", fontWeight: "bolder" }}
                         className="btn text-end me-2 hover"
                         onClick={() => setPouOpenModal(true)}
                       //   disabled={!depStateId}
                       >
                         Modify
-                      </button >
-                      <button type="button" onMouseEnter={(e) => { e.target.style.background = 'red' }} onMouseOut={(e) => { e.target.style.background = '#e6e6e6' }}
+                      </Button >
+                      <Button type="button" variant='contained' size="small" onMouseEnter={(e) => { e.target.style.background = 'red' }} onMouseOut={(e) => { e.target.style.background = '#e6e6e6' }}
                         style={{ backgroundColor: "#e6e6e6", color: "black", fontWeight: "bolder" }}
                         className="btn text-end "
                         onClick={() => { setPlaceOfUsageId(null); setPlaceOfUsageData(initialPlaceOfUsageData) }}
-                      >Cancel</button>
+                      >Cancel</Button>
                     </div>) : <div>
                       <Button variant='contained' size="small" color='warning' onClick={() => setPouOpenModal(true)}>+ Add Place</Button>
-                      </div> }
+                    </div>}
 
 
 
@@ -2003,10 +2007,10 @@ export const Designation = () => {
 
 
   const designationColumns = [
-    { field: 'id', headerName: 'Si. No', width: 70, renderCell: (params) => params.api.getAllRowIds().indexOf(params.id) + 1,headerAlign:"center", align: "center" },
+    { field: 'id', headerName: 'Si. No', width: 70, renderCell: (params) => params.api.getAllRowIds().indexOf(params.id) + 1, headerAlign: "center", align: "center" },
 
-    { field: 'designation', headerName: 'Designation', width: "200" ,headerAlign:"center",align: "center", },
-    { field: 'designationStatus', headerName: 'Designation Status', width: "150",headerAlign:"center",align: "center", },
+    { field: 'designation', headerName: 'Designation', width: "200", headerAlign: "center", align: "center", },
+    { field: 'designationStatus', headerName: 'Designation Status', width: "150", headerAlign: "center", align: "center", },
     {/*{
       field: 'delete',
       headerName: 'Delete',
@@ -2346,6 +2350,7 @@ export const Designation = () => {
                   </div>
 
                 </div>
+                {desExcelStatus && <p>{desExcelStatus}</p>}
 
 
                 {desStateId ? <Dialog
@@ -2394,7 +2399,7 @@ export const Designation = () => {
 
                   {desStateId ? (<div>
                     <Button
-                    component={Link}
+                      component={Link}
                       type="button"
                       variant="contained"
                       className="btn text-end me-3 hover"
@@ -2403,16 +2408,24 @@ export const Designation = () => {
                     >
                       Modify
                     </Button>
-                    <Button  component={Link} size="small" variant="contained" type="button" onMouseEnter={(e) => { e.target.style.background = 'red' }} onMouseOut={(e) => { e.target.style.background = '#e6e6e6' }}
+                    <Button component={Link} size="small" variant="contained" type="button" onMouseEnter={(e) => { e.target.style.background = 'red' }} onMouseOut={(e) => { e.target.style.background = '#e6e6e6' }}
                       style={{ backgroundColor: "#e6e6e6", color: "black", fontWeight: "bolder" }}
                       className="btn text-end me-3"
                       onClick={() => { setDesStateId(null); setDesignationData(initialDesignationData) }}
                     >Cancel</Button>
-                  </div>) : <div className="ms-auto">
-                  <Button  className="ms-auto" variant='contained' size="small" color='warning' onClick={() => setOpenModal(true)}>+ Add Designation</Button>
-                  </div> }
+                  </div>) : <Button variant="contained"
+                    color='warning'
+                    type="button"
+                    size="small"
+                    className="btn text-end hover"
+                  
+                    onClick={() => setOpenModal(true)}
+                    
+                  >
+                    <i className="bi bi-plus"></i>Add Designation</Button>
+                  }
                 </div>
-                
+
               </div>
                     {desExcelStatus && <p>{desExcelStatus}</p>}
 
@@ -2442,7 +2455,7 @@ export const Designation = () => {
               </div>
 
               <div style={{ height: 500, width: '100%' }}>
-                <DataGrid  disableDensitySelector
+                <DataGrid disableDensitySelector
                   rows={designationList}
                   columns={designationColumns}
                   getRowId={(row) => row._id}

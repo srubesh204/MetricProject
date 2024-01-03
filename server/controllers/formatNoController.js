@@ -61,7 +61,7 @@ const formatNoController = {
             // Create an object with the fields you want to update
             const updateFormatNoFields = {
               /* Specify the fields and their updated values here */
-             fDc: req.body.fDc, fGrn: req.body.fGrn, fCertficate: req.body.fCertificate, fHistoryCard: req.body.fHistoryCard, fTotalList: req.body.fTotalList, fCalDueDate: req.body.fCalDueDate, fCertificatePrefix: req.body.fCertificatePrefix,  fDeTemperature: req.body. fDeTemperature, fDeHumidity: req.body.fDeHumidity,// Example: updating the 'name' field
+             fDc: req.body.fDc, fGrn: req.body.fGrn, fCertficate: req.body.fCertficate, fHistoryCard: req.body.fHistoryCard, fTotalList: req.body.fTotalList, fCalDueDate: req.body.fCalDueDate, fCertificatePrefix: req.body.fCertificatePrefix,  fDeTemperature: req.body. fDeTemperature, fDeHumidity: req.body.fDeHumidity,// Example: updating the 'name' field
               // Add more fields as needed
             };
         

@@ -7,7 +7,7 @@ import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
 import { Container, Paper } from '@mui/material';
 import Grid from '@mui/material/Unstable_Grid2';
-import { TextField, MenuItem, IconButton, FormControl, ButtonGroup,  } from '@mui/material';
+import { TextField, MenuItem, IconButton, FormControl, ButtonGroup, } from '@mui/material';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
@@ -69,14 +69,14 @@ export const UnitDataBase = ({ style }) => {
             field: 'id',
             headerName: 'Si. No',
             width: 100,
-            headerAlign:"center",align: "center",
+            headerAlign: "center", align: "center",
             renderCell: (params) => {
                 const rowIndex = params.api.getRowIndexRelativeToVisibleRows(params.id);
                 return Number.isInteger(rowIndex) ? rowIndex + 1 : '';
             }
         },
 
-        { field: 'unitName', headerName: 'UnitName', width: "150",headerAlign:"center",align: "center", },
+        { field: 'unitName', headerName: 'UnitName', width: "150", headerAlign: "center", align: "center", },
 
 
 
@@ -91,7 +91,7 @@ export const UnitDataBase = ({ style }) => {
 
     };
 
-    
+
     const VisuallyHiddenInput = styled('input')({
         clip: 'rect(0 0 0 0)',
         clipPath: 'inset(50%)',
@@ -102,46 +102,46 @@ export const UnitDataBase = ({ style }) => {
         left: 0,
         whiteSpace: 'nowrap',
         width: 1,
-      });
-    
-      const [file, setFile] = useState(null);
-      const [generalExcelStatus, setGeneralExcelStatus] = useState('');
-    
-      const handleGeneralExcel = (e) => {
+    });
+
+    const [file, setFile] = useState(null);
+    const [generalExcelStatus, setGeneralExcelStatus] = useState('');
+
+    const handleGeneralExcel = (e) => {
         const selectedFile = e.target.files[0];
         console.log(selectedFile)
         setFile(selectedFile);
-      };
-    
-      const handleGeneralUpload = async () => {
+    };
+
+    const handleGeneralUpload = async () => {
         try {
-          if (!file) {
-            setGeneralExcelStatus('No file selected');
-            return;
-          }
-    
-          const formData = new FormData();
-          formData.append('file', file);
-    
-          const response = await axios.post(`${process.env.REACT_APP_PORT}/unit/uploadUnitInExcel`, formData, {
-            headers: {
-              'Content-Type': 'multipart/form-data',
-            },
-          });
-          unitFetchData();
-    
-          setGeneralExcelStatus(response.data.message || 'Excel file uploaded successfully');
+            if (!file) {
+                setGeneralExcelStatus('No file selected');
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append('file', file);
+
+            const response = await axios.post(`${process.env.REACT_APP_PORT}/unit/uploadUnitInExcel`, formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                },
+            });
+            unitFetchData();
+
+            setGeneralExcelStatus(response.data.message || 'Excel file uploaded successfully');
         } catch (error) {
-          if (error.response) {
-            setGeneralExcelStatus(`Error: ${error.response.data.error || 'Something went wrong'}`);
-          } else if (error.request) {
-            setGeneralExcelStatus('Network error. Please try again.');
-          } else {
-            setGeneralExcelStatus('Error uploading the file.');
-          }
-          console.error('Error uploading Excel file:', error);
+            if (error.response) {
+                setGeneralExcelStatus(`Error: ${error.response.data.error || 'Something went wrong'}`);
+            } else if (error.request) {
+                setGeneralExcelStatus('Network error. Please try again.');
+            } else {
+                setGeneralExcelStatus('Error uploading the file.');
+            }
+            console.error('Error uploading Excel file:', error);
         }
-      };
+    };
 
 
     //validate function 
@@ -199,7 +199,7 @@ export const UnitDataBase = ({ style }) => {
         try {
             const response = await axios.put(
                 `${process.env.REACT_APP_PORT}/unit/updateUnit/${unitStateId}`, unitData
-                
+
             );
             unitFetchData();
             setUnitData({
@@ -234,7 +234,7 @@ export const UnitDataBase = ({ style }) => {
         try {
             const response = await axios.delete(
                 `${process.env.REACT_APP_PORT}/unit/deleteUnit`, {
-                    
+
                 data: {
                     unitIds: unitSelectedRowIds
                 }
@@ -403,48 +403,48 @@ export const UnitDataBase = ({ style }) => {
                                     </div>
                                 </div>
 
-                                                
-                <div className="row g-2 ">
-                  <div className="col d-flex">
-                    <div className="d-flex justify-content-center">
-                      <ButtonGroup className='me-3'>
-                        <Button component="label" variant="contained" >
-                          Upload
-                          <VisuallyHiddenInput type="file" onChange={handleGeneralExcel} />
-                        </Button>
-                        <Button onClick={handleGeneralUpload}><CloudUpload /></Button>
-                      </ButtonGroup>
 
-                      <ButtonGroup>
-                        <Button component="label" variant="contained" color='secondary'>
-                          Download
-                          <VisuallyHiddenInput type="file" />
-                        </Button>
-                        <Button color='secondary'><CloudDownload /></Button>
-                      </ButtonGroup>
-                    </div>
+                                <div className="row g-2 ">
+                                    <div className="col d-flex">
+                                        <div className="d-flex justify-content-center">
+                                            <ButtonGroup className='me-3'>
+                                                <Button component="label" variant="contained" >
+                                                    Upload
+                                                    <VisuallyHiddenInput type="file" onChange={handleGeneralExcel} />
+                                                </Button>
+                                                <Button onClick={handleGeneralUpload}><CloudUpload /></Button>
+                                            </ButtonGroup>
 
-                  </div>
-                                <div className='col d-flex justify-content-end'>
-                                    {unitStateId ? <div className='d-flex justify-content-end'><div className='me-2' >
-                                        <button type="button" className='btn btn-secondary' onClick={() => setOpenModal(true)}>Modify</button>
+                                            <ButtonGroup>
+                                                <Button component="label" variant="contained" color='secondary'>
+                                                    Download
+                                                    <VisuallyHiddenInput type="file" />
+                                                </Button>
+                                                <Button color='secondary'><CloudDownload /></Button>
+                                            </ButtonGroup>
+                                        </div>
+
                                     </div>
-                                        <div className='me-2' >
-                                            <button type="button" className='btn btn-danger' onClick={() => { setUnitStateId(null); setUnitData(initialUnitData) }}>Cancel</button>
-                                        </div></div> : <div  className="ms-auto">
-                  <Button variant='contained' size="small" color='warning' onClick={() => setOpenModal(true)}>+ Add Unit</Button>
-                  </div>}
+                                    <div className='col d-flex justify-content-end'>
+                                        {unitStateId ? <div className='d-flex justify-content-end'><div className='me-2' >
+                                            <Button type="button"  variant='contained' size="small" className='btn btn-secondary' onClick={() => setOpenModal(true)}>Modify</Button>
+                                        </div>
+                                            <div className='me-2' >
+                                                <Button type="button"  variant='contained' size="small"  className='btn btn-danger' onClick={() => { setUnitStateId(null); setUnitData(initialUnitData) }}>Cancel</Button>
+                                            </div></div> : <div className="ms-auto">
+                                            <Button variant='contained' size="small" color='warning' onClick={() => setOpenModal(true)}>+ Add Unit</Button>
+                                        </div>}
 
+
+                                    </div>
 
                                 </div>
-                                
-                  </div>
                                 <Snackbar anchorOrigin={{ vertical: "top", horizontal: "right" }} open={unitSnackBar} autoHideDuration={6000} onClose={handleSnackClose}>
                                     <Alert variant="filled" onClose={handleSnackClose} severity={errorHandler.code} sx={{ width: '100%' }}>
                                         {errorHandler.message}
                                     </Alert>
                                 </Snackbar>
-                      {generalExcelStatus && <p>{generalExcelStatus}</p>}
+                                {generalExcelStatus && <p>{generalExcelStatus}</p>}
                             </Paper>
                         </Grid>
 
@@ -636,13 +636,13 @@ export const PartDataBase = ({ style }) => {
 
     const [partSelectedRowIds, setPartSelectedRowIds] = useState([]);
     const partColumns = [
-        { field: 'id', headerName: 'Si. No', width: 100, renderCell: (params) => params.api.getAllRowIds().indexOf(params.id) + 1 ,headerAlign:"center",align: "center",},
+        { field: 'id', headerName: 'Si. No', width: 100, renderCell: (params) => params.api.getAllRowIds().indexOf(params.id) + 1, headerAlign: "center", align: "center", },
 
-        { field: 'partNo', headerName: 'PartNo', width: "150",headerAlign:"center",align: "center" },
-        { field: 'partName', headerName: 'partName', width: "190",headerAlign:"center",align: "center" },
-        { field: 'customer', headerName: 'Customer', width: "200" ,headerAlign:"center",align: "center"},
-        { field: 'operationNo', headerName: 'Operation No', width: "200" ,headerAlign:"center",align: "center"},
-        { field: 'partStatus', headerName: 'Part Status', width: "200",headerAlign:"center",align: "center" },
+        { field: 'partNo', headerName: 'PartNo', width: "150", headerAlign: "center", align: "center" },
+        { field: 'partName', headerName: 'partName', width: "190", headerAlign: "center", align: "center" },
+        { field: 'customer', headerName: 'Customer', width: "200", headerAlign: "center", align: "center" },
+        { field: 'operationNo', headerName: 'Operation No', width: "200", headerAlign: "center", align: "center" },
+        { field: 'partStatus', headerName: 'Part Status', width: "200", headerAlign: "center", align: "center" },
 
 
 
@@ -660,46 +660,46 @@ export const PartDataBase = ({ style }) => {
         left: 0,
         whiteSpace: 'nowrap',
         width: 1,
-      });
-    
-      const [file, setFile] = useState(null);
-      const [generalExcelStatus, setGeneralExcelStatus] = useState('');
-    
-      const handleGeneralExcel = (e) => {
+    });
+
+    const [file, setFile] = useState(null);
+    const [generalExcelStatus, setGeneralExcelStatus] = useState('');
+
+    const handleGeneralExcel = (e) => {
         const selectedFile = e.target.files[0];
         console.log(selectedFile)
         setFile(selectedFile);
-      };
-    
-      const handleGeneralUpload = async () => {
+    };
+
+    const handleGeneralUpload = async () => {
         try {
-          if (!file) {
-            setGeneralExcelStatus('No file selected');
-            return;
-          }
-    
-          const formData = new FormData();
-          formData.append('file', file);
-    
-          const response = await axios.post(`${process.env.REACT_APP_PORT}/part/uploadPartInExcel`, formData, {
-            headers: {
-              'Content-Type': 'multipart/form-data',
-            },
-          });
-          partFetchData();
-    
-          setGeneralExcelStatus(response.data.message || 'Excel file uploaded successfully');
+            if (!file) {
+                setGeneralExcelStatus('No file selected');
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append('file', file);
+
+            const response = await axios.post(`${process.env.REACT_APP_PORT}/part/uploadPartInExcel`, formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                },
+            });
+            partFetchData();
+
+            setGeneralExcelStatus(response.data.message || 'Excel file uploaded successfully');
         } catch (error) {
-          if (error.response) {
-            setGeneralExcelStatus(`Error: ${error.response.data.error || 'Something went wrong'}`);
-          } else if (error.request) {
-            setGeneralExcelStatus('Network error. Please try again.');
-          } else {
-            setGeneralExcelStatus('Error uploading the file.');
-          }
-          console.error('Error uploading Excel file:', error);
+            if (error.response) {
+                setGeneralExcelStatus(`Error: ${error.response.data.error || 'Something went wrong'}`);
+            } else if (error.request) {
+                setGeneralExcelStatus('Network error. Please try again.');
+            } else {
+                setGeneralExcelStatus('Error uploading the file.');
+            }
+            console.error('Error uploading Excel file:', error);
         }
-      };
+    };
 
 
 
@@ -764,7 +764,7 @@ export const PartDataBase = ({ style }) => {
         try {
             const response = await axios.put(
                 `${process.env.REACT_APP_PORT}/part/updatePart/${partStateId}`, partData
-               
+
             );
             partFetchData();
             setPartData(initialPartData);
@@ -800,7 +800,7 @@ export const PartDataBase = ({ style }) => {
     const deletePartData = async (id) => {
         try {
             const response = await axios.delete(
-               ` ${process.env.REACT_APP_PORT}/part/deletePart`, {
+                ` ${process.env.REACT_APP_PORT}/part/deletePart`, {
                 data: {
                     partIds: partSelectedRowIds
                 }
@@ -1032,43 +1032,47 @@ export const PartDataBase = ({ style }) => {
                                     </Alert>
                                 </Snackbar>
 
-                                
-                <div className="row g-2 ">
-                  <div className="col d-flex">
-                    <div className="d-flex justify-content-center">
-                      <ButtonGroup className='me-3'>
-                        <Button component="label" variant="contained" >
-                          Upload
-                          <VisuallyHiddenInput type="file" onChange={handleGeneralExcel} />
-                        </Button>
-                        <Button onClick={handleGeneralUpload}><CloudUpload /></Button>
-                      </ButtonGroup>
 
-                      <ButtonGroup>
-                        <Button component="label" variant="contained" color='secondary'>
-                          Download
-                          <VisuallyHiddenInput type="file" />
-                        </Button>
-                        <Button color='secondary'><CloudDownload /></Button>
-                      </ButtonGroup>
-                    </div>
-                    {partStateId ?
-                                    <div className="d-flex justify-content-end">
-                                        <div className='me-2'>
-                                            <button type="button" className='btn btn-secondary' onClick={() => setOpenModal(true)}>Modify</button>
+                                <div className="row g-2 ">
+                                    <div className="col d-flex">
+                                        <div className="d-flex justify-content-center">
+                                            <ButtonGroup className='me-3'>
+                                                <Button component="label" variant="contained" >
+                                                    Upload
+                                                    <VisuallyHiddenInput type="file" onChange={handleGeneralExcel} />
+                                                </Button>
+                                                <Button onClick={handleGeneralUpload}><CloudUpload /></Button>
+                                            </ButtonGroup>
+
+                                            <ButtonGroup>
+                                                <Button component="label" variant="contained" color='secondary'>
+                                                    Download
+                                                    <VisuallyHiddenInput type="file" />
+                                                </Button>
+                                                <Button color='secondary'><CloudDownload /></Button>
+                                            </ButtonGroup>
                                         </div>
-                                        <div className='me-2'>
-                                            <button type="button" className='btn btn-danger' onClick={() => { setPartStateId(null); setPartData(initialPartData) }}>Cancel</button>
-                                        </div>
-                                    </div> : <div className="ms-auto">
-                  <Button variant='contained' size="small" color='warning' onClick={() => setOpenModal(true)}>+ Add Part</Button>
-                  </div>}
+                                        <div className='col d-flex justify-content-end'>
+                                        {partStateId ?
+                                            <div className="d-flex justify-content-end">
+                                                <div className='me-2'>
+                                                    <Button type="button" variant='contained' size="small" className='btn btn-secondary' onClick={() => setOpenModal(true)}>Modify</Button>
+                                                </div>
+                                                <div className='me-2'>
+                                                    <Button type="button" variant='contained'  size="small" className='btn btn-danger' onClick={() => { setPartStateId(null); setPartData(initialPartData) }}>Cancel</Button>
+                                                </div>
+                                            </div> : <div className="ms-auto">
+                                                <Button variant='contained' size="small" color='warning' onClick={() => setOpenModal(true)}>+ Add Part</Button>
+                                            </div>}
 
-                  </div>
-                  </div>
+                                    </div>
+                                    </div>
+                                </div>
+                               
 
-                                
-                      {generalExcelStatus && <p>{generalExcelStatus}</p>}
+
+
+                                {generalExcelStatus && <p>{generalExcelStatus}</p>}
                                 {partStateId ? <Dialog
                                     open={openModal}
                                     onClose={() => setOpenModal(false)}
@@ -1137,7 +1141,7 @@ export const PartDataBase = ({ style }) => {
                                     </div>
 
                                     <div style={{ height: 400, width: '100%' }}>
-                                        <DataGrid   disableDensitySelector
+                                        <DataGrid disableDensitySelector
                                             rows={partDataList}
                                             columns={partColumns}
                                             getRowId={(row) => row._id}

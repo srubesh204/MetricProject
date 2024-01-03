@@ -152,9 +152,9 @@ const FormatNumber = () => {
                 fCalDueDate: {
                     ...prev.fCalDueDate,
                     frNo: format.fCalDueDate.frNo,
-                    amNo: formatData.fCalDueDate.amNo,
-                    amDate: formatData.fCalDueDate.amDate,
-                  
+                    amNo: format.fCalDueDate.amNo,
+                    amDate: format.fCalDueDate.amDate,
+
                 },
                 fCertificatePrefix: format.fCertificatePrefix,
                 fDeTemperature: format.fDeTemperature,
