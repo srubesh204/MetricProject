@@ -69,13 +69,14 @@ export const UnitDataBase = ({ style }) => {
             field: 'id',
             headerName: 'Si. No',
             width: 100,
+            headerAlign:"center",align: "center",
             renderCell: (params) => {
                 const rowIndex = params.api.getRowIndexRelativeToVisibleRows(params.id);
                 return Number.isInteger(rowIndex) ? rowIndex + 1 : '';
             }
         },
 
-        { field: 'unitName', headerName: 'UnitName', width: "150" },
+        { field: 'unitName', headerName: 'UnitName', width: "150",headerAlign:"center",align: "center", },
 
 
 
@@ -421,10 +422,8 @@ export const UnitDataBase = ({ style }) => {
                         </Button>
                         <Button color='secondary'><CloudDownload /></Button>
                       </ButtonGroup>
-                      {generalExcelStatus && <p>{generalExcelStatus}</p>}
                     </div>
 
-                  </div>
                   </div>
                                 <div className='col d-flex justify-content-end'>
                                     {unitStateId ? <div className='d-flex justify-content-end'><div className='me-2' >
@@ -432,17 +431,20 @@ export const UnitDataBase = ({ style }) => {
                                     </div>
                                         <div className='me-2' >
                                             <button type="button" className='btn btn-danger' onClick={() => { setUnitStateId(null); setUnitData(initialUnitData) }}>Cancel</button>
-                                        </div></div> : <div>
-                                        <button type="button" className='btn btn-warning ' onClick={() => setOpenModal(true)}>+ Add UnitDataBase</button>
-                                    </div>}
+                                        </div></div> : <div  className="ms-auto">
+                  <Button variant='contained' size="small" color='warning' onClick={() => setOpenModal(true)}>+ Add Unit</Button>
+                  </div>}
 
 
                                 </div>
+                                
+                  </div>
                                 <Snackbar anchorOrigin={{ vertical: "top", horizontal: "right" }} open={unitSnackBar} autoHideDuration={6000} onClose={handleSnackClose}>
                                     <Alert variant="filled" onClose={handleSnackClose} severity={errorHandler.code} sx={{ width: '100%' }}>
                                         {errorHandler.message}
                                     </Alert>
                                 </Snackbar>
+                      {generalExcelStatus && <p>{generalExcelStatus}</p>}
                             </Paper>
                         </Grid>
 
@@ -634,13 +636,13 @@ export const PartDataBase = ({ style }) => {
 
     const [partSelectedRowIds, setPartSelectedRowIds] = useState([]);
     const partColumns = [
-        { field: 'id', headerName: 'Si. No', width: 100, renderCell: (params) => params.api.getAllRowIds().indexOf(params.id) + 1 },
+        { field: 'id', headerName: 'Si. No', width: 100, renderCell: (params) => params.api.getAllRowIds().indexOf(params.id) + 1 ,headerAlign:"center",align: "center",},
 
-        { field: 'partNo', headerName: 'PartNo', width: "150" },
-        { field: 'partName', headerName: 'partName', width: "190" },
-        { field: 'customer', headerName: 'Customer', width: "200" },
-        { field: 'operationNo', headerName: 'Operation No', width: "200" },
-        { field: 'partStatus', headerName: 'Part Status', width: "200" },
+        { field: 'partNo', headerName: 'PartNo', width: "150",headerAlign:"center",align: "center" },
+        { field: 'partName', headerName: 'partName', width: "190",headerAlign:"center",align: "center" },
+        { field: 'customer', headerName: 'Customer', width: "200" ,headerAlign:"center",align: "center"},
+        { field: 'operationNo', headerName: 'Operation No', width: "200" ,headerAlign:"center",align: "center"},
+        { field: 'partStatus', headerName: 'Part Status', width: "200",headerAlign:"center",align: "center" },
 
 
 
@@ -1049,13 +1051,8 @@ export const PartDataBase = ({ style }) => {
                         </Button>
                         <Button color='secondary'><CloudDownload /></Button>
                       </ButtonGroup>
-                      {generalExcelStatus && <p>{generalExcelStatus}</p>}
                     </div>
-
-                  </div>
-                  </div>
-
-                                {partStateId ?
+                    {partStateId ?
                                     <div className="d-flex justify-content-end">
                                         <div className='me-2'>
                                             <button type="button" className='btn btn-secondary' onClick={() => setOpenModal(true)}>Modify</button>
@@ -1063,11 +1060,15 @@ export const PartDataBase = ({ style }) => {
                                         <div className='me-2'>
                                             <button type="button" className='btn btn-danger' onClick={() => { setPartStateId(null); setPartData(initialPartData) }}>Cancel</button>
                                         </div>
-                                    </div> : <div className='col d-flex justify-content-end mb-2' >
-                                        <div>
-                                            <button type="button" className='btn btn-warning' onClick={() => setOpenModal(true)}>+ Add PartDataBase</button>
-                                        </div>
-                                    </div>}
+                                    </div> : <div className="ms-auto">
+                  <Button variant='contained' size="small" color='warning' onClick={() => setOpenModal(true)}>+ Add Part</Button>
+                  </div>}
+
+                  </div>
+                  </div>
+
+                                
+                      {generalExcelStatus && <p>{generalExcelStatus}</p>}
                                 {partStateId ? <Dialog
                                     open={openModal}
                                     onClose={() => setOpenModal(false)}

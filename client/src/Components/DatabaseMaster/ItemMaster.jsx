@@ -178,16 +178,16 @@ const ItemMaster = () => {
 
     const [itemMasteSelectedRowIds, setItemMasteSelectedRowIds] = useState([]);
     const itemMasterColumns = [
-        { field: 'id', headerName: 'Si. No', width: 70, renderCell: (params) => params.api.getAllRowIds().indexOf(params.id) + 1 },
-        { field: 'itemType', headerName: 'Item Type', width: 70 },
-        { field: 'itemDescription', headerName: 'Item Description', width: 150 },
-        { field: 'itemPrefix', headerName: 'Item Prefix', width: 150 },
-        { field: 'itemFqInMonths', headerName: 'Item Fq In Months', width: 90, },
-        { field: 'calAlertInDay', headerName: 'Cal Alert In Day', width: 90, },
-        { field: 'SOPNo', headerName: 'SOP No', width: 90, },
-        { field: 'uncertainty', headerName: 'Uncertainty', width: 90, },
-        { field: 'standardRef', headerName: 'Standard Ref', type: "number", width: 90, },
-        { field: 'status', headerName: 'Status', width: 90, },
+        { field: 'id', headerName: 'Si. No', width: 70, renderCell: (params) => params.api.getAllRowIds().indexOf(params.id) + 1 ,headerAlign:"center",align: "center",},
+        { field: 'itemType', headerName: 'Item Type', width: 70,headerAlign:"center",align: "center" },
+        { field: 'itemDescription', headerName: 'Item Description', width: 150 ,headerAlign:"center",align: "center"},
+        { field: 'itemPrefix', headerName: 'Item Prefix', width: 150,headerAlign:"center",align: "center" },
+        { field: 'itemFqInMonths', headerName: 'Item Fq In Months', width: 90, headerAlign:"center",align: "center"},
+        { field: 'calAlertInDay', headerName: 'Cal Alert In Day', width: 90,headerAlign:"center",align: "center" },
+        { field: 'SOPNo', headerName: 'SOP No', width: 90,headerAlign:"center",align: "center"},
+        { field: 'uncertainty', headerName: 'Uncertainty', width: 90, headerAlign:"center",align: "center"},
+        { field: 'standardRef', headerName: 'Standard Ref', type: "number", width: 90,headerAlign:"center",align: "center"},
+        { field: 'status', headerName: 'Status', width: 90,headerAlign:"center",align: "center" },
 
         {/* {
             field: 'delete',
@@ -909,7 +909,6 @@ const ItemMaster = () => {
                                             </Button>
                                             <Button color='secondary'><CloudDownload /></Button>
                                         </ButtonGroup>
-                                        {itemMasterExcelStatus && <p>{itemMasterExcelStatus}</p>}
                                     </div>
 
 
@@ -959,6 +958,7 @@ const ItemMaster = () => {
                                         </Button>
                                     </DialogActions>
                                 </Dialog>}
+                                       
 
 
 
@@ -980,6 +980,7 @@ const ItemMaster = () => {
                                         </div>
                                     }
                                 </div>
+                                <div>{itemMasterExcelStatus && <p>{itemMasterExcelStatus}</p>}</div>
 
                             </div>
                         </Paper>

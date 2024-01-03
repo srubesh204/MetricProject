@@ -9,6 +9,7 @@ import { Paper } from '@mui/material';
 import { Edit } from '@mui/icons-material';
 import AddIcon from '@mui/icons-material/Add';
 
+import dayjs from 'dayjs';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
@@ -70,8 +71,42 @@ const OnSiteList = () => {
     })
 
 
-
+    const [vendorDataList, setVendorDataList] = useState([])
+    const vendorFetchData = async () => {
+        try {
+            const response = await axios.get(
+                `${process.env.REACT_APP_PORT}/vendor/getAllVendors`
+            );
+            setVendorDataList(response.data.result);
+            // setFilteredData(response.data.result);
+        } catch (err) {
+            console.log(err);
+        }
+    };
+    useEffect(() => {
+        vendorFetchData();
+    }, []);
     //
+
+    const [vendorFullList, setVendorFullList] = useState([])
+    const [vendorTypeList, setVendorTypeList] = useState([])
+
+    const FetchData = async () => {
+        try {
+            const response = await axios.get(
+                `${process.env.REACT_APP_PORT}/vendor/getAllVendors`
+            );
+            setVendorFullList(response.data.result);
+            setVendorTypeList(response.data.result)
+            // setFilteredData(response.data.result);
+        } catch (err) {
+            console.log(err);
+        }
+    };
+    useEffect(() => {
+        FetchData();
+    }, []);
+
 
     const Columns = [
         { field: 'id', headerName: 'Si. No', width: 100, renderCell: (params) => params.api.getAllRowIds().indexOf(params.id) + 1 },
@@ -82,6 +117,7 @@ const OnSiteList = () => {
             field: 'viewButton',
             headerName: 'View',
             width: 100,
+            headerAlign: "center", align: "center",
 
             renderCell: (params) => (
 
@@ -91,9 +127,9 @@ const OnSiteList = () => {
 
             ),
         },
-        { field: 'osGrnNo', headerName: 'Grn No', width: 100 },
-        { field: 'osGrnDate', headerName: 'Grn Date', width: 200 },
-        { field: 'osGrnPartyName', headerName: 'Party Name', width: 250, },
+        { field: 'osGrnNo', headerName: 'Grn No', width: 100, headerAlign: "center", align: "center", },
+        { field: 'osGrnDate', headerName: 'Grn Date', width: 200, headerAlign: "center", align: "center", },
+        { field: 'osGrnPartyName', headerName: 'Party Name', width: 250, headerAlign: "center", align: "center", },
     ]
 
 
@@ -106,7 +142,7 @@ const OnSiteList = () => {
     const [selectedRowView, setSelectedRowView] = useState(null);
     const handleViewClick = (params) => {
         setSelectedRowView(params); // Set the selected row data
-        setGrnListDataList(params.dcPartyItems)
+        setGrnListDataList(params.osGrnPartyId)
 
     };
 
@@ -128,7 +164,7 @@ const OnSiteList = () => {
 
         try {
             const response = await axios.delete(
-                "http://localhost:3001/onsiteItemGRN/deleteOnsiteItemGRN", {
+                `${process.env.REACT_APP_PORT}/onsiteItemGRN/deleteOnsiteItemGRN`, {
                 data: {
                     onsiteItemGRNIds: itemListSelectedRowIds
                 }
@@ -174,39 +210,14 @@ const OnSiteList = () => {
     }
     console.log(grnStateId)
 
-
-
-    const grnColumns = [
-
-        { field: 'id', headerName: 'Si. No', width: 70, renderCell: (params) => params.api.getAllRowIds().indexOf(params.id) + 1 },
-        { field: 'itemIMTENo', headerName: 'Item IMTENo', width: 100 },
-        { field: 'itemAddMasterName', headerName: 'Item Description', width: 100 },
-        { field: 'itemRangeSize', headerName: 'Range/Size', width: 100 },
-        { field: 'dcRef', headerName: 'Dc Ref', width: 100 },
-
-    ]
-
-    const [vendorDataList, setVendorDataList] = useState([])
-    const vendorFetchData = async () => {
-        try {
-            const response = await axios.get(
-                `${process.env.REACT_APP_PORT}/vendor/getAllVendors`
-            );
-            setVendorDataList(response.data.result);
-            setFilteredData(response.data.result);
-        } catch (err) {
-            console.log(err);
-        }
-    };
-    useEffect(() => {
-        vendorFetchData();
-    }, []);
-
-
-
-
+    const oneMonthBefore = dayjs().subtract(dayjs().date() - 1, 'day')
+    const [dateData, setDateData] = useState({
+        fromDate: oneMonthBefore.format('YYYY-MM-DD'),
+        toDate: dayjs().format('YYYY-MM-DD')
+    })
     const [grnListDataList, setGrnListDataList] = useState([])
     const [grnDataList, setGrnDataList] = useState([])
+    const [filteredData, setFilteredData] = useState([])
     const grnListFetchData = async () => {
         try {
             const response = await axios.get(
@@ -214,7 +225,7 @@ const OnSiteList = () => {
             );
             console.log(response.data)
             setGrnDataList(response.data.result);
-            // setFilteredData(response.data.result);
+            setFilteredData(response.data.result);
         } catch (err) {
             console.log(err);
         }
@@ -223,44 +234,59 @@ const OnSiteList = () => {
         grnListFetchData();
     }, []);
 
+    useEffect(() => {
+        const filteredItems = grnDataList.filter((item) => dayjs(item.grnDate).isSameOrAfter(dateData.fromDate) && dayjs(item.grnDate).isSameOrBefore(dateData.toDate))
+        console.log(filteredItems)
+        setFilteredData(filteredItems)
+    }, [dateData.fromDate, dateData.toDate])
+
+
+
+    const grnColumns = [
+
+        { field: 'osGrnItemId', headerName: 'Si. No', width: 70, renderCell: (params) => params.api.getAllRowIds().indexOf(params.id) + 1,headerAlign: "center", align: "center", },
+        { field: 'osGrnItemIMTENo', headerName: 'Item IMTENo', width: 100,headerAlign: "center", align: "center", },
+        { field: 'osGrnItemAddMasterName', headerName: 'Item Description', width: 100,headerAlign: "center", align: "center", },
+        { field: 'osGrnItemRangeSize', headerName: 'Range/Size', width: 100,headerAlign: "center", align: "center", },
+        { field: 'osGrnPartyRefNo', headerName: 'OsGrn Party Ref No', width: 200,headerAlign: "center", align: "center", },
+
+    ]
+    console.log(grnColumns)
+
+   
 
 
 
 
 
 
+   
 
-    const [filteredData, setFilteredData] = useState([])
+
+   
+
+
+
+
+
     const handleFilterChange = (e) => {
         const { name, value } = e.target;
-        if (value === "all") {
-            setFilteredData(vendorDataList)
-        } else {
-            if (value === "oem") {
-                const vendorType = vendorDataList.filter((item) => (item.oem === "1"))
-                setFilteredData(vendorType)
+        if (name === "vendorType") {
+            if (value === "all") {
+                setVendorTypeList(vendorFullList)
+            } else {
+                const vendorType = vendorDataList.filter((item) => (item[value] === "1"))
+                setVendorTypeList(vendorType)
             }
-            if (value === "customer") {
-                const vendorType = vendorDataList.filter((item) => (item.customer === "1"))
-                setFilteredData(vendorType)
-            }
-            if (value === "supplier") {
-                const vendorType = vendorDataList.filter((item) => (item.supplier === "1"))
-                setFilteredData(vendorType)
-            }
-            if (value === "subContractor") {
-                const vendorType = vendorDataList.filter((item) => (item.subContractor === "1"))
-                setFilteredData(vendorType)
-            }
-            if (name === "partyName") {
-                const partyName = vendorDataList.filter((item) => (item.dcPartyName === value))
-                setFilteredData(partyName)
-                console.log(value)
-            }
-
-
-
         }
+        if (name === "partyName") {
+            const partyName = grnDataList.filter((item) => (item.osGrnPartyName === value))
+            setFilteredData(partyName)
+            console.log(value)
+        }
+        setDateData((prev) => ({ ...prev, [name]: value }))
+
+
 
 
     };
@@ -301,8 +327,8 @@ const OnSiteList = () => {
                                 <TextField fullWidth label="Party Name" className="col" select size="small" onChange={handleFilterChange} id="partyNameId" name="partyName" defaultValue="" >
 
                                     <MenuItem value="all">All</MenuItem>
-                                    {filteredData.map((item, index) => (
-                                        <MenuItem key={index} value={item._id}>{item.dcPartyName}</MenuItem>
+                                    {vendorTypeList.map((item, index) => (
+                                        <MenuItem key={index} value={item.fullName}>{item.fullName}</MenuItem>
                                     ))}
 
 
@@ -318,7 +344,11 @@ const OnSiteList = () => {
                                     name="fromDate"
                                     label="From Date"
                                     sx={{ width: "100%" }}
+
                                     slotProps={{ textField: { size: 'small' } }}
+                                    value={dayjs(dateData.fromDate)}
+                                    onChange={(newValue) =>
+                                        setDateData((prev) => ({ ...prev, fromDate: dayjs(newValue).format('YYYY-MM-DD') }))}
                                     format="DD-MM-YYYY" />
                             </div>
                             <div className="col">
@@ -329,6 +359,9 @@ const OnSiteList = () => {
                                     sx={{ width: "100%" }}
                                     label="To Date"
                                     slotProps={{ textField: { size: 'small' } }}
+                                    value={dayjs(dateData.toDate)}
+                                    onChange={(newValue) =>
+                                        setDateData((prev) => ({ ...prev, toDate: dayjs(newValue).format('YYYY-MM-DD') }))}
                                     format="DD-MM-YYYY" />
                             </div>
 
@@ -352,7 +385,7 @@ const OnSiteList = () => {
                         <Box sx={{ height: 310, width: '100%', my: 2 }}>
                             <DataGrid
 
-                                rows={grnDataList}
+                                rows={filteredData}
                                 columns={Columns}
                                 getRowId={(row) => row._id}
                                 initialState={{
@@ -405,7 +438,8 @@ const OnSiteList = () => {
 
                                     rows={grnListDataList}
                                     columns={grnColumns}
-                                    getRowId={(row) => row._id}
+                                    getRowId={(row) => row.osGrnItemId}
+                                   
                                     initialState={{
                                         pagination: {
                                             paginationModel: { page: 0, pageSize: 5 },
@@ -457,9 +491,9 @@ const OnSiteList = () => {
                                         <AddIcon /> Add Item
                                     </Button>
                                 </div>
-                                <div className=' me-2'>
+                                {itemListSelectedRowIds.length !== 0 &&  <div className=' me-2'>
                                     <Button variant='contained' type='button' color='error' onClick={() => setDeleteModalItem(true)}>Delete</Button>
-                                </div>
+                                </div>}
                                 <Dialog
                                     open={deleteModalItem}
                                     onClose={() => setDeleteModalItem(false)}

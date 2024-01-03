@@ -55,25 +55,26 @@ const Employee = () => {
     const [employeeSelectedRowIds, setEmployeeSelectedRowIds] = useState([]);
 
     const employeeColumns = [
-        { field: 'id', headerName: 'Si. No', width: 50, renderCell: (params) => params.api.getAllRowIds().indexOf(params.id) + 1, align: "center" },
+        { field: 'id', headerName: 'Si. No', width: 50, renderCell: (params) => params.api.getAllRowIds().indexOf(params.id) + 1, headerAlign:"center",align: "center"},
 
-        { field: 'employeeCode', headerName: 'Emp.Code', width: 80 },
+        { field: 'employeeCode', headerName: 'Emp.Code', width: 80, headerAlign:"center",align: "center"},
         {
             field: 'Name',
             headerName: 'Name',
             description: 'This column has a value getter and is not sortable.',
             sortable: false,
+            headerAlign:"center",align: "center",
             width: 120,
             valueGetter: (params) =>
                 `${params.row.firstName || ''} ${params.row.lastName || ''}`,
         },
 
-        { field: 'dob', headerName: 'DOB', width: 100, valueGetter: (params) => dayjs(params.row.itemCalDate).format('DD-MM-YYYY') },
-        { field: 'contactNumber', headerName: 'Contact No', type: "number", width: 120, },
-        { field: 'designation', headerName: 'Designation', width: 120, },
-        { field: 'department', headerName: 'Department', width: 130, },
-        { field: 'empRole', headerName: 'Role', width: 150, },
-        { field: 'reportTo', headerName: 'Report To', width: 100, },
+        { field: 'dob', headerName: 'DOB', width: 100,headerAlign:"center",align: "center", valueGetter: (params) => dayjs(params.row.itemCalDate).format('DD-MM-YYYY') },
+        { field: 'contactNumber', headerName: 'Contact No',headerAlign:"center",align: "center", type: "number", width: 120, },
+        { field: 'designation', headerName: 'Designation',headerAlign:"center",align: "center", width: 120, },
+        { field: 'department', headerName: 'Department',headerAlign:"center",align: "center", width: 130, },
+        { field: 'empRole', headerName: 'Role', width: 150,headerAlign:"center",align: "center" },
+        { field: 'reportTo', headerName: 'Report To', width: 100,headerAlign:"center",align: "center", },
 
 
     ];
@@ -919,9 +920,10 @@ const Employee = () => {
                                             </Button>
                                             <Button color='secondary'><CloudDownload /></Button>
                                         </ButtonGroup>
-                                        {empExcelStatus && <p>{empExcelStatus}</p>}
                                     </div>
                                 </div>
+
+
                                 {empDataId ? <Dialog
                                     open={open}
                                     onClose={handleClose}
@@ -986,11 +988,12 @@ const Employee = () => {
                                         </div>
                                     </div> :
                                         <div>
-                                            <button onClick={handleClickOpen} type="button" className='btn btn-warning'>+ Add Employee</button>
-                                        </div>
+                  <Button variant='contained' size="small" color='warning' onClick={handleClickOpen}>+ Add Employee</Button>
+                  </div>
                                     }
                                 </div>
                             </div>
+                                        {empExcelStatus && <p>{empExcelStatus}</p>}
                         </Paper>
                     </Grid>
 

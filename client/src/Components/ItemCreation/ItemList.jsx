@@ -269,6 +269,7 @@ const ItemList = () => {
                     field: 'button',
                     headerName: 'Edit',
                     width: 60,
+                    headerAlign:"center",align: "center",
                     renderCell: (params) => (
                         <Button component={Link} to={`/itemedit/${params.id}`}>
                             <Edit color='success' />
@@ -277,31 +278,33 @@ const ItemList = () => {
                 },
             ]
             : []),
-        { field: 'id', headerName: 'Si. No', width: 60, renderCell: (params) => params.api.getAllRowIds().indexOf(params.id) + 1 },
-        { field: 'itemIMTENo', headerName: 'IMTE No', width: 100 },
-        { field: 'itemAddMasterName', headerName: 'Description', width: 120 },
+        { field: 'id', headerName: 'Si. No', width: 60, renderCell: (params) => params.api.getAllRowIds().indexOf(params.id) + 1,headerAlign:"center",align: "center" },
+        { field: 'itemIMTENo', headerName: 'IMTE No', width: 100,headerAlign:"center",align: "center" },
+        { field: 'itemAddMasterName', headerName: 'Description', width: 120,headerAlign:"center",align: "center" },
         {
             field: 'Range/Size',
             headerName: 'Range/Size',
+            headerAlign:"center",align: "center",
             description: 'This column has a value getter and is not sortable.',
             sortable: false,
             width: 130,
             valueGetter: (params) =>
                 `${params.row.itemRangeSize || ''} ${params.row.itemLCUnit || ''}`,
         },
-        { field: 'itemMake', headerName: 'Make', width: 90 },
-        { field: 'itemCalDate', headerName: 'Cal Date', width: 100, valueGetter: (params) => dayjs(params.row.itemCalDate).format('DD-MM-YYYY') },
-        { field: 'itemDueDate', headerName: 'Due Date', width: 110, valueGetter: (params) => dayjs(params.row.itemDueDate).format('DD-MM-YYYY') },
-        { field: 'itemLC', headerName: 'ItemLC', width: 60, valueGetter: (params) => params.row.itemLC || "-" },
-        { field: 'itemCalFreInMonths', headerName: 'Frequency', type: "number", width: 100 },
-        { field: 'itemCalibrationSource', headerName: 'Cal Done At ', width: 100 },
-        { field: 'itemStatus', headerName: 'Status ', width: 80, },
-        { field: 'itemDepartment', headerName: 'Current location', width: 120, },
-        { field: 'itemSupplier', headerName: 'Cal Source', renderCell: (params) => params.row.itemSupplier.toString(), width: 110 },
+        { field: 'itemMake', headerName: 'Make', width: 90 ,headerAlign:"center",align: "center",},
+        { field: 'itemCalDate', headerName: 'Cal Date', width: 100,headerAlign:"center",align: "center", valueGetter: (params) => dayjs(params.row.itemCalDate).format('DD-MM-YYYY') },
+        { field: 'itemDueDate', headerName: 'Due Date', width: 110,headerAlign:"center",align: "center", valueGetter: (params) => dayjs(params.row.itemDueDate).format('DD-MM-YYYY') },
+        { field: 'itemLC', headerName: 'ItemLC', width: 60,headerAlign:"center",align: "center", valueGetter: (params) => params.row.itemLC || "-" },
+        { field: 'itemCalFreInMonths', headerName: 'Frequency', type: "number", width: 100,headerAlign:"center",align: "center" },
+        { field: 'itemCalibrationSource', headerName: 'Cal Done At ', width: 100 ,headerAlign:"center",align: "center" },
+        { field: 'itemStatus', headerName: 'Status ', width: 80,headerAlign:"center",align: "center", },
+        { field: 'itemDepartment', headerName: 'Current location', width: 120,headerAlign:"center",align: "center", },
+        { field: 'itemSupplier', headerName: 'Cal Source', renderCell: (params) => params.row.itemSupplier.toString(), width: 110,headerAlign:"center",align: "center", },
         {
             field: 'itemType',
             headerName: 'Type',
             width: 180,
+            headerAlign:"center",align: "center",
             renderCell: (params) => {
                 const itemType = params.row.itemType.toString();
                 return itemType.charAt(0).toUpperCase() + itemType.slice(1).toLowerCase();

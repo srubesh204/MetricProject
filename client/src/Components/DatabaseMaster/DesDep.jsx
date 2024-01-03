@@ -15,6 +15,7 @@ import { CloudDownload, CloudUpload, Delete } from '@mui/icons-material';
 import { Check, Clear } from '@mui/icons-material';
 import { useParams } from 'react-router-dom';
 import styled from "@emotion/styled";
+import { Link } from 'react-router-dom';
 
 
 
@@ -214,18 +215,18 @@ if(name === "pou") {
 
   const columns = [
 
-    { field: 'id', headerName: 'Si.No', width: 30, renderCell: (params) => params.api.getAllRowIds().indexOf(params.id) + 1, align: "center" },
+    { field: 'id', headerName: 'Si.No', width: 30, renderCell: (params) => params.api.getAllRowIds().indexOf(params.id) + 1,headerAlign:"center", align: "center" },
 
-    { field: 'department', headerName: 'Department', width: "90" },
-    { field: 'departmentStatus', headerName: 'Status', width: "70" },
+    { field: 'department', headerName: 'Department',headerAlign:"center",align: "center", width: "90" },
+    { field: 'departmentStatus', headerName: 'Status',headerAlign:"center",align: "center", width: "70" },
     {
-      field: 'defaultdep', headerName: 'Default', width: "50",
+      field: 'defaultdep', headerName: 'Default', width: "50",headerAlign:"center",align: "center",
       renderCell: (params) => params.row.defaultdep === "yes" ? <Check color="success" /> : <Clear color="error" />
     },
     {
       field: 'delete',
       headerName: 'Delete',
-      width: 80,
+      width: 80,headerAlign:"center",
       sortable: false,
       renderHeader: () => (
         <IconButton color='error' aria-label="Delete" onClick={() => setDeleteDepModal(true)}>
@@ -453,14 +454,15 @@ if(name === "pou") {
 
 
   const areaColumns = [
-    { field: 'id', headerName: 'Si. No', width: 70, renderCell: (params) => params.api.getAllRowIds().indexOf(params.id) + 1, align: "center" },
+    { field: 'id', headerName: 'Si. No', width: 70, renderCell: (params) => params.api.getAllRowIds().indexOf(params.id) + 1,headerAlign:"center",align: "center", },
 
-    { field: 'area', headerName: 'Area', width: "90" },
-    { field: 'areaStatus', headerName: ' Area Status', width: "90" },
+    { field: 'area', headerName: 'Area', width: "90",headerAlign:"center",align: "center", },
+    { field: 'areaStatus', headerName: ' Area Status', width: "90",headerAlign:"center",align: "center", },
     {
       field: 'delete',
       headerName: 'Delete',
       width: 80,
+      headerAlign:"center",
       sortable: false,
       renderHeader: () => (
         <IconButton color='error' aria-label="Delete" onClick={() => setDeleteAreaModal(true)}>
@@ -775,14 +777,15 @@ if(name === "pou") {
 
 
   const placeOfUsageColumns = [
-    { field: 'id', headerName: 'Si. No', width: 70, renderCell: (params) => params.api.getAllRowIds().indexOf(params.id) + 1, align: "center" },
+    { field: 'id', headerName: 'Si. No', width: 70, renderCell: (params) => params.api.getAllRowIds().indexOf(params.id) + 1, headerAlign:"center",align: "center" },
 
-    { field: 'placeOfUsage', headerName: 'Place Of Usage', width: "70" },
-    { field: 'placeOfUsageStatus', headerName: ' Place Of Usage Status', width: "90" },
+    { field: 'placeOfUsage', headerName: 'Place Of Usage', width: "70",headerAlign:"center",align: "center", },
+    { field: 'placeOfUsageStatus', headerName: ' Place Of Usage Status', width: "120",headerAlign:"center",align: "center", },
     {
       field: 'delete',
       headerName: 'Delete',
-      width: 80,
+      width: 60,
+      headerAlign:"center",
       sortable: false,
       renderHeader: () => (
         <IconButton color='error' aria-label="Delete" onClick={() => setDeletePouModal(true)}>
@@ -1072,10 +1075,10 @@ if(name === "pou") {
                         </Button>
                         <Button color='secondary'><CloudDownload /></Button>
                       </ButtonGroup>
-                      {depExcelStatus && <p>{depExcelStatus}</p>}
                     </div>
 
                   </div>
+                      {depExcelStatus && <p>{depExcelStatus}</p>}
 
 
 
@@ -1139,25 +1142,17 @@ if(name === "pou") {
                       //   disabled={!depStateId}
                       >
                         Modify
-                      </button >
+                      </button ><div>
+                                                <Button variant='contained' size="small" color='danger' onClick={() => setDepOpenModal(true)}>Modify</Button>
+                                                </div>
                       <button type="button" onMouseEnter={(e) => { e.target.style.background = 'red' }} onMouseOut={(e) => { e.target.style.background = '#e6e6e6' }}
                         style={{ backgroundColor: "#e6e6e6", color: "black", fontWeight: "bolder" }}
                         className="btn text-end"
                         onClick={() => { setDepStateId(null); setDepartmentData(emptyDepartmentData) }}
                       >Cancel</button>
-                    </div>) :
-                      <div className="d-flex justify-content-end">
-                        <button
-                          type="button"
-                          style={{ backgroundColor: "#e6e6e6", color: "black", fontWeight: "bolder" }}
-                          className="btn text-end hover"
-                          onClick={() => setDepOpenModal(true)}
-
-                        >
-                          <i className="bi bi-plus"></i>Add Department
-                        </button>
-                      </div>
-                    }
+                    </div>) : <div>
+                                                <Button variant='contained' size="small" color='warning' onClick={() => setDepOpenModal(true)}>+ Add Department</Button>
+                                                </div> }
 
 
 
@@ -1353,10 +1348,10 @@ if(name === "pou") {
                           </Button>
                           <Button color='secondary'><CloudDownload /></Button>
                         </ButtonGroup>
-                        {areaExcelStatus && <p>{areaExcelStatus}</p>}
                       </div>
 
                     </div>
+                        {areaExcelStatus && <p>{areaExcelStatus}</p>}
 
 
                     {areaStateId ? <Dialog
@@ -1427,16 +1422,9 @@ if(name === "pou") {
                           className="btn text-end"
                           onClick={() => { setareaStateId(null); setArea(initialAreaData) }}
                         >Cancel</button>
-                      </div>) : <div className="d-flex justify-content-end">
-                        <button
-                          type="button"
-                          style={{ backgroundColor: "#e6e6e6", color: "black", fontWeight: "bolder" }}
-                          className="btn text-end hover"
-                          onClick={() => setAreaOpenModal(true)}
-
-                        >
-                          <i className="bi bi-plus"></i>Add Area
-                        </button></div>}
+                      </div>) : <div>
+                                                <Button variant='contained' size="small" color='warning' onClick={() => setAreaOpenModal(true)}>+ Add Area</Button>
+                                                </div> }
 
 
 
@@ -1645,10 +1633,12 @@ if(name === "pou") {
                         </Button>
                         <Button color='secondary'><CloudDownload /></Button>
                       </ButtonGroup>
-                      {pouExcelStatus && <p>{pouExcelStatus}</p>}
                     </div>
 
                   </div>
+                      {pouExcelStatus && <p>{pouExcelStatus}</p>}
+
+
                   {placeOfUsageId ? <Dialog
                     open={pouOpenModal}
                     onClose={() => setPouOpenModal(false)}
@@ -1696,7 +1686,7 @@ if(name === "pou") {
 
 
 
-                  <div className="col-md p-0">
+                  <div className="col-md p-0 d-flex justify-content-end">
 
                     {placeOfUsageId ? (<div className="d-flex justify-content-end">
                       <button
@@ -1713,16 +1703,9 @@ if(name === "pou") {
                         className="btn text-end "
                         onClick={() => { setPlaceOfUsageId(null); setPlaceOfUsageData(initialPlaceOfUsageData) }}
                       >Cancel</button>
-                    </div>) :
-                      <div className="d-flex justify-content-end"><button
-                        type="button"
-                        style={{ backgroundColor: "#e6e6e6", color: "black", fontWeight: "bolder" }}
-                        className="btn hover"
-                        onClick={() => setPouOpenModal(true)}
-
-                      >
-                        <i className="bi bi-plus"></i>Add Place
-                      </button></div>}
+                    </div>) : <div>
+                      <Button variant='contained' size="small" color='warning' onClick={() => setPouOpenModal(true)}>+ Add Place</Button>
+                      </div> }
 
 
 
@@ -2020,10 +2003,10 @@ export const Designation = () => {
 
 
   const designationColumns = [
-    { field: 'id', headerName: 'Si. No', width: 70, renderCell: (params) => params.api.getAllRowIds().indexOf(params.id) + 1, align: "center" },
+    { field: 'id', headerName: 'Si. No', width: 70, renderCell: (params) => params.api.getAllRowIds().indexOf(params.id) + 1,headerAlign:"center", align: "center" },
 
-    { field: 'designation', headerName: 'Designation', width: "200" },
-    { field: 'designationStatus', headerName: 'Designation Status', width: "150" },
+    { field: 'designation', headerName: 'Designation', width: "200" ,headerAlign:"center",align: "center", },
+    { field: 'designationStatus', headerName: 'Designation Status', width: "150",headerAlign:"center",align: "center", },
     {/*{
       field: 'delete',
       headerName: 'Delete',
@@ -2278,10 +2261,12 @@ export const Designation = () => {
           <Grid item xs={6} >
             <Paper
               sx={{
-                p: 2,
+                py: 2,
+                px: 1,
                 display: 'flex',
                 flexDirection: 'column',
-                m: 2,
+                my: 2,
+                mx: 0.5,
 
               }}
               elevation={12}
@@ -2358,7 +2343,6 @@ export const Designation = () => {
                       </Button>
                       <Button color='secondary'><CloudDownload /></Button>
                     </ButtonGroup>
-                    {desExcelStatus && <p>{desExcelStatus}</p>}
                   </div>
 
                 </div>
@@ -2409,29 +2393,28 @@ export const Designation = () => {
                 <div className="text-end col">
 
                   {desStateId ? (<div>
-                    <button
+                    <Button
+                    component={Link}
                       type="button"
+                      variant="contained"
                       className="btn text-end me-3 hover"
                       onClick={() => setOpenModal(true)}
                       style={{ backgroundColor: "#e6e6e6", color: "black", fontWeight: "bolder" }}
                     >
                       Modify
-                    </button>
-                    <button type="button" onMouseEnter={(e) => { e.target.style.background = 'red' }} onMouseOut={(e) => { e.target.style.background = '#e6e6e6' }}
+                    </Button>
+                    <Button  component={Link} size="small" variant="contained" type="button" onMouseEnter={(e) => { e.target.style.background = 'red' }} onMouseOut={(e) => { e.target.style.background = '#e6e6e6' }}
                       style={{ backgroundColor: "#e6e6e6", color: "black", fontWeight: "bolder" }}
                       className="btn text-end me-3"
                       onClick={() => { setDesStateId(null); setDesignationData(initialDesignationData) }}
-                    >Cancel</button>
-                  </div>) : <button
-                    type="button"
-                    className="btn text-end hover"
-                    onClick={() => setOpenModal(true)}
-                    style={{ backgroundColor: "#e6e6e6", color: "black", fontWeight: "bolder" }}
-                  >
-                    <i className="bi bi-plus"></i>Add Designation</button>
-                  }
+                    >Cancel</Button>
+                  </div>) : <div className="ms-auto">
+                  <Button  className="ms-auto" variant='contained' size="small" color='warning' onClick={() => setOpenModal(true)}>+ Add Designation</Button>
+                  </div> }
                 </div>
+                
               </div>
+                    {desExcelStatus && <p>{desExcelStatus}</p>}
 
             </Paper>
           </Grid>

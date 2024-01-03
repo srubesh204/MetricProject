@@ -586,37 +586,42 @@ const Vendor = () => {
 
     const vendorListColumns = [
 
-        { field: 'id', headerName: 'Si. No', width: 70, renderCell: (params) => params.api.getAllRowIds().indexOf(params.id) + 1 },
-        { field: 'vendorCode', headerName: 'VendorCode', width: 130 },
+        { field: 'id', headerName: 'Si. No', width: 70, renderCell: (params) => params.api.getAllRowIds().indexOf(params.id) + 1 ,headerAlign:"center",align: "center",},
+        { field: 'vendorCode', headerName: 'VendorCode', width: 130,headerAlign:"center",align: "center", },
 
         {
             field: 'fullName',
             headerName: 'Full Name',
             width: 200,
+            headerAlign:"center",align: "center",
         },
         {
             field: 'city',
             headerName: 'City',
             //   description: 'This column has a value getter and is not sortable.',
             width: 100,
+            headerAlign:"center",align: "center",
         },
         {
             field: 'state',
             headerName: 'State',
             // description: 'This column has a value getter and is not sortable.',
             width: 100,
+            headerAlign:"center",align: "center",
         },
         {
             field: 'vendorStatus',
             headerName: 'Status',
             // description: 'This column has a value getter and is not sortable.',
             width: 100,
+            headerAlign:"center",align: "center",
 
         },
         {
             field: 'vendorType',
             headerName: 'Vendor Type',
             headerAlign: "center",
+            align: "center",
 
             width: 300,
 
@@ -1160,9 +1165,11 @@ const Vendor = () => {
                                                 </Button>
                                                 <Button color='secondary'><CloudDownload /></Button>
                                             </ButtonGroup>
-                                            {vendorExcelStatus && <p>{vendorExcelStatus}</p>}
                                         </div>
                                     </div>
+                                            
+
+
                                     {vendorStateId ?
                                         <div className='d-flex justify-content-end'>
                                             <div className='me-2' >
@@ -1172,9 +1179,9 @@ const Vendor = () => {
                                                 <button type="button" className='btn btn-danger' onClick={() => { setVendorStateId(null); setVendorData(initialVendorData) }}>Cancel</button>
                                             </div>
                                         </div> : <div className='col d-flex justify-content-end mb-2'>
-                                            <div >
-                                                <button type="button" className='btn btn-warning' onClick={() => setOpenModalVendor(true)}>+ Add Vendor</button>
-                                            </div>
+                                            <div>
+                  <Button variant='contained' size="small" color='warning' onClick={() => setOpenModalVendor(true)}>+ Add Vendor</Button>
+                  </div>
                                         </div>}
 
                                 </div>
@@ -1220,6 +1227,7 @@ const Vendor = () => {
                                             </Button>
                                         </DialogActions>
                                     </Dialog>}
+                                    <div>{vendorExcelStatus && <p>{vendorExcelStatus}</p>}</div>
 
                             </div>
                         </Paper>
