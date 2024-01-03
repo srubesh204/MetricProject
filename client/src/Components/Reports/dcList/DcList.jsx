@@ -39,7 +39,7 @@ const DcList = () => {
     const formatFetchData = async () => {
         try {
             const response = await axios.get(
-                `${process.env.REACT_APP_PORT}/formatNo/getFormatNoById/6595064f151cbe07fdd7fab7`
+                `${process.env.REACT_APP_PORT}/formatNo/getFormatNoById/1`
             );
             const format = response.data.result
             console.log(format)
