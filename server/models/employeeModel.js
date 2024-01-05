@@ -49,7 +49,7 @@ const employeeSchema = new mongoose.Schema({
     },
     plant: {
         type: String,
-        required: [true, "Please select plant"]
+        // required: [true, "Please select plant"]
     },
     extraPermissions : []
 });

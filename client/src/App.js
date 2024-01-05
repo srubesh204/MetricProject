@@ -75,7 +75,7 @@ const generateRoutes = (employee) => {
     { path: "/vendor", element: <Vendor /> },
     { path: "/itemMaster", element: <ItemMaster /> },
     { path: "/itemadd", element: <ItemAdd /> },
-    { path: "/itemedit/:id", element: <ItemEdit /> },
+    { path: "/itemEdit/:id", element: <ItemEdit /> },
     { path: "/itemList", element: <ItemList /> },
     { path: "/test", element: <FileViewer /> },
     { path: "/rubyTest", element: <RubeshTest /> },

@@ -65,7 +65,9 @@ const itemAddController = {
         acAverageOB,
         acOBError,
         acMinPSError,
-        acMaxPSError, // Assuming createdAt is part of the request body
+        acMaxPSError,
+        createdBy,
+        updatedBy // Assuming createdAt is part of the request body
       } = req.body;
   
       const newItemFields = {
@@ -118,6 +120,8 @@ const itemAddController = {
         acOBError,
         acMinPSError,
         acMaxPSError,
+        createdBy,
+        updatedBy
       };
   
       const newItem = new itemAddModel(newItemFields);
@@ -219,7 +223,7 @@ const itemAddController = {
         } = req.body;
       // Create an object with the fields you want to update
       const updateItemFields = {
-         itemMasterRef,
+        itemMasterRef,
         selectedItemMaster,
         isItemMaster,
         itemAddMasterName,
@@ -238,7 +242,6 @@ const itemAddController = {
         itemDepartment,
         itemCurrentLocation,
         itemLastLocation,
-        itemDcLocation: "department",
         itemArea,
         itemPlaceOfUsage,
         itemCalFreInMonths,
@@ -269,7 +272,6 @@ const itemAddController = {
         acOBError,
         acMinPSError,
         acMaxPSError,
-        itemLocation: "department"
       };
 
       // Find the designation by desId and update it

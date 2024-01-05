@@ -11,10 +11,14 @@ import { Link as RouterLink } from 'react-router-dom';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { Add, Remove, HighlightOffRounded, UploadFile } from '@mui/icons-material';
 import { Link } from '@mui/material';
+import { useEmployee } from '../../App';
 
 const ItemAdd = () => {
 
     // Units Data
+    const employeeRole = useEmployee()
+
+    console.log(employeeRole)
     const [units, setUnits] = useState([]);
     const UnitFetch = async () => {
         try {
@@ -263,6 +267,9 @@ const ItemAdd = () => {
         itemUncertainity: "",
         itemUncertainityUnit: "",
         itemPrevCalData: "",
+        createdBy: employeeRole.loggedEmp.employeeCode,
+        createdByName : employeeRole.loggedEmp.firstName,
+        upDatedBy: ""
     })
 
     //upload Button
@@ -865,26 +872,31 @@ const ItemAdd = () => {
                                 <Typography variant='h6' className='text-center'>
                                     Select Location
                                 </Typography>
-                                <div className="row g-1 mt-0 mb-2">
-                                    <div className="col me-1">
+                                <div className="row g-2 mt-0 mb-2">
+                                    <div className="col-md-6">
                                         <TextField value={itemAddData.itemDepartment} onChange={handleItemAddChange} size='small' select fullWidth variant='outlined' label="Department" name='itemDepartment' id='itemDepartmentId'>
                                             {departments.map((item, index) => (
                                                 <MenuItem key={index} value={item.department}>{item.department}</MenuItem>
                                             ))}
                                         </TextField>
                                     </div>
-                                    <div className="col">
+                                    <div className="col-md-6">
                                         <TextField size='small' onChange={handleItemAddChange} value={itemAddData.itemArea} select fullWidth variant='outlined' label="Area" name='itemArea' id='itemAreaId'>
                                             {areas.map((item, index) => (
                                                 <MenuItem key={index} value={item.area}>{item.area}</MenuItem>
                                             ))}
                                         </TextField>
                                     </div>
-                                    <div className='mt-2'>
+                                    <div className='col mt-2'>
                                         <TextField size='small' onChange={handleItemAddChange} value={itemAddData.itemPlaceOfUsage} select fullWidth variant='outlined' label="Place" name='itemPlaceOfUsage' id='itemPlaceOfUsageId'>
                                             {placeOfUsages.map((item, index) => (
                                                 <MenuItem key={index} value={item.placeOfUsage}>{item.placeOfUsage}</MenuItem>
                                             ))}
+                                        </TextField>
+                                    </div>
+                                    <div className='col mt-2'>
+                                        <TextField size='small' disabled value={itemAddData.createdByName} fullWidth variant='outlined' label="Created By" name='createdByName' id='createdByNameId'>
+                                            
                                         </TextField>
                                     </div>
 

@@ -64,7 +64,7 @@ const Home = () => {
       { value: 0, label: 'Total Items' },
       { value: 0, label: 'Active' },
       { value: 0, label: 'Spare' },
-      { value: 0, label: 'BreakDown' },
+      { value: 0, label: 'Breakdown' },
       { value: 0, label: 'Missing' },
       { value: 0, label: 'Rejection' }
     ])
@@ -200,7 +200,7 @@ const Home = () => {
 
       const activeItems = allItems.filter((item) => item.itemStatus === "Active");
       const spareItems = allItems.filter((item) => item.itemStatus === "Spare");
-      const breakDownItems = allItems.filter((item) => item.itemStatus === "BreakDown");
+      const breakDownItems = allItems.filter((item) => item.itemStatus === "Breakdown");
       const missingItems = allItems.filter((item) => item.itemStatus === "Missing");
       const rejectionItems = allItems.filter((item) => item.itemStatus === "Rejection");
 
@@ -230,7 +230,7 @@ const Home = () => {
         updateIfExists('Total Items', allItems.length);
         updateIfExists('Active', activeItems.length);
         updateIfExists('Spare', spareItems.length);
-        updateIfExists('BreakDown', breakDownItems.length);
+        updateIfExists('Breakdown', breakDownItems.length);
         updateIfExists('Missing', missingItems.length);
         updateIfExists('Rejection', rejectionItems.length);
 
@@ -622,7 +622,7 @@ const Home = () => {
 
     const activeItems = filter.filter((item) => item.itemStatus === "Active");
     const spareItems = filter.filter((item) => item.itemStatus === "Spare");
-    const breakDownItems = filter.filter((item) => item.itemStatus === "BreakDown");
+    const breakDownItems = filter.filter((item) => item.itemStatus === "Breakdown");
     const missingItems = filter.filter((item) => item.itemStatus === "Missing");
     const rejectionItems = filter.filter((item) => item.itemStatus === "Rejection");
 
@@ -640,7 +640,7 @@ const Home = () => {
       { value: filter.length, label: 'Total Items' },
       { value: activeItems.length, label: 'Active' },
       { value: spareItems.length, label: 'Spare' },
-      { value: breakDownItems.length, label: 'BreakDown' },
+      { value: breakDownItems.length, label: 'Breakdown' },
       { value: missingItems.length, label: 'Missing' },
       { value: rejectionItems.length, label: 'Rejection' }
     ])
@@ -668,7 +668,7 @@ const Home = () => {
 
     const activeItems = filter.filter((item) => item.itemStatus === "Active");
     const spareItems = filter.filter((item) => item.itemStatus === "Spare");
-    const breakDownItems = filter.filter((item) => item.itemStatus === "BreakDown");
+    const breakDownItems = filter.filter((item) => item.itemStatus === "Breakdown");
     const missingItems = filter.filter((item) => item.itemStatus === "Missing");
     const rejectionItems = filter.filter((item) => item.itemStatus === "Rejection");
 
@@ -684,7 +684,7 @@ const Home = () => {
       { id: 0, value: filter.length, label: 'Total Items' },
       { id: 1, value: activeItems.length, label: 'Active' },
       { id: 2, value: spareItems.length, label: 'Spare' },
-      { id: 3, value: breakDownItems.length, label: 'BreakDown' },
+      { id: 3, value: breakDownItems.length, label: 'Breakdown' },
       { id: 4, value: missingItems.length, label: 'Missing' },
       { id: 5, value: rejectionItems.length, label: 'Rejection' }
     ])

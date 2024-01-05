@@ -80,7 +80,9 @@ const itemAddSchema = new mongoose.Schema({
   updatedAt: {
     type: String,
     default: () => dayjs().format("YYYY-MM-DD")
-  }
+  },
+  createdBy : String,
+  updatedBy : String
 });
 itemAddSchema.plugin(uniqueValidator);
 
