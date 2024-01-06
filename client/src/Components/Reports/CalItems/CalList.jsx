@@ -7,12 +7,13 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DataGrid, GridToolbar } from '@mui/x-data-grid';
 import dayjs from 'dayjs';
 import { Container, Paper } from '@mui/material';
-import { Edit, EditRounded } from '@mui/icons-material';
+import { Edit, EditRounded,PrintRounded  } from '@mui/icons-material';
 import isSameOrAfter from 'dayjs/plugin/isSameOrAfter'
 import isSameOrBefore from 'dayjs/plugin/isSameOrBefore'
-
+import CalPrint from './CalPrint'
 import CalAddModel from './CalAddModel'
 import CalEditModel from './CalEditModel'
+
 import { useEmployee } from '../../../App';
 export const CalData = createContext(null);
 dayjs.extend(isSameOrBefore)
@@ -60,9 +61,11 @@ const CalList = () => {
         empFetch();
     }, [])
     console.log(activeEmps)
+    const [selectedRows, setSelectedRows] = useState([]);
 
     const [calAddOpen, setCalAddOpen] = useState(false)
     const [calEditOpen, setCalEditOpen] = useState(false)
+    const [calPrintOpen, setCalPrintOpen] = useState(false);
 
     const [calDataList, setCalDataList] = useState([])
     const calFetchData = async () => {
@@ -119,15 +122,16 @@ const CalList = () => {
     console.log(selectedCalRow)
 
     const calListColumns = [
-        { field: 'id', headerName: 'Entry. No', width: 100, renderCell: (params) => params.api.getAllRowIds().indexOf(params.id) + 1 ,headerAlign:"center",align: "center",},
-        ...(employeeRole && employeeRole.employee !== "viewer" ? [{ field: 'editButton',headerAlign:"center",align: "center", headerName: 'Edit', width: 100, renderCell: (params) => <EditRounded color='warning' onClick={() => setCalEditData(params)} /> }] : []),
-        { field: 'calItemEntryDate', headerName: 'Entry Date', width: 200, valueGetter: (params) => dayjs(params.row.calItemEntryDate).format('DD-MM-YYYY') ,headerAlign:"center",align: "center",},
-        { field: 'calIMTENo', headerName: 'Item IMTENo', width: 200,headerAlign:"center",align: "center", },
-        { field: 'calItemName', headerName: 'Item Description', width: 200,headerAlign:"center",align: "center", },
-        { field: 'calRangeSize', headerName: 'Range/Size', width: 200,headerAlign:"center",align: "center",},
-        { field: 'calItemCalDate', headerName: 'Calibration On', width: 200, valueGetter: (params) => dayjs(params.row.calItemCalDate).format('DD-MM-YYYY') ,headerAlign:"center",align: "center",},
-        { field: 'itemDueDate', headerName: 'Next Due On', width: 200, valueGetter: (params) => dayjs(params.row.itemDueDate).format('DD-MM-YYYY') ,headerAlign:"center",align: "center",},
-        { field: 'calStatus', headerName: 'Cal status', width: 200,headerAlign:"center",align: "center", },
+        { field: 'id', headerName: 'Entry. No', width: 100, renderCell: (params) => params.api.getAllRowIds().indexOf(params.id) + 1, headerAlign: "center", align: "center", },
+        ...(employeeRole && employeeRole.employee !== "viewer" ? [{ field: 'editButton', headerAlign: "center", align: "center", headerName: 'Edit', width: 100, renderCell: (params) => <EditRounded color='warning' onClick={() => setCalEditData(params)} /> }] : []),
+        { field: 'calItemEntryDate', headerName: 'Entry Date', width: 200, valueGetter: (params) => dayjs(params.row.calItemEntryDate).format('DD-MM-YYYY'), headerAlign: "center", align: "center", },
+        { field: 'calIMTENo', headerName: 'Item IMTENo', width: 200, headerAlign: "center", align: "center", },
+        { field: 'calItemName', headerName: 'Item Description', width: 200, headerAlign: "center", align: "center", },
+        { field: 'calRangeSize', headerName: 'Range/Size', width: 200, headerAlign: "center", align: "center", },
+        { field: 'calItemCalDate', headerName: 'Calibration On', width: 200, valueGetter: (params) => dayjs(params.row.calItemCalDate).format('DD-MM-YYYY'), headerAlign: "center", align: "center", },
+        { field: 'itemDueDate', headerName: 'Next Due On', width: 200, valueGetter: (params) => dayjs(params.row.itemDueDate).format('DD-MM-YYYY'), headerAlign: "center", align: "center", },
+        { field: 'calStatus', headerName: 'Cal status', width: 200, headerAlign: "center", align: "center", },
+        { field: 'printButton', headerName: 'Print', headerAlign: "center", align: "center", width: 100, renderCell: (params) => <Button onClick={() => { setSelectedRows(params.row); setCalPrintOpen(true) }}><PrintRounded color='success' /></Button> }
 
     ]
 
@@ -169,10 +173,10 @@ const CalList = () => {
     const deleteCal = async () => {
         try {
             const response = await axios.delete(
-                `${process.env.REACT_APP_PORT}/itemCal/deleteItemCal`, {data : {itemCalIds: calListSelectedRowIds}}
+                `${process.env.REACT_APP_PORT}/itemCal/deleteItemCal`, { data: { itemCalIds: calListSelectedRowIds } }
             );
             calListFetchData()
-                console.log("Cal Items Deleted Successfully")
+            console.log("Cal Items Deleted Successfully")
         } catch (err) {
             console.log(err);
         }
@@ -199,7 +203,7 @@ const CalList = () => {
                         elevation={12}
                     >
                         <div className='row g-2 '>
-                            
+
 
                             <div className='col d-flex'>
                                 <div className='col me-2'>
@@ -264,7 +268,7 @@ const CalList = () => {
 
                         <div className='row'>
                             <Box sx={{ height: "75vh", width: '100%', my: 2 }}>
-                                <DataGrid   disableDensitySelector
+                                <DataGrid disableDensitySelector
 
                                     rows={filteredCalData}
                                     columns={calListColumns}
@@ -293,7 +297,7 @@ const CalList = () => {
 
                                     density="compact"
                                     //disableColumnMenu={true}
-                                    
+
                                     checkboxSelection
                                     //onRowClick={handleRowClick}
                                     disableRowSelectionOnClick
@@ -316,33 +320,38 @@ const CalList = () => {
                                 </div>
 
                             </div>
-                            {employeeRole && employeeRole.employee !== "viewer" && 
-                            <div className='col d-flex justify-content-end'>
-                                
-                                <div className='me-2 '>
-                                    <button type="button" className='btn btn-success' onClick={() => setCalAddOpen(true)}>Add</button>
-                                </div>
-                                {calListSelectedRowIds.length !== 0 && <div className='me-2 '>
-                                    <button type="button" className='btn btn-danger' onClick={()=> deleteCal()}>Delete</button>
-                                </div>}
-                               
+                            {employeeRole && employeeRole.employee !== "viewer" &&
+                                <div className='col d-flex justify-content-end'>
 
-                            </div>}
+                                    <div className='me-2 '>
+                                        <button type="button" className='btn btn-success' onClick={() => setCalAddOpen(true)}>Add</button>
+                                    </div>
+                                    {calListSelectedRowIds.length !== 0 && <div className='me-2 '>
+                                        <button type="button" className='btn btn-danger' onClick={() => deleteCal()}>Delete</button>
+                                    </div>}
+
+
+                                </div>}
                         </div>
                     </Paper>
                     {employeeRole && employeeRole.employee !== "viewer" &&
-                    <CalData.Provider
-                        value={{ calAddOpen, setCalAddOpen, itemMasters, activeEmps, calListFetchData }}
-                    >
-                        <CalAddModel />
-                    </CalData.Provider> }
+                        <CalData.Provider
+                            value={{ calAddOpen, setCalAddOpen, itemMasters, activeEmps, calListFetchData }}
+                        >
+                            <CalAddModel />
+                        </CalData.Provider>}
 
                     {employeeRole && employeeRole.employee !== "viewer" &&
+                        <CalData.Provider
+                            value={{ calEditOpen, setCalEditOpen, selectedCalRow, itemMasters, activeEmps, calListFetchData }}
+                        >
+                            {selectedCalRow.length !== 0 && <CalEditModel />}
+                        </CalData.Provider>}
                     <CalData.Provider
-                        value={{ calEditOpen, setCalEditOpen, selectedCalRow, itemMasters, activeEmps, calListFetchData }}
+                        value={{ calPrintOpen, setCalPrintOpen, selectedRows, }}
                     >
-                        {selectedCalRow.length !== 0 && <CalEditModel />}
-                    </CalData.Provider>}
+                        {selectedRows.length !== 0 && <CalPrint />}
+                    </CalData.Provider>
 
 
 

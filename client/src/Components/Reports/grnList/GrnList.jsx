@@ -73,6 +73,22 @@ const GrnList = () => {
 
     })
 
+    const [formatNoData, setFormatNoData] = useState([])
+    const formatFetchData = async () => {
+        try {
+            const response = await axios.get(
+                `${process.env.REACT_APP_PORT}/formatNo/getFormatNoById/1`
+            );
+            const format = response.data.result
+            console.log(format)
+            setFormatNoData(format)
+        } catch (err) {
+            console.log(err);
+        }
+    };
+    useEffect(() => {
+        formatFetchData();
+    }, []);
 
 
     //
@@ -518,9 +534,10 @@ const GrnList = () => {
                                     <GrnAdd />
                                 </GrnListContent.Provider>
                                 <GrnListContent.Provider
-                                    value={{grnPrintOpen, setGrnPrintOpen, selectedRows, grnListFetchData }}
+                                    value={{grnPrintOpen, setGrnPrintOpen, selectedRows,formatNoData }}
                                 >
-                                    <GrnPrint />
+                                      {selectedRows.length !== 0 &&
+                                    <GrnPrint />}
                                 </GrnListContent.Provider>
                             </div>
                         </Paper>
