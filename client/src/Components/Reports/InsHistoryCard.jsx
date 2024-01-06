@@ -28,9 +28,6 @@ function InsHistoryCard() {
         itemCurrentLocation: '',
         itemCalFreInMonths: '',
         itemMake: '',
-        acMinPS: '',
-        acMaxPS: '',
-        acWearLimitPS: '',
         acceptanceCriteria: [],
         calInsName: '',
     });

@@ -88,7 +88,7 @@ const HistoryCardPrint = () => {
             );
         });
     };
-    
+
 
 
     const Footer = ((data) => {
@@ -214,9 +214,18 @@ const HistoryCardPrint = () => {
 
                             <Text>{selectedRow.itemMFRNo}</Text>
                             <Text>{selectedRow.itemModelNo}</Text>
-                            
+
                             <Text>Acceptance{selectedRow.acceptanceCriteria.acMinPS}</Text>
-                            
+                            {
+                                selectedRow.acceptanceCriteria.map(item => (
+                                    <View style={{display: "flex", flexDirection: "row"}}>
+                                        <Text>{item.acMinPS}</Text>
+                                        <Text>{item.acMaxPS}</Text>
+                                        <Text>{item.acWearLimitPS}</Text>
+                                    </View>
+                                ))
+                            }
+
                         </View>
                     </Page>
 
