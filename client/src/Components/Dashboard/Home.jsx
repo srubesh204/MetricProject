@@ -26,7 +26,9 @@ dayjs.extend(isSameOrAfter)
 
 const Home = () => {
 
-  const empRole = useEmployee();
+  const employeeRole = useEmployee();
+
+  const loggedInEmpId = sessionStorage.getItem('empId')
 
   const [itemDistinctNames, setItemDistinctNames] = useState([])
   const [errorhandler, setErrorHandler] = useState({});
@@ -72,37 +74,27 @@ const Home = () => {
   const [departmentName, setDepartmentName] = useState("")
   const [allDepartments, setAllDepartments] = useState([])
 
-  //get all employess
-  // const getAllEmployees = async () => {
-  //   try {
-  //     const Departments = await axios.get(
-  //       `${process.env.REACT_APP_PORT}/employee/getAllEmployees`
-  //     );
-  //     console.log(Departments)
-  //     const defaultDepartment = Departments.data.result.filter((dep) => dep.defaultdep === "yes");
-  //     const otherDepartment = Departments.data.result.filter((dep) => dep.defaultdep === "no")
 
-
-  //     setAllDepartments([...defaultDepartment, ...otherDepartment])
-
-
-
-
-  //   } catch (err) {
-  //     console.log(err);
-  //   }
-  // };
-  //
 
   //allActiveEmployees
-  const [activeEmps, setActiveEmps] = useState([])
+  const [activeEmps, setActiveEmps] = useState({
+    allEmps: [],
+    admins: [],
+    plantAdmins: [],
+    creators: [],
+    viewers: []
+  })
 
   const empFetch = async () => {
     try {
       const response = await axios.get(
         `${process.env.REACT_APP_PORT}/employee/getAllActiveEmployees`
       );
-      setActiveEmps(response.data.result)
+      const admins = response.data.result.filter(emp => emp === "admin")
+      const plantAdmins = response.data.result.filter(emp => emp === "plantAdmin")
+      const creators = response.data.result.filter(emp => emp === "creator")
+      const viewers = response.data.result.filter(emp => emp === "viewer")
+      setActiveEmps((prev) => ({ ...prev, allEmps: response.data.result, admins: admins, plantAdmins: plantAdmins, creators: creators, viewers: viewers }))
     } catch (err) {
       console.log(err);
     }
@@ -170,14 +162,28 @@ const Home = () => {
     }
   };
   console.log(customers)
-  console.log(oems)
+  console.log(employeeRole)
 
-  const itemFetch = async (departments) => {
+  const itemFetch = async () => {
     try {
+      console.log(employeeRole)
       const response = await axios.get(
         `${process.env.REACT_APP_PORT}/itemAdd/getAllItemAdds`
       );
-      const allItems = response.data.result
+
+      // const loggedEmp = activeEmps.allEmps.filter(emp => emp.id === loggedInEmpId)
+      // console.log(loggedEmp)
+
+      const allItems = response.data.result.filter(item => employeeRole.loggedEmp.plant.some(plant => item.itemPlant === plant))
+      console.log(allItems)
+
+      
+      // const allItems = response.data.result.filter(item =>
+      //   loggedEmp.loggedEmp.plant.length !== 0 &&
+      //   loggedEmp.loggedEmp.plant.some(plant => item.itemPlant === plant)
+      // );
+
+      console.log(allItems)
       setPieDataFilter(allItems)
       setFilteredData(allItems)
       // You can use a different logic for generating the id
@@ -584,11 +590,12 @@ const Home = () => {
   };
 
   useEffect(() => {
-    itemFetch(allDepartments);
-
-    getAllDepartments();
-    getVendorsByType();
-    empFetch();
+    
+      itemFetch();
+      getAllDepartments();
+      getVendorsByType();
+      empFetch();
+    
   }, [])
 
 
@@ -694,8 +701,9 @@ const Home = () => {
 
     console.log(newValue, extraName)
     if (newValue === "all") {
+       
       itemFetch()
-      // console.log("working")
+    
     } else {
 
       if (extraName === "itemIMTENo") {
@@ -754,7 +762,9 @@ const Home = () => {
 
           setErrorHandler({ status: response.data.status, message: "Department Changed Successfully", code: "success" })
           setSelectedRows([])
+         
           itemFetch();
+         
 
         }
       }
@@ -816,7 +826,7 @@ const Home = () => {
   const [dcOpen, setDcOpen] = useState(false);
   const [grnOpen, setGrnOpen] = useState(false);
   const [onSiteOpen, setOnSiteOpen] = useState(false);
-  
+
 
   console.log(selectedRows)
 
@@ -876,7 +886,7 @@ const Home = () => {
 
 
         <div className="row gx-3 m-3" >
-          
+
           <div className="col-8 mb-2">
             <Paper sx={{ p: 2 }} elevation={12} className=''>
 
@@ -942,7 +952,9 @@ const Home = () => {
                 alignItems="center"
                 spacing={2}>
                 <TextField select onChange={MainFilter} fullWidth size='small' defaultValue="All" name='plantLocationFilter' label="Plant Location">
-                  <MenuItem value="all">All</MenuItem>
+                  {employeeRole.loggedEmp.length !== 0 && employeeRole.loggedEmp.plant.map(item => (
+                    <MenuItem value={item}>{item}</MenuItem>
+                  ))}
 
                 </TextField>
                 <TextField select onChange={MainFilter} fullWidth size='small' name='employeeFilter' defaultValue="All" label="Employee">
@@ -1104,33 +1116,33 @@ const Home = () => {
                 </PieChart>
 
               </ResponsiveContainer>
-              {empRole && empRole.employee !== "viewer" && 
-              <div className='row mx-2'>
-                <FormControl className='col-md-8 me-2' size='small'>
-                  <InputLabel htmlFor="grouped-select">Select Department</InputLabel>
-                  <Select defaultValue="" id="grouped-select" label="Select Department" onChange={DepartmentChange}>
-                    <ListSubheader color='primary' sx={{ fontSize: "12px" }}>Default Department</ListSubheader>
-                    {allDepartments
-                      .filter(item => item.defaultdep === "yes")
-                      .map((item, index) => (
-                        <MenuItem sx={{ marginLeft: "20px" }} key={index} value={item.department}>
-                          {item.department}
-                        </MenuItem>
-                      ))}
+              {employeeRole && employeeRole.employee !== "viewer" &&
+                <div className='row mx-2'>
+                  <FormControl className='col-md-8 me-2' size='small'>
+                    <InputLabel htmlFor="grouped-select">Select Department</InputLabel>
+                    <Select defaultValue="" id="grouped-select" label="Select Department" onChange={DepartmentChange}>
+                      <ListSubheader color='primary' sx={{ fontSize: "12px" }}>Default Department</ListSubheader>
+                      {allDepartments
+                        .filter(item => item.defaultdep === "yes")
+                        .map((item, index) => (
+                          <MenuItem sx={{ marginLeft: "20px" }} key={index} value={item.department}>
+                            {item.department}
+                          </MenuItem>
+                        ))}
 
-                    <ListSubheader color='primary' sx={{ fontSize: "12px" }}>Other Department</ListSubheader>
-                    {allDepartments
-                      .filter(item => item.defaultdep === "no")
-                      .map((item, index) => (
-                        <MenuItem sx={{ marginLeft: "20px" }} key={index} value={item.department}>
-                          {item.department}
-                        </MenuItem>
-                      ))}
-                  </Select>
-                </FormControl>
-                <Button className='col' size='small' fullWidth variant='contained' onClick={(e) => updateItemData(e)}>Move</Button>
+                      <ListSubheader color='primary' sx={{ fontSize: "12px" }}>Other Department</ListSubheader>
+                      {allDepartments
+                        .filter(item => item.defaultdep === "no")
+                        .map((item, index) => (
+                          <MenuItem sx={{ marginLeft: "20px" }} key={index} value={item.department}>
+                            {item.department}
+                          </MenuItem>
+                        ))}
+                    </Select>
+                  </FormControl>
+                  <Button className='col' size='small' fullWidth variant='contained' onClick={(e) => updateItemData(e)}>Move</Button>
 
-              </div>}
+                </div>}
 
             </Paper>
           </div>
@@ -1141,7 +1153,7 @@ const Home = () => {
             <Paper sx={{ p: 2, }} elevation={12}>
               <Box sx={{ height: 400, mb: 2 }}>
                 <DataGrid
-                  density='compact'    disableDensitySelector
+                  density='compact' disableDensitySelector
                   rows={filteredData}
                   columns={ItemListColumns}
                   getRowId={(row) => row._id}
@@ -1173,7 +1185,7 @@ const Home = () => {
 
                 />
               </Box>
-              {empRole.employee && empRole.employee !== "viewer" &&
+              {employeeRole.employee && employeeRole.employee !== "viewer" &&
                 <div className="row">
 
                   <div className="col-md-9">
@@ -1282,11 +1294,11 @@ const Home = () => {
                 <Button component={Link} to="/" variant='contained' startIcon={<ArrowBack />} endIcon={<House />} color='secondary'>Home</Button>
               </div>
             </Paper>
-            {empRole && empRole !== "viewer" &&
+            {employeeRole && employeeRole !== "viewer" &&
               <React.Fragment>
 
                 <HomeContent.Provider
-                  value={{ calOpen, setCalOpen, selectedRows, itemMasters, activeEmps }}
+                  value={{ calOpen, setCalOpen, selectedRows, itemMasters, activeEmps: activeEmps.allEmps }}
                 >
                   <CalDialog />
                 </HomeContent.Provider>
@@ -1303,7 +1315,7 @@ const Home = () => {
                 </HomeContent.Provider>
 
                 <HomeContent.Provider
-                  value={{ onSiteOpen, setOnSiteOpen, selectedRows  }}
+                  value={{ onSiteOpen, setOnSiteOpen, selectedRows }}
                 >
                   <OnSiteDialog />
                 </HomeContent.Provider>

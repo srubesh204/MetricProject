@@ -244,7 +244,35 @@ const employeeController = {
       console.error('Error uploading Excel data:', error);
       res.status(500).json({ error: 'Internal Server Error' });
     }
-  }
+  },
+  updateEmployeePlantDetails: async (req, res) => {
+    try {
+      // Assuming desId is part of the URL parameter
+
+      
+      // if (isNaN(desId)) {
+      //   return res.status(400).json({ error: 'Invalid desId value' });
+      // }
+     
+      
+     
+      console.log("ItemAdd Updated Successfully")
+      res.status(200).json({ result: updatedItems, message: "ItemAdd Updated Successfully" });
+    } catch (error) {
+      console.log(error);
+      if (error.code === 11000) {
+        console.log(error)
+        return res.status(500).json({ error: 'Duplicate Value Not Accepted' });
+
+      }
+      const errors500 = {};
+      for (const key in error.errors) {
+        errors500[key] = error.errors[key].message;
+      }
+      console.log(error)
+      res.status(500).json({ error: error, status: 0 });
+    }
+  },
 
   
 

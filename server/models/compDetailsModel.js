@@ -20,8 +20,14 @@ const plantSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: 'compDetails', // Reference to the compDetailsSchema model
   },
-  plantName: String,
-  plantAddress: String,
+  plantName: {
+    type: String,
+    required: [true, "Plant Name required"]
+  },
+  plantAddress: {
+    type: String,
+    required: [true, "Plant Address required"]
+  },
   admins: [],
   plantAdmins: [],
   creators: [],

@@ -531,7 +531,30 @@ const itemAddController = {
       console.error('Error uploading Excel data:', error);
       res.status(500).json({ error: 'Internal Server Error' });
     }
-  }
+  },
+  getItemAddByPlant: async (req, res) => {
+    try {
+       // Assuming desId is part of the URL parameter
+      // if (isNaN(desId)) {
+      // Find the designation by desId and update it
+      console.log(req.body)
+
+      // const employeesToRemove = await itemAddModel.find({ _id: { $in: plantEmployees } });
+      // const getItemAddById = await itemAddModel.findOne(
+      //   { _id: itemAddId }// To return the updated document
+      // );
+
+      // if (!getItemAddById) {
+      //   return res.status(404).json({ error: 'Item Add not found' });
+      // }
+      console.log("Item Master Get Successfully")
+      res.status(200).json({ result: "success", message: "Item Master get Successfully" });
+    } catch (error) {
+      console.log(error);
+      res.status(500).json({ error: error, status: 0 });
+    }
+  },
+
 
   
 
