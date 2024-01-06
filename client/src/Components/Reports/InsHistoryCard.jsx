@@ -161,8 +161,8 @@ function InsHistoryCard() {
         { field: 'calItemDueDate', headerName: 'Next calibration Date', width: 150, valueGetter: (params) => dayjs(params.row.calItemDueDate).format('DD-MM-YYYY') },
         { field: 'col5', headerName: 'Certificate Status', width: 150 },
         { field: 'calCertificateNo', headerName: 'Certificate No', width: 150 },
-        { field: 'col7', headerName: 'Observed Size 1', width: 150 },
-        { field: 'itemCalibratedAt', headerName: 'Calibrated At', width: 150 },
+        { field: 'acAverageOB', headerName: 'Observed Size 1', width: 150 },
+        { field: 'itemCalibrationSource', headerName: 'Calibrated At', width: 150 },
     ];
 
     const handlePrintClick = () => {
