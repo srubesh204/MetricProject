@@ -65,7 +65,9 @@ const itemAddController = {
         acAverageOB,
         acOBError,
         acMinPSError,
-        acMaxPSError, // Assuming createdAt is part of the request body
+        acMaxPSError,
+        createdBy,
+        updatedBy // Assuming createdAt is part of the request body
       } = req.body;
   
       const newItemFields = {
@@ -118,6 +120,8 @@ const itemAddController = {
         acOBError,
         acMinPSError,
         acMaxPSError,
+        createdBy,
+        updatedBy
       };
   
       const newItem = new itemAddModel(newItemFields);
@@ -219,7 +223,7 @@ const itemAddController = {
         } = req.body;
       // Create an object with the fields you want to update
       const updateItemFields = {
-         itemMasterRef,
+        itemMasterRef,
         selectedItemMaster,
         isItemMaster,
         itemAddMasterName,
@@ -238,7 +242,6 @@ const itemAddController = {
         itemDepartment,
         itemCurrentLocation,
         itemLastLocation,
-        itemDcLocation: "department",
         itemArea,
         itemPlaceOfUsage,
         itemCalFreInMonths,
@@ -269,7 +272,6 @@ const itemAddController = {
         acOBError,
         acMinPSError,
         acMaxPSError,
-        itemLocation: "department"
       };
 
       // Find the designation by desId and update it
@@ -529,7 +531,30 @@ const itemAddController = {
       console.error('Error uploading Excel data:', error);
       res.status(500).json({ error: 'Internal Server Error' });
     }
-  }
+  },
+  getItemAddByPlant: async (req, res) => {
+    try {
+       // Assuming desId is part of the URL parameter
+      // if (isNaN(desId)) {
+      // Find the designation by desId and update it
+      console.log(req.body)
+
+      // const employeesToRemove = await itemAddModel.find({ _id: { $in: plantEmployees } });
+      // const getItemAddById = await itemAddModel.findOne(
+      //   { _id: itemAddId }// To return the updated document
+      // );
+
+      // if (!getItemAddById) {
+      //   return res.status(404).json({ error: 'Item Add not found' });
+      // }
+      console.log("Item Master Get Successfully")
+      res.status(200).json({ result: "success", message: "Item Master get Successfully" });
+    } catch (error) {
+      console.log(error);
+      res.status(500).json({ error: error, status: 0 });
+    }
+  },
+
 
   
 

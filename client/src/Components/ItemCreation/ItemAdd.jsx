@@ -539,6 +539,7 @@ const ItemAdd = () => {
         tempErrors.itemCalAlertDays = itemAddData.itemCalAlertDays ? "" : "Cal Alert Days is Required"
         tempErrors.itemCalDate = itemAddData.itemCalDate ? "" : "Calibration Date is Required"
         tempErrors.itemDueDate = itemAddData.itemDueDate ? "" : "Due Date is Required"
+        tempErrors.itemDepartment = itemAddData.itemDepartment ? "" : "Department is Required"
 
         if (itemAddData.itemCalDate !== "") {
             tempErrors.itemCalDate = ""
@@ -867,7 +868,9 @@ const ItemAdd = () => {
                                 </Typography>
                                 <div className="row g-1 mt-0 mb-2">
                                     <div className="col me-1">
-                                        <TextField value={itemAddData.itemDepartment} onChange={handleItemAddChange} size='small' select fullWidth variant='outlined' label="Department" name='itemDepartment' id='itemDepartmentId'>
+                                        <TextField
+                                                {...(errors.itemDepartment !== "" && { helperText: errors.itemDepartment, error: true })}
+                                                 value={itemAddData.itemDepartment} onChange={handleItemAddChange} size='small' select fullWidth variant='outlined' label="Department" name='itemDepartment' id='itemDepartmentId'>
                                             {departments.map((item, index) => (
                                                 <MenuItem key={index} value={item.department}>{item.department}</MenuItem>
                                             ))}

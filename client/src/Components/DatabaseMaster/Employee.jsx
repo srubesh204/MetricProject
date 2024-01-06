@@ -52,6 +52,8 @@ const Employee = () => {
         empFetch();
     }, []);
 
+    
+
     const [employeeSelectedRowIds, setEmployeeSelectedRowIds] = useState([]);
 
     const employeeColumns = [

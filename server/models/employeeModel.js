@@ -48,7 +48,7 @@ const employeeSchema = new mongoose.Schema({
         unique: [true, "Password should be unique"]
     },
     plant: {
-        type: String,
+        type: [],
         required: [true, "Please select plant"]
     },
     extraPermissions : []
