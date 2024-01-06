@@ -40,6 +40,7 @@ import AccessDenied from './Components/ErrorComponents/AccessDenied';
 import axios from 'axios';
 import RubeshTest from './Components/Test/RubeshTest';
 import DcPrint from './Components/Reports/dcList/DcPrint';
+import TotalList from './Components/Reports/TotalList';
 import { Backdrop, CircularProgress } from '@mui/material';
 export const empRole = createContext(null);
 
@@ -91,6 +92,7 @@ const generateRoutes = (employee) => {
     { path: "/onSiteEditGrn", element: <OnSiteEditGrn /> },
     { path: "/onSiteDialog", element: <OnSiteDialog /> },
     { path: "/roles", element: <Roles /> },
+    { path: "/totalList", element: <TotalList /> },
 
     // Add more common routes...
   ];

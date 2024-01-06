@@ -6,7 +6,7 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { TextField, MenuItem, Button, Link, Box } from '@mui/material';
 import { DataGrid, GridToolbar } from '@mui/x-data-grid';
 import { Paper } from '@mui/material';
-import { Edit } from '@mui/icons-material';
+import { Edit,PrintRounded } from '@mui/icons-material';
 import AddIcon from '@mui/icons-material/Add';
 import GrnEdit from './GrnEdit';
 import Dialog from '@mui/material/Dialog';
@@ -17,9 +17,11 @@ import DialogTitle from '@mui/material/DialogTitle';
 import Snackbar from '@mui/material/Snackbar';
 import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
 import GrnAdd from './GrnAdd';
+
 import Alert from '@mui/material/Alert';
 import dayjs from 'dayjs';
 import { useEmployee } from '../../../App';
+import GrnPrint from './GrnPrint';
 export const GrnListContent = createContext(null);
 
 const GrnList = () => {
@@ -29,6 +31,7 @@ const GrnList = () => {
     const [selectedRows, setSelectedRows] = useState([]);
     const [grnEditOpen, setGrnEditOpen] = useState(false);
     const [grnOpen, setGrnOpen] = useState(false);
+    const [grnPrintOpen, setGrnPrintOpen] = useState(false);
 
 
     const handleSnackClose = (event, reason) => {
@@ -70,6 +73,22 @@ const GrnList = () => {
 
     })
 
+    const [formatNoData, setFormatNoData] = useState([])
+    const formatFetchData = async () => {
+        try {
+            const response = await axios.get(
+                `${process.env.REACT_APP_PORT}/formatNo/getFormatNoById/1`
+            );
+            const format = response.data.result
+            console.log(format)
+            setFormatNoData(format)
+        } catch (err) {
+            console.log(err);
+        }
+    };
+    useEffect(() => {
+        formatFetchData();
+    }, []);
 
 
     //
@@ -96,6 +115,7 @@ const GrnList = () => {
         { field: 'grnNo', headerName: 'Grn No', width: 200,headerAlign:"center",align: "center", },
         { field: 'grnDate', headerName: 'Grn Date', width: 200 ,headerAlign:"center",align: "center",},
         { field: 'grnPartyName', headerName: 'Party Name', width: 300,headerAlign:"center",align: "center", },
+        { field: 'printButton', headerName: 'Print', headerAlign: "center", align: "center", width: 100, renderCell: (params) => <Button onClick={() => { setSelectedRows(params.row); setGrnPrintOpen(true) }}><PrintRounded color='success' /></Button> }
     ]
 
 
@@ -512,6 +532,12 @@ const GrnList = () => {
                                     value={{ grnOpen, setGrnOpen, selectedRows, grnListFetchData }}
                                 >
                                     <GrnAdd />
+                                </GrnListContent.Provider>
+                                <GrnListContent.Provider
+                                    value={{grnPrintOpen, setGrnPrintOpen, selectedRows,formatNoData }}
+                                >
+                                      {selectedRows.length !== 0 &&
+                                    <GrnPrint />}
                                 </GrnListContent.Provider>
                             </div>
                         </Paper>
