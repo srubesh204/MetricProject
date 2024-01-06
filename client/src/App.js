@@ -40,6 +40,7 @@ import AccessDenied from './Components/ErrorComponents/AccessDenied';
 import axios from 'axios';
 import RubeshTest from './Components/Test/RubeshTest';
 import DcPrint from './Components/Reports/dcList/DcPrint';
+import { Backdrop, CircularProgress } from '@mui/material';
 export const empRole = createContext(null);
 
 
@@ -58,8 +59,8 @@ export const EmployeeProvider = ({ children, employee }) => {
 };
 
 const roleAccessRules = {
-  admin: ['/home', "/desdep", "/general", "/vendor", "/itemMaster", "/itemadd", "/itemEdit/:id", "/itemList", "/grnList", "/calList", "/onSiteList", '/roles',"/employee", '/test', '/rubyTest', '/dcPrint'],
-  plantAdmin: ['/home', "/desdep", "/general", "/vendor", "/itemMaster", "/itemadd", "/itemEdit/:id", "/itemList", "/grnList", "/calList", "/onSiteList", '/roles',"/employee", '/rubyTest', '/dcPrint', '/dcList'],
+  admin: ['/home', "/desdep", "/general", "/vendor", "/itemMaster", "/itemadd", "/itemEdit/:id", "/itemList", "/grnList", "/calList", "/onSiteList", '/roles', "/employee", '/test', '/rubyTest', '/dcPrint'],
+  plantAdmin: ['/home', "/desdep", "/general", "/vendor", "/itemMaster", "/itemadd", "/itemEdit/:id", "/itemList", "/grnList", "/calList", "/onSiteList", '/roles', "/employee", '/rubyTest', '/dcPrint', '/dcList'],
   creator: ['/home', '/itemList', '/itemadd', '/itemedit/:id', "/grnList", "/calList", "/onSiteList", '/dcPrint'],
   viewer: ['/itemList', '/home', '/dcPrint'],
 };
@@ -75,7 +76,7 @@ const generateRoutes = (employee) => {
     { path: "/vendor", element: <Vendor /> },
     { path: "/itemMaster", element: <ItemMaster /> },
     { path: "/itemadd", element: <ItemAdd /> },
-    { path: "/itemedit/:id", element: <ItemEdit /> },
+    { path: "/itemEdit/:id", element: <ItemEdit /> },
     { path: "/itemList", element: <ItemList /> },
     { path: "/test", element: <FileViewer /> },
     { path: "/rubyTest", element: <RubeshTest /> },
@@ -127,57 +128,77 @@ const PrivateRoute = ({ element: Element, employee, ...rest }) => {
 
 
 function App() {
+  const [loggedEmp, setLoggedEmp] = useState([]);
+  const [isLoggedIn, setIsLoggedIn] = useState(sessionStorage.getItem('loggedIn'));
+  const [employee, setEmployee] = useState(sessionStorage.getItem('employee'));
+  const [empId, setEmpId] = useState(sessionStorage.getItem('empId'));
+  const [isEmployeeLoaded, setIsEmployeeLoaded] = useState(false);
 
-  const [loggedEmp, setLoggedEmp] = useState([])
-  // Custom function to render the PrivateRoute component
-  const isLoggedIn = sessionStorage.getItem('loggedIn'); // Retrieve session storage data
-  const employee = sessionStorage.getItem('employee');
-  const empId = sessionStorage.getItem('empId')
-  console.log(empId)
-
-  
   useEffect(() => {
     const fetchEmployeeData = async () => {
       try {
         const response = await axios.get(
           `${process.env.REACT_APP_PORT}/employee/getEmployeeById/${empId}`
         );
+        console.log(response.data.result)
         setLoggedEmp(response.data.result);
+        setIsEmployeeLoaded(true); // Set the flag to indicate employee data is loaded
       } catch (err) {
         console.log(err);
       }
     };
 
-    if (empId) {
+    // Check if logged in and empId exist, then fetch employee data
+    if (isLoggedIn && empId) {
       fetchEmployeeData();
     }
-  }, [empId]);
-  
+  }, [isLoggedIn, empId]);
 
+  // This effect watches for changes in isLoggedIn state
+  // If logged in status changes, update the state
+  useEffect(() => {
+    setIsLoggedIn(sessionStorage.getItem('loggedIn'));
+  }, [isLoggedIn]);
 
-  console.log(isLoggedIn, employee, loggedEmp)
-  const location = useLocation();
+  // Function to handle successful login
+  const handleLoginSuccess = () => {
+    // Set isLoggedIn, employee, and empId from sessionStorage after successful login
+    setIsLoggedIn(sessionStorage.getItem('loggedIn'));
+    setEmployee(sessionStorage.getItem('employee'));
+    setEmpId(sessionStorage.getItem('empId'));
+  };
 
-  console.log('hash', location.hash);
-  console.log(location.pathname);
-  console.log('search', location.search);
-
-
+  console.log(loggedEmp)
 
   return (
     <div className="App">
-
-      <EmployeeProvider employee={{employee, loggedEmp}}>
-        {/* {fullList.includes(location.pathname) ? "":""} */}
-        {/* <Dashboard /> */}
-
+      <EmployeeProvider employee={{ employee, loggedEmp }}>
         <Routes>
-          <Route path="/" element={isLoggedIn ? <Dashboard /> : <Navigate to="/login" />} />
+          <Route
+            path="/"
+            element={isLoggedIn ? <Dashboard /> : <Navigate to="/login" />}
+          />
           <Route
             path="/*"
-            element={<PrivateRoute employee={employee} />}
+            element={
+              isEmployeeLoaded ? (
+                <PrivateRoute employee={employee} />
+              ) : (
+                <Backdrop
+                  style={{ zIndex: 1000 }}
+                  open={!isEmployeeLoaded}
+                >
+                  <div class="spinner-border text-light" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                  </div>
+                </Backdrop>
+              )
+            }
           />
-          <Route path="/login" element={isLoggedIn ? <Navigate to="/" /> : <Login />} />
+          <Route
+            path="/login"
+            element={<Login onLoginSuccess={handleLoginSuccess} />}
+          />
           <Route path="/accessDenied" element={<AccessDenied />} />
         </Routes>
       </EmployeeProvider>
@@ -186,3 +207,4 @@ function App() {
 }
 
 export default App;
+

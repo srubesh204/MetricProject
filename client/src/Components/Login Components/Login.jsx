@@ -21,7 +21,7 @@ import { useNavigate } from 'react-router-dom';
 
 const defaultTheme = createTheme();
 
-export default function Login() {
+export default function Login(props) {
   const navigate = useNavigate()
   const [loginData, setLoginData] = React.useState({
     employeeCode: "",
@@ -45,6 +45,9 @@ export default function Login() {
       sessionStorage.setItem('empId', response.data.employee._id);
       sessionStorage.setItem('loggedIn', true);
       console.log(response)
+      if (props.onLoginSuccess) {
+        props.onLoginSuccess();
+      }
       navigate("/")
     } catch (err) {
       console.log(err)

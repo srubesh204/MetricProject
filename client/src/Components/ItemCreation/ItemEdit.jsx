@@ -237,7 +237,9 @@ const ItemEdit = () => {
                 acMaxPSError: "",
             }
         ],
-        itemUncertainity: ""
+        itemUncertainity: "",
+        createdBy: "",
+        updatedBy: ""
     }
 
 
@@ -292,7 +294,9 @@ const ItemEdit = () => {
                 acMaxPSError: "",
             }
         ],
-        itemUncertainity: ""
+        itemUncertainity: "",
+        createdBy: "",
+        updatedBy: ""
     })
 
 
@@ -309,6 +313,7 @@ const ItemEdit = () => {
                 selectedItemMaster: itemData.selectedItemMaster,
                 itemAddMasterName: itemData.itemAddMasterName,
                 itemIMTENo: itemData.itemIMTENo,
+                isItemMaster: itemData.isItemMaster,
                 itemImage: itemData.itemImage,
                 itemType: itemData.itemType,
                 itemRangeSize: itemData.itemRangeSize,
@@ -407,13 +412,13 @@ const ItemEdit = () => {
             previousItemRangeSizeUnit: prevData.itemRangeSizeUnit, // Store the previous value
         }));*/}
 
-        if(name === "itemDepartment"){
-          
+        if (name === "itemDepartment") {
+
             setItemAddData((prev) => ({
                 ...prev,
                 [name]: value,
                 itemCurrentLocation: value, // Ensure 'value' is correct here
-              }));
+            }));
         }
         const selectedIndex = itemAddData.itemPartName.indexOf(value);
         let updatedValues = [...itemAddData.itemPartName];
@@ -452,7 +457,7 @@ const ItemEdit = () => {
 
 
         }
-        if(name === "itemCalDate"){
+        if (name === "itemCalDate") {
             const parsedDate = dayjs(itemAddData.itemCalDate);
             if (parsedDate.isValid() && !isNaN(parseInt(itemAddData.itemCalFreInMonths))) {
                 const calculatedDate = parsedDate.add(parseInt(itemAddData.itemCalFreInMonths, 10), 'month').subtract(1, 'day');
@@ -516,13 +521,13 @@ const ItemEdit = () => {
         setItemAddData({ ...itemAddData, itemPartName: newSelected });
     };*/}
 
-    useEffect(()=> {
+    useEffect(() => {
         setItemAddData((prev) => ({
             ...prev,
-            
+
             itemCurrentLocation: itemAddData.itemDepartment, // Ensure 'value' is correct here
-          }));
-    },[itemAddData.itemDepartment])
+        }));
+    }, [itemAddData.itemDepartment])
 
 
 
@@ -560,8 +565,8 @@ const ItemEdit = () => {
 
 
 
-   console.log(itemAddData)
-   const [calibrationPointsData, setCalibrationPointsData] = useState([])
+    console.log(itemAddData)
+    const [calibrationPointsData, setCalibrationPointsData] = useState([])
     const itemMasterById = async () => {
         try {
             const response = await axios.get(
@@ -571,7 +576,7 @@ const ItemEdit = () => {
             const { _id, itemType, itemDescription, itemPrefix, itemFqInMonths, calAlertInDay, wiNo, uncertainity, standartRef, itemImageName, status, itemMasterImage, workInsName, calibrationPoints } = response.data.result
             setItemAddData((prev) => ({
                 ...prev,
-                
+
                 itemType: itemType,
                 itemImage: itemMasterImage,
                 itemAddMasterName: itemDescription,
@@ -727,19 +732,19 @@ const ItemEdit = () => {
     const navigate = useNavigate();
 
 
-    
-        //validate function 
-        const [errors, setErrors] = useState({})
-    
-        const validateFunction = () => {
-            let tempErrors = {};
-            tempErrors.itemMasterRef = itemAddData.itemMasterRef ? "" : "Item Master is Required"
-    
-            setErrors({ ...tempErrors })
-    
-            return Object.values(tempErrors).every(x => x === "")
-        }
-        console.log(errors)
+
+    //validate function 
+    const [errors, setErrors] = useState({})
+
+    const validateFunction = () => {
+        let tempErrors = {};
+        tempErrors.itemMasterRef = itemAddData.itemMasterRef ? "" : "Item Master is Required"
+
+        setErrors({ ...tempErrors })
+
+        return Object.values(tempErrors).every(x => x === "")
+    }
+    console.log(errors)
 
 
     const updateItemData = async (e) => {
@@ -857,12 +862,12 @@ const ItemEdit = () => {
 
 
 
-   
+
 
 
 
     const calculateResultDate = (newValue) => {
-        const itemCalDate = dayjs(newValue).format('YYYY-MM-DD') 
+        const itemCalDate = dayjs(newValue).format('YYYY-MM-DD')
         const parsedDate = dayjs(itemCalDate);
         if (parsedDate.isValid() && !isNaN(parseInt(itemAddData.itemCalFreInMonths))) {
             const calculatedDate = parsedDate.add(parseInt(itemAddData.itemCalFreInMonths, 10), 'month').subtract(1, 'day');
@@ -874,7 +879,7 @@ const ItemEdit = () => {
         }
     };
 
-    
+
 
     return (
         <div style={{ margin: "2rem", backgroundColor: "#f5f5f5" }}>
@@ -885,8 +890,8 @@ const ItemEdit = () => {
 
                             <div className='col-9'>
                                 <TextField
-                                        {...(errors.itemMasterRef !== "" && { helperText: errors.itemMasterRef, error: true })}
-                                         size='small' select variant='outlined' label="Item Master" name='itemMasterRef' value={itemAddData.itemMasterRef} fullWidth onChange={handleItemAddChange}>
+                                    {...(errors.itemMasterRef !== "" && { helperText: errors.itemMasterRef, error: true })}
+                                    size='small' select variant='outlined' label="Item Master" name='itemMasterRef' value={itemAddData.itemMasterRef} fullWidth onChange={handleItemAddChange}>
                                     <MenuItem value=""><em>Select</em></MenuItem>
                                     {itemMasterDataList.map((item, index) => (
                                         <MenuItem key={index} value={item._id}>{item.itemDescription}</MenuItem>
@@ -909,7 +914,7 @@ const ItemEdit = () => {
                             </div>
                             <div className="col">
                                 <FormControlLabel
-                                    control={<Checkbox name='isItemMaster' onChange={handleItemAddChange} />}
+                                    control={<Checkbox name='isItemMaster' checked={itemAddData.isItemMaster === "1"} onChange={handleItemAddChange} />}
                                     label="Use as Master"
                                 />
 
@@ -969,7 +974,7 @@ const ItemEdit = () => {
                                         {itemAddData.itemType === "variable" && <TextField size='small' variant='outlined' name='itemLC' onChange={handleItemAddChange} id="itemLCId" value={itemAddData.itemLC} label="Least Count" fullWidth />}
 
 
-                                        {itemAddData.itemType === "variable" &&  <TextField select size='small' variant='outlined' label="Unit" name='itemLCUnit' onChange={handleItemAddChange} value={itemAddData.itemLCUnit} style={{ width: "100%" }} >
+                                        {itemAddData.itemType === "variable" && <TextField select size='small' variant='outlined' label="Unit" name='itemLCUnit' onChange={handleItemAddChange} value={itemAddData.itemLCUnit} style={{ width: "100%" }} >
                                             <MenuItem value=""><em>None</em></MenuItem>
                                             {units.map((unit, index) => (
                                                 <MenuItem key={index} value={unit.unitName}>{unit.unitName}</MenuItem>
@@ -1020,26 +1025,31 @@ const ItemEdit = () => {
                                 <Typography variant='h6' className='text-center'>
                                     Select Location
                                 </Typography>
-                                <div className="row g-1 mt-0 mb-2">
-                                    <div className="col me-1">
+                                <div className="row g-2 mt-0 mb-2">
+                                    <div className="col-md-6 ">
                                         <TextField value={itemAddData.itemDepartment} onChange={handleItemAddChange} size='small' select fullWidth variant='outlined' label="Department" name='itemDepartment' id='itemDepartmentId'>
                                             {departments.map((item, index) => (
                                                 <MenuItem key={index} value={item.department}>{item.department}</MenuItem>
                                             ))}
                                         </TextField>
                                     </div>
-                                    <div className="col">
+                                    <div className="col-md-6">
                                         <TextField size='small' onChange={handleItemAddChange} value={itemAddData.itemArea} select fullWidth variant='outlined' label="Area" name='itemArea' id='itemAreaId'>
                                             {areas.map((item, index) => (
                                                 <MenuItem key={index} value={item.area}>{item.area}</MenuItem>
                                             ))}
                                         </TextField>
                                     </div>
-                                    <div className='mt-2'>
+                                    <div className='col-md-6'>
                                         <TextField size='small' onChange={handleItemAddChange} value={itemAddData.itemPlaceOfUsage} select fullWidth variant='outlined' label="Place" name='itemPlaceOfUsage' id='itemPlaceOfUsageId'>
                                             {placeOfUsages.map((item, index) => (
                                                 <MenuItem key={index} value={item.placeOfUsage}>{item.placeOfUsage}</MenuItem>
                                             ))}
+                                        </TextField>
+                                    </div>
+                                    <div className='col-md-6 '>
+                                        <TextField size='small' disabled value={itemAddData.createdByName} fullWidth variant='outlined' label="Created By" name='createdByName' id='createdByNameId'>
+
                                         </TextField>
                                     </div>
 
@@ -1310,7 +1320,7 @@ const ItemEdit = () => {
                                             id="itemCalDateId"
                                             name="itemCalDate"
                                             value={dayjs(itemAddData.itemCalDate)}
-                                            onChange={(newValue)=> calculateResultDate(newValue)}
+                                            onChange={(newValue) => calculateResultDate(newValue)}
                                             label="Calibration Date"
 
                                             slotProps={{ textField: { size: 'small' } }}
@@ -1364,7 +1374,7 @@ const ItemEdit = () => {
                                 </div>
 
                             </Paper >
-                            {(itemAddData.isItemMaster === "0" && itemAddData.itemType !== "referenceStandard") &&  <Paper className='row-6-lg' elevation={12} sx={{ p: 2, mt: 2, height: "inherit" }} >
+                            {(itemAddData.isItemMaster === "0" && itemAddData.itemType !== "referenceStandard") && <Paper className='row-6-lg' elevation={12} sx={{ p: 2, mt: 2, height: "inherit" }} >
 
                                 <h5 className='text-center'>Part</h5>
                                 <div className="row">
@@ -1457,12 +1467,12 @@ const ItemEdit = () => {
                                         {itemAddData.acceptanceCriteria.map((item, index) => (
                                             <tr key={index}>
                                                 <td>
-                                                <select className='form-select form-select-sm' id="acParameterId" name="acParameter" value={item.acParameter} onChange={(e) => changeACValue(index, e.target.name, e.target.value)}>
-                                                    <option value="">-Select-</option>
-                                                    {calibrationPointsData.map((item, idx) => (
-                                                        <option key={idx}>{item.calibrationPoint}</option>
-                                                    ))}
-                                                </select></td>
+                                                    <select className='form-select form-select-sm' id="acParameterId" name="acParameter" value={item.acParameter} onChange={(e) => changeACValue(index, e.target.name, e.target.value)}>
+                                                        <option value="">-Select-</option>
+                                                        {calibrationPointsData.map((item, idx) => (
+                                                            <option key={idx}>{item.calibrationPoint}</option>
+                                                        ))}
+                                                    </select></td>
                                                 <td><input type="text" className='form-control form-control-sm' id="acNominalSizeId" name="acNominalSize" value={item.acNominalSize} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} /></td>
                                                 <td> <select className="form-select form-select-sm" id="acNominalSizeUnitId" name="acNominalSizeUnit" value={item.acNominalSizeUnit} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} >
                                                     <option value="">-Select-</option>
