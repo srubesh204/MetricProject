@@ -1386,13 +1386,12 @@ const ItemEdit = () => {
                                             value={itemAddData.itemPartName}
                                             onChange={handleItemAddChange}
                                             input={<OutlinedInput fullWidth label="Select Part" />}
-                                            renderValue={(selected) => selected.map(item => item.partName).join(", ")}
-                                            MenuProps={MenuProps}
+                                            renderValue={(selected) => selected.map(item => partData.find(part => part._id === item).partName).join(", ")} MenuProps={MenuProps}
                                             fullWidth
                                         >
                                             {partData.map((name, index) => (
-                                                <MenuItem key={index} value={name}>
-                                                    <Checkbox checked={itemAddData.itemPartName.indexOf(name) > -1} />
+                                                <MenuItem key={index} value={name._id}>
+                                                    <Checkbox checked={itemAddData.itemPartName.indexOf(name._id) > -1} /> {/* Check if the item is selected */}
                                                     <ListItemText primary={name.partName} />
                                                 </MenuItem>
                                             ))}
