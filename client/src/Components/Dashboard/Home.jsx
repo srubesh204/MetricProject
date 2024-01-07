@@ -47,7 +47,7 @@ const Home = () => {
 
 
   //Vendor Type state
-  const [customers, setCustomers] = useState([{ aliasName: "all" }])
+  const [customers, setCustomers] = useState([{ aliasName: "All" }])
   const [suppliers, setSuppliers] = useState([])
   const [subContractors, setSubContractors] = useState([])
   const [oems, setOems] = useState([])
@@ -82,7 +82,7 @@ const Home = () => {
     admins: [],
     plantAdmins: [],
     creators: [],
-    viewers: []
+    viewers: [],
   })
 
   const empFetch = async () => {
@@ -94,7 +94,12 @@ const Home = () => {
       const plantAdmins = response.data.result.filter(emp => emp === "plantAdmin")
       const creators = response.data.result.filter(emp => emp === "creator")
       const viewers = response.data.result.filter(emp => emp === "viewer")
+
+      const plantEmp = response.data.result.filter(emp =>
+        emp.plant.some(plant => employeeRole.loggedEmp.plant.includes(plant))
+      );
       setActiveEmps((prev) => ({ ...prev, allEmps: response.data.result, admins: admins, plantAdmins: plantAdmins, creators: creators, viewers: viewers }))
+      setPlantEmployees(plantEmp)
     } catch (err) {
       console.log(err);
     }
@@ -148,7 +153,7 @@ const Home = () => {
       );
       console.log(getAllVendorWithTypes)
       setCustomers([
-        { aliasName: "all" },
+        { aliasName: "All" },
         ...getAllVendorWithTypes.data.result.customers.map(customer => ({ ...customer }))
       ]);
 
@@ -170,18 +175,24 @@ const Home = () => {
       const response = await axios.get(
         `${process.env.REACT_APP_PORT}/itemAdd/getAllItemAdds`
       );
+      let allItems = []
+      if (employeeRole.employee === "admin") {
+        allItems = response.data.result.filter(item => employeeRole.loggedEmp.plant.some(plant => item.itemPlant === plant))
+        console.log(allItems)
+      } else if (employeeRole.employee === "plantAdmin") {
+        allItems = response.data.result.filter(item => employeeRole.loggedEmp.plant.some(plant => item.itemPlant === plant))
+        console.log(allItems)
+      } else if (employeeRole.employee === "creator") {
+        allItems = response.data.result.filter(item => employeeRole.loggedEmp.plant.some(plant => item.itemPlant === plant))
+        console.log(allItems)
+      } else if (employeeRole.employee === "viewer") {
+        allItems = response.data.result.filter(item => employeeRole.loggedEmp.plant.some(plant => item.itemPlant === plant))
+        console.log(allItems)
+      } else {
+        allItems = response.data.result
+      }
 
-      // const loggedEmp = activeEmps.allEmps.filter(emp => emp.id === loggedInEmpId)
-      // console.log(loggedEmp)
 
-      const allItems = response.data.result.filter(item => employeeRole.loggedEmp.plant.some(plant => item.itemPlant === plant))
-      console.log(allItems)
-
-      
-      // const allItems = response.data.result.filter(item =>
-      //   loggedEmp.loggedEmp.plant.length !== 0 &&
-      //   loggedEmp.loggedEmp.plant.some(plant => item.itemPlant === plant)
-      // );
 
       console.log(allItems)
       setPieDataFilter(allItems)
@@ -192,7 +203,7 @@ const Home = () => {
       setItemList(allItems);
       const masterItems = allItems.filter((item) => item.isItemMaster === "1")
       setItemMasters(masterItems)
-      setItemListOptions([{ itemIMTENo: "all" }, ...allItems])
+      setItemListOptions([{ itemIMTENo: "All" }, ...allItems])
 
       console.log(itemList)
 
@@ -590,12 +601,12 @@ const Home = () => {
   };
 
   useEffect(() => {
-    
-      itemFetch();
-      getAllDepartments();
-      getVendorsByType();
-      empFetch();
-    
+
+    itemFetch();
+    getAllDepartments();
+    getVendorsByType();
+    empFetch();
+
   }, [])
 
 
@@ -700,10 +711,10 @@ const Home = () => {
   const MainFilter = (newValue, extraName) => {
 
     console.log(newValue, extraName)
-    if (newValue === "all") {
-       
+    if (newValue === "All") {
+
       itemFetch()
-    
+
     } else {
 
       if (extraName === "itemIMTENo") {
@@ -720,8 +731,34 @@ const Home = () => {
       }
 
 
+
     }
   }
+  const [plantEmployees, setPlantEmployees] = useState([])
+  const LocationEmpFilter = (e) => {
+    const { name, value } = e.target;
+    if (name === "plantLocationFilter") {
+      if (value === "All") {
+        console.log(activeEmps.allEmps)
+        // Assuming activeEmps.allEmps and employeeRole.loggedEmp are arrays
+        const filteredEmployees = activeEmps.allEmps.filter(emp =>
+          emp.plant.some(plant => employeeRole.loggedEmp.plant.includes(plant))
+        );
+        setPlantEmployees(filteredEmployees)
+        console.log(filteredEmployees)
+        handlePieData(name, value)
+      } else {
+        const filteredEmployees = activeEmps.allEmps.filter(emp =>
+          emp.plant.some(plant => plant === value)
+        );
+        setPlantEmployees(filteredEmployees)
+      }
+    }
+
+  }
+
+
+
   const [calSrcValue, setCalSrcValue] = useState("")
 
   const handleCalSrc = (e, newValue) => {
@@ -762,9 +799,9 @@ const Home = () => {
 
           setErrorHandler({ status: response.data.status, message: "Department Changed Successfully", code: "success" })
           setSelectedRows([])
-         
+
           itemFetch();
-         
+
 
         }
       }
@@ -873,12 +910,7 @@ const Home = () => {
     }
   }
 
-
-
-
-
-
-
+  console.log(itemListOptions)
 
   return (
     <div style={{ backgroundColor: "#f1f4f4", margin: 0, padding: 0 }}>
@@ -888,34 +920,37 @@ const Home = () => {
         <div className="row gx-3 m-3" >
 
           <div className="col-8 mb-2">
-            <Paper sx={{ p: 2 }} elevation={12} className=''>
+            <Paper sx={{ p: 2 }} elevation={12}>
 
               <Stack direction="row"
                 justifyContent="center"
                 alignItems="center"
                 spacing={2}>
 
-                <Autocomplete
-                  disablePortal
-                  id="combo-box-demo"
-                  options={itemListOptions}
-                  size='small'
-                  fullWidth
-                  onInputChange={(e, newValue) => MainFilter(newValue, "itemIMTENo")}
-                  name="itemIMTENo"
-                  getOptionLabel={(itemList) => itemList.itemIMTENo}
-                  renderInput={(params) => <TextField {...params} label="IMTE No" />}
-                  defaultValue={(e) => console.log(e)}
-                />
-                <TextField select onChange={(e) => MainFilter(e.target.value, "itemType")} fullWidth size='small' value={selectedFilterName === 'itemType' ? selectedFilterValue : 'all'} name='itemType' label="Item Type">
-                  <MenuItem value="all">All</MenuItem>
+                {itemListOptions.length > 0 &&
+                  <Autocomplete
+                    disablePortal
+                    id="combo-box-demo"
+                    options={itemListOptions}
+                    size='small'
+                    fullWidth
+                    onInputChange={(e, newValue) => MainFilter(newValue, "itemIMTENo")}
+                    name="itemIMTENo"
+                    defaultValue={itemListOptions.length > 0 ? itemListOptions[0] : null}
+                    getOptionLabel={(itemList) => itemList.itemIMTENo}
+                    renderInput={(params) => <TextField {...params} label="IMTE No" />}
+                  />}
+
+
+                <TextField select onChange={(e) => MainFilter(e.target.value, "itemType")} fullWidth size='small' value={selectedFilterName === 'itemType' ? selectedFilterValue : 'All'} name='itemType' label="Item Type">
+                  <MenuItem value="All">All</MenuItem>
                   <MenuItem value="Variable">Variable</MenuItem>
                   <MenuItem value="Attribute">Attribute</MenuItem>
                   <MenuItem value="Ref Standard">Ref Standard</MenuItem>
                 </TextField>
 
-                <TextField select onChange={(e) => MainFilter(e.target.value, "itemAddMasterName")} fullWidth size='small' value={selectedFilterName === 'itemAddMasterName' ? selectedFilterValue : 'all'} name='itemAddMasterName' label="Item Description">
-                  <MenuItem value="all">All</MenuItem>
+                <TextField select onChange={(e) => MainFilter(e.target.value, "itemAddMasterName")} fullWidth size='small' value={selectedFilterName === 'itemAddMasterName' ? selectedFilterValue : 'All'} name='itemAddMasterName' label="Item Description">
+                  <MenuItem value="All">All</MenuItem>
                   {itemDistinctNames.map((item, index) => (<MenuItem key={index} value={item}>{item}</MenuItem>))}
                 </TextField>
 
@@ -926,11 +961,12 @@ const Home = () => {
                   size='small'
                   fullWidth
                   onInputChange={(e, newValue) => MainFilter(newValue, "customer")}
-                  // value={selectedFilterName === 'customer' ? selectedFilterValue : 0}
+
                   name="customer"
+
                   getOptionLabel={(customers) => customers.aliasName}
                   // onChange={(e, newValue) => MainFilter(e,newValue, "customer")}
-                  renderInput={(params) => <TextField {...params} label="Customer" name='Master' />}
+                  renderInput={(params) => <TextField {...params} label="Customer" name='customer' />}
                   disableClearable
                 />
 
@@ -951,15 +987,16 @@ const Home = () => {
                 justifyContent="center"
                 alignItems="center"
                 spacing={2}>
-                <TextField select onChange={MainFilter} fullWidth size='small' defaultValue="All" name='plantLocationFilter' label="Plant Location">
+                <TextField select onChange={(e) => LocationEmpFilter(e)} fullWidth size='small' defaultValue="All" name='plantLocationFilter' label="Plant Location">
+                  <MenuItem value="All">All</MenuItem>
                   {employeeRole.loggedEmp.length !== 0 && employeeRole.loggedEmp.plant.map(item => (
                     <MenuItem value={item}>{item}</MenuItem>
                   ))}
 
                 </TextField>
                 <TextField select onChange={MainFilter} fullWidth size='small' name='employeeFilter' defaultValue="All" label="Employee">
-                  <MenuItem value="all">All</MenuItem>
-                  {suppliers.map((item, index) => (<MenuItem key={index} value={item.aliasName}>{item.aliasName}</MenuItem>))}
+                  <MenuItem value="All">All</MenuItem>
+                  {plantEmployees.map((emp, index) => (<MenuItem key={index} value={emp._id}>{emp.firstName}</MenuItem>))}
                 </TextField>
               </Stack>
             </Paper>
