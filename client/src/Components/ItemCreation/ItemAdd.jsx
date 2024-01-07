@@ -1294,8 +1294,8 @@ const ItemAdd = () => {
                                                 fullWidth
                                             >
                                                 {partData.map((name, index) => (
-                                                    <MenuItem key={index} value={name}>
-                                                        <Checkbox checked={itemAddData.itemPartName.indexOf(name) > -1} /> {/* Check if the item is selected */}
+                                                    <MenuItem key={index} value={name._id}>
+                                                        <Checkbox checked={itemAddData.itemPartName.indexOf(name._id) > -1} /> {/* Check if the item is selected */}
                                                         <ListItemText primary={name.partName} />
                                                     </MenuItem>
                                                 ))}
