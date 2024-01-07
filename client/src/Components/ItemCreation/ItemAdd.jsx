@@ -870,8 +870,18 @@ const ItemAdd = () => {
                                     <Typography variant='h6' className='text-center'>
                                         Select Location
                                     </Typography>
-                                    <div className="row g-1 mt-0 mb-2">
-                                        <div className="col me-1">
+                                    <div className="row g-2 mb-2">
+                                        <div className="col-md-6">
+                                            <TextField
+                                                {...(errors.itemDepartment !== "" && { helperText: errors.itemDepartment, error: true })}
+                                                value={itemAddData.itemDepartment} onChange={handleItemAddChange} size='small' select fullWidth variant='outlined' label="Select Plant" name='itemPlant' id='itemPlantId'>
+                                                <MenuItem value="">Select Plant</MenuItem>
+                                                {employeeRole.loggedEmp.plant.map((plant, index) => (
+                                                    <MenuItem key={index} value={plant}>{plant}</MenuItem>
+                                                ))}
+                                            </TextField>
+                                        </div>
+                                        <div className="col-md-6">
                                             <TextField
                                                 {...(errors.itemDepartment !== "" && { helperText: errors.itemDepartment, error: true })}
                                                 value={itemAddData.itemDepartment} onChange={handleItemAddChange} size='small' select fullWidth variant='outlined' label="Department" name='itemDepartment' id='itemDepartmentId'>
@@ -880,14 +890,14 @@ const ItemAdd = () => {
                                                 ))}
                                             </TextField>
                                         </div>
-                                        <div className="col">
+                                        <div className="col-md-6">
                                             <TextField size='small' onChange={handleItemAddChange} value={itemAddData.itemArea} select fullWidth variant='outlined' label="Area" name='itemArea' id='itemAreaId'>
                                                 {areas.map((item, index) => (
                                                     <MenuItem key={index} value={item.area}>{item.area}</MenuItem>
                                                 ))}
                                             </TextField>
                                         </div>
-                                        <div className='mt-2'>
+                                        <div className='col-md-6'>
                                             <TextField size='small' onChange={handleItemAddChange} value={itemAddData.itemPlaceOfUsage} select fullWidth variant='outlined' label="Place" name='itemPlaceOfUsage' id='itemPlaceOfUsageId'>
                                                 {placeOfUsages.map((item, index) => (
                                                     <MenuItem key={index} value={item.placeOfUsage}>{item.placeOfUsage}</MenuItem>
