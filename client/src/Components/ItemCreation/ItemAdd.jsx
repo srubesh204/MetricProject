@@ -1289,8 +1289,7 @@ const ItemAdd = () => {
                                                 value={itemAddData.itemPartName}
                                                 onChange={handleItemAddChange}
                                                 input={<OutlinedInput fullWidth label="Select Part" />}
-                                                renderValue={(selected) => selected.map(item => item.partName).join(", ")}
-                                                MenuProps={MenuProps}
+                                                renderValue={(selected) => selected.map(item => partData.find(part => part._id === item).partName).join(", ")}                                                MenuProps={MenuProps}
                                                 fullWidth
                                             >
                                                 {partData.map((name, index) => (
