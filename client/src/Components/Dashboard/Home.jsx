@@ -263,7 +263,7 @@ const Home = () => {
         { value: AboveThirtyDaysFilter.length, label: '>30 Days' }
       ])
       setItemLocationData([
-        { value: depLength.length, label: "Departments" },
+        { value: allItems.length, label: "Departments" },
         { value: subContractorLength.length, label: "Sub Contractors" },
         { value: customersLength.length, label: "Customers" },
         { value: supplierLength.length, label: "Suppliers" },
