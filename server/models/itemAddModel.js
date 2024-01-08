@@ -7,7 +7,7 @@ const itemAddSchema = new mongoose.Schema({
   selectedItemMaster: [],
   isItemMaster: String,
   itemAddMasterName: String,
-  itemPlantName: {
+  itemPlant: {
     type: String,
     required: [true,"Plant required"]
   },
