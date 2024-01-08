@@ -39,17 +39,16 @@ const TotalList = () => {
 
 
 
-  
+
   const [partDataList, setPartDataList] = useState([])
-  const [FilterList, setFilterList] = useState({
-    itemCustomer: [],})
+  const [FilterPartDataList, setFilterPartDataList] = useState({
+    itemCustomer: [],
+  })
   const partFetchData = async () => {
     try {
       const response = await axios.get(
         `${process.env.REACT_APP_PORT}/part/getAllParts`
       );
-
-
 
       setPartDataList(response.data.result);
     } catch (err) {
@@ -57,20 +56,22 @@ const TotalList = () => {
     }
   };
   useEffect(() => {
+    partFetchData();
     if (partDataList.length !== 0) {
       const partCustomers = itemList.map(item => {
         const foundPart = item.itemPartName.map(itemPlant => {
-            const part = partDataList.find(part => itemPlant === part._id);
-            return part ? part.customer : null;
+          const part = partDataList.find(part => itemPlant === part._id);
+          return part ? part.customer : null;
         });
         return foundPart; // Returning the foundPart array for each itemList item
-    });
+      });
+      setFilterPartDataList(prev => ({ ...prev, ...partCustomers }))
     
-    console.log(partCustomers);
-    
+console.log(partCustomers)
     }
   }, [partDataList, itemList])
-//
+  console.log(FilterPartDataList);
+  //
 
 
 
@@ -127,22 +128,22 @@ const TotalList = () => {
     if (partDataList.length !== 0) {
       const partCustomers = itemList.map(item => {
         const foundPart = item.itemPartName.map(itemPlant => {
-            const part = partDataList.find(part => itemPlant === part._id);
-            return part ? part.customer : null;
+          const part = partDataList.find(part => itemPlant === part._id);
+          return part ? part.customer : null;
         });
         return foundPart; // Returning the foundPart array for each itemList item
-    });
-    
-    console.log(partCustomers);
-    
+      });
+
+      console.log(partCustomers);
+
     }
   }, [partDataList, itemList])
 
- 
 
-    
-   
-  
+
+
+
+
 
 
 
@@ -614,7 +615,7 @@ const TotalList = () => {
                   onChange={handleFilterChangeItemList}
                   name="customerWise" >
                   <MenuItem value="all">All</MenuItem>
-                  {partDataList.itemCustomer.map((item, index) => (
+                  {FilterPartDataList.itemCustomer && FilterPartDataList.itemCustomer.map((item, index) => (
                     <MenuItem key={index} value={item}>{item}</MenuItem>
                   ))}
                 </TextField>
@@ -671,9 +672,9 @@ const TotalList = () => {
 
                   name="partName" >
                   <MenuItem value="all">All</MenuItem>
-                   {partDataList.map((item, index) => (
+                  {partDataList.map((item, index) => (
                     <MenuItem key={index} value={item.partName}>{[item.partNo, item.partName].join(', ')}</MenuItem>
-                  ))} 
+                  ))}
                 </TextField>
 
               </div>
