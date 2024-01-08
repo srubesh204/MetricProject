@@ -209,6 +209,7 @@ const ItemEdit = () => {
         itemStatus: "Active",
         itemReceiptDate: dayjs().format("YYYY-MM-DD"),
         itemDepartment: "",
+        
         itemArea: "N/A",
         itemPlaceOfUsage: "N/A",
         itemCalFreInMonths: "",
@@ -251,7 +252,7 @@ const ItemEdit = () => {
         itemMasterRef: "",
         selectedItemMaster: [],
         isItemMaster: "",
-        itemPlant: "",
+       
         itemAddMasterName: "",
         itemIMTENo: "",
         itemImage: "",
@@ -266,6 +267,7 @@ const ItemEdit = () => {
         itemStatus: "Active",
         itemReceiptDate: dayjs().format("YYYY-MM-DD"),
         itemDepartment: "",
+        itemPlant:"",
         itemCurrentLocation: "",
         itemArea: "N/A",
         itemPlaceOfUsage: "N/A",
@@ -774,7 +776,7 @@ const ItemEdit = () => {
             setSnackBarOpen(true)
 
 
-
+console.log(err)
 
             if (err.response && err.response.status === 400) {
                 // Handle validation errors
@@ -1037,7 +1039,7 @@ const ItemEdit = () => {
                                             value={itemAddData.itemPlant} onChange={handleItemAddChange} size='small' select fullWidth variant='outlined' label="Select Plant" name='itemPlant' id='itemPlantId'>
                                             <MenuItem value="">Select Plant</MenuItem>
                                             {employeeRole.loggedEmp && employeeRole.loggedEmp.plant && employeeRole.loggedEmp.plant.map((plant, index) => (
-                                                <MenuItem key={index} value={plant}>{plant && plant.partName}</MenuItem>
+                                                <MenuItem key={index} value={plant}>{plant}</MenuItem>
                                             ))}
                                         </TextField>
                                     </div>
