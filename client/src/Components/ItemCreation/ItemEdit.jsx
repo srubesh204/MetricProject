@@ -12,6 +12,7 @@ import { useNavigate } from 'react-router-dom';
 import { Link as RouterLink } from 'react-router-dom';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { Add, Remove, HighlightOffRounded } from '@mui/icons-material';
+import { useEmployee } from '../../App';
 
 
 
@@ -21,6 +22,8 @@ const ItemEdit = () => {
     const { id } = useParams()
     console.log(id)
 
+
+    const employeeRole = useEmployee();
     // Units Data
     const [units, setUnits] = useState([]);
     const UnitFetch = async () => {
@@ -192,6 +195,7 @@ const ItemEdit = () => {
         selectedItemMaster: [],
         isItemMaster: "",
         itemAddMasterName: "",
+        itemPlant: "",
         itemIMTENo: "",
         itemImage: "",
         itemType: "",
@@ -247,6 +251,7 @@ const ItemEdit = () => {
         itemMasterRef: "",
         selectedItemMaster: [],
         isItemMaster: "",
+        itemPlant: "",
         itemAddMasterName: "",
         itemIMTENo: "",
         itemImage: "",
@@ -1026,6 +1031,16 @@ const ItemEdit = () => {
                                     Select Location
                                 </Typography>
                                 <div className="row g-2 mt-0 mb-2">
+                                    <div className="col-md-6">
+                                        <TextField
+
+                                            value={itemAddData.itemPlant} onChange={handleItemAddChange} size='small' select fullWidth variant='outlined' label="Select Plant" name='itemPlant' id='itemPlantId'>
+                                            <MenuItem value="">Select Plant</MenuItem>
+                                            {employeeRole.loggedEmp && employeeRole.loggedEmp.plant && employeeRole.loggedEmp.plant.map((plant, index) => (
+                                                <MenuItem key={index} value={plant}>{plant && plant.partName}</MenuItem>
+                                            ))}
+                                        </TextField>
+                                    </div>
                                     <div className="col-md-6 ">
                                         <TextField value={itemAddData.itemDepartment} onChange={handleItemAddChange} size='small' select fullWidth variant='outlined' label="Department" name='itemDepartment' id='itemDepartmentId'>
                                             {departments.map((item, index) => (
@@ -1047,11 +1062,7 @@ const ItemEdit = () => {
                                             ))}
                                         </TextField>
                                     </div>
-                                    <div className='col-md-6 '>
-                                        <TextField size='small' disabled value={itemAddData.createdByName} fullWidth variant='outlined' label="Created By" name='createdByName' id='createdByNameId'>
 
-                                        </TextField>
-                                    </div>
 
                                 </div>
                             </Paper>

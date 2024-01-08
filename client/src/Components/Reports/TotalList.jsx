@@ -37,6 +37,43 @@ const TotalList = () => {
     itemDepartment: []
   })
 
+
+
+  
+  const [partDataList, setPartDataList] = useState([])
+  const [FilterList, setFilterList] = useState({
+    itemCustomer: [],})
+  const partFetchData = async () => {
+    try {
+      const response = await axios.get(
+        `${process.env.REACT_APP_PORT}/part/getAllParts`
+      );
+
+
+
+      setPartDataList(response.data.result);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+  useEffect(() => {
+    if (partDataList.length !== 0) {
+      const partCustomers = itemList.map(item => {
+        const foundPart = item.itemPartName.map(itemPlant => {
+            const part = partDataList.find(part => itemPlant === part._id);
+            return part ? part.customer : null;
+        });
+        return foundPart; // Returning the foundPart array for each itemList item
+    });
+    
+    console.log(partCustomers);
+    
+    }
+  }, [partDataList, itemList])
+//
+
+
+
   const itemFetch = async () => {
     try {
       const response = await axios.get(
@@ -44,7 +81,7 @@ const TotalList = () => {
       );
       // You can use a different logic for generating the id
 
-      const filterNames = ["itemIMTENo", "itemType", "itemDepartment","customerWise"]
+      const filterNames = ["itemIMTENo", "itemType", "itemDepartment", "customerWise"]
 
       let updatedFilterNames = {};
 
@@ -60,7 +97,12 @@ const TotalList = () => {
       // Update state outside the loop with the updated object
       setFilterNameList(prev => ({ ...prev, ...updatedFilterNames }));
 
-      
+      console.log(partDataList)
+
+
+
+
+
 
 
       setItemList(response.data.result);
@@ -79,9 +121,28 @@ const TotalList = () => {
   const [today, setToday] = useState(dayjs().format('YYYY-MM-DD'))
   console.log(today)
 
+  console.log(partDataList)
 
+  useEffect(() => {
+    if (partDataList.length !== 0) {
+      const partCustomers = itemList.map(item => {
+        const foundPart = item.itemPartName.map(itemPlant => {
+            const part = partDataList.find(part => itemPlant === part._id);
+            return part ? part.customer : null;
+        });
+        return foundPart; // Returning the foundPart array for each itemList item
+    });
+    
+    console.log(partCustomers);
+    
+    }
+  }, [partDataList, itemList])
 
+ 
 
+    
+   
+  
 
 
 
@@ -243,7 +304,7 @@ const TotalList = () => {
 
 
 
-
+  console.log(filteredItemListData)
   {/* const dueDatePicker = (newValue, name) => {
       let startDate = "";
       let endDate = "";
@@ -346,20 +407,10 @@ const TotalList = () => {
   }, []);
 
 
-  const [partDataList, setPartDataList] = useState([])
-  const partFetchData = async () => {
-    try {
-      const response = await axios.get(
-        `${process.env.REACT_APP_PORT}/part/getAllParts`
-      );
-      setPartDataList(response.data.result);
-    } catch (err) {
-      console.log(err);
-    }
-  };
-  useEffect(() => {
-    partFetchData();
-  }, []);
+
+
+
+
 
   const [snackBarOpen, setSnackBarOpen] = useState(false)
   const [errorhandler, setErrorHandler] = useState({});
@@ -563,8 +614,8 @@ const TotalList = () => {
                   onChange={handleFilterChangeItemList}
                   name="customerWise" >
                   <MenuItem value="all">All</MenuItem>
-                  {customerList.map((item, index) => (
-                    <MenuItem key={index} value={item.aliasName}>{item.aliasName}</MenuItem>
+                  {partDataList.itemCustomer.map((item, index) => (
+                    <MenuItem key={index} value={item}>{item}</MenuItem>
                   ))}
                 </TextField>
 
@@ -620,9 +671,9 @@ const TotalList = () => {
 
                   name="partName" >
                   <MenuItem value="all">All</MenuItem>
-                  {partDataList.map((item, index) => (
+                   {partDataList.map((item, index) => (
                     <MenuItem key={index} value={item.partName}>{[item.partNo, item.partName].join(', ')}</MenuItem>
-                  ))}
+                  ))} 
                 </TextField>
 
               </div>

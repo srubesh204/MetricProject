@@ -3,14 +3,14 @@ import axios from 'axios';
 import { styled } from '@mui/material/styles';
 import Button from '@mui/material/Button';
 
-import { AddToPhotos, CloudUpload,CloudDownload, DeleteOutlined, Delete, DomainVerification } from '@mui/icons-material';
+import { AddToPhotos, CloudUpload, CloudDownload, DeleteOutlined, Delete, DomainVerification } from '@mui/icons-material';
 import Stack from '@mui/material/Stack';
 import FileDownloadIcon from '@mui/icons-material/FileDownload';
 import UploadFileIcon from '@mui/icons-material/UploadFile';
 import Alert from '@mui/material/Alert';
 import Snackbar from '@mui/material/Snackbar';
 import { TextField, MenuItem, FormControl, Fab, Link, Typography, Badge, LinearProgress } from '@mui/material';
-import { Box, Grid,ButtonGroup, Paper, Container, Chip } from '@mui/material';
+import { Box, Grid, ButtonGroup, Paper, Container, Chip } from '@mui/material';
 import { Add, Remove, HighlightOffRounded } from '@mui/icons-material';
 import { Done } from '@mui/icons-material';
 import Dialog from '@mui/material/Dialog';
@@ -155,16 +155,42 @@ const ItemMaster = () => {
     };
 
 
-
+    
 
 
 
     const [itemMasterDataList, setItemMasterDataList] = useState([])
+
+    const [FilterNameList, setFilterNameList] = useState({
+        itemType: [],
+        itemDescription: [],
+        
+    })
+
     const itemMasterFetchData = async () => {
         try {
             const response = await axios.get(
                 `${process.env.REACT_APP_PORT}/itemMaster/getAllItemMasters`
             );
+
+
+            const filterNames = [ "itemType", "itemDescription",]
+
+            let updatedFilterNames = {};
+
+            filterNames.forEach((element, index) => {
+                const data = response.data.result.map(item => item[element]);
+                filterNames[index] = [...new Set(data)];
+
+                // Update the object with a dynamic key based on the 'element'
+                updatedFilterNames[element] = filterNames[index];
+                console.log(updatedFilterNames)
+            });
+
+
+            setFilterNameList(prev => ({ ...prev, ...updatedFilterNames }));
+
+
             console.log(response.data)
             setItemMasterDataList(response.data.result);
             setFilteredData(response.data.result);
@@ -176,18 +202,20 @@ const ItemMaster = () => {
         itemMasterFetchData();
     }, []);
 
+    console.log(FilterNameList)
+
     const [itemMasteSelectedRowIds, setItemMasteSelectedRowIds] = useState([]);
     const itemMasterColumns = [
-        { field: 'id', headerName: 'Si. No', width: 70, renderCell: (params) => params.api.getAllRowIds().indexOf(params.id) + 1 ,headerAlign:"center",align: "center",},
-        { field: 'itemType', headerName: 'Item Type', width: 70,headerAlign:"center",align: "center" },
-        { field: 'itemDescription', headerName: 'Item Description', width: 150 ,headerAlign:"center",align: "center"},
-        { field: 'itemPrefix', headerName: 'Item Prefix', width: 150,headerAlign:"center",align: "center" },
-        { field: 'itemFqInMonths', headerName: 'Item Fq In Months', width: 90, headerAlign:"center",align: "center"},
-        { field: 'calAlertInDay', headerName: 'Cal Alert In Day', width: 90,headerAlign:"center",align: "center" },
-        { field: 'SOPNo', headerName: 'SOP No', width: 90,headerAlign:"center",align: "center"},
-        { field: 'uncertainty', headerName: 'Uncertainty', width: 90, headerAlign:"center",align: "center"},
-        { field: 'standardRef', headerName: 'Standard Ref', type: "number", width: 90,headerAlign:"center",align: "center"},
-        { field: 'status', headerName: 'Status', width: 90,headerAlign:"center",align: "center" },
+        { field: 'id', headerName: 'Si. No', width: 70, renderCell: (params) => params.api.getAllRowIds().indexOf(params.id) + 1, headerAlign: "center", align: "center", },
+        { field: 'itemType', headerName: 'Item Type', width: 70, headerAlign: "center", align: "center" },
+        { field: 'itemDescription', headerName: 'Item Description', width: 150, headerAlign: "center", align: "center" },
+        { field: 'itemPrefix', headerName: 'Item Prefix', width: 150, headerAlign: "center", align: "center" },
+        { field: 'itemFqInMonths', headerName: 'Item Fq In Months', width: 90, headerAlign: "center", align: "center" },
+        { field: 'calAlertInDay', headerName: 'Cal Alert In Day', width: 90, headerAlign: "center", align: "center" },
+        { field: 'SOPNo', headerName: 'SOP No', width: 90, headerAlign: "center", align: "center" },
+        { field: 'uncertainty', headerName: 'Uncertainty', width: 90, headerAlign: "center", align: "center" },
+        { field: 'standardRef', headerName: 'Standard Ref', type: "number", width: 90, headerAlign: "center", align: "center" },
+        { field: 'status', headerName: 'Status', width: 90, headerAlign: "center", align: "center" },
 
         {/* {
             field: 'delete',
@@ -958,7 +986,7 @@ const ItemMaster = () => {
                                         </Button>
                                     </DialogActions>
                                 </Dialog>}
-                                       
+
 
 
 
@@ -1019,8 +1047,8 @@ const ItemMaster = () => {
                                         <TextField fullWidth label="Item Description Sort" onChange={handleFilterChange} className="form-select" select size="small" id="itemDescriptionSortId" name="itemDescriptionSort" defaultValue="" >
 
                                             <MenuItem value="all">All</MenuItem >
-                                            {itemMasterDataList.map((item, index) => (
-                                                <MenuItem key={index} value={item.itemDescription}>{item.itemDescription}</MenuItem>
+                                            {FilterNameList.itemDescription.map((item, index) => (
+                                                <MenuItem key={index} value={item}>{item}</MenuItem>
                                             ))}
 
                                         </TextField>
