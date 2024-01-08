@@ -204,6 +204,14 @@ const Vendor = () => {
 
     console.log(vendorData)
 
+
+
+
+
+
+
+
+    
     const [vendorDataList, setVendorDataList] = useState([])
     const vendorFetchData = async () => {
         try {

@@ -29,10 +29,16 @@ dayjs.extend(isSameOrAfter)
 const ItemList = () => {
 
     const employeeRole = useEmployee()
-    
+
 
     console.log(dayjs("2023-11-17").isSameOrBefore("2023-11-21"))
     const [itemList, setItemList] = useState([]);
+
+    const [FilterNameList, setFilterNameList] = useState({
+        itemIMTENo: [],
+        itemType: [],
+        itemDepartment: []
+    })
 
     const itemFetch = async () => {
         try {
@@ -40,6 +46,25 @@ const ItemList = () => {
                 `${process.env.REACT_APP_PORT}/itemAdd/getAllItemAdds`
             );
             // You can use a different logic for generating the id
+
+            const filterNames = ["itemIMTENo", "itemType", "itemDepartment", "customerWise"]
+
+            let updatedFilterNames = {};
+
+            filterNames.forEach((element, index) => {
+                const data = response.data.result.map(item => item[element]);
+                filterNames[index] = [...new Set(data)];
+
+                // Update the object with a dynamic key based on the 'element'
+                updatedFilterNames[element] = filterNames[index];
+                console.log(updatedFilterNames)
+            });
+
+            // Update state outside the loop with the updated object
+            setFilterNameList(prev => ({ ...prev, ...updatedFilterNames }));
+
+
+
 
             setItemList(response.data.result);
             setFilteredItemListData(response.data.result);
@@ -51,6 +76,9 @@ const ItemList = () => {
     useEffect(() => {
         itemFetch();
     }, []);
+
+
+    console.log(FilterNameList)
 
     const [today, setToday] = useState(dayjs().format('YYYY-MM-DD'))
     console.log(today)
@@ -270,7 +298,7 @@ const ItemList = () => {
                     field: 'button',
                     headerName: 'Edit',
                     width: 60,
-                    headerAlign:"center",align: "center",
+                    headerAlign: "center", align: "center",
                     renderCell: (params) => (
                         <Button component={Link} to={`/itemedit/${params.id}`}>
                             <Edit color='success' />
@@ -279,33 +307,33 @@ const ItemList = () => {
                 },
             ]
             : []),
-        { field: 'id', headerName: 'Si. No', width: 60, renderCell: (params) => params.api.getAllRowIds().indexOf(params.id) + 1,headerAlign:"center",align: "center" },
-        { field: 'itemIMTENo', headerName: 'IMTE No', width: 100,headerAlign:"center",align: "center" },
-        { field: 'itemAddMasterName', headerName: 'Description', width: 120,headerAlign:"center",align: "center" },
+        { field: 'id', headerName: 'Si. No', width: 60, renderCell: (params) => params.api.getAllRowIds().indexOf(params.id) + 1, headerAlign: "center", align: "center" },
+        { field: 'itemIMTENo', headerName: 'IMTE No', width: 100, headerAlign: "center", align: "center" },
+        { field: 'itemAddMasterName', headerName: 'Description', width: 120, headerAlign: "center", align: "center" },
         {
             field: 'Range/Size',
             headerName: 'Range/Size',
-            headerAlign:"center",align: "center",
+            headerAlign: "center", align: "center",
             description: 'This column has a value getter and is not sortable.',
             sortable: false,
             width: 130,
             valueGetter: (params) =>
                 `${params.row.itemRangeSize || ''} ${params.row.itemLCUnit || ''}`,
         },
-        { field: 'itemMake', headerName: 'Make', width: 90 ,headerAlign:"center",align: "center",},
-        { field: 'itemCalDate', headerName: 'Cal Date', width: 100,headerAlign:"center",align: "center", valueGetter: (params) => dayjs(params.row.itemCalDate).format('DD-MM-YYYY') },
-        { field: 'itemDueDate', headerName: 'Due Date', width: 110,headerAlign:"center",align: "center", valueGetter: (params) => dayjs(params.row.itemDueDate).format('DD-MM-YYYY') },
-        { field: 'itemLC', headerName: 'ItemLC', width: 60,headerAlign:"center",align: "center", valueGetter: (params) => params.row.itemLC || "-" },
-        { field: 'itemCalFreInMonths', headerName: 'Frequency', type: "number", width: 100,headerAlign:"center",align: "center" },
-        { field: 'itemCalibrationSource', headerName: 'Cal Done At ', width: 100 ,headerAlign:"center",align: "center" },
-        { field: 'itemStatus', headerName: 'Status ', width: 80,headerAlign:"center",align: "center", },
-        { field: 'itemDepartment', headerName: 'Current location', width: 120,headerAlign:"center",align: "center", },
-        { field: 'itemSupplier', headerName: 'Cal Source', renderCell: (params) => params.row.itemSupplier.toString(), width: 110,headerAlign:"center",align: "center", },
+        { field: 'itemMake', headerName: 'Make', width: 90, headerAlign: "center", align: "center", },
+        { field: 'itemCalDate', headerName: 'Cal Date', width: 100, headerAlign: "center", align: "center", valueGetter: (params) => dayjs(params.row.itemCalDate).format('DD-MM-YYYY') },
+        { field: 'itemDueDate', headerName: 'Due Date', width: 110, headerAlign: "center", align: "center", valueGetter: (params) => dayjs(params.row.itemDueDate).format('DD-MM-YYYY') },
+        { field: 'itemLC', headerName: 'ItemLC', width: 60, headerAlign: "center", align: "center", valueGetter: (params) => params.row.itemLC || "-" },
+        { field: 'itemCalFreInMonths', headerName: 'Frequency', type: "number", width: 100, headerAlign: "center", align: "center" },
+        { field: 'itemCalibrationSource', headerName: 'Cal Done At ', width: 100, headerAlign: "center", align: "center" },
+        { field: 'itemStatus', headerName: 'Status ', width: 80, headerAlign: "center", align: "center", },
+        { field: 'itemDepartment', headerName: 'Current location', width: 120, headerAlign: "center", align: "center", },
+        { field: 'itemSupplier', headerName: 'Cal Source', renderCell: (params) => params.row.itemSupplier.toString(), width: 110, headerAlign: "center", align: "center", },
         {
             field: 'itemType',
             headerName: 'Type',
             width: 180,
-            headerAlign:"center",align: "center",
+            headerAlign: "center", align: "center",
             renderCell: (params) => {
                 const itemType = params.row.itemType.toString();
                 return itemType.charAt(0).toUpperCase() + itemType.slice(1).toLowerCase();
@@ -733,17 +761,17 @@ console.log(statusInfo)*/}
                             <div className="col d-flex mb-2 ">
 
                                 <TextField label="Imte No"
-                                    id="imteNoId"
+                                    id="itemIMTENoId"
                                     required
                                     select
                                     defaultValue="all"
                                     fullWidth
                                     size="small"
                                     onChange={handleFilterChangeItemList}
-                                    name="imteNo" >
+                                    name="itemIMTENo" >
                                     <MenuItem value="all">All</MenuItem>
-                                    {itemAddList.map((item, index) => (
-                                        <MenuItem key={index} value={item.itemIMTENo}>{item.itemIMTENo}</MenuItem>
+                                    {FilterNameList.itemIMTENo.map((item, index) => (
+                                        <MenuItem key={index} value={item}>{item}</MenuItem>
                                     ))}
                                 </TextField>
 
@@ -759,8 +787,8 @@ console.log(statusInfo)*/}
                                     size="small"
                                     name="itemType" >
                                     <MenuItem value="all">All</MenuItem >
-                                    <MenuItem value="Attribute">Attribute</MenuItem >
-                                    <MenuItem value="Variable">Variable</MenuItem >
+                                    <MenuItem value="attribute">Attribute</MenuItem >
+                                    <MenuItem value="variable">Variable</MenuItem >
                                     <MenuItem value="referenceStandard">Reference Standard</MenuItem >
                                 </TextField>
 
@@ -776,8 +804,8 @@ console.log(statusInfo)*/}
                                     size="small"
                                     name="currentLocation" >
                                     <MenuItem value="all">All</MenuItem>
-                                    {departmentList.map((item, index) => (
-                                        <MenuItem key={index} value={item.department}>{item.department}</MenuItem>
+                                    {FilterNameList.itemDepartment.map((item, index) => (
+                                        <MenuItem key={index} value={item}>{item}</MenuItem>
                                     ))}
 
                                 </TextField>
@@ -1014,9 +1042,9 @@ console.log(statusInfo)*/}
                                 <div className='me-2' >
                                     <button type="button" className='btn btn' >History Card</button>
                                 </div>
-                                {employeeRole && employeeRole.employee !== "viewer" && 
-                                <div className='me-2' >
-                                    {itemListSelectedRowIds.length !== 0 && <button type="button" className='btn btn-warning' onClick={() => setOpenModalStatus(true)} >Change status</button>} </div>}
+                                {employeeRole && employeeRole.employee !== "viewer" &&
+                                    <div className='me-2' >
+                                        {itemListSelectedRowIds.length !== 0 && <button type="button" className='btn btn-warning' onClick={() => setOpenModalStatus(true)} >Change status</button>} </div>}
 
                                 <Dialog
                                     open={openModalStatus}
