@@ -19,6 +19,8 @@ function InsHistoryCard() {
     const [distItemName, setDistItemNames] = useState([]);
     const [calDetails, setCalDetails] = useState([]);
     const [selectedIMTEs, setSelectedIMTEs] = useState([])
+    const [fromDate, setFromDate] = useState(null);
+    const [toDate, setToDate] = useState(null);
     const [selectedRow, setSelectedRow] = useState({
         itemMFRNo: '',
         itemModelNo: '',
@@ -30,24 +32,28 @@ function InsHistoryCard() {
         itemMake: '',
         acceptanceCriteria: [],
         calInsName: '',
+        itemIMTENo: '',
+        itemDepartment: '',
     });
 
 
     const [historyCardPrintOpen, setHistoryCardPrintOpen] = useState(false);
-    const [formatNoData, setFormatNoData] = useState([]);
-
+    const [formatNoData, setFormatNoData] = useState([])
     const formatFetchData = async () => {
         try {
             const response = await axios.get(
-                `${process.env.REACT_APP_PORT}/formatNo/getFormatNoById/6595064f151cbe07fdd7fab7`
+                `${process.env.REACT_APP_PORT}/formatNo/getFormatNoById/1`
             );
-            const format = response.data.result;
-            console.log(format);
-            setFormatNoData(format);
+            const format = response.data.result
+            console.log(format)
+            setFormatNoData(format)
         } catch (err) {
             console.log(err);
         }
     };
+    useEffect(() => {
+        formatFetchData();
+    }, []);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -135,10 +141,9 @@ function InsHistoryCard() {
             itemCalFreInMonths: selectedItemAdd[0].itemCalFreInMonths,
             itemMake: selectedItemAdd[0].itemMake,
             acceptanceCriteria: selectedItemAdd[0].acceptanceCriteria.map((item) => (item)),
-            acMinPS: selectedItemAdd[0].acceptanceCriteriaacMinPS,
-            acMaxPS: '',
-            acWearLimitPS: '',
             itemAddMasterName: selectedItemAdd[0].itemAddMasterName,
+            itemIMTENo: selectedItemAdd[0].itemIMTENo,
+            itemDepartment: selectedItemAdd[0].itemDepartment,
         }))
 
 
@@ -150,19 +155,29 @@ function InsHistoryCard() {
         setFilteredData(itemList);
     };
 
+    const filterByDate = (items, fromDate, toDate) => {
+        return items.filter((row) => {
+            const calDate = dayjs(row.calItemCalDate);
+            return (
+                (!fromDate || calDate.isSameOrAfter(fromDate, 'day')) &&
+                (!toDate || calDate.isSameOrBefore(toDate, 'day'))
+            );
+        });
+    };
 
+    const filteredSelectedIMTEs = filterByDate(selectedIMTEs, fromDate, toDate);
 
 
 
     const columns = [
-        { field: 'id', headerName: 'SlNo', width: 50, renderCell: (params) => params.api.getAllRowIds().indexOf(params.id) + 1 },
-        { field: 'calItemCalDate', headerName: 'Calibration Date', width: 150, valueGetter: (params) => dayjs(params.row.calItemCalDate).format('DD-MM-YYYY') },
-        { field: 'calStatus', headerName: 'Calibration Status', width: 150 },
-        { field: 'calItemDueDate', headerName: 'Next calibration Date', width: 150, valueGetter: (params) => dayjs(params.row.calItemDueDate).format('DD-MM-YYYY') },
-        { field: 'col5', headerName: 'Certificate Status', width: 150 },
-        { field: 'calCertificateNo', headerName: 'Certificate No', width: 150 },
-        { field: 'col7', headerName: 'Observed Size 1', width: 150 },
-        { field: 'itemCalibratedAt', headerName: 'Calibrated At', width: 150 },
+        { field: 'id', headerName: 'SlNo', width: 50, align: "center", renderCell: (params) => params.api.getAllRowIds().indexOf(params.id) + 1 },
+        { field: 'calItemCalDate', headerName: 'Calibration Date', width: 150, align: "center", valueGetter: (params) => dayjs(params.row.calItemCalDate).format('DD-MM-YYYY') },
+        { field: 'calStatus', headerName: 'Calibration Status', width: 150, align: "center", },
+        { field: 'calItemDueDate', headerName: 'Next calibration Date', width: 150, align: "center", valueGetter: (params) => dayjs(params.row.calItemDueDate).format('DD-MM-YYYY') },
+        { field: 'col5', headerName: 'Certificate Status', width: 150, align: "center", },
+        { field: 'calCertificateNo', headerName: 'Certificate No', width: 150, align: "center", },
+        { field: 'col7', headerName: 'Observed Size 1', width: 150, align: "center", },
+        { field: 'itemCalibratedAt', headerName: 'Calibrated At', width: 150, align: "center", },
     ];
 
     const handlePrintClick = () => {
@@ -216,26 +231,31 @@ function InsHistoryCard() {
 
                                 </div>
 
-
                                 <div className="col-2 offset-3">
-                                    <DatePicker
-                                        fullWidth
-                                        id="fromDateId"
-                                        name="fromDate"
-                                        label="From Date"
-                                        sx={{ width: "100%" }}
-                                        slotProps={{ textField: { size: 'small' } }}
-                                        format="DD-MM-YYYY" />
+                                <DatePicker
+                                    fullWidth
+                                    id="fromDateId"
+                                    name="fromDate"
+                                    label="From Date"
+                                    sx={{ width: "100%" }}
+                                    slotProps={{ textField: { size: 'small' } }}
+                                    format="DD-MM-YYYY"
+                                    value={fromDate}
+                                    onChange={(date) => setFromDate(date)}
+                                />
                                 </div>
                                 <div className="col-2">
-                                    <DatePicker
-                                        fullWidth
-                                        id="toDateId"
-                                        name="toDate"
-                                        sx={{ width: "100%" }}
-                                        label="To Date"
-                                        slotProps={{ textField: { size: 'small' } }}
-                                        format="DD-MM-YYYY" />
+                                <DatePicker
+                                    fullWidth
+                                    id="toDateId"
+                                    name="toDate"
+                                    sx={{ width: "100%" }}
+                                    label="To Date"
+                                    slotProps={{ textField: { size: 'small' } }}
+                                    format="DD-MM-YYYY"
+                                    value={toDate}
+                                    onChange={(date) => setToDate(date)}
+                                />
                                 </div>
 
                                 <div className="row">
@@ -355,7 +375,13 @@ function InsHistoryCard() {
                         <Paper>
 
                             <DataGrid
-                                rows={selectedIMTEs}
+                                rows={selectedIMTEs.filter((row) => {
+                                    const calDate = dayjs(row.calItemCalDate);
+                                    return (
+                                        (!fromDate || calDate.isSameOrAfter(fromDate, 'day')) &&
+                                        (!toDate || calDate.isSameOrBefore(toDate, 'day'))
+                                    );
+                                })}
                                 columns={columns}
                                 initialState={{
                                     pagination: {
@@ -366,37 +392,28 @@ function InsHistoryCard() {
                                 pageSizeOptions={[5, 10]}
                             />
 
+
                         </Paper>
 
                     </Container>
                 </form>
             </LocalizationProvider>
-
             <HistoryCardContent.Provider
-                value={{
-                    historyCardPrintOpen,
-                    setHistoryCardPrintOpen,
-                    selectedRow,
-                    selectedInstrumentName: calDetails.calInsName,
-                    selectedIMTENo: calDetails.calInsIMTENo,
-                    distItemName,
-                }}
-            >
-                <HistoryCardPrint />
-            </HistoryCardContent.Provider>
-
-
+    value={{
+        historyCardPrintOpen,
+        setHistoryCardPrintOpen,
+        selectedRow,
+        selectedInstrumentName: calDetails.calInsName,
+        selectedIMTENo: calDetails.calInsIMTENo,
+        distItemName,
+        formatNoData,
+        selectedIMTEs: filteredSelectedIMTEs,
+    }}
+>
+    <HistoryCardPrint />
+</HistoryCardContent.Provider>
         </div>
-
-
-
     );
-
-
-
-
-
-
 }
 
 export default InsHistoryCard;
