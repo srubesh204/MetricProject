@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { TextField, MenuItem, Button } from '@mui/material';
+import { TextField, MenuItem, Button, ButtonGroup } from '@mui/material';
 import { Box, Container, Grid, Paper, Typography } from "@mui/material";
 import { DataGrid, GridToolbar } from '@mui/x-data-grid';
 import axios from 'axios';
@@ -23,6 +23,8 @@ import { Link } from 'react-router-dom';
 import isSameOrAfter from 'dayjs/plugin/isSameOrAfter'
 import isSameOrBefore from 'dayjs/plugin/isSameOrBefore'
 import { useEmployee } from '../../App';
+import styled from "@emotion/styled";
+import { CloudDownload, CloudUpload, Delete } from '@mui/icons-material';
 dayjs.extend(isSameOrBefore)
 dayjs.extend(isSameOrAfter)
 
@@ -183,7 +185,57 @@ const ItemList = () => {
 
 
 
-
+    const VisuallyHiddenInput = styled('input')({
+        clip: 'rect(0 0 0 0)',
+        clipPath: 'inset(50%)',
+        height: 1,
+        overflow: 'hidden',
+        position: 'absolute',
+        bottom: 0,
+        left: 0,
+        whiteSpace: 'nowrap',
+        width: 1,
+      });
+    
+      const [file, setFile] = useState(null);
+      const [itemAddExcelStatus, setItemAddExcelStatus] = useState('');
+    
+      const handleItemAddExcel = (e) => {
+        const selectedFile = e.target.files[0];
+        console.log(selectedFile)
+        setFile(selectedFile);
+      };
+    
+      const handleItemAddUpload = async () => {
+        try {
+          if (!file) {
+            setItemAddExcelStatus('No file selected');
+            return;
+          }
+    
+          const formData = new FormData();
+          formData.append('file', file);
+    
+          const response = await axios.post(`${process.env.REACT_APP_PORT}/itemAdd/uploadItemAddInExcel`, formData, {
+            headers: {
+              'Content-Type': 'multipart/form-data',
+            },
+          });
+    
+          setItemAddExcelStatus(response.data.message || 'Excel file uploaded successfully');
+        } catch (error) {
+          if (error.response) {
+            setItemAddExcelStatus(`Error: ${error.response.data.error || 'Something went wrong'}`);
+          } else if (error.request) {
+            setItemAddExcelStatus('Network error. Please try again.');
+          } else {
+            setItemAddExcelStatus('Error uploading the file.');
+          }
+          console.error('Error uploading Excel file:', error);
+        }
+      };
+    
+    
 
 
 
@@ -1149,16 +1201,24 @@ console.log(statusInfo)*/}
                         </div>
                         <div className='row'>
                             <div className='col d-flex '>
-                                {employeeRole.employee !== "viewer" && <React.Fragment>
-                                    <div className='me-2' >
-                                        <label className='itemlistloade'>
-                                            <input className="form-control itemlistdownload" type="file" id="upload" />Upload</label>
-                                    </div>
-                                    <div className='me-2'>
-                                        <label className='itemlistloade'>
-                                            <input className="form-control itemlistdownload" type="file" id="download" />Download </label>
-                                    </div>
-                                </React.Fragment>}
+                  <div className="d-flex justify-content-center">
+                    <ButtonGroup className='me-3'>
+                      <Button component="label" variant="contained" >
+                        Upload
+                        <VisuallyHiddenInput type="file" onChange={handleItemAddExcel} />
+                      </Button>
+                      <Button onClick={handleItemAddUpload}><CloudUpload /></Button>
+                    </ButtonGroup>
+
+                    <ButtonGroup>
+                      <Button component="label" variant="contained" color='secondary'>
+                        Download
+                        <VisuallyHiddenInput type="file" />
+                      </Button>
+                      <Button color='secondary'><CloudDownload /></Button>
+                    </ButtonGroup>
+                  </div>
+                  {itemAddExcelStatus && <p>{itemAddExcelStatus}</p>}
 
                                 <div className='me-2 '>
                                     <button type="button" className='btn btn-secondary' >Sticker Print</button>

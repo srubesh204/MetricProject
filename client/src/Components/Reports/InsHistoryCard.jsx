@@ -21,20 +21,7 @@ function InsHistoryCard() {
     const [selectedIMTEs, setSelectedIMTEs] = useState([])
     const [fromDate, setFromDate] = useState(null);
     const [toDate, setToDate] = useState(null);
-    const [selectedRow, setSelectedRow] = useState({
-        itemMFRNo: '',
-        itemModelNo: '',
-        itemRangeSize: '',
-        itemCalibrationSource: '',
-        premissibleSize: '',
-        itemCurrentLocation: '',
-        itemCalFreInMonths: '',
-        itemMake: '',
-        acceptanceCriteria: [],
-        calInsName: '',
-        itemIMTENo: '',
-        itemDepartment: '',
-    });
+    const [selectedRow, setSelectedRow] = useState([]);
 
 
     const [historyCardPrintOpen, setHistoryCardPrintOpen] = useState(false);
@@ -130,21 +117,7 @@ function InsHistoryCard() {
 
         const selectedItemAdd = itemList.filter((item) => item.itemIMTENo === value)
         console.log(selectedItemAdd)
-        setSelectedRow((prev) => ({
-            ...prev,
-            itemMFRNo: selectedItemAdd[0].itemMFRNo,
-            itemModelNo: selectedItemAdd[0].itemModelNo,
-            itemRangeSize: selectedItemAdd[0].itemRangeSize,
-            itemCalibrationSource: selectedItemAdd[0].itemCalibrationSource,
-            itemPermissibleSize: selectedItemAdd[0].itemPermissibleSize,
-            itemCurrentLocation: selectedItemAdd[0].itemCurrentLocation,
-            itemCalFreInMonths: selectedItemAdd[0].itemCalFreInMonths,
-            itemMake: selectedItemAdd[0].itemMake,
-            acceptanceCriteria: selectedItemAdd[0].acceptanceCriteria.map((item) => (item)),
-            itemAddMasterName: selectedItemAdd[0].itemAddMasterName,
-            itemIMTENo: selectedItemAdd[0].itemIMTENo,
-            itemDepartment: selectedItemAdd[0].itemDepartment,
-        }))
+        setSelectedRow(selectedItemAdd)
 
 
     };
@@ -176,9 +149,15 @@ function InsHistoryCard() {
         { field: 'calItemDueDate', headerName: 'Next calibration Date', width: 150, align: "center", valueGetter: (params) => dayjs(params.row.calItemDueDate).format('DD-MM-YYYY') },
         { field: 'col5', headerName: 'Certificate Status', width: 150, align: "center", },
         { field: 'calCertificateNo', headerName: 'Certificate No', width: 150, align: "center", },
-        { field: 'col7', headerName: 'Observed Size 1', width: 150, align: "center", },
-        { field: 'itemCalibratedAt', headerName: 'Calibrated At', width: 150, align: "center", },
+        ...(selectedRow[0]?.itemType === 'variable' ?
+        [{ field: 'selectedRow.itemType', headerName: "Observed Error", width: 150, align: "center" }] : 
+        [{ field: 'selectedRow.itemType', headerName: "Observed Size", width: 150, align: "center" }]),
+        { field: 'selectedRow.itemCalibrationSource', headerName: 'Calibrated At', width: 150, align: "center", },
     ];
+
+    console.log(selectedRow)
+
+
 
     const handlePrintClick = () => {
         setHistoryCardPrintOpen(true);
@@ -260,13 +239,14 @@ function InsHistoryCard() {
 
                                 <div className="row">
                                     <div className=" col-md-3  g-2 mb-3 d-flex justify-content-start">
-                                        <div>
+                                    <div ><Button>Excel</Button></div>
+                                        {selectedRow[0]?.itemIMTENo && <div>
                                             <Button size="small" variant="contained" onClick={handlePrintClick} startIcon={<PrintRounded />}>
                                                 Print
                                             </Button>
-                                        </div>
+                                        </div> }
 
-                                        <div ><Button>Excel</Button></div>
+                                        
                                     </div>
                                     <div className="col"></div>
                                     <div className="col-md-8  g-2 d-flex justify-content-between">
@@ -292,16 +272,16 @@ function InsHistoryCard() {
                                     <div className="row g-2 mb-2">
                                         <div className="form-floating col-3">
                                             <TextField label="Serial No."
-                                                value={selectedRow.itemMFRNo} size="small" name="itemMFRNo" InputProps={{ readOnly: true }} InputLabelProps={{ shrink: true }}></TextField>
+                                                value={selectedRow[0]?.itemMFRNo} size="small" name="itemMFRNo" InputProps={{ readOnly: true }} InputLabelProps={{ shrink: true }}></TextField>
                                         </div>
                                         <div className="form-floating col-3">
                                             <TextField label="Model No."
-                                                value={selectedRow.itemModelNo} size="small" name="itemModelNo" InputProps={{ readOnly: true }} InputLabelProps={{ shrink: true }}></TextField>
+                                                value={selectedRow[0]?.itemModelNo} size="small" name="itemModelNo" InputProps={{ readOnly: true }} InputLabelProps={{ shrink: true }}></TextField>
                                         </div>
                                         <div className="form-floating col-3">
                                             <TextField
                                                 label="Range / Size"
-                                                value={selectedRow.itemRangeSize}
+                                                value={selectedRow[0]?.itemRangeSize+" "+selectedRow[0]?.itemRangeSizeUnit}
                                                 size="small"
                                                 name="itemRangeSize"
                                                 InputProps={{ readOnly: true }}
@@ -311,22 +291,22 @@ function InsHistoryCard() {
                                         </div>
                                         <div className="form-floating col-3">
                                             <TextField label="Calibration Source"
-                                                value={selectedRow.itemCalibrationSource} size="small" name="itemCalibrationSource" InputProps={{ readOnly: true }} InputLabelProps={{ shrink: true }}></TextField>
+                                                value={selectedRow[0]?.itemCalibrationSource} size="small" name="itemCalibrationSource" InputProps={{ readOnly: true }} InputLabelProps={{ shrink: true }}></TextField>
                                         </div>
                                     </div>
                                     <div className="row g-2 mb-2">
                                         <div className="form-floating col d-flex-md-5">
                                             <TextField label="Location"
-                                                value={selectedRow.itemCurrentLocation} size="small" name="itemCurrentLocation" InputProps={{ readOnly: true }} InputLabelProps={{ shrink: true }}></TextField>
+                                                value={selectedRow[0]?.itemCurrentLocation} size="small" name="itemCurrentLocation" InputProps={{ readOnly: true }} InputLabelProps={{ shrink: true }}></TextField>
                                         </div>
                                         <div className="form-floating col d-flex-md-5">
                                             <TextField label="Frequency In Months"
-                                                value={selectedRow.itemCalFreInMonths} size="small" name="itemCalFreInMonths" InputProps={{ readOnly: true }} InputLabelProps={{ shrink: true }}></TextField>
+                                                value={selectedRow[0]?.itemCalFreInMonths} size="small" name="itemCalFreInMonths" InputProps={{ readOnly: true }} InputLabelProps={{ shrink: true }}></TextField>
                                         </div>
                                         <div className="form-floating col d-flex-md-5">
                                             <TextField
                                                 label="Make"
-                                                value={selectedRow.itemMake}
+                                                value={selectedRow[0]?.itemMake}
                                                 size="small"
                                                 name="itemMake"
                                                 InputProps={{ readOnly: true }}
@@ -350,15 +330,17 @@ function InsHistoryCard() {
                                         <table className="table table-sm table-bordered text-center align-middle p-0">
                                             <thead>
                                                 <tr>
+                                                    <th>Parameter</th>
                                                     <th>Min</th>
                                                     <th>Max</th>
                                                     <th>Wear Limit</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                {selectedRow &&
-                                                    selectedRow.acceptanceCriteria.map(item => (
+                                                {selectedRow.length > 0 &&
+                                                    selectedRow[0].acceptanceCriteria.map(item => (
                                                         <tr>
+                                                        <td>{item.acParameter}</td>
                                                             <td>{item.acMinPS}</td>
                                                             <td>{item.acMaxPS}</td>
                                                             <td>{item.acWearLimitPS}</td>
