@@ -42,6 +42,7 @@ import RubeshTest from './Components/Test/RubeshTest';
 import DcPrint from './Components/Reports/dcList/DcPrint';
 import TotalList from './Components/Reports/TotalList';
 import { Backdrop, CircularProgress } from '@mui/material';
+import CalDueReport from './Components/Reports/CalDueReport';
 export const empRole = createContext(null);
 
 
@@ -93,6 +94,7 @@ const generateRoutes = (employee) => {
     { path: "/onSiteDialog", element: <OnSiteDialog /> },
     { path: "/roles", element: <Roles /> },
     { path: "/totalList", element: <TotalList /> },
+    { path: "/calDueReport", element: <CalDueReport /> },
 
     // Add more common routes...
   ];

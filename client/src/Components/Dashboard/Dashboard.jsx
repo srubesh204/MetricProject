@@ -60,6 +60,7 @@ import InsHistoryCard from '../Reports/InsHistoryCard';
 import Roles from '../system/Permissions';
 import Permissions from '../system/Permissions';
 import TotalList from '../Reports/TotalList';
+import CalDueReport from '../Reports/CalDueReport';
 //
 
 // function Copyright(props) {
@@ -164,7 +165,7 @@ const Dashboard = () => {
       { name: "Cal Data", file: <CalList /> },
       { name: "History Card", file: <InsHistoryCard /> },
       { name: "Gauge List",file:<TotalList/> },
-      { name: "Cal Due Report" },
+      { name: "Cal Due Report",file:<CalDueReport/> },
       { name: "Gauge Movement Report" },
       { name: "Management Chart" },
     ]
