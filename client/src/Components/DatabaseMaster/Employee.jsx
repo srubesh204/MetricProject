@@ -35,13 +35,38 @@ const Employee = () => {
 
     console.log(currentDay + "-" + currentMonth + "-" + currentYear)
 
-    const [employeeList, setEmployeeList] = useState([]);
+
+
+
+
     const [empDataId, setEmpDataId] = useState(null)
+    const [employeeList, setEmployeeList] = useState([]);
+    const [FilterNameList, setFilterNameList] = useState({
+        employmentStatus: [],
+        department: [],
+        reportTo: []
+
+    })
+
     const empFetch = async () => {
         try {
             const response = await axios.get(
                 `${process.env.REACT_APP_PORT}/employee/getAllEmployees`
             );
+            const filterNames = ["employmentStatus", "department", "reportTo"]
+            let updatedFilterNames = {};
+
+            filterNames.forEach((element, index) => {
+                const data = response.data.result.map(item => item[element]);
+                filterNames[index] = [...new Set(data)];
+
+                // Update the object with a dynamic key based on the 'element'
+                updatedFilterNames[element] = filterNames[index];
+                console.log(updatedFilterNames)
+            });
+            setFilterNameList(prev => ({ ...prev, ...updatedFilterNames }));
+
+
             setEmployeeList(response.data.result);
             setFilteredData(response.data.result);
         } catch (err) {
@@ -51,8 +76,9 @@ const Employee = () => {
     useEffect(() => {
         empFetch();
     }, []);
+    console.log(FilterNameList)
 
-    
+
 
     const [employeeSelectedRowIds, setEmployeeSelectedRowIds] = useState([]);
 
@@ -1043,9 +1069,9 @@ const Employee = () => {
                                 <Grid item xs={4}>
                                     <TextField fullWidth label="Department Filter" onChange={handleFilterChange} select size="small" id="departmentFilterId" name="departmentFilter" defaultValue="" >
                                         <MenuItem value="all">All</MenuItem>
-                                        {departmentList.map((item) => (
-                                            <MenuItem key={item._id} value={item.department}>{item.department}</MenuItem>
-                                        ))
+                                        {FilterNameList.department.map((item) => (
+                                                <MenuItem key={item._id} value={item}>{item}</MenuItem>
+                                            ))
 
                                         }
                                     </TextField>
@@ -1056,8 +1082,8 @@ const Employee = () => {
                                     <TextField fullWidth label="Report To" onChange={handleFilterChange} select size="small" id="reportToFilterId" name="reportToFilter" defaultValue="" >
                                         <MenuItem value="all">All</MenuItem>
                                         <MenuItem value="N/A">N/A</MenuItem>
-                                        {employeeList.map((item, index) => (
-                                            <MenuItem key={index} value={item.firstName}>{item.firstName}</MenuItem>
+                                        {FilterNameList.reportTo.map((item, index) => (
+                                            <MenuItem key={index} value={item}>{item}</MenuItem>
                                         ))}
                                     </TextField>
                                 </Grid>

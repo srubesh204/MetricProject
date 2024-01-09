@@ -36,51 +36,7 @@ const ItemList = () => {
     console.log(dayjs("2023-11-17").isSameOrBefore("2023-11-21"))
     const [itemList, setItemList] = useState([]);
 
-    const [FilterNameList, setFilterNameList] = useState({
-        itemIMTENo: [],
-        itemType: [],
-        itemDepartment: []
-    })
-
-    const itemFetch = async () => {
-        try {
-            const response = await axios.get(
-                `${process.env.REACT_APP_PORT}/itemAdd/getAllItemAdds`
-            );
-            // You can use a different logic for generating the id
-
-            const filterNames = ["itemIMTENo", "itemType", "itemDepartment", "customerWise"]
-
-            let updatedFilterNames = {};
-
-            filterNames.forEach((element, index) => {
-                const data = response.data.result.map(item => item[element]);
-                filterNames[index] = [...new Set(data)];
-
-                // Update the object with a dynamic key based on the 'element'
-                updatedFilterNames[element] = filterNames[index];
-                console.log(updatedFilterNames)
-            });
-
-            // Update state outside the loop with the updated object
-            setFilterNameList(prev => ({ ...prev, ...updatedFilterNames }));
-
-
-
-
-            setItemList(response.data.result);
-            setFilteredItemListData(response.data.result);
-
-        } catch (err) {
-            console.log(err);
-        }
-    };
-    useEffect(() => {
-        itemFetch();
-    }, []);
-
-
-    console.log(FilterNameList)
+    
 
     const [today, setToday] = useState(dayjs().format('YYYY-MM-DD'))
     console.log(today)
@@ -237,6 +193,9 @@ const ItemList = () => {
     
     
 
+   
+
+    
 
 
 
@@ -306,9 +265,57 @@ const ItemList = () => {
         }
     };
     const [showDialog, setShowDialog] = useState(false);
+//
+
+    const [FilterNameList, setFilterNameList] = useState({
+        itemIMTENo: [],
+        itemType: [],
+        itemDepartment: []
+    })
+
+    const itemFetch = async () => {
+        try {
+            const response = await axios.get(
+                `${process.env.REACT_APP_PORT}/itemAdd/getAllItemAdds`
+            );
+            // You can use a different logic for generating the id
+
+            const filterNames = ["itemIMTENo", "itemType", "itemDepartment", "customerWise"]
+
+            let updatedFilterNames = {};
+
+            filterNames.forEach((element, index) => {
+                const data = response.data.result.map(item => item[element]);
+                filterNames[index] = [...new Set(data)];
+
+                // Update the object with a dynamic key based on the 'element'
+                updatedFilterNames[element] = filterNames[index];
+                console.log(updatedFilterNames)
+            });
+
+            // Update state outside the loop with the updated object
+            setFilterNameList(prev => ({ ...prev, ...updatedFilterNames }));
+
+            console.log(partDataList)
 
 
 
+            setItemList(response.data.result);
+            setFilteredItemListData(response.data.result);
+
+        } catch (err) {
+            console.log(err);
+        }
+    };
+    useEffect(() => {
+        itemFetch();
+    }, []);
+
+   
+
+
+
+    console.log(FilterNameList)
 
 
 
@@ -556,8 +563,9 @@ const ItemList = () => {
         depFetchData();
     }, []);
 
-
+    // const [partCutomerNames, setPartCutomerNames] = useState([])
     const [partDataList, setPartDataList] = useState([])
+   
     const partFetchData = async () => {
         try {
             const response = await axios.get(
@@ -571,6 +579,29 @@ const ItemList = () => {
     useEffect(() => {
         partFetchData();
     }, []);
+    // useEffect(() => {
+    //     if (partDataList.length !== 0) {
+    //         // const partCustomers = itemList.map(item => {
+    //         //   const foundPart = item.itemPartName.map(itemPlant => {
+    //         //     const part = partDataList.find(part => itemPlant === part._id);
+    //         //     return part ? part : null;
+    //         //   });
+    //         //   console.log(foundPart);
+    //         //   setPartCutomerNames(foundPart)
+    //         //   return foundPart; // Returning the foundPart array for each itemList item
+    //         // });
+    //         // console.log(partCustomers);
+    //         // setPartCutomerNames(partCustomers)
+
+
+    //         //const partCustomers = itemList.map(item => item.itemPartName.includes(partDataList.map(part => part._id)))
+    //         const partCustomers = partDataList.filter(part => itemList.some(item => item.itemPartName.includes(part._id)))
+    //         console.log(partCustomers)
+    //         setPartCutomerNames(partCustomers)
+
+    //     }
+    // }, [partDataList, itemList])
+
 
     const [snackBarOpen, setSnackBarOpen] = useState(false)
     const [errorhandler, setErrorHandler] = useState({});
@@ -813,14 +844,14 @@ console.log(statusInfo)*/}
                             <div className="col d-flex mb-2 ">
 
                                 <TextField label="Imte No"
-                                    id="itemIMTENoId"
+                                    id="imteNoId"
                                     required
                                     select
                                     defaultValue="all"
                                     fullWidth
                                     size="small"
                                     onChange={handleFilterChangeItemList}
-                                    name="itemIMTENo" >
+                                    name="imteNo" >
                                     <MenuItem value="all">All</MenuItem>
                                     {FilterNameList.itemIMTENo.map((item, index) => (
                                         <MenuItem key={index} value={item}>{item}</MenuItem>
@@ -847,7 +878,7 @@ console.log(statusInfo)*/}
                             </div>
                             <div className="col d-flex  mb-2">
 
-                                <TextField label="Current Location"
+                                <TextField label="Department  Wise "
                                     id="currentLocationId"
                                     select
                                     defaultValue="all"
@@ -874,15 +905,15 @@ console.log(statusInfo)*/}
                                     onChange={handleFilterChangeItemList}
                                     name="customerWise" >
                                     <MenuItem value="all">All</MenuItem>
-                                    {customerList.map((item, index) => (
-                                        <MenuItem key={index} value={item.aliasName}>{item.aliasName}</MenuItem>
+                                    {partDataList.map((item, index) => (
+                                        <MenuItem key={index} value={item}>{item.customer}</MenuItem>
                                     ))}
                                 </TextField>
 
                             </div>
                             <div className="col d-flex  mb-2">
 
-                                <TextField label="supplier Wise"
+                                <TextField label="Other Location"
                                     id="supplierWiseId"
                                     select
                                     defaultValue="all"
@@ -973,7 +1004,7 @@ console.log(statusInfo)*/}
                                         <MenuItem value="all">All</MenuItem>
                                         <MenuItem value="Active">Active</MenuItem>
                                         <MenuItem value="InActive">InActive</MenuItem>
-                                        <MenuItem value="Spara">Spare</MenuItem>
+                                        <MenuItem value="Spare">Spare</MenuItem>
                                         <MenuItem value="Breakdown">Breakdown</MenuItem>
                                         <MenuItem value="Missing">Missing</MenuItem>
                                         <MenuItem value="Rejection">Rejection</MenuItem>

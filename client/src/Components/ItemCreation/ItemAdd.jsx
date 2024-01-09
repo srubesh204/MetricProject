@@ -267,7 +267,7 @@ const ItemAdd = () => {
         itemUncertainity: "",
         itemUncertainityUnit: "",
         itemPrevCalData: "",
-        itemPlant: []
+        itemPlant: ""
     })
 
     //upload Button

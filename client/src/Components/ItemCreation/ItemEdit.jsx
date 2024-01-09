@@ -12,6 +12,7 @@ import { useNavigate } from 'react-router-dom';
 import { Link as RouterLink } from 'react-router-dom';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { Add, Remove, HighlightOffRounded } from '@mui/icons-material';
+import { useEmployee } from '../../App';
 
 
 
@@ -21,6 +22,8 @@ const ItemEdit = () => {
     const { id } = useParams()
     console.log(id)
 
+
+    const employeeRole = useEmployee();
     // Units Data
     const [units, setUnits] = useState([]);
     const UnitFetch = async () => {
@@ -192,6 +195,7 @@ const ItemEdit = () => {
         selectedItemMaster: [],
         isItemMaster: "",
         itemAddMasterName: "",
+        itemPlant: "",
         itemIMTENo: "",
         itemImage: "",
         itemType: "",
@@ -205,6 +209,7 @@ const ItemEdit = () => {
         itemStatus: "Active",
         itemReceiptDate: dayjs().format("YYYY-MM-DD"),
         itemDepartment: "",
+
         itemArea: "N/A",
         itemPlaceOfUsage: "N/A",
         itemCalFreInMonths: "",
@@ -247,6 +252,7 @@ const ItemEdit = () => {
         itemMasterRef: "",
         selectedItemMaster: [],
         isItemMaster: "",
+
         itemAddMasterName: "",
         itemIMTENo: "",
         itemImage: "",
@@ -261,6 +267,7 @@ const ItemEdit = () => {
         itemStatus: "Active",
         itemReceiptDate: dayjs().format("YYYY-MM-DD"),
         itemDepartment: "",
+        itemPlant: "",
         itemCurrentLocation: "",
         itemArea: "N/A",
         itemPlaceOfUsage: "N/A",
@@ -315,6 +322,7 @@ const ItemEdit = () => {
                 itemIMTENo: itemData.itemIMTENo,
                 isItemMaster: itemData.isItemMaster,
                 itemImage: itemData.itemImage,
+                itemPlant: itemData.itemPlant,
                 itemType: itemData.itemType,
                 itemRangeSize: itemData.itemRangeSize,
                 itemRangeSizeUnit: itemData.itemRangeSizeUnit,
@@ -769,7 +777,7 @@ const ItemEdit = () => {
             setSnackBarOpen(true)
 
 
-
+            console.log(err)
 
             if (err.response && err.response.status === 400) {
                 // Handle validation errors
@@ -1026,6 +1034,16 @@ const ItemEdit = () => {
                                     Select Location
                                 </Typography>
                                 <div className="row g-2 mt-0 mb-2">
+                                    <div className="col-md-6">
+                                        <TextField
+                                            {...(errors.itemDepartment !== "" && { helperText: errors.itemDepartment, error: true })}
+                                            value={itemAddData.itemPlant} onChange={handleItemAddChange} size='small' select fullWidth variant='outlined' label="Select Plant" name='itemPlant' id='itemPlantId'>
+                                            <MenuItem value="">Select Plant</MenuItem>
+                                            {employeeRole.loggedEmp.plant.map((plant, index) => (
+                                                <MenuItem key={index} value={plant}>{plant}</MenuItem>
+                                            ))}
+                                        </TextField>
+                                    </div>
                                     <div className="col-md-6 ">
                                         <TextField value={itemAddData.itemDepartment} onChange={handleItemAddChange} size='small' select fullWidth variant='outlined' label="Department" name='itemDepartment' id='itemDepartmentId'>
                                             {departments.map((item, index) => (
@@ -1047,11 +1065,7 @@ const ItemEdit = () => {
                                             ))}
                                         </TextField>
                                     </div>
-                                    <div className='col-md-6 '>
-                                        <TextField size='small' disabled value={itemAddData.createdByName} fullWidth variant='outlined' label="Created By" name='createdByName' id='createdByNameId'>
 
-                                        </TextField>
-                                    </div>
 
                                 </div>
                             </Paper>
@@ -1386,7 +1400,15 @@ const ItemEdit = () => {
                                             value={itemAddData.itemPartName}
                                             onChange={handleItemAddChange}
                                             input={<OutlinedInput fullWidth label="Select Part" />}
-                                            renderValue={(selected) => selected.map(item => partData.find(part => part._id === item).partName).join(", ")} MenuProps={MenuProps}
+                                            renderValue={(selected) => {
+                                                const selectedParts = selected.map(item => {
+                                                  const foundPart = partData.find(part => part._id === item);
+                                                  return foundPart ? foundPart.partName : ""; // Check if foundPart exists before accessing its properties
+                                                });
+                                                return selectedParts.join(", ");
+                                              }}
+                                              
+                                            MenuProps={MenuProps}
                                             fullWidth
                                         >
                                             {partData.map((name, index) => (

@@ -23,6 +23,7 @@ const departmentController = {
         // Handle validation errors
         const validationErrors = {};
 
+        
         if (validationError.errors) {
           // Convert Mongoose validation error details to a more user-friendly format
           for (const key in validationError.errors) {

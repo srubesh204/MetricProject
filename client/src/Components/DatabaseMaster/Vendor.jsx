@@ -209,8 +209,6 @@ const Vendor = () => {
 
 
 
-
-
     
     const [vendorDataList, setVendorDataList] = useState([])
     const vendorFetchData = async () => {
