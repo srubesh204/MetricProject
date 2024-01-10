@@ -209,7 +209,7 @@ const ItemEdit = () => {
         itemStatus: "Active",
         itemReceiptDate: dayjs().format("YYYY-MM-DD"),
         itemDepartment: "",
-        
+
         itemArea: "N/A",
         itemPlaceOfUsage: "N/A",
         itemCalFreInMonths: "",
@@ -252,7 +252,7 @@ const ItemEdit = () => {
         itemMasterRef: "",
         selectedItemMaster: [],
         isItemMaster: "",
-       
+
         itemAddMasterName: "",
         itemIMTENo: "",
         itemImage: "",
@@ -267,7 +267,6 @@ const ItemEdit = () => {
         itemStatus: "Active",
         itemReceiptDate: dayjs().format("YYYY-MM-DD"),
         itemDepartment: "",
-        
         itemCurrentLocation: "",
         itemArea: "N/A",
         itemPlaceOfUsage: "N/A",
@@ -324,6 +323,7 @@ const ItemEdit = () => {
                 itemIMTENo: itemData.itemIMTENo,
                 isItemMaster: itemData.isItemMaster,
                 itemImage: itemData.itemImage,
+                itemPlant: itemData.itemPlant,
                 itemType: itemData.itemType,
                 itemRangeSize: itemData.itemRangeSize,
                 itemRangeSizeUnit: itemData.itemRangeSizeUnit,
@@ -780,7 +780,7 @@ const ItemEdit = () => {
             setSnackBarOpen(true)
 
 
-console.log(err)
+            console.log(err)
 
             if (err.response && err.response.status === 400) {
                 // Handle validation errors
@@ -1039,10 +1039,10 @@ console.log(err)
                                 <div className="row g-2 mt-0 mb-2">
                                     <div className="col-md-6">
                                         <TextField
-
+                                            {...(errors.itemDepartment !== "" && { helperText: errors.itemDepartment, error: true })}
                                             value={itemAddData.itemPlant} onChange={handleItemAddChange} size='small' select fullWidth variant='outlined' label="Select Plant" name='itemPlant' id='itemPlantId'>
                                             <MenuItem value="">Select Plant</MenuItem>
-                                            {employeeRole.loggedEmp && employeeRole.loggedEmp.plant && employeeRole.loggedEmp.plant.map((plant, index) => (
+                                            {employeeRole.loggedEmp.plant.map((plant, index) => (
                                                 <MenuItem key={index} value={plant}>{plant}</MenuItem>
                                             ))}
                                         </TextField>
@@ -1403,7 +1403,15 @@ console.log(err)
                                             value={itemAddData.itemPartName}
                                             onChange={handleItemAddChange}
                                             input={<OutlinedInput fullWidth label="Select Part" />}
-                                            renderValue={(selected) => selected.map(item => partData.find(part => part._id === item).partName).join(", ")} MenuProps={MenuProps}
+                                            renderValue={(selected) => {
+                                                const selectedParts = selected.map(item => {
+                                                  const foundPart = partData.find(part => part._id === item);
+                                                  return foundPart ? foundPart.partName : ""; // Check if foundPart exists before accessing its properties
+                                                });
+                                                return selectedParts.join(", ");
+                                              }}
+                                              
+                                            MenuProps={MenuProps}
                                             fullWidth
                                         >
                                             {partData.map((name, index) => (

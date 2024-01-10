@@ -1130,7 +1130,7 @@ const Employee = () => {
                                         <MenuItem value="all">All</MenuItem>
 
                                         {FilterNameList.reportTo.map((item, index) => (
-                                            <MenuItem key={index} value={item.firstName}>{item.firstName}</MenuItem>
+                                            <MenuItem key={index} value={item}>{item}</MenuItem>
                                         ))}
                                     </TextField>
                                 </Grid>

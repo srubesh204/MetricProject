@@ -7,7 +7,7 @@ import { Button, Dialog, DialogActions, DialogContent, DialogTitle, IconButton }
 const TotalPrint = () => {
 
     const totalPrintData = useContext(TotalListContent)
-    const { totalPrintOpen, setTotalPrintOpen, selectedRows, filteredItemListData, formatNoData, itemList } = totalPrintData
+    const { totalPrintOpen, setTotalPrintOpen, selectedRows, filteredItemListData, formatNoData, itemList, partDataList } = totalPrintData
 
 
     const styles = StyleSheet.create({
@@ -75,9 +75,13 @@ const TotalPrint = () => {
                 <Text style={{ width: "14%", border: "0.5px solid black", padding: "4px 0px", textAlign: "center" }}> {row.itemMake}</Text>
                 <Text style={{ width: "13%", border: "0.5px solid black", padding: "4px 0px", textAlign: "center" }}> {row.itemMFRNo}</Text>
                 <Text style={{ width: "10%", border: "0.5px solid black", padding: "4px 0px", textAlign: "center" }}> {row.itemCalFreInMonths}</Text>
-                <Text style={{ width: "13%", border: "0.5px solid black", padding: "4px 0px", textAlign: "center" }}>{row.itemCalibrationDoneAt || "-"} </Text>
+                <Text style={{ width: "16%", border: "0.5px solid black", padding: "4px 0px", textAlign: "center" }}>{partDataList
+                    .filter(part => row.itemPartName.includes(part._id))
+                    .map(part => part.partNo)
+                    .join(", ")}
+                </Text>
                 <Text style={{ width: "16%", border: "0.5px solid black", padding: "4px 0px", textAlign: "center" }}> {row.itemCalibrationSource === "outsource" ? (row.itemCalibratedAt ? row.itemCalibratedAt : "outsource") : row.itemCalibrationSource} </Text>
-                <Text style={{ width: "13%", border: "0.5px solid black", padding: "4px 0px", textAlign: "center" }}>{dayjs(row.itemCalDate).format('DD-MM-YYYY')} </Text>
+                <Text style={{ width: "10%", border: "0.5px solid black", padding: "4px 0px", textAlign: "center" }}>{dayjs(row.itemCalDate).format('DD-MM-YYYY')} </Text>
                 <Text style={{ width: "12%", border: "0.5px solid black", padding: "4px 0px", textAlign: "center" }}>{dayjs(row.itemDueDate).format('DD-MM-YYYY')} </Text>
                 <Text style={{ width: "14%", border: "0.5px solid black", padding: "4px 0px", textAlign: "center" }}>{row.itemDepartment} </Text>
 
@@ -122,7 +126,7 @@ const TotalPrint = () => {
                         {/* <Text style={{ padding: "10px", textAlign: "center", textDecoration: "underline" }}>Master List Of Gauges</Text>*/}
                         <View style={{ border: "1px solid black", width: "100%", height: "95%" }}>
                             <View style={{ display: "flex", flexDirection: "row", padding: 0, borderBottom: "1px solid black" }}>
-                                <Text style={{ width: "100%" ,padding: "20px", textAlign: "center", fontSize: "12px"  }}>Master List of Gauges & Instruments</Text>
+                                <Text style={{ width: "100%", padding: "20px", textAlign: "center", fontSize: "12px" }}>Master List of Gauges & Instruments</Text>
                             </View>
                             <View style={styles.table}>
                                 {/* Table header */}
@@ -135,9 +139,9 @@ const TotalPrint = () => {
                                     <Text style={{ width: "14%", border: "0.5px solid black", padding: 8, textAlign: "center" }}>Make</Text>
                                     <Text style={{ width: "13%", border: "0.5px solid black", padding: 8, textAlign: "center" }}>Mfr.Sr.No. </Text>
                                     <Text style={{ width: "10%", border: "0.5px solid black", padding: 8, textAlign: "center" }}>Calib. Freq. </Text>
-                                    <Text style={{ width: "13%", border: "0.5px solid black", padding: 8, textAlign: "center" }}>Used in Part No</Text>
+                                    <Text style={{ width: "16%", border: "0.5px solid black", padding: 8, textAlign: "center" }}>Used in Part No</Text>
                                     <Text style={{ width: "16%", border: "0.5px solid black", padding: 8, textAlign: "center" }}>Calibration Source</Text>
-                                    <Text style={{ width: "13%", border: "0.5px solid black", padding: 8, textAlign: "center" }}>Calibration Date</Text>
+                                    <Text style={{ width: "10%", border: "0.5px solid black", padding: 8, textAlign: "center" }}>Calibration Date</Text>
                                     <Text style={{ width: "12%", border: "0.5px solid black", padding: 8, textAlign: "center" }}>Duedate</Text>
                                     <Text style={{ width: "14%", border: "0.5px solid black", padding: 8, textAlign: "center" }}>Current           Location</Text>
 

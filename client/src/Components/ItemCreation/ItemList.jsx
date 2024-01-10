@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { TextField, MenuItem, Button } from '@mui/material';
+import { TextField, MenuItem, Button, ButtonGroup } from '@mui/material';
 import { Box, Container, Grid, Paper, Typography } from "@mui/material";
 import { DataGrid, GridToolbar } from '@mui/x-data-grid';
 import axios from 'axios';
@@ -23,6 +23,8 @@ import { Link } from 'react-router-dom';
 import isSameOrAfter from 'dayjs/plugin/isSameOrAfter'
 import isSameOrBefore from 'dayjs/plugin/isSameOrBefore'
 import { useEmployee } from '../../App';
+import styled from "@emotion/styled";
+import { CloudDownload, CloudUpload, Delete } from '@mui/icons-material';
 dayjs.extend(isSameOrBefore)
 dayjs.extend(isSameOrAfter)
 
@@ -34,51 +36,7 @@ const ItemList = () => {
     console.log(dayjs("2023-11-17").isSameOrBefore("2023-11-21"))
     const [itemList, setItemList] = useState([]);
 
-    const [FilterNameList, setFilterNameList] = useState({
-        itemIMTENo: [],
-        itemType: [],
-        itemDepartment: []
-    })
 
-    const itemFetch = async () => {
-        try {
-            const response = await axios.get(
-                `${process.env.REACT_APP_PORT}/itemAdd/getAllItemAdds`
-            );
-            // You can use a different logic for generating the id
-
-            const filterNames = ["itemIMTENo", "itemType", "itemDepartment", "customerWise"]
-
-            let updatedFilterNames = {};
-
-            filterNames.forEach((element, index) => {
-                const data = response.data.result.map(item => item[element]);
-                filterNames[index] = [...new Set(data)];
-
-                // Update the object with a dynamic key based on the 'element'
-                updatedFilterNames[element] = filterNames[index];
-                console.log(updatedFilterNames)
-            });
-
-            // Update state outside the loop with the updated object
-            setFilterNameList(prev => ({ ...prev, ...updatedFilterNames }));
-
-
-
-
-            setItemList(response.data.result);
-            setFilteredItemListData(response.data.result);
-
-        } catch (err) {
-            console.log(err);
-        }
-    };
-    useEffect(() => {
-        itemFetch();
-    }, []);
-
-
-    console.log(FilterNameList)
 
     const [today, setToday] = useState(dayjs().format('YYYY-MM-DD'))
     console.log(today)
@@ -183,6 +141,59 @@ const ItemList = () => {
 
 
 
+    const VisuallyHiddenInput = styled('input')({
+        clip: 'rect(0 0 0 0)',
+        clipPath: 'inset(50%)',
+        height: 1,
+        overflow: 'hidden',
+        position: 'absolute',
+        bottom: 0,
+        left: 0,
+        whiteSpace: 'nowrap',
+        width: 1,
+      });
+    
+      const [file, setFile] = useState(null);
+      const [itemAddExcelStatus, setItemAddExcelStatus] = useState('');
+    
+      const handleItemAddExcel = (e) => {
+        const selectedFile = e.target.files[0];
+        console.log(selectedFile)
+        setFile(selectedFile);
+      };
+    
+      const handleItemAddUpload = async () => {
+        try {
+          if (!file) {
+            setItemAddExcelStatus('No file selected');
+            return;
+          }
+    
+          const formData = new FormData();
+          formData.append('file', file);
+    
+          const response = await axios.post(`${process.env.REACT_APP_PORT}/itemAdd/uploadItemAddInExcel`, formData, {
+            headers: {
+              'Content-Type': 'multipart/form-data',
+            },
+          });
+    
+          setItemAddExcelStatus(response.data.message || 'Excel file uploaded successfully');
+        } catch (error) {
+          if (error.response) {
+            setItemAddExcelStatus(`Error: ${error.response.data.error || 'Something went wrong'}`);
+          } else if (error.request) {
+            setItemAddExcelStatus('Network error. Please try again.');
+          } else {
+            setItemAddExcelStatus('Error uploading the file.');
+          }
+          console.error('Error uploading Excel file:', error);
+        }
+      };
+    
+    
+
+
 
 
 
@@ -254,9 +265,59 @@ const ItemList = () => {
         }
     };
     const [showDialog, setShowDialog] = useState(false);
+    //
+
+    const [FilterNameList, setFilterNameList] = useState({
+        itemIMTENo: [],
+        itemType: [],
+        itemDepartment: [],
+        itemPlant: [],
+        itemCalibrationSource: []
+    })
+
+    const itemFetch = async () => {
+        try {
+            const response = await axios.get(
+                `${process.env.REACT_APP_PORT}/itemAdd/getAllItemAdds`
+            );
+            // You can use a different logic for generating the id
+
+            const filterNames = ["itemIMTENo", "itemType", "itemDepartment", "itemPlant", "itemCalibrationSource"]
+
+            let updatedFilterNames = {};
+
+            filterNames.forEach((element, index) => {
+                const data = response.data.result.map(item => item[element]);
+                filterNames[index] = [...new Set(data)];
+
+                // Update the object with a dynamic key based on the 'element'
+                updatedFilterNames[element] = filterNames[index];
+                console.log(updatedFilterNames)
+            });
+
+            // Update state outside the loop with the updated object
+            setFilterNameList(prev => ({ ...prev, ...updatedFilterNames }));
+
+            console.log(partDataList)
 
 
 
+            setItemList(response.data.result);
+            setFilteredItemListData(response.data.result);
+
+        } catch (err) {
+            console.log(err);
+        }
+    };
+    useEffect(() => {
+        itemFetch();
+    }, []);
+
+
+
+
+
+    console.log(FilterNameList)
 
 
 
@@ -339,6 +400,7 @@ const ItemList = () => {
                 return itemType.charAt(0).toUpperCase() + itemType.slice(1).toLowerCase();
             },
         }
+
     ];
 
     const [deleteModalItem, setDeleteModalItem] = useState(false);
@@ -387,51 +449,48 @@ const ItemList = () => {
                 const partName = itemList.filter((item) => (item.itemStatus === value))
                 setFilteredItemListData(partName)
             }
+            if (name === "plantWise") {
+                const plantWise = itemList.filter((item) => (item.itemPlant === value))
+                setFilteredItemListData(plantWise)
+                // setFilterAllNames(prev => ({
+                //     ...prev,
+                //     imteNo: "all",
+                //     itemType: "all",
+                //     currentLocation: "all",
+                //     customerWise: "all",
+                //     supplierWise: "all",
+                //     partName: "all",
+                //     status: "all",
+                //     plantWise: value,
+                // }))
+            }
+            if (name === "calibrationSource") {
 
-
-        }
-
-
-    };
-
-
-    const handleItemStatusDataBaseChange = (e) => {
-        const { name, checked, type } = e.target;
-        let value = type === "checkbox" ? (checked ? "1" : "0") : e.target.value;
-
-        setItemStatusData((prev) => ({ ...prev, [name]: value }));
-    };
-
-
-    {/* const dueDatePicker = (newValue, name) => {
-        let startDate = "";
-        let endDate = "";
-        let startDueDate = "";
-        let endDueDate = "";
-
-        // console.log(newValue.format("YYYY-MM-DD"));
-
-        if (name === "dueStartDate") {
-            startDate = newValue.format("YYYY-MM-DD");
-        }
-        if (name === "dueEndDate") {
-            endDate = newValue.format("YYYY-MM-DD");
-        }
-
-       
-            const filteredData = itemList.filter((item) => {
-                console.log(item.itemDueDate)
-                return (
-                    item.itemDueDate >= startDate && item.itemDueDate <= endDate)
-
+                const calibrationSource = itemList.filter((item) => (item.itemCalibrationSource === value))
+                setFilteredItemListData(calibrationSource)
+                // setFilterAllNames(prev => ({
+                //     ...prev,
+                //     imteNo: "all",
+                //     itemType: "all",
+                //     currentLocation: "all",
+                //     customerWise: "all",
+                //     supplierWise: "all",
+                //     partName: "all",
+                //     status: "all",
+                //     plantWise: "all",
+                //     calibrationSource: value,
+                // }))
             }
 
-            );
-            console.log(filteredData)
-      
+
+        }
 
 
-    };*/}
+    };
+
+
+
+
     const dueDatePicker = (newValue, name) => {
         let startDate = "";
         let endDate = "";
@@ -461,11 +520,7 @@ const ItemList = () => {
         console.log(filteredData);
     };
 
-    {/*const updateVendor = async (params) => {
-        console.log(params)
-        setVendorData(params.row)
-        setVendorStateId(params.id)
-    }*/}
+
     const [supplierList, setSupplierList] = useState([])
 
     const [customerList, setCustomerList] = useState([])
@@ -504,8 +559,9 @@ const ItemList = () => {
         depFetchData();
     }, []);
 
-
+    const [partCutomerNames, setPartCutomerNames] = useState([])
     const [partDataList, setPartDataList] = useState([])
+
     const partFetchData = async () => {
         try {
             const response = await axios.get(
@@ -519,6 +575,17 @@ const ItemList = () => {
     useEffect(() => {
         partFetchData();
     }, []);
+    useEffect(() => {
+        if (partDataList.length !== 0) {
+
+            const partCustomers = partDataList.filter(part => itemList.some(item => item.itemPartName.includes(part._id)))
+            console.log(partCustomers)
+            setPartCutomerNames(partCustomers)
+
+        }
+    }, [partDataList, itemList])
+
+
 
     const [snackBarOpen, setSnackBarOpen] = useState(false)
     const [errorhandler, setErrorHandler] = useState({});
@@ -761,14 +828,14 @@ console.log(statusInfo)*/}
                             <div className="col d-flex mb-2 ">
 
                                 <TextField label="Imte No"
-                                    id="itemIMTENoId"
+                                    id="imteNoId"
                                     required
                                     select
                                     defaultValue="all"
                                     fullWidth
                                     size="small"
                                     onChange={handleFilterChangeItemList}
-                                    name="itemIMTENo" >
+                                    name="imteNo" >
                                     <MenuItem value="all">All</MenuItem>
                                     {FilterNameList.itemIMTENo.map((item, index) => (
                                         <MenuItem key={index} value={item}>{item}</MenuItem>
@@ -795,7 +862,7 @@ console.log(statusInfo)*/}
                             </div>
                             <div className="col d-flex  mb-2">
 
-                                <TextField label="Current Location"
+                                <TextField label="Department  Wise "
                                     id="currentLocationId"
                                     select
                                     defaultValue="all"
@@ -822,25 +889,26 @@ console.log(statusInfo)*/}
                                     onChange={handleFilterChangeItemList}
                                     name="customerWise" >
                                     <MenuItem value="all">All</MenuItem>
-                                    {customerList.map((item, index) => (
-                                        <MenuItem key={index} value={item.aliasName}>{item.aliasName}</MenuItem>
+                                    {partCutomerNames.map((item, index) => (
+                                        <MenuItem key={index} value={item}>{item.customer}</MenuItem>
                                     ))}
                                 </TextField>
 
                             </div>
                             <div className="col d-flex  mb-2">
 
-                                <TextField label="supplier Wise"
-                                    id="supplierWiseId"
+                                <TextField label="Calibration source"
+                                    id="calibrationSourceId"
                                     select
-                                    defaultValue="all"
+                                    defaultValue={"all"}
                                     fullWidth
                                     size="small"
+                                   // value={filterAllNames.calibrationSource}
                                     onChange={handleFilterChangeItemList}
-                                    name="supplierWise" >
+                                    name="calibrationSource" >
                                     <MenuItem value="all">All</MenuItem>
-                                    {supplierList.map((item, index) => (
-                                        <MenuItem key={index} value={item.aliasName}>{item.aliasName}</MenuItem>
+                                    {FilterNameList.itemCalibrationSource.map((item, index) => (
+                                        <MenuItem key={index} value={item}>{item}</MenuItem>
                                     ))}
                                 </TextField>
 
@@ -890,13 +958,16 @@ console.log(statusInfo)*/}
                                 <TextField label="Plant Wise"
                                     id="plantWiseId"
                                     select
-                                    defaultValue="all"
+                                    //  value={filterAllNames.plantWise}
                                     fullWidth
                                     size="small"
                                     onChange={handleFilterChangeItemList}
                                     name="plantWise" >
                                     <MenuItem value="all">All</MenuItem>
-                                    <MenuItem value="Reference Standard">Reference Standard</MenuItem>
+                                    {FilterNameList.itemPlant.map((item, index) => (
+                                        <MenuItem key={index} value={item}>{item}</MenuItem>
+                                    ))}
+
                                 </TextField>
 
                             </div>
@@ -921,7 +992,7 @@ console.log(statusInfo)*/}
                                         <MenuItem value="all">All</MenuItem>
                                         <MenuItem value="Active">Active</MenuItem>
                                         <MenuItem value="InActive">InActive</MenuItem>
-                                        <MenuItem value="Spara">Spare</MenuItem>
+                                        <MenuItem value="Spare">Spare</MenuItem>
                                         <MenuItem value="Breakdown">Breakdown</MenuItem>
                                         <MenuItem value="Missing">Missing</MenuItem>
                                         <MenuItem value="Rejection">Rejection</MenuItem>
@@ -1149,16 +1220,24 @@ console.log(statusInfo)*/}
                         </div>
                         <div className='row'>
                             <div className='col d-flex '>
-                                {employeeRole.employee !== "viewer" && <React.Fragment>
-                                    <div className='me-2' >
-                                        <label className='itemlistloade'>
-                                            <input className="form-control itemlistdownload" type="file" id="upload" />Upload</label>
-                                    </div>
-                                    <div className='me-2'>
-                                        <label className='itemlistloade'>
-                                            <input className="form-control itemlistdownload" type="file" id="download" />Download </label>
-                                    </div>
-                                </React.Fragment>}
+                  <div className="d-flex justify-content-center">
+                    <ButtonGroup className='me-3'>
+                      <Button component="label" variant="contained" >
+                        Upload
+                        <VisuallyHiddenInput type="file" onChange={handleItemAddExcel} />
+                      </Button>
+                      <Button onClick={handleItemAddUpload}><CloudUpload /></Button>
+                    </ButtonGroup>
+
+                    <ButtonGroup>
+                      <Button component="label" variant="contained" color='secondary'>
+                        Download
+                        <VisuallyHiddenInput type="file" />
+                      </Button>
+                      <Button color='secondary'><CloudDownload /></Button>
+                    </ButtonGroup>
+                  </div>
+                  {itemAddExcelStatus && <p>{itemAddExcelStatus}</p>}
 
                                 <div className='me-2 '>
                                     <button type="button" className='btn btn-secondary' >Sticker Print</button>
