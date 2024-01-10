@@ -167,22 +167,7 @@ const DcList = () => {
     }, [dateData.fromDate, dateData.toDate])
 
 
-    {/*const [dcListData, setDcListData] = useState([])
-    const dcListFetchData = async () => {
-        try {
-            const response = await axios.get(
-                `${process.env.REACT_APP_PORT}/itemDc/getAllItemDc`
-            );
-
-            setDcListData(response.data.result);
-        } catch (err) {
-            console.log(err);
-        }
-    };
-    useEffect(() => {
-        dcListFetchData();
-    }, []);*/}
-
+  
 
     const handleSnackClose = (event, reason) => {
         if (reason === 'clickaway') {

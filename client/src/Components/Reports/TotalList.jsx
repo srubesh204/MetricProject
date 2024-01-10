@@ -26,6 +26,18 @@ const TotalList = () => {
 
 
 
+
+  
+
+
+
+
+
+
+
+
+
+
   const employeeRole = useEmployee()
 
   console.log(dayjs("2023-11-17").isSameOrBefore("2023-11-21"))
@@ -35,7 +47,8 @@ const TotalList = () => {
     itemIMTENo: [],
     itemType: [],
     itemDepartment: [],
-    itemPlant: []
+    itemPlant: [],
+    itemCalibrationSource: []
   })
 
 
@@ -74,7 +87,7 @@ const TotalList = () => {
       );
       // You can use a different logic for generating the id
 
-      const filterNames = ["itemIMTENo", "itemType", "itemDepartment", "itemPlant"]
+      const filterNames = ["itemIMTENo", "itemType", "itemDepartment", "itemPlant", "itemCalibrationSource"]
 
       let updatedFilterNames = {};
 
@@ -181,7 +194,21 @@ const TotalList = () => {
   const [showDialog, setShowDialog] = useState(false);
 
 
+  const [vendorCalDataList, setVendorCalDataList] = useState([])
+  const calFetchData = async () => {
+    try {
+      const response = await axios.get(
+        `${process.env.REACT_APP_PORT}/vendor/getAllVendors`
+      );
+      setVendorCalDataList(response.data.result);
 
+    } catch (err) {
+      console.log(err);
+    }
+  };
+  useEffect(() => {
+    calFetchData();
+  }, []);
 
 
 
@@ -250,6 +277,7 @@ const TotalList = () => {
         return itemType.charAt(0).toUpperCase() + itemType.slice(1).toLowerCase();
       },
     },
+    { field: 'itemPartName', headerName: 'Part Name', width: 120, headerAlign: "center", align: "center", },
 
   ];
 
@@ -346,7 +374,7 @@ const TotalList = () => {
       }
       if (name === "supplierWise") {
         if (value) {
-          const supplierWise = itemList.filter((item) => item.itemCurrentLocation && item.itemLocation !== "itemDepartment" && item.dcStatus ==="1" );
+          const supplierWise = itemList.filter((item) => item.itemCurrentLocation && item.itemLocation !== "itemDepartment" && item.dcStatus === "1");
           console.log(supplierWise);
           setFilteredItemListData(supplierWise);
           setFilterAllNames((prev) => ({
@@ -362,21 +390,40 @@ const TotalList = () => {
           }));
         }
       }
+      // if (name === "partName") {
+      //   const partName = itemList.filter((item) => (item.partName === value);
+      //   setFilteredItemListData(partName);
+      //   setFilterAllNames((prev) => ({
+      //     ...prev,
+      //     imteNo: "all",
+      //     itemType: "all",
+      //     currentLocation: "all",
+      //     customerWise: "all",
+      //     supplierWise: "all",
+      //     partName: value, // Update the partName value in the filterAllNames state
+      //     status: "all", // Reset other filters if needed
+      //     plantWise: "all",
+      //   }));
+      // }
       if (name === "partName") {
-        const partName = itemList.filter((item) => (item.itemPartName === value))
-        setFilteredItemListData(partName)
-        setFilterAllNames(prev => ({
+        const filteredItems = itemList.filter((item) => (item.itemPartName.includes(value)));
+
+        setFilteredItemListData(filteredItems);
+        console.log(filteredItems)
+        setFilterAllNames((prev) => ({
           ...prev,
           imteNo: "all",
           itemType: "all",
           currentLocation: "all",
           customerWise: "all",
           supplierWise: "all",
-          partName: value,
-          status: "all",
+          partName: value, // Update the partName value in the filterAllNames state
+          status: "all", // Reset other filters if needed
           plantWise: "all",
-        }))
+        }));
       }
+    
+
 
       if (name === "status") {
         const partName = itemList.filter((item) => (item.itemStatus === value))
@@ -408,6 +455,23 @@ const TotalList = () => {
           plantWise: value,
         }))
       }
+      if (name === "calibrationSource") {
+
+        const calibrationSource = itemList.filter((item) => (item.itemCalibrationSource === value))
+        setFilteredItemListData(calibrationSource)
+        setFilterAllNames(prev => ({
+          ...prev,
+          imteNo: "all",
+          itemType: "all",
+          currentLocation: "all",
+          customerWise: "all",
+          supplierWise: "all",
+          partName: "all",
+          status: "all",
+          plantWise: "all",
+          calibrationSource: value,
+        }))
+      }
 
 
     }
@@ -415,6 +479,25 @@ const TotalList = () => {
 
   };
 
+
+  const handleFilterChange = (e) => {
+    const { name, value } = e.target;
+    if (value === "all") {
+      setFilteredItemListData(vendorDataList)
+    } else {
+      if (value === "oem") {
+        const vendorType = vendorDataList.filter((item) => (item.oem === "1"))
+        setFilteredItemListData(vendorType)
+      }
+      if (value === "supplier") {
+        const vendorType = vendorDataList.filter((item) => (item.supplier === "1"))
+        setFilteredItemListData(vendorType)
+      }
+
+    }
+
+
+  };
 
 
   console.log(filteredItemListData)
@@ -492,7 +575,7 @@ const TotalList = () => {
       );
       console.log(response.data.result)
       const customersList = response.data.result.filter((item) => item.customer === "1")
-      const suppliersList = response.data.result.filter((item,[value]) => (item.fullName === value))
+      const suppliersList = response.data.result.filter((item) => item.oem === "1")
       setSupplierList(suppliersList);
       setCustomerList(customersList);
     } catch (err) {
@@ -509,7 +592,7 @@ const TotalList = () => {
         `${process.env.REACT_APP_PORT}/vendor/getAllVendors`
       );
       setVendorDataList(response.data.result);
-    
+
 
     } catch (err) {
       console.log(err);
@@ -775,23 +858,19 @@ const TotalList = () => {
               </div>
               <div className="col d-flex  mb-2">
 
-                <TextField label="Due In Days"
-                  id="dueInDaysId"
+                <TextField label="Calibration source"
+                  id="calibrationSourceId"
                   select
-
+                  defaultValue={"all"}
                   fullWidth
                   size="small"
-                  onChange={handleDueChange}
-                  name="dueInDays" >
+                  value={filterAllNames.calibrationSource}
+                  onChange={handleFilterChangeItemList}
+                  name="calibrationSource" >
                   <MenuItem value="all">All</MenuItem>
-                  <MenuItem value="Past">Past</MenuItem >
-                  <MenuItem value="Today">Today</MenuItem >
-                  <MenuItem value="7">7</MenuItem >
-                  <MenuItem value="15">15</MenuItem >
-                  <MenuItem value="30">30</MenuItem >
-                  <MenuItem value=">30">{'>'}30</MenuItem >
-                  <MenuItem value="Date">Date</MenuItem >
-
+                  {FilterNameList.itemCalibrationSource.map((item, index) => (
+                    <MenuItem key={index} value={item}>{item}</MenuItem>
+                  ))}
                 </TextField>
 
               </div>
@@ -808,7 +887,7 @@ const TotalList = () => {
                   name="partName" >
                   <MenuItem value="all">All</MenuItem>
                   {partCutomerNames.map((item, index) => (
-                    <MenuItem key={index} value={item}>{item.partName}</MenuItem>
+                    <MenuItem key={index} value={item._id}>{[item.partNo, item.partName].join(', ')}</MenuItem>
                   ))}
                 </TextField>
 
@@ -992,7 +1071,7 @@ const TotalList = () => {
       </form>
 
       <TotalListContent.Provider
-        value={{ totalPrintOpen, setTotalPrintOpen, selectedRows, itemList, filteredItemListData }}
+        value={{ totalPrintOpen, setTotalPrintOpen, selectedRows, itemList, filteredItemListData,partDataList }}
       >
 
         <TotalPrint />
