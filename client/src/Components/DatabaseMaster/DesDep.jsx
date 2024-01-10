@@ -1,18 +1,29 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import Alert from '@mui/material/Alert';
-import Snackbar from '@mui/material/Snackbar';
-import { Autocomplete, Box, ButtonGroup, Checkbox, Container, FormControlLabel, Grid, IconButton, Paper, Typography } from "@mui/material";
-import { TextField, MenuItem, FormControl } from '@mui/material';
-import Button from '@mui/material/Button';
-import Dialog from '@mui/material/Dialog';
-import DialogActions from '@mui/material/DialogActions';
-import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
-import DialogTitle from '@mui/material/DialogTitle';
+import {
+  Autocomplete,
+  Box,
+  ButtonGroup,
+  Checkbox,
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+  TextField,
+  MenuItem,
+  Alert,
+  Snackbar,
+  FormControl,
+  FormControlLabel,
+  Grid,
+  IconButton,
+  Paper,
+  Typography
+} from "@mui/material";
 import { DataGrid, GridToolbar } from '@mui/x-data-grid';
-import { CloudDownload, CloudUpload, Delete } from '@mui/icons-material';
-import { Check, Clear } from '@mui/icons-material';
+import { CloudDownload, CloudUpload, Delete, Check, Clear } from '@mui/icons-material';
 import { useParams } from 'react-router-dom';
 import styled from "@emotion/styled";
 import { Link } from 'react-router-dom';
@@ -1060,20 +1071,20 @@ export const Department = () => {
                 <div className="row g-2">
                   <div className="col d-flex">
                     <div className="d-flex justify-content-center">
-                      <ButtonGroup  style={{ marginRight: '10px' }}>
-                        <Button component="label" size="small" sx={{width: "50%"}} variant="contained" >
+                      <ButtonGroup style={{ marginRight: '10px' }}>
+                        <Button component="label" size="small" fullWidth variant="contained" >
                           Upload
                           <VisuallyHiddenInput type="file" onChange={(e) => handleExcel(e, "dep")} />
                         </Button>
-                        <Button sx={{width: "20%"}} onClick={(e) => handleUpload(e, "dep")}><CloudUpload /></Button>
+                        <Button fullWidth onClick={(e) => handleUpload(e, "dep")}><CloudUpload /></Button>
                       </ButtonGroup>
 
                       <ButtonGroup>
-                        <Button component="label" size="small"  sx={{width: "50%"}} variant="contained" color='secondary'>
+                        <Button component="label" size="small" fullWidth variant="contained" color='secondary'>
                           Download
                           <VisuallyHiddenInput type="file" />
                         </Button>
-                        <Button color='secondary'sx={{width: "20%"}}  ><CloudDownload /></Button>
+                        <Button color='secondary' fullWidth  ><CloudDownload /></Button>
                       </ButtonGroup>
                     </div>
 
@@ -1136,15 +1147,15 @@ export const Department = () => {
                     {depStateId ? (<div className="d-flex justify-content-end">
                       <Button
                         type="button"
-                        variant="contained"  size="small"
+                        variant="contained" size="small"
                         style={{ backgroundColor: "#e6e6e6", color: "black", fontWeight: "bolder" }}
                         className="btn text-end me-2 hover"
                         onClick={() => setDepOpenModal(true)}
-                      //   disabled={!depStateId}
+                        color="info"
                       >
                         Modify
                       </Button >
-                      <Button type="button" variant="contained"  size="small"  onMouseEnter={(e) => { e.target.style.background = 'red' }} onMouseOut={(e) => { e.target.style.background = '#e6e6e6' }}
+                      <Button type="button" variant="contained" size="small" onMouseEnter={(e) => { e.target.style.background = 'red' }} onMouseOut={(e) => { e.target.style.background = '#e6e6e6' }}
                         style={{ backgroundColor: "#e6e6e6", color: "black", fontWeight: "bolder" }}
                         className="btn text-end"
                         onClick={() => { setDepStateId(null); setDepartmentData(emptyDepartmentData) }}
@@ -1153,9 +1164,9 @@ export const Department = () => {
                       <Button variant="contained" type="button"
                         size="small"
                         color='warning'
-                        
+
                         className="btn text-end hover" onClick={() => setDepOpenModal(true)}
-                       >+ Add Department</Button>
+                      >+ Add Department</Button>
                     </div>}
 
 
@@ -1282,19 +1293,6 @@ export const Department = () => {
                   <div className="row g-2">
                     <div className="col-md-8 d-flex ">
 
-
-                      {/* <TextField label="Area"
-                        {...(errors.area !== "" && { helperText: errors.area, error: true })}
-                        id="areaId"
-
-                        fullWidth
-                        size="small"
-
-                        placeholder="N/A"
-                        onChange={handleAreaChange}
-                        onKeyDown={handleAreaKeyDown}
-                        value={areaData.area}
-              name="area" ></TextField>*/}
                       <Autocomplete label="Area"
                         disablePortal
                         size="small"
@@ -1307,6 +1305,7 @@ export const Department = () => {
                           <TextField  {...(errors.area !== "" && { helperText: errors.area, error: true })} onKeyDown={handleAreaKeyDown} onChange={handleAreaChange}
                             name="area" {...params} label="Area" />} />
                     </div>
+
                     <div className="col d-flex mb-3">
 
                       <TextField label="Status"
@@ -1336,19 +1335,19 @@ export const Department = () => {
                     <div className="col d-flex">
                       <div className="d-flex justify-content-center">
                         <ButtonGroup >
-                          <Button component="label" sx={{width: "50%"}} variant="contained" >
+                          <Button component="label" fullWidth variant="contained" >
                             Upload
                             <VisuallyHiddenInput type="file" onChange={(e) => handleExcel(e, "area")} />
                           </Button>
-                          <Button sx={{width: "25%"}} onClick={(e) => handleUpload(e, "area")}><CloudUpload /></Button>
+                          <Button sx={{ width: "25%" }} onClick={(e) => handleUpload(e, "area")}><CloudUpload /></Button>
                         </ButtonGroup>
 
                         <ButtonGroup>
-                          <Button component="label" sx={{width: "50%"}} variant="contained" color='secondary'>
+                          <Button component="label" fullWidth variant="contained" color='secondary'>
                             Download
                             <VisuallyHiddenInput type="file" />
                           </Button>
-                          <Button sx={{width: "25%"}} color='secondary'><CloudDownload /></Button>
+                          <Button sx={{ width: "25%" }} color='secondary'><CloudDownload /></Button>
                         </ButtonGroup>
                       </div>
 
@@ -1420,7 +1419,7 @@ export const Department = () => {
                         >
                           Modify
                         </Button >
-                        <Button type="button"  variant='contained' size="small" onMouseEnter={(e) => { e.target.style.background = 'red' }} onMouseOut={(e) => { e.target.style.background = '#e6e6e6' }}
+                        <Button type="button" variant='contained' size="small" onMouseEnter={(e) => { e.target.style.background = 'red' }} onMouseOut={(e) => { e.target.style.background = '#e6e6e6' }}
                           style={{ backgroundColor: "#e6e6e6", color: "black", fontWeight: "bolder" }}
                           className="btn text-end"
                           onClick={() => { setareaStateId(null); setArea(initialAreaData) }}
@@ -1622,7 +1621,7 @@ export const Department = () => {
                   <div className="col d-flex">
                     <div className="d-flex justify-content-center">
                       <ButtonGroup className='me-3'>
-                        <Button component="label" variant="contained" >
+                        <Button component="label" variant="contained" fullWidth>
                           Upload
                           <VisuallyHiddenInput type="file" onChange={(e) => handleExcel(e, "pou")} />
                         </Button>
@@ -1630,7 +1629,7 @@ export const Department = () => {
                       </ButtonGroup>
 
                       <ButtonGroup>
-                        <Button component="label" variant="contained" color='secondary'>
+                        <Button component="label" variant="contained" fullWidth color='secondary'>
                           Download
                           <VisuallyHiddenInput type="file" />
                         </Button>
@@ -2333,7 +2332,7 @@ export const Designation = () => {
                 <div className="col d-flex">
                   <div className="d-flex justify-content-center">
                     <ButtonGroup className='me-3'>
-                      <Button component="label" variant="contained" >
+                      <Button component="label" variant="contained" fullWidth>
                         Upload
                         <VisuallyHiddenInput type="file" onChange={handleDesExcel} />
                       </Button>
@@ -2341,7 +2340,7 @@ export const Designation = () => {
                     </ButtonGroup>
 
                     <ButtonGroup>
-                      <Button component="label" variant="contained" color='secondary'>
+                      <Button component="label" variant="contained" color='secondary' fullWidth>
                         Download
                         <VisuallyHiddenInput type="file" />
                       </Button>
@@ -2418,16 +2417,16 @@ export const Designation = () => {
                     type="button"
                     size="small"
                     className="btn text-end hover"
-                  
+
                     onClick={() => setOpenModal(true)}
-                    
+
                   >
                     <i className="bi bi-plus"></i>Add Designation</Button>
                   }
                 </div>
 
               </div>
-                    {desExcelStatus && <p>{desExcelStatus}</p>}
+              {desExcelStatus && <p>{desExcelStatus}</p>}
 
             </Paper>
           </Grid>

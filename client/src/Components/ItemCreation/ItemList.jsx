@@ -41,7 +41,7 @@ const ItemList = () => {
     console.log(dayjs("2023-11-17").isSameOrBefore("2023-11-21"))
     const [itemList, setItemList] = useState([]);
 
-    
+
 
     const [today, setToday] = useState(dayjs().format('YYYY-MM-DD'))
     console.log(today)
@@ -198,9 +198,9 @@ const ItemList = () => {
     
     
 
-   
 
-    
+
+
 
 
 
@@ -270,12 +270,14 @@ const ItemList = () => {
         }
     };
     const [showDialog, setShowDialog] = useState(false);
-//
+    //
 
     const [FilterNameList, setFilterNameList] = useState({
         itemIMTENo: [],
         itemType: [],
-        itemDepartment: []
+        itemDepartment: [],
+        itemPlant: [],
+        itemCalibrationSource: []
     })
 
     const itemFetch = async () => {
@@ -285,7 +287,7 @@ const ItemList = () => {
             );
             // You can use a different logic for generating the id
 
-            const filterNames = ["itemIMTENo", "itemType", "itemDepartment", "customerWise"]
+            const filterNames = ["itemIMTENo", "itemType", "itemDepartment", "itemPlant", "itemCalibrationSource"]
 
             let updatedFilterNames = {};
 
@@ -316,7 +318,7 @@ const ItemList = () => {
         itemFetch();
     }, []);
 
-   
+
 
 
 
@@ -364,7 +366,7 @@ const ItemList = () => {
                     width: 60,
                     headerAlign: "center", align: "center",
                     renderCell: (params) => (
-                        <Button component={Link} to={`/itemedit/${params.id}`}>
+                        <Button component={Link} to={`/itemEdit/${params.id}`}>
                             <Edit color='success' />
                         </Button>
                     ),
@@ -403,6 +405,7 @@ const ItemList = () => {
                 return itemType.charAt(0).toUpperCase() + itemType.slice(1).toLowerCase();
             },
         }
+
     ];
 
     const [deleteModalItem, setDeleteModalItem] = useState(false);
@@ -451,51 +454,48 @@ const ItemList = () => {
                 const partName = itemList.filter((item) => (item.itemStatus === value))
                 setFilteredItemListData(partName)
             }
+            if (name === "plantWise") {
+                const plantWise = itemList.filter((item) => (item.itemPlant === value))
+                setFilteredItemListData(plantWise)
+                // setFilterAllNames(prev => ({
+                //     ...prev,
+                //     imteNo: "all",
+                //     itemType: "all",
+                //     currentLocation: "all",
+                //     customerWise: "all",
+                //     supplierWise: "all",
+                //     partName: "all",
+                //     status: "all",
+                //     plantWise: value,
+                // }))
+            }
+            if (name === "calibrationSource") {
 
-
-        }
-
-
-    };
-
-
-    const handleItemStatusDataBaseChange = (e) => {
-        const { name, checked, type } = e.target;
-        let value = type === "checkbox" ? (checked ? "1" : "0") : e.target.value;
-
-        setItemStatusData((prev) => ({ ...prev, [name]: value }));
-    };
-
-
-    {/* const dueDatePicker = (newValue, name) => {
-        let startDate = "";
-        let endDate = "";
-        let startDueDate = "";
-        let endDueDate = "";
-
-        // console.log(newValue.format("YYYY-MM-DD"));
-
-        if (name === "dueStartDate") {
-            startDate = newValue.format("YYYY-MM-DD");
-        }
-        if (name === "dueEndDate") {
-            endDate = newValue.format("YYYY-MM-DD");
-        }
-
-       
-            const filteredData = itemList.filter((item) => {
-                console.log(item.itemDueDate)
-                return (
-                    item.itemDueDate >= startDate && item.itemDueDate <= endDate)
-
+                const calibrationSource = itemList.filter((item) => (item.itemCalibrationSource === value))
+                setFilteredItemListData(calibrationSource)
+                // setFilterAllNames(prev => ({
+                //     ...prev,
+                //     imteNo: "all",
+                //     itemType: "all",
+                //     currentLocation: "all",
+                //     customerWise: "all",
+                //     supplierWise: "all",
+                //     partName: "all",
+                //     status: "all",
+                //     plantWise: "all",
+                //     calibrationSource: value,
+                // }))
             }
 
-            );
-            console.log(filteredData)
-      
+
+        }
 
 
-    };*/}
+    };
+
+
+
+
     const dueDatePicker = (newValue, name) => {
         let startDate = "";
         let endDate = "";
@@ -525,11 +525,7 @@ const ItemList = () => {
         console.log(filteredData);
     };
 
-    {/*const updateVendor = async (params) => {
-        console.log(params)
-        setVendorData(params.row)
-        setVendorStateId(params.id)
-    }*/}
+
     const [supplierList, setSupplierList] = useState([])
 
     const [customerList, setCustomerList] = useState([])
@@ -568,9 +564,9 @@ const ItemList = () => {
         depFetchData();
     }, []);
 
-    // const [partCutomerNames, setPartCutomerNames] = useState([])
+    const [partCutomerNames, setPartCutomerNames] = useState([])
     const [partDataList, setPartDataList] = useState([])
-   
+
     const partFetchData = async () => {
         try {
             const response = await axios.get(
@@ -584,28 +580,16 @@ const ItemList = () => {
     useEffect(() => {
         partFetchData();
     }, []);
-    // useEffect(() => {
-    //     if (partDataList.length !== 0) {
-    //         // const partCustomers = itemList.map(item => {
-    //         //   const foundPart = item.itemPartName.map(itemPlant => {
-    //         //     const part = partDataList.find(part => itemPlant === part._id);
-    //         //     return part ? part : null;
-    //         //   });
-    //         //   console.log(foundPart);
-    //         //   setPartCutomerNames(foundPart)
-    //         //   return foundPart; // Returning the foundPart array for each itemList item
-    //         // });
-    //         // console.log(partCustomers);
-    //         // setPartCutomerNames(partCustomers)
+    useEffect(() => {
+        if (partDataList.length !== 0) {
 
+            const partCustomers = partDataList.filter(part => itemList.some(item => item.itemPartName.includes(part._id)))
+            console.log(partCustomers)
+            setPartCutomerNames(partCustomers)
 
-    //         //const partCustomers = itemList.map(item => item.itemPartName.includes(partDataList.map(part => part._id)))
-    //         const partCustomers = partDataList.filter(part => itemList.some(item => item.itemPartName.includes(part._id)))
-    //         console.log(partCustomers)
-    //         setPartCutomerNames(partCustomers)
+        }
+    }, [partDataList, itemList])
 
-    //     }
-    // }, [partDataList, itemList])
 
 
     const [snackBarOpen, setSnackBarOpen] = useState(false)
@@ -910,7 +894,7 @@ console.log(statusInfo)*/}
                                     onChange={handleFilterChangeItemList}
                                     name="customerWise" >
                                     <MenuItem value="all">All</MenuItem>
-                                    {partDataList.map((item, index) => (
+                                    {partCutomerNames.map((item, index) => (
                                         <MenuItem key={index} value={item}>{item.customer}</MenuItem>
                                     ))}
                                 </TextField>
@@ -918,17 +902,18 @@ console.log(statusInfo)*/}
                             </div>
                             <div className="col d-flex  mb-2">
 
-                                <TextField label="Other Location"
-                                    id="supplierWiseId"
+                                <TextField label="Calibration source"
+                                    id="calibrationSourceId"
                                     select
-                                    defaultValue="all"
+                                    defaultValue={"all"}
                                     fullWidth
                                     size="small"
+                                   // value={filterAllNames.calibrationSource}
                                     onChange={handleFilterChangeItemList}
-                                    name="supplierWise" >
+                                    name="calibrationSource" >
                                     <MenuItem value="all">All</MenuItem>
-                                    {supplierList.map((item, index) => (
-                                        <MenuItem key={index} value={item.aliasName}>{item.aliasName}</MenuItem>
+                                    {FilterNameList.itemCalibrationSource.map((item, index) => (
+                                        <MenuItem key={index} value={item}>{item}</MenuItem>
                                     ))}
                                 </TextField>
 
@@ -978,13 +963,16 @@ console.log(statusInfo)*/}
                                 <TextField label="Plant Wise"
                                     id="plantWiseId"
                                     select
-                                    defaultValue="all"
+                                    //  value={filterAllNames.plantWise}
                                     fullWidth
                                     size="small"
                                     onChange={handleFilterChangeItemList}
                                     name="plantWise" >
                                     <MenuItem value="all">All</MenuItem>
-                                    <MenuItem value="Reference Standard">Reference Standard</MenuItem>
+                                    {FilterNameList.itemPlant.map((item, index) => (
+                                        <MenuItem key={index} value={item}>{item}</MenuItem>
+                                    ))}
+
                                 </TextField>
 
                             </div>
