@@ -67,6 +67,7 @@ const CalAddModel = () => {
         calItemEntryDate: dayjs().format('YYYY-MM-DD'),
         calCalibratedBy: "",
         calApprovedBy: "",
+        calSource: "",
         calBeforeData: "no",
         calStatus: "status",
         calcalibrationData: [{
@@ -111,6 +112,7 @@ const CalAddModel = () => {
         calApprovedBy: "",
         calBeforeData: "no",
         calStatus: "status",
+        calSource: "",
         calcalibrationData: [{
             calParameter: "",
             calNominalSize: "",

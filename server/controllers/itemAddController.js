@@ -571,59 +571,24 @@ const itemAddController = {
       // Convert Excel data to JSON
       const jsonData = excelToJson({
         source: excelData,
+        header: {
+          // Is the number of rows that will be skipped and will not be present at our result object. Counting from top to bottom
+          rows: 1 // 2, 3, 4, etc.
+        },
         columnToKey: {
-          A: 'itemMasterRef',
-          B: 'selectedItemMaster',
-          C: 'isItemMaster',
-          D: 'itemAddMasterName',
-          E: 'itemPlantName',
-          F: 'itemIMTENo',
-          G: 'itemImage',
-          H: 'itemType',
-          I: 'itemRangeSize',
-          J: 'itemRangeSizeUnit',
-          K: 'itemMFRNo',
-          L: 'itemLC',
-          M: 'itemLCUnit',
-          N: 'itemMake',
-          O: 'itemModelNo',
-          P: 'itemStatus',
-          Q: 'itemReceiptDate',
-          R: 'itemDepartment',
-          S: 'itemCurrentLocation',
-          T: 'itemLocation',
-          U: 'itemLastLocation',
-          V: 'itemArea',
-          W: 'itemPlaceOfUsage',
-          X: 'itemCalFreInMonths',
-          Y: 'itemCalAlertDays',
-          Z: 'itemCalibrationSource',
-          AA: 'itemCalibrationDoneAt',
-          AB: 'itemItemMasterName',
-          AC: 'itemItemMasterIMTENo',
-          AD: 'itemSupplier',
-          AE: 'itemOEM',
-          AF: 'itemCalDate',
-          AG: 'itemDueDate',
-          AH: 'itemCalibratedAt',
-          AI: 'itemCertificateName',
-          AJ: 'itemCertificateNo',
-          AK: 'itemPartName',
-          AL: 'itemOBType', 
-          AM: 'dcId',
-          AN: 'dcStatus',
-          AO: 'dcCreatedOn',
-          AP: 'dcNo',
-          AQ: 'grnId',
-          AR: 'grnNo',
-          AS: 'grnStatus',
-          AT: 'grnCreatedOn',
-          AU: 'acceptanceCriteria',
-          AV: 'itemUncertainity',
-          AW: 'createdAt',
-          AX: 'updatedAt',
-          AY: 'createdBy',
-          AZ: 'updatedBy',
+          A: 'itemIMTENo',
+          B: 'itemAddMasterName',
+          C: 'itemRangeSize',
+          D: 'itemMake',
+          E: 'itemCalDate',
+          F: 'itemDueDate',
+          G: 'itemLC',
+          H: 'itemCalFreInMonths',
+          I: 'itemCalibrationSource',
+          J: 'itemStatus',
+          K: 'itemDepartment',
+          L: 'itemPlant',
+          M: 'itemType',
       }
       });
       console.log(jsonData)
@@ -631,7 +596,7 @@ const itemAddController = {
       const uploadPromises = jsonData.Sheet1.map(async (item) => {
         try {
           // Create an instance of designationModel and save it to the database
-          const newItemAdd = new ItemAddModel(item); // Assuming 'item' conforms to your ItemAddModel schema
+          const newItemAdd = new itemAddModel(item); // Assuming 'item' conforms to your ItemAddModel schema
           const savedItemAdd = await newItemAdd.save();
           return savedItemAdd;
 

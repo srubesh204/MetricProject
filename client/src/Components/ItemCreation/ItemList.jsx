@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from 'react'
+import React, { createContext, useEffect, useState } from 'react'
 import { TextField, MenuItem, Button, ButtonGroup } from '@mui/material';
 import { Box, Container, Grid, Paper, Typography } from "@mui/material";
 import { DataGrid, GridToolbar } from '@mui/x-data-grid';
 import axios from 'axios';
-import { Edit, FilterAlt } from '@mui/icons-material';
+import { Edit, FilterAlt, PrintRounded } from '@mui/icons-material';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import dayjs from 'dayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
@@ -25,10 +25,15 @@ import isSameOrBefore from 'dayjs/plugin/isSameOrBefore'
 import { useEmployee } from '../../App';
 import styled from "@emotion/styled";
 import { CloudDownload, CloudUpload, Delete } from '@mui/icons-material';
+import ItemListPrint from './ItemListPrint';
 dayjs.extend(isSameOrBefore)
 dayjs.extend(isSameOrAfter)
+export const ItemListContent = createContext(null);
 
 const ItemList = () => {
+
+    const [selectedRows, setSelectedRows] = useState([]);
+    const [itemListPrintOpen, setItemListPrintOpen] = useState(false);
 
     const employeeRole = useEmployee()
 
@@ -1251,6 +1256,19 @@ console.log(statusInfo)*/}
                   </div>
                   {itemAddExcelStatus && <p>{itemAddExcelStatus}</p>}
 
+                  <div>
+                    
+                <div>
+                  <Button onClick={() => { setSelectedRows(); setItemListPrintOpen(true) }}><PrintRounded color='success' /></Button>
+
+                </div>
+              <Snackbar anchorOrigin={{ vertical: "top", horizontal: "right" }} open={snackBarOpen} autoHideDuration={6000} onClose={handleSnackClose}>
+                <Alert onClose={handleSnackClose} severity={errorhandler.code} sx={{ width: '25%' }}>
+                  {errorhandler.message}
+                </Alert>
+              </Snackbar>
+                  </div>
+
                                 <div className='me-2 '>
                                     <button type="button" className='btn btn-secondary' >Sticker Print</button>
                                 </div>
@@ -1277,6 +1295,12 @@ console.log(statusInfo)*/}
 
                 </LocalizationProvider>
             </form>
+            <ItemListContent.Provider
+        value={{ itemListPrintOpen, setItemListPrintOpen, selectedRows, filteredItemListData }}
+      >
+
+        <ItemListPrint />
+      </ItemListContent.Provider>
 
         </div>
     )

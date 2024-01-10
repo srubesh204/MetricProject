@@ -71,13 +71,13 @@ const HistoryCardPrint = () => {
 
             <View style={styles.tableRow} key={index}>
                 <Text style={{ width: "5%", border: "0.5px solid black", padding: "4px 0px", textAlign: "center" }}>{index + 1}</Text>
-                <Text style={{ width: "9%", border: "0.5px solid black", padding: "4px 0px", textAlign: "center" }}>{row.calItemCalDate}</Text>
-                <Text style={{ width: "9%", border: "0.5px solid black", padding: "4px 0px", textAlign: "center" }}>{row.calStatus}</Text>
-                <Text style={{ width: "9%", border: "0.5px solid black", padding: "4px 0px", textAlign: "center" }}>{row.calItemDueDate}</Text>
+                <Text style={{ width: "9%", border: "0.5px solid black", padding: "4px 0px", textAlign: "center" }}>{row.calItemCalDate || '-' }</Text>
+                <Text style={{ width: "9%", border: "0.5px solid black", padding: "4px 0px", textAlign: "center" }}>{row.calStatus || '-' }</Text>
+                <Text style={{ width: "9%", border: "0.5px solid black", padding: "4px 0px", textAlign: "center" }}>{row.calItemDueDate || '-' }</Text>
                 <Text style={{ width: "9%", border: "0.5px solid black", padding: "4px 0px", textAlign: "center" }}>--</Text>
-                <Text style={{ width: "9%", border: "0.5px solid black", padding: "4px 0px", textAlign: "center" }}>{row.calCertificateNo}</Text>
+                <Text style={{ width: "9%", border: "0.5px solid black", padding: "4px 0px", textAlign: "center" }}>{row.calCertificateNo || '-' }</Text>
                 <Text style={{ width: "9%", border: "0.5px solid black", padding: "4px 0px", textAlign: "center" }}>--</Text>
-                <Text style={{ width: "9%", border: "0.5px solid black", padding: "4px 0px", textAlign: "center" }}>{selectedRow.itemCalibrationSource}</Text>
+                <Text style={{ width: "9%", border: "0.5px solid black", padding: "4px 0px", textAlign: "center" }}>{selectedRow[0].itemCalibrationSource || '-' }</Text>
                 <Text style={{ width: "9%", border: "0.5px solid black", padding: "4px 0px", textAlign: "center" }}>--</Text>
                 <Text style={{ width: "9%", border: "0.5px solid black", padding: "4px 0px", textAlign: "center" }}>--</Text>
                 <Text style={{ width: "14%", border: "0.5px solid black", padding: "4px 0px", textAlign: "center" }}>--</Text>
@@ -123,15 +123,15 @@ const HistoryCardPrint = () => {
 
                             <View style={{ display: "flex", flexDirection: "row", padding: 0 }}>
                                 <View style={{ width: "30%", padding: "5px", border: "1px solid black", margin: 0 }}>
-                                    <Text style={{ padding: "3px 0px" }}>Gauge Number :    {selectedRow[0]?.itemIMTENo}</Text>
-                                    <Text style={{ padding: "3px 0px" }}>Gauge Serial No :    {selectedRow[0]?.itemMFRNo}</Text>
-                                    <Text style={{ padding: "3px 0px" }}>Calibration Source :    {selectedRow[0]?.itemCalibrationSource}</Text>
+                                    <Text style={{ padding: "3px 0px" }}>Gauge Number :    {selectedRow[0]?.itemIMTENo || '-' }</Text>
+                                    <Text style={{ padding: "3px 0px" }}>Gauge Serial No :    {selectedRow[0]?.itemMFRNo || '-' }</Text>
+                                    <Text style={{ padding: "3px 0px" }}>Calibration Source :    {selectedRow[0]?.itemCalibrationSource || '-' }</Text>
                                 </View>
                                 <View style={{ width: "40%", padding: "5px", border: "1px solid black", margin: 0 }}>
-                                    <Text style={{ padding: "3px 0px" }}>Instrument / Gauge Name :    {selectedRow[0]?.itemAddMasterName}</Text>
-                                    <Text style={{ padding: "3px 0px" }}>Range / Size :    {selectedRow[0]?.itemRangeSize} {selectedRow[0]?.itemRangeSizeUnit}</Text>
+                                    <Text style={{ padding: "3px 0px" }}>Instrument / Gauge Name :    {selectedRow[0]?.itemAddMasterName || '-' }</Text>
+                                    <Text style={{ padding: "3px 0px" }}>Range / Size :    {selectedRow[0]?.itemRangeSize || '-' } {selectedRow[0]?.itemRangeSizeUnit}</Text>
                                     <Text style={{ padding: "3px 0px" }}>Frequency of Calibration :    {selectedRow[0]?.itemCalFreInMonths}</Text>
-                                    <Text style={{ padding: "3px 0px" }}>Department :    {selectedRow[0]?.itemDepartment}</Text>
+                                    <Text style={{ padding: "3px 0px" }}>Department :    {selectedRow[0]?.itemDepartment || '-' }</Text>
                                 </View>
                                 <View style={{ width: "30%", padding: "5px", border: "1px solid black", margin: 0 }}>
                                     <Text style={{ padding: "3px 0px", textAlign: "center" }}>Permissible Size :</Text>
@@ -144,10 +144,10 @@ const HistoryCardPrint = () => {
                                         selectedRow.length > 0 && selectedRow[0].acceptanceCriteria.map((item,index) => {
                                             return (
                                                 <View key={index} style={{ display: "flex", flexDirection: "row" }}>
-                                                    <Text style={{ width: "33%", textAlign: "center", border: "1px solid black" }}>{item.acParameter}</Text>
-                                                    <Text style={{ width: "33%", textAlign: "center", border: "1px solid black" }}>{item.acMinPS} / {item.acMaxPS}</Text>
-                                                    <Text style={{ width: "34%", textAlign: "center", border: "1px solid black" }}>{item.acWearLimitPS}</Text>
-                                                </View>)
+                                                    <Text style={{ width: "33%", textAlign: "center", border: "1px solid black" }}>{item.acParameter || '-' }</Text>
+                                                    <Text style={{ width: "33%", textAlign: "center", border: "1px solid black" }}>{item.acMinPS || '-' } / {item.acMaxPS || '-' }</Text>
+                                                    <Text style={{ width: "34%", textAlign: "center", border: "1px solid black" }}>{item.acWearLimitPS || '-' }</Text>
+                                                </View>)                                       
                                         }
 
                                         )
