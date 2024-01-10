@@ -8,7 +8,7 @@ import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { CalData } from './CalList'
 import { Add, Close, Delete, ErrorOutline } from '@mui/icons-material';
-
+import { useEmployee } from '../../../App';
 
 dayjs.extend(isSameOrBefore)
 dayjs.extend(isSameOrAfter)
@@ -19,6 +19,8 @@ const CalAddModel = () => {
     const calData = useContext(CalData)
     const [lastResultData, setLastResultData] = useState([])
     const { calAddOpen, setCalAddOpen, itemMasters, activeEmps, calListFetchData } = calData
+
+    const employeeRole = useEmployee()
     const [calibrationDatas, setCalibrationDatas] = useState([])
 
     const [selectedIMTE, setSelectedIMTE] = useState([]);
@@ -40,7 +42,7 @@ const CalAddModel = () => {
         getDistinctItemName();
     }, []);
 
-    
+
 
 
     const [selectedExtraMaster, setSelectedExtraMaster] = useState([])
@@ -107,7 +109,8 @@ const CalAddModel = () => {
         calItemCalDate: dayjs().format('YYYY-MM-DD'),
         calItemDueDate: "",
         calItemEntryDate: dayjs().format('YYYY-MM-DD'),
-        calCalibratedBy: "",
+        calCalibratedBy: `${employeeRole.loggedEmp.firstName} ${employeeRole.loggedEmp.lastName}`,
+        calCalibratedById: employeeRole.loggedEmp._id,
         calApprovedBy: "",
         calBeforeData: "no",
         calStatus: "status",
@@ -487,7 +490,7 @@ const CalAddModel = () => {
 
     }, [calibrationData.calcalibrationData])
 
-    
+
 
 
 
@@ -508,14 +511,8 @@ const CalAddModel = () => {
         }
     };
 
-    const [selectedEmp, setSelectedEmp] = useState([])
-    const getEmployeeByName = (empId) => {
-        const selectedEmp = activeEmps.filter((emp) => emp._id === empId);
-        setSelectedEmp(selectedEmp)
-    }
-    useEffect(() => {
-        getEmployeeByName(calibrationData.calCalibratedBy)
-    }, [calibrationData.calCalibratedBy])
+    
+    
 
     const [lastResultShow, setLastResultShow] = useState(false)
 
@@ -529,29 +526,29 @@ const CalAddModel = () => {
         if (name === "lastResult") {
             setLastResultShow(checked)
         }
-        if(name === "calItemName"){
-            setCalibrationData((prev) => ({...prev, [name]: value}))
+        if (name === "calItemName") {
+            setCalibrationData((prev) => ({ ...prev, [name]: value }))
             const itemMasterFetchData = async () => {
                 try {
                     const response = await axios.post(
-                        `${process.env.REACT_APP_PORT}/itemAdd/getitemAddMasterName`, {itemAddMasterName: value}
-        
+                        `${process.env.REACT_APP_PORT}/itemAdd/getitemAddMasterName`, { itemAddMasterName: value }
+
                     );
                     console.log(response.data.result)
-                    const inhouseIMTEs = response.data.result.filter((item)=> item.itemCalibrationSource === "inhouse")
+                    const inhouseIMTEs = response.data.result.filter((item) => item.itemCalibrationSource === "inhouse")
                     setItemIMTEs(inhouseIMTEs);
-                   
-        
+
+
                 } catch (err) {
                     console.log(err);
                 }
             };
             itemMasterFetchData();
-         
-        }
-        if(name === "calIMTENo"){
 
-            const selectedItem = itemIMTEs.filter((item)=> item.itemIMTENo === value)
+        }
+        if (name === "calIMTENo") {
+
+            const selectedItem = itemIMTEs.filter((item) => item.itemIMTENo === value)
             setCalibrationData((prev) => (
                 {
                     ...prev,
@@ -647,8 +644,8 @@ const CalAddModel = () => {
 
     const [showLastResult, setShowLastResult] = useState(false)
     const [itemIMTEs, setItemIMTEs] = useState([])
- 
-    
+
+
 
 
 
@@ -698,7 +695,7 @@ const CalAddModel = () => {
                                         variant="outlined"
                                     >
                                         <MenuItem value=""><em>Select Item Name</em></MenuItem>
-                                        {distinctItemNames.map((item, index)=> (
+                                        {distinctItemNames.map((item, index) => (
                                             <MenuItem key={index} value={item}>{item}</MenuItem>
                                         ))}
                                     </TextField>
@@ -714,10 +711,10 @@ const CalAddModel = () => {
                                         select
                                         onChange={handleCalData}
                                         variant="outlined"
-                                        
+
                                     >
                                         <MenuItem value=""><em>Select IMTE</em></MenuItem>
-                                        {itemIMTEs.map((item, index)=> (
+                                        {itemIMTEs.map((item, index) => (
                                             <MenuItem key={index} value={item.itemIMTENo}>{item.itemIMTENo}</MenuItem>
                                         ))}
                                     </TextField >
@@ -886,13 +883,13 @@ const CalAddModel = () => {
                                 />
                             </div>
                             <div className="col-md-6">
-                                <DatePicker format="DD-MM-YYYY" slotProps={{ textField: { size: 'small' } }} value={dayjs(calibrationData.calItemCalDate)} label="Cal Date" onChange={(newValue) => setCalibrationData((prev) => ({ ...prev, calItemCalDate: newValue.format('YYYY-MM-DD') }))} />
+                                <DatePicker format="DD-MM-YYYY" slotProps={{ textField: { size: 'small', fullWidth: true } }} value={dayjs(calibrationData.calItemCalDate)} label="Cal Date" onChange={(newValue) => setCalibrationData((prev) => ({ ...prev, calItemCalDate: newValue.format('YYYY-MM-DD') }))} />
                             </div>
                             <div className="col-md-6">
-                                <DatePicker format="DD-MM-YYYY" slotProps={{ textField: { size: 'small' } }} value={dayjs(calibrationData.calItemDueDate)} label="Due Date" onChange={(newValue) => setCalibrationData((prev) => ({ ...prev, calItemDueDate: newValue.format('YYYY-MM-DD') }))} />
+                                <DatePicker format="DD-MM-YYYY" slotProps={{ textField: { size: 'small', fullWidth: true } }} value={dayjs(calibrationData.calItemDueDate)} label="Due Date" onChange={(newValue) => setCalibrationData((prev) => ({ ...prev, calItemDueDate: newValue.format('YYYY-MM-DD') }))} />
                             </div>
                             <div className="col-md-6">
-                                <DatePicker format="DD-MM-YYYY" slotProps={{ textField: { size: 'small' } }} value={dayjs(calibrationData.calItemEntryDate)} label="Cal Entry Date" onChange={(newValue) => setCalibrationData((prev) => ({ ...prev, calItemEntryDate: newValue.format('YYYY-MM-DD') }))} />
+                                <DatePicker format="DD-MM-YYYY" slotProps={{ textField: { size: 'small', fullWidth: true } }} value={dayjs(calibrationData.calItemEntryDate)} label="Cal Entry Date" onChange={(newValue) => setCalibrationData((prev) => ({ ...prev, calItemEntryDate: newValue.format('YYYY-MM-DD') }))} />
                             </div>
                             <div className="col-md-6">
                                 <TextField
@@ -902,22 +899,16 @@ const CalAddModel = () => {
                                     value={calibrationData.calCalibratedBy}
                                     name='calCalibratedBy'
                                     fullWidth
-                                    select
+                                    disabled
                                     variant="outlined"
                                     onChange={handleCalData}
                                 >
-                                    {activeEmps.map((emp, index) => (
-                                        <MenuItem key={index} value={emp._id}>{emp.firstName + " " + emp.lastName}</MenuItem>
-                                    ))}
                                 </TextField>
 
 
                             </div>
                             <div className="col-md-6">
                                 <TextField
-                                    InputProps={{
-                                        disabled: selectedEmp.length === 0,
-                                    }}
                                     id="calApprovedById"
                                     size='small'
                                     label="Approved By"
@@ -928,7 +919,7 @@ const CalAddModel = () => {
                                     variant="outlined"
                                     onChange={handleCalData}
                                 >
-                                    {selectedEmp.map((emp, index) => (
+                                    {activeEmps.map((emp, index) => (
                                         <MenuItem key={index} value={emp._id}>{emp.firstName + " " + emp.lastName}</MenuItem>
                                     ))}
                                 </TextField>

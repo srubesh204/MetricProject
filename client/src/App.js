@@ -62,7 +62,7 @@ export const EmployeeProvider = ({ children, employee }) => {
 const roleAccessRules = {
   admin: ['/home', "/desdep", "/general", "/vendor", "/itemMaster", "/itemadd", "/itemEdit/:id", "/itemList", "/grnList", "/calList", "/onSiteList", '/roles', "/employee", '/test', '/rubyTest', '/dcPrint'],
   plantAdmin: ['/home', "/desdep", "/general", "/vendor", "/itemMaster", "/itemadd", "/itemEdit/:id", "/itemList", "/grnList", "/calList", "/onSiteList", '/roles', "/employee", '/rubyTest', '/dcPrint', '/dcList'],
-  creator: ['/home', '/itemList', '/itemadd', '/itemedit/:id', "/grnList", "/calList", "/onSiteList", '/dcPrint'],
+  creator: ['/home', '/itemList', '/itemadd', '/itemEdit/:id', "/grnList", "/calList", "/onSiteList", '/dcPrint'],
   viewer: ['/itemList', '/home', '/dcPrint'],
 };
 
@@ -109,7 +109,7 @@ const generateRoutes = (employee) => {
 
 
 
-const PrivateRoute = ({ element: Element, employee, ...rest }) => {
+const PrivateRoute = ({ element: Element, employee }) => {
   const isLoggedIn = sessionStorage.getItem('loggedIn');
 
 
@@ -179,6 +179,10 @@ function App() {
           <Route
             path="/"
             element={isLoggedIn ? <Dashboard /> : <Navigate to="/login" />}
+          />
+          <Route
+            path="/login"
+            element={isLoggedIn ? <Navigate to="/" /> : <Login onLoginSuccess={handleLoginSuccess} />}
           />
           <Route
             path="/*"

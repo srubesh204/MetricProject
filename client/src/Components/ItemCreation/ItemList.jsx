@@ -300,7 +300,7 @@ const ItemList = () => {
                     width: 60,
                     headerAlign: "center", align: "center",
                     renderCell: (params) => (
-                        <Button component={Link} to={`/itemedit/${params.id}`}>
+                        <Button component={Link} to={`/itemEdit/${params.id}`}>
                             <Edit color='success' />
                         </Button>
                     ),

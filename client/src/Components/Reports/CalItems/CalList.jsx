@@ -52,7 +52,16 @@ const CalList = () => {
             const response = await axios.get(
                 `${process.env.REACT_APP_PORT}/employee/getAllActiveEmployees`
             );
-            setActiveEmps(response.data.result)
+
+            const selectedEmps = response.data.result.filter((emp) => emp.plant.find(plant => {
+                console.log(plant) 
+                return (employeeRole.loggedEmp.plant.includes(plant))
+            }));
+            
+            const filter = selectedEmps.filter(emp => emp.empRole === "plantAdmin")
+            
+           
+            setActiveEmps(filter)
         } catch (err) {
             console.log(err);
         }
@@ -336,19 +345,19 @@ const CalList = () => {
                     </Paper>
                     {employeeRole && employeeRole.employee !== "viewer" &&
                         <CalData.Provider
-                            value={{ calAddOpen, setCalAddOpen, itemMasters, activeEmps, calListFetchData }}
+                            value={{ employeeRole, calAddOpen, setCalAddOpen, itemMasters, activeEmps, calListFetchData }}
                         >
                             <CalAddModel />
                         </CalData.Provider>}
 
                     {employeeRole && employeeRole.employee !== "viewer" &&
                         <CalData.Provider
-                            value={{ calEditOpen, setCalEditOpen, selectedCalRow, itemMasters, activeEmps, calListFetchData }}
+                            value={{ employeeRole, calEditOpen, setCalEditOpen, selectedCalRow, itemMasters, activeEmps, calListFetchData }}
                         >
                             {selectedCalRow.length !== 0 && <CalEditModel />}
                         </CalData.Provider>}
                     <CalData.Provider
-                        value={{ calPrintOpen, setCalPrintOpen, selectedRows, }}
+                        value={{ employeeRole, calPrintOpen, setCalPrintOpen, selectedRows, }}
                     >
                         {selectedRows.length !== 0 && <CalPrint />}
                     </CalData.Provider>
