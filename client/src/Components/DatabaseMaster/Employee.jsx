@@ -9,7 +9,7 @@ import DialogTitle from '@mui/material/DialogTitle';
 // import dayjs from 'dayjs';
 import Snackbar from '@mui/material/Snackbar';
 import MuiAlert from '@mui/material/Alert';
-import { TextField, MenuItem, InputAdornment } from '@mui/material';
+import { TextField, MenuItem, InputAdornment, gridClasses } from '@mui/material';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
@@ -21,11 +21,23 @@ import { DataGrid, GridToolbar } from '@mui/x-data-grid';
 import { Delete, Visibility, VisibilityOff } from '@mui/icons-material';
 import { CloudDownload, CloudUpload, } from '@mui/icons-material';
 import styled from "@emotion/styled";
-
+import { useEmployee } from '../../App';
 
 
 const Employee = () => {
-    const ref0 = useRef();
+
+    const employeeRole = useEmployee()
+
+    const StyledDataGrid = styled(DataGrid)`
+
+
+  & .selected-row {
+    background-color: #cceeff; /* Change this to your desired color */
+    /* Add any other styles for the selected row */
+  }
+`;
+    console.log(employeeRole)
+
     const currentDate = new Date();
     console.log(currentDate)
     const currentDay = currentDate.getDate().toString();
@@ -41,6 +53,7 @@ const Employee = () => {
 
     const [empDataId, setEmpDataId] = useState(null)
     const [employeeList, setEmployeeList] = useState([]);
+    const [reportToList, setReportToList] = useState([])
     const [FilterNameList, setFilterNameList] = useState({
         employmentStatus: [],
         department: [],
@@ -66,9 +79,26 @@ const Employee = () => {
             });
             setFilterNameList(prev => ({ ...prev, ...updatedFilterNames }));
 
+            if (employeeRole.employee === "superAdmin") {
 
-            setEmployeeList(response.data.result);
-            setFilteredData(response.data.result);
+                setEmployeeList(response.data.result);
+                setFilteredData(response.data.result);
+                setReportToList(response.data.result)
+            }
+            if (employeeRole.employee === "admin") {
+                const filter = response.data.result.filter(emp => emp.empRole !== "superAdmin" && emp.empRole !== "admin")
+                setEmployeeList(filter);
+                setFilteredData(filter);
+                setReportToList(filter)
+            }
+            if (employeeRole.employee === "plantAdmin") {
+                const filter = response.data.result.filter(emp => emp.empRole !== "superAdmin" && emp.empRole !== "admin" && emp.empRole !== "plantAdmin")
+                setEmployeeList(filter);
+                setFilteredData(filter);
+                setReportToList(filter)
+            }
+            
+
         } catch (err) {
             console.log(err);
         }
@@ -106,6 +136,8 @@ const Employee = () => {
 
 
     ];
+
+
 
 
 
@@ -208,12 +240,17 @@ const Employee = () => {
         password: "",
     });
 
-    const handleSetEmp = async (params) => {
+    const handleSetEmp = (params) => {
         console.log(params)
         setEmployeeData(params.row)
         setEmpDataId(params.id)
     }
 
+    const getRowClassName = (params) => {
+        return params.id === empDataId ? 'selected-row' : '';
+    };
+
+ 
 
 
 
@@ -383,6 +420,22 @@ const Employee = () => {
 
     console.log(errors)
 
+    const reportToChange = () => {
+        if(employeeData.empRole === "viewer"){
+            const filter = employeeList.filter(emp => emp.empRole === "creator")
+            setReportToList(filter)
+        }
+        if(employeeData.empRole === "creator"){
+            const filter = employeeList.filter(emp => emp.empRole === "creator" || emp.empRole === "plantAdmin")
+            setReportToList(filter)
+        }
+        if(employeeData.empRole === "plantAdmin"){
+            setReportToList([employeeRole.loggedEmp])
+        }
+    }
+    useEffect(()=> {
+        reportToChange()
+    }, [employeeData.empRole])
 
 
     const EmployeeSubmit = async (e) => {
@@ -591,9 +644,7 @@ const Employee = () => {
 
 
 
-    const [value, setValue] = useState(null)
-
-    console.log(value)
+    console.log(employeeRole)
 
 
 
@@ -716,9 +767,11 @@ const Employee = () => {
                                 <TextField label="Role"
                                     {...(errors.empRole !== "" && { helperText: errors.empRole, error: true })}
                                     size='small' id='empRoleId' onChange={handleChange} fullWidth name='empRole' value={employeeData.empRole} select>
-                                    <MenuItem value="admin">Admin</MenuItem>
-                                    <MenuItem value="plantAdmin">Plant Admin</MenuItem>
-                                    <MenuItem value="creator">Creator</MenuItem>
+
+                                    {employeeRole.employee === "superAdmin" && <MenuItem value="admin">Admin</MenuItem>}
+                                    {(employeeRole.employee === "superAdmin" || employeeRole.employee === "admin") &&
+                                        <MenuItem value="plantAdmin">Plant Admin</MenuItem>}
+                                    {(employeeRole.employee === "superAdmin" || employeeRole.employee === "admin" || employeeRole.employee === "plantAdmin") && <MenuItem value="creator">Creator</MenuItem>}
                                     <MenuItem value="viewer">Viewer</MenuItem>
                                 </TextField>
                             </div>
@@ -856,13 +909,7 @@ const Employee = () => {
                                 elevation={12}
                             >
                                 <Grid container rowSpacing={1} columnSpacing={{ xs: 1 }} className=' g-2 mb-2'>
-                                    <Grid item xs={6}>
-                                        <TextField label="Company Plant"
-                                            size='small' id='empRoleId' onChange={handleChange} fullWidth name='empRole' value={employeeData.plant} select>
-                                            <MenuItem value="">Select Plant</MenuItem>
 
-                                        </TextField>
-                                    </Grid>
 
                                     <Grid item xs={6}>
                                         <TextField
@@ -925,7 +972,7 @@ const Employee = () => {
                                             <input onChange={handleChange} value={employeeData.doj} max={DateFormat} type="date" className="form-control" id="dojId" name="doj" placeholder="doj" />
                                             <label htmlFor="dojId">Date Of joining</label>
                                         </div>*/}
-                                    <Grid item xs={5}>
+                                    <Grid item xs={3}>
                                         <TextField
                                             {...(errors.employmentStatus !== "" && { helperText: errors.employmentStatus, error: true })}
                                             fullWidth label="Employment Status" onChange={handleChange} value={employeeData.employmentStatus} select size="small" id="employmentStatusId" name="employmentStatus" defaultValue="" >
@@ -943,15 +990,15 @@ const Employee = () => {
                                             </select>
                                             <label htmlFor="employmentStatusId">Employment Status</label>
                                         </div>*/}
-                                    <Grid item xs={3}>
+                                    {/* <Grid item xs={5}>
                                         <TextField fullWidth label="Report To" onChange={handleChange} value={employeeData.reportTo} select size="small" id="reportToId" name="reportTo">
                                             <MenuItem value="N/A">N/A</MenuItem>
-                                            {employeeList.map((item, index) => (
+                                            {reportToList.map((item, index) => (
                                                 <MenuItem key={index} value={item.firstName}>{`${item.firstName} ${item.lastName}`}</MenuItem>
                                             ))}
                                         </TextField>
 
-                                    </Grid>
+                                    </Grid> */}
                                 </Grid>
                             </Paper>
                         </Grid>
@@ -1096,9 +1143,9 @@ const Employee = () => {
                                 <Grid item xs={4}>
                                     <TextField fullWidth label="Department Filter" value={filterAllNames.departmentFilter} onChange={handleFilterChange} select size="small" id="departmentFilterId" name="departmentFilter" defaultValue="" >
                                         <MenuItem value="all">All</MenuItem>
-                                        {FilterNameList.department.map((item) => (
-                                                <MenuItem key={item._id} value={item}>{item}</MenuItem>
-                                            ))
+                                        {FilterNameList.department.map((item, index) => (
+                                            <MenuItem key={index} value={item}>{item}</MenuItem>
+                                        ))
 
                                         }
                                     </TextField>
@@ -1108,14 +1155,14 @@ const Employee = () => {
                                 <Grid item xs={3}>
                                     <TextField fullWidth label="Report To" value={filterAllNames.reportToFilter} onChange={handleFilterChange} select size="small" id="reportToFilterId" name="reportToFilter" defaultValue="" >
                                         <MenuItem value="all">All</MenuItem>
-                                        <MenuItem value="N/A">N/A</MenuItem>
+
                                         {FilterNameList.reportTo.map((item, index) => (
                                             <MenuItem key={index} value={item}>{item}</MenuItem>
                                         ))}
                                     </TextField>
                                 </Grid>
                                 <Grid item xs={2}>
-                                    <div className='col d-flex justify-content-end mb-2'>
+                                    <div className='col d-flex justify-content-end'>
                                         {employeeSelectedRowIds.length !== 0 && <Button variant='contained' component="button" fullWidth type='button' color='error' onClick={() => handleDeleteOpen(true)}>Delete  Employee</Button>}
 
                                     </div>
@@ -1148,7 +1195,8 @@ const Employee = () => {
 
                                                 "marginTop": "1em",
                                                 "marginBottom": "1em"
-                                            }
+                                            },
+                                            
                                         }}
                                         slots={{
                                             toolbar: GridToolbar,
@@ -1159,14 +1207,10 @@ const Employee = () => {
 
                                         }}
                                         onRowClick={handleSetEmp}
-
+                                        
                                         density="compact"
-                                        //disableColumnMenu={true}
-
                                         checkboxSelection
                                         pageSizeOptions={[5]}
-
-
                                     >
 
                                     </DataGrid>

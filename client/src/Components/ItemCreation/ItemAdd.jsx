@@ -211,7 +211,7 @@ const ItemAdd = () => {
     };
 
 
-
+    
     const [itemAddData, setItemAddData] = useState({
         itemMasterRef: "",
         selectedItemMaster: [],
@@ -240,6 +240,7 @@ const ItemAdd = () => {
         itemItemMasterName: "",
         itemItemMasterIMTENo: [],
         itemSupplier: [],
+        itemLocation: "department",
         itemOEM: [],
         itemCalDate: dayjs().format("YYYY-MM-DD"),
         itemDueDate: "",
@@ -267,7 +268,8 @@ const ItemAdd = () => {
         itemUncertainity: "",
         itemUncertainityUnit: "",
         itemPrevCalData: "",
-        itemPlant: ""
+        itemPlant: "",
+        itemCreatedBy: employeeRole && employeeRole.loggedEmp._id,
     })
 
     //upload Button

@@ -267,7 +267,6 @@ const ItemEdit = () => {
         itemStatus: "Active",
         itemReceiptDate: dayjs().format("YYYY-MM-DD"),
         itemDepartment: "",
-        itemPlant: "",
         itemCurrentLocation: "",
         itemArea: "N/A",
         itemPlaceOfUsage: "N/A",
@@ -302,8 +301,10 @@ const ItemEdit = () => {
             }
         ],
         itemUncertainity: "",
-        createdBy: "",
-        updatedBy: ""
+        itemPlant:"",
+        itemCreatedBy: employeeRole.loggedEmp._id,
+        itemLastModifiedBy: employeeRole.loggedEmp._id,
+        itemLastModifiedAt: dayjs().format("YYYY-MM-DD")
     })
 
 
@@ -351,7 +352,9 @@ const ItemEdit = () => {
                 itemCertificateName: itemData.itemCertificateName,
                 itemPartName: itemData.itemPartName,
                 itemOBType: itemData.itemOBType,
-                acceptanceCriteria: itemData.acceptanceCriteria
+                acceptanceCriteria: itemData.acceptanceCriteria,
+                itemPlant: itemData.itemPlant,
+                // itemCreatedBy: itemData.itemCreatedBy
             }))
             console.log(response)
 

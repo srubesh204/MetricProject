@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from 'react'
-import { TextField, MenuItem, Button } from '@mui/material';
+import React, { createContext, useEffect, useState } from 'react'
+import { TextField, MenuItem, Button, ButtonGroup } from '@mui/material';
 import { Box, Container, Grid, Paper, Typography } from "@mui/material";
 import { DataGrid, GridToolbar } from '@mui/x-data-grid';
 import axios from 'axios';
-import { Edit, FilterAlt, KingBedTwoTone } from '@mui/icons-material';
+import { Edit, FilterAlt, PrintRounded } from '@mui/icons-material';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import dayjs from 'dayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
@@ -23,10 +23,17 @@ import { Link } from 'react-router-dom';
 import isSameOrAfter from 'dayjs/plugin/isSameOrAfter'
 import isSameOrBefore from 'dayjs/plugin/isSameOrBefore'
 import { useEmployee } from '../../App';
+import styled from "@emotion/styled";
+import { CloudDownload, CloudUpload, Delete } from '@mui/icons-material';
+import ItemListPrint from './ItemListPrint';
 dayjs.extend(isSameOrBefore)
 dayjs.extend(isSameOrAfter)
+export const ItemListContent = createContext(null);
 
 const ItemList = () => {
+
+    const [selectedRows, setSelectedRows] = useState([]);
+    const [itemListPrintOpen, setItemListPrintOpen] = useState(false);
 
     const employeeRole = useEmployee()
 
@@ -308,7 +315,7 @@ const ItemList = () => {
                     width: 60,
                     headerAlign: "center", align: "center",
                     renderCell: (params) => (
-                        <Button component={Link} to={`/itemedit/${params.id}`}>
+                        <Button component={Link} to={`/itemEdit/${params.id}`}>
                             <Edit color='success' />
                         </Button>
                     ),
@@ -1260,6 +1267,19 @@ console.log(statusInfo)*/}
                                     </div>
                                 </React.Fragment>}
 
+                  <div>
+                    
+                <div>
+                  <Button onClick={() => { setSelectedRows(); setItemListPrintOpen(true) }}><PrintRounded color='success' /></Button>
+
+                </div>
+              <Snackbar anchorOrigin={{ vertical: "top", horizontal: "right" }} open={snackBarOpen} autoHideDuration={6000} onClose={handleSnackClose}>
+                <Alert onClose={handleSnackClose} severity={errorhandler.code} sx={{ width: '25%' }}>
+                  {errorhandler.message}
+                </Alert>
+              </Snackbar>
+                  </div>
+
                                 <div className='me-2 '>
                                     <button type="button" className='btn btn-secondary' >Sticker Print</button>
                                 </div>
@@ -1286,6 +1306,12 @@ console.log(statusInfo)*/}
 
                 </LocalizationProvider>
             </form>
+            <ItemListContent.Provider
+        value={{ itemListPrintOpen, setItemListPrintOpen, selectedRows, filteredItemListData }}
+      >
+
+        <ItemListPrint />
+      </ItemListContent.Provider>
 
         </div>
     )

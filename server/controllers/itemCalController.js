@@ -36,12 +36,14 @@ const itemCalController = {
         calItemDueDate,
         calItemEntryDate,
         calCalibratedBy,
+        calCalibratedById,
         calApprovedBy,
         calBeforeData,
         calStatus,
         calcalibrationData,
         calMasterUsed,
         calItemFreInMonths,
+        calSource,
       } = req.body;
 
       const newItemFields = {
@@ -64,12 +66,14 @@ const itemCalController = {
         calItemDueDate,
         calItemEntryDate,
         calCalibratedBy,
+        calCalibratedById,
         calApprovedBy,
         calBeforeData,
         calStatus,
         calcalibrationData,
         calMasterUsed,
         calItemFreInMonths,
+        calSource,
       };
 
       const newItem = new itemCalModel(newItemFields);
@@ -138,12 +142,14 @@ const itemCalController = {
         calItemDueDate,
         calItemEntryDate,
         calCalibratedBy,
+        calCalibratedById,
         calApprovedBy,
         calBeforeData,
         calStatus,
         calcalibrationData,
         calMasterUsed,
         calItemFreInMonths,
+        calSource,
       } = req.body;
       // Create an object with the fields you want to update
       const updateItemFields = {
@@ -166,12 +172,14 @@ const itemCalController = {
         calItemDueDate,
         calItemEntryDate,
         calCalibratedBy,
+        calCalibratedById,
         calApprovedBy,
         calBeforeData,
         calStatus,
         calcalibrationData,
         calMasterUsed,
         calItemFreInMonths,
+        calSource,
       };
 
       // Find the designation by desId and update it

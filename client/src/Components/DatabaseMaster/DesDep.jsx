@@ -1,18 +1,29 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import Alert from '@mui/material/Alert';
-import Snackbar from '@mui/material/Snackbar';
-import { Autocomplete, Box, ButtonGroup, Checkbox, Container, FormControlLabel, Grid, IconButton, Paper, Typography } from "@mui/material";
-import { TextField, MenuItem, FormControl } from '@mui/material';
-import Button from '@mui/material/Button';
-import Dialog from '@mui/material/Dialog';
-import DialogActions from '@mui/material/DialogActions';
-import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
-import DialogTitle from '@mui/material/DialogTitle';
+import {
+  Autocomplete,
+  Box,
+  ButtonGroup,
+  Checkbox,
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+  TextField,
+  MenuItem,
+  Alert,
+  Snackbar,
+  FormControl,
+  FormControlLabel,
+  Grid,
+  IconButton,
+  Paper,
+  Typography
+} from "@mui/material";
 import { DataGrid, GridToolbar } from '@mui/x-data-grid';
-import { CloudDownload, CloudUpload, Delete } from '@mui/icons-material';
-import { Check, Clear } from '@mui/icons-material';
+import { CloudDownload, CloudUpload, Delete, Check, Clear } from '@mui/icons-material';
 import { useParams } from 'react-router-dom';
 import styled from "@emotion/styled";
 import { Link } from 'react-router-dom';
@@ -1141,7 +1152,7 @@ export const Department = () => {
                         
                        
                         onClick={() => setDepOpenModal(true)}
-                      //   disabled={!depStateId}
+                        color="info"
                       >
                         Modify
                       </Button >
@@ -1157,7 +1168,7 @@ export const Department = () => {
                         color='success'
                         
                         className="btn text-end hover" onClick={() => setDepOpenModal(true)}
-                       >+ Add Department</Button>
+                      >+ Add Department</Button>
                     </div>}
 
 
@@ -1284,19 +1295,6 @@ export const Department = () => {
                   <div className="row g-2">
                     <div className="col-md-8 d-flex ">
 
-
-                      {/* <TextField label="Area"
-                        {...(errors.area !== "" && { helperText: errors.area, error: true })}
-                        id="areaId"
-
-                        fullWidth
-                        size="small"
-
-                        placeholder="N/A"
-                        onChange={handleAreaChange}
-                        onKeyDown={handleAreaKeyDown}
-                        value={areaData.area}
-              name="area" ></TextField>*/}
                       <Autocomplete label="Area"
                         disablePortal
                         size="small"
@@ -1309,6 +1307,7 @@ export const Department = () => {
                           <TextField  {...(errors.area !== "" && { helperText: errors.area, error: true })} onKeyDown={handleAreaKeyDown} onChange={handleAreaChange}
                             name="area" {...params} label="Area" />} />
                     </div>
+
                     <div className="col d-flex mb-3">
 
                       <TextField label="Status"
@@ -2334,7 +2333,7 @@ export const Designation = () => {
                 <div className="col d-flex">
                   <div className="d-flex justify-content-center">
                     <ButtonGroup className='me-3'>
-                      <Button component="label" variant="contained" >
+                      <Button component="label" variant="contained" fullWidth>
                         Upload
                         <VisuallyHiddenInput type="file" onChange={handleDesExcel} />
                       </Button>
@@ -2342,7 +2341,7 @@ export const Designation = () => {
                     </ButtonGroup>
 
                     <ButtonGroup>
-                      <Button component="label" variant="contained" color='secondary'>
+                      <Button component="label" variant="contained" color='secondary' fullWidth>
                         Download
                         <VisuallyHiddenInput type="file" />
                       </Button>
@@ -2419,16 +2418,16 @@ export const Designation = () => {
                     type="button"
                     size="small"
                     className="btn text-end hover"
-                  
+
                     onClick={() => setOpenModal(true)}
-                    
+
                   >
                     <i className="bi bi-plus"></i>Add Designation</Button>
                   }
                 </div>
 
               </div>
-                    {desExcelStatus && <p>{desExcelStatus}</p>}
+              {desExcelStatus && <p>{desExcelStatus}</p>}
 
             </Paper>
           </Grid>

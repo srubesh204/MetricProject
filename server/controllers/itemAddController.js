@@ -68,10 +68,11 @@ const itemAddController = {
         acOBError,
         acMinPSError,
         acMaxPSError,
-        createdBy,
-        updatedBy // Assuming createdAt is part of the request body
+        itemCreatedBy,
+        itemLastModifiedBy
+        // Assuming createdAt is part of the request body
       } = req.body;
-  
+
       const newItemFields = {
         itemMasterRef,
         selectedItemMaster,
@@ -123,37 +124,38 @@ const itemAddController = {
         acOBError,
         acMinPSError,
         acMaxPSError,
-        createdBy,
-        updatedBy
+        itemCreatedBy,
+        itemLastModifiedBy,
+
       };
-  
+
       const newItem = new itemAddModel(newItemFields);
-  
+
       const validationError = newItem.validateSync();
       if (validationError) {
         const validationErrors = {};
-  
+
         if (validationError.errors) {
           for (const key in validationError.errors) {
             validationErrors[key] = validationError.errors[key].message;
           }
         }
-  
+
         return res.status(400).json({
           errors: validationErrors
         });
       }
-  
+
       const createdItem = await itemAddModel.create(newItemFields);
       console.log("ItemAdd Created Successfully");
       res.status(200).json({ result: createdItem, message: "ItemAdd Created Successfully" });
     } catch (error) {
       console.log(error);
-  
+
       if (error.code === 11000) {
         return res.status(500).json({ error: 'Duplicate Value Not Accepted' });
       }
-  
+
       const errors500 = {};
       for (const key in error.errors) {
         errors500[key] = error.errors[key].message;
@@ -162,7 +164,7 @@ const itemAddController = {
       res.status(500).json({ error: error, status: 0 });
     }
   },
-  
+
 
   updateItemAdd: async (req, res) => {
     try {
@@ -173,7 +175,7 @@ const itemAddController = {
       // if (isNaN(desId)) {
       //   return res.status(400).json({ error: 'Invalid desId value' });
       // }
-      const { 
+      const {
         itemMasterRef,
         selectedItemMaster,
         isItemMaster,
@@ -224,13 +226,14 @@ const itemAddController = {
         acOBError,
         acMinPSError,
         acMaxPSError,
-        } = req.body;
+        itemCreatedBy,
+        itemLastModifiedBy
+      } = req.body;
       // Create an object with the fields you want to update
       const updateItemFields = {
         itemMasterRef,
         selectedItemMaster,
         isItemMaster,
-        
         itemAddMasterName,
         itemIMTENo,
         itemImage,
@@ -278,6 +281,8 @@ const itemAddController = {
         acOBError,
         acMinPSError,
         acMaxPSError,
+        itemCreatedBy,
+        itemLastModifiedBy
       };
 
       // Find the designation by desId and update it
@@ -462,18 +467,18 @@ const itemAddController = {
     try {
       // Assuming desId is part of the URL parameter
 
-      
+
       // if (isNaN(desId)) {
       //   return res.status(400).json({ error: 'Invalid desId value' });
       // }
-     
-      const {itemIds, itemCurrentLocation} = req.body
+
+      const { itemIds, itemCurrentLocation } = req.body
 
       const updatePromises = itemIds.map(async (itemId) => {
-        
+
         const itemData = await itemAddModel.findById(itemId)
-        const {itemCurrentLocation: itemLastLocation , itemIMTENo} = itemData
-        const updateItemFields = {itemIMTENo, itemCurrentLocation, itemLastLocation}
+        const { itemCurrentLocation: itemLastLocation, itemIMTENo } = itemData
+        const updateItemFields = { itemIMTENo, itemCurrentLocation, itemLastLocation, itemLocation: "department" }
         const updateResult = await itemAddModel.findOneAndUpdate(
           { _id: itemId._id },
           { $set: updateItemFields },
@@ -483,7 +488,7 @@ const itemAddController = {
         return updateResult;
       });
       const updatedItems = await Promise.all(updatePromises);
-     
+
       console.log("ItemAdd Updated Successfully")
       res.status(200).json({ result: updatedItems, message: "ItemAdd Updated Successfully" });
     } catch (error) {
@@ -540,7 +545,7 @@ const itemAddController = {
   },
   getItemAddByPlant: async (req, res) => {
     try {
-       // Assuming desId is part of the URL parameter
+      // Assuming desId is part of the URL parameter
       // if (isNaN(desId)) {
       // Find the designation by desId and update it
       console.log(req.body)
@@ -571,59 +576,24 @@ const itemAddController = {
       // Convert Excel data to JSON
       const jsonData = excelToJson({
         source: excelData,
+        header: {
+          // Is the number of rows that will be skipped and will not be present at our result object. Counting from top to bottom
+          rows: 1 // 2, 3, 4, etc.
+        },
         columnToKey: {
-          A: 'itemMasterRef',
-          B: 'selectedItemMaster',
-          C: 'isItemMaster',
-          D: 'itemAddMasterName',
-          E: 'itemPlantName',
-          F: 'itemIMTENo',
-          G: 'itemImage',
-          H: 'itemType',
-          I: 'itemRangeSize',
-          J: 'itemRangeSizeUnit',
-          K: 'itemMFRNo',
-          L: 'itemLC',
-          M: 'itemLCUnit',
-          N: 'itemMake',
-          O: 'itemModelNo',
-          P: 'itemStatus',
-          Q: 'itemReceiptDate',
-          R: 'itemDepartment',
-          S: 'itemCurrentLocation',
-          T: 'itemLocation',
-          U: 'itemLastLocation',
-          V: 'itemArea',
-          W: 'itemPlaceOfUsage',
-          X: 'itemCalFreInMonths',
-          Y: 'itemCalAlertDays',
-          Z: 'itemCalibrationSource',
-          AA: 'itemCalibrationDoneAt',
-          AB: 'itemItemMasterName',
-          AC: 'itemItemMasterIMTENo',
-          AD: 'itemSupplier',
-          AE: 'itemOEM',
-          AF: 'itemCalDate',
-          AG: 'itemDueDate',
-          AH: 'itemCalibratedAt',
-          AI: 'itemCertificateName',
-          AJ: 'itemCertificateNo',
-          AK: 'itemPartName',
-          AL: 'itemOBType', 
-          AM: 'dcId',
-          AN: 'dcStatus',
-          AO: 'dcCreatedOn',
-          AP: 'dcNo',
-          AQ: 'grnId',
-          AR: 'grnNo',
-          AS: 'grnStatus',
-          AT: 'grnCreatedOn',
-          AU: 'acceptanceCriteria',
-          AV: 'itemUncertainity',
-          AW: 'createdAt',
-          AX: 'updatedAt',
-          AY: 'createdBy',
-          AZ: 'updatedBy',
+          A: 'itemIMTENo',
+          B: 'itemAddMasterName',
+          C: 'itemRangeSize',
+          D: 'itemMake',
+          E: 'itemCalDate',
+          F: 'itemDueDate',
+          G: 'itemLC',
+          H: 'itemCalFreInMonths',
+          I: 'itemCalibrationSource',
+          J: 'itemStatus',
+          K: 'itemDepartment',
+          L: 'itemPlant',
+          M: 'itemType',
       }
       });
       console.log(jsonData)
@@ -631,7 +601,7 @@ const itemAddController = {
       const uploadPromises = jsonData.Sheet1.map(async (item) => {
         try {
           // Create an instance of designationModel and save it to the database
-          const newItemAdd = new ItemAddModel(item); // Assuming 'item' conforms to your ItemAddModel schema
+          const newItemAdd = new itemAddModel(item); // Assuming 'item' conforms to your ItemAddModel schema
           const savedItemAdd = await newItemAdd.save();
           return savedItemAdd;
 
@@ -652,7 +622,7 @@ const itemAddController = {
   }
 
 
-  
+
 
 
 }

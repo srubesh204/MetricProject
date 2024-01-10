@@ -9,7 +9,6 @@ const itemAddSchema = new mongoose.Schema({
   itemAddMasterName: String,
   itemPlant: {
     type: String,
-    required: [true,"Plant required"]
   },
   itemIMTENo: {
     type: String,
@@ -81,12 +80,17 @@ const itemAddSchema = new mongoose.Schema({
     default: () => dayjs().format("YYYY-MM-DD"),
     immutable: true,
   },
+
   updatedAt: {
     type: String,
     default: () => dayjs().format("YYYY-MM-DD")
   },
-  createdBy : String,
-  updatedBy : String
+  itemCreatedBy : {
+    type: String,
+  },
+  itemLastModifiedBy : {
+    type: String,
+  }
 });
 itemAddSchema.plugin(uniqueValidator);
 

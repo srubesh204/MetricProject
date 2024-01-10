@@ -108,7 +108,7 @@ function InsHistoryCard() {
         }, []);
         setFilteredIMTEs(distinctImte);
     };
-    console.log(itemCalList)
+    console.log(itemCalList[0]?.calcalibrationData)
 
     const handleInsIMTENoSelection = (value) => {
         console.log(value)
@@ -149,13 +149,13 @@ function InsHistoryCard() {
         { field: 'calItemDueDate', headerName: 'Next calibration Date', width: 150, align: "center", valueGetter: (params) => dayjs(params.row.calItemDueDate).format('DD-MM-YYYY') },
         { field: 'col5', headerName: 'Certificate Status', width: 150, align: "center", },
         { field: 'calCertificateNo', headerName: 'Certificate No', width: 150, align: "center", },
-        ...(selectedRow[0]?.itemType === 'variable' ?
-        [{ field: 'selectedRow.itemType', headerName: "Observed Error", width: 150, align: "center" }] : 
-        [{ field: 'selectedRow.itemType', headerName: "Observed Size", width: 150, align: "center" }]),
-        { field: 'selectedRow.itemCalibrationSource', headerName: 'Calibrated At', width: 150, align: "center", },
+        ...(selectedRow[0]?.itemType === 'variable'
+        ? [{ field: 'calOBError', headerName: "Observed Error", width: 150, align: "center" }]
+        : [{ field: 'observedMinSize', headerName: "Observed Size", width: 150, align: "center" },]),
+        { field: 'itemCalibrationSource', headerName: 'Calibrated At', width: 150, align: "center", renderCell: (params) => params.row.calSource || selectedRow[0]?.itemCalibrationSource },
     ];
 
-    console.log(selectedRow)
+    console.log(selectedRow[0])
 
 
 
@@ -340,10 +340,10 @@ function InsHistoryCard() {
                                                 {selectedRow.length > 0 &&
                                                     selectedRow[0].acceptanceCriteria.map(item => (
                                                         <tr>
-                                                        <td>{item.acParameter}</td>
-                                                            <td>{item.acMinPS}</td>
-                                                            <td>{item.acMaxPS}</td>
-                                                            <td>{item.acWearLimitPS}</td>
+                                                        <td>{item.acParameter || '-' }</td>
+                                                            <td>{item.acMinPS || '-' }</td>
+                                                            <td>{item.acMaxPS || '-' }</td>
+                                                            <td>{item.acWearLimitPS || '-' }</td>
                                                         </tr>
                                                     ))
                                                 }
