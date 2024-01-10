@@ -1,5 +1,6 @@
 const itemAddModel = require("../models/itemAddModel")
 const dayjs = require('dayjs')
+const excelToJson = require('convert-excel-to-json');
 
 const itemAddController = {
   getAllItemAdds: async (req, res) => {
@@ -559,6 +560,96 @@ const itemAddController = {
       res.status(500).json({ error: error, status: 0 });
     }
   },
+  uploadItemAddInExcel: async (req, res) => {
+    try {
+      if (!req.file) {
+        return res.status(400).json({ error: 'No file uploaded' });
+      }
+      
+      const excelData = req.file.buffer; // Access the file buffer
+  
+      // Convert Excel data to JSON
+      const jsonData = excelToJson({
+        source: excelData,
+        columnToKey: {
+          A: 'itemMasterRef',
+          B: 'selectedItemMaster',
+          C: 'isItemMaster',
+          D: 'itemAddMasterName',
+          E: 'itemPlantName',
+          F: 'itemIMTENo',
+          G: 'itemImage',
+          H: 'itemType',
+          I: 'itemRangeSize',
+          J: 'itemRangeSizeUnit',
+          K: 'itemMFRNo',
+          L: 'itemLC',
+          M: 'itemLCUnit',
+          N: 'itemMake',
+          O: 'itemModelNo',
+          P: 'itemStatus',
+          Q: 'itemReceiptDate',
+          R: 'itemDepartment',
+          S: 'itemCurrentLocation',
+          T: 'itemLocation',
+          U: 'itemLastLocation',
+          V: 'itemArea',
+          W: 'itemPlaceOfUsage',
+          X: 'itemCalFreInMonths',
+          Y: 'itemCalAlertDays',
+          Z: 'itemCalibrationSource',
+          AA: 'itemCalibrationDoneAt',
+          AB: 'itemItemMasterName',
+          AC: 'itemItemMasterIMTENo',
+          AD: 'itemSupplier',
+          AE: 'itemOEM',
+          AF: 'itemCalDate',
+          AG: 'itemDueDate',
+          AH: 'itemCalibratedAt',
+          AI: 'itemCertificateName',
+          AJ: 'itemCertificateNo',
+          AK: 'itemPartName',
+          AL: 'itemOBType', 
+          AM: 'dcId',
+          AN: 'dcStatus',
+          AO: 'dcCreatedOn',
+          AP: 'dcNo',
+          AQ: 'grnId',
+          AR: 'grnNo',
+          AS: 'grnStatus',
+          AT: 'grnCreatedOn',
+          AU: 'acceptanceCriteria',
+          AV: 'itemUncertainity',
+          AW: 'createdAt',
+          AX: 'updatedAt',
+          AY: 'createdBy',
+          AZ: 'updatedBy',
+      }
+      });
+      console.log(jsonData)
+  
+      const uploadPromises = jsonData.Sheet1.map(async (item) => {
+        try {
+          // Create an instance of designationModel and save it to the database
+          const newItemAdd = new ItemAddModel(item); // Assuming 'item' conforms to your ItemAddModel schema
+          const savedItemAdd = await newItemAdd.save();
+          return savedItemAdd;
+
+        } catch (error) {
+          console.error('Error saving ItemAdd:', error);
+          // return res.status(500).json({ error: 'Internal Server Error' });
+        }
+      });
+  
+      // Execute all upload promises
+      const uploadedItemAdds = await Promise.all(uploadPromises);
+  
+      res.status(200).json({ uploadedItemAdds, message: 'Uploaded successfully' });
+    } catch (error) {
+      console.error('Error uploading Excel data:', error);
+      res.status(500).json({ error: 'Internal Server Error' });
+    }
+  }
 
 
   

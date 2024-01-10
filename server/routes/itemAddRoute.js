@@ -1,6 +1,10 @@
 const express = require("express");
 const itemAddController = require('../controllers/itemAddController')
 const router = express.Router();
+const multer = require('multer');
+
+const storage = multer.memoryStorage();
+const upload = multer({ storage: storage }).single('file');
  
 router.get("/getAllItemAdds", itemAddController.getAllItemAdds)
 router.get("/getItemAddById/:id", itemAddController.getItemAddById)
@@ -17,4 +21,5 @@ router.post("/getitemAddMasterName", itemAddController.getitemAddMasterName)
 router.get("/getAllDistinctItemName", itemAddController.getAllDistinctItemName)
 router.get("/uploadItemAddExcelData", itemAddController.uploadItemAddExcelData)
 router.post("/getItemAddByPlant", itemAddController.getItemAddByPlant)
+router.post("/uploadItemAddInExcel", upload, itemAddController.uploadItemAddInExcel)
 module.exports = router;
