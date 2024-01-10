@@ -156,47 +156,48 @@ const ItemList = () => {
         left: 0,
         whiteSpace: 'nowrap',
         width: 1,
-      });
-    
-      const [file, setFile] = useState(null);
-      const [itemAddExcelStatus, setItemAddExcelStatus] = useState('');
-    
-      const handleItemAddExcel = (e) => {
+        
+    });
+
+    const [file, setFile] = useState(null);
+    const [itemAddExcelStatus, setItemAddExcelStatus] = useState('');
+
+    const handleItemAddExcel = (e) => {
         const selectedFile = e.target.files[0];
         console.log(selectedFile)
         setFile(selectedFile);
-      };
-    
-      const handleItemAddUpload = async () => {
+    };
+
+    const handleItemAddUpload = async () => {
         try {
-          if (!file) {
-            setItemAddExcelStatus('No file selected');
-            return;
-          }
-    
-          const formData = new FormData();
-          formData.append('file', file);
-    
-          const response = await axios.post(`${process.env.REACT_APP_PORT}/itemAdd/uploadItemAddInExcel`, formData, {
-            headers: {
-              'Content-Type': 'multipart/form-data',
-            },
-          });
-    
-          setItemAddExcelStatus(response.data.message || 'Excel file uploaded successfully');
+            if (!file) {
+                setItemAddExcelStatus('No file selected');
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append('file', file);
+
+            const response = await axios.post(`${process.env.REACT_APP_PORT}/itemAdd/uploadItemAddInExcel`, formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                },
+            });
+
+            setItemAddExcelStatus(response.data.message || 'Excel file uploaded successfully');
         } catch (error) {
-          if (error.response) {
-            setItemAddExcelStatus(`Error: ${error.response.data.error || 'Something went wrong'}`);
-          } else if (error.request) {
-            setItemAddExcelStatus('Network error. Please try again.');
-          } else {
-            setItemAddExcelStatus('Error uploading the file.');
-          }
-          console.error('Error uploading Excel file:', error);
+            if (error.response) {
+                setItemAddExcelStatus(`Error: ${error.response.data.error || 'Something went wrong'}`);
+            } else if (error.request) {
+                setItemAddExcelStatus('Network error. Please try again.');
+            } else {
+                setItemAddExcelStatus('Error uploading the file.');
+            }
+            console.error('Error uploading Excel file:', error);
         }
-      };
-    
-    
+    };
+
+
 
 
 
@@ -828,6 +829,67 @@ console.log(statusInfo)*/}
                     }} elevation={12}
                     >
                         <div className='row g-2  '>
+                            <div className='row d-flex'>
+                                <div className='col-2'>
+                                    <div className='me-2'>
+                                        <Button component={Link} to={`/home`} variant="contained" size='small' color="warning">
+                                            <ArrowBackIcon /> Dashboard
+                                        </Button>
+
+                                    </div>
+                                </div>
+                                <div className='col-8'>
+                                {dueDate === "Date" && <div className='col d-flex justify-content-end mb-2 g-2'>
+                                    <div className="me-2 col-2 ">
+                                        <DatePicker
+
+                                            fullWidth
+                                            id="startDateId"
+                                            name="dueStartDate"
+                                            onChange={(newValue) => dueDatePicker(newValue, "dueStartDate")}
+                                            label="Start Date"
+
+                                            slotProps={{ textField: { size: 'small' } }}
+                                            format="DD-MM-YYYY" />
+                                    </div>
+                                    <div className="me-2 col-2">
+                                        <DatePicker
+
+                                            fullWidth
+                                            id="endDateId"
+                                            name="dueEndDate"
+                                            onChange={(newValue) => dueDatePicker(newValue, "dueEndDate")}
+                                            label="End Date "
+
+                                            slotProps={{ textField: { size: 'small' } }}
+                                            format="DD-MM-YYYY" />
+                                    </div>
+                                    
+                                    <div>
+                                        <Button variant='contained' startIcon={<FilterAlt />} size='small' color='warning'>Filter</Button>
+                                    </div>
+                                </div>}
+                                </div>
+                                <div className='col-2'>
+                                <div className=' col d-flex justify-content-end'>
+                                    {employeeRole.employee !== "viewer" && <React.Fragment> <div className='me-2'>
+
+                                        <Button component={Link} to={`/itemAdd`} variant="contained" size='small' color="warning">
+                                            <AddIcon /> Add Item
+                                        </Button>
+
+                                    </div>
+
+                                        {/* <div className='me-2'>
+                                            {itemListSelectedRowIds.length !== 0 && <Button variant='contained' type='button' color='error' onClick={() => setDeleteModalItem(true)}><DeleteIcon /> Delete </Button>}
+                                        </div> */}
+                                    </React.Fragment>
+                                    }
+
+
+
+
+                                </div> </div> </div>
                             <Typography variant="h5" className="text-center mb-2">Item List</Typography>
 
                             <div className="col d-flex mb-2 ">
@@ -908,7 +970,7 @@ console.log(statusInfo)*/}
                                     defaultValue={"all"}
                                     fullWidth
                                     size="small"
-                                   // value={filterAllNames.calibrationSource}
+                                    // value={filterAllNames.calibrationSource}
                                     onChange={handleFilterChangeItemList}
                                     name="calibrationSource" >
                                     <MenuItem value="all">All</MenuItem>
@@ -982,7 +1044,7 @@ console.log(statusInfo)*/}
                         <div className='row g-2'>
 
 
-                            <div className="col d-flex  g-2 mb-2">
+                            <div className="col d-flex g-2 mb-2">
 
                                 <div className='col-3'>
                                     <TextField label="Status"
@@ -1004,39 +1066,25 @@ console.log(statusInfo)*/}
 
                                     </TextField>
                                 </div>
+                                <div className="col-1 offset-7">
+                                {itemListSelectedRowIds.length !== 0 && <Button variant='contained' type='button' size='small' color='error' onClick={() => setDeleteModalItem(true)}><DeleteIcon /> Delete </Button>}
+                                </div>
+                                <div className="col-1">
+                                    <div>
+                                        <Button color="secondary" variant='contained' startIcon={<PrintRounded />} size='small' onClick={() => { setSelectedRows(); setItemListPrintOpen(true) }}> Print</Button>
+
+                                    </div>
+                                    <Snackbar anchorOrigin={{ vertical: "top", horizontal: "right" }} open={snackBarOpen} autoHideDuration={6000} onClose={handleSnackClose}>
+                                        <Alert onClose={handleSnackClose} severity={errorhandler.code} sx={{ width: '25%' }}>
+                                            {errorhandler.message}
+                                        </Alert>
+                                    </Snackbar>
+                                
+                                </div>
 
                             </div>
 
 
-                            {dueDate === "Date" && <div className='col d-flex justify-content-end mb-2 g-2'>
-                                <div className="me-2 ">
-                                    <DatePicker
-
-                                        fullWidth
-                                        id="startDateId"
-                                        name="dueStartDate"
-                                        onChange={(newValue) => dueDatePicker(newValue, "dueStartDate")}
-                                        label="Start Date"
-
-                                        slotProps={{ textField: { size: 'small' } }}
-                                        format="DD-MM-YYYY" />
-                                </div>
-                                <div className="me-2">
-                                    <DatePicker
-
-                                        fullWidth
-                                        id="endDateId"
-                                        name="dueEndDate"
-                                        onChange={(newValue) => dueDatePicker(newValue, "dueEndDate")}
-                                        label="End Date "
-
-                                        slotProps={{ textField: { size: 'small' } }}
-                                        format="DD-MM-YYYY" />
-                                </div>
-                                <div>
-                                    <Button variant='contained' startIcon={<FilterAlt />} color='warning'>Filter</Button>
-                                </div>
-                            </div>}
                         </div>
                         <div>
                             <Box sx={{ height: 490, width: '100%', my: 2 }}>
@@ -1116,11 +1164,11 @@ console.log(statusInfo)*/}
                         <div className='row'>
                             <div className=' col d-flex mb-2'>
                                 <div className='me-2' >
-                                    <button type="button" className='btn btn' >History Card</button>
+                                    <button type="button" className='btn btn-sm' >History Card</button>
                                 </div>
                                 {employeeRole && employeeRole.employee !== "viewer" &&
                                     <div className='me-2' >
-                                        {itemListSelectedRowIds.length !== 0 && <button type="button" className='btn btn-warning' onClick={() => setOpenModalStatus(true)} >Change status</button>} </div>}
+                                        {itemListSelectedRowIds.length !== 0 && <button type="button" className='btn btn-warning btn-sm' onClick={() => setOpenModalStatus(true)} >Change status</button>} </div>}
 
                                 <Dialog
                                     open={openModalStatus}
@@ -1190,81 +1238,40 @@ console.log(statusInfo)*/}
 
 
                                 {employeeRole.employee !== "viewer" && <div className='me-2' >
-                                    <Button component={RouterLink} to={`/itemMaster`} variant="contained" color="secondary">
+                                    <Button component={RouterLink} to={`/itemMaster`} size='small' variant="contained" color="secondary">
                                         Item Master
                                     </Button>
 
                                 </div>}
-                            </div>
-                            <div className=' col d-flex justify-content-end'>
-                                {employeeRole.employee !== "viewer" && <React.Fragment> <div className='me-2'>
+                            
+                                <div className="d-flex justify-content-center">
+                                    <ButtonGroup size='small' className='me-3'>
+                                        <Button variant="contained" size="small" >
+                                            Upload
+                                            <VisuallyHiddenInput type="file" onChange={handleItemAddExcel} />
+                                        </Button>
+                                        <Button size='small' onClick={handleItemAddUpload}><CloudUpload /></Button>
+                                    </ButtonGroup>
 
-                                    <Button component={Link} to={`/itemAdd`} variant="contained" color="warning">
-                                        <AddIcon /> Add Item
-                                    </Button>
+                                    <ButtonGroup  className='me-3' size='small'>
+                                        <Button variant="contained" size="small" color='secondary'>
+                                            Download
+                                            <VisuallyHiddenInput  type="file" />
+                                        </Button>
+                                        <Button size='small' color='secondary'><CloudDownload /></Button>
+                                    </ButtonGroup>
+                                </div>
+                                {/* {itemAddExcelStatus && <p>{itemAddExcelStatus}</p>} */}
 
+
+                                <div className='me-2 col-1'>
+                                    <button type="button" className='btn btn-secondary btn-sm' >Sticker Print</button>
+                                </div>
+                                <div className='me-2 col-2'>
+                                    <button type="button" className='btn btn-secondary btn-sm' >Sticker Print Barcode</button>
                                 </div>
 
-                                    <div className='me-2'>
-                                        {itemListSelectedRowIds.length !== 0 && <Button variant='contained' type='button' color='error' onClick={() => setDeleteModalItem(true)}><DeleteIcon /> Delete </Button>}
-                                    </div>
-                                </React.Fragment>
-                                }
-
-
-                                <div className='me-2'>
-                                    <Button component={Link} to={`/home`} variant="contained" color="warning">
-                                        <ArrowBackIcon /> Dashboard
-                                    </Button>
-
-                                </div>
-
-
-                            </div>
-
-                        </div>
-                        <div className='row'>
-                            <div className='col d-flex '>
-                  <div className="d-flex justify-content-center">
-                    <ButtonGroup className='me-3'>
-                      <Button component="label" variant="contained" >
-                        Upload
-                        <VisuallyHiddenInput type="file" onChange={handleItemAddExcel} />
-                      </Button>
-                      <Button onClick={handleItemAddUpload}><CloudUpload /></Button>
-                    </ButtonGroup>
-
-                    <ButtonGroup>
-                      <Button component="label" variant="contained" color='secondary'>
-                        Download
-                        <VisuallyHiddenInput type="file" />
-                      </Button>
-                      <Button color='secondary'><CloudDownload /></Button>
-                    </ButtonGroup>
-                  </div>
-                  {itemAddExcelStatus && <p>{itemAddExcelStatus}</p>}
-
-                  <div>
-                    
-                <div>
-                  <Button onClick={() => { setSelectedRows(); setItemListPrintOpen(true) }}><PrintRounded color='success' /></Button>
-
-                </div>
-              <Snackbar anchorOrigin={{ vertical: "top", horizontal: "right" }} open={snackBarOpen} autoHideDuration={6000} onClose={handleSnackClose}>
-                <Alert onClose={handleSnackClose} severity={errorhandler.code} sx={{ width: '25%' }}>
-                  {errorhandler.message}
-                </Alert>
-              </Snackbar>
-                  </div>
-
-                                <div className='me-2 '>
-                                    <button type="button" className='btn btn-secondary' >Sticker Print</button>
-                                </div>
-                                <div className='me-2 '>
-                                    <button type="button" className='btn btn-secondary' >Sticker Print Barcode</button>
-                                </div>
-
-                            </div>
+                            
                             <Snackbar anchorOrigin={{ vertical: "top", horizontal: "right" }} open={snackBarOpen} autoHideDuration={6000} onClose={handleSnackClose}>
                                 <Alert onClose={handleSnackClose} severity={errorhandler.code} sx={{ width: '25%' }}>
                                     {errorhandler.message}
@@ -1272,7 +1279,7 @@ console.log(statusInfo)*/}
                             </Snackbar>
 
 
-
+                            </div>
 
                         </div>
 
@@ -1284,11 +1291,11 @@ console.log(statusInfo)*/}
                 </LocalizationProvider>
             </form>
             <ItemListContent.Provider
-        value={{ itemListPrintOpen, setItemListPrintOpen, selectedRows, filteredItemListData }}
-      >
+                value={{ itemListPrintOpen, setItemListPrintOpen, selectedRows, filteredItemListData }}
+            >
 
-        <ItemListPrint />
-      </ItemListContent.Provider>
+                <ItemListPrint />
+            </ItemListContent.Provider>
 
         </div>
     )
