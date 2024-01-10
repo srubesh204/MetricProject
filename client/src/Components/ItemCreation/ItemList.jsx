@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react'
-import { TextField, MenuItem, Button, ButtonGroup } from '@mui/material';
+import { TextField, MenuItem, Button } from '@mui/material';
 import { Box, Container, Grid, Paper, Typography } from "@mui/material";
 import { DataGrid, GridToolbar } from '@mui/x-data-grid';
 import axios from 'axios';
-import { Edit, FilterAlt } from '@mui/icons-material';
+import { Edit, FilterAlt, KingBedTwoTone } from '@mui/icons-material';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import dayjs from 'dayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
@@ -23,8 +23,6 @@ import { Link } from 'react-router-dom';
 import isSameOrAfter from 'dayjs/plugin/isSameOrAfter'
 import isSameOrBefore from 'dayjs/plugin/isSameOrBefore'
 import { useEmployee } from '../../App';
-import styled from "@emotion/styled";
-import { CloudDownload, CloudUpload, Delete } from '@mui/icons-material';
 dayjs.extend(isSameOrBefore)
 dayjs.extend(isSameOrAfter)
 
@@ -141,57 +139,6 @@ const ItemList = () => {
 
 
 
-    const VisuallyHiddenInput = styled('input')({
-        clip: 'rect(0 0 0 0)',
-        clipPath: 'inset(50%)',
-        height: 1,
-        overflow: 'hidden',
-        position: 'absolute',
-        bottom: 0,
-        left: 0,
-        whiteSpace: 'nowrap',
-        width: 1,
-      });
-    
-      const [file, setFile] = useState(null);
-      const [itemAddExcelStatus, setItemAddExcelStatus] = useState('');
-    
-      const handleItemAddExcel = (e) => {
-        const selectedFile = e.target.files[0];
-        console.log(selectedFile)
-        setFile(selectedFile);
-      };
-    
-      const handleItemAddUpload = async () => {
-        try {
-          if (!file) {
-            setItemAddExcelStatus('No file selected');
-            return;
-          }
-    
-          const formData = new FormData();
-          formData.append('file', file);
-    
-          const response = await axios.post(`${process.env.REACT_APP_PORT}/itemAdd/uploadItemAddInExcel`, formData, {
-            headers: {
-              'Content-Type': 'multipart/form-data',
-            },
-          });
-    
-          setItemAddExcelStatus(response.data.message || 'Excel file uploaded successfully');
-        } catch (error) {
-          if (error.response) {
-            setItemAddExcelStatus(`Error: ${error.response.data.error || 'Something went wrong'}`);
-          } else if (error.request) {
-            setItemAddExcelStatus('Network error. Please try again.');
-          } else {
-            setItemAddExcelStatus('Error uploading the file.');
-          }
-          console.error('Error uploading Excel file:', error);
-        }
-      };
-    
-    
 
 
 
@@ -407,6 +354,18 @@ const ItemList = () => {
     const [itemListSelectedRowIds, setItemListSelectedRowIds] = useState([])
 
     const [filteredItemListData, setFilteredItemListData] = useState([])
+    const [filterAllNames, setFilterAllNames] = useState({
+
+        imteNo: "all",
+        itemType: "all",
+        currentLocation: "all",
+        customerWise: "all",
+        supplierWise: "all",
+        partName: "all",
+        status: "all",
+        plantWise: "all",
+
+    })
 
     const handleFilterChangeItemList = (e) => {
         const { name, value } = e.target;
@@ -417,69 +376,152 @@ const ItemList = () => {
             if (name === "imteNo") {
                 const imteNo = itemList.filter((item) => (item.itemIMTENo === value))
                 setFilteredItemListData(imteNo)
+                setFilterAllNames(prev => ({
+                    ...prev,
+                    imteNo: value,
+                    itemType: "all",
+                    currentLocation: "all",
+                    customerWise: "all",
+                    supplierWise: "all",
+                    partName: "all",
+                    status: "all",
+                    plantWise: "all",
+                }))
 
             }
             if (name === "itemType") {
                 const itemType = itemList.filter((item) => (item.itemType === value))
                 console.log(itemType)
                 setFilteredItemListData(itemType)
+                setFilterAllNames(prev => ({
+                    ...prev,
+                    imteNo: "all",
+                    itemType: value,
+                    currentLocation: "all",
+                    customerWise: "all",
+                    supplierWise: "all",
+                    partName: "all",
+                    status: "all",
+                    plantWise: "all",
+                }))
 
-
+             
             }
             if (name === "currentLocation") {
                 const currentLocation = itemList.filter((item) => (item.itemDepartment === value))
                 setFilteredItemListData(currentLocation)
+                setFilterAllNames(prev => ({
+                    ...prev,
+                    imteNo: "all",
+                    itemType: "all",
+                    currentLocation: value,
+                    customerWise: "all",
+                    supplierWise: "all",
+                    partName: "all",
+                    status: "all",
+                    plantWise: "all",
+                }))
             }
+
             if (name === "customerWise") {
-                const customerWise = itemList.filter((item) => item.itemCustomer.includes(value))
-                setFilteredItemListData(customerWise)
+                const customerWise = itemList.filter((item) => {
+                    return item.itemCustomer && item.itemCustomer.includes(value);
+                });
+                setFilteredItemListData(customerWise);
+                setFilterAllNames(prev => ({
+                    ...prev,
+                    imteNo: "all",
+                    itemType: "all",
+                    currentLocation: "all",
+                    customerWise: value,
+                    supplierWise: "all",
+                    partName: "all",
+                    status: "all",
+                    plantWise: "all",
+                }))
             }
             if (name === "supplierWise") {
-
-                const supperlierWise = itemList.filter((item) => item.itemSupplier.includes(value))
-                console.log(supperlierWise)
-                setFilteredItemListData(supperlierWise)
+                if (value) {
+                    const supplierWise = itemList.filter((item) => item.itemCurrentLocation && item.itemLocation !== "itemDepartment" && item.dcStatus === "1");
+                    console.log(supplierWise);
+                    setFilterAllNames(prev => ({
+                        ...prev,
+                        imteNo: "all",
+                        itemType: "all",
+                        currentLocation: "all",
+                        customerWise: "all",
+                        supplierWise: value,
+                        partName: "all",
+                        status: "all",
+                        plantWise: "all",
+                    }))
+                }
             }
             if (name === "partName") {
-                const partName = itemList.filter((item) => (item.itemPartName === value))
-                setFilteredItemListData(partName)
+                const filteredItems = itemList.filter((item) => (item.itemPartName.includes(value)));
+
+                setFilteredItemListData(filteredItems);
+                console.log(filteredItems)
+                setFilterAllNames(prev => ({
+                    ...prev,
+                    imteNo: "all",
+                    itemType: "all",
+                    currentLocation: "all",
+                    customerWise: "all",
+                    supplierWise: "all",
+                    partName: value,
+                    status: "all",
+                    plantWise: "all",
+                }))
             }
 
             if (name === "status") {
                 const partName = itemList.filter((item) => (item.itemStatus === value))
                 setFilteredItemListData(partName)
+                setFilterAllNames(prev => ({
+                    ...prev,
+                    imteNo: "all",
+                    itemType: "all",
+                    currentLocation: "all",
+                    customerWise: "all",
+                    supplierWise: "all",
+                    partName: "all",
+                    status: value,
+                    plantWise: "all",
+                }))
             }
             if (name === "plantWise") {
                 const plantWise = itemList.filter((item) => (item.itemPlant === value))
                 setFilteredItemListData(plantWise)
-                // setFilterAllNames(prev => ({
-                //     ...prev,
-                //     imteNo: "all",
-                //     itemType: "all",
-                //     currentLocation: "all",
-                //     customerWise: "all",
-                //     supplierWise: "all",
-                //     partName: "all",
-                //     status: "all",
-                //     plantWise: value,
-                // }))
+                setFilterAllNames(prev => ({
+                    ...prev,
+                    imteNo: "all",
+                    itemType: "all",
+                    currentLocation: "all",
+                    customerWise: "all",
+                    supplierWise: "all",
+                    partName: value,
+                    status: "all",
+                    plantWise: value,
+                }))
             }
             if (name === "calibrationSource") {
 
                 const calibrationSource = itemList.filter((item) => (item.itemCalibrationSource === value))
                 setFilteredItemListData(calibrationSource)
-                // setFilterAllNames(prev => ({
-                //     ...prev,
-                //     imteNo: "all",
-                //     itemType: "all",
-                //     currentLocation: "all",
-                //     customerWise: "all",
-                //     supplierWise: "all",
-                //     partName: "all",
-                //     status: "all",
-                //     plantWise: "all",
-                //     calibrationSource: value,
-                // }))
+                setFilterAllNames(prev => ({
+                    ...prev,
+                    imteNo: "all",
+                    itemType: "all",
+                    currentLocation: "all",
+                    currentLocation: "all",
+                    customerWise: "all",
+                    supplierWise: "all",
+                    partName: "all",
+                    status: "all",
+                    plantWise: "all",
+                    calibrationSource: value,
+                }))
             }
 
 
@@ -559,6 +601,24 @@ const ItemList = () => {
         depFetchData();
     }, []);
 
+    const [vendorDataList, setVendorDataList] = useState([])
+    const vendorFetchData = async () => {
+        try {
+            const response = await axios.get(
+                `${process.env.REACT_APP_PORT}/vendor/getAllVendors`
+            );
+            setVendorDataList(response.data.result);
+
+
+        } catch (err) {
+            console.log(err);
+        }
+    };
+    useEffect(() => {
+        vendorFetchData();
+    }, []);
+
+
     const [partCutomerNames, setPartCutomerNames] = useState([])
     const [partDataList, setPartDataList] = useState([])
 
@@ -591,49 +651,6 @@ const ItemList = () => {
     const [errorhandler, setErrorHandler] = useState({});
 
     console.log(itemListSelectedRowIds)
-
-
-    {/*const deleteItemData = async () => {
-    try {
-        const response = await axios.delete(
-            "http://localhost:3001/itemAdd/deleteItemAdd/", {
-            data: {
-                itemAddIds: itemListSelectedRowIds
-            }
-        }
-
-
-        );
-       
-        setSnackBarOpen(true)
-        setErrorHandler({ status: response.data.status, message: response.data.message, code: "success" })
-        console.log("ItemAdd delete Successfully");
-    } catch (err) {
-        setSnackBarOpen(true)
-
-        if (err.response && err.response.status === 400) {
-            // Handle validation errors
-            console.log(err);
-            const errorData400 = err.response.data.errors;
-            const errorMessages400 = Object.values(errorData400).join(', ');
-            console.log(errorMessages400)
-            setErrorHandler({ status: 0, message: errorMessages400, code: "error" });
-        } else if (err.response && err.response.status === 500) {
-            // Handle other errors
-            console.log(err);
-            const errorData500 = err.response.data.error;
-            const errorMessages500 = Object.values(errorData500);
-            console.log(errorMessages500)
-            setErrorHandler({ status: 0, message: errorMessages500, code: "error" });
-        } else {
-            console.log(err);
-            console.log(err.response.data.error)
-            setErrorHandler({ status: 0, message: "An error occurred", code: "error" });
-        }
-
-        console.log(err);
-    }
-};*/}
 
 
 
@@ -832,6 +849,7 @@ console.log(statusInfo)*/}
                                     required
                                     select
                                     defaultValue="all"
+                                    value={filterAllNames.imteNo}
                                     fullWidth
                                     size="small"
                                     onChange={handleFilterChangeItemList}
@@ -849,6 +867,7 @@ console.log(statusInfo)*/}
                                     id="itemTypeId"
                                     select
                                     defaultValue="all"
+                                    value={filterAllNames.itemType}
                                     fullWidth
                                     onChange={handleFilterChangeItemList}
                                     size="small"
@@ -867,6 +886,7 @@ console.log(statusInfo)*/}
                                     select
                                     defaultValue="all"
                                     fullWidth
+                                    value={filterAllNames.currentLocation}
                                     onChange={handleFilterChangeItemList}
                                     size="small"
                                     name="currentLocation" >
@@ -877,6 +897,10 @@ console.log(statusInfo)*/}
 
                                 </TextField>
 
+                                
+
+
+
                             </div>
                             <div className="col d-flex  mb-2">
 
@@ -885,6 +909,7 @@ console.log(statusInfo)*/}
                                     select
                                     defaultValue="all"
                                     fullWidth
+                                    value={filterAllNames.customerWise}
                                     size="small"
                                     onChange={handleFilterChangeItemList}
                                     name="customerWise" >
@@ -897,18 +922,18 @@ console.log(statusInfo)*/}
                             </div>
                             <div className="col d-flex  mb-2">
 
-                                <TextField label="Calibration source"
-                                    id="calibrationSourceId"
+                                <TextField label="Other Location"
+                                    id="supplierWiseId"
                                     select
-                                    defaultValue={"all"}
+                                    value={filterAllNames.supplierWise}
                                     fullWidth
                                     size="small"
-                                   // value={filterAllNames.calibrationSource}
+                                    defaultValue={"all"}
                                     onChange={handleFilterChangeItemList}
-                                    name="calibrationSource" >
+                                    name="supplierWise" >
                                     <MenuItem value="all">All</MenuItem>
-                                    {FilterNameList.itemCalibrationSource.map((item, index) => (
-                                        <MenuItem key={index} value={item}>{item}</MenuItem>
+                                    {vendorDataList.map((item, index) => (
+                                        <MenuItem key={index} value={item.fullName}>{item.fullName}</MenuItem>
                                     ))}
                                 </TextField>
 
@@ -920,6 +945,7 @@ console.log(statusInfo)*/}
                                     select
                                     defaultValue="all"
                                     fullWidth
+                                    value={filterAllNames.dueInDays}
                                     size="small"
                                     onChange={handleDueChange}
                                     name="dueInDays" >
@@ -942,13 +968,14 @@ console.log(statusInfo)*/}
                                     select
                                     defaultValue="all"
                                     fullWidth
+                                    value={filterAllNames.partName}
                                     size="small"
                                     onChange={handleFilterChangeItemList}
 
                                     name="partName" >
                                     <MenuItem value="all">All</MenuItem>
-                                    {partDataList.map((item, index) => (
-                                        <MenuItem key={index} value={item.partName}>{[item.partNo, item.partName].join(', ')}</MenuItem>
+                                    {partCutomerNames.map((item, index) => (
+                                        <MenuItem key={index} value={item._id}>{[item.partNo, item.partName].join(', ')}</MenuItem>
                                     ))}
                                 </TextField>
 
@@ -958,8 +985,9 @@ console.log(statusInfo)*/}
                                 <TextField label="Plant Wise"
                                     id="plantWiseId"
                                     select
-                                    //  value={filterAllNames.plantWise}
+                                    value={filterAllNames.plantWise}
                                     fullWidth
+                                    defaultValue={"all"}
                                     size="small"
                                     onChange={handleFilterChangeItemList}
                                     name="plantWise" >
@@ -985,6 +1013,7 @@ console.log(statusInfo)*/}
                                         select
                                         defaultValue="Active"
                                         fullWidth
+                                        value={filterAllNames.status}
                                         size="small"
                                         name="status"
                                         onChange={handleFilterChangeItemList}>
@@ -1220,24 +1249,16 @@ console.log(statusInfo)*/}
                         </div>
                         <div className='row'>
                             <div className='col d-flex '>
-                  <div className="d-flex justify-content-center">
-                    <ButtonGroup className='me-3'>
-                      <Button component="label" variant="contained" >
-                        Upload
-                        <VisuallyHiddenInput type="file" onChange={handleItemAddExcel} />
-                      </Button>
-                      <Button onClick={handleItemAddUpload}><CloudUpload /></Button>
-                    </ButtonGroup>
-
-                    <ButtonGroup>
-                      <Button component="label" variant="contained" color='secondary'>
-                        Download
-                        <VisuallyHiddenInput type="file" />
-                      </Button>
-                      <Button color='secondary'><CloudDownload /></Button>
-                    </ButtonGroup>
-                  </div>
-                  {itemAddExcelStatus && <p>{itemAddExcelStatus}</p>}
+                                {employeeRole.employee !== "viewer" && <React.Fragment>
+                                    <div className='me-2' >
+                                        <label className='itemlistloade'>
+                                            <input className="form-control itemlistdownload" type="file" id="upload" />Upload</label>
+                                    </div>
+                                    <div className='me-2'>
+                                        <label className='itemlistloade'>
+                                            <input className="form-control itemlistdownload" type="file" id="download" />Download </label>
+                                    </div>
+                                </React.Fragment>}
 
                                 <div className='me-2 '>
                                     <button type="button" className='btn btn-secondary' >Sticker Print</button>

@@ -9,7 +9,7 @@ import { Button, Dialog, DialogActions, DialogContent, DialogTitle, IconButton }
 const CalPrint = () => {
 
     const calData = useContext(CalData)
-    const { calPrintOpen, setCalPrintOpen, selectedRows, formatNoData } = calData
+    const { calPrintOpen, setCalPrintOpen, selectedRows, formatNoData,filteredCalData } = calData
 
     const styles = StyleSheet.create({
         table: {
@@ -50,7 +50,7 @@ const CalPrint = () => {
 
     const renderTableRows = () => {
 
-        return selectedRows.calMasterUsed.map((row, index) => (
+        return filteredCalData.map((row, index) => (
             <View style={styles.tableRow} key={index.toString()}>
 
                 <View style={{ marginBottom: "5px", width: "100%", border: "0.5px solid black" }}>
@@ -138,7 +138,7 @@ const CalPrint = () => {
                 <Close />
             </IconButton>
             <PDFViewer width="100%" height="100%">
-                <Document title={selectedRows.dcNo || "DC Details"}>
+                <Document >
                     <Page size="A4" style={{ fontSize: "10px", padding: "10px 15px" }}>
                         <Text style={{ padding: "10px", textAlign: "center", textDecoration: "underline" }}>Calibration Certificate</Text>
                         <View style={{ border: "1px solid black", width: "100%", height: "95%" }}>
@@ -154,7 +154,7 @@ const CalPrint = () => {
                                     <Text style={{ width: "30%", border: "0.5px solid black", textAlign: "center", height: "50%" }}>Metric</Text>
                                     <View style={{ border: "1px solid black", width: "90%", height: "50%" }}>
 
-                                        {renderTableRows()}
+                                         {renderTableRows()} 
 
                                     </View>
                                 </View>
