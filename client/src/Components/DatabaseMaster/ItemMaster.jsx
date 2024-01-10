@@ -55,6 +55,12 @@ const ItemMaster = () => {
 
 
     const [filteredData, setFilteredData] = useState([])
+    const [filterAllName,setFilterAllName]= useState({
+        itemTypeSort:"all",
+        itemDescriptionSort:"all"
+
+
+    })
 
     const handleFilterChange = (e) => {
         const { name, value } = e.target;
@@ -64,10 +70,20 @@ const ItemMaster = () => {
             if (name === "itemTypeSort") {
                 const itemType = itemMasterDataList.filter((item) => (item.itemType === value))
                 setFilteredData(itemType)
+                setFilterAllName(prev =>({
+                    ...prev,
+                    itemTypeSort: value,
+                    itemDescriptionSort:"all"
+                }))
             }
             if (name === "itemDescriptionSort") {
                 const itemDescription = itemMasterDataList.filter((item) => (item.itemDescription === value))
                 setFilteredData(itemDescription)
+                setFilterAllName(prev =>({
+                    ...prev,
+                    itemTypeSort: "all",
+                    itemDescriptionSort: value
+                }))
                 console.log(value)
             }
 
@@ -1033,7 +1049,7 @@ const ItemMaster = () => {
                                 <div className='row mb-2 g-2'>
 
                                     <div className="col-3 ">
-                                        <TextField fullWidth label="Item Type Sort" onChange={handleFilterChange} className="form-select" select size="small" id="itemTypeSortId" name="itemTypeSort" defaultValue="" >
+                                        <TextField fullWidth label="Item Type Sort" onChange={handleFilterChange} value={filterAllName.itemTypeSort} className="form-select" select size="small" id="itemTypeSortId" name="itemTypeSort" defaultValue="" >
 
                                             <MenuItem value="all">All</MenuItem >
                                             <MenuItem value="attribute">Attribute</MenuItem >
@@ -1044,7 +1060,7 @@ const ItemMaster = () => {
 
                                     </div>
                                     <div className=" col-3">
-                                        <TextField fullWidth label="Item Description Sort" onChange={handleFilterChange} className="form-select" select size="small" id="itemDescriptionSortId" name="itemDescriptionSort" defaultValue="" >
+                                        <TextField fullWidth label="Item Description Sort" onChange={handleFilterChange} value={filterAllName.itemDescriptionSort} className="form-select" select size="small" id="itemDescriptionSortId" name="itemDescriptionSort" defaultValue="" >
 
                                             <MenuItem value="all">All</MenuItem >
                                             {FilterNameList.itemDescription.map((item, index) => (

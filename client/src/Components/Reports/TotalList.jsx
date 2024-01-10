@@ -480,24 +480,6 @@ const TotalList = () => {
   };
 
 
-  const handleFilterChange = (e) => {
-    const { name, value } = e.target;
-    if (value === "all") {
-      setFilteredItemListData(vendorDataList)
-    } else {
-      if (value === "oem") {
-        const vendorType = vendorDataList.filter((item) => (item.oem === "1"))
-        setFilteredItemListData(vendorType)
-      }
-      if (value === "supplier") {
-        const vendorType = vendorDataList.filter((item) => (item.supplier === "1"))
-        setFilteredItemListData(vendorType)
-      }
-
-    }
-
-
-  };
 
 
   console.log(filteredItemListData)

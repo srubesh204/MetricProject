@@ -145,6 +145,14 @@ const Employee = () => {
 
 
     const [filteredData, setFilteredData] = useState([])
+    const [filterAllNames, setFilterAllNames] = useState({
+
+        departmentFilter: "all",
+        employementStatusFilter: "all",
+        reportToFilter: "all",
+       
+
+    })
 
     const handleFilterChange = (e) => {
         const { name, value } = e.target;
@@ -155,16 +163,35 @@ const Employee = () => {
             if (name === "departmentFilter") {
                 const departmentFilter = employeeList.filter((item) => (item.department === value))
                 setFilteredData(departmentFilter)
+                setFilterAllNames(prev=>({
+                    ...prev,
+                    departmentFilter: value,
+                    employementStatusFilter:"all",
+                    reportToFilter:"all"
+
+                }))
             }
             if (name === "employementStatusFilter") {
                 const statusFilter = employeeList.filter((item) => (item.employmentStatus === value))
                 console.log(statusFilter)
                 setFilteredData(statusFilter)
+                setFilterAllNames(prev =>({
+                    ...prev,
+                    departmentFilter:"all",
+                    employementStatusFilter:value,
+                    reportToFilter:"all"
+                }))
                 console.log(value)
             }
             if (name === "reportToFilter") {
                 const reportFilter = employeeList.filter((item) => (item.reportTo === value))
                 setFilteredData(reportFilter)
+                setFilterAllNames(prev =>({
+                    ...prev,
+                    departmentFilter:"all",
+                    employementStatusFilter:'all',
+                    reportToFilter:value
+                }))
             }
         }
 
@@ -1105,7 +1132,7 @@ const Employee = () => {
                             <Grid container rowSpacing={1} columnSpacing={{ xs: 1 }} className=' g-2 mb-2'>
 
                                 <Grid item xs={3}>
-                                    <TextField fullWidth label="Employment Status Filter" onChange={handleFilterChange} select size="small" id="employementStatusFilterId" name="employementStatusFilter" defaultValue="" >
+                                    <TextField fullWidth label="Employment Status Filter" value={filterAllNames.employementStatusFilter} onChange={handleFilterChange} select size="small" id="employementStatusFilterId" name="employementStatusFilter" defaultValue="" >
                                         <MenuItem value="all">All</MenuItem >
                                         <MenuItem value="Active">Active</MenuItem >
                                         <MenuItem value="InActive">InActive</MenuItem >
@@ -1114,7 +1141,7 @@ const Employee = () => {
 
                                 </Grid>
                                 <Grid item xs={4}>
-                                    <TextField fullWidth label="Department Filter" onChange={handleFilterChange} select size="small" id="departmentFilterId" name="departmentFilter" defaultValue="" >
+                                    <TextField fullWidth label="Department Filter" value={filterAllNames.departmentFilter} onChange={handleFilterChange} select size="small" id="departmentFilterId" name="departmentFilter" defaultValue="" >
                                         <MenuItem value="all">All</MenuItem>
                                         {FilterNameList.department.map((item, index) => (
                                             <MenuItem key={index} value={item}>{item}</MenuItem>
@@ -1126,7 +1153,7 @@ const Employee = () => {
 
 
                                 <Grid item xs={3}>
-                                    <TextField fullWidth label="Report To" onChange={handleFilterChange} select size="small" id="reportToFilterId" name="reportToFilter" defaultValue="" >
+                                    <TextField fullWidth label="Report To" value={filterAllNames.reportToFilter} onChange={handleFilterChange} select size="small" id="reportToFilterId" name="reportToFilter" defaultValue="" >
                                         <MenuItem value="all">All</MenuItem>
 
                                         {FilterNameList.reportTo.map((item, index) => (

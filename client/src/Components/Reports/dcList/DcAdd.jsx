@@ -844,7 +844,7 @@ const DcAdd = () => {
                 </div>
                 <div>
                     <Button variant='contained' color='error' className='me-3' onClick={() => { setDcOpen(false); setDcAddData(initialDcData) }}>Cancel</Button>
-                    <Button variant='contained' color='success' onClick={() => { setConfirmSubmit(true) }}>Submit</Button>
+                    <Button variant='contained'    onClick={() => { setConfirmSubmit(true) }}>Submit</Button>
                 </div>
             </DialogActions>
 
