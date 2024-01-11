@@ -110,6 +110,7 @@ const CalList = () => {
             );
 
             setCalListDataList(response.data.result);
+            setFilteredCalData(response.data.result)
             const filteredItems = response.data.result.filter((item) => dayjs(item.calItemCalDate).isSameOrAfter(dateData.fromDate) && dayjs(item.calItemCalDate).isSameOrBefore(dateData.toDate))
             setFilteredCalData(filteredItems);
         } catch (err) {

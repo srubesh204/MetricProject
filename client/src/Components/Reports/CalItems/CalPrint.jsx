@@ -159,6 +159,8 @@ const CalPrint = () => {
                                     </View>
                                 </View>
                                 {/* Table rows */}
+                                {renderTableRows()} 
+                                
                                 <View >
                                     <Text style={{ padding: "10px", textAlign: "center", }}>Environmental Condition</Text>
                                     <View style={{ border: "1px solid black", width: "100%", height: "50%" }}>
@@ -167,6 +169,11 @@ const CalPrint = () => {
 
                                 </View>
 
+                            </View>
+                            <View style={styles.tableRow}>
+                                <Text>z</Text>
+                                <Text>z</Text>
+                                <Text>z</Text>
                             </View>
 
                             {/* <View  style={styles.tableRow}>
