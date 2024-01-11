@@ -15,8 +15,8 @@ const plantDetailsController = {
     createPlantDetails: async (req, res) => {
 
         try {
-            const { plantName, plantAddress, admins, plantAdmins, creators, viewers } = req.body;
-            const plantResults = new plantSchema({ plantName, plantAddress, admins, plantAdmins, creators, viewers });
+            const { plantName, plantAddress, employees } = req.body;
+            const plantResults = new plantSchema({ plantName, plantAddress, employees });
             const validationError = plantResults.validateSync();
 
             if (validationError) {
@@ -40,25 +40,25 @@ const plantDetailsController = {
 
             await plantResults.save();
 
-            const plantEmployees = [...new Set([...admins, ...plantAdmins, ...creators, ...viewers])];
+            // const plantEmployees = [...new Set([...admins, ...plantAdmins, ...creators, ...viewers])];
 
 
-            const updatePromises = plantEmployees.map(async (empId) => {
+            // const updatePromises = plantEmployees.map(async (empId) => {
 
-                const employeeData = await employeeModel.findById(empId)
-                console.log(employeeData)
-                const updatedEmployeeData = { employeeData, plant: [plantName] }
-                console.log(updatedEmployeeData)
+            //     const employeeData = await employeeModel.findById(empId)
+            //     console.log(employeeData)
+            //     const updatedEmployeeData = { employeeData, plant: [plantName] }
+            //     console.log(updatedEmployeeData)
 
-                const updateResult = await employeeModel.findOneAndUpdate(
-                    { _id: employeeData._id },
-                    { $set: updatedEmployeeData },
-                    { new: true }
-                );
+            //     const updateResult = await employeeModel.findOneAndUpdate(
+            //         { _id: employeeData._id },
+            //         { $set: updatedEmployeeData },
+            //         { new: true }
+            //     );
 
-                return updateResult;
-            });
-            const updatedItems = await Promise.all(updatePromises);
+            //     return updateResult;
+            // });
+            // const updatedItems = await Promise.all(updatePromises);
 
             return res.status(200).json({ message: "Company Plants Details Successfully Saved", status: 1 });
         } catch (error) {

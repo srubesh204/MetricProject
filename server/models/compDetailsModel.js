@@ -28,10 +28,11 @@ const plantSchema = new mongoose.Schema({
     type: String,
     required: [true, "Plant Address required"]
   },
-  admins: [],
-  plantAdmins: [],
-  creators: [],
-  viewers: []
+  employees: [{
+    employeeId: String,
+    empRole: String,
+    departments: []
+  }]
 });
 
 plantSchema.plugin(uniqueValidator);

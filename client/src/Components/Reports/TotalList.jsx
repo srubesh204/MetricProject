@@ -105,12 +105,6 @@ const TotalList = () => {
 
       console.log(partDataList)
 
-
-
-
-
-
-
       setItemList(response.data.result);
       setFilteredItemListData(response.data.result);
 
@@ -121,6 +115,7 @@ const TotalList = () => {
   useEffect(() => {
     itemFetch();
   }, []);
+
   useEffect(() => {
     const filteredItems = itemList.filter((item) => dayjs(item.itemCalDate).isSameOrAfter(dateData.fromDate) && dayjs(item.itemCalDate).isSameOrBefore(dateData.toDate))
     console.log(filteredItems)
@@ -136,20 +131,7 @@ const TotalList = () => {
 
   useEffect(() => {
     if (partDataList.length !== 0) {
-      // const partCustomers = itemList.map(item => {
-      //   const foundPart = item.itemPartName.map(itemPlant => {
-      //     const part = partDataList.find(part => itemPlant === part._id);
-      //     return part ? part : null;
-      //   });
-      //   console.log(foundPart);
-      //   setPartCutomerNames(foundPart)
-      //   return foundPart; // Returning the foundPart array for each itemList item
-      // });
-      // console.log(partCustomers);
-      // setPartCutomerNames(partCustomers)
-
-
-      //const partCustomers = itemList.map(item => item.itemPartName.includes(partDataList.map(part => part._id)))
+      
       const partCustomers = partDataList.filter(part => itemList.some(item => item.itemPartName.includes(part._id)))
       console.log(partCustomers)
       setPartCutomerNames(partCustomers)

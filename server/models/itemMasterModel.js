@@ -17,7 +17,7 @@ const itemMasterSchema = new mongoose.Schema({
   uncertaintyUnit : String,
   standardRef : String,
  
-  itemImageName : String,
+  itemMasterImage : String,
   workInsName : String,
   status : String,
   calibrationPoints : []
