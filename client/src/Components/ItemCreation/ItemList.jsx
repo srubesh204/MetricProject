@@ -156,7 +156,6 @@ const ItemList = () => {
         left: 0,
         whiteSpace: 'nowrap',
         width: 1,
-        
     });
 
     const [file, setFile] = useState(null);
@@ -200,10 +199,15 @@ const ItemList = () => {
 
 
 
+  useEffect(() => {
+    if (itemAddExcelStatus) {
+      const timeoutId = setTimeout(() => {
+        setItemAddExcelStatus('');
+      }, 3000);
 
-
-
-
+      return () => clearTimeout(timeoutId); 
+    }
+  }, [itemAddExcelStatus]);
 
 
 
@@ -839,57 +843,57 @@ console.log(statusInfo)*/}
                                     </div>
                                 </div>
                                 <div className='col-8'>
-                                {dueDate === "Date" && <div className='col d-flex justify-content-end mb-2 g-2'>
-                                    <div className="me-2 col-2 ">
-                                        <DatePicker
+                                    {dueDate === "Date" && <div className='col d-flex justify-content-end mb-2 g-2'>
+                                        <div className="me-2 col-2 ">
+                                            <DatePicker
 
-                                            fullWidth
-                                            id="startDateId"
-                                            name="dueStartDate"
-                                            onChange={(newValue) => dueDatePicker(newValue, "dueStartDate")}
-                                            label="Start Date"
+                                                fullWidth
+                                                id="startDateId"
+                                                name="dueStartDate"
+                                                onChange={(newValue) => dueDatePicker(newValue, "dueStartDate")}
+                                                label="Start Date"
 
-                                            slotProps={{ textField: { size: 'small' } }}
-                                            format="DD-MM-YYYY" />
-                                    </div>
-                                    <div className="me-2 col-2">
-                                        <DatePicker
+                                                slotProps={{ textField: { size: 'small' } }}
+                                                format="DD-MM-YYYY" />
+                                        </div>
+                                        <div className="me-2 col-2">
+                                            <DatePicker
 
-                                            fullWidth
-                                            id="endDateId"
-                                            name="dueEndDate"
-                                            onChange={(newValue) => dueDatePicker(newValue, "dueEndDate")}
-                                            label="End Date "
+                                                fullWidth
+                                                id="endDateId"
+                                                name="dueEndDate"
+                                                onChange={(newValue) => dueDatePicker(newValue, "dueEndDate")}
+                                                label="End Date "
 
-                                            slotProps={{ textField: { size: 'small' } }}
-                                            format="DD-MM-YYYY" />
-                                    </div>
-                                    
-                                    <div>
-                                        <Button variant='contained' startIcon={<FilterAlt />} size='small' color='warning'>Filter</Button>
-                                    </div>
-                                </div>}
+                                                slotProps={{ textField: { size: 'small' } }}
+                                                format="DD-MM-YYYY" />
+                                        </div>
+
+                                        <div>
+                                            <Button variant='contained' startIcon={<FilterAlt />} size='small' color='warning'>Filter</Button>
+                                        </div>
+                                    </div>}
                                 </div>
                                 <div className='col-2'>
-                                <div className=' col d-flex justify-content-end'>
-                                    {employeeRole.employee !== "viewer" && <React.Fragment> <div className='me-2'>
+                                    <div className=' col d-flex justify-content-end'>
+                                        {employeeRole.employee !== "viewer" && <React.Fragment> <div className='me-2'>
 
-                                        <Button component={Link} to={`/itemAdd`} variant="contained" size='small' color="warning">
-                                            <AddIcon /> Add Item
-                                        </Button>
+                                            <Button component={Link} to={`/itemAdd`} variant="contained" size='small' color="warning">
+                                                <AddIcon /> Add Item
+                                            </Button>
 
-                                    </div>
+                                        </div>
 
-                                        {/* <div className='me-2'>
+                                            {/* <div className='me-2'>
                                             {itemListSelectedRowIds.length !== 0 && <Button variant='contained' type='button' color='error' onClick={() => setDeleteModalItem(true)}><DeleteIcon /> Delete </Button>}
                                         </div> */}
-                                    </React.Fragment>
-                                    }
+                                        </React.Fragment>
+                                        }
 
 
 
 
-                                </div> </div> </div>
+                                    </div> </div> </div>
                             <Typography variant="h5" className="text-center mb-2">Item List</Typography>
 
                             <div className="col d-flex mb-2 ">
@@ -1067,7 +1071,7 @@ console.log(statusInfo)*/}
                                     </TextField>
                                 </div>
                                 <div className="col-1 offset-7">
-                                {itemListSelectedRowIds.length !== 0 && <Button variant='contained' type='button' size='small' color='error' onClick={() => setDeleteModalItem(true)}><DeleteIcon /> Delete </Button>}
+                                    {itemListSelectedRowIds.length !== 0 && <Button variant='contained' type='button' size='small' color='error' onClick={() => setDeleteModalItem(true)}><DeleteIcon /> Delete </Button>}
                                 </div>
                                 <div className="col-1">
                                     <div>
@@ -1079,7 +1083,7 @@ console.log(statusInfo)*/}
                                             {errorhandler.message}
                                         </Alert>
                                     </Snackbar>
-                                
+
                                 </div>
 
                             </div>
@@ -1243,43 +1247,43 @@ console.log(statusInfo)*/}
                                     </Button>
 
                                 </div>}
-                            
+
                                 <div className="d-flex justify-content-center">
-                                    <ButtonGroup size='small' className='me-3'>
-                                        <Button variant="contained" size="small" >
+                                    <ButtonGroup className='me-3'>
+                                        <Button component="label" size='small' variant="contained" >
                                             Upload
                                             <VisuallyHiddenInput type="file" onChange={handleItemAddExcel} />
                                         </Button>
                                         <Button size='small' onClick={handleItemAddUpload}><CloudUpload /></Button>
                                     </ButtonGroup>
 
-                                    <ButtonGroup  className='me-3' size='small'>
-                                        <Button variant="contained" size="small" color='secondary'>
+                                    <ButtonGroup>
+                                        <Button component="label" size='small' variant="contained" color='secondary'>
                                             Download
-                                            <VisuallyHiddenInput  type="file" />
+                                            <VisuallyHiddenInput type="file" />
                                         </Button>
                                         <Button size='small' color='secondary'><CloudDownload /></Button>
                                     </ButtonGroup>
                                 </div>
-                                {/* {itemAddExcelStatus && <p>{itemAddExcelStatus}</p>} */}
 
 
-                                <div className='me-2 col-1'>
+                                <div className='me-2 col-1 px-1'>
                                     <button type="button" className='btn btn-secondary btn-sm' >Sticker Print</button>
                                 </div>
                                 <div className='me-2 col-2'>
                                     <button type="button" className='btn btn-secondary btn-sm' >Sticker Print Barcode</button>
                                 </div>
 
-                            
-                            <Snackbar anchorOrigin={{ vertical: "top", horizontal: "right" }} open={snackBarOpen} autoHideDuration={6000} onClose={handleSnackClose}>
-                                <Alert onClose={handleSnackClose} severity={errorhandler.code} sx={{ width: '25%' }}>
-                                    {errorhandler.message}
-                                </Alert>
-                            </Snackbar>
+
+                                <Snackbar anchorOrigin={{ vertical: "top", horizontal: "right" }} open={snackBarOpen} autoHideDuration={6000} onClose={handleSnackClose}>
+                                    <Alert onClose={handleSnackClose} severity={errorhandler.code} sx={{ width: '25%' }}>
+                                        {errorhandler.message}
+                                    </Alert>
+                                </Snackbar>
 
 
                             </div>
+                                {itemAddExcelStatus && <p style={{color:'green'}}>{itemAddExcelStatus}</p>}
 
                         </div>
 

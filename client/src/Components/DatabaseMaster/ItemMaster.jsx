@@ -1024,7 +1024,7 @@ const ItemMaster = () => {
                                         </div>
                                     }
                                 </div>
-                                <div>{itemMasterExcelStatus && <p>{itemMasterExcelStatus}</p>}</div>
+                                <div>{itemMasterExcelStatus && <p style={{color:'green'}}>{itemMasterExcelStatus}</p>}</div>
 
                             </div>
                         </Paper>

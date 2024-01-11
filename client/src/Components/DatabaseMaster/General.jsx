@@ -444,7 +444,7 @@ export const UnitDataBase = ({ style }) => {
                                         {errorHandler.message}
                                     </Alert>
                                 </Snackbar>
-                                {generalExcelStatus && <p>{generalExcelStatus}</p>}
+                                {generalExcelStatus && <p style={{color:'green'}}>{generalExcelStatus}</p>}
                             </Paper>
                         </Grid>
 
@@ -1072,7 +1072,7 @@ export const PartDataBase = ({ style }) => {
 
 
 
-                                {generalExcelStatus && <p>{generalExcelStatus}</p>}
+                                {generalExcelStatus && <p style={{color:'green'}}>{generalExcelStatus}</p>}
                                 {partStateId ? <Dialog
                                     open={openModal}
                                     onClose={() => setOpenModal(false)}

@@ -1107,7 +1107,7 @@ const Employee = () => {
                                     }
                                 </div>
                             </div>
-                            {empExcelStatus && <p>{empExcelStatus}</p>}
+                            {empExcelStatus && <p style={{color:'green'}}>{empExcelStatus}</p>}
                         </Paper>
                     </Grid>
 
