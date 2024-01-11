@@ -7,7 +7,7 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DataGrid, GridToolbar } from '@mui/x-data-grid';
 import dayjs from 'dayjs';
 import { Container, Paper } from '@mui/material';
-import { Edit, EditRounded,PrintRounded  } from '@mui/icons-material';
+import { Edit, EditRounded, PrintRounded } from '@mui/icons-material';
 import isSameOrAfter from 'dayjs/plugin/isSameOrAfter'
 import isSameOrBefore from 'dayjs/plugin/isSameOrBefore'
 import CalPrint from './CalPrint'
@@ -110,6 +110,7 @@ const CalList = () => {
             );
 
             setCalListDataList(response.data.result);
+            setFilteredCalData(response.data.result)
             const filteredItems = response.data.result.filter((item) => dayjs(item.calItemCalDate).isSameOrAfter(dateData.fromDate) && dayjs(item.calItemCalDate).isSameOrBefore(dateData.toDate))
             setFilteredCalData(filteredItems);
         } catch (err) {
@@ -140,7 +141,7 @@ const CalList = () => {
         { field: 'calItemCalDate', headerName: 'Calibration On', width: 200, valueGetter: (params) => dayjs(params.row.calItemCalDate).format('DD-MM-YYYY'), headerAlign: "center", align: "center", },
         { field: 'itemDueDate', headerName: 'Next Due On', width: 200, valueGetter: (params) => dayjs(params.row.itemDueDate).format('DD-MM-YYYY'), headerAlign: "center", align: "center", },
         { field: 'calStatus', headerName: 'Cal status', width: 200, headerAlign: "center", align: "center", },
-        { field: 'printButton', headerName: 'Print', headerAlign: "center", align: "center", width: 100, renderCell: (params) => <Button onClick={() => { setSelectedRows(params.row); setCalPrintOpen(true) }}><PrintRounded color='success' /></Button> }
+    
 
     ]
 
@@ -319,7 +320,7 @@ const CalList = () => {
                         <div className='row'>
                             <div className='col d-flex '>
                                 <div className='me-2 '>
-                                    <button type="button" className='btn btn-secondary' >Print</button>
+                                    <Button  onClick={() => { setSelectedRows(); setCalPrintOpen(true) }} ><PrintRounded color='success' /></Button>
                                 </div>
                                 <div className='me-2 '>
                                     <button type="button" className='btn btn-secondary' > Label Print</button>
@@ -357,9 +358,9 @@ const CalList = () => {
                             {selectedCalRow.length !== 0 && <CalEditModel />}
                         </CalData.Provider>}
                     <CalData.Provider
-                        value={{ employeeRole, calPrintOpen, setCalPrintOpen, selectedRows, }}
+                        value={{ calPrintOpen, setCalPrintOpen, selectedRows,filteredCalData }}
                     >
-                        {selectedRows.length !== 0 && <CalPrint />}
+                         <CalPrint />
                     </CalData.Provider>
 
 

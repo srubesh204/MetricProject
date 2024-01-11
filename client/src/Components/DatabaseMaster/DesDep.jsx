@@ -1071,27 +1071,25 @@ export const Department = () => {
                 <div className="row g-2">
                   <div className="col d-flex">
                     <div className="d-flex justify-content-center">
-                      <ButtonGroup style={{ marginRight: '10px' }}>
-                        <Button component="label" size="small" fullWidth variant="contained" >
+                      <ButtonGroup className="me-2" size="small">
+                        <Button component="label" size="small"  variant="contained" >
                           Upload
                           <VisuallyHiddenInput type="file" onChange={(e) => handleExcel(e, "dep")} />
                         </Button>
-                        <Button fullWidth onClick={(e) => handleUpload(e, "dep")}><CloudUpload /></Button>
+                        <Button size="small" onClick={(e) => handleUpload(e, "dep")}><CloudUpload /></Button>
                       </ButtonGroup>
 
-                      <ButtonGroup>
-                        <Button component="label" size="small" fullWidth variant="contained" color='secondary'>
+                      <ButtonGroup size="small">
+                        <Button component="label" size="small"   variant="contained" color='secondary'>
                           Download
                           <VisuallyHiddenInput type="file" />
                         </Button>
-                        <Button color='secondary' fullWidth  ><CloudDownload /></Button>
+                        <Button color='secondary' size="small"   ><CloudDownload /></Button>
                       </ButtonGroup>
                     </div>
 
                   </div>
-                  {depExcelStatus && <p>{depExcelStatus}</p>}
-
-
+              
 
                   {depStateId ? <Dialog
                     open={depOpenModal}
@@ -1145,32 +1143,35 @@ export const Department = () => {
                   <div className="col-md text-end">
 
                     {depStateId ? (<div className="d-flex justify-content-end">
-                      <Button
+                      <Button className="me-1"
                         type="button"
-                        variant="contained" size="small"
-                        style={{ backgroundColor: "#e6e6e6", color: "black", fontWeight: "bolder" }}
-                        className="btn text-end me-2 hover"
+                        variant="contained"  size="small"
+                        color='warning'
+                        
+                       
                         onClick={() => setDepOpenModal(true)}
-                        color="info"
                       >
                         Modify
                       </Button >
-                      <Button type="button" variant="contained" size="small" onMouseEnter={(e) => { e.target.style.background = 'red' }} onMouseOut={(e) => { e.target.style.background = '#e6e6e6' }}
-                        style={{ backgroundColor: "#e6e6e6", color: "black", fontWeight: "bolder" }}
-                        className="btn text-end"
+                      <Button type="button" variant="contained"  size="small"   color='error' onMouseEnter={(e) => { e.target.style.background = 'red' }} onMouseOut={(e) => { e.target.style.background = '#e6e6e6' }}
+                        // style={{ backgroundColor: "#e6e6e6", color: "black", fontWeight: "bolder" }}
+                        // className="btn text-end"
                         onClick={() => { setDepStateId(null); setDepartmentData(emptyDepartmentData) }}
                       >Cancel</Button>
                     </div>) : <div >
                       <Button variant="contained" type="button"
                         size="small"
-                        color='warning'
-
+                       
+                        color='success'
+                        
                         className="btn text-end hover" onClick={() => setDepOpenModal(true)}
                       >+ Add Department</Button>
                     </div>}
 
 
                   </div>
+
+                  {depExcelStatus && <p style={{color:'green'}}>{depExcelStatus}</p>}
 
 
 
@@ -1334,25 +1335,24 @@ export const Department = () => {
                   <div className="row g-2 mb-3">
                     <div className="col d-flex">
                       <div className="d-flex justify-content-center">
-                        <ButtonGroup >
-                          <Button component="label" fullWidth variant="contained" >
+                        <ButtonGroup size="small"  className="me-2">
+                          <Button component="label" size="small" variant="contained" >
                             Upload
                             <VisuallyHiddenInput type="file" onChange={(e) => handleExcel(e, "area")} />
                           </Button>
-                          <Button sx={{ width: "25%" }} onClick={(e) => handleUpload(e, "area")}><CloudUpload /></Button>
+                          <Button size="small" onClick={(e) => handleUpload(e, "area")}><CloudUpload /></Button>
                         </ButtonGroup>
 
-                        <ButtonGroup>
-                          <Button component="label" fullWidth variant="contained" color='secondary'>
+                        <ButtonGroup size="small">
+                          <Button component="label"  variant="contained" color='secondary'>
                             Download
                             <VisuallyHiddenInput type="file" />
                           </Button>
-                          <Button sx={{ width: "25%" }} color='secondary'><CloudDownload /></Button>
+                          <Button size="small" color='secondary'><CloudDownload /></Button>
                         </ButtonGroup>
                       </div>
 
                     </div>
-                    {areaExcelStatus && <p>{areaExcelStatus}</p>}
 
 
                     {areaStateId ? <Dialog
@@ -1409,29 +1409,27 @@ export const Department = () => {
                     <div className="col-md text-end">
 
                       {areaStateId ? (<div className="d-flex justify-content-end">
-                        <Button
+                        <Button className="me-1"
                           type="button"
+                          color='warning'
                           variant='contained' size="small"
-                          style={{ backgroundColor: "#e6e6e6", color: "black", fontWeight: "bolder" }}
-                          className="btn text-end me-2  hover"
+                          // style={{ backgroundColor: "#e6e6e6", color: "black", fontWeight: "bolder" }}
+                          // className="btn text-end me-2  hover"
                           onClick={() => setAreaOpenModal(true)}
                         //   disabled={!depStateId}
                         >
                           Modify
                         </Button >
-                        <Button type="button" variant='contained' size="small" onMouseEnter={(e) => { e.target.style.background = 'red' }} onMouseOut={(e) => { e.target.style.background = '#e6e6e6' }}
-                          style={{ backgroundColor: "#e6e6e6", color: "black", fontWeight: "bolder" }}
-                          className="btn text-end"
+                        <Button type="button"  variant='contained' size="small" color='error' onMouseEnter={(e) => { e.target.style.background = 'red' }} onMouseOut={(e) => { e.target.style.background = '#e6e6e6' }}
+                         
                           onClick={() => { setareaStateId(null); setArea(initialAreaData) }}
                         >Cancel</Button>
                       </div>) : <div>
-                        <Button variant='contained' size="small" color='warning' onClick={() => setAreaOpenModal(true)}>+ Add Area</Button>
+                        <Button variant='contained' size="small" color='success'  onClick={() => setAreaOpenModal(true)}>+ Add Area</Button>
                       </div>}
 
-
-
-
                     </div>
+                      {areaExcelStatus && <p style={{color:'green'}}>{areaExcelStatus}</p>}
                   </div>
                   <div className="row ">
 
@@ -1620,25 +1618,24 @@ export const Department = () => {
                 <div className="row g-2 ">
                   <div className="col d-flex">
                     <div className="d-flex justify-content-center">
-                      <ButtonGroup className='me-3'>
-                        <Button component="label" variant="contained" fullWidth>
+                      <ButtonGroup className='me-2'size="small" >
+                        <Button component="label" variant="contained" size="small" >
                           Upload
                           <VisuallyHiddenInput type="file" onChange={(e) => handleExcel(e, "pou")} />
                         </Button>
-                        <Button onClick={(e) => handleUpload(e, "pou")}><CloudUpload /></Button>
+                        <Button size="small" onClick={(e) => handleUpload(e, "pou")}><CloudUpload /></Button>
                       </ButtonGroup>
 
-                      <ButtonGroup>
-                        <Button component="label" variant="contained" fullWidth color='secondary'>
+                      <ButtonGroup size="small">
+                        <Button component="label" size="small" variant="contained" color='secondary'>
                           Download
                           <VisuallyHiddenInput type="file" />
                         </Button>
-                        <Button color='secondary'><CloudDownload /></Button>
+                        <Button size="small" color='secondary'><CloudDownload /></Button>
                       </ButtonGroup>
                     </div>
 
                   </div>
-                  {pouExcelStatus && <p>{pouExcelStatus}</p>}
 
 
                   {placeOfUsageId ? <Dialog
@@ -1691,23 +1688,22 @@ export const Department = () => {
                   <div className="col-md p-0 d-flex justify-content-end">
 
                     {placeOfUsageId ? (<div className="d-flex justify-content-end">
-                      <Button
+                      <Button className="me-1"
                         type="button"
                         variant='contained' size="small"
-                        style={{ backgroundColor: "#e6e6e6", color: "black", fontWeight: "bolder" }}
-                        className="btn text-end me-2 hover"
+                        color='warning'
+                       
                         onClick={() => setPouOpenModal(true)}
                       //   disabled={!depStateId}
                       >
                         Modify
                       </Button >
-                      <Button type="button" variant='contained' size="small" onMouseEnter={(e) => { e.target.style.background = 'red' }} onMouseOut={(e) => { e.target.style.background = '#e6e6e6' }}
-                        style={{ backgroundColor: "#e6e6e6", color: "black", fontWeight: "bolder" }}
-                        className="btn text-end "
+                      <Button type="button" variant='contained' size="small" color='error' onMouseEnter={(e) => { e.target.style.background = 'red' }} onMouseOut={(e) => { e.target.style.background = '#e6e6e6' }}
+                       
                         onClick={() => { setPlaceOfUsageId(null); setPlaceOfUsageData(initialPlaceOfUsageData) }}
                       >Cancel</Button>
                     </div>) : <div>
-                      <Button variant='contained' size="small" color='warning' onClick={() => setPouOpenModal(true)}>+ Add Place</Button>
+                      <Button variant='contained' size="small" color='success' onClick={() => setPouOpenModal(true)}>+ Add Place</Button>
                     </div>}
 
 
@@ -1715,6 +1711,7 @@ export const Department = () => {
 
                   </div>
 
+                  {pouExcelStatus && <p style={{color:'green'}}>{pouExcelStatus}</p>}
 
 
                 </div>
@@ -2349,7 +2346,6 @@ export const Designation = () => {
                   </div>
 
                 </div>
-                {desExcelStatus && <p>{desExcelStatus}</p>}
 
 
                 {desStateId ? <Dialog
@@ -2426,7 +2422,7 @@ export const Designation = () => {
                 </div>
 
               </div>
-              {desExcelStatus && <p>{desExcelStatus}</p>}
+              {desExcelStatus && <p style={{color:'green'}}>{desExcelStatus}</p>}
 
             </Paper>
           </Grid>
