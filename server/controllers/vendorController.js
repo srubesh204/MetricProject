@@ -178,11 +178,15 @@ const vendorController = {
   },
   getAllVendorWithTypes: async (req, res) => {
     try {
+      const fetchAllVendors = async () => {
+        return await vendorModel.find();
+      };
       const fetchVendor = async (category) => {
         return await vendorModel.find({ [category]: "1" });
       };
   
-      const [customers, subContractors, suppliers, oems] = await Promise.all([
+      const [allVendors, customers, subContractors, suppliers, oems] = await Promise.all([
+        fetchAllVendors(),
         fetchVendor('customer'),
         fetchVendor('subContractor'),
         fetchVendor('supplier'),
@@ -190,7 +194,7 @@ const vendorController = {
       ]);
   
       res.status(202).json({
-        result: { customers, subContractors, suppliers, oems },
+        result: { allVendors, customers, subContractors, suppliers, oems },
         status: 1,
       });
     } catch (err) {

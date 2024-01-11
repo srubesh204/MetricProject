@@ -51,7 +51,8 @@ const Home = () => {
 
 
   //Vendor Type state
-  const [customers, setCustomers] = useState([{ aliasName: "All" }])
+  const [vendors, setVendors] = useState([])
+  const [customers, setCustomers] = useState([])
   const [suppliers, setSuppliers] = useState([])
   const [subContractors, setSubContractors] = useState([])
   const [oems, setOems] = useState([])
@@ -154,6 +155,7 @@ const Home = () => {
         `${process.env.REACT_APP_PORT}/vendor/getAllVendorWithTypes`
       );
       console.log(getAllVendorWithTypes)
+      setVendors(getAllVendorWithTypes.data.result.allVendors)
       setCustomers([
         { aliasName: "All" },
         ...getAllVendorWithTypes.data.result.customers.map(customer => ({ ...customer }))
@@ -1049,6 +1051,17 @@ const Home = () => {
   }, [plantWiseList])
 
   console.log(itemListOptions)
+
+
+  // useEffect(() => {
+  //   if (partDataList.length !== 0) {
+      
+  //     const partCustomers = partDataList.filter(part => itemList.some(item => item.itemPartName.includes(part._id)))
+  //     console.log(partCustomers)
+  //     setPartCutomerNames(partCustomers)
+
+  //   }
+  // }, [partDataList, itemList])
 
   return (
     <div style={{ backgroundColor: "#f1f4f4", margin: 0, padding: 0 }}>

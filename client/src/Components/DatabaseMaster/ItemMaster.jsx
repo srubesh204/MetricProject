@@ -95,7 +95,7 @@ const ItemMaster = () => {
         uncertaintyUnit: "",
         standardRef: "",
 
-        itemImageName: "",
+        itemMasterImage: "",
         workInsName: "",
         status: "Active",
         calibrationPoints: [],
@@ -113,7 +113,7 @@ const ItemMaster = () => {
         uncertainty: "",
         uncertaintyUnit: "",
         standardRef: "",
-        itemImageName: "",
+        itemMasterImage: "",
 
         workInsName: "",
         status: "Active",
@@ -425,7 +425,7 @@ const ItemMaster = () => {
     const handleImageChange = async (e) => {
         const selectedImage = e.target.files[0];
         if (selectedImage) {
-            setItemMasterData((prev) => ({ ...prev, itemMasterImage: selectedImage.name }));
+            
 
             const formData = new FormData();
             formData.append('image', selectedImage); // Append the selected image to the FormData
@@ -439,6 +439,7 @@ const ItemMaster = () => {
 
                 if (response.status === 200) {
                     // Image uploaded successfully
+                    setItemMasterData((prev) => ({ ...prev, itemMasterImage: selectedImage.name }));
                     console.log('Image Uploaded Successfully');
 
                     // If you want to access the saved file path sent by the server
@@ -520,26 +521,8 @@ const ItemMaster = () => {
         }
     };
 
-    //Work Instruction Upload
-    {/* const handleWorkInstructionUpload = async () => {
-        const formData = new FormData();
-        formData.append('file', iframeURL.file);
+    
 
-        try {
-            axios.post(`${process.env.REACT_APP_PORT}/upload/workInstructions`, formData)
-                .then(response => {
-                    setSnackBarOpen(true);
-                    setErrorHandler({ status: 1, message: response.data.message, code: "success" });
-                    console.log(response);
-                })
-                .catch(error => {
-                    console.error(error);
-                    // handle error here
-                });
-        } catch (error) {
-            console.error('Error uploading the file:', error);
-        }
-    };*/}
 
     const VisuallyHiddenInputs = styled('input')({
         clip: 'rect(0 0 0 0)',
@@ -922,20 +905,20 @@ const ItemMaster = () => {
 
                                 <div className="col-md-7">
                                     <div className="d-flex justify">
-                                        <ButtonGroup className='me-3'>
-                                            <Button component="label" variant="contained" >
+                                        <ButtonGroup className='me-3' size='small'>
+                                            <Button component="label" variant="contained" size='small'>
                                                 Upload
                                                 <VisuallyHiddenInputs type="file" onChange={handleItemMasterExcel} />
                                             </Button>
-                                            <Button onClick={handleItemMasterUpload}><CloudUpload /></Button>
+                                            <Button size='small' onClick={handleItemMasterUpload}><CloudUpload /></Button>
                                         </ButtonGroup>
 
-                                        <ButtonGroup>
-                                            <Button component="label" variant="contained" color='secondary'>
+                                        <ButtonGroup size='small'>
+                                            <Button component="label" size='small' variant="contained" color='secondary'>
                                                 Download
-                                                <VisuallyHiddenInputs type="file" />
+                                                <VisuallyHiddenInputs  type="file" />
                                             </Button>
-                                            <Button color='secondary'><CloudDownload /></Button>
+                                            <Button size='small' color='secondary'><CloudDownload /></Button>
                                         </ButtonGroup>
                                     </div>
 
