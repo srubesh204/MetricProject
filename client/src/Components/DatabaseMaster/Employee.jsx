@@ -705,7 +705,7 @@ const Employee = () => {
             .filter(value => Array.isArray(value))
             .every(arr => arr.length > 0);
 
-        
+
 
         console.log(allNonArrayValuesAreNonEmptyStrings && allArrayValuesHaveLengthGreaterThanZero);
 
@@ -757,7 +757,7 @@ const Employee = () => {
     }
 
 
-   
+
 
 
 
@@ -797,7 +797,7 @@ const Employee = () => {
                             </Grid>
                             <Grid item xs={3}>
 
-                              
+
 
                                 <Autocomplete label="First Name"
                                     disablePortal
@@ -1030,7 +1030,7 @@ const Employee = () => {
                             }}
                                 elevation={12}
                             >
-                                
+
 
 
                                 <div className="row">
@@ -1047,15 +1047,16 @@ const Employee = () => {
                                             <div className="col-md-12">
                                                 <TextField
                                                     disabled={empPlantId}
-                                                    fullWidth label="Select Plant"  onChange={handlePlantChange} value={empPlantDetails.plantName} select size="small" id="plantNameId" name="plantName"  >
+                                                    fullWidth label="Select Plant" onChange={handlePlantChange} value={empPlantDetails.plantName} select size="small" id="plantNameId" name="plantName"  >
 
                                                     {plantsData.map((plant, index) => {
 
                                                         const status = employeeData.plantDetails.find(empPlant => empPlant.plantName === plant.plantName)
                                                         console.log(status)
-                                                        return(
-                                                        <MenuItem key={index} disabled={status} value={plant.plantName}>{plant.plantName}</MenuItem>
-                                                    )})}
+                                                        return (
+                                                            <MenuItem key={index} disabled={status} value={plant.plantName}>{plant.plantName}</MenuItem>
+                                                        )
+                                                    })}
                                                 </TextField>
                                             </div>
                                             <div className="col-md-12">
@@ -1096,7 +1097,7 @@ const Employee = () => {
                                     </div>
 
                                     <div className="col-md-9" style={{ maxHeight: "134px", overflow: "auto" }}>
-                                    <h6 className='text-center'>Roles and Authentication Details </h6>
+                                        <h6 className='text-center'>Roles and Authentication Details </h6>
                                         <table className='table table-sm table-bordered text-center align-midle'>
                                             <tbody>
                                                 <tr className='sticky-top table-light'>
@@ -1156,7 +1157,7 @@ const Employee = () => {
                             <div className="row g-2" >
                                 <div className="col d-flex ">
                                     <div className="d-flex justify-content-center">
-                                        <ButtonGroup className='me-3' size='small'>
+                                        {/* <ButtonGroup className='me-3' size='small'>
                                             <Button size='small' variant="contained" >
                                                 Upload
                                                 <VisuallyHiddenInput type="file" onChange={handleEmpExcel} />
@@ -1170,6 +1171,21 @@ const Employee = () => {
                                                 <VisuallyHiddenInput type="file" />
                                             </Button>
                                             <Button size='small' color='secondary'><CloudDownload /></Button>
+                                        </ButtonGroup> */}
+                                        <ButtonGroup className='me-3' size="small">
+                                            <Button component="label" variant="contained" size='small' >
+                                                Upload
+                                                <VisuallyHiddenInput type="file" onChange={handleEmpExcel} />
+                                            </Button>
+                                            <Button size="small" onClick={handleEmpUpload}><CloudUpload /></Button>
+                                        </ButtonGroup>
+
+                                        <ButtonGroup size="small" >
+                                            <Button component="label" variant="contained" color='secondary' size="small">
+                                                Download
+                                                <VisuallyHiddenInput type="file" />
+                                            </Button>
+                                            <Button color='secondary' size="small" ><CloudDownload /></Button>
                                         </ButtonGroup>
                                     </div>
                                 </div>
@@ -1232,19 +1248,19 @@ const Employee = () => {
                                 <div className='col d-flex justify-content-end'>
                                     {empDataId ? <div className='col d-flex justify-content-end'>
                                         <div className='me-2' >
-                                            <Button type="button" variant='contained'  color='warning' size="small" onClick={handleClickOpen} className='btn btn-secondary' >Modify</Button>
+                                            <Button type="button" variant='contained' color='warning' size="small" onClick={handleClickOpen} className='btn btn-secondary' >Modify</Button>
                                         </div>
                                         <div className='me-2' >
-                                            <Button type="button" variant='contained' color='error' size="small"  onClick={() => { setEmpDataId(null); setEmployeeData(initialEmpData) }} >Cancel</Button>
+                                            <Button type="button" variant='contained' color='error' size="small" onClick={() => { setEmpDataId(null); setEmployeeData(initialEmpData) }} >Cancel</Button>
                                         </div>
                                     </div> :
                                         <div>
-                                            <Button variant='contained' size="small"  color='success' onClick={handleClickOpen}>+ Add Employee</Button>
+                                            <Button variant='contained' size="small" color='success' onClick={handleClickOpen}>+ Add Employee</Button>
                                         </div>
                                     }
                                 </div>
                             </div>
-                            {empExcelStatus && <p style={{color:'green'}}>{empExcelStatus}</p>}
+                            {empExcelStatus && <p style={{ color: 'green' }}>{empExcelStatus}</p>}
                         </Paper>
                     </Grid>
 
