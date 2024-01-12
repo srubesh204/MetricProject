@@ -706,15 +706,6 @@ const ItemAdd = () => {
 
     };
 
-    const [plantDepartments, setPlantDepartments] = useState([])
-
-    useEffect(() => {
-        const filteredPlants = employeeRole.loggedEmp.plantDetails.filter(plant => plant.plantName === itemAddData.itemPlant);
-
-        console.log(filteredPlants)
-        setPlantDepartments(filteredPlants[0])
-    }, [itemAddData.itemPlant])
-
 
 
 
@@ -888,8 +879,8 @@ const ItemAdd = () => {
                                                 {...(errors.itemDepartment !== "" && { helperText: errors.itemDepartment, error: true })}
                                                 value={itemAddData.itemPlant} onChange={handleItemAddChange} size='small' select fullWidth variant='outlined' label="Select Plant" name='itemPlant' id='itemPlantId'>
                                                 <MenuItem value="">Select Plant</MenuItem>
-                                                {employeeRole.loggedEmp.plantDetails.map((plant, index) => (
-                                                    <MenuItem key={index} value={plant.plantName}>{plant.plantName}</MenuItem>
+                                                {employeeRole.loggedEmp.plant.map((plant, index) => (
+                                                    <MenuItem key={index} value={plant}>{plant}</MenuItem>
                                                 ))}
                                             </TextField>
                                         </div>
@@ -897,8 +888,8 @@ const ItemAdd = () => {
                                             <TextField
                                                 {...(errors.itemDepartment !== "" && { helperText: errors.itemDepartment, error: true })}
                                                 value={itemAddData.itemDepartment} onChange={handleItemAddChange} size='small' select fullWidth variant='outlined' label="Department" name='itemDepartment' id='itemDepartmentId'>
-                                                {plantDepartments && plantDepartments.departments.map((item, index) => (
-                                                    <MenuItem key={index} value={item}>{item}</MenuItem>
+                                                {departments.map((item, index) => (
+                                                    <MenuItem key={index} value={item.department}>{item.department}</MenuItem>
                                                 ))}
                                             </TextField>
                                         </div>

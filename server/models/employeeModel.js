@@ -13,7 +13,7 @@ const employeeSchema = new mongoose.Schema({
     },
     lastName : {
         type:String,
-        required:[true,"LastName is required  "]
+       // required:[true,"LastName is required  "]
     },
     dob : String,
     address : String,
