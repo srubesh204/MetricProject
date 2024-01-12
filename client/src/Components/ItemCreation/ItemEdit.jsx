@@ -24,6 +24,7 @@ const ItemEdit = () => {
 
 
     const employeeRole = useEmployee();
+    console.log(employeeRole)
     // Units Data
     const [units, setUnits] = useState([]);
     const UnitFetch = async () => {
@@ -353,7 +354,7 @@ const ItemEdit = () => {
                 itemPartName: itemData.itemPartName,
                 itemOBType: itemData.itemOBType,
                 acceptanceCriteria: itemData.acceptanceCriteria,
-                itemPlant: itemData.itemPlant,
+                //itemPlant: itemData.itemPlant,
                 // itemCreatedBy: itemData.itemCreatedBy
             }))
             console.log(response)
@@ -890,6 +891,20 @@ const ItemEdit = () => {
         }
     };
 
+    const [plantDepartments, setPlantDepartments] = useState([])
+
+    useEffect(() => {
+        console.log(employeeRole)
+        const filteredPlants = employeeRole.loggedEmp.plantDetails.filter(plant => plant.plantName === itemAddData.itemPlant);
+        console.log(filteredPlants)
+        if(filteredPlants.length > 0){
+            setPlantDepartments(filteredPlants[0].departments)
+        }else{
+            setPlantDepartments([])
+        }
+        
+    }, [itemAddData.itemPlant])
+
 
 
     return (
@@ -1049,8 +1064,8 @@ const ItemEdit = () => {
                                     </div>
                                     <div className="col-md-6 ">
                                         <TextField value={itemAddData.itemDepartment} onChange={handleItemAddChange} size='small' select fullWidth variant='outlined' label="Department" name='itemDepartment' id='itemDepartmentId'>
-                                            {departments.map((item, index) => (
-                                                <MenuItem key={index} value={item.department}>{item.department}</MenuItem>
+                                            {plantDepartments && plantDepartments.map((item, index) => (
+                                                <MenuItem key={index} value={item}>{item}</MenuItem>
                                             ))}
                                         </TextField>
                                     </div>

@@ -90,7 +90,7 @@ const Home = () => {
     viewers: [],
     plantEmployees: []
   })
-
+  const [selectedPlantName, setSelectedPlantName] = useState("")
   const empFetch = async () => {
     try {
       const response = await axios.get(
@@ -101,11 +101,6 @@ const Home = () => {
       const creators = response.data.result.filter(emp => emp === "creator")
       const viewers = response.data.result.filter(emp => emp === "viewer")
 
-      const plantEmp = response.data.result.filter(emp =>
-        emp.plant.some(plant => employeeRole.loggedEmp.plant.includes(plant))
-      );
-
-      const plantEmployees = [...plantEmp.filter(emp => emp.empRole === "creator"), employeeRole.loggedEmp]
 
       // if(employeeRole.loggedEmp.empRole === "admin"){
       //   plantEmployees = [...plantEmp.filter(emp => emp.empRole === "creator"), employeeRole.loggedEmp]
@@ -115,8 +110,8 @@ const Home = () => {
       //   plantEmployees = [...plantEmp.filter(emp => emp.empRole === "creator"), employeeRole.loggedEmp]
       //   console.log(plantEmployees)
       // }
-      setActiveEmps((prev) => ({ ...prev, allEmps: response.data.result, admins: admins, plantAdmins: plantAdmins, creators: creators, viewers: viewers, plantEmployees: plantEmployees }))
-      setPlantEmployees(plantEmployees)
+      setActiveEmps((prev) => ({ ...prev, allEmps: response.data.result, admins: admins, plantAdmins: plantAdmins, creators: creators, viewers: viewers }))
+
     } catch (err) {
       console.log(err);
     }
@@ -147,7 +142,7 @@ const Home = () => {
     }
   };
 
-  
+
 
   const getVendorsByType = async () => {
     try {
@@ -340,13 +335,15 @@ const Home = () => {
       if (value === "All") {
         console.log(activeEmps.allEmps)
         // Assuming activeEmps.allEmps and employeeRole.loggedEmp are arrays
-        setPlantEmployees(activeEmps.plantEmployees)
+
         itemFetch();
+        setSelectedPlantName(value)
       } else {
+        setSelectedPlantName(value)
         const filteredEmployees = activeEmps.plantEmployees.filter(emp =>
           emp.plant.some(plant => plant === value)
         );
-        setPlantEmployees(filteredEmployees)
+
         console.log(value)
 
         const plantData = itemList.filter(plant => plant.itemPlant === value)
@@ -403,7 +400,7 @@ const Home = () => {
 
       }
     }
-    if (name === "itemCreatedBy") {
+    if (name === "itemDepartment") {
 
       if (value === "All") {
         itemLocationFun()
@@ -746,6 +743,20 @@ const Home = () => {
 
   }, [])
 
+  const [plantDepartments, setPlantDepartments] = useState([])
+
+  useEffect(() => {
+    console.log(employeeRole)
+    const filteredPlants = employeeRole.loggedEmp.plantDetails.filter(plant => plant.plantName === selectedPlantName);
+    console.log(filteredPlants)
+    if (filteredPlants.length > 0) {
+      setPlantDepartments(filteredPlants[0].departments)
+    } else {
+      setPlantDepartments([])
+    }
+
+  }, [selectedPlantName])
+
 
   const DepartmentDataShow = (name, value) => {
 
@@ -867,7 +878,7 @@ const Home = () => {
 
     } else {
 
-      if (extraName === "itemIMTENo" || extraName === "itemType" || extraName === "itemAddMasterName" || extraName === "itemCreatedBy") {
+      if (extraName === "itemIMTENo" || extraName === "itemType" || extraName === "itemAddMasterName" || extraName === "itemDepartment") {
         handlePieData(extraName, newValue)
       }
       if (extraName === "customer") {
@@ -881,7 +892,7 @@ const Home = () => {
   }
 
 
-  const [plantEmployees, setPlantEmployees] = useState([])
+
 
 
 
@@ -1036,17 +1047,17 @@ const Home = () => {
     if (department && departmentDced) {
       updateItemData(e);
     } else {
-        setStatusCheckMsg("Selected Items are already in the same location or already DC created");  
+      setStatusCheckMsg("Selected Items are already in the same location or already DC created");
     }
   };
 
 
-  useEffect(()=> {
+  useEffect(() => {
     console.log(plantWiseList)
     const distinctNames = plantWiseList.map(item => item.itemAddMasterName);
-    console.log(distinctNames) 
-    const names =[...new Set(distinctNames)]
-    console.log(names) 
+    console.log(distinctNames)
+    const names = [...new Set(distinctNames)]
+    console.log(names)
     setItemDistinctNames(names)
   }, [plantWiseList])
 
@@ -1055,7 +1066,7 @@ const Home = () => {
 
   // useEffect(() => {
   //   if (partDataList.length !== 0) {
-      
+
   //     const partCustomers = partDataList.filter(part => itemList.some(item => item.itemPartName.includes(part._id)))
   //     console.log(partCustomers)
   //     setPartCutomerNames(partCustomers)
@@ -1077,15 +1088,15 @@ const Home = () => {
                 spacing={2}>
                 <TextField select onChange={(e) => LocationEmpFilter(e)} disabled={employeeRole.loggedEmp.length === 1} fullWidth size='small' defaultValue="All" name='itemPlant' id='itemPlantId' label="Plant Location">
                   <MenuItem value="All">All</MenuItem>
-                  {employeeRole.loggedEmp.length !== 0 && employeeRole.loggedEmp.plant.map(item => (
-                    <MenuItem value={item}>{item}</MenuItem>
+                  {employeeRole.loggedEmp.length !== 0 && employeeRole.loggedEmp.plantDetails.map(item => (
+                    <MenuItem value={item.plantName}>{item.plantName}</MenuItem>
                   ))}
 
                 </TextField>
-                {(employeeRole.employee === "admin" || employeeRole.employee === "plantAdmin") &&
-                  <TextField select onChange={(e) => LocationEmpFilter(e)} fullWidth size='small' name='itemCreatedBy' defaultValue="All" label="Employee">
+                {
+                  <TextField select onChange={(e) => LocationEmpFilter(e)} fullWidth size='small' name='itemDepartment' defaultValue="All" label="Department">
                     <MenuItem value="All">All</MenuItem>
-                    {plantEmployees.map((emp, index) => emp.empRole === "creator" && <MenuItem key={index} value={emp._id}>{emp.firstName}</MenuItem>)}
+                    {plantDepartments && plantDepartments.map((department, index) => (<MenuItem key={index} value={department}>{department}</MenuItem>))}
                   </TextField>}
               </Stack>
             </Paper>
@@ -1103,7 +1114,7 @@ const Home = () => {
                   <Autocomplete
                     disablePortal
                     id="combo-box-demo"
-                    options={plantWiseList} 
+                    options={plantWiseList}
                     size='small'
                     fullWidth
                     onInputChange={(e, newValue) => MainFilter(newValue, "itemIMTENo")}
