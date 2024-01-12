@@ -696,7 +696,7 @@ const RubeshTest = () => {
                   </div>
 
                 </div>
-                <div className="col mt-3 ms-1 " style={{ maxHeight: "144px", overflow: "auto" }}>
+                <div className="col mt-3 ms-1 " style={{ maxHeight: "1px", overflow: "auto" }}>
 
                   <table className='col table table-sm table-bordered align-middle text-center'>
                     <tbody>

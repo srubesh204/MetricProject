@@ -86,6 +86,7 @@ const Employee = () => {
             const response = await axios.get(
                 `${process.env.REACT_APP_PORT}/employee/getAllEmployees`
             );
+            console.log(response.data.result)
             const filterNames = ["employmentStatus", "department", "reportTo"]
             let updatedFilterNames = {};
 
@@ -170,7 +171,7 @@ const Employee = () => {
         departmentFilter: "all",
         employementStatusFilter: "all",
         reportToFilter: "all",
-       
+
 
     })
 
@@ -183,11 +184,11 @@ const Employee = () => {
             if (name === "departmentFilter") {
                 const departmentFilter = employeeList.filter((item) => (item.department === value))
                 setFilteredData(departmentFilter)
-                setFilterAllNames(prev=>({
+                setFilterAllNames(prev => ({
                     ...prev,
                     departmentFilter: value,
-                    employementStatusFilter:"all",
-                    reportToFilter:"all"
+                    employementStatusFilter: "all",
+                    reportToFilter: "all"
 
                 }))
             }
@@ -195,22 +196,22 @@ const Employee = () => {
                 const statusFilter = employeeList.filter((item) => (item.employmentStatus === value))
                 console.log(statusFilter)
                 setFilteredData(statusFilter)
-                setFilterAllNames(prev =>({
+                setFilterAllNames(prev => ({
                     ...prev,
-                    departmentFilter:"all",
-                    employementStatusFilter:value,
-                    reportToFilter:"all"
+                    departmentFilter: "all",
+                    employementStatusFilter: value,
+                    reportToFilter: "all"
                 }))
                 console.log(value)
             }
             if (name === "reportToFilter") {
                 const reportFilter = employeeList.filter((item) => (item.reportTo === value))
                 setFilteredData(reportFilter)
-                setFilterAllNames(prev =>({
+                setFilterAllNames(prev => ({
                     ...prev,
-                    departmentFilter:"all",
-                    employementStatusFilter:'all',
-                    reportToFilter:value
+                    departmentFilter: "all",
+                    employementStatusFilter: 'all',
+                    reportToFilter: value
                 }))
             }
         }
@@ -430,7 +431,7 @@ const Employee = () => {
     const handlePlantChange = (e) => {
         const { name, value } = e.target;
         setEmpPlantDetails((prev) => ({ ...prev, [name]: value }));
-      };
+    };
 
 
 
@@ -459,6 +460,7 @@ const Employee = () => {
         tempErrors.department = employeeData.department ? "" : "Department is Required"
         tempErrors.doj = employeeData.doj ? "" : "DOJ is Required"
         tempErrors.employmentStatus = employeeData.employmentStatus ? "" : "Employment Status is Required"
+        tempErrors.plantStatus = employeeData.plantDetails.length > 0 ? "" : "Plant Details Required"
 
         setErrors({ ...tempErrors })
 
@@ -502,6 +504,7 @@ const Employee = () => {
                 setErrorHandler({ status: response.data.status, message: response.data.message, code: "success" })
                 setEmployeeData(initialEmpData)
                 setEmpDataId(null)
+                setErrors({})
             }
 
         } catch (err) {
@@ -542,6 +545,7 @@ const Employee = () => {
             console.log("Employee Updated Successfully")
             setEmpDataId(null)
             setEmployeeData(initialEmpData)
+            setErrors({})
 
         } catch (err) {
             setSnackBarOpen(true)
@@ -694,33 +698,35 @@ const Employee = () => {
         console.log(Object.values(empPlantDetails).every(item => typeof item === "string" ? item !== "" : item.length > 0))
 
         const allNonArrayValuesAreNonEmptyStrings = Object.values(empPlantDetails)
-        .filter(value => !Array.isArray(value))  // Exclude arrays
-        .every(item => item !== "");
-    
-      // Check if all array values have a length greater than 0
-      const allArrayValuesHaveLengthGreaterThanZero = Object.values(empPlantDetails)
-        .filter(value => Array.isArray(value))
-        .every(arr => arr.length > 0);
-    
-      console.log(allNonArrayValuesAreNonEmptyStrings && allArrayValuesHaveLengthGreaterThanZero);
+            .filter(value => !Array.isArray(value))  // Exclude arrays
+            .every(item => item !== "");
+
+        // Check if all array values have a length greater than 0
+        const allArrayValuesHaveLengthGreaterThanZero = Object.values(empPlantDetails)
+            .filter(value => Array.isArray(value))
+            .every(arr => arr.length > 0);
+
+        
+
+        console.log(allNonArrayValuesAreNonEmptyStrings && allArrayValuesHaveLengthGreaterThanZero);
 
         if (allNonArrayValuesAreNonEmptyStrings && allArrayValuesHaveLengthGreaterThanZero) {
             setEmployeeData((prev) => ({ ...prev, plantDetails: [...prev.plantDetails, empPlantDetails] }))
             setEmpPlantDetails(initialEmpPlantDetails)
-            setEmpPlantId(null); 
+            setEmpPlantId(null);
             setPlantIndex(null);
         }
 
     }
 
     const handlePlantClick = (data, index) => {
-        setEmpPlantId(data.employeeId)
+        setEmpPlantId(data.plantName)
         setPlantIndex(index)
         setEmpPlantDetails({
-          plantName: data.plantName,
-          departments: data.departments
+            plantName: data.plantName,
+            departments: data.departments
         })
-      }
+    }
 
     const empPlantEdit = () => {
         if (employeeData.plantDetails.length > 0) {
@@ -728,32 +734,31 @@ const Employee = () => {
             updatedItems[plantIndex] = empPlantDetails;
             setEmployeeData({ ...employeeData, plantDetails: updatedItems });
             setEmpPlantDetails(initialEmpPlantDetails)
-            setEmpPlantId(null); 
+            setEmpPlantId(null);
             setPlantIndex(null); // Clear the edited item after update
 
         }
     }
 
 
-    
+
 
     const deletePlant = (index) => {
 
         setEmployeeData((prev) => {
-          const updatedPlant = [...prev.plantDetails]
-          updatedPlant.splice(index, 1);
-          return {
-            ...prev, plantDetails: updatedPlant,
-          };
+            const updatedPlant = [...prev.plantDetails]
+            updatedPlant.splice(index, 1);
+            return {
+                ...prev, plantDetails: updatedPlant,
+            };
         })
         setEmpPlantDetails(initialEmpPlantDetails)
         setEmpPlantId(null)
         setPlantIndex(null)
-      }
+    }
 
 
-
-
+   
 
 
 
@@ -793,17 +798,7 @@ const Employee = () => {
                             </Grid>
                             <Grid item xs={3}>
 
-                                {/* <TextField label="First Name"
-                                    {...(errors.firstName !== "" && { helperText: errors.firstName, error: true })}
-                                    id="firstNameId"
-                                    defaultValue=""
-                                    fullWidth
-                                    size="small"
-                                    sx={{ width: "100%" }}
-                                    onChange={handleChange}
-                                    onKeyDown={handleKeyDown}
-                                    value={employeeData.firstName}
-    name="firstName" />*/}
+                              
 
                                 <Autocomplete label="First Name"
                                     disablePortal
@@ -859,7 +854,7 @@ const Employee = () => {
 
                         </Grid>
                         <div className='row g-2 mb-2'>
-                            <div className="col-md-9">
+                            <div className="col-md-6">
                                 <TextField label="Address"
                                     {...(errors.address !== "" && { helperText: errors.address, error: true })}
                                     id="addressId"
@@ -872,7 +867,33 @@ const Employee = () => {
                                     onChange={handleChange}
                                     name="address" />
                             </div>
-                            <div className="col">
+                            <div className="col-md">
+                                <DatePicker
+                                    disableFuture
+                                    fullWidth
+                                    id="dojId"
+                                    name="doj"
+                                    value={dayjs(employeeData.doj)}
+                                    onChange={(newValue) =>
+                                        setEmployeeData((prev) => ({ ...prev, doj: newValue.format("YYYY-MM-DD") }))
+                                    }
+                                    label="Date of joining"
+
+                                    slotProps={{ textField: { size: 'small', fullWidth: true } }}
+                                    format="DD-MM-YYYY" />
+                            </div>
+                            <div className="col-md">
+                                <TextField
+                                    {...(errors.designation !== "" && { helperText: errors.designation, error: true })}
+                                    fullWidth label="Designation" onChange={handleChange} value={employeeData.designation} select size="small" id="designationId" name="designation" defaultValue="" >
+
+                                    {designationList.map((item, index) => (
+                                        <MenuItem key={index} value={item.designation}>{item.designation}</MenuItem>
+                                    ))}
+
+                                </TextField>
+                            </div>
+                            <div className="col-md">
                                 <TextField label="Role"
                                     {...(errors.empRole !== "" && { helperText: errors.empRole, error: true })}
                                     size='small' id='empRoleId' onChange={handleChange} fullWidth name='empRole' value={employeeData.empRole} select>
@@ -884,6 +905,9 @@ const Employee = () => {
                                     <MenuItem value="viewer">Viewer</MenuItem>
                                 </TextField>
                             </div>
+
+
+
 
 
                         </div>
@@ -998,70 +1022,16 @@ const Employee = () => {
 
                     <Grid container spacing={1} >
 
-                        <Grid item xs={2}>
-                            <Paper sx={{
-                                p: 1,
-                                display: 'flex',
-                                flexDirection: 'column',
-                                mb: 1
-
-                            }}
-                                elevation={12}
-                            >
-                                <Grid container rowSpacing={1} columnSpacing={{ xs: 1 }} className=' g-2 mb-2'>
-                                    <Grid item xs={12}>
 
 
-                                        <DatePicker
-                                            disableFuture
-                                            fullWidth
-                                            id="dojId"
-                                            name="doj"
-                                            value={dayjs(employeeData.doj)}
-                                            onChange={(newValue) =>
-                                                setEmployeeData((prev) => ({ ...prev, doj: newValue.format("YYYY-MM-DD") }))
-                                            }
-                                            label="DOJ"
-
-                                            slotProps={{ textField: { size: 'small', fullWidth: true } }}
-                                            format="DD-MM-YYYY" />
-
-                                    </Grid>
-
-                                    <Grid item xs={12}>
-                                        <TextField
-                                            {...(errors.employmentStatus !== "" && { helperText: errors.employmentStatus, error: true })}
-                                            fullWidth label="Employment Status" onChange={handleChange} value={employeeData.employmentStatus} select size="small" id="employmentStatusId" name="employmentStatus" >
-                                            <MenuItem value="Active">Active</MenuItem >
-                                            <MenuItem value="InActive">InActive</MenuItem >
-                                        </TextField>
-
-                                    </Grid>
-                                    <Grid item xs={12} className='mb-2'>
-                                        <TextField
-                                            {...(errors.designation !== "" && { helperText: errors.designation, error: true })}
-                                            fullWidth label="Designation" onChange={handleChange} value={employeeData.designation} select size="small" id="designationId" name="designation" defaultValue="" >
-
-                                            {designationList.map((item, index) => (
-                                                <MenuItem key={index} value={item.designation}>{item.designation}</MenuItem>
-                                            ))}
-
-                                        </TextField>
-
-                                    </Grid>
-
-                                </Grid>
-                            </Paper>
-                        </Grid>
-
-                        <Grid item xs={10}>
+                        <Grid item xs={12}>
                             <Paper sx={{
                                 p: 1,
                                 mb: 1
                             }}
                                 elevation={12}
                             >
-                                <h6 className='text-center'>Plant and Department Details</h6>
+                                
 
 
                                 <div className="row">
@@ -1069,12 +1039,24 @@ const Employee = () => {
                                         <div className="row g-2">
                                             <div className="col-md-12">
                                                 <TextField
-                                                    {...(errors.department !== "" && { helperText: errors.department, error: true })}
-                                                    fullWidth label="Select Plant" onChange={handlePlantChange} value={empPlantDetails.plantName} select size="small" id="plantNameId" name="plantName"  >
+                                                    {...(errors.employmentStatus !== "" && { helperText: errors.employmentStatus, error: true })}
+                                                    fullWidth label="Employment Status" onChange={handleChange} value={employeeData.employmentStatus} select size="small" id="employmentStatusId" name="employmentStatus" >
+                                                    <MenuItem value="Active">Active</MenuItem >
+                                                    <MenuItem value="InActive">InActive</MenuItem >
+                                                </TextField>
+                                            </div>
+                                            <div className="col-md-12">
+                                                <TextField
+                                                    disabled={empPlantId}
+                                                    fullWidth label="Select Plant"  onChange={handlePlantChange} value={empPlantDetails.plantName} select size="small" id="plantNameId" name="plantName"  >
 
-                                                    {plantsData.map((plant, index) => (
-                                                        <MenuItem key={index} value={plant.plantName}>{plant.plantName}</MenuItem>
-                                                    ))}
+                                                    {plantsData.map((plant, index) => {
+
+                                                        const status = employeeData.plantDetails.find(empPlant => empPlant.plantName === plant.plantName)
+                                                        console.log(status)
+                                                        return(
+                                                        <MenuItem key={index} disabled={status} value={plant.plantName}>{plant.plantName}</MenuItem>
+                                                    )})}
                                                 </TextField>
                                             </div>
                                             <div className="col-md-12">
@@ -1102,20 +1084,23 @@ const Employee = () => {
                                                     </Select>
                                                 </FormControl>
                                             </div>
-                                            <div className="col d-flex justify-content-end">
+
+
+                                            <div className="col-md-12 d-flex justify-content-end">
                                                 {empPlantId ? <React.Fragment>
-                                                    <Button className='me-2' size='small' variant='contained' color='warning' onClick={() => empPlantEdit()}>Modify</Button>
+                                                    <Button className='me-2' size='small' variant='contained' color='warning' onClick={() => empPlantEdit()}>Role Update</Button>
                                                     <Button size='small' variant='contained' color='error' onClick={() => { setEmpPlantId(null); setPlantIndex(null); setEmpPlantDetails(initialEmpPlantDetails) }}>Cancel</Button>
                                                 </React.Fragment>
-                                                    : <Button size='small' variant='contained' color='success' onClick={() => empPlantAdd()}>Add</Button>}
+                                                    : <Button size='small' variant='contained' color='success' onClick={() => empPlantAdd()}>Add Role</Button>}
                                             </div>
                                         </div>
                                     </div>
 
-                                    <div className="col-md-9">
+                                    <div className="col-md-9" style={{ maxHeight: "134px", overflow: "auto" }}>
+                                    <h6 className='text-center'>Roles and Authentication Details </h6>
                                         <table className='table table-sm table-bordered text-center align-midle'>
                                             <tbody>
-                                                <tr>
+                                                <tr className='sticky-top table-light'>
                                                     <th>Si No</th>
                                                     <th>Plant Name</th>
                                                     <th>Departments</th>
@@ -1127,8 +1112,8 @@ const Employee = () => {
                                                         <td>{index + 1}</td>
                                                         <td>{plant.plantName}</td>
                                                         <td>{plant.departments.join(", ")}</td>
-                                                        <td><IconButton color='warning' size='small' onClick={()=> handlePlantClick(plant, index)}><Edit /></IconButton></td>
-                                                        <td><IconButton color='error' size='small' onClick={()=> deletePlant(index)}><Delete /></IconButton></td>
+                                                        <td><IconButton color='warning' size='small' onClick={() => handlePlantClick(plant, index)}><Edit /></IconButton></td>
+                                                        <td><IconButton color='error' size='small' onClick={() => deletePlant(index)}><Delete /></IconButton></td>
                                                     </tr>
                                                 ))}
 
@@ -1360,7 +1345,7 @@ const Employee = () => {
 
                                         }}
                                         onRowClick={handleSetEmp}
-
+                                        disableRowSelectionOnClick
                                         density="compact"
                                         checkboxSelection
                                         pageSizeOptions={[5]}
