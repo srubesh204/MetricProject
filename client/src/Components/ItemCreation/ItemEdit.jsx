@@ -1181,7 +1181,7 @@ const ItemEdit = () => {
                                                         selected.itemIMTENo // Render a single selected value
                                                 )}
                                                 MenuProps={MenuProps}
-
+                                                // renderValue={(selected) => selected.map(item => supplierList.find(sub => sub._id === item).aliasName).join(", ")} MenuProps={MenuProps}
                                                 fullWidth
                                             >
                                                 {itemMasterListByName.map((name, index) => (
@@ -1447,7 +1447,7 @@ const ItemEdit = () => {
                                                 <MenuItem key={index} value={item.aliasName}>{item.aliasName}</MenuItem>
                                             ))}
                                         </TextField>
-
+                                        {itemAddData.isItemMaster === "1" &&
                                         <React.Fragment>
                                             <TextField disabled={itemAddData.itemPrevCalData !== "available"}
                                                 className='ms-2'
@@ -1476,7 +1476,7 @@ const ItemEdit = () => {
                                                     <MenuItem key={index} value={unit.unitName}>{unit.unitName}</MenuItem>
                                                 ))}
                                             </TextField>
-                                        </React.Fragment>
+                                        </React.Fragment>}
                                     </div>
 
 
