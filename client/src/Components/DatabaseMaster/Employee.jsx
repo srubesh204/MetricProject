@@ -231,10 +231,7 @@ const Employee = () => {
         state: "",
         contactNumber: "",
         designation: "",
-        plantDetails: [{
-            plantName: "",
-            departments: []
-        }],
+        plantDetails: [],
         mailId: "",
         doj: DateFormat,
         employmentStatus: "Active",
@@ -458,7 +455,6 @@ const Employee = () => {
         tempErrors.mailId = employeeData.mailId ? "" : "Mail Id is Required"
         tempErrors.password = employeeData.password ? "" : "Password is Required"
         tempErrors.designation = employeeData.designation ? "" : "Designation is Required"
-        tempErrors.department = employeeData.department ? "" : "Department is Required"
         tempErrors.doj = employeeData.doj ? "" : "DOJ is Required"
         tempErrors.employmentStatus = employeeData.employmentStatus ? "" : "Employment Status is Required"
         tempErrors.plantStatus = employeeData.plantDetails.length > 0 ? "" : "Plant Details Required"
@@ -506,13 +502,15 @@ const Employee = () => {
                 setEmployeeData(initialEmpData)
                 setEmpDataId(null)
                 setErrors({})
+            }else{
+                console.log("error")
             }
 
         } catch (err) {
 
             setSnackBarOpen(true)
 
-
+            console.log(err)
 
 
             if (err.response && err.response.status === 400) {
