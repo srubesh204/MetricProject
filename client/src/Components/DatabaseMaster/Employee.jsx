@@ -9,7 +9,7 @@ import DialogTitle from '@mui/material/DialogTitle';
 // import dayjs from 'dayjs';
 import Snackbar from '@mui/material/Snackbar';
 import MuiAlert from '@mui/material/Alert';
-import { TextField, MenuItem, InputAdornment, gridClasses } from '@mui/material';
+import { TextField, MenuItem, InputAdornment, gridClasses, FormControl, InputLabel, Select, Checkbox, OutlinedInput, ListItemText } from '@mui/material';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
@@ -18,7 +18,7 @@ import Autocomplete from '@mui/material/Autocomplete';
 import { Box, Grid, Paper, IconButton, ButtonGroup, Container } from '@mui/material';
 import dayjs from 'dayjs';
 import { DataGrid, GridToolbar } from '@mui/x-data-grid';
-import { Delete, Visibility, VisibilityOff } from '@mui/icons-material';
+import { CheckBox, Delete, Edit, OtherHouses, Visibility, VisibilityOff } from '@mui/icons-material';
 import { CloudDownload, CloudUpload, } from '@mui/icons-material';
 import styled from "@emotion/styled";
 import { useEmployee } from '../../App';
@@ -28,14 +28,18 @@ const Employee = () => {
 
     const employeeRole = useEmployee()
 
-    const StyledDataGrid = styled(DataGrid)`
+    const ITEM_HEIGHT = 48;
+    const ITEM_PADDING_TOP = 8;
+    const MenuProps = {
+        PaperProps: {
+            style: {
+                maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
+                width: 250,
+            },
+        },
+    };
 
 
-  & .selected-row {
-    background-color: #cceeff; /* Change this to your desired color */
-    /* Add any other styles for the selected row */
-  }
-`;
     console.log(employeeRole)
 
     const currentDate = new Date();
@@ -61,11 +65,28 @@ const Employee = () => {
 
     })
 
+    const [plantsData, setPlantsData] = useState([]);
+    const plantFetch = async () => {
+        try {
+            const response = await axios.get(
+                `${process.env.REACT_APP_PORT}/compDetails/getAllPlantDetails`
+            );
+            setPlantsData(response.data.result);
+        } catch (err) {
+            console.log(err);
+        }
+    };
+    //get Designations
+    useEffect(() => {
+        plantFetch();
+    }, []);
+
     const empFetch = async () => {
         try {
             const response = await axios.get(
                 `${process.env.REACT_APP_PORT}/employee/getAllEmployees`
             );
+            console.log(response.data.result)
             const filterNames = ["employmentStatus", "department", "reportTo"]
             let updatedFilterNames = {};
 
@@ -97,7 +118,7 @@ const Employee = () => {
                 setFilteredData(filter);
                 setReportToList(filter)
             }
-            
+
 
         } catch (err) {
             console.log(err);
@@ -150,7 +171,7 @@ const Employee = () => {
         departmentFilter: "all",
         employementStatusFilter: "all",
         reportToFilter: "all",
-       
+
 
     })
 
@@ -163,11 +184,11 @@ const Employee = () => {
             if (name === "departmentFilter") {
                 const departmentFilter = employeeList.filter((item) => (item.department === value))
                 setFilteredData(departmentFilter)
-                setFilterAllNames(prev=>({
+                setFilterAllNames(prev => ({
                     ...prev,
                     departmentFilter: value,
-                    employementStatusFilter:"all",
-                    reportToFilter:"all"
+                    employementStatusFilter: "all",
+                    reportToFilter: "all"
 
                 }))
             }
@@ -175,22 +196,22 @@ const Employee = () => {
                 const statusFilter = employeeList.filter((item) => (item.employmentStatus === value))
                 console.log(statusFilter)
                 setFilteredData(statusFilter)
-                setFilterAllNames(prev =>({
+                setFilterAllNames(prev => ({
                     ...prev,
-                    departmentFilter:"all",
-                    employementStatusFilter:value,
-                    reportToFilter:"all"
+                    departmentFilter: "all",
+                    employementStatusFilter: value,
+                    reportToFilter: "all"
                 }))
                 console.log(value)
             }
             if (name === "reportToFilter") {
                 const reportFilter = employeeList.filter((item) => (item.reportTo === value))
                 setFilteredData(reportFilter)
-                setFilterAllNames(prev =>({
+                setFilterAllNames(prev => ({
                     ...prev,
-                    departmentFilter:"all",
-                    employementStatusFilter:'all',
-                    reportToFilter:value
+                    departmentFilter: "all",
+                    employementStatusFilter: 'all',
+                    reportToFilter: value
                 }))
             }
         }
@@ -210,7 +231,10 @@ const Employee = () => {
         state: "",
         contactNumber: "",
         designation: "",
-        department: "",
+        plantDetails: [{
+            plantName: "",
+            departments: []
+        }],
         mailId: "",
         doj: DateFormat,
         employmentStatus: "Active",
@@ -231,7 +255,7 @@ const Employee = () => {
         state: "",
         contactNumber: "",
         designation: "",
-        department: "",
+        plantDetails: [],
         mailId: "",
         doj: DateFormat,
         employmentStatus: "Active",
@@ -239,6 +263,19 @@ const Employee = () => {
         empRole: "",
         password: "",
     });
+
+    const [empPlantId, setEmpPlantId] = useState(null)
+    const [plantIndex, setPlantIndex] = useState(null)
+
+    const initialEmpPlantDetails = {
+        plantName: "",
+        departments: []
+    }
+
+    const [empPlantDetails, setEmpPlantDetails] = useState({
+        plantName: "",
+        departments: []
+    })
 
     const handleSetEmp = (params) => {
         console.log(params)
@@ -250,7 +287,7 @@ const Employee = () => {
         return params.id === empDataId ? 'selected-row' : '';
     };
 
- 
+
 
 
 
@@ -337,12 +374,15 @@ const Employee = () => {
 
     //Department and Designation 
     const [departmentList, setDepartmentList] = useState([]);
+    const [defaultDepartments, setDefaultDepartments] = useState([])
     const depFetchData = async () => {
         try {
             const response = await axios.get(
                 `${process.env.REACT_APP_PORT}/department/getAllDepartments`
             );
+            const defaultdep = response.data.result.filter(dep => dep.defaultdep === "yes")
             setDepartmentList(response.data.result);
+            setDefaultDepartments(defaultdep)
         } catch (err) {
             console.log(err);
         }
@@ -388,6 +428,14 @@ const Employee = () => {
         setEmployeeData((prev) => ({ ...prev, [name]: value }));
 
     };
+
+    const handlePlantChange = (e) => {
+        const { name, value } = e.target;
+        setEmpPlantDetails((prev) => ({ ...prev, [name]: value }));
+    };
+
+
+
     const [showPassword, setShowPassword] = useState(false)
     const handleShowPassword = () => {
         setShowPassword((show) => !show)
@@ -413,6 +461,7 @@ const Employee = () => {
         tempErrors.department = employeeData.department ? "" : "Department is Required"
         tempErrors.doj = employeeData.doj ? "" : "DOJ is Required"
         tempErrors.employmentStatus = employeeData.employmentStatus ? "" : "Employment Status is Required"
+        tempErrors.plantStatus = employeeData.plantDetails.length > 0 ? "" : "Plant Details Required"
 
         setErrors({ ...tempErrors })
 
@@ -422,21 +471,24 @@ const Employee = () => {
     console.log(errors)
 
     const reportToChange = () => {
-        if(employeeData.empRole === "viewer"){
+        if (employeeData.empRole === "viewer") {
             const filter = employeeList.filter(emp => emp.empRole === "creator")
             setReportToList(filter)
         }
-        if(employeeData.empRole === "creator"){
+        if (employeeData.empRole === "creator") {
             const filter = employeeList.filter(emp => emp.empRole === "creator" || emp.empRole === "plantAdmin")
             setReportToList(filter)
         }
-        if(employeeData.empRole === "plantAdmin"){
+        if (employeeData.empRole === "plantAdmin") {
             setReportToList([employeeRole.loggedEmp])
         }
     }
-    useEffect(()=> {
+    useEffect(() => {
         reportToChange()
     }, [employeeData.empRole])
+
+
+
 
 
     const EmployeeSubmit = async (e) => {
@@ -453,6 +505,7 @@ const Employee = () => {
                 setErrorHandler({ status: response.data.status, message: response.data.message, code: "success" })
                 setEmployeeData(initialEmpData)
                 setEmpDataId(null)
+                setErrors({})
             }
 
         } catch (err) {
@@ -493,6 +546,7 @@ const Employee = () => {
             console.log("Employee Updated Successfully")
             setEmpDataId(null)
             setEmployeeData(initialEmpData)
+            setErrors({})
 
         } catch (err) {
             setSnackBarOpen(true)
@@ -641,11 +695,71 @@ const Employee = () => {
         }
     };
 
+    const empPlantAdd = () => {
+        console.log(Object.values(empPlantDetails).every(item => typeof item === "string" ? item !== "" : item.length > 0))
+
+        const allNonArrayValuesAreNonEmptyStrings = Object.values(empPlantDetails)
+            .filter(value => !Array.isArray(value))  // Exclude arrays
+            .every(item => item !== "");
+
+        // Check if all array values have a length greater than 0
+        const allArrayValuesHaveLengthGreaterThanZero = Object.values(empPlantDetails)
+            .filter(value => Array.isArray(value))
+            .every(arr => arr.length > 0);
+
+        
+
+        console.log(allNonArrayValuesAreNonEmptyStrings && allArrayValuesHaveLengthGreaterThanZero);
+
+        if (allNonArrayValuesAreNonEmptyStrings && allArrayValuesHaveLengthGreaterThanZero) {
+            setEmployeeData((prev) => ({ ...prev, plantDetails: [...prev.plantDetails, empPlantDetails] }))
+            setEmpPlantDetails(initialEmpPlantDetails)
+            setEmpPlantId(null);
+            setPlantIndex(null);
+        }
+
+    }
+
+    const handlePlantClick = (data, index) => {
+        setEmpPlantId(data.plantName)
+        setPlantIndex(index)
+        setEmpPlantDetails({
+            plantName: data.plantName,
+            departments: data.departments
+        })
+    }
+
+    const empPlantEdit = () => {
+        if (employeeData.plantDetails.length > 0) {
+            const updatedItems = [...employeeData.plantDetails];
+            updatedItems[plantIndex] = empPlantDetails;
+            setEmployeeData({ ...employeeData, plantDetails: updatedItems });
+            setEmpPlantDetails(initialEmpPlantDetails)
+            setEmpPlantId(null);
+            setPlantIndex(null); // Clear the edited item after update
+
+        }
+    }
 
 
 
 
-    console.log(employeeRole)
+    const deletePlant = (index) => {
+
+        setEmployeeData((prev) => {
+            const updatedPlant = [...prev.plantDetails]
+            updatedPlant.splice(index, 1);
+            return {
+                ...prev, plantDetails: updatedPlant,
+            };
+        })
+        setEmpPlantDetails(initialEmpPlantDetails)
+        setEmpPlantId(null)
+        setPlantIndex(null)
+    }
+
+
+   
 
 
 
@@ -685,17 +799,7 @@ const Employee = () => {
                             </Grid>
                             <Grid item xs={3}>
 
-                                {/* <TextField label="First Name"
-                                    {...(errors.firstName !== "" && { helperText: errors.firstName, error: true })}
-                                    id="firstNameId"
-                                    defaultValue=""
-                                    fullWidth
-                                    size="small"
-                                    sx={{ width: "100%" }}
-                                    onChange={handleChange}
-                                    onKeyDown={handleKeyDown}
-                                    value={employeeData.firstName}
-    name="firstName" />*/}
+                              
 
                                 <Autocomplete label="First Name"
                                     disablePortal
@@ -751,7 +855,7 @@ const Employee = () => {
 
                         </Grid>
                         <div className='row g-2 mb-2'>
-                            <div className="col-md-9">
+                            <div className="col-md-6">
                                 <TextField label="Address"
                                     {...(errors.address !== "" && { helperText: errors.address, error: true })}
                                     id="addressId"
@@ -764,7 +868,33 @@ const Employee = () => {
                                     onChange={handleChange}
                                     name="address" />
                             </div>
-                            <div className="col">
+                            <div className="col-md">
+                                <DatePicker
+                                    disableFuture
+                                    fullWidth
+                                    id="dojId"
+                                    name="doj"
+                                    value={dayjs(employeeData.doj)}
+                                    onChange={(newValue) =>
+                                        setEmployeeData((prev) => ({ ...prev, doj: newValue.format("YYYY-MM-DD") }))
+                                    }
+                                    label="Date of joining"
+
+                                    slotProps={{ textField: { size: 'small', fullWidth: true } }}
+                                    format="DD-MM-YYYY" />
+                            </div>
+                            <div className="col-md">
+                                <TextField
+                                    {...(errors.designation !== "" && { helperText: errors.designation, error: true })}
+                                    fullWidth label="Designation" onChange={handleChange} value={employeeData.designation} select size="small" id="designationId" name="designation" defaultValue="" >
+
+                                    {designationList.map((item, index) => (
+                                        <MenuItem key={index} value={item.designation}>{item.designation}</MenuItem>
+                                    ))}
+
+                                </TextField>
+                            </div>
+                            <div className="col-md">
                                 <TextField label="Role"
                                     {...(errors.empRole !== "" && { helperText: errors.empRole, error: true })}
                                     size='small' id='empRoleId' onChange={handleChange} fullWidth name='empRole' value={employeeData.empRole} select>
@@ -776,6 +906,9 @@ const Employee = () => {
                                     <MenuItem value="viewer">Viewer</MenuItem>
                                 </TextField>
                             </div>
+
+
+
 
 
                         </div>
@@ -826,17 +959,6 @@ const Employee = () => {
 
                             <Grid item xs={2}>
 
-                                {/* <TextField label="Contact Number "
-                                    {...(errors.contactNumber !== "" && { helperText: errors.contactNumber, error: true })}
-                                    id="contactNumberId"
-                                    color={employeeData.contactNumber.length !== 10 ? "error" : "success"}
-                                    
-                                    fullWidth
-                                    size="small"
-                                    onChange={handleChange}
-                                    type='number'
-                                    value={employeeData.contactNumber}
-                                    name="contactNumber" />*/}
                                 <TextField
                                     label="Contact Number"
                                     {...(errors.contactNumber !== "" && { helperText: errors.contactNumber, error: true })}
@@ -899,110 +1021,126 @@ const Employee = () => {
 
 
 
-                    <Grid container spacing={2} >
-                        <Grid item xs={6}>
+                    <Grid container spacing={1} >
+
+
+
+                        <Grid item xs={12}>
                             <Paper sx={{
                                 p: 1,
-                                display: 'flex',
-                                flexDirection: 'column',
                                 mb: 1
                             }}
                                 elevation={12}
                             >
-                                <Grid container rowSpacing={1} columnSpacing={{ xs: 1 }} className=' g-2 mb-2'>
+                                
 
 
-                                    <Grid item xs={6}>
-                                        <TextField
-                                            {...(errors.designation !== "" && { helperText: errors.designation, error: true })}
-                                            fullWidth label="Designation" onChange={handleChange} value={employeeData.designation} select size="small" id="designationId" name="designation" defaultValue="" >
+                                <div className="row">
+                                    <div className="col-md-3">
+                                        <div className="row g-2">
+                                            <div className="col-md-12">
+                                                <TextField
+                                                    {...(errors.employmentStatus !== "" && { helperText: errors.employmentStatus, error: true })}
+                                                    fullWidth label="Employment Status" onChange={handleChange} value={employeeData.employmentStatus} select size="small" id="employmentStatusId" name="employmentStatus" >
+                                                    <MenuItem value="Active">Active</MenuItem >
+                                                    <MenuItem value="InActive">InActive</MenuItem >
+                                                </TextField>
+                                            </div>
+                                            <div className="col-md-12">
+                                                <TextField
+                                                    disabled={empPlantId}
+                                                    fullWidth label="Select Plant"  onChange={handlePlantChange} value={empPlantDetails.plantName} select size="small" id="plantNameId" name="plantName"  >
 
-                                            {designationList.map((item, index) => (
-                                                <MenuItem key={index} value={item.designation}>{item.designation}</MenuItem>
-                                            ))}
+                                                    {plantsData.map((plant, index) => {
 
-                                        </TextField>
+                                                        const status = employeeData.plantDetails.find(empPlant => empPlant.plantName === plant.plantName)
+                                                        console.log(status)
+                                                        return(
+                                                        <MenuItem key={index} disabled={status} value={plant.plantName}>{plant.plantName}</MenuItem>
+                                                    )})}
+                                                </TextField>
+                                            </div>
+                                            <div className="col-md-12">
+                                                <FormControl size='small' component="div" fullWidth>
+                                                    <InputLabel id="departmentsId">Select Departments</InputLabel>
+                                                    <Select
+                                                        labelId="departmentsId"
+                                                        name="departments"
+                                                        multiple
 
-                                    </Grid>
-                                    <Grid item xs={6}>
-                                        <TextField
-                                            {...(errors.department !== "" && { helperText: errors.department, error: true })}
-                                            fullWidth label="Department" onChange={handleChange} value={employeeData.department} select size="small" id="DepartmentId" name="department" defaultValue="" >
+                                                        value={empPlantDetails.departments}
+                                                        onChange={handlePlantChange}
+                                                        input={<OutlinedInput fullWidth label="Select Departments" />}
+                                                        renderValue={(selected) => selected.join(", ")}
 
-                                            {departmentList.map((item, index) => (
-                                                <MenuItem key={index} value={item.department}>{item.department}</MenuItem>
-                                            ))}
-                                        </TextField>
+                                                        MenuProps={MenuProps}
+                                                        fullWidth
+                                                    >
+                                                        {defaultDepartments.map((dep, index) => (
+                                                            <MenuItem key={index} value={dep.department}>
+                                                                <Checkbox checked={empPlantDetails.departments.indexOf(dep.department) > -1} />
+                                                                <ListItemText primary={dep.department} />
+                                                            </MenuItem>
+                                                        ))}
+                                                    </Select>
+                                                </FormControl>
+                                            </div>
 
-                                    </Grid>
-                                </Grid>
+
+                                            <div className="col-md-12 d-flex justify-content-end">
+                                                {empPlantId ? <React.Fragment>
+                                                    <Button className='me-2' size='small' variant='contained' color='warning' onClick={() => empPlantEdit()}>Role Update</Button>
+                                                    <Button size='small' variant='contained' color='error' onClick={() => { setEmpPlantId(null); setPlantIndex(null); setEmpPlantDetails(initialEmpPlantDetails) }}>Cancel</Button>
+                                                </React.Fragment>
+                                                    : <Button size='small' variant='contained' color='success' onClick={() => empPlantAdd()}>Add Role</Button>}
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div className="col-md-9" style={{ maxHeight: "134px", overflow: "auto" }}>
+                                    <h6 className='text-center'>Roles and Authentication Details </h6>
+                                        <table className='table table-sm table-bordered text-center align-midle'>
+                                            <tbody>
+                                                <tr className='sticky-top table-light'>
+                                                    <th>Si No</th>
+                                                    <th>Plant Name</th>
+                                                    <th>Departments</th>
+                                                    <th>Edit</th>
+                                                    <th>Delete</th>
+                                                </tr>
+                                                {employeeData.plantDetails.map((plant, index) => (
+                                                    <tr key={index} >
+                                                        <td>{index + 1}</td>
+                                                        <td>{plant.plantName}</td>
+                                                        <td>{plant.departments.join(", ")}</td>
+                                                        <td><IconButton color='warning' size='small' onClick={() => handlePlantClick(plant, index)}><Edit /></IconButton></td>
+                                                        <td><IconButton color='error' size='small' onClick={() => deletePlant(index)}><Delete /></IconButton></td>
+                                                    </tr>
+                                                ))}
+
+                                            </tbody>
+                                        </table>
+                                    </div>
+
+                                </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
                             </Paper>
                         </Grid>
 
 
-                        <Grid item xs={6}>
-                            <Paper sx={{
-                                p: 1,
-                                display: 'flex',
-                                flexDirection: 'column',
-                                mb: 1
 
-                            }}
-                                elevation={12}
-                            >
-                                <Grid container rowSpacing={1} columnSpacing={{ xs: 1 }} className=' g-2 mb-2'>
-                                    <Grid item xs={4}>
-
-
-                                        <DatePicker
-                                            disableFuture
-                                            fullWidth
-                                            id="dojId"
-                                            name="doj"
-                                            value={dayjs(employeeData.doj)}
-                                            onChange={(newValue) =>
-                                                setEmployeeData((prev) => ({ ...prev, doj: newValue.format("YYYY-MM-DD") }))
-                                            }
-                                            label="DOJ"
-
-                                            slotProps={{ textField: { size: 'small' } }}
-                                            format="DD-MM-YYYY" />
-
-                                    </Grid>
-                                    {/*<div className="form-floating col-6">
-                                            <input onChange={handleChange} value={employeeData.doj} max={DateFormat} type="date" className="form-control" id="dojId" name="doj" placeholder="doj" />
-                                            <label htmlFor="dojId">Date Of joining</label>
-                                        </div>*/}
-                                    <Grid item xs={3}>
-                                        <TextField
-                                            {...(errors.employmentStatus !== "" && { helperText: errors.employmentStatus, error: true })}
-                                            fullWidth label="Employment Status" onChange={handleChange} value={employeeData.employmentStatus} select size="small" id="employmentStatusId" name="employmentStatus" defaultValue="" >
-                                            <MenuItem value="Active">Active</MenuItem >
-                                            <MenuItem value="InActive">InActive</MenuItem >
-                                        </TextField>
-
-                                    </Grid>
-                                    {/* <div className="form-floating col-6">
-                                            <select onChange={handleChange} value={employeeData.employmentStatus}  id="employmentStatusId" name="employmentStatus" >
-                                                <option value="">Select Status</option>
-                                                <option value="Active">Active</option>
-                                                <option value="InActive">InActive</option>
-                                                <option value="Relieved">Relieved</option>
-                                            </select>
-                                            <label htmlFor="employmentStatusId">Employment Status</label>
-                                        </div>*/}
-                                    {/* <Grid item xs={5}>
-                                        <TextField fullWidth label="Report To" onChange={handleChange} value={employeeData.reportTo} select size="small" id="reportToId" name="reportTo">
-                                            <MenuItem value="N/A">N/A</MenuItem>
-                                            {reportToList.map((item, index) => (
-                                                <MenuItem key={index} value={item.firstName}>{`${item.firstName} ${item.lastName}`}</MenuItem>
-                                            ))}
-                                        </TextField>
-
-                                    </Grid> */}
-                                </Grid>
-                            </Paper>
-                        </Grid>
 
                     </Grid>
 
@@ -1020,20 +1158,20 @@ const Employee = () => {
                             <div className="row g-2" >
                                 <div className="col d-flex ">
                                     <div className="d-flex justify-content-center">
-                                        <ButtonGroup className='me-3'>
-                                            <Button component="label" variant="contained" >
+                                        <ButtonGroup className='me-3' size='small'>
+                                            <Button size='small' variant="contained" >
                                                 Upload
                                                 <VisuallyHiddenInput type="file" onChange={handleEmpExcel} />
                                             </Button>
-                                            <Button onClick={handleEmpUpload}><CloudUpload /></Button>
+                                            <Button size='small' onClick={handleEmpUpload}><CloudUpload /></Button>
                                         </ButtonGroup>
 
-                                        <ButtonGroup>
-                                            <Button component="label" variant="contained" color='secondary'>
+                                        <ButtonGroup size='small'>
+                                            <Button size='small' variant="contained" color='secondary'>
                                                 Download
                                                 <VisuallyHiddenInput type="file" />
                                             </Button>
-                                            <Button color='secondary'><CloudDownload /></Button>
+                                            <Button size='small' color='secondary'><CloudDownload /></Button>
                                         </ButtonGroup>
                                     </div>
                                 </div>
@@ -1108,7 +1246,7 @@ const Employee = () => {
                                     }
                                 </div>
                             </div>
-                            {empExcelStatus && <p>{empExcelStatus}</p>}
+                            {empExcelStatus && <p style={{color:'green'}}>{empExcelStatus}</p>}
                         </Paper>
                     </Grid>
 
@@ -1197,7 +1335,7 @@ const Employee = () => {
                                                 "marginTop": "1em",
                                                 "marginBottom": "1em"
                                             },
-                                            
+
                                         }}
                                         slots={{
                                             toolbar: GridToolbar,
@@ -1208,7 +1346,7 @@ const Employee = () => {
 
                                         }}
                                         onRowClick={handleSetEmp}
-                                        
+                                        disableRowSelectionOnClick
                                         density="compact"
                                         checkboxSelection
                                         pageSizeOptions={[5]}
@@ -1295,16 +1433,6 @@ const Employee = () => {
                             </div>
                         </Paper>
                     </Grid>
-
-
-
-
-
-
-
-
-
-
 
                 </form>
 

@@ -30,10 +30,7 @@ const employeeSchema = new mongoose.Schema({
         type: String,
         required : [true, "Designation required"]
     },
-    department : {
-        type: String,
-        required : [true, "Department required"]
-    },
+    
     mailId : String,
     empRole: {
         type: String,
@@ -47,11 +44,12 @@ const employeeSchema = new mongoose.Schema({
         required: [true, "Password is required"],
         unique: [true, "Password should be unique"]
     },
-    plant: {
+    plantDetails: {
         type: [],
-        required: [true, "Please select plant"]
-    },
-    extraPermissions : []
+        required: [true, "Plant details required*"]
+    }
+    
+   
 });
 employeeSchema.plugin(uniqueValidator);
 

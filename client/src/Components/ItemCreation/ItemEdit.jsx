@@ -1055,8 +1055,8 @@ const ItemEdit = () => {
                                             {...(errors.itemDepartment !== "" && { helperText: errors.itemDepartment, error: true })}
                                             value={itemAddData.itemPlant} onChange={handleItemAddChange} size='small' select fullWidth variant='outlined' label="Select Plant" name='itemPlant' id='itemPlantId'>
                                             <MenuItem value="">Select Plant</MenuItem>
-                                            {employeeRole.loggedEmp.plant.map((plant, index) => (
-                                                <MenuItem key={index} value={plant}>{plant}</MenuItem>
+                                            {employeeRole.loggedEmp.plantDetails.map((plant, index) => (
+                                                <MenuItem key={index} value={plant.plantName}>{plant.plantName}</MenuItem>
                                             ))}
                                         </TextField>
                                     </div>
@@ -1531,9 +1531,12 @@ const ItemEdit = () => {
                                 <h5 className='text-center'>Part</h5>
                                 <div className="row">
                                     <div className="col-md-12">
+                                        <FormControl fullWidth>
+                                        <InputLabel id="itemPartNameId">Select Part</InputLabel>
                                         <Select
                                             labelId="itemPartNameId"
                                             multiple
+                                            id="demo-multiple-checkbox"
                                             name="itemPartName"
                                             value={itemAddData.itemPartName}
                                             onChange={handleItemAddChange}
@@ -1541,11 +1544,11 @@ const ItemEdit = () => {
                                             renderValue={(selected) => {
                                                 const selectedParts = selected.map(item => {
                                                     const foundPart = partData.find(part => part._id === item);
-                                                    return foundPart ? foundPart.partName : ""; // Check if foundPart exists before accessing its properties
-                                                });
+                                                    return foundPart ? foundPart.partName : "";
+                                                }).filter(Boolean); // Filter out empty strings
+                                            
                                                 return selectedParts.join(", ");
                                             }}
-
                                             MenuProps={MenuProps}
                                             fullWidth
                                         >
@@ -1556,28 +1559,8 @@ const ItemEdit = () => {
                                                 </MenuItem>
                                             ))}
                                         </Select>
-                                        {/* <FormControl size='small' component="div" fullWidth>
-                                            <InputLabel id="itemPartNameId">Select Part</InputLabel>
-                                            <Select
-                                                labelId="itemPartNameId"
-
-                                                multiple
-                                                name="itemPartName"
-                                                value={itemAddData.itemPartName}
-                                                onChange={handleItemAddChange}
-                                                input={<OutlinedInput fullWidth label="Select Part" />}
-                                                renderValue={(selected) => selected.map(item => item.partName).join(", ")}
-                                                MenuProps={MenuProps}
-                                                fullWidth
-                                            >
-                                                {partData.map((name, index) => (
-                                                    <MenuItem key={index} value={name}>
-                                                        <Checkbox checked={itemAddData.itemPartName} />
-                                                        <ListItemText primary={name.partName} />
-                                                    </MenuItem>
-                                                ))}
-                                            </Select>
-                                                </FormControl>*/}
+                                        </FormControl>
+                                       
                                     </div>
 
 

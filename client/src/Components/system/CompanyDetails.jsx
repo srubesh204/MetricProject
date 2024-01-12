@@ -105,23 +105,14 @@ const CompanyDetails = () => {
     useEffect(() => {
         plantFetch();
     }, []);
-
     const initialPlantData = {
         plantName: "",
         plantAddress: "",
-        admins: [],
-        plantAdmins: [],
-        creators: [],
-        viewers: []
+        
     }
-
     const [plantData, setPlantData] = useState({
         plantName: "",
-        plantAddress: "",
-        admins: [],
-        plantAdmins: [],
-        creators: [],
-        viewers: []
+        plantAddress: "",   
     })
     console.log(companyData, plantData)
 
@@ -229,11 +220,11 @@ const CompanyDetails = () => {
                 console.log(err)
                 setPlantError({ status: 0, message: errorMessages400, code: "error" });
             } else if (err.response && err.response.status === 500) {
-                // Handle other errors
-                // const errorData500 = err.response.data.error;
-                // const errorMessages500 = Object.values(errorData500).join(', ');
+              
+                const errorData500 = err.response.data.error;
+                const errorMessages500 = Object.values(errorData500).join(', ');
                 console.log(err)
-                setPlantError({ status: 0, message: err.response.data.error, code: "error" });
+                setPlantError({ status: 0, message: errorMessages500, code: "error" });
             } else {
                 console.log(err)
                 setPlantError({ status: 0, message: "An error occurred", code: "error" });
@@ -246,6 +237,47 @@ const CompanyDetails = () => {
         try {
             const response = await axios.put(
                 `${process.env.REACT_APP_PORT}/compDetails/updatePlantDetails/${selectedPlantId}`, plantData
+
+            );
+            console.log(response.data)
+
+
+            plantFetch();
+            setPlantSnackBar(true)
+            setPlantError({ status: response.data.status, message: response.data.message, code: "success" })
+            setSelectedPlantId(null)
+            setPlantData(initialPlantData)
+            console.log(response);
+        } catch (err) {
+            console.log(err);
+            setPlantSnackBar(true)
+            if (err.response && err.response.status === 400) {
+                // Handle validation errors
+                const errorData400 = err.response.data.errors;
+                const errorMessages400 = Object.values(errorData400).join(' / ');
+
+                console.log(errorMessages400);
+                console.log(err)
+                setPlantError({ status: 0, message: errorMessages400, code: "error" });
+            } else if (err.response && err.response.status === 500) {
+                // Handle other errors
+                const errorData500 = err.response.data.error;
+                const errorMessages500 = Object.values(errorData500);
+                console.log(err)
+                setPlantError({ status: 0, message: errorMessages500, code: "error" });
+            } else {
+                console.log(err)
+                setPlantError({ status: 0, message: "An error occurred", code: "error" });
+            }
+
+        }
+    };
+
+
+    const deletePlant = async () => {
+        try {
+            const response = await axios.delete(
+                `${process.env.REACT_APP_PORT}/compDetails/deletePlantDetail/${selectedPlantId}`, plantData
 
             );
             console.log(response.data)
@@ -505,138 +537,10 @@ const CompanyDetails = () => {
                                         name="plantAddress" >
                                     </TextField>
                                 </div>
-                                <div className="col">
-                                    <FormControl size='small' component="div" fullWidth>
-                                        <InputLabel id="adminsId">Admins</InputLabel>
-                                        <Select
-                                            labelId="adminsId"
-                                            name="admins"
-                                            multiple
-
-                                            value={plantData.admins}
-                                            // onChange={handleItemAddChange}
-                                            input={<OutlinedInput fullWidth label="Admins" />}
-                                            renderValue={(selected) =>
-                                                selected
-                                                    .map((emp) =>
-                                                        employeeData.admins
-                                                            .filter((emps) => emps._id === emp)
-                                                            .map((filteredEmp) => filteredEmp.firstName)
-
-                                                    ).join(", ")
-                                            }
-                                            onChange={handleAdminChange}
-                                            MenuProps={MenuProps}
-                                            fullWidth
-                                        >
-                                            {employeeData.admins.map((name, index) => (
-                                                <MenuItem key={index} value={name._id}>
-                                                    <Checkbox checked={plantData.admins.indexOf(name._id) > -1} />
-                                                    <ListItemText primary={name.employeeCode + " - " + name.firstName} />
-                                                </MenuItem>
-                                            ))}
-                                        </Select>
-                                    </FormControl>
-                                </div>
-                                <div className="col">
-                                    <FormControl size='small' component="div" fullWidth>
-                                        <InputLabel id="plantAdminsId">Add PlantAdmins</InputLabel>
-                                        <Select
-                                            labelId="plantAdminsId"
-                                            name="plantAdmins"
-                                            multiple
-
-                                            value={plantData.plantAdmins}
-                                            // onChange={handleItemAddChange}
-                                            input={<OutlinedInput fullWidth label="Add PlantAdmins" />}
-                                            renderValue={(selected) =>
-                                                selected
-                                                    .map((emp) =>
-                                                        employeeData.plantAdmins
-                                                            .filter((emps) => emps._id === emp)
-                                                            .map((filteredEmp) => filteredEmp.firstName)
-
-                                                    ).join(", ")
-                                            }
-                                            onChange={handleAdminChange}
-                                            MenuProps={MenuProps}
-                                            fullWidth
-                                        >
-                                            {employeeData.plantAdmins.map((name, index) => (
-                                                <MenuItem key={index} value={name._id}>
-                                                    <Checkbox checked={plantData.plantAdmins.indexOf(name._id) > -1} />
-                                                    <ListItemText primary={name.employeeCode + " - " + name.firstName} />
-                                                </MenuItem>
-                                            ))}
-                                        </Select>
-                                    </FormControl>
-                                </div>
-                                <div className="col">
-                                    <FormControl size='small' component="div" fullWidth>
-                                        <InputLabel id="creatorsId">Add Creators</InputLabel>
-                                        <Select
-                                            labelId="creatorsId"
-                                            name="creators"
-                                            multiple
-
-                                            value={plantData.creators}
-                                            // onChange={handleItemAddChange}
-                                            input={<OutlinedInput fullWidth label="Add Creators" />}
-                                            renderValue={(selected) =>
-                                                selected
-                                                    .map((emp) =>
-                                                        employeeData.creators
-                                                            .filter((emps) => emps._id === emp)
-                                                            .map((filteredEmp) => filteredEmp.firstName)
-
-                                                    ).join(", ")
-                                            }
-                                            onChange={handleAdminChange}
-                                            MenuProps={MenuProps}
-                                            fullWidth
-                                        >
-                                            {employeeData.creators.map((name, index) => (
-                                                <MenuItem key={index} value={name._id}>
-                                                    <Checkbox checked={plantData.creators.indexOf(name._id) > -1} />
-                                                    <ListItemText primary={name.employeeCode + " - " + name.firstName} />
-                                                </MenuItem>
-                                            ))}
-                                        </Select>
-                                    </FormControl>
-                                </div>
-                                <div className="col">
-                                    <FormControl size='small' component="div" fullWidth>
-                                        <InputLabel id="viewersId">Add Viewers</InputLabel>
-                                        <Select
-                                            labelId="viewersId"
-
-                                            multiple
-                                            name="viewers"
-                                            value={plantData.viewers}
-                                            // onChange={handleItemAddChange}
-                                            input={<OutlinedInput fullWidth label="Add Viewers" />}
-                                            renderValue={(selected) =>
-                                                selected
-                                                    .map((emp) =>
-                                                        employeeData.viewers
-                                                            .filter((emps) => emps._id === emp)
-                                                            .map((filteredEmp) => filteredEmp.firstName)
-
-                                                    ).join(", ")
-                                            }
-                                            onChange={handleAdminChange}
-                                            MenuProps={MenuProps}
-                                            fullWidth
-                                        >
-                                            {employeeData.viewers.map((name, index) => (
-                                                <MenuItem key={index} value={name._id}>
-                                                    <Checkbox checked={plantData.viewers.indexOf(name._id) > -1} />
-                                                    <ListItemText primary={name.employeeCode + " - " + name.firstName} />
-                                                </MenuItem>
-                                            ))}
-                                        </Select>
-                                    </FormControl>
-                                </div>
+                                
+                                
+                                
+                                
                             </div>
 
 
@@ -758,10 +662,7 @@ const CompanyDetails = () => {
                                 <th>Si No</th>
                                 <th>Plant Name</th>
                                 <th>Plant Address</th>
-                                <th>Add Admins</th>
-                                <th>Add PlantAdmins</th>
-                                <th>Add Creators</th>
-                                <th>Add Viewers</th>
+                                <th>Delete</th>
 
                             </tr>
                             {plantDatas.map((plant, index) => (
@@ -769,32 +670,9 @@ const CompanyDetails = () => {
                                     <td>{index + 1}</td>
                                     <td>{plant.plantName}</td>
                                     <td>{plant.plantAddress}</td>
-                                    <td>
-                                        {/* {plant.admins.map(empId =>
-                                                employeeData.admins
-                                                    .find(admin => admin.employeeCode === empId)
-                                                    ?.firstName // Assuming 'firstName' is the property for first name
-                                                ?? 'Unknown' // Display 'Unknown' if no match is found
-                                            ).join(", ")} */}
-                                        {plant.admins.map(empId => {
-                                            const matchedEmployee = employeeData.admins.find(emp => empId === emp._id);
-                                            return matchedEmployee ? `${matchedEmployee.employeeCode} - ${matchedEmployee.firstName}` : '';
-                                        }).join(", ")}
+                                    <td><Delete /></td>
 
-                                    </td>
-
-                                    <td>{plant.plantAdmins.map(empId => {
-                                        const matchedEmployee = employeeData.plantAdmins.find(emp => empId === emp._id);
-                                        return matchedEmployee ? `${matchedEmployee.employeeCode} - ${matchedEmployee.firstName}` : '';
-                                    }).join(", ")}</td>
-                                    <td>{plant.creators.map(empId => {
-                                        const matchedEmployee = employeeData.creators.find(emp => empId === emp._id);
-                                        return matchedEmployee ? `${matchedEmployee.employeeCode} - ${matchedEmployee.firstName}` : '';
-                                    }).join(", ")}</td>
-                                    <td>{plant.viewers.map(empId => {
-                                        const matchedEmployee = employeeData.viewers.find(emp => empId === emp._id);
-                                        return matchedEmployee ? `${matchedEmployee.employeeCode} - ${matchedEmployee.firstName}` : '';
-                                    }).join(", ")}</td>
+                                   
 
                                 </tr>
                             ))}

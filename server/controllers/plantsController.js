@@ -15,8 +15,8 @@ const plantDetailsController = {
     createPlantDetails: async (req, res) => {
 
         try {
-            const { plantName, plantAddress, admins, plantAdmins, creators, viewers } = req.body;
-            const plantResults = new plantSchema({ plantName, plantAddress, admins, plantAdmins, creators, viewers });
+            const { plantName, plantAddress } = req.body;
+            const plantResults = new plantSchema({ plantName, plantAddress});
             const validationError = plantResults.validateSync();
 
             if (validationError) {
@@ -35,31 +35,7 @@ const plantDetailsController = {
                 });
             }
             console.log("success")
-
-
-
             await plantResults.save();
-
-            const plantEmployees = [...new Set([...admins, ...plantAdmins, ...creators, ...viewers])];
-
-
-            const updatePromises = plantEmployees.map(async (empId) => {
-
-                const employeeData = await employeeModel.findById(empId)
-                console.log(employeeData)
-                const updatedEmployeeData = { employeeData, plant: [plantName] }
-                console.log(updatedEmployeeData)
-
-                const updateResult = await employeeModel.findOneAndUpdate(
-                    { _id: employeeData._id },
-                    { $set: updatedEmployeeData },
-                    { new: true }
-                );
-
-                return updateResult;
-            });
-            const updatedItems = await Promise.all(updatePromises);
-
             return res.status(200).json({ message: "Company Plants Details Successfully Saved", status: 1 });
         } catch (error) {
             console.log(error)
@@ -78,18 +54,15 @@ const plantDetailsController = {
     updatePlantDetails: async (req, res) => {
         try {
             const plantDetailsId = req.params.id; // Assuming desId is part of the URL parameter
-            // if (isNaN(desId)) {
-            //   return res.status(400).json({ error: 'Invalid desId value' });
-            // }
-
-            // Create an object with the fields you want to update
-            const updatePlantDetailsFields = { plantName, plantAddress, admins, plantAdmins, creators, viewers } = req.body;
+           
+            const updatePlantDetailsFields = { plantName, plantAddress } = req.body;
 
             // Find the designation by desId and update it
             const plantDetailsUpdate = new plantSchema(updatePlantDetailsFields);
 
             const validationError = plantDetailsUpdate.validateSync();
-            if (validationError) {
+
+           if (validationError) {
                 // Handle validation errors
                 const validationErrors = {};
 
@@ -113,43 +86,7 @@ const plantDetailsController = {
                 { new: true } // To return the updated document
             );
 
-            const plantEmployees = [...new Set([...admins, ...plantAdmins, ...creators, ...viewers])];
-
-            const allEmployees = await employeeModel.find();
             
-            allEmployees.forEach(async (employee) => {
-                // Check if the plantName is in the plant array
-                if (employee.plant.includes(plantName)) {
-                    await employeeModel.findByIdAndUpdate(
-                        employee._id,
-                        { $pull: { plant: plantName } }
-                    );
-                    console.log(`Plant ${plantName} removed from employee with ID ${employee._id}`);
-                } else {
-                    console.log(`Employee with ID ${employee._id} doesn't have plant ${plantName}`);
-                }
-            });
-
-            const updatePromises = plantEmployees.map(async (empId) => {
-                const employeeData = await employeeModel.findById(empId);
-            
-                // Check if the plantName is already in the plant array
-                if (!employeeData.plant.includes(plantName)) {
-                    const updateResult = await employeeModel.findByIdAndUpdate(
-                        empId,
-                        { $addToSet: { plant: plantName } },
-                        { new: true }
-                    );
-            
-                    console.log(updateResult);
-                    return updateResult;
-                } else {
-                    // If the plantName is already present, return the existing employee data
-                    return employeeData;
-                }
-            });
-            
-            const updatedItems = await Promise.all(updatePromises);
 
             if (!updatePlantDetails) {
                 return res.status(404).json({ error: 'Company Plants Details not found' });
@@ -159,13 +96,22 @@ const plantDetailsController = {
         } catch (error) {
             console.log(error);
             if (error.code === 11000) {
-                return res.status(500).json({ error: 'Duplicate Value Not Accepted' });
+                return res.status(500).json({ error: 'Same Plant Not Allowed' });
             }
             const errors500 = {};
             for (const key in error.errors) {
                 errors500[key] = error.errors[key].message;
             }
             res.status(500).json({ error: error, status: 0 });
+            // if (error.errors) {
+            //     const errors500 = {};
+            //     for (const key in error.errors) {
+            //         errors500[key] = error.errors[key].message;
+            //     }
+            //     return res.status(500).json({ error: errors500, status: 0 });
+            // }
+
+            // return res.status(500).json({ error: 'Internal server error on Company Plants Details', status: 0 });
         }
     },
     deletePlantDetails: async (req, res) => {

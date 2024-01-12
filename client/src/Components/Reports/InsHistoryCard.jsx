@@ -150,8 +150,35 @@ function InsHistoryCard() {
         { field: 'col5', headerName: 'Certificate Status', width: 150, align: "center", },
         { field: 'calCertificateNo', headerName: 'Certificate No', width: 150, align: "center", },
         ...(selectedRow[0]?.itemType === 'variable'
-        ? [{ field: 'calOBError', headerName: "Observed Error", width: 150, align: "center" }]
-        : [{ field: 'observedMinSize', headerName: "Observed Size", width: 150, align: "center" },]),
+            ? [{
+                field: 'calOBError',
+                headerName: 'Observed Error',
+                width: 150,
+                align: 'center',
+                renderCell: (params) => (
+                  <div>
+                    {params.row.calcalibrationData.map((cal, index) => (
+                      <span key={index}>
+                        {cal.calOBError}
+                        {index < params.row.calcalibrationData.length - 1 && <br />} 
+                      </span>
+                    ))}
+                  </div>
+                ),
+              }]
+            : [{ field: 'observedSize', headerName: "Observed Size", width: 150, align: "center", 
+            renderCell: (params) => (
+              <div>
+                {params.row.calcalibrationData.map((cal, index) => (
+                  <span key={index}>
+                    {"Min : " + cal.calMinPS}<br />
+                    {"Max : " + cal.calMaxPS}
+                    {index < params.row.calcalibrationData.length - 1 && <br />} 
+                  </span>
+                ))}
+              </div>
+            ),
+        }]),
         { field: 'itemCalibrationSource', headerName: 'Calibrated At', width: 150, align: "center", renderCell: (params) => params.row.calSource || selectedRow[0]?.itemCalibrationSource },
     ];
 
@@ -211,42 +238,42 @@ function InsHistoryCard() {
                                 </div>
 
                                 <div className="col-2 offset-3">
-                                <DatePicker
-                                    fullWidth
-                                    id="fromDateId"
-                                    name="fromDate"
-                                    label="From Date"
-                                    sx={{ width: "100%" }}
-                                    slotProps={{ textField: { size: 'small' } }}
-                                    format="DD-MM-YYYY"
-                                    value={fromDate}
-                                    onChange={(date) => setFromDate(date)}
-                                />
+                                    <DatePicker
+                                        fullWidth
+                                        id="fromDateId"
+                                        name="fromDate"
+                                        label="From Date"
+                                        sx={{ width: "100%" }}
+                                        slotProps={{ textField: { size: 'small' } }}
+                                        format="DD-MM-YYYY"
+                                        value={fromDate}
+                                        onChange={(date) => setFromDate(date)}
+                                    />
                                 </div>
                                 <div className="col-2">
-                                <DatePicker
-                                    fullWidth
-                                    id="toDateId"
-                                    name="toDate"
-                                    sx={{ width: "100%" }}
-                                    label="To Date"
-                                    slotProps={{ textField: { size: 'small' } }}
-                                    format="DD-MM-YYYY"
-                                    value={toDate}
-                                    onChange={(date) => setToDate(date)}
-                                />
+                                    <DatePicker
+                                        fullWidth
+                                        id="toDateId"
+                                        name="toDate"
+                                        sx={{ width: "100%" }}
+                                        label="To Date"
+                                        slotProps={{ textField: { size: 'small' } }}
+                                        format="DD-MM-YYYY"
+                                        value={toDate}
+                                        onChange={(date) => setToDate(date)}
+                                    />
                                 </div>
 
                                 <div className="row">
                                     <div className=" col-md-3  g-2 mb-3 d-flex justify-content-start">
-                                    <div ><Button>Excel</Button></div>
+                                        <div ><Button>Excel</Button></div>
                                         {selectedRow[0]?.itemIMTENo && <div>
                                             <Button size="small" variant="contained" onClick={handlePrintClick} startIcon={<PrintRounded />}>
                                                 Print
                                             </Button>
-                                        </div> }
+                                        </div>}
 
-                                        
+
                                     </div>
                                     <div className="col"></div>
                                     <div className="col-md-8  g-2 d-flex justify-content-between">
@@ -281,13 +308,12 @@ function InsHistoryCard() {
                                         <div className="form-floating col-3">
                                             <TextField
                                                 label="Range / Size"
-                                                value={selectedRow[0]?.itemRangeSize+" "+selectedRow[0]?.itemRangeSizeUnit}
+                                                value={`${selectedRow[0]?.itemRangeSize || ''} ${selectedRow[0]?.itemRangeSizeUnit || ''}`}
                                                 size="small"
                                                 name="itemRangeSize"
                                                 InputProps={{ readOnly: true }}
                                                 InputLabelProps={{ shrink: true }}
                                             ></TextField>
-
                                         </div>
                                         <div className="form-floating col-3">
                                             <TextField label="Calibration Source"
@@ -340,10 +366,10 @@ function InsHistoryCard() {
                                                 {selectedRow.length > 0 &&
                                                     selectedRow[0].acceptanceCriteria.map(item => (
                                                         <tr>
-                                                        <td>{item.acParameter || '-' }</td>
-                                                            <td>{item.acMinPS || '-' }</td>
-                                                            <td>{item.acMaxPS || '-' }</td>
-                                                            <td>{item.acWearLimitPS || '-' }</td>
+                                                            <td>{item.acParameter || '-'}</td>
+                                                            <td>{item.acMinPS || '-'}</td>
+                                                            <td>{item.acMaxPS || '-'}</td>
+                                                            <td>{item.acWearLimitPS || '-'}</td>
                                                         </tr>
                                                     ))
                                                 }
@@ -381,19 +407,19 @@ function InsHistoryCard() {
                 </form>
             </LocalizationProvider>
             <HistoryCardContent.Provider
-    value={{
-        historyCardPrintOpen,
-        setHistoryCardPrintOpen,
-        selectedRow,
-        selectedInstrumentName: calDetails.calInsName,
-        selectedIMTENo: calDetails.calInsIMTENo,
-        distItemName,
-        formatNoData,
-        selectedIMTEs: filteredSelectedIMTEs,
-    }}
->
-    <HistoryCardPrint />
-</HistoryCardContent.Provider>
+                value={{
+                    historyCardPrintOpen,
+                    setHistoryCardPrintOpen,
+                    selectedRow,
+                    selectedInstrumentName: calDetails.calInsName,
+                    selectedIMTENo: calDetails.calInsIMTENo,
+                    distItemName,
+                    formatNoData,
+                    selectedIMTEs: filteredSelectedIMTEs,
+                }}
+            >
+                <HistoryCardPrint />
+            </HistoryCardContent.Provider>
         </div>
     );
 }
