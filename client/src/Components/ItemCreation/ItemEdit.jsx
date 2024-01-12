@@ -1045,11 +1045,11 @@ const ItemEdit = () => {
                                     <div className="row g-1">
                                         <div className="col-lg me-1">
                                             <TextField size='small' select variant='outlined' value={itemAddData.itemStatus} onChange={handleItemAddChange} label="Item Status" name='itemStatus' id='itemStatusId' fullWidth >
-                                                <MenuItem value="Active">Active</MenuItem>
-                                                <MenuItem value="Spare">Spare</MenuItem>
-                                                <MenuItem value="Breakdown">Breakdown</MenuItem>
-                                                <MenuItem value="Missing">Missing</MenuItem>
-                                                <MenuItem value="Rejection">Rejection</MenuItem>
+                                                <MenuItem value="active">Active</MenuItem>
+                                                <MenuItem value="spare">Spare</MenuItem>
+                                                <MenuItem value="breakdown">Breakdown</MenuItem>
+                                                <MenuItem value="missing">Missing</MenuItem>
+                                                <MenuItem value="rejection">Rejection</MenuItem>
                                             </TextField>
                                         </div>
                                         <div className="col-lg">
