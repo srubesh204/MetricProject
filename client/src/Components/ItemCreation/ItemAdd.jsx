@@ -719,7 +719,7 @@ const ItemAdd = () => {
                             <div className='col-9'>
                                 <TextField
                                     {...(errors.itemMasterRef !== "" && { helperText: errors.itemMasterRef, error: true })}
-                                    size='small' select variant='outlined' label="Item Master" name='itemMasterRef' value={itemAddData.itemMasterRef} fullWidth onChange={handleItemAddChange}>
+                                    size='small' select variant='outlined' label="Item Master" name='itemMasterRef'  value={itemAddData.itemDescription} fullWidth onChange={handleItemAddChange}>
                                     <MenuItem value=""><em>Select</em></MenuItem>
                                     {itemMasterDataList.map((item, index) => (
                                         <MenuItem key={index} value={item._id}>{item.itemDescription}</MenuItem>

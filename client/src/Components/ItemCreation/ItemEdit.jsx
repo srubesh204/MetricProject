@@ -937,7 +937,15 @@ const ItemEdit = () => {
                                     ))}
                                 </TextField>
                             </div>
-                            <div className="col-6">
+
+                            <div className='col-md-4'>
+                                <TextField
+                                    {...(errors.itemMasterRef !== "" && { helperText: errors.itemMasterRef, error: true })}
+                                    size='small' disabled variant='outlined' label="Item Master" name='itemAddMasterName' value={itemAddData.itemAddMasterName} fullWidth >
+                                </TextField>
+                            </div>
+
+                            <div className="col-3">
                                 <Autocomplete
                                     disablePortal
                                     id="itemIMTENoId"
