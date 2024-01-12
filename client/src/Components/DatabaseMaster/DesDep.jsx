@@ -142,6 +142,7 @@ export const Department = () => {
           setDepExcelStatus('Error uploading the file.');
         }
         console.error('Error uploading Excel file:', error);
+        setTimeout()
       }
 
       if (name === "area") {
@@ -153,6 +154,7 @@ export const Department = () => {
           setAreaExcelStatus('Error uploading the file.');
         }
         console.error('Error uploading Excel file:', error);
+        setTimeout()
       }
 
       if (name === "pou") {
@@ -164,11 +166,42 @@ export const Department = () => {
           setPouExcelStatus('Error uploading the file.');
         }
         console.error('Error uploading Excel file:', error);
+        setTimeout()
       }
     }
   };
 
+  
+  useEffect(() => {
+    if (depExcelStatus) {
+      const timeoutId = setTimeout(() => {
+        setDepExcelStatus('');
+      }, 1000);
 
+      return () => clearTimeout(timeoutId); 
+    }
+  }, [depExcelStatus]);
+    
+  useEffect(() => {
+    if (areaExcelStatus) {
+      const timeoutId = setTimeout(() => {
+        setAreaExcelStatus('');
+      }, 1000);
+
+      return () => clearTimeout(timeoutId); 
+    }
+  }, [areaExcelStatus]);
+    
+  useEffect(() => {
+    if (pouExcelStatus) {
+      const timeoutId = setTimeout(() => {
+        setPouExcelStatus('');
+      }, 1000);
+
+      return () => clearTimeout(timeoutId); 
+    }
+  }, [pouExcelStatus]);
+  
 
 
   const { id } = useParams()
@@ -1815,6 +1848,7 @@ export const Designation = () => {
         setDesExcelStatus('Error uploading the file.');
       }
       console.error('Error uploading Excel file:', error);
+      setTimeout();
     }
   };
 
@@ -2108,7 +2142,17 @@ export const Designation = () => {
   };
 
 
-  //
+  
+  useEffect(() => {
+    if (desExcelStatus) {
+      const timeoutId = setTimeout(() => {
+        setDesExcelStatus('');
+      }, 1000);
+
+      return () => clearTimeout(timeoutId); 
+    }
+  }, [desExcelStatus]);
+  
 
   console.log(designationList);
 

@@ -703,6 +703,18 @@ const Vendor = () => {
         }
     };
 
+    
+    useEffect(() => {
+        if (vendorExcelStatus) {
+          const timeoutId = setTimeout(() => {
+            setVendorExcelStatus('');
+          }, 1000);
+    
+          return () => clearTimeout(timeoutId); 
+        }
+      }, [vendorExcelStatus]);
+      
+
 
 
 

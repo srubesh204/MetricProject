@@ -590,6 +590,17 @@ const ItemMaster = () => {
             console.error('Error uploading Excel file:', error);
         }
     };
+    
+    
+    useEffect(() => {
+        if (itemMasterExcelStatus) {
+          const timeoutId = setTimeout(() => {
+            setItemMasterExcelStatus('');
+          }, 1000);
+    
+          return () => clearTimeout(timeoutId); 
+        }
+      }, [itemMasterExcelStatus]);
 
 
 

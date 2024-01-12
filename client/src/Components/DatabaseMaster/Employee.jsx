@@ -693,6 +693,18 @@ const Employee = () => {
         }
     };
 
+    
+    useEffect(() => {
+        if (empExcelStatus) {
+          const timeoutId = setTimeout(() => {
+            setEmpExcelStatus('');
+          }, 1000);
+    
+          return () => clearTimeout(timeoutId); 
+        }
+      }, [empExcelStatus]);
+      
+
     const empPlantAdd = () => {
         console.log(Object.values(empPlantDetails).every(item => typeof item === "string" ? item !== "" : item.length > 0))
 
@@ -1189,7 +1201,6 @@ const Employee = () => {
                                         </ButtonGroup>
                                     </div>
                                 </div>
-
 
                                 {empDataId ? <Dialog
                                     open={open}

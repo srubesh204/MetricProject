@@ -143,6 +143,17 @@ export const UnitDataBase = ({ style }) => {
         }
     };
 
+        
+    useEffect(() => {
+        if (generalExcelStatus) {
+          const timeoutId = setTimeout(() => {
+            setGeneralExcelStatus('');
+          }, 1000);
+    
+          return () => clearTimeout(timeoutId); 
+        }
+      }, [generalExcelStatus]);
+
 
     //validate function 
     const [errors, setErrors] = useState({})
@@ -700,6 +711,16 @@ export const PartDataBase = ({ style }) => {
             console.error('Error uploading Excel file:', error);
         }
     };
+
+    useEffect(() => {
+        if (generalExcelStatus) {
+          const timeoutId = setTimeout(() => {
+            setGeneralExcelStatus('');
+          }, 1000);
+    
+          return () => clearTimeout(timeoutId); 
+        }
+      }, [generalExcelStatus]);
 
 
 
