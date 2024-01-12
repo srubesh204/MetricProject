@@ -370,7 +370,7 @@ const ItemEdit = () => {
 
                 // itemCreatedBy: itemData.itemCreatedBy
             }))
-            console.log(response)
+            console.log(response.data.result)
 
         } catch (err) {
             console.log(err);
@@ -1075,7 +1075,7 @@ const ItemEdit = () => {
                                 <div className="row g-2 mt-0 mb-2">
                                     <div className="col-md-6">
                                         <TextField
-                                            {...(errors.itemDepartment !== "" && { helperText: errors.itemDepartment, error: true })}
+                                            
                                             value={itemAddData.itemPlant} onChange={handleItemAddChange} size='small' select fullWidth variant='outlined' label="Select Plant" name='itemPlant' id='itemPlantId'>
                                             <MenuItem value="">Select Plant</MenuItem>
                                             {employeeRole.loggedEmp.plantDetails.map((plant, index) => (
