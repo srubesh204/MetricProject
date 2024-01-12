@@ -921,20 +921,20 @@ const ItemMaster = () => {
 
                                 <div className="col-md-7">
                                     <div className="d-flex justify">
-                                        <ButtonGroup className='me-3' size='small'>
-                                            <Button component="label" variant="contained" size='small'>
+                                        <ButtonGroup className='me-3' size="small">
+                                            <Button component="label" variant="contained" size="small" >
                                                 Upload
                                                 <VisuallyHiddenInputs type="file" onChange={handleItemMasterExcel} />
                                             </Button>
-                                            <Button size='small' onClick={handleItemMasterUpload}><CloudUpload /></Button>
+                                            <Button size="small"onClick={handleItemMasterUpload}><CloudUpload /></Button>
                                         </ButtonGroup>
 
-                                        <ButtonGroup size='small'>
-                                            <Button component="label" size='small' variant="contained" color='secondary'>
+                                        <ButtonGroup size="small">
+                                            <Button size="small" component="label" variant="contained" color='secondary'>
                                                 Download
                                                 <VisuallyHiddenInputs  type="file" />
                                             </Button>
-                                            <Button size='small' color='secondary'><CloudDownload /></Button>
+                                            <Button size="small" color='secondary'><CloudDownload /></Button>
                                         </ButtonGroup>
                                     </div>
 
@@ -995,14 +995,14 @@ const ItemMaster = () => {
                                     {itemMasterStateId ?
                                         <div className='col d-flex justify-content-end '>
                                             <div className='me-2' >
-                                                <Button variant='contained' size='small' type='button' color='info' onClick={() => setOpenModal(true)} >Modify</Button>
+                                                <Button variant='contained' size='small' type='button' color='warning'  onClick={() => setOpenModal(true)} >Modify</Button>
                                             </div>
                                             <div className='me-2' >
                                                 <Button variant='contained' size='small' type='button' color='error' onClick={() => { setItemMasterStateId(null); setItemMasterData(initialItemMasterData) }}>Cancel</Button>
                                             </div>
                                         </div> : <div className='col d-flex justify-content-end '>
                                             <div >
-                                                <Button variant='contained' size="small" color='warning' onClick={() => setOpenModal(true)}>+ Add Item Master</Button>
+                                                <Button variant='contained' size="small" color='success' onClick={() => setOpenModal(true)}>+ Add Item Master</Button>
                                             </div>
                                         </div>
                                     }

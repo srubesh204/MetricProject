@@ -118,30 +118,22 @@ const CalPrint = () => {
 
                                     <View style={{ width: "100%", border: "0.5px solid black", textAlign: "center", height: "100%" }}>
                                         <View style={{ display: "flex", flexDirection: "row" }}>
-                                            <View style={{ width: "15%", border: "0.5px solid black", textAlign: "center", height: "50%" }}>
-                                                <View style={{ border: "0.5px solid black", width: "100%", height: "20%" }}>
-                                                    <Text>Name</Text>
-                                                </View>
-                                                <View>
-                                                    <Text>METRIC</Text>
-                                                </View>
+                                            <View style={{ textAlign: "center", display: "flex", flexDirection: "column", width: "50%" }}>
+                                                    <Text style={[styles.tableCell,{height: "20%"}]}>Name</Text>
+                                                    <Text style={[styles.tableCell,{height: "80%"}]}>Address</Text>
                                             </View>
-                                            <View style={{ width: "35%", border: "0.5px solid black", textAlign: "center", height: "50%" }}>
-                                                <View style={{ border: "0.5px solid black", width: "100%", height: "20%" }}>
-                                                    <Text>Address</Text>
-                                                </View>
-                                                <View>
-                                                    <Text>Avadi, Chennai.</Text>
-                                                </View>
+                                            <View style={{ textAlign: "center", display: "flex", flexDirection: "column", width: "50%" }}>
+                                                    <Text style={[styles.tableCell,{height: "20%"}]}>METRIC</Text>
+                                                    <Text style={[styles.tableCell,{height: "80%"}]}>Avadi, Chennai.</Text>
                                             </View>
-                                            <View style={{ width: "20%" }}>
+                                            <View style={{ textAlign: "center", display: "flex", flexDirection: "column", width: "20%" }}>
                                                 <Text style={styles.tableCell}>Description</Text>
                                                 <Text style={styles.tableCell}>Make</Text>
                                                 <Text style={styles.tableCell}>SIZE</Text>
                                                 <Text style={styles.tableCell}>Gauge No</Text>
                                                 <Text style={styles.tableCell}>Gauge Serial No</Text>
                                             </View>
-                                            <View style={{ width: "30%" }}>
+                                            <View style={{ textAlign: "center", display: "flex", flexDirection: "column", width: "30%" }}>
                                                 <Text style={styles.tableCell}>Description</Text>
                                                 <Text style={styles.tableCell}>Make</Text>
                                                 <Text style={styles.tableCell}>SIZE</Text>
@@ -156,6 +148,12 @@ const CalPrint = () => {
                                             <Text style={styles.tableCell}>7-Sep-23</Text>
                                         </View>
                                         <View style={{ textAlign: "center", display: "flex", flexDirection: "row" }}>
+                                            <Text style={styles.tableCell}>Received Condition of DUC</Text>
+                                            <Text style={styles.tableCell}>Satisfactory</Text>
+                                            <Text style={styles.tableCell}>Next Due</Text>
+                                            <Text style={styles.tableCell}>7-sep-23</Text>
+                                        </View>
+                                        <View style={{ textAlign: "center", display: "flex", flexDirection: "column", width: "50%" }}>
                                             <Text style={styles.tableCell}>Received Condition of DUC</Text>
                                             <Text style={styles.tableCell}>Satisfactory</Text>
                                             <Text style={styles.tableCell}>Next Due</Text>
