@@ -212,8 +212,8 @@ const employeeController = {
           M: 'empRole',
           N: 'doj',
           O: 'employmentStatus',
-          P: 'reportTo',
-          Q: "password"
+          P: 'password',
+          
 
 
            

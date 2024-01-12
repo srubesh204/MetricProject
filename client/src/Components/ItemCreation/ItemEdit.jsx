@@ -1190,18 +1190,27 @@ const ItemEdit = () => {
                                                 value={itemAddData.itemItemMasterIMTENo} // Ensure this holds the correct selected value(s)
                                                 onChange={handleItemAddChange}
                                                 input={<OutlinedInput fullWidth label="Select IMTE No" />}
-                                                renderValue={(selected) => (
-                                                    Array.isArray(selected) ?
-                                                        selected.map((item) => item.itemIMTENo).join(", ") :
-                                                        selected.itemIMTENo // Render a single selected value
-                                                )}
+                                                // renderValue={(selected) => (
+                                                //     Array.isArray(selected) ?
+                                                //         selected.map((item) => item.itemIMTENo).join(", ") :
+                                                //         selected.itemIMTENo // Render a single selected value
+                                                // )}
+                                                // 
+                                                //  renderValue={(selected) => selected.map(item => itemMasterListByName.find(sub => sub._id === item).itemIMTENo).join(", ")} MenuProps={MenuProps}
+                                                renderValue={(selected) => {
+                                                    const selectedParts = selected.map(item => {
+                                                        const foundPart = itemMasterListByName.find(part => part._id === item);
+                                                        return foundPart ? foundPart.itemIMTENo : "";
+                                                    }).filter(Boolean); // Filter out empty strings
+                                                
+                                                    return selectedParts.join(", ");
+                                                }}
                                                 MenuProps={MenuProps}
-                                                // renderValue={(selected) => selected.map(item => supplierList.find(sub => sub._id === item).aliasName).join(", ")} MenuProps={MenuProps}
                                                 fullWidth
                                             >
                                                 {itemMasterListByName.map((name, index) => (
-                                                    <MenuItem key={index} value={name}>
-                                                        <Checkbox checked={itemAddData.itemItemMasterIMTENo.indexOf(name.itemIMTENo) > -1} />
+                                                    <MenuItem key={index} value={name._id}>
+                                                        <Checkbox checked={itemAddData.itemItemMasterIMTENo.indexOf(name._id) > -1}  />
                                                         <ListItemText primary={name.itemIMTENo} />
                                                     </MenuItem>
                                                 ))}
