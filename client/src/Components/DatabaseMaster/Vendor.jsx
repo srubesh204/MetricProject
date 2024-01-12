@@ -1234,7 +1234,7 @@ const Vendor = () => {
                                             </Button>
                                         </DialogActions>
                                     </Dialog>}
-                                <div>{vendorExcelStatus && <p>{vendorExcelStatus}</p>}</div>
+                                <div>{vendorExcelStatus && <p style={{color:'green'}}>{vendorExcelStatus}</p>}</div>
 
                             </div>
                         </Paper>

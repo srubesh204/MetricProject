@@ -1089,9 +1089,7 @@ export const Department = () => {
                     </div>
 
                   </div>
-                  {depExcelStatus && <p>{depExcelStatus}</p>}
-
-
+              
 
                   {depStateId ? <Dialog
                     open={depOpenModal}
@@ -1173,6 +1171,8 @@ export const Department = () => {
 
 
                   </div>
+
+                  {depExcelStatus && <p style={{color:'green'}}>{depExcelStatus}</p>}
 
 
 
@@ -1354,7 +1354,6 @@ export const Department = () => {
                       </div>
 
                     </div>
-                    {areaExcelStatus && <p>{areaExcelStatus}</p>}
 
 
                     {areaStateId ? <Dialog
@@ -1430,10 +1429,8 @@ export const Department = () => {
                         <Button variant='contained' size="small" color='success'  onClick={() => setAreaOpenModal(true)}>+ Add Area</Button>
                       </div>}
 
-
-
-
                     </div>
+                      {areaExcelStatus && <p style={{color:'green'}}>{areaExcelStatus}</p>}
                   </div>
                   <div className="row ">
 
@@ -1640,7 +1637,6 @@ export const Department = () => {
                     </div>
 
                   </div>
-                  {pouExcelStatus && <p>{pouExcelStatus}</p>}
 
 
                   {placeOfUsageId ? <Dialog
@@ -1716,6 +1712,7 @@ export const Department = () => {
 
                   </div>
 
+                  {pouExcelStatus && <p style={{color:'green'}}>{pouExcelStatus}</p>}
 
 
                 </div>
@@ -2339,7 +2336,6 @@ export const Designation = () => {
                   </div>
 
                 </div>
-                {desExcelStatus && <p>{desExcelStatus}</p>}
 
 
                 {desStateId ? <Dialog
@@ -2409,7 +2405,7 @@ export const Designation = () => {
                 </div>
 
               </div>
-              {desExcelStatus && <p>{desExcelStatus}</p>}
+              {desExcelStatus && <p style={{color:'green'}}>{desExcelStatus}</p>}
 
             </Paper>
           </Grid>
