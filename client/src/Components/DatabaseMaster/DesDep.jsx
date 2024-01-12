@@ -791,11 +791,11 @@ export const Department = () => {
     { field: 'id', headerName: 'Si. No', width: 70, renderCell: (params) => params.api.getAllRowIds().indexOf(params.id) + 1, headerAlign: "center", align: "center" },
 
     { field: 'placeOfUsage', headerName: 'Place Of Usage', width: "70", headerAlign: "center", align: "center", },
-    { field: 'placeOfUsageStatus', headerName: ' Place Of Usage Status', width: "120", headerAlign: "center", align: "center", },
+    { field: 'placeOfUsageStatus', headerName: ' Place Of Usage Status', width: "100", headerAlign: "center", align: "center", },
     {
       field: 'delete',
       headerName: 'Delete',
-      width: 60,
+      width: 90,
       headerAlign: "center",
       sortable: false,
       renderHeader: () => (
@@ -1152,7 +1152,7 @@ export const Department = () => {
                         
                        
                         onClick={() => setDepOpenModal(true)}
-                        color="info"
+                      
                       >
                         Modify
                       </Button >
@@ -1852,17 +1852,6 @@ export const Department = () => {
               </Alert>
             </Snackbar>
 
-
-
-
-
-
-
-
-
-
-
-
           </Box>
         </div>
       </form>
@@ -2332,20 +2321,20 @@ export const Designation = () => {
               <div className="row mb-1">
                 <div className="col d-flex">
                   <div className="d-flex justify-content-center">
-                    <ButtonGroup className='me-3'>
-                      <Button component="label" variant="contained" fullWidth>
+                    <ButtonGroup className='me-2' size="small">
+                      <Button size="small" component="label" variant="contained" fullWidth>
                         Upload
                         <VisuallyHiddenInput type="file" onChange={handleDesExcel} />
                       </Button>
-                      <Button onClick={handleDesUpload}><CloudUpload /></Button>
+                      <Button size="small" onClick={handleDesUpload}><CloudUpload /></Button>
                     </ButtonGroup>
 
-                    <ButtonGroup>
-                      <Button component="label" variant="contained" color='secondary' fullWidth>
+                    <ButtonGroup size="small">
+                      <Button size="small" component="label" variant="contained" color='secondary' fullWidth>
                         Download
                         <VisuallyHiddenInput type="file" />
                       </Button>
-                      <Button color='secondary'><CloudDownload /></Button>
+                      <Button size="small" color='secondary'><CloudDownload /></Button>
                     </ButtonGroup>
                   </div>
 
@@ -2398,32 +2387,25 @@ export const Designation = () => {
                 <div className="text-end col">
 
                   {desStateId ? (<div>
-                    <Button
+                    <Button className="me-1"
                       component={Link}
                       type="button"
                       variant="contained"
-                      className="btn text-end me-3 hover"
+                      color='warning'
+                      size="small"
+                     
                       onClick={() => setOpenModal(true)}
-                      style={{ backgroundColor: "#e6e6e6", color: "black", fontWeight: "bolder" }}
+                     
                     >
                       Modify
                     </Button>
-                    <Button component={Link} size="small" variant="contained" type="button" onMouseEnter={(e) => { e.target.style.background = 'red' }} onMouseOut={(e) => { e.target.style.background = '#e6e6e6' }}
-                      style={{ backgroundColor: "#e6e6e6", color: "black", fontWeight: "bolder" }}
-                      className="btn text-end me-3"
+                    <Button component={Link} size="small" variant="contained" type="button" color='error' onMouseEnter={(e) => { e.target.style.background = 'red' }} onMouseOut={(e) => { e.target.style.background = '#e6e6e6' }}
+                      // style={{ backgroundColor: "#e6e6e6", color: "black", fontWeight: "bolder" }}
+                      // className="btn text-end me-3"
                       onClick={() => { setDesStateId(null); setDesignationData(initialDesignationData) }}
                     >Cancel</Button>
-                  </div>) : <Button variant="contained"
-                    color='warning'
-                    type="button"
-                    size="small"
-                    className="btn text-end hover"
-
-                    onClick={() => setOpenModal(true)}
-
-                  >
-                    <i className="bi bi-plus"></i>Add Designation</Button>
-                  }
+                  </div>) : <Button variant="contained" type="button" size="small" color='success'
+                    onClick={() => setOpenModal(true)}  ><i className="bi bi-plus"></i>Add Designation</Button> }
                 </div>
 
               </div>

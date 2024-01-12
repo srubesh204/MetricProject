@@ -736,7 +736,7 @@ const Vendor = () => {
                                         id="vendorCodeId"
                                         defaultValue=""
                                         size="small"
-                                        sx={{ width: "100%" }}
+                                       fullWidth
                                         value={vendorData.vendorCode}
                                         onChange={handleVendorDataBaseChange}
                                         name="vendorCode" />
@@ -825,7 +825,7 @@ const Vendor = () => {
                                         id="addressId"
                                         defaultValue=""
                                         size="small"
-                                        sx={{ width: "100%" }}
+                                        fullWidth
                                         value={vendorData.address}
                                         onKeyDown={handleKeyDown}
                                         onChange={handleVendorDataBaseChange}
@@ -965,7 +965,7 @@ const Vendor = () => {
                                                 setVendorData((prev) => ({ ...prev, certificateValidity: newValue.format("YYYY-MM-DD") }))
                                             }
                                             label="Certificate Validiy"
-                                            sx={{ width: "100%" }}
+                                           
                                             slotProps={{ textField: { size: 'small' } }}
                                             format="DD-MM-YYYY" />
                                     </div>
@@ -1145,7 +1145,7 @@ const Vendor = () => {
 
                         <Paper
                             sx={{
-                                p: 2,
+                                p: 1,
                                 display: 'flex',
                                 flexDirection: 'column',
                                 mb: 2
@@ -1155,23 +1155,24 @@ const Vendor = () => {
                             <div className='row' >
                                 <div className='col  d-flex justify-content-end mb-2'>
                                     <div className='col  d-flex'>
+                                        
                                         <div className="d-flex justify-content-center">
-                                            <ButtonGroup className='me-3'>
-                                                <Button component="label" variant="contained" >
-                                                    Upload
-                                                    <VisuallyHiddenInputs type="file" onChange={handleVendorExcel} />
-                                                </Button>
-                                                <Button onClick={handleVendorUpload}><CloudUpload /></Button>
-                                            </ButtonGroup>
+                                        <ButtonGroup className='me-3' size="small">
+                                            <Button component="label" variant="contained" size='small' >
+                                                Upload
+                                                <VisuallyHiddenInput type="file" onChange={handleVendorExcel} />
+                                            </Button>
+                                            <Button size="small" onClick={handleVendorUpload}><CloudUpload /></Button>
+                                        </ButtonGroup>
 
-                                            <ButtonGroup>
-                                                <Button component="label" variant="contained" color='secondary'>
-                                                    Download
-                                                    <VisuallyHiddenInputs type="file" />
-                                                </Button>
-                                                <Button color='secondary'><CloudDownload /></Button>
-                                            </ButtonGroup>
-                                        </div>
+                                        <ButtonGroup size="small" >
+                                            <Button component="label" variant="contained" color='secondary'size="small">
+                                                Download
+                                                <VisuallyHiddenInput type="file" />
+                                            </Button>
+                                            <Button color='secondary'size="small" ><CloudDownload /></Button>
+                                        </ButtonGroup>
+                                    </div>
                                     </div>
 
 
@@ -1179,14 +1180,14 @@ const Vendor = () => {
                                     {vendorStateId ?
                                         <div className='d-flex justify-content-end'>
                                             <div className='me-2' >
-                                                <Button type="button" variant='contained' size="small" className='btn btn-info' onClick={() => setOpenModalVendor(true)}>Modify</Button>
+                                                <Button type="button" variant='contained' color='warning'  size="small"  onClick={() => setOpenModalVendor(true)}>Modify</Button>
                                             </div>
                                             <div className='me-2' >
-                                                <Button type="button" variant='contained' size="small" className='btn btn-danger' onClick={() => { setVendorStateId(null); setVendorData(initialVendorData) }}>Cancel</Button>
+                                                <Button type="button" variant='contained' size="small" color='error' onClick={() => { setVendorStateId(null); setVendorData(initialVendorData) }}>Cancel</Button>
                                             </div>
                                         </div> : <div className='col d-flex justify-content-end mb-2'>
                                             <div>
-                                                <Button variant='contained' size="small" color='warning' onClick={() => setOpenModalVendor(true)}>+ Add Vendor</Button>
+                                                <Button variant='contained' size="small" color='success' onClick={() => setOpenModalVendor(true)}>+ Add Vendor</Button>
                                             </div>
                                         </div>}
 

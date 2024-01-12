@@ -407,32 +407,32 @@ export const UnitDataBase = ({ style }) => {
                                 <div className="row g-2 ">
                                     <div className="col d-flex">
                                         <div className="d-flex justify-content-center">
-                                            <ButtonGroup className='me-3'>
-                                                <Button component="label" variant="contained" >
+                                            <ButtonGroup className='me-3' size="small">
+                                                <Button component="label" variant="contained"  size="small">
                                                     Upload
                                                     <VisuallyHiddenInput type="file" onChange={handleGeneralExcel} />
                                                 </Button>
-                                                <Button onClick={handleGeneralUpload}><CloudUpload /></Button>
+                                                <Button  size="small" onClick={handleGeneralUpload}><CloudUpload /></Button>
                                             </ButtonGroup>
 
-                                            <ButtonGroup>
-                                                <Button component="label" variant="contained" color='secondary'>
+                                            <ButtonGroup size="small">
+                                                <Button size="small" component="label" variant="contained" color='secondary'>
                                                     Download
                                                     <VisuallyHiddenInput type="file" />
                                                 </Button>
-                                                <Button color='secondary'><CloudDownload /></Button>
+                                                <Button size="small" color='secondary'><CloudDownload /></Button>
                                             </ButtonGroup>
                                         </div>
 
                                     </div>
                                     <div className='col d-flex justify-content-end'>
                                         {unitStateId ? <div className='d-flex justify-content-end'><div className='me-2' >
-                                            <Button type="button"  variant='contained' size="small" className='btn btn-secondary' onClick={() => setOpenModal(true)}>Modify</Button>
+                                            <Button type="button"  color='warning' variant='contained' size="small" className='btn btn-secondary' onClick={() => setOpenModal(true)}>Modify</Button>
                                         </div>
                                             <div className='me-2' >
-                                                <Button type="button"  variant='contained' size="small"  className='btn btn-danger' onClick={() => { setUnitStateId(null); setUnitData(initialUnitData) }}>Cancel</Button>
+                                                <Button type="button"  variant='contained' size="small" color='error' onClick={() => { setUnitStateId(null); setUnitData(initialUnitData) }}>Cancel</Button>
                                             </div></div> : <div className="ms-auto">
-                                            <Button variant='contained' size="small" color='warning' onClick={() => setOpenModal(true)}>+ Add Unit</Button>
+                                            <Button variant='contained' size="small"  color='success'  onClick={() => setOpenModal(true)}>+ Add Unit</Button>
                                         </div>}
 
 
@@ -461,7 +461,7 @@ export const UnitDataBase = ({ style }) => {
                                     <h6 className='text-center'>Unit List</h6>
                                     <div className="row mb-2">
                                         <div className="col d-flex justify-content-end">
-                                            {unitSelectedRowIds.length !== 0 && <Button variant='contained' type='button' color='error' onClick={() => setDeleteModal(true)}>Delete </Button>}
+                                            {unitSelectedRowIds.length !== 0 && <Button variant='contained' size="small" type='button' color='error' onClick={() => setDeleteModal(true)}>Delete </Button>}
                                         </div>
                                     </div>
 
@@ -1036,33 +1036,33 @@ export const PartDataBase = ({ style }) => {
                                 <div className="row g-2 ">
                                     <div className="col d-flex">
                                         <div className="d-flex justify-content-center">
-                                            <ButtonGroup className='me-3'>
-                                                <Button component="label" variant="contained" >
+                                            <ButtonGroup className='me-3' size="small">
+                                                <Button component="label" variant="contained" size="small" >
                                                     Upload
                                                     <VisuallyHiddenInput type="file" onChange={handleGeneralExcel} />
                                                 </Button>
-                                                <Button onClick={handleGeneralUpload}><CloudUpload /></Button>
+                                                <Button size="small" onClick={handleGeneralUpload}><CloudUpload /></Button>
                                             </ButtonGroup>
 
-                                            <ButtonGroup>
-                                                <Button component="label" variant="contained" color='secondary'>
+                                            <ButtonGroup size="small">
+                                                <Button size="small" component="label" variant="contained" color='secondary'>
                                                     Download
                                                     <VisuallyHiddenInput type="file" />
                                                 </Button>
-                                                <Button color='secondary'><CloudDownload /></Button>
+                                                <Button size="small" color='secondary'><CloudDownload /></Button>
                                             </ButtonGroup>
                                         </div>
                                         <div className='col d-flex justify-content-end'>
                                         {partStateId ?
                                             <div className="d-flex justify-content-end">
                                                 <div className='me-2'>
-                                                    <Button type="button" variant='contained' size="small" className='btn btn-secondary' onClick={() => setOpenModal(true)}>Modify</Button>
+                                                    <Button type="button" variant='contained' size="small" color='warning'  onClick={() => setOpenModal(true)}>Modify</Button>
                                                 </div>
                                                 <div className='me-2'>
-                                                    <Button type="button" variant='contained'  size="small" className='btn btn-danger' onClick={() => { setPartStateId(null); setPartData(initialPartData) }}>Cancel</Button>
+                                                    <Button type="button" variant='contained' color='error' size="small" className='btn btn-danger' onClick={() => { setPartStateId(null); setPartData(initialPartData) }}>Cancel</Button>
                                                 </div>
                                             </div> : <div className="ms-auto">
-                                                <Button variant='contained' size="small" color='warning' onClick={() => setOpenModal(true)}>+ Add Part</Button>
+                                                <Button variant='contained' size="small"  color='success' onClick={() => setOpenModal(true)}>+ Add Part</Button>
                                             </div>}
 
                                     </div>

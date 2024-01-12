@@ -211,7 +211,7 @@ const ItemAdd = () => {
     };
 
 
-    
+
     const [itemAddData, setItemAddData] = useState({
         itemMasterRef: "",
         selectedItemMaster: [],
@@ -982,14 +982,15 @@ const ItemAdd = () => {
                                                     value={itemAddData.itemItemMasterIMTENo}
                                                     onChange={handleItemAddChange}
                                                     input={<OutlinedInput fullWidth label="Select IMTE No" />}
-                                                    renderValue={(selected) => selected.map(item => item.itemIMTENo).join(", ")}
+                                                    // renderValue={(selected) => selected.map(item => item.itemIMTENo).join(", ")}
+                                                    renderValue={(selected) => selected.map(item => itemMasterListByName.find(sub => sub._id === item).itemIMTENo).join(", ")} MenuProps={MenuProps}
 
-                                                    MenuProps={MenuProps}
+                                                   
                                                     fullWidth
                                                 >
                                                     {itemMasterListByName.map((name, index) => (
-                                                        <MenuItem key={index} value={name}>
-                                                            <Checkbox checked={itemAddData.itemItemMasterIMTENo.indexOf(name) > -1} />
+                                                        <MenuItem key={index} value={name._id}>
+                                                            <Checkbox checked={itemAddData.itemItemMasterIMTENo.indexOf(name._id) > -1} />
                                                             <ListItemText primary={name.itemIMTENo} />
                                                         </MenuItem>
                                                     ))}
@@ -1037,13 +1038,15 @@ const ItemAdd = () => {
                                                     value={itemAddData.itemSupplier}
                                                     onChange={handleItemAddChange}
                                                     input={<OutlinedInput fullWidth label="Select Supplier" />}
-                                                    renderValue={(selected) => selected.join(', ')}
-                                                    MenuProps={MenuProps}
+                                                    // renderValue={(selected) => selected.join(', ')}
+                                                    renderValue={(selected) => selected.map(item => supplierList.find(sub => sub._id === item).aliasName).join(", ")} MenuProps={MenuProps}
+
                                                     fullWidth
                                                 >
+
                                                     {supplierList.map((name, index) => (
-                                                        <MenuItem key={index} value={name.aliasName}>
-                                                            <Checkbox checked={itemAddData.itemSupplier.indexOf(name.aliasName) > -1} />
+                                                        <MenuItem key={index} value={name._id}>
+                                                            <Checkbox checked={itemAddData.itemSupplier.indexOf(name._id) > -1} />
                                                             <ListItemText primary={name.aliasName} />
                                                         </MenuItem>
                                                     ))}
@@ -1072,7 +1075,7 @@ const ItemAdd = () => {
                                         <h6 className='text-center'>Enter oem Details</h6>
                                         <div className="col-md-7">
                                             <FormControl size='small' component="div" fullWidth>
-                                                <InputLabel id="itemOEMId">Select Supplier</InputLabel>
+                                                <InputLabel id="itemOEMId">Select OEM</InputLabel>
                                                 <Select
                                                     labelId="itemOEMId"
                                                     id="demo-multiple-checkbox"
@@ -1081,13 +1084,14 @@ const ItemAdd = () => {
                                                     value={itemAddData.itemOEM}
                                                     onChange={handleItemAddChange}
                                                     input={<OutlinedInput fullWidth label="Select Supplier" />}
-                                                    renderValue={(selected) => selected.join(', ')}
-                                                    MenuProps={MenuProps}
+                                                    // renderValue={(selected) => selected.join(', ')}
+                                                    renderValue={(selected) => selected.map(item => OEMList.find(oem => oem._id === item).aliasName).join(", ")} MenuProps={MenuProps}
+                                                   
                                                     fullWidth
                                                 >
                                                     {OEMList.map((name, index) => (
-                                                        <MenuItem key={index} value={name.aliasName}>
-                                                            <Checkbox checked={itemAddData.itemOEM.indexOf(name.aliasName) > -1} />
+                                                        <MenuItem key={index} value={name._id}>
+                                                            <Checkbox checked={itemAddData.itemOEM.indexOf(name._id) > -1} />
                                                             <ListItemText primary={name.aliasName} />
                                                         </MenuItem>
                                                     ))}
@@ -1118,7 +1122,24 @@ const ItemAdd = () => {
                                             <th style={{ width: "50%" }}>Master Name</th>
                                             <th style={{ width: "30%" }}>Due</th>
                                         </tr>
-                                        {itemAddData.itemItemMasterIMTENo.map((item, index) => (
+
+                                        
+                                        {
+                                            itemAddData.itemItemMasterIMTENo.map((itemSup, index) => {
+                                                const selectedImte = itemMasterListByName.find(sup => sup._id === itemSup);
+                                                return (
+                                                    <tr key={index}>
+                                                        <td>{index + 1}</td>
+                                                        <td>{selectedImte ? selectedImte.itemIMTENo : ''}</td>
+                                                        <td>{selectedImte ? selectedImte.itemDueDate : ''}</td>
+                                                    </tr>
+                                                );
+                                            })
+                                        }
+
+
+
+                                        {/* {itemAddData.itemItemMasterIMTENo.map((item, index) => (
                                             <tr>
                                                 <td>{index + 1}</td>
                                                 <td>{item.itemIMTENo}</td>
@@ -1126,7 +1147,7 @@ const ItemAdd = () => {
                                             </tr>
                                         ))
 
-                                        }
+                                        } */}
 
 
                                     </tbody>
@@ -1136,35 +1157,55 @@ const ItemAdd = () => {
                                         <tr>
                                             <th style={{ width: "20%" }}>Si No</th>
                                             <th style={{ width: "80%" }}>Supplier</th>
-
                                         </tr>
-                                        {itemAddData.itemSupplier.map((item, index) => (
-                                            <tr key={index}>
-                                                <td>{index + 1}</td>
-                                                <td >{item}</td>
-                                            </tr>
-                                        ))}
+                                        {
+                                            itemAddData.itemSupplier.map((itemSup, index) => {
+                                                const selectedSupplier = supplierList.find(sup => sup._id === itemSup);
+                                                return (
+                                                    <tr key={index}>
+                                                        <td>{index + 1}</td>
+                                                        <td>{selectedSupplier ? selectedSupplier.aliasName : ''}</td>
+                                                    </tr>
+                                                );
+                                            })
+                                        }
 
 
 
                                     </tbody>
                                 </table>}
-                                {itemAddData.itemCalibrationSource === "OEM" && <table className='table table-sm table-bordered text-center mt-2'>
-                                    <tbody>
+                                {itemAddData.itemCalibrationSource === "oem" && <table className='table table-sm table-bordered text-center mt-2'>
+                                     <tbody>
                                         <tr>
                                             <th style={{ width: "20%" }}>Si No</th>
                                             <th style={{ width: "80%" }}>OEM</th>
 
                                         </tr>
-                                        {itemAddData.itemOEM.map((item, index) => (
+
+                                        {
+                                            itemAddData.itemOEM.map((itemOem, index) => {
+                                                const selectedOem = OEMList.find(oem => oem._id === itemOem);
+                                                return (
+                                                    <tr key={index}>
+                                                        <td>{index + 1}</td>
+                                                        <td>{selectedOem ? selectedOem.aliasName : ''}</td>
+                                                    </tr>
+                                                );
+                                            })
+                                        }
+
+
+
+                                        {/* {itemAddData.itemOEM.map((item, index) => (
                                             <tr key={index}>
                                                 <td>{index + 1}</td>
                                                 <td >{item}</td>
                                             </tr>
-                                        ))}
+                                        ))} */}
 
 
                                     </tbody>
+                                    
                                 </table>}
 
                             </Paper>
@@ -1173,7 +1214,7 @@ const ItemAdd = () => {
                                     <Typography variant='h6' className='text-center'>Enter Previous Calibration Data</Typography>
                                     <div className="row g-2 p-2">
                                         <TextField
-                                            size='small' select variant='outlined' label="Previous Calibration Data" onChange={handleItemAddChange} name='itemPrevCalData' value={itemAddData.itemprevcaldata} fullWidth>
+                                            size='small' select variant='outlined' label="Previous Calibration Data" onChange={handleItemAddChange} name='itemPrevCalData' value={itemAddData.itemPrevCalData} fullWidth>
                                             <MenuItem>Select Type</MenuItem>
                                             <MenuItem value="available">Available</MenuItem>
                                             <MenuItem value="notAvailable">Not Available</MenuItem>

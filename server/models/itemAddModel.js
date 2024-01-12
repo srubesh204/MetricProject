@@ -40,13 +40,16 @@ const itemAddSchema = new mongoose.Schema({
   itemItemMasterIMTENo: [],
   itemSupplier: [],
   itemOEM: [],
+  itemUncertainity: String,
+  itemUncertainityUnit: String,
+  itemPrevCalData: String,
   itemCalDate: String,
   itemDueDate: String,
   itemCalibratedAt: String,
   itemCertificateName: String,
   itemCertificateNo: String,
   itemPartName: [],
-  itemOBType: String, 
+  itemOBType: String,
   dcId: String,
   dcStatus: String,
   dcCreatedOn: String,
@@ -85,10 +88,10 @@ const itemAddSchema = new mongoose.Schema({
     type: String,
     default: () => dayjs().format("YYYY-MM-DD")
   },
-  itemCreatedBy : {
+  itemCreatedBy: {
     type: String,
   },
-  itemLastModifiedBy : {
+  itemLastModifiedBy: {
     type: String,
   }
 });

@@ -302,6 +302,7 @@ const Employee = () => {
                 `${process.env.REACT_APP_PORT}/general/getAllStateAndCity`
             );
             setAllStates(response.data);
+            console.log(response.data)
         } catch (err) {
             console.log(err);
         }
@@ -1095,14 +1096,14 @@ const Employee = () => {
                                 <div className='col d-flex justify-content-end'>
                                     {empDataId ? <div className='col d-flex justify-content-end'>
                                         <div className='me-2' >
-                                            <Button type="button" variant='contained' size="small" onClick={handleClickOpen} className='btn btn-secondary' >Modify</Button>
+                                            <Button type="button" variant='contained'  color='warning' size="small" onClick={handleClickOpen} className='btn btn-secondary' >Modify</Button>
                                         </div>
                                         <div className='me-2' >
-                                            <Button type="button" variant='contained' size="small" className='btn btn-danger' onClick={() => { setEmpDataId(null); setEmployeeData(initialEmpData) }} >Cancel</Button>
+                                            <Button type="button" variant='contained' color='error' size="small"  onClick={() => { setEmpDataId(null); setEmployeeData(initialEmpData) }} >Cancel</Button>
                                         </div>
                                     </div> :
                                         <div>
-                                            <Button variant='contained' size="small" color='warning' onClick={handleClickOpen}>+ Add Employee</Button>
+                                            <Button variant='contained' size="small"  color='success' onClick={handleClickOpen}>+ Add Employee</Button>
                                         </div>
                                     }
                                 </div>
