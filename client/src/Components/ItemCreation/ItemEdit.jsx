@@ -1042,8 +1042,8 @@ const ItemEdit = () => {
                                             {...(errors.itemDepartment !== "" && { helperText: errors.itemDepartment, error: true })}
                                             value={itemAddData.itemPlant} onChange={handleItemAddChange} size='small' select fullWidth variant='outlined' label="Select Plant" name='itemPlant' id='itemPlantId'>
                                             <MenuItem value="">Select Plant</MenuItem>
-                                            {employeeRole.loggedEmp.plant.map((plant, index) => (
-                                                <MenuItem key={index} value={plant}>{plant}</MenuItem>
+                                            {employeeRole.loggedEmp.plantDetails.map((plant, index) => (
+                                                <MenuItem key={index} value={plant.plantName}>{plant.plantName}</MenuItem>
                                             ))}
                                         </TextField>
                                     </div>

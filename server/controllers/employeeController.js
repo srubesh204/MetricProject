@@ -26,9 +26,9 @@ const employeeController = {
   createEmployee: async (req, res) => {
 
     try {
-      const { employeeCode, title, firstName, lastName, dob, address, city, state, contactNumber, designation, department, mailId, doj, employmentStatus, reportTo, empRole, password } = req.body;
+      const { employeeCode, title, firstName, lastName, dob, address, city, state, contactNumber, designation, mailId, doj, employmentStatus, reportTo, empRole, password, plantDetails } = req.body;
 
-      const employeeResult = new employeeModel({ employeeCode, title, firstName, lastName, dob, address, city, state, contactNumber, designation, department, mailId, doj, employmentStatus, reportTo, empRole, password });
+      const employeeResult = new employeeModel({ employeeCode, title, firstName, lastName, dob, address, city, state, contactNumber, designation, mailId, doj, employmentStatus, reportTo, empRole, password, plantDetails });
 
 
       const validationError = employeeResult.validateSync();
@@ -75,7 +75,7 @@ const employeeController = {
       // Create an object with the fields you want to update
       const updateEmpFields = {
         /* Specify the fields and their updated values here */
-        employeeCode , title ,  firstName,  lastName, dob , address , city , state , contactNumber , designation , department , mailId , doj ,  employmentStatus,  reportTo, empRole, password  // Example: updating the 'name' field
+        employeeCode , title ,  firstName,  lastName, dob , address , city , state , contactNumber , designation, mailId , doj ,  employmentStatus,  reportTo, empRole, password, plantDetails  // Example: updating the 'name' field
         // Add more fields as needed
       } = req.body;
       const updatedEmployee = new employeeModel(updateEmpFields);

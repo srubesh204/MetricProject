@@ -22,17 +22,13 @@ const plantSchema = new mongoose.Schema({
   },
   plantName: {
     type: String,
-    required: [true, "Plant Name required"]
+    required: [true, "Plant Name required"],
+    unique: [true, "Plant Name should be unique"]
   },
   plantAddress: {
     type: String,
     required: [true, "Plant Address required"]
   },
-  employees: [{
-    employeeId: String,
-    empRole: String,
-    departments: []
-  }]
 });
 
 plantSchema.plugin(uniqueValidator);

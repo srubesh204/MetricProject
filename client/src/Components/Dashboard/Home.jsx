@@ -181,16 +181,16 @@ const Home = () => {
       );
       let allItems = []
       if (employeeRole.employee === "admin") {
-        allItems = response.data.result.filter(item => employeeRole.loggedEmp.plant.some(plant => item.itemPlant === plant))
+        allItems = response.data.result.filter(item => employeeRole.loggedEmp.plantDetails.some(plant => item.itemPlant === plant.plantName))
         console.log(allItems)
       } else if (employeeRole.employee === "plantAdmin") {
-        allItems = response.data.result.filter(item => employeeRole.loggedEmp.plant.some(plant => item.itemPlant === plant))
+        allItems = response.data.result.filter(item => employeeRole.loggedEmp.plantDetails.some(plant => item.itemPlant === plant.plantName))
         console.log(allItems)
       } else if (employeeRole.employee === "creator") {
-        allItems = response.data.result.filter(item => employeeRole.loggedEmp.plant.some(plant => item.itemPlant === plant))
+        allItems = response.data.result.filter(item => employeeRole.loggedEmp.plantDetails.some(plant => item.itemPlant === plant.plantName))
         console.log(allItems)
       } else if (employeeRole.employee === "viewer") {
-        allItems = response.data.result.filter(item => employeeRole.loggedEmp.plant.some(plant => item.itemPlant === plant))
+        allItems = response.data.result.filter(item => employeeRole.loggedEmp.plantDetails.some(plant => item.itemPlant === plant.plantName))
         console.log(allItems)
       } else {
         allItems = response.data.result
