@@ -140,32 +140,32 @@ const Dashboard = () => {
 
   const MenuItems = {
     databaseMaster: [
-      { name: "Department", file: <Department />, icon: <CategoryIcon /> },
-      { name: "Designation", file: <Designation />, icon: <CategoryIcon /> },
-      { name: "Employee", file: <Employee />, icon: <img src={secretary} alt="Employee Icon" style={{ width: '25px', height: '25px' }} /> },
-      { name: "Vendor", file: <Vendor />, icon: <ContactPageIcon /> },
-      { name: "Unit", file: <UnitDataBase />, icon: <CategoryIcon /> },
-      { name: "Part", file: <PartDataBase />, icon: <CategoryIcon /> },
-      { name: "Item Master", file: <ItemMaster />, icon: <CategoryIcon /> },
+      { name: "Department", file: <Department />, icon: <img src={`${process.env.REACT_APP_PORT}/icon/list-text.png`} alt="Department Icon" style={{ width: '20px', height: '20px' }} /> },
+      { name: "Designation", file: <Designation />, icon: <img src={`${process.env.REACT_APP_PORT}/icon/list-text.png`} alt="Designation Icon" style={{ width: '20px', height: '20px' }} /> },
+      { name: "Employee", file: <Employee />, icon: <img src={`${process.env.REACT_APP_PORT}/icon/list-text.png`} alt="Employee Icon" style={{ width: '20px', height: '20px' }} /> },
+      { name: "Vendor", file: <Vendor />, icon: <img src={`${process.env.REACT_APP_PORT}/icon/list-text.png`} alt="Vendor Icon" style={{ width: '20px', height: '20px' }} /> },
+      { name: "Unit", file: <UnitDataBase />, icon: <img src={`${process.env.REACT_APP_PORT}/icon/list-text.png`} alt="Unit Icon" style={{ width: '20px', height: '20px' }} /> },
+      { name: "Part", file: <PartDataBase />, icon: <img src={`${process.env.REACT_APP_PORT}/icon/list-text.png`} alt="Part Icon" style={{ width: '20px', height: '20px' }} /> },
+      { name: "Item Master", file: <ItemMaster />, icon: <img src={`${process.env.REACT_APP_PORT}/icon/list-text.png`} alt="Item Master Icon" style={{ width: '20px', height: '20px' }} /> },
     ],
     system: [
-      { name: "Version" ,file: <Version />,},
-      { name: "Backup",file: <BackUp />,},
-      { name: "Alerts Configuration",file: <AlertConfig />,},
-      { name: "Mail Configuration" ,file: <MailConfig />,},
-      { name: "Format Number" ,file: <FormatNumber />,},
-      { name: "Company Details",file: <CompanyDetails />, },
-      { name: "Permissions",file: <Permissions />, },
-      { name: "Label Print" },
+      { name: "Version", file: <Version />, icon: <img src={`${process.env.REACT_APP_PORT}/icon/list-text.png`} alt="Version Icon" style={{ width: '20px', height: '20px' }} /> },
+      { name: "Backup", file: <BackUp />, icon: <img src={`${process.env.REACT_APP_PORT}/icon/list-text.png`} alt="Backup Icon" style={{ width: '20px', height: '20px' }} /> },
+      { name: "Alerts Configuration", file: <AlertConfig />, icon: <img src={`${process.env.REACT_APP_PORT}/icon/list-text.png`} alt="Alerts Configuration Icon" style={{ width: '20px', height: '20px' }} /> },
+      { name: "Mail Configuration", file: <MailConfig />, icon: <img src={`${process.env.REACT_APP_PORT}/icon/list-text.png`} alt="Mail Configuration Icon" style={{ width: '20px', height: '20px' }} /> },
+      { name: "Format Number", file: <FormatNumber />, icon: <img src={`${process.env.REACT_APP_PORT}/icon/list-text.png`} alt="Format Number Icon" style={{ width: '20px', height: '20px' }} /> },
+      { name: "Company Details", file: <CompanyDetails />, icon: <img src={`${process.env.REACT_APP_PORT}/icon/list-text.png`} alt="Company Details Icon" style={{ width: '20px', height: '20px' }} /> },
+      { name: "Permissions", file: <Permissions />, icon: <img src={`${process.env.REACT_APP_PORT}/icon/list-text.png`} alt="Permissions Icon" style={{ width: '20px', height: '20px' }} /> },
+      { name: "Label Print", file: "", icon: <img src={`${process.env.REACT_APP_PORT}/icon/list-text.png`} alt="Label Print Icon" style={{ width: '20px', height: '20px' }} /> },
 
     ],
     Reports: [
-      { name: "DC List", file: <DcList /> },
-      { name: "GRN List", file: <GrnList /> },
-      { name: "Cal Data", file: <CalList /> },
-      { name: "History Card", file: <InsHistoryCard /> },
-      { name: "Gauge List",file:<TotalList/> },
-      { name: "Cal Due Report",file:<CalDueReport/> },
+      { name: "DC List", file: <DcList />, icon: <img src={`${process.env.REACT_APP_PORT}/icon/list-text.png`} alt="DC List Icon" style={{ width: '20px', height: '20px' }} /> },
+      { name: "GRN List", file: <GrnList />, icon: <img src={`${process.env.REACT_APP_PORT}/icon/list-text.png`} alt="GRN List Icon" style={{ width: '20px', height: '20px' }} /> },
+      { name: "Cal Data", file: <CalList />, icon: <img src={`${process.env.REACT_APP_PORT}/icon/list-text.png`} alt="Cal Data Icon" style={{ width: '20px', height: '20px' }} /> },
+      { name: "History Card", file: <InsHistoryCard />, icon: <img src={`${process.env.REACT_APP_PORT}/icon/list-text.png`} alt="History Card Icon" style={{ width: '20px', height: '20px' }} /> },
+      { name: "Gauge List", file: <TotalList />, icon: <img src={`${process.env.REACT_APP_PORT}/icon/list-text.png`} alt="Gauge List Icon" style={{ width: '20px', height: '20px' }} /> },
+      { name: "Cal Due Report", file: <CalDueReport />, icon: <img src={`${process.env.REACT_APP_PORT}/icon/list-text.png`} alt="Cal Due Report Icon" style={{ width: '20px', height: '20px' }} /> },
       { name: "Gauge Movement Report" },
       { name: "Management Chart" },
     ]
@@ -201,9 +201,9 @@ const Dashboard = () => {
     // Add other drawer names with initial status here
   });
 
-  
 
-  
+
+
 
 
   const [adminOpen, setAdminOpen] = useState(false);
@@ -235,7 +235,7 @@ const Dashboard = () => {
   };
 
 
-  
+
   const handleToolOpen = () => {
     setToolOpen(!toolOpen);
   };
@@ -293,7 +293,7 @@ const Dashboard = () => {
   return (
     <div>
       <ThemeProvider theme={defaultTheme}>
-        <Box sx={{ display: 'flex', width: "100%"}}>
+        <Box sx={{ display: 'flex', width: "100%" }}>
           <CssBaseline />
           <AppBar position="absolute" open={togglerOpen}>
             <Toolbar
@@ -331,7 +331,7 @@ const Dashboard = () => {
                 noWrap
 
                 sx={{ flexGrow: 0, textAlign: "end", pointerEvents: true }}>
-                  Welcome {empRole.loggedEmp.firstName}
+                Welcome {empRole.loggedEmp.firstName}
               </Typography>
               <Tooltip title="Notifications">
                 <IconButton color="inherit">
@@ -381,8 +381,7 @@ const Dashboard = () => {
                 <React.Fragment>
                   <ListItemButton onClick={handleAdminOpen}>
                     <ListItemIcon>
-
-
+                      <img src={`${process.env.REACT_APP_PORT}/icon/admin.png`} alt="adminIcon" style={{ width: '24px', height: '24px' }} />
                     </ListItemIcon>
                     <ListItemText primary="Admin" />
                     {adminOpen ? <ExpandLess /> : <ExpandMore />}
@@ -393,7 +392,7 @@ const Dashboard = () => {
 
                       <ListItemButton sx={{ pl: 4 }} onClick={() => handleAdminList("databaseMaster")}>
                         <ListItemIcon>
-                          <AdminPanelSettingsIcon />
+                          <img src={`${process.env.REACT_APP_PORT}/icon/server.png`} alt="Database Icon" style={{ width: '24px', height: '24px' }} />
                         </ListItemIcon>
                         <ListItemText primary="Database Master" />
                         {adminListNames["databaseMaster"].status ? <ExpandLess /> : <ExpandMore />}
@@ -420,7 +419,7 @@ const Dashboard = () => {
 
                       <ListItemButton sx={{ pl: 4 }} onClick={() => handleAdminList("system")}>
                         <ListItemIcon>
-                          <AdminPanelSettingsIcon />
+                       <img src={`${process.env.REACT_APP_PORT}/icon/cogwheel.png`} alt="systemIcon" style={{ width: '24px', height: '24px' }} />
                         </ListItemIcon>
                         <ListItemText primary="System" />
                         {adminListNames["system"].status ? <ExpandLess /> : <ExpandMore />}
@@ -452,7 +451,7 @@ const Dashboard = () => {
                 </React.Fragment>}
               <ListItemButton onClick={handleItemOpen}>
                 <ListItemIcon>
-                  <AdminPanelSettingsIcon />
+                <img src={`${process.env.REACT_APP_PORT}/icon/measurement.png`} alt="systemIcon" style={{ width: '24px', height: '24px' }} />
                 </ListItemIcon>
                 <ListItemText primary="Item Creation" />
                 {itemOpen ? <ExpandLess /> : <ExpandMore />}
@@ -461,15 +460,15 @@ const Dashboard = () => {
                 <List component="div" disablePadding >
                   <ListItemButton sx={{ pl: 4 }} to="/itemlist">
                     <ListItemIcon>
-                      <AdminPanelSettingsIcon />
+                      -
                     </ListItemIcon>
                     <ListItemText primary="Item List" />
 
                   </ListItemButton>
-                  {empRole && (empRole.employee === "superAdmin" ||empRole.employee === "admin" || empRole.employee === "plantAdmin") &&
+                  {empRole && (empRole.employee === "superAdmin" || empRole.employee === "admin" || empRole.employee === "plantAdmin") &&
                     <ListItemButton sx={{ pl: 4 }} to="/itemAdd" >
                       <ListItemIcon>
-                        <AdminPanelSettingsIcon />
+                       -
                       </ListItemIcon>
                       <ListItemText primary="Item Add" />
 
@@ -482,7 +481,7 @@ const Dashboard = () => {
 
               <ListItemButton onClick={() => handleAdminList("report")}>
                 <ListItemIcon>
-                  <AdminPanelSettingsIcon />
+                 <img src={`${process.env.REACT_APP_PORT}/icon/seo-report.png`} alt="systemIcon" style={{ width: '24px', height: '24px' }} />
                 </ListItemIcon>
                 <ListItemText primary="Reports" />
                 {adminListNames["report"].status ? <ExpandLess /> : <ExpandMore />}
@@ -509,7 +508,7 @@ const Dashboard = () => {
 
               <ListItemButton onClick={handleToolOpen}>
                 <ListItemIcon>
-                  <AdminPanelSettingsIcon />
+                <img src={`${process.env.REACT_APP_PORT}/icon/settings.png`} alt="systemIcon" style={{ width: '24px', height: '24px' }} />
                 </ListItemIcon>
                 <ListItemText primary="Tools" />
                 {toolOpen ? <ExpandLess /> : <ExpandMore />}
@@ -533,11 +532,6 @@ const Dashboard = () => {
 
                 </List>
               </Collapse>
-
-
-
-
-
 
               {/* {SecondaryListItems()} */}
             </List>

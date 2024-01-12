@@ -992,7 +992,7 @@ export const Department = () => {
     <div >
 
       <form>
-        <div className="row">
+        <div className="container row">
           <Box sx={{ flexGrow: 1, m: 2 }}>
 
 
@@ -1020,16 +1020,7 @@ export const Department = () => {
 
                   <div className="col-md-5">
 
-                    {/* <TextField label="Department"
-                      {...(errors.department !== "" && { helperText: errors.department, error: true })}
-                      id="departmentId"
-
-                      fullWidth
-                      size="small"
-                      onChange={handleDepChange}
-                     
-                      value={departmentData.department}
-              name="department" ></TextField>*/}
+                    
 
                     <Autocomplete label="Department"
                       disablePortal
@@ -1180,20 +1171,7 @@ export const Department = () => {
 
                 <div className="row g-2">
 
-                  {/* <div style={{ height: 400, width: '100%' }}>
-                    <DataGrid
-                      rows={departmentList}
-                      columns={columns}
-                      getRowId={(row) => row._id}
-                      initialState={{
-                        pagination: {
-                          paginationModel: { page: 0, pageSize: 5 },
-                        },
-                      }}
-                      pageSizeOptions={[5, 10]}
-                      checkboxSelection
-                    />
-                  </div>*/}
+                 
 
 
                   <div style={{ height: 480, width: '100%' }}>
@@ -1279,7 +1257,7 @@ export const Department = () => {
 
               </Paper>
 
-              <Paper
+              {/* <Paper
                 sx={{
                   p: 1,
                   display: 'flex',
@@ -1414,10 +1392,9 @@ export const Department = () => {
                           type="button"
                           color='warning'
                           variant='contained' size="small"
-                          // style={{ backgroundColor: "#e6e6e6", color: "black", fontWeight: "bolder" }}
-                          // className="btn text-end me-2  hover"
+                          
                           onClick={() => setAreaOpenModal(true)}
-                        //   disabled={!depStateId}
+                       
                         >
                           Modify
                         </Button >
@@ -1488,37 +1465,6 @@ export const Department = () => {
 
 
 
-                    {/*} <div className="table-responsive col">
-                      <table className="table table-bordered text-center">
-                        <tbody>
-                          <tr>
-                            <th>Si.No</th>
-                            <th>Area </th>
-
-                            <th>Delete</th>
-                          </tr>
-                          {areaList.map((item, index) => (
-                            <tr key={item._id} onClick={() => handleAreaRowClick(item)} className={item._id === areaStateId ? "table-active" : ""}>
-                              <td >{index + 1}</td>
-                              <td>{item.area}</td>
-
-                              <td>
-                                <button
-                                  type="button"
-                                  className="btn btn-sm btn-danger"
-                                  onClick={() => setDeleteAreaModal(true)}
-
-                                >
-                                  <i className="bi bi-trash"></i>
-                                </button>
-                              </td>
-                            </tr>
-                          ))}
-
-
-                        </tbody>
-                      </table>
-                    </div>*/}
 
                     <Dialog
                       open={deleteAreaModal}
@@ -1552,9 +1498,9 @@ export const Department = () => {
 
 
                 </div>
-              </Paper>
+              </Paper> */}
 
-              <Paper
+              {/* <Paper
                 sx={{
                   p: 1,
                   display: 'flex',
@@ -1570,16 +1516,7 @@ export const Department = () => {
 
                   <div className="col-md-8 d-felx ">
 
-                    {/* <TextField label="Place Of Usage"
-                      {...(errors.placeOfUsage !== "" && { helperText: errors.placeOfUsage, error: true })}
-                      id="placeOfUsageId"
-                      defaultValue=""
-                      fullWidth
-                      size="small"
-                      onChange={handlePouChange}
-                      onKeyDown={handlePlaceOfKeyDown}
-                      value={placeOfUsageDatas.placeOfUsage}
-              name="placeOfUsage" ></TextField>*/}
+                  
                     <Autocomplete label="Place Of Usage"
                       disablePortal
                       size="small"
@@ -1796,7 +1733,7 @@ export const Department = () => {
                 </div>
 
 
-              </Paper>
+              </Paper> */}
             </div>
 
 
@@ -1810,39 +1747,8 @@ export const Department = () => {
 
 
 
-            {/*<h4 className="text-center mb-3">Department List</h4>*/}
-            {/* <div className="table-responsive">
-                  <table className="table table-bordered text-center table-hover">
-                    <tbody>
-                      <tr className="text-center">
-                        <th>S.No</th>
-                        <th>Department</th>
-                        <th>Area</th>
-                        <th>Place Of Usage</th>
-
-                        <th>Delete</th>
-                      </tr>
-                      {departmentList.map((item, index) => (
-                        <tr key={item._id} onClick={() => handleDepRowClick(item)} className={item._id === depStateId ? "table-active" : ""}>
-                          <td >{index + 1}</td>
-                          <td>{item.department}</td>
-                          <td>{item.area}</td>
-                          <td>{item.placeOfUsage}</td>
-
-                          <td>
-                            <button
-                              type="button"
-                              className="btn btn-sm btn-danger"
-                              onClick={() => deleteDepartment(item._id)}
-                            >
-                              <i className="bi bi-trash"></i>
-                            </button>
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>*/}
+           
+            
             <Snackbar anchorOrigin={{ vertical: "top", horizontal: "right" }} open={snackBarOpen} autoHideDuration={6000} onClose={handleSnackClose}>
               <Alert variant="filled" onClose={handleSnackClose} severity={errorhandler.code} sx={{ width: '100%' }}>
                 {errorhandler.message}
