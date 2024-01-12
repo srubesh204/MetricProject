@@ -61,8 +61,7 @@ const HistoryCardPrint = () => {
             right: "15px",
             fontSize: "8px",
             borderStyle: "solid",
-            borderWidth: 1,
-
+            borderWidth: 1
         },
     });
 
