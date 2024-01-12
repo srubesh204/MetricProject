@@ -693,6 +693,18 @@ const Employee = () => {
         }
     };
 
+    
+    useEffect(() => {
+        if (empExcelStatus) {
+          const timeoutId = setTimeout(() => {
+            setEmpExcelStatus('');
+          }, 1000);
+    
+          return () => clearTimeout(timeoutId); 
+        }
+      }, [empExcelStatus]);
+      
+
     const empPlantAdd = () => {
         console.log(Object.values(empPlantDetails).every(item => typeof item === "string" ? item !== "" : item.length > 0))
 
@@ -1157,7 +1169,7 @@ const Employee = () => {
                                 <div className="col d-flex ">
                                     <div className="d-flex justify-content-center">
                                         <ButtonGroup className='me-3' size='small'>
-                                            <Button size='small' variant="contained" >
+                                            <Button component="label" size='small' variant="contained" >
                                                 Upload
                                                 <VisuallyHiddenInput type="file" onChange={handleEmpExcel} />
                                             </Button>
@@ -1173,7 +1185,6 @@ const Employee = () => {
                                         </ButtonGroup>
                                     </div>
                                 </div>
-
 
                                 {empDataId ? <Dialog
                                     open={open}

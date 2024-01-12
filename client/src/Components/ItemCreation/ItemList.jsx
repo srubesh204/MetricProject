@@ -203,7 +203,7 @@ const ItemList = () => {
     if (itemAddExcelStatus) {
       const timeoutId = setTimeout(() => {
         setItemAddExcelStatus('');
-      }, 3000);
+      }, 1000);
 
       return () => clearTimeout(timeoutId); 
     }
