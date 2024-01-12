@@ -151,7 +151,7 @@ const Employee = () => {
         { field: 'dob', headerName: 'DOB', width: 100, headerAlign: "center", align: "center", valueGetter: (params) => dayjs(params.row.itemCalDate).format('DD-MM-YYYY') },
         { field: 'contactNumber', headerName: 'Contact No', headerAlign: "center", align: "center", type: "number", width: 120, },
         { field: 'designation', headerName: 'Designation', headerAlign: "center", align: "center", width: 120, },
-        { field: 'department', headerName: 'Department', headerAlign: "center", align: "center", width: 130, },
+        { field: 'department', headerName: 'Department', headerAlign: "center", align: "center", width: 130, renderCell : (params) => params.row.plantDetails.map },
         { field: 'empRole', headerName: 'Role', width: 150, headerAlign: "center", align: "center" },
         { field: 'reportTo', headerName: 'Report To', width: 100, headerAlign: "center", align: "center", },
 
@@ -1373,50 +1373,7 @@ const Employee = () => {
 
                                 </div>
 
-
-
-
-
-
-
-
-
-
-
-
-
-                                {/* <table className='table table-bordered text-center'>
-                                        <tbody>
-                                            <tr>
-                                                <th>Emp.Code</th>
-                                                <th>Emp.Name</th>
-                                                <th>Contact Number</th>
-                                                <th>Mail Id</th>
-                                                <th>Designation</th>
-                                                <th>Department</th>
-                                                <th>Report To</th>
-                                                <th>Delete</th>
-
-                                            </tr>
-                                            {filteredData.map((emp, index) => (
-                                                <tr key={emp._id} onClick={() => handleSetEmp(emp)} className={empDataId === emp._id ? "table-active" : ""}>
-                                                    <td>{emp.employeeCode}</td>
-                                                    <td>{emp.firstName + " " + emp.lastName}</td>
-                                                    <td>{emp.contactNumber}</td>
-                                                    <td>{emp.mailId}</td>
-                                                    <td>{emp.designation}</td>
-                                                    <td>{emp.department}</td>
-                                                    <td>{emp.reportTo}</td>
-                                                    <td><button type='button' className='btn btn-danger' onClick={() => handleDeleteOpen(emp._id)}><i className="bi bi-trash"></i></button></td>
-                                                </tr>
-                                            ))}
-
-
-                                        </tbody>
-
-
-                                    </table>*/}
-                                {/*Delete Confirmation*/}
+                      
                                 <Dialog
                                     open={deleteOpen}
                                     onClose={handleDeleteClose}
@@ -1441,9 +1398,7 @@ const Employee = () => {
 
 
 
-                                {/* <TextField id="outlined-basic" label="Outlined" variant="outlined" />
-                    <TextField id="filled-basic" label="Filled" variant="filled" />
-                    <TextField id="standard-basic" label="Standard" variant="standard" /> */}
+                           
                             </div>
                         </Paper>
                     </Grid>
