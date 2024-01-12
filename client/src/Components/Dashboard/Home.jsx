@@ -69,11 +69,11 @@ const Home = () => {
   const [calStatus, setCalStatus] = useState(
     [
       { value: 0, label: 'Total Items' },
-      { value: 0, label: 'Active' },
-      { value: 0, label: 'Spare' },
-      { value: 0, label: 'Breakdown' },
-      { value: 0, label: 'Missing' },
-      { value: 0, label: 'Rejection' }
+      { value: 0, label: 'active' },
+      { value: 0, label: 'spare' },
+      { value: 0, label: 'breakdown' },
+      { value: 0, label: 'missing' },
+      { value: 0, label: 'rejection' }
     ])
   const [distinctDepartment, setDistinctDepartment] = useState([])
   const [departmentName, setDepartmentName] = useState("")
@@ -213,16 +213,13 @@ const Home = () => {
       const AboveThirtyDaysFilter = allItems.filter((item) => dayjs(item.itemDueDate).isAfter(thirtyDaysAgo))
 
 
-      const activeItems = allItems.filter((item) => item.itemStatus === "Active");
-      const spareItems = allItems.filter((item) => item.itemStatus === "Spare");
-      const breakDownItems = allItems.filter((item) => item.itemStatus === "Breakdown");
-      const missingItems = allItems.filter((item) => item.itemStatus === "Missing");
-      const rejectionItems = allItems.filter((item) => item.itemStatus === "Rejection");
+      const activeItems = allItems.filter((item) => item.itemStatus === "active");
+      const spareItems = allItems.filter((item) => item.itemStatus === "spare");
+      const breakDownItems = allItems.filter((item) => item.itemStatus === "breakdown");
+      const missingItems = allItems.filter((item) => item.itemStatus === "missing");
+      const rejectionItems = allItems.filter((item) => item.itemStatus === "rejection");
 
-      // const spareItems = allItems.filter((item) => item.itemStatus === "Spare");
-      // const breakDownItems = allItems.filter((item) => item.itemStatus === "BreakDown");
-      // const missingItems = allItems.filter((item) => item.itemStatus === "Missing");
-      // const rejectionItems = allItems.filter((item) => item.itemStatus === "Rejection");
+     
       const depLength = allItems.filter((item) => item.itemLocation === "department")
       const oemLength = allItems.filter((item) => item.itemLocation === "oem")
       const customersLength = allItems.filter((item) => item.itemLocation === "customer")
@@ -289,11 +286,11 @@ const Home = () => {
     const AboveThirtyDaysFilter = plantWiseList.filter((item) => dayjs(item.itemDueDate).isAfter(thirtyDaysAgo))
 
 
-    const activeItems = plantWiseList.filter((item) => item.itemStatus === "Active");
-    const spareItems = plantWiseList.filter((item) => item.itemStatus === "Spare");
-    const breakDownItems = plantWiseList.filter((item) => item.itemStatus === "Breakdown");
-    const missingItems = plantWiseList.filter((item) => item.itemStatus === "Missing");
-    const rejectionItems = plantWiseList.filter((item) => item.itemStatus === "Rejection");
+    const activeItems = plantWiseList.filter((item) => item.itemStatus === "active");
+    const spareItems = plantWiseList.filter((item) => item.itemStatus === "spare");
+    const breakDownItems = plantWiseList.filter((item) => item.itemStatus === "breakdown");
+    const missingItems = plantWiseList.filter((item) => item.itemStatus === "missing");
+    const rejectionItems = plantWiseList.filter((item) => item.itemStatus === "rejection");
 
     const depLength = plantWiseList.filter((item) => item.itemLocation === "department")
     const oemLength = plantWiseList.filter((item) => item.itemLocation === "oem")
@@ -359,11 +356,11 @@ const Home = () => {
         const AboveThirtyDaysFilter = plantData.filter((item) => dayjs(item.itemDueDate).isAfter(thirtyDaysAgo))
 
 
-        const activeItems = plantData.filter((item) => item.itemStatus === "Active");
-        const spareItems = plantData.filter((item) => item.itemStatus === "Spare");
-        const breakDownItems = plantData.filter((item) => item.itemStatus === "Breakdown");
-        const missingItems = plantData.filter((item) => item.itemStatus === "Missing");
-        const rejectionItems = plantData.filter((item) => item.itemStatus === "Rejection");
+        const activeItems = plantData.filter((item) => item.itemStatus === "active");
+        const spareItems = plantData.filter((item) => item.itemStatus === "spare");
+        const breakDownItems = plantData.filter((item) => item.itemStatus === "breakdown");
+        const missingItems = plantData.filter((item) => item.itemStatus === "missing");
+        const rejectionItems = plantData.filter((item) => item.itemStatus === "rejection");
 
         const depLength = plantData.filter((item) => item.itemLocation === "department")
         const oemLength = plantData.filter((item) => item.itemLocation === "oem")
@@ -561,11 +558,11 @@ const Home = () => {
     console.log(name)
 
 
-    const activeItems = pieDataFilter.filter((item) => item.itemStatus === "Active");
-    const spareItems = pieDataFilter.filter((item) => item.itemStatus === "Spare");
-    const breakDownItems = pieDataFilter.filter((item) => item.itemStatus === "BreakDown");
-    const missingItems = pieDataFilter.filter((item) => item.itemStatus === "Missing");
-    const rejectionItems = pieDataFilter.filter((item) => item.itemStatus === "Rejection");
+    const activeItems = pieDataFilter.filter((item) => item.itemStatus === "active");
+    const spareItems = pieDataFilter.filter((item) => item.itemStatus === "spare");
+    const breakDownItems = pieDataFilter.filter((item) => item.itemStatus === "breakdown");
+    const missingItems = pieDataFilter.filter((item) => item.itemStatus === "missing");
+    const rejectionItems = pieDataFilter.filter((item) => item.itemStatus === "rejection");
 
     switch (name) {
 
@@ -786,11 +783,11 @@ const Home = () => {
     const AboveThirtyDaysFilter = filter.filter((item) => dayjs(item.itemDueDate).isAfter(thirtyDaysAgo))
 
 
-    const activeItems = filter.filter((item) => item.itemStatus === "Active");
-    const spareItems = filter.filter((item) => item.itemStatus === "Spare");
-    const breakDownItems = filter.filter((item) => item.itemStatus === "Breakdown");
-    const missingItems = filter.filter((item) => item.itemStatus === "Missing");
-    const rejectionItems = filter.filter((item) => item.itemStatus === "Rejection");
+    const activeItems = filter.filter((item) => item.itemStatus === "active");
+    const spareItems = filter.filter((item) => item.itemStatus === "spare");
+    const breakDownItems = filter.filter((item) => item.itemStatus === "breakdown");
+    const missingItems = filter.filter((item) => item.itemStatus === "missing");
+    const rejectionItems = filter.filter((item) => item.itemStatus === "rejection");
 
     const depLength = filter.filter((item) => item.itemLocation === "department")
     const oemLength = filter.filter((item) => item.itemLocation === "oem")
@@ -845,11 +842,11 @@ const Home = () => {
     const AboveThirtyDaysFilter = filter.filter((item) => dayjs(item.itemDueDate).isAfter(thirtyDaysAgo))
 
 
-    const activeItems = filter.filter((item) => item.itemStatus === "Active");
-    const spareItems = filter.filter((item) => item.itemStatus === "Spare");
-    const breakDownItems = filter.filter((item) => item.itemStatus === "Breakdown");
-    const missingItems = filter.filter((item) => item.itemStatus === "Missing");
-    const rejectionItems = filter.filter((item) => item.itemStatus === "Rejection");
+    const activeItems = filter.filter((item) => item.itemStatus === "active");
+    const spareItems = filter.filter((item) => item.itemStatus === "spare");
+    const breakDownItems = filter.filter((item) => item.itemStatus === "breakdown");
+    const missingItems = filter.filter((item) => item.itemStatus === "missing");
+    const rejectionItems = filter.filter((item) => item.itemStatus === "rejection");
 
     setCalStatus([
       { id: 0, value: pastDue.length, label: 'Past Due' },

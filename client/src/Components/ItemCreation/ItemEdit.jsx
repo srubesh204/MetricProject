@@ -370,7 +370,7 @@ const ItemEdit = () => {
 
                 // itemCreatedBy: itemData.itemCreatedBy
             }))
-            console.log(response)
+            console.log(response.data.result)
 
         } catch (err) {
             console.log(err);
@@ -937,7 +937,15 @@ const ItemEdit = () => {
                                     ))}
                                 </TextField>
                             </div>
-                            <div className="col-6">
+
+                            <div className='col-md-4'>
+                                <TextField
+                                    {...(errors.itemMasterRef !== "" && { helperText: errors.itemMasterRef, error: true })}
+                                    size='small' disabled variant='outlined' label="Item Master" name='itemAddMasterName' value={itemAddData.itemAddMasterName} fullWidth >
+                                </TextField>
+                            </div>
+
+                            <div className="col-3">
                                 <Autocomplete
                                     disablePortal
                                     id="itemIMTENoId"
@@ -1037,11 +1045,11 @@ const ItemEdit = () => {
                                     <div className="row g-1">
                                         <div className="col-lg me-1">
                                             <TextField size='small' select variant='outlined' value={itemAddData.itemStatus} onChange={handleItemAddChange} label="Item Status" name='itemStatus' id='itemStatusId' fullWidth >
-                                                <MenuItem value="Active">Active</MenuItem>
-                                                <MenuItem value="Spare">Spare</MenuItem>
-                                                <MenuItem value="Breakdown">Breakdown</MenuItem>
-                                                <MenuItem value="Missing">Missing</MenuItem>
-                                                <MenuItem value="Rejection">Rejection</MenuItem>
+                                                <MenuItem value="active">Active</MenuItem>
+                                                <MenuItem value="spare">Spare</MenuItem>
+                                                <MenuItem value="breakdown">Breakdown</MenuItem>
+                                                <MenuItem value="missing">Missing</MenuItem>
+                                                <MenuItem value="rejection">Rejection</MenuItem>
                                             </TextField>
                                         </div>
                                         <div className="col-lg">
@@ -1067,7 +1075,7 @@ const ItemEdit = () => {
                                 <div className="row g-2 mt-0 mb-2">
                                     <div className="col-md-6">
                                         <TextField
-                                            {...(errors.itemDepartment !== "" && { helperText: errors.itemDepartment, error: true })}
+                                            
                                             value={itemAddData.itemPlant} onChange={handleItemAddChange} size='small' select fullWidth variant='outlined' label="Select Plant" name='itemPlant' id='itemPlantId'>
                                             <MenuItem value="">Select Plant</MenuItem>
                                             {employeeRole.loggedEmp.plantDetails.map((plant, index) => (
@@ -1190,18 +1198,27 @@ const ItemEdit = () => {
                                                 value={itemAddData.itemItemMasterIMTENo} // Ensure this holds the correct selected value(s)
                                                 onChange={handleItemAddChange}
                                                 input={<OutlinedInput fullWidth label="Select IMTE No" />}
-                                                renderValue={(selected) => (
-                                                    Array.isArray(selected) ?
-                                                        selected.map((item) => item.itemIMTENo).join(", ") :
-                                                        selected.itemIMTENo // Render a single selected value
-                                                )}
+                                                // renderValue={(selected) => (
+                                                //     Array.isArray(selected) ?
+                                                //         selected.map((item) => item.itemIMTENo).join(", ") :
+                                                //         selected.itemIMTENo // Render a single selected value
+                                                // )}
+                                                // 
+                                                //  renderValue={(selected) => selected.map(item => itemMasterListByName.find(sub => sub._id === item).itemIMTENo).join(", ")} MenuProps={MenuProps}
+                                                renderValue={(selected) => {
+                                                    const selectedParts = selected.map(item => {
+                                                        const foundPart = itemMasterListByName.find(part => part._id === item);
+                                                        return foundPart ? foundPart.itemIMTENo : "";
+                                                    }).filter(Boolean); // Filter out empty strings
+                                                
+                                                    return selectedParts.join(", ");
+                                                }}
                                                 MenuProps={MenuProps}
-
                                                 fullWidth
                                             >
                                                 {itemMasterListByName.map((name, index) => (
-                                                    <MenuItem key={index} value={name}>
-                                                        <Checkbox checked={itemAddData.itemItemMasterIMTENo.indexOf(name.itemIMTENo) > -1} />
+                                                    <MenuItem key={index} value={name._id}>
+                                                        <Checkbox checked={itemAddData.itemItemMasterIMTENo.indexOf(name._id) > -1}  />
                                                         <ListItemText primary={name.itemIMTENo} />
                                                     </MenuItem>
                                                 ))}
@@ -1462,7 +1479,7 @@ const ItemEdit = () => {
                                                 <MenuItem key={index} value={item.aliasName}>{item.aliasName}</MenuItem>
                                             ))}
                                         </TextField>
-
+                                        {itemAddData.isItemMaster === "1" &&
                                         <React.Fragment>
                                             <TextField disabled={itemAddData.itemPrevCalData !== "available"}
                                                 className='ms-2'
@@ -1491,7 +1508,7 @@ const ItemEdit = () => {
                                                     <MenuItem key={index} value={unit.unitName}>{unit.unitName}</MenuItem>
                                                 ))}
                                             </TextField>
-                                        </React.Fragment>
+                                        </React.Fragment>}
                                     </div>
 
 

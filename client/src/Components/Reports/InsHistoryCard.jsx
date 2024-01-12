@@ -1,13 +1,14 @@
 import React from "react";
-import { Container, TextField, MenuItem, Paper, Button, Dialog, DialogTitle, DialogContent, DialogActions, } from "@mui/material";
+import { Container, TextField, MenuItem, Paper, Button, Dialog, DialogTitle, DialogContent, DialogActions, IconButton, } from "@mui/material";
 import { AdapterDayjs, } from '@mui/x-date-pickers/AdapterDayjs';
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
-import { DataGrid } from '@mui/x-data-grid';
+import { DataGrid, GridToolbar } from '@mui/x-data-grid';
 import { useState, useEffect, useContext, createContext } from "react";
 import axios from 'axios';
 import dayjs from 'dayjs';
-import { DisabledByDefault, PrintRounded } from '@mui/icons-material';
+import { DisabledByDefault, FileOpen, Pages, PrintRounded } from '@mui/icons-material';
 import HistoryCardPrint from './HistoryCardPrint';
+import { Link } from "react-router-dom";
 export const HistoryCardContent = createContext(null);
 
 
@@ -42,6 +43,23 @@ function InsHistoryCard() {
         formatFetchData();
     }, []);
 
+    const [grnData, setGrnData] = useState([])
+    const grnListFetchData = async () => {
+        try {
+            const response = await axios.get(
+                `${process.env.REACT_APP_PORT}/itemGRN/getAllItemGRN`
+            );
+            console.log(response.data.result)
+            setGrnData(response.data.result);
+            
+        } catch (err) {
+            console.log(err);
+        }
+    };
+    useEffect(() => {
+        grnListFetchData();
+    }, []);
+
     useEffect(() => {
         const fetchData = async () => {
             try {
@@ -60,7 +78,7 @@ function InsHistoryCard() {
     }, []);
 
 
-
+ 
     useEffect(() => {
         const calData = async () => {
             try {
@@ -74,6 +92,7 @@ function InsHistoryCard() {
 
         calData();
     }, []);
+
     console.log(itemCalList)
     console.log(selectedIMTEs)
 
@@ -112,12 +131,30 @@ function InsHistoryCard() {
 
     const handleInsIMTENoSelection = (value) => {
         console.log(value)
-        const selectedImtes = itemCalList.filter(cal => cal.calIMTENo === value)
-        setSelectedIMTEs(selectedImtes)
-
         const selectedItemAdd = itemList.filter((item) => item.itemIMTENo === value)
         console.log(selectedItemAdd)
         setSelectedRow(selectedItemAdd)
+
+        if (selectedItemAdd[0].itemCalibrationSource === "outsource") {
+            console.log("hello")
+            const grnDataFilter = grnData.map(grn => {
+                const filteredPartyItems = grn.grnPartyItems.filter(grnItem => grnItem.grnItemIMTENo === value);
+                return {
+                    
+                    grnPartyItems: filteredPartyItems
+                };
+            });
+            
+            // Now, grnDataFilter contains only the elements from grnData where at least one grnPartyItem matches the condition.
+            setSelectedIMTEs(grnDataFilter[0].grnPartyItems)
+           console.log(grnDataFilter[0].grnPartyItems)
+        } else {
+            const selectedImtes = itemCalList.filter(cal => cal.calIMTENo === value)
+            setSelectedIMTEs(selectedImtes)
+        }
+
+
+
 
 
     };
@@ -142,8 +179,50 @@ function InsHistoryCard() {
 
 
 
-    const columns = [
-        { field: 'id', headerName: 'SlNo', width: 50, align: "center", renderCell: (params) => params.api.getAllRowIds().indexOf(params.id) + 1 },
+    const grnColumns = [
+        { field: 'id', headerName: 'Si.No', width: 50, align: "center", renderCell: (params) => params.api.getAllRowIds().indexOf(params.id) + 1 },
+        { field: 'certificateView', headerName: 'Certificate', width: 100, align: "center", renderCell: (params)=>  <IconButton size="small" component={Link} target="_blank" to={`${process.env.REACT_APP_PORT}/grnCertificates/${params.row.grnItemCertificate}`} ><FileOpen /></IconButton> },
+        { field: 'grnItemCalDate', headerName: 'Calibration Date', width: 150, align: "center", valueGetter: (params) => dayjs(params.row.grnItemCalDate).format('DD-MM-YYYY') },
+        { field: 'grnItemCalStatus', headerName: 'Calibration Status', width: 150, align: "center", },
+        { field: 'grnItemDueDate', headerName: 'Next calibration Date', width: 150, align: "center", valueGetter: (params) => dayjs(params.row.grnItemDueDate).format('DD-MM-YYYY') },
+        { field: 'grnItemCertificateStatus', headerName: 'Certificate Status', width: 150, align: "center", },
+        { field: 'grnItemCertificateNo', headerName: 'Certificate No', width: 150, align: "center", },
+        ...(selectedRow[0]?.itemType === 'variable'
+            ? [{
+                field: 'calOBError',
+                headerName: 'Observed Error',
+                width: 150,
+                align: 'center',
+                renderCell: (params) => (
+                    <div>
+                        {params.row.grnAcCriteria.map((grn, index) => (
+                            <span key={index}>
+                                {grn.grnAcOBError}
+                                {index < params.row.grnAcCriteria.length - 1 && <br />}
+                            </span>
+                        ))}
+                    </div>
+                ),
+            }]
+            : [{
+                field: 'observedSize', headerName: "Observed Size", width: 150, align: "center",
+                renderCell: (params) => (
+                    <div>
+                        {params.row.grnAcCriteria.map((grn, index) => (
+                            <span key={index}>
+                                {"Min : " + grn.grnAcMinPSError}<br />
+                                {"Max : " + grn.grnAcMaxPSError}
+                                {index < params.row.grnAcCriteria.length - 1 && <br />}
+                            </span>
+                        ))}
+                    </div>
+                ),
+            }]),
+        { field: 'itemCalibrationSource', headerName: 'Calibrated At', width: 150, align: "center" },
+    ];
+
+    const calColumn = [
+        { field: 'id', headerName: 'Si.No', width: 50, align: "center", renderCell: (params) => params.api.getAllRowIds().indexOf(params.id) + 1 },
         { field: 'calItemCalDate', headerName: 'Calibration Date', width: 150, align: "center", valueGetter: (params) => dayjs(params.row.calItemCalDate).format('DD-MM-YYYY') },
         { field: 'calStatus', headerName: 'Calibration Status', width: 150, align: "center", },
         { field: 'calItemDueDate', headerName: 'Next calibration Date', width: 150, align: "center", valueGetter: (params) => dayjs(params.row.calItemDueDate).format('DD-MM-YYYY') },
@@ -156,29 +235,30 @@ function InsHistoryCard() {
                 width: 150,
                 align: 'center',
                 renderCell: (params) => (
-                  <div>
-                    {params.row.calcalibrationData.map((cal, index) => (
-                      <span key={index}>
-                        {cal.calOBError}
-                        {index < params.row.calcalibrationData.length - 1 && <br />} 
-                      </span>
-                    ))}
-                  </div>
+                    <div>
+                        {params.row.calcalibrationData.map((cal, index) => (
+                            <span key={index}>
+                                {cal.calOBError}
+                                {index < params.row.calcalibrationData.length - 1 && <br />}
+                            </span>
+                        ))}
+                    </div>
                 ),
-              }]
-            : [{ field: 'observedSize', headerName: "Observed Size", width: 150, align: "center", 
-            renderCell: (params) => (
-              <div>
-                {params.row.calcalibrationData.map((cal, index) => (
-                  <span key={index}>
-                    {"Min : " + cal.calMinPS}<br />
-                    {"Max : " + cal.calMaxPS}
-                    {index < params.row.calcalibrationData.length - 1 && <br />} 
-                  </span>
-                ))}
-              </div>
-            ),
-        }]),
+            }]
+            : [{
+                field: 'observedSize', headerName: "Observed Size", width: 150, align: "center",
+                renderCell: (params) => (
+                    <div>
+                        {params.row.calcalibrationData.map((cal, index) => (
+                            <span key={index}>
+                                {"Min : " + cal.calMinPS}<br />
+                                {"Max : " + cal.calMaxPS}
+                                {index < params.row.calcalibrationData.length - 1 && <br />}
+                            </span>
+                        ))}
+                    </div>
+                ),
+            }]),
         { field: 'itemCalibrationSource', headerName: 'Calibrated At', width: 150, align: "center", renderCell: (params) => params.row.calSource || selectedRow[0]?.itemCalibrationSource },
     ];
 
@@ -198,7 +278,7 @@ function InsHistoryCard() {
                 <form>
 
                     <Container maxWidth sx={{ mb: 2, mt: 2 }}>
-                        <h1 className="text-center">Instrument History Card</h1>
+
                         <Paper
                             sx={{
                                 p: 2,
@@ -208,104 +288,110 @@ function InsHistoryCard() {
                             }}
                             elevation={12}
                         >
-                            <div container spacing={2} className="row g-2">
-                                <div className="col-3">
-                                    <TextField label="Instrument Name" size="small" onChange={handleCalDetails} select name="calInsName" value={calDetails.calInsName} fullWidth >
+                            <div className="row g-2 mb-2">
+                                <div className="col-md-4 d-flex">
+
+                                    <TextField className="me-2" label="Instrument Name" size="small" onChange={handleCalDetails} select name="calInsName" value={calDetails.calInsName} fullWidth >
                                         <MenuItem value="all">All</MenuItem >
                                         {distItemName.map((cal) => (
                                             <MenuItem value={cal}>{cal}</MenuItem >
                                         ))}
 
                                     </TextField>
-                                </div>
-                                <div className="col-2"><TextField
-                                    label="IMTE No"
-                                    size="small"
-                                    select
-                                    onChange={handleCalDetails}
-                                    name="calInsIMTENo"
-                                    value={calDetails.calInsIMTENo}
-                                    fullWidth
-                                >
-                                    <MenuItem value="all">All</MenuItem>
-                                    {filteredIMTEs.map(cal => (
-                                        <MenuItem key={cal.itemIMTENo} value={cal.itemIMTENo}>
-                                            {cal.itemIMTENo}
-                                        </MenuItem>
-                                    ))}
-                                </TextField>
 
-                                </div>
-
-                                <div className="col-2 offset-3">
-                                    <DatePicker
+                                    <TextField
+                                        label="IMTE No"
+                                        size="small"
+                                        select
+                                        onChange={handleCalDetails}
+                                        name="calInsIMTENo"
+                                        value={calDetails.calInsIMTENo}
                                         fullWidth
-                                        id="fromDateId"
-                                        name="fromDate"
-                                        label="From Date"
-                                        sx={{ width: "100%" }}
-                                        slotProps={{ textField: { size: 'small' } }}
-                                        format="DD-MM-YYYY"
-                                        value={fromDate}
-                                        onChange={(date) => setFromDate(date)}
-                                    />
-                                </div>
-                                <div className="col-2">
-                                    <DatePicker
-                                        fullWidth
-                                        id="toDateId"
-                                        name="toDate"
-                                        sx={{ width: "100%" }}
-                                        label="To Date"
-                                        slotProps={{ textField: { size: 'small' } }}
-                                        format="DD-MM-YYYY"
-                                        value={toDate}
-                                        onChange={(date) => setToDate(date)}
-                                    />
+                                    >
+                                        <MenuItem value="all">All</MenuItem>
+                                        {filteredIMTEs.map(cal => (
+                                            <MenuItem key={cal.itemIMTENo} value={cal.itemIMTENo}>
+                                                {cal.itemIMTENo}
+                                            </MenuItem>
+                                        ))}
+                                    </TextField>
+
+
                                 </div>
 
-                                <div className="row">
-                                    <div className=" col-md-3  g-2 mb-3 d-flex justify-content-start">
-                                        <div ><Button>Excel</Button></div>
-                                        {selectedRow[0]?.itemIMTENo && <div>
-                                            <Button size="small" variant="contained" onClick={handlePrintClick} startIcon={<PrintRounded />}>
-                                                Print
-                                            </Button>
-                                        </div>}
-
-
+                                <div className="col-md-8 d-flex justify-content-end">
+                                    <div className="me-2">
+                                        <DatePicker
+                                            fullWidth
+                                            id="fromDateId"
+                                            name="fromDate"
+                                            label="From Date"
+                                            sx={{ width: "100%" }}
+                                            slotProps={{ textField: { size: 'small' } }}
+                                            format="DD-MM-YYYY"
+                                            value={fromDate}
+                                            onChange={(date) => setFromDate(date)}
+                                        />
                                     </div>
-                                    <div className="col"></div>
-                                    <div className="col-md-8  g-2 d-flex justify-content-between">
-                                        <div ><Button>View Certificates</Button></div>
-                                        <div ><Button>View Instructions</Button></div>
-                                        <div ><Button>View Drawing</Button></div>
-                                        <div ><Button>View R&R</Button></div>
-                                        <div ><Button>View Attachment</Button></div>
+                                    <div >
+                                        <DatePicker
+                                            fullWidth
+                                            id="toDateId"
+                                            name="toDate"
+                                            sx={{ width: "100%" }}
+                                            label="To Date"
+                                            slotProps={{ textField: { size: 'small' } }}
+                                            format="DD-MM-YYYY"
+                                            value={toDate}
+                                            onChange={(date) => setToDate(date)}
+                                        />
                                     </div>
                                 </div>
                             </div>
+
+
+                            <div className="row g-2">
+                                <div className=" col d-flex justify-content-start">
+                                    <div className="me-2"><Button variant="contained" size="small"  >Excel</Button></div>
+                                    {selectedRow[0]?.itemIMTENo && <div>
+                                        <div><Button size="small" variant="contained" onClick={handlePrintClick} startIcon={<PrintRounded />}>
+                                            Print
+                                        </Button></div>
+                                    </div>}
+
+
+                                </div>
+
+                                <div className="col d-flex justify-content-end">
+
+                                    <div className="me-2"><Button variant="contained" color="info" size="small">View Instructions</Button></div>
+                                    <div className="me-2"><Button variant="contained" color="info" size="small">View Drawing</Button></div>
+                                    <div className="me-2"><Button variant="contained" color="info" size="small">View R&R</Button></div>
+                                    <div ><Button variant="contained" color="info" size="small">View MSA</Button></div>
+                                </div>
+                            </div>
+
                         </Paper>
-                        <div className="row">
+                        <div className="row g-2 mb-2">
                             <div className="col-8">
                                 <Paper
                                     sx={{
                                         p: 2,
                                         display: 'flex',
                                         flexDirection: 'column',
-                                        mb: 2
+
                                     }}
                                     elevation={12}>
                                     <div className="row g-2 mb-2">
-                                        <div className="form-floating col-3">
+                                        <div className="col-md-3">
                                             <TextField label="Serial No."
                                                 value={selectedRow[0]?.itemMFRNo} size="small" name="itemMFRNo" InputProps={{ readOnly: true }} InputLabelProps={{ shrink: true }}></TextField>
                                         </div>
-                                        <div className="form-floating col-3">
+                                        <div className="col-md-3">
                                             <TextField label="Model No."
                                                 value={selectedRow[0]?.itemModelNo} size="small" name="itemModelNo" InputProps={{ readOnly: true }} InputLabelProps={{ shrink: true }}></TextField>
                                         </div>
-                                        <div className="form-floating col-3">
+                                        <div className="col-md-3">
                                             <TextField
                                                 label="Range / Size"
                                                 value={`${selectedRow[0]?.itemRangeSize || ''} ${selectedRow[0]?.itemRangeSizeUnit || ''}`}
@@ -315,21 +401,21 @@ function InsHistoryCard() {
                                                 InputLabelProps={{ shrink: true }}
                                             ></TextField>
                                         </div>
-                                        <div className="form-floating col-3">
+                                        <div className="col-md-3">
                                             <TextField label="Calibration Source"
                                                 value={selectedRow[0]?.itemCalibrationSource} size="small" name="itemCalibrationSource" InputProps={{ readOnly: true }} InputLabelProps={{ shrink: true }}></TextField>
                                         </div>
                                     </div>
-                                    <div className="row g-2 mb-2">
-                                        <div className="form-floating col d-flex-md-5">
+                                    <div className="row g-2 ">
+                                        <div className="col-md-3">
                                             <TextField label="Location"
                                                 value={selectedRow[0]?.itemCurrentLocation} size="small" name="itemCurrentLocation" InputProps={{ readOnly: true }} InputLabelProps={{ shrink: true }}></TextField>
                                         </div>
-                                        <div className="form-floating col d-flex-md-5">
+                                        <div className="col-md-3">
                                             <TextField label="Frequency In Months"
                                                 value={selectedRow[0]?.itemCalFreInMonths} size="small" name="itemCalFreInMonths" InputProps={{ readOnly: true }} InputLabelProps={{ shrink: true }}></TextField>
                                         </div>
-                                        <div className="form-floating col d-flex-md-5">
+                                        <div className="col-md-3">
                                             <TextField
                                                 label="Make"
                                                 value={selectedRow[0]?.itemMake}
@@ -345,17 +431,16 @@ function InsHistoryCard() {
                             <div className="col-4">
                                 <Paper
                                     sx={{
-                                        p: 0.5,
+                                        p: 1,
                                         display: 'flex',
                                         flexDirection: 'column',
-                                        mb: 2
+
                                     }}
                                     elevation={12}>
-                                    <div className="form-floating col d-flex-md-5">
-                                        <h6 className="text-center">Permissible Size</h6>
-                                        <table className="table table-sm table-bordered text-center align-middle p-0">
+                                    <div className="col ">
+                                        <table className="table table-sm table-bordered text-center align-middle" style={{ fontSize: "small" }}>
                                             <thead>
-                                                <tr>
+                                                <tr >
                                                     <th>Parameter</th>
                                                     <th>Min</th>
                                                     <th>Max</th>
@@ -380,25 +465,45 @@ function InsHistoryCard() {
                                 </Paper>
                             </div>
                         </div>
-                        <Paper>
+                        <Paper
+                            sx={{
+                                p: 1,
+                                display: 'flex',
+                                flexDirection: 'column',
+                                mb: 1
 
-                            <DataGrid
-                                rows={selectedIMTEs.filter((row) => {
-                                    const calDate = dayjs(row.calItemCalDate);
-                                    return (
-                                        (!fromDate || calDate.isSameOrAfter(fromDate, 'day')) &&
-                                        (!toDate || calDate.isSameOrBefore(toDate, 'day'))
-                                    );
-                                })}
-                                columns={columns}
-                                initialState={{
-                                    pagination: {
-                                        paginationModel: { page: 0, pageSize: 5 },
-                                    },
-                                }}
-                                getRowId={(row) => row._id}
-                                pageSizeOptions={[5, 10]}
-                            />
+
+                            }}
+                            elevation={12}>
+                            <div style={{ height: 400, width: '100%' }}>
+                                <DataGrid
+                                    rows={selectedIMTEs}
+                                    columns={selectedRow.length > 0 ? selectedRow[0].itemCalibrationSource === "outsource" ? grnColumns :  calColumn: []}
+                                    initialState={{
+                                        pagination: {
+                                            paginationModel: { page: 0, pageSize: 5 },
+                                        },
+                                    }}
+                                    getRowId={
+                                        selectedRow.length > 0 && selectedRow[0].itemCalibrationSource === "outsource"
+                                            ? (row) => row.grnItemId
+                                            : (row) => row._id
+                                    }
+                                    sx={{
+                                        ".MuiTablePagination-displayedRows": {
+
+                                            "marginTop": "1em",
+                                            "marginBottom": "1em"
+                                        },
+
+                                    }}
+                                    slots={{
+                                        toolbar: GridToolbar,
+                                    }}
+                                    disableRowSelectionOnClick
+                                    density="compact"
+                                />
+                            </div>
 
 
                         </Paper>
@@ -406,7 +511,7 @@ function InsHistoryCard() {
                     </Container>
                 </form>
             </LocalizationProvider>
-            <HistoryCardContent.Provider
+            {/* <HistoryCardContent.Provider
                 value={{
                     historyCardPrintOpen,
                     setHistoryCardPrintOpen,
@@ -418,8 +523,8 @@ function InsHistoryCard() {
                     selectedIMTEs: filteredSelectedIMTEs,
                 }}
             >
-                <HistoryCardPrint />
-            </HistoryCardContent.Provider>
+                 <HistoryCardPrint />
+            </HistoryCardContent.Provider> */}
         </div>
     );
 }

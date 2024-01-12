@@ -6,7 +6,7 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { TextField, MenuItem, Button, Link, Box } from '@mui/material';
 import { DataGrid, GridToolbar } from '@mui/x-data-grid';
 import { Paper } from '@mui/material';
-import { Edit,PrintRounded } from '@mui/icons-material';
+import { Edit, PrintRounded } from '@mui/icons-material';
 import AddIcon from '@mui/icons-material/Add';
 import GrnEdit from './GrnEdit';
 import Dialog from '@mui/material/Dialog';
@@ -90,39 +90,6 @@ const GrnList = () => {
         formatFetchData();
     }, []);
 
-
-    //
-
-    const Columns = [
-        { field: 'id', headerName: 'Si. No', width: 100, renderCell: (params) => params.api.getAllRowIds().indexOf(params.id) + 1 ,headerAlign:"center",align: "center",},
-        ...(employeeRole && employeeRole.employee !== "viewer" ? [{ field: 'button', headerName: 'Edit',headerAlign:"center",align: "center", width: 90, renderCell: (params) => <Button onClick={() => { setSelectedRows(params.row); setGrnEditOpen(true) }}><Edit color='success' /></Button> }] : []),
-
-
-        {
-            field: 'viewButton',
-            headerName: 'View',
-            width: 100,
-            headerAlign:"center",align: "center",
-
-            renderCell: (params) => (
-
-
-                <RemoveRedEyeIcon color="primary"
-                    onClick={() => handleViewClick(params.row)} />
-
-            ),
-        },
-        { field: 'grnNo', headerName: 'Grn No', width: 200,headerAlign:"center",align: "center", },
-        { field: 'grnDate', headerName: 'Grn Date', width: 200 ,headerAlign:"center",align: "center",},
-        { field: 'grnPartyName', headerName: 'Party Name', width: 300,headerAlign:"center",align: "center", },
-        { field: 'printButton', headerName: 'Print', headerAlign: "center", align: "center", width: 100, renderCell: (params) => <Button onClick={() => { setSelectedRows(params.row); setGrnPrintOpen(true) }}><PrintRounded color='success' /></Button> }
-    ]
-
-
-    const [grnDataListSelectedRowIds, setgrnDataListSelectedRowIds] = useState([])
-
-
-
     const [grnListDataList, setGrnListDataList] = useState([])
     const [grnDataList, setGrnDataList] = useState([])
     const [filteredData, setFilteredData] = useState([])
@@ -152,6 +119,41 @@ const GrnList = () => {
         console.log(filteredItems)
         setFilteredData(filteredItems)
     }, [dateData.fromDate, dateData.toDate])
+
+
+    //
+
+    const Columns = [
+        { field: 'id', headerName: 'Si. No', width: 100, renderCell: (params) => params.api.getAllRowIds().indexOf(params.id) + 1, headerAlign: "center", align: "center", },
+        ...(employeeRole && employeeRole.employee !== "viewer" ? [{ field: 'button', headerName: 'Edit', headerAlign: "center", align: "center", width: 90, renderCell: (params) => <Button onClick={() => { setSelectedRows(params.row); setGrnEditOpen(true) }}><Edit color='success' /></Button> }] : []),
+
+
+        {
+            field: 'viewButton',
+            headerName: 'View',
+            width: 100,
+            headerAlign: "center", align: "center",
+
+            renderCell: (params) => (
+
+
+                <RemoveRedEyeIcon color="primary"
+                    onClick={() => handleViewClick(params.row)} />
+
+            ),
+        },
+        { field: 'grnNo', headerName: 'Grn No', width: 200, headerAlign: "center", align: "center", },
+        { field: 'grnDate', headerName: 'Grn Date', width: 200, headerAlign: "center", align: "center", },
+        { field: 'grnPartyName', headerName: 'Party Name', width: 300, headerAlign: "center", align: "center", },
+        { field: 'printButton', headerName: 'Print', headerAlign: "center", align: "center", width: 100, renderCell: (params) => <Button onClick={() => { setSelectedRows(params.row); setGrnPrintOpen(true) }}><PrintRounded color='success' /></Button> }
+    ]
+
+
+    const [grnDataListSelectedRowIds, setgrnDataListSelectedRowIds] = useState([])
+
+
+
+
 
 
 
@@ -248,11 +250,11 @@ const GrnList = () => {
 
     const grnColumns = [
 
-        { field: 'grnItemId', headerName: 'Si. No', width: 70, renderCell: (params) => params.api.getAllRowIds().indexOf(params.id) + 1,headerAlign:"center",align: "center", },
-        { field: 'grnItemIMTENo', headerName: 'Item IMTENo', width: 150,headerAlign:"center",align: "center" },
-        { field: 'grnItemAddMasterName', headerName: 'Item Description', width: 200,headerAlign:"center",align: "center" },
-        { field: 'grnItemRangeSize', headerName: 'Range/Size', width: 100 ,headerAlign:"center",align: "center"},
-        { field: 'grnPartyRefNo', headerName: 'Dc Ref', width: 100,headerAlign:"center",align: "center" },
+        { field: 'grnItemId', headerName: 'Si. No', width: 70, renderCell: (params) => params.api.getAllRowIds().indexOf(params.id) + 1, headerAlign: "center", align: "center", },
+        { field: 'grnItemIMTENo', headerName: 'Item IMTENo', width: 150, headerAlign: "center", align: "center" },
+        { field: 'grnItemAddMasterName', headerName: 'Item Description', width: 200, headerAlign: "center", align: "center" },
+        { field: 'grnItemRangeSize', headerName: 'Range/Size', width: 100, headerAlign: "center", align: "center" },
+        { field: 'grnPartyRefNo', headerName: 'Dc Ref', width: 100, headerAlign: "center", align: "center" },
 
     ]
 
@@ -534,10 +536,10 @@ const GrnList = () => {
                                     <GrnAdd />
                                 </GrnListContent.Provider>
                                 <GrnListContent.Provider
-                                    value={{grnPrintOpen, setGrnPrintOpen, selectedRows,formatNoData }}
+                                    value={{ grnPrintOpen, setGrnPrintOpen, selectedRows, formatNoData }}
                                 >
-                                      {selectedRows.length !== 0 &&
-                                    <GrnPrint />}
+                                    {selectedRows.length !== 0 &&
+                                        <GrnPrint />}
                                 </GrnListContent.Provider>
                             </div>
                         </Paper>
