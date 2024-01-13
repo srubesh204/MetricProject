@@ -69,9 +69,9 @@ const ItemListPrint = () => {
             }} key={index.toString()}>
 
                 <Text style={{ width: "5%", border: "0.5px solid black", padding: "4px 0px", textAlign: "center" }}>{index + 1}</Text>
-                <Text style={{ width: "6%", border: "0.5px solid black", padding: "4px 0px", textAlign: "center" }}>{row.itemIMTENo}</Text>
+                <Text style={{ width: "10%", border: "0.5px solid black", padding: "4px 0px", textAlign: "center" }}>{row.itemIMTENo}</Text>
                 <Text style={{ width: "8%", border: "0.5px solid black", padding: "4px 0px", textAlign: "center" }}> {row.itemAddMasterName}</Text>
-                <Text style={{ width: "7%", border: "0.5px solid black", padding: "4px 0px", textAlign: "center" }}> {row.itemRangeSize !== "" ? row.itemRangeSize + " " + row.itemRangeSizeUnit : "-"}</Text>
+                <Text style={{ width: "5%", border: "0.5px solid black", padding: "4px 0px", textAlign: "center" }}> {row.itemRangeSize !== "" ? row.itemRangeSize + " " + row.itemRangeSizeUnit : "-"}</Text>
                 <Text style={{ width: "5%", border: "0.5px solid black", padding: "4px 0px", textAlign: "center" }}> {row.itemMake || "-"}</Text>
                 <Text style={{ width: "8%", border: "0.5px solid black", padding: "4px 0px", textAlign: "center" }}>{dayjs(row.itemCalDate).format('DD-MM-YYYY')} </Text>
                 <Text style={{ width: "8%", border: "0.5px solid black", padding: "4px 0px", textAlign: "center" }}>{dayjs(row.itemDueDate).format('DD-MM-YYYY')} </Text>
@@ -129,10 +129,10 @@ const ItemListPrint = () => {
                             <View style={styles.table}>
                                 {/* Table header */}
                                 <View style={styles.tableRow} fixed>
-                                    <Text style={{ width: "5%", border: "0.5px solid black", padding: 8, textAlign: "center" }}>Si. No </Text>
-                                    <Text style={{ width: "6%", border: "0.5px solid black", padding: 8, textAlign: "center" }}>IMTE No</Text>
+                                    <Text style={{ width: "%", border: "0.5px solid black", padding: 8, textAlign: "center" }}>Si. No </Text>
+                                    <Text style={{ width: "10%", border: "0.5px solid black", padding: 8, textAlign: "center" }}>IMTE No</Text>
                                     <Text style={{ width: "8%", border: "0.5px solid black", padding: 8, textAlign: "center" }}>Description</Text>
-                                    <Text style={{ width: "7%", border: "0.5px solid black", padding: 8, textAlign: "center" }}>Range/Size</Text>
+                                    <Text style={{ width: "5%", border: "0.5px solid black", padding: "0px 0px", textAlign: "center" }}>Range/Size</Text>
                                     <Text style={{ width: "5%", border: "0.5px solid black", padding: 8, textAlign: "center" }}>Make</Text>
                                     <Text style={{ width: "8%", border: "0.5px solid black", padding: 8, textAlign: "center" }}>Cal Date</Text>
                                     <Text style={{ width: "8%", border: "0.5px solid black", padding: 8, textAlign: "center" }}>Due Date</Text>

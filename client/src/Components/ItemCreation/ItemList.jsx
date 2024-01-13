@@ -37,6 +37,8 @@ const ItemList = () => {
 
     const employeeRole = useEmployee()
 
+    const [loaded, setLoaded] = useState(false);
+
     const [itemList, setItemList] = useState([]);
 
     const itemFetch = async () => {
@@ -44,30 +46,33 @@ const ItemList = () => {
             const response = await axios.get(
                 `${process.env.REACT_APP_PORT}/itemAdd/getAllItemAdds`
             );
-            // You can use a different logic for generating the id
 
-            // const filterNames = ["itemIMTENo", "itemType", "itemDepartment", "itemPlant", "itemCalibrationSource"]
 
-            // let updatedFilterNames = {};
 
-            // filterNames.forEach((element, index) => {
-            //     const data = response.data.result.map(item => item[element]);
-            //     filterNames[index] = [...new Set(data)];
+            const filterNames = ["itemIMTENo", "itemType", "itemDepartment", "itemPlant", "itemCalibrationSource"]
 
-            //     // Update the object with a dynamic key based on the 'element'
-            //     updatedFilterNames[element] = filterNames[index];
-            //     console.log(updatedFilterNames)
-            // });
+            let updatedFilterNames = {};
 
-            // // Update state outside the loop with the updated object
-            // setFilterNameList(prev => ({ ...prev, ...updatedFilterNames }));
+            filterNames.forEach((element, index) => {
+                const data = response.data.result.map(item => item[element]);
+                filterNames[index] = [...new Set(data)];
 
-            // console.log(partDataList)
+                // Update the object with a dynamic key based on the 'element'
+                updatedFilterNames[element] = filterNames[index];
+
+            });
+
+            // Update state outside the loop with the updated object
+            setFilterNameList(prev => ({ ...prev, ...updatedFilterNames }));
+
+
 
 
 
             setItemList(response.data.result);
             setFilteredItemListData(response.data.result);
+
+            setLoaded(true)
 
         } catch (err) {
             console.log(err);
@@ -77,104 +82,6 @@ const ItemList = () => {
         itemFetch();
     }, []);
 
-    const [today, setToday] = useState(dayjs().format('YYYY-MM-DD'))
-    console.log(today)
-
-
-    const initialItemStatusData = {
-        itemMasterRef: "",
-        itemIMTENo: "",
-        itemImage: "",
-        itemType: "",
-        itemRangeSize: "",
-        itemRangeSizeUnit: "",
-        itemMFRNo: "",
-        itemLC: "",
-        itemLCUnit: "",
-        itemMake: "",
-        itemModelNo: "",
-        itemStatus: "Active",
-        itemReceiptDate: "",
-        itemDepartment: "",
-        itemArea: "N/A",
-        itemPlaceOfUsage: "N/A",
-        itemCalFreInMonths: "",
-        itemCalAlertDays: "",
-        itemCalibrationSource: "",
-        itemItemMasterName: "",
-        itemItemMasterIMTENo: "",
-        itemSupplier: [],
-        itemOEM: [],
-        itemCalDate: "",
-        itemDueDate: "",
-        itemCalibratedAt: "",
-        itemCertificateName: "",
-        itemPartName: [],
-        acceptanceCriteria: [{
-            acParameter: "",
-            acRangeSize: "",
-            acRangeSizeUnit: "",
-            acMin: "",
-            acMax: "",
-            acPsMin: "",
-            acPsMax: "",
-            acPsWearLimit: "",
-            acAccuracy: "",
-            acAccuracyUnit: "",
-            acObservedSize: "",
-        }]
-
-
-    }
-
-    
-    const [itemStatusData, setItemStatusData] = useState({
-        itemMasterRef: "",
-        itemAddMasterName: "",
-        itemIMTENo: "",
-        itemImage: "",
-        itemType: "",
-        itemRangeSize: "",
-        itemRangeSizeUnit: "",
-        itemMFRNo: "",
-        itemLC: "",
-        itemLCUnit: "",
-        itemMake: "",
-        itemModelNo: "",
-        itemStatus: "Active",
-        itemReceiptDate: dayjs().format("YYYY-MM-DD"),
-        itemDepartment: "",
-        itemArea: "N/A",
-        itemPlaceOfUsage: "N/A",
-        itemCalFreInMonths: "",
-        itemCalAlertDays: "",
-        itemCalibrationSource: "",
-        itemCalibrationDoneAt: "",
-        itemItemMasterName: "",
-        itemItemMasterIMTENo: [],
-        itemSupplier: [],
-        itemOEM: [],
-        itemCalDate: dayjs().format("YYYY-MM-DD"),
-        itemDueDate: "",
-        itemCalibratedAt: "",
-        itemCertificateName: "",
-        itemPartName: [],
-        acceptanceCriteria: [
-            {
-                acAccuracyUnit: "",
-                acRangeSizeUnit: "",
-                acParameter: "",
-                acRangeSize: "",
-                acMin: "",
-                acMax: "",
-                acPsMin: "",
-                acPsMax: "",
-                acPsWearLimit: "",
-                acAccuracy: "",
-                acObservedSize: ""
-            }
-        ]
-    })
 
 
 
@@ -196,7 +103,7 @@ const ItemList = () => {
 
     const handleItemAddExcel = (e) => {
         const selectedFile = e.target.files[0];
-        console.log(selectedFile)
+
         setFile(selectedFile);
     };
 
@@ -225,22 +132,22 @@ const ItemList = () => {
             } else {
                 setItemAddExcelStatus('Error uploading the file.');
             }
-            console.error('Error uploading Excel file:', error);
+            console.log('Error uploading Excel file:', error);
         }
     };
 
 
 
 
-  useEffect(() => {
-    if (itemAddExcelStatus) {
-      const timeoutId = setTimeout(() => {
-        setItemAddExcelStatus('');
-      }, 1000);
+    useEffect(() => {
+        if (itemAddExcelStatus) {
+            const timeoutId = setTimeout(() => {
+                setItemAddExcelStatus('');
+            }, 1000);
 
-      return () => clearTimeout(timeoutId); 
-    }
-  }, [itemAddExcelStatus]);
+            return () => clearTimeout(timeoutId);
+        }
+    }, [itemAddExcelStatus]);
 
 
 
@@ -260,7 +167,7 @@ const ItemList = () => {
     useEffect(() => {
         itemStatusFetchData();
     }, []);
-    console.log(itemStatusDataList)
+
 
     const updateItemStatus = async () => {
         try {
@@ -270,8 +177,8 @@ const ItemList = () => {
             setSnackBarOpen(true)
             itemFetch()
 
-            
-            setItemStatusData(initialItemStatusData);
+
+
             console.log("Updated Successfully");
             setErrorHandler({ status: response.data.status, message: response.data.message, code: "success" })
             setTimeout(() => {
@@ -318,7 +225,7 @@ const ItemList = () => {
         itemCalibrationSource: []
     })
 
-    console.log(FilterNameList)
+
     const handleSnackClose = (event, reason) => {
         if (reason === 'clickaway') {
             return;
@@ -399,7 +306,7 @@ const ItemList = () => {
             }
             if (name === "itemType") {
                 const itemType = itemList.filter((item) => (item.itemType === value))
-                console.log(itemType)
+
                 setFilteredItemListData(itemType)
 
 
@@ -415,7 +322,7 @@ const ItemList = () => {
             if (name === "supplierWise") {
 
                 const supperlierWise = itemList.filter((item) => item.itemSupplier.includes(value))
-                console.log(supperlierWise)
+
                 setFilteredItemListData(supperlierWise)
             }
             if (name === "partName") {
@@ -446,7 +353,7 @@ const ItemList = () => {
 
                 const calibrationSource = itemList.filter((item) => (item.itemCalibrationSource === value))
                 setFilteredItemListData(calibrationSource)
-               
+
             }
 
 
@@ -461,8 +368,7 @@ const ItemList = () => {
     const dueDatePicker = (newValue, name) => {
         let startDate = "";
         let endDate = "";
-        let startDueDate = "";
-        let endDueDate = "";
+
 
 
         if (name === "dueStartDate") {
@@ -473,7 +379,7 @@ const ItemList = () => {
         }
 
         const filteredData = itemList.filter((item) => {
-            console.log(item.itemDueDate);
+
 
             // Assuming item.itemDueDate is a valid date
             const itemDueDate = new Date(item.itemDueDate);
@@ -484,24 +390,20 @@ const ItemList = () => {
             );
         });
 
-        console.log(filteredData);
+
     };
 
 
-    const [supplierList, setSupplierList] = useState([])
+    const [vendorList, setVendorList] = useState([])
 
-    const [customerList, setCustomerList] = useState([])
 
     const vendorFetch = async () => {
         try {
             const response = await axios.get(
                 `${process.env.REACT_APP_PORT}/vendor/getAllVendors`
             );
-            console.log(response.data)
-            const customersList = response.data.result.filter((item) => item.customer === "1")
-            const suppliersList = response.data.result.filter((item) => item.supplier === "1")
-            setSupplierList(suppliersList);
-            setCustomerList(customersList);
+            setVendorList(response.data.result)
+
         } catch (err) {
             console.log(err);
         }
@@ -510,7 +412,7 @@ const ItemList = () => {
         vendorFetch();
     }, []);
 
-   
+
 
     const [partCutomerNames, setPartCutomerNames] = useState([])
     const [partDataList, setPartDataList] = useState([])
@@ -532,7 +434,6 @@ const ItemList = () => {
         if (partDataList.length !== 0) {
 
             const partCustomers = partDataList.filter(part => itemList.some(item => item.itemPartName.includes(part._id)))
-            console.log(partCustomers)
             setPartCutomerNames(partCustomers)
 
         }
@@ -543,10 +444,10 @@ const ItemList = () => {
     const [snackBarOpen, setSnackBarOpen] = useState(false)
     const [errorhandler, setErrorHandler] = useState({});
 
-    console.log(itemListSelectedRowIds)
 
 
-  
+
+
 
 
 
@@ -603,7 +504,7 @@ const ItemList = () => {
         const sevenDaysAgo = currentDate.add(7, 'day');
         const fifteenDaysAgo = currentDate.add(15, 'day');
         const thirtyDaysAgo = currentDate.add(30, 'day');
-        // console.log(sevenDaysAgo.format("YYYY-MM-DD"))
+
 
         if (value === "all") {
             setFilteredItemListData(itemList)
@@ -613,11 +514,11 @@ const ItemList = () => {
             if (value === "Past") {
                 const pastData = itemList.filter((item) => dayjs(item.itemDueDate).isBefore(currentDate.format("YYYY-MM-DD")))
                 setFilteredItemListData(pastData)
-                console.log("past")
+
             }
             if (value === "Today") {
                 const CurrentDue = itemList.filter((item) => dayjs(item.itemDueDate).isSame(currentDate.format("YYYY-MM-DD")))
-                console.log(dayjs().isSame(currentDate))
+
                 setFilteredItemListData(CurrentDue)
             }
             if (value === "7") {
@@ -626,14 +527,13 @@ const ItemList = () => {
                     console.log(item.itemDueDate)
                     return (dayjs(item.itemDueDate).isSameOrBefore(sevenDaysAgo) && dayjs(item.itemDueDate).isSameOrAfter(currentDate.format("YYYY-MM-DD")))
                 })
-                console.log(dayjs("2023-11-11").isBefore(sevenDaysAgo))
-                console.log(filteredDataLast7Days)
+
                 setFilteredItemListData(filteredDataLast7Days)
             }
             if (value === "15") {
 
                 const fifteenDaysFilter = itemList.filter((item) => {
-                    console.log(item.itemDueDate)
+
                     return (dayjs(item.itemDueDate).isBetween(currentDate.format("YYYY-MM-DD"), fifteenDaysAgo))
                 })
                 setFilteredItemListData(fifteenDaysFilter)
@@ -641,7 +541,7 @@ const ItemList = () => {
             if (value === "30") {
 
                 const thirtyDaysFilter = itemList.filter((item) => {
-                    console.log(item.itemDueDate)
+
                     return (dayjs(item.itemDueDate).isBetween(currentDate.format("YYYY-MM-DD"), thirtyDaysAgo))
                 })
                 setFilteredItemListData(thirtyDaysFilter)
@@ -650,7 +550,7 @@ const ItemList = () => {
             if (value === ">30") {
 
                 const thirtyDaysFilter = itemList.filter((item) => {
-                    console.log(item.itemDueDate)
+
                     return (dayjs(item.itemDueDate).isAfter(thirtyDaysAgo))
                 })
                 setFilteredItemListData(thirtyDaysFilter)
@@ -665,18 +565,10 @@ const ItemList = () => {
 
 
     }
-    const [itemId, setItemId] = useState("")
+
     const [statusInfo, setStatusInfo] = useState([])
 
-    {/* const handleRowClick = async (params) => {
-        console.log(params)
 
-        setItemId(params.id)
-        setStatusInfo(params.row)
-
-
-    }
-console.log(statusInfo)*/}
 
 
     const handleRowClick = async (params) => {
@@ -685,7 +577,7 @@ console.log(statusInfo)*/}
             setShowDialog(true);
         } else {
 
-            setItemId(params.id);
+
             setStatusInfo(params.row);
             setItemListSelectedRowIds([params.id]);
         }
@@ -694,9 +586,6 @@ console.log(statusInfo)*/}
     const handleConfirmDialogClose = () => {
         setShowDialog(false);
     };
-    const handleSelectionModelChange = (newSelection) => {
-        setItemListSelectedRowIds(newSelection);
-    };
 
 
 
@@ -704,16 +593,8 @@ console.log(statusInfo)*/}
 
 
 
-    const handleCloseDialog = () => {
-        setOpenModalStatus(false);
-    };
-    const handleSave = () => {
-        if (itemListSelectedRowIds) {
 
-            console.log('Save logic:', itemListSelectedRowIds);
-            setOpenModalStatus(false); // Close dialog after saving
-        }
-    };
+
 
 
 
@@ -724,7 +605,7 @@ console.log(statusInfo)*/}
 
     return (
         <div style={{ margin: "2rem" }}>
-            <form>
+            {loaded ? <form>
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
 
                     <Paper sx={{
@@ -1186,7 +1067,7 @@ console.log(statusInfo)*/}
 
 
                             </div>
-                                {itemAddExcelStatus && <p style={{color:'green'}}>{itemAddExcelStatus}</p>}
+                            {itemAddExcelStatus && <p style={{ color: 'green' }}>{itemAddExcelStatus}</p>}
 
                         </div>
 
@@ -1195,14 +1076,17 @@ console.log(statusInfo)*/}
 
                     </Paper>
 
-                </LocalizationProvider>
-            </form>
-            <ItemListContent.Provider
-                value={{ itemListPrintOpen, setItemListPrintOpen, selectedRows, filteredItemListData }}
-            >
 
-               {filteredItemListData.length > 0 && <ItemListPrint />}
-            </ItemListContent.Provider>
+                </LocalizationProvider>
+                <ItemListContent.Provider
+                    value={{ itemListPrintOpen, setItemListPrintOpen, selectedRows, filteredItemListData }}
+                >
+
+                    {filteredItemListData.length > 0 && <ItemListPrint />}
+                </ItemListContent.Provider>
+            </form>
+                : <div style={{width: "100vw", height: "100vh", textAlign: "center"}}>Loading...</div>}
+            
 
         </div>
     )
