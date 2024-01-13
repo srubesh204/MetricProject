@@ -271,7 +271,7 @@ const ItemList = () => {
         { field: 'itemDueDate', headerName: 'Due Date', width: 110, headerAlign: "center", align: "center", valueGetter: (params) => dayjs(params.row.itemDueDate).format('DD-MM-YYYY') },
         { field: 'itemLC', headerName: 'ItemLC', width: 60, headerAlign: "center", align: "center", valueGetter: (params) => params.row.itemLC || "-" },
         { field: 'itemCalFreInMonths', headerName: 'Frequency', type: "number", width: 100, headerAlign: "center", align: "center" },
-        { field: 'itemCalibrationDoneAt', headerName: 'Cal Done At ', width: 100, headerAlign: "center", align: "center" },
+        { field: 'itemCalibratedAt', headerName: 'Cal Done At ', width: 100, headerAlign: "center", align: "center" },
         { field: 'itemStatus', headerName: 'Status ', width: 80, headerAlign: "center", align: "center", },
         { field: 'itemDepartment', headerName: 'Current location', width: 120, headerAlign: "center", align: "center", },
         { field: 'itemCalibrationSource', headerName: 'Cal Source', width: 120, headerAlign: "center", align: "center", },
