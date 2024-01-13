@@ -1,0 +1,104 @@
+[{
+  "_id": {
+    "$oid": "65a1187fc70230ea4df8c99e"
+  },
+  "employeeCode": "SBCUII004",
+  "title": "Mr.",
+  "firstName": "Lawrance",
+  "address": "Ambattur",
+  "city": "Chennai",
+  "state": "Tamilnadu",
+  "contactNumber": "9884048594",
+  "designation": "Quality Manager",
+  "mailId": "lawrance@sribalajicastings.com",
+  "empRole": "admin",
+  "employmentStatus": "Active",
+  "password": "004",
+  "plantDetails": [
+    {
+      "plantName": "Plant2",
+      "departments": [
+        "Quality"
+      ]
+    }
+  ],
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "65a1187fc70230ea4df8c99f"
+  },
+  "employeeCode": "SBCUII008",
+  "title": "Mr.",
+  "firstName": "Prakash",
+  "address": "Ambattur",
+  "city": "Chennai",
+  "state": "Tamilnadu",
+  "contactNumber": "8939940090",
+  "designation": "Quality Supervisor",
+  "mailId": "qcsbc2@gmail.com",
+  "empRole": "plantAdmin",
+  "employmentStatus": "Active",
+  "password": "008",
+  "plantDetails": [
+    {
+      "plantName": "Plant2",
+      "departments": [
+        "Quality"
+      ]
+    }
+  ],
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "65a1187fc70230ea4df8c9a0"
+  },
+  "employeeCode": "1",
+  "title": "Mr.",
+  "firstName": "Ayyappan",
+  "address": "Ambattur",
+  "city": "Chennai",
+  "state": "Tamilnadu",
+  "contactNumber": "9384314231",
+  "designation": "Calibration Engineer",
+  "mailId": "sbc2calibration@gmail.com",
+  "empRole": "creator",
+  "employmentStatus": "Active",
+  "password": "1",
+  "plantDetails": [
+    {
+      "plantName": "Plant2",
+      "departments": [
+        "Quality"
+      ]
+    }
+  ],
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "65a1187fc70230ea4df8c9a1"
+  },
+  "employeeCode": "SBCUII529",
+  "title": "Mr.",
+  "firstName": "Sridhar",
+  "address": "Ambattur",
+  "city": "Chennai",
+  "state": "Tamilnadu",
+  "contactNumber": "8825930758",
+  "designation": "Management Representative",
+  "mailId": "quality2@sribalajicastings.com",
+  "empRole": "viewer",
+  "employmentStatus": "Active",
+  "password": "529",
+  "plantDetails": [
+    {
+      "plantName": "Plant2",
+      "departments": [
+        "Quality"
+      ]
+    }
+  ],
+  "__v": 0
+}]

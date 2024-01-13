@@ -231,10 +231,7 @@ const vendorController = {
           K: 'subContractor',
           L: 'certificate',
           M: 'certificateValidity',
-          N: 'vendorStatus',
-          
-        
-
+          N: 'vendorStatus'
       }
       });
       console.log(jsonData)

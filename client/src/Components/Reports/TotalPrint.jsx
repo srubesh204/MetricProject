@@ -60,30 +60,64 @@ const TotalPrint = () => {
 
     const renderTableRows = () => {
 
-        return filteredItemListData.map((row, index) => (
-            <View style={{
-                margin: "auto",
-                flexDirection: "row",
-                width: "100%", padding: "0px"
-            }} key={index.toString()}>
+        // return filteredItemListData.map((row, index) => (
+        //     <View style={{
+        //         margin: "auto",
+        //         flexDirection: "row",
+        //         width: "100%", padding: "0px"
+        //     }} key={index.toString()}>
 
-                <Text style={{ width: "8%", border: "0.5px solid black", padding: "4px 0px", textAlign: "center" }}>{index + 1}</Text>
-                <Text style={{ width: "10%", border: "0.5px solid black", padding: "4px 0px", textAlign: "center" }}>{row.itemIMTENo}</Text>
-                <Text style={{ width: "17%", border: "0.5px solid black", padding: "4px 0px", textAlign: "center" }}> {row.itemAddMasterName}</Text>
-                <Text style={{ width: "14%", border: "0.5px solid black", padding: "4px 0px", textAlign: "center" }}> {row.itemRangeSize !== "" ? row.itemRangeSize + " " + row.itemRangeSizeUnit : "-"}</Text>
-                <Text style={{ width: "10%", border: "0.5px solid black", padding: "4px 0px", textAlign: "center" }}> {row.itemLC !== "" ? row.itemLC + " " + row.itemLCUnit : "-"}</Text>
-                <Text style={{ width: "14%", border: "0.5px solid black", padding: "4px 0px", textAlign: "center" }}> {row.itemMake}</Text>
-                <Text style={{ width: "13%", border: "0.5px solid black", padding: "4px 0px", textAlign: "center" }}> {row.itemMFRNo}</Text>
-                <Text style={{ width: "10%", border: "0.5px solid black", padding: "4px 0px", textAlign: "center" }}> {row.itemCalFreInMonths}</Text>
-                <Text style={{ width: "16%", border: "0.5px solid black", padding: "4px 0px", textAlign: "center" }}>{partDataList
-                    .filter(part => row.itemPartName.includes(part._id))
-                    .map(part => part.partNo)
-                    .join(", ")}
-                </Text>
-                <Text style={{ width: "16%", border: "0.5px solid black", padding: "4px 0px", textAlign: "center" }}> {row.itemCalibrationSource === "outsource" ? (row.itemCalibratedAt ? row.itemCalibratedAt : "outsource") : row.itemCalibrationSource} </Text>
-                <Text style={{ width: "10%", border: "0.5px solid black", padding: "4px 0px", textAlign: "center" }}>{dayjs(row.itemCalDate).format('DD-MM-YYYY')} </Text>
-                <Text style={{ width: "12%", border: "0.5px solid black", padding: "4px 0px", textAlign: "center" }}>{dayjs(row.itemDueDate).format('DD-MM-YYYY')} </Text>
-                <Text style={{ width: "14%", border: "0.5px solid black", padding: "4px 0px", textAlign: "center" }}>{row.itemDepartment} </Text>
+        //         <Text style={{ width: "8%", border: "0.5px solid black", padding: "4px 0px", textAlign: "center" }}>{index + 1}</Text>
+        //         <Text style={{ width: "10%", border: "0.5px solid black", padding: "4px 0px", textAlign: "center" }}>{row.itemIMTENo}</Text>
+        //         <Text style={{ width: "17%", border: "0.5px solid black", padding: "4px 0px", textAlign: "center" }}> {row.itemAddMasterName}</Text>
+        //         <Text style={{ width: "14%", border: "0.5px solid black", padding: "4px 0px", textAlign: "center" }}> {row.itemRangeSize !== "" ? row.itemRangeSize + " " + row.itemRangeSizeUnit : "-"}</Text>
+        //         <Text style={{ width: "10%", border: "0.5px solid black", padding: "4px 0px", textAlign: "center" }}> {row.itemLC !== "" ? row.itemLC + " " + row.itemLCUnit : "-"}</Text>
+        //         <Text style={{ width: "14%", border: "0.5px solid black", padding: "4px 0px", textAlign: "center" }}> {row.itemMake}</Text>
+        //         <Text style={{ width: "13%", border: "0.5px solid black", padding: "4px 0px", textAlign: "center" }}> {row.itemMFRNo}</Text>
+        //         <Text style={{ width: "10%", border: "0.5px solid black", padding: "4px 0px", textAlign: "center" }}> {row.itemCalFreInMonths}</Text>
+        //         <Text style={{ width: "16%", border: "0.5px solid black", padding: "4px 0px", textAlign: "center" }}>{partDataList
+        //             .filter(part => row.itemPartName.includes(part._id))
+        //             .map(part => part.partNo)
+        //             .join(", ")}
+        //         </Text>
+        //         <Text style={{ width: "16%", border: "0.5px solid black", padding: "4px 0px", textAlign: "center" }}> {row.itemCalibrationSource === "outsource" ? (row.itemCalibratedAt ? row.itemCalibratedAt : "outsource") : row.itemCalibrationSource} </Text>
+        //         <Text style={{ width: "10%", border: "0.5px solid black", padding: "4px 0px", textAlign: "center" }}>{dayjs(row.itemCalDate).format('DD-MM-YYYY')} </Text>
+        //         <Text style={{ width: "12%", border: "0.5px solid black", padding: "4px 0px", textAlign: "center" }}>{dayjs(row.itemDueDate).format('DD-MM-YYYY')} </Text>
+        //         <Text style={{ width: "14%", border: "0.5px solid black", padding: "4px 0px", textAlign: "center" }}>{row.itemDepartment} </Text>
+
+
+
+
+
+
+
+
+
+        //     </View>
+        // ));
+
+        return filteredItemListData.map((row, index) => (
+            <View
+                style={{
+                    margin: "auto",
+                    flexDirection: "row",
+                    width: "100%", padding: "0px"
+                }} key={index.toString()}>
+
+                <Text style={{ width: "5%", border: "0.5px solid black", padding: "4px 0px", textAlign: "center" }}>{index + 1}</Text>
+                <Text style={{ width: "6%", border: "0.5px solid black", padding: "4px 0px", textAlign: "center" }}>{row.itemIMTENo}</Text>
+                <Text style={{ width: "8%", border: "0.5px solid black", padding: "4px 0px", textAlign: "center" }}> {row.itemAddMasterName}</Text>
+                <Text style={{ width: "7%", border: "0.5px solid black", padding: "4px 0px", textAlign: "center" }}> {row.itemRangeSize !== "" ? row.itemRangeSize + " " + row.itemRangeSizeUnit : "-"}</Text>
+                <Text style={{ width: "5%", border: "0.5px solid black", padding: "4px 0px", textAlign: "center" }}> {row.itemMake || "-"}</Text>
+                <Text style={{ width: "8%", border: "0.5px solid black", padding: "4px 0px", textAlign: "center" }}>{dayjs(row.itemCalDate).format('DD-MM-YYYY')} </Text>
+                <Text style={{ width: "8%", border: "0.5px solid black", padding: "4px 0px", textAlign: "center" }}>{dayjs(row.itemDueDate).format('DD-MM-YYYY')} </Text>
+                <Text style={{ width: "7%", border: "0.5px solid black", padding: "4px 0px", textAlign: "center" }}> {row.itemLC !== "" ? row.itemLC + " " + row.itemLCUnit : "-"}</Text>
+                <Text style={{ width: "7%", border: "0.5px solid black", padding: "4px 0px", textAlign: "center" }}> {row.itemCalFreInMonths || "-"}</Text>
+                <Text style={{ width: "9%", border: "0.5px solid black", padding: "4px 0px", textAlign: "center" }}>{row.itemCalibrationDoneAt || "-"} </Text>
+                <Text style={{ width: "7%", border: "0.5px solid black", padding: "4px 0px", textAlign: "center" }}> {row.itemStatus || "-"}</Text>
+                <Text style={{ width: "10%", border: "0.5px solid black", padding: "4px 0px", textAlign: "center" }}>{row.itemDepartment || "-"} </Text>
+                <Text style={{ width: "7%", border: "0.5px solid black", padding: "4px 0px", textAlign: "center" }}> {row.itemCalibrationSource === "outsource" ? (row.itemCalibratedAt ? row.itemCalibratedAt : "outsource") : row.itemCalibrationSource || "-"} </Text>
+                <Text style={{ width: "6%", border: "0.5px solid black", padding: "4px 0px", textAlign: "center" }}> {row.itemMFRNo || "-"}</Text>
 
 
 
@@ -95,6 +129,7 @@ const TotalPrint = () => {
 
             </View>
         ));
+
 
 
     };
@@ -122,28 +157,29 @@ const TotalPrint = () => {
             </IconButton>
             <PDFViewer width="100%" height="100%">
                 <Document>
-                    <Page size="A4" orientation='landscape' style={{ fontSize: "8px", padding: "10px 15px" }}>
+                    <Page size="A4" orientation='landscape' style={{ fontSize: "8px", padding: "10px 15px" }} wrap>
                         {/* <Text style={{ padding: "10px", textAlign: "center", textDecoration: "underline" }}>Master List Of Gauges</Text>*/}
-                        <View style={{ border: "1px solid black", width: "100%", height: "95%" }}>
+                        <View style={{ border: "1px solid black", width: "100%" }}>
                             <View style={{ display: "flex", flexDirection: "row", padding: 0, borderBottom: "1px solid black" }}>
-                                <Text style={{ width: "100%", padding: "20px", textAlign: "center", fontSize: "12px" }}>Master List of Gauges & Instruments</Text>
+                                <Text style={{ width: "100%", padding: "20px", textAlign: "center", fontSize: "12px" }}>Total List</Text>
                             </View>
                             <View style={styles.table}>
                                 {/* Table header */}
-                                <View style={styles.tableRow}>
-                                    <Text style={{ width: "8%", border: "0.5px solid black", padding: 8, textAlign: "center" }}>Sr.No </Text>
-                                    <Text style={{ width: "10%", border: "0.5px solid black", padding: 8, textAlign: "center" }}>IMTE No </Text>
-                                    <Text style={{ width: "17%", border: "0.5px solid black", padding: 8, textAlign: "center" }}>Item Description </Text>
-                                    <Text style={{ width: "14%", border: "0.5px solid black", padding: 8, textAlign: "center" }}>Range/Size</Text>
-                                    <Text style={{ width: "10%", border: "0.5px solid black", padding: 8, textAlign: "center" }}>L.C </Text>
-                                    <Text style={{ width: "14%", border: "0.5px solid black", padding: 8, textAlign: "center" }}>Make</Text>
-                                    <Text style={{ width: "13%", border: "0.5px solid black", padding: 8, textAlign: "center" }}>Mfr.Sr.No. </Text>
-                                    <Text style={{ width: "10%", border: "0.5px solid black", padding: 8, textAlign: "center" }}>Calib. Freq. </Text>
-                                    <Text style={{ width: "16%", border: "0.5px solid black", padding: 8, textAlign: "center" }}>Used in Part No</Text>
-                                    <Text style={{ width: "16%", border: "0.5px solid black", padding: 8, textAlign: "center" }}>Calibration Source</Text>
-                                    <Text style={{ width: "10%", border: "0.5px solid black", padding: 8, textAlign: "center" }}>Calibration Date</Text>
-                                    <Text style={{ width: "12%", border: "0.5px solid black", padding: 8, textAlign: "center" }}>Duedate</Text>
-                                    <Text style={{ width: "14%", border: "0.5px solid black", padding: 8, textAlign: "center" }}>Current           Location</Text>
+                                <View style={styles.tableRow} fixed>
+                                    <Text style={{ width: "5%", border: "0.5px solid black", padding: 8, textAlign: "center" }}>Si. No </Text>
+                                    <Text style={{ width: "6%", border: "0.5px solid black", padding: 8, textAlign: "center" }}>IMTE No</Text>
+                                    <Text style={{ width: "8%", border: "0.5px solid black", padding: 8, textAlign: "center" }}>Description</Text>
+                                    <Text style={{ width: "7%", border: "0.5px solid black", padding: 8, textAlign: "center" }}>Range/Size</Text>
+                                    <Text style={{ width: "5%", border: "0.5px solid black", padding: 8, textAlign: "center" }}>Make</Text>
+                                    <Text style={{ width: "8%", border: "0.5px solid black", padding: 8, textAlign: "center" }}>Cal Date</Text>
+                                    <Text style={{ width: "8%", border: "0.5px solid black", padding: 8, textAlign: "center" }}>Due Date</Text>
+                                    <Text style={{ width: "7%", border: "0.5px solid black", padding: 8, textAlign: "center" }}>ItemLC</Text>
+                                    <Text style={{ width: "7%", border: "0.5px solid black", padding: 8, textAlign: "center" }}>Frequency</Text>
+                                    <Text style={{ width: "9%", border: "0.5px solid black", padding: 8, textAlign: "center" }}>Cal Done At</Text>
+                                    <Text style={{ width: "7%", border: "0.5px solid black", padding: 8, textAlign: "center" }}>Status</Text>
+                                    <Text style={{ width: "10%", border: "0.5px solid black", padding: 8, textAlign: "center" }}>Current location</Text>
+                                    <Text style={{ width: "7%", border: "0.5px solid black", padding: 8, textAlign: "center" }}>Cal Source</Text>
+                                    <Text style={{ width: "6%", border: "0.5px solid black", padding: 8, textAlign: "center" }}>Type</Text>
 
 
 

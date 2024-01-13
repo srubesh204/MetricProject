@@ -9,7 +9,7 @@ const upload = multer({ storage: storage }).single('file');
 
 
 router.post("/uploadTestData", upload, designationController.uploadTestData)
-
+router.get("/changeDate", upload, designationController.changeDate)
 
 
 module.exports = router;

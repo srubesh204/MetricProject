@@ -1,5 +1,8 @@
+const dayjs = require("dayjs");
+const itemAddModel = require("../models/itemAddModel");
 const testModel = require("../models/testModel")
 const excelToJson = require('convert-excel-to-json');
+
 
 const areaController = {
     getAllAreas: async (req, res) => {
@@ -55,7 +58,34 @@ const areaController = {
             console.error('Error uploading Excel data:', error);
             res.status(500).json({ error: 'Internal Server Error' });
         }
-    }
+    },
+    changeDate: async (req, res) => {
+        try {
+          // Fetch all documents in the collection
+          const allDocuments = await itemAddModel.find();
+      
+          // Iterate through each document and update the "area" field with its previous value
+          const updatePromises = allDocuments.map(async (existingDocument) => {
+            const prevCalDate = dayjs(existingDocument.itemCalDate).format("YYYY-MM-DD");
+            const itemDueDate = dayjs(existingDocument.itemDueDate).format("YYYY-MM-DD");
+            const itemReceiptDate = dayjs(existingDocument.itemReceiptDate).format("YYYY-MM-DD");
+            existingDocument.itemCalDate = prevCalDate;
+            existingDocument.itemDueDate = itemDueDate;
+            existingDocument.itemReceiptDate = itemReceiptDate;
+            // Optionally, update other properties based on your logic
+            // existingDocument.someOtherField = someNewValue;
+            return existingDocument.save();
+          });
+      
+          // Wait for all updates to complete
+          const updatedResults = await Promise.all(updatePromises);
+      
+          res.status(202).json({ result: updatedResults, status: 1, message: "All areas updated with previous values successfully" });
+        } catch (err) {
+          console.error(err);
+          res.status(500).send('Error updating areas');
+        }
+      }
 }
 
 

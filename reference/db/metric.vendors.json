@@ -1,0 +1,162 @@
+[{
+  "_id": {
+    "$oid": "65a23cc0672e5fe195041185"
+  },
+  "vendorCode": "SBC-02",
+  "aliasName": "Alfa",
+  "fullName": "Alfa Tools",
+  "dor": "Thu Jan 11 2024 23:59:50 GMT+0530 (India Standard Time)",
+  "address": "-",
+  "state": "Tamilnadu",
+  "city": "Chennai",
+  "oem": "0",
+  "customer": "0",
+  "supplier": "1",
+  "subContractor": "0",
+  "vendorStatus": "Active",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "65a23cc0672e5fe195041184"
+  },
+  "vendorCode": "SBC-01",
+  "aliasName": "Perfect-Chennai",
+  "fullName": "Perfect Calibration Centre Pvt.Ltd.",
+  "dor": "Thu Jan 11 2024 23:59:50 GMT+0530 (India Standard Time)",
+  "address": "Maduravoyal",
+  "state": "Tamilnadu",
+  "city": "Chennai",
+  "oem": "0",
+  "customer": "0",
+  "supplier": "1",
+  "subContractor": "0",
+  "vendorStatus": "Active",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "65a23cc0672e5fe195041186"
+  },
+  "vendorCode": "SBC-03",
+  "aliasName": "Trimaster",
+  "fullName": "Trimaster Metrology",
+  "dor": "Thu Jan 11 2024 23:59:50 GMT+0530 (India Standard Time)",
+  "address": "-",
+  "state": "Tamilnadu",
+  "city": "Chennai",
+  "oem": "1",
+  "customer": "0",
+  "supplier": "0",
+  "subContractor": "0",
+  "vendorStatus": "Active",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "65a23cc0672e5fe195041188"
+  },
+  "vendorCode": "SBC-05",
+  "aliasName": "GIRI Brothers",
+  "fullName": "GIRI Brothers",
+  "dor": "Thu Jan 11 2024 23:59:50 GMT+0530 (India Standard Time)",
+  "address": "-",
+  "state": "Tamilnadu",
+  "city": "Chennai",
+  "oem": "1",
+  "customer": "0",
+  "supplier": "0",
+  "subContractor": "0",
+  "vendorStatus": "Active",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "65a23cc0672e5fe195041189"
+  },
+  "vendorCode": "SBC-06",
+  "aliasName": "Accurate Engg",
+  "fullName": "Accurate Engg. Pvt. Ltd.",
+  "dor": "Thu Jan 11 2024 23:59:50 GMT+0530 (India Standard Time)",
+  "address": "-",
+  "state": "Tamilnadu",
+  "city": "Chennai",
+  "oem": "0",
+  "customer": "0",
+  "supplier": "1",
+  "subContractor": "0",
+  "vendorStatus": "Active",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "65a23cc0672e5fe19504118a"
+  },
+  "vendorCode": "SBC-07",
+  "aliasName": "Unik Gauges",
+  "fullName": "Unik Gauges",
+  "dor": "Thu Jan 11 2024 23:59:50 GMT+0530 (India Standard Time)",
+  "address": "-",
+  "state": "Tamilnadu",
+  "city": "Chennai",
+  "oem": "0",
+  "customer": "0",
+  "supplier": "1",
+  "subContractor": "0",
+  "vendorStatus": "Active",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "65a23cc0672e5fe195041187"
+  },
+  "vendorCode": "SBC-04",
+  "aliasName": "Accurate",
+  "fullName": "Accurate Gauging and Instruments",
+  "dor": "Thu Jan 11 2024 23:59:50 GMT+0530 (India Standard Time)",
+  "address": "-",
+  "state": "Tamilnadu",
+  "city": "Chennai",
+  "oem": "1",
+  "customer": "0",
+  "supplier": "0",
+  "subContractor": "0",
+  "vendorStatus": "Active",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "65a23cc0672e5fe19504118b"
+  },
+  "vendorCode": "SBC-08",
+  "aliasName": "Sambros EN",
+  "fullName": "Sambros EN",
+  "dor": "Thu Jan 11 2024 23:59:50 GMT+0530 (India Standard Time)",
+  "address": "-",
+  "state": "Tamilnadu",
+  "city": "Chennai",
+  "oem": "0",
+  "customer": "0",
+  "supplier": "1",
+  "subContractor": "0",
+  "vendorStatus": "Active",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "65a23cc0672e5fe19504118c"
+  },
+  "vendorCode": "SBC-09",
+  "aliasName": "Techno Gauges",
+  "fullName": "Techno Gauges",
+  "dor": "Thu Jan 11 2024 23:59:50 GMT+0530 (India Standard Time)",
+  "address": "-",
+  "state": "Tamilnadu",
+  "city": "Chennai",
+  "oem": "0",
+  "customer": "0",
+  "supplier": "1",
+  "subContractor": "0",
+  "vendorStatus": "Active",
+  "__v": 0
+}]

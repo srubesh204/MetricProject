@@ -1059,18 +1059,10 @@ const Home = () => {
     setItemDistinctNames(names)
   }, [plantWiseList])
 
-  console.log(itemListOptions)
+  console.log(selectedRows)
 
 
-  // useEffect(() => {
-  //   if (partDataList.length !== 0) {
-
-  //     const partCustomers = partDataList.filter(part => itemList.some(item => item.itemPartName.includes(part._id)))
-  //     console.log(partCustomers)
-  //     setPartCutomerNames(partCustomers)
-
-  //   }
-  // }, [partDataList, itemList])
+  
 
   return (
     <div style={{ backgroundColor: "#f1f4f4", margin: 0, padding: 0 }}>
