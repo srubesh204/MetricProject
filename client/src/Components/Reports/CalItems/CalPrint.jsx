@@ -9,7 +9,15 @@ import { Button, Dialog, DialogActions, DialogContent, DialogTitle, IconButton }
 const CalPrint = () => {
 
     const calData = useContext(CalData)
-    const { calPrintOpen, setCalPrintOpen, selectedRows, formatNoData, filteredCalData } = calData
+    const { calPrintOpen, setCalPrintOpen, selectedRows, formatNoData, filteredCalData ,calibrationData} = calData
+
+    Font.register({
+        family: 'Open Sans',
+        fonts: [
+            { src: 'https://cdn.jsdelivr.net/npm/open-sans-all@0.1.3/fonts/open-sans-regular.ttf' },
+            { src: 'https://cdn.jsdelivr.net/npm/open-sans-all@0.1.3/fonts/open-sans-600.ttf', fontWeight: 600 }
+        ]
+    })
 
     const styles = StyleSheet.create({
         table: {
@@ -22,7 +30,7 @@ const CalPrint = () => {
         tableRow: {
             flexDirection: "row",
             width: "100%",
-            height: "48%"
+            height: "50%"
         },
         tableCell: {
             width: '100%',
@@ -37,8 +45,8 @@ const CalPrint = () => {
         },
         footer: {
             position: 'absolute',
-            bottom: "20px",
-            height: "80px",
+            bottom: "10px",
+            height: "100px",
             left: "15px",
             right: "15px",
             fontSize: "8px",
@@ -46,7 +54,7 @@ const CalPrint = () => {
             borderWidth: 1,
 
         },
-    });
+    }); console.log(filteredCalData)
 
 
 
@@ -82,7 +90,7 @@ const CalPrint = () => {
                         <Text style={{ padding: "10px", textAlign: "center", textDecoration: "underline" }}>Calibration Certificate</Text>
                         <View style={{ border: "0.5px solid black", width: "100%", height: "95%" }}>
 
-                            <View style={styles.table}>
+                            <View>
                                 {/* Table header */}
                                 <View style={styles.tableRow}>
 
@@ -91,49 +99,49 @@ const CalPrint = () => {
                                         <View style={{ textAlign: "center", display: "flex", flexDirection: "row", width: "100%" }}>
                                             <View style={{ textAlign: "center", display: "flex", flexDirection: "column", width: "100%" }}>
                                                 <View style={{ textAlign: "center", display: "flex", flexDirection: "row", width: "100%" }}>
-                                                    <Text style={[styles.tableCell, { width: "40%" }]}>Certificate No.</Text>
-                                                    <Text style={[styles.tableCell, { width: "60%" }]}>Metric/18/2023</Text>
+                                                    <Text style={[styles.tableCell, { width: "40%", fontFamily: 'Open Sans', fontSize: 10, fontWeight: 1000 }]}>Certificate No.</Text>
+                                                    <Text style={[styles.tableCell, { width: "60%" }]}>{selectedRows.calCertificateNo}</Text>
                                                 </View>
-                                                <Text style={styles.tableCell}>CUSTOMER DETAILS</Text>
+                                                <Text style={[styles.tableCell, {fontFamily: 'Open Sans', fontSize: 10, fontWeight: 1000}]}>CUSTOMER DETAILS</Text>
                                             </View>
                                             <View style={{ textAlign: "center", display: "flex", flexDirection: "row", width: "100%" }}>
-                                                <Text style={[styles.tableCell, { paddingTop: "15px" }]}>DEVICE UNDER CALIBRATION DETAILS</Text>
+                                                <Text style={[styles.tableCell, { paddingTop: "15px", fontFamily: 'Open Sans', fontSize: 10, fontWeight: 1000  }]}>DEVICE UNDER CALIBRATION DETAILS</Text>
                                             </View>
                                         </View>
                                         <View style={{ display: "flex", flexDirection: "row", width: "100%", height: "50%" }}>
                                             <View style={{ textAlign: "center", display: "flex", flexDirection: "column", width: "20%" }}>
-                                                <Text style={[styles.tableCell, { height: "20%" }]}>Name</Text>
-                                                <Text style={[styles.tableCell, { height: "80%" }]}>Address</Text>
+                                                <Text style={[styles.tableCell, { height: "20%", fontFamily: 'Open Sans', fontSize: 10, fontWeight: 1000 }]}>Name</Text>
+                                                <Text style={[styles.tableCell, { height: "80%", fontFamily: 'Open Sans', fontSize: 10, fontWeight: 1000 }]}>Address</Text>
                                             </View>
                                             <View style={{ textAlign: "center", display: "flex", flexDirection: "column", width: "30%" }}>
                                                 <Text style={[styles.tableCell, { height: "20%" }]}>METRIC</Text>
                                                 <Text style={[styles.tableCell, { height: "80%" }]}>Avadi, Chennai.</Text>
                                             </View>
                                             <View style={{ textAlign: "center", display: "flex", flexDirection: "column", width: "20%" }}>
-                                                <Text style={[styles.tableCell, { height: "20%" }]}>Description</Text>
-                                                <Text style={[styles.tableCell, { height: "20%" }]}>Make</Text>
-                                                <Text style={[styles.tableCell, { height: "20%" }]}>SIZE</Text>
-                                                <Text style={[styles.tableCell, { height: "20%" }]}>Gauge No</Text>
-                                                <Text style={[styles.tableCell, { height: "20%" }]}>Gauge Serial No</Text>
+                                                <Text style={[styles.tableCell, { height: "20%", fontFamily: 'Open Sans', fontSize: 10, fontWeight: 1000 }]}>Description</Text>
+                                                <Text style={[styles.tableCell, { height: "20%", fontFamily: 'Open Sans', fontSize: 10, fontWeight: 1000 }]}>Make</Text>
+                                                <Text style={[styles.tableCell, { height: "20%", fontFamily: 'Open Sans', fontSize: 10, fontWeight: 1000 }]}>SIZE</Text>
+                                                <Text style={[styles.tableCell, { height: "20%", fontFamily: 'Open Sans', fontSize: 10, fontWeight: 1000 }]}>Gauge No</Text>
+                                                <Text style={[styles.tableCell, { height: "20%", fontFamily: 'Open Sans', fontSize: 10, fontWeight: 1000 }]}>Gauge Serial No</Text>
                                             </View>
                                             <View style={{ textAlign: "center", display: "flex", flexDirection: "column", width: "30%" }}>
-                                                <Text style={[styles.tableCell, { height: "20%" }]}>Description</Text>
-                                                <Text style={[styles.tableCell, { height: "20%" }]}>Make</Text>
-                                                <Text style={[styles.tableCell, { height: "20%" }]}>SIZE</Text>
-                                                <Text style={[styles.tableCell, { height: "20%" }]}>Gauge No</Text>
-                                                <Text style={[styles.tableCell, { height: "20%" }]}>Gauge Serial No</Text>
+                                                <Text style={[styles.tableCell, { height: "20%" }]}>{selectedRows.calItemName}</Text>
+                                                <Text style={[styles.tableCell, { height: "20%" }]}>{selectedRows.calItemMake}</Text>
+                                                <Text style={[styles.tableCell, { height: "20%" }]}>{selectedRows.calRangeSize}</Text>
+                                                <Text style={[styles.tableCell, { height: "20%" }]}>{selectedRows.calItemMFRNo}</Text>
+                                                <Text style={[styles.tableCell, { height: "20%" }]}>{selectedRows.calIMTENo}</Text>
                                             </View>
                                         </View>
                                         <View style={{ textAlign: "center", display: "flex", flexDirection: "row" }}>
                                             <Text style={[styles.tableCell, { width: "50%" }]}>Issue Date</Text>
-                                            <Text style={[styles.tableCell, { width: "50%" }]}>7-Sep-23</Text>
+                                            <Text style={[styles.tableCell, { width: "50%" }]}>{selectedRows.calItemEntryDate}</Text>
                                             <Text style={[styles.tableCell, { width: "40%" }]}>Calibrated on</Text>
-                                            <Text style={[styles.tableCell, { width: "60%" }]}>7-Sep-23</Text>
+                                            <Text style={[styles.tableCell, { width: "60%" }]}>{selectedRows.calItemCalDate}</Text>
                                         </View>
                                         <View style={{ textAlign: "center", display: "flex", flexDirection: "row" }}>
                                             <Text style={[styles.tableCell, { width: "50%" }]}>Received Condition of DUC</Text>
                                             <Text style={[styles.tableCell, { width: "50%" }]}>Satisfactory</Text>
-                                            <Text style={[styles.tableCell, { width: "40%" }]}>Next Due</Text>
+                                            <Text style={[styles.tableCell, { width: "40%" }]}>{selectedRows.calItemDueDate}</Text>
                                             <Text style={[styles.tableCell, { width: "60%" }]}>7-sep-23</Text>
                                         </View>
                                     </View>
@@ -146,9 +154,9 @@ const CalPrint = () => {
                                 </View>
                                 <View style={{ textAlign: "center", display: "flex", flexDirection: "row" }}>
                                     <Text style={[styles.tableCell, { width: "25%" }]}>Temperature</Text>
-                                    <Text style={[styles.tableCell, { width: "15%" }]}>0 ± 2°C</Text>
+                                    <Text style={[styles.tableCell, { width: "15%" }]}>{selectedRows.calItemTemperature}</Text>
                                     <Text style={[styles.tableCell, { width: "15%" }]}>Humidity</Text>
-                                    <Text style={[styles.tableCell, { width: "15%" }]}> 20 ± 10%</Text>
+                                    <Text style={[styles.tableCell, { width: "15%" }]}>{selectedRows.calItemHumidity}</Text>
                                     <Text style={[styles.tableCell, { width: "30%" }]}>Drawing No. :</Text>
                                 </View>
                                 <View style={{ textAlign: "center", display: "flex", flexDirection: "row" }}>
@@ -189,7 +197,7 @@ const CalPrint = () => {
                                     <Text style={[styles.tableCell, { width: "14%" }]}>Observed Size Min</Text>
                                     <Text style={[styles.tableCell, { width: "14%" }]}>Observed Size Max</Text>
                                     <Text style={[styles.tableCell, { width: "14%" }]}>Cal status</Text>
-                                    </View>
+                                </View>
                                 <View style={{ textAlign: "center", display: "flex", flexDirection: "row" }}>
                                     <Text style={[styles.tableCell, { width: "14%" }]}>GO</Text>
                                     <Text style={[styles.tableCell, { width: "14%" }]}>20.5000</Text>
@@ -198,9 +206,20 @@ const CalPrint = () => {
                                     <Text style={[styles.tableCell, { width: "14%" }]}>20.5280 </Text>
                                     <Text style={[styles.tableCell, { width: "14%" }]}>20.5290</Text>
                                     <Text style={[styles.tableCell, { width: "14%" }]}> ACCEPTED</Text>
-                                    </View>
+                                </View>
+                                <View>
+                                    <Text style={{padding: "20px 20px"}}>GAUGE IS ACCEPTABLE</Text>
+                                </View>
                             </View>
-
+                            <View Style={styles.footer}>
+                                <View><Text style={{ padding: "10px 20px"}}>Remarks :</Text></View>
+                                <View><Text style={{padding: "20px 20px"}}>This Certificate is Digitally Signed and does not require any seal or signature</Text></View>
+                                <View><Text style={{textAlign: "center", padding: "30px 10px"}}>----End of the Certificate----</Text></View>
+                                <View style={{width: "100%", display: "flex", flexDirection: "row", }}>
+                                <Text style={{width: "40%", textAlign: "center", padding: "30px 10px"}}>Calibrated by</Text><Text style={{width: "40%"}}></Text><Text style={{width: "40%", textAlign: "center", padding: "30px 10px"}}>Authorised by</Text>
+                                </View>
+                                
+                            </View>
 
                         </View>
 

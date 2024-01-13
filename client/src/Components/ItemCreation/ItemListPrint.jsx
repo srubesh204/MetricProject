@@ -82,15 +82,6 @@ const ItemListPrint = () => {
                 <Text style={{ width: "10%", border: "0.5px solid black", padding: "4px 0px", textAlign: "center" }}>{row.itemDepartment || "-"} </Text>
                 <Text style={{ width: "7%", border: "0.5px solid black", padding: "4px 0px", textAlign: "center" }}> {row.itemCalibrationSource === "outsource" ? (row.itemCalibratedAt ? row.itemCalibratedAt : "outsource") : row.itemCalibrationSource || "-"} </Text>
                 <Text style={{ width: "6%", border: "0.5px solid black", padding: "4px 0px", textAlign: "center" }}> {row.itemMFRNo || "-"}</Text>
-
-
-
-
-
-
-
-
-
             </View>
         ));
 

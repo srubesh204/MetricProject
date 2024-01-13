@@ -71,6 +71,7 @@ const CalList = () => {
     }, [])
     console.log(activeEmps)
     const [selectedRows, setSelectedRows] = useState([]);
+    console.log(selectedRows)
 
     const [calAddOpen, setCalAddOpen] = useState(false)
     const [calEditOpen, setCalEditOpen] = useState(false)
@@ -123,7 +124,7 @@ const CalList = () => {
     }, []);
 
     const [selectedCalRow, setSelectedCalRow] = useState([])
-
+    console.log(filteredCalData)
 
     const setCalEditData = (params) => {
         setSelectedCalRow(params.row);
@@ -141,6 +142,9 @@ const CalList = () => {
         { field: 'calItemCalDate', headerName: 'Calibration On', width: 200, valueGetter: (params) => dayjs(params.row.calItemCalDate).format('DD-MM-YYYY'), headerAlign: "center", align: "center", },
         { field: 'itemDueDate', headerName: 'Next Due On', width: 200, valueGetter: (params) => dayjs(params.row.itemDueDate).format('DD-MM-YYYY'), headerAlign: "center", align: "center", },
         { field: 'calStatus', headerName: 'Cal status', width: 200, headerAlign: "center", align: "center", },
+        
+        { field: 'printButton', headerName: 'Print', headerAlign: "center", align: "center", width: 100, renderCell: (params) => <Button onClick={() => { setSelectedRows(params.row); setCalPrintOpen(true) }}><PrintRounded color='success' /></Button> }
+        
     
 
     ]
@@ -321,7 +325,7 @@ const CalList = () => {
                             <div className='col d-flex '>
                                 <div className='me-2 '>
                                     <Button  onClick={() => { setSelectedRows(); setCalPrintOpen(true) }} ><PrintRounded color='success' /></Button>
-                                </div>
+                                </div> 
                                 <div className='me-2 '>
                                     <button type="button" className='btn btn-secondary' > Label Print</button>
                                 </div>
@@ -360,7 +364,7 @@ const CalList = () => {
                     <CalData.Provider
                         value={{ calPrintOpen, setCalPrintOpen, selectedRows,filteredCalData }}
                     >
-                         <CalPrint />
+                         {selectedRows && <CalPrint />}
                     </CalData.Provider>
 
 
