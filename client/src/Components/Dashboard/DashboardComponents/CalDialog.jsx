@@ -148,25 +148,25 @@ const CalDialog = () => {
             setCalibrationData((prev) => (
                 {
                     ...prev,
-                    calItemId: selectedRows[0]._id,
-                    calIMTENo: selectedRows[0].itemIMTENo,
-                    calItemName: selectedRows[0].itemAddMasterName,
-                    calItemType: selectedRows[0].itemType,
-                    calRangeSize: selectedRows[0].itemRangeSize,
-                    calItemMFRNo: selectedRows[0].itemMFRNo,
-                    calLC: selectedRows[0].itemLC,
-                    calItemMake: selectedRows[0].itemMake,
-                    calItemFreInMonths: selectedRows[0].itemCalFreInMonths,
-                    calItemUncertainity: selectedRows[0].selectedItemMaster[0].uncertainty,
-                    calItemSOPNo: selectedRows[0].selectedItemMaster[0].SOPNo,
-                    calStandardRef: selectedRows[0].selectedItemMaster[0].standardRef,
-                    calOBType: selectedRows[0].itemOBType,
+                    calItemId: selectedRows[0]._id || "",
+                    calIMTENo: selectedRows[0].itemIMTENo || "",
+                    calItemName: selectedRows[0].itemAddMasterName || "",
+                    calItemType: selectedRows[0].itemType || "",
+                    calRangeSize: selectedRows[0].itemRangeSize || "",
+                    calItemMFRNo: selectedRows[0].itemMFRNo || "",
+                    calLC: selectedRows[0].itemLC || "",
+                    calItemMake: selectedRows[0].itemMake || "",
+                    calItemFreInMonths: selectedRows[0].itemCalFreInMonths || "",
+                    calItemUncertainity: selectedRows[0].selectedItemMaster[0].uncertainty || "",
+                    calItemSOPNo: selectedRows[0].selectedItemMaster[0].SOPNo || "",
+                    calStandardRef: selectedRows[0].selectedItemMaster[0].standardRef || "",
+                    calOBType: selectedRows[0].itemOBType || "",
 
                     // calCalibratedBy: selectedRows[0],
                     // calApprovedBy: selectedRows[0],
                     calcalibrationData:
 
-                        selectedRows[0].acceptanceCriteria.map((item) => (
+                        selectedExtraMaster.length > 0 && selectedRows[0].acceptanceCriteria.map((item) => (
                             {
                                 calParameter: item.acParameter,
                                 calNominalSize: item.acNominalSize,
@@ -186,7 +186,7 @@ const CalDialog = () => {
                             }
                         )),
 
-                    calMasterUsed: selectedRows[0].itemItemMasterIMTENo
+                    calMasterUsed: selectedRows[0].itemItemMasterIMTENo || ""
                 }
 
             ))
