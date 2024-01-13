@@ -1,0 +1,54 @@
+[{
+  "_id": {
+    "$oid": "65a12249c70230ea4df8cbf2"
+  },
+  "department": "department",
+  "departmentStatus": "departmentStatus",
+  "defaultdep": "defaultdep",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "65a12249c70230ea4df8cbf3"
+  },
+  "department": "Quality",
+  "departmentStatus": "active",
+  "defaultdep": "yes",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "65a12249c70230ea4df8cbf4"
+  },
+  "department": "NPD",
+  "departmentStatus": "active",
+  "defaultdep": "No",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "65a12249c70230ea4df8cbf5"
+  },
+  "department": "Production",
+  "departmentStatus": "active",
+  "defaultdep": "No",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "65a12249c70230ea4df8cbf6"
+  },
+  "department": "Line",
+  "departmentStatus": "active",
+  "defaultdep": "No",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "65a12249c70230ea4df8cbf7"
+  },
+  "department": "Sample",
+  "departmentStatus": "active",
+  "defaultdep": "No",
+  "__v": 0
+}]

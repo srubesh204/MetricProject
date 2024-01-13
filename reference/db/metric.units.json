@@ -1,0 +1,77 @@
+[{
+  "_id": {
+    "$oid": "65a12359c70230ea4df8cc7e"
+  },
+  "unitName": "\"",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "65a12359c70230ea4df8cc7d"
+  },
+  "unitName": "mm",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "65a12359c70230ea4df8cc7c"
+  },
+  "unitName": "litre",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "65a12359c70230ea4df8cc7a"
+  },
+  "unitName": "kg",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "65a12359c70230ea4df8cc7b"
+  },
+  "unitName": "kgf",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "65a12359c70230ea4df8cc7f"
+  },
+  "unitName": "°",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "65a12359c70230ea4df8cc81"
+  },
+  "unitName": "Nm",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "65a12359c70230ea4df8cc82"
+  },
+  "unitName": "sec",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "65a12359c70230ea4df8cc80"
+  },
+  "unitName": "um",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "65a12359c70230ea4df8cc83"
+  },
+  "unitName": "min",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "65a12359c70230ea4df8cc84"
+  },
+  "unitName": "inch",
+  "__v": 0
+}]

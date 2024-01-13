@@ -1,0 +1,420 @@
+[{
+  "_id": {
+    "$oid": "65a1236bc70230ea4df8ccab"
+  },
+  "itemType": "attribute",
+  "itemDescription": "Plain Plug Gauge",
+  "itemFqInMonths": 6,
+  "calAlertInDay": 7,
+  "status": "Active",
+  "calibrationPoints": [],
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "65a1236bc70230ea4df8ccac"
+  },
+  "itemType": "attribute",
+  "itemDescription": "Profile Gauge",
+  "itemFqInMonths": 6,
+  "calAlertInDay": 7,
+  "status": "Active",
+  "calibrationPoints": [],
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "65a1236bc70230ea4df8ccad"
+  },
+  "itemType": "attribute",
+  "itemDescription": "Flush Pin Gauge",
+  "itemFqInMonths": 6,
+  "calAlertInDay": 7,
+  "status": "Active",
+  "calibrationPoints": [],
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "65a1236bc70230ea4df8ccae"
+  },
+  "itemType": "attribute",
+  "itemDescription": "Depth Gauge",
+  "itemFqInMonths": 6,
+  "calAlertInDay": 7,
+  "status": "Active",
+  "calibrationPoints": [],
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "65a1236bc70230ea4df8ccb0"
+  },
+  "itemType": "attribute",
+  "itemDescription": "Width Gauge",
+  "itemFqInMonths": 6,
+  "calAlertInDay": 7,
+  "status": "Active",
+  "calibrationPoints": [],
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "65a1236bc70230ea4df8ccb3"
+  },
+  "itemType": "attribute",
+  "itemDescription": "Thread Plug Gauge",
+  "itemFqInMonths": 6,
+  "calAlertInDay": 7,
+  "status": "Active",
+  "calibrationPoints": [],
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "65a1236bc70230ea4df8ccaf"
+  },
+  "itemType": "attribute",
+  "itemDescription": "Snap Gauge",
+  "itemFqInMonths": 6,
+  "calAlertInDay": 7,
+  "status": "Active",
+  "calibrationPoints": [],
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "65a1236bc70230ea4df8ccb1"
+  },
+  "itemType": "attribute",
+  "itemDescription": "Fouling Gauge",
+  "itemFqInMonths": 6,
+  "calAlertInDay": 7,
+  "status": "Active",
+  "calibrationPoints": [],
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "65a1236bc70230ea4df8ccb2"
+  },
+  "itemType": "attribute",
+  "itemDescription": "Concentricity Gauge",
+  "itemFqInMonths": 6,
+  "calAlertInDay": 7,
+  "status": "Active",
+  "calibrationPoints": [],
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "65a1236bc70230ea4df8ccb4"
+  },
+  "itemType": "attribute",
+  "itemDescription": "Groove Plug Gauge",
+  "itemFqInMonths": 6,
+  "calAlertInDay": 7,
+  "status": "Active",
+  "calibrationPoints": [],
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "65a1236bc70230ea4df8ccb5"
+  },
+  "itemType": "attribute",
+  "itemDescription": "Groove Depth Gauge",
+  "itemFqInMonths": 6,
+  "calAlertInDay": 7,
+  "status": "Active",
+  "calibrationPoints": [],
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "65a1236bc70230ea4df8ccb6"
+  },
+  "itemType": "attribute",
+  "itemDescription": "Groove Snap Gauge",
+  "itemFqInMonths": 6,
+  "calAlertInDay": 7,
+  "status": "Active",
+  "calibrationPoints": [],
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "65a1236bc70230ea4df8ccb7"
+  },
+  "itemType": "attribute",
+  "itemDescription": "Groove Width Gauge",
+  "itemFqInMonths": 6,
+  "calAlertInDay": 7,
+  "status": "Active",
+  "calibrationPoints": [],
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "65a1236bc70230ea4df8ccb8"
+  },
+  "itemType": "attribute",
+  "itemDescription": "Air Plug Gauge",
+  "itemFqInMonths": 6,
+  "calAlertInDay": 7,
+  "status": "Active",
+  "calibrationPoints": [],
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "65a1236bc70230ea4df8ccb9"
+  },
+  "itemType": "attribute",
+  "itemDescription": "Setting Ring Gauge",
+  "itemFqInMonths": 6,
+  "calAlertInDay": 7,
+  "status": "Active",
+  "calibrationPoints": [],
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "65a1236bc70230ea4df8ccba"
+  },
+  "itemType": "attribute",
+  "itemDescription": "Position Gauge",
+  "itemFqInMonths": 6,
+  "calAlertInDay": 7,
+  "status": "Active",
+  "calibrationPoints": [],
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "65a1236bc70230ea4df8ccbb"
+  },
+  "itemType": "variable",
+  "itemDescription": "Vernier Height Gauge",
+  "itemFqInMonths": 6,
+  "calAlertInDay": 7,
+  "status": "Active",
+  "calibrationPoints": [],
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "65a1236bc70230ea4df8ccbc"
+  },
+  "itemType": "variable",
+  "itemDescription": "Plunger Dial Gauge",
+  "itemFqInMonths": 6,
+  "calAlertInDay": 7,
+  "status": "Active",
+  "calibrationPoints": [],
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "65a1236bc70230ea4df8ccbd"
+  },
+  "itemType": "variable",
+  "itemDescription": "Bore Dial Gauge",
+  "itemFqInMonths": 6,
+  "calAlertInDay": 7,
+  "status": "Active",
+  "calibrationPoints": [],
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "65a1236bc70230ea4df8ccc9"
+  },
+  "itemType": "variable",
+  "itemDescription": "Ultrosonic Gauge",
+  "itemFqInMonths": 12,
+  "calAlertInDay": 7,
+  "status": "Active",
+  "calibrationPoints": [],
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "65a1236bc70230ea4df8ccca"
+  },
+  "itemType": "variable",
+  "itemDescription": "Bevel Protractor",
+  "itemFqInMonths": 12,
+  "calAlertInDay": 7,
+  "status": "Active",
+  "calibrationPoints": [],
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "65a1236bc70230ea4df8ccbf"
+  },
+  "itemType": "variable",
+  "itemDescription": "Digital Micrometer",
+  "itemFqInMonths": 6,
+  "calAlertInDay": 7,
+  "status": "Active",
+  "calibrationPoints": [],
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "65a1236bc70230ea4df8ccc0"
+  },
+  "itemType": "variable",
+  "itemDescription": "External Micrometer",
+  "itemFqInMonths": 6,
+  "calAlertInDay": 7,
+  "status": "Active",
+  "calibrationPoints": [],
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "65a1236bc70230ea4df8ccc1"
+  },
+  "itemType": "variable",
+  "itemDescription": "Digital Vernier Caliper",
+  "itemFqInMonths": 6,
+  "calAlertInDay": 7,
+  "status": "Active",
+  "calibrationPoints": [],
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "65a1236bc70230ea4df8ccc2"
+  },
+  "itemType": "variable",
+  "itemDescription": "Dial Vernier Caliper",
+  "itemFqInMonths": 6,
+  "calAlertInDay": 7,
+  "status": "Active",
+  "calibrationPoints": [],
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "65a1236bc70230ea4df8ccc3"
+  },
+  "itemType": "variable",
+  "itemDescription": "Torque Wrench",
+  "itemFqInMonths": 6,
+  "calAlertInDay": 7,
+  "status": "Active",
+  "calibrationPoints": [],
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "65a1236bc70230ea4df8ccc4"
+  },
+  "itemType": "referenceStandard",
+  "itemDescription": "Surface Plate",
+  "itemFqInMonths": 12,
+  "calAlertInDay": 7,
+  "status": "Active",
+  "calibrationPoints": [],
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "65a1236bc70230ea4df8ccc5"
+  },
+  "itemType": "variable",
+  "itemDescription": "2D Height Gauge",
+  "itemFqInMonths": 12,
+  "calAlertInDay": 7,
+  "status": "Active",
+  "calibrationPoints": [],
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "65a1236bc70230ea4df8ccc6"
+  },
+  "itemType": "variable",
+  "itemDescription": "CMM",
+  "itemFqInMonths": 12,
+  "calAlertInDay": 7,
+  "status": "Active",
+  "calibrationPoints": [],
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "65a1236bc70230ea4df8ccc7"
+  },
+  "itemType": "variable",
+  "itemDescription": "Weighing Balance",
+  "itemFqInMonths": 12,
+  "calAlertInDay": 7,
+  "status": "Active",
+  "calibrationPoints": [],
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "65a1236bc70230ea4df8ccc8"
+  },
+  "itemType": "variable",
+  "itemDescription": "Lux Meter",
+  "itemFqInMonths": 12,
+  "calAlertInDay": 7,
+  "status": "Active",
+  "calibrationPoints": [
+    {
+      "calibrationPoint": "Go"
+    },
+    {
+      "calibrationPoint": "No Go"
+    }
+  ],
+  "__v": 0,
+  "SOPNo": "sop No",
+  "standardRef": "std",
+  "uncertainty": 2.14,
+  "uncertaintyUnit": "mm",
+  "workInsName": "download.jpeg"
+},
+{
+  "_id": {
+    "$oid": "65a1236bc70230ea4df8cccb"
+  },
+  "itemType": "variable",
+  "itemDescription": "Roughness Tester",
+  "itemFqInMonths": 12,
+  "calAlertInDay": 7,
+  "status": "Active",
+  "calibrationPoints": [],
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "65a1236bc70230ea4df8cccc"
+  },
+  "itemType": "referenceStandard",
+  "itemDescription": "Cast Iron Weights",
+  "itemFqInMonths": 12,
+  "calAlertInDay": 7,
+  "status": "Active",
+  "calibrationPoints": [],
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "65a1236bc70230ea4df8ccbe"
+  },
+  "itemType": "variable",
+  "itemDescription": "Pistol Caliper",
+  "itemFqInMonths": 6,
+  "calAlertInDay": 7,
+  "status": "Active",
+  "calibrationPoints": [],
+  "__v": 0
+}]

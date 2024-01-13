@@ -125,6 +125,7 @@ const ItemList = () => {
             });
 
             setItemAddExcelStatus(response.data.message || 'Excel file uploaded successfully');
+            itemFetch()
         } catch (error) {
             if (error.response) {
                 setItemAddExcelStatus(`Error: ${error.response.data.error || 'Something went wrong'}`);
