@@ -563,8 +563,8 @@ const CalAddModel = () => {
                     calLC: selectedItem[0].itemLC,
                     calItemMake: selectedItem[0].itemMake,
                     calItemFreInMonths: selectedItem[0].itemCalFreInMonths,
-                    calItemUncertainity: selectedItem[0].selectedItemMaster[0].uncertainty,
-                    calItemSOPNo: selectedItem[0].selectedItemMaster[0].SOPNo,
+                     calItemUncertainity: selectedItem[0].selectedItemMaster[0].uncertainty,
+                     calItemSOPNo: selectedItem[0].selectedItemMaster[0].SOPNo,
                     calStandardRef: selectedItem[0].selectedItemMaster[0].standardRef,
                     calOBType: selectedItem[0].itemOBType,
 

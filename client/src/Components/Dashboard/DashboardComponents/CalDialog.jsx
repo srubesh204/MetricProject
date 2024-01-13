@@ -157,16 +157,16 @@ const CalDialog = () => {
                     calLC: selectedRows[0].itemLC || "",
                     calItemMake: selectedRows[0].itemMake || "",
                     calItemFreInMonths: selectedRows[0].itemCalFreInMonths || "",
-                    calItemUncertainity: selectedRows[0].selectedItemMaster[0].uncertainty || "",
-                    calItemSOPNo: selectedRows[0].selectedItemMaster[0].SOPNo || "",
-                    calStandardRef: selectedRows[0].selectedItemMaster[0].standardRef || "",
+                    // calItemUncertainity: selectedRows[0].selectedItemMaster[0].uncertainty || "",
+                    // calItemSOPNo: selectedRows[0].selectedItemMaster[0].SOPNo || "",
+                    // calStandardRef: selectedRows[0].selectedItemMaster[0].standardRef || "",
                     calOBType: selectedRows[0].itemOBType || "",
 
                     // calCalibratedBy: selectedRows[0],
                     // calApprovedBy: selectedRows[0],
                     calcalibrationData:
 
-                        selectedExtraMaster.length > 0 && selectedRows[0].acceptanceCriteria.map((item) => (
+                        selectedRows.length > 0 && selectedRows[0].acceptanceCriteria.map((item) => (
                             {
                                 calParameter: item.acParameter,
                                 calNominalSize: item.acNominalSize,

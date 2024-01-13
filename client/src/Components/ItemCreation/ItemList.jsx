@@ -40,7 +40,7 @@ const ItemList = () => {
     const [loaded, setLoaded] = useState(false);
 
     const [itemList, setItemList] = useState([]);
-    const [filteredItemListData, setFilteredItemListData] = useState([])
+
 
     const itemFetch = async () => {
         try {
@@ -292,7 +292,21 @@ const ItemList = () => {
     const [deleteModalItem, setDeleteModalItem] = useState(false);
     const [itemListSelectedRowIds, setItemListSelectedRowIds] = useState([])
 
+    const [filteredItemListData, setFilteredItemListData] = useState([])
+    const [filterAllNames, setFilterAllNames] = useState({
 
+        imteNo: "all",
+        itemType: "all",
+        currentLocation: "all",
+        customerWise: "all",
+        supplierWise: "all",
+        partName: "all",
+        status: "all",
+        plantWise: "all",
+        calibrationSource:"all",
+        dueInDays:"all"
+
+    })
 
     const handleFilterChangeItemList = (e) => {
         const { name, value } = e.target;
@@ -303,22 +317,72 @@ const ItemList = () => {
             if (name === "imteNo") {
                 const imteNo = itemList.filter((item) => (item.itemIMTENo === value))
                 setFilteredItemListData(imteNo)
+                setFilterAllNames(prev => ({
+                    ...prev,
+                    imteNo: value,
+                    itemType: "all",
+                    currentLocation: "all",
+                    customerWise: "all",
+                    supplierWise: "all",
+                    partName: "all",
+                    status: "all",
+                    plantWise: "all",
+                    calibrationSource:"all"
+                }))
 
             }
             if (name === "itemType") {
                 const itemType = itemList.filter((item) => (item.itemType === value))
 
                 setFilteredItemListData(itemType)
+                setFilterAllNames(prev => ({
+                    ...prev,
+                    imteNo: "all",
+                    itemType: value,
+                    currentLocation: "all",
+                    customerWise: "all",
+                    supplierWise: "all",
+                    partName: "all",
+                    status: "all",
+                    plantWise: "all",
+                    calibrationSource:"all"
+                }))
 
 
             }
             if (name === "currentLocation") {
                 const currentLocation = itemList.filter((item) => (item.itemDepartment === value))
                 setFilteredItemListData(currentLocation)
+                setFilterAllNames(prev => ({
+                    ...prev,
+                    imteNo: "all",
+                    itemType: "all",
+                    currentLocation: value,
+                    customerWise: "all",
+                    supplierWise: "all",
+                    partName: "all",
+                    status: "all",
+                    plantWise: "all",
+                    calibrationSource:"all"
+                }))
             }
             if (name === "customerWise") {
-                const customerWise = itemList.filter((item) => item.itemCustomer.includes(value))
-                setFilteredItemListData(customerWise)
+                const customerWise = itemList.filter((item) =>
+                    item.itemCustomer && Array.isArray(item.itemCustomer) && item.itemCustomer.includes(value)
+                );
+                setFilteredItemListData(customerWise);
+                setFilterAllNames(prev => ({
+                    ...prev,
+                    imteNo: "all",
+                    itemType: "all",
+                    currentLocation: "all",
+                    customerWise: value,
+                    supplierWise: "all",
+                    partName: "all",
+                    status: "all",
+                    plantWise: "all",
+                    calibrationSource:"all"
+                }))
             }
             if (name === "supplierWise") {
 
@@ -327,8 +391,22 @@ const ItemList = () => {
                 setFilteredItemListData(supperlierWise)
             }
             if (name === "partName") {
-                const partName = itemList.filter((item) => (item.itemPartName === value))
-                setFilteredItemListData(partName)
+                const filteredItems = itemList.filter((item) => (item.itemPartName.includes(value)));
+
+                setFilteredItemListData(filteredItems);
+                console.log(filteredItems)
+                setFilterAllNames((prev) => ({
+                    ...prev,
+                    imteNo: "all",
+                    itemType: "all",
+                    currentLocation: "all",
+                    customerWise: "all",
+                    supplierWise: "all",
+                    partName: value, // Update the partName value in the filterAllNames state
+                    status: "all", // Reset other filters if needed
+                    plantWise: "all",
+                    calibrationSource:"all"
+                }));
             }
 
             if (name === "status") {
@@ -338,22 +416,35 @@ const ItemList = () => {
             if (name === "plantWise") {
                 const plantWise = itemList.filter((item) => (item.itemPlant === value))
                 setFilteredItemListData(plantWise)
-                // setFilterAllNames(prev => ({
-                //     ...prev,
-                //     imteNo: "all",
-                //     itemType: "all",
-                //     currentLocation: "all",
-                //     customerWise: "all",
-                //     supplierWise: "all",
-                //     partName: "all",
-                //     status: "all",
-                //     plantWise: value,
-                // }))
+                setFilterAllNames(prev => ({
+                    ...prev,
+                    imteNo: "all",
+                    itemType: "all",
+                    currentLocation: "all",
+                    customerWise: "all",
+                    supplierWise: "all",
+                    partName: "all",
+                    status: "all",
+                    plantWise: value,
+                    calibrationSource:"all"
+                }))
             }
             if (name === "calibrationSource") {
 
                 const calibrationSource = itemList.filter((item) => (item.itemCalibrationSource === value))
                 setFilteredItemListData(calibrationSource)
+                setFilterAllNames(prev => ({
+                    ...prev,
+                    imteNo: "all",
+                    itemType: "all",
+                    currentLocation: "all",
+                    customerWise: "all",
+                    supplierWise: "all",
+                    partName: "all",
+                    status: "all",
+                    plantWise: "all",
+                    calibrationSource: value
+                }))
 
             }
 
@@ -509,6 +600,20 @@ const ItemList = () => {
 
         if (value === "all") {
             setFilteredItemListData(itemList)
+            // setFilterAllNames(prev => ({
+            //     ...prev,
+            //     imteNo: "all",
+            //     itemType: "all",
+            //     currentLocation: "all",
+            //     customerWise: "all",
+            //     supplierWise: "all",
+            //     partName: "all",
+            //     status: "all",
+            //     plantWise: value,
+            //     calibrationSource:"all",
+            //     dueInDays:value
+            // }))
+            
         } else {
 
 
@@ -688,6 +793,7 @@ const ItemList = () => {
                                     required
                                     select
                                     defaultValue="all"
+                                    value={filterAllNames.imteNo}
                                     fullWidth
                                     size="small"
                                     onChange={handleFilterChangeItemList}
@@ -706,6 +812,7 @@ const ItemList = () => {
                                     select
                                     defaultValue="all"
                                     fullWidth
+                                    value={filterAllNames.itemType}
                                     onChange={handleFilterChangeItemList}
                                     size="small"
                                     name="itemType" >
@@ -722,6 +829,7 @@ const ItemList = () => {
                                     id="currentLocationId"
                                     select
                                     defaultValue="all"
+                                    value={filterAllNames.currentLocation}
                                     fullWidth
                                     onChange={handleFilterChangeItemList}
                                     size="small"
@@ -740,11 +848,12 @@ const ItemList = () => {
                                     id="customerWiseId"
                                     select
                                     defaultValue="all"
+                                    value={filterAllNames.customerWise}
                                     fullWidth
                                     size="small"
                                     onChange={handleFilterChangeItemList}
                                     name="customerWise" >
-                                    <MenuItem value="all">All</MenuItem>
+                                    < MenuItem value="all">All</MenuItem>
                                     {partCutomerNames.map((item, index) => (
                                         <MenuItem key={index} value={item}>{item.customer}</MenuItem>
                                     ))}
@@ -757,6 +866,7 @@ const ItemList = () => {
                                     id="calibrationSourceId"
                                     select
                                     defaultValue={"all"}
+                                    value={filterAllNames.calibrationSource}
                                     fullWidth
                                     size="small"
                                     // value={filterAllNames.calibrationSource}
@@ -778,6 +888,7 @@ const ItemList = () => {
                                     fullWidth
                                     size="small"
                                     onChange={handleDueChange}
+                                    value={filterAllNames.dueInDays}
                                     name="dueInDays" >
                                     <MenuItem value="all">All</MenuItem>
                                     <MenuItem value="Past">Past</MenuItem >
@@ -797,14 +908,15 @@ const ItemList = () => {
                                     id="partNameId"
                                     select
                                     defaultValue="all"
+                                    value={filterAllNames.partName}
                                     fullWidth
                                     size="small"
                                     onChange={handleFilterChangeItemList}
 
                                     name="partName" >
                                     <MenuItem value="all">All</MenuItem>
-                                    {partDataList.map((item, index) => (
-                                        <MenuItem key={index} value={item.partName}>{[item.partNo, item.partName].join(', ')}</MenuItem>
+                                    {partCutomerNames.map((item, index) => (
+                                        <MenuItem key={index} value={item._id}>{[item.partNo, item.partName].join(', ')}</MenuItem>
                                     ))}
                                 </TextField>
 
@@ -814,7 +926,7 @@ const ItemList = () => {
                                 <TextField label="Plant Wise"
                                     id="plantWiseId"
                                     select
-                                    //  value={filterAllNames.plantWise}
+                                     value={filterAllNames.plantWise}
                                     fullWidth
                                     size="small"
                                     onChange={handleFilterChangeItemList}
@@ -1076,7 +1188,7 @@ const ItemList = () => {
 
 
                     </Paper>
-                
+
                     <ItemListContent.Provider
                         value={{ itemListPrintOpen, setItemListPrintOpen, selectedRows, filteredItemListData }}
                     >
@@ -1088,15 +1200,15 @@ const ItemList = () => {
 
             </form>
                 : <Backdrop
-                
-                open={true}
-                
-              >
-                <CircularProgress color="success" />
-              </Backdrop>}
+
+                    open={true}
+
+                >
+                    <CircularProgress color="success" />
+                </Backdrop>}
 
 
-        </div>
+        </div >
     )
 }
 

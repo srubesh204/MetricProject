@@ -249,6 +249,7 @@ const DcList = () => {
                 }
             }
             );
+            setDcData(initialDcData)
 
             setSnackBarOpen(true)
 

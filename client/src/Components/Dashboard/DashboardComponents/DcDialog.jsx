@@ -267,6 +267,7 @@ const Dc = () => {
                 const response = await axios.post(
                     `${process.env.REACT_APP_PORT}/itemDc/createItemDc`, dcData
                 );
+                setDcData(initialDcData)
                 setAlertMessage(response.data.message)
                 setSnackBarOpen(true)
                 itemFetch();

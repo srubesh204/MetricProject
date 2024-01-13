@@ -833,6 +833,7 @@ const Grn = () => {
 
                     `${process.env.REACT_APP_PORT}/itemGRN/createItemGRN`, grnData
                 );
+                setSelectedGrnItem(initialGrnItem)
                 setAlertMessage({ message: response.data.message, type: "success" })
                 setSnackBarOpen(true)
                 setTimeout(() => setGrnOpen(false), 1000)
