@@ -61,7 +61,8 @@ const ItemListPrint = () => {
     const renderTableRows = () => {
 
         return filteredItemListData.map((row, index) => (
-            <View style={{
+            <View 
+            style={{
                 margin: "auto",
                 flexDirection: "row",
                 width: "100%", padding: "0px"
@@ -119,15 +120,15 @@ const ItemListPrint = () => {
             </IconButton>
             <PDFViewer width="100%" height="100%">
                 <Document>
-                    <Page size="A4" orientation='landscape' style={{ fontSize: "8px", padding: "10px 15px" }}>
+                    <Page size="A4" orientation='landscape' style={{ fontSize: "8px", padding: "10px 15px" }} wrap>
                         {/* <Text style={{ padding: "10px", textAlign: "center", textDecoration: "underline" }}>Master List Of Gauges</Text>*/}
-                        <View style={{ border: "1px solid black", width: "100%", height: "95%" }}>
+                        <View style={{ border: "1px solid black", width: "100%" }}>
                             <View style={{ display: "flex", flexDirection: "row", padding: 0, borderBottom: "1px solid black" }}>
                                 <Text style={{ width: "100%" ,padding: "20px", textAlign: "center", fontSize: "12px"  }}>Item List</Text>
                             </View>
                             <View style={styles.table}>
                                 {/* Table header */}
-                                <View style={styles.tableRow}>
+                                <View style={styles.tableRow} fixed>
                                     <Text style={{ width: "5%", border: "0.5px solid black", padding: 8, textAlign: "center" }}>Si. No </Text>
                                     <Text style={{ width: "6%", border: "0.5px solid black", padding: 8, textAlign: "center" }}>IMTE No</Text>
                                     <Text style={{ width: "8%", border: "0.5px solid black", padding: 8, textAlign: "center" }}>Description</Text>
