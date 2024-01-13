@@ -37,11 +37,45 @@ const ItemList = () => {
 
     const employeeRole = useEmployee()
 
-
-    console.log(dayjs("2023-11-17").isSameOrBefore("2023-11-21"))
     const [itemList, setItemList] = useState([]);
 
+    const itemFetch = async () => {
+        try {
+            const response = await axios.get(
+                `${process.env.REACT_APP_PORT}/itemAdd/getAllItemAdds`
+            );
+            // You can use a different logic for generating the id
 
+            // const filterNames = ["itemIMTENo", "itemType", "itemDepartment", "itemPlant", "itemCalibrationSource"]
+
+            // let updatedFilterNames = {};
+
+            // filterNames.forEach((element, index) => {
+            //     const data = response.data.result.map(item => item[element]);
+            //     filterNames[index] = [...new Set(data)];
+
+            //     // Update the object with a dynamic key based on the 'element'
+            //     updatedFilterNames[element] = filterNames[index];
+            //     console.log(updatedFilterNames)
+            // });
+
+            // // Update state outside the loop with the updated object
+            // setFilterNameList(prev => ({ ...prev, ...updatedFilterNames }));
+
+            // console.log(partDataList)
+
+
+
+            setItemList(response.data.result);
+            setFilteredItemListData(response.data.result);
+
+        } catch (err) {
+            console.log(err);
+        }
+    };
+    useEffect(() => {
+        itemFetch();
+    }, []);
 
     const [today, setToday] = useState(dayjs().format('YYYY-MM-DD'))
     console.log(today)
@@ -69,7 +103,6 @@ const ItemList = () => {
         itemCalibrationSource: "",
         itemItemMasterName: "",
         itemItemMasterIMTENo: "",
-
         itemSupplier: [],
         itemOEM: [],
         itemCalDate: "",
@@ -94,7 +127,7 @@ const ItemList = () => {
 
     }
 
-    const [itemStatusStateId, setItemStatusStateId] = useState(null)
+    
     const [itemStatusData, setItemStatusData] = useState({
         itemMasterRef: "",
         itemAddMasterName: "",
@@ -235,9 +268,9 @@ const ItemList = () => {
                 `${process.env.REACT_APP_PORT}itemAdd/updateItemAdd/${statusInfo._id}`, statusInfo
             );
             setSnackBarOpen(true)
-            itemAddFetch();
+            itemFetch()
 
-            setItemStatusStateId(null)
+            
             setItemStatusData(initialItemStatusData);
             console.log("Updated Successfully");
             setErrorHandler({ status: response.data.status, message: response.data.message, code: "success" })
@@ -285,73 +318,7 @@ const ItemList = () => {
         itemCalibrationSource: []
     })
 
-    const itemFetch = async () => {
-        try {
-            const response = await axios.get(
-                `${process.env.REACT_APP_PORT}/itemAdd/getAllItemAdds`
-            );
-            // You can use a different logic for generating the id
-
-            const filterNames = ["itemIMTENo", "itemType", "itemDepartment", "itemPlant", "itemCalibrationSource"]
-
-            let updatedFilterNames = {};
-
-            filterNames.forEach((element, index) => {
-                const data = response.data.result.map(item => item[element]);
-                filterNames[index] = [...new Set(data)];
-
-                // Update the object with a dynamic key based on the 'element'
-                updatedFilterNames[element] = filterNames[index];
-                console.log(updatedFilterNames)
-            });
-
-            // Update state outside the loop with the updated object
-            setFilterNameList(prev => ({ ...prev, ...updatedFilterNames }));
-
-            console.log(partDataList)
-
-
-
-            setItemList(response.data.result);
-            setFilteredItemListData(response.data.result);
-
-        } catch (err) {
-            console.log(err);
-        }
-    };
-    useEffect(() => {
-        itemFetch();
-    }, []);
-
-
-
-
-
     console.log(FilterNameList)
-
-
-
-    const [itemAddList, setItemAddList] = useState([]);
-
-    const itemAddFetch = async () => {
-        try {
-            const response = await axios.get(
-                `${process.env.REACT_APP_PORT}/itemAdd/getItemAddByIMTESort`
-            );
-            // You can use a different logic for generating the id
-
-            setItemAddList(response.data.result);
-
-
-        } catch (err) {
-            console.log(err);
-        }
-    };
-    useEffect(() => {
-        itemAddFetch();
-    }, []);
-
-
     const handleSnackClose = (event, reason) => {
         if (reason === 'clickaway') {
             return;
@@ -479,18 +446,7 @@ const ItemList = () => {
 
                 const calibrationSource = itemList.filter((item) => (item.itemCalibrationSource === value))
                 setFilteredItemListData(calibrationSource)
-                // setFilterAllNames(prev => ({
-                //     ...prev,
-                //     imteNo: "all",
-                //     itemType: "all",
-                //     currentLocation: "all",
-                //     customerWise: "all",
-                //     supplierWise: "all",
-                //     partName: "all",
-                //     status: "all",
-                //     plantWise: "all",
-                //     calibrationSource: value,
-                // }))
+               
             }
 
 
@@ -554,21 +510,7 @@ const ItemList = () => {
         vendorFetch();
     }, []);
 
-    const [departmentList, setDepartmentList] = useState([]);
-
-    const depFetchData = async () => {
-        try {
-            const response = await axios.get(
-                `${process.env.REACT_APP_PORT}/department/getAllDepartments`
-            );
-            setDepartmentList(response.data.result);
-        } catch (err) {
-            console.log(err);
-        }
-    };
-    useEffect(() => {
-        depFetchData();
-    }, []);
+   
 
     const [partCutomerNames, setPartCutomerNames] = useState([])
     const [partDataList, setPartDataList] = useState([])
@@ -604,47 +546,7 @@ const ItemList = () => {
     console.log(itemListSelectedRowIds)
 
 
-    {/*const deleteItemData = async () => {
-    try {
-        const response = await axios.delete(
-            "http://localhost:3001/itemAdd/deleteItemAdd/", {
-            data: {
-                itemAddIds: itemListSelectedRowIds
-            }
-        }
-
-
-        );
-       
-        setSnackBarOpen(true)
-        setErrorHandler({ status: response.data.status, message: response.data.message, code: "success" })
-        console.log("ItemAdd delete Successfully");
-    } catch (err) {
-        setSnackBarOpen(true)
-
-        if (err.response && err.response.status === 400) {
-            // Handle validation errors
-            console.log(err);
-            const errorData400 = err.response.data.errors;
-            const errorMessages400 = Object.values(errorData400).join(', ');
-            console.log(errorMessages400)
-            setErrorHandler({ status: 0, message: errorMessages400, code: "error" });
-        } else if (err.response && err.response.status === 500) {
-            // Handle other errors
-            console.log(err);
-            const errorData500 = err.response.data.error;
-            const errorMessages500 = Object.values(errorData500);
-            console.log(errorMessages500)
-            setErrorHandler({ status: 0, message: errorMessages500, code: "error" });
-        } else {
-            console.log(err);
-            console.log(err.response.data.error)
-            setErrorHandler({ status: 0, message: "An error occurred", code: "error" });
-        }
-
-        console.log(err);
-    }
-};*/}
+  
 
 
 
@@ -1299,7 +1201,7 @@ console.log(statusInfo)*/}
                 value={{ itemListPrintOpen, setItemListPrintOpen, selectedRows, filteredItemListData }}
             >
 
-                <ItemListPrint />
+               {filteredItemListData.length > 0 && <ItemListPrint />}
             </ItemListContent.Provider>
 
         </div>

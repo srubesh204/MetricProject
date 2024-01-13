@@ -600,6 +600,7 @@ const Home = () => {
     if (name === "Departments") {
       const depTable = allDepartments.map((dep) => {
         const filteredData = pieDataFilter.filter((item) => item.itemCurrentLocation === dep.department);
+        console.log(filteredData)
 
         const quantity = filteredData.length;
         if (quantity !== 0) {

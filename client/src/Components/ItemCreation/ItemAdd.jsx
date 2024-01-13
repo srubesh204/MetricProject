@@ -719,7 +719,7 @@ const ItemAdd = () => {
                             <div className='col-9'>
                                 <TextField
                                     {...(errors.itemMasterRef !== "" && { helperText: errors.itemMasterRef, error: true })}
-                                    size='small' select variant='outlined' label="Item Master" name='itemMasterRef'  value={itemAddData.itemDescription} fullWidth onChange={handleItemAddChange}>
+                                    size='small' select variant='outlined' label="Item Master" name='itemMasterRef'  value={itemAddData.itemMasterRef} fullWidth onChange={handleItemAddChange}>
                                     <MenuItem value=""><em>Select</em></MenuItem>
                                     {itemMasterDataList.map((item, index) => (
                                         <MenuItem key={index} value={item._id}>{item.itemDescription}</MenuItem>
@@ -879,8 +879,8 @@ const ItemAdd = () => {
                                                 {...(errors.itemDepartment !== "" && { helperText: errors.itemDepartment, error: true })}
                                                 value={itemAddData.itemPlant} onChange={handleItemAddChange} size='small' select fullWidth variant='outlined' label="Select Plant" name='itemPlant' id='itemPlantId'>
                                                 <MenuItem value="">Select Plant</MenuItem>
-                                                {employeeRole.loggedEmp.plant.map((plant, index) => (
-                                                    <MenuItem key={index} value={plant}>{plant}</MenuItem>
+                                                {employeeRole.loggedEmp.plantDetails.map((plant, index) => (
+                                                    <MenuItem key={index} value={plant.plantName}>{plant.plantName}</MenuItem>
                                                 ))}
                                             </TextField>
                                         </div>

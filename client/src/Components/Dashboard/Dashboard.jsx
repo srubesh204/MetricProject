@@ -465,7 +465,7 @@ const Dashboard = () => {
                     <ListItemText primary="Item List" />
 
                   </ListItemButton>
-                  {empRole && (empRole.employee === "superAdmin" || empRole.employee === "admin" || empRole.employee === "plantAdmin") &&
+                  {empRole && (empRole.employee === "superAdmin" || empRole.employee === "admin" || empRole.employee === "plantAdmin" || empRole.employee === "creator") &&
                     <ListItemButton sx={{ pl: 4 }} to="/itemAdd" >
                       <ListItemIcon>
                        -
