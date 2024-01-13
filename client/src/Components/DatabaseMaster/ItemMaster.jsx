@@ -1103,7 +1103,7 @@ const ItemMaster = () => {
                                             }}
                                             onRowClick={updateItemMaster}
                                             checkboxSelection
-
+                                            disableRowSelectionOnClick
 
 
 

@@ -118,6 +118,7 @@ const ItemListPrint = () => {
             >
                 <Close />
             </IconButton>
+            {filteredItemListData.length > 0 &&
             <PDFViewer width="100%" height="100%">
                 <Document>
                     <Page size="A4" orientation='landscape' style={{ fontSize: "8px", padding: "10px 15px" }} wrap>
@@ -129,38 +130,26 @@ const ItemListPrint = () => {
                             <View style={styles.table}>
                                 {/* Table header */}
                                 <View style={styles.tableRow} fixed>
-                                    <Text style={{ width: "%", border: "0.5px solid black", padding: 8, textAlign: "center" }}>Si. No </Text>
-                                    <Text style={{ width: "10%", border: "0.5px solid black", padding: 8, textAlign: "center" }}>IMTE No</Text>
-                                    <Text style={{ width: "8%", border: "0.5px solid black", padding: 8, textAlign: "center" }}>Description</Text>
-                                    <Text style={{ width: "5%", border: "0.5px solid black", padding: "0px 0px", textAlign: "center" }}>Range/Size</Text>
-                                    <Text style={{ width: "5%", border: "0.5px solid black", padding: 8, textAlign: "center" }}>Make</Text>
-                                    <Text style={{ width: "8%", border: "0.5px solid black", padding: 8, textAlign: "center" }}>Cal Date</Text>
-                                    <Text style={{ width: "8%", border: "0.5px solid black", padding: 8, textAlign: "center" }}>Due Date</Text>
-                                    <Text style={{ width: "7%", border: "0.5px solid black", padding: 8, textAlign: "center" }}>ItemLC</Text>
-                                    <Text style={{ width: "7%", border: "0.5px solid black", padding: 8, textAlign: "center" }}>Frequency</Text>
-                                    <Text style={{ width: "9%", border: "0.5px solid black", padding: 8, textAlign: "center" }}>Cal Done At</Text>
-                                    <Text style={{ width: "7%", border: "0.5px solid black", padding: 8, textAlign: "center" }}>Status</Text>
-                                    <Text style={{ width: "10%", border: "0.5px solid black", padding: 8, textAlign: "center" }}>Current location</Text>
-                                    <Text style={{ width: "7%", border: "0.5px solid black", padding: 8, textAlign: "center" }}>Cal Source</Text>
-                                    <Text style={{ width: "6%", border: "0.5px solid black", padding: 8, textAlign: "center" }}>Type</Text>
+                                    <Text style={{ width: "%", border: "0.5px solid black", padding: "4px 0px", textAlign: "center" }}>Si. No </Text>
+                                    <Text style={{ width: "10%", border: "0.5px solid black", padding: "4px 0px", textAlign: "center" }}>IMTE No</Text>
+                                    <Text style={{ width: "8%", border: "0.5px solid black", padding: "4px 0px", textAlign: "center" }}>Description</Text>
+                                    <Text style={{ width: "5%", border: "0.5px solid black", padding: "4px 0px", textAlign: "center" }}>Range/Size</Text>
+                                    <Text style={{ width: "5%", border: "0.5px solid black", padding: "4px 0px", textAlign: "center" }}>Make</Text> 
+                                    <Text style={{ width: "8%", border: "0.5px solid black", padding: "4px 0px", textAlign: "center" }}>Cal Date</Text>
+                                    <Text style={{ width: "8%", border: "0.5px solid black", padding: "4px 0px", textAlign: "center" }}>Due Date</Text>
+                                    <Text style={{ width: "7%", border: "0.5px solid black", padding: "4px 0px", textAlign: "center" }}>ItemLC</Text>
+                                    <Text style={{ width: "7%", border: "0.5px solid black", padding: "4px 0px", textAlign: "center" }}>Frequency</Text>
+                                    <Text style={{ width: "9%", border: "0.5px solid black", padding: "4px 0px", textAlign: "center" }}>Cal Done At</Text>
+                                    <Text style={{ width: "7%", border: "0.5px solid black", padding: "4px 0px", textAlign: "center" }}>Status</Text>
+                                    <Text style={{ width: "10%", border: "0.5px solid black", padding: "4px 0px", textAlign: "center" }}>Current location</Text>
+                                    <Text style={{ width: "7%", border: "0.5px solid black", padding: "4px 0px", textAlign: "center" }}>Cal Source</Text>
+                                    <Text style={{ width: "6%", border: "0.5px solid black", padding: "4px 0px", textAlign: "center" }}>Type</Text>
 
 
 
-                                    {/* <View>
-                                        <View style={{ width: "13%", border: "0.5px solid black", padding: 8, textAlign: "center" }}>
-                                            <Text>Source Of Calibration</Text>
-                                        </View>
-                                        <View style={styles.tableRow}>
-                                            <View >
-                                                <Text>INHOUSE</Text>
-                                            </View>
-                                            <View>
-                                                <Text>EXTERNAL</Text>
-                                            </View>
-                                        </View>
-            </View>*/}
+                                
                                 </View>
-                                {/* Table rows */}
+                            
                                 {renderTableRows()}
                                
                             </View>
@@ -172,7 +161,7 @@ const ItemListPrint = () => {
 
                     </Page>
                 </Document>
-            </PDFViewer>
+            </PDFViewer>}
         </Dialog>
     )
 }

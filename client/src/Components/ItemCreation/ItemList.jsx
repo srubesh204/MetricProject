@@ -1,5 +1,5 @@
 import React, { createContext, useEffect, useState } from 'react'
-import { TextField, MenuItem, Button, ButtonGroup } from '@mui/material';
+import { TextField, MenuItem, Button, ButtonGroup, Backdrop, CircularProgress } from '@mui/material';
 import { Box, Container, Grid, Paper, Typography } from "@mui/material";
 import { DataGrid, GridToolbar } from '@mui/x-data-grid';
 import axios from 'axios';
@@ -40,6 +40,7 @@ const ItemList = () => {
     const [loaded, setLoaded] = useState(false);
 
     const [itemList, setItemList] = useState([]);
+    const [filteredItemListData, setFilteredItemListData] = useState([])
 
     const itemFetch = async () => {
         try {
@@ -291,7 +292,7 @@ const ItemList = () => {
     const [deleteModalItem, setDeleteModalItem] = useState(false);
     const [itemListSelectedRowIds, setItemListSelectedRowIds] = useState([])
 
-    const [filteredItemListData, setFilteredItemListData] = useState([])
+
 
     const handleFilterChangeItemList = (e) => {
         const { name, value } = e.target;
@@ -593,7 +594,7 @@ const ItemList = () => {
 
 
 
-
+    console.log(filteredItemListData)
 
 
 
@@ -1075,18 +1076,25 @@ const ItemList = () => {
 
 
                     </Paper>
+                
+                    <ItemListContent.Provider
+                        value={{ itemListPrintOpen, setItemListPrintOpen, selectedRows, filteredItemListData }}
+                    >
 
+                        <ItemListPrint />
+                    </ItemListContent.Provider>
 
                 </LocalizationProvider>
-                <ItemListContent.Provider
-                    value={{ itemListPrintOpen, setItemListPrintOpen, selectedRows, filteredItemListData }}
-                >
 
-                    {filteredItemListData.length > 0 && <ItemListPrint />}
-                </ItemListContent.Provider>
             </form>
-                : <div style={{width: "100vw", height: "100vh", textAlign: "center"}}>Loading...</div>}
-            
+                : <Backdrop
+                
+                open={true}
+                
+              >
+                <CircularProgress color="success" />
+              </Backdrop>}
+
 
         </div>
     )
