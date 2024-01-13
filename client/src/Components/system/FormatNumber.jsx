@@ -18,6 +18,7 @@ const FormatNumber = () => {
     }
 
     const initialFormatData = {
+        formatId:"",
         fDc: {
             frNo: "",
             amNo: "",
@@ -54,6 +55,7 @@ const FormatNumber = () => {
     }
     const [isEditable, setIsEditable] = useState(false)
     const [formatData, setFormatData] = useState({
+        formatId:"",
         fDc: {
             frNo: "",
             amNo: "",
@@ -119,6 +121,7 @@ const FormatNumber = () => {
             console.log(format)
             setFormatData((prev) => ({
                 ...prev,
+                
                 fDc: {
                     ...prev.fDc,
                     frNo: format.fDc.frNo,
