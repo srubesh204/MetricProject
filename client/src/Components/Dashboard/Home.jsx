@@ -80,6 +80,25 @@ const Home = () => {
   const [allDepartments, setAllDepartments] = useState([])
 
 
+  const [masters, setMasters] = useState([]);
+  const itemMasterFetchData = async () => {
+    try {
+        const response = await axios.get(
+            `${process.env.REACT_APP_PORT}/itemMaster/getAllItemMasters`
+        );
+
+
+       setMasters(response.data.result)
+
+    } catch (err) {
+        console.log(err);
+    }
+};
+useEffect(() => {
+    itemMasterFetchData();
+}, []);
+
+
 
   //allActiveEmployees
   const [activeEmps, setActiveEmps] = useState({
@@ -1488,7 +1507,7 @@ const Home = () => {
               <React.Fragment>
 
                 <HomeContent.Provider
-                  value={{ calOpen, setCalOpen, selectedRows, itemMasters, activeEmps: activeEmps.allEmps }}
+                  value={{ calOpen, setCalOpen, selectedRows, itemMasters, activeEmps: activeEmps.allEmps, masters }}
                 >
                   <CalDialog />
                 </HomeContent.Provider>
