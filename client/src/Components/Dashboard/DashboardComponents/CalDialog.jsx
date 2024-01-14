@@ -17,7 +17,7 @@ const CalDialog = () => {
 
     const calData = useContext(HomeContent)
     const [lastResultData, setLastResultData] = useState([])
-    const { calOpen, setCalOpen, selectedRows, itemMasters, activeEmps } = calData
+    const { calOpen, setCalOpen, selectedRows, itemMasters, activeEmps, masters } = calData
     const [calibrationDatas, setCalibrationDatas] = useState([])
     const [certNo, setCertNo] = useState(0)
 
@@ -140,11 +140,12 @@ const CalDialog = () => {
         calMasterUsed: [],
     })
 
-
+    const [refMaster, setRefMaster]= useState({})
     const setCalData = () => {
         if (selectedRows.length === 1) {
-
-
+            const filter = masters.filter(mas => mas._id === selectedRows[0].itemMasterRef)
+            console.log(filter)
+            setRefMaster(filter[0])
             setCalibrationData((prev) => (
                 {
                     ...prev,
@@ -157,9 +158,9 @@ const CalDialog = () => {
                     calLC: selectedRows[0].itemLC || "",
                     calItemMake: selectedRows[0].itemMake || "",
                     calItemFreInMonths: selectedRows[0].itemCalFreInMonths || "",
-                    calItemUncertainity: selectedRows[0].selectedItemMaster[0].uncertainty || "",
-                    calItemSOPNo: selectedRows[0].selectedItemMaster[0].SOPNo || "",
-                    calStandardRef: selectedRows[0].selectedItemMaster[0].standardRef || "",
+                    calItemUncertainity: filter[0].uncertainty || "",
+                    calItemSOPNo: filter[0].SOPNo || "",
+                    calStandardRef: filter[0].standardRef || "",
                     calOBType: selectedRows[0].itemOBType || "",
 
                     // calCalibratedBy: selectedRows[0],
@@ -517,8 +518,8 @@ const CalDialog = () => {
     };
 
     useEffect(() => {
-        const ifRejected = calibrationData.calcalibrationData.some((item) => item.rowStatus === "notOk")
-        const isEmpty = calibrationData.calcalibrationData.some((item) => item.rowStatus === "")
+        const ifRejected =calibrationData.calcalibrationData.length > 0 && calibrationData.calcalibrationData.some((item) => item.rowStatus === "notOk")
+        const isEmpty =calibrationData.calcalibrationData.length > 0 && calibrationData.calcalibrationData.some((item) => item.rowStatus === "")
         if (ifRejected) {
             setCalibrationData((prev) => ({ ...prev, calStatus: "rejected" }))
         } else if (isEmpty) {
@@ -1144,7 +1145,7 @@ const CalDialog = () => {
                                                 <th>Min</th>
                                                 <th>Max</th>
                                             </tr>
-                                            {calibrationData.calcalibrationData.map((item, index) => {
+                                            {calibrationData.calcalibrationData.length > 0 && calibrationData.calcalibrationData.map((item, index) => {
 
                                                 let averageColor = "";
                                                 if (parseFloat(item.calAverageOB) >= parseFloat(item.calMinPSError) && parseFloat(item.calAverageOB) <= parseFloat(item.calMaxPSError)) {
