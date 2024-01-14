@@ -966,7 +966,7 @@ const CalDialog = () => {
 
                                             </tr>
                                             {/* {calibrationData.calcalibrationData.map((item)=> ()} */}
-                                            {calibrationData.calcalibrationData.map((item, index) => {
+                                            {calibrationData && calibrationData.calcalibrationData.map((item, index) => {
                                                 let color = ""
                                                 if (item.rowStatus === "ok") {
                                                     color = "#4cbb17"
