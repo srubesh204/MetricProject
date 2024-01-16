@@ -183,10 +183,8 @@ const CalDialog = () => {
                                 calMinPSError: item.acMinPSError,
                                 calMaxPSError: item.acMaxPSError,
                                 rowStatus: ""
-
                             }
                         )),
-
                     calMasterUsed: selectedRows[0].itemItemMasterIMTENo || ""
                 }
 
