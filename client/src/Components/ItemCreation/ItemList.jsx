@@ -293,6 +293,19 @@ const ItemList = () => {
     const [deleteModalItem, setDeleteModalItem] = useState(false);
     const [itemListSelectedRowIds, setItemListSelectedRowIds] = useState([])
 
+    const [filterAllNames, setFilterAllNames] = useState({
+
+        imteNo: "all",
+        itemType: "all",
+        currentLocation: "all",
+        customerWise: "all",
+        supplierWise: "all",
+        partName: "all",
+        status: "all",
+        plantWise: "all",
+        calibrationSource: "all"
+
+    })
 
 
     const handleFilterChangeItemList = (e) => {
@@ -304,57 +317,158 @@ const ItemList = () => {
             if (name === "imteNo") {
                 const imteNo = itemList.filter((item) => (item.itemIMTENo === value))
                 setFilteredItemListData(imteNo)
+                setFilterAllNames(prev => ({
+                    ...prev,
+                    imteNo: value,
+                    itemType: "all",
+                    currentLocation: "all",
+                    customerWise: "all",
+                    supplierWise: "all",
+                    partName: "all",
+                    status: "all",
+                    plantWise: "all",
+                    calibrationSource: "all"
+                }))
 
             }
             if (name === "itemType") {
                 const itemType = itemList.filter((item) => (item.itemType === value))
 
                 setFilteredItemListData(itemType)
+                setFilterAllNames(prev => ({
+                    ...prev,
+                    imteNo: "all",
+                    itemType: value,
+                    currentLocation: "all",
+                    customerWise: "all",
+                    supplierWise: "all",
+                    partName: "all",
+                    status: "all",
+                    plantWise: "all",
+                    calibrationSource: "all"
+                }))
 
 
             }
             if (name === "currentLocation") {
                 const currentLocation = itemList.filter((item) => (item.itemDepartment === value))
                 setFilteredItemListData(currentLocation)
+                setFilterAllNames(prev => ({
+                    ...prev,
+                    imteNo: "all",
+                    itemType: "all",
+                    currentLocation: value,
+                    customerWise: "all",
+                    supplierWise: "all",
+                    partName: "all",
+                    status: "all",
+                    plantWise: "all",
+                    calibrationSource: "all"
+                }))
             }
             if (name === "customerWise") {
-                const customerWise = itemList.filter((item) => item.itemCustomer.includes(value))
-                setFilteredItemListData(customerWise)
+                const customerWise = itemList.filter((item) =>
+                    item.itemCustomer && Array.isArray(item.itemCustomer) && item.itemCustomer.includes(value)
+                );
+                setFilterAllNames(prev => ({
+                    ...prev,
+                    imteNo: "all",
+                    itemType: "all",
+                    currentLocation: "all",
+                    customerWise: value,
+                    supplierWise: "all",
+                    partName: "all",
+                    status: "all",
+                    plantWise: "all",
+                    calibrationSource: "all"
+                }))
             }
             if (name === "supplierWise") {
 
                 const supperlierWise = itemList.filter((item) => item.itemSupplier.includes(value))
 
                 setFilteredItemListData(supperlierWise)
+
+                setFilterAllNames(prev => ({
+                    ...prev,
+                    imteNo: "all",
+                    itemType: value,
+                    currentLocation: "all",
+                    customerWise: "all",
+                    supplierWise: value,
+                    partName: "all",
+                    status: "all",
+                    plantWise: "all",
+                    calibrationSource: "all"
+                }))
             }
             if (name === "partName") {
-                const partName = itemList.filter((item) => (item.itemPartName === value))
-                setFilteredItemListData(partName)
-            }
+                const filteredItems = itemList.filter((item) => (item.itemPartName.includes(value)));
 
+                setFilteredItemListData(filteredItems);
+                console.log(filteredItems)
+                setFilterAllNames((prev) => ({
+                    ...prev,
+                    imteNo: "all",
+                    itemType: "all",
+                    currentLocation: "all",
+                    customerWise: "all",
+                    supplierWise: "all",
+                    partName: value, // Update the partName value in the filterAllNames state
+                    status: "all", // Reset other filters if needed
+                    plantWise: "all",
+                    calibrationSource: "all"
+                }));
+            }
             if (name === "status") {
                 const partName = itemList.filter((item) => (item.itemStatus === value))
                 setFilteredItemListData(partName)
+                setFilterAllNames(prev => ({
+                    ...prev,
+                    imteNo: "all",
+                    itemType: value,
+                    currentLocation: "all",
+                    customerWise: "all",
+                    supplierWise: "all",
+                    partName: "all",
+                    status: value,
+                    plantWise: "all",
+                    calibrationSource: "all"
+                }))
             }
             if (name === "plantWise") {
                 const plantWise = itemList.filter((item) => (item.itemPlant === value))
                 setFilteredItemListData(plantWise)
-                // setFilterAllNames(prev => ({
-                //     ...prev,
-                //     imteNo: "all",
-                //     itemType: "all",
-                //     currentLocation: "all",
-                //     customerWise: "all",
-                //     supplierWise: "all",
-                //     partName: "all",
-                //     status: "all",
-                //     plantWise: value,
-                // }))
+                setFilterAllNames(prev => ({
+                    ...prev,
+                    imteNo: "all",
+                    itemType: "all",
+                    currentLocation: "all",
+                    customerWise: "all",
+                    supplierWise: "all",
+                    partName: "all",
+                    status: "all",
+                    plantWise: value,
+                    calibrationSource: "all"
+                }))
             }
             if (name === "calibrationSource") {
 
                 const calibrationSource = itemList.filter((item) => (item.itemCalibrationSource === value))
                 setFilteredItemListData(calibrationSource)
+                setFilterAllNames(prev => ({
+                    ...prev,
+                    imteNo: "all",
+                    itemType: "all",
+                    currentLocation: "all",
+                    customerWise: "all",
+                    supplierWise: "all",
+                    partName: "all",
+                    status: "all",
+                    plantWise: "all",
+                    calibrationSource: value
+
+                }))
 
             }
 
@@ -364,7 +478,10 @@ const ItemList = () => {
 
     };
 
-
+ const [filterDates, setFilterDates] = useState({
+    startDate: "",
+    endDate: ""
+ })
 
 
     const dueDatePicker = (newValue, name) => {
@@ -374,27 +491,38 @@ const ItemList = () => {
 
 
         if (name === "dueStartDate") {
-            startDate = newValue.format("YYYY-MM-DD");
+            setFilterDates(prev => ({...prev, startDate : newValue.format("YYYY-MM-DD")}));
         }
         if (name === "dueEndDate") {
-            endDate = newValue.format("YYYY-MM-DD");
+            setFilterDates(prev => ({...prev, endDate : newValue.format("YYYY-MM-DD")}));
         }
 
-        const filteredData = itemList.filter((item) => {
+        //     const filteredData = itemList.filter((item) => {
 
 
-            // Assuming item.itemDueDate is a valid date
-            const itemDueDate = new Date(item.itemDueDate);
+        //         // Assuming item.itemDueDate is a valid date
+        //         const itemDueDate = new Date(item.itemDueDate);
 
-            return (
-                (startDate === "" || itemDueDate >= new Date(startDate)) &&
-                (endDate === "" || itemDueDate <= new Date(endDate))
-            );
-        });
+        //         return (
+        //             (startDate === "" || itemDueDate >= new Date(startDate)) &&
+        //             (endDate === "" || itemDueDate <= new Date(endDate))
+        //         );
+        //     });
 
+
+        // };
+        
 
     };
+    console.log(filterDates)
 
+    const DatefilterFunction  = () => {
+    
+            const filter = itemList.filter((item) => dayjs(item.itemCalDate).isSameOrAfter(filterDates.startDate) && dayjs(item.itemCalDate).isSameOrBefore(filterDates.endDate))
+       
+        console.log(filter)
+        setFilteredItemListData(filter)
+    }
 
     const [vendorList, setVendorList] = useState([])
 
@@ -421,6 +549,7 @@ const ItemList = () => {
 
     const partFetchData = async () => {
         try {
+
             const response = await axios.get(
                 `${process.env.REACT_APP_PORT}/part/getAllParts`
             );
@@ -447,11 +576,41 @@ const ItemList = () => {
     const [errorhandler, setErrorHandler] = useState({});
 
 
+    const [startDate, setStartDate] = useState(null);
+    const [endDate, setEndDate] = useState(null);
+    const [filteredData, setFilteredData] = useState(itemList);
 
 
+    const dueDateYear = (newValue, name) => {
+        if (name === 'dueStartDate') {
+            setStartDate(newValue);
+        }
+        if (name === 'dueEndDate') {
+            setEndDate(newValue);
+        }
+    };
 
+    const handleDueChanges = () => {
+        // Check if both start and end dates are selected
+        if (startDate && endDate) {
+            const filteredData = itemList.filter((item) => {
+                const itemDueDate = new Date(item.itemDueDate);
 
+                return (
+                    itemDueDate >= new Date(startDate) &&
+                    itemDueDate <= new Date(endDate)
+                );
+            });
 
+            // Update the state with the filtered data
+            setFilteredData(filteredData);
+               console.log()
+        } else {
+            // Handle case where either start or end date is not selected
+            
+        }
+    };
+    console.log(filteredData);
 
     const deleteItemData = async () => {
 
@@ -632,31 +791,37 @@ const ItemList = () => {
                                     {dueDate === "Date" && <div className='col d-flex justify-content-end mb-2 g-2'>
                                         <div className="me-2 col-2 ">
                                             <DatePicker
-
                                                 fullWidth
                                                 id="startDateId"
                                                 name="dueStartDate"
-                                                onChange={(newValue) => dueDatePicker(newValue, "dueStartDate")}
+                                                onChange={(newValue) => dueDatePicker(newValue, 'dueStartDate')}
                                                 label="Start Date"
-
                                                 slotProps={{ textField: { size: 'small' } }}
-                                                format="DD-MM-YYYY" />
+                                                format="DD-MM-YYYY"
+                                            />
                                         </div>
                                         <div className="me-2 col-2">
                                             <DatePicker
-
                                                 fullWidth
                                                 id="endDateId"
                                                 name="dueEndDate"
-                                                onChange={(newValue) => dueDatePicker(newValue, "dueEndDate")}
+                                                onChange={(newValue) => dueDatePicker(newValue, 'dueEndDate')}
                                                 label="End Date "
-
                                                 slotProps={{ textField: { size: 'small' } }}
-                                                format="DD-MM-YYYY" />
+                                                format="DD-MM-YYYY"
+                                            />
                                         </div>
 
                                         <div>
-                                            <Button variant='contained' startIcon={<FilterAlt />} size='small' color='warning'>Filter</Button>
+                                            <Button
+                                                variant='contained'
+                                                onClick={() => DatefilterFunction()}
+                                                startIcon={<FilterAlt />}
+                                                size='small'
+                                                color='warning'
+                                            >
+                                                Filter
+                                            </Button>
                                         </div>
                                     </div>}
                                 </div>
@@ -688,6 +853,7 @@ const ItemList = () => {
                                     id="imteNoId"
                                     required
                                     select
+                                    value={filterAllNames.imteNo}
                                     defaultValue="all"
                                     fullWidth
                                     size="small"
@@ -705,6 +871,7 @@ const ItemList = () => {
                                 <TextField label="Item Type"
                                     id="itemTypeId"
                                     select
+                                    value={filterAllNames.itemType}
                                     defaultValue="all"
                                     fullWidth
                                     onChange={handleFilterChangeItemList}
@@ -723,6 +890,7 @@ const ItemList = () => {
                                     id="currentLocationId"
                                     select
                                     defaultValue="all"
+                                    value={filterAllNames.currentLocation}
                                     fullWidth
                                     onChange={handleFilterChangeItemList}
                                     size="small"
@@ -742,6 +910,7 @@ const ItemList = () => {
                                     select
                                     defaultValue="all"
                                     fullWidth
+                                    value={filterAllNames.customerWise}
                                     size="small"
                                     onChange={handleFilterChangeItemList}
                                     name="customerWise" >
@@ -758,6 +927,7 @@ const ItemList = () => {
                                     id="calibrationSourceId"
                                     select
                                     defaultValue={"all"}
+                                    value={filterAllNames.calibrationSource}
                                     fullWidth
                                     size="small"
                                     // value={filterAllNames.calibrationSource}
@@ -797,15 +967,16 @@ const ItemList = () => {
                                 <TextField label=" Part No & Part Name"
                                     id="partNameId"
                                     select
-                                    defaultValue="all"
+                                    // value={filterAllNames.partName}
                                     fullWidth
                                     size="small"
                                     onChange={handleFilterChangeItemList}
+                                    value={filterAllNames.partName}
 
                                     name="partName" >
                                     <MenuItem value="all">All</MenuItem>
-                                    {partDataList.map((item, index) => (
-                                        <MenuItem key={index} value={item.partName}>{[item.partNo, item.partName].join(', ')}</MenuItem>
+                                    {partCutomerNames.map((item, index) => (
+                                        <MenuItem key={index} value={item._id}>{[item.partNo, item.partName].join(', ')}</MenuItem>
                                     ))}
                                 </TextField>
 
@@ -815,7 +986,7 @@ const ItemList = () => {
                                 <TextField label="Plant Wise"
                                     id="plantWiseId"
                                     select
-                                    //  value={filterAllNames.plantWise}
+                                    value={filterAllNames.plantWise}
                                     fullWidth
                                     size="small"
                                     onChange={handleFilterChangeItemList}
@@ -1077,7 +1248,7 @@ const ItemList = () => {
 
 
                     </Paper>
-                
+
                     <ItemListContent.Provider
                         value={{ itemListPrintOpen, setItemListPrintOpen, selectedRows, filteredItemListData }}
                     >
@@ -1089,12 +1260,12 @@ const ItemList = () => {
 
             </form>
                 : <Backdrop
-                
-                open={true}
-                
-              >
-                <CircularProgress color="success" />
-              </Backdrop>}
+
+                    open={true}
+
+                >
+                    <CircularProgress color="success" />
+                </Backdrop>}
 
 
         </div>
