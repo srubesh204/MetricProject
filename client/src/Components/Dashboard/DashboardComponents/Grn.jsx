@@ -835,6 +835,7 @@ const Grn = () => {
                 );
                 setAlertMessage({ message: response.data.message, type: "success" })
                 setSnackBarOpen(true)
+                setGrnData(initialGrnData)
                 setTimeout(() => setGrnOpen(false), 1000)
             } else {
                 setAlertMessage({ message: "Fill the required fields to submit", type: "error" })
