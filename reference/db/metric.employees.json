@@ -16,7 +16,7 @@
   "password": "004",
   "plantDetails": [
     {
-      "plantName": "Plant2",
+      "plantName": "Plant-2",
       "departments": [
         "Quality"
       ]
@@ -42,7 +42,7 @@
   "password": "008",
   "plantDetails": [
     {
-      "plantName": "Plant2",
+      "plantName": "Plant-2",
       "departments": [
         "Quality"
       ]
@@ -68,7 +68,7 @@
   "password": "1",
   "plantDetails": [
     {
-      "plantName": "Plant2",
+      "plantName": "Plant-2",
       "departments": [
         "Quality"
       ]
@@ -94,7 +94,7 @@
   "password": "529",
   "plantDetails": [
     {
-      "plantName": "Plant2",
+      "plantName": "Plant-2",
       "departments": [
         "Quality"
       ]
@@ -120,13 +120,13 @@
   "password": "Metric@123",
   "plantDetails": [
     {
-      "plantName": "Plant2",
+      "plantName": "Plant-2",
       "departments": [
         "Quality"
       ]
     },
     {
-      "plantName": "Plant1",
+      "plantName": "Plant-1",
       "departments": [
         "Quality"
       ]
