@@ -33,15 +33,15 @@ const DcPrint = () => {
                         <div style={{ width: '70%' }}>Name and Signature of the person to whom the goods were delivered for Transporting with the status of the person signing.</div>
                         <div>Date: {data.value.fDc.date}</div>
                     </div>
-                    <div>
+                    <div style={{ height: '40px'}}>
                         <div style={{ margin: '5px', fontSize: 10, fontWeight: 600 }}>For {selectedRows.dcPartyName}</div>
-                        <div style={{ fontSize: 9 }}>Authorized Signature</div>
+                        <div style={{ fontSize: 9, textAlign: 'center' }}>Authorized Signature</div>
                     </div>
                 </div>
-                <div style={{ display: 'flex', flexDirection: 'row', height: '10px' }}>
-                    <div style={{ position: 'absolute' }}>Format Number: {data.value.fDc.frNo}</div>
-                    <div style={{ position: 'absolute' }}>Amendment No.: {data.value.fDc.amNo}</div>
-                    <div style={{ position: 'absolute' }}>Amendment Date.: {data.value.fDc.amDate}</div>
+                <div style={{ display: 'flex', flexDirection: 'row' }}>
+                    <div>Format Number: {data.value.fDc.frNo}       </div> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+                    <div>Amendment No.: {data.value.fDc.amNo}       </div> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+                    <div>Amendment Date.: {data.value.fDc.amDate}   </div>
                 </div>
                 {/* </td> */}
             </tr>
@@ -76,7 +76,6 @@ const DcPrint = () => {
         width: 100%;
         height: 60px; /* Set the height based on your footer height */
         font-size: 8px;
-        border: 1px solid black;
         page-break-after: always;
         z-index: 9;
       }
