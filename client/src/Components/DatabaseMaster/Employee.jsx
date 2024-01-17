@@ -1111,7 +1111,7 @@ const Employee = () => {
                                             </div>
                                                 : <Button size='small' variant='contained' color='success' onClick={() => empPlantAdd()}>Add Role</Button>}
                                                 </div>
-                                                <div className='col-md-9 text-center'> <h6 >Roles and Authentication Details </h6></div>
+                                                <div className='col-md-8 '> <h6 className=''>Roles and Authentication Details </h6></div>
                                                
                                         </div>
                                         
