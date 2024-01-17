@@ -719,7 +719,7 @@ const ItemAdd = () => {
                             <div className='col-9'>
                                 <TextField
                                     {...(errors.itemMasterRef !== "" && { helperText: errors.itemMasterRef, error: true })}
-                                    size='small' select variant='outlined' label="Item Master" name='itemMasterRef'  value={itemAddData.itemMasterRef} fullWidth onChange={handleItemAddChange}>
+                                    size='small' select variant='outlined' label="Item Master" name='itemMasterRef' value={itemAddData.itemMasterRef} fullWidth onChange={handleItemAddChange}>
                                     <MenuItem value=""><em>Select</em></MenuItem>
                                     {itemMasterDataList.map((item, index) => (
                                         <MenuItem key={index} value={item._id}>{item.itemDescription}</MenuItem>
@@ -893,7 +893,7 @@ const ItemAdd = () => {
                                                 ))}
                                             </TextField>
                                         </div>
-                                        
+
 
                                     </div>
                                 </Paper>
@@ -972,7 +972,7 @@ const ItemAdd = () => {
                                                     // renderValue={(selected) => selected.map(item => item.itemIMTENo).join(", ")}
                                                     renderValue={(selected) => selected.map(item => itemMasterListByName.find(sub => sub._id === item).itemIMTENo).join(", ")} MenuProps={MenuProps}
 
-                                                   
+
                                                     fullWidth
                                                 >
                                                     {itemMasterListByName.map((name, index) => (
@@ -1026,15 +1026,16 @@ const ItemAdd = () => {
                                                     onChange={handleItemAddChange}
                                                     input={<OutlinedInput fullWidth label="Select Supplier" />}
                                                     // renderValue={(selected) => selected.join(', ')}
-                                                    renderValue={(selected) => selected.map(item => supplierList.find(sub => sub._id === item).aliasName).join(", ")} MenuProps={MenuProps}
+                                                    renderValue={(selected) => selected.map(item => item).join(", ")}
+                                                    MenuProps={MenuProps}
 
                                                     fullWidth
                                                 >
 
                                                     {supplierList.map((name, index) => (
-                                                        <MenuItem key={index} value={name._id}>
-                                                            <Checkbox checked={itemAddData.itemSupplier.indexOf(name._id) > -1} />
-                                                            <ListItemText primary={name.aliasName} />
+                                                        <MenuItem key={index} value={name.fullName}>
+                                                            <Checkbox checked={itemAddData.itemSupplier.indexOf(name.fullName) > -1} />
+                                                            <ListItemText primary={name.fullName} />
                                                         </MenuItem>
                                                     ))}
                                                 </Select>
@@ -1072,16 +1073,24 @@ const ItemAdd = () => {
                                                     onChange={handleItemAddChange}
                                                     input={<OutlinedInput fullWidth label="Select Supplier" />}
                                                     // renderValue={(selected) => selected.join(', ')}
-                                                    renderValue={(selected) => selected.map(item => OEMList.find(oem => oem._id === item).aliasName).join(", ")} MenuProps={MenuProps}
-                                                   
+                                                    // renderValue={(selected) => selected.map(item => OEMList.find(oem => oem._id === item).aliasName).join(", ")}
+                                                    renderValue={(selected) => selected.map(item => item).join(", ")}
+                                                     MenuProps={MenuProps}
+
                                                     fullWidth
                                                 >
                                                     {OEMList.map((name, index) => (
+                                                        <MenuItem key={index} value={name.aliasName}>
+                                                            <Checkbox checked={itemAddData.itemOEM.indexOf(name.aliasName) > -1} />
+                                                            <ListItemText primary={name.aliasName} />
+                                                        </MenuItem>
+                                                    ))}
+                                                    {/* {OEMList.map((name, index) => (
                                                         <MenuItem key={index} value={name._id}>
                                                             <Checkbox checked={itemAddData.itemOEM.indexOf(name._id) > -1} />
                                                             <ListItemText primary={name.aliasName} />
                                                         </MenuItem>
-                                                    ))}
+                                                    ))} */}
                                                 </Select>
                                             </FormControl>
 
@@ -1110,7 +1119,7 @@ const ItemAdd = () => {
                                             <th style={{ width: "30%" }}>Due</th>
                                         </tr>
 
-                                        
+
                                         {
                                             itemAddData.itemItemMasterIMTENo.map((itemSup, index) => {
                                                 const selectedImte = itemMasterListByName.find(sup => sup._id === itemSup);
@@ -1145,7 +1154,7 @@ const ItemAdd = () => {
                                             <th style={{ width: "20%" }}>Si No</th>
                                             <th style={{ width: "80%" }}>Supplier</th>
                                         </tr>
-                                        {
+                                        {/* {
                                             itemAddData.itemSupplier.map((itemSup, index) => {
                                                 const selectedSupplier = supplierList.find(sup => sup._id === itemSup);
                                                 return (
@@ -1155,21 +1164,27 @@ const ItemAdd = () => {
                                                     </tr>
                                                 );
                                             })
-                                        }
+                                        } */}
+                                        {itemAddData.itemSupplier.map((item, index) => (
+                                            <tr key={index}>
+                                                <td>{index + 1}</td>
+                                                <td >{item}</td>
+                                            </tr>
+                                        ))}
 
 
 
                                     </tbody>
                                 </table>}
                                 {itemAddData.itemCalibrationSource === "oem" && <table className='table table-sm table-bordered text-center mt-2'>
-                                     <tbody>
+                                    <tbody>
                                         <tr>
                                             <th style={{ width: "20%" }}>Si No</th>
                                             <th style={{ width: "80%" }}>OEM</th>
 
                                         </tr>
 
-                                        {
+                                        {/* {
                                             itemAddData.itemOEM.map((itemOem, index) => {
                                                 const selectedOem = OEMList.find(oem => oem._id === itemOem);
                                                 return (
@@ -1179,20 +1194,20 @@ const ItemAdd = () => {
                                                     </tr>
                                                 );
                                             })
-                                        }
+                                        } */}
 
 
 
-                                        {/* {itemAddData.itemOEM.map((item, index) => (
+                                         {itemAddData.itemOEM.map((item, index) => (
                                             <tr key={index}>
                                                 <td>{index + 1}</td>
                                                 <td >{item}</td>
                                             </tr>
-                                        ))} */}
+                                        ))} 
 
 
                                     </tbody>
-                                    
+
                                 </table>}
 
                             </Paper>
@@ -1260,34 +1275,34 @@ const ItemAdd = () => {
                                                 ))}
                                             </TextField>
                                             {itemAddData.isItemMaster === "1" &&
-                                            <React.Fragment>
-                                                <TextField disabled={itemAddData.itemPrevCalData !== "available"}
-                                                    className='ms-2'
-                                                    fullWidth
-                                                    label="Uncertainity"
-                                                    variant='outlined'
-                                                    size='small'
-                                                    onChange={handleItemAddChange}
-                                                    name='itemUncertainity'
-                                                    value={itemAddData.itemUncertainity}
-                                                />
+                                                <React.Fragment>
+                                                    <TextField disabled={itemAddData.itemPrevCalData !== "available"}
+                                                        className='ms-2'
+                                                        fullWidth
+                                                        label="Uncertainity"
+                                                        variant='outlined'
+                                                        size='small'
+                                                        onChange={handleItemAddChange}
+                                                        name='itemUncertainity'
+                                                        value={itemAddData.itemUncertainity}
+                                                    />
 
-                                                <TextField disabled={itemAddData.itemPrevCalData !== "available"}
-                                                    select
-                                                    size='small'
-                                                    variant='outlined'
-                                                    label="Unit"
-                                                    name='itemUncertainityUnit'
-                                                    onChange={handleItemAddChange}
-                                                    style={{ width: "60%" }}
-                                                    value={itemAddData.itemUncertainityUnit}
-                                                >
-                                                    <MenuItem value=""><em>None</em></MenuItem>
-                                                    {units.map((unit, index) => (
-                                                        <MenuItem key={index} value={unit.unitName}>{unit.unitName}</MenuItem>
-                                                    ))}
-                                                </TextField>
-                                            </React.Fragment>}
+                                                    <TextField disabled={itemAddData.itemPrevCalData !== "available"}
+                                                        select
+                                                        size='small'
+                                                        variant='outlined'
+                                                        label="Unit"
+                                                        name='itemUncertainityUnit'
+                                                        onChange={handleItemAddChange}
+                                                        style={{ width: "60%" }}
+                                                        value={itemAddData.itemUncertainityUnit}
+                                                    >
+                                                        <MenuItem value=""><em>None</em></MenuItem>
+                                                        {units.map((unit, index) => (
+                                                            <MenuItem key={index} value={unit.unitName}>{unit.unitName}</MenuItem>
+                                                        ))}
+                                                    </TextField>
+                                                </React.Fragment>}
                                         </div>
 
 
