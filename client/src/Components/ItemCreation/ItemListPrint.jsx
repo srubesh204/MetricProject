@@ -20,58 +20,58 @@ const ItemListPrint = () => {
           }
         `,
         onAfterPrint: () => setPrintState(false)
-      });
-    
-      // Your conditional logic
-      if (printState) {
+    });
+
+    // Your conditional logic
+    if (printState) {
         // Call the handlePrint function when needed
         handlePrint();
-      }
+    }
 
-      console.log(printState)
+    console.log(printState)
 
     const renderTableRows = () => {
         return filteredItemListData.map((row, index) => (
             <tr key={index.toString()}>
-                <td style={{ width: '5%', border: '0.5px solid black', padding: '4px 0px', textAlign: 'center' }}>{index + 1}</td>
-                <td style={{ width: '10%', border: '0.5px solid black', padding: '4px 0px', textAlign: 'center' }}>{row.itemIMTENo}</td>
-                <td style={{ width: '8%', border: '0.5px solid black', padding: '4px 0px', textAlign: 'center' }}> {row.itemAddMasterName}</td>
-                <td style={{ width: '5%', border: '0.5px solid black', padding: '4px 0px', textAlign: 'center' }}> {row.itemRangeSize !== '' ? row.itemRangeSize + ' ' + row.itemRangeSizeUnit : '-'}</td>
-                <td style={{ width: '5%', border: '0.5px solid black', padding: '4px 0px', textAlign: 'center' }}> {row.itemMake || '-'}</td>
-                <td style={{ width: '8%', border: '0.5px solid black', padding: '4px 0px', textAlign: 'center' }}>{dayjs(row.itemCalDate).format('DD-MM-YYYY')} </td>
-                <td style={{ width: '8%', border: '0.5px solid black', padding: '4px 0px', textAlign: 'center' }}>{dayjs(row.itemDueDate).format('DD-MM-YYYY')} </td>
-                <td style={{ width: '7%', border: '0.5px solid black', padding: '4px 0px', textAlign: 'center' }}> {row.itemLC !== '' ? row.itemLC + ' ' + row.itemLCUnit : '-'}</td>
-                <td style={{ width: '7%', border: '0.5px solid black', padding: '4px 0px', textAlign: 'center' }}> {row.itemCalFreInMonths || '-'}</td>
-                <td style={{ width: '9%', border: '0.5px solid black', padding: '4px 0px', textAlign: 'center' }}>{row.itemCalibrationDoneAt || '-'}</td>
-                <td style={{ width: '7%', border: '0.5px solid black', padding: '4px 0px', textAlign: 'center' }}> {row.itemStatus || '-'}</td>
-                <td style={{ width: '10%', border: '0.5px solid black', padding: '4px 0px', textAlign: 'center' }}>{row.itemDepartment || '-'}</td>
-                <td style={{ width: '7%', border: '0.5px solid black', padding: '4px 0px', textAlign: 'center' }}> {row.itemCalibrationSource === 'outsource' ? (row.itemCalibratedAt ? row.itemCalibratedAt : 'outsource') : row.itemCalibrationSource || '-'}</td>
-                <td style={{ width: '6%', border: '0.5px solid black', padding: '4px 0px', textAlign: 'center' }}> {row.itemMFRNo || '-'}</td>
+                <td >{index + 1}</td>
+                <td >{row.itemIMTENo}</td>
+                <td > {row.itemAddMasterName}</td>
+                <td > {row.itemRangeSize !== '' ? row.itemRangeSize + ' ' + row.itemRangeSizeUnit : '-'}</td>
+                <td > {row.itemMake || '-'}</td>
+                <td style={{width: "15%"}}>{dayjs(row.itemCalDate).format('DD-MM-YYYY')} </td>
+                <td >{dayjs(row.itemDueDate).format('DD-MM-YYYY')} </td>
+                <td > {row.itemLC !== '' ? row.itemLC + ' ' + row.itemLCUnit : '-'}</td>
+                <td > {row.itemCalFreInMonths || '-'}</td>
+                <td >{row.itemCalibrationDoneAt || '-'}</td>
+                <td > {row.itemStatus || '-'}</td>
+                <td >{row.itemDepartment || '-'}</td>
+                <td > {row.itemCalibrationSource === 'outsource' ? (row.itemCalibratedAt ? row.itemCalibratedAt : 'outsource') : row.itemCalibrationSource || '-'}</td>
+                <td > {row.itemMFRNo || '-'}</td>
             </tr>
         ));
     };
 
     return (
-        < React.Fragment>
+        <React.Fragment>
             {filteredItemListData.length > 0 && (
-                <div style={{ display: 'none' }}>
-                    <table style={{ width: '100%', borderCollapse: 'collapse' }} ref={componentRef}>
+                <div style={{ display: 'none', width: "100%" }}>
+                    <table className='table table-sm table-bordered text-center align-middle table-responsive w-100' ref={componentRef} style={{border: "1px solid black"}}>
                         <thead>
                             <tr>
-                                <th style={{ width: '5%', border: '0.5px solid black', padding: '4px 0px', textAlign: 'center' }}>Si. No</th>
-                                <th style={{ width: '10%', border: '0.5px solid black', padding: '4px 0px', textAlign: 'center' }}>IMTE No</th>
-                                <th style={{ width: '8%', border: '0.5px solid black', padding: '4px 0px', textAlign: 'center' }}>Description</th>
-                                <th style={{ width: '5%', border: '0.5px solid black', padding: '4px 0px', textAlign: 'center' }}>Range/Size</th>
-                                <th style={{ width: '5%', border: '0.5px solid black', padding: '4px 0px', textAlign: 'center' }}>Make</th>
-                                <th style={{ width: '8%', border: '0.5px solid black', padding: '4px 0px', textAlign: 'center' }}>Cal Date</th>
-                                <th style={{ width: '8%', border: '0.5px solid black', padding: '4px 0px', textAlign: 'center' }}>Due Date</th>
-                                <th style={{ width: '7%', border: '0.5px solid black', padding: '4px 0px', textAlign: 'center' }}>ItemLC</th>
-                                <th style={{ width: '7%', border: '0.5px solid black', padding: '4px 0px', textAlign: 'center' }}>Frequency</th>
-                                <th style={{ width: '9%', border: '0.5px solid black', padding: '4px 0px', textAlign: 'center' }}>Cal Done At</th>
-                                <th style={{ width: '7%', border: '0.5px solid black', padding: '4px 0px', textAlign: 'center' }}>Status</th>
-                                <th style={{ width: '10%', border: '0.5px solid black', padding: '4px 0px', textAlign: 'center' }}>Current location</th>
-                                <th style={{ width: '7%', border: '0.5px solid black', padding: '4px 0px', textAlign: 'center' }}>Cal Source</th>
-                                <th style={{ width: '6%', border: '0.5px solid black', padding: '4px 0px', textAlign: 'center' }}>Type</th>
+                                <th >Si. No</th>
+                                <th >IMTE No</th>
+                                <th >Description</th>
+                                <th >Range/Size</th>
+                                <th >Make</th>
+                                <th style={{width: "15%"}}>Cal Date</th>
+                                <th >Due Date</th>
+                                <th >ItemLC</th>
+                                <th >Frequency</th>
+                                <th >Cal Done At</th>
+                                <th >Status</th>
+                                <th >Current location</th>
+                                <th >Cal Source</th>
+                                <th >Type</th>
                             </tr>
                         </thead>
                         <tbody>{renderTableRows()}</tbody>

@@ -15,7 +15,7 @@ import CalDialog from './DashboardComponents/CalDialog';
 import Dc from './DashboardComponents/DcDialog';
 import Grn from './DashboardComponents/Grn';
 import OnSiteDialog from './DashboardComponents/OnSiteDialog';
-
+import MuiPagination from '@mui/material/Pagination';
 import { useEmployee } from '../../App';
 export const HomeContent = createContext(null);
 
@@ -148,7 +148,7 @@ const Home = () => {
       );
       console.log(Departments)
       const defaultDepartment = Departments.data.result.filter((dep) => dep.defaultdep === "yes");
-      const otherDepartment = Departments.data.result.filter((dep) => dep.defaultdep === "no")
+      const otherDepartment = Departments.data.result.filter((dep) => dep.defaultdep !== "yes")
 
 
       setAllDepartments([...defaultDepartment, ...otherDepartment])
@@ -161,7 +161,7 @@ const Home = () => {
     }
   };
 
-
+  console.log(allDepartments)
 
   const getVendorsByType = async () => {
     try {
@@ -1100,6 +1100,19 @@ const Home = () => {
 
   console.log(selectedRows)
 
+  function Pagination() {
+   
+  
+    return (
+      <MuiPagination
+        height="50%"
+       
+        
+        
+      />
+    );
+  }
+
 
 
 
@@ -1380,32 +1393,36 @@ const Home = () => {
         <div className="row gx-3 mx-3">
           <div className="col-md-8">
             <Paper sx={{ p: 2, }} elevation={12}>
-              <Box sx={{ height: 400, mb: 2 }}>
+              <Box sx={{ height: 320, mb: 2, fontSize: "8px" }}>
                 <DataGrid
                   density='compact' disableDensitySelector
+                  getRowHeight={({ id, densityFactor }) => {
+                    return 20;
+                  }}
                   rows={filteredData}
                   columns={ItemListColumns}
                   getRowId={(row) => row._id}
                   initialState={{
                     pagination: {
                       paginationModel: {
-                        pageSize: 5,
+                        pageSize: 9,
+                        
                       },
                     },
                   }}
-
+                  
                   onRowSelectionModelChange={handleRowSelectionChange}
                   sx={{
                     ".MuiTablePagination-displayedRows": {
 
                       "marginTop": "1em",
                       "marginBottom": "1em"
-                    }
+                    }, fontSize: "12px"
                   }}
 
                   checkboxSelection
                   // onRowClick={handleSelectRow}
-                  slots={{ toolbar: GridToolbar }}
+                  slots={{ toolbar: GridToolbar}}
                   slotProps={{
                     toolbar: {
                       showQuickFilter: true,

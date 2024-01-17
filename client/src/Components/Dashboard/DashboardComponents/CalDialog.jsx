@@ -158,7 +158,7 @@ const CalDialog = () => {
                     calLC: selectedRows[0].itemLC || "",
                     calItemMake: selectedRows[0].itemMake || "",
                     calItemFreInMonths: selectedRows[0].itemCalFreInMonths || "",
-                    calItemUncertainity: filter[0].uncertainty || "",
+                    calItemUncertainity: filter[0] ? filter[0].uncertainty : "",
                     calItemSOPNo: filter[0].SOPNo || "",
                     calStandardRef: filter[0].standardRef || "",
                     calOBType: selectedRows[0].itemOBType || "",

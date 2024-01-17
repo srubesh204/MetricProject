@@ -1168,12 +1168,12 @@ const ItemList = () => {
                                             </div>
                                             <div className='row mb-2'>
                                                 <TextField size='small' select variant='outlined' className='mb-2' onChange={(e) => setStatusInfo((prev) => ({ ...prev, itemStatus: e.target.value }))} value={statusInfo.itemStatus} label="Item Status" name='itemStatus' id='itemStatusId'  >
-                                                    <MenuItem value="Active">Active</MenuItem>
-                                                    <MenuItem value="InActive">InActive</MenuItem>
-                                                    <MenuItem value="Spare">Spare</MenuItem>
-                                                    <MenuItem value="Breakdown">Breakdown</MenuItem>
-                                                    <MenuItem value="Missing">Missing</MenuItem>
-                                                    <MenuItem value="Rejection">Rejection</MenuItem>
+                                                    <MenuItem value="active">Active</MenuItem>
+                                                    <MenuItem value="inactive">InActive</MenuItem>
+                                                    <MenuItem value="spare">Spare</MenuItem>
+                                                    <MenuItem value="breakdown">Breakdown</MenuItem>
+                                                    <MenuItem value="missing">Missing</MenuItem>
+                                                    <MenuItem value="rejection">Rejection</MenuItem>
 
                                                 </TextField>
 

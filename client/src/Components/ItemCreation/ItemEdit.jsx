@@ -207,7 +207,7 @@ const ItemEdit = () => {
         itemLCUnit: "",
         itemMake: "",
         itemModelNo: "",
-        itemStatus: "Active",
+        itemStatus: "active",
         itemReceiptDate: dayjs().format("YYYY-MM-DD"),
         itemDepartment: "",
 
@@ -268,7 +268,7 @@ const ItemEdit = () => {
         itemLCUnit: "",
         itemMake: "",
         itemModelNo: "",
-        itemStatus: "Active",
+        itemStatus: "active",
         itemReceiptDate: dayjs().format("YYYY-MM-DD"),
         itemDepartment: "",
         itemCurrentLocation: "",
@@ -1244,15 +1244,16 @@ const ItemEdit = () => {
                                                 onChange={handleItemAddChange}
                                                 input={<OutlinedInput fullWidth label="Select Supplier" />}
                                                 // renderValue={(selected) => selected.join(', ')}
-                                                renderValue={(selected) => selected.map(item => supplierList.find(sub => sub._id === item).aliasName).join(", ")} MenuProps={MenuProps}
+                                                renderValue={(selected) => selected.map(item => item).join(", ")} 
+                                                MenuProps={MenuProps}
 
                                                 fullWidth
                                             >
 
                                                 {supplierList.map((name, index) => (
-                                                    <MenuItem key={index} value={name._id}>
-                                                        <Checkbox checked={itemAddData.itemSupplier.indexOf(name._id) > -1} />
-                                                        <ListItemText primary={name.aliasName} />
+                                                    <MenuItem key={index} value={name.fullName}>
+                                                        <Checkbox checked={itemAddData.itemSupplier.indexOf(name.fullName) > -1} />
+                                                        <ListItemText primary={name.fullName} />
                                                     </MenuItem>
                                                 ))}
                                             </Select>
