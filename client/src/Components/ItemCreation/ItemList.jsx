@@ -32,11 +32,10 @@ export const ItemListContent = createContext(null);
 
 const ItemList = () => {
 
-    const [selectedRows, setSelectedRows] = useState([]);
-    const [itemListPrintOpen, setItemListPrintOpen] = useState(false);
+ 
 
     const employeeRole = useEmployee()
-
+    const [printState, setPrintState] = useState(false)
     const [loaded, setLoaded] = useState(false);
 
     const [itemList, setItemList] = useState([]);
@@ -749,7 +748,7 @@ const ItemList = () => {
     };
 
 
-
+   
 
 
 
@@ -1032,7 +1031,7 @@ const ItemList = () => {
                                 </div>
                                 <div className="col-1">
                                     <div>
-                                        <Button color="secondary" variant='contained' startIcon={<PrintRounded />} size='small' onClick={() => { setSelectedRows(); setItemListPrintOpen(true) }}> Print</Button>
+                                        <Button color="secondary" variant='contained' startIcon={<PrintRounded />} size='small' onClick={() => setPrintState(true)}> Print</Button>
 
                                     </div>
                                     <Snackbar anchorOrigin={{ vertical: "top", horizontal: "right" }} open={snackBarOpen} autoHideDuration={6000} onClose={handleSnackClose}>
@@ -1250,7 +1249,7 @@ const ItemList = () => {
                     </Paper>
 
                     <ItemListContent.Provider
-                        value={{ itemListPrintOpen, setItemListPrintOpen, selectedRows, filteredItemListData }}
+                        value={{ filteredItemListData, printState, setPrintState }}
                     >
 
                         <ItemListPrint />

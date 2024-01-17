@@ -83,20 +83,20 @@ const Home = () => {
   const [masters, setMasters] = useState([]);
   const itemMasterFetchData = async () => {
     try {
-        const response = await axios.get(
-            `${process.env.REACT_APP_PORT}/itemMaster/getAllItemMasters`
-        );
+      const response = await axios.get(
+        `${process.env.REACT_APP_PORT}/itemMaster/getAllItemMasters`
+      );
 
 
-       setMasters(response.data.result)
+      setMasters(response.data.result)
 
     } catch (err) {
-        console.log(err);
+      console.log(err);
     }
-};
-useEffect(() => {
+  };
+  useEffect(() => {
     itemMasterFetchData();
-}, []);
+  }, []);
 
 
 
@@ -238,7 +238,7 @@ useEffect(() => {
       const missingItems = allItems.filter((item) => item.itemStatus === "missing");
       const rejectionItems = allItems.filter((item) => item.itemStatus === "rejection");
 
-     
+
       const depLength = allItems.filter((item) => item.itemLocation === "department")
       const oemLength = allItems.filter((item) => item.itemLocation === "oem")
       const customersLength = allItems.filter((item) => item.itemLocation === "customer")
@@ -525,6 +525,7 @@ useEffect(() => {
 
 
   const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', "#aca8c8", "#78787a"];
+  const [calStatusFitleredData, setCalStatusFitleredData] = useState([])
 
   const calStatusFunction = (name) => {
 
@@ -535,41 +536,60 @@ useEffect(() => {
     const thirtyDaysFilter = pieDataFilter.filter((item) => dayjs(item.itemDueDate).isBetween(currentDate.format("YYYY-MM-DD"), thirtyDaysAgo))
     const AboveThirtyDaysFilter = pieDataFilter.filter((item) => dayjs(item.itemDueDate).isAfter(thirtyDaysAgo))
 
-    const inhouse = pieDataFilter.filter((item) => item.itemCalibrationSource === "inhouse");
-    const outSource = pieDataFilter.filter((item) => item.itemCalibrationSource === "outsource");
-    const oem = pieDataFilter.filter((item) => item.itemCalibrationSource === "OEM");
+    const sourceFilter = (filterName) => {
 
-    setCalSourceCount((prev) => ({
-      ...prev,
-      inHouse: inhouse.length,
-      outSource: outSource.length,
-      oem: oem.length
-    }))
+      setCalStatusFitleredData(filterName)
+      const inhouse = filterName.filter((item) => item.itemCalibrationSource === "inhouse");
+      const outSource = filterName.filter((item) => item.itemCalibrationSource === "outsource");
+      const oem = filterName.filter((item) => item.itemCalibrationSource === "OEM");
+
+      setCalSourceCount((prev) => ({
+        ...prev,
+        inHouse: inhouse.length,
+        outSource: outSource.length,
+        oem: oem.length
+      }))
+    }
+
+
 
     switch (name) {
       case "Past Due":
         setFilteredData(pastDue);
+        sourceFilter(pastDue)
         break;
       case "Today":
         setFilteredData(CurrentDue);
+        sourceFilter(CurrentDue)
         break;
       case "7 Days":
         setFilteredData(sevenDaysFilter);
+        sourceFilter(sevenDaysFilter)
         break;
       case "15 Days":
         setFilteredData(fifteenDaysFilter);
+        sourceFilter(fifteenDaysFilter)
         break;
       case "30 Days":
         setFilteredData(thirtyDaysFilter);
+        sourceFilter(thirtyDaysFilter)
         break;
       case ">30 Days":
         setFilteredData(AboveThirtyDaysFilter);
+        sourceFilter(AboveThirtyDaysFilter)
         break;
       default:
         setFilteredData(itemList)
+        sourceFilter(itemList)
         break;
     }
+
+    
+
+
   }
+
+
 
 
 
@@ -921,7 +941,7 @@ useEffect(() => {
 
   const handleCalSrc = (e, newValue) => {
     setCalSrcValue(newValue)
-    const calSrcFilter = pieDataFilter.filter((item) => item.itemCalibrationSource === newValue);
+    const calSrcFilter = calStatusFitleredData.filter((item) => item.itemCalibrationSource === newValue);
     setFilteredData(calSrcFilter)
   }
 
@@ -1081,7 +1101,7 @@ useEffect(() => {
   console.log(selectedRows)
 
 
-  
+
 
   return (
     <div style={{ backgroundColor: "#f1f4f4", margin: 0, padding: 0 }}>
