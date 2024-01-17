@@ -227,7 +227,7 @@ const ItemAdd = () => {
         itemLCUnit: "",
         itemMake: "",
         itemModelNo: "",
-        itemStatus: "Active",
+        itemStatus: "active",
         itemReceiptDate: dayjs().format("YYYY-MM-DD"),
         itemDepartment: "",
         itemCurrentLocation: "",
@@ -848,7 +848,7 @@ const ItemAdd = () => {
                                                     <MenuItem value="active">Active</MenuItem>
                                                     <MenuItem value="spare">Spare</MenuItem>
                                                     <MenuItem value="breakdown">Breakdown</MenuItem>
-                                                    <MenuItem value="rissing">Missing</MenuItem>
+                                                    <MenuItem value="missing">Missing</MenuItem>
                                                     <MenuItem value="rejection">Rejection</MenuItem>
 
                                                 </TextField>
@@ -893,20 +893,7 @@ const ItemAdd = () => {
                                                 ))}
                                             </TextField>
                                         </div>
-                                        <div className="col-md-6">
-                                            <TextField size='small' onChange={handleItemAddChange} value={itemAddData.itemArea} select fullWidth variant='outlined' label="Area" name='itemArea' id='itemAreaId'>
-                                                {areas.map((item, index) => (
-                                                    <MenuItem key={index} value={item.area}>{item.area}</MenuItem>
-                                                ))}
-                                            </TextField>
-                                        </div>
-                                        <div className='col-md-6'>
-                                            <TextField size='small' onChange={handleItemAddChange} value={itemAddData.itemPlaceOfUsage} select fullWidth variant='outlined' label="Place" name='itemPlaceOfUsage' id='itemPlaceOfUsageId'>
-                                                {placeOfUsages.map((item, index) => (
-                                                    <MenuItem key={index} value={item.placeOfUsage}>{item.placeOfUsage}</MenuItem>
-                                                ))}
-                                            </TextField>
-                                        </div>
+                                        
 
                                     </div>
                                 </Paper>

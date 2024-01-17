@@ -4,8 +4,8 @@ const testModel = require("../models/testModel")
 const excelToJson = require('convert-excel-to-json');
 
 
-const areaController = {
-    getAllAreas: async (req, res) => {
+const testController = {
+    getAllTest: async (req, res) => {
         try {
             const TestResult = await testModel.find();
             res.status(202).json({ result: TestResult, status: 1, message: "Test Get Successfull" });
@@ -16,49 +16,94 @@ const areaController = {
         }
     },
     
-    uploadTestData: async (req, res) => {
+    uploadItemAddInExcel: async (req, res) => {
         try {
-            if (!req.file) {
-                return res.status(400).json({ error: 'No file uploaded' });
+          if (!req.file) {
+            return res.status(400).json({ error: 'No file uploaded' });
+          }
+          
+          const excelData = req.file.buffer; // Access the file buffer
+      
+          // Convert Excel data to JSON
+          const jsonData = excelToJson({
+            source: excelData,
+            header: {
+              // Is the number of rows that will be skipped and will not be present at our result object. Counting from top to bottom
+              rows: 1 // 2, 3, 4, etc.
+            },
+            columnToKey: {
+              A: 'itemMasterRef',
+              B: 'itemAddMasterName',
+              C: 'itemIMTENo',
+              D: 'itemImage',
+              E: 'itemType',
+              F: 'itemRangeSize',
+              G: 'itemRangeSizeUnit',
+              H: 'itemMFRNo',
+              I: 'itemLC',
+              J: 'itemLCUnit',
+              K: 'itemMake',
+              L: 'itemModelNo',
+              M: 'itemStatus',
+              N: 'itemReceiptDate',
+              O: 'itemDepartment',
+              P: 'itemCurrentLocation',
+              Q: 'itemLocation',
+              R: 'itemLastLocation',
+              S: 'itemArea',
+              T: 'itemPlaceOfUsage',
+              U: 'itemCalFreInMonths',
+              V: 'itemCalAlertDays',
+              W: 'itemCalibrationSource',
+              X: 'itemSupplier',
+              Z: 'itemCalDate',
+              AA: 'itemDueDate',
+              AB: 'itemCalibratedAt',
+              AC: 'itemCertificateNo',
+              AD: 'itemCertificateName',
+              AE: 'itemUncertainity',
+              AF: 'itemUncertainityUnit',
+              AG: 'itemPlant'
+    
+    
+          }
+          });
+          console.log(jsonData)
+
+          const modifiedData = jsonData.Sheet1.map(item => {
+            item.itemCalDate = dayjs(item.itemCalDate).format("YYYY-MM-DD")
+            item.itemDueDate = dayjs(item.itemDueDate).format("YYYY-MM-DD")
+            item.itemReceiptDate = dayjs(item.itemReceiptDate).format("YYYY-MM-DD")
+            item.itemLocation = item.itemLocation ?  item.itemLocation.toLowerCase() : "department"
+            item.itemStatus = item.itemStatus ? item.itemStatus.toLowerCase() : "active"
+           
+            
+            return item;
+          });
+      
+          const uploadPromises = modifiedData.map(async (item) => {
+            try {
+              // Create an instance of designationModel and save it to the database
+              const newItemAdd = new testModel(item); // Assuming 'item' conforms to your ItemAddModel schema
+              const savedItemAdd = await newItemAdd.save();
+              return savedItemAdd;
+    
+            } catch (error) {
+              console.error('Error saving ItemAdd:', error);
+              // return res.status(500).json({ error: 'Internal Server Error' });
             }
-
-            const excelData = req.file.buffer; // Access the file buffer
-
-            // Convert Excel data to JSON
-            const jsonData = excelToJson({
-                source: excelData,
-                columnToKey: {
-                    A: "albumId",
-                    B: "id",
-                    C: "title",
-                    D: "url",
-                    E: "thumbnailUrl"
-                }
-            });
-            console.log(jsonData)
-
-            const uploadPromises = jsonData.Sheet1.map(async (item) => {
-                try {
-                    // Create an instance of testModel and save it to the database
-                    const test = new testModel(item); // Assuming 'item' conforms to your testModel schema
-                    const testSavedData = await test.save();
-                    return testSavedData;
-
-                } catch (error) {
-                    console.error('Error saving designation:', error);
-                    
-                }
-            });
-
-            // Execute all upload promises
-            const uploadedTest = await Promise.all(uploadPromises);
-
-            res.status(200).json({ uploadedTest, message: 'Excel data uploaded successfully' });
+          });
+      
+          // Execute all upload promises
+          const uploadedItemAdds = await Promise.all(uploadPromises);
+      
+          res.status(200).json({ uploadedItemAdds, message: 'Uploaded successfully' });
         } catch (error) {
-            console.error('Error uploading Excel data:', error);
-            res.status(500).json({ error: 'Internal Server Error' });
+          console.error('Error uploading Excel data:', error);
+          res.status(500).json({ error: 'Internal Server Error' });
         }
-    },
+      }
+    ,
     changeDate: async (req, res) => {
         try {
           // Fetch all documents in the collection
@@ -90,4 +135,4 @@ const areaController = {
 
 
 
-module.exports = areaController;
+module.exports = testController;

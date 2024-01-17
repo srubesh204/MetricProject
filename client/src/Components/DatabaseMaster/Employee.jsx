@@ -151,7 +151,7 @@ const Employee = () => {
         { field: 'dob', headerName: 'DOB', width: 100, headerAlign: "center", align: "center", valueGetter: (params) => dayjs(params.row.itemCalDate).format('DD-MM-YYYY') },
         { field: 'contactNumber', headerName: 'Contact No', headerAlign: "center", align: "center", type: "number", width: 120, },
         { field: 'designation', headerName: 'Designation', headerAlign: "center", align: "center", width: 120, },
-        { field: 'department', headerName: 'Department', headerAlign: "center", align: "center", width: 130, renderCell : (params) => params.row.plantDetails.map },
+        { field: 'department', headerName: 'Department', headerAlign: "center", align: "center", width: 130, renderCell: (params) => params.row.plantDetails.map },
         { field: 'empRole', headerName: 'Role', width: 150, headerAlign: "center", align: "center" },
         { field: 'reportTo', headerName: 'Report To', width: 100, headerAlign: "center", align: "center", },
 
@@ -502,7 +502,7 @@ const Employee = () => {
                 setEmployeeData(initialEmpData)
                 setEmpDataId(null)
                 setErrors({})
-            }else{
+            } else {
                 console.log("error")
             }
 
@@ -693,17 +693,17 @@ const Employee = () => {
         }
     };
 
-    
+
     useEffect(() => {
         if (empExcelStatus) {
-          const timeoutId = setTimeout(() => {
-            setEmpExcelStatus('');
-          }, 1000);
-    
-          return () => clearTimeout(timeoutId); 
+            const timeoutId = setTimeout(() => {
+                setEmpExcelStatus('');
+            }, 1000);
+
+            return () => clearTimeout(timeoutId);
         }
-      }, [empExcelStatus]);
-      
+    }, [empExcelStatus]);
+
 
     const empPlantAdd = () => {
         console.log(Object.values(empPlantDetails).every(item => typeof item === "string" ? item !== "" : item.length > 0))
@@ -1098,18 +1098,23 @@ const Employee = () => {
                                             </div>
 
 
-                                            <div className="col-md-12 d-flex justify-content-end">
-                                                {empPlantId ? <React.Fragment>
-                                                    <Button className='me-2' size='small' variant='contained' color='warning' onClick={() => empPlantEdit()}>Role Update</Button>
-                                                    <Button size='small' variant='contained' color='error' onClick={() => { setEmpPlantId(null); setPlantIndex(null); setEmpPlantDetails(initialEmpPlantDetails) }}>Cancel</Button>
-                                                </React.Fragment>
-                                                    : <Button size='small' variant='contained' color='success' onClick={() => empPlantAdd()}>Add Role</Button>}
-                                            </div>
+
                                         </div>
                                     </div>
 
                                     <div className="col-md-9" style={{ maxHeight: "134px", overflow: "auto" }}>
-                                        <h6 className='text-center'>Roles and Authentication Details </h6>
+                                        <div className="row mb-2">
+                                            <div className='col d-flex justify-content-between'>
+                                            {empPlantId ? <div>
+                                                <Button className='me-2' size='small' variant='contained' color='warning' onClick={() => empPlantEdit()}>Role Update</Button>
+                                                <Button size='small' variant='contained' color='error' onClick={() => { setEmpPlantId(null); setPlantIndex(null); setEmpPlantDetails(initialEmpPlantDetails) }}>Cancel</Button>
+                                            </div>
+                                                : <Button size='small' variant='contained' color='success' onClick={() => empPlantAdd()}>Add Role</Button>}
+                                                </div>
+                                                <div className='col-md-8 '> <h6 className=''>Roles and Authentication Details </h6></div>
+                                               
+                                        </div>
+                                        
                                         <table className='table table-sm table-bordered text-center align-midle'>
                                             <tbody>
                                                 <tr className='sticky-top table-light'>
@@ -1384,7 +1389,7 @@ const Employee = () => {
 
                                 </div>
 
-                      
+
                                 <Dialog
                                     open={deleteOpen}
                                     onClose={handleDeleteClose}
@@ -1409,7 +1414,7 @@ const Employee = () => {
 
 
 
-                           
+
                             </div>
                         </Paper>
                     </Grid>

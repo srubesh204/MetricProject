@@ -60,10 +60,10 @@ const ItemListPrint = () => {
     };
 
     return (
-        < React.Fragment>
+        <React.Fragment>
             {filteredItemListData.length > 0 && (
-                <div style={{ display: 'none' }}>
-                    <table style={{ width: '100%', borderCollapse: 'collapse' }} ref={componentRef}>
+                <div style={{ display: 'none', width: "100%" }}>
+                    <table className='table table-sm table-bordered text-center align-middle table-responsive w-100' ref={componentRef} style={{border: "1px solid black"}}>
                         <thead>
                             <tr>
                                 <th style={{ width: '5%', border: '0.5px solid black', fontSize: '10px', textAlign: 'center' }}>Si. No</th>

@@ -1,5 +1,5 @@
 const express = require("express");
-const designationController = require('../controllers/testController')
+const testController = require('../controllers/testController')
 const router = express.Router();
 const multer = require('multer');
 
@@ -8,8 +8,8 @@ const upload = multer({ storage: storage }).single('file');
  
 
 
-router.post("/uploadTestData", upload, designationController.uploadTestData)
-router.get("/changeDate", upload, designationController.changeDate)
+router.post("/uploadItemAddInExcel", upload, testController.uploadItemAddInExcel)
+router.get("/getAllTest", upload, testController.getAllTest)
 
 
 module.exports = router;

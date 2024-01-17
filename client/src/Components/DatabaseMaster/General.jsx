@@ -65,16 +65,17 @@ export const UnitDataBase = ({ style }) => {
 
     const unitColumns = [
         {/*{ field: 'id', headerName: 'Si. No', width: 100, renderCell: (params) => params.api.getRowIndexRelativeToVisibleRows(params.id) + 1 }*/ },
-        {
-            field: 'id',
-            headerName: 'Si. No',
-            width: 100,
-            headerAlign: "center", align: "center",
-            renderCell: (params) => {
-                const rowIndex = params.api.getRowIndexRelativeToVisibleRows(params.id);
-                return Number.isInteger(rowIndex) ? rowIndex + 1 : '';
-            }
-        },
+        // {
+        //     field: 'id',
+        //     headerName: 'Si. No',
+        //     width: 100,
+        //     headerAlign: "center", align: "center",
+        //     renderCell: (params) => {
+        //         const rowIndex = params.api.getRowIndexRelativeToVisibleRows(params.id);
+        //         return Number.isInteger(rowIndex) ? rowIndex + 1 : '';
+        //     }
+        // },
+        { field: 'id', headerName: 'Si. No', width: 100, renderCell: (params) => params.api.getAllRowIds().indexOf(params.id) + 1, headerAlign: "center", align: "center", },
 
         { field: 'unitName', headerName: 'UnitName', width: "150", headerAlign: "center", align: "center", },
 
