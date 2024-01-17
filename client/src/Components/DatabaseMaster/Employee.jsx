@@ -206,15 +206,16 @@ const Employee = () => {
             setFilteredData(employeeList)
         } else {
             if (name === "departmentFilter") {
-                const departmentFilter = employeeList.filter((item) => (item.department === value))
-                setFilteredData(departmentFilter)
-                setFilterAllNames(prev => ({
+                const departmentFilter = employeeList.filter((item) => item.department === value);
+                setFilteredData(departmentFilter);
+
+                // Set filterAllNames values
+                setFilterAllNames((prev) => ({
                     ...prev,
                     departmentFilter: value,
                     employementStatusFilter: "all",
-                    reportToFilter: "all"
-
-                }))
+                    reportToFilter: "all",
+                }));
             }
             if (name === "employementStatusFilter") {
                 const statusFilter = employeeList.filter((item) => (item.employmentStatus === value))
@@ -1341,12 +1342,13 @@ const Employee = () => {
                                         defaultValue=""
                                     >
                                         <MenuItem value="all">All</MenuItem>
-                                        {plantsData && plantsData.departments && plantsData.departments.map((item, index) => (
-                                            <MenuItem key={index} value={item}>
-                                                {item}
+                                        {defaultDepartments.map((item, index) => (
+                                            <MenuItem key={index} value={item.department}>
+                                                {item.department}
                                             </MenuItem>
                                         ))}
-                                        {/* {plantsData.map((plant, index) => {
+                                    </TextField>
+                                    {/* {plantsData.map((plant, index) => {
                                             const value = employee.map(emp => emp.plantDetails.map(plant => plant.departments));
 
                                             console.log(value);
@@ -1356,28 +1358,28 @@ const Employee = () => {
                                                 </MenuItem>
                                             );
                                         })} */}
-                                    </TextField>
+                            
 
-                                </Grid>
+                            </Grid>
 
 
-                                <Grid item xs={3}>
-                                    <TextField fullWidth label="Report To" value={filterAllNames.reportToFilter} onChange={handleFilterChange} select size="small" id="reportToFilterId" name="reportToFilter" defaultValue="" >
-                                        <MenuItem value="all">All</MenuItem>
+                            <Grid item xs={3}>
+                                <TextField fullWidth label="Report To" value={filterAllNames.reportToFilter} onChange={handleFilterChange} select size="small" id="reportToFilterId" name="reportToFilter" defaultValue="" >
+                                    <MenuItem value="all">All</MenuItem>
 
-                                        {FilterNameList.reportTo.map((item, index) => (
-                                            <MenuItem key={index} value={item}>{item}</MenuItem>
-                                        ))}
-                                    </TextField>
-                                </Grid>
-                                <Grid item xs={2}>
-                                    <div className='col d-flex justify-content-end'>
-                                        {employeeSelectedRowIds.length !== 0 && <Button variant='contained' component="button" fullWidth type='button' color='error' onClick={() => handleDeleteOpen(true)}>Delete  Employee</Button>}
+                                    {FilterNameList.reportTo.map((item, index) => (
+                                        <MenuItem key={index} value={item}>{item}</MenuItem>
+                                    ))}
+                                </TextField>
+                            </Grid>
+                            <Grid item xs={2}>
+                                <div className='col d-flex justify-content-end'>
+                                    {employeeSelectedRowIds.length !== 0 && <Button variant='contained' component="button" fullWidth type='button' color='error' onClick={() => handleDeleteOpen(true)}>Delete  Employee</Button>}
 
-                                    </div>
-                                </Grid>
+                                </div>
+                            </Grid>
 
-                                {/* <div className="form-floating col">
+                            {/* <div className="form-floating col">
                                         <select  id="reportToFilterId" name="reportToFilter" onChange={handleFilterChange}>
                                             <option value="all">All</option>
                                             {employeeList.((item) => (
@@ -1386,82 +1388,82 @@ const Employee = () => {
                                         </select>
                                         <label htmlFor="reportToFilterId">Report To</label>
                                     </div>*/}
-                            </Grid>
-                            <div>
-                                <div style={{ height: 400, width: '100%' }}>
-                                    <DataGrid
-                                        rows={filteredData}
-                                        columns={employeeColumns}
-                                        getRowId={(row) => row._id}
-                                        disableDensitySelector
-                                        initialState={{
-                                            pagination: {
-                                                paginationModel: { page: 0, pageSize: 5 },
-                                            },
-                                        }}
-                                        sx={{
-                                            ".MuiTablePagination-displayedRows": {
-
-                                                "marginTop": "1em",
-                                                "marginBottom": "1em"
-                                            },
-
-                                        }}
-                                        slots={{
-                                            toolbar: GridToolbar,
-                                        }}
-                                        onRowSelectionModelChange={(newRowSelectionModel, event) => {
-                                            setEmployeeSelectedRowIds(newRowSelectionModel);
-                                            console.log(event)
-
-                                        }}
-                                        onRowClick={handleSetEmp}
-                                        disableRowSelectionOnClick
-                                        density="compact"
-                                        checkboxSelection
-                                        pageSizeOptions={[5]}
-                                    >
-
-                                    </DataGrid>
-
-
-
-
-                                </div>
-
-
-                                <Dialog
-                                    open={deleteOpen}
-                                    onClose={handleDeleteClose}
-                                    aria-labelledby="alert-dialog-title"
-                                    aria-describedby="alert-dialog-description"
-                                >
-                                    <DialogTitle id="alert-dialog-title">
-                                        {" Employee delete  confirmation "}
-                                    </DialogTitle>
-                                    <DialogContent>
-                                        <DialogContentText id="alert-dialog-description">
-                                            Are you sure to delete the Employee
-                                        </DialogContentText>
-                                    </DialogContent>
-                                    <DialogActions>
-                                        <Button onClick={handleDeleteClose}>Cancel</Button>
-                                        <Button onClick={(e) => { deleteEmployee(); handleDeleteClose(); }} autoFocus>
-                                            Delete
-                                        </Button>
-                                    </DialogActions>
-                                </Dialog>
-
-
-
-
-                            </div>
-                        </Paper>
                     </Grid>
+                    <div>
+                        <div style={{ height: 400, width: '100%' }}>
+                            <DataGrid
+                                rows={filteredData}
+                                columns={employeeColumns}
+                                getRowId={(row) => row._id}
+                                disableDensitySelector
+                                initialState={{
+                                    pagination: {
+                                        paginationModel: { page: 0, pageSize: 5 },
+                                    },
+                                }}
+                                sx={{
+                                    ".MuiTablePagination-displayedRows": {
 
-                </form>
+                                        "marginTop": "1em",
+                                        "marginBottom": "1em"
+                                    },
 
-            </LocalizationProvider>
+                                }}
+                                slots={{
+                                    toolbar: GridToolbar,
+                                }}
+                                onRowSelectionModelChange={(newRowSelectionModel, event) => {
+                                    setEmployeeSelectedRowIds(newRowSelectionModel);
+                                    console.log(event)
+
+                                }}
+                                onRowClick={handleSetEmp}
+                                disableRowSelectionOnClick
+                                density="compact"
+                                checkboxSelection
+                                pageSizeOptions={[5]}
+                            >
+
+                            </DataGrid>
+
+
+
+
+                        </div>
+
+
+                        <Dialog
+                            open={deleteOpen}
+                            onClose={handleDeleteClose}
+                            aria-labelledby="alert-dialog-title"
+                            aria-describedby="alert-dialog-description"
+                        >
+                            <DialogTitle id="alert-dialog-title">
+                                {" Employee delete  confirmation "}
+                            </DialogTitle>
+                            <DialogContent>
+                                <DialogContentText id="alert-dialog-description">
+                                    Are you sure to delete the Employee
+                                </DialogContentText>
+                            </DialogContent>
+                            <DialogActions>
+                                <Button onClick={handleDeleteClose}>Cancel</Button>
+                                <Button onClick={(e) => { deleteEmployee(); handleDeleteClose(); }} autoFocus>
+                                    Delete
+                                </Button>
+                            </DialogActions>
+                        </Dialog>
+
+
+
+
+                    </div>
+                </Paper>
+            </Grid>
+
+        </form>
+
+            </LocalizationProvider >
         </div >
     )
 }
