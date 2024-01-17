@@ -77,6 +77,8 @@ const DcPrint = () => {
         height: 60px; /* Set the height based on your footer height */
         font-size: 8px;
         border: 1px solid black;
+        page-break-after: always;
+        z-index: 9;
       }
       @page :last {
         .footer {
