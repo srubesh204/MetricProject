@@ -65,6 +65,12 @@ const Employee = () => {
 
     })
 
+    const employee = [
+        { plantDetails: { plantName: "Plant1", departments: "Department1" } },
+        { plantDetails: { plantName: "Plant2", departments: "Department2" } },
+        // ... other employees
+    ];
+
     const [plantsData, setPlantsData] = useState([]);
     const plantFetch = async () => {
         try {
@@ -129,7 +135,11 @@ const Employee = () => {
     }, []);
     console.log(FilterNameList)
 
+    // plantDetails = {plantName: "", departments: ""}
 
+    // const value = employee.map(emp => emp.plantDetails.map(plant => plant.departments))
+
+    // const departments = new Set(value)
 
     const [employeeSelectedRowIds, setEmployeeSelectedRowIds] = useState([]);
 
@@ -151,7 +161,20 @@ const Employee = () => {
         { field: 'dob', headerName: 'DOB', width: 100, headerAlign: "center", align: "center", valueGetter: (params) => dayjs(params.row.itemCalDate).format('DD-MM-YYYY') },
         { field: 'contactNumber', headerName: 'Contact No', headerAlign: "center", align: "center", type: "number", width: 120, },
         { field: 'designation', headerName: 'Designation', headerAlign: "center", align: "center", width: 120, },
-        { field: 'department', headerName: 'Department', headerAlign: "center", align: "center", width: 130, renderCell : (params) => params.row.plantDetails.map },
+        {
+            field: 'department',
+            headerName: 'Department',
+            headerAlign: 'center',
+            align: 'center',
+            width: 130,
+            renderCell: (params) => (
+                <span>
+                    {params.row.plantDetails.map((plant) => plant.departments).join(', ')}
+                </span>
+            ),
+            // valueOptions: Array.from(uniqueDepartments),
+        },
+
         { field: 'empRole', headerName: 'Role', width: 150, headerAlign: "center", align: "center" },
         { field: 'reportTo', headerName: 'Report To', width: 100, headerAlign: "center", align: "center", },
 
@@ -174,6 +197,7 @@ const Employee = () => {
 
 
     })
+    const uniqueDepartments = [...new Set(FilterNameList.department)];
 
     const handleFilterChange = (e) => {
         const { name, value } = e.target;
@@ -502,7 +526,7 @@ const Employee = () => {
                 setEmployeeData(initialEmpData)
                 setEmpDataId(null)
                 setErrors({})
-            }else{
+            } else {
                 console.log("error")
             }
 
@@ -693,17 +717,17 @@ const Employee = () => {
         }
     };
 
-    
+
     useEffect(() => {
         if (empExcelStatus) {
-          const timeoutId = setTimeout(() => {
-            setEmpExcelStatus('');
-          }, 1000);
-    
-          return () => clearTimeout(timeoutId); 
+            const timeoutId = setTimeout(() => {
+                setEmpExcelStatus('');
+            }, 1000);
+
+            return () => clearTimeout(timeoutId);
         }
-      }, [empExcelStatus]);
-      
+    }, [empExcelStatus]);
+
 
     const empPlantAdd = () => {
         console.log(Object.values(empPlantDetails).every(item => typeof item === "string" ? item !== "" : item.length > 0))
@@ -1305,14 +1329,35 @@ const Employee = () => {
 
                                 </Grid>
                                 <Grid item xs={4}>
-                                    <TextField fullWidth label="Department Filter" value={filterAllNames.departmentFilter} onChange={handleFilterChange} select size="small" id="departmentFilterId" name="departmentFilter" defaultValue="" >
+                                    <TextField
+                                        fullWidth
+                                        label="Department Filter"
+                                        value={filterAllNames.departmentFilter}
+                                        onChange={handleFilterChange}
+                                        select
+                                        size="small"
+                                        id="departmentFilterId"
+                                        name="departmentFilter"
+                                        defaultValue=""
+                                    >
                                         <MenuItem value="all">All</MenuItem>
-                                        {FilterNameList.department.map((item, index) => (
-                                            <MenuItem key={index} value={item}>{item}</MenuItem>
-                                        ))
+                                        {plantsData && plantsData.departments && plantsData.departments.map((item, index) => (
+                                            <MenuItem key={index} value={item}>
+                                                {item}
+                                            </MenuItem>
+                                        ))}
+                                        {/* {plantsData.map((plant, index) => {
+                                            const value = employee.map(emp => emp.plantDetails.map(plant => plant.departments));
 
-                                        }
+                                            console.log(value);
+                                            return (
+                                                <MenuItem key={index} value={plant.department}>
+                                                    {plant.department}
+                                                </MenuItem>
+                                            );
+                                        })} */}
                                     </TextField>
+
                                 </Grid>
 
 
@@ -1384,7 +1429,7 @@ const Employee = () => {
 
                                 </div>
 
-                      
+
                                 <Dialog
                                     open={deleteOpen}
                                     onClose={handleDeleteClose}
@@ -1409,7 +1454,7 @@ const Employee = () => {
 
 
 
-                           
+
                             </div>
                         </Paper>
                     </Grid>
