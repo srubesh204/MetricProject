@@ -27,7 +27,7 @@ export const DcListContent = createContext(null);
 const DcList = () => {
 
     const empRole = useEmployee()
-
+    const [printState, setPrintState] = useState(false)
     const [selectedRows, setSelectedRows] = useState([]);
     const [dcEditOpen, setDcEditOpen] = useState(false);
     const [dcOpen, setDcOpen] = useState(false);
@@ -222,7 +222,7 @@ const DcList = () => {
         { field: 'dcNo', headerName: 'Dc No', headerAlign: "center", align: "center", width: 100 },
         { field: 'dcDate', headerName: 'Dc Date', headerAlign: "center", align: "center", width: 200 },
         { field: 'dcPartyName', headerName: 'Dc PartyName', headerAlign: "center", align: "center", width: 300 },
-        { field: 'printButton', headerName: 'Print', headerAlign: "center", align: "center", width: 100, renderCell: (params) => <Button onClick={() => { setSelectedRows(params.row); setDcPrintOpen(true) }}><PrintRounded color='success' /></Button> }
+        { field: 'printButton', headerName: 'Print', headerAlign: "center", align: "center", width: 100, renderCell: (params) => <Button onClick={() => { setSelectedRows(params.row); setDcPrintOpen(true) }}><PrintRounded color='success' onClick={() => setPrintState(true)} /></Button> }
     ]
 
 
@@ -617,12 +617,12 @@ const DcList = () => {
                             </div>
 
                             <DcListContent.Provider
-                                value={{ dcEditOpen, setDcEditOpen, selectedRows, dcListFetchData }}
+                                value={{ dcEditOpen, setDcEditOpen, selectedRows, dcListFetchData, printState, setPrintState }}
                             >
                                 <DcEdit />
                             </DcListContent.Provider>
                             <DcListContent.Provider
-                                value={{ dcOpen, setDcOpen, selectedRows, dcListFetchData }}
+                                value={{ dcOpen, setDcOpen, selectedRows, dcListFetchData, printState, setPrintState }}
                             >
                                 <DcAdd />
                             </DcListContent.Provider>
@@ -630,7 +630,7 @@ const DcList = () => {
 
 
                             <DcListContent.Provider
-                                value={{ dcPrintOpen, setDcPrintOpen, selectedRows, formatNoData }}
+                                value={{ dcPrintOpen, setDcPrintOpen, selectedRows, formatNoData, printState, setPrintState }}
                             >
                                 {selectedRows.length !== 0 &&
                                     <DcPrint />}
