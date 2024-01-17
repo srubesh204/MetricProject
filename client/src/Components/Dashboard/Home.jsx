@@ -437,7 +437,7 @@ const Home = () => {
     {
       field: 'itemIMTENo',
       headerName: 'IMTE No.',
-      width: 70,
+      width: 150,
       // editable: true,
     },
     {
