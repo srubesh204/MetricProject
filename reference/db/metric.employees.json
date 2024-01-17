@@ -101,4 +101,36 @@
     }
   ],
   "__v": 0
+},
+{
+  "_id": {
+    "$oid": "65a2675630361f95e07533a2"
+  },
+  "employeeCode": "Metric",
+  "title": "Mr.",
+  "firstName": "Metric Measurement Technologies",
+  "address": "Ambattur",
+  "city": "Chennai",
+  "state": "Tamilnadu",
+  "contactNumber": "",
+  "designation": "Developer",
+  "mailId": "csd@metric.co.in",
+  "empRole": "superAdmin",
+  "employmentStatus": "Active",
+  "password": "Metric@123",
+  "plantDetails": [
+    {
+      "plantName": "Plant2",
+      "departments": [
+        "Quality"
+      ]
+    },
+    {
+      "plantName": "Plant1",
+      "departments": [
+        "Quality"
+      ]
+    }
+  ],
+  "__v": 0
 }]
