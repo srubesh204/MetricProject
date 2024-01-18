@@ -27,7 +27,7 @@ const TotalList = () => {
 
 
 
-  
+
 
 
 
@@ -131,7 +131,7 @@ const TotalList = () => {
 
   useEffect(() => {
     if (partDataList.length !== 0) {
-      
+
       const partCustomers = partDataList.filter(part => itemList.some(item => item.itemPartName.includes(part._id)))
       console.log(partCustomers)
       setPartCutomerNames(partCustomers)
@@ -404,7 +404,7 @@ const TotalList = () => {
           plantWise: "all",
         }));
       }
-    
+
 
 
       if (name === "status") {
@@ -893,12 +893,11 @@ const TotalList = () => {
                     onChange={handleFilterChangeItemList}>
 
                     <MenuItem value="all">All</MenuItem>
-                    <MenuItem value="Active">Active</MenuItem>
-                    <MenuItem value="InActive">InActive</MenuItem>
-                    <MenuItem value="Spare">Spare</MenuItem>
-                    <MenuItem value="Breakdown">Breakdown</MenuItem>
-                    <MenuItem value="Missing">Missing</MenuItem>
-                    <MenuItem value="Rejection">Rejection</MenuItem>
+                    <MenuItem value="active">Active</MenuItem>
+                    <MenuItem value="spare">Spare</MenuItem>
+                    <MenuItem value="breakdown">Breakdown</MenuItem>
+                    <MenuItem value="missing">Missing</MenuItem>
+                    <MenuItem value="rejection">Rejection</MenuItem>
 
                   </TextField>
                 </div>
@@ -1035,7 +1034,7 @@ const TotalList = () => {
       </form>
 
       <TotalListContent.Provider
-        value={{ totalPrintOpen, setTotalPrintOpen, selectedRows, itemList, filteredItemListData,partDataList }}
+        value={{ totalPrintOpen, setTotalPrintOpen, selectedRows, itemList, filteredItemListData, partDataList }}
       >
 
         <TotalPrint />

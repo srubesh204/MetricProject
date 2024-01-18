@@ -109,7 +109,8 @@ const ItemAdd = () => {
     console.log({ Department: departments, Area: areas, placeOfUsage: placeOfUsages })
 
     //item master list
-    const [itemMasterDataList, setItemMasterDataList] = useState([])
+    const [itemMasterDataList, setItemMasterDataList] = useState([]);
+    const [distinctNamesArray, setDistinctNamesArray] = useState([]);
 
     const itemMasterFetchData = async () => {
         try {
@@ -127,8 +128,55 @@ const ItemAdd = () => {
         }
     };
     useEffect(() => {
+        const distinctNamesSet = new Set(itemMasterDataList.map(item => item.itemAddMasterName));
+
+        // Convert the Set back to an array
+        const distinctNamesArray = [...distinctNamesSet];
+
+        // Sort the array
+        distinctNamesArray.sort();
+
+        console.log(distinctNamesArray);
+
+        const names = [...new Set(distinctNamesSet)]
+        setDistinctNamesArray(names)
         itemMasterFetchData();
     }, []);
+
+
+
+
+
+
+
+
+    // const itemMasterFetchData = async () => {
+    //     try {
+    //         const response = await axios.get(
+    //             `${process.env.REACT_APP_PORT}/itemMaster/getAllItemMasters`
+
+    //         );
+
+    //         console.log(response.data)
+    //         const masterItems = response.data.result.filter((item) => item.isItemMaster === "1")
+    //         setItemMasterDataList(response.data.result);
+
+    //     } catch (err) {
+    //         console.log(err);
+    //     }
+    // };
+    // useEffect(() => {
+    //     const distinctNamesSet = new Set(itemMasterDataList.map(item => item.itemAddMasterName));
+
+    //     // Convert the Set back to an array
+    //     const distinctNamesArray = [...distinctNamesSet];
+
+    //     // Sort the array
+    //     distinctNamesArray.sort();
+
+    //     console.log(distinctNamesArray);
+    //     itemMasterFetchData();
+    // }, []);
 
 
 
@@ -154,6 +202,7 @@ const ItemAdd = () => {
     };
     useEffect(() => {
         getDistinctItemName();
+
     }, []);
 
 
@@ -724,7 +773,24 @@ const ItemAdd = () => {
                                     {itemMasterDataList.map((item, index) => (
                                         <MenuItem key={index} value={item._id}>{item.itemDescription}</MenuItem>
                                     ))}
-                                </TextField>
+                                </TextField> 
+                                {/* <TextField
+                                    {...(errors.itemMasterRef !== "" && { helperText: errors.itemMasterRef, error: true })}
+                                    size='small'
+                                    select
+                                    variant='outlined'
+                                    label="Item Master"
+                                    name='itemMasterRef'
+                                    value={itemAddData.itemMasterRef}
+                                    fullWidth
+                                    onChange={handleItemAddChange}
+                                >
+                                    <MenuItem value=""><em>Select</em></MenuItem>
+                                    {distinctNamesArray.map((itemName, index) => (
+                                        <MenuItem key={index} value={itemName}>{itemName}</MenuItem>
+                                    ))}
+                                </TextField> */}
+
                             </div>
                             <div className="col-6">
                                 <Autocomplete
@@ -1075,7 +1141,7 @@ const ItemAdd = () => {
                                                     // renderValue={(selected) => selected.join(', ')}
                                                     // renderValue={(selected) => selected.map(item => OEMList.find(oem => oem._id === item).aliasName).join(", ")}
                                                     renderValue={(selected) => selected.map(item => item).join(", ")}
-                                                     MenuProps={MenuProps}
+                                                    MenuProps={MenuProps}
 
                                                     fullWidth
                                                 >
@@ -1198,12 +1264,12 @@ const ItemAdd = () => {
 
 
 
-                                         {itemAddData.itemOEM.map((item, index) => (
+                                        {itemAddData.itemOEM.map((item, index) => (
                                             <tr key={index}>
                                                 <td>{index + 1}</td>
                                                 <td >{item}</td>
                                             </tr>
-                                        ))} 
+                                        ))}
 
 
                                     </tbody>
