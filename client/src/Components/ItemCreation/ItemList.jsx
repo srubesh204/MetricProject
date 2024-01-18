@@ -255,8 +255,8 @@ const ItemList = () => {
             ]
             : []),
         { field: 'id', headerName: 'Si. No', width: 60, renderCell: (params) => params.api.getAllRowIds().indexOf(params.id) + 1, headerAlign: "center", align: "center" },
-        { field: 'itemIMTENo', headerName: 'IMTE No', width: 120, headerAlign: "center", align: "center" },
-        { field: 'itemAddMasterName', headerName: 'Description', width: 120, headerAlign: "center", align: "center" },
+        { field: 'itemIMTENo', headerName: 'IMTE No', width: 120, headerAlign: "center", align: "left" },
+        { field: 'itemAddMasterName', headerName: 'Description', width: 120, headerAlign: "center", align: "left" },
         {
             field: 'Range/Size',
             headerName: 'Range/Size',
@@ -581,7 +581,7 @@ const ItemList = () => {
 
 
     const [partCutomerNames, setPartCutomerNames] = useState([])
-    const[customer,setCustomer]= useState([])
+    const [customer, setCustomer] = useState([])
     const [partDataList, setPartDataList] = useState([])
 
     const partFetchData = async () => {
@@ -603,7 +603,7 @@ const ItemList = () => {
 
             const partCustomers = partDataList.filter(part => itemList.some(item => item.itemPartName.includes(part._id)))
             setPartCutomerNames(partCustomers)
-            const customerfileter= partDataList.filter(cus => itemList.some(item => item.itemCustomer))
+            const customerfileter = partDataList.filter(cus => itemList.some(item => item.itemCustomer))
             setCustomer(customerfileter)
 
         }
@@ -886,6 +886,45 @@ const ItemList = () => {
                                     </div> </div> </div>
                             <Typography variant="h5" className="text-center mb-2">Item List</Typography>
 
+                            <div className="col d-flex  mr-1 ">
+
+                                <TextField label="Plant Wise"
+                                    id="plantWiseId"
+                                    select
+                                    defaultValue="all"
+                                   // value={filterAllNames.plantWise}
+                                    fullWidth
+                                    size="small"
+                                    onChange={handleFilterChangeItemList}
+                                    name="plantWise" >
+                                    <MenuItem value="all">All</MenuItem>
+                                    {FilterNameList.itemPlant.map((item, index) => (
+                                        <MenuItem key={index} value={item}>{item}</MenuItem>
+                                    ))}
+
+                                </TextField>
+
+                            </div>
+                            <div className="col d-flex  mb-2">
+
+                                <TextField label="Default Location "
+                                    id="currentLocationId"
+                                    select
+                                    defaultValue="all"
+                                   // value={filterAllNames.currentLocation}
+                                    fullWidth
+                                    onChange={handleFilterChangeItemList}
+                                    size="small"
+                                    name="currentLocation" >
+                                    <MenuItem value="all">All</MenuItem>
+                                    {FilterNameList.itemDepartment.map((item, index) => (
+                                        <MenuItem key={index} value={item}>{item}</MenuItem>
+                                    ))}
+
+                                </TextField>
+
+                            </div>
+
                             <div className="col d-flex mb-2 ">
 
                                 <TextField label="Imte No"
@@ -923,25 +962,7 @@ const ItemList = () => {
                                 </TextField>
 
                             </div>
-                            <div className="col d-flex  mb-2">
 
-                                <TextField label="Default Location "
-                                    id="currentLocationId"
-                                    select
-                                    defaultValue="all"
-                                    value={filterAllNames.currentLocation}
-                                    fullWidth
-                                    onChange={handleFilterChangeItemList}
-                                    size="small"
-                                    name="currentLocation" >
-                                    <MenuItem value="all">All</MenuItem>
-                                    {FilterNameList.itemDepartment.map((item, index) => (
-                                        <MenuItem key={index} value={item}>{item}</MenuItem>
-                                    ))}
-
-                                </TextField>
-
-                            </div>
 
                             <div className="col d-flex  mb-2">
 
@@ -991,7 +1012,7 @@ const ItemList = () => {
                                     select
                                     defaultValue="all"
                                     fullWidth
-                                   // value={filterAllNames.customerWise}
+                                    // value={filterAllNames.customerWise}
                                     size="small"
                                     onChange={handleFilterChangeItemList}
                                     name="customerWise" >
@@ -1021,24 +1042,7 @@ const ItemList = () => {
                                 </TextField>
 
                             </div>
-                            <div className="col d-flex  mr-1 ">
 
-                                <TextField label="Plant Wise"
-                                    id="plantWiseId"
-                                    select
-                                    value={filterAllNames.plantWise}
-                                    fullWidth
-                                    size="small"
-                                    onChange={handleFilterChangeItemList}
-                                    name="plantWise" >
-                                    <MenuItem value="all">All</MenuItem>
-                                    {FilterNameList.itemPlant.map((item, index) => (
-                                        <MenuItem key={index} value={item}>{item}</MenuItem>
-                                    ))}
-
-                                </TextField>
-
-                            </div>
 
 
                         </div>
@@ -1047,7 +1051,7 @@ const ItemList = () => {
 
                             <div className="col d-flex g-2 mb-2">
 
-                                <div className='col-3 me-2'>
+                                <div className='col d-flex  me-2'>
                                     <TextField label="Status"
                                         id="statusId"
                                         select
@@ -1066,7 +1070,7 @@ const ItemList = () => {
 
                                     </TextField>
                                 </div>
-                                <div className="col-3">
+                                <div className="col d-flex ">
 
                                     <TextField label="Current Location "
                                         id="itemCurrentLocationId"
