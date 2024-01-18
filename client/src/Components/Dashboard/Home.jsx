@@ -109,6 +109,10 @@ const Home = () => {
     viewers: [],
     plantEmployees: []
   })
+
+
+
+
   const [selectedPlantName, setSelectedPlantName] = useState("")
   const empFetch = async () => {
     try {
@@ -1105,19 +1109,6 @@ const Home = () => {
   }, [plantWiseList])
 
   console.log(selectedRows)
-
-  function Pagination() {
-
-
-    return (
-      <MuiPagination
-        height="50%"
-
-
-
-      />
-    );
-  }
 
 
 
