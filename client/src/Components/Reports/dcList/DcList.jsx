@@ -195,6 +195,7 @@ const DcList = () => {
             setDcListDataList(selectedRowView.dcPartyItems || []);
         }
     }, [selectedRowView]);
+    
 
 
     // const [itemListSelectedRowIds, setItemListSelectedRowIds] = useState([])
@@ -270,8 +271,9 @@ const DcList = () => {
                 setErrorHandler({ status: 0, message: errorMessages400, code: "error" });
             } else if (err.response && err.response.status === 500) {
                 // Handle other errors
+                console.log(err.response)
                 const errorData500 = err.response.data.error;
-                const errorMessages500 = Object.values(errorData500).join(', ');
+                const errorMessages500 = Object.values(errorData500);
                 console.log(errorMessages500)
                 setErrorHandler({ status: 0, message: errorMessages500, code: "error" });
             } else {
