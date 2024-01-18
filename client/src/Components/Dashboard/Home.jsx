@@ -90,6 +90,24 @@ const Home = () => {
     viewers: [],
     plantEmployees: []
   })
+
+  const [masters, setMasters] = useState([])
+  const itemMasterFetchData = async () => {
+    try {
+      const response = await axios.get(
+        `${process.env.REACT_APP_PORT}/itemMaster/getAllItemMasters`
+      );
+
+      setMasters(response.data.result)
+    } catch (err) {
+      console.log(err);
+    }
+  };
+  useEffect(() => {
+    itemMasterFetchData();
+  }, []);
+
+
   const [selectedPlantName, setSelectedPlantName] = useState("")
   const empFetch = async () => {
     try {
@@ -219,7 +237,7 @@ const Home = () => {
       const missingItems = allItems.filter((item) => item.itemStatus === "missing");
       const rejectionItems = allItems.filter((item) => item.itemStatus === "rejection");
 
-     
+
       const depLength = allItems.filter((item) => item.itemLocation === "department")
       const oemLength = allItems.filter((item) => item.itemLocation === "oem")
       const customersLength = allItems.filter((item) => item.itemLocation === "customer")
@@ -1062,7 +1080,7 @@ const Home = () => {
   console.log(selectedRows)
 
 
-  
+
 
   return (
     <div style={{ backgroundColor: "#f1f4f4", margin: 0, padding: 0 }}>
@@ -1488,7 +1506,7 @@ const Home = () => {
               <React.Fragment>
 
                 <HomeContent.Provider
-                  value={{ calOpen, setCalOpen, selectedRows, itemMasters, activeEmps: activeEmps.allEmps }}
+                  value={{ calOpen, setCalOpen, selectedRows, itemMasters, activeEmps: activeEmps.allEmps, masters }}
                 >
                   <CalDialog />
                 </HomeContent.Provider>

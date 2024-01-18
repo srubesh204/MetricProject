@@ -17,9 +17,9 @@ const CalDialog = () => {
 
     const calData = useContext(HomeContent)
     const [lastResultData, setLastResultData] = useState([])
-    const { calOpen, setCalOpen, selectedRows, itemMasters, activeEmps } = calData
+    const { calOpen, setCalOpen, selectedRows, itemMasters, activeEmps, masters } = calData
     const [calibrationDatas, setCalibrationDatas] = useState([])
-    const [certNo, setCertNo] = useState(0)
+    
 
     const getAllCalibrationData = async () => {
         try {
@@ -140,11 +140,24 @@ const CalDialog = () => {
         calMasterUsed: [],
     })
 
+    const [usedMaster, setUsedMaster] = useState({})
+    console.log(usedMaster)
 
     const setCalData = () => {
+
+        console.log("hi")
         if (selectedRows.length === 1) {
-
-
+            let itemMasterUsed = {}
+            if(masters.length > 0){
+                const filter = masters.filter(itemMas => itemMas._id === selectedRows[0].itemMasterRef)
+                itemMasterUsed = filter[0]
+                setUsedMaster(...filter)
+                console.log(filter)
+            }
+            
+            console.log(itemMasterUsed)
+            
+          
             setCalibrationData((prev) => (
                 {
                     ...prev,
@@ -157,9 +170,9 @@ const CalDialog = () => {
                     calLC: selectedRows[0].itemLC || "",
                     calItemMake: selectedRows[0].itemMake || "",
                     calItemFreInMonths: selectedRows[0].itemCalFreInMonths || "",
-                    // calItemUncertainity: selectedRows[0].selectedItemMaster[0].uncertainty || "",
-                    // calItemSOPNo: selectedRows[0].selectedItemMaster[0].SOPNo || "",
-                    // calStandardRef: selectedRows[0].selectedItemMaster[0].standardRef || "",
+                    calItemUncertainity: itemMasterUsed.uncertainty || "",
+                    calItemSOPNo: itemMasterUsed.SOPNo || "",
+                    calStandardRef: itemMasterUsed.standardRef || "",
                     calOBType: selectedRows[0].itemOBType || "",
 
                     // calCalibratedBy: selectedRows[0],
@@ -218,7 +231,7 @@ const CalDialog = () => {
     }, [calibrationData.calMasterUsed])
 
     console.log(calibrationData)
-
+ 
     // const [minColor, setMinColor] = useState("")
     // const [maxColor, setMaxColor] = useState("")
 
@@ -893,7 +906,7 @@ const CalDialog = () => {
                                     onChange={handleCalData}
                                 >
                                     {activeEmps.map((emp, index) => (
-                                        <MenuItem key={index} value={emp._id}>{emp.firstName + " " + emp.lastName}</MenuItem>
+                                        <MenuItem key={index} value={emp._id}>{`${emp.firstName ? emp.firstName : ""} ${emp.lastName ? emp.lastName : ""}`}</MenuItem>
                                     ))}
                                 </TextField>
 

@@ -46,8 +46,8 @@ const itemDcController = {
         const updatePromises = dcPartyItems.map(async (item) => {
 
           const itemData = await itemAddModel.findById(item._id)
-          const { itemIMTENo } = itemData
-          const updateItemFields = { itemIMTENo, itemCurrentLocation: dcPartyName, itemLocation: dcPartyType, dcId: result._id, dcStatus: "1", dcCreatedOn: dcDate, dcNo: dcNo }
+          const { itemIMTENo, itemCurrentLocation : itemLastLocation } = itemData
+          const updateItemFields = { itemIMTENo, itemCurrentLocation: dcPartyName, itemLastLocation , itemLocation: dcPartyType, dcId: result._id, dcStatus: "1", dcCreatedOn: dcDate, dcNo: dcNo }
           const updateResult = await itemAddModel.findOneAndUpdate(
             { _id: item._id },
             { $set: updateItemFields },
