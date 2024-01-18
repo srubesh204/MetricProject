@@ -617,6 +617,7 @@ const itemAddController = {
           U: 'itemCalFreInMonths',
           V: 'itemCalAlertDays',
           W: 'itemCalibrationSource',
+          X: 'itemSupplier',
           Z: 'itemCalDate',
           AA: 'itemDueDate',
           AB: 'itemCalibratedAt',
@@ -630,8 +631,19 @@ const itemAddController = {
       }
       });
       console.log(jsonData)
+
+      const modifiedData = jsonData.Sheet1.map(item => {
+        item.itemCalDate = dayjs(item.itemCalDate).format("YYYY-MM-DD")
+        item.itemDueDate = dayjs(item.itemDueDate).format("YYYY-MM-DD")
+        item.itemReceiptDate = dayjs(item.itemReceiptDate).format("YYYY-MM-DD")
+        item.itemLocation = item.itemLocation ?  item.itemLocation.toLowerCase() : "department"
+        item.itemStatus = item.itemStatus ? item.itemStatus.toLowerCase() : "active"
+       
+        
+        return item;
+      });
   
-      const uploadPromises = jsonData.Sheet1.map(async (item) => {
+      const uploadPromises = modifiedData.map(async (item) => {
         try {
           // Create an instance of designationModel and save it to the database
           const newItemAdd = new itemAddModel(item); // Assuming 'item' conforms to your ItemAddModel schema

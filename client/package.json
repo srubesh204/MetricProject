@@ -29,6 +29,7 @@
     "react-router-dom": "^6.17.0",
     "react-scripts": "5.0.1",
     "react-spring": "^9.7.3",
+    "react-to-print": "^2.14.15",
     "recharts": "^2.10.1",
     "sweetalert2": "^11.10.2",
     "web-vitals": "^2.1.4"

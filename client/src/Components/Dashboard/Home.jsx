@@ -15,7 +15,7 @@ import CalDialog from './DashboardComponents/CalDialog';
 import Dc from './DashboardComponents/DcDialog';
 import Grn from './DashboardComponents/Grn';
 import OnSiteDialog from './DashboardComponents/OnSiteDialog';
-
+import MuiPagination from '@mui/material/Pagination';
 import { useEmployee } from '../../App';
 export const HomeContent = createContext(null);
 
@@ -80,6 +80,25 @@ const Home = () => {
   const [allDepartments, setAllDepartments] = useState([])
 
 
+  const [masters, setMasters] = useState([]);
+  const itemMasterFetchData = async () => {
+    try {
+      const response = await axios.get(
+        `${process.env.REACT_APP_PORT}/itemMaster/getAllItemMasters`
+      );
+
+
+      setMasters(response.data.result)
+
+    } catch (err) {
+      console.log(err);
+    }
+  };
+  useEffect(() => {
+    itemMasterFetchData();
+  }, []);
+
+
 
   //allActiveEmployees
   const [activeEmps, setActiveEmps] = useState({
@@ -91,21 +110,7 @@ const Home = () => {
     plantEmployees: []
   })
 
-  const [masters, setMasters] = useState([])
-  const itemMasterFetchData = async () => {
-    try {
-      const response = await axios.get(
-        `${process.env.REACT_APP_PORT}/itemMaster/getAllItemMasters`
-      );
 
-      setMasters(response.data.result)
-    } catch (err) {
-      console.log(err);
-    }
-  };
-  useEffect(() => {
-    itemMasterFetchData();
-  }, []);
 
 
   const [selectedPlantName, setSelectedPlantName] = useState("")
@@ -147,7 +152,7 @@ const Home = () => {
       );
       console.log(Departments)
       const defaultDepartment = Departments.data.result.filter((dep) => dep.defaultdep === "yes");
-      const otherDepartment = Departments.data.result.filter((dep) => dep.defaultdep === "no")
+      const otherDepartment = Departments.data.result.filter((dep) => dep.defaultdep !== "yes")
 
 
       setAllDepartments([...defaultDepartment, ...otherDepartment])
@@ -160,7 +165,7 @@ const Home = () => {
     }
   };
 
-
+  console.log(allDepartments)
 
   const getVendorsByType = async () => {
     try {
@@ -436,7 +441,7 @@ const Home = () => {
     {
       field: 'itemIMTENo',
       headerName: 'IMTE No.',
-      width: 70,
+      width: 150,
       // editable: true,
     },
     {
@@ -524,6 +529,7 @@ const Home = () => {
 
 
   const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', "#aca8c8", "#78787a"];
+  const [calStatusFitleredData, setCalStatusFitleredData] = useState([])
 
   const calStatusFunction = (name) => {
 
@@ -534,41 +540,60 @@ const Home = () => {
     const thirtyDaysFilter = pieDataFilter.filter((item) => dayjs(item.itemDueDate).isBetween(currentDate.format("YYYY-MM-DD"), thirtyDaysAgo))
     const AboveThirtyDaysFilter = pieDataFilter.filter((item) => dayjs(item.itemDueDate).isAfter(thirtyDaysAgo))
 
-    const inhouse = pieDataFilter.filter((item) => item.itemCalibrationSource === "inhouse");
-    const outSource = pieDataFilter.filter((item) => item.itemCalibrationSource === "outsource");
-    const oem = pieDataFilter.filter((item) => item.itemCalibrationSource === "OEM");
+    const sourceFilter = (filterName) => {
 
-    setCalSourceCount((prev) => ({
-      ...prev,
-      inHouse: inhouse.length,
-      outSource: outSource.length,
-      oem: oem.length
-    }))
+      setCalStatusFitleredData(filterName)
+      const inhouse = filterName.filter((item) => item.itemCalibrationSource === "inhouse");
+      const outSource = filterName.filter((item) => item.itemCalibrationSource === "outsource");
+      const oem = filterName.filter((item) => item.itemCalibrationSource === "OEM");
+
+      setCalSourceCount((prev) => ({
+        ...prev,
+        inHouse: inhouse.length,
+        outSource: outSource.length,
+        oem: oem.length
+      }))
+    }
+
+
 
     switch (name) {
       case "Past Due":
         setFilteredData(pastDue);
+        sourceFilter(pastDue)
         break;
       case "Today":
         setFilteredData(CurrentDue);
+        sourceFilter(CurrentDue)
         break;
       case "7 Days":
         setFilteredData(sevenDaysFilter);
+        sourceFilter(sevenDaysFilter)
         break;
       case "15 Days":
         setFilteredData(fifteenDaysFilter);
+        sourceFilter(fifteenDaysFilter)
         break;
       case "30 Days":
         setFilteredData(thirtyDaysFilter);
+        sourceFilter(thirtyDaysFilter)
         break;
       case ">30 Days":
         setFilteredData(AboveThirtyDaysFilter);
+        sourceFilter(AboveThirtyDaysFilter)
         break;
       default:
         setFilteredData(itemList)
+        sourceFilter(itemList)
         break;
     }
+
+    
+
+
   }
+
+
 
 
 
@@ -920,7 +945,7 @@ const Home = () => {
 
   const handleCalSrc = (e, newValue) => {
     setCalSrcValue(newValue)
-    const calSrcFilter = pieDataFilter.filter((item) => item.itemCalibrationSource === newValue);
+    const calSrcFilter = calStatusFitleredData.filter((item) => item.itemCalibrationSource === newValue);
     setFilteredData(calSrcFilter)
   }
 
@@ -1359,32 +1384,36 @@ const Home = () => {
         <div className="row gx-3 mx-3">
           <div className="col-md-8">
             <Paper sx={{ p: 2, }} elevation={12}>
-              <Box sx={{ height: 400, mb: 2 }}>
+              <Box sx={{ height: 320, mb: 2, fontSize: "8px" }}>
                 <DataGrid
                   density='compact' disableDensitySelector
+                  getRowHeight={({ id, densityFactor }) => {
+                    return 20;
+                  }}
                   rows={filteredData}
                   columns={ItemListColumns}
                   getRowId={(row) => row._id}
                   initialState={{
                     pagination: {
                       paginationModel: {
-                        pageSize: 5,
+                        pageSize: 9,
+                        
                       },
                     },
                   }}
-
+                  
                   onRowSelectionModelChange={handleRowSelectionChange}
                   sx={{
                     ".MuiTablePagination-displayedRows": {
 
                       "marginTop": "1em",
                       "marginBottom": "1em"
-                    }
+                    }, fontSize: "12px"
                   }}
 
                   checkboxSelection
                   // onRowClick={handleSelectRow}
-                  slots={{ toolbar: GridToolbar }}
+                  slots={{ toolbar: GridToolbar}}
                   slotProps={{
                     toolbar: {
                       showQuickFilter: true,

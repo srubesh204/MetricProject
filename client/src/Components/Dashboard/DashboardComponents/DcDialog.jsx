@@ -271,6 +271,7 @@ const Dc = () => {
                 setAlertMessage(response.data.message)
                 setSnackBarOpen(true)
                 itemFetch();
+                setDcData(initialDcData)
                 setTimeout(() => setDcOpen(false), 3000)
             } else {
                 
