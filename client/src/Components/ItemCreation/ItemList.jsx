@@ -39,7 +39,7 @@ const ItemList = () => {
     const [loaded, setLoaded] = useState(false);
 
     const [itemList, setItemList] = useState([]);
-    const [filteredItemListData, setFilteredItemListData] = useState([])
+
 
     const itemFetch = async () => {
         try {
@@ -306,6 +306,7 @@ const ItemList = () => {
 
     })
 
+     
 
     const handleFilterChangeItemList = (e) => {
         const { name, value } = e.target;
@@ -369,6 +370,7 @@ const ItemList = () => {
                 const customerWise = itemList.filter((item) =>
                     item.itemCustomer && Array.isArray(item.itemCustomer) && item.itemCustomer.includes(value)
                 );
+                setFilteredItemListData(customerWise);
                 setFilterAllNames(prev => ({
                     ...prev,
                     imteNo: "all",
@@ -466,7 +468,6 @@ const ItemList = () => {
                     status: "all",
                     plantWise: "all",
                     calibrationSource: value
-
                 }))
 
             }
@@ -668,6 +669,20 @@ const ItemList = () => {
 
         if (value === "all") {
             setFilteredItemListData(itemList)
+            // setFilterAllNames(prev => ({
+            //     ...prev,
+            //     imteNo: "all",
+            //     itemType: "all",
+            //     currentLocation: "all",
+            //     customerWise: "all",
+            //     supplierWise: "all",
+            //     partName: "all",
+            //     status: "all",
+            //     plantWise: value,
+            //     calibrationSource:"all",
+            //     dueInDays:value
+            // }))
+            
         } else {
 
 
@@ -854,6 +869,7 @@ const ItemList = () => {
                                     select
                                     value={filterAllNames.imteNo}
                                     defaultValue="all"
+                                    
                                     fullWidth
                                     size="small"
                                     onChange={handleFilterChangeItemList}
@@ -873,6 +889,7 @@ const ItemList = () => {
                                     value={filterAllNames.itemType}
                                     defaultValue="all"
                                     fullWidth
+                                   
                                     onChange={handleFilterChangeItemList}
                                     size="small"
                                     name="itemType" >
@@ -908,12 +925,13 @@ const ItemList = () => {
                                     id="customerWiseId"
                                     select
                                     defaultValue="all"
-                                    fullWidth
                                     value={filterAllNames.customerWise}
+                                    fullWidth
+                                    
                                     size="small"
                                     onChange={handleFilterChangeItemList}
                                     name="customerWise" >
-                                    <MenuItem value="all">All</MenuItem>
+                                    < MenuItem value="all">All</MenuItem>
                                     {partCutomerNames.map((item, index) => (
                                         <MenuItem key={index} value={item}>{item.customer}</MenuItem>
                                     ))}
@@ -948,6 +966,7 @@ const ItemList = () => {
                                     fullWidth
                                     size="small"
                                     onChange={handleDueChange}
+                                    value={filterAllNames.dueInDays}
                                     name="dueInDays" >
                                     <MenuItem value="all">All</MenuItem>
                                     <MenuItem value="Past">Past</MenuItem >
@@ -1267,7 +1286,7 @@ const ItemList = () => {
                 </Backdrop>}
 
 
-        </div>
+        </div >
     )
 }
 
