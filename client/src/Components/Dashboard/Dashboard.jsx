@@ -53,7 +53,7 @@ import Swal from 'sweetalert2';
 import Version from '../system/Version';
 import BackUp from '../system/BackUp';
 import AlertConfig from '../system/AlertConfig';
-import MailConfig from '../system/MailConfig';
+import MailConfig from '../system/Mails/MailConfig';
 import FormatNumber from '../system/FormatNumber';
 import CompanyDetails from '../system/CompanyDetails';
 import InsHistoryCard from '../Reports/InsHistoryCard';

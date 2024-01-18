@@ -159,4 +159,24 @@
   "subContractor": "0",
   "vendorStatus": "Active",
   "__v": 0
+},
+{
+  "_id": {
+    "$oid": "65a76731892226c3695d4107"
+  },
+  "vendorCode": "CU332",
+  "aliasName": "TEST",
+  "fullName": "test",
+  "dor": "2024-01-17",
+  "address": "address",
+  "state": "Tamil Nadu",
+  "city": "Chennai",
+  "oem": "1",
+  "customer": "1",
+  "supplier": "1",
+  "subContractor": "1",
+  "certificate": "CommonFeatures.pdf",
+  "certificateValidity": "2024-01-17",
+  "vendorStatus": "Active",
+  "__v": 0
 }]

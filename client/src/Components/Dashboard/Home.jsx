@@ -10,7 +10,7 @@ import isSameOrAfter from 'dayjs/plugin/isSameOrAfter'
 import isSameOrBefore from 'dayjs/plugin/isSameOrBefore'
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { Add, ArrowBack, Delete, Error, HomeMax, House } from '@mui/icons-material';
+import { Add, ArrowBack, Delete, Error, HomeMax, House, Mail } from '@mui/icons-material';
 import CalDialog from './DashboardComponents/CalDialog';
 import Dc from './DashboardComponents/DcDialog';
 import Grn from './DashboardComponents/Grn';
@@ -1371,7 +1371,7 @@ const Home = () => {
 
                       <ListSubheader color='primary' sx={{ fontSize: "12px" }}>Other Department</ListSubheader>
                       {allDepartments
-                        .filter(item => item.defaultdep === "no")
+                        .filter(item => item.defaultdep !== "yes")
                         .map((item, index) => (
                           <MenuItem sx={{ marginLeft: "20px" }} key={index} value={item.department}>
                             {item.department}
@@ -1438,6 +1438,7 @@ const Home = () => {
 
 
                     <Button size='small' onClick={() => dcCheck()}>Create DC</Button>
+                    {selectedRows.length > 0 && <Button size='small' color='info' variant='contained' endIcon={<Mail />}>Send Mail</Button>}
                     {StatusCheckMsg !== "" && <Chip icon={<Error />} color='error' label={StatusCheckMsg} />}
                   </div>
                   <div className="col-md-3">

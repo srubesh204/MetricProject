@@ -1,0 +1,22 @@
+[{
+  "_id": {
+    "$oid": "6554ae055722caaad4f1e634"
+  },
+  "partNo": "Test",
+  "partName": "Dct",
+  "customer": "Metric",
+  "operationNo": "N/A",
+  "partStatus": "Active",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "65646e262ab04521243acbf3"
+  },
+  "partNo": "123442",
+  "partName": "Second Part",
+  "customer": "Saint Gobin",
+  "operationNo": "N/A",
+  "partStatus": "Active",
+  "__v": 0
+}]
