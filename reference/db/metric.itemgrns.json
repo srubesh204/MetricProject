@@ -1,0 +1,65 @@
+[{
+  "_id": {
+    "$oid": "658565c7f1a44b6d5afbb4e9"
+  },
+  "grnPartyRefNo": "2212",
+  "grnPartyId": "6565be0bb1c957ffde34f9a6",
+  "grnPartyRefDate": "2023-12-22",
+  "grnPartyName": "Saint Gobin And Co",
+  "grnPartyCode": "mmt-123",
+  "grnPartyAddress": "Sriperambadur",
+  "grnNo": "1121",
+  "grnDate": "2023-12-22",
+  "grnCommonRemarks": "cr",
+  "grnPartyItems": [
+    {
+      "grnItemStatus": "Calibrated",
+      "grnItemId": "65818532bc1198dbb9f53640",
+      "grnItemIMTENo": "121",
+      "grnItemAddMasterName": "Plain Ring Gauge",
+      "grnItemType": "attribute",
+      "grnItemRangeSize": "20.12",
+      "grnItemItemMFRNo": "mfr",
+      "grnItemLC": "",
+      "grnItemMake": "Make",
+      "grnItemCalFreInMonths": "6",
+      "grnItemCalibratedAt": "inhouse",
+      "grnItemOBType": "average",
+      "grnAcCriteria": [
+        {
+          "grnAcParameter": "Go",
+          "grnAcNominalSize": "n1",
+          "grnAcNominalSizeUnit": "mm",
+          "grnAcMinPS": "14",
+          "grnAcMaxPS": "19",
+          "grnAcWearLimitPS": "25",
+          "grnAcAverageOB": "15",
+          "rowStatus": "ok"
+        },
+        {
+          "grnAcParameter": "Nogo",
+          "grnAcNominalSize": "n2",
+          "grnAcNominalSizeUnit": "mm",
+          "grnAcMinPS": "15",
+          "grnAcMaxPS": "20",
+          "grnAcWearLimitPS": "11",
+          "grnAcMinOB": "",
+          "grnAcMaxOB": "",
+          "grnAcAverageOB": "20",
+          "grnAcOBError": "",
+          "grnAcMinPSError": "",
+          "grnAcMaxPSError": "",
+          "rowStatus": "ok"
+        }
+      ],
+      "grnItemCalDate": "2023-12-22",
+      "grnItemDueDate": "2024-06-21",
+      "grnItemCertificateStatus": "received",
+      "grnItemCertificateNo": "332",
+      "grnItemCertificate": "DC.pdf",
+      "grnUncertainity": "2.14",
+      "grnItemCalStatus": "accepted"
+    }
+  ],
+  "__v": 0
+}]

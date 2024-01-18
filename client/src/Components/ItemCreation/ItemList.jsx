@@ -1328,8 +1328,6 @@ const ItemList = () => {
                 >
                     <CircularProgress color="success" />
                 </Backdrop>}
-
-
         </div>
     )
 }

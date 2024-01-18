@@ -1,0 +1,16 @@
+[{
+  "_id": {
+    "$oid": "6554ac775722caaad4f1e5e0"
+  },
+  "area": "Rack1",
+  "areaStatus": "Active",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "655dbed8256feb2ebaeba6ce"
+  },
+  "area": "Area 1",
+  "areaStatus": "Active",
+  "__v": 0
+}]

@@ -1,0 +1,16 @@
+[{
+  "_id": {
+    "$oid": "6554ac7a5722caaad4f1e5e7"
+  },
+  "placeOfUsage": "Box1",
+  "placeOfUsageStatus": "Active",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "655dbedb256feb2ebaeba6d5"
+  },
+  "placeOfUsage": "Place 1",
+  "placeOfUsageStatus": "Active",
+  "__v": 0
+}]
