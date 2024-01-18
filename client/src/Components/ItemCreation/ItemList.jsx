@@ -869,7 +869,7 @@ const ItemList = () => {
                                     select
                                     value={filterAllNames.imteNo}
                                     defaultValue="all"
-                                    value={filterAllNames.imteNo}
+                                    
                                     fullWidth
                                     size="small"
                                     onChange={handleFilterChangeItemList}
@@ -889,7 +889,7 @@ const ItemList = () => {
                                     value={filterAllNames.itemType}
                                     defaultValue="all"
                                     fullWidth
-                                    value={filterAllNames.itemType}
+                                   
                                     onChange={handleFilterChangeItemList}
                                     size="small"
                                     name="itemType" >
@@ -927,7 +927,7 @@ const ItemList = () => {
                                     defaultValue="all"
                                     value={filterAllNames.customerWise}
                                     fullWidth
-                                    value={filterAllNames.customerWise}
+                                    
                                     size="small"
                                     onChange={handleFilterChangeItemList}
                                     name="customerWise" >
