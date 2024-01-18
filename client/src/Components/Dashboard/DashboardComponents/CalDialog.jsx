@@ -19,7 +19,7 @@ const CalDialog = () => {
     const [lastResultData, setLastResultData] = useState([])
     const { calOpen, setCalOpen, selectedRows, itemMasters, activeEmps, masters } = calData
     const [calibrationDatas, setCalibrationDatas] = useState([])
-    const [certNo, setCertNo] = useState(0)
+    
 
     const getAllCalibrationData = async () => {
         try {
@@ -142,6 +142,8 @@ const CalDialog = () => {
 
     const [refMaster, setRefMaster]= useState({})
     const setCalData = () => {
+
+        console.log("hi")
         if (selectedRows.length === 1) {
             const filter = masters.filter(mas => mas._id === selectedRows[0].itemMasterRef)
             console.log(filter)
@@ -167,7 +169,7 @@ const CalDialog = () => {
                     // calApprovedBy: selectedRows[0],
                     calcalibrationData:
 
-                        selectedExtraMaster.length > 0 && selectedRows[0].acceptanceCriteria.map((item) => (
+                        selectedRows.length > 0 && selectedRows[0].acceptanceCriteria.map((item) => (
                             {
                                 calParameter: item.acParameter,
                                 calNominalSize: item.acNominalSize,
@@ -217,7 +219,7 @@ const CalDialog = () => {
     }, [calibrationData.calMasterUsed])
 
     console.log(calibrationData)
-
+ 
     // const [minColor, setMinColor] = useState("")
     // const [maxColor, setMaxColor] = useState("")
 
@@ -892,7 +894,7 @@ const CalDialog = () => {
                                     onChange={handleCalData}
                                 >
                                     {activeEmps.map((emp, index) => (
-                                        <MenuItem key={index} value={emp._id}>{emp.firstName + " " + emp.lastName}</MenuItem>
+                                        <MenuItem key={index} value={emp._id}>{`${emp.firstName ? emp.firstName : ""} ${emp.lastName ? emp.lastName : ""}`}</MenuItem>
                                     ))}
                                 </TextField>
 

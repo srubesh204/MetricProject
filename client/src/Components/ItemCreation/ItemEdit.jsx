@@ -910,12 +910,12 @@ const ItemEdit = () => {
         console.log(employeeRole)
         const filteredPlants = employeeRole.loggedEmp.plantDetails.filter(plant => plant.plantName === itemAddData.itemPlant);
         console.log(filteredPlants)
-        if(filteredPlants.length > 0){
+        if (filteredPlants.length > 0) {
             setPlantDepartments(filteredPlants[0].departments)
-        }else{
+        } else {
             setPlantDepartments([])
         }
-        
+
     }, [itemAddData.itemPlant])
 
 
@@ -1075,7 +1075,7 @@ const ItemEdit = () => {
                                 <div className="row g-2 mt-0 mb-2">
                                     <div className="col-md-6">
                                         <TextField
-                                            
+
                                             value={itemAddData.itemPlant} onChange={handleItemAddChange} size='small' select fullWidth variant='outlined' label="Select Plant" name='itemPlant' id='itemPlantId'>
                                             <MenuItem value="">Select Plant</MenuItem>
                                             {employeeRole.loggedEmp.plantDetails.map((plant, index) => (
@@ -1210,7 +1210,7 @@ const ItemEdit = () => {
                                                         const foundPart = itemMasterListByName.find(part => part._id === item);
                                                         return foundPart ? foundPart.itemIMTENo : "";
                                                     }).filter(Boolean); // Filter out empty strings
-                                                
+
                                                     return selectedParts.join(", ");
                                                 }}
                                                 MenuProps={MenuProps}
@@ -1218,7 +1218,7 @@ const ItemEdit = () => {
                                             >
                                                 {itemMasterListByName.map((name, index) => (
                                                     <MenuItem key={index} value={name._id}>
-                                                        <Checkbox checked={itemAddData.itemItemMasterIMTENo.indexOf(name._id) > -1}  />
+                                                        <Checkbox checked={itemAddData.itemItemMasterIMTENo.indexOf(name._id) > -1} />
                                                         <ListItemText primary={name.itemIMTENo} />
                                                     </MenuItem>
                                                 ))}
@@ -1244,7 +1244,7 @@ const ItemEdit = () => {
                                                 onChange={handleItemAddChange}
                                                 input={<OutlinedInput fullWidth label="Select Supplier" />}
                                                 // renderValue={(selected) => selected.join(', ')}
-                                                renderValue={(selected) => selected.map(item => item).join(", ")} 
+                                                renderValue={(selected) => selected.map(item => item).join(", ")}
                                                 MenuProps={MenuProps}
 
                                                 fullWidth
@@ -1315,13 +1315,14 @@ const ItemEdit = () => {
                                                 onChange={handleItemAddChange}
                                                 input={<OutlinedInput fullWidth label="Select Supplier" />}
                                                 // renderValue={(selected) => selected.join(', ')}
-                                                renderValue={(selected) => selected.map(item => oemList.find(oem => oem._id === item).aliasName).join(", ")} MenuProps={MenuProps}
+                                                renderValue={(selected) => selected.map(item => item).join(", ")}
+                                                MenuProps={MenuProps}
 
                                                 fullWidth
                                             >
                                                 {oemList.map((name, index) => (
-                                                    <MenuItem key={index} value={name._id}>
-                                                        <Checkbox checked={itemAddData.itemOEM.indexOf(name._id) > -1} />
+                                                    <MenuItem key={index} value={name.aliasName}>
+                                                        <Checkbox checked={itemAddData.itemOEM.indexOf(name.aliasName) > -1} />
                                                         <ListItemText primary={name.aliasName} />
                                                     </MenuItem>
                                                 ))}
@@ -1375,7 +1376,16 @@ const ItemEdit = () => {
                                         <th style={{ width: "20%" }}>Si No</th>
                                         <th style={{ width: "80%" }}>Supplier</th>
                                     </tr>
-                                    {
+
+                                    {itemAddData.itemSupplier.map((item, index) => (
+                                        <tr key={index}>
+                                            <td>{index + 1}</td>
+                                            <td >{item}</td>
+                                        </tr>
+                                    ))}
+
+
+                                    {/* {
                                         itemAddData.itemSupplier.map((itemSup, index) => {
                                             const selectedSupplier = supplierList.find(sup => sup._id === itemSup);
                                             return (
@@ -1385,7 +1395,7 @@ const ItemEdit = () => {
                                                 </tr>
                                             );
                                         })
-                                    }
+                                    } */}
 
 
 
@@ -1400,7 +1410,7 @@ const ItemEdit = () => {
 
                                     </tr>
 
-                                    {
+                                    {/* {
                                         itemAddData.itemOEM.map((itemOem, index) => {
                                             const selectedOem = oemList.find(sup => sup._id === itemOem);
                                             return (
@@ -1410,7 +1420,14 @@ const ItemEdit = () => {
                                                 </tr>
                                             );
                                         })
-                                    }
+                                    } */}
+                                     {itemAddData.itemOEM.map((item, index) => (
+                                            <tr key={index}>
+                                                <td>{index + 1}</td>
+                                                <td >{item}</td>
+                                            </tr>
+                                        ))} 
+
 
                                 </tbody>
                             </table>}
@@ -1481,35 +1498,35 @@ const ItemEdit = () => {
                                             ))}
                                         </TextField>
                                         {itemAddData.isItemMaster === "1" &&
-                                        <React.Fragment>
-                                            <TextField disabled={itemAddData.itemPrevCalData !== "available"}
-                                                className='ms-2'
-                                                fullWidth
-                                                label="Uncertainity"
-                                                variant='outlined'
-                                                size='small'
-                                                onChange={handleItemAddChange}
-                                                id='itemUncertainityId'
-                                                name='itemUncertainity'
-                                                value={itemAddData.itemUncertainity}
-                                            />
+                                            <React.Fragment>
+                                                <TextField disabled={itemAddData.itemPrevCalData !== "available"}
+                                                    className='ms-2'
+                                                    fullWidth
+                                                    label="Uncertainity"
+                                                    variant='outlined'
+                                                    size='small'
+                                                    onChange={handleItemAddChange}
+                                                    id='itemUncertainityId'
+                                                    name='itemUncertainity'
+                                                    value={itemAddData.itemUncertainity}
+                                                />
 
-                                            <TextField disabled={itemAddData.itemPrevCalData !== "available"}
-                                                select
-                                                size='small'
-                                                variant='outlined'
-                                                label="Unit"
-                                                name='itemUncertainityUnit'
-                                                onChange={handleItemAddChange}
-                                                style={{ width: "60%" }}
-                                                value={itemAddData.itemUncertainityUnit}
-                                            >
-                                                <MenuItem value=""><em>None</em></MenuItem>
-                                                {units.map((unit, index) => (
-                                                    <MenuItem key={index} value={unit.unitName}>{unit.unitName}</MenuItem>
-                                                ))}
-                                            </TextField>
-                                        </React.Fragment>}
+                                                <TextField disabled={itemAddData.itemPrevCalData !== "available"}
+                                                    select
+                                                    size='small'
+                                                    variant='outlined'
+                                                    label="Unit"
+                                                    name='itemUncertainityUnit'
+                                                    onChange={handleItemAddChange}
+                                                    style={{ width: "60%" }}
+                                                    value={itemAddData.itemUncertainityUnit}
+                                                >
+                                                    <MenuItem value=""><em>None</em></MenuItem>
+                                                    {units.map((unit, index) => (
+                                                        <MenuItem key={index} value={unit.unitName}>{unit.unitName}</MenuItem>
+                                                    ))}
+                                                </TextField>
+                                            </React.Fragment>}
                                     </div>
 
 
@@ -1565,35 +1582,35 @@ const ItemEdit = () => {
                                 <div className="row">
                                     <div className="col-md-12">
                                         <FormControl fullWidth>
-                                        <InputLabel id="itemPartNameId">Select Part</InputLabel>
-                                        <Select
-                                            labelId="itemPartNameId"
-                                            multiple
-                                            id="demo-multiple-checkbox"
-                                            name="itemPartName"
-                                            value={itemAddData.itemPartName}
-                                            onChange={handleItemAddChange}
-                                            input={<OutlinedInput fullWidth label="Select Part" />}
-                                            renderValue={(selected) => {
-                                                const selectedParts = selected.map(item => {
-                                                    const foundPart = partData.find(part => part._id === item);
-                                                    return foundPart ? foundPart.partName : "";
-                                                }).filter(Boolean); // Filter out empty strings
-                                            
-                                                return selectedParts.join(", ");
-                                            }}
-                                            MenuProps={MenuProps}
-                                            fullWidth
-                                        >
-                                            {partData.map((name, index) => (
-                                                <MenuItem key={index} value={name._id}>
-                                                    <Checkbox checked={itemAddData.itemPartName.indexOf(name._id) > -1} /> {/* Check if the item is selected */}
-                                                    <ListItemText primary={name.partName} />
-                                                </MenuItem>
-                                            ))}
-                                        </Select>
+                                            <InputLabel id="itemPartNameId">Select Part</InputLabel>
+                                            <Select
+                                                labelId="itemPartNameId"
+                                                multiple
+                                                id="demo-multiple-checkbox"
+                                                name="itemPartName"
+                                                value={itemAddData.itemPartName}
+                                                onChange={handleItemAddChange}
+                                                input={<OutlinedInput fullWidth label="Select Part" />}
+                                                renderValue={(selected) => {
+                                                    const selectedParts = selected.map(item => {
+                                                        const foundPart = partData.find(part => part._id === item);
+                                                        return foundPart ? foundPart.partName : "";
+                                                    }).filter(Boolean); // Filter out empty strings
+
+                                                    return selectedParts.join(", ");
+                                                }}
+                                                MenuProps={MenuProps}
+                                                fullWidth
+                                            >
+                                                {partData.map((name, index) => (
+                                                    <MenuItem key={index} value={name._id}>
+                                                        <Checkbox checked={itemAddData.itemPartName.indexOf(name._id) > -1} /> {/* Check if the item is selected */}
+                                                        <ListItemText primary={name.partName} />
+                                                    </MenuItem>
+                                                ))}
+                                            </Select>
                                         </FormControl>
-                                       
+
                                     </div>
 
 

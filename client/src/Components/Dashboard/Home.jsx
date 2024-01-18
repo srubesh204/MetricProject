@@ -109,6 +109,10 @@ const Home = () => {
     viewers: [],
     plantEmployees: []
   })
+
+
+
+
   const [selectedPlantName, setSelectedPlantName] = useState("")
   const empFetch = async () => {
     try {
@@ -215,7 +219,13 @@ const Home = () => {
       setFilteredData(allItems)
 
       //
-      setPlantWiseList(allItems)
+      // Assuming plantWiseList is an array of objects
+      const sortedPlantWiseList = allItems.slice().sort((a, b) => a.itemIMTENo.localeCompare(b.itemIMTENo));
+      console.log(sortedPlantWiseList)
+
+      // Now, sortedPlantWiseList is a new array with the objects sorted based on the itemIMTENo property
+
+      setPlantWiseList(sortedPlantWiseList)
       //
 
       const masterItems = allItems.filter((item) => item.isItemMaster === "1")
@@ -584,7 +594,7 @@ const Home = () => {
         break;
     }
 
-    
+
 
 
   }
@@ -1100,19 +1110,6 @@ const Home = () => {
 
   console.log(selectedRows)
 
-  function Pagination() {
-   
-  
-    return (
-      <MuiPagination
-        height="50%"
-       
-        
-        
-      />
-    );
-  }
-
 
 
 
@@ -1406,11 +1403,11 @@ const Home = () => {
                     pagination: {
                       paginationModel: {
                         pageSize: 9,
-                        
+
                       },
                     },
                   }}
-                  
+
                   onRowSelectionModelChange={handleRowSelectionChange}
                   sx={{
                     ".MuiTablePagination-displayedRows": {
@@ -1422,7 +1419,7 @@ const Home = () => {
 
                   checkboxSelection
                   // onRowClick={handleSelectRow}
-                  slots={{ toolbar: GridToolbar}}
+                  slots={{ toolbar: GridToolbar }}
                   slotProps={{
                     toolbar: {
                       showQuickFilter: true,
