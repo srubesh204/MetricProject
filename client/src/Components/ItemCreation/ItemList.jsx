@@ -768,7 +768,7 @@ const ItemList = () => {
 
 
 
-    console.log(filteredItemListData)
+
 
 
 
