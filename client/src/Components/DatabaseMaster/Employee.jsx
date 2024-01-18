@@ -150,10 +150,22 @@ const Employee = () => {
 
         { field: 'dob', headerName: 'DOB', width: 100, headerAlign: "center", align: "center", valueGetter: (params) => dayjs(params.row.itemCalDate).format('DD-MM-YYYY') },
         { field: 'contactNumber', headerName: 'Contact No', headerAlign: "center", align: "center", type: "number", width: 120, },
-        { field: 'designation', headerName: 'Designation', headerAlign: "center", align: "center", width: 120, },
-        { field: 'department', headerName: 'Department', headerAlign: "center", align: "center", width: 130, renderCell: (params) => params.row.plantDetails.map },
+        { field: 'designation', headerName: 'Designation', headerAlign: "center", align: "center", width: 150, },
+        {
+            field: 'department',
+            headerName: 'Department',
+            headerAlign: 'center',
+            align: 'center',
+            width: 150,
+            renderCell: (params) => (
+                <span>
+                    {params.row.plantDetails.map((plant) => plant.departments).join(', ')}
+                </span>
+            ),
+            // valueOptions: Array.from(uniqueDepartments),
+        },
         { field: 'empRole', headerName: 'Role', width: 150, headerAlign: "center", align: "center" },
-        { field: 'reportTo', headerName: 'Report To', width: 100, headerAlign: "center", align: "center", },
+       // { field: 'reportTo', headerName: 'Report To', width: 100, headerAlign: "center", align: "center", },
 
 
     ];
@@ -182,7 +194,9 @@ const Employee = () => {
             setFilteredData(employeeList)
         } else {
             if (name === "departmentFilter") {
-                const departmentFilter = employeeList.filter((item) => (item.department === value))
+                const departmentFilter = employeeList.filter((emp) => (
+                   emp.plantDetails.find(plant => plant.departments.includes(value))
+                ));
                 setFilteredData(departmentFilter)
                 setFilterAllNames(prev => ({
                     ...prev,
@@ -1105,16 +1119,16 @@ const Employee = () => {
                                     <div className="col-md-9" style={{ maxHeight: "134px", overflow: "auto" }}>
                                         <div className="row mb-2">
                                             <div className='col d-flex justify-content-between'>
-                                            {empPlantId ? <div>
-                                                <Button className='me-2' size='small' variant='contained' color='warning' onClick={() => empPlantEdit()}>Role Update</Button>
-                                                <Button size='small' variant='contained' color='error' onClick={() => { setEmpPlantId(null); setPlantIndex(null); setEmpPlantDetails(initialEmpPlantDetails) }}>Cancel</Button>
-                                            </div>
-                                                : <Button size='small' variant='contained' color='success' onClick={() => empPlantAdd()}>Add Role</Button>}
+                                                {empPlantId ? <div>
+                                                    <Button className='me-2' size='small' variant='contained' color='warning' onClick={() => empPlantEdit()}>Role Update</Button>
+                                                    <Button size='small' variant='contained' color='error' onClick={() => { setEmpPlantId(null); setPlantIndex(null); setEmpPlantDetails(initialEmpPlantDetails) }}>Cancel</Button>
                                                 </div>
-                                                <div className='col-md-8 '> <h6 className=''>Roles and Authentication Details </h6></div>
-                                               
+                                                    : <Button size='small' variant='contained' color='success' onClick={() => empPlantAdd()}>Add Role</Button>}
+                                            </div>
+                                            <div className='col-md-8 '> <h6 className=''>Roles and Authentication Details </h6></div>
+
                                         </div>
-                                        
+
                                         <table className='table table-sm table-bordered text-center align-midle'>
                                             <tbody>
                                                 <tr className='sticky-top table-light'>
@@ -1310,18 +1324,51 @@ const Employee = () => {
 
                                 </Grid>
                                 <Grid item xs={4}>
-                                    <TextField fullWidth label="Department Filter" value={filterAllNames.departmentFilter} onChange={handleFilterChange} select size="small" id="departmentFilterId" name="departmentFilter" defaultValue="" >
+                                    {/* <TextField fullWidth label="Department Filter" value={filterAllNames.departmentFilter} onChange={handleFilterChange} select size="small" id="departmentFilterId" name="departmentFilter" defaultValue="" >
                                         <MenuItem value="all">All</MenuItem>
                                         {FilterNameList.department.map((item, index) => (
                                             <MenuItem key={index} value={item}>{item}</MenuItem>
                                         ))
 
                                         }
+                                    </TextField> */}
+
+                                    <TextField
+                                        fullWidth
+                                        label="Department Filter"
+                                        value={filterAllNames.departmentFilter}
+                                        onChange={handleFilterChange}
+                                        select
+                                        size="small"
+                                        id="departmentFilterId"
+                                        name="departmentFilter"
+                                        defaultValue=""
+                                    >
+                                        <MenuItem value="all">All</MenuItem>
+                                        {defaultDepartments.map((item, index) => (
+                                            <MenuItem key={index} value={item.department}>
+                                                {item.department}
+                                            </MenuItem>
+                                        ))}
+                                        {/* {plantsData && plantsData.departments && plantsData.departments.map((item, index) => (
+                                            <MenuItem key={index} value={item}>
+                                                {item}
+                                            </MenuItem>
+                                        ))} */}
+                                        {/* {plantsData.map((plant, index) => {
+                                            const value = employee.map(emp => emp.plantDetails.map(plant => plant.departments));
+                                            console.log(value);
+                                            return (
+                                                <MenuItem key={index} value={plant.department}>
+                                                    {plant.department}
+                                                </MenuItem>
+                                            );
+                                        })} */}
                                     </TextField>
                                 </Grid>
 
 
-                                <Grid item xs={3}>
+                                {/* <Grid item xs={3}>
                                     <TextField fullWidth label="Report To" value={filterAllNames.reportToFilter} onChange={handleFilterChange} select size="small" id="reportToFilterId" name="reportToFilter" defaultValue="" >
                                         <MenuItem value="all">All</MenuItem>
 
@@ -1329,7 +1376,7 @@ const Employee = () => {
                                             <MenuItem key={index} value={item}>{item}</MenuItem>
                                         ))}
                                     </TextField>
-                                </Grid>
+                                </Grid> */}
                                 <Grid item xs={2}>
                                     <div className='col d-flex justify-content-end'>
                                         {employeeSelectedRowIds.length !== 0 && <Button variant='contained' component="button" fullWidth type='button' color='error' onClick={() => handleDeleteOpen(true)}>Delete  Employee</Button>}

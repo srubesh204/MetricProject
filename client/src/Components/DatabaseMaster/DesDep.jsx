@@ -230,12 +230,12 @@ export const Department = () => {
 
   const emptyDepartmentData = {
     department: "",
-    departmentStatus: "Active",
+    departmentStatus: "active",
     defaultdep: "no"
   }
   const [departmentData, setDepartmentData] = useState({
     department: "",
-    departmentStatus: "Active",
+    departmentStatus: "active",
     defaultdep: "no"
   });
   console.log(departmentData)
@@ -468,11 +468,11 @@ export const Department = () => {
 
   const initialAreaData = {
     area: "",
-    areaStatus: "Active"
+    areaStatus: "active"
   }
   const [areaData, setArea] = useState({
     area: "",
-    areaStatus: "Active"
+    areaStatus: "active"
   });
   const [areaList, setAreaList] = useState([]);
 
@@ -674,7 +674,7 @@ export const Department = () => {
 
   const initialPlaceOfUsageData = {
     placeOfUsage: "",
-    placeOfUsageStatus: "Active"
+    placeOfUsageStatus: "active"
 
   }
 
@@ -787,7 +787,7 @@ export const Department = () => {
 
   const [placeOfUsageDatas, setPlaceOfUsageData] = useState({
     placeOfUsage: "",
-    placeOfUsageStatus: "Active"
+    placeOfUsageStatus: "active"
 
   });
   const [placeOfUsageList, setPlaceOfUsageList] = useState([]);
@@ -1073,7 +1073,7 @@ export const Department = () => {
                     <TextField label="Status"
                       id="departmentStatusId"
                       select
-                      defaultValue="Active"
+                      defaultValue="active"
                       fullWidth
                       size="small"
                       onChange={handleDepChange}
@@ -1081,8 +1081,8 @@ export const Department = () => {
                       value={departmentData.departmentStatus}
                       name="departmentStatus" >
 
-                      <MenuItem value="Active">Active</MenuItem>
-                      <MenuItem value="InActive">InActive</MenuItem>
+                      <MenuItem value="active">Active</MenuItem>
+                      <MenuItem value="inActive">inActive</MenuItem>
                     </TextField>
 
                   </div>
@@ -1324,7 +1324,7 @@ export const Department = () => {
                       <TextField label="Status"
                         id="areaStatusID"
                         select
-                        defaultValue="Active"
+                        defaultValue="active"
                         fullWidth
                         size="small"
                         onChange={handleAreaChange}
@@ -1332,8 +1332,8 @@ export const Department = () => {
                         value={areaData.areaStatus}
                         name="areaStatus" >
 
-                        <MenuItem value="Active">Active</MenuItem>
-                        <MenuItem value="InActive">InActive</MenuItem>
+                        <MenuItem value="active">active</MenuItem>
+                        <MenuItem value="inActive">inActive</MenuItem>
                       </TextField>
 
                     </div>
@@ -1577,8 +1577,8 @@ export const Department = () => {
                       value={placeOfUsageDatas.placeOfUsageStatus}
                       name="placeOfUsageStatus" >
 
-                      <MenuItem value="Active">Active</MenuItem>
-                      <MenuItem value="InActive">InActive</MenuItem>
+                      <MenuItem value="active">active</MenuItem>
+                      <MenuItem value="inActive">inActive</MenuItem>
                     </TextField>
 
                   </div>
@@ -1876,12 +1876,12 @@ export const Designation = () => {
 
   const initialDesignationData = {
     designation: "",
-    designationStatus: "Active"
+    designationStatus: "active"
   }
 
   const [designationData, setDesignationData] = useState({
     designation: "",
-    designationStatus: "Active"
+    designationStatus: "active"
   });
 
 
@@ -2238,8 +2238,8 @@ export const Designation = () => {
                     value={designationData.designationStatus}
                     name="designationStatus" >
 
-                    <MenuItem value="Active">Active</MenuItem>
-                    <MenuItem value="InActive">InActive</MenuItem>
+                    <MenuItem value="active">Active</MenuItem>
+                    <MenuItem value="inActive">InActive</MenuItem>
                   </TextField>
 
 

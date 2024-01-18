@@ -32,7 +32,7 @@ export const ItemListContent = createContext(null);
 
 const ItemList = () => {
 
- 
+
 
     const employeeRole = useEmployee()
     const [printState, setPrintState] = useState(false)
@@ -49,7 +49,7 @@ const ItemList = () => {
 
 
 
-            const filterNames = ["itemIMTENo", "itemType", "itemDepartment", "itemPlant", "itemCalibrationSource"]
+            const filterNames = ["itemIMTENo", "itemType", "itemDepartment", "itemPlant", "itemCalibrationSource", "itemCurrentLocation"]
 
             let updatedFilterNames = {};
 
@@ -223,7 +223,8 @@ const ItemList = () => {
         itemType: [],
         itemDepartment: [],
         itemPlant: [],
-        itemCalibrationSource: []
+        itemCalibrationSource: [],
+        itemCurrentLocation: []
     })
 
 
@@ -254,7 +255,7 @@ const ItemList = () => {
             ]
             : []),
         { field: 'id', headerName: 'Si. No', width: 60, renderCell: (params) => params.api.getAllRowIds().indexOf(params.id) + 1, headerAlign: "center", align: "center" },
-        { field: 'itemIMTENo', headerName: 'IMTE No', width: 100, headerAlign: "center", align: "center" },
+        { field: 'itemIMTENo', headerName: 'IMTE No', width: 120, headerAlign: "center", align: "center" },
         { field: 'itemAddMasterName', headerName: 'Description', width: 120, headerAlign: "center", align: "center" },
         {
             field: 'Range/Size',
@@ -266,15 +267,17 @@ const ItemList = () => {
             valueGetter: (params) =>
                 `${params.row.itemRangeSize || ''} ${params.row.itemLCUnit || ''}`,
         },
+        { field: 'itemLC', headerName: 'ItemLC', width: 60, headerAlign: "center", align: "left", valueGetter: (params) => params.row.itemLC || "-" },
         { field: 'itemMake', headerName: 'Make', width: 90, headerAlign: "center", align: "center", },
         { field: 'itemCalDate', headerName: 'Cal Date', width: 100, headerAlign: "center", align: "center", valueGetter: (params) => dayjs(params.row.itemCalDate).format('DD-MM-YYYY') },
         { field: 'itemDueDate', headerName: 'Due Date', width: 110, headerAlign: "center", align: "center", valueGetter: (params) => dayjs(params.row.itemDueDate).format('DD-MM-YYYY') },
-        { field: 'itemLC', headerName: 'ItemLC', width: 60, headerAlign: "center", align: "center", valueGetter: (params) => params.row.itemLC || "-" },
-        { field: 'itemCalFreInMonths', headerName: 'Frequency', type: "number", width: 100, headerAlign: "center", align: "center" },
-        { field: 'itemCalibratedAt', headerName: 'Cal Done At ', width: 100, headerAlign: "center", align: "center" },
-        { field: 'itemStatus', headerName: 'Status ', width: 80, headerAlign: "center", align: "center", },
-        { field: 'itemDepartment', headerName: 'Current location', width: 120, headerAlign: "center", align: "center", },
+
+        { field: 'itemCalFreInMonths', headerName: 'Frequency', type: "number", width: 80, headerAlign: "center", align: "center" },
         { field: 'itemCalibrationSource', headerName: 'Cal Source', width: 120, headerAlign: "center", align: "center", },
+        { field: 'itemCalibratedAt', headerName: 'Cal Done At ', width: 100, headerAlign: "center", align: "center" },
+        { field: 'itemCurrentLocation', headerName: 'Current Location', width: 120, headerAlign: "center", align: "center", },
+        { field: 'itemDepartment', headerName: 'Defaul location', width: 100, headerAlign: "center", align: "center", },
+        { field: 'itemStatus', headerName: 'Status ', width: 70, headerAlign: "center", align: "center", },
         // { field: 'itemCalibrationSource', headerName: 'Cal Source', renderCell: (params) => params.row.itemSupplier.toString(), width: 110, headerAlign: "center", align: "center", },
         {
             field: 'itemType',
@@ -302,9 +305,18 @@ const ItemList = () => {
         partName: "all",
         status: "all",
         plantWise: "all",
-        calibrationSource: "all"
+        calibrationSource: "all",
+        itemCurrentLocation: "all"
 
     })
+    const [allDepartments, setAllDepartments] = useState([])
+    const [departmentTable, setDepartmentTable] = useState([])
+    const [selectedLoc, setSelectedLoc] = useState("")
+
+
+
+
+
 
 
     const handleFilterChangeItemList = (e) => {
@@ -326,7 +338,8 @@ const ItemList = () => {
                     partName: "all",
                     status: "all",
                     plantWise: "all",
-                    calibrationSource: "all"
+                    calibrationSource: "all",
+                    itemCurrentLocation: "all"
                 }))
 
             }
@@ -344,7 +357,8 @@ const ItemList = () => {
                     partName: "all",
                     status: "all",
                     plantWise: "all",
-                    calibrationSource: "all"
+                    calibrationSource: "all",
+                    itemCurrentLocation: "all"
                 }))
 
 
@@ -362,7 +376,8 @@ const ItemList = () => {
                     partName: "all",
                     status: "all",
                     plantWise: "all",
-                    calibrationSource: "all"
+                    calibrationSource: "all",
+                    itemCurrentLocation: "all"
                 }))
             }
             if (name === "customerWise") {
@@ -379,7 +394,8 @@ const ItemList = () => {
                     partName: "all",
                     status: "all",
                     plantWise: "all",
-                    calibrationSource: "all"
+                    calibrationSource: "all",
+                    itemCurrentLocation: "all"
                 }))
             }
             if (name === "supplierWise") {
@@ -398,7 +414,8 @@ const ItemList = () => {
                     partName: "all",
                     status: "all",
                     plantWise: "all",
-                    calibrationSource: "all"
+                    calibrationSource: "all",
+                    itemCurrentLocation: "all"
                 }))
             }
             if (name === "partName") {
@@ -416,7 +433,8 @@ const ItemList = () => {
                     partName: value, // Update the partName value in the filterAllNames state
                     status: "all", // Reset other filters if needed
                     plantWise: "all",
-                    calibrationSource: "all"
+                    calibrationSource: "all",
+                    itemCurrentLocation: "all"
                 }));
             }
             if (name === "status") {
@@ -425,14 +443,15 @@ const ItemList = () => {
                 setFilterAllNames(prev => ({
                     ...prev,
                     imteNo: "all",
-                    itemType: value,
+                    itemType: "all",
                     currentLocation: "all",
                     customerWise: "all",
                     supplierWise: "all",
                     partName: "all",
                     status: value,
                     plantWise: "all",
-                    calibrationSource: "all"
+                    calibrationSource: "all",
+                    itemCurrentLocation: "all"
                 }))
             }
             if (name === "plantWise") {
@@ -448,7 +467,8 @@ const ItemList = () => {
                     partName: "all",
                     status: "all",
                     plantWise: value,
-                    calibrationSource: "all"
+                    calibrationSource: "all",
+                    itemCurrentLocation: "all"
                 }))
             }
             if (name === "calibrationSource") {
@@ -465,22 +485,39 @@ const ItemList = () => {
                     partName: "all",
                     status: "all",
                     plantWise: "all",
-                    calibrationSource: value
+                    calibrationSource: value,
+                    itemCurrentLocation: "all"
 
                 }))
 
             }
-
+            if (name === "itemCurrentLocation") {
+                const itemCurrentLocation = itemList.filter((item) => (item.itemCurrentLocation === value))
+                setFilteredItemListData(itemCurrentLocation)
+                setFilterAllNames(prev => ({
+                    ...prev,
+                    imteNo: "all",
+                    itemType: "all",
+                    currentLocation: "all",
+                    customerWise: "all",
+                    supplierWise: "all",
+                    partName: "all",
+                    status: "all",
+                    plantWise: "all",
+                    calibrationSource: "all",
+                    itemCurrentLocation: value
+                }))
+            }
 
         }
 
 
     };
 
- const [filterDates, setFilterDates] = useState({
-    startDate: "",
-    endDate: ""
- })
+    const [filterDates, setFilterDates] = useState({
+        startDate: "",
+        endDate: ""
+    })
 
 
     const dueDatePicker = (newValue, name) => {
@@ -490,10 +527,10 @@ const ItemList = () => {
 
 
         if (name === "dueStartDate") {
-            setFilterDates(prev => ({...prev, startDate : newValue.format("YYYY-MM-DD")}));
+            setFilterDates(prev => ({ ...prev, startDate: newValue.format("YYYY-MM-DD") }));
         }
         if (name === "dueEndDate") {
-            setFilterDates(prev => ({...prev, endDate : newValue.format("YYYY-MM-DD")}));
+            setFilterDates(prev => ({ ...prev, endDate: newValue.format("YYYY-MM-DD") }));
         }
 
         //     const filteredData = itemList.filter((item) => {
@@ -510,15 +547,15 @@ const ItemList = () => {
 
 
         // };
-        
+
 
     };
     console.log(filterDates)
 
-    const DatefilterFunction  = () => {
-    
-            const filter = itemList.filter((item) => dayjs(item.itemCalDate).isSameOrAfter(filterDates.startDate) && dayjs(item.itemCalDate).isSameOrBefore(filterDates.endDate))
-       
+    const DatefilterFunction = () => {
+
+        const filter = itemList.filter((item) => dayjs(item.itemCalDate).isSameOrAfter(filterDates.startDate) && dayjs(item.itemCalDate).isSameOrBefore(filterDates.endDate))
+
         console.log(filter)
         setFilteredItemListData(filter)
     }
@@ -544,6 +581,7 @@ const ItemList = () => {
 
 
     const [partCutomerNames, setPartCutomerNames] = useState([])
+    const[customer,setCustomer]= useState([])
     const [partDataList, setPartDataList] = useState([])
 
     const partFetchData = async () => {
@@ -565,6 +603,8 @@ const ItemList = () => {
 
             const partCustomers = partDataList.filter(part => itemList.some(item => item.itemPartName.includes(part._id)))
             setPartCutomerNames(partCustomers)
+            const customerfileter= partDataList.filter(cus => itemList.some(item => item.itemCustomer))
+            setCustomer(customerfileter)
 
         }
     }, [partDataList, itemList])
@@ -603,10 +643,10 @@ const ItemList = () => {
 
             // Update the state with the filtered data
             setFilteredData(filteredData);
-               console.log()
+            console.log()
         } else {
             // Handle case where either start or end date is not selected
-            
+
         }
     };
     console.log(filteredData);
@@ -748,7 +788,7 @@ const ItemList = () => {
     };
 
 
-   
+
 
 
 
@@ -871,7 +911,7 @@ const ItemList = () => {
                                     id="itemTypeId"
                                     select
                                     value={filterAllNames.itemType}
-                                    defaultValue="all"
+
                                     fullWidth
                                     onChange={handleFilterChangeItemList}
                                     size="small"
@@ -885,7 +925,7 @@ const ItemList = () => {
                             </div>
                             <div className="col d-flex  mb-2">
 
-                                <TextField label="Department  Wise "
+                                <TextField label="Default Location "
                                     id="currentLocationId"
                                     select
                                     defaultValue="all"
@@ -902,24 +942,7 @@ const ItemList = () => {
                                 </TextField>
 
                             </div>
-                            <div className="col d-flex  mb-2">
 
-                                <TextField label="Customer Wise"
-                                    id="customerWiseId"
-                                    select
-                                    defaultValue="all"
-                                    fullWidth
-                                    value={filterAllNames.customerWise}
-                                    size="small"
-                                    onChange={handleFilterChangeItemList}
-                                    name="customerWise" >
-                                    <MenuItem value="all">All</MenuItem>
-                                    {partCutomerNames.map((item, index) => (
-                                        <MenuItem key={index} value={item}>{item.customer}</MenuItem>
-                                    ))}
-                                </TextField>
-
-                            </div>
                             <div className="col d-flex  mb-2">
 
                                 <TextField label="Calibration source"
@@ -958,6 +981,24 @@ const ItemList = () => {
                                     <MenuItem value=">30">{'>'}30</MenuItem >
                                     <MenuItem value="Date">Date</MenuItem >
 
+                                </TextField>
+
+                            </div>
+                            <div className="col d-flex  mb-2">
+
+                                <TextField label="Customer Wise"
+                                    id="customerWiseId"
+                                    select
+                                    defaultValue="all"
+                                    fullWidth
+                                   // value={filterAllNames.customerWise}
+                                    size="small"
+                                    onChange={handleFilterChangeItemList}
+                                    name="customerWise" >
+                                    <MenuItem value="all">All</MenuItem>
+                                    {partCutomerNames.map((item, index) => (
+                                        <MenuItem key={index} value={item}>{item.customer}</MenuItem>
+                                    ))}
                                 </TextField>
 
                             </div>
@@ -1006,25 +1047,43 @@ const ItemList = () => {
 
                             <div className="col d-flex g-2 mb-2">
 
-                                <div className='col-3'>
+                                <div className='col-3 me-2'>
                                     <TextField label="Status"
                                         id="statusId"
                                         select
-                                        defaultValue="Active"
+                                        defaultValue="all"
                                         fullWidth
                                         size="small"
                                         name="status"
                                         onChange={handleFilterChangeItemList}>
 
                                         <MenuItem value="all">All</MenuItem>
-                                        <MenuItem value="Active">Active</MenuItem>
-                                        <MenuItem value="InActive">InActive</MenuItem>
-                                        <MenuItem value="Spare">Spare</MenuItem>
-                                        <MenuItem value="Breakdown">Breakdown</MenuItem>
-                                        <MenuItem value="Missing">Missing</MenuItem>
-                                        <MenuItem value="Rejection">Rejection</MenuItem>
+                                        <MenuItem value="active">Active</MenuItem>
+                                        <MenuItem value="spare">Spare</MenuItem>
+                                        <MenuItem value="breakdown">Breakdown</MenuItem>
+                                        <MenuItem value="missing">Missing</MenuItem>
+                                        <MenuItem value="rejection">Rejection</MenuItem>
 
                                     </TextField>
+                                </div>
+                                <div className="col-3">
+
+                                    <TextField label="Current Location "
+                                        id="itemCurrentLocationId"
+                                        select
+                                        defaultValue="all"
+                                        value={filterAllNames.itemCurrentLocation}
+                                        fullWidth
+                                        onChange={handleFilterChangeItemList}
+                                        size="small"
+                                        name="itemCurrentLocation" >
+                                        <MenuItem value="all">All</MenuItem>
+                                        {FilterNameList.itemCurrentLocation.map((item, index) => (
+                                            <MenuItem key={index} value={item}>{item}</MenuItem>
+                                        ))}
+
+                                    </TextField>
+
                                 </div>
                                 <div className="col-1 offset-7">
                                     {itemListSelectedRowIds.length !== 0 && <Button variant='contained' type='button' size='small' color='error' onClick={() => setDeleteModalItem(true)}><DeleteIcon /> Delete </Button>}
