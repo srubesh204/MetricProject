@@ -10,7 +10,7 @@ import isSameOrAfter from 'dayjs/plugin/isSameOrAfter'
 import isSameOrBefore from 'dayjs/plugin/isSameOrBefore'
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { Add, ArrowBack, Delete, Error, HomeMax, House } from '@mui/icons-material';
+import { Add, ArrowBack, Delete, Error, HomeMax, House, Mail } from '@mui/icons-material';
 import CalDialog from './DashboardComponents/CalDialog';
 import Dc from './DashboardComponents/DcDialog';
 import Grn from './DashboardComponents/Grn';
@@ -31,6 +31,7 @@ const Home = () => {
   const loggedInEmpId = sessionStorage.getItem('empId')
 
   const [itemDistinctNames, setItemDistinctNames] = useState([])
+  const [itemDistinctIMTEs, setItemDistinctIMTEs] = useState([])
   const [errorhandler, setErrorHandler] = useState({});
   const [snackBarOpen, setSnackBarOpen] = useState(false)
   const [itemList, setItemList] = useState([]);
@@ -1102,13 +1103,40 @@ const Home = () => {
   useEffect(() => {
     console.log(plantWiseList)
     const distinctNames = plantWiseList.map(item => item.itemAddMasterName);
+    const distinctImtes = plantWiseList.map(item => item.itemIMTENo);
     console.log(distinctNames)
+    distinctNames.sort()
+    distinctImtes.sort()
+
     const names = [...new Set(distinctNames)]
+    const imtes = ["All", ...new Set(distinctImtes)]
     console.log(names)
     setItemDistinctNames(names)
+    setItemDistinctIMTEs(imtes)
+
   }, [plantWiseList])
 
   console.log(selectedRows)
+
+  const [itemMasterSort, setItemMasterSort] = useState([])
+  const getDistinctItemName = async () => {
+    try {
+      const response = await axios.get(
+        `${process.env.REACT_APP_PORT}/itemAdd/getItemAddByIMTESort`
+      );
+      console.log(response.data)
+      setItemMasterSort(response.data.result);
+
+    } catch (err) {
+      console.log(err);
+    }
+  };
+  useEffect(() => {
+    getDistinctItemName();
+  }, []);
+
+
+
 
 
 
@@ -1133,7 +1161,7 @@ const Home = () => {
 
                 </TextField>
                 {
-                  <TextField select onChange={(e) => LocationEmpFilter(e)} fullWidth size='small' name='itemDepartment' defaultValue="All" label="Department">
+                  <TextField select onChange={(e) => LocationEmpFilter(e)} fullWidth size='small' name='itemDepartment' defaultValue="All" label="Defaul Location">
                     <MenuItem value="All">All</MenuItem>
                     {plantDepartments && plantDepartments.map((department, index) => (<MenuItem key={index} value={department}>{department}</MenuItem>))}
                   </TextField>}
@@ -1153,13 +1181,13 @@ const Home = () => {
                   <Autocomplete
                     disablePortal
                     id="combo-box-demo"
-                    options={plantWiseList}
+                    options={itemDistinctIMTEs}
                     size='small'
                     fullWidth
                     onInputChange={(e, newValue) => MainFilter(newValue, "itemIMTENo")}
                     name="itemIMTENo"
-                    defaultValue={itemListOptions.length > 0 ? itemListOptions[0] : null}
-                    getOptionLabel={(itemList) => itemList.itemIMTENo}
+                    defaultValue={"All"}
+                    getOptionLabel={(itemList) => itemList}
                     renderInput={(params) => <TextField {...params} label="IMTE No" />}
                   />}
 
@@ -1177,6 +1205,20 @@ const Home = () => {
 
 
 
+                {/* <Autocomplete
+                  disablePortal
+                  id="combo-box-demo"
+                  options={customers}
+                  size='small'
+                  fullWidth
+                  onInputChange={(e, newValue) => MainFilter(newValue, "customer")}
+                  name="customer"
+                  getOptionLabel={(customers) => customers.aliasName}
+                  // onChange={(e, newValue) => MainFilter(e,newValue, "customer")}
+                  defaultValue={"All"}
+                  renderInput={(params) => <TextField {...params} label="Customer" name='customer' />}
+                  disableClearable
+                /> */}
                 <Autocomplete
                   disablePortal
                   id="combo-box-demo"
@@ -1184,11 +1226,9 @@ const Home = () => {
                   size='small'
                   fullWidth
                   onInputChange={(e, newValue) => MainFilter(newValue, "customer")}
-
                   name="customer"
-
-                  getOptionLabel={(customers) => customers.aliasName}
-                  // onChange={(e, newValue) => MainFilter(e,newValue, "customer")}
+                  getOptionLabel={(customer) => customer.aliasName}
+                  defaultValue={customers.find(customer => customer.aliasName === "All") || null}
                   renderInput={(params) => <TextField {...params} label="Customer" name='customer' />}
                   disableClearable
                 />
@@ -1371,7 +1411,7 @@ const Home = () => {
 
                       <ListSubheader color='primary' sx={{ fontSize: "12px" }}>Other Department</ListSubheader>
                       {allDepartments
-                        .filter(item => item.defaultdep === "no")
+                        .filter(item => item.defaultdep !== "yes")
                         .map((item, index) => (
                           <MenuItem sx={{ marginLeft: "20px" }} key={index} value={item.department}>
                             {item.department}
@@ -1438,6 +1478,7 @@ const Home = () => {
 
 
                     <Button size='small' onClick={() => dcCheck()}>Create DC</Button>
+                    {selectedRows.length > 0 && <Button size='small' color='info' variant='contained' endIcon={<Mail />}>Send Mail</Button>}
                     {StatusCheckMsg !== "" && <Chip icon={<Error />} color='error' label={StatusCheckMsg} />}
                   </div>
                   <div className="col-md-3">

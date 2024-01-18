@@ -2,7 +2,15 @@
   "_id": {
     "$oid": "659fde5da89978d21f8997f2"
   },
-  "plantName": "Plant2",
+  "plantName": "Plant-2",
   "plantAddress": "add1",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "65a266c6c7f6a553bae313e5"
+  },
+  "plantName": "Plant-1",
+  "plantAddress": "Address for Plant1",
   "__v": 0
 }]

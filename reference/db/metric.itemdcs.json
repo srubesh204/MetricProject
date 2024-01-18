@@ -1,0 +1,870 @@
+[{
+  "_id": {
+    "$oid": "6593d236b0646570adf7746b"
+  },
+  "dcPartyId": "6554adac5722caaad4f1e613",
+  "dcPartyType": "oem",
+  "dcPartyName": "Metric Mmt",
+  "dcPartyCode": "M-1",
+  "dcPartyAddress": "Chennai",
+  "dcNo": "123",
+  "dcDate": "2024-01-02",
+  "dcReason": "Service & Calibration",
+  "dcCommonRemarks": "cr",
+  "dcPartyItems": [
+    {
+      "_id": "658187a3bc1198dbb9f536f1",
+      "itemMasterRef": "6572c7abc42cbb0e9c80192c",
+      "selectedItemMaster": [
+        {
+          "_id": "6572c7abc42cbb0e9c80192c",
+          "itemType": "referenceStandard",
+          "itemDescription": "Master Ring Gauge",
+          "itemPrefix": "imte1",
+          "itemFqInMonths": 7,
+          "calAlertInDay": 7,
+          "SOPNo": "sope2",
+          "uncertainty": 2.01,
+          "uncertaintyUnit": "mm",
+          "standardRef": "std ref1",
+          "itemMasterImage": "plain-plug-gauge-500x500.webp",
+          "itemImageName": "",
+          "workInsName": "Cal.pdf",
+          "status": "Active",
+          "calibrationPoints": [
+            {
+              "calibrationPoint": "Int Dia"
+            },
+            {
+              "calibrationPoint": "Ext Dia"
+            }
+          ],
+          "__v": 0
+        }
+      ],
+      "isItemMaster": "",
+      "itemAddMasterName": "Master Ring Gauge",
+      "itemIMTENo": "112",
+      "itemImage": "plain-plug-gauge-500x500.webp",
+      "itemType": "referenceStandard",
+      "itemRangeSize": "range",
+      "itemRangeSizeUnit": "mm",
+      "itemMFRNo": "mfr",
+      "itemLC": "",
+      "itemLCUnit": "mm",
+      "itemMake": "Make",
+      "itemModelNo": "",
+      "itemStatus": "Active",
+      "itemReceiptDate": "2023-12-19",
+      "itemDepartment": "Tool Room",
+      "itemCurrentLocation": "Tool Room",
+      "itemArea": "Rack1",
+      "itemPlaceOfUsage": "Box1",
+      "itemCalFreInMonths": "7",
+      "itemCalAlertDays": "7",
+      "itemCalibrationSource": "inhouse",
+      "itemCalibrationDoneAt": "",
+      "itemItemMasterName": "Plain Ring Gauge",
+      "itemItemMasterIMTENo": [
+        {
+          "_id": "65818532bc1198dbb9f53640",
+          "itemMasterRef": "6572c765c42cbb0e9c801925",
+          "selectedItemMaster": [
+            {
+              "_id": "6572c765c42cbb0e9c801925",
+              "itemType": "attribute",
+              "itemDescription": "Plain Ring Gauge",
+              "itemPrefix": "imte",
+              "itemFqInMonths": 6,
+              "calAlertInDay": 7,
+              "SOPNo": "sopno",
+              "uncertainty": 2.03,
+              "uncertaintyUnit": "mm",
+              "standardRef": "std ref",
+              "itemMasterImage": "plain-plug-gauge-500x500.webp",
+              "itemImageName": "",
+              "workInsName": "document.pdf",
+              "status": "Active",
+              "calibrationPoints": [
+                {
+                  "calibrationPoint": "Go"
+                },
+                {
+                  "calibrationPoint": "Nogo"
+                }
+              ],
+              "__v": 0
+            }
+          ],
+          "isItemMaster": "1",
+          "itemAddMasterName": "Plain Ring Gauge",
+          "itemIMTENo": "121",
+          "itemImage": "plain-plug-gauge-500x500.webp",
+          "itemType": "attribute",
+          "itemRangeSize": "20.12",
+          "itemRangeSizeUnit": "mm",
+          "itemMFRNo": "mfr",
+          "itemLC": "",
+          "itemLCUnit": "mm",
+          "itemMake": "Make",
+          "itemModelNo": "",
+          "itemStatus": "Active",
+          "itemReceiptDate": "2023-12-19",
+          "itemDepartment": "Default 1",
+          "itemCurrentLocation": "Default 1",
+          "itemArea": "Rack1",
+          "itemPlaceOfUsage": "Box1",
+          "itemCalFreInMonths": "6",
+          "itemCalAlertDays": "7",
+          "itemCalibrationSource": "outsource",
+          "itemCalibrationDoneAt": "Lab",
+          "itemItemMasterName": "",
+          "itemItemMasterIMTENo": [],
+          "itemSupplier": [
+            "Metric"
+          ],
+          "itemOEM": [],
+          "itemCalDate": "2023-12-19",
+          "itemDueDate": "2024-06-18",
+          "itemCalibratedAt": "inhouse",
+          "itemCertificateName": "document.pdf",
+          "itemCertificateNo": "1123",
+          "itemPartName": [
+            {
+              "_id": "6554ae055722caaad4f1e634",
+              "partNo": "Test",
+              "partName": "Dct",
+              "customer": "Metric",
+              "operationNo": "N/A",
+              "partStatus": "Active",
+              "__v": 0
+            }
+          ],
+          "itemOBType": "average",
+          "acceptanceCriteria": [
+            {
+              "acParameter": "Go",
+              "acNominalSize": "n1",
+              "acNominalSizeUnit": "mm",
+              "acMinPS": "14",
+              "acMaxPS": "19",
+              "acWearLimitPS": "25",
+              "acAverageOB": "11",
+              "_id": "65818532bc1198dbb9f53641"
+            },
+            {
+              "acParameter": "Nogo",
+              "acNominalSize": "n2",
+              "acNominalSizeUnit": "mm",
+              "acMinPS": "15",
+              "acMaxPS": "20",
+              "acWearLimitPS": "11",
+              "acMinOB": "",
+              "acMaxOB": "",
+              "acAverageOB": "22",
+              "acOBError": "",
+              "acMinPSError": "",
+              "acMaxPSError": "",
+              "_id": "65818532bc1198dbb9f53642"
+            }
+          ],
+          "createdAt": "2023-12-19",
+          "updatedAt": "2023-12-19",
+          "__v": 0
+        }
+      ],
+      "itemSupplier": [],
+      "itemOEM": [],
+      "itemCalDate": "2023-12-19",
+      "itemDueDate": "2024-07-18",
+      "itemCalibratedAt": "Metric Mmt",
+      "itemCertificateName": "",
+      "itemCertificateNo": "11245",
+      "itemPartName": [
+        {
+          "_id": "65646e262ab04521243acbf3",
+          "partNo": "123442",
+          "partName": "Second Part",
+          "customer": "Saint Gobin",
+          "operationNo": "N/A",
+          "partStatus": "Active",
+          "__v": 0
+        },
+        {
+          "_id": "6554ae055722caaad4f1e634",
+          "partNo": "Test",
+          "partName": "Dct",
+          "customer": "Metric",
+          "operationNo": "N/A",
+          "partStatus": "Active",
+          "__v": 0
+        }
+      ],
+      "itemOBType": "average",
+      "acceptanceCriteria": [
+        {
+          "acParameter": "Int Dia",
+          "acNominalSize": "nominal",
+          "acNominalSizeUnit": "mm",
+          "acMinPS": "15",
+          "acMaxPS": "20",
+          "acAverageOB": "24",
+          "_id": "658187a3bc1198dbb9f536f2",
+          "acWearLimitPS": "--"
+        },
+        {
+          "acParameter": "Ext Dia",
+          "acNominalSize": "nominal2",
+          "acNominalSizeUnit": "mm",
+          "acMinPS": "17",
+          "acMaxPS": "20",
+          "acWearLimitPS": "",
+          "acMinOB": "",
+          "acMaxOB": "",
+          "acAverageOB": "23",
+          "acOBError": "",
+          "acMinPSError": "",
+          "acMaxPSError": "",
+          "_id": "658187a3bc1198dbb9f536f3"
+        }
+      ],
+      "createdAt": "2023-12-19",
+      "updatedAt": "2023-12-19",
+      "itemLocation": "customer",
+      "__v": 0,
+      "dcCreatedOn": "2023-12-21",
+      "dcId": "658422deb762d784b07bf527",
+      "dcNo": "223",
+      "dcStatus": "1",
+      "itemLastLocation": "Metric Mmt",
+      "dcItemRemarks": "Calibration"
+    },
+    {
+      "_id": "65818532bc1198dbb9f53640",
+      "itemMasterRef": "6572c765c42cbb0e9c801925",
+      "selectedItemMaster": [
+        {
+          "_id": "6572c765c42cbb0e9c801925",
+          "itemType": "attribute",
+          "itemDescription": "Plain Ring Gauge",
+          "itemPrefix": "imte",
+          "itemFqInMonths": 6,
+          "calAlertInDay": 7,
+          "SOPNo": "sopno",
+          "uncertainty": 2.03,
+          "uncertaintyUnit": "mm",
+          "standardRef": "std ref",
+          "itemMasterImage": "plain-plug-gauge-500x500.webp",
+          "itemImageName": "",
+          "workInsName": "document.pdf",
+          "status": "Active",
+          "calibrationPoints": [
+            {
+              "calibrationPoint": "Go"
+            },
+            {
+              "calibrationPoint": "Nogo"
+            }
+          ],
+          "__v": 0
+        }
+      ],
+      "isItemMaster": "1",
+      "itemAddMasterName": "Plain Ring Gauge",
+      "itemIMTENo": "121",
+      "itemImage": "plain-plug-gauge-500x500.webp",
+      "itemType": "attribute",
+      "itemRangeSize": "20.12",
+      "itemRangeSizeUnit": "mm",
+      "itemMFRNo": "mfr",
+      "itemLC": "",
+      "itemLCUnit": "mm",
+      "itemMake": "Make",
+      "itemModelNo": "",
+      "itemStatus": "Active",
+      "itemReceiptDate": "2023-12-19",
+      "itemDepartment": "Default 1",
+      "itemCurrentLocation": "Tool Room",
+      "itemArea": "Rack1",
+      "itemPlaceOfUsage": "Box1",
+      "itemCalFreInMonths": "6",
+      "itemCalAlertDays": "7",
+      "itemCalibrationSource": "outsource",
+      "itemCalibrationDoneAt": "Lab",
+      "itemItemMasterName": "",
+      "itemItemMasterIMTENo": [],
+      "itemSupplier": [
+        "Metric"
+      ],
+      "itemOEM": [],
+      "itemLocation": "oem",
+      "itemCalDate": "2023-12-19",
+      "itemDueDate": "2024-06-18",
+      "itemCalibratedAt": "inhouse",
+      "itemCertificateName": "document.pdf",
+      "itemCertificateNo": "1123",
+      "itemPartName": [
+        {
+          "_id": "6554ae055722caaad4f1e634",
+          "partNo": "Test",
+          "partName": "Dct",
+          "customer": "Metric",
+          "operationNo": "N/A",
+          "partStatus": "Active",
+          "__v": 0
+        }
+      ],
+      "itemOBType": "average",
+      "acceptanceCriteria": [
+        {
+          "acParameter": "Go",
+          "acNominalSize": "n1",
+          "acNominalSizeUnit": "mm",
+          "acMinPS": "14",
+          "acMaxPS": "19",
+          "acWearLimitPS": "25",
+          "acAverageOB": "11",
+          "_id": "65818532bc1198dbb9f53641"
+        },
+        {
+          "acParameter": "Nogo",
+          "acNominalSize": "n2",
+          "acNominalSizeUnit": "mm",
+          "acMinPS": "15",
+          "acMaxPS": "20",
+          "acWearLimitPS": "11",
+          "acMinOB": "",
+          "acMaxOB": "",
+          "acAverageOB": "22",
+          "acOBError": "",
+          "acMinPSError": "",
+          "acMaxPSError": "",
+          "_id": "65818532bc1198dbb9f53642"
+        }
+      ],
+      "createdAt": "2023-12-19",
+      "updatedAt": "2023-12-19",
+      "__v": 0,
+      "dcCreatedOn": "2023-12-20",
+      "dcId": "6582afcb0e94000ab3a71261",
+      "dcNo": "1124",
+      "dcStatus": "1",
+      "itemLastLocation": "Saint Gobin And Co",
+      "dcItemRemarks": "Service"
+    },
+    {
+      "_id": "658189d4bc1198dbb9f53835",
+      "itemMasterRef": "6572c7efc42cbb0e9c801933",
+      "selectedItemMaster": [
+        {
+          "_id": "6572c7efc42cbb0e9c801933",
+          "itemType": "variable",
+          "itemDescription": "Thread Ring Guage",
+          "itemPrefix": "imte3",
+          "itemFqInMonths": 7,
+          "calAlertInDay": 7,
+          "SOPNo": "sopeno",
+          "uncertainty": 2.02,
+          "uncertaintyUnit": "mm",
+          "standardRef": "std ref",
+          "itemMasterImage": "Go_spline_ring_gage.jpg",
+          "itemImageName": "",
+          "workInsName": "sample.pdf",
+          "status": "Active",
+          "calibrationPoints": [
+            {
+              "calibrationPoint": "Go"
+            },
+            {
+              "calibrationPoint": "No Go"
+            }
+          ],
+          "__v": 0
+        }
+      ],
+      "isItemMaster": "1",
+      "itemAddMasterName": "Thread Ring Guage",
+      "itemIMTENo": "223",
+      "itemImage": "Go_spline_ring_gage.jpg",
+      "itemType": "variable",
+      "itemRangeSize": "24.65",
+      "itemRangeSizeUnit": "mm",
+      "itemMFRNo": "mfr",
+      "itemLC": "0.12",
+      "itemLCUnit": "mm",
+      "itemMake": "Make",
+      "itemModelNo": "model",
+      "itemStatus": "Active",
+      "itemReceiptDate": "2023-12-19",
+      "itemDepartment": "Default 1",
+      "itemCurrentLocation": "Tool Room",
+      "itemArea": "Rack1",
+      "itemPlaceOfUsage": "Box1",
+      "itemCalFreInMonths": "7",
+      "itemCalAlertDays": "7",
+      "itemCalibrationSource": "outsource",
+      "itemCalibrationDoneAt": "Lab",
+      "itemItemMasterName": "",
+      "itemItemMasterIMTENo": [],
+      "itemSupplier": [
+        "Saint Gobin"
+      ],
+      "itemOEM": [],
+      "itemCalDate": "2023-12-19",
+      "itemDueDate": "2024-07-18",
+      "itemCalibratedAt": "Saint Gobin And Co",
+      "itemCertificateName": "",
+      "itemCertificateNo": "1245",
+      "itemPartName": [
+        {
+          "_id": "6554ae055722caaad4f1e634",
+          "partNo": "Test",
+          "partName": "Dct",
+          "customer": "Metric",
+          "operationNo": "N/A",
+          "partStatus": "Active",
+          "__v": 0
+        }
+      ],
+      "itemOBType": "average",
+      "acceptanceCriteria": [
+        {
+          "acParameter": "Go",
+          "acNominalSize": "23.5",
+          "acNominalSizeUnit": "mm",
+          "acOBError": "22.334",
+          "acMinPSError": "23.445",
+          "acMaxPSError": "22.345",
+          "_id": "658189d4bc1198dbb9f53836",
+          "acWearLimitPS": "--"
+        },
+        {
+          "acParameter": "Go",
+          "acNominalSize": "24.345",
+          "acNominalSizeUnit": "mm",
+          "acMinPS": "",
+          "acMaxPS": "",
+          "acWearLimitPS": "",
+          "acMinOB": "",
+          "acMaxOB": "",
+          "acAverageOB": "",
+          "acOBError": "21.334",
+          "acMinPSError": "23.445",
+          "acMaxPSError": "24.334",
+          "_id": "658189d4bc1198dbb9f53837"
+        }
+      ],
+      "createdAt": "2023-12-19",
+      "updatedAt": "2023-12-19",
+      "itemLocation": "department",
+      "__v": 0,
+      "dcCreatedOn": "",
+      "dcId": "",
+      "dcNo": "",
+      "dcStatus": "0",
+      "itemLastLocation": "Saint Gobin And Co",
+      "dcItemRemarks": "Calibration & Service"
+    }
+  ],
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "659537a159a07de46f48b641"
+  },
+  "dcPartyId": "6565be0bb1c957ffde34f9a6",
+  "dcPartyType": "customer",
+  "dcPartyName": "Saint Gobin And Co",
+  "dcPartyCode": "mmt-123",
+  "dcPartyAddress": "Sriperambadur",
+  "dcNo": "221",
+  "dcDate": "2024-01-03",
+  "dcReason": "Service",
+  "dcCommonRemarks": "cr",
+  "dcPartyItems": [
+    {
+      "_id": "65818532bc1198dbb9f53640",
+      "itemMasterRef": "6572c765c42cbb0e9c801925",
+      "selectedItemMaster": [
+        {
+          "_id": "6572c765c42cbb0e9c801925",
+          "itemType": "attribute",
+          "itemDescription": "Plain Ring Gauge",
+          "itemPrefix": "imte",
+          "itemFqInMonths": 6,
+          "calAlertInDay": 7,
+          "SOPNo": "sopno",
+          "uncertainty": 2.03,
+          "uncertaintyUnit": "mm",
+          "standardRef": "std ref",
+          "itemMasterImage": "plain-plug-gauge-500x500.webp",
+          "itemImageName": "",
+          "workInsName": "document.pdf",
+          "status": "Active",
+          "calibrationPoints": [
+            {
+              "calibrationPoint": "Go"
+            },
+            {
+              "calibrationPoint": "Nogo"
+            }
+          ],
+          "__v": 0
+        }
+      ],
+      "isItemMaster": "",
+      "itemAddMasterName": "Plain Ring Gauge",
+      "itemIMTENo": "121",
+      "itemImage": "plain-plug-gauge-500x500.webp",
+      "itemType": "attribute",
+      "itemRangeSize": "20.12",
+      "itemRangeSizeUnit": "mm",
+      "itemMFRNo": "mfr",
+      "itemLC": "",
+      "itemLCUnit": "mm",
+      "itemMake": "Make",
+      "itemModelNo": "",
+      "itemStatus": "Breakdown",
+      "itemReceiptDate": "2023-12-19",
+      "itemDepartment": "Default 1",
+      "itemCurrentLocation": "Default 1",
+      "itemArea": "Rack1",
+      "itemPlaceOfUsage": "Box1",
+      "itemCalFreInMonths": "6",
+      "itemCalAlertDays": "7",
+      "itemCalibrationSource": "outsource",
+      "itemCalibrationDoneAt": "Lab",
+      "itemItemMasterName": "",
+      "itemItemMasterIMTENo": [],
+      "itemSupplier": [
+        "Metric"
+      ],
+      "itemOEM": [],
+      "itemLocation": "department",
+      "itemCalDate": "2023-12-19",
+      "itemDueDate": "2024-06-18",
+      "itemCalibratedAt": "inhouse",
+      "itemCertificateName": "document.pdf",
+      "itemCertificateNo": "1123",
+      "itemPartName": [
+        {
+          "_id": "6554ae055722caaad4f1e634",
+          "partNo": "Test",
+          "partName": "Dct",
+          "customer": "Metric",
+          "operationNo": "N/A",
+          "partStatus": "Active",
+          "__v": 0
+        },
+        "Breakdown"
+      ],
+      "itemOBType": "average",
+      "acceptanceCriteria": [
+        {
+          "acParameter": "Go",
+          "acNominalSize": "n1",
+          "acNominalSizeUnit": "mm",
+          "acMinPS": "14",
+          "acMaxPS": "19",
+          "acWearLimitPS": "25",
+          "acAverageOB": "11",
+          "_id": "65818532bc1198dbb9f53641"
+        },
+        {
+          "acParameter": "Nogo",
+          "acNominalSize": "n2",
+          "acNominalSizeUnit": "mm",
+          "acMinPS": "15",
+          "acMaxPS": "20",
+          "acWearLimitPS": "11",
+          "acMinOB": "",
+          "acMaxOB": "",
+          "acAverageOB": "22",
+          "acOBError": "",
+          "acMinPSError": "",
+          "acMaxPSError": "",
+          "_id": "65818532bc1198dbb9f53642"
+        }
+      ],
+      "createdAt": "2023-12-19",
+      "updatedAt": "2023-12-19",
+      "__v": 0,
+      "dcCreatedOn": "2024-01-02",
+      "dcId": "6593d236b0646570adf7746b",
+      "dcNo": "123",
+      "dcStatus": "1",
+      "itemLastLocation": "Saint Gobin And Co"
+    }
+  ],
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "659d30f3f02e4972087dfd26"
+  },
+  "dcPartyId": "6565be0bb1c957ffde34f9a6",
+  "dcPartyType": "oem",
+  "dcPartyName": "Saint Gobin And Co",
+  "dcPartyCode": "mmt-123",
+  "dcPartyAddress": "Sriperambadur",
+  "dcNo": "1",
+  "dcDate": "2024-01-09",
+  "dcReason": "Service Calibration",
+  "dcCommonRemarks": "cr",
+  "dcPartyItems": [
+    {
+      "_id": "658189d4bc1198dbb9f53835",
+      "itemMasterRef": "6572c7efc42cbb0e9c801933",
+      "selectedItemMaster": [
+        {
+          "_id": "6572c7efc42cbb0e9c801933",
+          "itemType": "variable",
+          "itemDescription": "Thread Ring Guage",
+          "itemPrefix": "imte3",
+          "itemFqInMonths": 7,
+          "calAlertInDay": 7,
+          "SOPNo": "1",
+          "uncertainty": 2.02,
+          "uncertaintyUnit": "mm",
+          "standardRef": "std ref",
+          "itemMasterImage": "Go_spline_ring_gage.jpg",
+          "itemImageName": "",
+          "workInsName": "sample.pdf",
+          "status": "Active",
+          "calibrationPoints": [
+            {
+              "calibrationPoint": "Go"
+            },
+            {
+              "calibrationPoint": "No Go"
+            }
+          ],
+          "__v": 0
+        }
+      ],
+      "isItemMaster": "1",
+      "itemAddMasterName": "Thread Ring Guage",
+      "itemIMTENo": "223",
+      "itemImage": "Go_spline_ring_gage.jpg",
+      "itemType": "variable",
+      "itemRangeSize": "24.65",
+      "itemRangeSizeUnit": "mm",
+      "itemMFRNo": "mfr",
+      "itemLC": "0.12",
+      "itemLCUnit": "mm",
+      "itemMake": "Make",
+      "itemModelNo": "model",
+      "itemStatus": "Active",
+      "itemReceiptDate": "2023-12-19",
+      "itemDepartment": "Default 1",
+      "itemCurrentLocation": "Default 1",
+      "itemArea": "Rack1",
+      "itemPlaceOfUsage": "Box1",
+      "itemCalFreInMonths": "7",
+      "itemCalAlertDays": "7",
+      "itemCalibrationSource": "outsource",
+      "itemCalibrationDoneAt": "Lab",
+      "itemItemMasterName": "",
+      "itemItemMasterIMTENo": [],
+      "itemSupplier": [
+        "Saint Gobin"
+      ],
+      "itemOEM": [],
+      "itemCalDate": "2023-12-19",
+      "itemDueDate": "2024-07-18",
+      "itemCalibratedAt": "Saint Gobin And Co",
+      "itemCertificateName": "",
+      "itemCertificateNo": "1245",
+      "itemPartName": [
+        {
+          "_id": "6554ae055722caaad4f1e634",
+          "partNo": "Test",
+          "partName": "Dct",
+          "customer": "Metric",
+          "operationNo": "N/A",
+          "partStatus": "Active",
+          "__v": 0
+        },
+        "on",
+        "Metric Measurement Technology Unit-2",
+        "Plant1"
+      ],
+      "itemOBType": "average",
+      "acceptanceCriteria": [
+        {
+          "acParameter": "Go",
+          "acNominalSize": "23.5",
+          "acNominalSizeUnit": "mm",
+          "acWearLimitPS": "--",
+          "acOBError": "22.334",
+          "acMinPSError": "23.445",
+          "acMaxPSError": "22.345",
+          "_id": "658189d4bc1198dbb9f53836"
+        },
+        {
+          "acParameter": "Go",
+          "acNominalSize": "24.345",
+          "acNominalSizeUnit": "mm",
+          "acMinPS": "",
+          "acMaxPS": "",
+          "acWearLimitPS": "",
+          "acMinOB": "",
+          "acMaxOB": "",
+          "acAverageOB": "",
+          "acOBError": "21.334",
+          "acMinPSError": "23.445",
+          "acMaxPSError": "24.334",
+          "_id": "658189d4bc1198dbb9f53837"
+        }
+      ],
+      "createdAt": "2023-12-19",
+      "updatedAt": "2023-12-19",
+      "itemLocation": "department",
+      "__v": 0,
+      "dcCreatedOn": "2024-01-02",
+      "dcId": "6593d236b0646570adf7746b",
+      "dcNo": "123",
+      "dcStatus": "1",
+      "itemLastLocation": "Saint Gobin And Co",
+      "itemPlant": "Plant1",
+      "itemCreatedBy": "6554ad045722caaad4f1e607",
+      "itemLastModifiedBy": "6554ad045722caaad4f1e607"
+    }
+  ],
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "659d3aa4f02e4972087e1728"
+  },
+  "dcPartyId": "6565be0bb1c957ffde34f9a6",
+  "dcPartyType": "customer",
+  "dcPartyName": "Saint Gobin And Co",
+  "dcPartyCode": "mmt-123",
+  "dcPartyAddress": "Sriperambadur",
+  "dcNo": "224",
+  "dcDate": "2024-01-09",
+  "dcReason": "Service Calibration",
+  "dcCommonRemarks": "cr",
+  "dcPartyItems": [
+    {
+      "_id": "658189d4bc1198dbb9f53835",
+      "itemMasterRef": "6572c7efc42cbb0e9c801933",
+      "selectedItemMaster": [
+        {
+          "_id": "6572c7efc42cbb0e9c801933",
+          "itemType": "variable",
+          "itemDescription": "Thread Ring Guage",
+          "itemPrefix": "imte3",
+          "itemFqInMonths": 7,
+          "calAlertInDay": 7,
+          "SOPNo": "1",
+          "uncertainty": 2.02,
+          "uncertaintyUnit": "mm",
+          "standardRef": "std ref",
+          "itemMasterImage": "Go_spline_ring_gage.jpg",
+          "itemImageName": "",
+          "workInsName": "sample.pdf",
+          "status": "Active",
+          "calibrationPoints": [
+            {
+              "calibrationPoint": "Go"
+            },
+            {
+              "calibrationPoint": "No Go"
+            }
+          ],
+          "__v": 0
+        }
+      ],
+      "isItemMaster": "1",
+      "itemAddMasterName": "Thread Ring Guage",
+      "itemIMTENo": "223",
+      "itemImage": "Go_spline_ring_gage.jpg",
+      "itemType": "variable",
+      "itemRangeSize": "24.65",
+      "itemRangeSizeUnit": "mm",
+      "itemMFRNo": "mfr",
+      "itemLC": "0.12",
+      "itemLCUnit": "mm",
+      "itemMake": "Make",
+      "itemModelNo": "model",
+      "itemStatus": "Active",
+      "itemReceiptDate": "2023-12-19",
+      "itemDepartment": "Default 1",
+      "itemCurrentLocation": "Tool Room",
+      "itemArea": "Rack1",
+      "itemPlaceOfUsage": "Box1",
+      "itemCalFreInMonths": "7",
+      "itemCalAlertDays": "7",
+      "itemCalibrationSource": "outsource",
+      "itemCalibrationDoneAt": "Lab",
+      "itemItemMasterName": "",
+      "itemItemMasterIMTENo": [],
+      "itemSupplier": [
+        "Saint Gobin"
+      ],
+      "itemOEM": [],
+      "itemCalDate": "2023-12-19",
+      "itemDueDate": "2024-07-18",
+      "itemCalibratedAt": "Saint Gobin And Co",
+      "itemCertificateName": "",
+      "itemCertificateNo": "1245",
+      "itemPartName": [
+        {
+          "_id": "6554ae055722caaad4f1e634",
+          "partNo": "Test",
+          "partName": "Dct",
+          "customer": "Metric",
+          "operationNo": "N/A",
+          "partStatus": "Active",
+          "__v": 0
+        },
+        "on",
+        "Metric Measurement Technology Unit-2",
+        "Plant1"
+      ],
+      "itemOBType": "average",
+      "acceptanceCriteria": [
+        {
+          "acParameter": "Go",
+          "acNominalSize": "23.5",
+          "acNominalSizeUnit": "mm",
+          "acWearLimitPS": "--",
+          "acOBError": "22.334",
+          "acMinPSError": "23.445",
+          "acMaxPSError": "22.345",
+          "_id": "658189d4bc1198dbb9f53836"
+        },
+        {
+          "acParameter": "Go",
+          "acNominalSize": "24.345",
+          "acNominalSizeUnit": "mm",
+          "acMinPS": "",
+          "acMaxPS": "",
+          "acWearLimitPS": "",
+          "acMinOB": "",
+          "acMaxOB": "",
+          "acAverageOB": "",
+          "acOBError": "21.334",
+          "acMinPSError": "23.445",
+          "acMaxPSError": "24.334",
+          "_id": "658189d4bc1198dbb9f53837"
+        }
+      ],
+      "createdAt": "2023-12-19",
+      "updatedAt": "2023-12-19",
+      "itemLocation": "department",
+      "__v": 0,
+      "dcCreatedOn": "2024-01-09",
+      "dcId": "659d30f3f02e4972087dfd26",
+      "dcNo": "1",
+      "dcStatus": "1",
+      "itemLastLocation": "Saint Gobin And Co",
+      "itemPlant": "Plant1",
+      "itemCreatedBy": "6554ad045722caaad4f1e607",
+      "itemLastModifiedBy": "6554ad045722caaad4f1e607"
+    }
+  ],
+  "__v": 0
+}]

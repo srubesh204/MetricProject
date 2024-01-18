@@ -250,11 +250,9 @@ const DcList = () => {
                 }
             }
             );
+           
             setDcData(initialDcData)
-
             setSnackBarOpen(true)
-
-
             setErrorHandler({ status: response.data.status, message: response.data.message, code: "success" })
 
 
