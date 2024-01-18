@@ -91,7 +91,7 @@ app.use('/mailConfig', mailConfigRoute);
 
 //
 app.post('/login', employeeController.employeeLoginCheck)
-const port = 3002;
+const port = 3001;
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
 });
