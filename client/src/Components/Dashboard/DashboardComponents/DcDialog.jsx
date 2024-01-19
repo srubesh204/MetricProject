@@ -716,14 +716,19 @@ const Dc = () => {
                                     </Button>
                                 </DialogActions>
                             </Dialog>
-                            <Snackbar anchorOrigin={{ vertical: "top", horizontal: "right" }} open={snackBarOpen} autoHideDuration={3000}
+                             {/* <Snackbar anchorOrigin={{ vertical: "top", horizontal: "right" }} open={snackBarOpen} autoHideDuration={3000}
                                 onClose={() => setTimeout(() => {
                                     setSnackBarOpen(false)
                                 }, 3000)}>
                                 <Alert onClose={() => setSnackBarOpen(false)} variant='filled' severity="success" sx={{ width: '100%' }}>
                                     {alertMessage}
                                 </Alert>
-                            </Snackbar>
+                            </Snackbar>  */}
+                            <Snackbar anchorOrigin={{ vertical: "top", horizontal: "right" }} open={snackBarOpen} autoHideDuration={6000} onClose={() => setSnackBarOpen(false)}>
+                        <Alert onClose={() => setSnackBarOpen(false)}severity={errorhandler.code} variant='filled' sx={{ width: '100%' }}>
+                            {errorhandler.message}
+                        </Alert>
+                    </Snackbar>
 
 
                         </form>
