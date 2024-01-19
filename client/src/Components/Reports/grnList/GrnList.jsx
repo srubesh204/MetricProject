@@ -27,7 +27,7 @@ export const GrnListContent = createContext(null);
 const GrnList = () => {
 
     const employeeRole = useEmployee()
-
+    const [printState, setPrintState] = useState(false)
     const [selectedRows, setSelectedRows] = useState([]);
     const [grnEditOpen, setGrnEditOpen] = useState(false);
     const [grnOpen, setGrnOpen] = useState(false);
@@ -145,13 +145,13 @@ const GrnList = () => {
         { field: 'grnNo', headerName: 'Grn No', width: 200, headerAlign: "center", align: "center", },
         { field: 'grnDate', headerName: 'Grn Date', width: 200, headerAlign: "center", align: "center", },
         { field: 'grnPartyName', headerName: 'Party Name', width: 300, headerAlign: "center", align: "center", },
-        { field: 'printButton', headerName: 'Print', headerAlign: "center", align: "center", width: 100, renderCell: (params) => <Button onClick={() => { setSelectedRows(params.row); setGrnPrintOpen(true) }}><PrintRounded color='success' /></Button> }
+        { field: 'printButton', headerName: 'Print', headerAlign: "center", align: "center", width: 100, renderCell: (params) => <Button onClick={() => { setSelectedRows(params.row); setGrnPrintOpen(true) }}><PrintRounded onClick={() => setPrintState(true)} color='success' /></Button> }
     ]
 
 
     const [grnDataListSelectedRowIds, setgrnDataListSelectedRowIds] = useState([])
 
-
+console.log(setGrnPrintOpen)
 
 
 
@@ -526,17 +526,17 @@ const GrnList = () => {
                                 </div>
 
                                 <GrnListContent.Provider
-                                    value={{ grnEditOpen, setGrnEditOpen, selectedRows, grnListFetchData }}
+                                    value={{ grnEditOpen, setGrnEditOpen, selectedRows, grnListFetchData, printState, setPrintState }}
                                 >
                                     <GrnEdit />
                                 </GrnListContent.Provider>
                                 <GrnListContent.Provider
-                                    value={{ grnOpen, setGrnOpen, selectedRows, grnListFetchData }}
+                                    value={{ grnOpen, setGrnOpen, selectedRows, grnListFetchData, printState, setPrintState }}
                                 >
                                     <GrnAdd />
                                 </GrnListContent.Provider>
                                 <GrnListContent.Provider
-                                    value={{ grnPrintOpen, setGrnPrintOpen, selectedRows, formatNoData }}
+                                    value={{ grnPrintOpen, setGrnPrintOpen, selectedRows, formatNoData, printState, setPrintState }}
                                 >
                                     {selectedRows.length !== 0 &&
                                         <GrnPrint />}

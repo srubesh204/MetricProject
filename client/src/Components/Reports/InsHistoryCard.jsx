@@ -23,6 +23,7 @@ function InsHistoryCard() {
     const [fromDate, setFromDate] = useState(null);
     const [toDate, setToDate] = useState(null);
     const [selectedRow, setSelectedRow] = useState([]);
+    const [printState, setPrintState] = useState(false)
 
 
     const [historyCardPrintOpen, setHistoryCardPrintOpen] = useState(false);
@@ -270,6 +271,8 @@ function InsHistoryCard() {
         setHistoryCardPrintOpen(true);
     };
 
+    console.log(handlePrintClick)
+
 
 
     return (
@@ -354,7 +357,7 @@ function InsHistoryCard() {
                                 <div className=" col d-flex justify-content-start">
                                     <div className="me-2"><Button variant="contained" size="small"  >Excel</Button></div>
                                     {selectedRow[0]?.itemIMTENo && <div>
-                                        <div><Button size="small" variant="contained" onClick={handlePrintClick} startIcon={<PrintRounded />}>
+                                        <div><Button size="small" variant="contained" onClick={() => setPrintState(true)} startIcon={<PrintRounded />}>
                                             Print
                                         </Button></div>
                                     </div>}
@@ -511,7 +514,7 @@ function InsHistoryCard() {
                     </Container>
                 </form>
             </LocalizationProvider>
-            {/* <HistoryCardContent.Provider
+            <HistoryCardContent.Provider
                 value={{
                     historyCardPrintOpen,
                     setHistoryCardPrintOpen,
@@ -521,10 +524,11 @@ function InsHistoryCard() {
                     distItemName,
                     formatNoData,
                     selectedIMTEs: filteredSelectedIMTEs,
+                    printState, setPrintState,
                 }}
             >
                  <HistoryCardPrint />
-            </HistoryCardContent.Provider> */}
+            </HistoryCardContent.Provider>
         </div>
     );
 }
