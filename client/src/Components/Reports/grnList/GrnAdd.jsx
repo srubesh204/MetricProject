@@ -8,6 +8,7 @@ import isSameOrBefore from 'dayjs/plugin/isSameOrBefore'
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { GrnListContent } from './GrnList';
+import { useEmployee } from '../../../App';
 import styled from '@emotion/styled';
 
 import { Add, Close, CloudUpload, Delete, Done, OtherHouses } from '@mui/icons-material';
@@ -20,7 +21,9 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 
 const GrnAdd = () => {
     const grnAddDatas = useContext(GrnListContent)
-    const { grnOpen, setGrnOpen, selectedRows, grnListFetchData } = grnAddDatas
+    const { grnOpen, setGrnOpen, selectedRows, grnListFetchData, itemPlantList,dcStatus } = grnAddDatas
+    const employeeRole = useEmployee()
+    const { loggedEmp } = employeeRole
 
     // const [grnImtes, setGrnImtes] = useState(selectedRows)
 
@@ -125,44 +128,44 @@ const GrnAdd = () => {
 
 
 
-    const [grnList, setGrnList] = useState({})
-    const grnFetchData = async () => {
-        try {
-            const response = await axios.get(
-                `${process.env.REACT_APP_PORT}/itemGRN/getAllItemGRN`
-            );
-            setGrnList(response.data.result);
-        } catch (err) {
-            console.log(err);
-        }
-    };
-    useEffect(() => {
-        grnFetchData();
-    }, []);
+    // const [grnList, setGrnList] = useState({})
+    // const grnFetchData = async () => {
+    //     try {
+    //         const response = await axios.get(
+    //             `${process.env.REACT_APP_PORT}/itemGRN/getAllItemGRN`
+    //         );
+    //         setGrnList(response.data.result);
+    //     } catch (err) {
+    //         console.log(err);
+    //     }
+    // };
+    // useEffect(() => {
+    //     grnFetchData();
+    // }, []);
 
 
 
-    const [itemAddList, setItemAddList] = useState([]);
+    // const [itemAddList, setItemAddList] = useState([]);
 
 
 
-    const itemAddFetch = async () => {
-        try {
-            const response = await axios.get(
-                `${process.env.REACT_APP_PORT}/itemAdd/getItemAddByIMTESort`
-            );
-            // You can use a different logic for generating the id
+    // const itemAddFetch = async () => {
+    //     try {
+    //         const response = await axios.get(
+    //             `${process.env.REACT_APP_PORT}/itemAdd/getItemAddByIMTESort`
+    //         );
+    //         // You can use a different logic for generating the id
 
-            setItemAddList(response.data.result);
+    //         setItemAddList(response.data.result);
 
 
-        } catch (err) {
-            console.log(err);
-        }
-    };
-    useEffect(() => {
-        itemAddFetch();
-    }, []);
+    //     } catch (err) {
+    //         console.log(err);
+    //     }
+    // };
+    // useEffect(() => {
+    //     itemAddFetch();
+    // }, []);
 
 
     const [itemMasterDistNames, setItemMasterDistNames] = useState([])
@@ -295,10 +298,22 @@ const GrnAdd = () => {
 
 
 
-
+    const [itemNameList, setItemNameList] = useState(itemPlantList)
     const handleGrnItemAdd = (e) => {
         const { name, value } = e.target;
         setItemAddDetails((prev) => ({ ...prev, [name]: value }))
+       
+        if (name === "itemPlant") {
+            // Set the selected itemPlant in state
+            setItemAddDetails((prev) => ({ ...prev, grnPlant: value }));
+            const plantItems = itemPlantList.filter(item => item.itemPlant === value)
+            
+            const distinctItemNames = [... new Set(plantItems.map(item => item.itemAddMasterName))]
+            setItemNameList(distinctItemNames)
+            console.log(distinctItemNames)
+            console.log(plantItems)
+        }
+
         if (name === "grnList") {
             getItemByName(value)
 
@@ -1120,10 +1135,27 @@ const GrnAdd = () => {
                             >
                                 <div className='row g-2 mb-2'>
 
-                                    <div className='col '>
-                                        <TextField size='small' fullWidth variant='outlined' defaultValue="" value={itemAddDetails.grnList} id="grnListId" onChange={handleGrnItemAdd} {...(errors.grnPartyItems !== "" && { helperText: errors.grnPartyItems, error: true })}  select label="Item List" name='grnList'>
 
-                                            {itemMasterDistNames.map((item, index) => (
+                                    <div className='col'>
+                                        <TextField label="Plant Wise"
+                                            id="itemPlantId"
+                                            select
+                                            defaultValue="all"
+
+                                            fullWidth
+                                            onChange={handleGrnItemAdd}
+                                            size="small"
+                                            name="itemPlant" >
+                                            <MenuItem value="all">All</MenuItem>
+                                            {loggedEmp.plantDetails.map((item, index) => (
+                                                <MenuItem key={index} value={item.plantName}>{item.plantName}</MenuItem>
+                                            ))}
+                                        </TextField>
+                                    </div>
+                                    <div className='col '>
+                                        <TextField size='small' fullWidth variant='outlined' defaultValue="" value={itemAddDetails.grnList} id="grnListId" onChange={handleGrnItemAdd} {...(errors.grnPartyItems !== "" && { helperText: errors.grnPartyItems, error: true })} select label="Item List" name='grnList'>
+
+                                            {itemNameList.map((item, index) => (
                                                 <MenuItem key={index} value={item}>{item}</MenuItem>
                                             ))}
 
