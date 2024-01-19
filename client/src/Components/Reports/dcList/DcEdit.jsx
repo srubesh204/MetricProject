@@ -10,15 +10,18 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { useNavigate } from 'react-router-dom';
 import { DcListContent } from './DcList';
 import { Add, Close, Delete, DeleteOutline } from '@mui/icons-material';
+import { useEmployee } from '../../../App';
 import { useParams } from 'react-router-dom';
 
 
 const DcEdit = () => {
     const { id } = useParams()
     console.log(id)
+    const empRole = useEmployee()
+    const { employee, loggedEmp } = empRole
 
     const dcEditDatas = useContext(DcListContent)
-    const { dcEditOpen, setDcEditOpen, selectedRows, dcListFetchData } = dcEditDatas
+    const { dcEditOpen, setDcEditOpen, selectedRows, dcListFetchData, itemPlantList } = dcEditDatas
     console.log(selectedRows)
     const [errorhandler, setErrorHandler] = useState({});
 
@@ -411,9 +414,18 @@ const DcEdit = () => {
             console.log(err);
         }
     };
-
+    const [itemNameList, setItemNameList] = useState(itemPlantList)
     const handleDcItemAdd = (e) => {
         const { name, value } = e.target;
+        if (name === "itemPlant") {
+            // Set the selected itemPlant in state
+            setItemAddDetails((prev) => ({ ...prev, dcPlant: value }));
+            const plantItems = itemPlantList.filter(item => item.itemPlant === value)
+            const distinctItemNames = [... new Set(plantItems.map(item => item.itemAddMasterName))]
+            setItemNameList(distinctItemNames)
+            console.log(distinctItemNames)
+        }
+
         if (name === "itemListNames") {
             getItemByName(value)
             setItemAddDetails((prev) => ({ ...prev, [name]: value }))
@@ -422,13 +434,10 @@ const DcEdit = () => {
             setSelectedDcItem(value)
             setItemAddDetails((prev) => ({ ...prev, [name]: value }))
         }
-        if (name === "itemReMarks") {
-            setSelectedDcItem(value)
-            setItemAddDetails((prev) => ({ ...prev, [name]: value }))
-        }
 
 
     }
+    
 
     const dcItemAdd = () => {
         if (selectedDcItem.length !== 0) {
@@ -530,18 +539,23 @@ const DcEdit = () => {
                     <LocalizationProvider dateAdapter={AdapterDayjs}>
                         <form>
                             <div className='row'>
-                                <div className="col-3 mb-2">
-                                    <TextField label="Vendor Type"
-                                        id="dcPartyTypeId" select defaultValue="" onChange={handleFilterChange} size="small" value={dcEditData.dcPartyType} sx={{ width: "101%" }} name="dcPartyType" >
-                                        <MenuItem value=""><em>--Select--</em></MenuItem>
-                                        <MenuItem value="oem">OEM</MenuItem>
-                                        <MenuItem value="customer">Customer</MenuItem>
-                                        <MenuItem value="supplier">Supplier</MenuItem>
-                                        <MenuItem value="subContractor">SubContractor</MenuItem>
 
+                                <div className='col-3 mb-2'>
+                                    <TextField label="Plant Wise"
+                                        id="dcPlantId"
+                                        select
+                                        defaultValue="all"
+                                        fullWidth
+                                        onChange={handleDcItemAdd}
+                                        size="small"
+                                        name="dcPlant" >
+                                        <MenuItem value="all">All</MenuItem>
+                                        {loggedEmp.plantDetails.map((item, index) => (
+                                            <MenuItem key={index} value={item.plantName}>{item.plantName}</MenuItem>
+                                        ))}
                                     </TextField>
-
                                 </div>
+
                             </div>
 
                             <Paper
@@ -561,6 +575,18 @@ const DcEdit = () => {
                                     <div className='col'>
 
                                         <div className='col d-flex mb-2'>
+                                            <div className="col me-2">
+                                                <TextField label="Vendor Type"
+                                                    id="dcPartyTypeId" select defaultValue="" onChange={handleFilterChange} size="small" value={dcEditData.dcPartyType} sx={{ width: "101%" }} name="dcPartyType" >
+                                                    <MenuItem value=""><em>--Select--</em></MenuItem>
+                                                    <MenuItem value="oem">OEM</MenuItem>
+                                                    <MenuItem value="customer">Customer</MenuItem>
+                                                    <MenuItem value="supplier">Supplier</MenuItem>
+                                                    <MenuItem value="subContractor">SubContractor</MenuItem>
+
+                                                </TextField>
+
+                                            </div>
                                             <div className=" col me-2">
 
                                                 <TextField label="Party Name"
@@ -711,8 +737,10 @@ const DcEdit = () => {
                                         <div className='col me-2'>
                                             <TextField size='small' select fullWidth id='itemListNamesId' value={itemAddDetails.itemListNames} variant='outlined' onChange={handleDcItemAdd} label="Item List" name='itemListNames' >
                                                 <MenuItem value=""><em>--Select--</em></MenuItem>
-                                                {itemMasterDistNames.map((item, index) => (
-                                                    <MenuItem key={index} value={item}>{item}</MenuItem>
+                                                {itemNameList.map((item, index) => (
+                                                    <MenuItem key={index} value={item}>
+                                                        {item}
+                                                    </MenuItem>
                                                 ))}
                                             </TextField>
                                         </div>

@@ -456,7 +456,7 @@ const Home = () => {
       headerName: 'Item Description',
       width: 150,
       // editable: true,
-      align: "center"
+      align: "left"
     },
     {
       field: 'itemCalDate',
@@ -1203,7 +1203,7 @@ const Home = () => {
                     fullWidth
                     onInputChange={(e, newValue) => MainFilter(newValue, "itemIMTENo")}
                     name="itemIMTENo"
-                    defaultValue={"All"}
+                    defaultValue="All"
                     getOptionLabel={(itemList) => itemList}
                     renderInput={(params) => <TextField {...params} label="IMTE No" />}
                   />}
@@ -1222,21 +1222,23 @@ const Home = () => {
 
 
 
-                {/* <Autocomplete
+                 <Autocomplete
                   disablePortal
+                  defaultValue={"All"}
                   id="combo-box-demo"
                   options={customers}
                   size='small'
                   fullWidth
                   onInputChange={(e, newValue) => MainFilter(newValue, "customer")}
                   name="customer"
-                  getOptionLabel={(customers) => customers.aliasName}
-                  // onChange={(e, newValue) => MainFilter(e,newValue, "customer")}
-                  defaultValue={"All"}
+                  getOptionLabel={(customers) => customers}
+                  // onChange={(e, newValue) => MainFilter(e,newValue, "customer") .aliasName}
+                
                   renderInput={(params) => <TextField {...params} label="Customer" name='customer' />}
                   disableClearable
-                /> */}
-                <Autocomplete
+                /> 
+
+                {/* <Autocomplete
                   disablePortal
                   id="combo-box-demo"
                   options={customers}
@@ -1248,7 +1250,7 @@ const Home = () => {
                   defaultValue={customers.find(customer => customer.aliasName === "All") || null}
                   renderInput={(params) => <TextField {...params} label="Customer" name='customer' />}
                   disableClearable
-                />
+                /> */}
 
 
 

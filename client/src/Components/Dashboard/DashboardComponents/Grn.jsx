@@ -843,7 +843,30 @@ const Grn = () => {
                 setSnackBarOpen(true)
             }
         } catch (err) {
+            setSnackBarOpen(true)
+
+            if (err.response && err.response.status === 400) {
+                // Handle validation errors
+                console.log(err);
+                const errorData400 = err.response.data.errors;
+                const errorMessages400 = Object.values(errorData400).join(', ');
+                console.log(errorMessages400)
+                setErrorHandler({ status: 0, message: errorMessages400, code: "error" });
+            } else if (err.response && err.response.status === 500) {
+                // Handle other errors
+                console.log(err);
+                const errorData500 = err.response.data.error;
+                const errorMessages500 = Object.values(errorData500).join(', ');
+                console.log(errorMessages500)
+                setErrorHandler({ status: 0, message: errorMessages500, code: "error" });
+            } else {
+                console.log(err);
+                console.log(err.response.data.error)
+                setErrorHandler({ status: 0, message: "An error occurred", code: "error" });
+            }
+
             console.log(err);
+
         }
     };
 

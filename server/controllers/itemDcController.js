@@ -16,11 +16,9 @@ const itemDcController = {
   createItemDc: async (req, res) => {
 
     try {
-      const { dcPartyName, dcPartyId, dcPartyType, dcPartyCode, dcPartyAddress, dcNo, dcDate, dcReason, dcCommonRemarks, dcMasterName, dcPartyItems } = req.body;
+      const { dcPartyName, dcPartyId, dcPartyType, dcPartyCode, dcPartyAddress, dcNo, dcDate, dcReason, dcCommonRemarks, dcMasterName, dcPartyItems, dcPlant, dcDepartment } = req.body;
       const itemDcResult = new itemDcModel({ dcPartyName, dcPartyId, dcPartyType, dcPartyCode, dcPartyAddress, dcNo, dcDate, dcReason, dcCommonRemarks, dcMasterName, dcPartyItems });
-      const dcDepartment = [new Set(dcPartyItems.map(item => item.itemCurrentLocation))]
-      itemDcResult.dcDepartment = dcDepartment
-      itemDcResult.dcPlant = dcPartyItems[0].itemCurrentLocation
+      
 
       const validationError = itemDcResult.validateSync();
 
