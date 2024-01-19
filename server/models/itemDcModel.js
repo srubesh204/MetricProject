@@ -35,10 +35,19 @@ const itemDcSchema = new mongoose.Schema({
     type: String,
     required: [true, "DC Reason is required"]
   },
+  dcPlant: {
+    type: String,
+    required: [true, "Plant is required"]
+  }, 
+  dcDepartment: {
+    type: [],
+    required: [true, "Department Required"]
+  },
   dcCommonRemarks: String,
   dcMasterName: String,
   dcPartyItems: {
-    type: []
+    type: [],
+    required: [true, "Item Required"]
   }
 });
 itemDcSchema.plugin(uniqueValidator);

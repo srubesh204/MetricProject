@@ -619,7 +619,8 @@ const CalDialog = () => {
             return Object.values(tempErrors).every(x => x === "")
         }
         console.log(errors)
-
+        const [errorhandler, setErrorHandler] = useState({})
+        console.log(errorhandler)
 
     const submitCalForm = async () => {
         try {
@@ -632,13 +633,34 @@ const CalDialog = () => {
                 setTimeout(() => { setCalOpen(false); setCalibrationData(initialCalData) }, 3000)
             }
         } catch (err) {
+            setSnackBarOpen(true)
+
+            if (err.response && err.response.status === 400) {
+                // Handle validation errors
+                console.log(err);
+                const errorData400 = err.response.data.errors;
+                const errorMessages400 = Object.values(errorData400).join(', ');
+                console.log(errorMessages400)
+                setErrorHandler({ status: 0, message: errorMessages400, code: "error" });
+            } else if (err.response && err.response.status === 500) {
+                // Handle other errors
+                console.log(err);
+                const errorData500 = err.response.data.error;
+                const errorMessages500 = Object.values(errorData500).join(', ');
+                console.log(errorMessages500)
+                setErrorHandler({ status: 0, message: errorMessages500, code: "error" });
+            } else {
+                console.log(err);
+                console.log(err.response.data.error)
+                setErrorHandler({ status: 0, message: "An error occurred", code: "error" });
+            }
+
             console.log(err);
+
         }
     };
 
-    const [obStatus, setObStatus] = useState([]);
-
-    const [showLastResult, setShowLastResult] = useState(false)
+    
 
 
 

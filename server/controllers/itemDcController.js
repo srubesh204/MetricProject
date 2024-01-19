@@ -16,9 +16,9 @@ const itemDcController = {
   createItemDc: async (req, res) => {
 
     try {
-      const { dcPartyName, dcPartyId, dcPartyType, dcPartyCode, dcPartyAddress, dcNo, dcDate, dcReason, dcCommonRemarks, dcMasterName, dcPartyItems } = req.body;
-      const itemDcResult = new itemDcModel({ dcPartyName, dcPartyId, dcPartyType, dcPartyCode, dcPartyAddress, dcNo, dcDate, dcReason, dcCommonRemarks, dcMasterName, dcPartyItems });
-
+      const { dcPartyName, dcPartyId, dcPartyType, dcPartyCode, dcPartyAddress, dcNo, dcDate, dcReason, dcCommonRemarks, dcMasterName, dcPartyItems, dcPlant, dcDepartment } = req.body;
+      const itemDcResult = new itemDcModel({ dcPartyName, dcPartyId, dcPartyType, dcPartyCode, dcPartyAddress, dcNo, dcDate, dcReason, dcCommonRemarks, dcMasterName, dcPartyItems, dcPlant, dcDepartment });
+      
 
       const validationError = itemDcResult.validateSync();
 
@@ -32,12 +32,14 @@ const itemDcController = {
             validationErrors[key] = validationError.errors[key].message;
           }
         }
-
+        console.log(validationErrors)
         return res.status(400).json({
           errors: validationErrors
         });
       }
       console.log("success")
+
+      
 
       const result = await itemDcResult.save();
 
@@ -84,8 +86,10 @@ const itemDcController = {
       // }
 
       // Create an object with the fields you want to update
-      const { dcPartyName, dcPartyId, dcPartyType, dcPartyCode, dcPartyAddress, dcNo, dcDate, dcReason, dcCommonRemarks, dcMasterName, dcPartyItems } = req.body;
-      const updateItemDcFields = { dcPartyName, dcPartyId, dcPartyType, dcPartyCode, dcPartyAddress, dcNo, dcDate, dcReason, dcCommonRemarks, dcMasterName, dcPartyItems };
+      const { dcPartyName, dcPartyId, dcPartyType, dcPartyCode, dcPartyAddress, dcNo, dcDate, dcReason, dcCommonRemarks, dcMasterName, dcPartyItems, dcPlant, dcDepartment } = req.body;
+      const updateItemDcFields = { dcPartyName, dcPartyId, dcPartyType, dcPartyCode, dcPartyAddress, dcNo, dcDate, dcReason, dcCommonRemarks, dcMasterName, dcPartyItems,dcPlant, dcDepartment };
+
+      
 
 
       // Setting the prevData to status "0" 
@@ -109,6 +113,7 @@ const itemDcController = {
 
       const itemDcUpdate = new itemDcModel(updateItemDcFields);
 
+
       const validationError = itemDcUpdate.validateSync();
       if (validationError) {
         // Handle validation errors
@@ -125,7 +130,7 @@ const itemDcController = {
           errors: validationErrors
         });
       }
-
+      
       // Find the designation by desId and update it
       const updateItemDc = await itemDcModel.findOneAndUpdate(
         { _id: itemDcId },

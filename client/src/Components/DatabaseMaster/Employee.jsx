@@ -157,11 +157,17 @@ const Employee = () => {
             headerAlign: 'center',
             align: 'center',
             width: 150,
-            renderCell: (params) => (
-                <span>
-                    {params.row.plantDetails.map((plant) => plant.departments).join(', ')}
-                </span>
-            ),
+            renderCell: (params) => {
+                const uniqueDepartments = Array.from(
+                  new Set(params.row.plantDetails.flatMap((plant) => plant.departments))
+                );
+              
+                return (
+                  <span>
+                    {uniqueDepartments.join(', ')}
+                  </span>
+                );
+              },
             // valueOptions: Array.from(uniqueDepartments),
         },
         { field: 'empRole', headerName: 'Role', width: 150, headerAlign: "center", align: "center" },
@@ -1350,33 +1356,12 @@ const Employee = () => {
                                                 {item.department}
                                             </MenuItem>
                                         ))}
-                                        {/* {plantsData && plantsData.departments && plantsData.departments.map((item, index) => (
-                                            <MenuItem key={index} value={item}>
-                                                {item}
-                                            </MenuItem>
-                                        ))} */}
-                                        {/* {plantsData.map((plant, index) => {
-                                            const value = employee.map(emp => emp.plantDetails.map(plant => plant.departments));
-                                            console.log(value);
-                                            return (
-                                                <MenuItem key={index} value={plant.department}>
-                                                    {plant.department}
-                                                </MenuItem>
-                                            );
-                                        })} */}
+                                        
                                     </TextField>
                                 </Grid>
 
 
-                                {/* <Grid item xs={3}>
-                                    <TextField fullWidth label="Report To" value={filterAllNames.reportToFilter} onChange={handleFilterChange} select size="small" id="reportToFilterId" name="reportToFilter" defaultValue="" >
-                                        <MenuItem value="all">All</MenuItem>
-
-                                        {FilterNameList.reportTo.map((item, index) => (
-                                            <MenuItem key={index} value={item}>{item}</MenuItem>
-                                        ))}
-                                    </TextField>
-                                </Grid> */}
+                               
                                 <Grid item xs={2}>
                                     <div className='col d-flex justify-content-end'>
                                         {employeeSelectedRowIds.length !== 0 && <Button variant='contained' component="button" fullWidth type='button' color='error' onClick={() => handleDeleteOpen(true)}>Delete  Employee</Button>}
@@ -1384,15 +1369,7 @@ const Employee = () => {
                                     </div>
                                 </Grid>
 
-                                {/* <div className="form-floating col">
-                                        <select  id="reportToFilterId" name="reportToFilter" onChange={handleFilterChange}>
-                                            <option value="all">All</option>
-                                            {employeeList.((item) => (
-                                                <option>{item.firstName}</option>
-                                            ))}
-                                        </select>
-                                        <label htmlFor="reportToFilterId">Report To</label>
-                                    </div>*/}
+                                
                             </Grid>
                             <div>
                                 <div style={{ height: 400, width: '100%' }}>

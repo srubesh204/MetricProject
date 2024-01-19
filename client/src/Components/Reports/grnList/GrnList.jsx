@@ -27,6 +27,7 @@ export const GrnListContent = createContext(null);
 const GrnList = () => {
 
     const employeeRole = useEmployee()
+    const { loggedEmp } = employeeRole
     const [printState, setPrintState] = useState(false)
     const [selectedRows, setSelectedRows] = useState([]);
     const [grnEditOpen, setGrnEditOpen] = useState(false);
@@ -151,10 +152,30 @@ const GrnList = () => {
 
     const [grnDataListSelectedRowIds, setgrnDataListSelectedRowIds] = useState([])
 
-console.log(setGrnPrintOpen)
+    console.log(setGrnPrintOpen)
 
+     
+    const [itemPlantList, setItemPlantList] = useState([])
+    const ItemFetch = async () => {
+        try {
+            const response = await axios.get(
+                `${process.env.REACT_APP_PORT}/itemAdd/getAllItemAdds`
+            );
+            console.log(response.data.result)
+            const plantItems = response.data.result.filter(item => (loggedEmp.plantDetails.map(plant => plant.plantName).includes(item.itemPlant)))
+            const DcItems = plantItems.filter(item => item.dcStatus === "1")
+            console.log(DcItems)
+            setItemPlantList(DcItems);
+            
+          
 
-
+        } catch (err) {
+            console.log(err);
+        }
+    };
+    useEffect(() => {
+        ItemFetch()
+    }, []);
 
 
 
@@ -531,7 +552,7 @@ console.log(setGrnPrintOpen)
                                     <GrnEdit />
                                 </GrnListContent.Provider>
                                 <GrnListContent.Provider
-                                    value={{ grnOpen, setGrnOpen, selectedRows, grnListFetchData, printState, setPrintState }}
+                                    value={{ grnOpen, setGrnOpen, selectedRows, grnListFetchData, printState, setPrintState,itemPlantList }}
                                 >
                                     <GrnAdd />
                                 </GrnListContent.Provider>

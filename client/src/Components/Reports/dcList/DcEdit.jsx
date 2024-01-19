@@ -10,19 +10,22 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { useNavigate } from 'react-router-dom';
 import { DcListContent } from './DcList';
 import { Add, Close, Delete, DeleteOutline } from '@mui/icons-material';
+import { useEmployee } from '../../../App';
 import { useParams } from 'react-router-dom';
 
 
 const DcEdit = () => {
     const { id } = useParams()
     console.log(id)
+    const empRole = useEmployee()
+    const { employee, loggedEmp } = empRole
 
     const dcEditDatas = useContext(DcListContent)
-    const { dcEditOpen, setDcEditOpen, selectedRows, dcListFetchData } = dcEditDatas
+    const { dcEditOpen, setDcEditOpen, selectedRows, dcListFetchData, itemPlantList } = dcEditDatas
     console.log(selectedRows)
     const [errorhandler, setErrorHandler] = useState({});
 
-
+    const [itemNameList, setItemNameList] = useState(itemPlantList)
     console.log(selectedRows)
     const [selectedExtraMaster, setSelectedExtraMaster] = useState([])
     const initialDcData = {
@@ -35,7 +38,8 @@ const DcEdit = () => {
         dcDate: "",
         dcReason: "",
         dcCommonRemarks: "",
-        dcPartyItems: []
+        dcPartyItems: [],
+        dcPlant:""
 
     }
 
@@ -49,13 +53,16 @@ const DcEdit = () => {
         dcDate: "",
         dcReason: "",
         dcCommonRemarks: "",
-        dcPartyItems: []
+        dcPartyItems: [],
+        dcPlant:""
 
     })
     console.log(dcEditData)
 
     const settingDcData = () => {
-        if (selectedRows.length !== 0) { // Check if selectedRows is defined
+        if (selectedRows.length !== 0) { 
+            
+            // Check if selectedRows is defined
             setDcEditData((prev) => ({
                 ...prev,
                 dcPartyId: selectedRows.dcPartyId,
@@ -68,13 +75,25 @@ const DcEdit = () => {
                 dcReason: selectedRows.dcReason,
                 dcCommonRemarks: selectedRows.dcCommonRemarks,
                 dcPartyItems: selectedRows.dcPartyItems,
+                dcPlant: selectedRows.dcPlant
+
             }));
+            const plantItems = itemPlantList.filter(item => item.itemPlant === selectedRows.dcPlant)
+            const distinctItemNames = [... new Set(plantItems.map(item => item.itemAddMasterName))]
+            setItemNameList(distinctItemNames)
+            console.log(distinctItemNames)
+
         }
     };
 
     console.log(dcEditData)
 
-
+    useEffect(() => {
+        const plantItems = itemPlantList.filter(item => item.itemPlant === selectedRows.dcPlant);
+        const distinctItemNames = [...new Set(plantItems.map(item => item.itemAddMasterName))];
+        setItemNameList(distinctItemNames);
+        console.log(distinctItemNames);
+    }, [selectedRows.dcPlant, itemPlantList]);
 
     useEffect(() => {
         settingDcData();
@@ -163,7 +182,7 @@ const DcEdit = () => {
 
         { field: 'itemCalFreInMonths', headerName: 'Frequency', type: "number", width: 100 },
         {
-            field: 'select', headerName: 'ReMarks', width: 200, renderCell: (params) => <select className="form-select form-select-sm col-2" id="reMarks" name="reMarks" aria-label="Floating label select example">
+            field: 'select', headerName: 'ReMarks', width: 200, renderCell: (params) => <select className="form-select  form-select-sm col-2" id="reMarks" name="reMarks" aria-label="Floating label select example">
 
                 <option value="Calibration">Calibration</option>
                 <option value="service">Service</option>
@@ -294,48 +313,6 @@ const DcEdit = () => {
         getImteList();
     }, []);
 
-    {/*const updateItemData = async (e) => {
-        e.preventDefault();
-        try {
-            const response = await axios.put(
-                `${process.env.REACT_APP_PORT}/itemAdd/updateItemDc/${id}`, dcEditData
-            );
-
-            setSnackBarOpen(true)
-
-            console.log("Item Update Successfully")
-            setErrorHandler({ status: response.data.status, message: response.data.message, code: "success" })
-            setDcEditData(initialDcData)
-            setTimeout(() => {
-                navigate('/itemList');
-            }, 3000);
-
-
-        } catch (err) {
-
-            setSnackBarOpen(true)
-
-
-
-
-            if (err.response && err.response.status === 400) {
-                // Handle validation errors
-                const errorData400 = err.response.data.errors;
-                const errorMessages400 = Object.values(errorData400).join(', ');
-                console.log(errorMessages400)
-                setErrorHandler({ status: 0, message: errorMessages400, code: "error" });
-            } else if (err.response && err.response.status === 500) {
-                // Handle other errors
-                const errorData500 = err.response.data.error;
-                const errorMessages500 = Object.values(errorData500).join(', ');
-                console.log(errorMessages500)
-                setErrorHandler({ status: 0, message: errorMessages500, code: "error" });
-            } else {
-                console.log(err.response.data.error)
-                setErrorHandler({ status: 0, message: "An error occurred", code: "error" });
-            }
-        }
-    };*/}
 
 
 
@@ -411,9 +388,18 @@ const DcEdit = () => {
             console.log(err);
         }
     };
-
+   
     const handleDcItemAdd = (e) => {
         const { name, value } = e.target;
+        if (name === "dcPlant") {
+            // Set the selected itemPlant in state
+            setItemAddDetails((prev) => ({ ...prev, dcPlant: value }));
+             const plantItems = itemPlantList.filter(item => item.itemPlant === value)
+             const distinctItemNames = [... new Set(plantItems.map(item => item.itemAddMasterName))]
+             setItemNameList(distinctItemNames)
+             console.log(distinctItemNames)
+        }
+
         if (name === "itemListNames") {
             getItemByName(value)
             setItemAddDetails((prev) => ({ ...prev, [name]: value }))
@@ -422,13 +408,10 @@ const DcEdit = () => {
             setSelectedDcItem(value)
             setItemAddDetails((prev) => ({ ...prev, [name]: value }))
         }
-        if (name === "itemReMarks") {
-            setSelectedDcItem(value)
-            setItemAddDetails((prev) => ({ ...prev, [name]: value }))
-        }
 
 
     }
+    
 
     const dcItemAdd = () => {
         if (selectedDcItem.length !== 0) {
@@ -530,18 +513,25 @@ const DcEdit = () => {
                     <LocalizationProvider dateAdapter={AdapterDayjs}>
                         <form>
                             <div className='row'>
-                                <div className="col-3 mb-2">
-                                    <TextField label="Vendor Type"
-                                        id="dcPartyTypeId" select defaultValue="" onChange={handleFilterChange} size="small" value={dcEditData.dcPartyType} sx={{ width: "101%" }} name="dcPartyType" >
-                                        <MenuItem value=""><em>--Select--</em></MenuItem>
-                                        <MenuItem value="oem">OEM</MenuItem>
-                                        <MenuItem value="customer">Customer</MenuItem>
-                                        <MenuItem value="supplier">Supplier</MenuItem>
-                                        <MenuItem value="subContractor">SubContractor</MenuItem>
 
+                                <div className='col-3 mb-2'>
+                                    <TextField label="Plant Wise"
+                                        id="dcPlantId"
+                                        disabled
+                                        select
+                                      value={dcEditData.dcPlant}
+                                        fullWidth
+                                        onChange={handleDcItemAdd}
+                                        size="small"
+                                        name="dcPlant" >
+                                    
+                                        <MenuItem value="all">All</MenuItem>
+                                        {loggedEmp.plantDetails.map((item, index) => (
+                                            <MenuItem key={index} value={item.plantName}>{item.plantName}</MenuItem>
+                                        ))}
                                     </TextField>
-
                                 </div>
+
                             </div>
 
                             <Paper
@@ -561,20 +551,32 @@ const DcEdit = () => {
                                     <div className='col'>
 
                                         <div className='col d-flex mb-2'>
+                                            <div className="col me-2">
+                                                <TextField label="Vendor Type"
+                                                    id="dcPartyTypeId" select defaultValue="" onChange={handleFilterChange} size="small" value={dcEditData.dcPartyType} sx={{ width: "101%" }} name="dcPartyType" >
+                                                    <MenuItem value=""><em>--Select--</em></MenuItem>
+                                                    <MenuItem value="oem">OEM</MenuItem>
+                                                    <MenuItem value="customer">Customer</MenuItem>
+                                                    <MenuItem value="supplier">Supplier</MenuItem>
+                                                    <MenuItem value="subContractor">SubContractor</MenuItem>
+
+                                                </TextField>
+
+                                            </div>
                                             <div className=" col me-2">
 
                                                 <TextField label="Party Name"
-                                                    id="partyNameId"
+                                                    id="partyIdId"
                                                     select
 
                                                     value={dcEditData.dcPartyId}
                                                     onChange={(e) => setPartyData(e.target.value)}
 
-                                                    //  sx={{ width: "100%" }}
+                                                   
                                                     size="small"
                                                     fullWidth
                                                     disabled={dcEditData.dcPartyType === ""}
-                                                    name="partyName" >
+                                                    name="partyId" >
                                                     {filteredData.map((item, index) => (
                                                         <MenuItem key={index} value={item._id}>{item.fullName}</MenuItem>
                                                     ))}
@@ -711,8 +713,10 @@ const DcEdit = () => {
                                         <div className='col me-2'>
                                             <TextField size='small' select fullWidth id='itemListNamesId' value={itemAddDetails.itemListNames} variant='outlined' onChange={handleDcItemAdd} label="Item List" name='itemListNames' >
                                                 <MenuItem value=""><em>--Select--</em></MenuItem>
-                                                {itemMasterDistNames.map((item, index) => (
-                                                    <MenuItem key={index} value={item}>{item}</MenuItem>
+                                                {itemNameList.map((item, index) => (
+                                                    <MenuItem key={index} value={item}>
+                                                        {item}
+                                                    </MenuItem>
                                                 ))}
                                             </TextField>
                                         </div>

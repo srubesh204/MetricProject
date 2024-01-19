@@ -27,10 +27,31 @@ export const DcListContent = createContext(null);
 const DcList = () => {
 
     const empRole = useEmployee()
+    const { loggedEmp } = empRole
     const [printState, setPrintState] = useState(false)
     const [selectedRows, setSelectedRows] = useState([]);
     const [dcEditOpen, setDcEditOpen] = useState(false);
     const [dcOpen, setDcOpen] = useState(false);
+
+    const [itemPlantList, setItemPlantList] = useState([])
+    const ItemFetch = async () => {
+        try {
+            const response = await axios.get(
+                `${process.env.REACT_APP_PORT}/itemAdd/getAllItemAdds`
+            );
+            console.log(response.data.result)
+            const plantItems = response.data.result.filter(item => (loggedEmp.plantDetails.map(plant => plant.plantName).includes(item.itemPlant)))
+            console.log(plantItems)
+            setItemPlantList(response.data.result);
+            setItemDepartment(response.data.result)
+
+        } catch (err) {
+            console.log(err);
+        }
+    };
+    useEffect(() => {
+        ItemFetch()
+    }, []);
 
     //
     const [dcPrintOpen, setDcPrintOpen] = useState(false);
@@ -84,26 +105,26 @@ const DcList = () => {
     console.log(dcData)
 
 
+
+
+    // const vendorFetchData = async () => {
+    //     try {
+    //         const response = await axios.get(
+    //             `${process.env.REACT_APP_PORT}/vendor/getAllVendors`
+    //         );
+    //         console.log(response.data)
+
+
+
+    //         // setFilteredData(response.data.result);
+    //     } catch (err) {
+    //         console.log(err);
+    //     }
+    // };
+    // useEffect(() => {
+    //     vendorFetchData();
+    // }, []);
     const [vendorDataList, setVendorDataList] = useState([])
-
-    const vendorFetchData = async () => {
-        try {
-            const response = await axios.get(
-                `${process.env.REACT_APP_PORT}/vendor/getAllVendors`
-            );
-            console.log(response.data)
-
-            setVendorDataList(response.data.result);
-
-            // setFilteredData(response.data.result);
-        } catch (err) {
-            console.log(err);
-        }
-    };
-    useEffect(() => {
-        vendorFetchData();
-    }, []);
-
     const [vendorFullList, setVendorFullList] = useState([])
     const [vendorTypeList, setVendorTypeList] = useState([])
     const [filteredData, setFilteredData] = useState([])
@@ -117,6 +138,7 @@ const DcList = () => {
 
             setVendorFullList(response.data.result);
             setVendorTypeList(response.data.result)
+            setVendorDataList(response.data.result);
 
             // setFilteredData(response.data.result);
         } catch (err) {
@@ -125,6 +147,26 @@ const DcList = () => {
     };
     useEffect(() => {
         FetchData();
+    }, []);
+    const [itemDepartment, setItemDepartment] = useState([])
+   
+    const [departments, setDepartments] = useState([])
+    const DepartmentFetch = async () => {
+        try {
+            const response = await axios.get(
+                `${process.env.REACT_APP_PORT}/department/getAllDepartments`
+            );
+            const defaultDepartment = response.data.result.filter((dep) => dep.defaultdep === "yes")
+            setDepartments(defaultDepartment);
+
+            console.log(response.data)
+        } catch (err) {
+            console.log(err);
+        }
+    };
+    //get Designations
+    useEffect(() => {
+        DepartmentFetch()
     }, []);
 
 
@@ -167,7 +209,7 @@ const DcList = () => {
     }, [dateData.fromDate, dateData.toDate])
 
 
-  
+
 
     const handleSnackClose = (event, reason) => {
         if (reason === 'clickaway') {
@@ -250,7 +292,7 @@ const DcList = () => {
                 }
             }
             );
-           
+
             setDcData(initialDcData)
             setSnackBarOpen(true)
             setErrorHandler({ status: response.data.status, message: response.data.message, code: "success" })
@@ -290,6 +332,9 @@ const DcList = () => {
 
 
 
+
+
+
     const handleFilterChange = (e) => {
         const { name, value } = e.target;
         if (name === "vendorType") {
@@ -304,6 +349,14 @@ const DcList = () => {
             const partyName = dcDataDcList.filter((item) => (item.dcPartyName === value))
             setFilteredData(partyName)
             console.log(value)
+        }
+        if (name === "itemPlant") {
+            const itemPlant = dcDataDcList.filter((item) => (item.itemPlant && item.itemPlant.includes(value)));
+            setFilteredData(itemPlant);
+        }
+        if (name === "itemDepartment") {
+            const itemDepartment = dcDataDcList.filter((item) => (item.itemDepartment && item.itemDepartment.includes(value)));
+            setFilteredData(itemDepartment);
         }
         setDateData((prev) => ({ ...prev, [name]: value }))
 
@@ -380,11 +433,11 @@ const DcList = () => {
 
 
     const dcListColumns = [
-        { field: 'id', headerName: 'Si. No', width: 70, renderCell: (params) => params.api.getAllRowIds().indexOf(params.id) + 1,headerAlign:"center",align: "center", },
-        { field: 'itemIMTENo', headerName: 'Item IMTENo', width: 100 ,headerAlign:"center",align: "center",},
-        { field: 'itemAddMasterName', headerName: 'Item Description',headerAlign:"center",align: "center", width: 150 },
-        { field: 'itemRangeSize', headerName: 'Range/Size',headerAlign:"center",align: "center", width: 100 },
-        { field: 'dcItemRemarks', headerName: 'Remarks',headerAlign:"center",align: "center", width: 200 },
+        { field: 'id', headerName: 'Si. No', width: 70, renderCell: (params) => params.api.getAllRowIds().indexOf(params.id) + 1, headerAlign: "center", align: "center", },
+        { field: 'itemIMTENo', headerName: 'Item IMTENo', width: 100, headerAlign: "center", align: "center", },
+        { field: 'itemAddMasterName', headerName: 'Item Description', headerAlign: "center", align: "center", width: 150 },
+        { field: 'itemRangeSize', headerName: 'Range/Size', headerAlign: "center", align: "center", width: 100 },
+        { field: 'dcItemRemarks', headerName: 'Remarks', headerAlign: "center", align: "center", width: 200 },
     ]
     console.log(dcDataDcList)
 
@@ -430,12 +483,54 @@ const DcList = () => {
                                     </TextField>
 
                                 </div>
-                                <div className='col'>
+                                <div className='col me-2'>
                                     <TextField fullWidth label="Party Name" className="col" select size="small" onChange={handleFilterChange} id="partyNameId" name="partyName" defaultValue="" >
 
                                         <MenuItem value="all">All</MenuItem>
                                         {vendorTypeList.map((item, index) => (
                                             <MenuItem key={index} value={item.fullName}>{item.fullName}</MenuItem>
+                                        ))}
+
+
+                                    </TextField>
+
+                                </div>
+                                <div className='col me-2'>
+
+                                    <TextField label="Plant Wise"
+                                        id="itemPlantId"
+                                        select
+                                        defaultValue="all"
+                                        // value={filterAllNames.plantWise}
+                                        fullWidth
+
+                                        onChange={handleFilterChange}
+                                        size="small"
+                                        name="itemPlant" >
+
+                                        <MenuItem value="all">All</MenuItem>
+                                        {loggedEmp.plantDetails.map((item, index) => (
+                                            <MenuItem key={index} value={item.plantName}>{item.plantName}</MenuItem>
+                                        ))}
+
+
+                                    </TextField>
+
+                                </div>
+                                <div className='col '>
+
+                                    <TextField label="Default Location "
+                                        id="itemDepartmentId"
+                                        select
+                                        defaultValue="all"
+                                        // value={filterAllNames.currentLocation}
+                                        fullWidth
+                                        onChange={handleFilterChange}
+                                        size="small"
+                                        name="itemDepartment" >
+                                        <MenuItem value="all">All</MenuItem>
+                                        {departments.map((item, index) => (
+                                            <MenuItem key={index} value={item.department}>{item.department}</MenuItem>
                                         ))}
 
 
@@ -618,12 +713,12 @@ const DcList = () => {
                             </div>
 
                             <DcListContent.Provider
-                                value={{ dcEditOpen, setDcEditOpen, selectedRows, dcListFetchData, printState, setPrintState }}
+                                value={{ dcEditOpen, setDcEditOpen, selectedRows, dcListFetchData, printState, setPrintState,itemPlantList }}
                             >
                                 <DcEdit />
                             </DcListContent.Provider>
                             <DcListContent.Provider
-                                value={{ dcOpen, setDcOpen, selectedRows, dcListFetchData, printState, setPrintState }}
+                                value={{ dcOpen, setDcOpen, selectedRows, dcListFetchData, printState, setPrintState, itemPlantList }}
                             >
                                 <DcAdd />
                             </DcListContent.Provider>

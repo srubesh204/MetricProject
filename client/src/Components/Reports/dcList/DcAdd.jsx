@@ -9,14 +9,20 @@ import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DcListContent } from './DcList';
 import { Add, Close, Delete, DeleteOutline } from '@mui/icons-material';
+import { useEmployee } from '../../../App';
 dayjs.extend(isSameOrBefore)
 dayjs.extend(isSameOrAfter)
 
 
 const DcAdd = () => {
 
+    const empRole = useEmployee()
+    const { employee, loggedEmp } = empRole
+
     const dcAddDatas = useContext(DcListContent)
-    const { dcOpen, setDcOpen, selectedRows, dcListFetchData } = dcAddDatas
+    const { dcOpen, setDcOpen, selectedRows, dcListFetchData, itemPlantList } = dcAddDatas
+
+
 
 
     console.log(selectedRows)
@@ -249,7 +255,7 @@ const DcAdd = () => {
             const response = await axios.get(
                 `${process.env.REACT_APP_PORT}/itemAdd/getItemAddByIMTESort`
             );
-            console.log(response.data)
+            console.log(response.data.result)
             setImteList(response.data.result)
 
 
@@ -263,6 +269,7 @@ const DcAdd = () => {
     }, []);
 
     const [errorhandler, setErrorHandler] = useState({})
+    console.log(errorhandler)
     const [confirmSubmit, setConfirmSubmit] = useState(false)
     const [snackBarOpen, setSnackBarOpen] = useState(false)
     const [alertMessage, setAlertMessage] = useState({
@@ -272,7 +279,7 @@ const DcAdd = () => {
 
     //validate function
     const [errors, setErrors] = useState({})
-    
+
     const validateFunction = () => {
         let tempErrors = {};
         tempErrors.dcPartyType = dcAddData.dcPartyType ? "" : "GRN Party Type is Required"
@@ -318,27 +325,27 @@ const DcAdd = () => {
         } catch (err) {
             setSnackBarOpen(true)
 
-      if (err.response && err.response.status === 400) {
-        // Handle validation errors
-        console.log(err);
-        const errorData400 = err.response.data.errors;
-        const errorMessages400 = Object.values(errorData400).join(', ');
-        console.log(errorMessages400)
-        setErrorHandler({ status: 0, message: errorMessages400, code: "error" });
-      } else if (err.response && err.response.status === 500) {
-        // Handle other errors
-        console.log(err);
-        const errorData500 = err.response.data.error;
-        const errorMessages500 = Object.values(errorData500).join(', ');
-        console.log(errorMessages500)
-        setErrorHandler({ status: 0, message: errorMessages500, code: "error" });
-      } else {
-        console.log(err);
-        console.log(err.response.data.error)
-        setErrorHandler({ status: 0, message: "An error occurred", code: "error" });
-      }
+            if (err.response && err.response.status === 400) {
+                // Handle validation errors
+                console.log(err);
+                const errorData400 = err.response.data.errors;
+                const errorMessages400 = Object.values(errorData400).join(', ');
+                console.log(errorMessages400)
+                setErrorHandler({ status: 0, message: errorMessages400, code: "error" });
+            } else if (err.response && err.response.status === 500) {
+                // Handle other errors
+                console.log(err);
+                const errorData500 = err.response.data.error;
+                const errorMessages500 = Object.values(errorData500).join(', ');
+                console.log(errorMessages500)
+                setErrorHandler({ status: 0, message: errorMessages500, code: "error" });
+            } else {
+                console.log(err);
+                console.log(err.response.data.error)
+                setErrorHandler({ status: 0, message: "An error occurred", code: "error" });
+            }
 
-      console.log(err);
+            console.log(err);
 
         }
 
@@ -379,8 +386,19 @@ const DcAdd = () => {
         }
     };
 
+
+    const [itemNameList, setItemNameList] = useState(itemPlantList)
     const handleDcItemAdd = (e) => {
         const { name, value } = e.target;
+        if (name === "itemPlant") {
+            // Set the selected itemPlant in state
+            setItemAddDetails((prev) => ({ ...prev, dcPlant: value }));
+            const plantItems = itemPlantList.filter(item => item.itemPlant === value)
+            const distinctItemNames = [... new Set(plantItems.map(item => item.itemAddMasterName))]
+            setItemNameList(distinctItemNames)
+            console.log(plantItems)
+        }
+
         if (name === "itemListNames") {
             getItemByName(value)
             setItemAddDetails((prev) => ({ ...prev, [name]: value }))
@@ -393,7 +411,7 @@ const DcAdd = () => {
 
     }
 
-   
+    console.log(itemNameList)
 
     const dcItemAdd = () => {
         if (selectedDcItem.length !== 0) {
@@ -495,24 +513,25 @@ const DcAdd = () => {
                     <LocalizationProvider dateAdapter={AdapterDayjs}>
                         <form>
                             <div className='row'>
-                                <div className="col-3 mb-2">
-                                    <TextField label="Vendor Type"
-                                        id="dcPartyTypeId"
-                                        select
-                                        defaultValue=""
-                                        onChange={handleFilterChange}
-                                        size="small"
-                                        sx={{ width: "101%" }}
-                                        {...(errors.dcPartyType !== "" && { helperText: errors.dcPartyType, error: true })}
-                                        name="dcPartyType" >
-                                        <MenuItem value=""><em>--Select--</em></MenuItem>
-                                        <MenuItem value="oem">OEM</MenuItem>
-                                        <MenuItem value="customer">Customer</MenuItem>
-                                        <MenuItem value="supplier">Supplier</MenuItem>
-                                        <MenuItem value="subContractor">SubContractor</MenuItem>
 
+                                <div className='col-3 mb-2'>
+                                    <TextField label="Plant Wise"
+                                        id="itemPlantId"
+                                        select
+                                        defaultValue="all"
+                                        // value={filterAllNames.plantWise}
+                                        fullWidth
+                                        onChange={handleDcItemAdd}
+                                        size="small"
+                                        name="itemPlant" >
+                                        <MenuItem value="all">All</MenuItem>
+                                        {loggedEmp.plantDetails.map((item, index) => (
+                                            <MenuItem key={index} value={item.plantName}>{item.plantName}</MenuItem>
+                                        ))}
                                     </TextField>
                                 </div>
+
+
                             </div>
 
                             <Paper
@@ -529,18 +548,34 @@ const DcAdd = () => {
 
 
 
-                                    <div className='col'>
+                                   
 
                                         <div className='col d-flex mb-2'>
-                                            <div className=" col me-2">
+                                            <div className="col me-2">
+                                                <TextField label="Vendor Type"
+                                                    id="dcPartyTypeId"
+                                                    select
+                                                    defaultValue=""
+                                                    onChange={handleFilterChange}
+                                                    size="small"
+                                                    sx={{ width: "101%" }}
+                                                    {...(errors.dcPartyType !== "" && { helperText: errors.dcPartyType, error: true })}
+                                                    name="dcPartyType" >
+                                                    <MenuItem value=""><em>--Select--</em></MenuItem>
+                                                    <MenuItem value="oem">OEM</MenuItem>
+                                                    <MenuItem value="customer">Customer</MenuItem>
+                                                    <MenuItem value="supplier">Supplier</MenuItem>
+                                                    <MenuItem value="subContractor">SubContractor</MenuItem>
 
+                                                </TextField>
+                                            </div>
+
+                                            <div className=" col me-2">
                                                 <TextField label="Party Name"
                                                     id="dcPartyNameId"
                                                     select
-
                                                     // value={dcAddData.dcPartyName}
                                                     onChange={(e) => setPartyData(e.target.value)}
-
                                                     //  sx={{ width: "100%" }}
                                                     size="small"
                                                     fullWidth
@@ -551,11 +586,8 @@ const DcAdd = () => {
                                                         <MenuItem key={index} value={item._id}>{item.fullName}</MenuItem>
                                                     ))}
                                                 </TextField>
-
-
                                             </div>
                                             <div className="col me-2">
-
                                                 <TextField label="Party code"
                                                     id="dcPartyCodeId"
                                                     defaultValue=""
@@ -596,7 +628,7 @@ const DcAdd = () => {
                                         </div>
 
 
-                                    </div>
+                                  
                                 </div>
 
 
@@ -683,13 +715,34 @@ const DcAdd = () => {
                             >
                                 <div className='row g-2'>
                                     <div className='col d-flex'>
+
                                         <div className='col me-2'>
-                                            <TextField size='small' select fullWidth id='itemListNamesId' value={itemAddDetails.itemListNames}  {...(errors.dcPartyItems !== "" && { helperText: errors.dcPartyItems, error: true })} variant='outlined' onChange={handleDcItemAdd} label="Item List" name='itemListNames' >
+                                            {/* <TextField size='small' select fullWidth id='itemListNamesId' value={itemAddDetails.itemListNames}  {...(errors.dcPartyItems !== "" && { helperText: errors.dcPartyItems, error: true })} variant='outlined' onChange={handleDcItemAdd} label="Item List" name='itemListNames' >
                                                 <MenuItem value="--"><em>--Select--</em></MenuItem>
-                                                {itemMasterDistNames.map((item, index) => (
-                                                    <MenuItem key={index} value={item}>{item}</MenuItem>
+                                                {itemNameList.map((item, index) => (
+                                                    <MenuItem key={index} value={item.itemAddMasterName}>{item.itemAddMasterName}</MenuItem>
+                                                ))}
+                                            </TextField> */}
+                                            <TextField
+                                                size='small'
+                                                select
+                                                fullWidth
+                                                id='itemListNamesId'
+                                                value={itemAddDetails.itemListNames}
+                                                {...(errors.dcPartyItems !== "" && { helperText: errors.dcPartyItems, error: true })}
+                                                variant='outlined'
+                                                onChange={handleDcItemAdd}
+                                                label="Item List"
+                                                name='itemListNames'
+                                            >
+                                                <MenuItem value="--"><em>--Select--</em></MenuItem>
+                                                {itemNameList.map((item, index) => (
+                                                    <MenuItem key={index} value={item}>
+                                                        {item}
+                                                    </MenuItem>
                                                 ))}
                                             </TextField>
+
                                         </div>
                                         <div className='col me-2'>
                                             <TextField disabled={itemAddDetails.itemListNames === ""} size='small' select fullWidth variant='outlined' value={itemAddDetails.itemImteList} id='itemImteListId' onChange={handleDcItemAdd} label="Item IMTENo" name='itemImteList' >
@@ -844,7 +897,7 @@ const DcAdd = () => {
                 </div>
                 <div>
                     <Button variant='contained' color='error' className='me-3' onClick={() => { setDcOpen(false); setDcAddData(initialDcData) }}>Cancel</Button>
-                    <Button variant='contained'    onClick={() => { setConfirmSubmit(true) }}>Submit</Button>
+                    <Button variant='contained' onClick={() => { setConfirmSubmit(true) }}>Submit</Button>
                 </div>
             </DialogActions>
 
