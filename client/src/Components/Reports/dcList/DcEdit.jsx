@@ -25,7 +25,7 @@ const DcEdit = () => {
     console.log(selectedRows)
     const [errorhandler, setErrorHandler] = useState({});
 
-
+    const [itemNameList, setItemNameList] = useState(itemPlantList)
     console.log(selectedRows)
     const [selectedExtraMaster, setSelectedExtraMaster] = useState([])
     const initialDcData = {
@@ -38,7 +38,8 @@ const DcEdit = () => {
         dcDate: "",
         dcReason: "",
         dcCommonRemarks: "",
-        dcPartyItems: []
+        dcPartyItems: [],
+        dcPlant:""
 
     }
 
@@ -52,13 +53,16 @@ const DcEdit = () => {
         dcDate: "",
         dcReason: "",
         dcCommonRemarks: "",
-        dcPartyItems: []
+        dcPartyItems: [],
+        dcPlant:""
 
     })
     console.log(dcEditData)
 
     const settingDcData = () => {
-        if (selectedRows.length !== 0) { // Check if selectedRows is defined
+        if (selectedRows.length !== 0) { 
+            
+            // Check if selectedRows is defined
             setDcEditData((prev) => ({
                 ...prev,
                 dcPartyId: selectedRows.dcPartyId,
@@ -71,7 +75,14 @@ const DcEdit = () => {
                 dcReason: selectedRows.dcReason,
                 dcCommonRemarks: selectedRows.dcCommonRemarks,
                 dcPartyItems: selectedRows.dcPartyItems,
+                dcPlant: selectedRows.dcPlant
+
             }));
+            const plantItems = itemPlantList.filter(item => item.itemPlant === selectedRows.dcPlant)
+            const distinctItemNames = [... new Set(plantItems.map(item => item.itemAddMasterName))]
+            setItemNameList(distinctItemNames)
+            console.log(distinctItemNames)
+
         }
     };
 
@@ -166,7 +177,7 @@ const DcEdit = () => {
 
         { field: 'itemCalFreInMonths', headerName: 'Frequency', type: "number", width: 100 },
         {
-            field: 'select', headerName: 'ReMarks', width: 200, renderCell: (params) => <select className="form-select form-select-sm col-2" id="reMarks" name="reMarks" aria-label="Floating label select example">
+            field: 'select', headerName: 'ReMarks', width: 200, renderCell: (params) => <select className="form-select  form-select-sm col-2" id="reMarks" name="reMarks" aria-label="Floating label select example">
 
                 <option value="Calibration">Calibration</option>
                 <option value="service">Service</option>
@@ -414,16 +425,16 @@ const DcEdit = () => {
             console.log(err);
         }
     };
-    const [itemNameList, setItemNameList] = useState(itemPlantList)
+   
     const handleDcItemAdd = (e) => {
         const { name, value } = e.target;
-        if (name === "itemPlant") {
+        if (name === "dcPlant") {
             // Set the selected itemPlant in state
             setItemAddDetails((prev) => ({ ...prev, dcPlant: value }));
-            const plantItems = itemPlantList.filter(item => item.itemPlant === value)
-            const distinctItemNames = [... new Set(plantItems.map(item => item.itemAddMasterName))]
-            setItemNameList(distinctItemNames)
-            console.log(distinctItemNames)
+             const plantItems = itemPlantList.filter(item => item.itemPlant === value)
+             const distinctItemNames = [... new Set(plantItems.map(item => item.itemAddMasterName))]
+             setItemNameList(distinctItemNames)
+             console.log(distinctItemNames)
         }
 
         if (name === "itemListNames") {

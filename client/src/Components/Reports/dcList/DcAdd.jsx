@@ -516,14 +516,14 @@ const DcAdd = () => {
 
                                 <div className='col-3 mb-2'>
                                     <TextField label="Plant Wise"
-                                        id="dcPlantId"
+                                        id="itemPlantId"
                                         select
                                         defaultValue="all"
                                         // value={filterAllNames.plantWise}
                                         fullWidth
                                         onChange={handleDcItemAdd}
                                         size="small"
-                                        name="dcPlant" >
+                                        name="itemPlant" >
                                         <MenuItem value="all">All</MenuItem>
                                         {loggedEmp.plantDetails.map((item, index) => (
                                             <MenuItem key={index} value={item.plantName}>{item.plantName}</MenuItem>
