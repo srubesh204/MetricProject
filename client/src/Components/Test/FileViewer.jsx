@@ -13,7 +13,6 @@ const FileViewer = () => {
     } catch (error) {
       console.error('Error fetching data:', error);
     }
-
   };
 
   useEffect(() => {
@@ -34,22 +33,28 @@ const FileViewer = () => {
 
 const ComponentToPrint = React.forwardRef(({ apiData }, ref) => {
   return (
-    <div ref={ref}>
+    <div
+      ref={ref}
+      style={{
+        padding: '30px',
+        border: '3px solid black',
+        '@page': {
+          margin: '30px', // Set margin for all sides
+        },
+      }}
+    >
       <h2>Data from API</h2>
-      <table>
+      <table style={{ borderCollapse: 'collapse', width: '100%' }}>
         <tbody>
-          
-        {apiData.map((item) => (
-          <tr>
-          <td style={{border: "0.5px solid black", }}>
-          <li key={item.id}>{item.name}</li>
-          </td></tr>
-        ))}
-          
+          {apiData.map((item) => (
+            <tr key={item.id}>
+              <td style={{ border: '0.5px solid black', padding: '5px' }}>
+                {item.name}
+              </td>
+            </tr>
+          ))}
         </tbody>
       </table>
-      <ul>
-      </ul>
     </div>
   );
 });

@@ -30,10 +30,10 @@ const DcPrint = () => {
         <td style={{ height: '80px', fontSize: '12px' }}>
           <div style={{ display: 'flex', flexDirection: 'row', border: '0.5px solid black' }}>
             <div style={{ width: '70%', display: 'flex', flexDirection: 'column', paddingLeft: '5px' }}>
-              <div style={{ width: '100%', padding: '5px 5px 30px 5px', fontSize: '9px' }}>
+              <div style={{ width: '100%', paddingBottom: '30px' }}>
                 Name and Signature of the person to whom the goods were delivered for Transporting with the status of the person signing.
               </div>
-              <div style={{ width: '100%', paddingLeft: '5px' }}>Date: {data.value.fDc.date}</div>
+              <div style={{ width: '100%' }}>Date: {data.value.fDc.date}</div>
             </div>
             <div style={{ borderLeft: '0.5px solid black', paddingLeft: '5px', display: 'flex', flexDirection: 'column'}}>
               <div style={{ margin: '5px', fontSize: 10, fontWeight: 600, padding: '0 130px 40px 0', width: '100%' }}>For {selectedRows.dcPartyName}</div>
@@ -89,21 +89,44 @@ const DcPrint = () => {
   console.log(printState)
 
   return (
-    // <React.Fragment>
-    // {selectedRows.length > 0 && (
-      <div style={{ display: 'none', width: "100%" }}>
+    <Dialog
+      keepMounted
+      fullScreen
+      open={dcPrintOpen}
+      onClose={(e, reason) => {
+        console.log(reason);
+        if (reason !== 'backdropClick' && reason !== 'escapeKeyDown') {
+          setDcPrintOpen(false);
+        }
+      }}
+    >
+      <DialogTitle align='center' sx={{ backgroundColor: '#323639', color: 'white', height: '40px' }}>DC Print Preview</DialogTitle>
+      <IconButton
+        aria-label='close'
+        onClick={() => setDcPrintOpen(false)}
+        sx={{
+          position: 'absolute',
+          right: 8,
+          top: 8,
+          color: 'white',
+        }}
+      >
+        <Close />
+      </IconButton>
+      <DialogContent style={{ display: 'none', width: "100%" }}>
         <div ref={componentRef}>
+            <div style={{ padding: "10px", textAlign: "center", textDecoration: "underline" }}>DC List</div>
           <div style={{ textAlign: 'center', border: '0.5px solid black', display: 'flex', flexDirection: 'column' }}>
             <h3>{selectedRows.dcPartyName}</h3>
             <td>{selectedRows.dcPartyAddress}</td>
             <td>Phone and Address</td>
           </div>
           <div style={{ display: 'flex', flexDirection: 'row' }}>
-            <div style={{ width: '60%', display: 'flex', flexDirection: 'column', paddingLeft: '10px' }}>
+            <div style={{ width: '60%', border: '0.5px solid black', display: 'flex', flexDirection: 'column', paddingLeft: '10px' }}>
               <td>To:</td>
               <td style={{ padding: '0px 30px' }}>{selectedRows.dcPartyAddress}</td>
             </div>
-            <div style={{ width: '40%', display: 'flex', flexDirection: 'column', paddingLeft: '10px' }}>
+            <div style={{ width: '40%', border: '0.5px solid black', display: 'flex', flexDirection: 'column', paddingLeft: '10px' }}>
               <td>DC No: {selectedRows.dcNo}</td>
               <td>DC Date: {dayjs(selectedRows.dcDate).format('DD-MM-YYYY')}</td>
               <td>Narration: {selectedRows.dcReason}</td>
@@ -121,10 +144,9 @@ const DcPrint = () => {
             <tfoot>{Footer({ value: formatNoData })}</tfoot>
           </table>
         </div>
-      </div>
-    //   <Button onClick={handlePrint}>Print this out!</Button>
-    // )}
-    // </React.Fragment>
+      </DialogContent>
+      <Button onClick={handlePrint}>Print this out!</Button>
+    </Dialog>
   );
 };
 
