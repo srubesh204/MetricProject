@@ -40,7 +40,7 @@ const itemDcSchema = new mongoose.Schema({
     required: [true, "Plant is required"]
   }, 
   dcDepartment: {
-    type: String,
+    type: [],
     required: [true, "Department Required"]
   },
   dcCommonRemarks: String,

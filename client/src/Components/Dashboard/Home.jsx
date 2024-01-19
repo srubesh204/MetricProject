@@ -732,13 +732,13 @@ const Home = () => {
   const itemLocationLegend = ({ payload }) => {
     return (
 
-      <table className='table table-borderless table-responsive' style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
+      <table className='table table-borderless' style={{ display: "flex", justifyContent: "center", alignItems: "center", padding: 0 }}>
         <tbody>
           {payload.map((entry, index) => (
-            <tr key={index} >
-              <td onClick={() => ItemLocationDisplay(entry.value)}><div style={{ width: '25px', height: '25px', backgroundColor: entry.color, marginRight: '10px', textAlign: "center", display: "flex", justifyContent: "center", alignItems: "center" }}></div></td>
-              <td>{entry.value}</td>
-              <td style={{ fontWeight: "bolder", color: entry.color }} className='ms-2 ps-3'>{entry.payload.value}</td>
+            <tr key={index} style={{padding: 0}}>
+              <td style={{padding: "2px"}} onClick={() => ItemLocationDisplay(entry.value)}><div style={{ width: '25px', height: '25px', backgroundColor: entry.color, marginRight: '10px', textAlign: "center", display: "flex", justifyContent: "center", alignItems: "center", cursor: "pointer" }}></div></td>
+              <td style={{padding: "2px"}}>{entry.value}</td>
+              <td style={{ fontWeight: "bolder", color: entry.color, padding: "2px" }} className='ms-2 ps-3'>{entry.payload.value}</td>
             </tr>
           ))}
         </tbody>
@@ -752,13 +752,13 @@ const Home = () => {
   const itemStatusLegendContent = ({ payload }) => {
     return (
 
-      <table className='table table-borderless table-responsive' style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
+      <table className='table table-borderless table-sm' style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
         <tbody>
           {payload.map((entry, index) => (
             <tr key={index} height={entry.value === "Total Items" ? "50px" : ""}>
-              <td onClick={() => { itemStatusLegend(entry.value); console.log(entry) }}><div style={{ width: '25px', height: '25px', backgroundColor: entry.color, marginRight: '10px', textAlign: "center", display: "flex", justifyContent: "center", alignItems: "center" }}></div></td>
-              <td>{entry.value}</td>
-              <td style={{ fontWeight: "bolder", color: entry.color }} className='ms-2 ps-3'>{entry.payload.value}</td>
+              <td style={{padding: "2px"}} onClick={() => { itemStatusLegend(entry.value); console.log(entry) }}><div style={{ width: '25px', height: '25px', backgroundColor: entry.color, marginRight: '10px', textAlign: "center", display: "flex", justifyContent: "center", alignItems: "center", cursor: "pointer" }}></div></td>
+              <td style={{padding: "2px"}}>{entry.value}</td>
+              <td style={{ padding: "2px", fontWeight: "bolder", color: entry.color }} className='ms-2 ps-3'>{entry.payload.value}</td>
             </tr>
           ))}
         </tbody>
@@ -768,13 +768,13 @@ const Home = () => {
 
   const calibrationStatusLegendContent = ({ payload }) => {
     return (
-      <table className='table table-borderless' style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
+      <table className='table table-borderless table-sm' style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
         <tbody>
           {payload.map((entry, index) => (
             <tr key={index}>
-              <td onClick={() => { calStatusFunction(entry.value) }}><div style={{ width: '25px', height: '25px', backgroundColor: entry.color, marginRight: '10px', textAlign: "center", display: "flex", justifyContent: "center", alignItems: "center" }}></div></td>
-              <td>{entry.value}</td>
-              <td style={{ fontWeight: "bolder", color: entry.color }} className='ms-2 ps-3'>{entry.payload.value}</td>
+              <td style={{padding: "2px"}} onClick={() => { calStatusFunction(entry.value) }}><div style={{ width: '25px', height: '25px', backgroundColor: entry.color, marginRight: '10px', textAlign: "center", display: "flex", justifyContent: "center", alignItems: "center",cursor: "pointer" }}></div></td>
+              <td style={{padding: "2px"}}>{entry.value}</td>
+              <td style={{padding: "2px", fontWeight: "bolder", color: entry.color }} className='ms-2 ps-3'>{entry.payload.value}</td>
             </tr>
           ))}
         </tbody>
@@ -1014,19 +1014,12 @@ const Home = () => {
 
 
 
-  // const handleSelectRow = (row) => {
-  //   // Check if the row is already selected
-  //   const isSelected = selectedRows.some((selectedRow) => selectedRow._id === row._id);
+  useEffect(()=> {
+    setStatusCheckMsg("");
+    const grnBoolean = selectedRows.every(item => item.dcStatus === "1")
+    setGrnButtonVisibility(grnBoolean && selectedRows.length > 0)
 
-  //   // If not selected, add it to the selectedRows array
-  //   if (!isSelected) {
-  //     setSelectedRows([...selectedRows, row]);
-  //   } else {
-  //     // If already selected, remove it from the selectedRows array
-  //     const updatedSelection = selectedRows.filter((selectedRow) => selectedRow._id !== row._id);
-  //     setSelectedRows(updatedSelection);
-  //   }
-  // };
+  }, [selectedRows])
 
   const handleRowSelectionChange = (newSelection) => {
     const selectedRowsData = filteredData.filter((row) => newSelection.includes(row._id));
@@ -1047,15 +1040,15 @@ const Home = () => {
   
 
   const [StatusCheckMsg, setStatusCheckMsg] = useState("")
+  const [grnButtonVisibility, setGrnButtonVisibility] = useState(false)
 
-  useEffect(()=> {
-    setStatusCheckMsg("");
-  }, [selectedRows])
+  
 
   const dcCheck = () => {
     const defaultDepartmentCheck = selectedRows.every(item =>
       defaultDep.some(dep => item.itemCurrentLocation === dep.department)
     );
+    
     const singlePlant = selectedRows.every((item, index, array) => item.itemPlant === array[0].itemPlant);
 
     console.log(defaultDepartmentCheck);
@@ -1493,7 +1486,7 @@ const Home = () => {
                   <div className="col-md-9">
                     <Button size='small' onClick={() => onSiteCheck()}>Onsite</Button>
                     {(selectedRows.length === 1 && selectedRows[0].itemCalibrationSource === "inhouse") && <Button size='small' className='me-2' onClick={() => setCalOpen(true)}>Cal</Button>}
-                    <Button size='small' onClick={() => grnCheck()} className='me-2'>Grn</Button>
+                    {grnButtonVisibility && <Button size='small' onClick={() => grnCheck()} className='me-2'>Grn</Button>}
 
 
                     <Button size='small' onClick={() => dcCheck()}>Create DC</Button>

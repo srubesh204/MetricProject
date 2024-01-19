@@ -140,6 +140,18 @@ body{
 
 
 
+/* table tr {
+
+	padding: 0;
+}
+td{
+	padding: 2px !important;
+} */
+
+.hover:hover{
+	background-color: cornflowerblue !important;
+	cursor: pointer;
+}
 
 
 

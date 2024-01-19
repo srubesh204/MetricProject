@@ -257,8 +257,8 @@ const Dc = () => {
         return Object.values(tempErrors).every(x => x === "")
     }
     console.log(errors)
- const [errorhandler, setErrorHandler] = useState({})
- console.log(errorhandler)
+    const [errorhandler, setErrorHandler] = useState({})
+    console.log(errorhandler)
 
     const submitDC = async () => {
         try {
@@ -268,13 +268,13 @@ const Dc = () => {
                 const response = await axios.post(
                     `${process.env.REACT_APP_PORT}/itemDc/createItemDc`, dcData
                 );
-
+                console.log(response)
                 setDcData(initialDcData)
-                setAlertMessage(response.data.message)
+                setErrorHandler({ status: 0, message: "Dc Created Successfully", code: "success" });
                 setSnackBarOpen(true)
                 itemFetch();
                 setDcData(initialDcData)
-                setTimeout(() => setDcOpen(false), 500)
+                setTimeout(() => setDcOpen(false), 1000)
             } else {
                 setErrorHandler({ status: 0, message: errors, code: "error" });
             }
@@ -371,7 +371,10 @@ const Dc = () => {
 
 
 
-
+    const handleClose = () => {
+        setDcData(initialDcData)
+        setDcOpen(false)
+    }
 
 
 
@@ -400,7 +403,7 @@ const Dc = () => {
             <DialogTitle align='center' >DC</DialogTitle>
             <IconButton
                 aria-label="close"
-                onClick={() => setDcOpen(false)}
+                onClick={() => handleClose()}
                 sx={{
                     position: 'absolute',
                     right: 8,
@@ -422,11 +425,10 @@ const Dc = () => {
                                         {...(errors.dcPartyType !== "" && { helperText: errors.dcPartyType, error: true })}
                                         id="dcPartyTypeId"
                                         select
-                                        defaultValue=""
-
                                         onChange={handleFilterChange}
                                         size="small"
-                                        sx={{ width: "101%" }}
+                                        fullWidth
+                                        value={dcData.dcPartyType}
                                         name="dcPartyType" >
                                         <MenuItem value=""><em>--Select--</em></MenuItem>
                                         <MenuItem value="oem">OEM</MenuItem>
@@ -461,17 +463,14 @@ const Dc = () => {
 
                                                 <TextField label="Party Name"
                                                     {...(errors.dcPartyName !== "" && { helperText: errors.dcPartyName, error: true })}
-                                                    id="dcPartyNameId"
+                                                    id="dcPartyIdId"
                                                     select
-
-                                                    // value={dcData.dcPartyName}
                                                     onChange={(e) => setPartyData(e.target.value)}
-                                                    // value={dcData.dcPartyName}
-                                                    //  sx={{ width: "100%" }}
+                                                    value={dcData.dcPartyId}
                                                     size="small"
                                                     fullWidth
                                                     disabled={dcData.dcPartyType === ""}
-                                                    name="dcartyName" >
+                                                    name="dcPartyId" >
                                                     {filteredData.map((item, index) => (
                                                         <MenuItem key={index} value={item._id}>{item.fullName}</MenuItem>
                                                     ))}
@@ -490,7 +489,7 @@ const Dc = () => {
                                                     value={dcData.dcPartyCode}
 
 
-                                                    // sx={{ width: "100%" }}
+                                               
                                                     size="small"
                                                     fullWidth
                                                     name="partyCode" >
@@ -506,11 +505,10 @@ const Dc = () => {
                                                     id="partyAddressId"
                                                     value={dcData.dcPartyAddress}
 
-                                                    defaultValue=""
                                                     disabled={dcData.dcPartyType === ""}
 
                                                     size="small"
-                                                    sx={{ width: "100%" }}
+                                                    fullWidth
                                                     name="Party Address" >
 
                                                 </TextField>
@@ -532,7 +530,7 @@ const Dc = () => {
                                             <TextField label="Dc No"
                                                 {...(errors.dcNo !== "" && { helperText: errors.dcNo, error: true })}
                                                 id="dcNoId"
-                                                defaultValue=""
+                                               
                                                 value={dcData.dcNo}
                                                 onChange={handleDcChange}
                                                 size="small"
@@ -565,15 +563,14 @@ const Dc = () => {
                                                 {...(errors.dcReason !== "" && { helperText: errors.dcReason, error: true })}
                                                 id="dcReasonId"
                                                 select
-                                                defaultValue=""
-                                                //value={dcData.dcReason}
+                                                value={dcData.dcReason}
                                                 onChange={handleDcChange}
                                                 size="small"
-                                                sx={{ width: "100%" }}
+                                                fullWidth
                                                 name="dcReason" >
-                                                <MenuItem value="All">All</MenuItem>
+                                                <MenuItem value="">Select</MenuItem>
                                                 <MenuItem value="Service">Service</MenuItem>
-                                                <MenuItem value="Service Calibration">Service&Calibration</MenuItem>
+                                                <MenuItem value="ServiceCalibration">Service & Calibration</MenuItem>
                                                 <MenuItem value="Calibration">Calibration</MenuItem>
 
                                             </TextField>
@@ -582,8 +579,8 @@ const Dc = () => {
                                         <div className='col me-2'>
                                             <TextField label="Common Remarks"
                                                 id="dcCommonRemarksId"
-                                                //value={dcData.dcCommonRemarks}
-                                                defaultValue=""
+                                                value={dcData.dcCommonRemarks}
+                                              
                                                 onChange={handleDcChange}
                                                 size="small"
                                                 sx={{ width: "100%" }}
@@ -738,7 +735,7 @@ const Dc = () => {
                     <Button variant='contained' color='warning' className='me-3'>Upload Report</Button>
                 </div>
                 <div>
-                    <Button variant='contained' color='error' className='me-3' onClick={() => { setDcOpen(false) }}>Cancel</Button>
+                    <Button variant='contained' color='error' className='me-3' onClick={() =>  handleClose()}>Cancel</Button>
                     <Button variant='contained' color='success' onClick={() => { setConfirmSubmit(true) }}>Submit</Button>
                 </div>
             </DialogActions>

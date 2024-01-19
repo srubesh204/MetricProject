@@ -543,12 +543,14 @@ const DcEdit = () => {
                                 <div className='col-3 mb-2'>
                                     <TextField label="Plant Wise"
                                         id="dcPlantId"
+                                        disabled
                                         select
                                         defaultValue="all"
                                         fullWidth
                                         onChange={handleDcItemAdd}
                                         size="small"
                                         name="dcPlant" >
+                                    
                                         <MenuItem value="all">All</MenuItem>
                                         {loggedEmp.plantDetails.map((item, index) => (
                                             <MenuItem key={index} value={item.plantName}>{item.plantName}</MenuItem>
@@ -590,17 +592,17 @@ const DcEdit = () => {
                                             <div className=" col me-2">
 
                                                 <TextField label="Party Name"
-                                                    id="partyNameId"
+                                                    id="partyIdId"
                                                     select
 
                                                     value={dcEditData.dcPartyId}
                                                     onChange={(e) => setPartyData(e.target.value)}
 
-                                                    //  sx={{ width: "100%" }}
+                                                   
                                                     size="small"
                                                     fullWidth
                                                     disabled={dcEditData.dcPartyType === ""}
-                                                    name="partyName" >
+                                                    name="partyId" >
                                                     {filteredData.map((item, index) => (
                                                         <MenuItem key={index} value={item._id}>{item.fullName}</MenuItem>
                                                     ))}
