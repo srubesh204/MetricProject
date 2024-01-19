@@ -88,7 +88,12 @@ const DcEdit = () => {
 
     console.log(dcEditData)
 
-
+    useEffect(() => {
+        const plantItems = itemPlantList.filter(item => item.itemPlant === selectedRows.dcPlant);
+        const distinctItemNames = [...new Set(plantItems.map(item => item.itemAddMasterName))];
+        setItemNameList(distinctItemNames);
+        console.log(distinctItemNames);
+    }, [selectedRows.dcPlant, itemPlantList]);
 
     useEffect(() => {
         settingDcData();
@@ -514,7 +519,7 @@ const DcEdit = () => {
                                         id="dcPlantId"
                                         disabled
                                         select
-                                        defaultValue="all"
+                                      value={dcEditData.dcPlant}
                                         fullWidth
                                         onChange={handleDcItemAdd}
                                         size="small"
