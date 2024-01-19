@@ -140,7 +140,7 @@ const Dashboard = () => {
 
   const MenuItems = {
     databaseMaster: [
-      { name: "Department", file: <Department />, icon: <img src={`${process.env.REACT_APP_PORT}/icon/list-text.png`} alt="Department Icon" style={{ width: '20px', height: '20px' }} /> },
+      { name: "Department", file: <Department />, icon: <img src={`${process.env.REACT_APP_PORT}/icon/department.png`} alt="Department Icon" style={{ width: '20px', height: '20px' }} /> },
       { name: "Designation", file: <Designation />, icon: <img src={`${process.env.REACT_APP_PORT}/icon/list-text.png`} alt="Designation Icon" style={{ width: '20px', height: '20px' }} /> },
       { name: "Employee", file: <Employee />, icon: <img src={`${process.env.REACT_APP_PORT}/icon/list-text.png`} alt="Employee Icon" style={{ width: '20px', height: '20px' }} /> },
       { name: "Vendor", file: <Vendor />, icon: <img src={`${process.env.REACT_APP_PORT}/icon/list-text.png`} alt="Vendor Icon" style={{ width: '20px', height: '20px' }} /> },
@@ -154,7 +154,7 @@ const Dashboard = () => {
       { name: "Alerts Configuration", file: <AlertConfig />, icon: <img src={`${process.env.REACT_APP_PORT}/icon/list-text.png`} alt="Alerts Configuration Icon" style={{ width: '20px', height: '20px' }} /> },
       { name: "Mail Configuration", file: <MailConfig />, icon: <img src={`${process.env.REACT_APP_PORT}/icon/list-text.png`} alt="Mail Configuration Icon" style={{ width: '20px', height: '20px' }} /> },
       { name: "Format Number", file: <FormatNumber />, icon: <img src={`${process.env.REACT_APP_PORT}/icon/list-text.png`} alt="Format Number Icon" style={{ width: '20px', height: '20px' }} /> },
-      { name: "Company Details", file: <CompanyDetails />, icon: <img src={`${process.env.REACT_APP_PORT}/icon/list-text.png`} alt="Company Details Icon" style={{ width: '20px', height: '20px' }} /> },
+      { name: "Company Details", file: <CompanyDetails />, icon: <img src={`${process.env.REACT_APP_PORT}/icon/company details.png`} alt="Company Details Icon" style={{ width: '20px', height: '20px' }} /> },
       { name: "Permissions", file: <Permissions />, icon: <img src={`${process.env.REACT_APP_PORT}/icon/list-text.png`} alt="Permissions Icon" style={{ width: '20px', height: '20px' }} /> },
       { name: "Label Print", file: "", icon: <img src={`${process.env.REACT_APP_PORT}/icon/list-text.png`} alt="Label Print Icon" style={{ width: '20px', height: '20px' }} /> },
 
@@ -371,7 +371,7 @@ const Dashboard = () => {
 
               <ListItemButton to="/home">
                 <ListItemIcon>
-                  <img src={dashboard} alt="Dashboard Icon" style={{ width: '24px', height: '24px' }} />
+                  <img src={`${process.env.REACT_APP_PORT}/icon/dashboard.png`} alt="Dashboard Icon" style={{ width: '30px', height: '30px' }} />
                   {/* Adjust width and height as per your icon's size */}
                 </ListItemIcon>
                 <ListItemText primary="Dashboard" />
@@ -392,7 +392,7 @@ const Dashboard = () => {
 
                       <ListItemButton sx={{ pl: 4 }} onClick={() => handleAdminList("databaseMaster")}>
                         <ListItemIcon>
-                          <img src={`${process.env.REACT_APP_PORT}/icon/server.png`} alt="Database Icon" style={{ width: '24px', height: '24px' }} />
+                          <img src={`${process.env.REACT_APP_PORT}/icon/database.png`} alt="Database Icon" style={{ width: '24px', height: '24px' }} />
                         </ListItemIcon>
                         <ListItemText primary="Database Master" />
                         {adminListNames["databaseMaster"].status ? <ExpandLess /> : <ExpandMore />}
@@ -419,7 +419,7 @@ const Dashboard = () => {
 
                       <ListItemButton sx={{ pl: 4 }} onClick={() => handleAdminList("system")}>
                         <ListItemIcon>
-                       <img src={`${process.env.REACT_APP_PORT}/icon/cogwheel.png`} alt="systemIcon" style={{ width: '24px', height: '24px' }} />
+                       <img src={`${process.env.REACT_APP_PORT}/icon/system.png`} alt="systemIcon" style={{ width: '24px', height: '24px' }} />
                         </ListItemIcon>
                         <ListItemText primary="System" />
                         {adminListNames["system"].status ? <ExpandLess /> : <ExpandMore />}
@@ -432,7 +432,7 @@ const Dashboard = () => {
                             return (
                               <ListItemButton key={index} sx={{ pl: 6 }} onClick={() => onFileChange(item)}>
                                 <ListItemIcon>
-
+                                  {item.icon}
                                 </ListItemIcon>
                                 <ListItemText primary={item.name} />
                               </ListItemButton>

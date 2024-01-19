@@ -632,13 +632,12 @@ const CalDialog = () => {
                 setTimeout(() => { setCalOpen(false); setCalibrationData(initialCalData) }, 3000)
             }
         } catch (err) {
+            console.log("Error")
             console.log(err);
         }
     };
 
-    const [obStatus, setObStatus] = useState([]);
-
-    const [showLastResult, setShowLastResult] = useState(false)
+    
 
 
 

@@ -49,13 +49,19 @@ const Dc = () => {
     console.log(dcData)
 
     const settingDcData = () => {
-        setDcData((prev) => (
-            {
-                ...prev,
-                dcPartyItems: selectedRows
-            }
+        if (selectedRows.length > 0) {
+            const departments = [...new Set(selectedRows.map(item => item.itemCurrentLocation))]
+            setDcData((prev) => (
+                {
+                    ...prev,
+                    dcPlant: selectedRows[0].itemPlant,
+                    dcDepartment: departments,
+                    dcPartyItems: selectedRows
+                }
 
-        ))
+            ))
+        }
+
     };
     useEffect(() => {
         settingDcData()
@@ -98,15 +104,7 @@ const Dc = () => {
 
 
 
-    const addDcValue = () => {
-        if (selectedExtraMaster.length !== 0) {
-            setDcData((prev) => ({
-                ...prev,
-                dcPartyItems: [...prev.dcPartyItems, selectedExtraMaster]
-            }))
-            setSelectedExtraMaster([])
-        }
-    }
+
 
 
 
@@ -131,7 +129,7 @@ const Dc = () => {
         {
             field: 'dcCommonRemarks', headerName: 'Remarks', width: 250,
             renderCell: (params) =>
-                <select className='form-select form-select-sm' name=""> 
+                <select className='form-select form-select-sm' name="">
                     <option>Calibration</option>
                     <option>Service</option>
                     <option>Service and Calibration</option>
@@ -243,38 +241,41 @@ const Dc = () => {
 
 
 
-        //validate function 
-        const [errors, setErrors] = useState({})
-    
-        const validateFunction = () => {
-            let tempErrors = {};
-            tempErrors.dcPartyType = dcData.dcPartyType ? "" : "Vendor Type is Required"
-            tempErrors.dcPartyName = dcData.dcPartyName ? "" : "Party Name is Required"
-            tempErrors.dcPartyCode = dcData.dcPartyCode ? "" : "Party Code is Required"
-            tempErrors.dcPartyAddress = dcData.dcPartyAddress ? "" : "Party Address is Required"
-            tempErrors.dcNo = dcData.dcNo ? "" : "Dc No. is Required"
-            tempErrors.dcReason = dcData.dcReason ? "" : "Dc Reason is Required"
-            setErrors({ ...tempErrors })
-    
-            return Object.values(tempErrors).every(x => x === "")
-        }
-        console.log(errors)
+    //validate function 
+    const [errors, setErrors] = useState({})
+
+    const validateFunction = () => {
+        let tempErrors = {};
+        tempErrors.dcPartyType = dcData.dcPartyType ? "" : "Vendor Type is Required"
+        tempErrors.dcPartyName = dcData.dcPartyName ? "" : "Party Name is Required"
+        tempErrors.dcPartyCode = dcData.dcPartyCode ? "" : "Party Code is Required"
+        tempErrors.dcPartyAddress = dcData.dcPartyAddress ? "" : "Party Address is Required"
+        tempErrors.dcNo = dcData.dcNo ? "" : "Dc No. is Required"
+        tempErrors.dcReason = dcData.dcReason ? "" : "Dc Reason is Required"
+        setErrors({ ...tempErrors })
+
+        return Object.values(tempErrors).every(x => x === "")
+    }
+    console.log(errors)
 
 
-    const submitCalForm = async () => {
-        try { 
+    const submitDC = async () => {
+        try {
+            console.log("working")
             if (validateFunction()) {
+                console.log("success")
                 const response = await axios.post(
                     `${process.env.REACT_APP_PORT}/itemDc/createItemDc`, dcData
                 );
+
                 setDcData(initialDcData)
                 setAlertMessage(response.data.message)
                 setSnackBarOpen(true)
                 itemFetch();
                 setDcData(initialDcData)
-                setTimeout(() => setDcOpen(false), 3000)
+                setTimeout(() => setDcOpen(false), 500)
             } else {
-                
+                console.log("Validation error")
             }
         } catch (err) {
             console.log(err);
@@ -308,7 +309,7 @@ const Dc = () => {
             console.log(response.data)
             setAllItemImtes(response.data.result)
             const filteredImtes = response.data.result.filter((imtes) => !dcData.dcPartyItems.some(dcImte => imtes._id === dcImte._id))
-            const dcStatusFilter = filteredImtes.filter((item)=> item.dcStatus !== "1")
+            const dcStatusFilter = filteredImtes.filter((item) => item.dcStatus !== "1")
             setItemImtes(dcStatusFilter)
 
         } catch (err) {
@@ -328,7 +329,7 @@ const Dc = () => {
             setSelectedDcItem(value)
             setItemAddDetails((prev) => ({ ...prev, [name]: value }))
         }
-                           
+
     }
 
     const dcItemAdd = () => {
@@ -435,13 +436,13 @@ const Dc = () => {
                                             <div className=" col me-2">
 
                                                 <TextField label="Party Name"
-                                        {...(errors.dcPartyName !== "" && { helperText: errors.dcPartyName, error: true })}
+                                                    {...(errors.dcPartyName !== "" && { helperText: errors.dcPartyName, error: true })}
                                                     id="dcPartyNameId"
                                                     select
 
                                                     // value={dcData.dcPartyName}
                                                     onChange={(e) => setPartyData(e.target.value)}
-                                                   // value={dcData.dcPartyName}
+                                                    // value={dcData.dcPartyName}
                                                     //  sx={{ width: "100%" }}
                                                     size="small"
                                                     fullWidth
@@ -457,7 +458,7 @@ const Dc = () => {
                                             <div className="col me-2">
 
                                                 <TextField label="Party code"
-                                        {...(errors.dcPartyCode !== "" && { helperText: errors.dcPartyCode, error: true })}
+                                                    {...(errors.dcPartyCode !== "" && { helperText: errors.dcPartyCode, error: true })}
                                                     id="partyCodeId"
                                                     defaultValue=""
                                                     disabled={dcData.dcPartyType === ""}
@@ -477,7 +478,7 @@ const Dc = () => {
                                             <div className="col">
 
                                                 <TextField label="Party Address"
-                                        {...(errors.dcPartyAddress !== "" && { helperText: errors.dcPartyAddress, error: true })}
+                                                    {...(errors.dcPartyAddress !== "" && { helperText: errors.dcPartyAddress, error: true })}
                                                     id="partyAddressId"
                                                     value={dcData.dcPartyAddress}
 
@@ -505,7 +506,7 @@ const Dc = () => {
                                         <div className=" col-2 me-2">
 
                                             <TextField label="Dc No"
-                                        {...(errors.dcNo !== "" && { helperText: errors.dcNo, error: true })}
+                                                {...(errors.dcNo !== "" && { helperText: errors.dcNo, error: true })}
                                                 id="dcNoId"
                                                 defaultValue=""
                                                 value={dcData.dcNo}
@@ -530,14 +531,14 @@ const Dc = () => {
 
                                                 slotProps={{ textField: { size: 'small' } }}
                                                 format="DD-MM-YYYY" />
-                                                {errors.dcDate !== "" && (
-                                                    <div style={{ color: 'red', paddingLeft: '15px', fontSize: "75%" }}>{errors.dcDate}</div>
-                                                )}    
+                                            {errors.dcDate !== "" && (
+                                                <div style={{ color: 'red', paddingLeft: '15px', fontSize: "75%" }}>{errors.dcDate}</div>
+                                            )}
 
                                         </div>
                                         <div className="col me-2">
                                             <TextField label="Reason"
-                                        {...(errors.dcReason !== "" && { helperText: errors.dcReason, error: true })}
+                                                {...(errors.dcReason !== "" && { helperText: errors.dcReason, error: true })}
                                                 id="dcReasonId"
                                                 select
                                                 defaultValue=""
@@ -587,8 +588,8 @@ const Dc = () => {
                                 <div className='row g-2'>
                                     <div className='col d-flex'>
                                         <div className='col me-2'>
-                                            <TextField 
-                                         size='small' select fullWidth id='itemListNamesId' value={itemAddDetails.itemListNames} variant='outlined' onChange={handleDcItemAdd} label="Item List" name='itemListNames' >
+                                            <TextField
+                                                size='small' select fullWidth id='itemListNamesId' value={itemAddDetails.itemListNames} variant='outlined' onChange={handleDcItemAdd} label="Item List" name='itemListNames' >
                                                 <MenuItem value=""><em>--Select--</em></MenuItem>
                                                 {itemMasterDistNames.map((item, index) => (
                                                     <MenuItem key={index} value={item}>{item}</MenuItem>
@@ -597,7 +598,7 @@ const Dc = () => {
                                         </div>
                                         <div className='col'>
                                             <TextField
-                                         disabled={itemAddDetails.itemListNames === ""} size='small' select fullWidth variant='outlined' value={itemAddDetails.itemImteList} id='itemImteListId' onChange={handleDcItemAdd} label="Item IMTENo" name='itemImteList' >
+                                                disabled={itemAddDetails.itemListNames === ""} size='small' select fullWidth variant='outlined' value={itemAddDetails.itemImteList} id='itemImteListId' onChange={handleDcItemAdd} label="Item IMTENo" name='itemImteList' >
                                                 <MenuItem value=""><em>--Select--</em></MenuItem>
                                                 {itemImtes.map((item, index) => (
                                                     <MenuItem key={index} value={item}>{item.itemIMTENo}</MenuItem>
@@ -630,11 +631,11 @@ const Dc = () => {
                             >
                                 <div className='row'>
                                     <Box sx={{ height: 350, width: '100%', my: 2 }}>
-      {selectedRows.length === 0 && (
-        <div style={{ color: 'red', marginBottom: '1em', textAlign: 'right' }}>
-          Please select a row.
-        </div>
-      )}
+                                        {selectedRows.length === 0 && (
+                                            <div style={{ color: 'red', marginBottom: '1em', textAlign: 'right' }}>
+                                                Please select a row.
+                                            </div>
+                                        )}
                                         <DataGrid
 
                                             rows={dcData.dcPartyItems}
@@ -660,7 +661,7 @@ const Dc = () => {
 
                                             density="compact"
                                             //disableColumnMenu={true}
-                                            
+
                                             checkboxSelection
                                             //onRowClick={handleRowClick}
                                             disableRowSelectionOnClick
@@ -684,12 +685,12 @@ const Dc = () => {
                                 aria-describedby="alert-dialog-description"
                             >
                                 <DialogTitle id="alert-dialog-title">
-                                    Are you sure to submit ?
+                                    Are you sure to Create DC?
                                 </DialogTitle>
 
                                 <DialogActions className='d-flex justify-content-center'>
                                     <Button onClick={() => setConfirmSubmit(false)}>Cancel</Button>
-                                    <Button onClick={() => { submitCalForm(); setConfirmSubmit(false) }} autoFocus>
+                                    <Button onClick={() => { submitDC(); setConfirmSubmit(false) }} autoFocus>
                                         Submit
                                     </Button>
                                 </DialogActions>

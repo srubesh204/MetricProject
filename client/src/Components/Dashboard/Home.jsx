@@ -1044,22 +1044,39 @@ const Home = () => {
 
 
   console.log(selectedRows)
+  
 
   const [StatusCheckMsg, setStatusCheckMsg] = useState("")
+
+  useEffect(()=> {
+    setStatusCheckMsg("");
+  }, [selectedRows])
 
   const dcCheck = () => {
     const defaultDepartmentCheck = selectedRows.every(item =>
       defaultDep.some(dep => item.itemCurrentLocation === dep.department)
     );
+    const singlePlant = selectedRows.every((item, index, array) => item.itemPlant === array[0].itemPlant);
 
-    console.log(defaultDepartmentCheck)
-    if (defaultDepartmentCheck) {
+    console.log(defaultDepartmentCheck);
+    if (defaultDepartmentCheck && singlePlant) {
       setStatusCheckMsg("");
       setDcOpen(true);
     } else {
-      setStatusCheckMsg("Selected item are not in default location, To create a DC move the item to the default location")
+     
+      
+      if (!defaultDepartmentCheck) {
+        setStatusCheckMsg("Selected item are not in default location, To create a DC move the item to the default location");
+      }
+      
+      if (!singlePlant) {
+        setStatusCheckMsg("Mulitple plant not allowed");
+      }
+      
+      setDcOpen(false);
     }
-  }
+};
+
 
   const grnCheck = () => {
     const grnCheck = selectedRows.every(item => item.dcStatus === "1")

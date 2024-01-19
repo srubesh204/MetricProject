@@ -664,8 +664,8 @@ const ItemList = () => {
 
             setSnackBarOpen(true)
 
-
-            setErrorHandler({ status: response.data.status, message: response.data.message, code: "success" })
+            console.log(response.data)
+            setErrorHandler({ status: response.data.status, message: response.data.results, code: "success" })
             console.log("ItemAdd delete Successfully");
             //setItemAddData(initialItemAddData)
             itemFetch()
@@ -1097,11 +1097,7 @@ const ItemList = () => {
                                         <Button color="secondary" variant='contained' startIcon={<PrintRounded />} size='small' onClick={() => setPrintState(true)}> Print</Button>
 
                                     </div>
-                                    <Snackbar anchorOrigin={{ vertical: "top", horizontal: "right" }} open={snackBarOpen} autoHideDuration={6000} onClose={handleSnackClose}>
-                                        <Alert onClose={handleSnackClose} severity={errorhandler.code} sx={{ width: '25%' }}>
-                                            {errorhandler.message}
-                                        </Alert>
-                                    </Snackbar>
+                                    
 
                                 </div>
 
@@ -1295,7 +1291,7 @@ const ItemList = () => {
 
 
                                 <Snackbar anchorOrigin={{ vertical: "top", horizontal: "right" }} open={snackBarOpen} autoHideDuration={6000} onClose={handleSnackClose}>
-                                    <Alert onClose={handleSnackClose} severity={errorhandler.code} sx={{ width: '25%' }}>
+                                    <Alert onClose={handleSnackClose} severity={errorhandler.code} variant='filled'>
                                         {errorhandler.message}
                                     </Alert>
                                 </Snackbar>
