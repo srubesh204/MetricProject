@@ -1165,7 +1165,7 @@ const GrnAdd = () => {
                                         <TextField label="Imte No"
                                             id="grnItemIdId"
                                             select
-                                            defaultValue=""
+                                           
                                             fullWidth
                                             size="small"
                                             disabled={itemAddDetails.grnList === ""}
@@ -1182,7 +1182,7 @@ const GrnAdd = () => {
                                         </TextField>
                                     </div>
                                     <div className='col '>
-                                        <TextField size='small' fullWidth variant='outlined' disabled={selectedGrnItem.grnItemId === "" || selectedGrnItem.grnItemId === undefined} defaultValue="" id="grnItemStatusId" value={selectedGrnItem.grnItemStatus} onChange={handleGrnItemAdd} select label="Grn Item Status" name='grnItemStatus' >
+                                        <TextField size='small' fullWidth variant='outlined' disabled={selectedGrnItem.grnItemId === ""} defaultValue="" id="grnItemStatusId" value={selectedGrnItem.grnItemStatus} onChange={handleGrnItemAdd} select label="Grn Item Status" name='grnItemStatus' >
                                             <MenuItem value="">Select</MenuItem>
                                             <MenuItem value="Calibrated">Calibrated</MenuItem>
                                             <MenuItem value="Serviced">Serviced</MenuItem>

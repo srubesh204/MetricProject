@@ -49,13 +49,19 @@ const Dc = () => {
     console.log(dcData)
 
     const settingDcData = () => {
-        setDcData((prev) => (
-            {
-                ...prev,
-                dcPartyItems: selectedRows
-            }
+        if (selectedRows.length > 0) {
+            const departments = [...new Set(selectedRows.map(item => item.itemCurrentLocation))]
+            setDcData((prev) => (
+                {
+                    ...prev,
+                    dcPlant: selectedRows[0].itemPlant,
+                    dcDepartment: departments,
+                    dcPartyItems: selectedRows
+                }
 
-        ))
+            ))
+        }
+
     };
     useEffect(() => {
         settingDcData()
@@ -98,15 +104,7 @@ const Dc = () => {
 
 
 
-    const addDcValue = () => {
-        if (selectedExtraMaster.length !== 0) {
-            setDcData((prev) => ({
-                ...prev,
-                dcPartyItems: [...prev.dcPartyItems, selectedExtraMaster]
-            }))
-            setSelectedExtraMaster([])
-        }
-    }
+
 
 
 
@@ -262,20 +260,23 @@ const Dc = () => {
  const [errorhandler, setErrorHandler] = useState({})
  console.log(errorhandler)
 
-    const submitCalForm = async () => {
+    const submitDC = async () => {
         try {
+            console.log("working")
             if (validateFunction()) {
+                console.log("success")
                 const response = await axios.post(
                     `${process.env.REACT_APP_PORT}/itemDc/createItemDc`, dcData
                 );
+
                 setDcData(initialDcData)
                 setAlertMessage(response.data.message)
                 setSnackBarOpen(true)
                 itemFetch();
                 setDcData(initialDcData)
-                setTimeout(() => setDcOpen(false), 3000)
+                setTimeout(() => setDcOpen(false), 500)
             } else {
-
+                setErrorHandler({ status: 0, message: errors, code: "error" });
             }
         } catch (err) {
             setSnackBarOpen(true)
@@ -708,12 +709,12 @@ const Dc = () => {
                                 aria-describedby="alert-dialog-description"
                             >
                                 <DialogTitle id="alert-dialog-title">
-                                    Are you sure to submit ?
+                                    Are you sure to Create DC?
                                 </DialogTitle>
 
                                 <DialogActions className='d-flex justify-content-center'>
                                     <Button onClick={() => setConfirmSubmit(false)}>Cancel</Button>
-                                    <Button onClick={() => { submitCalForm(); setConfirmSubmit(false) }} autoFocus>
+                                    <Button onClick={() => { submitDC(); setConfirmSubmit(false) }} autoFocus>
                                         Submit
                                     </Button>
                                 </DialogActions>

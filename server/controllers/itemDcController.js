@@ -16,9 +16,9 @@ const itemDcController = {
   createItemDc: async (req, res) => {
 
     try {
-      const { dcPartyName, dcPartyId, dcPartyType, dcPartyCode, dcPartyAddress, dcNo, dcDate, dcReason, dcCommonRemarks, dcMasterName, dcPartyItems } = req.body;
+      const { dcPartyName, dcPartyId, dcPartyType, dcPartyCode, dcPartyAddress, dcNo, dcDate, dcReason, dcCommonRemarks, dcMasterName, dcPartyItems, dcPlant, dcDepartment } = req.body;
       const itemDcResult = new itemDcModel({ dcPartyName, dcPartyId, dcPartyType, dcPartyCode, dcPartyAddress, dcNo, dcDate, dcReason, dcCommonRemarks, dcMasterName, dcPartyItems });
-
+      
 
       const validationError = itemDcResult.validateSync();
 
@@ -38,6 +38,8 @@ const itemDcController = {
         });
       }
       console.log("success")
+
+      
 
       const result = await itemDcResult.save();
 
@@ -87,6 +89,8 @@ const itemDcController = {
       const { dcPartyName, dcPartyId, dcPartyType, dcPartyCode, dcPartyAddress, dcNo, dcDate, dcReason, dcCommonRemarks, dcMasterName, dcPartyItems } = req.body;
       const updateItemDcFields = { dcPartyName, dcPartyId, dcPartyType, dcPartyCode, dcPartyAddress, dcNo, dcDate, dcReason, dcCommonRemarks, dcMasterName, dcPartyItems };
 
+      
+
 
       // Setting the prevData to status "0" 
       const prevItemDc = await itemDcModel.findById(itemDcId)
@@ -109,6 +113,9 @@ const itemDcController = {
 
       const itemDcUpdate = new itemDcModel(updateItemDcFields);
 
+      const dcDepartment = [new Set(dcPartyItems.map(item => item.itemCurrentLocation))]
+      itemDcUpdate.dcDepartment = dcDepartment
+
       const validationError = itemDcUpdate.validateSync();
       if (validationError) {
         // Handle validation errors
@@ -125,7 +132,7 @@ const itemDcController = {
           errors: validationErrors
         });
       }
-
+      
       // Find the designation by desId and update it
       const updateItemDc = await itemDcModel.findOneAndUpdate(
         { _id: itemDcId },

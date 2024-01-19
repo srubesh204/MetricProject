@@ -660,9 +660,7 @@ const CalDialog = () => {
         }
     };
 
-    const [obStatus, setObStatus] = useState([]);
-
-    const [showLastResult, setShowLastResult] = useState(false)
+    
 
 
 
