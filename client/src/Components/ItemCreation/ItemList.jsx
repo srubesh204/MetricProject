@@ -153,21 +153,6 @@ const ItemList = () => {
 
 
     const [openModalStatus, setOpenModalStatus] = useState(false);
-    const [itemStatusDataList, setItemStatusDataList] = useState([])
-    const itemStatusFetchData = async () => {
-        try {
-            const response = await axios.get(
-                `${process.env.REACT_APP_PORT}/vendor/getAllVendors`
-            );
-            setItemStatusDataList(response.data.result);
-
-        } catch (err) {
-            console.log(err);
-        }
-    };
-    useEffect(() => {
-        itemStatusFetchData();
-    }, []);
 
 
     const updateItemStatus = async () => {
@@ -309,14 +294,11 @@ const ItemList = () => {
         itemCurrentLocation: "all"
 
     })
-    const [allDepartments, setAllDepartments] = useState([])
-    const [departmentTable, setDepartmentTable] = useState([])
-    const [selectedLoc, setSelectedLoc] = useState("")
+  
 
 
 
-
-
+    const [customerParts, setCustomerParts] = useState([])
 
 
     const handleFilterChangeItemList = (e) => {
@@ -384,6 +366,11 @@ const ItemList = () => {
                 const customerWise = itemList.filter((item) =>
                     item.itemCustomer && Array.isArray(item.itemCustomer) && item.itemCustomer.includes(value)
                 );
+                console.log(customerWise)
+
+                const partData = partDataList.filter(part => part.customer === value)
+
+                setCustomerParts(partData)
                 setFilterAllNames(prev => ({
                     ...prev,
                     imteNo: "all",
@@ -419,7 +406,9 @@ const ItemList = () => {
                 }))
             }
             if (name === "partName") {
+                console.log(name, value)
                 const filteredItems = itemList.filter((item) => (item.itemPartName.includes(value)));
+                
 
                 setFilteredItemListData(filteredItems);
                 console.log(filteredItems)
@@ -581,7 +570,7 @@ const ItemList = () => {
 
 
     const [partCutomerNames, setPartCutomerNames] = useState([])
-    const [customer, setCustomer] = useState([])
+   
     const [partDataList, setPartDataList] = useState([])
 
     const partFetchData = async () => {
@@ -603,8 +592,7 @@ const ItemList = () => {
 
             const partCustomers = partDataList.filter(part => itemList.some(item => item.itemPartName.includes(part._id)))
             setPartCutomerNames(partCustomers)
-            const customerfileter = partDataList.filter(cus => itemList.some(item => item.itemCustomer))
-            setCustomer(customerfileter)
+           
 
         }
     }, [partDataList, itemList])
@@ -892,7 +880,7 @@ const ItemList = () => {
                                     id="plantWiseId"
                                     select
                                     defaultValue="all"
-                                   // value={filterAllNames.plantWise}
+                                    // value={filterAllNames.plantWise}
                                     fullWidth
                                     size="small"
                                     onChange={handleFilterChangeItemList}
@@ -911,7 +899,7 @@ const ItemList = () => {
                                     id="currentLocationId"
                                     select
                                     defaultValue="all"
-                                   // value={filterAllNames.currentLocation}
+                                    // value={filterAllNames.currentLocation}
                                     fullWidth
                                     onChange={handleFilterChangeItemList}
                                     size="small"
@@ -1018,7 +1006,7 @@ const ItemList = () => {
                                     name="customerWise" >
                                     <MenuItem value="all">All</MenuItem>
                                     {partCutomerNames.map((item, index) => (
-                                        <MenuItem key={index} value={item}>{item.customer}</MenuItem>
+                                        <MenuItem key={index} value={item.customer}>{item.customer}</MenuItem>
                                     ))}
                                 </TextField>
 
@@ -1036,7 +1024,7 @@ const ItemList = () => {
 
                                     name="partName" >
                                     <MenuItem value="all">All</MenuItem>
-                                    {partCutomerNames.map((item, index) => (
+                                    {customerParts.map((item, index) => (
                                         <MenuItem key={index} value={item._id}>{[item.partNo, item.partName].join(', ')}</MenuItem>
                                     ))}
                                 </TextField>
@@ -1171,7 +1159,7 @@ const ItemList = () => {
                                 </DialogTitle>
                                 <DialogContent>
                                     <DialogContentText id="alert-dialog-description">
-                                        Are you sure to delete the ItemAdd
+                                        Are you sure to delete the Item
                                     </DialogContentText>
                                 </DialogContent>
                                 <DialogActions>
@@ -1295,7 +1283,7 @@ const ItemList = () => {
 
 
                                 <Snackbar anchorOrigin={{ vertical: "top", horizontal: "right" }} open={snackBarOpen} autoHideDuration={6000} onClose={handleSnackClose}>
-                                    <Alert onClose={handleSnackClose} severity={errorhandler.code} sx={{ width: '25%' }}>
+                                    <Alert onClose={handleSnackClose} severity={errorhandler.code} variant='filled' sx={{ width: '100%' }}>
                                         {errorhandler.message}
                                     </Alert>
                                 </Snackbar>
