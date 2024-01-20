@@ -16,7 +16,7 @@ import Dc from './DashboardComponents/DcDialog';
 import Grn from './DashboardComponents/Grn';
 import OnSiteDialog from './DashboardComponents/OnSiteDialog';
 import MuiPagination from '@mui/material/Pagination';
-import { useEmployee } from '../../App';
+import { empRole, useEmployee } from '../../App';
 export const HomeContent = createContext(null);
 
 
@@ -111,6 +111,8 @@ const Home = () => {
     plantEmployees: []
   })
 
+ 
+
 
 
 
@@ -200,20 +202,31 @@ const Home = () => {
       );
       let allItems = []
       if (employeeRole.employee === "admin") {
-        allItems = response.data.result.filter(item => employeeRole.loggedEmp.plantDetails.some(plant => item.itemPlant === plant.plantName))
+        const plantItems = response.data.result.filter(item => employeeRole.loggedEmp.plantDetails.some(plant => item.itemPlant === plant.plantName))
+        const departmentItems = plantItems.filter(item => employeeRole.loggedEmp.plantDetails.some(plant => plant.departments.includes(item.itemDepartment)))
+        console.log(departmentItems)
+        allItems = departmentItems
         console.log(allItems)
       } else if (employeeRole.employee === "plantAdmin") {
-        allItems = response.data.result.filter(item => employeeRole.loggedEmp.plantDetails.some(plant => item.itemPlant === plant.plantName))
+        const plantItems = response.data.result.filter(item => employeeRole.loggedEmp.plantDetails.some(plant => item.itemPlant === plant.plantName))
+        const departmentItems = plantItems.filter(item => employeeRole.loggedEmp.plantDetails.some(plant => plant.departments.includes(item.itemDepartment)))
+        allItems = departmentItems
         console.log(allItems)
       } else if (employeeRole.employee === "creator") {
-        allItems = response.data.result.filter(item => employeeRole.loggedEmp.plantDetails.some(plant => item.itemPlant === plant.plantName))
+        const plantItems = response.data.result.filter(item => employeeRole.loggedEmp.plantDetails.some(plant => item.itemPlant === plant.plantName))
+        const departmentItems = plantItems.filter(item => employeeRole.loggedEmp.plantDetails.some(plant => plant.departments.includes(item.itemDepartment)))
+        allItems = departmentItems
         console.log(allItems)
       } else if (employeeRole.employee === "viewer") {
-        allItems = response.data.result.filter(item => employeeRole.loggedEmp.plantDetails.some(plant => item.itemPlant === plant.plantName))
+        const plantItems = response.data.result.filter(item => employeeRole.loggedEmp.plantDetails.some(plant => item.itemPlant === plant.plantName))
+        const departmentItems = plantItems.filter(item => employeeRole.loggedEmp.plantDetails.some(plant => plant.departments.includes(item.itemDepartment)))
+        allItems = departmentItems
         console.log(allItems)
       } else {
         allItems = response.data.result
       }
+
+
 
       setItemList(allItems);
       setPieDataFilter(allItems)
@@ -474,23 +487,25 @@ const Home = () => {
       field: 'itemCurrentLocation',
       headerName: 'Current Location',
       width: 100,
+      align:"left"
     },
     {
       field: 'itemLastLocation',
       headerName: 'Last Location',
       width: 100,
+      align:"left"
     },
     {
       field: 'itemCalibrationSource',
       headerName: 'Calibration Source',
       width: 100,
-      align: "center"
+      align: "left"
     },
     {
       field: 'itemSupplier',
       headerName: 'Supplier',
       width: 100,
-      align: "center"
+      align: "left"
     },
   ];
 
@@ -796,20 +811,35 @@ const Home = () => {
 
   useEffect(() => {
     console.log(employeeRole)
-    const filteredPlants = employeeRole.loggedEmp.plantDetails.filter(plant => plant.plantName === selectedPlantName);
-    console.log(filteredPlants)
-    if (filteredPlants.length > 0) {
-      setPlantDepartments(filteredPlants[0].departments)
-    } else {
-      setPlantDepartments([])
+    if(employeeRole.loggedEmp.plantDetails.length === 1){
+          
+        const availableDeps = employeeRole.loggedEmp.plantDetails[0].departments.filter(dep => filteredData.find(item => item.itemDepartment === dep))
+        console.log(availableDeps)
+        
+        setPlantDepartments(availableDeps)
+      
+    }else{
+      const filteredPlants = employeeRole.loggedEmp.plantDetails.filter(plant => plant.plantName === selectedPlantName);
+    
+      if (filteredPlants.length > 0) {
+        console.log(filteredPlants[0].departments)
+        const availableDeps = filteredPlants[0].departments.filter(dep => filteredData.find(item => item.itemDepartment === dep))
+        console.log(availableDeps)
+        console.log(filteredPlants[0].departments)
+        setPlantDepartments(availableDeps)
+      } else { 
+        setPlantDepartments([])
+      }
+  
     }
-
+    
+   
   }, [selectedPlantName])
 
 
   const DepartmentDataShow = (name, value) => {
 
-    const filter = pieDataFilter.filter((item) => item.itemCurrentLocation === value);
+    const filter = pieDataFilter.filter((item) => item.itemCurrentLocation === value && item.itemLocation === name);
     setFilteredData(filter)
 
   };
@@ -1030,6 +1060,9 @@ const Home = () => {
 
   };
 
+  
+
+
   const [calOpen, setCalOpen] = useState(false);
   const [dcOpen, setDcOpen] = useState(false);
   const [grnOpen, setGrnOpen] = useState(false);
@@ -1148,7 +1181,7 @@ const Home = () => {
 
 
 
-  
+
 
 
 
@@ -1164,7 +1197,7 @@ const Home = () => {
                 justifyContent="center"
                 alignItems="center"
                 spacing={2}>
-                <TextField select onChange={(e) => LocationEmpFilter(e)} disabled={employeeRole.loggedEmp.length === 1} fullWidth size='small' defaultValue="All" name='itemPlant' id='itemPlantId' label="Plant Location">
+                <TextField select onChange={(e) => LocationEmpFilter(e)} disabled={employeeRole.loggedEmp.plantDetails.length === 1}  value={employeeRole.loggedEmp.plantDetails.length === 1 ? employeeRole.loggedEmp.plantDetails[0].plantName : ""} fullWidth size='small' defaultValue="All" name='itemPlant' id='itemPlantId' label="Plant Location">
                   <MenuItem value="All">All</MenuItem>
                   {employeeRole.loggedEmp.length !== 0 && employeeRole.loggedEmp.plantDetails.map(item => (
                     <MenuItem value={item.plantName}>{item.plantName}</MenuItem>
@@ -1172,7 +1205,7 @@ const Home = () => {
 
                 </TextField>
                 {
-                  <TextField select onChange={(e) => LocationEmpFilter(e)} fullWidth size='small' name='itemDepartment' defaultValue="All" label="Defaul Location">
+                  <TextField select onChange={(e) => LocationEmpFilter(e)} fullWidth size='small' name='itemDepartment' defaultValue="All"  label="Default Location">
                     <MenuItem value="All">All</MenuItem>
                     {plantDepartments && plantDepartments.map((department, index) => (<MenuItem key={index} value={department}>{department}</MenuItem>))}
                   </TextField>}

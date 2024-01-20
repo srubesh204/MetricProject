@@ -53,6 +53,8 @@ const GrnList = () => {
         grnNo: "",
         grnDate: "",
         grnCommonRemarks: "",
+        grnPlant: "",
+        grnDepartment: "",
         grnPartyItems: []
 
     }
@@ -67,12 +69,33 @@ const GrnList = () => {
         grnNo: "",
         grnDate: "",
         grnCommonRemarks: "",
+        grnPlant: "",
+        grnDepartment: "",
         grnPartyItems: []
 
 
 
 
     })
+
+    const [departments, setDepartments] = useState([])
+    const DepartmentFetch = async () => {
+        try {
+            const response = await axios.get(
+                `${process.env.REACT_APP_PORT}/department/getAllDepartments`
+            );
+            const defaultDepartment = response.data.result.filter((dep) => dep.defaultdep === "yes")
+            setDepartments(defaultDepartment);
+
+            console.log(response.data)
+        } catch (err) {
+            console.log(err);
+        }
+    };
+    //get Designations
+    useEffect(() => {
+        DepartmentFetch()
+    }, []);
 
     const [formatNoData, setFormatNoData] = useState([])
     const formatFetchData = async () => {
@@ -154,7 +177,7 @@ const GrnList = () => {
 
     console.log(setGrnPrintOpen)
 
-     
+
     const [itemPlantList, setItemPlantList] = useState([])
     const ItemFetch = async () => {
         try {
@@ -166,8 +189,8 @@ const GrnList = () => {
             const DcItems = plantItems.filter(item => item.dcStatus === "1")
             console.log(DcItems)
             setItemPlantList(DcItems);
-            
-          
+
+
 
         } catch (err) {
             console.log(err);
@@ -315,6 +338,16 @@ const GrnList = () => {
             setFilteredData(partyName)
             console.log(value)
         }
+        if (name === "grnPlant") {
+            const grnPlant = grnDataList.filter((item) => (item.grnPlant === value))
+            setFilteredData(grnPlant);
+        }
+        if (name === "dcDepartment") {
+            const dcDepartment = grnDataList.filter((item) => (item.itemDepartment && item.itemDepartment.includes(value)));
+
+
+            setFilteredData(dcDepartment);
+        }
         setDateData((prev) => ({ ...prev, [name]: value }))
 
 
@@ -369,6 +402,48 @@ const GrnList = () => {
                                     </TextField>
 
                                 </div>
+                                <div className='col'>
+
+                                    <TextField label="Plant Wise"
+                                        id="grnPlantId"
+                                        select
+                                        defaultValue="all"
+                                        // value={filterAllNames.plantWise}
+                                        fullWidth
+
+                                        onChange={handleFilterChange}
+                                        size="small"
+                                        name="grnPlant" >
+
+                                        <MenuItem value="all">All</MenuItem>
+                                        {loggedEmp.plantDetails.map((item, index) => (
+                                            <MenuItem key={index} value={item.plantName}>{item.plantName}</MenuItem>
+                                        ))}
+
+
+                                    </TextField>
+
+                                </div>
+                                <div className='col '>
+
+                                    <TextField label="Default Location "
+                                        id="dcDepartmentId"
+                                        select
+                                        defaultValue="all"
+                                        // value={filterAllNames.currentLocation}
+                                        fullWidth
+                                        onChange={handleFilterChange}
+                                        size="small"
+                                        name="dcDepartment" >
+                                        <MenuItem value="all">All</MenuItem>
+                                        {departments.map((item, index) => (
+                                            <MenuItem key={index} value={item.department}>{item.department}</MenuItem>
+                                        ))}
+
+
+                                    </TextField>
+
+                                </div>
                                 <div className="form-floating col">
                                     <DatePicker
                                         fullWidth
@@ -382,7 +457,7 @@ const GrnList = () => {
                                             setDateData((prev) => ({ ...prev, fromDate: dayjs(newValue).format('YYYY-MM-DD') }))}
                                         format="DD-MM-YYYY" />
                                 </div>
-                                <div className="col">
+                                <div className="col me-2">
                                     <DatePicker
                                         fullWidth
                                         id="toDateId"
@@ -395,6 +470,7 @@ const GrnList = () => {
                                             setDateData((prev) => ({ ...prev, toDate: dayjs(newValue).format('YYYY-MM-DD') }))}
                                         format="DD-MM-YYYY" />
                                 </div>
+
                             </div>
 
                         </Paper>
@@ -547,12 +623,12 @@ const GrnList = () => {
                                 </div>
 
                                 <GrnListContent.Provider
-                                    value={{ grnEditOpen, setGrnEditOpen, selectedRows, grnListFetchData, printState, setPrintState }}
+                                    value={{ grnEditOpen, setGrnEditOpen, selectedRows, grnListFetchData, printState, setPrintState, itemPlantList }}
                                 >
                                     <GrnEdit />
                                 </GrnListContent.Provider>
                                 <GrnListContent.Provider
-                                    value={{ grnOpen, setGrnOpen, selectedRows, grnListFetchData, printState, setPrintState,itemPlantList }}
+                                    value={{ grnOpen, setGrnOpen, selectedRows, grnListFetchData, printState, setPrintState, itemPlantList }}
                                 >
                                     <GrnAdd />
                                 </GrnListContent.Provider>

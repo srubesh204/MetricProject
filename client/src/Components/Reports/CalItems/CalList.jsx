@@ -13,7 +13,6 @@ import isSameOrBefore from 'dayjs/plugin/isSameOrBefore'
 import CalPrint from './CalPrint'
 import CalAddModel from './CalAddModel'
 import CalEditModel from './CalEditModel'
-
 import { useEmployee } from '../../../App';
 export const CalData = createContext(null);
 dayjs.extend(isSameOrBefore)
@@ -22,6 +21,7 @@ dayjs.extend(isSameOrAfter)
 
 const CalList = () => {
     const employeeRole = useEmployee()
+    const { loggedEmp } = employeeRole
     const [itemMasterDataList, setItemMasterDataList] = useState([])
     const [itemMasters, setItemMasters] = useState([])
     const [IMTENos, setIMTENos] = useState([])
@@ -237,6 +237,25 @@ const CalList = () => {
     ]
 
     const [filterMaster, setFilterMaster] = useState([])
+    const [departments, setDepartments] = useState([])
+    const DepartmentFetch = async () => {
+        try {
+            const response = await axios.get(
+                `${process.env.REACT_APP_PORT}/department/getAllDepartments`
+            );
+            const defaultDepartment = response.data.result.filter((dep) => dep.defaultdep === "yes")
+            setDepartments(defaultDepartment);
+
+            console.log(response.data)
+        } catch (err) {
+            console.log(err);
+        }
+    };
+    //get Designations
+    useEffect(() => {
+        DepartmentFetch()
+    }, []);
+
 
     const handleMasterFilter = (e) => {
         const { name, value } = e.target;
@@ -264,6 +283,7 @@ const CalList = () => {
         if (value === "all") {
             setFilteredCalData(calListDataList)
         } else {
+
             if (name === "itemName") {
                 const selectedItem = calListDataList.filter((item) => item.calItemName === value)
 
@@ -275,6 +295,14 @@ const CalList = () => {
             if (name === "itemIMTENo") {
                 const selectedItem = calListDataList.filter((item) => item.calIMTENo === value)
                 setFilteredCalData(selectedItem)
+            }
+            if (name === "itemPlant") {
+                const itemPlant = calListDataList.filter((item) => (item.itemPlant && item.itemPlant.includes(value)));
+                setFilteredCalData(itemPlant);
+            }
+            if (name === "itemDepartment") {
+                const itemDepartment = calListDataList.filter((item) => (item.itemDepartment && item.itemDepartment.includes(value)));
+                setFilteredCalData(itemDepartment);
             }
 
             setDateData((prev) => ({ ...prev, [name]: value }))
@@ -297,6 +325,7 @@ const CalList = () => {
             const response = await axios.delete(
                 `${process.env.REACT_APP_PORT}/itemCal/deleteItemCal`, { data: { itemCalIds: calListSelectedRowIds } }
             );
+            console.log(response.data.result)
             calListFetchData()
             console.log("Cal Items Deleted Successfully")
         } catch (err) {
@@ -337,13 +366,49 @@ const CalList = () => {
                                         ))}
                                     </TextField>
                                 </div>
-                                <div className='col '>
+                                <div className='col me-2 '>
                                     <TextField size='small' fullWidth defaultValue="all" variant='outlined' id="itemListId" select label="Item IMTE No" onChange={handleFilter} name='itemIMTENo'>
                                         <MenuItem value="all">All</MenuItem>
                                         {IMTENos.map((item, index) => (
                                             <MenuItem key={index} value={item}>{item}</MenuItem>
                                         ))}
                                     </TextField>
+                                </div>
+                                <div className='col me-2'>
+
+                                    <TextField label="Plant Wise"
+                                        id="itemPlantId"
+                                        select
+                                        defaultValue="all"
+                                        // value={filterAllNames.plantWise}
+                                        fullWidth
+                                        onChange={handleFilter}
+                                        size="small"
+                                        name="itemPlant" >
+                                        <MenuItem value="all">All</MenuItem>
+                                        {loggedEmp.plantDetails.map((item, index) => (
+                                            <MenuItem key={index} value={item.plantName}>{item.plantName}</MenuItem>
+                                        ))}
+                                    </TextField>
+                                </div>
+                                <div className='col '>
+                                    <TextField label="Default Location "
+                                        id="itemDepartmentId"
+                                        select
+                                        defaultValue="all"
+                                        // value={filterAllNames.currentLocation}
+                                        fullWidth
+                                        onChange={handleFilter}
+                                        size="small"
+                                        name="itemDepartment" >
+                                        <MenuItem value="all">All</MenuItem>
+                                        {departments.map((item, index) => (
+                                            <MenuItem key={index} value={item.department}>{item.department}</MenuItem>
+                                        ))}
+
+
+                                    </TextField>
+
                                 </div>
 
 

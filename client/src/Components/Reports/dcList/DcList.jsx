@@ -85,7 +85,10 @@ const DcList = () => {
         dcDate: "",
         dcReason: "",
         dcCommonRemarks: "",
-        dcPartyItems: []
+        dcPartyItems: [],
+        dcPlant:"",
+        dcDepartment:""
+        
 
     }
 
@@ -99,7 +102,9 @@ const DcList = () => {
         dcDate: "",
         dcReason: "",
         dcCommonRemarks: "",
-        dcPartyItems: []
+        dcPartyItems: [],
+        dcPlant:"",
+        dcDepartment:""
 
     })
     console.log(dcData)
@@ -350,13 +355,15 @@ const DcList = () => {
             setFilteredData(partyName)
             console.log(value)
         }
-        if (name === "itemPlant") {
-            const itemPlant = dcDataDcList.filter((item) => (item.itemPlant && item.itemPlant.includes(value)));
-            setFilteredData(itemPlant);
+        if (name === "dcPlant") {
+            const dcPlant = dcDataDcList.filter((item) => (item.dcPlant === value))
+            setFilteredData(dcPlant);
         }
-        if (name === "itemDepartment") {
-            const itemDepartment = dcDataDcList.filter((item) => (item.itemDepartment && item.itemDepartment.includes(value)));
-            setFilteredData(itemDepartment);
+        if (name === "dcDepartment") {
+            // const itemDepartment = dcDataDcList.filter((item) => (item.itemDepartment && item.itemDepartment.includes(value)));
+            const dcDepartment = dcDataDcList.filter((item) => (item.dcDepartment === value))
+
+            setFilteredData(dcDepartment);
         }
         setDateData((prev) => ({ ...prev, [name]: value }))
 
@@ -498,7 +505,7 @@ const DcList = () => {
                                 <div className='col me-2'>
 
                                     <TextField label="Plant Wise"
-                                        id="itemPlantId"
+                                        id="dcPlantId"
                                         select
                                         defaultValue="all"
                                         // value={filterAllNames.plantWise}
@@ -506,7 +513,7 @@ const DcList = () => {
 
                                         onChange={handleFilterChange}
                                         size="small"
-                                        name="itemPlant" >
+                                        name="dcPlant" >
 
                                         <MenuItem value="all">All</MenuItem>
                                         {loggedEmp.plantDetails.map((item, index) => (
@@ -520,14 +527,14 @@ const DcList = () => {
                                 <div className='col '>
 
                                     <TextField label="Default Location "
-                                        id="itemDepartmentId"
+                                        id="dcDepartmentId"
                                         select
                                         defaultValue="all"
                                         // value={filterAllNames.currentLocation}
                                         fullWidth
                                         onChange={handleFilterChange}
                                         size="small"
-                                        name="itemDepartment" >
+                                        name="dcDepartment" >
                                         <MenuItem value="all">All</MenuItem>
                                         {departments.map((item, index) => (
                                             <MenuItem key={index} value={item.department}>{item.department}</MenuItem>

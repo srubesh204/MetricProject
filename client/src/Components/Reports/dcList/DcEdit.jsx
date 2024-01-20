@@ -39,7 +39,8 @@ const DcEdit = () => {
         dcReason: "",
         dcCommonRemarks: "",
         dcPartyItems: [],
-        dcPlant:""
+        dcPlant:"",
+         dcDepartment:""
 
     }
 
@@ -54,11 +55,14 @@ const DcEdit = () => {
         dcReason: "",
         dcCommonRemarks: "",
         dcPartyItems: [],
-        dcPlant:""
+        dcPlant:"",
+        dcDepartment:""
 
     })
     console.log(dcEditData)
 
+    const [selectedPlantItems, setSelectedPlantItems] = useState([])
+ 
     const settingDcData = () => {
         if (selectedRows.length !== 0) { 
             
@@ -75,10 +79,12 @@ const DcEdit = () => {
                 dcReason: selectedRows.dcReason,
                 dcCommonRemarks: selectedRows.dcCommonRemarks,
                 dcPartyItems: selectedRows.dcPartyItems,
-                dcPlant: selectedRows.dcPlant
+                dcPlant: selectedRows.dcPlant,
+                dcDepartment: selectedRows.dcDepartment
 
             }));
             const plantItems = itemPlantList.filter(item => item.itemPlant === selectedRows.dcPlant)
+            setSelectedPlantItems(plantItems)
             const distinctItemNames = [... new Set(plantItems.map(item => item.itemAddMasterName))]
             setItemNameList(distinctItemNames)
             console.log(distinctItemNames)
@@ -88,12 +94,12 @@ const DcEdit = () => {
 
     console.log(dcEditData)
 
-    useEffect(() => {
-        const plantItems = itemPlantList.filter(item => item.itemPlant === selectedRows.dcPlant);
-        const distinctItemNames = [...new Set(plantItems.map(item => item.itemAddMasterName))];
-        setItemNameList(distinctItemNames);
-        console.log(distinctItemNames);
-    }, [selectedRows.dcPlant, itemPlantList]);
+    // useEffect(() => {
+    //     const plantItems = itemPlantList.filter(item => item.itemPlant === selectedRows.dcPlant);
+    //     const distinctItemNames = [...new Set(plantItems.map(item => item.itemAddMasterName))];
+    //     setItemNameList(distinctItemNames);
+    //     console.log(distinctItemNames);
+    // }, [selectedRows.dcPlant, itemPlantList]);
 
     useEffect(() => {
         settingDcData();
@@ -375,30 +381,16 @@ const DcEdit = () => {
 
 
     const getItemByName = async (value) => {
-        try {
-            const response = await axios.post(
-                `${process.env.REACT_APP_PORT}/itemAdd/getItemAddByName`, { itemItemMasterName: value }
-            );
-            console.log(response.data)
-            setAllItemImtes(response.data.result)
-            const filteredImtes = response.data.result.filter((imtes) => !dcEditData.dcPartyItems.some(dcImte => imtes._id === dcImte._id))
-            setItemImtes(filteredImtes)
-
-        } catch (err) {
-            console.log(err);
-        }
+        const itemBySelectedName = selectedPlantItems.filter(item => item.itemAddMasterName === value)
+        const remainingItems = itemBySelectedName.filter(item =>
+            !dcEditData.dcPartyItems.some(dc => dc._id === item._id)
+        );
+        setItemImtes(remainingItems)
     };
    
     const handleDcItemAdd = (e) => {
         const { name, value } = e.target;
-        if (name === "dcPlant") {
-            // Set the selected itemPlant in state
-            setItemAddDetails((prev) => ({ ...prev, dcPlant: value }));
-             const plantItems = itemPlantList.filter(item => item.itemPlant === value)
-             const distinctItemNames = [... new Set(plantItems.map(item => item.itemAddMasterName))]
-             setItemNameList(distinctItemNames)
-             console.log(distinctItemNames)
-        }
+       
 
         if (name === "itemListNames") {
             getItemByName(value)
@@ -427,9 +419,21 @@ const DcEdit = () => {
         })
     }, [dcEditData.dcPartyItems])
 
+    console.log(selectedPlantItems)
 
+    const nonSelectedItem = () => {
+        if (dcEditData.dcPartyItems.length > 0) {
+            const remainingItems = selectedPlantItems.filter(item =>
+                !dcEditData.dcPartyItems.some(dc => dc._id === item._id)
+            );
+            console.log(remainingItems)
+            setItemImtes(remainingItems)
+        }
 
-
+    }
+    useEffect(() => {
+        nonSelectedItem();
+    }, [dcEditData.dcPartyItems])
 
 
 
