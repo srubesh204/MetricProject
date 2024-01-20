@@ -758,6 +758,8 @@ const ItemAdd = () => {
 
 
 
+
+
     return (
         <div style={{ margin: "2rem", backgroundColor: "#f5f5f5" }}>
             <form>
@@ -773,7 +775,7 @@ const ItemAdd = () => {
                                     {itemMasterDataList.map((item, index) => (
                                         <MenuItem key={index} value={item._id}>{item.itemDescription}</MenuItem>
                                     ))}
-                                </TextField> 
+                                </TextField>
                                 {/* <TextField
                                     {...(errors.itemMasterRef !== "" && { helperText: errors.itemMasterRef, error: true })}
                                     size='small'
@@ -943,18 +945,30 @@ const ItemAdd = () => {
                                         <div className="col-md-6">
                                             <TextField
                                                 {...(errors.itemDepartment !== "" && { helperText: errors.itemDepartment, error: true })}
-                                                value={itemAddData.itemPlant} onChange={handleItemAddChange} size='small' select fullWidth variant='outlined' label="Select Plant" name='itemPlant' id='itemPlantId'>
-                                                <MenuItem value="">Select Plant</MenuItem>
+                                                value={employeeRole.loggedEmp.plantDetails.length === 1 ? employeeRole.loggedEmp.plantDetails[0].plantName : itemAddData.itemPlant}
+                                                onChange={handleItemAddChange}
+                                                size='small'
+                                                select
+                                                fullWidth
+                                                variant='outlined'
+                                                label="Select Plant"
+                                                name='itemPlant'
+                                                id='itemPlantId'
+                                                disabled={employeeRole.loggedEmp.plantDetails.length === 1}  // Disable TextField if there's only one option
+                                            >
                                                 {employeeRole.loggedEmp.plantDetails.map((plant, index) => (
-                                                    <MenuItem key={index} value={plant.plantName}>{plant.plantName}</MenuItem>
+                                                    <MenuItem key={index} value={plant.plantName}>
+                                                        {plant.plantName}
+                                                    </MenuItem>
                                                 ))}
                                             </TextField>
                                         </div>
                                         <div className="col-md-6">
+
                                             <TextField
                                                 {...(errors.itemDepartment !== "" && { helperText: errors.itemDepartment, error: true })}
-                                                value={itemAddData.itemDepartment} onChange={handleItemAddChange} size='small' select fullWidth variant='outlined' label="Department" name='itemDepartment' id='itemDepartmentId'>
-                                                {departments.map((item, index) => (
+                                                value={employeeRole.loggedEmp.plantDetails.length === 1 ? employeeRole.loggedEmp.plantDetails[0].plantName : itemAddData.itemDepartment} disabled={itemAddData.itemPlant === ""} onChange={handleItemAddChange} size='small' select fullWidth variant='outlined' label="Department" name='itemDepartment' id='itemDepartmentId'>
+                                                {employeeRole.loggedEmp.plantDetails.map((item, index) => (
                                                     <MenuItem key={index} value={item.department}>{item.department}</MenuItem>
                                                 ))}
                                             </TextField>
@@ -1426,28 +1440,7 @@ const ItemAdd = () => {
                                                     ))}
                                                 </Select>
                                             </FormControl>
-                                            {/*<FormControl size='small' component="div" fullWidth>
-                                            <InputLabel id="itemPartNameId">Select Part</InputLabel>
-                                            <Select
-                                                labelId="itemPartNameId"
 
-                                                multiple
-                                                name="itemPartName"
-                                                value={itemAddData.itemPartName}
-                                                onChange={handleItemAddChange}
-                                                input={<OutlinedInput fullWidth label="Select Part" />}
-                                                renderValue={(selected) => selected.map(item => item.partName).join(", ")}
-                                                MenuProps={MenuProps}
-                                                fullWidth
-                                            >
-                                                {partData.map((name, index) => (
-                                                    <MenuItem key={index} value={name}>
-                                                        <Checkbox checked={itemAddData.itemPartName.indexOf(name) > -1} />
-                                                        <ListItemText primary={name.partName} />
-                                                    </MenuItem>
-                                                ))}
-                                            </Select>
-                                                </FormControl>*/}
                                         </div>
 
 

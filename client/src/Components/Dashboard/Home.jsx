@@ -202,20 +202,31 @@ const Home = () => {
       );
       let allItems = []
       if (employeeRole.employee === "admin") {
-        allItems = response.data.result.filter(item => employeeRole.loggedEmp.plantDetails.some(plant => item.itemPlant === plant.plantName))
+        const plantItems = response.data.result.filter(item => employeeRole.loggedEmp.plantDetails.some(plant => item.itemPlant === plant.plantName))
+        const departmentItems = plantItems.filter(item => employeeRole.loggedEmp.plantDetails.some(plant => plant.departments.includes(item.itemDepartment)))
+        console.log(departmentItems)
+        allItems = departmentItems
         console.log(allItems)
       } else if (employeeRole.employee === "plantAdmin") {
-        allItems = response.data.result.filter(item => employeeRole.loggedEmp.plantDetails.some(plant => item.itemPlant === plant.plantName))
+        const plantItems = response.data.result.filter(item => employeeRole.loggedEmp.plantDetails.some(plant => item.itemPlant === plant.plantName))
+        const departmentItems = plantItems.filter(item => employeeRole.loggedEmp.plantDetails.some(plant => plant.departments.includes(item.itemDepartment)))
+        allItems = departmentItems
         console.log(allItems)
       } else if (employeeRole.employee === "creator") {
-        allItems = response.data.result.filter(item => employeeRole.loggedEmp.plantDetails.some(plant => item.itemPlant === plant.plantName))
+        const plantItems = response.data.result.filter(item => employeeRole.loggedEmp.plantDetails.some(plant => item.itemPlant === plant.plantName))
+        const departmentItems = plantItems.filter(item => employeeRole.loggedEmp.plantDetails.some(plant => plant.departments.includes(item.itemDepartment)))
+        allItems = departmentItems
         console.log(allItems)
       } else if (employeeRole.employee === "viewer") {
-        allItems = response.data.result.filter(item => employeeRole.loggedEmp.plantDetails.some(plant => item.itemPlant === plant.plantName))
+        const plantItems = response.data.result.filter(item => employeeRole.loggedEmp.plantDetails.some(plant => item.itemPlant === plant.plantName))
+        const departmentItems = plantItems.filter(item => employeeRole.loggedEmp.plantDetails.some(plant => plant.departments.includes(item.itemDepartment)))
+        allItems = departmentItems
         console.log(allItems)
       } else {
         allItems = response.data.result
       }
+
+
 
       setItemList(allItems);
       setPieDataFilter(allItems)
@@ -666,8 +677,9 @@ const Home = () => {
     }
 
     if (name === "Sub Contractors") {
-      const subTable = oems.map((sub) => {
+      const subTable = subContractors.map((sub) => {
         const filteredByDcLocation = pieDataFilter.filter((item) => item.itemLocation === "subContractor");
+        console.log(filteredByDcLocation)
         const filteredByOEM = filteredByDcLocation.filter((item) => item.itemCurrentLocation === sub.fullName);
 
         const quantity = filteredByOEM.length;
@@ -739,9 +751,9 @@ const Home = () => {
       <table className='table table-borderless' style={{ display: "flex", justifyContent: "center", alignItems: "center", padding: 0 }}>
         <tbody>
           {payload.map((entry, index) => (
-            <tr key={index} style={{padding: 0}}>
-              <td style={{padding: "2px"}} onClick={() => ItemLocationDisplay(entry.value)}><div style={{ width: '25px', height: '25px', backgroundColor: entry.color, marginRight: '10px', textAlign: "center", display: "flex", justifyContent: "center", alignItems: "center", cursor: "pointer" }}></div></td>
-              <td style={{padding: "2px"}}>{entry.value}</td>
+            <tr key={index} style={{ padding: 0 }}>
+              <td style={{ padding: "2px" }} onClick={() => ItemLocationDisplay(entry.value)}><div style={{ width: '25px', height: '25px', backgroundColor: entry.color, marginRight: '10px', textAlign: "center", display: "flex", justifyContent: "center", alignItems: "center", cursor: "pointer" }}></div></td>
+              <td style={{ padding: "2px" }}>{entry.value}</td>
               <td style={{ fontWeight: "bolder", color: entry.color, padding: "2px" }} className='ms-2 ps-3'>{entry.payload.value}</td>
             </tr>
           ))}
@@ -760,8 +772,8 @@ const Home = () => {
         <tbody>
           {payload.map((entry, index) => (
             <tr key={index} height={entry.value === "Total Items" ? "50px" : ""}>
-              <td style={{padding: "2px"}} onClick={() => { itemStatusLegend(entry.value); console.log(entry) }}><div style={{ width: '25px', height: '25px', backgroundColor: entry.color, marginRight: '10px', textAlign: "center", display: "flex", justifyContent: "center", alignItems: "center", cursor: "pointer" }}></div></td>
-              <td style={{padding: "2px"}}>{entry.value}</td>
+              <td style={{ padding: "2px" }} onClick={() => { itemStatusLegend(entry.value); console.log(entry) }}><div style={{ width: '25px', height: '25px', backgroundColor: entry.color, marginRight: '10px', textAlign: "center", display: "flex", justifyContent: "center", alignItems: "center", cursor: "pointer" }}></div></td>
+              <td style={{ padding: "2px" }}>{entry.value}</td>
               <td style={{ padding: "2px", fontWeight: "bolder", color: entry.color }} className='ms-2 ps-3'>{entry.payload.value}</td>
             </tr>
           ))}
@@ -776,9 +788,9 @@ const Home = () => {
         <tbody>
           {payload.map((entry, index) => (
             <tr key={index}>
-              <td style={{padding: "2px"}} onClick={() => { calStatusFunction(entry.value) }}><div style={{ width: '25px', height: '25px', backgroundColor: entry.color, marginRight: '10px', textAlign: "center", display: "flex", justifyContent: "center", alignItems: "center",cursor: "pointer" }}></div></td>
-              <td style={{padding: "2px"}}>{entry.value}</td>
-              <td style={{padding: "2px", fontWeight: "bolder", color: entry.color }} className='ms-2 ps-3'>{entry.payload.value}</td>
+              <td style={{ padding: "2px" }} onClick={() => { calStatusFunction(entry.value) }}><div style={{ width: '25px', height: '25px', backgroundColor: entry.color, marginRight: '10px', textAlign: "center", display: "flex", justifyContent: "center", alignItems: "center", cursor: "pointer" }}></div></td>
+              <td style={{ padding: "2px" }}>{entry.value}</td>
+              <td style={{ padding: "2px", fontWeight: "bolder", color: entry.color }} className='ms-2 ps-3'>{entry.payload.value}</td>
             </tr>
           ))}
         </tbody>
@@ -1022,7 +1034,7 @@ const Home = () => {
 
 
 
-  useEffect(()=> {
+  useEffect(() => {
     setStatusCheckMsg("");
     const grnBoolean = selectedRows.every(item => item.dcStatus === "1")
     setGrnButtonVisibility(grnBoolean && selectedRows.length > 0)
@@ -1048,18 +1060,18 @@ const Home = () => {
 
 
   console.log(selectedRows)
-  
+
 
   const [StatusCheckMsg, setStatusCheckMsg] = useState("")
   const [grnButtonVisibility, setGrnButtonVisibility] = useState(false)
 
-  
+
 
   const dcCheck = () => {
     const defaultDepartmentCheck = selectedRows.every(item =>
       defaultDep.some(dep => item.itemCurrentLocation === dep.department)
     );
-    
+
     const singlePlant = selectedRows.every((item, index, array) => item.itemPlant === array[0].itemPlant);
 
     console.log(defaultDepartmentCheck);
@@ -1067,19 +1079,19 @@ const Home = () => {
       setStatusCheckMsg("");
       setDcOpen(true);
     } else {
-     
-      
+
+
       if (!defaultDepartmentCheck) {
         setStatusCheckMsg("Selected item are not in default location, To create a DC move the item to the default location");
       }
-      
+
       if (!singlePlant) {
         setStatusCheckMsg("Mulitple plant not allowed");
       }
-      
+
       setDcOpen(false);
     }
-};
+  };
 
 
   const grnCheck = () => {
@@ -1226,7 +1238,7 @@ const Home = () => {
 
 
 
-                 <Autocomplete
+                <Autocomplete
                   disablePortal
                   defaultValue={"All"}
                   id="combo-box-demo"
@@ -1237,10 +1249,10 @@ const Home = () => {
                   name="customer"
                   getOptionLabel={(customers) => customers}
                   // onChange={(e, newValue) => MainFilter(e,newValue, "customer") .aliasName}
-                
+
                   renderInput={(params) => <TextField {...params} label="Customer" name='customer' />}
                   disableClearable
-                /> 
+                />
 
                 {/* <Autocomplete
                   disablePortal
