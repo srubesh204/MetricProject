@@ -45,6 +45,92 @@ const CalList = () => {
         itemMasterFetchData();
     }, []);
 
+    console.log(itemMasterDataList)
+
+
+    const [plantDatas, setPlantDatas] = useState([]);
+
+    const plantFetch = async () => {
+        try {
+            const response = await axios.get(
+                `${process.env.REACT_APP_PORT}/compDetails/getAllPlantDetails`
+            );
+            setPlantDatas(response.data.result);
+            setFilterAddress(response.data.result);
+            console.log(response.data.result);
+        } catch (err) {
+            console.error(err);
+        }
+    };
+
+    useEffect(() => {
+        plantFetch();
+    }, []);
+
+    const [filterAddress, setFilterAddress] = useState([])
+
+
+
+    const handlePlantAddress = (e) => {
+        const { name, value } = e.target;
+        if (value === "all") {
+            setPlantDatas(itemMasterDataList)
+        } else {
+            if (name === "plantAddress") {
+                const plantAddress = itemMasterDataList.filter((item) => item.plantAddress === value)
+                setFilterAddress(plantAddress)
+            }
+            if (name === "plantName") {
+                const plantName = itemMasterDataList.filter((item) => item.plantName === value)
+                setFilterAddress(plantName)
+            }
+
+        }
+
+
+    }
+
+
+    const [filterCompany, setFilterCompany] = useState ([])
+    
+    const [companyName, setCompanyName] = useState ([])
+
+    const companyFetch = async () => {
+        try {
+            const response = await axios.get(
+                `${process.env.REACT_APP_PORT}/compDetails/getAllCompDetails`
+            );
+            setCompanyName(response.data.result);
+            setFilterCompany(response.data.result);
+
+            console.log(response.data.result);
+        } catch (err) {
+            console.error(err);
+        }
+    };
+
+    useEffect(() => {
+        companyFetch();
+    }, []);
+
+    const handleCompany = (e) => {
+        const { name, value } = e.target;
+        if (value === "all") {
+            setCompanyName(itemMasterDataList)
+        } else {
+            if (name === "companyName") {
+                const companyName = itemMasterDataList.filter((item) => item.companyName === value)
+                setFilterAddress(companyName)
+            }
+            
+        }
+
+
+    }
+    
+
+
+    console.log(plantDatas);
 
     const [activeEmps, setActiveEmps] = useState([])
 
@@ -55,13 +141,13 @@ const CalList = () => {
             );
 
             const selectedEmps = response.data.result.filter((emp) => emp.plant.find(plant => {
-                console.log(plant) 
+                console.log(plant)
                 return (employeeRole.loggedEmp.plant.includes(plant))
             }));
-            
+
             const filter = selectedEmps.filter(emp => emp.empRole === "plantAdmin")
-            
-           
+
+
             setActiveEmps(filter)
         } catch (err) {
             console.log(err);
@@ -143,14 +229,35 @@ const CalList = () => {
         { field: 'calItemCalDate', headerName: 'Calibration On', width: 200, valueGetter: (params) => dayjs(params.row.calItemCalDate).format('DD-MM-YYYY'), headerAlign: "center", align: "center", },
         { field: 'itemDueDate', headerName: 'Next Due On', width: 200, valueGetter: (params) => dayjs(params.row.itemDueDate).format('DD-MM-YYYY'), headerAlign: "center", align: "center", },
         { field: 'calStatus', headerName: 'Cal status', width: 200, headerAlign: "center", align: "center", },
-        
+
         { field: 'printButton', headerName: 'Print', headerAlign: "center", align: "center", width: 100, renderCell: (params) => <Button onClick={() => { setSelectedRows(params.row); setCalPrintOpen(true) }}><PrintRounded color='success' /></Button> }
-        
-    
+
+
 
     ]
 
+    const [filterMaster, setFilterMaster] = useState([])
 
+    const handleMasterFilter = (e) => {
+        const { name, value } = e.target;
+        if (value === "all") {
+            setFilterMaster(itemMasterDataList)
+
+        } else {
+            if (name === "itemName") {
+                const selectedItem = itemMasterDataList.filter((item) => item.calItemName === value)
+
+
+            }
+
+            if (name === "itemIMTENo") {
+                const selectedItem = itemMasterDataList.filter((item) => item.calIMTENo === value)
+                setFilteredCalData(selectedItem)
+            }
+
+            setDateData((prev) => ({ ...prev, [name]: value }))
+        }
+    }
 
     const handleFilter = (e) => {
         const { name, value } = e.target;
@@ -325,8 +432,8 @@ const CalList = () => {
                         <div className='row'>
                             <div className='col d-flex '>
                                 <div className='me-2 '>
-                                    <Button  onClick={() => { setSelectedRows(); setCalPrintOpen(true) }} ><PrintRounded color='success' /></Button>
-                                </div> 
+                                    <Button onClick={() => { setSelectedRows(); setCalPrintOpen(true) }} ><PrintRounded color='success' /></Button>
+                                </div>
                                 <div className='me-2 '>
                                     <button type="button" className='btn btn-secondary' > Label Print</button>
                                 </div>
@@ -351,21 +458,21 @@ const CalList = () => {
                     </Paper>
                     {employeeRole && employeeRole.employee !== "viewer" &&
                         <CalData.Provider
-                            value={{ employeeRole, calAddOpen, setCalAddOpen, itemMasters, activeEmps, calListFetchData, printState, setPrintState }}
+                            value={{ employeeRole, calAddOpen, setCalAddOpen, itemMasters, activeEmps, calListFetchData, printState, setPrintState, filterAddress }}
                         >
                             <CalAddModel />
                         </CalData.Provider>}
 
                     {employeeRole && employeeRole.employee !== "viewer" &&
                         <CalData.Provider
-                            value={{ employeeRole, calEditOpen, setCalEditOpen, selectedCalRow, itemMasters, activeEmps, calListFetchData, printState, setPrintState }}
+                            value={{ employeeRole, calEditOpen, setCalEditOpen, selectedCalRow, itemMasters, activeEmps, calListFetchData, printState, setPrintState, filterAddress }}
                         >
                             {selectedCalRow.length !== 0 && <CalEditModel />}
                         </CalData.Provider>}
                     <CalData.Provider
-                        value={{ calPrintOpen, setCalPrintOpen, selectedRows,filteredCalData, printState, setPrintState }}
+                        value={{ calPrintOpen, setCalPrintOpen, selectedRows, filteredCalData, printState, setPrintState, filterAddress }}
                     >
-                         {selectedRows && <CalPrint />}
+                        {selectedRows && <CalPrint />}
                     </CalData.Provider>
 
 

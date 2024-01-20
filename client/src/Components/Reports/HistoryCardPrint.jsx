@@ -81,10 +81,10 @@ const HistoryCardPrint = () => {
                         <td style={{ width: "9%", border: "0.5px solid black" }}>{row.calItemDueDate || '-'}</td>
                         <td style={{ width: "9%", border: "0.5px solid black" }}>--</td>
                         <td style={{ width: "9%", border: "0.5px solid black" }}>{row.calCertificateNo || '-'}</td>
-                        <td style={{ width: "9%", border: "0.5px solid black" }}>
+                        {/* <td style={{ width: "9%", border: "0.5px solid black" }}>
                             {selectedRow[0]?.itemType === 'variable' ? row.calcalibrationData[0]?.calOBError : row.calcalibrationData[0]?.calMinPS + "/" + row.calcalibrationData[0]?.calMaxPS}
                         </td>
-                        <td style={{ width: "9%", border: "0.5px solid black" }}>{selectedRow[0]?.itemCalibrationSource || '-'}</td>
+                        <td style={{ width: "9%", border: "0.5px solid black" }}>{selectedRow[0]?.itemCalibrationSource || '-'}</td> */}
                         <td style={{ width: "9%", border: "0.5px solid black" }}>{row.calCalibratedBy || '-'}</td>
                         <td style={{ width: "9%", border: "0.5px solid black" }}>{row.calApprovedBy || '-'}</td>
                         <td style={{ width: "14%", border: "0.5px solid black" }}>--</td>
