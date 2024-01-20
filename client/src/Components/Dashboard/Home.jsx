@@ -16,7 +16,7 @@ import Dc from './DashboardComponents/DcDialog';
 import Grn from './DashboardComponents/Grn';
 import OnSiteDialog from './DashboardComponents/OnSiteDialog';
 import MuiPagination from '@mui/material/Pagination';
-import { useEmployee } from '../../App';
+import { empRole, useEmployee } from '../../App';
 export const HomeContent = createContext(null);
 
 
@@ -811,18 +811,29 @@ const Home = () => {
 
   useEffect(() => {
     console.log(employeeRole)
-    const filteredPlants = employeeRole.loggedEmp.plantDetails.filter(plant => plant.plantName === selectedPlantName);
+    if(employeeRole.loggedEmp.plantDetails.length === 1){
+          
+        const availableDeps = employeeRole.loggedEmp.plantDetails[0].departments.filter(dep => filteredData.find(item => item.itemDepartment === dep))
+        console.log(availableDeps)
+        
+        setPlantDepartments(availableDeps)
+      
+    }else{
+      const filteredPlants = employeeRole.loggedEmp.plantDetails.filter(plant => plant.plantName === selectedPlantName);
     
-    if (filteredPlants.length > 0) {
-      console.log(filteredPlants[0].departments)
-      const availableDeps = filteredPlants[0].departments.filter(dep => filteredData.find(item => item.itemDepartment === dep))
-      console.log(availableDeps)
-      console.log(filteredPlants[0].departments)
-      setPlantDepartments(availableDeps)
-    } else { 
-      setPlantDepartments([])
+      if (filteredPlants.length > 0) {
+        console.log(filteredPlants[0].departments)
+        const availableDeps = filteredPlants[0].departments.filter(dep => filteredData.find(item => item.itemDepartment === dep))
+        console.log(availableDeps)
+        console.log(filteredPlants[0].departments)
+        setPlantDepartments(availableDeps)
+      } else { 
+        setPlantDepartments([])
+      }
+  
     }
-
+    
+   
   }, [selectedPlantName])
 
 
@@ -1186,7 +1197,7 @@ const Home = () => {
                 justifyContent="center"
                 alignItems="center"
                 spacing={2}>
-                <TextField select onChange={(e) => LocationEmpFilter(e)} disabled={employeeRole.loggedEmp.length === 1} fullWidth size='small' defaultValue="All" name='itemPlant' id='itemPlantId' label="Plant Location">
+                <TextField select onChange={(e) => LocationEmpFilter(e)} disabled={employeeRole.loggedEmp.plantDetails.length === 1}  value={employeeRole.loggedEmp.plantDetails.length === 1 ? employeeRole.loggedEmp.plantDetails[0].plantName : ""} fullWidth size='small' defaultValue="All" name='itemPlant' id='itemPlantId' label="Plant Location">
                   <MenuItem value="All">All</MenuItem>
                   {employeeRole.loggedEmp.length !== 0 && employeeRole.loggedEmp.plantDetails.map(item => (
                     <MenuItem value={item.plantName}>{item.plantName}</MenuItem>
@@ -1194,7 +1205,7 @@ const Home = () => {
 
                 </TextField>
                 {
-                  <TextField select onChange={(e) => LocationEmpFilter(e)} fullWidth size='small' name='itemDepartment' defaultValue="All" label="Defaul Location">
+                  <TextField select onChange={(e) => LocationEmpFilter(e)} fullWidth size='small' name='itemDepartment' defaultValue="All"  label="Default Location">
                     <MenuItem value="All">All</MenuItem>
                     {plantDepartments && plantDepartments.map((department, index) => (<MenuItem key={index} value={department}>{department}</MenuItem>))}
                   </TextField>}
