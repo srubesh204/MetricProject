@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const uniqueValidator = require('mongoose-unique-validator');
+const mongooseSequence = require('mongoose-sequence')(mongoose);
 
 const itemMasterSchema = new mongoose.Schema({
  
@@ -25,4 +26,5 @@ const itemMasterSchema = new mongoose.Schema({
   
 });
 itemMasterSchema.plugin(uniqueValidator);
+itemMasterSchema.plugin(mongooseSequence, { inc_field: 'itemMasterId', prefix : 'SBC' });
 module.exports = mongoose.model('itemMaster', itemMasterSchema);

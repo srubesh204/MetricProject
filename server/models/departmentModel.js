@@ -1,5 +1,7 @@
 const mongoose = require('mongoose');
 const uniqueValidator = require('mongoose-unique-validator');
+const mongooseSequence = require('mongoose-sequence')(mongoose);
+
 const departmentSchema = new mongoose.Schema({
   department: {
     type: String,
@@ -11,4 +13,5 @@ const departmentSchema = new mongoose.Schema({
   defaultdep: String
 });
 departmentSchema.plugin(uniqueValidator);
+departmentSchema.plugin(mongooseSequence, { inc_field: 'departmentId', prefix: 'SBCDEP' });
 module.exports = mongoose.model('departments', departmentSchema);

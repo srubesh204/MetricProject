@@ -97,7 +97,7 @@ const itemAddController = {
         itemDepartment,
         itemCurrentLocation,
         itemLastLocation,
-        itemLocation: itemDepartment,
+        itemLocation: "department",
         itemArea,
         itemPlaceOfUsage,
         itemCalFreInMonths,
