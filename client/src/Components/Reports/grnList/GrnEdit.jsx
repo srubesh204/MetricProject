@@ -10,13 +10,15 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { GrnListContent } from './GrnList';
 import { Add, Close, CloudUpload, Delete, Done, Edit, Receipt } from '@mui/icons-material';
 import { useParams } from 'react-router-dom';
+import { useEmployee } from '../../../App';
 import styled from '@emotion/styled';
 
 
 const GrnEdit = () => {
     const grnEditDatas = useContext(GrnListContent)
-    const { grnEditOpen, setGrnEditOpen, selectedRows, grnListFetchData } = grnEditDatas
-
+    const { grnEditOpen, setGrnEditOpen, selectedRows, grnListFetchData, itemPlantList } = grnEditDatas
+    const empRole = useEmployee()
+    const { employee, loggedEmp } = empRole
 
     const { id } = useParams()
 
@@ -31,7 +33,7 @@ const GrnEdit = () => {
         whiteSpace: 'nowrap',
         width: 1,
     });
-
+    const [itemNameList, setItemNameList] = useState(itemPlantList)
     console.log(id)
     const [selectedExtraMaster, setSelectedExtraMaster] = useState([])
     const initialGrnEditData = {
@@ -49,6 +51,8 @@ const GrnEdit = () => {
         grnCertificateStatus: "",
         grnCertificateNo: "",
         grnUncertainity: "",
+        grnPlant: "",
+        grnDepartment: "",
         grnPartyItems: []
 
     }
@@ -69,10 +73,12 @@ const GrnEdit = () => {
         grnCertificateStatus: "",
         grnCertificateNo: "",
         grnUncertainity: "",
+        grnPlant: "",
+        grnDepartment: "",
         grnPartyItems: []
     })
 
-
+    const [selectedPlantItems, setSelectedPlantItems] = useState([])
     console.log(selectedRows)
     const settingGrnData = () => {
         if (selectedRows.length !== 0) { // Check if selectedRows is defined
@@ -93,7 +99,13 @@ const GrnEdit = () => {
                 grnCertificateNo: selectedRows.grnCertificateNo,
                 grnUncertainity: selectedRows.grnUncertainity,
                 grnPartyItems: selectedRows.grnPartyItems,
+                grnPlant: selectedRows.grnPlant
             }));
+            const plantItems = itemPlantList.filter(item => item.itemPlant === selectedRows.grnPlant)
+            setSelectedPlantItems(plantItems)
+            const distinctItemNames = [... new Set(plantItems.map(item => item.itemAddMasterName))]
+            setItemNameList(distinctItemNames)
+            console.log(distinctItemNames)
         }
     };
 
@@ -296,9 +308,9 @@ const GrnEdit = () => {
         grnItemCertificate: "",
         grnUncertainity: "",
         grnItemCalStatus: ""
-      })
+    })
 
-      console.log(selectedGrnItem)
+    console.log(selectedGrnItem)
     //
     const getItemByName = async (value) => {
         try {
@@ -353,6 +365,16 @@ const GrnEdit = () => {
 
     const handleGrnItemChange = (e) => {
         const { name, value } = e.target;
+        if (name === "grnPlant") {
+            // Set the selected itemPlant in state
+            setItemAddDetails((prev) => ({ ...prev, grnPlant: value }));
+            const plantItems = itemPlantList.filter(item => item.itemPlant === value)
+
+            const distinctItemNames = [... new Set(plantItems.map(item => item.itemAddMasterName))]
+            setItemNameList(distinctItemNames)
+            console.log(distinctItemNames)
+            console.log(plantItems)
+        }
         setItemAddDetails((prev) => ({ ...prev, [name]: value }))
         if (name === "grnList") {
             getItemByName(value)
@@ -476,7 +498,7 @@ const GrnEdit = () => {
     }
 
     const [editableSelectedGrn, setEditableSelectedGrn] = useState()
-   {/* const [tempItem, setTempItem] = useState([])
+    {/* const [tempItem, setTempItem] = useState([])
 console.log(tempItem)*/}
     console.log(selectedGrnItem)
     const handleEditGrnItemChange = (e) => {
@@ -487,135 +509,135 @@ console.log(tempItem)*/}
 
             let itemData = { data: [] }; // Assuming itemData is an object with a 'data' property
 
-                const getItemById = async (dataObj) => {
-                    try {
-                        const response = await axios.get(
-                            `${process.env.REACT_APP_PORT}/itemAdd/getItemAddById/${editGrnId}`
-                        );
-                        dataObj.data = response.data.result; // Update the 'data' property
-                        console.log(dataObj.data); // Inside the function, it will reflect the changes
-                    } catch (err) {
-                        console.log(err);
+            const getItemById = async (dataObj) => {
+                try {
+                    const response = await axios.get(
+                        `${process.env.REACT_APP_PORT}/itemAdd/getItemAddById/${editGrnId}`
+                    );
+                    dataObj.data = response.data.result; // Update the 'data' property
+                    console.log(dataObj.data); // Inside the function, it will reflect the changes
+                } catch (err) {
+                    console.log(err);
+                }
+            };
+
+            getItemById(itemData)
+                .then(() => {
+                    if (value === "Calibrated") {
+
+                        console.log("calibration")
+
+
+                        setSelectedGrnItem((prev) => ({
+                            ...prev,
+                            [name]: value,
+                            grnItemId: itemData.data._id,
+                            grnItemAddMasterName: itemData.data.itemAddMasterName,
+                            grnItemIMTENo: itemData.data.itemIMTENo,
+                            grnItemType: itemData.data.itemType,
+                            grnItemRangeSize: itemData.data.itemRangeSize,
+                            grnItemRangeSizeUnit: itemData.data.itemRangeSizeUnit,
+                            grnItemMFRNo: itemData.data.itemMFRNo,
+                            grnItemLC: itemData.data.itemLC,
+                            grnItemLCUnit: itemData.data.itemLCUnit,
+                            grnItemMake: itemData.data.itemMake,
+                            grnItemModelNo: itemData.data.itemModelNo,
+
+                            grnItemDepartment: itemData.data.itemDepartment,
+                            grnItemArea: itemData.data.itemArea,
+                            grnItemPlaceOfUsage: itemData.data.itemPlaceOfUsage,
+                            grnItemCalFreInMonths: itemData.data.itemCalFreInMonths,
+                            grnItemCalAlertDays: itemData.data.itemCalAlertDays,
+                            grnItemCalibrationSource: itemData.data.itemCalibrationSource,
+                            grnItemCalibrationDoneAt: itemData.data.itemCalibrationDoneAt,
+                            grnItemCalibratedAt: itemData.data.itemCalibratedAt,
+                            grnItemOBType: itemData.data.itemOBType,
+                            grnAcCriteria: itemData.data.acceptanceCriteria.map((item) => (
+                                {
+                                    grnAcParameter: item.acParameter,
+                                    grnAcNominalSize: item.acNominalSize,
+                                    grnAcNominalSizeUnit: item.acNominalSizeUnit,
+                                    grnAcMinPS: item.acMinPS,
+                                    grnAcMaxPS: item.acMaxPS,
+                                    grnAcWearLimitPS: item.acWearLimitPS,
+                                    grnAcBeforeCalibration: "",
+                                    grnAcMinOB: "",
+                                    grnAcMaxOB: "",
+                                    grnAcAverageOB: "",
+                                    grnAcOBError: "",
+                                    grnAcMinPSError: item.acMinPSError,
+                                    grnAcMaxPSError: item.acMaxPSError,
+                                    rowStatus: ""
+                                }
+                            )),
+                            grnItemUncertainity: itemData.data.itemUncertainity,
+                            grnItemCalDate: dayjs().format("YYYY-MM-DD"),
+                            grnItemDueDate: "",
+                            grnItemCertificateStatus: "",
+                            grnItemCertificateNo: "",
+                            grnItemCertificate: "",
+                            grnUncertainity: "",
+                            grnItemCalStatus: ""
+                        }))
+                    } else {
+
+                        console.log("else", itemData)
+                        setSelectedGrnItem((prev) => ({
+                            ...prev,
+                            [name]: value,
+                            grnItemId: itemData.data._id,
+                            grnItemAddMasterName: itemData.data.itemAddMasterName,
+                            grnItemIMTENo: itemData.data.itemIMTENo,
+                            grnItemType: itemData.data.itemType,
+                            grnItemRangeSize: itemData.data.itemRangeSize,
+                            grnItemRangeSizeUnit: itemData.data.itemRangeSizeUnit,
+                            grnItemMFRNo: itemData.data.itemMFRNo,
+                            grnItemLC: itemData.data.itemLC,
+                            grnItemLCUnit: itemData.data.itemLCUnit,
+                            grnItemMake: itemData.data.itemMake,
+                            grnItemModelNo: itemData.data.itemModelNo,
+
+                            grnItemDepartment: itemData.data.itemDepartment,
+                            grnItemArea: itemData.data.itemArea,
+                            grnItemPlaceOfUsage: itemData.data.itemPlaceOfUsage,
+                            grnItemCalFreInMonths: itemData.data.itemCalFreInMonths,
+                            grnItemCalAlertDays: itemData.data.itemCalAlertDays,
+                            grnItemCalibrationSource: itemData.data.itemCalibrationSource,
+                            grnItemCalibrationDoneAt: itemData.data.itemCalibrationDoneAt,
+                            grnItemCalibratedAt: "",
+                            grnItemOBType: itemData.data.itemOBType,
+                            grnAcCriteria: itemData.data.acceptanceCriteria.map((item) => (
+                                {
+                                    grnAcParameter: item.acParameter,
+                                    grnAcNominalSize: item.acNominalSize,
+                                    grnAcNominalSizeUnit: item.acNominalSizeUnit,
+                                    grnAcMinPS: item.acMinPS,
+                                    grnAcMaxPS: item.acMaxPS,
+                                    grnAcWearLimitPS: item.acWearLimitPS,
+                                    grnAcBeforeCalibration: "",
+                                    grnAcMinOB: item.acMinOB,
+                                    grnAcMaxOB: item.acMaxOB,
+                                    grnAcAverageOB: item.acAverageOB,
+                                    grnAcOBError: item.acOBError,
+                                    grnAcMinPSError: item.acMinPSError,
+                                    grnAcMaxPSError: item.acMaxPSError,
+                                    rowStatus: ""
+                                }
+                            )),
+                            grnItemUncertainity: itemData.data.itemUncertainity,
+                            grnItemCalDate: "",
+                            grnItemDueDate: "",
+                            grnItemCertificateStatus: "",
+                            grnItemCertificateNo: "",
+                            grnItemCertificate: "",
+                            grnUncertainity: "",
+                            grnItemCalStatus: ""
+                        }))
                     }
-                };
-
-                getItemById(itemData)
-                    .then(() => {
-                        if (value === "Calibrated") {
-                
-                            console.log("calibration")
-            
-            
-                            setSelectedGrnItem((prev) => ({
-                                ...prev,
-                                [name]: value,
-                                grnItemId: itemData.data._id,
-                                grnItemAddMasterName: itemData.data.itemAddMasterName,
-                                grnItemIMTENo: itemData.data.itemIMTENo,
-                                grnItemType: itemData.data.itemType,
-                                grnItemRangeSize: itemData.data.itemRangeSize,
-                                grnItemRangeSizeUnit: itemData.data.itemRangeSizeUnit,
-                                grnItemMFRNo: itemData.data.itemMFRNo,
-                                grnItemLC: itemData.data.itemLC,
-                                grnItemLCUnit: itemData.data.itemLCUnit,
-                                grnItemMake: itemData.data.itemMake,
-                                grnItemModelNo: itemData.data.itemModelNo,
-            
-                                grnItemDepartment: itemData.data.itemDepartment,
-                                grnItemArea: itemData.data.itemArea,
-                                grnItemPlaceOfUsage: itemData.data.itemPlaceOfUsage,
-                                grnItemCalFreInMonths: itemData.data.itemCalFreInMonths,
-                                grnItemCalAlertDays: itemData.data.itemCalAlertDays,
-                                grnItemCalibrationSource: itemData.data.itemCalibrationSource,
-                                grnItemCalibrationDoneAt: itemData.data.itemCalibrationDoneAt,
-                                grnItemCalibratedAt: itemData.data.itemCalibratedAt,
-                                grnItemOBType: itemData.data.itemOBType,
-                                grnAcCriteria: itemData.data.acceptanceCriteria.map((item) => (
-                                    {
-                                        grnAcParameter: item.acParameter,
-                                        grnAcNominalSize: item.acNominalSize,
-                                        grnAcNominalSizeUnit: item.acNominalSizeUnit,
-                                        grnAcMinPS: item.acMinPS,
-                                        grnAcMaxPS: item.acMaxPS,
-                                        grnAcWearLimitPS: item.acWearLimitPS,
-                                        grnAcBeforeCalibration: "",
-                                        grnAcMinOB: "",
-                                        grnAcMaxOB: "",
-                                        grnAcAverageOB: "",
-                                        grnAcOBError: "",
-                                        grnAcMinPSError: item.acMinPSError,
-                                        grnAcMaxPSError: item.acMaxPSError,
-                                        rowStatus: ""
-                                    }
-                                )),
-                                grnItemUncertainity: itemData.data.itemUncertainity,
-                                grnItemCalDate: dayjs().format("YYYY-MM-DD"),
-                                grnItemDueDate: "",
-                                grnItemCertificateStatus: "",
-                                grnItemCertificateNo: "",
-                                grnItemCertificate: "",
-                                grnUncertainity: "",
-                                grnItemCalStatus: ""
-                            }))
-                        } else {
-            
-                            console.log("else",itemData)
-                            setSelectedGrnItem((prev)=> ({
-                                ...prev,
-                                [name]: value,
-                                grnItemId: itemData.data._id,
-                                grnItemAddMasterName: itemData.data.itemAddMasterName,
-                                grnItemIMTENo: itemData.data.itemIMTENo,
-                                grnItemType: itemData.data.itemType,
-                                grnItemRangeSize: itemData.data.itemRangeSize,
-                                grnItemRangeSizeUnit: itemData.data.itemRangeSizeUnit,
-                                grnItemMFRNo: itemData.data.itemMFRNo,
-                                grnItemLC: itemData.data.itemLC,
-                                grnItemLCUnit: itemData.data.itemLCUnit,
-                                grnItemMake: itemData.data.itemMake,
-                                grnItemModelNo: itemData.data.itemModelNo,
-            
-                                grnItemDepartment: itemData.data.itemDepartment,
-                                grnItemArea: itemData.data.itemArea,
-                                grnItemPlaceOfUsage: itemData.data.itemPlaceOfUsage,
-                                grnItemCalFreInMonths: itemData.data.itemCalFreInMonths,
-                                grnItemCalAlertDays: itemData.data.itemCalAlertDays,
-                                grnItemCalibrationSource: itemData.data.itemCalibrationSource,
-                                grnItemCalibrationDoneAt: itemData.data.itemCalibrationDoneAt,
-                                grnItemCalibratedAt: "",
-                                grnItemOBType: itemData.data.itemOBType,
-                                grnAcCriteria: itemData.data.acceptanceCriteria.map((item) => (
-                                    {
-                                        grnAcParameter: item.acParameter,
-                                        grnAcNominalSize: item.acNominalSize,
-                                        grnAcNominalSizeUnit: item.acNominalSizeUnit,
-                                        grnAcMinPS: item.acMinPS,
-                                        grnAcMaxPS: item.acMaxPS,
-                                        grnAcWearLimitPS: item.acWearLimitPS,
-                                        grnAcBeforeCalibration: "",
-                                        grnAcMinOB: item.acMinOB,
-                                        grnAcMaxOB: item.acMaxOB,
-                                        grnAcAverageOB: item.acAverageOB,
-                                        grnAcOBError: item.acOBError,
-                                        grnAcMinPSError: item.acMinPSError,
-                                        grnAcMaxPSError: item.acMaxPSError,
-                                        rowStatus: ""
-                                    }
-                                )),
-                                grnItemUncertainity: itemData.data.itemUncertainity,
-                                grnItemCalDate: "",
-                                grnItemDueDate: "",
-                                grnItemCertificateStatus: "",
-                                grnItemCertificateNo: "",
-                                grnItemCertificate: "",
-                                grnUncertainity: "",
-                                grnItemCalStatus: ""
-                            }))
-                        }
-                    });
+                });
 
 
-           
+
 
         } else {
             setSelectedGrnItem((prev) => ({ ...prev, [name]: value }))
@@ -1027,8 +1049,8 @@ console.log(tempItem)*/}
     const [editIndex, setEditIndex] = useState(null)
     console.log(editableSelectedGrn, editGrnId)
     const handleGrnItemEdit = (item, index) => {
-        setSelectedGrnItem((prev)=>({
-        ...prev,
+        setSelectedGrnItem((prev) => ({
+            ...prev,
             grnItemStatus: item.grnItemStatus,
             grnItemId: item.grnItemId,
             grnItemAddMasterName: item.grnItemAddMasterName,
@@ -1829,10 +1851,28 @@ console.log(tempItem)*/}
                                     elevation={12}
                                 >
                                     <div className='row g-2'>
-                                        <div className="col-md-2">
+                                        <div className='col'>
+                                            <TextField label="Plant Wise"
+                                                id="grnPlantId"
+                                               
+                                                select
+                                                value={grnEditData.grnPlant}
+                                              
+                                                fullWidth
+                                                onChange={handleGrnItemChange}
+                                                size="small"
+                                                name="grnPlant" >
+
+                                                <MenuItem value="all">All</MenuItem>
+                                                {loggedEmp.plantDetails.map((item, index) => (
+                                                    <MenuItem key={index} value={item.plantName}>{item.plantName}</MenuItem>
+                                                ))}
+                                            </TextField>
+                                        </div>
+                                        <div className="col">
                                             <TextField size='small' fullWidth variant='outlined' value={itemAddDetails.grnList} id="grnListId" onChange={handleGrnItemChange} select label="Item List" name='grnList'>
 
-                                                {itemMasterDistNames.map((item, index) => (
+                                                {itemNameList.map((item, index) => (
                                                     <MenuItem key={index} value={item}>{item}</MenuItem>
                                                 ))}
 

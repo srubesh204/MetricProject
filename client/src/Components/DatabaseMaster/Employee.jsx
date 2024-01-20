@@ -821,8 +821,8 @@ const Employee = () => {
                                     fullWidth label="Title" onChange={handleChange} value={employeeData.title} select size="small" id="titleId" name="title" >
 
                                     <MenuItem value="">Title</MenuItem >
-                                    <MenuItem value="1">Mr.</MenuItem >
-                                    <MenuItem value="2">Ms.</MenuItem >
+                                    <MenuItem value="Mr.">Mr.</MenuItem >
+                                    <MenuItem value="Ms.">Ms.</MenuItem >
 
                                 </TextField>
 

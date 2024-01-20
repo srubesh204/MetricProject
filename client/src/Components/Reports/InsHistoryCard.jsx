@@ -7,6 +7,7 @@ import { useState, useEffect, useContext, createContext } from "react";
 import axios from 'axios';
 import dayjs from 'dayjs';
 import { DisabledByDefault, FileOpen, Pages, PrintRounded } from '@mui/icons-material';
+
 import HistoryCardPrint from './HistoryCardPrint';
 import { Link } from "react-router-dom";
 export const HistoryCardContent = createContext(null);
@@ -44,6 +45,8 @@ function InsHistoryCard() {
         formatFetchData();
     }, []);
 
+
+
     const [grnData, setGrnData] = useState([])
     const grnListFetchData = async () => {
         try {
@@ -52,7 +55,7 @@ function InsHistoryCard() {
             );
             console.log(response.data.result)
             setGrnData(response.data.result);
-            
+
         } catch (err) {
             console.log(err);
         }
@@ -79,7 +82,7 @@ function InsHistoryCard() {
     }, []);
 
 
- 
+
     useEffect(() => {
         const calData = async () => {
             try {
@@ -141,14 +144,14 @@ function InsHistoryCard() {
             const grnDataFilter = grnData.map(grn => {
                 const filteredPartyItems = grn.grnPartyItems.filter(grnItem => grnItem.grnItemIMTENo === value);
                 return {
-                    
+
                     grnPartyItems: filteredPartyItems
                 };
             });
-            
+
             // Now, grnDataFilter contains only the elements from grnData where at least one grnPartyItem matches the condition.
             setSelectedIMTEs(grnDataFilter[0].grnPartyItems)
-           console.log(grnDataFilter[0].grnPartyItems)
+            console.log(grnDataFilter[0].grnPartyItems)
         } else {
             const selectedImtes = itemCalList.filter(cal => cal.calIMTENo === value)
             setSelectedIMTEs(selectedImtes)
@@ -182,7 +185,7 @@ function InsHistoryCard() {
 
     const grnColumns = [
         { field: 'id', headerName: 'Si.No', width: 50, align: "center", renderCell: (params) => params.api.getAllRowIds().indexOf(params.id) + 1 },
-        { field: 'certificateView', headerName: 'Certificate', width: 100, align: "center", renderCell: (params)=>  <IconButton size="small" component={Link} target="_blank" to={`${process.env.REACT_APP_PORT}/grnCertificates/${params.row.grnItemCertificate}`} ><FileOpen /></IconButton> },
+        { field: 'certificateView', headerName: 'Certificate', width: 100, align: "center", renderCell: (params) => <IconButton size="small" component={Link} target="_blank" to={`${process.env.REACT_APP_PORT}/grnCertificates/${params.row.grnItemCertificate}`} ><FileOpen /></IconButton> },
         { field: 'grnItemCalDate', headerName: 'Calibration Date', width: 150, align: "center", valueGetter: (params) => dayjs(params.row.grnItemCalDate).format('DD-MM-YYYY') },
         { field: 'grnItemCalStatus', headerName: 'Calibration Status', width: 150, align: "center", },
         { field: 'grnItemDueDate', headerName: 'Next calibration Date', width: 150, align: "center", valueGetter: (params) => dayjs(params.row.grnItemDueDate).format('DD-MM-YYYY') },
@@ -272,6 +275,11 @@ function InsHistoryCard() {
     };
 
     console.log(handlePrintClick)
+    const [showPdf, setShowPdf] = useState(false);
+    const handleButtonClick = () => {
+        setShowPdf(true);
+    };
+    const [iframeURL, setIframeURL] = useState({});
 
 
 
@@ -367,6 +375,9 @@ function InsHistoryCard() {
 
                                 <div className="col d-flex justify-content-end">
 
+                                    {/* <Worker workerUrl={`https://unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.js`}>
+                                        <Viewer fileUrl={pdfUrl} onNumPagesChange={onNumPagesChange} />
+                                    </Worker> */}
                                     <div className="me-2"><Button variant="contained" color="info" size="small">View Instructions</Button></div>
                                     <div className="me-2"><Button variant="contained" color="info" size="small">View Drawing</Button></div>
                                     <div className="me-2"><Button variant="contained" color="info" size="small">View R&R</Button></div>
@@ -481,7 +492,7 @@ function InsHistoryCard() {
                             <div style={{ height: 400, width: '100%' }}>
                                 <DataGrid
                                     rows={selectedIMTEs}
-                                    columns={selectedRow.length > 0 ? selectedRow[0].itemCalibrationSource === "outsource" ? grnColumns :  calColumn: []}
+                                    columns={selectedRow.length > 0 ? selectedRow[0].itemCalibrationSource === "outsource" ? grnColumns : calColumn : []}
                                     initialState={{
                                         pagination: {
                                             paginationModel: { page: 0, pageSize: 5 },
@@ -527,7 +538,7 @@ function InsHistoryCard() {
                     printState, setPrintState,
                 }}
             >
-                 <HistoryCardPrint />
+                <HistoryCardPrint />
             </HistoryCardContent.Provider>
         </div>
     );

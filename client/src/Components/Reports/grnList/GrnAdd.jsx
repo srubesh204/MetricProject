@@ -557,7 +557,7 @@ const GrnAdd = () => {
 
                     `${process.env.REACT_APP_PORT}/itemGRN/createItemGRN`, grnAddData
                 );
-                console.log(response.data)
+                console.log(response.data.result)
                 setAlertMessage({ message: response.data.message, type: "success" })
                 setSnackBarOpen(true)
 

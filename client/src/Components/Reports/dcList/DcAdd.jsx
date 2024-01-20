@@ -37,7 +37,10 @@ const DcAdd = () => {
         dcDate: dayjs().format("YYYY-MM-DD"),
         dcReason: "Calibration",
         dcCommonRemarks: "",
-        dcPartyItems: []
+        dcPlant:"",
+        dcDepartment:"",
+        dcPartyItems: [],
+      
 
     }
 
@@ -51,7 +54,10 @@ const DcAdd = () => {
         dcDate: dayjs().format("YYYY-MM-DD"),
         dcReason: "Calibration",
         dcCommonRemarks: "",
-        dcPartyItems: []
+        dcPlant:"",
+        dcDepartment:"",
+        dcPartyItems: [],
+       
 
     })
     console.log(dcAddData)
@@ -308,6 +314,8 @@ const DcAdd = () => {
                 const response = await axios.post(
                     `${process.env.REACT_APP_PORT}/itemDc/createItemDc`, dcAddData
                 );
+
+                console.log(response.data.result)
                 setAlertMessage({ message: response.data.message, type: "success" });
                 setSnackBarOpen(true);
                 dcListFetchData();
@@ -390,7 +398,7 @@ const DcAdd = () => {
     const [itemNameList, setItemNameList] = useState(itemPlantList)
     const handleDcItemAdd = (e) => {
         const { name, value } = e.target;
-        if (name === "itemPlant") {
+        if (name === "dcPlant") {
             // Set the selected itemPlant in state
             setItemAddDetails((prev) => ({ ...prev, dcPlant: value }));
             const plantItems = itemPlantList.filter(item => item.itemPlant === value)
@@ -515,15 +523,15 @@ const DcAdd = () => {
                             <div className='row'>
 
                                 <div className='col-3 mb-2'>
-                                    <TextField label="Plant Wise"
-                                        id="itemPlantId"
+                                <TextField label="Plant Wise"
+                                        id="dcPlantId"
+                                       
                                         select
-                                        defaultValue="all"
-                                        // value={filterAllNames.plantWise}
+                                      value={dcAddData.dcPlant}
                                         fullWidth
                                         onChange={handleDcItemAdd}
                                         size="small"
-                                        name="itemPlant" >
+                                        name="dcPlant" >
                                         <MenuItem value="all">All</MenuItem>
                                         {loggedEmp.plantDetails.map((item, index) => (
                                             <MenuItem key={index} value={item.plantName}>{item.plantName}</MenuItem>
@@ -877,14 +885,19 @@ const DcAdd = () => {
                                     </Button>
                                 </DialogActions>
                             </Dialog>
-                            <Snackbar anchorOrigin={{ vertical: "top", horizontal: "right" }} open={snackBarOpen} autoHideDuration={3000}
+                            {/* <Snackbar anchorOrigin={{ vertical: "top", horizontal: "right" }} open={snackBarOpen} autoHideDuration={3000}
                                 onClose={() => setTimeout(() => {
                                     setSnackBarOpen(false)
                                 }, 3000)}>
                                 <Alert onClose={() => setSnackBarOpen(false)} variant='filled' severity={alertMessage.type} sx={{ width: '100%' }}>
                                     {alertMessage.message}
                                 </Alert>
-                            </Snackbar>
+                            </Snackbar> */}
+                            <Snackbar anchorOrigin={{ vertical: "top", horizontal: "right" }} open={snackBarOpen} autoHideDuration={6000} onClose={() => setSnackBarOpen(false)}>
+                        <Alert onClose={() => setSnackBarOpen(false)}severity={errorhandler.code} variant='filled' sx={{ width: '100%' }}>
+                            {errorhandler.message}
+                        </Alert>
+                    </Snackbar>
 
 
                         </form>

@@ -74,6 +74,58 @@ const Grn = () => {
     console.log(grnData)
 
 
+    // const [grnNo, setGrnNo] = useState(dayjs().year() + 1);
+    // useEffect(() => {
+    //     // Update grnNo when the year changes
+    //     setGrnNo(dayjs().year() + 1);
+    // }, [dayjs().year()]);
+
+    // const handleGrnChanges = (event) => {
+    //     const { name, value } = event.target;
+
+    //     if (name === 'grnNo') {
+    //         // Handle changes if needed
+    //     }
+    // };
+    const [currentYear, setCurrentYear] = useState(dayjs().year());
+    const [grnNo, setGrnNo] = useState(currentYear + 1);
+    useEffect(() => {
+        // Update grnNo when the year changes
+        setGrnNo(currentYear + 1);
+    }, [currentYear]);
+    const handleGrnChanges = (event) => {
+        const { name, value } = event.target;
+
+        if (name === 'grnNo') {
+            // Handle changes if needed
+        }
+    };
+
+
+
+
+
+    // const [dcNumber, setDcNumber] = useState(1);
+    // const currentYear = dayjs().year();
+    // const [data, setData] = useState({ year: currentYear, dcNo: `${currentYear}+1` });
+
+
+    // const handleDcChanges = (event) => {
+    //     const { name, value } = event.target;
+
+    //     if (name === 'dcNo') {
+    //         // Handle changes if needed
+    //     }
+    // };
+    // useEffect(() => {
+    //     // Update the value when dcNumber changes
+    //     setGrnData({ ...grnData, dcNo: `${currentYear}-${dcNumber}` });
+    // }, [dcNumber, currentYear]);
+
+
+
+
+
 
     const [itemAddDetails, setItemAddDetails] = useState({
         grnList: "",
@@ -834,12 +886,13 @@ const Grn = () => {
                     `${process.env.REACT_APP_PORT}/itemGRN/createItemGRN`, grnData
                 );
                 setSelectedGrnItem(initialGrnItem)
-                setAlertMessage({ message: response.data.message, type: "success" })
+                console.log(response.data.result)
+                setErrorHandler({ status: 0, message: "GRN Created Successfully", code: "success" });
                 setSnackBarOpen(true)
                 setGrnData(initialGrnData)
                 setTimeout(() => setGrnOpen(false), 1000)
             } else {
-                setAlertMessage({ message: "Fill the required fields to submit", type: "error" })
+                setErrorHandler({ status: 0, message: errors, code: "error" });
                 setSnackBarOpen(true)
             }
         } catch (err) {
@@ -1077,16 +1130,14 @@ const Grn = () => {
 
                                         <div className='col d-flex mb-2'>
                                             <div className=" col-6 me-2">
-
-                                                <TextField
-                                                    label="GRN NO"
+                                              
+                                                  <TextField
+                                                    label="GRN No"
                                                     id="grnNoId"
-                                                    defaultValue=""
-                                                    value={grnData.grnNo}
+                                                    value={grnNo}
+                                                    onChange={handleGrnChanges}
                                                     size="small"
-                                                    onChange={handleGrnChange}
-                                                    {...(errors.grnNo !== "" && { helperText: errors.grnNo, error: true })}
-                                                    fullWidth
+                                                    sx={{ width: "101%" }}
                                                     name="grnNo"
                                                 />
                                             </div>
@@ -1726,14 +1777,21 @@ const Grn = () => {
                                 </Button>
                             </DialogActions>
                         </Dialog>
-                        <Snackbar anchorOrigin={{ vertical: "top", horizontal: "right" }} open={snackBarOpen} autoHideDuration={3000}
+                        {/* <Snackbar anchorOrigin={{ vertical: "top", horizontal: "right" }} open={snackBarOpen} autoHideDuration={3000}
                             onClose={() => setTimeout(() => {
                                 setSnackBarOpen(false)
                             }, 3000)}>
                             <Alert onClose={() => setSnackBarOpen(false)} variant='filled' severity={alertMessage.type} sx={{ width: '100%' }}>
                                 {alertMessage.message}
                             </Alert>
+                        </Snackbar> */}
+                        <Snackbar anchorOrigin={{ vertical: "top", horizontal: "right" }} open={snackBarOpen} autoHideDuration={6000} onClose={() => setSnackBarOpen(false)}>
+                            <Alert onClose={() => setSnackBarOpen(false)} severity={errorhandler.code} variant='filled' sx={{ width: '100%' }}>
+                                {errorhandler.message}
+                            </Alert>
                         </Snackbar>
+
+
                     </LocalizationProvider>
 
                 </div>

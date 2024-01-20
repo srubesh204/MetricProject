@@ -111,6 +111,8 @@ const Home = () => {
     plantEmployees: []
   })
 
+ 
+
 
 
 
@@ -474,23 +476,25 @@ const Home = () => {
       field: 'itemCurrentLocation',
       headerName: 'Current Location',
       width: 100,
+      align:"left"
     },
     {
       field: 'itemLastLocation',
       headerName: 'Last Location',
       width: 100,
+      align:"left"
     },
     {
       field: 'itemCalibrationSource',
       headerName: 'Calibration Source',
       width: 100,
-      align: "center"
+      align: "left"
     },
     {
       field: 'itemSupplier',
       headerName: 'Supplier',
       width: 100,
-      align: "center"
+      align: "left"
     },
   ];
 
@@ -796,10 +800,14 @@ const Home = () => {
   useEffect(() => {
     console.log(employeeRole)
     const filteredPlants = employeeRole.loggedEmp.plantDetails.filter(plant => plant.plantName === selectedPlantName);
-    console.log(filteredPlants)
+    
     if (filteredPlants.length > 0) {
-      setPlantDepartments(filteredPlants[0].departments)
-    } else {
+      console.log(filteredPlants[0].departments)
+      const availableDeps = filteredPlants[0].departments.filter(dep => filteredData.find(item => item.itemDepartment === dep))
+      console.log(availableDeps)
+      console.log(filteredPlants[0].departments)
+      setPlantDepartments(availableDeps)
+    } else { 
       setPlantDepartments([])
     }
 
@@ -808,7 +816,7 @@ const Home = () => {
 
   const DepartmentDataShow = (name, value) => {
 
-    const filter = pieDataFilter.filter((item) => item.itemCurrentLocation === value);
+    const filter = pieDataFilter.filter((item) => item.itemCurrentLocation === value && item.itemLocation === name);
     setFilteredData(filter)
 
   };
@@ -1028,6 +1036,9 @@ const Home = () => {
 
 
   };
+
+  
+
 
   const [calOpen, setCalOpen] = useState(false);
   const [dcOpen, setDcOpen] = useState(false);

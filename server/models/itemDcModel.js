@@ -24,7 +24,7 @@ const itemDcSchema = new mongoose.Schema({
   },
   dcNo: {
     type: String,
-    required: [true, "DC No is required"],
+   
     unique: [true, "DC No Should be Unique"]
   },
   dcDate: {

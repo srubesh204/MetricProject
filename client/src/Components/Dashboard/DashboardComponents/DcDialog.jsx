@@ -45,8 +45,31 @@ const Dc = () => {
         dcCommonRemarks: "",
         dcPartyItems: []
 
+
     })
     console.log(dcData)
+
+    // const [data, setData] = useState({
+    //     dcNo: '',
+    //     dcPartyItems: [],
+    //     year: new Date().getFullYear() // Set the initial year to the current year
+    //   });
+    const [dcNumber, setDcNumber] = useState(1);
+    const currentYear = dayjs().year();
+    const [data, setData] = useState({ year: currentYear, dcNo: `${currentYear}-1` });
+
+
+    const handleDcChanges = (event) => {
+        const { name, value } = event.target;
+
+        if (name === 'dcNo') {
+            // Handle changes if needed
+        }
+    };
+    useEffect(() => {
+        // Update the value when dcNumber changes
+        setDcData({ ...dcData, dcNo: `${currentYear}-${dcNumber}` });
+    }, [dcNumber, currentYear]);
 
     const settingDcData = () => {
         if (selectedRows.length > 0) {
@@ -325,6 +348,7 @@ const Dc = () => {
     })
 
 
+
     const getItemByName = async (value) => {
         try {
             const response = await axios.post(
@@ -377,6 +401,18 @@ const Dc = () => {
     }
 
 
+    // const handleDcChange = (event) => {
+    //     const { name, value } = event.target;
+
+    //     if (name === 'dcNo') {
+    //       // Extract the year from the existing dcData or use a static value
+    //       const year = dcData.year || 2024; // Replace with your dynamic year value
+
+    //       // Update the sequential number and set the new value for "Dc No"
+    //       setDcNumber(dcNumber + 1);
+    //       setDcData({ ...dcData, [name]: `${year}-${dcNumber}` });
+    //     }
+    //   };
 
 
 
@@ -489,7 +525,7 @@ const Dc = () => {
                                                     value={dcData.dcPartyCode}
 
 
-                                               
+
                                                     size="small"
                                                     fullWidth
                                                     name="partyCode" >
@@ -527,15 +563,15 @@ const Dc = () => {
                                     <div className='col d-flex'>
                                         <div className=" col-2 me-2">
 
-                                            <TextField label="Dc No"
-                                                {...(errors.dcNo !== "" && { helperText: errors.dcNo, error: true })}
+                                            <TextField
+                                                label="Dc No"
                                                 id="dcNoId"
-                                               
                                                 value={dcData.dcNo}
                                                 onChange={handleDcChange}
                                                 size="small"
                                                 sx={{ width: "101%" }}
-                                                name="dcNo" />
+                                                name="dcNo"
+                                            />
 
                                         </div>
                                         <div className="col-2 me-2">
@@ -580,7 +616,7 @@ const Dc = () => {
                                             <TextField label="Common Remarks"
                                                 id="dcCommonRemarksId"
                                                 value={dcData.dcCommonRemarks}
-                                              
+
                                                 onChange={handleDcChange}
                                                 size="small"
                                                 sx={{ width: "100%" }}
@@ -716,7 +752,7 @@ const Dc = () => {
                                     </Button>
                                 </DialogActions>
                             </Dialog>
-                             {/* <Snackbar anchorOrigin={{ vertical: "top", horizontal: "right" }} open={snackBarOpen} autoHideDuration={3000}
+                            {/* <Snackbar anchorOrigin={{ vertical: "top", horizontal: "right" }} open={snackBarOpen} autoHideDuration={3000}
                                 onClose={() => setTimeout(() => {
                                     setSnackBarOpen(false)
                                 }, 3000)}>
@@ -725,10 +761,10 @@ const Dc = () => {
                                 </Alert>
                             </Snackbar>  */}
                             <Snackbar anchorOrigin={{ vertical: "top", horizontal: "right" }} open={snackBarOpen} autoHideDuration={6000} onClose={() => setSnackBarOpen(false)}>
-                        <Alert onClose={() => setSnackBarOpen(false)}severity={errorhandler.code} variant='filled' sx={{ width: '100%' }}>
-                            {errorhandler.message}
-                        </Alert>
-                    </Snackbar>
+                                <Alert onClose={() => setSnackBarOpen(false)} severity={errorhandler.code} variant='filled' sx={{ width: '100%' }}>
+                                    {errorhandler.message}
+                                </Alert>
+                            </Snackbar>
 
 
                         </form>
@@ -740,7 +776,7 @@ const Dc = () => {
                     <Button variant='contained' color='warning' className='me-3'>Upload Report</Button>
                 </div>
                 <div>
-                    <Button variant='contained' color='error' className='me-3' onClick={() =>  handleClose()}>Cancel</Button>
+                    <Button variant='contained' color='error' className='me-3' onClick={() => handleClose()}>Cancel</Button>
                     <Button variant='contained' color='success' onClick={() => { setConfirmSubmit(true) }}>Submit</Button>
                 </div>
             </DialogActions>

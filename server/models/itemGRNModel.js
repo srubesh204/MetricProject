@@ -33,6 +33,14 @@ const itemGRNSchema = new mongoose.Schema({
     type: String,
     required: [true, "GRN Date Required"]
   },
+  grnPlant: {
+    type: String,
+    required: [true, "Plant is required"]
+  }, 
+  grnDepartment: {
+    type: [],
+    required: [true, "Department Required"]
+  },
   grnCommonRemarks:String,
   grnPartyItems:[]
 });
