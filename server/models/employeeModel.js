@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const uniqueValidator = require('mongoose-unique-validator')
+const mongooseSequence = require('mongoose-sequence')(mongoose);
 const employeeSchema = new mongoose.Schema({
     employeeCode : {
         type: String,
@@ -52,5 +53,6 @@ const employeeSchema = new mongoose.Schema({
    
 });
 employeeSchema.plugin(uniqueValidator);
+employeeSchema.plugin(mongooseSequence, { inc_field: 'employeeId', });
 
 module.exports = mongoose.model('employee', employeeSchema);
