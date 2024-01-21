@@ -70,7 +70,7 @@ app.use('/formatNo', formatNoRoute);
 app.use('/compDetails', compDetailsRoute);
 app.use('/placeOfUsage', placeOfUsageRoute);
 app.use('/mailConfig', mailConfigRoute);
-//app.use('/mail', mailRoute)
+app.use('/mail', mailRoute)
  
 //
 app.post('/login', employeeController.employeeLoginCheck)
