@@ -913,7 +913,8 @@ const Grn = () => {
                 setGrnData(initialGrnData)
                 setTimeout(() => setGrnOpen(false), 1000)
             } else {
-                setErrorHandler({ status: 0, message: errors, code: "error" });
+                console.log(errors)
+                setErrorHandler({ status: 0, message: Object.values(errors).join(', '), code: "error" });
                 setSnackBarOpen(true)
             }
         } catch (err) {
@@ -1155,17 +1156,15 @@ const Grn = () => {
                                                 <TextField
                                                     label="GRN No"
                                                     id="grnNoId"
-                                                    value={grnNo}
-                                                    onChange={handleGrnChanges}
+                                                    value={grnData.grnNo}
+                                                    onChange={handleGrnChange}
                                                     size="small"
-                                                    sx={{ width: "101%" }}
+                                                    fullWidth
                                                     name="grnNo"
                                                 />
                                             </div>
+
                                             <div className="col-6">
-
-
-
                                                 <DatePicker
 
                                                     fullWidth
@@ -1179,13 +1178,10 @@ const Grn = () => {
                                                     //onChange={handleGrnChange}
                                                     slotProps={{ textField: { size: 'small', fullWidth: true } }}
                                                     format="DD-MM-YYYY" />
-
-
-
                                             </div>
-
-
                                         </div>
+
+                                        
                                         <div className='row '>
                                             <div className='mb-5'>
                                                 <TextField label="Common Remarks"
