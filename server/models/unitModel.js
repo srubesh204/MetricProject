@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const uniqueValidator = require('mongoose-unique-validator');
+const mongooseSequence = require('mongoose-sequence')(mongoose);
 
 const unitSchema = new mongoose.Schema({
   unitName: {
@@ -9,5 +10,6 @@ const unitSchema = new mongoose.Schema({
   }  
 });
 unitSchema.plugin(uniqueValidator);
+unitSchema.plugin(mongooseSequence, { inc_field: 'unitId', });
 
 module.exports = mongoose.model('unit', unitSchema);

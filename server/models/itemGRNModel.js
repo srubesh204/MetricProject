@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const uniqueValidator = require('mongoose-unique-validator');
+const mongooseSequence = require('mongoose-sequence')(mongoose);
 const itemGRNSchema = new mongoose.Schema({
   grnPartyRefNo:{
     type: String,
@@ -45,4 +46,5 @@ const itemGRNSchema = new mongoose.Schema({
   grnPartyItems:[]
 });
 itemGRNSchema.plugin(uniqueValidator);
+itemGRNSchema.plugin(mongooseSequence, { inc_field: 'grnId', });
 module.exports = mongoose.model('itemGRN', itemGRNSchema);

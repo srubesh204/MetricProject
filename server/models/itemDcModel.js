@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const uniqueValidator = require('mongoose-unique-validator');
+const mongooseSequence = require('mongoose-sequence')(mongoose);
 const itemDcSchema = new mongoose.Schema({
 
   dcPartyId: {
@@ -51,4 +52,5 @@ const itemDcSchema = new mongoose.Schema({
   }
 });
 itemDcSchema.plugin(uniqueValidator);
+itemDcSchema.plugin(mongooseSequence, { inc_field: 'dcId', prefix: 'SBCDEP' });
 module.exports = mongoose.model('itemDc', itemDcSchema);

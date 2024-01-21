@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const dayjs = require('dayjs')
 const uniqueValidator = require('mongoose-unique-validator');
+const mongooseSequence = require('mongoose-sequence')(mongoose);
 
 const itemAddSchema = new mongoose.Schema({
   itemMasterRef: String,
@@ -98,5 +99,6 @@ const itemAddSchema = new mongoose.Schema({
   }
 });
 itemAddSchema.plugin(uniqueValidator);
+itemAddSchema.plugin(mongooseSequence, { inc_field: 'itemId', });
 
 module.exports = mongoose.model('itemAdd', itemAddSchema);

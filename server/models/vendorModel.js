@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const uniqueValidator = require('mongoose-unique-validator');
+const mongooseSequence = require('mongoose-sequence')(mongoose);
 const vendorSchema = new mongoose.Schema({
   vendorCode: {
     type: String,
@@ -46,5 +47,6 @@ const vendorSchema = new mongoose.Schema({
   // }] 
 });
 vendorSchema.plugin(uniqueValidator);
+vendorSchema.plugin(mongooseSequence, { inc_field: 'vendorId', });
 module.exports = mongoose.model('vendor', vendorSchema);
 

@@ -1313,7 +1313,7 @@ const Employee = () => {
                             elevation={12}
                         >
 
-                            <h3 className='text-center'>Employee List</h3>
+                            {/* <h3 className='text-center'>Employee List</h3> */}
 
 
 
@@ -1372,7 +1372,7 @@ const Employee = () => {
                                 
                             </Grid>
                             <div>
-                                <div style={{ height: 400, width: '100%' }}>
+                                <div style={{ height: 300, width: '100%' }}>
                                     <DataGrid
                                         rows={filteredData}
                                         columns={employeeColumns}
