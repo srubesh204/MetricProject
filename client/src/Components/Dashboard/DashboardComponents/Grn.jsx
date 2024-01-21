@@ -103,6 +103,27 @@ const Grn = () => {
 
 
 
+    const settingDcData = () => {
+        if (selectedRows.length > 0) {
+            const departments = [...new Set(selectedRows.map(item => item.itemCurrentLocation))]
+            setGrnData((prev) => (
+                {
+                    ...prev,
+                    grnPlant: selectedRows[0].itemPlant,
+                    grnDepartment: departments,
+                    grnPartyItems: selectedRows
+                }
+
+            ))
+        }
+
+    };
+    useEffect(() => {
+        settingDcData()
+    }, [selectedRows])
+
+
+
 
 
     // const [dcNumber, setDcNumber] = useState(1);
@@ -1130,8 +1151,8 @@ const Grn = () => {
 
                                         <div className='col d-flex mb-2'>
                                             <div className=" col-6 me-2">
-                                              
-                                                  <TextField
+
+                                                <TextField
                                                     label="GRN No"
                                                     id="grnNoId"
                                                     value={grnNo}
