@@ -25,19 +25,6 @@ const TotalList = () => {
   const [totalPrintOpen, setTotalPrintOpen] = useState(false);
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
   const employeeRole = useEmployee()
 
   console.log(dayjs("2023-11-17").isSameOrBefore("2023-11-21"))
@@ -731,14 +718,22 @@ const TotalList = () => {
     }
   };
 
-
-
-
-
-
-
-
-
+  const [formatNoData, setFormatNoData] = useState([])
+  const formatFetchData = async () => {
+      try {
+          const response = await axios.get(
+              `${process.env.REACT_APP_PORT}/formatNo/getFormatNoById/1`
+          );
+          const format = response.data.result
+          console.log(format)
+          setFormatNoData(format)
+      } catch (err) {
+          console.log(err);
+      }
+  };
+  useEffect(() => {
+      formatFetchData();
+  }, []);
 
   return (
     <div style={{ margin: "2rem" }}>
@@ -1089,7 +1084,7 @@ const TotalList = () => {
       </form>
 
       <TotalListContent.Provider
-        value={{ totalPrintOpen, setTotalPrintOpen, selectedRows, itemList, filteredItemListData, partDataList }}
+        value={{ totalPrintOpen, setTotalPrintOpen, selectedRows, itemList, filteredItemListData, partDataList, formatNoData }}
       >
 
         <TotalPrint />

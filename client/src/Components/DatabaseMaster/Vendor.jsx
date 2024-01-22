@@ -1278,7 +1278,7 @@ const Vendor = () => {
                                     </select>
 
                                 </div>
-                                {selectedRowIds.length !== 0 && <Button variant='contained' type='button' color='error' onClick={() => setDeleteModalVendor(true)}>Delete Vendors</Button>}
+                                
                             </div>
 
                             <div style={{ height: 400, width: '100%', marginTop: "0.5rem" }}>
@@ -1300,8 +1300,16 @@ const Vendor = () => {
                                     }}
 
                                     slots={{
-                                        toolbar: GridToolbar,
-                                    }}
+                                        toolbar: () => (
+                                          <div className='d-flex justify-content-between align-items-center'>
+                                            <GridToolbar />
+                                            <div>
+                                            {selectedRowIds.length !== 0 && <Button variant='contained' type='button' size='small' color='error' onClick={() => setDeleteModalVendor(true)}>Delete Vendors</Button>}
+                                            </div>
+                    
+                                          </div>
+                                        ),
+                                      }}
 
                                     onRowSelectionModelChange={(newRowSelectionModel, event) => {
                                         setSelectedRowIds(newRowSelectionModel);

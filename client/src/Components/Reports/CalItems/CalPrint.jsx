@@ -8,7 +8,7 @@ import { useReactToPrint } from 'react-to-print';
 const CalPrint = () => {
 
     const calData = useContext(CalData)
-    const { calPrintOpen, setCalPrintOpen, selectedRows, formatNoData, filteredCalData, calibrationData, printState, setPrintState, filterAddress } = calData
+    const { calPrintOpen, setCalPrintOpen, selectedRows, formatNoData, filteredCalData, calibrationData, printState, setPrintState, filterAddress, filterCompany } = calData
 
 
     const componentRef = useRef();
@@ -53,6 +53,7 @@ const CalPrint = () => {
     console.log(filterAddress)
     console.log(selectedRows && selectedRows.calcalibrationData)
     console.log(filteredCalData)
+    console.log(filterCompany[0]?.companyName)
 
     return (
         <Dialog keepMounted fullScreen open={calPrintOpen} sx={{ height: '100vh', width: '100vw' }}
@@ -111,7 +112,7 @@ const CalPrint = () => {
                                         </tr>
                                         <tr style={{ textAlign: "center", width: "30%", margin: 0 }}>
                                             <div style={{ display: "flex", flexDirection: "column", height: "100%" }}>
-                                                <div style={{ border: "0.1px solid black", height: "20%" }}>Metric</div>
+                                                <div style={{ border: "0.1px solid black", height: "20%" }}>{filterCompany[0]?.companyName}</div>
                                                 <div style={{ flex: 1, border: "0.1px solid black", height: "80%" }}>{filterAddress[0]?.plantName}<br />{filterAddress[0]?.plantAddress}</div>
                                             </div>
                                         </tr>
