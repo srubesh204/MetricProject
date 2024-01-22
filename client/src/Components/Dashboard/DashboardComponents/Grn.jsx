@@ -126,22 +126,7 @@ const Grn = () => {
 
 
 
-    // const [dcNumber, setDcNumber] = useState(1);
-    // const currentYear = dayjs().year();
-    // const [data, setData] = useState({ year: currentYear, dcNo: `${currentYear}+1` });
-
-
-    // const handleDcChanges = (event) => {
-    //     const { name, value } = event.target;
-
-    //     if (name === 'dcNo') {
-    //         // Handle changes if needed
-    //     }
-    // };
-    // useEffect(() => {
-    //     // Update the value when dcNumber changes
-    //     setGrnData({ ...grnData, dcNo: `${currentYear}-${dcNumber}` });
-    // }, [dcNumber, currentYear]);
+   
 
 
 

@@ -171,37 +171,37 @@ export const Department = () => {
     }
   };
 
-  
+
   useEffect(() => {
     if (depExcelStatus) {
       const timeoutId = setTimeout(() => {
         setDepExcelStatus('');
       }, 1000);
 
-      return () => clearTimeout(timeoutId); 
+      return () => clearTimeout(timeoutId);
     }
   }, [depExcelStatus]);
-    
+
   useEffect(() => {
     if (areaExcelStatus) {
       const timeoutId = setTimeout(() => {
         setAreaExcelStatus('');
       }, 1000);
 
-      return () => clearTimeout(timeoutId); 
+      return () => clearTimeout(timeoutId);
     }
   }, [areaExcelStatus]);
-    
+
   useEffect(() => {
     if (pouExcelStatus) {
       const timeoutId = setTimeout(() => {
         setPouExcelStatus('');
       }, 1000);
 
-      return () => clearTimeout(timeoutId); 
+      return () => clearTimeout(timeoutId);
     }
   }, [pouExcelStatus]);
-  
+
 
 
   const { id } = useParams()
@@ -267,17 +267,17 @@ export const Department = () => {
       field: 'defaultdep', headerName: 'Default', width: "300", headerAlign: "center", align: "center",
       renderCell: (params) => params.row.defaultdep === "yes" ? <Check color="success" /> : <Clear color="error" />
     },
-    {
-      field: 'delete',
-      headerName: 'Delete',
-      width: 80, headerAlign: "center",
-      sortable: false,
-      renderHeader: () => (
-        <IconButton color='error' aria-label="Delete" onClick={() => setDeleteDepModal(true)}>
-          <Delete />
-        </IconButton>
-      ),
-    },
+    // {
+    //   field: 'delete',
+    //   headerName: 'Delete',
+    //   width: 80, headerAlign: "center",
+    //   sortable: false,
+    //   renderHeader: () => (
+    //     <IconButton color='error' aria-label="Delete" onClick={() => setDeleteDepModal(true)}>
+    //       <Delete />
+    //     </IconButton>
+    //   ),
+    // },
   ];
 
   const [selectedRowIds, setSelectedRowIds] = useState([]);
@@ -1053,7 +1053,7 @@ export const Department = () => {
 
                   <div className="col-md-5">
 
-                    
+
 
                     <Autocomplete label="Department"
                       disablePortal
@@ -1096,7 +1096,7 @@ export const Department = () => {
                   <div className="col d-flex">
                     <div className="d-flex justify-content-center">
                       <ButtonGroup className="me-2" size="small">
-                        <Button component="label" size="small"  variant="contained" >
+                        <Button component="label" size="small" variant="contained" >
                           Upload
                           <VisuallyHiddenInput type="file" onChange={(e) => handleExcel(e, "dep")} />
                         </Button>
@@ -1104,7 +1104,7 @@ export const Department = () => {
                       </ButtonGroup>
 
                       <ButtonGroup size="small">
-                        <Button component="label" size="small"   variant="contained" color='secondary'>
+                        <Button component="label" size="small" variant="contained" color='secondary'>
                           Download
                           <VisuallyHiddenInput type="file" />
                         </Button>
@@ -1113,7 +1113,7 @@ export const Department = () => {
                     </div>
 
                   </div>
-              
+
 
                   {depStateId ? <Dialog
                     open={depOpenModal}
@@ -1169,16 +1169,16 @@ export const Department = () => {
                     {depStateId ? (<div className="d-flex justify-content-end">
                       <Button className="me-1"
                         type="button"
-                        variant="contained"  size="small"
+                        variant="contained" size="small"
                         color='warning'
-                        
-                       
+
+
                         onClick={() => setDepOpenModal(true)}
-                      
+
                       >
                         Modify
                       </Button >
-                      <Button type="button" variant="contained"  size="small"   color='error' onMouseEnter={(e) => { e.target.style.background = 'red' }} onMouseOut={(e) => { e.target.style.background = '#e6e6e6' }}
+                      <Button type="button" variant="contained" size="small" color='error' onMouseEnter={(e) => { e.target.style.background = 'red' }} onMouseOut={(e) => { e.target.style.background = '#e6e6e6' }}
                         // style={{ backgroundColor: "#e6e6e6", color: "black", fontWeight: "bolder" }}
                         // className="btn text-end"
                         onClick={() => { setDepStateId(null); setDepartmentData(emptyDepartmentData) }}
@@ -1186,9 +1186,9 @@ export const Department = () => {
                     </div>) : <div >
                       <Button variant="contained" type="button"
                         size="small"
-                       
+
                         color='success'
-                        
+
                         className="btn text-end hover" onClick={() => setDepOpenModal(true)}
                       >+ Add Department</Button>
                     </div>}
@@ -1196,7 +1196,7 @@ export const Department = () => {
 
                   </div>
 
-                  {depExcelStatus && <p style={{color:'green'}}>{depExcelStatus}</p>}
+                  {depExcelStatus && <p style={{ color: 'green' }}>{depExcelStatus}</p>}
 
 
 
@@ -1204,7 +1204,7 @@ export const Department = () => {
 
                 <div className="row g-2">
 
-                 
+
 
 
                   <div style={{ height: 480, width: '100%' }}>
@@ -1230,9 +1230,16 @@ export const Department = () => {
                         }
                       }}
                       slots={{
-                        toolbar: GridToolbar,
-                      }}
+                        toolbar: () => (
+                          <div className='d-flex justify-content-between align-items-center'>
+                            <GridToolbar />
+                            <div>
+                              {selectedRowIds.length !== 0 && <Button variant='contained' size="small" type='button' color='error' onClick={() => setDeleteDepModal(true)}>Delete </Button>}
+                            </div>
 
+                          </div>
+                        ),
+                      }}
                       onRowSelectionModelChange={(newRowSelectionModel, event) => {
                         setSelectedRowIds(newRowSelectionModel);
                         console.log(event)
@@ -1780,8 +1787,8 @@ export const Department = () => {
 
 
 
-           
-            
+
+
             <Snackbar anchorOrigin={{ vertical: "top", horizontal: "right" }} open={snackBarOpen} autoHideDuration={6000} onClose={handleSnackClose}>
               <Alert variant="filled" onClose={handleSnackClose} severity={errorhandler.code} sx={{ width: '100%' }}>
                 {errorhandler.message}
@@ -2142,17 +2149,17 @@ export const Designation = () => {
   };
 
 
-  
+
   useEffect(() => {
     if (desExcelStatus) {
       const timeoutId = setTimeout(() => {
         setDesExcelStatus('');
       }, 1000);
 
-      return () => clearTimeout(timeoutId); 
+      return () => clearTimeout(timeoutId);
     }
   }, [desExcelStatus]);
-  
+
 
   console.log(designationList);
 
@@ -2339,9 +2346,9 @@ export const Designation = () => {
                       variant="contained"
                       color='warning'
                       size="small"
-                     
+
                       onClick={() => setOpenModal(true)}
-                     
+
                     >
                       Modify
                     </Button>
@@ -2351,11 +2358,11 @@ export const Designation = () => {
                       onClick={() => { setDesStateId(null); setDesignationData(initialDesignationData) }}
                     >Cancel</Button>
                   </div>) : <Button variant="contained" type="button" size="small" color='success'
-                    onClick={() => setOpenModal(true)}  ><i className="bi bi-plus"></i>Add Designation</Button> }
+                    onClick={() => setOpenModal(true)}  ><i className="bi bi-plus"></i>Add Designation</Button>}
                 </div>
 
               </div>
-              {desExcelStatus && <p style={{color:'green'}}>{desExcelStatus}</p>}
+              {desExcelStatus && <p style={{ color: 'green' }}>{desExcelStatus}</p>}
 
             </Paper>
           </Grid>
@@ -2377,9 +2384,9 @@ export const Designation = () => {
 
               <h4 className=" text-center">Designation List</h4>
               <div className="row mb-2">
-                <div className="col d-flex justify-content-end">
+                {/* <div className="col d-flex justify-content-end">
                   {designationselectedRowIds.length !== 0 && <Button variant='contained' type='button' color='error' onClick={() => setDeleteModal(true)}>Delete </Button>}
-                </div>
+                </div> */}
               </div>
 
               <div style={{ height: 500, width: '100%' }}>
@@ -2400,9 +2407,7 @@ export const Designation = () => {
                       "marginBottom": "1em"
                     }
                   }}
-                  slots={{
-                    toolbar: GridToolbar,
-                  }}
+
                   onRowSelectionModelChange={(newRowSelectionModel, event) => {
                     setDesignationSelectedRowIds(newRowSelectionModel);
                     console.log(event)
@@ -2414,6 +2419,17 @@ export const Designation = () => {
                   density="compact"
 
                   checkboxSelection
+                  slots={{
+                    toolbar: () => (
+                      <div className='d-flex justify-content-between align-items-center'>
+                        <GridToolbar />
+                        <div>
+                          {designationselectedRowIds.length !== 0 && <Button variant='contained' size="small" type='button' color='error' onClick={() => setDeleteModal(true)}>Delete </Button>}
+                        </div>
+
+                      </div>
+                    ),
+                  }}
                   pageSizeOptions={[5]}
 
 

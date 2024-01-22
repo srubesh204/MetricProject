@@ -1513,7 +1513,7 @@ const Home = () => {
                       <div className='d-flex justify-content-between align-items-center'>
                         <GridToolbar />
                         <div>
-                        <Button onClick={()=> setMailOpen(true)} endIcon={<Send />} color="primary">Send Mail</Button>
+                        <Button onClick={()=> setMailOpen(true)} size='small' endIcon={<Send />} color="primary">Send Mail</Button>
                         </div>
                         
                       </div>
