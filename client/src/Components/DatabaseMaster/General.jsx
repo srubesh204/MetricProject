@@ -471,11 +471,6 @@ export const UnitDataBase = ({ style }) => {
                             >
                                 <div>
                                     <h6 className='text-center'>Unit List</h6>
-                                    <div className="row mb-2">
-                                        <div className="col d-flex justify-content-end">
-                                            {unitSelectedRowIds.length !== 0 && <Button variant='contained' size="small" type='button' color='error' onClick={() => setDeleteModal(true)}>Delete </Button>}
-                                        </div>
-                                    </div>
 
                                     <div style={{ height: 400, width: '100%' }}>
                                         <DataGrid disableDensitySelector
@@ -495,8 +490,16 @@ export const UnitDataBase = ({ style }) => {
                                                 }
                                             }}
                                             slots={{
-                                                toolbar: GridToolbar,
-                                            }}
+                                                toolbar: () => (
+                                                  <div className='d-flex justify-content-between align-items-center'>
+                                                    <GridToolbar />
+                                                    <div>
+                                                    {unitSelectedRowIds.length !== 0 && <Button variant='contained' size="small" type='button' color='error' onClick={() => setDeleteModal(true)}>Delete </Button>}
+                                                    </div>
+                            
+                                                  </div>
+                                                ),
+                                              }}
 
 
                                             onRowSelectionModelChange={(newRowSelectionModel, event) => {
@@ -1156,12 +1159,6 @@ export const PartDataBase = ({ style }) => {
                             >
                                 <div>
                                     <h5 className='text-center'>Part List</h5>
-                                    <div className="row mb-2">
-                                        <div className="col d-flex justify-content-end">
-                                            {partSelectedRowIds.length !== 0 && <Button variant='contained' type='button' color='error' onClick={() => setDeleteModal(true)}>Delete </Button>}
-                                        </div>
-                                    </div>
-
                                     <div style={{ height: 400, width: '100%' }}>
                                         <DataGrid disableDensitySelector
                                             rows={partDataList}
@@ -1180,8 +1177,16 @@ export const PartDataBase = ({ style }) => {
                                                 }
                                             }}
                                             slots={{
-                                                toolbar: GridToolbar,
-                                            }}
+                                                toolbar: () => (
+                                                  <div className='d-flex justify-content-between align-items-center'>
+                                                    <GridToolbar />
+                                                    <div>
+                                                    {partSelectedRowIds.length !== 0 && <Button variant='contained' type='button' size='small' color='error' onClick={() => setDeleteModal(true)}>Delete </Button>}
+                                                    </div>
+                            
+                                                  </div>
+                                                ),
+                                              }}
 
                                             onRowSelectionModelChange={(newRowSelectionModel, event) => {
                                                 setPartSelectedRowIds(newRowSelectionModel);
