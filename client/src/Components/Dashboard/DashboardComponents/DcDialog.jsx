@@ -215,7 +215,7 @@ const Dc = () => {
 
             const dcNumbers = response.data.result.map(item => (item.dcId)).filter(Boolean).sort();
             if(dcNumbers){
-                const lastNumber = dcNumbers[dcNumbers.length-1]
+                const lastNumber = dcNumbers[dcNumbers.length-1] + 1
             console.log(lastNumber)
 
             setDcData(prev => ({...prev, dcNo : dayjs().year()+"-"+lastNumber}))
