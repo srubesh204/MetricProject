@@ -318,8 +318,8 @@ const CalList = () => {
     useEffect(() => {
         dateFilter();
     }, [dateData.fromDate, dateData.toDate])
-
-
+    const [snackBarOpen, setSnackBarOpen] = useState(false)
+    const [errorhandler, setErrorHandler] = useState({});
     const deleteCal = async () => {
         try {
             const response = await axios.delete(
@@ -329,9 +329,34 @@ const CalList = () => {
             calListFetchData()
             console.log("Cal Items Deleted Successfully")
         } catch (err) {
+
+            setSnackBarOpen(true)
+
+            if (err.response && err.response.status === 400) {
+                // Handle validation errors
+                const errorData400 = err.response.data.errors;
+                const errorMessages400 = Object.values(errorData400).join(', ');
+                console.log(errorMessages400)
+                setErrorHandler({ status: 0, message: errorMessages400, code: "error" });
+            } else if (err.response && err.response.status === 500) {
+                // Handle other errors
+                const errorData500 = err.response.data.error;
+                const errorMessages500 = Object.values(errorData500).join(', ');
+                console.log(errorMessages500)
+                setErrorHandler({ status: 0, message: errorMessages500, code: "error" });
+            } else {
+                console.log(err.response.data.error)
+                setErrorHandler({ status: 0, message: "An error occurred", code: "error" });
+            }
             console.log(err);
         }
     };
+
+
+
+
+   
+
 
 
     console.log(calListSelectedRowIds)

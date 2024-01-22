@@ -99,7 +99,7 @@ const GrnEdit = () => {
                 grnCertificateNo: selectedRows.grnCertificateNo,
                 grnUncertainity: selectedRows.grnUncertainity,
                 grnPartyItems: selectedRows.grnPartyItems,
-                grnPlant: selectedRows.grnPlant
+              grnPlant: selectedRows.grnPlant
             }));
             const plantItems = itemPlantList.filter(item => item.itemPlant === selectedRows.grnPlant)
             setSelectedPlantItems(plantItems)
@@ -365,16 +365,16 @@ const GrnEdit = () => {
 
     const handleGrnItemChange = (e) => {
         const { name, value } = e.target;
-        if (name === "grnPlant") {
-            // Set the selected itemPlant in state
-            setItemAddDetails((prev) => ({ ...prev, grnPlant: value }));
-            const plantItems = itemPlantList.filter(item => item.itemPlant === value)
+        // if (name === "grnPlant") {
+        //     // Set the selected itemPlant in state
+        //     setGrnEditData((prev) => ({ ...prev, grnPlant: value }));
+        //     const plantItems = itemPlantList.filter(item => item.itemPlant === value)
 
-            const distinctItemNames = [... new Set(plantItems.map(item => item.itemAddMasterName))]
-            setItemNameList(distinctItemNames)
-            console.log(distinctItemNames)
-            console.log(plantItems)
-        }
+        //     const distinctItemNames = [... new Set(plantItems.map(item => item.itemAddMasterName))]
+        //     setItemNameList(distinctItemNames)
+        //     console.log(distinctItemNames)
+        //     console.log(plantItems)
+        // }
         setItemAddDetails((prev) => ({ ...prev, [name]: value }))
         if (name === "grnList") {
             getItemByName(value)
@@ -1857,7 +1857,7 @@ console.log(tempItem)*/}
                                                
                                                 select
                                                 value={grnEditData.grnPlant}
-                                              
+                                              disabled
                                                 fullWidth
                                                 onChange={handleGrnItemChange}
                                                 size="small"

@@ -1363,10 +1363,9 @@ const Employee = () => {
 
                                
                                 <Grid item xs={2}>
-                                    <div className='col d-flex justify-content-end'>
-                                        {employeeSelectedRowIds.length !== 0 && <Button variant='contained' component="button" fullWidth type='button' color='error' onClick={() => handleDeleteOpen(true)}>Delete  Employee</Button>}
+                                   
+                                       
 
-                                    </div>
                                 </Grid>
 
                                 
@@ -1392,8 +1391,16 @@ const Employee = () => {
 
                                         }}
                                         slots={{
-                                            toolbar: GridToolbar,
-                                        }}
+                                            toolbar: () => (
+                                              <div className='d-flex justify-content-between align-items-center'>
+                                                <GridToolbar />
+                                                <div>
+                                                {employeeSelectedRowIds.length !== 0 && <Button variant='contained' size='small' component="button" fullWidth type='button' color='error' onClick={() => handleDeleteOpen(true)}>Delete  Employee</Button>}
+                                                </div>
+                        
+                                              </div>
+                                            ),
+                                          }}
                                         onRowSelectionModelChange={(newRowSelectionModel, event) => {
                                             setEmployeeSelectedRowIds(newRowSelectionModel);
                                             console.log(event)
@@ -1403,6 +1410,7 @@ const Employee = () => {
                                         disableRowSelectionOnClick
                                         density="compact"
                                         checkboxSelection
+                                        
                                         pageSizeOptions={[5]}
                                     >
 

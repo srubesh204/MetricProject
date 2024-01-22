@@ -1078,7 +1078,7 @@ const ItemList = () => {
 
                                 </div>
                                 <div className="col-1 offset-7">
-                                    {itemListSelectedRowIds.length !== 0 && <Button variant='contained' type='button' size='small' color='error' onClick={() => setDeleteModalItem(true)}><DeleteIcon /> Delete </Button>}
+                                    
                                 </div>
                                 <div className="col-1">
                                     <div>
@@ -1119,9 +1119,17 @@ const ItemList = () => {
                                     }}
 
                                     slots={{
-                                        toolbar: GridToolbar,
-                                    }}
-
+                                        toolbar: () => (
+                                          <div className='d-flex justify-content-between align-items-center'>
+                                            <GridToolbar />
+                                            <div>
+                                            {itemListSelectedRowIds.length !== 0 && <Button variant='contained' type='button' size='small' color='error' onClick={() => setDeleteModalItem(true)}> Delete </Button>}
+                                          
+                                            </div>
+                    
+                                          </div>
+                                        ),
+                                      }}
                                     density="compact"
                                     //disableColumnMenu={true}
 

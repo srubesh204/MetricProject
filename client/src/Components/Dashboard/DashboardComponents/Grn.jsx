@@ -74,32 +74,8 @@ const Grn = () => {
     console.log(grnData)
 
 
-    // const [grnNo, setGrnNo] = useState(dayjs().year() + 1);
-    // useEffect(() => {
-    //     // Update grnNo when the year changes
-    //     setGrnNo(dayjs().year() + 1);
-    // }, [dayjs().year()]);
-
-    // const handleGrnChanges = (event) => {
-    //     const { name, value } = event.target;
-
-    //     if (name === 'grnNo') {
-    //         // Handle changes if needed
-    //     }
-    // };
-    const [currentYear, setCurrentYear] = useState(dayjs().year());
-    const [grnNo, setGrnNo] = useState(currentYear + 1);
-    useEffect(() => {
-        // Update grnNo when the year changes
-        setGrnNo(currentYear + 1);
-    }, [currentYear]);
-    const handleGrnChanges = (event) => {
-        const { name, value } = event.target;
-
-        if (name === 'grnNo') {
-            // Handle changes if needed
-        }
-    };
+   
+   
 
 
 
@@ -193,6 +169,17 @@ const Grn = () => {
                 `${process.env.REACT_APP_PORT}/itemGRN/getAllItemGRN`
             );
             setGrnList(response.data.result);
+            const grnNumbers = response.data.result.map(item => (item.grnId)).filter(Boolean).sort();
+            if(grnNumbers){
+                const lastNumber = grnNumbers[grnNumbers.length-1] + 1
+            console.log(lastNumber)
+
+            setGrnData(prev => ({...prev, grnNo : dayjs().year()+"-"+lastNumber}))
+            }else{
+                setGrnData(prev => ({...prev, grnNo : dayjs().year()+"-"+1}))
+            }
+
+
         } catch (err) {
             console.log(err);
         }
@@ -200,6 +187,10 @@ const Grn = () => {
     useEffect(() => {
         grnFetchData();
     }, []);
+
+
+   
+
 
 
 
