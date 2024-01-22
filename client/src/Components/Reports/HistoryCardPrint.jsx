@@ -1,7 +1,5 @@
 import React, { useContext, useEffect, useState, useRef } from 'react'
 import { HistoryCardContent } from './InsHistoryCard'
-import { Button, Dialog, DialogActions, DialogContent, DialogTitle, IconButton } from '@mui/material';
-import { Close } from '@mui/icons-material';
 import { useReactToPrint } from 'react-to-print';
 import dayjs from 'dayjs';
 
@@ -81,10 +79,10 @@ const HistoryCardPrint = () => {
                         <td style={{ width: "9%", border: "0.5px solid black" }}>{row.calItemDueDate || '-'}</td>
                         <td style={{ width: "9%", border: "0.5px solid black" }}>--</td>
                         <td style={{ width: "9%", border: "0.5px solid black" }}>{row.calCertificateNo || '-'}</td>
-                        {/* <td style={{ width: "9%", border: "0.5px solid black" }}>
-                            {selectedRow[0]?.itemType === 'variable' ? row.calcalibrationData[0]?.calOBError : row.calcalibrationData[0]?.calMinPS + "/" + row.calcalibrationData[0]?.calMaxPS}
+                        <td style={{ width: "9%", border: "0.5px solid black" }}>
+                            {selectedRow[0]?.itemType === 'variable' ? row.calcalibrationData && row.calcalibrationData[0]?.calOBError : row.calcalibrationData && row.calcalibrationData[0]?.calMinPS + "/" + row.calcalibrationData && row.calcalibrationData[0]?.calMaxPS}
                         </td>
-                        <td style={{ width: "9%", border: "0.5px solid black" }}>{selectedRow[0]?.itemCalibrationSource || '-'}</td> */}
+                        <td style={{ width: "9%", border: "0.5px solid black" }}>{selectedRow && selectedRow[0]?.itemCalibrationSource || '-'}</td>
                         <td style={{ width: "9%", border: "0.5px solid black" }}>{row.calCalibratedBy || '-'}</td>
                         <td style={{ width: "9%", border: "0.5px solid black" }}>{row.calApprovedBy || '-'}</td>
                         <td style={{ width: "14%", border: "0.5px solid black" }}>--</td>
@@ -97,8 +95,8 @@ const HistoryCardPrint = () => {
     const Footer = (data) => {
         return (
             <tr className='footer' style={{display : "flex" , flexDirection : "row", fontSize : "6px"}}>
-                    <td style={{display : "flex" , flexDirection : "row", width : "20%"}}><th>Format No : &nbsp;&nbsp;&nbsp;</th>{formatNoData?.fHistoryCard?.frNo || '-'} &nbsp;&nbsp;&nbsp;</td>
-                    <td><th>Rev No & Date :</th></td>
+                    <td style={{display : "flex" , flexDirection : "row", width : "20%", fontWeight: "bold"}}>Format No : &nbsp;&nbsp;&nbsp;{formatNoData?.fHistoryCard?.frNo || '-'} &nbsp;&nbsp;&nbsp;</td>
+                    <td style={{fontWeight: "bold"}}>Rev No & Date :</td>
             </tr>
         )
     }
@@ -111,35 +109,35 @@ const HistoryCardPrint = () => {
 
 
         
-            <DialogContent style={{ display: 'block', width: "100%", height: "100%" }}>
+            <div style={{ display: 'none', width: "100%", height: "100%" }}>
                 <div style={{width: "100%", height: "100%", border: "1px solid"}} ref={componentRef} >
                     
                         
                             <h3 style={{ padding: "10px", textAlign: "center" }}>METRIC</h3>
                             <h3 style={{ paddingBottom: "5px", textAlign: "center" }}>INSTRUMENTS/GAUGE HISTORY CARD</h3>
                         
-                    <table style={{ width: "100%" }}>
+                    <table style={{ width: "100%", borderCollapse: "collapse" }}>
                     <tbody>
                         <tr style={{ width: "100" }}>
                             <td style={{ width: "30%", padding: "5px", border: "1px solid black", margin: 0 }}>
-                                <tr><th>Gauge Number :    &nbsp;&nbsp;&nbsp;</th>{selectedRow[0]?.itemIMTENo || '-'}</tr>
-                                <tr><th>Gauge Serial No :    &nbsp;&nbsp;&nbsp;</th>{selectedRow[0]?.itemMFRNo || '-'}</tr>
-                                <tr><th>Calibration Source :    &nbsp;&nbsp;&nbsp;</th>{selectedRow[0]?.itemCalibrationSource || '-'}</tr>
+                                <tr style={{fontWeight: "bold"}}>Gauge Number :    &nbsp;&nbsp;&nbsp;{selectedRow[0]?.itemIMTENo || '-'}</tr>
+                                <tr style={{fontWeight: "bold"}}>Gauge Serial No :    &nbsp;&nbsp;&nbsp;{selectedRow[0]?.itemMFRNo || '-'}</tr>
+                                <tr style={{fontWeight: "bold"}}>Calibration Source :    &nbsp;&nbsp;&nbsp;{selectedRow[0]?.itemCalibrationSource || '-'}</tr>
                             </td>
                             <td style={{ width: "40%", padding: "5px", border: "1px solid black", margin: 0 }}>
-                                <tr><th>Instrument / Gauge Name :    &nbsp;&nbsp;&nbsp;</th>{selectedRow[0]?.itemAddMasterName || '-'}</tr>
-                                <tr><th>Range / Size :    &nbsp;&nbsp;&nbsp;</th>{selectedRow[0]?.itemRangeSize || '-'} {selectedRow[0]?.itemRangeSizeUnit}</tr>
-                                <tr><th>Frequency of Calibration :    &nbsp;&nbsp;&nbsp;</th>{selectedRow[0]?.itemCalFreInMonths}</tr>
-                                <tr><th>Department :    &nbsp;&nbsp;&nbsp;</th>{selectedRow[0]?.itemDepartment || '-'}</tr>
+                                <tr style={{fontWeight: "bold"}}>Instrument / Gauge Name :    &nbsp;&nbsp;&nbsp;{selectedRow[0]?.itemAddMasterName || '-'}</tr>
+                                <tr style={{fontWeight: "bold"}}>Range / Size :    &nbsp;&nbsp;&nbsp;{selectedRow[0]?.itemRangeSize || '-'} {selectedRow[0]?.itemRangeSizeUnit}</tr>
+                                <tr style={{fontWeight: "bold"}}>Frequency of Calibration :    &nbsp;&nbsp;&nbsp;{selectedRow[0]?.itemCalFreInMonths}</tr>
+                                <tr style={{fontWeight: "bold"}}>Department :    &nbsp;&nbsp;&nbsp;{selectedRow[0]?.itemDepartment || '-'}</tr>
                             </td>
                             <td style={{ width: "30%", border: "1px solid black", padding: "0px"}}>
                                 <h6 className='text-center m-0'>Permissible Size</h6>
                                 <table style={{ width: "100%", margin: 0, borderCollapse: "collapse" }}>
                                    
                                     <tr>
-                                        <td style={{ width: "33%", border: "1px solid black" }}><th>Parameter</th></td>
-                                        <td style={{ width: "33%", border: "1px solid black" }}><th>Min / Max</th></td>
-                                        <td style={{ width: "34%", border: "1px solid black" }}><th>Wear Limit</th></td>
+                                        <td style={{ width: "33%", border: "1px solid black" ,fontWeight: "bold"}}>Parameter0</td>
+                                        <td style={{ width: "33%", border: "1px solid black" ,fontWeight: "bold"}}>Min / Max0</td>
+                                        <td style={{ width: "34%", border: "1px solid black" ,fontWeight: "bold"}}>Wear Limit0</td>
                                     </tr>
                                     {selectedRow.length > 0 &&
                                         selectedRow[0].acceptanceCriteria.map((item, index) => (
@@ -155,41 +153,41 @@ const HistoryCardPrint = () => {
                         </tr>
                         </tbody>
                         </table>
-                        <table  style={{ width: "100%" }}>
+                        <table  style={{ width: "100%", borderCollapse: "collapse" }}>
                          <thead>
                             <tr style={{ textAlign: "center", fontSize: "9px" }}>
-                                <td style={{ width: "5%", border: "1px solid black", margin: 0 }}>
-                                    <th>Sl No</th>
+                                <td style={{ width: "5%", border: "1px solid black", margin: 0, fontWeight: "bold" }}>
+                                    Sl No
                                 </td>
-                                <td style={{ width: "9%", border: "1px solid black", margin: 0 }}>
-                                    <th>Calibration Date</th>
+                                <td style={{ width: "9%", border: "1px solid black", margin: 0, fontWeight: "bold" }}>
+                                    Calibration Date
                                 </td>
-                                <td style={{ width: "9%", border: "1px solid black", margin: 0 }}>
-                                    <th>Calibration Status</th>
+                                <td style={{ width: "9%", border: "1px solid black", margin: 0, fontWeight: "bold" }}>
+                                    Calibration Status
                                 </td>
-                                <td style={{ width: "9%", border: "1px solid black", margin: 0 }}>
-                                    <th>Next Calibration</th>
+                                <td style={{ width: "9%", border: "1px solid black", margin: 0, fontWeight: "bold" }}>
+                                    Next Calibration
                                 </td>
-                                <td style={{ width: "9%", border: "1px solid black", margin: 0 }}>
-                                    <th>Certificate Status</th>
+                                <td style={{ width: "9%", border: "1px solid black", margin: 0, fontWeight: "bold" }}>
+                                    Certificate Status
                                 </td>
-                                <td style={{ width: "9%", border: "1px solid black", margin: 0 }}>
-                                    <th>Certificate No</th>
+                                <td style={{ width: "9%", border: "1px solid black", margin: 0, fontWeight: "bold" }}>
+                                    Certificate No
                                 </td>
-                                <td style={{ width: "9%", border: "1px solid black", margin: 0 }}>
-                                    <th>{selectedRow[0]?.itemType === 'variable' ? 'Observed Error' : 'Observed Size'}</th>
+                                <td style={{ width: "9%", border: "1px solid black", margin: 0, fontWeight: "bold" }}>
+                                    {selectedRow[0]?.itemType === 'variable' ? 'Observed Error' : 'Observed Size'}
                                 </td>
-                                <td style={{ width: "9%", border: "1px solid black", margin: 0 }}>
-                                    <th>Calibration At</th>
+                                <td style={{ width: "9%", border: "1px solid black", margin: 0, fontWeight: "bold" }}>
+                                    Calibration At
                                 </td>
-                                <td style={{ width: "9%", border: "1px solid black", margin: 0 }}>
-                                    <th>Calibrated By</th>
+                                <td style={{ width: "9%", border: "1px solid black", margin: 0, fontWeight: "bold" }}>
+                                    Calibrated By
                                 </td>
-                                <td style={{ width: "9%", border: "1px solid black", margin: 0 }}>
-                                    <th>Verified By</th>
+                                <td style={{ width: "9%", border: "1px solid black", margin: 0, fontWeight: "bold" }}>
+                                    Verified By
                                 </td>
-                                <td style={{ width: "14%", border: "1px solid black", margin: 0 }}>
-                                    <th>Remarks</th>
+                                <td style={{ width: "14%", border: "1px solid black", margin: 0, fontWeight: "bold" }}>
+                                    Remarks
                                 </td>
                             </tr>
                         </thead>
@@ -204,7 +202,8 @@ const HistoryCardPrint = () => {
 
 
 
-                </div></DialogContent>
+                </div>
+                </div>
             // <Button onClick={handlePrint}>Print this out!</Button>
 
 
