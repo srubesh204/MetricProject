@@ -10,13 +10,14 @@ import isSameOrAfter from 'dayjs/plugin/isSameOrAfter'
 import isSameOrBefore from 'dayjs/plugin/isSameOrBefore'
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { Add, ArrowBack, Delete, Error, HomeMax, House, Mail } from '@mui/icons-material';
+import { Add, ArrowBack, Delete, Error, HomeMax, House, Mail, MailLock, Send } from '@mui/icons-material';
 import CalDialog from './DashboardComponents/CalDialog';
 import Dc from './DashboardComponents/DcDialog';
 import Grn from './DashboardComponents/Grn';
 import OnSiteDialog from './DashboardComponents/OnSiteDialog';
 import MuiPagination from '@mui/material/Pagination';
 import { empRole, useEmployee } from '../../App';
+import HomeMail from './DashboardComponents/HomeMail';
 export const HomeContent = createContext(null);
 
 
@@ -1067,6 +1068,8 @@ const Home = () => {
   const [dcOpen, setDcOpen] = useState(false);
   const [grnOpen, setGrnOpen] = useState(false);
   const [onSiteOpen, setOnSiteOpen] = useState(false);
+
+  const [mailOpen, setMailOpen] = useState(false)
   const [departmentStatus, setDepartmentStatus] = useState(false)
 
 
@@ -1505,7 +1508,17 @@ const Home = () => {
 
                   checkboxSelection
                   // onRowClick={handleSelectRow}
-                  slots={{ toolbar: GridToolbar }}
+                  slots={{
+                    toolbar: () => (
+                      <div className='d-flex justify-content-between align-items-center'>
+                        <GridToolbar />
+                        <div>
+                        <Button onClick={()=> setMailOpen(true)} endIcon={<Send />} color="primary">Send Mail</Button>
+                        </div>
+                        
+                      </div>
+                    ),
+                  }}
                   slotProps={{
                     toolbar: {
                       showQuickFilter: true,
@@ -1648,6 +1661,12 @@ const Home = () => {
                   value={{ onSiteOpen, setOnSiteOpen, selectedRows }}
                 >
                   <OnSiteDialog />
+                </HomeContent.Provider>
+
+                <HomeContent.Provider
+                  value={{ mailOpen, setMailOpen, selectedRows }}
+                >
+                  <HomeMail />
                 </HomeContent.Provider>
               </React.Fragment>}
 
