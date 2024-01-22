@@ -204,6 +204,7 @@ const Dc = () => {
 
     const [dcList, setDcList] = useState([])
 
+
     const dcFetchData = async () => {
         try {
             const response = await axios.get(
@@ -212,34 +213,44 @@ const Dc = () => {
             setDcList(response.data.result);
             console.log(response.data.result)
 
+            const dcNumbers = response.data.result.map(item => (item.dcId)).filter(Boolean).sort();
+            if(dcNumbers){
+                const lastNumber = dcNumbers[dcNumbers.length-1]
+            console.log(lastNumber)
+
+            setDcData(prev => ({...prev, dcNo : dayjs().year()+"-"+lastNumber}))
+            }else{
+                setDcData(prev => ({...prev, dcNo : dayjs().year()+"-"+1}))
+            }
+            
+
         } catch (err) {
             console.log(err);
         }
     };
     useEffect(() => {
-        const dcNumbers = dcList.map(item => item.dcId);
-        console.log(dcNumbers)
-        dcNumbers.sort()
         dcFetchData();
+
+
     }, []);
 
 
-        // const dcNumber = dcList.map(item => item.dcId);
+    // const dcNumber = dcList.map(item => item.dcId);
 
-        // // Sort the array in ascending order
-        // const sortedDcNumber = [...dcNumber].sort((a, b) => a - b);
+    // // Sort the array in ascending order
+    // const sortedDcNumber = [...dcNumber].sort((a, b) => a - b);
 
-        // // Get the last element of the sorted array
-        // const lastElement = sortedDcNumber[sortedDcNumber.length - 1];
+    // // Get the last element of the sorted array
+    // const lastElement = sortedDcNumber[sortedDcNumber.length - 1];
 
-        // console.log("Sorted dcNumber:", sortedDcNumber);
-        // console.log("Last Element:", lastElement);
-
-    
+    // console.log("Sorted dcNumber:", sortedDcNumber);
+    // console.log("Last Element:", lastElement);
 
 
 
-  
+
+
+
     // useEffect(() => {
     //     const dcNumber = dcList.map(item => item.dcId).filter(item => item !== undefined);
 
