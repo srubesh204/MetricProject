@@ -1123,7 +1123,7 @@ const ItemList = () => {
                                         toolbar: () => (
                                           <div className='d-flex justify-content-between align-items-center'>
                                             <GridToolbar />
-                                            <div>
+                                            <div className='mt-2'>
                                             {itemListSelectedRowIds.length !== 0 && <Button variant='contained' type='button' size='small' color='error' onClick={() => setDeleteModalItem(true)}> Delete </Button>}
                                           
                                             </div>

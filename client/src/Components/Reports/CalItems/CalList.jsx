@@ -13,6 +13,13 @@ import isSameOrBefore from 'dayjs/plugin/isSameOrBefore'
 import CalPrint from './CalPrint'
 import CalAddModel from './CalAddModel'
 import CalEditModel from './CalEditModel'
+import Snackbar from '@mui/material/Snackbar';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import Alert from '@mui/material/Alert';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
 import { useEmployee } from '../../../App';
 export const CalData = createContext(null);
 dayjs.extend(isSameOrBefore)
@@ -26,6 +33,15 @@ const CalList = () => {
     const [itemMasters, setItemMasters] = useState([])
     const [IMTENos, setIMTENos] = useState([])
     const [printState, setPrintState] = useState(false)
+
+
+    const handleSnackClose = (event, reason) => {
+        if (reason === 'clickaway') {
+            return;
+        }
+
+        setSnackBarOpen(false);
+    }
 
     const itemMasterFetchData = async () => {
         try {
@@ -91,9 +107,9 @@ const CalList = () => {
     }
 
 
-    const [filterCompany, setFilterCompany] = useState ([])
-    
-    const [companyName, setCompanyName] = useState ([])
+    const [filterCompany, setFilterCompany] = useState([])
+
+    const [companyName, setCompanyName] = useState([])
 
     const companyFetch = async () => {
         try {
@@ -122,12 +138,12 @@ const CalList = () => {
                 const companyName = itemMasterDataList.filter((item) => item.companyName === value)
                 setFilterAddress(companyName)
             }
-            
+
         }
 
 
     }
-    
+
 
 
     console.log(plantDatas);
@@ -320,6 +336,7 @@ const CalList = () => {
     }, [dateData.fromDate, dateData.toDate])
     const [snackBarOpen, setSnackBarOpen] = useState(false)
     const [errorhandler, setErrorHandler] = useState({});
+    const [deleteModalItem, setDeleteModalItem] = useState(false);
     const deleteCal = async () => {
         try {
             const response = await axios.delete(
@@ -513,8 +530,19 @@ const CalList = () => {
                                     }}
 
                                     slots={{
-                                        toolbar: GridToolbar,
-                                    }}
+                                        toolbar: () => (
+                                          <div className='d-flex justify-content-between align-items-center'>
+                                            <GridToolbar />
+                                            <div className='mt-2'>
+                                            {calListSelectedRowIds.length !== 0 &&  <Button variant='contained' type='button' size='small' color='error' onClick={() => setDeleteModalItem(true)}> Delete </Button>}
+                                            
+                                       
+                                   
+                                            </div>
+                    
+                                          </div>
+                                        ),
+                                      }}
 
                                     density="compact"
                                     //disableColumnMenu={true}
@@ -547,24 +575,53 @@ const CalList = () => {
                                     <div className='me-2 '>
                                         <button type="button" className='btn btn-success' onClick={() => setCalAddOpen(true)}>Add</button>
                                     </div>
-                                    {calListSelectedRowIds.length !== 0 && <div className='me-2 '>
-                                        <button type="button" className='btn btn-danger' onClick={() => deleteCal()}>Delete</button>
-                                    </div>}
+                                    
 
 
                                 </div>}
                         </div>
                     </Paper>
+
+                    <Dialog
+                        open={deleteModalItem}
+                        onClose={() => setDeleteModalItem(false)}
+                        aria-labelledby="alert-dialog-title"
+                        aria-describedby="alert-dialog-description"
+                    >
+                        <DialogTitle id="alert-dialog-title">
+                            {" ItemAdd delete confirmation?"}
+                        </DialogTitle>
+                        <DialogContent>
+                            <DialogContentText id="alert-dialog-description">
+                                Are you sure to delete the
+                            </DialogContentText>
+                        </DialogContent>
+                        <DialogActions>
+                            <Button onClick={() => setDeleteModalItem(false)}>Cancel</Button>
+                            <Button onClick={(e) => { deleteCal(e); setDeleteModalItem(false); }} autoFocus>
+                                Delete
+                            </Button>
+                        </DialogActions>
+                    </Dialog>
+                    <Snackbar anchorOrigin={{ vertical: "top", horizontal: "right" }} open={snackBarOpen} autoHideDuration={6000} onClose={handleSnackClose}>
+                        <Alert onClose={handleSnackClose} severity={errorhandler.code} sx={{ width: '100%' }}>
+                            {errorhandler.message}
+                        </Alert>
+                    </Snackbar>
+
+
+
+
                     {employeeRole && employeeRole.employee !== "viewer" &&
                         <CalData.Provider
-                            value={{ employeeRole, calAddOpen, setCalAddOpen, itemMasters, activeEmps}}
+                            value={{ employeeRole, calAddOpen, setCalAddOpen, itemMasters, activeEmps }}
                         >
                             <CalAddModel />
                         </CalData.Provider>}
 
                     {employeeRole && employeeRole.employee !== "viewer" &&
                         <CalData.Provider
-                            value={{ employeeRole, calEditOpen, setCalEditOpen, selectedCalRow, itemMasters, activeEmps}}
+                            value={{ employeeRole, calEditOpen, setCalEditOpen, selectedCalRow, itemMasters, activeEmps }}
                         >
                             {selectedCalRow.length !== 0 && <CalEditModel />}
                         </CalData.Provider>}
