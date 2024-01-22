@@ -7,7 +7,7 @@ const mailController = {
   mailSender: async (req, res) => {
     const mailOptions = {
       from: 'calsoftmetric@gmail.com',
-      to: 'srubesh204@gmail.com',
+      to: 'rbmkrishh@gmail.com',
       subject: 'Test Mail from calsoft',
       text: 'Hi im test mail from cal soft',
       html: `<!DOCTYPE html>

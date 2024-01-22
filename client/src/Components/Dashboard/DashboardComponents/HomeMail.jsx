@@ -46,8 +46,6 @@ const HomeMail = () => {
                     </div>
                     <div className="col-6 ">
                         <TextField
-
-                        
                             required
                             margin="dense"
                             id="subjectId"
@@ -60,7 +58,6 @@ const HomeMail = () => {
                     </div>
                     <div >
                         <TextField
-
                             multiline
                             maxRows={4}
                             required
