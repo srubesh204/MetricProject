@@ -580,8 +580,14 @@ const GrnList = () => {
                             </div>
 
                             <div className='row'>
+                                <div className='col d-flex '>
+                                    <div className='me-2 '>
+                                        <button type="button" className='btn btn-secondary' >Print</button>
+                                    </div>
 
-                                <div className='col d-flex mb-1'>
+                                </div>
+
+                                <div className='col d-flex justify-content-end'>
                                     <div className=' me-2'>
                                         <Button component={Link} onClick={() => { setGrnOpen(true) }} type='button' variant="contained" color="warning">
                                             <AddIcon /> Add Item
@@ -617,9 +623,7 @@ const GrnList = () => {
                                             {errorhandler.message}
                                         </Alert>
                                     </Snackbar>
-                                    <div className=' me-2'>
-                                        <button type="button" className='btn btn-secondary' >Back</button>
-                                    </div>
+                                    
                                 </div>
 
                                 <GrnListContent.Provider

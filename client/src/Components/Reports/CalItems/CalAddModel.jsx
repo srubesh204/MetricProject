@@ -150,6 +150,10 @@ const CalAddModel = () => {
                 const currentDate = dayjs(current.calItemEntryDate);
                 return currentDate.isAfter(prevDate) ? current : prev;
             });
+
+            
+
+
             setLastResultData(maxDateObject)
 
         } catch (err) {
@@ -159,6 +163,38 @@ const CalAddModel = () => {
     useEffect(() => {
         getAllCalibrationData();
     }, [calibrationData.calIMTENo])
+
+    const [dcList, setDcList] = useState([])
+
+
+    const dcFetchData = async () => {
+        try {
+            const response = await axios.get(
+                `${process.env.REACT_APP_PORT}/itemCal/getAllItemCals`
+            );
+            setCalibrationDatas(response.data.result);
+            console.log(response.data.result)
+
+            const calNumbers = response.data.result.map(item => (item.calId)).filter(Boolean).sort();
+            if (calNumbers) {
+                const lastNumber = calNumbers[calNumbers.length - 1] + 1
+                console.log(lastNumber)
+
+                setCalibrationData(prev => ({ ...prev, calCertificateNo: dayjs().year() + "-" + lastNumber }))
+            } else {
+                setCalibrationData(prev => ({ ...prev, calCertificateNo: dayjs().year() + "-" + 1 }))
+            }
+
+
+        } catch (err) {
+            console.log(err);
+        }
+    };
+    useEffect(() => {
+        dcFetchData();
+    }, []);
+
+
 
 
     const [nonSelectedMaster, setNonSelectedMaster] = useState([])

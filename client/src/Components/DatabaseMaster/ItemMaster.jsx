@@ -1063,17 +1063,8 @@ const ItemMaster = () => {
 
                                         </TextField>
                                     </div>
-                                    <div className='col d-flex justify-content-end'>
-                                        <div >
-                                            {itemMasteSelectedRowIds.length !== 0 && <Button variant='contained' size='small' type='button' color='error' onClick={() => setDeleteModal(true)}>Delete </Button>}
-                                        </div>
-                                    </div>
-
-
                                 </div>
                                 <div>
-
-
                                     <div style={{ height: 440, width: '100%' }}>
                                         <DataGrid
                                             density='compact' disableDensitySelector
@@ -1099,8 +1090,16 @@ const ItemMaster = () => {
 
                                             }}
                                             slots={{
-                                                toolbar: GridToolbar,
-                                            }}
+                                                toolbar: () => (
+                                                  <div className='d-flex justify-content-between align-items-center'>
+                                                    <GridToolbar />
+                                                    <div>
+                                                    {itemMasteSelectedRowIds.length !== 0 && <Button variant='contained' size='small' type='button' color='error' onClick={() => setDeleteModal(true)}>Delete </Button>}
+                                                    </div>
+                            
+                                                  </div>
+                                                ),
+                                              }}
                                             onRowClick={updateItemMaster}
                                             checkboxSelection
                                             disableRowSelectionOnClick

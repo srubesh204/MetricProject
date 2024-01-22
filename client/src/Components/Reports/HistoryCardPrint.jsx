@@ -94,12 +94,16 @@ const HistoryCardPrint = () => {
 
     const Footer = (data) => {
         return (
-            <tr className='footer' style={{display : "flex" , flexDirection : "row", fontSize : "6px"}}>
-                    <td style={{display : "flex" , flexDirection : "row", width : "20%", fontWeight: "bold"}}>Format No : &nbsp;&nbsp;&nbsp;{formatNoData?.fHistoryCard?.frNo || '-'} &nbsp;&nbsp;&nbsp;</td>
-                    <td style={{fontWeight: "bold"}}>Rev No & Date :</td>
-            </tr>
-        )
-    }
+          <tr className="footer">
+            <td style={{ height: '80px', fontSize: '12px' }}>
+              <div style={{ display: 'flex', flexDirection: 'row', height: '10px' }}>
+                <div style={{ position: 'absolute', fontSize: '8px' }}>Format Number: {formatNoData && formatNoData.fDc?.frNo}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;     Amendment No.: {formatNoData && formatNoData.fDc?.amNo}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;     Amendment Date.: {formatNoData && formatNoData.fDc?.amDate}</div>
+              </div>
+            </td>
+          </tr>
+        );
+      };
+
 
 
     console.log(selectedRow[0]?.itemType)

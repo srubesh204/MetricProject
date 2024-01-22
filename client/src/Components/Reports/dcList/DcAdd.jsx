@@ -37,10 +37,10 @@ const DcAdd = () => {
         dcDate: dayjs().format("YYYY-MM-DD"),
         dcReason: "Calibration",
         dcCommonRemarks: "",
-        dcPlant:"",
-        dcDepartment:"",
+        dcPlant: "",
+        dcDepartment: "",
         dcPartyItems: [],
-      
+
 
     }
 
@@ -54,10 +54,10 @@ const DcAdd = () => {
         dcDate: dayjs().format("YYYY-MM-DD"),
         dcReason: "Calibration",
         dcCommonRemarks: "",
-        dcPlant:"",
-        dcDepartment:"",
+        dcPlant: "",
+        dcDepartment: "",
         dcPartyItems: [],
-       
+
 
     })
     console.log(dcAddData)
@@ -235,328 +235,361 @@ const DcAdd = () => {
         }
     };
 
-    //
 
-    const [itemMasterDistNames, setItemMasterDistNames] = useState([])
-    const getDistinctItemName = async () => {
+    const [dcList, setDcList] = useState([])
+
+
+    const dcFetchData = async () => {
         try {
             const response = await axios.get(
-                `${process.env.REACT_APP_PORT}/itemAdd/getAllDistinctItemName`
+                `${process.env.REACT_APP_PORT}/itemDc/getAllItemDc`
             );
-            console.log(response.data)
-            setItemMasterDistNames(response.data.result);
-
-        } catch (err) {
-            console.log(err);
-        }
-    };
-    useEffect(() => {
-        getDistinctItemName();
-    }, []);
-
-    //
-    const [imteList, setImteList] = useState([])
-    const getImteList = async () => {
-        try {
-            const response = await axios.get(
-                `${process.env.REACT_APP_PORT}/itemAdd/getItemAddByIMTESort`
-            );
+            setDcList(response.data.result);
             console.log(response.data.result)
-            setImteList(response.data.result)
+
+            const dcNumbers = response.data.result.map(item => (item.dcId)).filter(Boolean).sort();
+            if (dcNumbers) {
+                const lastNumber = dcNumbers[dcNumbers.length - 1] + 1
+                console.log(lastNumber)
+
+                setDcAddData(prev => ({ ...prev, dcNo: dayjs().year() + "-" + lastNumber }))
+            } else {
+                setDcAddData(prev => ({ ...prev, dcNo: dayjs().year() + "-" + 1 }))
+            }
 
 
         } catch (err) {
             console.log(err);
         }
     };
-
     useEffect(() => {
-        getImteList();
+        dcFetchData();
     }, []);
 
-    const [errorhandler, setErrorHandler] = useState({})
-    console.log(errorhandler)
-    const [confirmSubmit, setConfirmSubmit] = useState(false)
-    const [snackBarOpen, setSnackBarOpen] = useState(false)
-    const [alertMessage, setAlertMessage] = useState({
-        message: "",
-        type: ""
-    })
-
-    //validate function
-    const [errors, setErrors] = useState({})
-
-    const validateFunction = () => {
-        let tempErrors = {};
-        tempErrors.dcPartyType = dcAddData.dcPartyType ? "" : "GRN Party Type is Required"
-        tempErrors.dcPartyName = dcAddData.dcPartyName ? "" : "GRN Party Name is Required"
-        tempErrors.dcPartyCode = dcAddData.dcPartyCode ? "" : "GRN Party Code is Required"
-        tempErrors.dcPartyAddress = dcAddData.dcPartyAddress ? "" : "GRN Party Address is Required"
-        tempErrors.dcNo = dcAddData.dcNo ? "" : "GRN Number is Required"
-        tempErrors.dcReason = dcAddData.dcReason ? "" : "GRN Reason is Required"
-        tempErrors.dcPartyItems = dcAddData.dcPartyItems.length !== 0 ? "" : "GRN Item Required"
-
-        setErrors({ ...tempErrors })
-
-        return Object.values(tempErrors).every(x => x === "")
-    }
-    console.log(errors)
-
-    ///
 
 
+        //
+
+        const [itemMasterDistNames, setItemMasterDistNames] = useState([])
+        const getDistinctItemName = async () => {
+            try {
+                const response = await axios.get(
+                    `${process.env.REACT_APP_PORT}/itemAdd/getAllDistinctItemName`
+                );
+                console.log(response.data)
+                setItemMasterDistNames(response.data.result);
+
+            } catch (err) {
+                console.log(err);
+            }
+        };
+        useEffect(() => {
+            getDistinctItemName();
+        }, []);
+
+        //
+        const [imteList, setImteList] = useState([])
+        const getImteList = async () => {
+            try {
+                const response = await axios.get(
+                    `${process.env.REACT_APP_PORT}/itemAdd/getItemAddByIMTESort`
+                );
+                console.log(response.data.result)
+                setImteList(response.data.result)
 
 
-    const submitDcForm = async () => {
-        try {
-            if (validateFunction()) {
+            } catch (err) {
+                console.log(err);
+            }
+        };
 
+        useEffect(() => {
+            getImteList();
+        }, []);
+
+        const [errorhandler, setErrorHandler] = useState({})
+        console.log(errorhandler)
+        const [confirmSubmit, setConfirmSubmit] = useState(false)
+        const [snackBarOpen, setSnackBarOpen] = useState(false)
+        const [alertMessage, setAlertMessage] = useState({
+            message: "",
+            type: ""
+        })
+
+        //validate function
+        const [errors, setErrors] = useState({})
+
+        const validateFunction = () => {
+            let tempErrors = {};
+            tempErrors.dcPartyType = dcAddData.dcPartyType ? "" : "GRN Party Type is Required"
+            tempErrors.dcPartyName = dcAddData.dcPartyName ? "" : "GRN Party Name is Required"
+            tempErrors.dcPartyCode = dcAddData.dcPartyCode ? "" : "GRN Party Code is Required"
+            tempErrors.dcPartyAddress = dcAddData.dcPartyAddress ? "" : "GRN Party Address is Required"
+            tempErrors.dcNo = dcAddData.dcNo ? "" : "GRN Number is Required"
+            tempErrors.dcReason = dcAddData.dcReason ? "" : "GRN Reason is Required"
+            tempErrors.dcPartyItems = dcAddData.dcPartyItems.length !== 0 ? "" : "GRN Item Required"
+
+            setErrors({ ...tempErrors })
+
+            return Object.values(tempErrors).every(x => x === "")
+        }
+        console.log(errors)
+
+        ///
+
+
+
+
+        const submitDcForm = async () => {
+            try {
+                if (validateFunction()) {
+
+                    const response = await axios.post(
+                        `${process.env.REACT_APP_PORT}/itemDc/createItemDc`, dcAddData
+                    );
+
+                    console.log(response.data.result)
+                    setAlertMessage({ message: response.data.message, type: "success" });
+                    setSnackBarOpen(true);
+                    dcListFetchData();
+                    setDcAddData(initialDcData);
+                    setErrors({});
+                    setItemAddDetails({
+                        itemListNames: "",
+                        itemImteList: ""
+                    })
+                    setTimeout(() => setDcOpen(false), 1000)
+                } else {
+                    setAlertMessage({ message: "Fill the required fields to submit", type: "error" })
+                    setSnackBarOpen(true)
+                }
+            } catch (err) {
+                setSnackBarOpen(true)
+
+                if (err.response && err.response.status === 400) {
+                    // Handle validation errors
+                    console.log(err);
+                    const errorData400 = err.response.data.errors;
+                    const errorMessages400 = Object.values(errorData400).join(', ');
+                    console.log(errorMessages400)
+                    setErrorHandler({ status: 0, message: errorMessages400, code: "error" });
+                } else if (err.response && err.response.status === 500) {
+                    // Handle other errors
+                    console.log(err);
+                    const errorData500 = err.response.data.error;
+                    const errorMessages500 = Object.values(errorData500).join(', ');
+                    console.log(errorMessages500)
+                    setErrorHandler({ status: 0, message: errorMessages500, code: "error" });
+                } else {
+                    console.log(err);
+                    console.log(err.response.data.error)
+                    setErrorHandler({ status: 0, message: "An error occurred", code: "error" });
+                }
+
+                console.log(err);
+
+            }
+
+        };
+
+        const deleteAC = (index) => {
+            setDcAddData((prev) => {
+                const AC = [...prev.dcPartyItems]
+                AC.splice(index, 1);
+                return {
+                    ...prev, dcPartyItems: AC,
+                };
+            })
+        };
+        const [allItemImtes, setAllItemImtes] = useState([])
+        const [itemImtes, setItemImtes] = useState([])
+        const [selectedDcItem, setSelectedDcItem] = useState([])
+
+        const [itemAddDetails, setItemAddDetails] = useState({
+            itemListNames: "--",
+            itemImteList: "--"
+        })
+
+
+        const getItemByName = async (value) => {
+            try {
                 const response = await axios.post(
-                    `${process.env.REACT_APP_PORT}/itemDc/createItemDc`, dcAddData
+                    `${process.env.REACT_APP_PORT}/itemAdd/getItemAddByName`, { itemItemMasterName: value }
+                );
+                console.log(response.data)
+                setAllItemImtes(response.data.result)
+                const nonDcItem = response.data.result.filter(item => item.dcStatus !== "1")
+                const filteredImtes = nonDcItem.filter((imtes) => !dcAddData.dcPartyItems.some(dcImte => imtes._id === dcImte._id))
+                setItemImtes(filteredImtes)
+
+            } catch (err) {
+                console.log(err);
+            }
+        };
+
+
+        const [itemNameList, setItemNameList] = useState(itemPlantList)
+        const handleDcItemAdd = (e) => {
+            const { name, value } = e.target;
+            if (name === "dcPlant") {
+                // Set the selected itemPlant in state
+                setDcAddData ((prev) => ({ ...prev, dcPlant: value }));
+                const plantItems = itemPlantList.filter(item => item.itemPlant === value)
+                const distinctItemNames = [... new Set(plantItems.map(item => item.itemAddMasterName))]
+                setItemNameList(distinctItemNames)
+                console.log(plantItems)
+            }
+
+            if (name === "itemListNames") {
+                getItemByName(value)
+                setItemAddDetails((prev) => ({ ...prev, [name]: value }))
+            }
+            if (name === "itemImteList") {
+                setSelectedDcItem(value)
+                setItemAddDetails((prev) => ({ ...prev, [name]: value }))
+            }
+
+
+        }
+
+        console.log(itemNameList)
+
+        const dcItemAdd = () => {
+            if (selectedDcItem.length !== 0) {
+                setDcAddData((prev) => ({ ...prev, dcPartyItems: [...prev.dcPartyItems, selectedDcItem] }))
+            }
+        }
+        useEffect(() => {
+            setSelectedDcItem([])
+            setItemAddDetails({
+                itemListNames: "",
+                itemImteList: "",
+                itemReMarks: ""
+            })
+        }, [dcAddData.dcPartyItems])
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        const [itemMasterDataList, setItemMasterDataList] = useState([])
+
+        const itemMasterFetchData = async () => {
+            try {
+                const response = await axios.get(
+                    `${process.env.REACT_APP_PORT}/itemMaster/getAllItemMasters`
+
                 );
 
-                console.log(response.data.result)
-                setAlertMessage({ message: response.data.message, type: "success" });
-                setSnackBarOpen(true);
-                dcListFetchData();
-                setDcAddData(initialDcData);
-                setErrors({});
-                setItemAddDetails({
-                    itemListNames: "",
-                    itemImteList: ""
-                })
-                setTimeout(() => setDcOpen(false), 1000)
-            } else {
-                setAlertMessage({ message: "Fill the required fields to submit", type: "error" })
-                setSnackBarOpen(true)
+                console.log(response.data)
+                setItemMasterDataList(response.data.result);
+
+            } catch (err) {
+                console.log(err);
             }
-        } catch (err) {
-            setSnackBarOpen(true)
+        };
+        useEffect(() => {
+            itemMasterFetchData();
+        }, []);
 
-            if (err.response && err.response.status === 400) {
-                // Handle validation errors
+        const [itemAddList, setItemAddList] = useState([]);
+
+        const itemAddFetch = async () => {
+            try {
+                const response = await axios.get(
+                    `${process.env.REACT_APP_PORT}/itemAdd/getItemAddByIMTESort`
+                );
+                // You can use a different logic for generating the id
+
+                setItemAddList(response.data.result);
+
+
+            } catch (err) {
                 console.log(err);
-                const errorData400 = err.response.data.errors;
-                const errorMessages400 = Object.values(errorData400).join(', ');
-                console.log(errorMessages400)
-                setErrorHandler({ status: 0, message: errorMessages400, code: "error" });
-            } else if (err.response && err.response.status === 500) {
-                // Handle other errors
-                console.log(err);
-                const errorData500 = err.response.data.error;
-                const errorMessages500 = Object.values(errorData500).join(', ');
-                console.log(errorMessages500)
-                setErrorHandler({ status: 0, message: errorMessages500, code: "error" });
-            } else {
-                console.log(err);
-                console.log(err.response.data.error)
-                setErrorHandler({ status: 0, message: "An error occurred", code: "error" });
             }
+        };
+        useEffect(() => {
+            itemAddFetch();
 
-            console.log(err);
-
-        }
-
-    };
-
-    const deleteAC = (index) => {
-        setDcAddData((prev) => {
-            const AC = [...prev.dcPartyItems]
-            AC.splice(index, 1);
-            return {
-                ...prev, dcPartyItems: AC,
-            };
-        })
-    };
-    const [allItemImtes, setAllItemImtes] = useState([])
-    const [itemImtes, setItemImtes] = useState([])
-    const [selectedDcItem, setSelectedDcItem] = useState([])
-
-    const [itemAddDetails, setItemAddDetails] = useState({
-        itemListNames: "--",
-        itemImteList: "--"
-    })
-
-
-    const getItemByName = async (value) => {
-        try {
-            const response = await axios.post(
-                `${process.env.REACT_APP_PORT}/itemAdd/getItemAddByName`, { itemItemMasterName: value }
-            );
-            console.log(response.data)
-            setAllItemImtes(response.data.result)
-            const nonDcItem = response.data.result.filter(item => item.dcStatus !== "1")
-            const filteredImtes = nonDcItem.filter((imtes) => !dcAddData.dcPartyItems.some(dcImte => imtes._id === dcImte._id))
-            setItemImtes(filteredImtes)
-
-        } catch (err) {
-            console.log(err);
-        }
-    };
-
-
-    const [itemNameList, setItemNameList] = useState(itemPlantList)
-    const handleDcItemAdd = (e) => {
-        const { name, value } = e.target;
-        if (name === "dcPlant") {
-            // Set the selected itemPlant in state
-            setItemAddDetails((prev) => ({ ...prev, dcPlant: value }));
-            const plantItems = itemPlantList.filter(item => item.itemPlant === value)
-            const distinctItemNames = [... new Set(plantItems.map(item => item.itemAddMasterName))]
-            setItemNameList(distinctItemNames)
-            console.log(plantItems)
-        }
-
-        if (name === "itemListNames") {
-            getItemByName(value)
-            setItemAddDetails((prev) => ({ ...prev, [name]: value }))
-        }
-        if (name === "itemImteList") {
-            setSelectedDcItem(value)
-            setItemAddDetails((prev) => ({ ...prev, [name]: value }))
-        }
-
-
-    }
-
-    console.log(itemNameList)
-
-    const dcItemAdd = () => {
-        if (selectedDcItem.length !== 0) {
-            setDcAddData((prev) => ({ ...prev, dcPartyItems: [...prev.dcPartyItems, selectedDcItem] }))
-        }
-    }
-    useEffect(() => {
-        setSelectedDcItem([])
-        setItemAddDetails({
-            itemListNames: "",
-            itemImteList: "",
-            itemReMarks: ""
-        })
-    }, [dcAddData.dcPartyItems])
+        }, []);
 
 
 
+        return (
+            <Dialog fullWidth={true} keepMounted maxWidth="xl" open={dcOpen} sx={{ color: "#f1f4f4" }}
+                onClose={(e, reason) => {
+                    console.log(reason)
+                    if (reason !== 'backdropClick' && reason !== 'escapeKeyDown') {
+                        setDcOpen(false)
+                    }
+                }}>
+                <DialogTitle align='center' >DC</DialogTitle>
+                <IconButton
+                    aria-label="close"
+                    onClick={() => setDcOpen(false)}
+                    sx={{
+                        position: 'absolute',
+                        right: 8,
+                        top: 8,
+                        color: (theme) => theme.palette.grey[500],
+                    }}
+                >
+                    <Close />
+                </IconButton>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-    const [itemMasterDataList, setItemMasterDataList] = useState([])
-
-    const itemMasterFetchData = async () => {
-        try {
-            const response = await axios.get(
-                `${process.env.REACT_APP_PORT}/itemMaster/getAllItemMasters`
-
-            );
-
-            console.log(response.data)
-            setItemMasterDataList(response.data.result);
-
-        } catch (err) {
-            console.log(err);
-        }
-    };
-    useEffect(() => {
-        itemMasterFetchData();
-    }, []);
-
-    const [itemAddList, setItemAddList] = useState([]);
-
-    const itemAddFetch = async () => {
-        try {
-            const response = await axios.get(
-                `${process.env.REACT_APP_PORT}/itemAdd/getItemAddByIMTESort`
-            );
-            // You can use a different logic for generating the id
-
-            setItemAddList(response.data.result);
-
-
-        } catch (err) {
-            console.log(err);
-        }
-    };
-    useEffect(() => {
-        itemAddFetch();
-
-    }, []);
-
-
-
-    return (
-        <Dialog fullWidth={true} keepMounted maxWidth="xl" open={dcOpen} sx={{ color: "#f1f4f4" }}
-            onClose={(e, reason) => {
-                console.log(reason)
-                if (reason !== 'backdropClick' && reason !== 'escapeKeyDown') {
-                    setDcOpen(false)
-                }
-            }}>
-            <DialogTitle align='center' >DC</DialogTitle>
-            <IconButton
-                aria-label="close"
-                onClick={() => setDcOpen(false)}
-                sx={{
-                    position: 'absolute',
-                    right: 8,
-                    top: 8,
-                    color: (theme) => theme.palette.grey[500],
-                }}
-            >
-                <Close />
-            </IconButton>
-
-            <DialogContent >
-                <div>
-                    <LocalizationProvider dateAdapter={AdapterDayjs}>
-                        <form>
-                            <div className='row'>
-
-                                <div className='col-3 mb-2'>
-                                <TextField label="Plant Wise"
-                                        id="dcPlantId"
-                                       
-                                        select
-                                      value={dcAddData.dcPlant}
-                                        fullWidth
-                                        onChange={handleDcItemAdd}
-                                        size="small"
-                                        name="dcPlant" >
-                                        <MenuItem value="all">All</MenuItem>
-                                        {loggedEmp.plantDetails.map((item, index) => (
-                                            <MenuItem key={index} value={item.plantName}>{item.plantName}</MenuItem>
-                                        ))}
-                                    </TextField>
-                                </div>
-
-
-                            </div>
-
-                            <Paper
-                                sx={{
-                                    p: 1,
-                                    display: 'flex',
-                                    flexDirection: 'column',
-                                    mb: 1,
-
-                                }}
-                                elevation={12}
-                            >
+                <DialogContent >
+                    <div>
+                        <LocalizationProvider dateAdapter={AdapterDayjs}>
+                            <form>
                                 <div className='row'>
 
+                                    <div className='col-3 mb-2'>
+                                        <TextField label="Plant Wise"
+                                            id="dcPlantId"
+
+                                            select
+                                            value={dcAddData.dcPlant}
+                                            fullWidth
+                                            onChange={handleDcItemAdd}
+                                            size="small"
+                                            name="dcPlant" >
+                                            <MenuItem value="all">All</MenuItem>
+                                            {loggedEmp.plantDetails.map((item, index) => (
+                                                <MenuItem key={index} value={item.plantName}>{item.plantName}</MenuItem>
+                                            ))}
+                                        </TextField>
+                                    </div>
 
 
-                                   
+                                </div>
+
+                                <Paper
+                                    sx={{
+                                        p: 1,
+                                        display: 'flex',
+                                        flexDirection: 'column',
+                                        mb: 1,
+
+                                    }}
+                                    elevation={12}
+                                >
+                                    <div className='row'>
+
+
+
+
 
                                         <div className='col d-flex mb-2'>
                                             <div className="col me-2">
@@ -636,157 +669,157 @@ const DcAdd = () => {
                                         </div>
 
 
-                                  
-                                </div>
-
-
-                                <div className='row g-2 mb-2'>
-                                    <div className='col d-flex'>
-                                        <div className=" col-2 me-2">
-
-                                            <TextField label="Dc No"
-                                                id="dcNoId"
-                                                defaultValue=""
-                                                value={dcAddData.dcNo}
-                                                onChange={handleDcChange}
-                                                {...(errors.dcNo !== "" && { helperText: errors.dcNo, error: true })}
-                                                size="small"
-                                                sx={{ width: "101%" }}
-                                                name="dcNo" />
-
-                                        </div>
-                                        <div className="col-2 me-2">
-                                            <DatePicker
-
-                                                fullWidth
-                                                id="dcDateId"
-                                                name="dcDate"
-                                                value={dayjs(dcAddData.dcDate)}
-                                                onChange={(newValue) =>
-                                                    setDcAddData((prev) => ({ ...prev, dcDate: newValue.format("YYYY-MM-DD") }))
-                                                }
-                                                label="Dc Date"
-
-
-                                                slotProps={{ textField: { size: 'small' } }}
-                                                format="DD-MM-YYYY" />
-
-
-                                        </div>
-                                        <div className="col me-2">
-                                            <TextField label="Reason"
-                                                id="dcReasonId"
-                                                select
-                                                value={dcAddData.dcReason}
-                                                fullWidth
-                                                onChange={handleDcChange}
-                                                size="small"
-                                                {...(errors.dcReason !== "" && { helperText: errors.dcReason, error: true })}
-
-                                                name="dcReason" >
-                                                <MenuItem value="Calibration">Calibration</MenuItem>
-                                                <MenuItem value="Service">Service</MenuItem>
-                                                <MenuItem value="Service Calibration">Service&Calibration</MenuItem>
-
-                                            </TextField>
-
-                                        </div>
-                                        <div className='col me-2'>
-                                            <TextField label="Common Remarks"
-                                                id="dcCommonRemarksId"
-                                                value={dcAddData.dcCommonRemarks}
-                                                defaultValue=""
-                                                onChange={handleDcChange}
-                                                size="small"
-                                                sx={{ width: "102%" }}
-                                                name="dcCommonRemarks" />
-
-                                        </div>
-
 
                                     </div>
 
-                                </div>
-                            </Paper>
+
+                                    <div className='row g-2 mb-2'>
+                                        <div className='col d-flex'>
+                                            <div className=" col-2 me-2">
+
+                                                <TextField label="Dc No"
+                                                    id="dcNoId"
+                                                    defaultValue=""
+                                                    value={dcAddData.dcNo}
+                                                    onChange={handleDcChange}
+                                                    {...(errors.dcNo !== "" && { helperText: errors.dcNo, error: true })}
+                                                    size="small"
+                                                    sx={{ width: "101%" }}
+                                                    name="dcNo" />
+
+                                            </div>
+                                            <div className="col-2 me-2">
+                                                <DatePicker
+
+                                                    fullWidth
+                                                    id="dcDateId"
+                                                    name="dcDate"
+                                                    value={dayjs(dcAddData.dcDate)}
+                                                    onChange={(newValue) =>
+                                                        setDcAddData((prev) => ({ ...prev, dcDate: newValue.format("YYYY-MM-DD") }))
+                                                    }
+                                                    label="Dc Date"
+
+
+                                                    slotProps={{ textField: { size: 'small' } }}
+                                                    format="DD-MM-YYYY" />
+
+
+                                            </div>
+                                            <div className="col me-2">
+                                                <TextField label="Reason"
+                                                    id="dcReasonId"
+                                                    select
+                                                    value={dcAddData.dcReason}
+                                                    fullWidth
+                                                    onChange={handleDcChange}
+                                                    size="small"
+                                                    {...(errors.dcReason !== "" && { helperText: errors.dcReason, error: true })}
+
+                                                    name="dcReason" >
+                                                    <MenuItem value="Calibration">Calibration</MenuItem>
+                                                    <MenuItem value="Service">Service</MenuItem>
+                                                    <MenuItem value="Service Calibration">Service&Calibration</MenuItem>
+
+                                                </TextField>
+
+                                            </div>
+                                            <div className='col me-2'>
+                                                <TextField label="Common Remarks"
+                                                    id="dcCommonRemarksId"
+                                                    value={dcAddData.dcCommonRemarks}
+                                                    defaultValue=""
+                                                    onChange={handleDcChange}
+                                                    size="small"
+                                                    sx={{ width: "102%" }}
+                                                    name="dcCommonRemarks" />
+
+                                            </div>
+
+
+                                        </div>
+
+                                    </div>
+                                </Paper>
 
 
 
-                            <Paper
-                                sx={{
-                                    p: 2,
-                                    display: 'flex',
-                                    flexDirection: 'column',
-                                    mb: 1,
+                                <Paper
+                                    sx={{
+                                        p: 2,
+                                        display: 'flex',
+                                        flexDirection: 'column',
+                                        mb: 1,
 
-                                }}
-                                elevation={12}
-                            >
-                                <div className='row g-2'>
-                                    <div className='col d-flex'>
+                                    }}
+                                    elevation={12}
+                                >
+                                    <div className='row g-2'>
+                                        <div className='col d-flex'>
 
-                                        <div className='col me-2'>
-                                            {/* <TextField size='small' select fullWidth id='itemListNamesId' value={itemAddDetails.itemListNames}  {...(errors.dcPartyItems !== "" && { helperText: errors.dcPartyItems, error: true })} variant='outlined' onChange={handleDcItemAdd} label="Item List" name='itemListNames' >
+                                            <div className='col me-2'>
+                                                {/* <TextField size='small' select fullWidth id='itemListNamesId' value={itemAddDetails.itemListNames}  {...(errors.dcPartyItems !== "" && { helperText: errors.dcPartyItems, error: true })} variant='outlined' onChange={handleDcItemAdd} label="Item List" name='itemListNames' >
                                                 <MenuItem value="--"><em>--Select--</em></MenuItem>
                                                 {itemNameList.map((item, index) => (
                                                     <MenuItem key={index} value={item.itemAddMasterName}>{item.itemAddMasterName}</MenuItem>
                                                 ))}
                                             </TextField> */}
-                                            <TextField
-                                                size='small'
-                                                select
-                                                fullWidth
-                                                id='itemListNamesId'
-                                                value={itemAddDetails.itemListNames}
-                                                {...(errors.dcPartyItems !== "" && { helperText: errors.dcPartyItems, error: true })}
-                                                variant='outlined'
-                                                onChange={handleDcItemAdd}
-                                                label="Item List"
-                                                name='itemListNames'
-                                            >
-                                                <MenuItem value="--"><em>--Select--</em></MenuItem>
-                                                {itemNameList.map((item, index) => (
-                                                    <MenuItem key={index} value={item}>
-                                                        {item}
-                                                    </MenuItem>
-                                                ))}
-                                            </TextField>
+                                                <TextField
+                                                    size='small'
+                                                    select
+                                                    fullWidth
+                                                    id='itemListNamesId'
+                                                    value={itemAddDetails.itemListNames}
+                                                    {...(errors.dcPartyItems !== "" && { helperText: errors.dcPartyItems, error: true })}
+                                                    variant='outlined'
+                                                    onChange={handleDcItemAdd}
+                                                    label="Item List"
+                                                    name='itemListNames'
+                                                >
+                                                    <MenuItem value="--"><em>--Select--</em></MenuItem>
+                                                    {itemNameList.map((item, index) => (
+                                                        <MenuItem key={index} value={item}>
+                                                            {item}
+                                                        </MenuItem>
+                                                    ))}
+                                                </TextField>
+
+                                            </div>
+                                            <div className='col me-2'>
+                                                <TextField disabled={itemAddDetails.itemListNames === ""} size='small' select fullWidth variant='outlined' value={itemAddDetails.itemImteList} id='itemImteListId' onChange={handleDcItemAdd} label="Item IMTENo" name='itemImteList' >
+                                                    <MenuItem value="--"><em>--Select--</em></MenuItem>
+                                                    {itemImtes.map((item, index) => (
+                                                        <MenuItem key={index} value={item}>{item.itemIMTENo}</MenuItem>
+                                                    ))}
+                                                </TextField>
+
+
+                                            </div>
 
                                         </div>
-                                        <div className='col me-2'>
-                                            <TextField disabled={itemAddDetails.itemListNames === ""} size='small' select fullWidth variant='outlined' value={itemAddDetails.itemImteList} id='itemImteListId' onChange={handleDcItemAdd} label="Item IMTENo" name='itemImteList' >
-                                                <MenuItem value="--"><em>--Select--</em></MenuItem>
-                                                {itemImtes.map((item, index) => (
-                                                    <MenuItem key={index} value={item}>{item.itemIMTENo}</MenuItem>
-                                                ))}
-                                            </TextField>
-
+                                        <div className=' col d-flex justify-content-end'>
+                                            <div className='me-2 '>
+                                                {/*<button type="button" className='btn btn-secondary' onClick={addDcValue} >Add Item</button>*/}
+                                                <Button startIcon={<Add />} onClick={() => dcItemAdd()} size='small' sx={{ minWidth: "130px" }} variant='contained'>Add Item</Button>
+                                            </div>
 
                                         </div>
 
                                     </div>
-                                    <div className=' col d-flex justify-content-end'>
-                                        <div className='me-2 '>
-                                            {/*<button type="button" className='btn btn-secondary' onClick={addDcValue} >Add Item</button>*/}
-                                            <Button startIcon={<Add />} onClick={() => dcItemAdd()} size='small' sx={{ minWidth: "130px" }} variant='contained'>Add Item</Button>
-                                        </div>
+                                </Paper>
 
-                                    </div>
+                                <Paper
+                                    sx={{
+                                        p: 2,
+                                        display: 'flex',
+                                        flexDirection: 'column',
+                                        mb: 1,
 
-                                </div>
-                            </Paper>
-
-                            <Paper
-                                sx={{
-                                    p: 2,
-                                    display: 'flex',
-                                    flexDirection: 'column',
-                                    mb: 1,
-
-                                }}
-                                elevation={12}
-                            >
-                                <div className='row'>
-                                    {/*<Box sx={{ height: 350, width: '100%', my: 2 }}>
+                                    }}
+                                    elevation={12}
+                                >
+                                    <div className='row'>
+                                        {/*<Box sx={{ height: 350, width: '100%', my: 2 }}>
                                         <DataGrid
 
                                             rows={dcAddData.dcPartyItems}
@@ -822,70 +855,70 @@ const DcAdd = () => {
 
                                         </Box>*/}
 
-                                    <table className='table table-bordered table-responsive text-center align-middle'>
-                                        <tbody>
-                                            <tr>
-                                                <th>Si No</th>
-                                                <th>IMTE No</th>
-                                                <th>Item Name</th>
-                                                <th>Range/Size</th>
-                                                <th>Make</th>
-                                                <th>Frequency</th>
-                                                <th>Remarks</th>
-                                                <th>Remove</th>
-                                            </tr>
-                                            {dcAddData.dcPartyItems.map((item, index) => (
-                                                <tr key={index}>
-                                                    <td>{index + 1}</td>
-                                                    <td>{item.itemIMTENo}</td>
-                                                    <td>{item.itemAddMasterName}</td>
-                                                    <td>{item.itemRangeSize}</td>
-                                                    <td>{item.itemMake}</td>
-                                                    <td>{item.itemCalFreInMonths}</td>
-                                                    <td> <select className="form-select form-select-sm" id="dcItemRemarksId" name="dcItemRemarks" value={item.dcItemRemarks} onChange={(e) => remarksChange(e, index)} aria-label="Floating label select example">
-                                                        <option value="calibration">Calibration</option>
-                                                        <option value="service">Service</option>
-                                                        <option value="calibration&service">Calibration&Service</option>
-
-
-                                                    </select></td>
-                                                    <td width="5%"><Delete color='error' onClick={() => deleteAC(index)} /></td>
+                                        <table className='table table-bordered table-responsive text-center align-middle'>
+                                            <tbody>
+                                                <tr>
+                                                    <th>Si No</th>
+                                                    <th>IMTE No</th>
+                                                    <th>Item Name</th>
+                                                    <th>Range/Size</th>
+                                                    <th>Make</th>
+                                                    <th>Frequency</th>
+                                                    <th>Remarks</th>
+                                                    <th>Remove</th>
                                                 </tr>
-                                            ))}
-                                        </tbody>
-                                    </table>
+                                                {dcAddData.dcPartyItems.map((item, index) => (
+                                                    <tr key={index}>
+                                                        <td>{index + 1}</td>
+                                                        <td>{item.itemIMTENo}</td>
+                                                        <td>{item.itemAddMasterName}</td>
+                                                        <td>{item.itemRangeSize}</td>
+                                                        <td>{item.itemMake}</td>
+                                                        <td>{item.itemCalFreInMonths}</td>
+                                                        <td> <select className="form-select form-select-sm" id="dcItemRemarksId" name="dcItemRemarks" value={item.dcItemRemarks} onChange={(e) => remarksChange(e, index)} aria-label="Floating label select example">
+                                                            <option value="calibration">Calibration</option>
+                                                            <option value="service">Service</option>
+                                                            <option value="calibration&service">Calibration&Service</option>
 
-                                </div>
-                            </Paper>
 
-                            <Dialog
-                                open={confirmSubmit}
-                                onClose={(e, reason) => {
-                                    console.log(reason)
-                                    if (reason !== 'backdropClick' && reason !== 'escapeKeyDown') {
-                                        setConfirmSubmit(false)
-                                    }
-                                }}
-                                aria-labelledby="alert-dialog-title"
-                                aria-describedby="alert-dialog-description"
-                            >
-                                <DialogTitle id="alert-dialog-title">
-                                    Are you sure to submit ?
-                                </DialogTitle>
+                                                        </select></td>
+                                                        <td width="5%"><Delete color='error' onClick={() => deleteAC(index)} /></td>
+                                                    </tr>
+                                                ))}
+                                            </tbody>
+                                        </table>
 
-                                <DialogActions className='d-flex justify-content-center'>
-                                    <Button onClick={() => {
-                                        setConfirmSubmit(false);
-                                        setAlertMessage();
-                                    }}>
-                                        Cancel
-                                    </Button>
-                                    <Button onClick={() => { submitDcForm(); setConfirmSubmit(false) }} autoFocus>
-                                        Submit
-                                    </Button>
-                                </DialogActions>
-                            </Dialog>
-                            {/* <Snackbar anchorOrigin={{ vertical: "top", horizontal: "right" }} open={snackBarOpen} autoHideDuration={3000}
+                                    </div>
+                                </Paper>
+
+                                <Dialog
+                                    open={confirmSubmit}
+                                    onClose={(e, reason) => {
+                                        console.log(reason)
+                                        if (reason !== 'backdropClick' && reason !== 'escapeKeyDown') {
+                                            setConfirmSubmit(false)
+                                        }
+                                    }}
+                                    aria-labelledby="alert-dialog-title"
+                                    aria-describedby="alert-dialog-description"
+                                >
+                                    <DialogTitle id="alert-dialog-title">
+                                        Are you sure to submit ?
+                                    </DialogTitle>
+
+                                    <DialogActions className='d-flex justify-content-center'>
+                                        <Button onClick={() => {
+                                            setConfirmSubmit(false);
+                                            setAlertMessage();
+                                        }}>
+                                            Cancel
+                                        </Button>
+                                        <Button onClick={() => { submitDcForm(); setConfirmSubmit(false) }} autoFocus>
+                                            Submit
+                                        </Button>
+                                    </DialogActions>
+                                </Dialog>
+                                {/* <Snackbar anchorOrigin={{ vertical: "top", horizontal: "right" }} open={snackBarOpen} autoHideDuration={3000}
                                 onClose={() => setTimeout(() => {
                                     setSnackBarOpen(false)
                                 }, 3000)}>
@@ -893,30 +926,30 @@ const DcAdd = () => {
                                     {alertMessage.message}
                                 </Alert>
                             </Snackbar> */}
-                            <Snackbar anchorOrigin={{ vertical: "top", horizontal: "right" }} open={snackBarOpen} autoHideDuration={6000} onClose={() => setSnackBarOpen(false)}>
-                        <Alert onClose={() => setSnackBarOpen(false)}severity={errorhandler.code} variant='filled' sx={{ width: '100%' }}>
-                            {errorhandler.message}
-                        </Alert>
-                    </Snackbar>
+                                <Snackbar anchorOrigin={{ vertical: "top", horizontal: "right" }} open={snackBarOpen} autoHideDuration={6000} onClose={() => setSnackBarOpen(false)}>
+                                    <Alert onClose={() => setSnackBarOpen(false)} severity={errorhandler.code} variant='filled' sx={{ width: '100%' }}>
+                                        {errorhandler.message}
+                                    </Alert>
+                                </Snackbar>
 
 
-                        </form>
-                    </LocalizationProvider>
-                </div >
-            </DialogContent>
-            <DialogActions className='d-flex justify-content-between'>
-                <div>
-                    <Button variant='contained' color='warning' className='me-3'>Print</Button>
-                </div>
-                <div>
-                    <Button variant='contained' color='error' className='me-3' onClick={() => { setDcOpen(false); setDcAddData(initialDcData) }}>Cancel</Button>
-                    <Button variant='contained' onClick={() => { setConfirmSubmit(true) }}>Submit</Button>
-                </div>
-            </DialogActions>
+                            </form>
+                        </LocalizationProvider>
+                    </div >
+                </DialogContent>
+                <DialogActions className='d-flex justify-content-between'>
+                    <div>
+                        <Button variant='contained' color='warning' className='me-3'>Print</Button>
+                    </div>
+                    <div>
+                        <Button variant='contained' color='error' className='me-3' onClick={() => { setDcOpen(false); setDcAddData(initialDcData) }}>Cancel</Button>
+                        <Button variant='contained' onClick={() => { setConfirmSubmit(true) }}>Submit</Button>
+                    </div>
+                </DialogActions>
 
 
-        </Dialog>
-    )
-}
+            </Dialog>
+        )
+    }
 
 export default DcAdd

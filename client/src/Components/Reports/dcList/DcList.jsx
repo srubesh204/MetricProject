@@ -287,7 +287,7 @@ const DcList = () => {
     const [errorhandler, setErrorHandler] = useState({});
     const [itemListSelectedRowIds, setItemListSelectedRowIds] = useState([])
 
-    const deleteDcData = async (id) => {
+     const deleteDcData = async (id) => {
 
         try {
             const response = await axios.delete(
@@ -329,6 +329,9 @@ const DcList = () => {
         }
     };
 
+
+
+  
     const handleRowClick = async (params) => {
         console.log(params)
         setDcData(params.row)
@@ -615,7 +618,6 @@ const DcList = () => {
                                     disableColumnMenu={true}
 
                                     checkboxSelection
-                                    
 
                                     onRowClick={handleRowClick}
 
