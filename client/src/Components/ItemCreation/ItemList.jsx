@@ -777,18 +777,22 @@ const ItemList = () => {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
+    const [formatNoData, setFormatNoData] = useState([])
+    const formatFetchData = async () => {
+        try {
+            const response = await axios.get(
+                `${process.env.REACT_APP_PORT}/formatNo/getFormatNoById/1`
+            );
+            const format = response.data.result
+            console.log(format)
+            setFormatNoData(format)
+        } catch (err) {
+            console.log(err);
+        }
+    };
+    useEffect(() => {
+        formatFetchData();
+    }, []);
 
 
     return (
@@ -1296,7 +1300,7 @@ const ItemList = () => {
                     </Paper>
 
                     <ItemListContent.Provider
-                        value={{ filteredItemListData, printState, setPrintState }}
+                        value={{ filteredItemListData, printState, setPrintState, formatNoData}}
                     >
 
                         <ItemListPrint />

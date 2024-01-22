@@ -27,6 +27,14 @@ const TotalPrint = () => {
             padding: 4px 0px;
             text-align: center;
           }
+          .footer {
+              position: fixed;
+              bottom: 0;
+              left: 0;
+              width: 100%;
+              height: 50px; /* Set the height based on your footer height */
+              font-size: 6px;
+          }
         `,
         onAfterPrint: () => setTotalPrintOpen(false)
     });
@@ -38,6 +46,7 @@ const TotalPrint = () => {
     }
 
     console.log(totalPrintOpen)
+    console.log(formatNoData)
 
     const renderTableRows = () => {
         return filteredItemListData.map((row, index) => (
@@ -58,11 +67,25 @@ const TotalPrint = () => {
             </tr>
         ));
     };
+
+    const Footer = (data) => {
+        return (
+          <tr className="footer">
+            <td style={{ height: '80px', fontSize: '12px' }}>
+              <div style={{ display: 'flex', flexDirection: 'row', height: '10px' }}>
+                <div style={{ position: 'absolute', fontSize: '8px' }}>Format Number: {formatNoData && formatNoData.fDc?.frNo}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;     Amendment No.: {formatNoData && formatNoData.fDc?.amNo}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;     Amendment Date.: {formatNoData && formatNoData.fDc?.amDate}</div>
+              </div>
+            </td>
+          </tr>
+        );
+      };
+
     return (
         < React.Fragment>
         {filteredItemListData.length > 0 && (
-            <div style={{ display: 'none' }}>
-                <table style={{ width: '100%', borderCollapse: 'collapse' }} ref={componentRef}>
+            <div ref={componentRef} style={{ display: 'block' }}>
+            <h3 style={{ paddingBottom: "5px", textAlign: "center" }}>Gauge List</h3>
+                <table className='table table-sm table-bordered text-center align-middle table-responsive w-100' style={{border: "1px solid black"}}>
                     <thead>
                         <tr>
                             <th style={{ width: '5%', border: '0.5px solid black', fontSize: '10px', textAlign: 'center' }}>Si. No</th>
@@ -80,6 +103,7 @@ const TotalPrint = () => {
                     </thead>
                     <tbody>{renderTableRows()}</tbody>
                 </table>
+            <tfoot>{Footer({ value: formatNoData })}</tfoot>
             </div>
         )}
         {/* <Button onClick={handlePrint}>Print this out!</Button> */}

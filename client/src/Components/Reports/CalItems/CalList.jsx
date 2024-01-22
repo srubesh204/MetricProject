@@ -332,9 +332,24 @@ const CalList = () => {
             console.log(err);
         }
     };
-
-
     console.log(calListSelectedRowIds)
+
+    const [formatNoData, setFormatNoData] = useState([])
+    const formatFetchData = async () => {
+        try {
+            const response = await axios.get(
+                `${process.env.REACT_APP_PORT}/formatNo/getFormatNoById/1`
+            );
+            const format = response.data.result
+            console.log(format)
+            setFormatNoData(format)
+        } catch (err) {
+            console.log(err);
+        }
+    };
+    useEffect(() => {
+        formatFetchData();
+    }, []);
 
 
     return (
@@ -523,19 +538,19 @@ const CalList = () => {
                     </Paper>
                     {employeeRole && employeeRole.employee !== "viewer" &&
                         <CalData.Provider
-                            value={{ employeeRole, calAddOpen, setCalAddOpen, itemMasters, activeEmps, calListFetchData, printState, setPrintState, filterAddress, filteredCalData }}
+                            value={{ employeeRole, calAddOpen, setCalAddOpen, itemMasters, activeEmps, calListFetchData, printState, setPrintState, filterAddress, filteredCalData, formatNoData }}
                         >
                             <CalAddModel />
                         </CalData.Provider>}
 
                     {employeeRole && employeeRole.employee !== "viewer" &&
                         <CalData.Provider
-                            value={{ employeeRole, calEditOpen, setCalEditOpen, selectedCalRow, itemMasters, activeEmps, calListFetchData, printState, setPrintState, filterAddress, filteredCalData }}
+                            value={{ employeeRole, calEditOpen, setCalEditOpen, selectedCalRow, itemMasters, activeEmps, calListFetchData, printState, setPrintState, filterAddress, filteredCalData, formatNoData }}
                         >
                             {selectedCalRow.length !== 0 && <CalEditModel />}
                         </CalData.Provider>}
                     <CalData.Provider
-                        value={{ calPrintOpen, setCalPrintOpen, selectedRows, filteredCalData, printState, setPrintState, filterAddress, filteredCalData }}
+                        value={{ calPrintOpen, setCalPrintOpen, selectedRows, printState, setPrintState, filterAddress, filteredCalData, formatNoData }}
                     >
                         {selectedRows && <CalPrint />}
                     </CalData.Provider>
