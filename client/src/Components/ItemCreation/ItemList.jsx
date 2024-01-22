@@ -775,8 +775,6 @@ const ItemList = () => {
         setShowDialog(false);
     };
 
-
-
     const [formatNoData, setFormatNoData] = useState([])
     const formatFetchData = async () => {
         try {
@@ -793,7 +791,6 @@ const ItemList = () => {
     useEffect(() => {
         formatFetchData();
     }, []);
-
 
     return (
         <div style={{ margin: "2rem" }}>
@@ -1300,7 +1297,7 @@ const ItemList = () => {
                     </Paper>
 
                     <ItemListContent.Provider
-                        value={{ filteredItemListData, printState, setPrintState, formatNoData}}
+                        value={{ filteredItemListData, printState, setPrintState, formatNoData }}
                     >
 
                         <ItemListPrint />

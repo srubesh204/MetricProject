@@ -538,19 +538,19 @@ const CalList = () => {
                     </Paper>
                     {employeeRole && employeeRole.employee !== "viewer" &&
                         <CalData.Provider
-                            value={{ employeeRole, calAddOpen, setCalAddOpen, itemMasters, activeEmps, calListFetchData, printState, setPrintState, filterAddress, filteredCalData, formatNoData }}
+                            value={{ employeeRole, calAddOpen, setCalAddOpen, itemMasters, activeEmps}}
                         >
                             <CalAddModel />
                         </CalData.Provider>}
 
                     {employeeRole && employeeRole.employee !== "viewer" &&
                         <CalData.Provider
-                            value={{ employeeRole, calEditOpen, setCalEditOpen, selectedCalRow, itemMasters, activeEmps, calListFetchData, printState, setPrintState, filterAddress, filteredCalData, formatNoData }}
+                            value={{ employeeRole, calEditOpen, setCalEditOpen, selectedCalRow, itemMasters, activeEmps}}
                         >
                             {selectedCalRow.length !== 0 && <CalEditModel />}
                         </CalData.Provider>}
                     <CalData.Provider
-                        value={{ calPrintOpen, setCalPrintOpen, selectedRows, printState, setPrintState, filterAddress, filteredCalData, formatNoData }}
+                        value={{ calPrintOpen, setCalPrintOpen, selectedRows, printState, setPrintState, filterAddress, filteredCalData, formatNoData, filterCompany }}
                     >
                         {selectedRows && <CalPrint />}
                     </CalData.Provider>

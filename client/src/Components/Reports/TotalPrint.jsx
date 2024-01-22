@@ -1,6 +1,5 @@
 import React, { useContext, useRef } from 'react';
 import { TotalListContent } from './TotalList';
-import { Close, ViewInArTwoTone } from '@mui/icons-material';
 import dayjs from 'dayjs';
 import { useReactToPrint } from 'react-to-print';
 const TotalPrint = () => {
@@ -83,7 +82,8 @@ const TotalPrint = () => {
     return (
         < React.Fragment>
         {filteredItemListData.length > 0 && (
-            <div ref={componentRef} style={{ display: 'block' }}>
+            <div style={{ display: 'none', width: "100%" }}>
+            <div ref={componentRef}>
             <h3 style={{ paddingBottom: "5px", textAlign: "center" }}>Gauge List</h3>
                 <table className='table table-sm table-bordered text-center align-middle table-responsive w-100' style={{border: "1px solid black"}}>
                     <thead>
@@ -104,6 +104,7 @@ const TotalPrint = () => {
                     <tbody>{renderTableRows()}</tbody>
                 </table>
             <tfoot>{Footer({ value: formatNoData })}</tfoot>
+            </div>
             </div>
         )}
         {/* <Button onClick={handlePrint}>Print this out!</Button> */}
