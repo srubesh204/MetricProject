@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const uniqueValidator = require('mongoose-unique-validator');
+const mongooseSequence = require('mongoose-sequence')(mongoose);
 
 const designationSchema = new mongoose.Schema({
  
@@ -16,5 +17,6 @@ const designationSchema = new mongoose.Schema({
   }
 });
 designationSchema.plugin(uniqueValidator);
+designationSchema.plugin(mongooseSequence, { inc_field: 'designationId', });
 module.exports = mongoose.model('designation', designationSchema);
 

@@ -28,6 +28,7 @@ const versionRoute = require("./routes/versionRoute");
 const compDetailsRoute = require("./routes/compDetailsRoute");
 const formatNoRoute = require("./routes/formatNoRoute");
 const employeeController = require("./controllers/employeeController");
+const mailRoute = require("./routes/mailRoute")
 
 
 db.connectDatabase();
@@ -69,7 +70,8 @@ app.use('/formatNo', formatNoRoute);
 app.use('/compDetails', compDetailsRoute);
 app.use('/placeOfUsage', placeOfUsageRoute);
 app.use('/mailConfig', mailConfigRoute);
-
+app.use('/mail', mailRoute)
+ 
 //
 app.post('/login', employeeController.employeeLoginCheck)
 const port = 3001;

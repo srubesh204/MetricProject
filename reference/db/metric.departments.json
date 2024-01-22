@@ -1,6 +1,6 @@
 [{
   "_id": {
-    "$oid": "65a12249c70230ea4df8cbf2"
+    "$oid": "65aba8d04989d7cf7fadde43"
   },
   "department": "department",
   "departmentStatus": "departmentStatus",
@@ -9,25 +9,7 @@
 },
 {
   "_id": {
-    "$oid": "65a12249c70230ea4df8cbf3"
-  },
-  "department": "Quality",
-  "departmentStatus": "active",
-  "defaultdep": "yes",
-  "__v": 0
-},
-{
-  "_id": {
-    "$oid": "65a12249c70230ea4df8cbf4"
-  },
-  "department": "NPD",
-  "departmentStatus": "active",
-  "defaultdep": "No",
-  "__v": 0
-},
-{
-  "_id": {
-    "$oid": "65a12249c70230ea4df8cbf5"
+    "$oid": "65aba8d04989d7cf7fadde44"
   },
   "department": "Production",
   "departmentStatus": "active",
@@ -36,19 +18,46 @@
 },
 {
   "_id": {
-    "$oid": "65a12249c70230ea4df8cbf6"
+    "$oid": "65aba8d04989d7cf7fadde46"
   },
-  "department": "Line",
+  "department": "Quality",
+  "departmentStatus": "active",
+  "defaultdep": "yes",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "65aba8d04989d7cf7fadde49"
+  },
+  "department": "Maintenance",
+  "departmentStatus": "active",
+  "defaultdep": "yes",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "65aba8d04989d7cf7fadde45"
+  },
+  "department": "Tool Room",
   "departmentStatus": "active",
   "defaultdep": "No",
   "__v": 0
 },
 {
   "_id": {
-    "$oid": "65a12249c70230ea4df8cbf7"
+    "$oid": "65aba8d04989d7cf7fadde48"
   },
-  "department": "Sample",
+  "department": "Lab",
   "departmentStatus": "active",
-  "defaultdep": "No",
+  "defaultdep": "yes",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "65aba8d04989d7cf7fadde47"
+  },
+  "department": "Standards Room",
+  "departmentStatus": "active",
+  "defaultdep": "yes",
   "__v": 0
 }]

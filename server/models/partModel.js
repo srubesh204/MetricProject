@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const uniqueValidator = require('mongoose-unique-validator');
+const mongooseSequence = require('mongoose-sequence')(mongoose);
 
 const partSchema = new mongoose.Schema({
   partNo: {
@@ -23,5 +24,6 @@ const partSchema = new mongoose.Schema({
 
 });
 partSchema.plugin(uniqueValidator);
+partSchema.plugin(mongooseSequence, { inc_field: 'partId', });
 
 module.exports = mongoose.model('part', partSchema);

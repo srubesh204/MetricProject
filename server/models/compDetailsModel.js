@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const uniqueValidator = require('mongoose-unique-validator');
+const mongooseSequence = require('mongoose-sequence')(mongoose);
 
 const compDetailsSchema = new mongoose.Schema({
 
@@ -32,6 +33,7 @@ const plantSchema = new mongoose.Schema({
 });
 
 plantSchema.plugin(uniqueValidator);
+plantSchema.plugin(mongooseSequence, { inc_field: 'plantId', });
 exports.plantSchema = mongoose.model('plants', plantSchema);
 
 

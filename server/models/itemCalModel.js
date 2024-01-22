@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const dayjs = require('dayjs')
 const uniqueValidator = require('mongoose-unique-validator');
+const mongooseSequence = require('mongoose-sequence')(mongoose);
 
 const counterSchema = new mongoose.Schema({
   _id: { type: String, required: true },
@@ -57,6 +58,7 @@ const itemCal = new mongoose.Schema({
 
 });
 itemCal.plugin(uniqueValidator);
+itemCal.plugin(mongooseSequence, { inc_field: 'calId', });
 
 itemCal.pre('save', function (next) {
   const doc = this;

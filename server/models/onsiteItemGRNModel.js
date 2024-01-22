@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const uniqueValidator = require('mongoose-unique-validator');
+const mongooseSequence = require('mongoose-sequence')(mongoose);
 const onsiteItemGRNSchema = new mongoose.Schema({
   osGrnPartyRefNo: String,
   osGrnPartyId: String,
@@ -18,4 +19,5 @@ const onsiteItemGRNSchema = new mongoose.Schema({
   osGrnPartyItems: []
 });
 onsiteItemGRNSchema.plugin(uniqueValidator);
+onsiteItemGRNSchema.plugin(mongooseSequence, { inc_field: 'onsiteId', });
 module.exports = mongoose.model('onsiteItemGRN', onsiteItemGRNSchema);
