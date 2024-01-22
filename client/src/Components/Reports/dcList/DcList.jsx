@@ -615,6 +615,7 @@ const DcList = () => {
                                     disableColumnMenu={true}
 
                                     checkboxSelection
+                                    
 
                                     onRowClick={handleRowClick}
 
