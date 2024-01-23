@@ -369,10 +369,12 @@ const Home = () => {
     console.log(employeeRole)
     if (employeeRole.loggedEmp.plantDetails.length === 1) {
 
-      const availableDeps = employeeRole.loggedEmp.plantDetails[0].departments.filter(dep => filteredData.find(item => item.itemDepartment === dep))
+      const availableDeps = employeeRole.loggedEmp.plantDetails[0].departments.filter(dep => filteredData.map(item => item.itemDepartment === dep))
+      console.log(employeeRole.loggedEmp.plantDetails[0].departments)
       console.log(availableDeps)
 
       setPlantDepartments(availableDeps)
+      setPlantDeps(prev => ({...prev, itemDepartment: availableDeps.length === 1 ? availableDeps[0] : "All"}))
 
     } else {
       const filteredPlants = employeeRole.loggedEmp.plantDetails.filter(plant => plant.plantName === selectedPlantName);
@@ -1230,7 +1232,7 @@ const Home = () => {
                 justifyContent="center"
                 alignItems="center"
                 spacing={2}>
-                <TextField select onChange={(e) => LocationEmpFilter(e)} disabled={employeeRole.loggedEmp.plantDetails.length === 1} value={plantDeps.itemPlant} fullWidth size='small' defaultValue="All" name='itemPlant' id='itemPlantId' label="Plant Location">
+                <TextField select onChange={(e) => LocationEmpFilter(e)} disabled={employeeRole.loggedEmp.plantDetails.length <= 1} value={plantDeps.itemPlant} fullWidth size='small' defaultValue="All" name='itemPlant' id='itemPlantId' label="Plant Location">
                   <MenuItem value="All">All</MenuItem>
                   {employeeRole.loggedEmp.length !== 0 && employeeRole.loggedEmp.plantDetails.map(item => (
                     <MenuItem value={item.plantName}>{item.plantName}</MenuItem>
@@ -1238,7 +1240,7 @@ const Home = () => {
 
                 </TextField>
                 {
-                  <TextField select onChange={(e) => LocationEmpFilter(e)} fullWidth size='small' name='itemDepartment' disabled={plantDepartments.length < 1 } value={plantDeps.itemDepartment} defaultValue="All" label="Default Location">
+                  <TextField select onChange={(e) => LocationEmpFilter(e)} fullWidth size='small' name='itemDepartment' disabled={plantDepartments.length <= 1 } value={plantDeps.itemDepartment} defaultValue="All" label="Default Location">
                     {plantDepartments.length !== 1 && <MenuItem value="All">All</MenuItem>}
                     {plantDepartments && plantDepartments.map((department, index) => (<MenuItem key={index} value={department}>{department}</MenuItem>))}
                   </TextField>}

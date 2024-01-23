@@ -47,14 +47,14 @@ const ItemList = () => {
                 `${process.env.REACT_APP_PORT}/itemAdd/getAllItemAdds`
             );
 
-
+            const plantwise = response.data.result.filter(item => employeeRole.loggedEmp.plantDetails.find(plant => plant.plantName === item.itemPlant))
 
             const filterNames = ["itemIMTENo", "itemType", "itemDepartment", "itemPlant", "itemCalibrationSource", "itemCurrentLocation"]
 
             let updatedFilterNames = {};
 
             filterNames.forEach((element, index) => {
-                const data = response.data.result.map(item => item[element]);
+                const data = plantwise.map(item => item[element]);
                 filterNames[index] = [...new Set(data)];
 
                 // Update the object with a dynamic key based on the 'element'
@@ -69,8 +69,8 @@ const ItemList = () => {
 
 
 
-            setItemList(response.data.result);
-            setFilteredItemListData(response.data.result);
+            setItemList(plantwise);
+            setFilteredItemListData(plantwise);
 
             setLoaded(true)
 

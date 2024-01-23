@@ -42,8 +42,8 @@ const DcList = () => {
             console.log(response.data.result)
             const plantItems = response.data.result.filter(item => (loggedEmp.plantDetails.map(plant => plant.plantName).includes(item.itemPlant)))
             console.log(plantItems)
-            setItemPlantList(response.data.result);
-            setItemDepartment(response.data.result)
+            setItemPlantList(plantItems);
+            setItemDepartment(plantItems)
 
         } catch (err) {
             console.log(err);
@@ -71,6 +71,26 @@ const DcList = () => {
     };
     useEffect(() => {
         formatFetchData();
+    }, []);
+
+    const [dcDataDcList, setDcDataDcList] = useState([])
+    const dcListFetchData = async () => {
+        try {
+            const response = await axios.get(
+                `${process.env.REACT_APP_PORT}/itemDc/getAllItemDc`
+
+            );
+            const plantDc = response.data.result.filter(dc => (loggedEmp.plantDetails.map(plant => plant.plantName).includes(dc.dcPlant)) )
+            setDcDataDcList(plantDc);
+            setFilteredData(plantDc);
+
+
+        } catch (err) {
+            console.log(err);
+        }
+    };
+    useEffect(() => {
+        dcListFetchData();
     }, []);
 
 
@@ -112,23 +132,7 @@ const DcList = () => {
 
 
 
-    // const vendorFetchData = async () => {
-    //     try {
-    //         const response = await axios.get(
-    //             `${process.env.REACT_APP_PORT}/vendor/getAllVendors`
-    //         );
-    //         console.log(response.data)
-
-
-
-    //         // setFilteredData(response.data.result);
-    //     } catch (err) {
-    //         console.log(err);
-    //     }
-    // };
-    // useEffect(() => {
-    //     vendorFetchData();
-    // }, []);
+   
     const [vendorDataList, setVendorDataList] = useState([])
     const [vendorFullList, setVendorFullList] = useState([])
     const [vendorTypeList, setVendorTypeList] = useState([])
@@ -188,24 +192,7 @@ const DcList = () => {
     const [dcListDataList, setDcListDataList] = useState([])
 
 
-    const [dcDataDcList, setDcDataDcList] = useState([])
-    const dcListFetchData = async () => {
-        try {
-            const response = await axios.get(
-                `${process.env.REACT_APP_PORT}/itemDc/getAllItemDc`
-
-            );
-            setDcDataDcList(response.data.result);
-            setFilteredData(response.data.result);
-
-
-        } catch (err) {
-            console.log(err);
-        }
-    };
-    useEffect(() => {
-        dcListFetchData();
-    }, []);
+    
 
     useEffect(() => {
         const filteredItems = dcDataDcList.filter((item) => dayjs(item.dcDate).isSameOrAfter(dateData.fromDate) && dayjs(item.dcDate).isSameOrBefore(dateData.toDate))
@@ -364,7 +351,7 @@ const DcList = () => {
         }
         if (name === "dcDepartment") {
             // const itemDepartment = dcDataDcList.filter((item) => (item.itemDepartment && item.itemDepartment.includes(value)));
-            const dcDepartment = dcDataDcList.filter((item) => (item.dcDepartment === value))
+            const dcDepartment = dcDataDcList.filter((dc) => (dc.dcDepartment.includes(value)))
 
             setFilteredData(dcDepartment);
         }

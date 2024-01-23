@@ -18,15 +18,11 @@ const HomeMail = () => {
     const mailDatas = useContext(HomeContent)
     const { mailOpen, setMailOpen, selectedRows, mailIds } = mailDatas
 
-    const ITEM_HEIGHT = 48;
-    const ITEM_PADDING_TOP = 8;
-    const MenuProps = {
-        PaperProps: {
-            style: {
-                maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
-                width: 250,
-            },
-        },
+    const initialMailDetails = {
+        to: "",
+        subject: "",
+        mailBody: "",
+        cc: [],
     }
 
 
@@ -61,6 +57,8 @@ const HomeMail = () => {
             console.error(err)
         } finally {
             setLoading(false)
+            setMailDetails(initialMailDetails)
+            setTimeout(()=> setMailOpen(false), 1000)
         }
 
     }
@@ -82,8 +80,8 @@ const HomeMail = () => {
             <DialogTitle id="alert-dialog-title">
                 Send Mail
             </DialogTitle>
-            <DialogContent>
-                <form className='row g-2' onSubmit={handleSubmit}>
+            <DialogContent >
+                <form className='row g-2 my-2' onSubmit={handleSubmit}>
                     <div className="col-6">
 
 
@@ -91,7 +89,7 @@ const HomeMail = () => {
                             size='small'
                             autoFocus
                             required
-                           
+
                             id="toId"
                             name="to"
                             label="To"
@@ -105,7 +103,7 @@ const HomeMail = () => {
                         <TextField
                             size='small'
                             required
-                           
+
                             id="subjectId"
                             name="subject"
                             label="Subject"
@@ -122,7 +120,7 @@ const HomeMail = () => {
                             maxRows={10}
                             rows={4}
                             onChange={handleMailChange}
-                           
+
                             id="mailBodyId"
                             name="mailBody"
                             label="Body"
@@ -171,7 +169,20 @@ const HomeMail = () => {
                 <Button
                     size="small"
                     onClick={handleSubmit}
-                    endIcon={loading ? <CircularProgress /> : <Send />}
+                    endIcon={loading ?
+                        <CircularProgress
+
+                            sx={{
+                                color: "inherit",
+
+                            }}
+                            variant="indeterminate"
+                            size={20}
+
+
+                        />
+                        : <Send />
+                    }
                     variant="contained"
                     disabled={loading}
                 >
