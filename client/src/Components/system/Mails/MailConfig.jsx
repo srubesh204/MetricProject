@@ -80,7 +80,6 @@ const MailConfig = () => {
             );
             console.log(response.data)
             mailFetchData();
-            setMailData(initialMailData);
             setMailSnackBar(true)
             setErrorHandler({ status: response.data.status, message: response.data.message, code: "success" })
             setIsEditable(false)
