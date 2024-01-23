@@ -112,7 +112,7 @@ const Home = () => {
     plantEmployees: []
   })
 
- 
+
 
 
 
@@ -129,7 +129,7 @@ const Home = () => {
       const viewers = response.data.result.filter(emp => emp === "viewer")
 
 
-     
+
       setActiveEmps((prev) => ({ ...prev, allEmps: response.data.result, admins: admins, plantAdmins: plantAdmins, creators: creators, viewers: viewers }))
 
     } catch (err) {
@@ -362,15 +362,53 @@ const Home = () => {
     ])
   }
 
+  
+  const [plantDepartments, setPlantDepartments] = useState([])
+
+  useEffect(() => {
+    console.log(employeeRole)
+    if (employeeRole.loggedEmp.plantDetails.length === 1) {
+
+      const availableDeps = employeeRole.loggedEmp.plantDetails[0].departments.filter(dep => filteredData.find(item => item.itemDepartment === dep))
+      console.log(availableDeps)
+
+      setPlantDepartments(availableDeps)
+
+    } else {
+      const filteredPlants = employeeRole.loggedEmp.plantDetails.filter(plant => plant.plantName === selectedPlantName);
+
+      if (filteredPlants.length > 0) {
+        console.log(filteredPlants[0].departments)
+        const availableDeps = filteredPlants[0].departments.filter(dep => filteredData.find(item => item.itemDepartment === dep))
+        console.log(availableDeps)
+        console.log(filteredPlants[0].departments)
+        setPlantDeps(prev => ({...prev, itemDepartment: availableDeps.length === 1 ? availableDeps[0] : "All"}))
+        setPlantDepartments(availableDeps)
+      } else {
+        setPlantDepartments([])
+      }
+
+    }
+
+
+  }, [selectedPlantName])
+
+  const [plantDeps, setPlantDeps] = useState({
+    itemPlant: employeeRole.loggedEmp.plantDetails.length === 1 ? employeeRole.loggedEmp.plantDetails[0].plantName : "All",
+    itemDepartment: plantDepartments.length === 1 ? plantDepartments[0] : "All"
+  })
+  console.log(plantDepartments)
 
   const LocationEmpFilter = (e) => {
     const { name, value } = e.target;
+    setPlantDeps(prev => ({...prev, [name]: value}))
     if (name === "itemPlant") {
       if (value === "All") {
         console.log(activeEmps.allEmps)
         // Assuming activeEmps.allEmps and employeeRole.loggedEmp are arrays
-
+        setPlantDeps(prev => ({...prev, itemDepartment : "All"}))
         itemFetch();
+        
         setSelectedPlantName(value)
       } else {
         setSelectedPlantName(value)
@@ -481,13 +519,13 @@ const Home = () => {
       field: 'itemCurrentLocation',
       headerName: 'Current Location',
       width: 100,
-      align:"left"
+      align: "left"
     },
     {
       field: 'itemLastLocation',
       headerName: 'Last Location',
       width: 100,
-      align:"left"
+      align: "left"
     },
     {
       field: 'itemCalibrationSource',
@@ -801,34 +839,6 @@ const Home = () => {
 
   }, [])
 
-  const [plantDepartments, setPlantDepartments] = useState([])
-
-  useEffect(() => {
-    console.log(employeeRole)
-    if(employeeRole.loggedEmp.plantDetails.length === 1){
-          
-        const availableDeps = employeeRole.loggedEmp.plantDetails[0].departments.filter(dep => filteredData.find(item => item.itemDepartment === dep))
-        console.log(availableDeps)
-        
-        setPlantDepartments(availableDeps)
-      
-    }else{
-      const filteredPlants = employeeRole.loggedEmp.plantDetails.filter(plant => plant.plantName === selectedPlantName);
-    
-      if (filteredPlants.length > 0) {
-        console.log(filteredPlants[0].departments)
-        const availableDeps = filteredPlants[0].departments.filter(dep => filteredData.find(item => item.itemDepartment === dep))
-        console.log(availableDeps)
-        console.log(filteredPlants[0].departments)
-        setPlantDepartments(availableDeps)
-      } else { 
-        setPlantDepartments([])
-      }
-  
-    }
-    
-   
-  }, [selectedPlantName])
 
 
   const DepartmentDataShow = (name, value) => {
@@ -1037,13 +1047,27 @@ const Home = () => {
     }
   };
 
+  const [mailIds, setMailIds] = useState([])
+
+  const mailIdGather = () => {
+    if (selectedRows.length > 0) {
+      const deps = selectedRows.map(item => item.itemDepartment)
+      console.log(deps)
+
+      const empEmails = activeEmps.allEmps.filter(emp => emp.plantDetails.find(plant => deps.find(dep => plant.departments.includes(dep))))
+      const uniqueEmails = [...new Set(empEmails)]
+      setMailIds(empEmails)
+      console.log(uniqueEmails)
+    }
+  }
+
 
 
   useEffect(() => {
     setStatusCheckMsg("");
     const grnBoolean = selectedRows.every(item => item.dcStatus === "1")
     setGrnButtonVisibility(grnBoolean && selectedRows.length > 0)
-
+    mailIdGather()
   }, [selectedRows])
 
   const handleRowSelectionChange = (newSelection) => {
@@ -1054,7 +1078,7 @@ const Home = () => {
 
   };
 
-  
+
 
 
   const [calOpen, setCalOpen] = useState(false);
@@ -1142,14 +1166,14 @@ const Home = () => {
   const mailCheck = () => {
     const singlePlant = selectedRows.every((item, index, array) => item.itemPlant === array[0].itemPlant);
 
-    if(singlePlant && selectedRows.length > 0){
+    if (singlePlant && selectedRows.length > 0) {
       setMailOpen(true)
-      
-    }else{
+
+    } else {
       setStatusCheckMsg("Select one plant only for sending mails")
     }
 
-    
+
   }
 
 
@@ -1206,7 +1230,7 @@ const Home = () => {
                 justifyContent="center"
                 alignItems="center"
                 spacing={2}>
-                <TextField select onChange={(e) => LocationEmpFilter(e)} disabled={employeeRole.loggedEmp.plantDetails.length === 1}  value={employeeRole.loggedEmp.plantDetails.length === 1 ? employeeRole.loggedEmp.plantDetails[0].plantName : ""} fullWidth size='small' defaultValue="All" name='itemPlant' id='itemPlantId' label="Plant Location">
+                <TextField select onChange={(e) => LocationEmpFilter(e)} disabled={employeeRole.loggedEmp.plantDetails.length === 1} value={plantDeps.itemPlant} fullWidth size='small' defaultValue="All" name='itemPlant' id='itemPlantId' label="Plant Location">
                   <MenuItem value="All">All</MenuItem>
                   {employeeRole.loggedEmp.length !== 0 && employeeRole.loggedEmp.plantDetails.map(item => (
                     <MenuItem value={item.plantName}>{item.plantName}</MenuItem>
@@ -1214,8 +1238,8 @@ const Home = () => {
 
                 </TextField>
                 {
-                  <TextField select onChange={(e) => LocationEmpFilter(e)} fullWidth size='small' name='itemDepartment' defaultValue="All"  label="Default Location">
-                    <MenuItem value="All">All</MenuItem>
+                  <TextField select onChange={(e) => LocationEmpFilter(e)} fullWidth size='small' name='itemDepartment' disabled={plantDepartments.length < 1 } value={plantDeps.itemDepartment} defaultValue="All" label="Default Location">
+                    {plantDepartments.length !== 1 && <MenuItem value="All">All</MenuItem>}
                     {plantDepartments && plantDepartments.map((department, index) => (<MenuItem key={index} value={department}>{department}</MenuItem>))}
                   </TextField>}
               </Stack>
@@ -1487,9 +1511,9 @@ const Home = () => {
             <Paper sx={{ p: 2, }} elevation={12}>
               <Box sx={{ height: 320, mb: 2, fontSize: "8px" }}>
                 <DataGrid
-                  density='compact' 
+                  density='compact'
                   disableDensitySelector
-                
+
                   getRowHeight={({ id, densityFactor }) => {
                     return 20;
                   }}
@@ -1504,7 +1528,7 @@ const Home = () => {
                       },
                     },
                   }}
-                  
+
                   onRowSelectionModelChange={handleRowSelectionChange}
                   sx={{
                     ".MuiTablePagination-displayedRows": {
@@ -1520,12 +1544,12 @@ const Home = () => {
                     toolbar: () => (
                       <div className='d-flex justify-content-between align-items-center'>
                         <GridToolbar />
-                        
+
                         <div className='d-flex'>
-                        <GridToolbarQuickFilter />
-                       { selectedRows.length > 0 && <Button onClick={()=> mailCheck()} size='small' endIcon={<Send />} color="primary">Send Mail</Button>}
+                          <GridToolbarQuickFilter />
+                          {selectedRows.length > 0 && <Button onClick={() => mailCheck()} size='small' endIcon={<Send />} color="primary">Send Mail</Button>}
                         </div>
-                        
+
                       </div>
                     ),
                   }}
@@ -1547,7 +1571,7 @@ const Home = () => {
 
 
                     <Button size='small' onClick={() => dcCheck()}>Create DC</Button>
-                    
+
                     {StatusCheckMsg !== "" && <Chip icon={<Error />} color='error' label={StatusCheckMsg} />}
                   </div>
                   <div className="col-md-3">
@@ -1674,7 +1698,7 @@ const Home = () => {
                 </HomeContent.Provider>
 
                 <HomeContent.Provider
-                  value={{ mailOpen, setMailOpen, selectedRows, emps : activeEmps.allEmps }}
+                  value={{ mailOpen, setMailOpen, selectedRows, mailIds }}
                 >
                   <HomeMail />
                 </HomeContent.Provider>

@@ -5,11 +5,12 @@ const transporter = require('../models/mailConfig');
 
 const mailController = {
   mailSender: async (req, res) => {
+    const {to, subject, mailBody, cc} = req.body
     const mailOptions = {
       from: 'calsoftmetric@gmail.com',
-      to: 'rbmkrishh@gmail.com',
-      subject: 'Test Mail from calsoft',
-      text: 'Hi im test mail from cal soft',
+      to: to,
+      subject: subject,
+      text: mailBody,
       html: `<!DOCTYPE html>
       <html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:o="urn:schemas-microsoft-com:office:office">
       <head>
@@ -102,7 +103,8 @@ const mailController = {
               </tr>
           </table>
       </body>
-      </html>`
+      </html>`,
+      cc: cc
     };
   
     transporter.sendMail(mailOptions, (error, info) => {
