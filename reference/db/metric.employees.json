@@ -1,61 +1,5 @@
 [{
   "_id": {
-    "$oid": "65abab1a4989d7cf7faddefa"
-  },
-  "employeeCode": "1",
-  "title": "Mr.",
-  "firstName": "Lawrance",
-  "address": "Ambattur",
-  "city": "Chennai",
-  "state": "Tamilnadu",
-  "contactNumber": "9884048594",
-  "designation": "Quality Manager",
-  "mailId": "lawrance@sribalajicastings.com",
-  "empRole": "admin",
-  "employmentStatus": "Active",
-  "password": "1",
-  "plantDetails": [
-    {
-      "plantName": "Plant-1",
-      "departments": [
-        "Quality",
-        "Maintenance",
-        "Lab",
-        "Standards Room"
-      ]
-    },
-    {
-      "plantName": "Plant-2",
-      "departments": [
-        "Quality",
-        "Maintenance",
-        "Lab",
-        "Standards Room"
-      ]
-    },
-    {
-      "plantName": "Plant-3",
-      "departments": [
-        "Quality",
-        "Maintenance",
-        "Lab",
-        "Standards Room"
-      ]
-    },
-    {
-      "plantName": "Plant-4",
-      "departments": [
-        "Quality",
-        "Maintenance",
-        "Lab",
-        "Standards Room"
-      ]
-    }
-  ],
-  "__v": 0
-},
-{
-  "_id": {
     "$oid": "65abab1a4989d7cf7faddefe"
   },
   "employeeCode": "5",
@@ -66,7 +10,7 @@
   "state": "Tamilnadu",
   "contactNumber": "9384314231",
   "designation": "Calibration Engineer",
-  "mailId": "sbc2calibration@gmail.com",
+  "mailId": "csd@metric.co.in ",
   "empRole": "plantAdmin",
   "employmentStatus": "Active",
   "password": "5",
@@ -121,7 +65,7 @@
   "state": "Tamilnadu",
   "contactNumber": "9384314231",
   "designation": "Calibration Engineer",
-  "mailId": "sbc2calibration@gmail.com",
+  "mailId": "ishunalini15@gmail.com",
   "empRole": "creator",
   "employmentStatus": "Active",
   "password": "7",
@@ -147,7 +91,7 @@
   "state": "Tamilnadu",
   "contactNumber": "9384314231",
   "designation": "Calibration Engineer",
-  "mailId": "sbc2calibration@gmail.com",
+  "mailId": "ishunalini15@gmail.com",
   "empRole": "creator",
   "employmentStatus": "Active",
   "password": "8",
@@ -173,7 +117,7 @@
   "state": "Tamilnadu",
   "contactNumber": "9384314231",
   "designation": "Calibration Engineer",
-  "mailId": "sbc2calibration@gmail.com",
+  "mailId": "ishunalini15@gmail.com",
   "empRole": "creator",
   "employmentStatus": "Active",
   "password": "9",
@@ -199,7 +143,7 @@
   "state": "Tamilnadu",
   "contactNumber": "9384314231",
   "designation": "Calibration Engineer",
-  "mailId": "sbc2calibration@gmail.com",
+  "mailId": "csd@metric.co.in ",
   "empRole": "viewer",
   "employmentStatus": "Active",
   "password": "10",
@@ -225,7 +169,7 @@
   "state": "Tamilnadu",
   "contactNumber": "9384314231",
   "designation": "Calibration Engineer",
-  "mailId": "sbc2calibration@gmail.com",
+  "mailId": "csd@metric.co.in ",
   "empRole": "viewer",
   "employmentStatus": "Active",
   "password": "11",
@@ -252,7 +196,7 @@
   "state": "Tamilnadu",
   "contactNumber": "9384314231",
   "designation": "Calibration Engineer",
-  "mailId": "sbc2calibration@gmail.com",
+  "mailId": "csd@metric.co.in ",
   "empRole": "viewer",
   "employmentStatus": "Active",
   "password": "12",
@@ -279,7 +223,7 @@
   "state": "Tamilnadu",
   "contactNumber": "9384314231",
   "designation": "Quality Supervisor",
-  "mailId": "sbc2calibration@gmail.com",
+  "mailId": "csd@metric.co.in ",
   "empRole": "plantAdmin",
   "employmentStatus": "Active",
   "password": "3",
@@ -308,7 +252,7 @@
   "state": "Tamilnadu",
   "contactNumber": "9384314231",
   "designation": "Calibration Engineer",
-  "mailId": "sbc2calibration@gmail.com",
+  "mailId": "csd@metric.co.in ",
   "empRole": "viewer",
   "employmentStatus": "Active",
   "password": "13",
@@ -334,7 +278,7 @@
   "state": "Tamilnadu",
   "contactNumber": "8939940090",
   "designation": "Quality Supervisor",
-  "mailId": "qcsbc2@gmail.com",
+  "mailId": "csd@metric.co.in ",
   "empRole": "plantAdmin",
   "employmentStatus": "Active",
   "password": "2",
@@ -363,7 +307,7 @@
   "state": "Tamilnadu",
   "contactNumber": "9384314231",
   "designation": "Quality Supervisor",
-  "mailId": "sbc2calibration@gmail.com",
+  "mailId": "csd@metric.co.in ",
   "empRole": "plantAdmin",
   "employmentStatus": "Active",
   "password": "4",
@@ -392,7 +336,7 @@
   "state": "Tamilnadu",
   "contactNumber": "9384314231",
   "designation": "Calibration Engineer",
-  "mailId": "sbc2calibration@gmail.com",
+  "mailId": "ishunalini15@gmail.com",
   "empRole": "creator",
   "employmentStatus": "Active",
   "password": "14",
@@ -418,7 +362,7 @@
   "state": "Tamilnadu",
   "contactNumber": "9384314231",
   "designation": "Calibration Engineer",
-  "mailId": "sbc2calibration@gmail.com",
+  "mailId": "ishunalini15@gmail.com",
   "empRole": "creator",
   "employmentStatus": "Active",
   "password": "15",
@@ -444,7 +388,7 @@
   "state": "Tamilnadu",
   "contactNumber": "9884048594",
   "designation": "Quality Manager",
-  "mailId": "lawrance@sribalajicastings.com",
+  "mailId": "csd@metric.co.in ",
   "empRole": "admin",
   "employmentStatus": "Active",
   "password": "16",
@@ -473,7 +417,7 @@
   "state": "Tamilnadu",
   "contactNumber": "9884048594",
   "designation": "Quality Manager",
-  "mailId": "lawrance@sribalajicastings.com",
+  "mailId": "csd@metric.co.in ",
   "empRole": "superAdmin",
   "employmentStatus": "Active",
   "password": "Metric@123",
