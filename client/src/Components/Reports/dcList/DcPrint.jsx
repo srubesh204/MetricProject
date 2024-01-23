@@ -1,13 +1,47 @@
-import React, { useContext, useRef } from 'react';
+import React, { useContext, useEffect, useRef } from 'react';
 import { DcListContent } from './DcList';
-import { Button, Dialog, DialogActions, DialogContent, DialogTitle, IconButton } from '@mui/material';
-import { Close } from '@mui/icons-material';
 import dayjs from 'dayjs';
 import { useReactToPrint } from 'react-to-print';
 
 const DcPrint = () => {
   const DcPrintData = useContext(DcListContent);
   const { dcPrintOpen, setDcPrintOpen, selectedRows, formatNoData, printState, setPrintState } = DcPrintData;
+
+  const componentRef = useRef();
+
+
+  const handlePrint = useReactToPrint({
+    content: () => componentRef.current,
+    pageStyle: `
+            @page {
+                size: A4;
+                margin: 1cm;
+            }
+            body {
+                margin: 0;
+            }
+            table {
+                width: 100%;
+                border-collapse: collapse;
+            }
+            .footer {
+                position: fixed;
+                bottom: 0;
+                left: 0;
+                width: 100%;
+                height: 120px; /* Set the height based on your footer height */
+                font-size: 6px;
+            }
+        `,
+    onAfterPrint: () => setPrintState(false)
+  });
+
+  useEffect(() => {
+    if (printState) {
+      console.log("Working");
+      handlePrint();
+    }
+  }, [printState, handlePrint]);
 
   const renderTableRows = () => {
     return selectedRows.dcPartyItems.map((row, index) => (
@@ -48,68 +82,17 @@ const DcPrint = () => {
     );
   };
 
-  const componentRef = useRef();
 
-  const handlePrint = useReactToPrint({
-    content: () => componentRef.current,
-    pageStyle: `
-            @page {
-                size: A4;
-                margin: 1cm;
-            }
-            body {
-                margin: 0;
-            }
-            table {
-                width: 100%;
-                border-collapse: collapse;
-            }
-            .footer {
-                position: fixed;
-                bottom: 0;
-                left: 0;
-                width: 100%;
-                height: 120px; /* Set the height based on your footer height */
-                font-size: 6px;
-            }
-        `,
-    onAfterPrint: () => setPrintState(false)
-  });
+
+ 
 
   // Your conditional logic
-  if (printState) {
-    // Call the handlePrint function when needed
-    handlePrint();
-  }
+ 
 
   console.log(printState)
 
   return (
-    <Dialog
-      keepMounted
-      fullScreen
-      open={dcPrintOpen}
-      onClose={(e, reason) => {
-        console.log(reason);
-        if (reason !== 'backdropClick' && reason !== 'escapeKeyDown') {
-          setDcPrintOpen(false);
-        }
-      }}
-    >
-      <DialogTitle align='center' sx={{ backgroundColor: '#323639', color: 'white', height: '40px' }}>DC Print Preview</DialogTitle>
-      <IconButton
-        aria-label='close'
-        onClick={() => setDcPrintOpen(false)}
-        sx={{
-          position: 'absolute',
-          right: 8,
-          top: 8,
-          color: 'white',
-        }}
-      >
-        <Close />
-      </IconButton>
-      <DialogContent style={{ display: 'none', width: "100%" }}>
+      <div style={{ display: 'none', width: "100%" }}>
         <div ref={componentRef}>
           <div style={{ padding: "10px", textAlign: "center", textDecoration: "underline" }}>DC List</div>
           <div style={{ border: '0.5px solid black' }}>
@@ -142,9 +125,7 @@ const DcPrint = () => {
             </table>
           </div>
         </div>
-      </DialogContent>
-      <Button onClick={handlePrint}>Print this out!</Button>
-    </Dialog>
+      </div>
   );
 };
 

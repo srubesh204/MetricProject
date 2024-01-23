@@ -82,37 +82,17 @@ const GrnPrint = () => {
         onAfterPrint: () => setPrintState(false)
     });
 
-    // Your conditional logic
-    if (printState) {
-        // Call the handlePrint function when needed
-        handlePrint();
-    }
-
-    console.log(printState)
+    useEffect(() => {
+        if (printState) {
+          console.log("Working");
+          handlePrint();
+        }
+      }, [printState, handlePrint]);
+      
+      console.log(printState)
 
     return (
-        <Dialog keepMounted fullScreen open={grnPrintOpen} sx={{ height: '100vh', width: '100vw' }}
-            onClose={(e, reason) => {
-                console.log(reason)
-                if (reason !== 'backdropClick' && reason !== 'escapeKeyDown') {
-                    setGrnPrintOpen(false)
-                }
-            }}>
-            <DialogTitle align='center' sx={{ backgroundColor: "#323639", color: "white", height: "40px" }}>GRN Print Preview</DialogTitle>
-            <IconButton
-                aria-label="close"
-                onClick={() => setGrnPrintOpen(false)}
-
-                sx={{
-                    position: 'absolute',
-                    right: 8,
-                    top: 8,
-                    color: "white"
-                }}
-            >
-                <Close />
-            </IconButton>
-            <DialogContent style={{ display: 'none', width: "100%" }}>
+            <div style={{ display: 'none', width: "100%" }}>
                 <div ref={componentRef}>
                     <div style={{ padding: "10px", textAlign: "center", textDecoration: "underline" }}>GRN List</div>
                     <div style={{ border: "0.5px solid black", width: "100%", height: "95%" }}>
@@ -151,12 +131,8 @@ const GrnPrint = () => {
                             {Footer({ value: formatNoData })}
                         </table>
                     </div>
-                </div></DialogContent>
-            <Button onClick={handlePrint}>Print this out!</Button>
+                </div></div>
 
-
-
-        </Dialog>
     )
 }
 
