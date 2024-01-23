@@ -1,30 +1,41 @@
-import React from 'react'
-import { Card, CardContent, CardActions, Button, Container, Grid, Paper, TextField, Typography, CardMedia, InputLabel, Input, FormControl, FormHelperText, FormGroup, FormLabel, MenuItem, Select, Menu, FormControlLabel, Radio, RadioGroup, TableContainer, Table, TableHead, TableRow, TableCell, TableBody, IconButton, OutlinedInput, Box, Chip, Snackbar, Alert, Dialog, DialogTitle, DialogContent, DialogActions, DialogContentText, Checkbox, ListItemText, Autocomplete } from '@mui/material'
-import { Add, Close, CloudUpload, Delete, Done, Edit, Receipt } from '@mui/icons-material';
+import React, { useState, useEffect } from 'react';
+import { Container, Paper } from '@mui/material';
+import axios from 'axios';
 
 const Version = () => {
-    return (
-        <div>
+  const [versionDatas, setVersionDatas] = useState([]);
 
+  const versionFetch = async () => {
+    try {
+      const response = await axios.get(
+        `${process.env.REACT_APP_PORT}/version/getAllVersion`
+      );
+      setVersionDatas(response.data.result);
+      console.log(response.data.result);
+    } catch (err) {
+      console.error(err);
+    }
+  };
 
+  useEffect(() => {
+    versionFetch();
+  }, []);
 
-
-<Container maxWidth="lg" sx={{ mt: 4 }}>
-            <form>
-
-                <Paper
-                    sx={{
-                        p: 2,
-                        display: 'flex',
-                        flexDirection: 'column',
-                        mb: 1,
-
-                    }}
-                    elevation={12}
-                >
-
-                    <div className='row'>
-                        <h5 className='text-center mb-2'>Software Information</h5>
+  return (
+    <div>
+      <Container maxWidth="lg" sx={{ mt: 4 }}>
+        <form>
+          <Paper
+            sx={{
+              p: 2,
+              display: 'flex',
+              flexDirection: 'column',
+              mb: 1,
+            }}
+            elevation={12}
+          >
+            <div className='row'>
+              <h5 className='text-center mb-2'>Software Information</h5>
                         <table className='table table-sm table table-bordered table-responsive align-middle' >
                             <tbody>
 
@@ -32,38 +43,38 @@ const Version = () => {
                                     <th>Name</th>
 
                                     <tr>
-                                        <td><input type="text" className='form-control form-control-sm' id="certificatePrefixId" name="certificatePrefix" /></td>
+                                        <td><input type="text" className='form-control form-control-sm' id="certificatePrefixId" name="certificatePrefix" value="CalSoft" /></td>
 
                                     </tr>
                                 </tr>
                                 <tr>
                                     <th>Version</th>
                                     <tr>
-                                        <td><input type="text" className='form-control form-control-sm' id="definedTemparatureId" name="definedTemparature" /></td>
+                                        <td><input type="text" className='form-control form-control-sm' id="definedTemparatureId" name="definedTemparature" value={versionDatas?.[0]?.versionNo} /></td>
                                     </tr>
                                 </tr>
                                 <tr>
                                     <th>Released Date</th>
                                     <tr>
-                                        <td><input type="text" className='form-control form-control-sm' id="definedTemparatureId" name="definedTemparature" /></td>
+                                        <td><input type="text" className='form-control form-control-sm' id="definedTemparatureId" name="definedTemparature" value={versionDatas?.[0]?.versionRelDate} /></td>
                                     </tr>
                                 </tr>
                                 <tr>
                                     <th>Current Released Version</th>
                                     <tr>
-                                        <td><input type="text" className='form-control form-control-sm' id="definedTemparatureId" name="definedTemparature" /></td>
+                                        <td><input type="text" className='form-control form-control-sm' id="definedTemparatureId" name="definedTemparature" value={versionDatas?.[0]?.versionChange} /></td>
                                     </tr>
                                 </tr>
                                 <tr>
                                     <th>Change</th>
                                     <tr>
-                                        <td><input type="text" className='form-control form-control-sm' id="definedTemparatureId" name="definedTemparature" /></td>
+                                        <td><input type="text" className='form-control form-control-sm' id="definedTemparatureId" name="definedTemparature" value={versionDatas?.[0]?.lastVersion} /></td>
                                     </tr>
                                 </tr>
                                 <tr>
                                     <th>Added Features</th>
                                     <tr>
-                                        <td><input type="text" className='form-control form-control-sm' id="definedTemparatureId" name="definedTemparature" /></td>
+                                        <td><input type="text" className='form-control form-control-sm' id="definedTemparatureId" name="definedTemparature" value={versionDatas?.[0]?.additionFeatures} /></td>
                                     </tr>
                                 </tr>
 
@@ -72,15 +83,12 @@ const Version = () => {
 
                             </tbody>
                         </table>
-
-
-                    </div>
-                </Paper>
-            </form>
-            </Container>
-
-        </div>
-    )
+            </div>
+          </Paper>
+        </form>
+      </Container>
+    </div>
+  );
 }
 
-export default Version
+export default Version;
