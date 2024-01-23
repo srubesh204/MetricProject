@@ -57,18 +57,23 @@ const HomeMail = () => {
             setLoading(true)
             const response = await axios.post(`${process.env.REACT_APP_PORT}/mail/sendMail`, mailDetails)
             console.log(response)
-        }catch(err){
+        } catch (err) {
             console.error(err)
-        }finally{
+        } finally {
             setLoading(false)
         }
-        
+
     }
 
     return (
         <Dialog
             open={mailOpen}
-            onClose={() => setMailOpen(false)}
+            onClose={(e, reason) => {
+                console.log(reason)
+                if (reason !== 'backdropClick' && reason !== 'escapeKeyDown') {
+                    setMailOpen(false)
+                }
+            }}
             maxWidth="md"
             fullWidth
             aria-labelledby="alert-dialog-title"
@@ -78,52 +83,55 @@ const HomeMail = () => {
                 Send Mail
             </DialogTitle>
             <DialogContent>
-                <form className='row' onSubmit={handleSubmit}>
+                <form className='row g-2' onSubmit={handleSubmit}>
                     <div className="col-6">
 
 
                         <TextField
-
+                            size='small'
                             autoFocus
                             required
-                            margin="dense"
+                           
                             id="toId"
                             name="to"
                             label="To"
                             type="email"
                             fullWidth
                             onChange={handleMailChange}
-                            variant="standard"
+                        //variant="standard"
                         />
                     </div>
                     <div className="col-6 ">
                         <TextField
+                            size='small'
                             required
-                            margin="dense"
+                           
                             id="subjectId"
                             name="subject"
                             label="Subject"
                             type="text"
                             fullWidth
                             onChange={handleMailChange}
-                            variant="standard"
+                        //variant="standard"
                         />
                     </div>
                     <div >
                         <TextField
+                            size='small'
                             multiline
-                            maxRows={4}
+                            maxRows={10}
+                            rows={4}
                             onChange={handleMailChange}
-                            margin="dense"
+                           
                             id="mailBodyId"
                             name="mailBody"
                             label="Body"
                             type="text"
                             fullWidth
-                            variant="standard"
+                        //variant="standard"
                         />
                     </div>
-                    <div className="col-12 mt-3">
+                    <div className="col-12 ">
                         <FormControl size='small' component="div" fullWidth>
                             <InputLabel id="ccId">CC.</InputLabel>
                             <Select
@@ -163,7 +171,7 @@ const HomeMail = () => {
                 <Button
                     size="small"
                     onClick={handleSubmit}
-                    endIcon={loading ? <CircularProgress  size="small" /> : <Send />}
+                    endIcon={loading ? <CircularProgress /> : <Send />}
                     variant="contained"
                     disabled={loading}
                 >
