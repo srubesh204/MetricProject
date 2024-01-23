@@ -351,7 +351,7 @@ const DcList = () => {
         }
         if (name === "dcDepartment") {
             // const itemDepartment = dcDataDcList.filter((item) => (item.itemDepartment && item.itemDepartment.includes(value)));
-            const dcDepartment = dcDataDcList.filter((item) => (item.dcDepartment === value))
+            const dcDepartment = dcDataDcList.filter((dc) => (dc.dcDepartment.includes(value)))
 
             setFilteredData(dcDepartment);
         }
