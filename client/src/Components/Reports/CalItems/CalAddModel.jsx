@@ -176,7 +176,7 @@ const CalAddModel = () => {
             console.log(response.data.result)
 
             const calNumbers = response.data.result.map(item => (item.calId)).filter(Boolean).sort();
-            if (calNumbers) {
+            if (calNumbers.length > 0) {
                 const lastNumber = calNumbers[calNumbers.length - 1] + 1
                 console.log(lastNumber)
 
@@ -184,6 +184,7 @@ const CalAddModel = () => {
             } else {
                 setCalibrationData(prev => ({ ...prev, calCertificateNo: dayjs().year() + "-" + 1 }))
             }
+            
 
 
         } catch (err) {
@@ -672,7 +673,7 @@ const CalAddModel = () => {
             setSnackBarOpen(true)
             calListFetchData();
             setCalibrationData(initialCalData)
-            setTimeout(() => { setCalAddOpen(false) }, 2000)
+            setTimeout(() => { setCalAddOpen(false) }, 1000)
         } catch (err) {
             console.log(err);
         }

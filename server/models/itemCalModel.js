@@ -46,6 +46,8 @@ const itemCal = new mongoose.Schema({
     calcalibrationData: [],
     calMasterUsed: [],
     calItemFreInMonths: String,
+    calPlant: String,
+    calDepartment: String,
   calCreatedAt: {
     type: String,
     default: () => dayjs().format("YYYY-MM-DD"),

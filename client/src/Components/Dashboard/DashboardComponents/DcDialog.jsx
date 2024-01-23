@@ -680,6 +680,7 @@ const Dc = () => {
                                                 label="Dc No"
                                                 id="dcNoId"
                                                 value={dcData.dcNo}
+                                                disabled
                                                 onChange={handleDcChange}
                                                 size="small"
                                                 sx={{ width: "101%" }}

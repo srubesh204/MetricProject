@@ -1133,6 +1133,7 @@ const Grn = () => {
                                                     label="GRN No"
                                                     id="grnNoId"
                                                     value={grnData.grnNo}
+                                                    disabled
                                                     onChange={handleGrnChange}
                                                     size="small"
                                                     fullWidth
