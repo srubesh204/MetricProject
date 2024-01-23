@@ -89,6 +89,8 @@ const CalAddModel = () => {
             rowStatus: ""
         }],
         calMasterUsed: [],
+        calPlant: "",
+    calDepartment:""
     })
 
     const [calibrationData, setCalibrationData] = useState({
@@ -131,8 +133,11 @@ const CalAddModel = () => {
             calMinPSError: "",
             calMaxPSError: "",
             rowStatus: ""
+            
         }],
         calMasterUsed: [],
+        calPlant: "",
+        calDepartment:""
     })
 
 
