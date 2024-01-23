@@ -42,11 +42,13 @@ const CalPrint = () => {
         onAfterPrint: () => setPrintState(false)
     });
 
-    // Your conditional logic
-    if (printState) {
-        // Call the handlePrint function when needed
-        handlePrint();
-    }
+
+    useEffect(() => {
+        if (printState) {
+          console.log("Working");
+          handlePrint();
+        }
+      }, [printState, handlePrint]);
 
     console.log(printState)
     console.log(selectedRows)
@@ -57,28 +59,7 @@ const CalPrint = () => {
     console.log(formatNoData)
 
     return (
-        <Dialog keepMounted fullScreen open={calPrintOpen} sx={{ height: '100vh', width: '100vw' }}
-            onClose={(e, reason) => {
-                console.log(reason)
-                if (reason !== 'backdropClick' && reason !== 'escapeKeyDown') {
-                    setCalPrintOpen(false)
-                }
-            }}>
-            <DialogTitle align='center' sx={{ backgroundColor: "#323639", color: "white", height: "40px" }}>Cal Print Preview</DialogTitle>
-            <IconButton
-                aria-label="close"
-                onClick={() => setCalPrintOpen(false)}
-
-                sx={{
-                    position: 'absolute',
-                    right: 8,
-                    top: 8,
-                    color: "white"
-                }}
-            >
-                <Close />
-            </IconButton>
-            <DialogContent style={{ display: 'block', width: "100%" }}>
+            <div style={{ display: 'none', width: "100%" }}>
                 <div ref={componentRef}>
                     {/* <PDFViewer width="100%" height="100%">
                 <Document >
@@ -281,9 +262,7 @@ const CalPrint = () => {
                     {/* </Page>
                 </Document>
             </PDFViewer> */}
-                </div></DialogContent>
-            <Button onClick={handlePrint}>Print this out!</Button>
-        </Dialog>
+                </div></div>
 
     )
 }

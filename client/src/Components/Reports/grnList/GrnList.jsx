@@ -638,12 +638,12 @@ const GrnList = () => {
                                 </div>
 
                                 <GrnListContent.Provider
-                                    value={{ grnEditOpen, setGrnEditOpen, selectedRows, grnListFetchData, printState, setPrintState, itemPlantList }}
+                                    value={{ grnEditOpen, setGrnEditOpen, selectedRows, grnListFetchData, itemPlantList }}
                                 >
                                     <GrnEdit />
                                 </GrnListContent.Provider>
                                 <GrnListContent.Provider
-                                    value={{ grnOpen, setGrnOpen, selectedRows, grnListFetchData, printState, setPrintState, itemPlantList }}
+                                    value={{ grnOpen, setGrnOpen, selectedRows, grnListFetchData, itemPlantList }}
                                 >
                                     <GrnAdd />
                                 </GrnListContent.Provider>
