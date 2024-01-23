@@ -61,9 +61,9 @@ const mailConfigController = {
             // Create an object with the fields you want to update
             const updateMailConfigFields = {
               /* Specify the fields and their updated values here */
-              mailId: req.body.mailId, mailPassword: req.body.mailPassword,  portNumber: req.body.portNumber, inMailServer : req.body.inMailServer, outMailServer : req.body.outMailServer// Example: updating the 'name' field
+              mailId, mailPassword, portNumber, inMailServer, outMailServer, mailSubjects, mailBodies // Example: updating the 'name' field
               // Add more fields as needed
-            };
+            } = req.body;
         
             // Find the designation by desId and update it
             const mailConfigUpdate = new mailConfigModel(updateMailConfigFields);
@@ -87,8 +87,8 @@ const mailConfigController = {
   
             // Find the designation by desId and update it
             const updateMailConfig = await mailConfigModel.findOneAndUpdate(
-                { _id: mailConfigId },
-                updateMailConfigFields,
+                { mailFixedId: mailConfigId },
+                {$set : updateMailConfigFields},
                 { new: true } // To return the updated document
             );
   

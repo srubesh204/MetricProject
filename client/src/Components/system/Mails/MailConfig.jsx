@@ -20,21 +20,16 @@ const MailConfig = () => {
 
         setMailSnackBar(false);
     }
-    const initialMailData = {
-        mailId: "",
-        mailPassword: "",
-        portNumber: "",
-        inMailServer: "",
-        outMailServer: ""
-
-    }
+    
     const [isEditable, setIsEditable] = useState(false)
     const [mailData, setMailData] = useState({
         mailId: "",
         mailPassword: "",
         portNumber: "",
         inMailServer: "",
-        outMailServer: ""
+        outMailServer: "",
+        mailSubjects: [],
+        mailBodies: []
 
     })
     console.log(mailData)
@@ -42,11 +37,11 @@ const MailConfig = () => {
     // const[mailDetails,setMailDetails]= useState[]
 
 
-   
+
     const mailFetchData = async () => {
         try {
             const response = await axios.get(
-                `${process.env.REACT_APP_PORT}/mailConfig/getMailConfigById/658bef57308988e77396ef64`
+                `${process.env.REACT_APP_PORT}/mailConfig/getMailConfigById/1`
             );
             const mail = response.data.result
             console.log(mail)
@@ -56,7 +51,9 @@ const MailConfig = () => {
                 mailPassword: mail.mailPassword,
                 portNumber: mail.portNumber,
                 inMailServer: mail.inMailServer,
-                outMailServer: mail.outMailServer
+                outMailServer: mail.outMailServer,
+                mailSubjects: mail.mailSubjects,
+                mailBodies: mail.mailBodies
             }));
         } catch (err) {
             console.log(err);
@@ -143,14 +140,14 @@ const MailConfig = () => {
 
                             <div className='row'>
                                 <div className='col d-flex justify-content-end'>
-                                    <Button onClick={()=> setIsEditable(true)}><Edit color='success' /></Button>
+                                    <Button onClick={() => setIsEditable(true)}><Edit color='success' /></Button>
                                 </div>
                             </div>
 
                             <div className='col'>
                                 <TextField label="Mail Id"
                                     id="mailIdId"
-                                   
+
                                     size="small"
                                     disabled={!isEditable}
                                     onChange={handleMailChange}
@@ -162,7 +159,7 @@ const MailConfig = () => {
                             <div className='col'>
                                 <TextField label="PassWord"
                                     id="mailPasswordId"
-                                  
+
                                     disabled={!isEditable}
                                     size="small"
                                     onChange={handleMailChange}
@@ -174,7 +171,7 @@ const MailConfig = () => {
                             <div className='col'>
                                 <TextField label="Port Number"
                                     id="portNumberId"
-                                    
+
                                     size="small"
                                     disabled={!isEditable}
                                     onChange={handleMailChange}
@@ -201,7 +198,7 @@ const MailConfig = () => {
                             <div className='col'>
                                 <TextField label="Incoming Mail Server"
                                     id="inMailServerId"
-                                  
+
                                     size="small"
                                     disabled={!isEditable}
                                     onChange={handleMailChange}
@@ -213,7 +210,7 @@ const MailConfig = () => {
                             <div className='col'>
                                 <TextField label="outGoing Mail Server"
                                     id="outMailServerId"
-                                    
+
                                     size="small"
                                     disabled={!isEditable}
                                     onChange={handleMailChange}
@@ -232,7 +229,7 @@ const MailConfig = () => {
                                 <Button size='small' sx={{ minWidth: "130px" }} variant='contained' onClick={() => setOpenModal(true)}>Modify</Button>
                             </div>
                             <div className='me-2 '>
-                                <Button size='small' color='error' sx={{ minWidth: "130px" }} variant='contained' onClick={()=> setIsEditable(false)}>Cancel</Button>
+                                <Button size='small' color='error' sx={{ minWidth: "130px" }} variant='contained' onClick={() => setIsEditable(false)}>Cancel</Button>
                             </div>
 
 
