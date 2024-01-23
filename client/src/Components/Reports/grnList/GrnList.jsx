@@ -512,7 +512,20 @@ const GrnList = () => {
                                         }}
 
                                         slots={{
-                                            toolbar: GridToolbar,
+                                            toolbar: () => (
+                                                <div className='d-flex justify-content-between align-items-center'>
+                                                    <GridToolbar />
+                                                    <div className='mt-2'>
+                                                    {itemListSelectedRowIds.length !== 0 &&  <Button variant='contained' type='button' size='small' color='error'onClick={() => setDeleteModalItem(true)}> Delete </Button>}
+                                                       
+                                      
+                                    
+
+
+                                                    </div>
+
+                                                </div>
+                                            ),
                                         }}
 
                                         density="compact"
@@ -593,9 +606,7 @@ const GrnList = () => {
                                             <AddIcon /> Add Item
                                         </Button>
                                     </div>
-                                    {itemListSelectedRowIds.length !== 0 && <div className=' me-2'>
-                                        <Button variant='contained' type='button' color='error' onClick={() => setDeleteModalItem(true)}>Delete</Button>
-                                    </div>}
+                                    
                                     <Dialog
                                         open={deleteModalItem}
                                         onClose={() => setDeleteModalItem(false)}
@@ -623,7 +634,7 @@ const GrnList = () => {
                                             {errorhandler.message}
                                         </Alert>
                                     </Snackbar>
-                                    
+
                                 </div>
 
                                 <GrnListContent.Provider

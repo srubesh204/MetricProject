@@ -31,7 +31,7 @@ const itemCal = new mongoose.Schema({
     calStandardRef: String,
     calOBType: String,
     calCertificateNo:{
-      type: Number,
+      type: String,
       unique: true,
     },
     calItemCalDate: String,

@@ -12,14 +12,14 @@ const DcPrint = () => {
   const renderTableRows = () => {
     return selectedRows.dcPartyItems.map((row, index) => (
       <tr key={index.toString()}>
-        <td style={{ width: '8%', border: '0.5px solid black', padding: '15px 0px', textAlign: 'center' }}>{index + 1}</td>
-        <td style={{ borderBottom: '0.5px solid black', padding: '15px 8px', display: 'flex', flexDirection: 'column' }}>
+        <td style={{ width: '8%', borderTop: '0.5px solid black', borderRight: '0.5px solid black', textAlign: 'center' }}>{index + 1}</td>
+        <td style={{ borderTop: '0.5px solid black', borderRight: '0.5px solid black', display: 'flex', flexDirection: 'column' }}>
           <td>Item Name: {row.itemItemMasterName},    IMTE No: {row.itemIMTENo}</td>
           <td>Range/Size: {row.itemRangeSize + ' ' + row.itemRangeSizeUnit},    L.C.: {row.itemLC + ' ' + row.itemLCUnit}</td>
           <td>Make: {row.itemMake},    Sr.No: {row.itemMFRNo}</td>
           <td>Cal. Frequency: {row.itemCalFreInMonths}</td>
         </td>
-        <td style={{ width: '30%', border: '0.5px solid black', padding: '15px 8px', textAlign: 'center' }}>{row.dcItemRemarks}</td>
+        <td style={{ width: '30%', borderTop: '0.5px solid black', textAlign: 'center' }}>{row.dcItemRemarks}</td>
       </tr>
     ));
   };
@@ -35,7 +35,7 @@ const DcPrint = () => {
               </div>
               <div style={{ width: '100%' }}>Date: {data.value.fDc.date}</div>
             </div>
-            <div style={{ borderLeft: '0.5px solid black', paddingLeft: '5px', display: 'flex', flexDirection: 'column'}}>
+            <div style={{ borderLeft: '0.5px solid black', paddingLeft: '5px', display: 'flex', flexDirection: 'column' }}>
               <div style={{ margin: '5px', fontSize: 10, fontWeight: 600, padding: '0 130px 40px 0', width: '100%' }}>For {selectedRows.dcPartyName}</div>
               <div style={{ fontSize: 9, textAlign: 'center' }}>Authorized Signature</div>
             </div>
@@ -63,10 +63,6 @@ const DcPrint = () => {
             table {
                 width: 100%;
                 border-collapse: collapse;
-            }
-            th, td {
-                border: 0.5px solid black;
-                padding: 4px 0px;
             }
             .footer {
                 position: fixed;
@@ -115,34 +111,36 @@ const DcPrint = () => {
       </IconButton>
       <DialogContent style={{ display: 'none', width: "100%" }}>
         <div ref={componentRef}>
-            <div style={{ padding: "10px", textAlign: "center", textDecoration: "underline" }}>DC List</div>
-          <div style={{ textAlign: 'center', border: '0.5px solid black', display: 'flex', flexDirection: 'column' }}>
-            <h3>{selectedRows.dcPartyName}</h3>
-            <td>{selectedRows.dcPartyAddress}</td>
-            <td>Phone and Address</td>
-          </div>
-          <div style={{ display: 'flex', flexDirection: 'row' }}>
-            <div style={{ width: '60%', border: '0.5px solid black', display: 'flex', flexDirection: 'column', paddingLeft: '10px' }}>
-              <td>To:</td>
-              <td style={{ padding: '0px 30px' }}>{selectedRows.dcPartyAddress}</td>
+          <div style={{ padding: "10px", textAlign: "center", textDecoration: "underline" }}>DC List</div>
+          <div style={{ border: '0.5px solid black' }}>
+            <div style={{ textAlign: 'center', borderBottom: '0.5px solid black', display: 'flex', flexDirection: 'column' }}>
+              <td style={{ padding: "10px", textAlign: "center" }}>{selectedRows.dcPartyName}</td>
+              <td>{selectedRows.dcPartyAddress}</td>
+              <td>Phone and Address</td>
             </div>
-            <div style={{ width: '40%', border: '0.5px solid black', display: 'flex', flexDirection: 'column', paddingLeft: '10px' }}>
-              <td>DC No: {selectedRows.dcNo}</td>
-              <td>DC Date: {dayjs(selectedRows.dcDate).format('DD-MM-YYYY')}</td>
-              <td>Narration: {selectedRows.dcReason}</td>
+            <div style={{ display: 'flex', flexDirection: 'row', borderBottom: '0.5px solid black' }}>
+              <div style={{ width: '60%', display: 'flex', flexDirection: 'column', paddingLeft: '10px', borderRight: '0.5px solid black' }}>
+                <td>To:</td>
+                <td style={{ padding: '0px 30px' }}>{selectedRows.dcPartyAddress}</td>
+              </div>
+              <div style={{ width: '40%', display: 'flex', flexDirection: 'column', paddingLeft: '10px' }}>
+                <td>DC No: {selectedRows.dcNo}</td>
+                <td>DC Date: {dayjs(selectedRows.dcDate).format('DD-MM-YYYY')}</td>
+                <td>Narration: {selectedRows.dcReason}</td>
+              </div>
             </div>
+            <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+              <thead>
+                <tr>
+                  <th style={{ width: '8%', borderRight: '0.5px solid black', textAlign: 'center' }}>Si No</th>
+                  <th style={{ width: '52%', borderRight: '0.5px solid black', textAlign: 'center' }}>Item Description</th>
+                  <th style={{ width: '40%', textAlign: 'center' }}>Remarks</th>
+                </tr>
+              </thead>
+              <tbody>{renderTableRows()}</tbody>
+              <tfoot>{Footer({ value: formatNoData })}</tfoot>
+            </table>
           </div>
-          <table style={{ width: '100%', borderCollapse: 'collapse' }}>
-            <thead>
-              <tr>
-                <th style={{ width: '8%', border: '0.5px solid black', padding: '8px', textAlign: 'center' }}>Si No</th>
-                <th style={{ width: '52%', border: '0.5px solid black', padding: '8px', textAlign: 'center' }}>Item Description</th>
-                <th style={{ width: '40%', border: '0.5px solid black', padding: '8px', textAlign: 'center' }}>Remarks</th>
-              </tr>
-            </thead>
-            <tbody>{renderTableRows()}</tbody>
-            <tfoot>{Footer({ value: formatNoData })}</tfoot>
-          </table>
         </div>
       </DialogContent>
       <Button onClick={handlePrint}>Print this out!</Button>

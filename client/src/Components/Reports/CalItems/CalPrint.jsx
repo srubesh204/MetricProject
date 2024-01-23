@@ -36,7 +36,7 @@ const CalPrint = () => {
                     bottom: 0;
                     left: 0;
                     width: 100%;
-                    height: 200px; /* Set the height based on your footer height */
+                    height: 250px; /* Set the height based on your footer height */
                 }
             `,
         onAfterPrint: () => setPrintState(false)
@@ -54,6 +54,7 @@ const CalPrint = () => {
     console.log(selectedRows && selectedRows.calcalibrationData)
     console.log(filteredCalData)
     console.log(filterCompany[0]?.companyName)
+    console.log(formatNoData)
 
     return (
         <Dialog keepMounted fullScreen open={calPrintOpen} sx={{ height: '100vh', width: '100vw' }}
@@ -215,13 +216,13 @@ const CalPrint = () => {
 
                                     {selectedRows && selectedRows.calcalibrationData && selectedRows.calcalibrationData.map((item, index) => (
                                         <tr key={index} style={{ textAlign: "center", display: "flex", flexDirection: "row", width: "100%" }}>
-                                                <td style={{ width: "16%", border: "0.1px solid black" }}>{item.calParameter || '-'}</td>
-                                                <td style={{ width: "14%", border: "0.1px solid black" }}>{item.calNominalSize || '-'}</td>
-                                                <td style={{ width: "14%", border: "0.1px solid black" }}>{item.calMinPS || '-'}</td>
-                                                <td style={{ width: "14%", border: "0.1px solid black" }}>{item.calMaxPS || '-'}</td>
-                                                <td style={{ width: "14%", border: "0.1px solid black" }}>{item.calMinOB || '-'} </td>
-                                                <td style={{ width: "14%", border: "0.1px solid black" }}>{item.calMaxOB || '-'}</td>
-                                                <td style={{ width: "14%", border: "0.1px solid black" }}>{item.rowStatus || '-'}</td>
+                                            <td style={{ width: "16%", border: "0.1px solid black" }}>{item.calParameter || '-'}</td>
+                                            <td style={{ width: "14%", border: "0.1px solid black" }}>{item.calNominalSize || '-'}</td>
+                                            <td style={{ width: "14%", border: "0.1px solid black" }}>{item.calMinPS || '-'}</td>
+                                            <td style={{ width: "14%", border: "0.1px solid black" }}>{item.calMaxPS || '-'}</td>
+                                            <td style={{ width: "14%", border: "0.1px solid black" }}>{item.calMinOB || '-'} </td>
+                                            <td style={{ width: "14%", border: "0.1px solid black" }}>{item.calMaxOB || '-'}</td>
+                                            <td style={{ width: "14%", border: "0.1px solid black" }}>{item.rowStatus || '-'}</td>
                                         </tr>
                                     ))}
                                 </tr>
@@ -244,7 +245,34 @@ const CalPrint = () => {
                                         <td style={{ width: '40%' }}></td>
                                         <td style={{ width: '40%', textAlign: 'center', padding: '30px 10px' }}>Authorised by</td>
                                     </tr>
+                                        <div style={{ display: 'flex', flexDirection: 'row', height: '10px' }}>
+                                            <div style={{ position: 'absolute', fontSize: '8px' }}>Format Number: {formatNoData && formatNoData.fCalDueDate?.frNo}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;     Amendment No.: {formatNoData && formatNoData.fCalDueDate?.amNo}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;     Amendment Date.: {formatNoData && formatNoData.fCalDueDate?.amDate}</div>
+                                        </div>
                                 </div>
+                                  {/* const Footer = (data) => {
+                                <tr className="footer">
+                                    <td>
+                                        <tr>
+                                            <td style={{ fontWeight: "bold", textAlign: "left" }}>Remarks :</td>
+                                        </tr>
+                                        <tr>
+                                            <td style={{ paddingLeft: "50px" }}>This Certificate is Digitally Signed and does not require any seal or signature</td>
+                                        </tr>
+                                        <tr style={{ textAlign: "center", display: "flex", flexDirection: "row" }}>
+                                            <td style={{ textAlign: 'center', padding: '30px 10px', width: '100%', fontWeight: "bold" }}>----End of the Certificate----</td>
+                                        </tr>
+                                        <tr style={{ width: '100%', display: 'flex', flexDirection: 'row', fontWeight: "bold" }}>
+                                            <td style={{ width: '40%', textAlign: 'center', padding: '30px 10px' }}>Calibrated by</td>
+                                            <td style={{ width: '40%' }}></td>
+                                            <td style={{ width: '40%', textAlign: 'center', padding: '30px 10px' }}>Authorised by</td>
+                                        </tr>
+                                        <div style={{ display: 'flex', flexDirection: 'row', height: '10px' }}>
+                                            <div style={{ position: 'absolute', fontSize: '8px' }}>Format Number: {data.value.fCalDueDate.frNo}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;     Amendment No.: {data.value.fCalDueDate.amNo}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;     Amendment Date.: {data.value.fCalDueDate.amDate}</div>
+                                        </div>
+                                    </td>
+                                </tr>
+                                );
+  }; */}
 
                             </tr>
 
