@@ -135,7 +135,7 @@ const GrnAdd = () => {
             );
             setGrnList(response.data.result);
             const grnNumbers = response.data.result.map(item => (item.grnId)).filter(Boolean).sort();
-            if(grnNumbers){
+            if(grnNumbers.length > 0){
                 const lastNumber = grnNumbers[grnNumbers.length-1] + 1
             console.log(lastNumber)
 

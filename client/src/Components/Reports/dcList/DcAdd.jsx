@@ -248,7 +248,7 @@ const DcAdd = () => {
             console.log(response.data.result)
 
             const dcNumbers = response.data.result.map(item => (item.dcId)).filter(Boolean).sort();
-            if (dcNumbers) {
+            if (dcNumbers.length > 0) {
                 const lastNumber = dcNumbers[dcNumbers.length - 1] + 1
                 console.log(lastNumber)
 

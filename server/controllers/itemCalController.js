@@ -43,6 +43,8 @@ const itemCalController = {
         calcalibrationData,
         calMasterUsed,
         calItemFreInMonths,
+        calPlant,
+        calDepartment,
         calSource,
       } = req.body;
 
@@ -73,6 +75,8 @@ const itemCalController = {
         calcalibrationData,
         calMasterUsed,
         calItemFreInMonths,
+        calPlant,
+        calDepartment,
         calSource,
       };
 
@@ -149,6 +153,8 @@ const itemCalController = {
         calcalibrationData,
         calMasterUsed,
         calItemFreInMonths,
+        calPlant,
+        calDepartment,
         calSource,
       } = req.body;
       // Create an object with the fields you want to update
@@ -175,6 +181,8 @@ const itemCalController = {
         calCalibratedById,
         calApprovedBy,
         calBeforeData,
+        calPlant,
+        calDepartment,
         calStatus,
         calcalibrationData,
         calMasterUsed,

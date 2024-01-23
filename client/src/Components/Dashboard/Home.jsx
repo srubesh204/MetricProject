@@ -1286,15 +1286,15 @@ const Home = () => {
 
                 <Autocomplete
                   disablePortal
-                  defaultValue={"All"}
+                  defaultValue="All"
                   id="combo-box-demo"
                   options={customers}
                   size='small'
                   fullWidth
                   onInputChange={(e, newValue) => MainFilter(newValue, "customer")}
                   name="customer"
-                  getOptionLabel={(customers) => customers}
-                  // onChange={(e, newValue) => MainFilter(e,newValue, "customer") .aliasName}
+                  getOptionLabel={(customers) => customers.aliasName}
+                  // onChange={(e, newValue) => MainFilter(e,newValue, "customer") }
 
                   renderInput={(params) => <TextField {...params} label="Customer" name='customer' />}
                   disableClearable
