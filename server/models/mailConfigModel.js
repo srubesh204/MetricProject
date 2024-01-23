@@ -8,7 +8,12 @@ const mailConfigSchema = new mongoose.Schema({
   mailPassword : String,
   portNumber : String,
   inMailServer : String,
-  outMailServer : String
+  outMailServer : String,
+   mailContent: [{
+     content: String,
+     body: String,
+     subject : String
+   }] 
 
    
 });

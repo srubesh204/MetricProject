@@ -25,7 +25,12 @@ const MailConfig = () => {
         mailPassword: "",
         portNumber: "",
         inMailServer: "",
-        outMailServer: ""
+        outMailServer: "",
+        mailContent: [{
+            Content: "",
+            body: "",
+            subject: ""
+        }]
 
     }
     const [isEditable, setIsEditable] = useState(false)
@@ -34,15 +39,25 @@ const MailConfig = () => {
         mailPassword: "",
         portNumber: "",
         inMailServer: "",
-        outMailServer: ""
+        outMailServer: "",
+        mailContent: [{
+            content: "",
+            body: "",
+            subject: ""
+        }]
 
     })
     console.log(mailData)
 
     // const[mailDetails,setMailDetails]= useState[]
 
+    const [mailConfig, setMailConfig] = useState({
+        content: "",
+        subject: ""
+    })
 
-   
+
+
     const mailFetchData = async () => {
         try {
             const response = await axios.get(
@@ -56,7 +71,8 @@ const MailConfig = () => {
                 mailPassword: mail.mailPassword,
                 portNumber: mail.portNumber,
                 inMailServer: mail.inMailServer,
-                outMailServer: mail.outMailServer
+                outMailServer: mail.outMailServer,
+                mailContent: mail.mailContent
             }));
         } catch (err) {
             console.log(err);
@@ -138,19 +154,19 @@ const MailConfig = () => {
                         }}
                         elevation={12}
                     >
-                        <div className='row g-2'>
+                        <div className='row g-2 mb-2'>
                             <h6 className='text-center mb-2'>Mail Details</h6>
 
                             <div className='row'>
                                 <div className='col d-flex justify-content-end'>
-                                    <Button onClick={()=> setIsEditable(true)}><Edit color='success' /></Button>
+                                    <Button onClick={() => setIsEditable(true)}><Edit color='success' /></Button>
                                 </div>
                             </div>
 
                             <div className='col'>
                                 <TextField label="Mail Id"
                                     id="mailIdId"
-                                   
+
                                     size="small"
                                     disabled={!isEditable}
                                     onChange={handleMailChange}
@@ -162,7 +178,7 @@ const MailConfig = () => {
                             <div className='col'>
                                 <TextField label="PassWord"
                                     id="mailPasswordId"
-                                  
+
                                     disabled={!isEditable}
                                     size="small"
                                     onChange={handleMailChange}
@@ -174,7 +190,7 @@ const MailConfig = () => {
                             <div className='col'>
                                 <TextField label="Port Number"
                                     id="portNumberId"
-                                    
+
                                     size="small"
                                     disabled={!isEditable}
                                     onChange={handleMailChange}
@@ -185,23 +201,14 @@ const MailConfig = () => {
                             </div>
 
                         </div>
-                    </Paper>
 
-                    <Paper
-                        sx={{
-                            p: 2,
-                            display: 'flex',
-                            flexDirection: 'column',
-                            mb: 1,
 
-                        }}
-                        elevation={12}
-                    >
+
                         <div className='row g-2 mb-2'>
                             <div className='col'>
                                 <TextField label="Incoming Mail Server"
                                     id="inMailServerId"
-                                  
+
                                     size="small"
                                     disabled={!isEditable}
                                     onChange={handleMailChange}
@@ -213,61 +220,166 @@ const MailConfig = () => {
                             <div className='col'>
                                 <TextField label="outGoing Mail Server"
                                     id="outMailServerId"
-                                    
+
                                     size="small"
                                     disabled={!isEditable}
                                     onChange={handleMailChange}
                                     value={mailData.outMailServer}
-                                    sx={{ width: "100%" }}
+                                    fullWidth
                                     name="outMailServer" />
 
+                            </div>
+
+                            {isEditable && <div className=' col d-flex justify-content-end '>
+                                <div className='me-2'>
+                                    <Button size='small' sx={{ minWidth: "130px" }} variant='contained' onClick={() => setOpenModal(true)}>Modify</Button>
+                                </div>
+                                <div className='me-2'>
+                                    <Button size='small' color='error' sx={{ minWidth: "130px" }} variant='contained' onClick={() => setIsEditable(false)}>Cancel</Button>
+                                </div>
+
+
+                            </div>}
+
+
+
+                        </div>
+                    </Paper>
+
+
+                    <Paper
+                        sx={{
+                            p: 2,
+                            display: 'flex',
+                            flexDirection: 'column',
+                            mb: 1,
+
+                        }}
+                        elevation={12}
+                    >
+
+                        <div className='row mb-2'>
+                            <div className='col'>
+                                <TextField label="Mail content"
+                                    id="mailContentId"
+                                    size="small"
+                                    // disabled={!isEditable}
+                                    onChange={handleMailChange}
+                                    value={mailConfig.content}
+                                    sx={{ width: "100%" }}
+                                    name="mailContent" />
+                            </div>
+                            <div className='col d-felx d-flex justify-content-end'>
+                           
+                            <Button size='small'  color='warning'  sx={{ minWidth: "130px" }} variant='contained' >Add</Button>
+                            </div>
+
+
+
+                        </div>
+                        <div className="row mb-2">
+                            <div className='col'>
+                                <TextField label="Subject"
+                                    id="subjectId"
+                                    size="small"
+                                    // disabled={!isEditable}
+                                    onChange={handleMailChange}
+                                    value={mailConfig.subject}
+                                    sx={{ width: "100%" }}
+                                    name="subject" />
+                            </div>
+                            <div className='col d-felx d-flex justify-content-end'>
+                            <Button  size='small' color='warning'  sx={{ minWidth: "130px" }} variant='contained'>Add </Button>
                             </div>
 
 
                         </div>
 
+                        <div className='row'>
+                            <div className='col'>
+                                <table className='table table-sm table-bordered table-responsive text-center align-middle'>
+                                    <tbody>
+                                        <tr style={{ fontSize: "14px" }}>
+                                            <th width={"5%"}>Sr.No</th>
+                                            <th width={"25%"}>Mail Content</th>
 
-                        {isEditable && <div className=' col d-flex justify-content-end'>
-                            <div className='me-2 '>
-                                <Button size='small' sx={{ minWidth: "130px" }} variant='contained' onClick={() => setOpenModal(true)}>Modify</Button>
+                                            {/* <th width={"10%"}> <Fab size='small' color="primary" aria-label="add" onClick={() => addVendorDataRow()}>
+                                            <Add />
+                                        </Fab></th> */}
+                                        </tr>
+                                        {mailConfig.mailContent ? mailConfig.mailContent.map((item, index) => (
+                                            <tr>
+                                                <td>{index + 1}</td>
+                                                <td>{item.content}</td>
+
+                                            </tr>
+                                        )) : <tr></tr>}
+                                    </tbody>
+                                </table>
+
                             </div>
-                            <div className='me-2 '>
-                                <Button size='small' color='error' sx={{ minWidth: "130px" }} variant='contained' onClick={()=> setIsEditable(false)}>Cancel</Button>
+                            <div className='col'>
+                                <table className='table table-sm table-bordered table-responsive text-center align-middle'>
+                                    <tbody>
+                                        <tr style={{ fontSize: "14px" }}>
+                                            <th width={"5%"}>Sr.No</th>
+                                            <th width={"25%"}>Mail Subject</th>
+
+                                            {/* <th width={"10%"}> <Fab size='small' color="primary" aria-label="add" onClick={() => addVendorDataRow()}>
+                                            <Add />
+                                        </Fab></th> */}
+                                        </tr>
+                                        {mailConfig.mailContent ? mailConfig.mailContent.map((item, index) => (
+                                            <tr>
+                                                <td>{index + 1}</td>
+                                                <td>{item.subject}</td>
+
+                                            </tr>
+                                        )) : <tr></tr>}
+                                    </tbody>
+                                </table>
+
                             </div>
 
-
-                        </div>}
-
-                        <Dialog
-                            open={openModal}
-                            onClose={() => setOpenModal(false)}
-                            aria-labelledby="alert-dialog-title"
-                            aria-describedby="alert-dialog-description"
-                        >
-                            <DialogTitle id="alert-dialog-title">
-                                {"Mail update confirmation?"}
-                            </DialogTitle>
-                            <DialogContent>
-                                <DialogContentText id="alert-dialog-description">
-                                    Are you sure to update the Mail
-                                </DialogContentText>
-                            </DialogContent>
-                            <DialogActions>
-                                <Button onClick={() => setOpenModal(false)}>Cancel</Button>
-                                <Button onClick={() => { updateMailData(); setOpenModal(false); }} autoFocus>
-                                    Update
-                                </Button>
-                            </DialogActions>
-                        </Dialog>
-                        <Snackbar anchorOrigin={{ vertical: "top", horizontal: "right" }} open={mailSnackBar} autoHideDuration={6000} onClose={handleSnackClose}>
-                            <Alert variant="filled" onClose={handleSnackClose} severity={errorHandler.code} sx={{ width: '100%' }}>
-                                {errorHandler.message}
-                            </Alert>
-                        </Snackbar>
-
-
-
+                        </div>
                     </Paper>
+
+
+
+
+
+
+
+                    <Dialog
+                        open={openModal}
+                        onClose={() => setOpenModal(false)}
+                        aria-labelledby="alert-dialog-title"
+                        aria-describedby="alert-dialog-description"
+                    >
+                        <DialogTitle id="alert-dialog-title">
+                            {"Mail update confirmation?"}
+                        </DialogTitle>
+                        <DialogContent>
+                            <DialogContentText id="alert-dialog-description">
+                                Are you sure to update the Mail
+                            </DialogContentText>
+                        </DialogContent>
+                        <DialogActions>
+                            <Button onClick={() => setOpenModal(false)}>Cancel</Button>
+                            <Button onClick={() => { updateMailData(); setOpenModal(false); }} autoFocus>
+                                Update
+                            </Button>
+                        </DialogActions>
+                    </Dialog>
+                    <Snackbar anchorOrigin={{ vertical: "top", horizontal: "right" }} open={mailSnackBar} autoHideDuration={6000} onClose={handleSnackClose}>
+                        <Alert variant="filled" onClose={handleSnackClose} severity={errorHandler.code} sx={{ width: '100%' }}>
+                            {errorHandler.message}
+                        </Alert>
+                    </Snackbar>
+
+
+
+
 
                 </form>
             </Container>
