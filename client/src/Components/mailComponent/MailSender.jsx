@@ -12,7 +12,7 @@ import axios from 'axios'
 
 
 
-const MailSender = () => {
+const MailSender = (data) => {
 
     //const {data} = props
   

@@ -3,12 +3,14 @@ const uniqueValidator = require('mongoose-unique-validator');
 
 const mailConfigSchema = new mongoose.Schema({
  
-  
+  mailFixedId: String,
   mailId : String,
   mailPassword : String,
   portNumber : String,
   inMailServer : String,
-  outMailServer : String
+  outMailServer : String,
+  mailSubjects: [],
+  mailBodies: []
 
    
 });
