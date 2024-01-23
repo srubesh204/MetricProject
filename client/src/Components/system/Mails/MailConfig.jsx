@@ -61,7 +61,7 @@ const MailConfig = () => {
     const mailFetchData = async () => {
         try {
             const response = await axios.get(
-                `${process.env.REACT_APP_PORT}/mailConfig/getMailConfigById/658bef57308988e77396ef64`
+                `${process.env.REACT_APP_PORT}/mailConfig/getMailConfigById/1`
             );
             const mail = response.data.result
             console.log(mail)
@@ -99,7 +99,6 @@ const MailConfig = () => {
             );
             console.log(response.data)
             mailFetchData();
-            setMailData(initialMailData);
             setMailSnackBar(true)
             setErrorHandler({ status: response.data.status, message: response.data.message, code: "success" })
             setIsEditable(false)

@@ -1,4 +1,4 @@
-import React, { useEffect, useState, createContext } from 'react'
+import React, { useEffect, useState, createContext } from 'react' 
 import { TextField, MenuItem, Button } from '@mui/material';
 import { Box, Container, Grid, Paper, Typography } from "@mui/material";
 import { DataGrid, GridToolbar } from '@mui/x-data-grid';
@@ -8,14 +8,8 @@ import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import dayjs from 'dayjs';
+//import MailSender from '../mailComponent/MailSender';
 
-
-import Alert from '@mui/material/Alert';
-import Snackbar from '@mui/material/Snackbar';
-
-
-import { useEmployee } from '../../App';
-import TotalPrint from './TotalPrint';
 
 
 
@@ -128,6 +122,7 @@ const CalDueReport = () => {
     const [itemId, setItemId] = useState("")
     const [showDialog, setShowDialog] = useState(false);
     const [itemListSelectedRowIds, setItemListSelectedRowIds] = useState([])
+    
     const handleRowClick = async (params) => {
         if (itemListSelectedRowIds.length > 0) {
 
@@ -140,7 +135,7 @@ const CalDueReport = () => {
         }
     };
 
-
+    
 
 
 
@@ -153,6 +148,8 @@ const CalDueReport = () => {
 
 
     })
+
+    console.log(itemListSelectedRowIds)
     const handleFilterChangeItemList = (e) => {
         const { name, value } = e.target;
         console.log(e)
@@ -290,7 +287,7 @@ const CalDueReport = () => {
 
 
     };
-
+    console.log(itemListSelectedRowIds) 
     const [dueDate, setDueDate] = useState("")
     const handleDueChange = (e) => {
         const { value } = e.target;
@@ -658,6 +655,7 @@ const CalDueReport = () => {
 
 
                 </LocalizationProvider>
+                {/* <MailSender /> */}
             </form>
         </div>
     )

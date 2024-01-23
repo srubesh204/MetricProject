@@ -237,64 +237,7 @@ const Dc = () => {
     }, []);
 
 
-    // const dcNumber = dcList.map(item => item.dcId);
 
-    // // Sort the array in ascending order
-    // const sortedDcNumber = [...dcNumber].sort((a, b) => a - b);
-
-    // // Get the last element of the sorted array
-    // const lastElement = sortedDcNumber[sortedDcNumber.length - 1];
-
-    // console.log("Sorted dcNumber:", sortedDcNumber);
-    // console.log("Last Element:", lastElement);
-
-
-
-
-
-
-    // useEffect(() => {
-    //     const dcNumber = dcList.map(item => item.dcId).filter(item => item !== undefined);
-
-    //     // Sort the array in ascending order
-    //     dcNumber.sort((a, b) => a - b);
-
-    //     // Get the last element of the array
-    //     const lastElement = dcNumber[dcNumber.length - 1];
-
-    //     // Auto-increment the last element (assuming it's a number)
-    //     const autoIncrementedValue = lastElement !== undefined ? lastElement + 1 : 1;
-
-    //     console.log(autoIncrementedValue);
-
-    //     // ... Rest of your code
-
-    //     dcFetchData();
-    // }, []);
-
-    // useEffect(() => {
-    //     const dcNumber = dcList.map(item => item.dcId);
-
-    //     // Get the maximum value from the array
-    //     const maxNumber = Math.max(...dcNumber);
-
-    //     console.log("maxNumber:", maxNumber);
-
-    //     // Auto-increment the maximum value (assuming it's a number)
-    //     const autoIncrementedValue = maxNumber !== -Infinity ? maxNumber + 1 : 1;
-
-    //     console.log("autoIncrementedValue:", autoIncrementedValue);
-
-    //     // Save the auto-incremented value to your state or wherever it needs to be stored
-    //     setDcData(prevDcData => ({
-    //         ...prevDcData,
-    //         dcNo: autoIncrementedValue.toString() // Assuming dcNo is a string
-    //     }));
-
-    //     // ... Rest of your code
-
-    //     dcFetchData();
-    // }, [dcList]);
 
 
 

@@ -1300,19 +1300,7 @@ const Home = () => {
                   disableClearable
                 />
 
-                {/* <Autocomplete
-                  disablePortal
-                  id="combo-box-demo"
-                  options={customers}
-                  size='small'
-                  fullWidth
-                  onInputChange={(e, newValue) => MainFilter(newValue, "customer")}
-                  name="customer"
-                  getOptionLabel={(customer) => customer.aliasName}
-                  defaultValue={customers.find(customer => customer.aliasName === "All") || null}
-                  renderInput={(params) => <TextField {...params} label="Customer" name='customer' />}
-                  disableClearable
-                /> */}
+               
 
 
 
@@ -1700,7 +1688,7 @@ const Home = () => {
                 </HomeContent.Provider>
 
                 <HomeContent.Provider
-                  value={{ mailOpen, setMailOpen, selectedRows, mailIds }}
+                  value={{ mailOpen, setMailOpen, selectedRows, mailIds, setErrorHandler, setSnackBarOpen }}
                 >
                   <HomeMail />
                 </HomeContent.Provider>

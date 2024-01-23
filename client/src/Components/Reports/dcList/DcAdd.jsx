@@ -20,7 +20,7 @@ const DcAdd = () => {
     const { employee, loggedEmp } = empRole
 
     const dcAddDatas = useContext(DcListContent)
-    const { dcOpen, setDcOpen, selectedRows, dcListFetchData, itemPlantList } = dcAddDatas
+    const { dcOpen, setDcOpen, selectedRows, dcListFetchData, itemPlantList, dcDataDcList, ItemFetch } = dcAddDatas
 
 
 
@@ -98,15 +98,7 @@ const DcAdd = () => {
 
 
 
-    const addDcValue = () => {
-        if (selectedExtraMaster.length !== 0) {
-            setDcAddData((prev) => ({
-                ...prev,
-                dcPartyItems: [...prev.dcPartyItems, selectedExtraMaster]
-            }))
-            setSelectedExtraMaster([])
-        }
-    }
+    
 
     const remarksChange = (event, rowId) => {
         const { name, value } = event.target;
@@ -158,25 +150,11 @@ const DcAdd = () => {
 
 
 
-    // const [dcPartyItem, setDcPartyItem] = useState([])
+
 
     const [vendorDataList, setVendorDataList] = useState([])
 
-    {/*const vendorFetchData = async () => {
-        try {
-            const response = await axios.get(
-                `${process.env.REACT_APP_PORT}/vendor/getAllVendors`
-            );
-            setVendorDataList(response.data.result);
-            const filteredData = response.data.result.filter((dcItem) => !dcAddData.dcPartyItems.some(vendor => dcName._id === vendor._id === dcCode._id ===vendor._id === dcAddress._id === vendor.id))
-            setFilteredData(filteredData)
-        } catch (err) {
-            console.log(err);
-        }
-    };
-    useEffect(() => {
-        vendorFetchData();
-    }, []);*/}
+    
 
     const vendorFetchData = async () => {
         try {
@@ -236,35 +214,22 @@ const DcAdd = () => {
     };
 
 
-    const [dcList, setDcList] = useState([])
+    
 
+    useEffect(()=> {
+        const dcNumbers = dcDataDcList.map(item => (item.dcId)).filter(Boolean).sort();
+        if (dcNumbers.length > 0) {
+            const lastNumber = dcNumbers[dcNumbers.length - 1] + 1
+            console.log(lastNumber)
 
-    const dcFetchData = async () => {
-        try {
-            const response = await axios.get(
-                `${process.env.REACT_APP_PORT}/itemDc/getAllItemDc`
-            );
-            setDcList(response.data.result);
-            console.log(response.data.result)
-
-            const dcNumbers = response.data.result.map(item => (item.dcId)).filter(Boolean).sort();
-            if (dcNumbers.length > 0) {
-                const lastNumber = dcNumbers[dcNumbers.length - 1] + 1
-                console.log(lastNumber)
-
-                setDcAddData(prev => ({ ...prev, dcNo: dayjs().year() + "-" + lastNumber }))
-            } else {
-                setDcAddData(prev => ({ ...prev, dcNo: dayjs().year() + "-" + 1 }))
-            }
-
-
-        } catch (err) {
-            console.log(err);
+            setDcAddData(prev => ({ ...prev, dcNo: dayjs().year() + "-" + lastNumber }))
+        } else {
+            setDcAddData(prev => ({ ...prev, dcNo: dayjs().year() + "-" + 1 }))
         }
-    };
-    useEffect(() => {
-        dcFetchData();
-    }, []);
+    }, [dcDataDcList])
+
+
+   
 
 
 
@@ -358,6 +323,7 @@ const DcAdd = () => {
                         itemListNames: "",
                         itemImteList: ""
                     })
+                    ItemFetch()
                     setTimeout(() => setDcOpen(false), 1000)
                 } else {
                     setAlertMessage({ message: "Fill the required fields to submit", type: "error" })
@@ -401,7 +367,7 @@ const DcAdd = () => {
                 };
             })
         };
-        const [allItemImtes, setAllItemImtes] = useState([])
+      
         const [itemImtes, setItemImtes] = useState([])
         const [selectedDcItem, setSelectedDcItem] = useState([])
 
@@ -411,24 +377,18 @@ const DcAdd = () => {
         })
 
 
-        const getItemByName = async (value) => {
-            try {
-                const response = await axios.post(
-                    `${process.env.REACT_APP_PORT}/itemAdd/getItemAddByName`, { itemItemMasterName: value }
-                );
-                console.log(response.data)
-                setAllItemImtes(response.data.result)
-                const nonDcItem = response.data.result.filter(item => item.dcStatus !== "1")
-                const filteredImtes = nonDcItem.filter((imtes) => !dcAddData.dcPartyItems.some(dcImte => imtes._id === dcImte._id))
+        const getItemByName = (value) => {
+                console.log(value)
+                const plantItem = itemPlantList.filter(item => item.itemAddMasterName === value)
+                console.log(plantItem)
+                const filteredImtes = plantItem.filter((imtes) => !dcAddData.dcPartyItems.some(dcImte => imtes._id === dcImte._id))
                 setItemImtes(filteredImtes)
 
-            } catch (err) {
-                console.log(err);
-            }
+           
         };
 
 
-        const [itemNameList, setItemNameList] = useState(itemPlantList)
+        const [itemNameList, setItemNameList] = useState([])
         const handleDcItemAdd = (e) => {
             const { name, value } = e.target;
             if (name === "dcPlant") {
@@ -437,7 +397,7 @@ const DcAdd = () => {
                 const plantItems = itemPlantList.filter(item => item.itemPlant === value)
                 const distinctItemNames = [... new Set(plantItems.map(item => item.itemAddMasterName))]
                 setItemNameList(distinctItemNames)
-                console.log(plantItems)
+                console.log(distinctItemNames)
             }
 
             if (name === "itemListNames") {
@@ -460,70 +420,21 @@ const DcAdd = () => {
             }
         }
         useEffect(() => {
+            const departments = [...new Set(dcAddData.dcPartyItems.map(item => item.itemCurrentLocation))]
             setSelectedDcItem([])
             setItemAddDetails({
                 itemListNames: "",
                 itemImteList: "",
                 itemReMarks: ""
             })
+            setDcAddData(prev => ({...prev, dcDepartment: departments}))
+            
         }, [dcAddData.dcPartyItems])
 
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-        const [itemMasterDataList, setItemMasterDataList] = useState([])
-
-        const itemMasterFetchData = async () => {
-            try {
-                const response = await axios.get(
-                    `${process.env.REACT_APP_PORT}/itemMaster/getAllItemMasters`
-
-                );
-
-                console.log(response.data)
-                setItemMasterDataList(response.data.result);
-
-            } catch (err) {
-                console.log(err);
-            }
-        };
-        useEffect(() => {
-            itemMasterFetchData();
-        }, []);
-
-        const [itemAddList, setItemAddList] = useState([]);
-
-        const itemAddFetch = async () => {
-            try {
-                const response = await axios.get(
-                    `${process.env.REACT_APP_PORT}/itemAdd/getItemAddByIMTESort`
-                );
-                // You can use a different logic for generating the id
-
-                setItemAddList(response.data.result);
-
-
-            } catch (err) {
-                console.log(err);
-            }
-        };
-        useEffect(() => {
-            itemAddFetch();
-
-        }, []);
+       
 
 
 
@@ -565,7 +476,7 @@ const DcAdd = () => {
                                             onChange={handleDcItemAdd}
                                             size="small"
                                             name="dcPlant" >
-                                            <MenuItem value="all">All</MenuItem>
+                                            <MenuItem value="">Select</MenuItem>
                                             {loggedEmp.plantDetails.map((item, index) => (
                                                 <MenuItem key={index} value={item.plantName}>{item.plantName}</MenuItem>
                                             ))}
@@ -775,6 +686,7 @@ const DcAdd = () => {
                                                     onChange={handleDcItemAdd}
                                                     label="Item List"
                                                     name='itemListNames'
+                                                    disabled={dcAddData.dcPlant === ""}
                                                 >
                                                     <MenuItem value="--"><em>--Select--</em></MenuItem>
                                                     {itemNameList.map((item, index) => (
@@ -819,41 +731,7 @@ const DcAdd = () => {
                                     elevation={12}
                                 >
                                     <div className='row'>
-                                        {/*<Box sx={{ height: 350, width: '100%', my: 2 }}>
-                                        <DataGrid
-
-                                            rows={dcAddData.dcPartyItems}
-                                            columns={Columns}
-                                            getRowId={(row) => row._id}
-
-                                            initialState={{
-                                                pagination: {
-                                                    paginationModel: { page: 0, pageSize: 5 },
-                                                },
-                                            }}
-                                            sx={{
-                                                ".MuiTablePagination-displayedRows": {
-
-                                                    "marginTop": "1em",
-                                                    "marginBottom": "1em"
-                                                }
-                                            }}
-
-
-                                            slots={{
-                                                toolbar: GridToolbar,
-                                            }}
-
-                                            density="compact"
-
-
-                                            checkboxSelection
-
-                                            disableRowSelectionOnClick
-                                            pageSizeOptions={[5]}
-                                        />
-
-                                        </Box>*/}
+                                       
 
                                         <table className='table table-bordered table-responsive text-center align-middle'>
                                             <tbody>
