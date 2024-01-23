@@ -86,9 +86,9 @@ const DcList = () => {
         dcReason: "",
         dcCommonRemarks: "",
         dcPartyItems: [],
-        dcPlant:"",
-        dcDepartment:""
-        
+        dcPlant: "",
+        dcDepartment: ""
+
 
     }
 
@@ -103,8 +103,8 @@ const DcList = () => {
         dcReason: "",
         dcCommonRemarks: "",
         dcPartyItems: [],
-        dcPlant:"",
-        dcDepartment:""
+        dcPlant: "",
+        dcDepartment: ""
 
     })
     console.log(dcData)
@@ -154,7 +154,7 @@ const DcList = () => {
         FetchData();
     }, []);
     const [itemDepartment, setItemDepartment] = useState([])
-   
+
     const [departments, setDepartments] = useState([])
     const DepartmentFetch = async () => {
         try {
@@ -242,7 +242,7 @@ const DcList = () => {
             setDcListDataList(selectedRowView.dcPartyItems || []);
         }
     }, [selectedRowView]);
-    
+
 
 
     // const [itemListSelectedRowIds, setItemListSelectedRowIds] = useState([])
@@ -328,6 +328,9 @@ const DcList = () => {
             console.log(err);
         }
     };
+
+
+
 
     const handleRowClick = async (params) => {
         console.log(params)
@@ -608,14 +611,21 @@ const DcList = () => {
                                     }}
                                     disableRowSelectionOnClick
                                     slots={{
-                                        toolbar: GridToolbar,
+                                        toolbar: () => (
+                                            <div className='d-flex justify-content-between align-items-center'>
+                                                <GridToolbar />
+                                                <div className='mt-2'>
+                                                {itemListSelectedRowIds.length !== 0 &&  <Button variant='contained' type='button' size='small' color='error' onClick={() => setDeleteModalItem(true)}> Delete </Button>}
+                                                </div>
+
+                                            </div>
+                                        ),
                                     }}
 
                                     density="compact"
                                     disableColumnMenu={true}
 
                                     checkboxSelection
-                                    
 
                                     onRowClick={handleRowClick}
 
@@ -691,9 +701,7 @@ const DcList = () => {
                                             <AddIcon /> New Dc
                                         </Button>
                                     </div>
-                                    {itemListSelectedRowIds.length !== 0 && <div className='me-2 '>
-                                        <Button variant='contained' type='button' color='error' onClick={() => setDeleteModalItem(true)}>Delete</Button>
-                                    </div>}</React.Fragment>
+                                   </React.Fragment>
                                 }
 
                                 <Dialog
@@ -721,7 +729,7 @@ const DcList = () => {
                             </div>
 
                             <DcListContent.Provider
-                                value={{ dcEditOpen, setDcEditOpen, selectedRows, dcListFetchData, printState, setPrintState,itemPlantList }}
+                                value={{ dcEditOpen, setDcEditOpen, selectedRows, dcListFetchData, printState, setPrintState, itemPlantList }}
                             >
                                 <DcEdit />
                             </DcListContent.Provider>

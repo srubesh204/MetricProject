@@ -19,7 +19,7 @@ const CalDialog = () => {
     const [lastResultData, setLastResultData] = useState([])
     const { calOpen, setCalOpen, selectedRows, itemMasters, activeEmps, masters } = calData
     const [calibrationDatas, setCalibrationDatas] = useState([])
-    
+
 
     const getAllCalibrationData = async () => {
         try {
@@ -37,6 +37,7 @@ const CalDialog = () => {
                     return currentDate.isAfter(prevDate) ? current : prev;
                 });
                 setLastResultData(maxDateObject)
+
             } catch {
                 setLastResultData("")
             }
@@ -51,6 +52,46 @@ const CalDialog = () => {
     useEffect(() => {
         getAllCalibrationData();
     }, [selectedRows])
+
+
+
+
+
+    // const [dcList, setDcList] = useState([])
+
+
+    // const dcFetchData = async () => {
+    //     try {
+    //         const response = await axios.get(
+    //             `${process.env.REACT_APP_PORT}/itemCal/getAllItemCals`
+    //         );
+    //         setDcList(response.data.result);
+    //         console.log(response.data.result)
+
+    //         const dcNumbers = response.data.result.map(item => (item.calId)).filter(Boolean).sort();
+    //         if(dcNumbers){
+    //             const lastNumber = dcNumbers[dcNumbers.length-1] + 1
+    //         console.log(lastNumber)
+
+    //         setDcData(prev => ({...prev, calCertificateNo : dayjs().year()+"-"+lastNumber}))
+    //         }else{
+    //             setDcData(prev => ({...prev, calCertificateNo : dayjs().year()+"-"+1}))
+    //         }
+
+
+    //     } catch (err) {
+    //         console.log(err);
+    //     }
+    // };
+    // useEffect(() => {
+    //     dcFetchData();
+
+
+    // }, []);
+
+
+
+
 
 
     const [selectedExtraMaster, setSelectedExtraMaster] = useState([])
@@ -140,7 +181,80 @@ const CalDialog = () => {
         calMasterUsed: [],
     })
 
-    const [refMaster, setRefMaster]= useState({})
+
+
+    // const dcFetchData = async () => {
+    //     try {
+    //         const response = await axios.get(
+    //             `${process.env.REACT_APP_PORT}/itemCal/getAllItemCals`
+    //         );
+    //         setCalibrationDatas(response.data.result);
+    //         console.log(response.data.result)
+
+    //         const calNumbers = response.data.result.map(item => (item.calId)).filter(Boolean).sort();
+    //         if (calNumbers) {
+    //             const lastNumber = calNumbers[calNumbers.length - 1] + 1
+    //             console.log(lastNumber)
+
+    //             setCalibrationData(prev => ({ ...prev, calCertificateNo: dayjs().year() + "-" + lastNumber }))
+    //         } else {
+    //             setCalibrationData(prev => ({ ...prev, calCertificateNo: dayjs().year() + "-" + 1 }))
+    //         }
+
+
+    //     } catch (err) {
+    //         console.log(err);
+    //     }
+    // };
+    // useEffect(() => {
+    //     dcFetchData();
+    // }, []);
+
+
+    const [dcList, setDcList] = useState([])
+
+
+    const dcFetchData = async () => {
+        try {
+            const response = await axios.get(
+                `${process.env.REACT_APP_PORT}/itemCal/getAllItemCals`
+            );
+            setDcList(response.data.result);
+            console.log(response.data.result)
+
+            const dcNumbers = response.data.result.map(item => (item.calId)).filter(Boolean).sort();
+            if (dcNumbers.length > 0) {
+                const lastNumber = dcNumbers[dcNumbers.length - 1] + 1
+                console.log(lastNumber)
+
+                setCalibrationData(prev => ({ ...prev, calCertificateNo: dayjs().year() + "-" + lastNumber }))
+            } else {
+                setCalibrationData(prev => ({ ...prev, calCertificateNo: dayjs().year() + "-" + 1 }))
+            }
+
+
+        } catch (err) {
+            console.log(err);
+        }
+    };
+    useEffect(() => {
+        dcFetchData();
+
+
+    }, []);
+
+
+
+
+
+
+
+
+
+
+
+
+    const [refMaster, setRefMaster] = useState({})
     const setCalData = () => {
 
         console.log("hi")
@@ -161,9 +275,10 @@ const CalDialog = () => {
                     calItemMake: selectedRows[0].itemMake || "",
                     calItemFreInMonths: selectedRows[0].itemCalFreInMonths || "",
                     calItemUncertainity: filter[0] ? filter[0].uncertainty : "",
-                    calItemSOPNo: filter[0].SOPNo ? filter[0].SOPNo: "",
+                    calItemSOPNo: filter[0].SOPNo ? filter[0].SOPNo : "",
                     calStandardRef: filter[0].standardRef || "",
                     calOBType: selectedRows[0].itemOBType || "",
+                    // calCertificateNo: selectedRows[0].itemCertificateNo || "",
 
                     // calCalibratedBy: selectedRows[0],
                     // calApprovedBy: selectedRows[0],
@@ -219,7 +334,7 @@ const CalDialog = () => {
     }, [calibrationData.calMasterUsed])
 
     console.log(calibrationData)
- 
+
 
 
 
@@ -516,8 +631,8 @@ const CalDialog = () => {
     };
 
     useEffect(() => {
-        const ifRejected =calibrationData.calcalibrationData.length > 0 && calibrationData.calcalibrationData.some((item) => item.rowStatus === "notOk")
-        const isEmpty =calibrationData.calcalibrationData.length > 0 && calibrationData.calcalibrationData.some((item) => item.rowStatus === "")
+        const ifRejected = calibrationData.calcalibrationData.length > 0 && calibrationData.calcalibrationData.some((item) => item.rowStatus === "notOk")
+        const isEmpty = calibrationData.calcalibrationData.length > 0 && calibrationData.calcalibrationData.some((item) => item.rowStatus === "")
         if (ifRejected) {
             setCalibrationData((prev) => ({ ...prev, calStatus: "rejected" }))
         } else if (isEmpty) {
@@ -528,7 +643,7 @@ const CalDialog = () => {
 
     }, [calibrationData.calcalibrationData])
 
-    
+
 
 
 
@@ -602,25 +717,25 @@ const CalDialog = () => {
 
 
 
-    
-        //validate function 
-        const [errors, setErrors] = useState({})
-    
-        const validateFunction = () => {
-            let tempErrors = {};
-            tempErrors.calItemTemperature = calibrationData.calItemTemperature ? "" : "* Required"
-            tempErrors.calItemHumidity = calibrationData.calItemHumidity ? "" : "Humidity is Required"
-            // tempErrors.calCertificateNo = calibrationData.calCertificateNo ? "" : "Certificate No. is Required"
-            tempErrors.calCalibratedBy = calibrationData.calCalibratedBy ? "" : "Calibrated By is Required"
-            tempErrors.calApprovedBy = calibrationData.calApprovedBy ? "" : "Approved By is Required"
-    
-            setErrors({ ...tempErrors })
-    
-            return Object.values(tempErrors).every(x => x === "")
-        }
-        console.log(errors)
-        const [errorhandler, setErrorHandler] = useState({})
-        console.log(errorhandler)
+
+    //validate function 
+    const [errors, setErrors] = useState({})
+
+    const validateFunction = () => {
+        let tempErrors = {};
+        tempErrors.calItemTemperature = calibrationData.calItemTemperature ? "" : "* Required"
+        tempErrors.calItemHumidity = calibrationData.calItemHumidity ? "" : "Humidity is Required"
+        // tempErrors.calCertificateNo = calibrationData.calCertificateNo ? "" : "Certificate No. is Required"
+        tempErrors.calCalibratedBy = calibrationData.calCalibratedBy ? "" : "Calibrated By is Required"
+        tempErrors.calApprovedBy = calibrationData.calApprovedBy ? "" : "Approved By is Required"
+
+        setErrors({ ...tempErrors })
+
+        return Object.values(tempErrors).every(x => x === "")
+    }
+    console.log(errors)
+    const [errorhandler, setErrorHandler] = useState({})
+    console.log(errorhandler)
 
     const submitCalForm = async () => {
         try {
@@ -660,7 +775,7 @@ const CalDialog = () => {
         }
     };
 
-    
+
 
 
 
@@ -881,7 +996,7 @@ const CalDialog = () => {
                         <div className="row g-2 ">
                             <div className="col-md-6">
                                 <TextField
-                                        // {...(errors.calCertificateNo !== "" && { helperText: errors.calCertificateNo, error: true })}
+                                    // {...(errors.calCertificateNo !== "" && { helperText: errors.calCertificateNo, error: true })}
                                     id="calCertificateNoId"
                                     size='small'
                                     label="Certificate No."
@@ -902,7 +1017,7 @@ const CalDialog = () => {
                             </div>
                             <div className="col-md-6">
                                 <TextField
-                                        {...(errors.calCalibratedBy !== "" && { helperText: errors.calCalibratedBy, error: true })}
+                                    {...(errors.calCalibratedBy !== "" && { helperText: errors.calCalibratedBy, error: true })}
                                     id="calCalibratedById"
                                     size='small'
                                     label="Calibrated By"
@@ -922,7 +1037,7 @@ const CalDialog = () => {
                             </div>
                             <div className="col-md-6">
                                 <TextField
-                                        {...(errors.calApprovedBy !== "" && { helperText: errors.calApprovedBy, error: true })}
+                                    {...(errors.calApprovedBy !== "" && { helperText: errors.calApprovedBy, error: true })}
                                     InputProps={{
                                         disabled: selectedEmp.length === 0,
                                     }}
@@ -1193,7 +1308,7 @@ const CalDialog = () => {
                                                         </td>
 
 
-                    
+
                                                     </tr>
                                                 )
                                             })}

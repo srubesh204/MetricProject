@@ -1,7 +1,7 @@
 import { Alert, Autocomplete, Badge, Button, Chip, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, FormControl, FormControlLabel, Grid, InputLabel, List, ListSubheader, MenuItem, Paper, Select, Snackbar, Stack, Switch, TextField, ToggleButton, ToggleButtonGroup, Typography } from '@mui/material';
 import Box from '@mui/material/Box';
 import { Link } from 'react-router-dom'
-import { DataGrid, GridToolbar } from '@mui/x-data-grid';
+import { DataGrid, GridToolbar, GridToolbarQuickFilter } from '@mui/x-data-grid';
 import { PieChart, Pie, Tooltip, Legend, ResponsiveContainer, Cell } from 'recharts';
 import axios from 'axios';
 import React, { createContext, useEffect, useState } from 'react'
@@ -129,14 +129,7 @@ const Home = () => {
       const viewers = response.data.result.filter(emp => emp === "viewer")
 
 
-      // if(employeeRole.loggedEmp.empRole === "admin"){
-      //   plantEmployees = [...plantEmp.filter(emp => emp.empRole === "creator"), employeeRole.loggedEmp]
-      // }
-      // if(employeeRole.loggedEmp.empRole === "plantAdmin"){
-      //   console.log(plantEmp)
-      //   plantEmployees = [...plantEmp.filter(emp => emp.empRole === "creator"), employeeRole.loggedEmp]
-      //   console.log(plantEmployees)
-      // }
+     
       setActiveEmps((prev) => ({ ...prev, allEmps: response.data.result, admins: admins, plantAdmins: plantAdmins, creators: creators, viewers: viewers }))
 
     } catch (err) {
@@ -1146,6 +1139,19 @@ const Home = () => {
     }
   };
 
+  const mailCheck = () => {
+    const singlePlant = selectedRows.every((item, index, array) => item.itemPlant === array[0].itemPlant);
+
+    if(singlePlant && selectedRows.length > 0){
+      setMailOpen(true)
+      
+    }else{
+      setStatusCheckMsg("Select one plant only for sending mails")
+    }
+
+    
+  }
+
 
   useEffect(() => {
     console.log(plantWiseList)
@@ -1481,7 +1487,9 @@ const Home = () => {
             <Paper sx={{ p: 2, }} elevation={12}>
               <Box sx={{ height: 320, mb: 2, fontSize: "8px" }}>
                 <DataGrid
-                  density='compact' disableDensitySelector
+                  density='compact' 
+                  disableDensitySelector
+                
                   getRowHeight={({ id, densityFactor }) => {
                     return 20;
                   }}
@@ -1496,7 +1504,7 @@ const Home = () => {
                       },
                     },
                   }}
-
+                  
                   onRowSelectionModelChange={handleRowSelectionChange}
                   sx={{
                     ".MuiTablePagination-displayedRows": {
@@ -1512,8 +1520,10 @@ const Home = () => {
                     toolbar: () => (
                       <div className='d-flex justify-content-between align-items-center'>
                         <GridToolbar />
-                        <div>
-                        <Button onClick={()=> setMailOpen(true)} size='small' endIcon={<Send />} color="primary">Send Mail</Button>
+                        
+                        <div className='d-flex'>
+                        <GridToolbarQuickFilter />
+                       { selectedRows.length > 0 && <Button onClick={()=> mailCheck()} size='small' endIcon={<Send />} color="primary">Send Mail</Button>}
                         </div>
                         
                       </div>
@@ -1537,7 +1547,7 @@ const Home = () => {
 
 
                     <Button size='small' onClick={() => dcCheck()}>Create DC</Button>
-                    {selectedRows.length > 0 && <Button size='small' color='info' variant='contained' endIcon={<Mail />}>Send Mail</Button>}
+                    
                     {StatusCheckMsg !== "" && <Chip icon={<Error />} color='error' label={StatusCheckMsg} />}
                   </div>
                   <div className="col-md-3">
@@ -1664,7 +1674,7 @@ const Home = () => {
                 </HomeContent.Provider>
 
                 <HomeContent.Provider
-                  value={{ mailOpen, setMailOpen, selectedRows }}
+                  value={{ mailOpen, setMailOpen, selectedRows, emps : activeEmps.allEmps }}
                 >
                   <HomeMail />
                 </HomeContent.Provider>

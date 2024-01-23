@@ -18,7 +18,7 @@ const itemDcController = {
     try {
       const { dcPartyName, dcPartyId, dcPartyType, dcPartyCode, dcPartyAddress, dcNo, dcDate, dcReason, dcCommonRemarks, dcMasterName, dcPartyItems, dcPlant, dcDepartment } = req.body;
       const itemDcResult = new itemDcModel({ dcPartyName, dcPartyId, dcPartyType, dcPartyCode, dcPartyAddress, dcNo, dcDate, dcReason, dcCommonRemarks, dcMasterName, dcPartyItems, dcPlant, dcDepartment });
-      
+
 
       const validationError = itemDcResult.validateSync();
 
@@ -39,7 +39,7 @@ const itemDcController = {
       }
       console.log("success")
 
-      
+
 
       const result = await itemDcResult.save();
 
@@ -48,8 +48,8 @@ const itemDcController = {
         const updatePromises = dcPartyItems.map(async (item) => {
 
           const itemData = await itemAddModel.findById(item._id)
-          const { itemIMTENo, itemCurrentLocation : itemLastLocation } = itemData
-          const updateItemFields = { itemIMTENo, itemCurrentLocation: dcPartyName, itemLastLocation , itemLocation: dcPartyType, dcId: result._id, dcStatus: "1", dcCreatedOn: dcDate, dcNo: dcNo }
+          const { itemIMTENo, itemCurrentLocation: itemLastLocation } = itemData
+          const updateItemFields = { itemIMTENo, itemCurrentLocation: dcPartyName, itemLastLocation, itemLocation: dcPartyType, dcId: result._id, dcStatus: "1", dcCreatedOn: dcDate, dcNo: dcNo }
           const updateResult = await itemAddModel.findOneAndUpdate(
             { _id: item._id },
             { $set: updateItemFields },
@@ -87,9 +87,9 @@ const itemDcController = {
 
       // Create an object with the fields you want to update
       const { dcPartyName, dcPartyId, dcPartyType, dcPartyCode, dcPartyAddress, dcNo, dcDate, dcReason, dcCommonRemarks, dcMasterName, dcPartyItems, dcPlant, dcDepartment } = req.body;
-      const updateItemDcFields = { dcPartyName, dcPartyId, dcPartyType, dcPartyCode, dcPartyAddress, dcNo, dcDate, dcReason, dcCommonRemarks, dcMasterName, dcPartyItems,dcPlant, dcDepartment };
+      const updateItemDcFields = { dcPartyName, dcPartyId, dcPartyType, dcPartyCode, dcPartyAddress, dcNo, dcDate, dcReason, dcCommonRemarks, dcMasterName, dcPartyItems, dcPlant, dcDepartment };
 
-      
+
 
 
       // Setting the prevData to status "0" 
@@ -130,7 +130,7 @@ const itemDcController = {
           errors: validationErrors
         });
       }
-      
+
       // Find the designation by desId and update it
       const updateItemDc = await itemDcModel.findOneAndUpdate(
         { _id: itemDcId },
@@ -174,52 +174,71 @@ const itemDcController = {
   },
   deleteItemDc: async (req, res) => {
     try {
-
-      const { itemDcIds } = req.body; // Assuming an array of vendor IDs is sent in the request body
-      console.log(req.body)
+      const { itemDcIds } = req.body;
+      console.log(req.body);
+  
       const deleteResults = [];
-
+  
       for (const itemDcId of itemDcIds) {
-        // Find and remove each vendor by _id
-        const dcData = await itemDcModel.findById(itemDcId)
-       
+        const dcData = await itemDcModel.findById(itemDcId);
+        console.log(dcData);
+  
         if (dcData.dcPartyItems.length !== 0) {
-
           const updatePromises = dcData.dcPartyItems.map(async (item) => {
-
-            const itemData = await itemAddModel.findById(item._id)
-            const { itemIMTENo, itemCurrentLocation, itemLastLocation } = itemData
-            const updateItemFields = { itemIMTENo, itemCurrentLocation: itemLastLocation, itemLastLocation: itemCurrentLocation, itemLocation: "department", dcId: "", dcStatus: "0", dcCreatedOn: "", dcNo: "" }
-            const updateResult = await itemAddModel.findOneAndUpdate(
-              { _id: item._id },
-              { $set: updateItemFields },
-              { new: true }
-            );
-            console.log("itemUpdated")
-            return updateResult;
+            const itemData = await itemAddModel.findById(item._id);
+  
+            if (itemData) {
+              const { itemIMTENo, itemCurrentLocation, itemLastLocation } = itemData;
+              const updateItemFields = {
+                itemIMTENo,
+                itemCurrentLocation: itemLastLocation,
+                itemLastLocation: itemCurrentLocation,
+                itemLocation: "department",
+                dcId: "",
+                dcStatus: "0",
+                dcCreatedOn: "",
+                dcNo: "",
+              };
+  
+              const updateResult = await itemAddModel.findOneAndUpdate(
+                { _id: item._id },
+                { $set: updateItemFields },
+                { new: true }
+              );
+  
+              console.log("itemUpdated");
+              return updateResult;
+            } else {
+              throw new Error(`Item Data not found for item with ID: ${item._id}`);
+            }
           });
+  
           const updatedItems = await Promise.all(updatePromises);
+          console.log("Updated items:", updatedItems);
         }
-
+  
         const deletedItemDc = await itemDcModel.findOneAndRemove({ _id: itemDcId });
-        console.log(deletedItemDc)
+  
         if (!deletedItemDc) {
-          // If a vendor was not found, you can skip it or handle the error as needed.
           console.log(`Item Dc with ID ${itemDcId} not found.`);
-          res.status(500).json({ message: `Item Dc with ID not found.` });
-
+          throw new Error(`Item Dc with ID ${itemDcId} not found.`);
         } else {
           console.log(`Item Dc with ID ${itemDcId} deleted successfully.`);
           deleteResults.push(deletedItemDc);
         }
       }
-
-      return res.status(202).json({ message: 'Item Dc deleted successfully', results: `${deleteResults.length} Item Dc Deleted Successfull ` });
+  
+      return res.status(202).json({
+        message: 'Item Dc deleted successfully',
+        results: `${deleteResults.length} Item Dc Deleted Successfully`,
+        deletedItems: deleteResults,
+      });
     } catch (error) {
       console.error(error);
-      res.status(500).send('Internal Server Error');
+      res.status(500).json({ error: error.message || 'Internal Server Error' });
     }
   },
+  
   getItemDcById: async (req, res) => {
     try {
       const itemDcId = req.params.id; // Assuming desId is part of the URL parameter

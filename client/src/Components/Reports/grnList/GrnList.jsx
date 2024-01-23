@@ -512,7 +512,20 @@ const GrnList = () => {
                                         }}
 
                                         slots={{
-                                            toolbar: GridToolbar,
+                                            toolbar: () => (
+                                                <div className='d-flex justify-content-between align-items-center'>
+                                                    <GridToolbar />
+                                                    <div className='mt-2'>
+                                                    {itemListSelectedRowIds.length !== 0 &&  <Button variant='contained' type='button' size='small' color='error'onClick={() => setDeleteModalItem(true)}> Delete </Button>}
+                                                       
+                                      
+                                    
+
+
+                                                    </div>
+
+                                                </div>
+                                            ),
                                         }}
 
                                         density="compact"
@@ -580,16 +593,20 @@ const GrnList = () => {
                             </div>
 
                             <div className='row'>
+                                <div className='col d-flex '>
+                                    <div className='me-2 '>
+                                        <button type="button" className='btn btn-secondary' >Print</button>
+                                    </div>
 
-                                <div className='col d-flex mb-1'>
+                                </div>
+
+                                <div className='col d-flex justify-content-end'>
                                     <div className=' me-2'>
                                         <Button component={Link} onClick={() => { setGrnOpen(true) }} type='button' variant="contained" color="warning">
                                             <AddIcon /> Add Item
                                         </Button>
                                     </div>
-                                    {itemListSelectedRowIds.length !== 0 && <div className=' me-2'>
-                                        <Button variant='contained' type='button' color='error' onClick={() => setDeleteModalItem(true)}>Delete</Button>
-                                    </div>}
+                                    
                                     <Dialog
                                         open={deleteModalItem}
                                         onClose={() => setDeleteModalItem(false)}
@@ -617,9 +634,7 @@ const GrnList = () => {
                                             {errorhandler.message}
                                         </Alert>
                                     </Snackbar>
-                                    <div className=' me-2'>
-                                        <button type="button" className='btn btn-secondary' >Back</button>
-                                    </div>
+
                                 </div>
 
                                 <GrnListContent.Provider

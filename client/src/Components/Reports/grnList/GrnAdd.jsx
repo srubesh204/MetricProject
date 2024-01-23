@@ -52,6 +52,7 @@ const GrnAdd = () => {
         grnNo: "",
         grnDate: dayjs().format("YYYY-MM-DD"),
         grnCommonRemarks: "",
+        grnPlant:"",
         grnPartyItems: []
 
     }
@@ -67,6 +68,7 @@ const GrnAdd = () => {
         grnNo: "",
         grnDate: dayjs().format("YYYY-MM-DD"),
         grnCommonRemarks: "",
+        grnPlant:"",
         grnPartyItems: []
     })
 
@@ -125,24 +127,34 @@ const GrnAdd = () => {
 
 
 
+    const [grnList, setGrnList] = useState({})
+    const grnFetchData = async () => {
+        try {
+            const response = await axios.get(
+                `${process.env.REACT_APP_PORT}/itemGRN/getAllItemGRN`
+            );
+            setGrnList(response.data.result);
+            const grnNumbers = response.data.result.map(item => (item.grnId)).filter(Boolean).sort();
+            if(grnNumbers){
+                const lastNumber = grnNumbers[grnNumbers.length-1] + 1
+            console.log(lastNumber)
+
+            setGrnAddData(prev => ({...prev, grnNo : dayjs().year()+"-"+lastNumber}))
+            }else{
+                setGrnAddData(prev => ({...prev, grnNo : dayjs().year()+"-"+1}))
+            }
 
 
+        } catch (err) {
+            console.log(err);
+        }
+    };
+    useEffect(() => {
+        grnFetchData();
+    }, []);
 
-    // const [grnList, setGrnList] = useState({})
-    // const grnFetchData = async () => {
-    //     try {
-    //         const response = await axios.get(
-    //             `${process.env.REACT_APP_PORT}/itemGRN/getAllItemGRN`
-    //         );
-    //         setGrnList(response.data.result);
-    //     } catch (err) {
-    //         console.log(err);
-    //     }
-    // };
-    // useEffect(() => {
-    //     grnFetchData();
-    // }, []);
 
+   
 
 
     // const [itemAddList, setItemAddList] = useState([]);
@@ -303,9 +315,9 @@ const GrnAdd = () => {
         const { name, value } = e.target;
         setItemAddDetails((prev) => ({ ...prev, [name]: value }))
        
-        if (name === "itemPlant") {
+        if (name === "grnPlant") {
             // Set the selected itemPlant in state
-            setItemAddDetails((prev) => ({ ...prev, grnPlant: value }));
+            setGrnAddData((prev) => ({ ...prev, grnPlant: value }));
             const plantItems = itemPlantList.filter(item => item.itemPlant === value)
             
             const distinctItemNames = [... new Set(plantItems.map(item => item.itemAddMasterName))]
@@ -1138,14 +1150,14 @@ const GrnAdd = () => {
 
                                     <div className='col'>
                                         <TextField label="Plant Wise"
-                                            id="itemPlantId"
+                                            id="grnPlantId"
                                             select
                                             defaultValue="all"
-
+                                            value={grnAddData.grnPlant}
                                             fullWidth
                                             onChange={handleGrnItemAdd}
                                             size="small"
-                                            name="itemPlant" >
+                                            name="grnPlant" >
                                             <MenuItem value="all">All</MenuItem>
                                             {loggedEmp.plantDetails.map((item, index) => (
                                                 <MenuItem key={index} value={item.plantName}>{item.plantName}</MenuItem>
@@ -1658,12 +1670,17 @@ const GrnAdd = () => {
                                         </Button>
                                     </DialogActions>
                                 </Dialog>
-                                <Snackbar anchorOrigin={{ vertical: "top", horizontal: "right" }} open={snackBarOpen} autoHideDuration={3000}
+                                {/* <Snackbar anchorOrigin={{ vertical: "top", horizontal: "right" }} open={snackBarOpen} autoHideDuration={3000}
                                     onClose={() => setTimeout(() => {
                                         setSnackBarOpen(false)
                                     }, 3000)}>
                                     <Alert onClose={() => setSnackBarOpen(false)} variant='filled' severity={alertMessage.type} sx={{ width: '100%' }}>
                                         {alertMessage.message}
+                                    </Alert>
+                                </Snackbar> */}
+                                 <Snackbar anchorOrigin={{ vertical: "top", horizontal: "right" }} open={snackBarOpen} autoHideDuration={6000} onClose={() => setSnackBarOpen(false)}>
+                                    <Alert onClose={() => setSnackBarOpen(false)} severity={errorhandler.code} variant='filled' sx={{ width: '100%' }}>
+                                        {errorhandler.message}
                                     </Alert>
                                 </Snackbar>
 

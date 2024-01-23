@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
@@ -12,7 +12,25 @@ import { TextField } from '@mui/material';
 const HomeMail = () => {
 
     const mailDatas = useContext(HomeContent)
-    const { mailOpen, setMailOpen, selectedRows } = mailDatas
+    const { mailOpen, setMailOpen, selectedRows, emps } = mailDatas
+
+    
+
+    useEffect(()=> {
+        const deps = selectedRows.map(item => item.itemDepartment)
+        console.log(deps)
+
+        const empEmails = emps.filter(emp => emp.plantDetails.find(plant => deps.find(dep => plant.departments.includes(dep))))
+        console.log(empEmails)
+    }, [])
+
+    const [mailDetails, setMailDetails] = useState({
+        to: "",
+        subject: "",
+        mailBody: "",
+        cc: [],
+
+    })
 
     return (
         <Dialog
@@ -60,7 +78,7 @@ const HomeMail = () => {
                         <TextField
                             multiline
                             maxRows={4}
-                            required
+                            
                             margin="dense"
                             id="mailBodyId"
                             name="mailBody"

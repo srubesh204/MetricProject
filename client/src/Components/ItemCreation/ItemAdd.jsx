@@ -1025,7 +1025,7 @@ const ItemAdd = () => {
                                 </div>
                                 {itemAddData.itemCalibrationSource === "inhouse" &&
                                     <div className='row g-2'>
-                                        <h6 className='text-center'>Enter Master Details</h6>
+                                        <h6 className='text-center m-0'>Enter Master Details</h6>
                                         <div className="col-md-12">
                                             <TextField size='small' select fullWidth variant='outlined' onChange={handleItemAddChange} label="Select Master" name='itemItemMasterName' >
                                                 <MenuItem value=""><em>--Select--</em></MenuItem>
@@ -1063,28 +1063,8 @@ const ItemAdd = () => {
                                                     ))}
                                                 </Select>
                                             </FormControl>
-                                            {/*<FormControl size='small' component="div" fullWidth>
-                                            <InputLabel id="itemItemMasterIMTENoId">Select IMTENo.</InputLabel>
-                                            <Select
-                                                labelId="itemItemMasterIMTENoId"
-                                               
-                                                multiple
-                                                name="itemItemMasterIMTENo"
-                                                value={itemAddData.itemItemMasterIMTENo}
-                                                onChange={handleItemAddChange}
-                                                input={<OutlinedInput fullWidth label="Select IMTE No" />}
-                                                renderValue={(selected) => selected.map(item => item.itemIMTENo).join(", ")}
-                                                MenuProps={MenuProps}
-                                                fullWidth
-                                            >
-                                                {itemMasterListByName.map((name, index) => (
-                                                    <MenuItem key={index} value={name}>
-                                                        <Checkbox checked={itemAddData.itemItemMasterIMTENo.indexOf(name) > -1} />
-                                                        <ListItemText primary={name.itemIMTENo} />
-                                                    </MenuItem>
-                                                ))}
-                                            </Select>
-                                                </FormControl>*/}
+                                            
+                                            
                                         </div>
 
 
