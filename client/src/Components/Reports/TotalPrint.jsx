@@ -72,7 +72,7 @@ const TotalPrint = () => {
           <tr className="footer">
             <td style={{ height: '80px', fontSize: '12px' }}>
               <div style={{ display: 'flex', flexDirection: 'row', height: '10px' }}>
-                <div style={{ position: 'absolute', fontSize: '8px' }}>Format Number: {formatNoData && formatNoData.fDc?.frNo}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;     Amendment No.: {formatNoData && formatNoData.fDc?.amNo}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;     Amendment Date.: {formatNoData && formatNoData.fDc?.amDate}</div>
+                <div style={{ position: 'absolute', fontSize: '8px' }}>Format Number: {formatNoData && formatNoData.fTotalList?.frNo}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;     Amendment No.: {formatNoData && formatNoData.fTotalList?.amNo}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;     Amendment Date.: {formatNoData && formatNoData.fTotalList?.amDate}</div>
               </div>
             </td>
           </tr>
