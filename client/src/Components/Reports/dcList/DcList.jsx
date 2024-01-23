@@ -40,10 +40,10 @@ const DcList = () => {
                 `${process.env.REACT_APP_PORT}/itemAdd/getAllItemAdds`
             );
             console.log(response.data.result)
-            const plantItems = response.data.result.filter(item => (loggedEmp.plantDetails.map(plant => plant.plantName).includes(item.itemPlant)))
+            const plantItems = response.data.result.filter(item => (loggedEmp.plantDetails.map(plant => plant.plantName).includes(item.itemPlant) && item.dcStatus !== "1"))
             console.log(plantItems)
-            setItemPlantList(response.data.result);
-            setItemDepartment(response.data.result)
+            setItemPlantList(plantItems);
+            setItemDepartment(plantItems)
 
         } catch (err) {
             console.log(err);
@@ -71,6 +71,26 @@ const DcList = () => {
     };
     useEffect(() => {
         formatFetchData();
+    }, []);
+
+    const [dcDataDcList, setDcDataDcList] = useState([])
+    const dcListFetchData = async () => {
+        try {
+            const response = await axios.get(
+                `${process.env.REACT_APP_PORT}/itemDc/getAllItemDc`
+
+            );
+            const plantDc = response.data.result.filter(dc => (loggedEmp.plantDetails.map(plant => plant.plantName).includes(dc.dcPlant)) )
+            setDcDataDcList(plantDc);
+            setFilteredData(plantDc);
+
+
+        } catch (err) {
+            console.log(err);
+        }
+    };
+    useEffect(() => {
+        dcListFetchData();
     }, []);
 
 
@@ -112,23 +132,7 @@ const DcList = () => {
 
 
 
-    // const vendorFetchData = async () => {
-    //     try {
-    //         const response = await axios.get(
-    //             `${process.env.REACT_APP_PORT}/vendor/getAllVendors`
-    //         );
-    //         console.log(response.data)
-
-
-
-    //         // setFilteredData(response.data.result);
-    //     } catch (err) {
-    //         console.log(err);
-    //     }
-    // };
-    // useEffect(() => {
-    //     vendorFetchData();
-    // }, []);
+   
     const [vendorDataList, setVendorDataList] = useState([])
     const [vendorFullList, setVendorFullList] = useState([])
     const [vendorTypeList, setVendorTypeList] = useState([])
@@ -188,24 +192,7 @@ const DcList = () => {
     const [dcListDataList, setDcListDataList] = useState([])
 
 
-    const [dcDataDcList, setDcDataDcList] = useState([])
-    const dcListFetchData = async () => {
-        try {
-            const response = await axios.get(
-                `${process.env.REACT_APP_PORT}/itemDc/getAllItemDc`
-
-            );
-            setDcDataDcList(response.data.result);
-            setFilteredData(response.data.result);
-
-
-        } catch (err) {
-            console.log(err);
-        }
-    };
-    useEffect(() => {
-        dcListFetchData();
-    }, []);
+    
 
     useEffect(() => {
         const filteredItems = dcDataDcList.filter((item) => dayjs(item.dcDate).isSameOrAfter(dateData.fromDate) && dayjs(item.dcDate).isSameOrBefore(dateData.toDate))
@@ -301,7 +288,7 @@ const DcList = () => {
             setDcData(initialDcData)
             setSnackBarOpen(true)
             setErrorHandler({ status: response.data.status, message: response.data.message, code: "success" })
-
+            ItemFetch()
 
             dcListFetchData()
         } catch (err) {
@@ -364,7 +351,7 @@ const DcList = () => {
         }
         if (name === "dcDepartment") {
             // const itemDepartment = dcDataDcList.filter((item) => (item.itemDepartment && item.itemDepartment.includes(value)));
-            const dcDepartment = dcDataDcList.filter((item) => (item.dcDepartment === value))
+            const dcDepartment = dcDataDcList.filter((dc) => (dc.dcDepartment.includes(value)))
 
             setFilteredData(dcDepartment);
         }
@@ -374,6 +361,7 @@ const DcList = () => {
 
 
     };
+    console.log(dcDataDcList)
 
     {/* const handleFilterChange = (e) => {
         const { name, value } = e.target;
@@ -729,12 +717,12 @@ const DcList = () => {
                             </div>
 
                             <DcListContent.Provider
-                                value={{ dcEditOpen, setDcEditOpen, selectedRows, dcListFetchData, printState, setPrintState, itemPlantList }}
+                                value={{ dcEditOpen, setDcEditOpen, selectedRows, dcListFetchData, printState, setPrintState, itemPlantList, dcDataDcList, ItemFetch }}
                             >
                                 <DcEdit />
                             </DcListContent.Provider>
                             <DcListContent.Provider
-                                value={{ dcOpen, setDcOpen, selectedRows, dcListFetchData, printState, setPrintState, itemPlantList }}
+                                value={{ dcOpen, setDcOpen, selectedRows, dcListFetchData, printState, setPrintState, itemPlantList, dcDataDcList, ItemFetch }}
                             >
                                 <DcAdd />
                             </DcListContent.Provider>

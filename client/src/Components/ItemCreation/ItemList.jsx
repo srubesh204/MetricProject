@@ -1,7 +1,7 @@
 import React, { createContext, useEffect, useState } from 'react'
 import { TextField, MenuItem, Button, ButtonGroup, Backdrop, CircularProgress } from '@mui/material';
 import { Box, Container, Grid, Paper, Typography } from "@mui/material";
-import { DataGrid, GridToolbar } from '@mui/x-data-grid';
+import { DataGrid, GridToolbar,GridToolbarQuickFilter } from '@mui/x-data-grid';
 import axios from 'axios';
 import { Edit, FilterAlt, PrintRounded } from '@mui/icons-material';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
@@ -24,14 +24,19 @@ import isSameOrAfter from 'dayjs/plugin/isSameOrAfter'
 import isSameOrBefore from 'dayjs/plugin/isSameOrBefore'
 import { useEmployee } from '../../App';
 import styled from "@emotion/styled";
-import { CloudDownload, CloudUpload, Delete } from '@mui/icons-material';
+import { CloudDownload, CloudUpload, Delete,Send } from '@mui/icons-material';
 import ItemListPrint from './ItemListPrint';
+import ItemMail from './ItemMail';
+
 dayjs.extend(isSameOrBefore)
 dayjs.extend(isSameOrAfter)
 export const ItemListContent = createContext(null);
 
 const ItemList = () => {
 
+   
+    const [StatusCheckMsg, setStatusCheckMsg] = useState("")
+    const [mailOpen, setMailOpen] = useState(false)
 
 
     const employeeRole = useEmployee()
@@ -41,36 +46,30 @@ const ItemList = () => {
     const [itemList, setItemList] = useState([]);
     const [filteredItemListData, setFilteredItemListData] = useState([])
 
+
+
     const itemFetch = async () => {
         try {
             const response = await axios.get(
                 `${process.env.REACT_APP_PORT}/itemAdd/getAllItemAdds`
             );
 
-
+            const plantwise = response.data.result.filter(item => employeeRole.loggedEmp.plantDetails.find(plant => plant.plantName === item.itemPlant))
 
             const filterNames = ["itemIMTENo", "itemType", "itemDepartment", "itemPlant", "itemCalibrationSource", "itemCurrentLocation"]
 
             let updatedFilterNames = {};
 
             filterNames.forEach((element, index) => {
-                const data = response.data.result.map(item => item[element]);
+                const data = plantwise.map(item => item[element]);
                 filterNames[index] = [...new Set(data)];
-
                 // Update the object with a dynamic key based on the 'element'
                 updatedFilterNames[element] = filterNames[index];
-
             });
-
             // Update state outside the loop with the updated object
             setFilterNameList(prev => ({ ...prev, ...updatedFilterNames }));
-
-
-
-
-
-            setItemList(response.data.result);
-            setFilteredItemListData(response.data.result);
+            setItemList(plantwise);
+            setFilteredItemListData(plantwise);
 
             setLoaded(true)
 
@@ -82,7 +81,35 @@ const ItemList = () => {
         itemFetch();
     }, []);
 
+    const [employeeList, setEmployeeList] = useState([]);
+    const empFetchData = async () => {
+        try {
+            const response = await axios.get(
+                `${process.env.REACT_APP_PORT}/employee/getAllEmployees`
+            );
+            console.log(response.data.result)
+            setEmployeeList(response.data.result);
+        } catch (err) {
+            console.log(err);
+        }
+    };
+    //get Designations
+    useEffect(() => {
+        empFetchData();
+    }, []);
 
+    const mailCheck = () => {
+        const singlePlant = itemListSelectedRowIds.every((item, index, array) => item.itemPlant === array[0].itemPlant);
+
+        if (singlePlant && itemListSelectedRowIds.length > 0) {
+            setMailOpen(true)
+
+        } else {
+            setStatusCheckMsg("Select one plant only for sending mails")
+        }
+
+
+    }
 
 
 
@@ -292,15 +319,9 @@ const ItemList = () => {
         plantWise: "all",
         calibrationSource: "all",
         itemCurrentLocation: "all"
-
     })
-  
-
-
 
     const [customerParts, setCustomerParts] = useState([])
-
-
     const handleFilterChangeItemList = (e) => {
         const { name, value } = e.target;
         console.log(e)
@@ -323,7 +344,6 @@ const ItemList = () => {
                     calibrationSource: "all",
                     itemCurrentLocation: "all"
                 }))
-
             }
             if (name === "itemType") {
                 const itemType = itemList.filter((item) => (item.itemType === value))
@@ -408,7 +428,7 @@ const ItemList = () => {
             if (name === "partName") {
                 console.log(name, value)
                 const filteredItems = itemList.filter((item) => (item.itemPartName.includes(value)));
-                
+
 
                 setFilteredItemListData(filteredItems);
                 console.log(filteredItems)
@@ -570,7 +590,7 @@ const ItemList = () => {
 
 
     const [partCutomerNames, setPartCutomerNames] = useState([])
-   
+
     const [partDataList, setPartDataList] = useState([])
 
     const partFetchData = async () => {
@@ -592,7 +612,7 @@ const ItemList = () => {
 
             const partCustomers = partDataList.filter(part => itemList.some(item => item.itemPartName.includes(part._id)))
             setPartCutomerNames(partCustomers)
-           
+
 
         }
     }, [partDataList, itemList])
@@ -755,6 +775,41 @@ const ItemList = () => {
     }
 
     const [statusInfo, setStatusInfo] = useState([])
+
+
+   
+    const [mailIds, setMailIds] = useState([])
+    const mailIdGather = () => {
+      if (itemListSelectedRowIds.length > 0) {
+        const deps = itemListSelectedRowIds.map(item => item.itemDepartment)
+        console.log(deps)
+  
+        const empEmails = employeeList.filter(emp => emp.plantDetails.find(plant => deps.find(dep => plant.departments.includes(dep))))
+        const uniqueEmails = [...new Set(empEmails)]
+        setMailIds(empEmails)
+        console.log(empEmails)
+        console.log(uniqueEmails)
+      }
+    }
+
+    useEffect(() => {
+        setStatusCheckMsg("");
+        
+      
+      mailIdGather()
+    }, [itemListSelectedRowIds])
+
+  
+  
+    const handleRowSelectionChange = (newSelection) => {
+      const selectedRowsData = filteredData.filter((row) => newSelection.includes(row._id));
+      setItemListSelectedRowIds(selectedRowsData);
+      
+  
+    };
+  
+
+
 
 
 
@@ -1079,14 +1134,14 @@ const ItemList = () => {
 
                                 </div>
                                 <div className="col-1 offset-7">
-                                    
+
                                 </div>
                                 <div className="col-1">
                                     <div>
                                         <Button color="secondary" variant='contained' startIcon={<PrintRounded />} size='small' onClick={() => setPrintState(true)}> Print</Button>
 
                                     </div>
-                                    
+
 
                                 </div>
 
@@ -1113,24 +1168,29 @@ const ItemList = () => {
                                             "marginBottom": "1em"
                                         }
                                     }}
-                                    onRowSelectionModelChange={(newRowSelectionModel, event) => {
-                                        setItemListSelectedRowIds(newRowSelectionModel);
+                                   // onRowSelectionModelChange={handleRowSelectionChange}
+                                 onRowSelectionModelChange={(newRowSelectionModel, event) => {
+                                       setItemListSelectedRowIds(newRowSelectionModel);
 
 
-                                    }}
+                                }}
 
                                     slots={{
                                         toolbar: () => (
-                                          <div className='d-flex justify-content-between align-items-center'>
-                                            <GridToolbar />
-                                            <div className='mt-2'>
-                                            {itemListSelectedRowIds.length !== 0 && <Button variant='contained' type='button' size='small' color='error' onClick={() => setDeleteModalItem(true)}> Delete </Button>}
-                                          
+                                            <div className='d-flex justify-content-between align-items-center'>
+                                                <GridToolbar />
+                                                <div className='d-flex justify-content-between align-items-end'>
+                                                <GridToolbarQuickFilter />
+                                                {itemListSelectedRowIds.length !== 0 && <Button onClick={() => mailCheck()} size='small' endIcon={<Send />} color="primary">Send Mail</Button>}
+                                                </div>
+                                                <div className='mt-2'>
+                                                    {itemListSelectedRowIds.length !== 0 && <Button variant='contained' type='button' size='small' color='error' onClick={() => setDeleteModalItem(true)}> Delete </Button>}
+
+                                                </div>
+
                                             </div>
-                    
-                                          </div>
                                         ),
-                                      }}
+                                    }}
                                     density="compact"
                                     //disableColumnMenu={true}
 
@@ -1309,6 +1369,13 @@ const ItemList = () => {
                     >
 
                         <ItemListPrint />
+                    </ItemListContent.Provider>
+
+                    <ItemListContent.Provider
+                        value={{ mailOpen, setMailOpen, itemListSelectedRowIds, mailIds }}
+                    >
+
+                        <ItemMail />
                     </ItemListContent.Provider>
 
                 </LocalizationProvider>

@@ -342,7 +342,7 @@ const GrnList = () => {
             const grnPlant = grnDataList.filter((item) => (item.grnPlant === value))
             setFilteredData(grnPlant);
         }
-        if (name === "dcDepartment") {
+        if (name === "grnDepartment") {
             const dcDepartment = grnDataList.filter((item) => (item.itemDepartment && item.itemDepartment.includes(value)));
 
 

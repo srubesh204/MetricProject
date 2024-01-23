@@ -18,7 +18,7 @@ const CalAddModel = () => {
 
     const calData = useContext(CalData)
     const [lastResultData, setLastResultData] = useState([])
-    const { calAddOpen, setCalAddOpen, itemMasters, activeEmps, calListFetchData } = calData
+    const { calAddOpen, setCalAddOpen, itemMasters, activeEmps, calListFetchData, itemAddList, setItemAddList } = calData
 
     const employeeRole = useEmployee()
     const [calibrationDatas, setCalibrationDatas] = useState([])
@@ -26,21 +26,11 @@ const CalAddModel = () => {
     const [selectedIMTE, setSelectedIMTE] = useState([]);
     const [distinctItemNames, setDistinctItemNames] = useState([])
 
-    const getDistinctItemName = async () => {
-        try {
-            const response = await axios.get(
-                `${process.env.REACT_APP_PORT}/itemAdd/getAllDistinctItemName`
-            );
-            console.log(response.data)
-            setDistinctItemNames(response.data.result);
-
-        } catch (err) {
-            console.log(err);
-        }
-    };
     useEffect(() => {
-        getDistinctItemName();
-    }, []);
+        const itemListName = [...new Set(itemAddList.map(item => item.itemAddMasterName))]
+        setDistinctItemNames(itemListName);
+        console.log(itemListName)
+    }, [itemAddList]);
 
 
 
@@ -89,6 +79,8 @@ const CalAddModel = () => {
             rowStatus: ""
         }],
         calMasterUsed: [],
+        calPlant: "",
+        calDepartment: ""
     })
 
     const [calibrationData, setCalibrationData] = useState({
@@ -110,7 +102,7 @@ const CalAddModel = () => {
         calItemCalDate: dayjs().format('YYYY-MM-DD'),
         calItemDueDate: "",
         calItemEntryDate: dayjs().format('YYYY-MM-DD'),
-        calCalibratedBy: `${employeeRole.loggedEmp.firstName} ${employeeRole.loggedEmp.lastName}`,
+        calCalibratedBy: `${employeeRole.loggedEmp.firstName ? employeeRole.loggedEmp.firstName : ""} ${employeeRole.loggedEmp.lastName ? employeeRole.loggedEmp.lastName : ""}`,
         calCalibratedById: employeeRole.loggedEmp._id,
         calApprovedBy: "",
         calBeforeData: "no",
@@ -131,8 +123,11 @@ const CalAddModel = () => {
             calMinPSError: "",
             calMaxPSError: "",
             rowStatus: ""
+
         }],
         calMasterUsed: [],
+        calPlant: "",
+        calDepartment: ""
     })
 
 
@@ -151,7 +146,7 @@ const CalAddModel = () => {
                 return currentDate.isAfter(prevDate) ? current : prev;
             });
 
-            
+
 
 
             setLastResultData(maxDateObject)
@@ -176,7 +171,7 @@ const CalAddModel = () => {
             console.log(response.data.result)
 
             const calNumbers = response.data.result.map(item => (item.calId)).filter(Boolean).sort();
-            if (calNumbers) {
+            if (calNumbers.length > 0) {
                 const lastNumber = calNumbers[calNumbers.length - 1] + 1
                 console.log(lastNumber)
 
@@ -184,6 +179,7 @@ const CalAddModel = () => {
             } else {
                 setCalibrationData(prev => ({ ...prev, calCertificateNo: dayjs().year() + "-" + 1 }))
             }
+
 
 
         } catch (err) {
@@ -549,8 +545,8 @@ const CalAddModel = () => {
         }
     };
 
-    
-    
+
+
 
     const [lastResultShow, setLastResultShow] = useState(false)
 
@@ -566,22 +562,14 @@ const CalAddModel = () => {
         }
         if (name === "calItemName") {
             setCalibrationData((prev) => ({ ...prev, [name]: value }))
-            const itemMasterFetchData = async () => {
-                try {
-                    const response = await axios.post(
-                        `${process.env.REACT_APP_PORT}/itemAdd/getitemAddMasterName`, { itemAddMasterName: value }
 
-                    );
-                    console.log(response.data.result)
-                    const inhouseIMTEs = response.data.result.filter((item) => item.itemCalibrationSource === "inhouse")
-                    setItemIMTEs(inhouseIMTEs);
+            
+            const getItemByName = itemAddList.filter(item => item.itemAddMasterName === value)
+            
+            setItemIMTEs(getItemByName);
 
 
-                } catch (err) {
-                    console.log(err);
-                }
-            };
-            itemMasterFetchData();
+
 
         }
         if (name === "calIMTENo") {
@@ -599,8 +587,8 @@ const CalAddModel = () => {
                     calLC: selectedItem[0].itemLC,
                     calItemMake: selectedItem[0].itemMake,
                     calItemFreInMonths: selectedItem[0].itemCalFreInMonths,
-                     calItemUncertainity: selectedItem[0].selectedItemMaster[0].uncertainty,
-                     calItemSOPNo: selectedItem[0].selectedItemMaster[0].SOPNo,
+                    calItemUncertainity: selectedItem[0].selectedItemMaster[0].uncertainty,
+                    calItemSOPNo: selectedItem[0].selectedItemMaster[0].SOPNo,
                     calStandardRef: selectedItem[0].selectedItemMaster[0].standardRef,
                     calOBType: selectedItem[0].itemOBType,
 
@@ -672,7 +660,7 @@ const CalAddModel = () => {
             setSnackBarOpen(true)
             calListFetchData();
             setCalibrationData(initialCalData)
-            setTimeout(() => { setCalAddOpen(false) }, 2000)
+            setTimeout(() => { setCalAddOpen(false) }, 1000)
         } catch (err) {
             console.log(err);
         }

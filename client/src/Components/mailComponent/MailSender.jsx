@@ -5,36 +5,35 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
-import { HomeContent } from '../Home';
 import { Box, Checkbox, Chip, CircularProgress, FormControl, InputLabel, ListItemText, MenuItem, OutlinedInput, Select, TextField } from '@mui/material';
 import { Send } from '@mui/icons-material';
+
 import axios from 'axios'
 
 
 
-const HomeMail = () => {
+const MailSender = (data) => {
 
-    const mailDatas = useContext(HomeContent)
-    const { mailOpen, setMailOpen, selectedRows, mailIds, setErrorHandler, setSnackBarOpen } = mailDatas
+    //const {data} = props
+  
+    // console.log(selectedRows)
 
-    console.log(selectedRows)
-
-    useEffect(()=> {
-        const data = selectedRows.map((item, index) => ({
-            itemId: item._id,
-            itemIMTENo: item.itemIMTENo,
-            itemAddMasterName: item.itemAddMasterName,
-            itemRangeSize: item.itemRangeSize,
-            itemRangeSizeUnit: item.itemRangeSizeUnit,
-            itemCalDate: item.itemCalDate,
-            itemDueDate: item.itemDueDate,
-            itemCurrentLocation: item.itemCurrentLocation,
-            itemLastLocation: item.itemLastLocation,
-            itemCalibrationSource: item.itemCalibrationSource,
-            itemSupplier: item.itemSupplier
-        }))
-        setMailDetails(prev => ({...prev, selectedItems: data}))
-    }, [selectedRows])
+    // useEffect(()=> {
+    //     const data = selectedRows.map((item, index) => ({
+    //         itemId: item._id,
+    //         itemIMTENo: item.itemIMTENo,
+    //         itemAddMasterName: item.itemAddMasterName,
+    //         itemRangeSize: item.itemRangeSize,
+    //         itemRangeSizeUnit: item.itemRangeSizeUnit,
+    //         itemCalDate: item.itemCalDate,
+    //         itemDueDate: item.itemDueDate,
+    //         itemCurrentLocation: item.itemCurrentLocation,
+    //         itemLastLocation: item.itemLastLocation,
+    //         itemCalibrationSource: item.itemCalibrationSource,
+    //         itemSupplier: item.itemSupplier
+    //     }))
+    //     setMailDetails(prev => ({...prev, selectedItems: data}))
+    // }, [selectedRows])
 
     const initialMailDetails = {
         to: "",
@@ -50,19 +49,19 @@ const HomeMail = () => {
         subject: "",
         mailBody: "",
         cc: [],
-        selectedItems: selectedRows.map((item, index) => ({
-            itemId: item._id,
-            itemIMTENo: item.itemIMTENo,
-            itemAddMasterName: item.itemAddMasterName,
-            itemRangeSize: item.itemRangeSize,
-            itemRangeSizeUnit: item.itemRangeSizeUnit,
-            itemCalDate: item.itemCalDate,
-            itemDueDate: item.itemDueDate,
-            itemCurrentLocation: item.itemCurrentLocation,
-            itemLastLocation: item.itemLastLocation,
-            itemCalibrationSource: item.itemCalibrationSource,
-            itemSupplier: item.itemSupplier
-        }))
+        // selectedItems: selectedRows.map((item, index) => ({
+        //     itemId: item._id,
+        //     itemIMTENo: item.itemIMTENo,
+        //     itemAddMasterName: item.itemAddMasterName,
+        //     itemRangeSize: item.itemRangeSize,
+        //     itemRangeSizeUnit: item.itemRangeSizeUnit,
+        //     itemCalDate: item.itemCalDate,
+        //     itemDueDate: item.itemDueDate,
+        //     itemCurrentLocation: item.itemCurrentLocation,
+        //     itemLastLocation: item.itemLastLocation,
+        //     itemCalibrationSource: item.itemCalibrationSource,
+        //     itemSupplier: item.itemSupplier
+        // }))
     })
 
     const handleMailChange = (e) => {
@@ -226,4 +225,4 @@ const HomeMail = () => {
     )
 }
 
-export default HomeMail
+export default MailSender

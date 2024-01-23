@@ -57,42 +57,6 @@ const CalDialog = () => {
 
 
 
-    // const [dcList, setDcList] = useState([])
-
-
-    // const dcFetchData = async () => {
-    //     try {
-    //         const response = await axios.get(
-    //             `${process.env.REACT_APP_PORT}/itemCal/getAllItemCals`
-    //         );
-    //         setDcList(response.data.result);
-    //         console.log(response.data.result)
-
-    //         const dcNumbers = response.data.result.map(item => (item.calId)).filter(Boolean).sort();
-    //         if(dcNumbers){
-    //             const lastNumber = dcNumbers[dcNumbers.length-1] + 1
-    //         console.log(lastNumber)
-
-    //         setDcData(prev => ({...prev, calCertificateNo : dayjs().year()+"-"+lastNumber}))
-    //         }else{
-    //             setDcData(prev => ({...prev, calCertificateNo : dayjs().year()+"-"+1}))
-    //         }
-
-
-    //     } catch (err) {
-    //         console.log(err);
-    //     }
-    // };
-    // useEffect(() => {
-    //     dcFetchData();
-
-
-    // }, []);
-
-
-
-
-
 
     const [selectedExtraMaster, setSelectedExtraMaster] = useState([])
     console.log(selectedRows[0])
@@ -181,35 +145,26 @@ const CalDialog = () => {
         calMasterUsed: [],
     })
 
+    const settingCalData = () => {
+        if (selectedRows.length > 0) {
+            const departments = [...new Set(selectedRows.map(item => item.itemCurrentLocation))]
+            setCalibrationData((prev) => (
+                {
+                    ...prev,
+                    calPlant: selectedRows[0].itemPlant,
+                    calDepartment: departments,
+                    
+                }
 
+            ))
+        }
 
-    // const dcFetchData = async () => {
-    //     try {
-    //         const response = await axios.get(
-    //             `${process.env.REACT_APP_PORT}/itemCal/getAllItemCals`
-    //         );
-    //         setCalibrationDatas(response.data.result);
-    //         console.log(response.data.result)
+    };
+    useEffect(() => {
+        settingCalData()
+    }, [selectedRows])
 
-    //         const calNumbers = response.data.result.map(item => (item.calId)).filter(Boolean).sort();
-    //         if (calNumbers) {
-    //             const lastNumber = calNumbers[calNumbers.length - 1] + 1
-    //             console.log(lastNumber)
-
-    //             setCalibrationData(prev => ({ ...prev, calCertificateNo: dayjs().year() + "-" + lastNumber }))
-    //         } else {
-    //             setCalibrationData(prev => ({ ...prev, calCertificateNo: dayjs().year() + "-" + 1 }))
-    //         }
-
-
-    //     } catch (err) {
-    //         console.log(err);
-    //     }
-    // };
-    // useEffect(() => {
-    //     dcFetchData();
-    // }, []);
-
+   
 
     const [dcList, setDcList] = useState([])
 
@@ -1000,6 +955,7 @@ const CalDialog = () => {
                                     id="calCertificateNoId"
                                     size='small'
                                     label="Certificate No."
+                                    disabled
                                     value={calibrationData.calCertificateNo}
                                     name='calCertificateNo'
                                     fullWidth

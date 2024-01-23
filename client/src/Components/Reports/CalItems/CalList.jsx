@@ -29,7 +29,7 @@ dayjs.extend(isSameOrAfter)
 const CalList = () => {
     const employeeRole = useEmployee()
     const { loggedEmp } = employeeRole
-    const [itemMasterDataList, setItemMasterDataList] = useState([])
+    const [itemAddList, setItemAddList] = useState([])
     const [itemMasters, setItemMasters] = useState([])
     const [IMTENos, setIMTENos] = useState([])
     const [printState, setPrintState] = useState(false)
@@ -49,10 +49,11 @@ const CalList = () => {
                 `${process.env.REACT_APP_PORT}/itemAdd/getAllItemAdds`
 
             );
-            const masterItems = response.data.result.filter((item) => item.isItemMaster === "1")
-            setItemMasterDataList(response.data.result);
+            const plantItems = response.data.result.filter(item => (loggedEmp.plantDetails.map(plant => plant.plantName).includes(item.itemPlant) && item.itemCalibrationSource === "inhouse"))
+            const masterItems = plantItems.filter((item) => item.isItemMaster === "1")
+            setItemAddList(plantItems);
             setItemMasters(masterItems)
-            console.log(response.data.result)
+            console.log(plantItems)
         } catch (err) {
             console.log(err);
         }
@@ -61,7 +62,7 @@ const CalList = () => {
         itemMasterFetchData();
     }, []);
 
-    console.log(itemMasterDataList)
+    console.log(itemAddList)
 
 
     const [plantDatas, setPlantDatas] = useState([]);
@@ -90,14 +91,14 @@ const CalList = () => {
     const handlePlantAddress = (e) => {
         const { name, value } = e.target;
         if (value === "all") {
-            setPlantDatas(itemMasterDataList)
+            setPlantDatas(itemAddList)
         } else {
             if (name === "plantAddress") {
-                const plantAddress = itemMasterDataList.filter((item) => item.plantAddress === value)
+                const plantAddress = itemAddList.filter((item) => item.plantAddress === value)
                 setFilterAddress(plantAddress)
             }
             if (name === "plantName") {
-                const plantName = itemMasterDataList.filter((item) => item.plantName === value)
+                const plantName = itemAddList.filter((item) => item.plantName === value)
                 setFilterAddress(plantName)
             }
 
@@ -132,10 +133,10 @@ const CalList = () => {
     const handleCompany = (e) => {
         const { name, value } = e.target;
         if (value === "all") {
-            setCompanyName(itemMasterDataList)
+            setCompanyName(itemAddList)
         } else {
             if (name === "companyName") {
-                const companyName = itemMasterDataList.filter((item) => item.companyName === value)
+                const companyName = itemAddList.filter((item) => item.companyName === value)
                 setFilterAddress(companyName)
             }
 
@@ -276,17 +277,17 @@ const CalList = () => {
     const handleMasterFilter = (e) => {
         const { name, value } = e.target;
         if (value === "all") {
-            setFilterMaster(itemMasterDataList)
+            setFilterMaster(itemAddList)
 
         } else {
             if (name === "itemName") {
-                const selectedItem = itemMasterDataList.filter((item) => item.calItemName === value)
+                const selectedItem = itemAddList.filter((item) => item.calItemName === value)
 
 
             }
 
             if (name === "itemIMTENo") {
-                const selectedItem = itemMasterDataList.filter((item) => item.calIMTENo === value)
+                const selectedItem = itemAddList.filter((item) => item.calIMTENo === value)
                 setFilteredCalData(selectedItem)
             }
 
@@ -614,14 +615,14 @@ const CalList = () => {
 
                     {employeeRole && employeeRole.employee !== "viewer" &&
                         <CalData.Provider
-                            value={{ employeeRole, calAddOpen, setCalAddOpen, itemMasters, activeEmps }}
+                            value={{ employeeRole, calAddOpen, setCalAddOpen, itemMasters, activeEmps, itemAddList, setItemAddList }}
                         >
                             <CalAddModel />
                         </CalData.Provider>}
 
                     {employeeRole && employeeRole.employee !== "viewer" &&
                         <CalData.Provider
-                            value={{ employeeRole, calEditOpen, setCalEditOpen, selectedCalRow, itemMasters, activeEmps }}
+                            value={{ employeeRole, calEditOpen, setCalEditOpen, selectedCalRow, itemMasters, activeEmps, itemAddList, setItemAddList }}
                         >
                             {selectedCalRow.length !== 0 && <CalEditModel />}
                         </CalData.Provider>}

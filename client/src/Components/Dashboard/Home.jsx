@@ -362,15 +362,55 @@ const Home = () => {
     ])
   }
 
+  
+  const [plantDepartments, setPlantDepartments] = useState([])
+
+  useEffect(() => {
+    console.log(employeeRole)
+    if (employeeRole.loggedEmp.plantDetails.length === 1) {
+
+      const availableDeps = employeeRole.loggedEmp.plantDetails[0].departments.filter(dep => filteredData.map(item => item.itemDepartment === dep))
+      console.log(employeeRole.loggedEmp.plantDetails[0].departments)
+      console.log(availableDeps)
+
+      setPlantDepartments(availableDeps)
+      setPlantDeps(prev => ({...prev, itemDepartment: availableDeps.length === 1 ? availableDeps[0] : "All"}))
+
+    } else {
+      const filteredPlants = employeeRole.loggedEmp.plantDetails.filter(plant => plant.plantName === selectedPlantName);
+
+      if (filteredPlants.length > 0) {
+        console.log(filteredPlants[0].departments)
+        const availableDeps = filteredPlants[0].departments.filter(dep => filteredData.find(item => item.itemDepartment === dep))
+        console.log(availableDeps)
+        console.log(filteredPlants[0].departments)
+        setPlantDeps(prev => ({...prev, itemDepartment: availableDeps.length === 1 ? availableDeps[0] : "All"}))
+        setPlantDepartments(availableDeps)
+      } else {
+        setPlantDepartments([])
+      }
+
+    }
+
+
+  }, [selectedPlantName])
+
+  const [plantDeps, setPlantDeps] = useState({
+    itemPlant: employeeRole.loggedEmp.plantDetails.length === 1 ? employeeRole.loggedEmp.plantDetails[0].plantName : "All",
+    itemDepartment: plantDepartments.length === 1 ? plantDepartments[0] : "All"
+  })
+  console.log(plantDepartments)
 
   const LocationEmpFilter = (e) => {
     const { name, value } = e.target;
+    setPlantDeps(prev => ({...prev, [name]: value}))
     if (name === "itemPlant") {
       if (value === "All") {
         console.log(activeEmps.allEmps)
         // Assuming activeEmps.allEmps and employeeRole.loggedEmp are arrays
-
+        setPlantDeps(prev => ({...prev, itemDepartment : "All"}))
         itemFetch();
+        
         setSelectedPlantName(value)
       } else {
         setSelectedPlantName(value)
@@ -801,34 +841,6 @@ const Home = () => {
 
   }, [])
 
-  const [plantDepartments, setPlantDepartments] = useState([])
-
-  useEffect(() => {
-    console.log(employeeRole)
-    if (employeeRole.loggedEmp.plantDetails.length === 1) {
-
-      const availableDeps = employeeRole.loggedEmp.plantDetails[0].departments.filter(dep => filteredData.find(item => item.itemDepartment === dep))
-      console.log(availableDeps)
-
-      setPlantDepartments(availableDeps)
-
-    } else {
-      const filteredPlants = employeeRole.loggedEmp.plantDetails.filter(plant => plant.plantName === selectedPlantName);
-
-      if (filteredPlants.length > 0) {
-        console.log(filteredPlants[0].departments)
-        const availableDeps = filteredPlants[0].departments.filter(dep => filteredData.find(item => item.itemDepartment === dep))
-        console.log(availableDeps)
-        console.log(filteredPlants[0].departments)
-        setPlantDepartments(availableDeps)
-      } else {
-        setPlantDepartments([])
-      }
-
-    }
-
-
-  }, [selectedPlantName])
 
 
   const DepartmentDataShow = (name, value) => {
@@ -1220,7 +1232,7 @@ const Home = () => {
                 justifyContent="center"
                 alignItems="center"
                 spacing={2}>
-                <TextField select onChange={(e) => LocationEmpFilter(e)} disabled={employeeRole.loggedEmp.plantDetails.length === 1} value={employeeRole.loggedEmp.plantDetails.length === 1 ? employeeRole.loggedEmp.plantDetails[0].plantName : ""} fullWidth size='small' defaultValue="All" name='itemPlant' id='itemPlantId' label="Plant Location">
+                <TextField select onChange={(e) => LocationEmpFilter(e)} disabled={employeeRole.loggedEmp.plantDetails.length <= 1} value={plantDeps.itemPlant} fullWidth size='small' defaultValue="All" name='itemPlant' id='itemPlantId' label="Plant Location">
                   <MenuItem value="All">All</MenuItem>
                   {employeeRole.loggedEmp.length !== 0 && employeeRole.loggedEmp.plantDetails.map(item => (
                     <MenuItem value={item.plantName}>{item.plantName}</MenuItem>
@@ -1228,8 +1240,8 @@ const Home = () => {
 
                 </TextField>
                 {
-                  <TextField select onChange={(e) => LocationEmpFilter(e)} fullWidth size='small' name='itemDepartment' defaultValue="All" label="Default Location">
-                    <MenuItem value="All">All</MenuItem>
+                  <TextField select onChange={(e) => LocationEmpFilter(e)} fullWidth size='small' name='itemDepartment' disabled={plantDepartments.length <= 1 } value={plantDeps.itemDepartment} defaultValue="All" label="Default Location">
+                    {plantDepartments.length !== 1 && <MenuItem value="All">All</MenuItem>}
                     {plantDepartments && plantDepartments.map((department, index) => (<MenuItem key={index} value={department}>{department}</MenuItem>))}
                   </TextField>}
               </Stack>
@@ -1274,33 +1286,21 @@ const Home = () => {
 
                 <Autocomplete
                   disablePortal
-                  defaultValue={"All"}
+                  defaultValue="All"
                   id="combo-box-demo"
                   options={customers}
                   size='small'
                   fullWidth
                   onInputChange={(e, newValue) => MainFilter(newValue, "customer")}
                   name="customer"
-                  getOptionLabel={(customers) => customers}
-                  // onChange={(e, newValue) => MainFilter(e,newValue, "customer") .aliasName}
+                  getOptionLabel={(customers) => customers.aliasName}
+                  // onChange={(e, newValue) => MainFilter(e,newValue, "customer") }
 
                   renderInput={(params) => <TextField {...params} label="Customer" name='customer' />}
                   disableClearable
                 />
 
-                {/* <Autocomplete
-                  disablePortal
-                  id="combo-box-demo"
-                  options={customers}
-                  size='small'
-                  fullWidth
-                  onInputChange={(e, newValue) => MainFilter(newValue, "customer")}
-                  name="customer"
-                  getOptionLabel={(customer) => customer.aliasName}
-                  defaultValue={customers.find(customer => customer.aliasName === "All") || null}
-                  renderInput={(params) => <TextField {...params} label="Customer" name='customer' />}
-                  disableClearable
-                /> */}
+               
 
 
 
@@ -1688,7 +1688,7 @@ const Home = () => {
                 </HomeContent.Provider>
 
                 <HomeContent.Provider
-                  value={{ mailOpen, setMailOpen, selectedRows, mailIds }}
+                  value={{ mailOpen, setMailOpen, selectedRows, mailIds, setErrorHandler, setSnackBarOpen }}
                 >
                   <HomeMail />
                 </HomeContent.Provider>
