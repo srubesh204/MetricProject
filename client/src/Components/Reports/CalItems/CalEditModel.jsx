@@ -71,6 +71,8 @@ const CalEditModel = () => {
             rowStatus: ""
         }],
         calMasterUsed: [],
+        calPlant: "",
+        calDepartment:""
     })
 
     const [calibrationData, setCalibrationData] = useState({
@@ -114,6 +116,8 @@ const CalEditModel = () => {
             rowStatus: ""
         }],
         calMasterUsed: [],
+        calPlant: "",
+        calDepartment:""
     })
 
     console.log(selectedCalRow)

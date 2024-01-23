@@ -361,6 +361,7 @@ const DcList = () => {
 
 
     };
+    console.log(dcDataDcList)
 
     {/* const handleFilterChange = (e) => {
         const { name, value } = e.target;
