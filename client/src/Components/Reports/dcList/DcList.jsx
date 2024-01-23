@@ -40,7 +40,7 @@ const DcList = () => {
                 `${process.env.REACT_APP_PORT}/itemAdd/getAllItemAdds`
             );
             console.log(response.data.result)
-            const plantItems = response.data.result.filter(item => (loggedEmp.plantDetails.map(plant => plant.plantName).includes(item.itemPlant)))
+            const plantItems = response.data.result.filter(item => (loggedEmp.plantDetails.map(plant => plant.plantName).includes(item.itemPlant) && item.dcStatus !== "1"))
             console.log(plantItems)
             setItemPlantList(plantItems);
             setItemDepartment(plantItems)
@@ -288,7 +288,7 @@ const DcList = () => {
             setDcData(initialDcData)
             setSnackBarOpen(true)
             setErrorHandler({ status: response.data.status, message: response.data.message, code: "success" })
-
+            ItemFetch()
 
             dcListFetchData()
         } catch (err) {
@@ -716,12 +716,12 @@ const DcList = () => {
                             </div>
 
                             <DcListContent.Provider
-                                value={{ dcEditOpen, setDcEditOpen, selectedRows, dcListFetchData, printState, setPrintState, itemPlantList }}
+                                value={{ dcEditOpen, setDcEditOpen, selectedRows, dcListFetchData, printState, setPrintState, itemPlantList, dcDataDcList, ItemFetch }}
                             >
                                 <DcEdit />
                             </DcListContent.Provider>
                             <DcListContent.Provider
-                                value={{ dcOpen, setDcOpen, selectedRows, dcListFetchData, printState, setPrintState, itemPlantList }}
+                                value={{ dcOpen, setDcOpen, selectedRows, dcListFetchData, printState, setPrintState, itemPlantList, dcDataDcList, ItemFetch }}
                             >
                                 <DcAdd />
                             </DcListContent.Provider>
