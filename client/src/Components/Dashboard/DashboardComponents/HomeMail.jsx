@@ -22,10 +22,13 @@ const HomeMail = () => {
     const bccMailsOnly = bccMails ? bccMails.map(emp => emp.mailId) : []
     console.log(bccMailsOnly)
 
+   
+
     useEffect(() => {
         setMailDetails(prev => ({ ...prev, to: emp.mailId, bcc: bccMailsOnly, employee: {...emp} }))
         const data = selectedRows.map((item, index) => ({
             itemId: item._id,
+            itemPlant: item.itemPlant,
             itemIMTENo: item.itemIMTENo,
             itemAddMasterName: item.itemAddMasterName,
             itemRangeSize: item.itemRangeSize,

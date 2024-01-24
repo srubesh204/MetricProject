@@ -72,6 +72,30 @@ const CompanyDetails = () => {
     }, []);
 
 
+    const companysFetchData = async () => {
+        try {
+            const response = await axios.get(
+                `${process.env.REACT_APP_PORT}/compDetails/getCompDetailsById/1`
+            );
+            const details = response.data.result
+            console.log(details)
+            setCompanyData((prev) => ({
+                ...prev,
+                userType: details.userType,
+                companyName: details.companyName,
+                companyAddress: details.companyAddress,
+                companyPlants: details.companyPlants,
+                companyLogo: details.companyLogo,
+                companyImage: details.companyImage
+            }));
+        } catch (err) {
+            console.log(err);
+        }
+    };
+    useEffect(() => {
+        companysFetchData();
+    }, []);
+
     const initialMailData = {
         userType: "",
         companyName: "",
@@ -88,6 +112,48 @@ const CompanyDetails = () => {
         companyImage: ""
 
     })
+
+    const updateCompanyDetails = async (e) => {
+        e.preventDefault();
+        try {
+            const response = await axios.put(
+                `${process.env.REACT_APP_PORT}/compDetails/updateCompDetails/1`, companyData
+            );
+            console.log(response.data)
+
+
+            companysFetchData();
+            setPlantSnackBar(true)
+            setPlantError({ status: response.data.status, message: response.data.message, code: "success" })
+            setSelectedPlantId(null)
+            setPlantData(initialPlantData)
+            console.log(response);
+            setIsEditable(false)
+        } catch (err) {
+            console.log(err);
+            setPlantSnackBar(true)
+            if (err.response && err.response.status === 400) {
+                // Handle validation errors
+                const errorData400 = err.response.data.errors;
+                const errorMessages400 = Object.values(errorData400).join(' / ');
+
+                console.log(errorMessages400);
+                console.log(err)
+                setPlantError({ status: 0, message: errorMessages400, code: "error" });
+            } else if (err.response && err.response.status === 500) {
+                // Handle other errors
+                const errorData500 = err.response.data.error;
+                const errorMessages500 = Object.values(errorData500);
+                console.log(err)
+                setPlantError({ status: 0, message: errorMessages500, code: "error" });
+            } else {
+                console.log(err)
+                setPlantError({ status: 0, message: "An error occurred", code: "error" });
+            }
+
+        }
+    };
+
 
     const [plantDatas, setPlantDatas] = useState([])
 
@@ -108,37 +174,15 @@ const CompanyDetails = () => {
     const initialPlantData = {
         plantName: "",
         plantAddress: "",
-        
+
     }
     const [plantData, setPlantData] = useState({
         plantName: "",
-        plantAddress: "",   
+        plantAddress: "",
     })
     console.log(companyData, plantData)
 
-    const companysFetchData = async () => {
-        try {
-            const response = await axios.get(
-                `${process.env.REACT_APP_PORT}/compDetails/getCompDetailsById/658c12ca19f2c8564204a6af`
-            );
-            const details = response.data.result
-            console.log(details)
-            setCompanyData((prev) => ({
-                ...prev,
-                userType: details.userType,
-                companyName: details.companyName,
-                companyAddress: details.companyAddress,
-                companyPlants: details.companyPlants,
-                companyLogo: details.companyLogo,
-                companyImage: details.companyImage
-            }));
-        } catch (err) {
-            console.log(err);
-        }
-    };
-    useEffect(() => {
-        companysFetchData();
-    }, []);
+   
 
     const handleImageChange = async (e) => {
         const selectedImage = e.target.files[0];
@@ -174,11 +218,13 @@ const CompanyDetails = () => {
 
 
     const [companyDataList, setCompanyDataList] = useState([])
+
     const companyFetchData = async () => {
         try {
             const response = await axios.get(
-                `${process.env.REACT_APP_PORT}/compDetails/getAllCompDetails`
+                `${process.env.REACT_APP_PORT}/compDetails/getCompDetailsById/1`
             );
+            console.log(response.data)
             setCompanyDataList(response.data.result);
 
         } catch (err) {
@@ -193,15 +239,10 @@ const CompanyDetails = () => {
     const createPlant = async () => {
 
         try {
-
-
             const response = await axios.post(
                 `${process.env.REACT_APP_PORT}/compDetails/createPlantDetails`, plantData
-
             );
             console.log(response.data)
-
-
             plantFetch();
             setPlantSnackBar(true)
             setPlantError({ status: response.data.status, message: response.data.message, code: "success" })
@@ -220,7 +261,7 @@ const CompanyDetails = () => {
                 console.log(err)
                 setPlantError({ status: 0, message: errorMessages400, code: "error" });
             } else if (err.response && err.response.status === 500) {
-              
+
                 const errorData500 = err.response.data.error;
                 const errorMessages500 = Object.values(errorData500).join(', ');
                 console.log(err)
@@ -327,6 +368,7 @@ const CompanyDetails = () => {
 
     });
     const [file, setFile] = useState(null);
+
     const handleCompany = (e) => {
         const selectedFile = e.target.files[0];
         console.log(selectedFile)
@@ -335,19 +377,12 @@ const CompanyDetails = () => {
 
 
 
-    {/* const handleCompanyChanges = (e) => {
-        const { name, value } = e.target;
-        setCompanyData((prev) => ({ ...prev, [name]: value }));
-
-
-    }*/}
     const handleCompanyChange = (e) => {
         const { name, checked, value, type } = e.target;
         let updatedValue = value;
         if (type === "checkbox") {
             updatedValue = checked ? "1" : "0";
         }
-
         setCompanyData((prev) => ({ ...prev, [name]: updatedValue }));
     };
 
@@ -378,11 +413,8 @@ const CompanyDetails = () => {
 
     return (
         <div className='m-4'>
-
-
             <form>
                 <div className="row">
-
                     <div className="col-md-12">
                         <Paper
                             sx={{
@@ -395,19 +427,13 @@ const CompanyDetails = () => {
                             className='col'
                             elevation={12}
                         >
-
                             <div className='row'>
                                 <div className="col-md-10">
-                                    <div className="row">
+                                    <div className="row g-2">
                                         <div className='col-md-12 text-end'>
                                             <Button onClick={() => setIsEditable(true)}><Edit color='success' /></Button>
                                         </div>
-
-
-
-
-
-                                        <div className='col-md-12'>
+                                        {/* <div className='col-md-12'>
                                             <RadioGroup
                                                 row
                                                 aria-labelledby="demo-row-radio-buttons-group-label"
@@ -416,14 +442,10 @@ const CompanyDetails = () => {
                                                 name="userType"
                                                 onChange={handleCompanyChange}
                                             >
-                                                <FormControlLabel value="singleUser" checked={companyData.userType === "singleUser"} disabled={!isEditable} control={<Radio />} label="SingleUser" />
-                                                <FormControlLabel value="multiUser" checked={companyData.userType === "multiUser"} disabled={!isEditable} control={<Radio />} label="MultiUser" />
+                                                <FormControlLabel value="single" checked={companyData.userType === "single"} disabled={!isEditable} control={<Radio />} label="SingleUser" />
+                                                <FormControlLabel value="multi" checked={companyData.userType === "multi"} disabled={!isEditable} control={<Radio />} label="MultiUser" />
                                             </RadioGroup>
-                                        </div>
-
-
-
-
+                                        </div> */}
 
                                         <div className='col-md-5'>
                                             <TextField label="Company Name"
@@ -438,8 +460,8 @@ const CompanyDetails = () => {
 
 
                                         </div>
-                                        {companyData.userType === "singleUser" && <div className='col-md-7'>
-                                            <TextField label="Company  Address"
+                                        <div className='col-md-7'>
+                                            <TextField label="Company Address"
                                                 id="companyNameId"
                                                 value={companyData.companyAddress}
                                                 disabled={!isEditable}
@@ -449,7 +471,7 @@ const CompanyDetails = () => {
                                                 name="companyAddress" />
 
 
-                                        </div>}
+                                        </div>
                                         <div className='col-md-4'>
                                             <Button size='small' component="label" fullWidth variant="contained" disabled={!isEditable} startIcon={<CloudUpload />} >
                                                 Upload ComPany Logo
@@ -497,6 +519,11 @@ const CompanyDetails = () => {
 
                                     </div>}
                                 </div>
+                                {isEditable && <div className='text-end mt-2'>
+                                    <Button size='small' className='me-2' variant='contained' disabled={!isEditable} color='warning' onClick={(e)=> updateCompanyDetails(e)}>Update Company Details</Button>
+                                    <Button size='small' variant='contained' disabled={!isEditable} color='error' onClick={()=> setIsEditable(false)}>Cancel</Button>
+                                    </div>}
+                                
                             </div>
 
                         </Paper>
@@ -537,10 +564,10 @@ const CompanyDetails = () => {
                                         name="plantAddress" >
                                     </TextField>
                                 </div>
-                                
-                                
-                                
-                                
+
+
+
+
                             </div>
 
 
@@ -672,7 +699,7 @@ const CompanyDetails = () => {
                                     <td>{plant.plantAddress}</td>
                                     <td><Delete /></td>
 
-                                   
+
 
                                 </tr>
                             ))}
