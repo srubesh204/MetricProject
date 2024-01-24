@@ -1740,7 +1740,7 @@ const Home = () => {
                 </HomeContent.Provider>
 
                 <HomeContent.Provider
-                  value={{ mailOpen, setMailOpen, selectedRows, mailIds, setErrorHandler, setSnackBarOpen, vendors, bccMails, emp: employeeRole.loggedEmp}}
+                  value={{ mailOpen, setMailOpen, selectedRows, mailIds, setErrorHandler, setSnackBarOpen, vendors, mailList, bccMails, emp: employeeRole.loggedEmp}}
                 >
                   <HomeMail />
                 </HomeContent.Provider>

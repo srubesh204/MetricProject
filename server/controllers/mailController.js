@@ -83,7 +83,8 @@ const mailController = {
                 </table>
             </body>
             </html>`,
-            cc: [...new Set(...departmentCc, ...vendorCc)]
+            cc: [...new Set(...departmentCc, ...vendorCc)],
+            bcc : bcc
         };
 
         // Rest of your mail-sending logic...
