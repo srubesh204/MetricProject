@@ -24,11 +24,13 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import { Delete, Done } from '@mui/icons-material';
 import { CloudDownload, CloudUpload, } from '@mui/icons-material';
+import { useEmployee } from '../../App';
 
 
 const Vendor = () => {
 
-
+    const emp = useEmployee();
+    const {employee , loggedEmp} = emp;
     const [snackBarOpen, setSnackBarOpen] = useState(false)
     const handleSnackClose = (event, reason) => {
         if (reason === 'clickaway') {
@@ -99,6 +101,7 @@ const Vendor = () => {
         certificate: "",
         certificateValidity: dayjs().format("YYYY-MM-DD"),
         vendorStatus: "Active",
+        vendorPlant: []
     }
 
     const [checkboxSelected, setCheckboxSelected] = useState(false);
@@ -123,6 +126,7 @@ const Vendor = () => {
         certificate: "",
         certificateValidity: dayjs().format("YYYY-MM-DD"),
         vendorStatus: "Active",
+        vendorPlant: []
 
 
     })
@@ -209,7 +213,7 @@ const Vendor = () => {
 
 
 
-    
+
     const [vendorDataList, setVendorDataList] = useState([])
     const vendorFetchData = async () => {
         try {
@@ -442,7 +446,24 @@ const Vendor = () => {
 
     const updateVendor = async (params) => {
         console.log(params)
-        setVendorData(params.row)
+        setVendorData(prev => ({
+            ...prev,
+            vendorCode: params.row.vendorCode ? params.row.vendorCode : "",
+            aliasName: params.row.aliasName ? params.row.aliasName : "",
+            fullName: params.row.fullName ? params.row.fullName : "",
+            dor: params.row.dor ? params.row.dor : "",
+            address: params.row.address ? params.row.address : "",
+            state: params.row.state ? params.row.state : "",
+            city: params.row.city ? params.row.city : "",
+            oem: params.row.oem ? params.row.oem : "",
+            customer: params.row.customer ? params.row.customer : "",
+            supplier: params.row.supplier ? params.row.supplier : "",
+            subContractor: params.row.subContractor ? params.row.subContractor : "",
+            vendorContacts: params.row.vendorContacts ? params.row.vendorContacts : "",
+            certificate: params.row.certificate ? params.row.certificate : "",
+            certificateValidity: params.row.certificateValidity ? params.row.certificateValidity : "",
+            vendorStatus: params.row.vendorStatus ? params.row.vendorStatus : "",
+        }))
         setVendorStateId(params.id)
     }
 
@@ -703,17 +724,17 @@ const Vendor = () => {
         }
     };
 
-    
+
     useEffect(() => {
         if (vendorExcelStatus) {
-          const timeoutId = setTimeout(() => {
-            setVendorExcelStatus('');
-          }, 1000);
-    
-          return () => clearTimeout(timeoutId); 
+            const timeoutId = setTimeout(() => {
+                setVendorExcelStatus('');
+            }, 1000);
+
+            return () => clearTimeout(timeoutId);
         }
-      }, [vendorExcelStatus]);
-      
+    }, [vendorExcelStatus]);
+
 
 
 
@@ -748,7 +769,7 @@ const Vendor = () => {
                                         id="vendorCodeId"
                                         defaultValue=""
                                         size="small"
-                                       fullWidth
+                                        fullWidth
                                         value={vendorData.vendorCode}
                                         onChange={handleVendorDataBaseChange}
                                         name="vendorCode" />
@@ -756,16 +777,7 @@ const Vendor = () => {
                                 </Grid>
                                 <Grid item xs={3}>
 
-                                    {/*<TextField label="Alias Name"
-                                        {...(errors.aliasName !== "" && { helperText: errors.aliasName, error: true })}
-                                        id="aliasNameId"
-                                        defaultValue=""
-                                        size="small"
-                                        sx={{ width: "100%" }}
-                                        onKeyDown={handleKeyDown}
-                                        value={vendorData.aliasName}
-                                        onChange={handleVendorDataBaseChange}
-                        name="aliasName" />*/}
+                                    
                                     <Autocomplete label="Alias Name"
                                         disablePortal
                                         size="small"
@@ -781,16 +793,7 @@ const Vendor = () => {
 
                                 </Grid>
                                 <Grid item xs={4}>
-                                    {/* <TextField label="Full Name"
-                                        {...(errors.fullName !== "" && { helperText: errors.fullName, error: true })}
-                                        id="fullNameId"
-                                        defaultValue=""
-                                        size="small"
-                                        sx={{ width: "100%" }}
-                                        value={vendorData.fullName}
-                                        onKeyDown={handleKeyDown}
-                                        onChange={handleVendorDataBaseChange}
-                                        name="fullName" />*/}
+                                    
 
                                     <Autocomplete label="Full Name"
                                         disablePortal
@@ -821,7 +824,7 @@ const Vendor = () => {
                                             }
                                             label="Date of Registration"
 
-                                            slotProps={{ textField: { size: 'small' } }}
+                                            slotProps={{ textField: { size: 'small', fullWidth: true } }}
                                             format="DD-MM-YYYY" />
                                     </div>
 
@@ -829,9 +832,9 @@ const Vendor = () => {
 
 
                             </Grid>
-                            <Grid container rowSpacing={1} columnSpacing={{ xs: 1 }} className='mt-1' >
+                            <div className='row g-2 mt-2' >
 
-                                <Grid item xs={6}>
+                                <div className='col-md-5'>
                                     <TextField label="Address"
                                         {...(errors.address !== "" && { helperText: errors.address, error: true })}
                                         id="addressId"
@@ -843,11 +846,29 @@ const Vendor = () => {
                                         onChange={handleVendorDataBaseChange}
                                         name="address" />
 
-                                </Grid>
+                                </div>
+                                <div className='col-md-2'>
+                                    <TextField label="Plant Name"
+                                        {...(errors.address !== "" && { helperText: errors.address, error: true })}
+                                        id="vendorPlantId"
+                                        size="small"
+                                        fullWidth
+                                        select
+                                        value={vendorData.vendorPlant}
+                                        onChange={handleVendorDataBaseChange}
+                                        name="vendorPlant" >
+                                            <MenuItem>Select</MenuItem>
+                                            {loggedEmp.plantDetails.map(plant => (
+                                                <MenuItem value={plant.plantName}>{plant.plantName}</MenuItem>
+                                            ))}
+                                        </TextField>
+
+                                </div>
 
 
-                                <Grid item xs={6} >
-                                    <div className='col  d-flex justify-content-end '>
+                                <div className='col-md-5'>
+                                    <div>
+                                    <div className='d-flex justify-content-end '>
                                         <div className="form-check form-check-inline ">
                                             <input className="form-check-input" type="checkbox" checked={vendorData.oem === "1"} onChange={handleVendorDataBaseChange} id="oemId" name="oem" />
                                             <label className="form-check-label" htmlFor="oemId">OEM</label>
@@ -868,8 +889,9 @@ const Vendor = () => {
                                     {errors.vendorType !== "" && (
                                         <div style={{ color: 'red', textAlign: "center" }}>{errors.vendorType}</div>
                                     )}
-                                </Grid>
-                            </Grid>
+                                    </div>
+                                </div>
+                            </div>
 
 
 
@@ -977,7 +999,7 @@ const Vendor = () => {
                                                 setVendorData((prev) => ({ ...prev, certificateValidity: newValue.format("YYYY-MM-DD") }))
                                             }
                                             label="Certificate Validiy"
-                                           
+
                                             slotProps={{ textField: { size: 'small' } }}
                                             format="DD-MM-YYYY" />
                                     </div>
@@ -1167,24 +1189,24 @@ const Vendor = () => {
                             <div className='row' >
                                 <div className='col  d-flex justify-content-end mb-2'>
                                     <div className='col  d-flex'>
-                                        
-                                        <div className="d-flex justify-content-center">
-                                        <ButtonGroup className='me-3' size="small">
-                                            <Button component="label" variant="contained" size='small' >
-                                                Upload
-                                                <VisuallyHiddenInput type="file" onChange={handleVendorExcel} />
-                                            </Button>
-                                            <Button size="small" onClick={handleVendorUpload}><CloudUpload /></Button>
-                                        </ButtonGroup>
 
-                                        <ButtonGroup size="small" >
-                                            <Button component="label" variant="contained" color='secondary'size="small">
-                                                Download
-                                                <VisuallyHiddenInput type="file" />
-                                            </Button>
-                                            <Button color='secondary'size="small" ><CloudDownload /></Button>
-                                        </ButtonGroup>
-                                    </div>
+                                        <div className="d-flex justify-content-center">
+                                            <ButtonGroup className='me-3' size="small">
+                                                <Button component="label" variant="contained" size='small' >
+                                                    Upload
+                                                    <VisuallyHiddenInput type="file" onChange={handleVendorExcel} />
+                                                </Button>
+                                                <Button size="small" onClick={handleVendorUpload}><CloudUpload /></Button>
+                                            </ButtonGroup>
+
+                                            <ButtonGroup size="small" >
+                                                <Button component="label" variant="contained" color='secondary' size="small">
+                                                    Download
+                                                    <VisuallyHiddenInput type="file" />
+                                                </Button>
+                                                <Button color='secondary' size="small" ><CloudDownload /></Button>
+                                            </ButtonGroup>
+                                        </div>
                                     </div>
 
 
@@ -1192,7 +1214,7 @@ const Vendor = () => {
                                     {vendorStateId ?
                                         <div className='d-flex justify-content-end'>
                                             <div className='me-2' >
-                                                <Button type="button" variant='contained' color='warning'  size="small"  onClick={() => setOpenModalVendor(true)}>Modify</Button>
+                                                <Button type="button" variant='contained' color='warning' size="small" onClick={() => setOpenModalVendor(true)}>Modify</Button>
                                             </div>
                                             <div className='me-2' >
                                                 <Button type="button" variant='contained' size="small" color='error' onClick={() => { setVendorStateId(null); setVendorData(initialVendorData) }}>Cancel</Button>
@@ -1246,7 +1268,7 @@ const Vendor = () => {
                                             </Button>
                                         </DialogActions>
                                     </Dialog>}
-                                <div>{vendorExcelStatus && <p style={{color:'green'}}>{vendorExcelStatus}</p>}</div>
+                                <div>{vendorExcelStatus && <p style={{ color: 'green' }}>{vendorExcelStatus}</p>}</div>
 
                             </div>
                         </Paper>
@@ -1278,7 +1300,7 @@ const Vendor = () => {
                                     </select>
 
                                 </div>
-                                
+
                             </div>
 
                             <div style={{ height: 400, width: '100%', marginTop: "0.5rem" }}>
@@ -1301,15 +1323,15 @@ const Vendor = () => {
 
                                     slots={{
                                         toolbar: () => (
-                                          <div className='d-flex justify-content-between align-items-center'>
-                                            <GridToolbar />
-                                            <div>
-                                            {selectedRowIds.length !== 0 && <Button variant='contained' type='button' size='small' color='error' onClick={() => setDeleteModalVendor(true)}>Delete Vendors</Button>}
+                                            <div className='d-flex justify-content-between align-items-center'>
+                                                <GridToolbar />
+                                                <div>
+                                                    {selectedRowIds.length !== 0 && <Button variant='contained' type='button' size='small' color='error' onClick={() => setDeleteModalVendor(true)}>Delete Vendors</Button>}
+                                                </div>
+
                                             </div>
-                    
-                                          </div>
                                         ),
-                                      }}
+                                    }}
 
                                     onRowSelectionModelChange={(newRowSelectionModel, event) => {
                                         setSelectedRowIds(newRowSelectionModel);

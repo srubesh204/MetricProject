@@ -175,8 +175,6 @@ const Home = () => {
         { aliasName: "All" },
         ...getAllVendorWithTypes.data.result.customers.map(customer => ({ ...customer }))
       ]);
-
-
       setOems(getAllVendorWithTypes.data.result.oems)
       setSubContractors(getAllVendorWithTypes.data.result.subContractors)
       setSuppliers(getAllVendorWithTypes.data.result.suppliers)
@@ -185,6 +183,10 @@ const Home = () => {
       console.log(err);
     }
   };
+ 
+  useEffect(()=>{
+    getVendorsByType();
+  }, [])
   console.log(customers)
   console.log(employeeRole)
 
@@ -836,7 +838,7 @@ const Home = () => {
 
     itemFetch();
     getAllDepartments();
-    getVendorsByType();
+   
     empFetch();
 
   }, [])
@@ -1053,10 +1055,10 @@ const Home = () => {
 
   const mailIdGather = () => {
     if (selectedRows.length > 0) {
-      const deps = selectedRows.map(item => item.itemDepartment)
-      console.log(deps)
+      const plants = selectedRows.map(item => item.itemPlant)
+      console.log(plants)
 
-      const empEmails = activeEmps.allEmps.filter(emp => emp.plantDetails.find(plant => deps.find(dep => plant.departments.includes(dep))))
+      const empEmails = activeEmps.allEmps.filter(emp => emp.plantDetails.find(plant => plants.find(itemPlant => plant.plantName == itemPlant)))
       const uniqueEmails = [...new Set(empEmails)]
       setMailIds(empEmails)
       console.log(uniqueEmails)
@@ -1688,7 +1690,7 @@ const Home = () => {
                 </HomeContent.Provider>
 
                 <HomeContent.Provider
-                  value={{ mailOpen, setMailOpen, selectedRows, mailIds, setErrorHandler, setSnackBarOpen }}
+                  value={{ mailOpen, setMailOpen, selectedRows, mailIds, setErrorHandler, setSnackBarOpen, vendors}}
                 >
                   <HomeMail />
                 </HomeContent.Provider>
