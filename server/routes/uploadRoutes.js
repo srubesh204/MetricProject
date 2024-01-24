@@ -107,7 +107,7 @@ router.post('/workInstructions', workInsUploadFolder.single('file'), (req, res) 
   }
 
   // File was provided, proceed with processing
-  res.status(200).json({ message: ' Certificate uploaded successfully' });
+  res.status(200).json({ message: ' Work Instruction uploaded successfully' });
 });
 
 router.post('/itemCertificates', itemCertificateFolder.single('file'), (req, res) => {

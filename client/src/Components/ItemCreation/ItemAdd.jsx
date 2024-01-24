@@ -456,6 +456,7 @@ const ItemAdd = () => {
             setItemAddData((prev) => ({
                 ...prev,
                 itemType: itemType,
+                itemIMTENo: itemPrefix,
                 itemImage: itemMasterImage,
                 itemAddMasterName: itemDescription,
                 itemCalFreInMonths: itemFqInMonths,
@@ -1433,7 +1434,7 @@ const ItemAdd = () => {
                             {itemAddData.itemAddMasterName && <Paper sx={{ m: 2, p: 2 }} elevation={12}>
                                 <div className="d-flex justify-content-between mb-2">
                                     <h6 className='h5 text-center'>Acceptance Criteria</h6>
-                                    <Button variant='contained' onClick={() => addACValue()}>Add</Button>
+                                    <Button variant='contained' onClick={() => addACValue()}>Add Row</Button>
                                 </div>
 
 

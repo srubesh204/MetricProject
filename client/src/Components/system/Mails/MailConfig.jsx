@@ -143,6 +143,7 @@ const MailConfig = () => {
     const addSubjectDataRow = () => {
         if (mailDetails.length !== 0) {
             setMailData((prev) => ({ ...prev, mailSubjects: [...prev.mailSubjects, mailDetails.mailSubject] }))
+            
         }
     }
 
@@ -275,7 +276,7 @@ const MailConfig = () => {
 
                             </div>
 
-                            {isEditable && <div className=' col d-flex justify-content-end '>
+                            {/* {isEditable && <div className=' col d-flex justify-content-end '>
                                 <div className='me-2'>
                                     <Button size='small' sx={{ minWidth: "130px" }} variant='contained' onClick={() => setOpenModal(true)}>Modify</Button>
                                 </div>
@@ -284,7 +285,7 @@ const MailConfig = () => {
                                 </div>
 
 
-                            </div>}
+                            </div>} */}
 
 
 
@@ -332,7 +333,7 @@ const MailConfig = () => {
                                 //variant="standard"
                                 />
                                 <div className='text-end mt-2' >
-                                    <Button size='small' color='warning' disabled={!isEditable} onClick={() => addSubjectDataRow(true)} variant='contained'>Add </Button>
+                                    <Button size='small' color='warning' onClick={() => addSubjectDataRow(true)} variant='contained'>Add </Button>
                                 </div>
                             </div>
                             <div className='col'>
@@ -350,11 +351,8 @@ const MailConfig = () => {
                                     <Button size='small' color='warning' onClick={() => addBodyRow(true)} variant='contained'>Add </Button>
                                 </div>
                             </div>
-
-
-
-
                         </div>
+
 
                         {/* <div className='row mb-2'>
                             <div className='col'>
@@ -374,7 +372,7 @@ const MailConfig = () => {
                         </div> */}
 
 
-                        <div className='row' >
+                        <div className='row'>
 
                             <div className='col-4'>
                                 <table className='table table-sm table-bordered table-responsive  align-middle'>
@@ -391,13 +389,13 @@ const MailConfig = () => {
 
 
                                         {mailData.mailSubjects ? mailData.mailSubjects.map((item, index) => (
-                                            <tr key={index} style={{fontSize: "12px",textAlign:"left"}}>
-                                                <td  style={{ width: "2%" }}>{index + 1}</td>
+                                            <tr key={index} style={{ fontSize: "12px", textAlign: "left" }}>
+                                                <td style={{ width: "2%" }}>{index + 1}</td>
                                                 <td>{item}</td>
-                                                
-                                                <td style={{ width: "2%" }}><Button size='small' color="error" aria-label="add" onClick={() => deleteMailRow(index)}>
+
+                                                <th style={{ width: "2%" }}><Button size='small' color="error" aria-label="add" onClick={() => deleteMailRow(index)}>
                                                     <Delete />
-                                                </Button></td>
+                                                </Button></th>
 
                                             </tr>
                                         )) : <tr></tr>}
@@ -406,7 +404,7 @@ const MailConfig = () => {
 
                             </div>
                             <div className='col'>
-                                <table className='table table-sm table-bordered table-responsive  align-middle'>
+                                <table className='table table-sm table-bordered table-responsive   align-middle'>
                                     <tbody>
                                         <tr style={{ fontSize: "14px" }} >
                                             <th>Sr.No</th>
@@ -416,7 +414,7 @@ const MailConfig = () => {
 
                                         </tr>
                                         {mailData.mailBodies ? mailData.mailBodies.map((item, index) => (
-                                            <tr  key={index} style={{fontSize: "12px",textAlign:"left"}}>
+                                            <tr key={index} style={{ fontSize: "12px", textAlign: "left" }}>
                                                 <td style={{ width: "2%" }}>{index + 1}</td>
                                                 <td >{item}</td>
 
@@ -436,6 +434,18 @@ const MailConfig = () => {
 
 
                         </div>
+
+                        <div className='row'>
+                            {isEditable && <div className=' col d-flex justify-content-end '>
+                                <div className='me-2'>
+                                    <Button size='small' sx={{ minWidth: "130px" }} variant='contained' onClick={() => setOpenModal(true)}>Update</Button>
+                                </div>
+                                <div className='me-2'>
+                                    <Button size='small' color='error' sx={{ minWidth: "130px" }} variant='contained' onClick={() => setIsEditable(false)}>Cancel</Button>
+                                </div>
+                            </div>}
+                        </div>
+
                     </Paper>
 
 

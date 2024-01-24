@@ -55,9 +55,9 @@ const ItemMaster = () => {
 
 
     const [filteredData, setFilteredData] = useState([])
-    const [filterAllName,setFilterAllName]= useState({
-        itemTypeSort:"all",
-        itemDescriptionSort:"all"
+    const [filterAllName, setFilterAllName] = useState({
+        itemTypeSort: "all",
+        itemDescriptionSort: "all"
 
 
     })
@@ -70,16 +70,16 @@ const ItemMaster = () => {
             if (name === "itemTypeSort") {
                 const itemType = itemMasterDataList.filter((item) => (item.itemType === value))
                 setFilteredData(itemType)
-                setFilterAllName(prev =>({
+                setFilterAllName(prev => ({
                     ...prev,
                     itemTypeSort: value,
-                    itemDescriptionSort:"all"
+                    itemDescriptionSort: "all"
                 }))
             }
             if (name === "itemDescriptionSort") {
                 const itemDescription = itemMasterDataList.filter((item) => (item.itemDescription === value))
                 setFilteredData(itemDescription)
-                setFilterAllName(prev =>({
+                setFilterAllName(prev => ({
                     ...prev,
                     itemTypeSort: "all",
                     itemDescriptionSort: value
@@ -171,7 +171,7 @@ const ItemMaster = () => {
     };
 
 
-    
+
 
 
 
@@ -180,7 +180,7 @@ const ItemMaster = () => {
     const [FilterNameList, setFilterNameList] = useState({
         itemType: [],
         itemDescription: [],
-        
+
     })
 
     const itemMasterFetchData = async () => {
@@ -190,7 +190,7 @@ const ItemMaster = () => {
             );
 
 
-            const filterNames = [ "itemType", "itemDescription",]
+            const filterNames = ["itemType", "itemDescription",]
 
             let updatedFilterNames = {};
 
@@ -422,21 +422,21 @@ const ItemMaster = () => {
 
     const updateItemMaster = async (params) => {
         console.log(params)
-        setItemMasterData(prev =>({
+        setItemMasterData(prev => ({
             ...prev,
-            itemType: params.row.itemType ? params.row.itemType: "",
-            itemDescription: params.row.itemDescription ? params.row.itemDescription: "",
-            itemPrefix: params.row.itemPrefix ? params.row.itemPrefix:"",
-            itemFqInMonths: params.row.itemFqInMonths ? params.row.itemFqInMonths: "",
-            calAlertInDay: params.row.calAlertInDay ? params.row.calAlertInDay:"",
-            SOPNo: params.row.SOPNo ? params.row.SOPNo: "",
-            uncertainty: params.row.uncertainty ? params.row.uncertainty: "",
-            uncertaintyUnit:params.row.uncertaintyUnit ? params.row.uncertaintyUnit:  "",
-            standardRef: params.row.standardRef ? params.row.standardRef: "",
-            itemMasterImage: params.row.itemMasterImage ? params.row.itemMasterImage: "",
-            workInsName: params.row.workInsName ? params.row.workInsName:"",
-            status: params.row.status ? params.row.status: "",
-            calibrationPoints: params.row.calibrationPoints ? params.row.calibrationPoints:[],
+            itemType: params.row.itemType ? params.row.itemType : "",
+            itemDescription: params.row.itemDescription ? params.row.itemDescription : "",
+            itemPrefix: params.row.itemPrefix ? params.row.itemPrefix : "",
+            itemFqInMonths: params.row.itemFqInMonths ? params.row.itemFqInMonths : "",
+            calAlertInDay: params.row.calAlertInDay ? params.row.calAlertInDay : "",
+            SOPNo: params.row.SOPNo ? params.row.SOPNo : "",
+            uncertainty: params.row.uncertainty ? params.row.uncertainty : "",
+            uncertaintyUnit: params.row.uncertaintyUnit ? params.row.uncertaintyUnit : "",
+            standardRef: params.row.standardRef ? params.row.standardRef : "",
+            itemMasterImage: params.row.itemMasterImage ? params.row.itemMasterImage : "",
+            workInsName: params.row.workInsName ? params.row.workInsName : "",
+            status: params.row.status ? params.row.status : "",
+            calibrationPoints: params.row.calibrationPoints ? params.row.calibrationPoints : [],
 
         }))
         setItemMasterStateId(params.id)
@@ -483,7 +483,7 @@ const ItemMaster = () => {
     const handleImageChange = async (e) => {
         const selectedImage = e.target.files[0];
         if (selectedImage) {
-            
+
 
             const formData = new FormData();
             formData.append('image', selectedImage); // Append the selected image to the FormData
@@ -579,7 +579,7 @@ const ItemMaster = () => {
         }
     };
 
-    
+
 
 
     const VisuallyHiddenInputs = styled('input')({
@@ -632,17 +632,17 @@ const ItemMaster = () => {
             console.error('Error uploading Excel file:', error);
         }
     };
-    
-    
+
+
     useEffect(() => {
         if (itemMasterExcelStatus) {
-          const timeoutId = setTimeout(() => {
-            setItemMasterExcelStatus('');
-          }, 1000);
-    
-          return () => clearTimeout(timeoutId); 
+            const timeoutId = setTimeout(() => {
+                setItemMasterExcelStatus('');
+            }, 1000);
+
+            return () => clearTimeout(timeoutId);
         }
-      }, [itemMasterExcelStatus]);
+    }, [itemMasterExcelStatus]);
 
 
 
@@ -979,13 +979,13 @@ const ItemMaster = () => {
                                                 Upload
                                                 <VisuallyHiddenInputs type="file" onChange={handleItemMasterExcel} />
                                             </Button>
-                                            <Button size="small"onClick={handleItemMasterUpload}><CloudUpload /></Button>
+                                            <Button size="small" onClick={handleItemMasterUpload}><CloudUpload /></Button>
                                         </ButtonGroup>
 
                                         <ButtonGroup size="small">
                                             <Button size="small" component="label" variant="contained" color='secondary'>
                                                 Download
-                                                <VisuallyHiddenInputs  type="file" />
+                                                <VisuallyHiddenInputs type="file" />
                                             </Button>
                                             <Button size="small" color='secondary'><CloudDownload /></Button>
                                         </ButtonGroup>
@@ -1048,7 +1048,7 @@ const ItemMaster = () => {
                                     {itemMasterStateId ?
                                         <div className='col d-flex justify-content-end '>
                                             <div className='me-2' >
-                                                <Button variant='contained' size='small' type='button' color='warning'  onClick={() => setOpenModal(true)} >Modify</Button>
+                                                <Button variant='contained' size='small' type='button' color='warning' onClick={() => setOpenModal(true)} >Modify</Button>
                                             </div>
                                             <div className='me-2' >
                                                 <Button variant='contained' size='small' type='button' color='error' onClick={() => { setItemMasterStateId(null); setItemMasterData(initialItemMasterData) }}>Cancel</Button>
@@ -1060,7 +1060,7 @@ const ItemMaster = () => {
                                         </div>
                                     }
                                 </div>
-                                <div>{itemMasterExcelStatus && <p style={{color:'green'}}>{itemMasterExcelStatus}</p>}</div>
+                                <div>{itemMasterExcelStatus && <p style={{ color: 'green' }}>{itemMasterExcelStatus}</p>}</div>
 
                             </div>
                         </Paper>
@@ -1081,10 +1081,10 @@ const ItemMaster = () => {
                             elevation={12}
                         >
                             <div>
-                                <h3 className='text-center'>Item List</h3>
+                                {/* <h3 className='text-center'>Item List</h3> */}
                                 <div className='row mb-2 g-2'>
 
-                                    <div className="col-3 ">
+                                    {/* <div className="col-3 ">
                                         <TextField fullWidth label="Item Type Sort" onChange={handleFilterChange} value={filterAllName.itemTypeSort} className="form-select" select size="small" id="itemTypeSortId" name="itemTypeSort" defaultValue="" >
 
                                             <MenuItem value="all">All</MenuItem >
@@ -1094,8 +1094,8 @@ const ItemMaster = () => {
 
                                         </TextField>
 
-                                    </div>
-                                    <div className=" col-3">
+                                    </div> */}
+                                    {/* <div className=" col-3">
                                         <TextField fullWidth label="Item Description Sort" onChange={handleFilterChange} value={filterAllName.itemDescriptionSort} className="form-select" select size="small" id="itemDescriptionSortId" name="itemDescriptionSort" defaultValue="" >
 
                                             <MenuItem value="all">All</MenuItem >
@@ -1104,7 +1104,7 @@ const ItemMaster = () => {
                                             ))}
 
                                         </TextField>
-                                    </div>
+                                    </div> */}
                                 </div>
                                 <div>
                                     <div style={{ height: 440, width: '100%' }}>
@@ -1133,15 +1133,39 @@ const ItemMaster = () => {
                                             }}
                                             slots={{
                                                 toolbar: () => (
-                                                  <div className='d-flex justify-content-between align-items-center'>
-                                                    <GridToolbar />
-                                                    <div>
-                                                    {itemMasteSelectedRowIds.length !== 0 && <Button variant='contained' size='small' type='button' color='error' onClick={() => setDeleteModal(true)}>Delete </Button>}
+                                                    <div className='d-flex justify-content-between align-items-center'>
+                                                        <GridToolbar />
+
+
+                                                        <div className="col-4 mt-2">
+                                                            <TextField fullWidth label="Item Type Sort" onChange={handleFilterChange} value={filterAllName.itemTypeSort} className="form-select" select size="small" id="itemTypeSortId" name="itemTypeSort" defaultValue="" >
+
+                                                                <MenuItem value="all">All</MenuItem >
+                                                                <MenuItem value="attribute">Attribute</MenuItem >
+                                                                <MenuItem value="variable">Variable</MenuItem >
+                                                                <MenuItem value="referenceStandard">Reference Standard</MenuItem >
+
+                                                            </TextField>
+
+                                                        </div>
+                                                        <div className=" col-3 mt-2">
+                                                            <TextField fullWidth label="Item Description Sort" onChange={handleFilterChange} value={filterAllName.itemDescriptionSort} className="form-select" select size="small" id="itemDescriptionSortId" name="itemDescriptionSort" defaultValue="" >
+
+                                                                <MenuItem value="all">All</MenuItem >
+                                                                {FilterNameList.itemDescription.map((item, index) => (
+                                                                    <MenuItem key={index} value={item}>{item}</MenuItem>
+                                                                ))}
+
+                                                            </TextField>
+                                                        </div>
+                                                        <div className='mt-2'>
+                                                            {itemMasteSelectedRowIds.length !== 0 && <Button variant='contained' size='small' type='button' color='error' onClick={() => setDeleteModal(true)}>Delete </Button>}
+                                                        </div>
+
                                                     </div>
-                            
-                                                  </div>
+
                                                 ),
-                                              }}
+                                            }}
                                             onRowClick={updateItemMaster}
                                             checkboxSelection
                                             disableRowSelectionOnClick

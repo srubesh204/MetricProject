@@ -1507,7 +1507,7 @@ const CalEditModel = () => {
             </DialogContent>
             <DialogActions className='d-flex justify-content-between'>
                 <div>
-                    <Button variant='contained' color='warning' className='me-3'>Upload Report</Button>
+                 
                 </div>
                 <div>
                     <Button variant='contained' color='error' className='me-3' onClick={() => { setCalEditOpen(false) }}>Cancel</Button>

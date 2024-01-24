@@ -1090,20 +1090,20 @@ const ItemEdit = () => {
                                             ))}
                                         </TextField>
                                     </div>
-                                    <div className="col-md-6">
+                                    {/* <div className="col-md-6">
                                         <TextField size='small' onChange={handleItemAddChange} value={itemAddData.itemArea} select fullWidth variant='outlined' label="Area" name='itemArea' id='itemAreaId'>
                                             {areas.map((item, index) => (
                                                 <MenuItem key={index} value={item.area}>{item.area}</MenuItem>
                                             ))}
                                         </TextField>
-                                    </div>
-                                    <div className='col-md-6'>
+                                    </div> */}
+                                    {/* <div className='col-md-6'>
                                         <TextField size='small' onChange={handleItemAddChange} value={itemAddData.itemPlaceOfUsage} select fullWidth variant='outlined' label="Place" name='itemPlaceOfUsage' id='itemPlaceOfUsageId'>
                                             {placeOfUsages.map((item, index) => (
                                                 <MenuItem key={index} value={item.placeOfUsage}>{item.placeOfUsage}</MenuItem>
                                             ))}
                                         </TextField>
-                                    </div>
+                                    </div> */}
 
 
                                 </div>
@@ -1623,7 +1623,7 @@ const ItemEdit = () => {
                         {itemAddData.itemAddMasterName && <Paper sx={{ m: 2, p: 2 }} elevation={12}>
                             <div className="d-flex justify-content-between mb-2">
                                 <h6 className='h5 text-center'>Acceptance Criteria</h6>
-                                <Button variant='contained' onClick={() => addACValue()}>Add</Button>
+                                <Button variant='contained' onClick={() => addACValue()}>Add Row</Button>
                             </div>
 
 
