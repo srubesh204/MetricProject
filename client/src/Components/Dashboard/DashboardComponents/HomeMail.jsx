@@ -15,7 +15,7 @@ import axios from 'axios'
 const HomeMail = () => {
 
     const mailDatas = useContext(HomeContent)
-    const { mailOpen, setMailOpen, selectedRows, mailIds, setErrorHandler, setSnackBarOpen, vendors, bccMails, emp } = mailDatas
+    const { mailOpen, setMailOpen, selectedRows, mailIds, setErrorHandler, setSnackBarOpen, vendors, mailList, bccMails, emp } = mailDatas
 
 
     console.log(vendors)
