@@ -395,7 +395,7 @@ const MailConfig = () => {
                                                 <td  style={{ width: "2%" }}>{index + 1}</td>
                                                 <td>{item}</td>
                                                 
-                                                <th style={{ width: "2%" }}><Button size='small' color="error" aria-label="add" onClick={() => deleteMailRow(index)}>
+                                                <td style={{ width: "2%" }}><Button size='small' color="error" aria-label="add" onClick={() => deleteMailRow(index)}>
                                                     <Delete />
                                                 </Button></td>
 
