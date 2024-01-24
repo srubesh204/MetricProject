@@ -9,7 +9,7 @@ import RemoveRoundedIcon from '@mui/icons-material/RemoveRounded';
 import AddRoundedIcon from '@mui/icons-material/AddRounded';
 
 import { Container, Paper } from '@mui/material';
-import { Box, Grid } from '@mui/material';
+import { Box } from '@mui/material';
 import { DataGrid, GridToolbar } from '@mui/x-data-grid';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
@@ -30,7 +30,7 @@ import { useEmployee } from '../../App';
 const Vendor = () => {
 
     const emp = useEmployee();
-    const {employee , loggedEmp} = emp;
+    const { employee, loggedEmp } = emp;
     const [snackBarOpen, setSnackBarOpen] = useState(false)
     const handleSnackClose = (event, reason) => {
         if (reason === 'clickaway') {
@@ -459,7 +459,7 @@ const Vendor = () => {
             customer: params.row.customer ? params.row.customer : "",
             supplier: params.row.supplier ? params.row.supplier : "",
             subContractor: params.row.subContractor ? params.row.subContractor : "",
-            vendorContacts: params.row.vendorContacts ? params.row.vendorContacts : "",
+            vendorContacts: params.row.vendorContacts.length > 0 ? params.row.vendorContacts : [],
             certificate: params.row.certificate ? params.row.certificate : "",
             certificateValidity: params.row.certificateValidity ? params.row.certificateValidity : "",
             vendorStatus: params.row.vendorStatus ? params.row.vendorStatus : "",
@@ -508,16 +508,7 @@ const Vendor = () => {
         width: 1,
     });
 
-    // useEffect(() => {
-    //     axios.get('http://localhost:3001/upload/getVendorCertificate/' + vendorData.certificate) // Replace with your API endpoint URL
-    //         .then((response) => {
-    //             console.log(response)
-    //             setFile((prev) => ({ ...prev, file: response.data }));
-    //         })
-    //         .catch((error) => {
-    //             console.error('Error fetching file:', error);
-    //         });
-    // }, [vendorData.certificate]);
+    
     const [openModalVendor, setOpenModalVendor] = useState(false);
     const [deleteModalVendor, setDeleteModalVendor] = useState(false);
 
@@ -760,9 +751,9 @@ const Vendor = () => {
 
 
 
-                            <Grid container rowSpacing={1} columnSpacing={{ xs: 1 }}  >
+                            <div className='row g-2'  >
 
-                                <Grid item xs={2}>
+                                <div className='col-md-2'>
 
                                     <TextField label="Vendor Code"
                                         {...(errors.vendorCode !== "" && { helperText: errors.vendorCode, error: true })}
@@ -774,10 +765,10 @@ const Vendor = () => {
                                         onChange={handleVendorDataBaseChange}
                                         name="vendorCode" />
 
-                                </Grid>
-                                <Grid item xs={3}>
+                                </div>
+                                <div className='col-md-3'>
 
-                                    
+
                                     <Autocomplete label="Alias Name"
                                         disablePortal
                                         size="small"
@@ -791,9 +782,9 @@ const Vendor = () => {
                                             <TextField {...(errors.aliasName !== "" && { helperText: errors.aliasName, error: true })} onChange={handleVendorDataBaseChange} value={vendorData.aliasName}
                                                 name="aliasName" {...params} label="AliasName" />} />
 
-                                </Grid>
-                                <Grid item xs={4}>
-                                    
+                                </div>
+                                <div className='col-md-4'>
+
 
                                     <Autocomplete label="Full Name"
                                         disablePortal
@@ -809,9 +800,9 @@ const Vendor = () => {
                                                 name="fullName" {...params} label="Full Name" />} />
 
 
-                                </Grid>
+                                </div>
 
-                                <Grid item xs={3}>
+                                <div className='col-md-4'>
                                     <div className="col">
                                         <DatePicker
                                             disableFuture
@@ -828,10 +819,10 @@ const Vendor = () => {
                                             format="DD-MM-YYYY" />
                                     </div>
 
-                                </Grid>
+                                </div>
 
 
-                            </Grid>
+                            </div>
                             <div className='row g-2 mt-2' >
 
                                 <div className='col-md-5'>
@@ -857,38 +848,38 @@ const Vendor = () => {
                                         value={vendorData.vendorPlant}
                                         onChange={handleVendorDataBaseChange}
                                         name="vendorPlant" >
-                                            <MenuItem>Select</MenuItem>
-                                            {loggedEmp.plantDetails.map(plant => (
-                                                <MenuItem value={plant.plantName}>{plant.plantName}</MenuItem>
-                                            ))}
-                                        </TextField>
+                                        <MenuItem>Select</MenuItem>
+                                        {loggedEmp.plantDetails.map(plant => (
+                                            <MenuItem value={plant.plantName}>{plant.plantName}</MenuItem>
+                                        ))}
+                                    </TextField>
 
                                 </div>
 
 
                                 <div className='col-md-5'>
                                     <div>
-                                    <div className='d-flex justify-content-end '>
-                                        <div className="form-check form-check-inline ">
-                                            <input className="form-check-input" type="checkbox" checked={vendorData.oem === "1"} onChange={handleVendorDataBaseChange} id="oemId" name="oem" />
-                                            <label className="form-check-label" htmlFor="oemId">OEM</label>
+                                        <div className='d-flex justify-content-end '>
+                                            <div className="form-check form-check-inline ">
+                                                <input className="form-check-input" type="checkbox" checked={vendorData.oem === "1"} onChange={handleVendorDataBaseChange} id="oemId" name="oem" />
+                                                <label className="form-check-label" htmlFor="oemId">OEM</label>
+                                            </div>
+                                            <div className="form-check form-check-inline ">
+                                                <input className="form-check-input" type="checkbox" checked={vendorData.customer === "1"} onChange={handleVendorDataBaseChange} id="customerId" name="customer" />
+                                                <label className="form-check-label" htmlFor="customerId">Customer</label>
+                                            </div>
+                                            <div className="form-check form-check-inline ">
+                                                <input className="form-check-input" type="checkbox" checked={vendorData.supplier === "1"} onChange={handleVendorDataBaseChange} id="supplierId" name="supplier" />
+                                                <label className="form-check-label" htmlFor="supplierId">Supplier</label>
+                                            </div>
+                                            <div className="form-check form-check-inline">
+                                                <input className="form-check-input" type="checkbox" checked={vendorData.subContractor === "1"} onChange={handleVendorDataBaseChange} id="subContractorId" name="subContractor" />
+                                                <label className="form-check-label" htmlFor="subContractorId">SubContractor</label>
+                                            </div>
                                         </div>
-                                        <div className="form-check form-check-inline ">
-                                            <input className="form-check-input" type="checkbox" checked={vendorData.customer === "1"} onChange={handleVendorDataBaseChange} id="customerId" name="customer" />
-                                            <label className="form-check-label" htmlFor="customerId">Customer</label>
-                                        </div>
-                                        <div className="form-check form-check-inline ">
-                                            <input className="form-check-input" type="checkbox" checked={vendorData.supplier === "1"} onChange={handleVendorDataBaseChange} id="supplierId" name="supplier" />
-                                            <label className="form-check-label" htmlFor="supplierId">Supplier</label>
-                                        </div>
-                                        <div className="form-check form-check-inline">
-                                            <input className="form-check-input" type="checkbox" checked={vendorData.subContractor === "1"} onChange={handleVendorDataBaseChange} id="subContractorId" name="subContractor" />
-                                            <label className="form-check-label" htmlFor="subContractorId">SubContractor</label>
-                                        </div>
-                                    </div>
-                                    {errors.vendorType !== "" && (
-                                        <div style={{ color: 'red', textAlign: "center" }}>{errors.vendorType}</div>
-                                    )}
+                                        {errors.vendorType !== "" && (
+                                            <div style={{ color: 'red', textAlign: "center" }}>{errors.vendorType}</div>
+                                        )}
                                     </div>
                                 </div>
                             </div>
@@ -958,18 +949,6 @@ const Vendor = () => {
                                     />
                                 </div>
 
-
-
-                                {/* <select onChange={handleVendorDataBaseChange} value={vendorData.vendorStatus} className="form-select" id="vendorStatusId" name="vendorStatus" >
-                                            <option value="">-select-</option>
-                                            <option value="Active">Active</option>
-                                            <option value="InActive">InActive</option>
-                                            <option value="Relieved">Relieved</option>
-                                        </select>
-                                        <label htmlFor="vendorStatusId">Vendor Status</label>*/}
-
-
-
                                 <div className=" row g-2 mb-2">
 
 
@@ -983,10 +962,6 @@ const Vendor = () => {
 
                                         </TextField>
                                     </div>
-
-
-
-
 
                                     <div className='col-md'>
 
@@ -1006,30 +981,11 @@ const Vendor = () => {
 
 
 
-                                    {/*<div className="form-floating me-4 mb-4 col">
-                                        <input type="date" className="form-control" id="certificateValidityId" name="certificateValidity" placeholder="certificateValidity" value={vendorData.certificateValidity} onChange={handleVendorDataBaseChange} />
-                                        <label htmlFor="certificateValidityId">Certificate Validity</label>
-                                    </div>*/}
 
 
 
                                 </div>
                                 <div className="row">
-                                    {/* <ButtonGroup className='col' >
-
-                                        <Button component="label" variant='contained' sx={{ width: "80%" }}>
-                                            Certificate
-                                            <VisuallyHiddenInput type="file" onChange={handleFileChange} />
-                                        </Button>
-
-                                        <Button variant='outlined' sx={{ width: "20%" }} startIcon={<CloudUploadIcon />} type='button' className='btn btn-info' onClick={handleFileUpload}>Upload</Button>
-
-                                    </ButtonGroup> */}
-                                    {/* <Button component="label" variant="contained" fullWidth >
-
-                                        Certificate Upload
-                                        <VisuallyHiddenInput type="file" onChange={handleCertificateUpload} />
-                                </Button>*/}
 
                                     <div>
                                         <div>
@@ -1090,17 +1046,7 @@ const Vendor = () => {
                                                     <HighlightOffRounded type="button" onClick={() => RemoveFile()} />
 
                                                 </div>}
-                                            {/*} <div className='d-flex ' style={{ width: "20%", height: '60%', border: '2px dashed #ccc' }}>
-
-                                                <Chip label={vendorData.certificate} component="a" href={`${process.env.REACT_APP_PORT}/workInstructions/${vendorData.certificate}`} target="_blank" clickable={true} />
-                                                <Chip
-                                                    label={uploadMessage}
-                                                    size='small'
-                                                    onClick={() => RemoveFile()}
-                                                    color="success"
-                                                    icon={<Done />}
-                                                />
-                                            </div>*/}
+                                            
                                         </div>
                                         {vendorData.certificate &&
                                             <Chip

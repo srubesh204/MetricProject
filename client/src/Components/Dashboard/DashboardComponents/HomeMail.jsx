@@ -15,9 +15,10 @@ import axios from 'axios'
 const HomeMail = () => {
 
     const mailDatas = useContext(HomeContent)
-    const { mailOpen, setMailOpen, selectedRows, mailIds, setErrorHandler, setSnackBarOpen, vendors } = mailDatas
+    const { mailOpen, setMailOpen, selectedRows, mailIds, setErrorHandler, setSnackBarOpen, vendorMails } = mailDatas
 
-    console.log(selectedRows)
+
+    console.log(vendorMails)
 
     useEffect(() => {
         const data = selectedRows.map((item, index) => ({
@@ -50,7 +51,8 @@ const HomeMail = () => {
         to: "",
         subject: "",
         mailBody: "",
-        cc: [],
+        cc1: [],
+        cc2: [],
         selectedItems: selectedRows.map((item, index) => ({
             itemId: item._id,
             itemIMTENo: item.itemIMTENo,
@@ -96,7 +98,7 @@ const HomeMail = () => {
         }
 
     }
-    console.log(vendors)
+   
 
     return (
         <Dialog
@@ -164,16 +166,16 @@ const HomeMail = () => {
                         //variant="standard"
                         />
                     </div>
-                    <div className="col-12 ">
+                    <div className="col-md-6">
                         <FormControl size='small' component="div" fullWidth>
-                            <InputLabel id="ccId">CC.</InputLabel>
+                            <InputLabel id="ccId">Department CC.</InputLabel>
                             <Select
                                 labelId="ccId"
                                 multiple
                                 name="cc1"  // Use a different name for the first Select
                                 value={mailDetails.cc2}
                                 onChange={handleMailChange}
-                                input={<OutlinedInput fullWidth label="CC." />}
+                                input={<OutlinedInput fullWidth label="Department CC." />}
                                 renderValue={(selected) => (
                                     <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
                                         {selected.map((value) => (
@@ -183,24 +185,25 @@ const HomeMail = () => {
                                 )}
                                 fullWidth
                             >
-                                {vendors.vendorContacts.map((venMail, index) => (
-                                    <MenuItem key={index} value={venMail.mailId}>
-                                        <Checkbox checked={mailDetails.cc2.indexOf(venMail.mailId) > -1} />
-                                        <ListItemText primary={venMail.firstName + " - " + venMail.mailId} />
+                                {vendorMails.length > 0 && vendorMails.map((venMail, index) => (
+                                    <MenuItem key={index} value={venMail}>
+                                        <Checkbox checked={mailDetails.cc2.indexOf(venMail) > -1} />
+                                        <ListItemText primary={venMail} />
                                     </MenuItem>
                                 ))}
                             </Select>
                         </FormControl>
-
+                        </div>
+                        <div className='col-md-6'>
                         <FormControl size='small' component="div" fullWidth>
-                            <InputLabel id="ccId">CC.</InputLabel>
+                            <InputLabel id="ccId">Vendor CC.</InputLabel>
                             <Select
                                 labelId="ccId"
                                 multiple
                                 name="cc2"  // Use a different name for the second Select
                                 value={mailDetails.cc1}
                                 onChange={handleMailChange}
-                                input={<OutlinedInput fullWidth label="CC." />}
+                                input={<OutlinedInput fullWidth label="Vendor CC." />}
                                 renderValue={(selected) => (
                                     <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
                                         {selected.map((value) => (
@@ -210,7 +213,7 @@ const HomeMail = () => {
                                 )}
                                 fullWidth
                             >
-                                {mailIds.map((mail, index) => (
+                                {mailIds.length > 0 && mailIds.map((mail, index) => (
                                     <MenuItem key={index} value={mail.mailId}>
                                         <Checkbox checked={mailDetails.cc1.indexOf(mail.mailId) > -1} />
                                         <ListItemText primary={mail.firstName + " - " + mail.mailId} />
