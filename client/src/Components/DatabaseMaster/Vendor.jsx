@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react'
 import axios from 'axios'
 import Autocomplete from '@mui/material/Autocomplete';
-import { TextField, MenuItem, styled, Button, ButtonGroup, Chip, FormControl, OutlinedInput, Fab, Link } from '@mui/material';
+import { TextField, OutlinedInput, Select, styled, Button, ButtonGroup, Chip, Fab, MenuItem, FormControl, InputLabel, ListItemText, Checkbox } from '@mui/material';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import Alert from '@mui/material/Alert';
 import Snackbar from '@mui/material/Snackbar';
@@ -27,10 +27,24 @@ import { CloudDownload, CloudUpload, } from '@mui/icons-material';
 import { useEmployee } from '../../App';
 
 
+
 const Vendor = () => {
 
     const emp = useEmployee();
     const { employee, loggedEmp } = emp;
+
+    const ITEM_HEIGHT = 48;
+    const ITEM_PADDING_TOP = 8;
+    const MenuProps = {
+        PaperProps: {
+            style: {
+                maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
+                width: 250,
+            },
+        },
+    };
+
+
     const [snackBarOpen, setSnackBarOpen] = useState(false)
     const handleSnackClose = (event, reason) => {
         if (reason === 'clickaway') {
@@ -410,36 +424,14 @@ const Vendor = () => {
                 .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
                 .join(' ');
             console.log(formattedValue)
-            // Format the input value (capitalization)
-            // Update the state to show the formatted value
-            setVendorData((prev) => ({ ...prev, [name]: formattedValue })); // Update the state with the formatted value
+           
+            setVendorData((prev) => ({ ...prev, [name]: formattedValue })); 
 
 
         }
     };
 
-    // const handleKeyDownForContacts = (event) => {
-    //     const { name, value } = event.target
-    //     console.log(name)
-    //     if (event.key === 'Tab') {
-    //         // Prevent default Tab behavior
-
-    //         const formattedValue = value.toLowerCase().
-    //             split(' ')
-    //             .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-    //             .join(' ');
-    //         console.log(formattedValue)
-    //         // Format the input value (capitalization)
-    //         // Update the state to show the formatted value
-    //         setVendorData((prevVendorData) => ({
-    //             ...prevVendorData,
-    //             vendorContacts: [{ ...prevVendorData.vendorContacts, [name]: formattedValue }]
-    //         }))
-
-
-    //     }
-    // };
-
+   
 
 
 
@@ -459,10 +451,11 @@ const Vendor = () => {
             customer: params.row.customer ? params.row.customer : "",
             supplier: params.row.supplier ? params.row.supplier : "",
             subContractor: params.row.subContractor ? params.row.subContractor : "",
-            vendorContacts: params.row.vendorContacts.length > 0 ? params.row.vendorContacts : [],
+            vendorContacts: params.row.vendorContacts ? params.row.vendorContacts : "",
             certificate: params.row.certificate ? params.row.certificate : "",
             certificateValidity: params.row.certificateValidity ? params.row.certificateValidity : "",
             vendorStatus: params.row.vendorStatus ? params.row.vendorStatus : "",
+            vendorPlant: params.row.vendorPlant.length > 0 ? params.row.vendorPlant : []
         }))
         setVendorStateId(params.id)
     }
@@ -508,7 +501,7 @@ const Vendor = () => {
         width: 1,
     });
 
-    
+
     const [openModalVendor, setOpenModalVendor] = useState(false);
     const [deleteModalVendor, setDeleteModalVendor] = useState(false);
 
@@ -802,7 +795,7 @@ const Vendor = () => {
 
                                 </div>
 
-                                <div className='col-md-4'>
+                                <div className='col-md-3'>
                                     <div className="col">
                                         <DatePicker
                                             disableFuture
@@ -839,20 +832,27 @@ const Vendor = () => {
 
                                 </div>
                                 <div className='col-md-2'>
-                                    <TextField label="Plant Name"
-                                        {...(errors.address !== "" && { helperText: errors.address, error: true })}
-                                        id="vendorPlantId"
-                                        size="small"
-                                        fullWidth
-                                        select
-                                        value={vendorData.vendorPlant}
-                                        onChange={handleVendorDataBaseChange}
-                                        name="vendorPlant" >
-                                        <MenuItem>Select</MenuItem>
-                                        {loggedEmp.plantDetails.map(plant => (
-                                            <MenuItem value={plant.plantName}>{plant.plantName}</MenuItem>
-                                        ))}
-                                    </TextField>
+                                    <FormControl size='small' component="div" fullWidth>
+                                        <InputLabel id="vendorPlantId">Select Plant</InputLabel>
+                                        <Select
+                                            labelId="vendorPlantId"
+                                            multiple
+                                            name="vendorPlant"  // Use a different name for the first Select
+                                            value={vendorData.vendorPlant}
+                                            onChange={handleVendorDataBaseChange}
+                                            input={<OutlinedInput fullWidth label="Select Plant" />}
+                                            renderValue={(selected) => selected.join(', ')}
+                                            MenuProps={MenuProps}
+                                            fullWidth
+                                        >
+                                            {loggedEmp.plantDetails && loggedEmp.plantDetails.map((plant, index) => (
+                                                <MenuItem key={index} value={plant.plantName}>
+                                                    <Checkbox checked={vendorData.vendorPlant.indexOf(plant.plantName) > -1} />
+                                                    <ListItemText primary={plant.plantName} />
+                                                </MenuItem>
+                                            ))}
+                                        </Select>
+                                    </FormControl>
 
                                 </div>
 
@@ -897,7 +897,7 @@ const Vendor = () => {
 
 
 
-                        <div className="row g-2 mb-3">
+                        <div className="row g-0 mb-3">
 
                             <Paper
                                 sx={{
@@ -1046,7 +1046,7 @@ const Vendor = () => {
                                                     <HighlightOffRounded type="button" onClick={() => RemoveFile()} />
 
                                                 </div>}
-                                            
+
                                         </div>
                                         {vendorData.certificate &&
                                             <Chip
@@ -1083,6 +1083,7 @@ const Vendor = () => {
                             >
                                 <div style={{ maxHeight: "200px", overflow: "auto" }}>
                                     <h6 className='text-center'>Vendor Contacts</h6>
+
                                     <table className='table table-sm table-bordered table-responsive text-center align-middle'>
                                         <tbody>
                                             <tr style={{ fontSize: "14px" }}>

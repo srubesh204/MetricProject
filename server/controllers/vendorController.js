@@ -179,7 +179,7 @@ const vendorController = {
   getAllVendorWithTypes: async (req, res) => {
     try {
       const fetchAllVendors = async () => {
-        return await vendorModel.find();
+        return await vendorModel.find({});
       };
       const fetchVendor = async (category) => {
         return await vendorModel.find({ [category]: "1" });

@@ -15,12 +15,15 @@ import axios from 'axios'
 const HomeMail = () => {
 
     const mailDatas = useContext(HomeContent)
-    const { mailOpen, setMailOpen, selectedRows, mailIds, setErrorHandler, setSnackBarOpen, vendorMails, mailList } = mailDatas
+    const { mailOpen, setMailOpen, selectedRows, mailIds, setErrorHandler, setSnackBarOpen, vendorMails, bccMails, emp,mailList} = mailDatas
 
 
-    console.log(vendorMails)
+    console.log(emp)
+    const bccMailsOnly = bccMails ? bccMails.map(emp => emp.mailId) : []
+    console.log(bccMailsOnly)
 
     useEffect(() => {
+        setMailDetails(prev => ({...prev, to: emp.mailId, bcc: bccMailsOnly}))
         const data = selectedRows.map((item, index) => ({
             itemId: item._id,
             itemIMTENo: item.itemIMTENo,
@@ -41,18 +44,19 @@ const HomeMail = () => {
         to: "",
         subject: "",
         mailBody: "",
-        cc1: [],
-        cc2: []
+        departmentCc: [],
+        vendorCc: [],
 
     }
 
 
     const [mailDetails, setMailDetails] = useState({
-        to: "",
+        to: emp.mailId,
         subject: "",
         mailBody: "",
-        cc1: [],
-        cc2: [],
+        departmentCc: [],
+        vendorCc: [],
+        bcc: [],
         selectedItems: selectedRows.map((item, index) => ({
             itemId: item._id,
             itemIMTENo: item.itemIMTENo,
@@ -126,7 +130,7 @@ const HomeMail = () => {
                             size='small'
                             autoFocus
                             required
-
+                            value={mailDetails.to}
                             id="toId"
                             name="to"
                             label="To"
@@ -140,7 +144,7 @@ const HomeMail = () => {
                         <TextField
                             size='small'
                             required
-
+                            
                             id="subjectId"
                             name="subject"
                             label="Subject"
@@ -181,18 +185,18 @@ const HomeMail = () => {
                     </div>
                     <div className="col-md-6">
                         <FormControl size='small' component="div" fullWidth>
-                            <InputLabel id="ccId">Department CC.</InputLabel>
+                            <InputLabel id="departmentCcId">Department CC.</InputLabel>
                             <Select
-                                labelId="ccId"
+                                labelId="departmentCcId"
                                 multiple
-                                name="cc1"  // Use a different name for the first Select
-                                value={mailDetails.cc2}
+                                name="departmentCc"  // Use a different name for the first Select
+                                value={mailDetails.departmentCc}
                                 onChange={handleMailChange}
                                 input={<OutlinedInput fullWidth label="Department CC." />}
                                 renderValue={(selected) => (
                                     <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
                                         {selected.map((value) => (
-                                            <Chip key={value} label={value} />
+                                            <Chip key={value} size='small' label={value} />
                                         ))}
                                     </Box>
                                 )}
@@ -200,7 +204,7 @@ const HomeMail = () => {
                             >
                                 {vendorMails.length > 0 && vendorMails.map((venMail, index) => (
                                     <MenuItem key={index} value={venMail}>
-                                        <Checkbox checked={mailDetails.cc2.indexOf(venMail) > -1} />
+                                        <Checkbox checked={mailDetails.departmentCc.indexOf(venMail) > -1} />
                                         <ListItemText primary={venMail} />
                                     </MenuItem>
                                 ))}
@@ -209,18 +213,18 @@ const HomeMail = () => {
                     </div>
                     <div className='col-md-6'>
                         <FormControl size='small' component="div" fullWidth>
-                            <InputLabel id="ccId">Vendor CC.</InputLabel>
+                            <InputLabel id="vendorCcId">Vendor CC.</InputLabel>
                             <Select
-                                labelId="ccId"
+                                labelId="vendorCcId"
                                 multiple
-                                name="cc2"  // Use a different name for the second Select
-                                value={mailDetails.cc1}
+                                name="vendorCc"  // Use a different name for the second Select
+                                value={mailDetails.vendorCc}
                                 onChange={handleMailChange}
                                 input={<OutlinedInput fullWidth label="Vendor CC." />}
                                 renderValue={(selected) => (
                                     <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
                                         {selected.map((value) => (
-                                            <Chip key={value} label={value} />
+                                            <Chip key={value} size='small' label={value} />
                                         ))}
                                     </Box>
                                 )}
@@ -228,7 +232,36 @@ const HomeMail = () => {
                             >
                                 {mailIds.length > 0 && mailIds.map((mail, index) => (
                                     <MenuItem key={index} value={mail.mailId}>
-                                        <Checkbox checked={mailDetails.cc1.indexOf(mail.mailId) > -1} />
+                                        <Checkbox checked={mailDetails.vendorCc.indexOf(mail.mailId) > -1} />
+                                        <ListItemText primary={mail.firstName + " - " + mail.mailId} />
+                                    </MenuItem>
+                                ))}
+                            </Select>
+                        </FormControl>
+
+                    </div>
+                    <div className="col">
+                        <FormControl size='small' component="div" fullWidth>
+                            <InputLabel id="bccId">BCC</InputLabel>
+                            <Select
+                                labelId="bccId"
+                                multiple
+                                name="bcc"  // Use a different name for the second Select
+                                value={mailDetails.bcc}
+                                onChange={handleMailChange}
+                                input={<OutlinedInput fullWidth label="BCC" />}
+                                renderValue={(selected) => (
+                                    <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
+                                        {selected.map((value) => (
+                                            <Chip key={value} size='small' label={value} />
+                                        ))}
+                                    </Box>
+                                )}
+                                fullWidth
+                            >
+                                {bccMails && bccMails.map((mail, index) => (
+                                    <MenuItem key={index} value={mail.mailId}>
+                                        <Checkbox checked={mailDetails.bcc.indexOf(mail.mailId) > -1} />
                                         <ListItemText primary={mail.firstName + " - " + mail.mailId} />
                                     </MenuItem>
                                 ))}
