@@ -26,12 +26,18 @@ const TotalPrint = () => {
             padding: 4px 0px;
             text-align: center;
           }
+          
+    @media print {
+      .print-page-break {
+          page-break-before: always;
+      }
+  }
           .footer {
               position: fixed;
               bottom: 0;
               left: 0;
               width: 100%;
-              height: 50px; /* Set the height based on your footer height */
+              height: 10px; /* Set the height based on your footer height */
               font-size: 6px;
           }
         `,
@@ -49,7 +55,7 @@ const TotalPrint = () => {
 
     const renderTableRows = () => {
         return filteredItemListData.map((row, index) => (
-            <tr key={index.toString()}>
+            <tr key={index.toString()} className={index % 25 === 0 ? "print-page-break" : ""}>
                 <td style={{ width: '5%', border: '0.5px solid black', fontSize: '10px', textAlign: 'center' }}>{index + 1}</td>
                 <td style={{ width: '10%', border: '0.5px solid black', fontSize: '10px', textAlign: 'center' }}>{row.itemIMTENo}</td>
                 <td style={{ width: '13%', border: '0.5px solid black', fontSize: '10px', textAlign: 'center' }}> {row.itemAddMasterName}</td>
@@ -70,11 +76,7 @@ const TotalPrint = () => {
     const Footer = (data) => {
         return (
           <tr className="footer">
-            <td style={{ height: '80px', fontSize: '12px' }}>
-              <div style={{ display: 'flex', flexDirection: 'row', height: '10px' }}>
                 <div style={{ position: 'absolute', fontSize: '8px' }}>Format Number: {formatNoData && formatNoData.fTotalList?.frNo}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;     Amendment No.: {formatNoData && formatNoData.fTotalList?.amNo}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;     Amendment Date.: {formatNoData && formatNoData.fTotalList?.amDate}</div>
-              </div>
-            </td>
           </tr>
         );
       };
@@ -89,21 +91,21 @@ const TotalPrint = () => {
                     <thead>
                         <tr>
                             <th style={{ width: '5%', border: '0.5px solid black', fontSize: '10px', textAlign: 'center' }}>Si. No</th>
-                            <th style={{ width: '10%', border: '0.5px solid black', fontSize: '10px', textAlign: 'center' }}>IMTE No</th>
-                            <th style={{ width: '15%', border: '0.5px solid black', fontSize: '10px', textAlign: 'center' }}>Description</th>
-                            <th style={{ width: '5%', border: '0.5px solid black', fontSize: '10px', textAlign: 'center' }}>Range/Size</th>
+                            <th style={{ width: '9%', border: '0.5px solid black', fontSize: '10px', textAlign: 'center' }}>IMTE No</th>
+                            <th style={{ width: '10%', border: '0.5px solid black', fontSize: '10px', textAlign: 'center' }}>Description</th>
+                            <th style={{ width: '13%', border: '0.5px solid black', fontSize: '10px', textAlign: 'center' }}>Range/Size</th>
                             <th style={{ width: '7%', border: '0.5px solid black', fontSize: '10px', textAlign: 'center' }}>ItemLC</th>
                             <th style={{ width: '5%', border: '0.5px solid black', fontSize: '10px', textAlign: 'center' }}>Make</th>
-                            <th style={{ width: '6%', border: '0.5px solid black', fontSize: '10px', textAlign: 'center' }}>Cal Date</th>
-                            <th style={{ width: '6%', border: '0.5px solid black', fontSize: '10px', textAlign: 'center' }}>Due Date</th>
+                            <th style={{ width: '7%', border: '0.5px solid black', fontSize: '10px', textAlign: 'center' }}>Cal Date</th>
+                            <th style={{ width: '7%', border: '0.5px solid black', fontSize: '10px', textAlign: 'center' }}>Due Date</th>
                             <th style={{ width: '5%', border: '0.5px solid black', fontSize: '10px', textAlign: 'center' }}>Frequency</th>
-                            <th style={{ width: '10%', border: '0.5px solid black', fontSize: '10px', textAlign: 'center' }}>Current location</th>
-                            <th style={{ width: '20%', border: '0.5px solid black', fontSize: '10px', textAlign: 'center' }}>Callbration Source</th>
+                            <th style={{ width: '8%', border: '0.5px solid black', fontSize: '10px', textAlign: 'center' }}>Current location</th>
+                            <th style={{ width: '18%', border: '0.5px solid black', fontSize: '10px', textAlign: 'center' }}>Callbration Source</th>
                         </tr>
                     </thead>
                     <tbody>{renderTableRows()}</tbody>
                 </table>
-            <tfoot>{Footer({ value: formatNoData })}</tfoot>
+            <tfoot>{Footer()}</tfoot>
             </div>
             </div>
         )}

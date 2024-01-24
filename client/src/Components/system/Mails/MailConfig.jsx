@@ -1,6 +1,8 @@
 import React, { createContext, useEffect, useState, useContext } from 'react'
-import { Container, Box, Alert, Button, Dialog, DialogActions, DialogContent, InputLabel, DialogContentText, FormControl, Select, DialogTitle, OutlinedInput, FormControlLabel, IconButton, MenuItem, Paper, Checkbox, ListItemText, Snackbar, Switch, TextField, Chip } from '@mui/material';
+import { Container, Box, Alert, Button, Dialog, DialogActions, DialogContent, Fab, InputLabel, DialogContentText, FormControl, Select, DialogTitle, OutlinedInput, FormControlLabel, IconButton, MenuItem, Paper, Checkbox, ListItemText, Snackbar, Switch, TextField, Chip } from '@mui/material';
 import { Add, Close, Delete, CloudUpload, Edit, Done } from '@mui/icons-material';
+import { Remove, HighlightOffRounded } from '@mui/icons-material';
+
 import axios from 'axios'
 
 
@@ -26,11 +28,8 @@ const MailConfig = () => {
         portNumber: "",
         inMailServer: "",
         outMailServer: "",
-        mailContent: [{
-            Content: "",
-            body: "",
-            subject: ""
-        }]
+        mailSubjects: ""
+
 
     }
     const [isEditable, setIsEditable] = useState(false)
@@ -40,23 +39,20 @@ const MailConfig = () => {
         portNumber: "",
         inMailServer: "",
         outMailServer: "",
-        mailContent: [{
-            content: "",
-            body: "",
-            subject: ""
-        }]
+        mailSubjects: [],
+        mailBodies: [],
+
 
     })
     console.log(mailData)
 
-    // const[mailDetails,setMailDetails]= useState[]
-
-    const [mailConfig, setMailConfig] = useState({
-        content: "",
-        subject: ""
+    const [mailDetails, setMailDetails] = useState({
+       mailContent: "",
+        mailSubject: ""
     })
 
-
+    
+    
 
     const mailFetchData = async () => {
         try {
@@ -87,6 +83,12 @@ const MailConfig = () => {
     const handleMailChange = (e) => {
         const { name, value } = e.target;
         setMailData((prev) => ({ ...prev, [name]: value }));
+
+
+    }
+    const handleMailChanges = (e) => {
+        const { name, value } = e.target;
+        setMailDetails((prev) => ({ ...prev, [name]: value }));
 
 
     }
@@ -129,8 +131,41 @@ const MailConfig = () => {
     };
 
 
+    const addMailDataRow = () => {
+        setMailData((prevMailData) => ({
+            ...prevMailData,
+            mailSubjects: [...prevMailData.mailSubjects, { subject: "" }]
+        }))
+    }
+   
+    const addMailDataContentRow = () => {
+        setMailDetails((prevMailData) => ({
+            ...prevMailData,
+            mailBodies: [...prevMailData.mailBodies, { content: "" }]
+        }));
+    };
 
 
+
+    const deleteMailRow = (index) => {
+        setMailDetails((prevMailData) => {
+            const updateCP = [...prevMailData.mailSubjects]
+            updateCP.splice(index, 1);
+            return {
+                ...prevMailData, mailSubjects: updateCP,
+            };
+        })
+    };
+
+    const deleteMailContentRow = (index) => {
+        setMailData((prevMailData) => {
+            const updateCP = [...prevMailData.mailBodies]
+            updateCP.splice(index, 1);
+            return {
+                ...prevMailData, mailBodies: updateCP,
+            };
+        })
+    };
 
 
 
@@ -264,32 +299,29 @@ const MailConfig = () => {
                                     size="small"
                                     // disabled={!isEditable}
                                     onChange={handleMailChange}
-                                    value={mailConfig.content}
+                                    value={mailDetails.mailContent}
                                     sx={{ width: "100%" }}
                                     name="mailContent" />
                             </div>
-                            <div className='col d-felx d-flex justify-content-end'>
-                           
-                            <Button size='small'  color='warning'  sx={{ minWidth: "130px" }} variant='contained' >Add</Button>
-                            </div>
-
-
-
+                             <div className='col d-flex justify-content-end'>
+                               
+                                 <Button size='small' color='warning' sx={{ minWidth: "130px" }} onClick={() => addMailDataContentRow(true)} variant='contained'>Add </Button>
+                            </div> 
                         </div>
                         <div className="row mb-2">
                             <div className='col'>
                                 <TextField label="Subject"
-                                    id="subjectId"
+                                    id="mailSubjectId"
                                     size="small"
                                     // disabled={!isEditable}
                                     onChange={handleMailChange}
-                                    value={mailConfig.subject}
+                                    value={mailDetails.mailSubject}
                                     sx={{ width: "100%" }}
-                                    name="subject" />
+                                    name="mailSubject" />
                             </div>
-                            <div className='col d-felx d-flex justify-content-end'>
-                            <Button  size='small' color='warning'  sx={{ minWidth: "130px" }} variant='contained'>Add </Button>
-                            </div>
+                             <div className='col d-felx d-flex justify-content-end'>
+                                <Button size='small' color='warning' sx={{ minWidth: "130px" }} onClick={() => addMailDataRow(true)} variant='contained'>Add </Button>
+                            </div> 
 
 
                         </div>
@@ -301,18 +333,25 @@ const MailConfig = () => {
                                         <tr style={{ fontSize: "14px" }}>
                                             <th width={"5%"}>Sr.No</th>
                                             <th width={"25%"}>Mail Content</th>
+                                            <th width={"25%"} >Delete</th>
 
-                                            {/* <th width={"10%"}> <Fab size='small' color="primary" aria-label="add" onClick={() => addVendorDataRow()}>
-                                            <Add />
-                                        </Fab></th> */}
+                                             
                                         </tr>
-                                        {mailConfig.mailContent ? mailConfig.mailContent.map((item, index) => (
-                                            <tr>
+                                        {mailData.mailBodies ? mailData.mailBodies.map((item, index) => (
+                                            <tr key={index}>
                                                 <td>{index + 1}</td>
-                                                <td>{item.content}</td>
+                                                <td>{item.subject}</td>
+
+                                                <td style={{ padding: 0, margin: 0 }}>
+                                                    <Fab size='small' sx={{ m: 0, p: 0 }} color="error" aria-label="add" onClick={() => deleteMailContentRow(index)}>
+                                                        <Remove sx={{ m: 0, p: 0 }} />
+                                                    </Fab></td>
+
 
                                             </tr>
                                         )) : <tr></tr>}
+
+
                                     </tbody>
                                 </table>
 
@@ -323,15 +362,22 @@ const MailConfig = () => {
                                         <tr style={{ fontSize: "14px" }}>
                                             <th width={"5%"}>Sr.No</th>
                                             <th width={"25%"}>Mail Subject</th>
+                                            <th width={"25%"} >Delete</th>
 
                                             {/* <th width={"10%"}> <Fab size='small' color="primary" aria-label="add" onClick={() => addVendorDataRow()}>
                                             <Add />
                                         </Fab></th> */}
                                         </tr>
-                                        {mailConfig.mailContent ? mailConfig.mailContent.map((item, index) => (
-                                            <tr>
+
+
+                                        {mailData.mailSubjects ? mailData.mailSubjects.map((item, index) => (
+                                            <tr key={index}>
                                                 <td>{index + 1}</td>
                                                 <td>{item.subject}</td>
+                                                <td style={{ padding: 0, margin: 0 }}>
+                                                    <Fab size='small' sx={{ m: 0, p: 0 }} color="error" aria-label="add" onClick={() => deleteMailRow(index)}>
+                                                        <Remove sx={{ m: 0, p: 0 }} />
+                                                    </Fab></td>
 
                                             </tr>
                                         )) : <tr></tr>}
