@@ -27,24 +27,21 @@ const vendorSchema = new mongoose.Schema({
   certificate: String,
   certificateValidity: String,
   vendorStatus: String,
-  // vendorContacts: [{
-  //   name: String,
-  //   contactNumber: {
-  //     type: Number,
-  //     // required: [true, "Vendor Contact number is must"],
-  //     minLength: [10, "Vendor Contact should be within 10 digits"],
-  //     maxLength: [10, "Vendor Contact should not more than 10 digits"]
-
-  //   },
-  //   mailId: {
-  //     type: String,
-  //     // unique: [true, "Vendor Email should be unique"],
-  //     // required: [true, "Email Required"],
-  //     lowercase: true
-
-  //   },
-  //   vcStatus: String
-  // }] 
+  vendorContacts: [{
+    name: String,
+    contactNumber: {
+      type: Number,
+    },
+    mailId: {
+      type: String,
+      lowercase: true
+    },
+    vcStatus: String
+  }] ,
+  vendorPlant: {
+    type: [],
+    required: [true, "Vendor Plant required"]
+  }
 });
 vendorSchema.plugin(uniqueValidator);
 vendorSchema.plugin(mongooseSequence, { inc_field: 'vendorId', });

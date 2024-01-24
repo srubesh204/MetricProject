@@ -119,21 +119,16 @@ const CalDueReport = () => {
 
 
     ];
-    const [itemId, setItemId] = useState("")
-    const [showDialog, setShowDialog] = useState(false);
+    
     const [itemListSelectedRowIds, setItemListSelectedRowIds] = useState([])
     
-    const handleRowClick = async (params) => {
-        if (itemListSelectedRowIds.length > 0) {
-
-            setShowDialog(true);
-        } else {
-
-            setItemId(params.id);
-
-            setItemListSelectedRowIds([params.id]);
-        }
-    };
+    const handleRowSelectionChange = (newSelection) => {
+        const selectedRowsData = filteredItemListData.filter((row) => newSelection.includes(row._id));
+        setItemListSelectedRowIds(selectedRowsData);
+        
+    
+    
+      };
 
     
 
@@ -164,7 +159,6 @@ const CalDueReport = () => {
                 setFilteredItemListData(itemType)
                 setFilterAllNames(prev => ({
                     ...prev,
-
                     itemType: value,
                     currentLocation: "all",
                     customerWise: "all",
@@ -625,21 +619,14 @@ const CalDueReport = () => {
                                             "marginBottom": "1em"
                                         }
                                     }}
-                                    onRowSelectionModelChange={(newRowSelectionModel, event) => {
-                                        setItemListSelectedRowIds(newRowSelectionModel);
-
-
-                                    }}
-
+                                    onRowSelectionModelChange={handleRowSelectionChange}
+                                    disableDensitySelector
                                     slots={{
                                         toolbar: GridToolbar,
                                     }}
-
                                     density="compact"
                                     //disableColumnMenu={true}
-
                                     checkboxSelection
-                                    onRowClick={handleRowClick}
                                     disableRowSelectionOnClick
                                     pageSizeOptions={[5]}
                                 />

@@ -15,9 +15,9 @@ const vendorController = {
   createVendor: async (req, res) => {
 
     try {
-      const { vendorCode, aliasName, fullName, dor, address, state, city, oem, customer, supplier, subContractor, certificate, certificateValidity, vendorStatus, vendorContacts } = req.body;
+      const { vendorCode, aliasName, fullName, dor, address, state, city, oem, customer, supplier, subContractor, certificate, certificateValidity, vendorStatus, vendorContacts, vendorPlant } = req.body;
 
-      const vendorResult = new vendorModel({ vendorCode, aliasName, fullName, dor, address, state, city, oem, customer, supplier, subContractor, certificate, certificateValidity, vendorStatus, vendorContacts });
+      const vendorResult = new vendorModel({ vendorCode, aliasName, fullName, dor, address, state, city, oem, customer, supplier, subContractor, certificate, certificateValidity, vendorStatus, vendorContacts, vendorPlant });
 
       const validationError = vendorResult.validateSync();
 
@@ -61,7 +61,7 @@ const vendorController = {
       // }
 
       // Create an object with the fields you want to update
-      const { vendorCode, aliasName, fullName, dor, address, state, city, oem, customer, supplier, subContractor, certificate, certificateValidity, vendorStatus, vendorContacts } = req.body;
+      const { vendorCode, aliasName, fullName, dor, address, state, city, oem, customer, supplier, subContractor, certificate, certificateValidity, vendorStatus, vendorContacts, vendorPlant } = req.body;
 
       const updateVendorFields = {
         vendorCode,
@@ -78,8 +78,8 @@ const vendorController = {
         certificate,
         certificateValidity,
         vendorStatus,
-        vendorContacts
-
+        vendorContacts,
+        vendorPlant
         // Add more fields as needed
       };
 
