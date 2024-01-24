@@ -143,7 +143,7 @@ const mailConfigController = {
       // if (isNaN(desId)) {
       // Find the designation by desId and update it
       const getMailConfigById = await mailConfigModel.findOne(
-          { _id: mailConfigId }// To return the updated document
+          { mailFixedId : mailConfigId }// To return the updated document
       );
 
       if (!getMailConfigById) {
