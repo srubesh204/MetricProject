@@ -15,7 +15,7 @@ import axios from 'axios'
 const HomeMail = () => {
 
     const mailDatas = useContext(HomeContent)
-    const { mailOpen, setMailOpen, selectedRows, mailIds, setErrorHandler, setSnackBarOpen, vendorMails } = mailDatas
+    const { mailOpen, setMailOpen, selectedRows, mailIds, setErrorHandler, setSnackBarOpen, vendorMails, mailList } = mailDatas
 
 
     console.log(vendorMails)
@@ -98,7 +98,7 @@ const HomeMail = () => {
         }
 
     }
-   
+
 
     return (
         <Dialog
@@ -145,10 +145,18 @@ const HomeMail = () => {
                             name="subject"
                             label="Subject"
                             type="text"
+                            select
                             fullWidth
                             onChange={handleMailChange}
+
                         //variant="standard"
-                        />
+                        >
+                            {mailList.length > 0 && mailList[0].mailSubjects.map((item, index) => (
+                                <MenuItem key={index} value={item}>{item}</MenuItem>
+                            ))}
+                        </TextField>
+
+
                     </div>
                     <div >
                         <TextField
@@ -161,10 +169,15 @@ const HomeMail = () => {
                             id="mailBodyId"
                             name="mailBody"
                             label="Body"
+                            select
                             type="text"
                             fullWidth
                         //variant="standard"
-                        />
+                        >
+                            {mailList.length > 0 && mailList[0].mailBodies.map((item, index) => (
+                                <MenuItem key={index} value={item}>{item}</MenuItem>
+                            ))}
+                        </TextField>
                     </div>
                     <div className="col-md-6">
                         <FormControl size='small' component="div" fullWidth>
@@ -193,8 +206,8 @@ const HomeMail = () => {
                                 ))}
                             </Select>
                         </FormControl>
-                        </div>
-                        <div className='col-md-6'>
+                    </div>
+                    <div className='col-md-6'>
                         <FormControl size='small' component="div" fullWidth>
                             <InputLabel id="ccId">Vendor CC.</InputLabel>
                             <Select

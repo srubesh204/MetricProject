@@ -1071,6 +1071,30 @@ const Home = () => {
 
 
 
+  const [mailList, setMailList] = useState([])
+  const getMailList = async () => {
+      try {
+          const response = await axios.get(
+              `${process.env.REACT_APP_PORT}/mailConfig/getAllMailConfig`
+          );
+          console.log(response.data.result)
+          setMailList(response.data.result)
+
+
+      } catch (err) {
+          console.log(err);
+      }
+  };
+
+  useEffect(() => {
+    getMailList();
+  }, []);
+
+
+
+
+
+
   useEffect(() => {
     setStatusCheckMsg("");
     const grnBoolean = selectedRows.every(item => item.dcStatus === "1")
@@ -1231,7 +1255,7 @@ const Home = () => {
       <LocalizationProvider dateAdapter={AdapterDayjs}>
 
 
-        <div className="row gx-3 m-3" >
+        <div className="row gx-3 mx-3 my-2" >
           <div className="col-md-4">
             <Paper sx={{ p: 2 }} elevation={12}>
               <Stack direction="row"
@@ -1570,8 +1594,8 @@ const Home = () => {
 
                     {StatusCheckMsg !== "" && <Chip icon={<Error />} color='error' label={StatusCheckMsg} />}
                   </div>
-                  <div className="col-md-3">
-                    <Button component={Link} to="/itemmaster" size='small' className='me-2'>Item Master</Button>
+                  <div className="col-md-2">
+                    <Button component={Link} to="/itemmaster" size='small' className='me-1'>Item Master</Button>
                     <Button component={Link} to="/itemList" size='small'>Item Entry</Button>
                   </div>
                 </div>}
@@ -1694,7 +1718,7 @@ const Home = () => {
                 </HomeContent.Provider>
 
                 <HomeContent.Provider
-                  value={{ mailOpen, setMailOpen, selectedRows, mailIds, setErrorHandler, setSnackBarOpen, vendorMails}}
+                  value={{ mailOpen, setMailOpen, selectedRows, mailIds, setErrorHandler, setSnackBarOpen, vendorMails,mailList}}
                 >
                   <HomeMail />
                 </HomeContent.Provider>
