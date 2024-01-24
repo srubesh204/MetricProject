@@ -164,6 +164,8 @@ const Home = () => {
 
   console.log(allDepartments)
 
+  const [vendorMails, setVendorMails] = useState([])
+
   const getVendorsByType = async () => {
     try {
       const getAllVendorWithTypes = await axios.get(
@@ -171,6 +173,8 @@ const Home = () => {
       );
       console.log(getAllVendorWithTypes)
       setVendors(getAllVendorWithTypes.data.result.allVendors)
+      const contactDetails = [...new Set(getAllVendorWithTypes.data.result.allVendors.flatMap(item => item.vendorContacts.map(contact => contact.mailId)))];
+      setVendorMails(contactDetails)
       setCustomers([
         { aliasName: "All" },
         ...getAllVendorWithTypes.data.result.customers.map(customer => ({ ...customer }))
@@ -1690,7 +1694,7 @@ const Home = () => {
                 </HomeContent.Provider>
 
                 <HomeContent.Provider
-                  value={{ mailOpen, setMailOpen, selectedRows, mailIds, setErrorHandler, setSnackBarOpen, vendors}}
+                  value={{ mailOpen, setMailOpen, selectedRows, mailIds, setErrorHandler, setSnackBarOpen, vendorMails}}
                 >
                   <HomeMail />
                 </HomeContent.Provider>
