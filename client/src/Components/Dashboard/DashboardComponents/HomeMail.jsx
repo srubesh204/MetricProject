@@ -23,7 +23,7 @@ const HomeMail = () => {
     console.log(bccMailsOnly)
 
     useEffect(() => {
-        setMailDetails(prev => ({ ...prev, to: emp.mailId, bcc: bccMailsOnly }))
+        setMailDetails(prev => ({ ...prev, to: emp.mailId, bcc: bccMailsOnly, employee: {...emp} }))
         const data = selectedRows.map((item, index) => ({
             itemId: item._id,
             itemIMTENo: item.itemIMTENo,
@@ -46,12 +46,13 @@ const HomeMail = () => {
         mailBody: "",
         departmentCc: [],
         vendorCc: [],
+        employee: {}
 
     }
 
 
     const [mailDetails, setMailDetails] = useState({
-        to: emp.mailId,
+        to: "",
         subject: "",
         mailBody: "",
         departmentCc: [],
@@ -69,7 +70,8 @@ const HomeMail = () => {
             itemLastLocation: item.itemLastLocation,
             itemCalibrationSource: item.itemCalibrationSource,
             itemSupplier: item.itemSupplier
-        }))
+        })),
+        employee: {}
     })
 
     const handleMailChange = (e) => {

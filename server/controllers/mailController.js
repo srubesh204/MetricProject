@@ -16,7 +16,7 @@ const transporter1 = nodemailer.createTransport({
 
 const mailController = {
     mailSender: async (req, res) => {
-        const { to, subject, mailBody, departmentCc, vendorCc, bcc , selectedItems } = req.body;
+        const { to, subject, mailBody, departmentCc, vendorCc, bcc , selectedItems, employee } = req.body;
         console.log(selectedItems)
         // Mapping the selectedItems array to HTML rows
         const itemsRows = selectedItems.map((item, index) => `
@@ -63,7 +63,11 @@ const mailController = {
             </style>
 
             <body style="margin:0;padding:0;">
+            <p>Dear Sir/Madam,</p>
                 <p>${mailBody}</p>
+                </p>Thanks with Regards</p>
+                <p>${employee.firstName ? employee.firstName : ""} ${employee.lastName ? employee.lastName : ""} - ${employee.designation ? employee.designation : ""}</p>
+                <p></p>
                 <table role="presentation" style="width:100%; border-collapse:collapse; border: 1px solid black; border-spacing:0; background:#ffffff;">
                     <tbody>
                         <tr>
@@ -81,6 +85,7 @@ const mailController = {
                         
                     </tbody>
                 </table>
+                
             </body>
             </html>`,
             cc: [...new Set(...departmentCc, ...vendorCc)],
