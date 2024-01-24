@@ -68,7 +68,9 @@ const MailConfig = () => {
                 portNumber: mail.portNumber,
                 inMailServer: mail.inMailServer,
                 outMailServer: mail.outMailServer,
-                mailContent: mail.mailContent
+                mailSubjects: mail.mailSubjects,
+                mailBodies: mail.mailBodies
+
             }));
         } catch (err) {
             console.log(err);
