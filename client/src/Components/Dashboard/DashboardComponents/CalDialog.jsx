@@ -70,8 +70,8 @@ const CalDialog = () => {
         calItemMFRNo: "",
         calLC: "",
         calItemMake: "",
-        calItemTemperature: "",
-        calItemHumidity: "",
+        calItemTemperature: "20±2°c",
+        calItemHumidity: "30+75%",
         calItemUncertainity: "",
         calItemSOPNo: "",
         calStandardRef: "",
@@ -112,9 +112,9 @@ const CalDialog = () => {
         calItemMFRNo: "",
         calLC: "",
         calItemMake: "",
-        calItemTemperature: "",
-        calItemHumidity: "",
-        calItemUncertainity: "",
+        calItemTemperature: "20±2°C",
+        calItemHumidity: "30% to 75%", 
+        calItemUncertainity:"",
         calItemSOPNo: "",
         calStandardRef: "",
         calOBType: "",
@@ -1602,7 +1602,7 @@ const CalDialog = () => {
             </DialogContent>
             <DialogActions className='d-flex justify-content-between'>
                 <div>
-                    <Button variant='contained' color='warning' className='me-3'>Upload Report</Button>
+                   
                 </div>
                 <div>
                     <Button variant='contained' color='error' className='me-3' onClick={() => { setCalOpen(false) }}>Cancel</Button>

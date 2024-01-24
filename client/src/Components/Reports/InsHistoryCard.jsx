@@ -394,14 +394,14 @@ function InsHistoryCard() {
 
                                     <TextField className="me-2" label="Instrument Name" size="small" onChange={handleCalDetails} select name="calInsName" value={calDetails.calInsName} fullWidth >
                                         <MenuItem value="all">All</MenuItem >
-                                         {/* {distItemName.map((cal) => (
+                                          {distItemName.map((cal) => (
                                             <MenuItem value={cal}>{cal}</MenuItem >
-                                        ))}  */}
-                                         {itemNameList.map((item, index) => (
+                                        ))}  
+                                         {/* {itemNameList.map((item, index) => (
                                             <MenuItem key={index} value={item}>
                                                 {item}
                                             </MenuItem>
-                                        ))} 
+                                        ))}  */}
 
                                     </TextField>
 
