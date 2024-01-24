@@ -7,6 +7,7 @@ import { useState, useEffect, useContext, createContext } from "react";
 import axios from 'axios';
 import dayjs from 'dayjs';
 import { DisabledByDefault, FileOpen, Pages, PrintRounded } from '@mui/icons-material';
+import { useEmployee } from "../../App";
 
 import HistoryCardPrint from './HistoryCardPrint';
 import { Link } from "react-router-dom";
@@ -25,6 +26,9 @@ function InsHistoryCard() {
     const [toDate, setToDate] = useState(null);
     const [selectedRow, setSelectedRow] = useState([]);
     const [printState, setPrintState] = useState(false)
+
+    const empRole = useEmployee()
+    const { employee, loggedEmp } = empRole
 
 
     const [historyCardPrintOpen, setHistoryCardPrintOpen] = useState(false);
@@ -97,11 +101,40 @@ function InsHistoryCard() {
         calData();
     }, []);
 
+    const [itemPlantList, setItemPlantList] = useState([])
+    const ItemFetch = async () => {
+        try {
+            const response = await axios.get(
+                `${process.env.REACT_APP_PORT}/itemAdd/getAllItemAdds`
+            );
+            console.log(response.data.result)
+            const plantItems = response.data.result.filter(item => (loggedEmp.plantDetails.map(plant => plant.plantName).includes(item.itemPlant) && item.dcStatus !== "1"))
+            console.log(plantItems)
+            setItemPlantList(plantItems);
+            // setItemDepartment(plantItems)
+
+        } catch (err) {
+            console.log(err);
+        }
+    };
+    useEffect(() => {
+        ItemFetch()
+    }, []);
+
     console.log(itemCalList)
     console.log(selectedIMTEs)
-
+    const [itemNameList, setItemNameList] = useState([])
     const handleCalDetails = (e) => {
         const { name, value } = e.target;
+        if (name === "hisPlant") {
+            // Set the selected itemPlant in state
+            // setDcAddData ((prev) => ({ ...prev, dcPlant: value }));
+            const plantItems = itemPlantList.filter(item => item.itemPlant === value)
+            const distinctItemNames = [... new Set(plantItems.map(item => item.itemAddMasterName))]
+            setItemNameList(distinctItemNames)
+            console.log(distinctItemNames)
+        }
+
 
 
         if (name === "calInsName") {
@@ -268,6 +301,25 @@ function InsHistoryCard() {
 
     console.log(selectedRow[0])
 
+    const [departments, setDepartments] = useState([])
+    const DepartmentFetch = async () => {
+        try {
+            const response = await axios.get(
+                `${process.env.REACT_APP_PORT}/department/getAllDepartments`
+            );
+            const defaultDepartment = response.data.result.filter((dep) => dep.defaultdep === "yes")
+            setDepartments(defaultDepartment);
+
+            console.log(response.data)
+        } catch (err) {
+            console.log(err);
+        }
+    };
+    //get Designations
+    useEffect(() => {
+        DepartmentFetch()
+    }, []);
+
 
 
     const handlePrintClick = () => {
@@ -302,11 +354,54 @@ function InsHistoryCard() {
                             <div className="row g-2 mb-2">
                                 <div className="col-md-4 d-flex">
 
+                                    <TextField label="Plant Wise"
+                                        className="me-2"
+                                        id="hisPlantId"
+
+                                        select
+                                        // value={dcAddData.dcPlant}
+                                        fullWidth
+                                        // onChange={handleDcItemAdd}
+                                        size="small"
+                                        name="hisPlant" >
+                                        <MenuItem value="">Select</MenuItem>
+                                        {loggedEmp.plantDetails.map((item, index) => (
+                                            <MenuItem key={index} value={item.plantName}>{item.plantName}</MenuItem>
+                                        ))}
+                                    </TextField>
+
+                                    <TextField label="Default Location "
+                                        id="hisDepartmentId"
+                                        className="me-2"
+                                        select
+                                        defaultValue="all"
+                                        // value={filterAllNames.currentLocation}
+                                        fullWidth
+                                        // onChange={handleFilterChange}
+                                        size="small"
+                                        name="hisDepartment" >
+                                        <MenuItem value="all">All</MenuItem>
+                                        {departments.map((item, index) => (
+                                            <MenuItem key={index} value={item.department}>{item.department}</MenuItem>
+                                        ))}
+
+
+                                    </TextField>
+
+
+
+
+
                                     <TextField className="me-2" label="Instrument Name" size="small" onChange={handleCalDetails} select name="calInsName" value={calDetails.calInsName} fullWidth >
                                         <MenuItem value="all">All</MenuItem >
-                                        {distItemName.map((cal) => (
+                                         {/* {distItemName.map((cal) => (
                                             <MenuItem value={cal}>{cal}</MenuItem >
-                                        ))}
+                                        ))}  */}
+                                         {itemNameList.map((item, index) => (
+                                            <MenuItem key={index} value={item}>
+                                                {item}
+                                            </MenuItem>
+                                        ))} 
 
                                     </TextField>
 

@@ -422,9 +422,51 @@ const ItemMaster = () => {
 
     const updateItemMaster = async (params) => {
         console.log(params)
-        setItemMasterData(params.row)
+        setItemMasterData(prev =>({
+            ...prev,
+            itemType: params.row.itemType ? params.row.itemType: "",
+            itemDescription: params.row.itemDescription ? params.row.itemDescription: "",
+            itemPrefix: params.row.itemPrefix ? params.row.itemPrefix:"",
+            itemFqInMonths: params.row.itemFqInMonths ? params.row.itemFqInMonths: "",
+            calAlertInDay: params.row.calAlertInDay ? params.row.calAlertInDay:"",
+            SOPNo: params.row.SOPNo ? params.row.SOPNo: "",
+            uncertainty: params.row.uncertainty ? params.row.uncertainty: "",
+            uncertaintyUnit:params.row.uncertaintyUnit ? params.row.uncertaintyUnit:  "",
+            standardRef: params.row.standardRef ? params.row.standardRef: "",
+            itemMasterImage: params.row.itemMasterImage ? params.row.itemMasterImage: "",
+            workInsName: params.row.workInsName ? params.row.workInsName:"",
+            status: params.row.status ? params.row.status: "",
+            calibrationPoints: params.row.calibrationPoints ? params.row.calibrationPoints:[],
+
+        }))
         setItemMasterStateId(params.id)
     }
+
+
+    // const handleSetEmp = (params) => {
+    //     console.log(params)
+    //     setEmployeeData(prev =>({
+    //         ...prev,
+    //         employeeCode: params.row.employeeCode ? params.row. employeeCode : "",
+    //         title: params.row.title ? params.row. title : "",
+    //         firstName: params.row.firstName ? params.row.title:"",
+    //         lastName :params.row.lastName ? params.row.lastName:"",
+    //         dob:params.row.dob ? params.row.dob:"",
+    //         address: params.row.address? params.row.address:"",
+    //         city: params.row.city ? params.row.city:"",
+    //         state: params.row.state? params.row.state:"",
+    //         contactNumber: params.row.contactNumber ? params.row.contactNumber:"",
+    //         designation: params.row.designation ? params.row.designation:"",
+    //         plantDetails: params.row.plantDetails ? params.row.plantDetails:[],
+    //         mailId: params.row.mailId ? params.row.mailId:"",
+    //         doj: params.row.doj ? params.row.doj:"",
+    //         employmentStatus: params.row.employmentStatus ? params.row.employmentStatus: "",
+    //         reportTo: params.row.reportTo? params.row.reportTo:"",
+    //         empRole: params.row.empRole? params.row.empRole:"",
+    //         password: params.row.password? params.row.password:"",
+    //     }))
+    //     setEmpDataId(params.id)
+    // }
 
 
 

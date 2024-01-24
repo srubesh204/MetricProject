@@ -377,10 +377,10 @@ const MailConfig = () => {
                         <div className='row' >
 
                             <div className='col-4'>
-                                <table className='table table-sm table-bordered table-responsive text-center align-middle' >
+                                <table className='table table-sm table-bordered table-responsive  align-middle'>
                                     <tbody>
                                         <tr style={{ fontSize: "14px" }}>
-                                            <th width={"5%"}>Sr.No</th>
+                                            <th>Sr.No</th>
                                             <th width={"25%"}>Subject</th>
                                             <th>Delete</th>
 
@@ -391,14 +391,11 @@ const MailConfig = () => {
 
 
                                         {mailData.mailSubjects ? mailData.mailSubjects.map((item, index) => (
-                                            <tr key={index}>
-                                                <td>{index + 1}</td>
+                                            <tr key={index} style={{fontSize: "12px",textAlign:"left"}}>
+                                                <td  style={{ width: "2%" }}>{index + 1}</td>
                                                 <td>{item}</td>
-                                                {/* <td style={{ padding: 0, margin: 0 }}>
-                                                    <Fab size='small' sx={{ m: 0, p: 0 }} color="error" aria-label="add" onClick={() => deleteMailRow(index)}>
-                                                        <Remove sx={{ m: 0, p: 0 }} />
-                                                    </Fab></td> */}
-                                                <td style={{ width: "2%" }}><Button size='small' color="error" disabled={!isEditable} aria-label="add" onClick={() => deleteMailRow(index)}>
+                                                
+                                                <th style={{ width: "2%" }}><Button size='small' color="error" aria-label="add" onClick={() => deleteMailRow(index)}>
                                                     <Delete />
                                                 </Button></td>
 
@@ -409,27 +406,23 @@ const MailConfig = () => {
 
                             </div>
                             <div className='col'>
-                                <table className='table table-sm table-bordered table-responsive text-center align-middle'>
+                                <table className='table table-sm table-bordered table-responsive  align-middle'>
                                     <tbody>
-                                        <tr style={{ fontSize: "14px" }}>
-                                            <th width={"5%"}>Sr.No</th>
+                                        <tr style={{ fontSize: "14px" }} >
+                                            <th>Sr.No</th>
                                             <th width={"25%"}>Content</th>
                                             <th>Delete</th>
 
 
                                         </tr>
                                         {mailData.mailBodies ? mailData.mailBodies.map((item, index) => (
-                                            <tr key={index}>
-                                                <td>{index + 1}</td>
-                                                <td>{item}</td>
+                                            <tr  key={index} style={{fontSize: "12px",textAlign:"left"}}>
+                                                <td style={{ width: "2%" }}>{index + 1}</td>
+                                                <td >{item}</td>
 
-                                                {/* <td style={{ padding: 0, margin: 0 }}>
-                                                    <Fab size='small' sx={{ m: 0, p: 0 }} color="error" aria-label="add" onClick={() => deleteMailContentRow(index)}>
-                                                        <Remove sx={{ m: 0, p: 0 }} />
-                                                    </Fab></td> */}
-                                                <th style={{ width: "2%" }}><Button size='small' color="error" aria-label="add" disabled={!isEditable} onClick={() => deleteMailContentRow(index)}>
+                                                <td style={{ width: "2%" }}><Button size='small' color="error" aria-label="add" onClick={() => deleteMailContentRow(index)}>
                                                     <Delete />
-                                                </Button></th>
+                                                </Button></td>
 
 
                                             </tr>

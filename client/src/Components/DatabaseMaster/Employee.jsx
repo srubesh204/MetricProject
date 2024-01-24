@@ -296,17 +296,34 @@ const Employee = () => {
 
     const handleSetEmp = (params) => {
         console.log(params)
-        setEmployeeData(params.row)
+        setEmployeeData(prev =>({
+            ...prev,
+            employeeCode: params.row.employeeCode ? params.row. employeeCode : "",
+            title: params.row.title ? params.row. title : "",
+            firstName: params.row.firstName ? params.row.title:"",
+            lastName :params.row.lastName ? params.row.lastName:"",
+            dob:params.row.dob ? params.row.dob:"",
+            address: params.row.address? params.row.address:"",
+            city: params.row.city ? params.row.city:"",
+            state: params.row.state? params.row.state:"",
+            contactNumber: params.row.contactNumber ? params.row.contactNumber:"",
+            designation: params.row.designation ? params.row.designation:"",
+            plantDetails: params.row.plantDetails ? params.row.plantDetails:[],
+            mailId: params.row.mailId ? params.row.mailId:"",
+            doj: params.row.doj ? params.row.doj:"",
+            employmentStatus: params.row.employmentStatus ? params.row.employmentStatus: "",
+            reportTo: params.row.reportTo? params.row.reportTo:"",
+            empRole: params.row.empRole? params.row.empRole:"",
+            password: params.row.password? params.row.password:"",
+        }))
         setEmpDataId(params.id)
     }
+
+
 
     const getRowClassName = (params) => {
         return params.id === empDataId ? 'selected-row' : '';
     };
-
-
-
-
 
     console.log(employeeData)
     const Alert = React.forwardRef(function Alert(props, ref) {
