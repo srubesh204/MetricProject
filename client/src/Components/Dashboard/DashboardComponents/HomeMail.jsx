@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react'
+import React, { Fragment, useContext, useEffect, useState } from 'react'
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
@@ -6,7 +6,7 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import { HomeContent } from '../Home';
-import { Box, Checkbox, Chip, CircularProgress, FormControl, InputLabel, ListItemText, MenuItem, OutlinedInput, Select, TextField } from '@mui/material';
+import { Box, Checkbox, Chip, CircularProgress, FormControl, InputLabel, ListItemText, ListSubheader, MenuItem, OutlinedInput, Select, TextField } from '@mui/material';
 import { Send } from '@mui/icons-material';
 import axios from 'axios'
 
@@ -15,15 +15,15 @@ import axios from 'axios'
 const HomeMail = () => {
 
     const mailDatas = useContext(HomeContent)
-    const { mailOpen, setMailOpen, selectedRows, mailIds, setErrorHandler, setSnackBarOpen, vendorMails, bccMails, emp} = mailDatas
+    const { mailOpen, setMailOpen, selectedRows, mailIds, setErrorHandler, setSnackBarOpen, vendors, bccMails, emp } = mailDatas
 
 
-    console.log(emp)
+    console.log(vendors)
     const bccMailsOnly = bccMails ? bccMails.map(emp => emp.mailId) : []
     console.log(bccMailsOnly)
 
     useEffect(() => {
-        setMailDetails(prev => ({...prev, to: emp.mailId, bcc: bccMailsOnly}))
+        setMailDetails(prev => ({ ...prev, to: emp.mailId, bcc: bccMailsOnly }))
         const data = selectedRows.map((item, index) => ({
             itemId: item._id,
             itemIMTENo: item.itemIMTENo,
@@ -74,6 +74,11 @@ const HomeMail = () => {
 
     const handleMailChange = (e) => {
         const { name, value } = e.target;
+        console.log(name, value)
+
+        if(name === "vendorCc"){
+            console.log(value)
+        }
         if (name === "cc") {
             setMailDetails((prev) => ({ ...prev, [name]: typeof value === 'string' ? value.split(',') : value }));
         } else {
@@ -144,7 +149,7 @@ const HomeMail = () => {
                         <TextField
                             size='small'
                             required
-                            
+
                             id="subjectId"
                             name="subject"
                             label="Subject"
@@ -189,10 +194,10 @@ const HomeMail = () => {
                                 )}
                                 fullWidth
                             >
-                                {vendorMails.length > 0 && vendorMails.map((venMail, index) => (
-                                    <MenuItem key={index} value={venMail}>
-                                        <Checkbox checked={mailDetails.departmentCc.indexOf(venMail) > -1} />
-                                        <ListItemText primary={venMail} />
+                                {mailIds.length > 0 && mailIds.map((mail, index) => (
+                                    <MenuItem key={index} value={mail.mailId}>
+                                        <Checkbox checked={mailDetails.departmentCc.indexOf(mail.mailId) > -1} />
+                                        <ListItemText primary={mail.firstName + " - " + mail.mailId} />
                                     </MenuItem>
                                 ))}
                             </Select>
@@ -200,7 +205,7 @@ const HomeMail = () => {
                     </div>
                     <div className='col-md-6'>
                         <FormControl size='small' component="div" fullWidth>
-                            <InputLabel id="vendorCcId">Vendor CC.</InputLabel>
+                            <InputLabel  id="vendorCcId">Vendor CC.</InputLabel>
                             <Select
                                 labelId="vendorCcId"
                                 multiple
@@ -210,19 +215,30 @@ const HomeMail = () => {
                                 input={<OutlinedInput fullWidth label="Vendor CC." />}
                                 renderValue={(selected) => (
                                     <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
-                                        {selected.map((value) => (
+                                        {selected.map((value) => { 
+                                            console.log(selected)
+                                            return(
                                             <Chip key={value} size='small' label={value} />
-                                        ))}
+                                        )})}
                                     </Box>
                                 )}
                                 fullWidth
                             >
-                                {mailIds.length > 0 && mailIds.map((mail, index) => (
-                                    <MenuItem key={index} value={mail.mailId}>
-                                        <Checkbox checked={mailDetails.vendorCc.indexOf(mail.mailId) > -1} />
-                                        <ListItemText primary={mail.firstName + " - " + mail.mailId} />
-                                    </MenuItem>
-                                ))}
+
+                                {vendors.length > 0 && vendors.map((venMail, index) => (
+                                    [
+                                        
+                                            <ListSubheader>{venMail.aliasName}</ListSubheader>,
+                                            venMail.vendorContacts.map((contact, inx) => (
+                                                <MenuItem key={inx} value={contact.mailId}>
+                                                    <Checkbox checked={mailDetails.vendorCc.indexOf(contact.mailId) > -1} />
+                                                    <ListItemText size="small" primary={contact.name+ " - "+ contact.mailId} />
+                                                </MenuItem>
+                                            ))
+
+                                      
+                                    ])
+                                )}
                             </Select>
                         </FormControl>
 

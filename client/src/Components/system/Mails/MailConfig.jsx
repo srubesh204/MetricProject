@@ -332,7 +332,7 @@ const MailConfig = () => {
                                 //variant="standard"
                                 />
                                 <div className='text-end mt-2' >
-                                    <Button size='small' color='warning' onClick={() => addSubjectDataRow(true)} variant='contained'>Add </Button>
+                                    <Button size='small' color='warning' disabled={!isEditable} onClick={() => addSubjectDataRow(true)} variant='contained'>Add </Button>
                                 </div>
                             </div>
                             <div className='col'>
@@ -374,10 +374,10 @@ const MailConfig = () => {
                         </div> */}
 
 
-                        <div className='row'>
+                        <div className='row' >
 
                             <div className='col-4'>
-                                <table className='table table-sm table-bordered table-responsive text-center align-middle'>
+                                <table className='table table-sm table-bordered table-responsive text-center align-middle' >
                                     <tbody>
                                         <tr style={{ fontSize: "14px" }}>
                                             <th width={"5%"}>Sr.No</th>
@@ -398,9 +398,9 @@ const MailConfig = () => {
                                                     <Fab size='small' sx={{ m: 0, p: 0 }} color="error" aria-label="add" onClick={() => deleteMailRow(index)}>
                                                         <Remove sx={{ m: 0, p: 0 }} />
                                                     </Fab></td> */}
-                                                <th style={{ width: "2%" }}><Button size='small' color="error" aria-label="add" onClick={() => deleteMailRow(index)}>
+                                                <td style={{ width: "2%" }}><Button size='small' color="error" disabled={!isEditable} aria-label="add" onClick={() => deleteMailRow(index)}>
                                                     <Delete />
-                                                </Button></th>
+                                                </Button></td>
 
                                             </tr>
                                         )) : <tr></tr>}
@@ -427,7 +427,7 @@ const MailConfig = () => {
                                                     <Fab size='small' sx={{ m: 0, p: 0 }} color="error" aria-label="add" onClick={() => deleteMailContentRow(index)}>
                                                         <Remove sx={{ m: 0, p: 0 }} />
                                                     </Fab></td> */}
-                                                <th style={{ width: "2%" }}><Button size='small' color="error" aria-label="add" onClick={() => deleteMailContentRow(index)}>
+                                                <th style={{ width: "2%" }}><Button size='small' color="error" aria-label="add" disabled={!isEditable} onClick={() => deleteMailContentRow(index)}>
                                                     <Delete />
                                                 </Button></th>
 

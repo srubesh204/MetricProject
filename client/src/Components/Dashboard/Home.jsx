@@ -180,12 +180,12 @@ const Home = () => {
       console.log(getAllVendorWithTypes)
       
 
-      const allPlantVendors = getAllVendorWithTypes.data.result.allVendors.filter(ven => employeeRole.loggedEmp.plantDetails.find(plant => ven.vendorPlant.includes(plant)))
-      const allPlantCustomers = getAllVendorWithTypes.data.result.customers.filter(ven => employeeRole.loggedEmp.plantDetails.find(plant => ven.vendorPlant.includes(plant)))
-      const allPlantSubContractors = getAllVendorWithTypes.data.result.subContractors.filter(ven => employeeRole.loggedEmp.plantDetails.find(plant => ven.vendorPlant.includes(plant)))
-      const allPlantSuppliers = getAllVendorWithTypes.data.result.suppliers.filter(ven => employeeRole.loggedEmp.plantDetails.find(plant => ven.vendorPlant.includes(plant)))
-      const allPlantOems = getAllVendorWithTypes.data.result.oems.filter(ven => employeeRole.loggedEmp.plantDetails.find(plant => ven.vendorPlant.includes(plant)))
-
+      const allPlantVendors = getAllVendorWithTypes.data.result.allVendors.filter(ven => employeeRole.loggedEmp.plantDetails.find(plant => ven.vendorPlant.includes(plant.plantName)))
+      const allPlantCustomers = getAllVendorWithTypes.data.result.customers.filter(ven => employeeRole.loggedEmp.plantDetails.find(plant => ven.vendorPlant.includes(plant.plantName)))
+      const allPlantSubContractors = getAllVendorWithTypes.data.result.subContractors.filter(ven => employeeRole.loggedEmp.plantDetails.find(plant => ven.vendorPlant.includes(plant.plantName)))
+      const allPlantSuppliers = getAllVendorWithTypes.data.result.suppliers.filter(ven => employeeRole.loggedEmp.plantDetails.find(plant => ven.vendorPlant.includes(plant.plantName)))
+      const allPlantOems = getAllVendorWithTypes.data.result.oems.filter(ven => employeeRole.loggedEmp.plantDetails.find(plant => ven.vendorPlant.includes(plant.plantName)))
+      console.log(allPlantVendors)
       const contactDetails = [...new Set(getAllVendorWithTypes.data.result.allVendors.flatMap(item => item.vendorContacts.map(contact => contact.mailId)))];
 
       setVendors(allPlantVendors)
@@ -1716,7 +1716,7 @@ const Home = () => {
                 </HomeContent.Provider>
 
                 <HomeContent.Provider
-                  value={{ mailOpen, setMailOpen, selectedRows, mailIds, setErrorHandler, setSnackBarOpen, vendorMails, bccMails, emp: employeeRole.loggedEmp}}
+                  value={{ mailOpen, setMailOpen, selectedRows, mailIds, setErrorHandler, setSnackBarOpen, vendors, bccMails, emp: employeeRole.loggedEmp}}
                 >
                   <HomeMail />
                 </HomeContent.Provider>
