@@ -118,6 +118,8 @@ const Home = () => {
 
 
   const [selectedPlantName, setSelectedPlantName] = useState("")
+
+  const [bccMails, setBccMails] = useState([])
   const empFetch = async () => {
     try {
       const response = await axios.get(
@@ -129,7 +131,11 @@ const Home = () => {
       const viewers = response.data.result.filter(emp => emp === "viewer")
 
 
-
+      const plantemps = response.data.result.filter(emp => emp.plantDetails.find(empPlant => employeeRole.loggedEmp.plantDetails.map(plant=> plant.plantName).includes(empPlant.plantName)))
+      const adminsList = plantemps.filter(emp => emp.empRole ==="admin" || emp.empRole ==="plantAdmin")
+      const uniqueList = [...new Set(adminsList)]
+      console.log(adminsList)
+      setBccMails(uniqueList)
       setActiveEmps((prev) => ({ ...prev, allEmps: response.data.result, admins: admins, plantAdmins: plantAdmins, creators: creators, viewers: viewers }))
 
     } catch (err) {
@@ -172,16 +178,25 @@ const Home = () => {
         `${process.env.REACT_APP_PORT}/vendor/getAllVendorWithTypes`
       );
       console.log(getAllVendorWithTypes)
-      setVendors(getAllVendorWithTypes.data.result.allVendors)
+      
+
+      const allPlantVendors = getAllVendorWithTypes.data.result.allVendors.filter(ven => employeeRole.loggedEmp.plantDetails.find(plant => ven.vendorPlant.includes(plant)))
+      const allPlantCustomers = getAllVendorWithTypes.data.result.customers.filter(ven => employeeRole.loggedEmp.plantDetails.find(plant => ven.vendorPlant.includes(plant)))
+      const allPlantSubContractors = getAllVendorWithTypes.data.result.subContractors.filter(ven => employeeRole.loggedEmp.plantDetails.find(plant => ven.vendorPlant.includes(plant)))
+      const allPlantSuppliers = getAllVendorWithTypes.data.result.suppliers.filter(ven => employeeRole.loggedEmp.plantDetails.find(plant => ven.vendorPlant.includes(plant)))
+      const allPlantOems = getAllVendorWithTypes.data.result.oems.filter(ven => employeeRole.loggedEmp.plantDetails.find(plant => ven.vendorPlant.includes(plant)))
+
       const contactDetails = [...new Set(getAllVendorWithTypes.data.result.allVendors.flatMap(item => item.vendorContacts.map(contact => contact.mailId)))];
+
+      setVendors(allPlantVendors)
       setVendorMails(contactDetails)
       setCustomers([
         { aliasName: "All" },
-        ...getAllVendorWithTypes.data.result.customers.map(customer => ({ ...customer }))
+        ...allPlantCustomers.map(customer => ({ ...customer }))
       ]);
-      setOems(getAllVendorWithTypes.data.result.oems)
-      setSubContractors(getAllVendorWithTypes.data.result.subContractors)
-      setSuppliers(getAllVendorWithTypes.data.result.suppliers)
+      setOems(allPlantOems)
+      setSubContractors(allPlantSubContractors)
+      setSuppliers(allPlantSuppliers)
 
     } catch (err) {
       console.log(err);
@@ -917,8 +932,7 @@ const Home = () => {
   }
 
   const customerFilter = (name, value) => {
-    setSelectedFilterName(name)
-    setSelectedFilterValue(value)
+    
     console.log(name, value)
     const filter = plantWiseList.filter((item) =>
       item.itemPartName.some((partData) => partData.customer === value)
@@ -960,9 +974,17 @@ const Home = () => {
     ])
   }
 
+  const [filterNames, setFilterNames] = useState({
+    itemIMTENo: "All",
+    itemType: "All",
+    itemAddMasterName: "All",
+    customer: "All"
+  })
+
   const MainFilter = (newValue, extraName) => {
 
     console.log(newValue, extraName)
+    setFilterNames(prev => ({...prev, [extraName]: newValue}))
     if (newValue === "All") {
 
       itemLocationFun()
@@ -1178,7 +1200,7 @@ const Home = () => {
       setMailOpen(true)
 
     } else {
-      setStatusCheckMsg("Select one plant only for sending mails")
+      setStatusCheckMsg("Select any one plant to send mails")
     }
 
 
@@ -1269,6 +1291,7 @@ const Home = () => {
                     options={itemDistinctIMTEs}
                     size='small'
                     fullWidth
+                    value={filterNames.itemIMTENo}
                     onInputChange={(e, newValue) => MainFilter(newValue, "itemIMTENo")}
                     name="itemIMTENo"
                     defaultValue="All"
@@ -1276,12 +1299,12 @@ const Home = () => {
                     renderInput={(params) => <TextField {...params} label="IMTE No" />}
                   />}
 
-                <TextField select onChange={(e) => MainFilter(e.target.value, "itemAddMasterName")} fullWidth size='small' value={selectedFilterName === 'itemAddMasterName' ? selectedFilterValue : 'All'} name='itemAddMasterName' label="Item Description">
+                <TextField select onChange={(e) => MainFilter(e.target.value, "itemAddMasterName")} fullWidth size='small' value={filterNames.itemAddMasterName} name='itemAddMasterName' label="Item Description">
                   <MenuItem value="All">All</MenuItem>
                   {itemDistinctNames.length > 0 && itemDistinctNames.map((item, index) => <MenuItem key={index} value={item}>{item}</MenuItem>)}
                 </TextField>
 
-                <TextField select onChange={(e) => MainFilter(e.target.value, "itemType")} fullWidth size='small' value={selectedFilterName === 'itemType' ? selectedFilterValue : 'All'} name='itemType' label="Item Type">
+                <TextField select onChange={(e) => MainFilter(e.target.value, "itemType")} fullWidth size='small' value={filterNames.itemType} name='itemType' label="Item Type">
                   <MenuItem value="All">All</MenuItem>
                   <MenuItem value="variable">Variable</MenuItem>
                   <MenuItem value="attribute">Attribute</MenuItem>
@@ -1292,17 +1315,16 @@ const Home = () => {
 
                 <Autocomplete
                   disablePortal
-                  defaultValue="All"
+                  
                   id="combo-box-demo"
-                  options={customers}
+                  options={customers.length > 0 ? customers : []}
                   size='small'
                   fullWidth
                   onInputChange={(e, newValue) => MainFilter(newValue, "customer")}
                   name="customer"
-                  getOptionLabel={(customers) => customers.aliasName}
-                  // onChange={(e, newValue) => MainFilter(e,newValue, "customer") }
-
-                  renderInput={(params) => <TextField {...params} label="Customer" name='customer' />}
+                  value={filterNames.customer}
+                  getOptionLabel={(cus) => cus.aliasName}
+                  renderInput={(params) => <TextField {...params} label="Customer" name='customer'/>}
                   disableClearable
                 />
 
@@ -1694,7 +1716,7 @@ const Home = () => {
                 </HomeContent.Provider>
 
                 <HomeContent.Provider
-                  value={{ mailOpen, setMailOpen, selectedRows, mailIds, setErrorHandler, setSnackBarOpen, vendorMails}}
+                  value={{ mailOpen, setMailOpen, selectedRows, mailIds, setErrorHandler, setSnackBarOpen, vendorMails, bccMails, emp: employeeRole.loggedEmp}}
                 >
                   <HomeMail />
                 </HomeContent.Provider>
