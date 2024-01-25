@@ -17,6 +17,10 @@ import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
 import Autocomplete from '@mui/material/Autocomplete';
 import { Box, Grid, Paper, IconButton, ButtonGroup, Container } from '@mui/material';
 import dayjs from 'dayjs';
+import { Add, ArrowBack,Error, HomeMax, House, Mail, MailLock,  } from '@mui/icons-material';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import { Link as RouterLink } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { DataGrid, GridToolbar } from '@mui/x-data-grid';
 import { CheckBox, Delete, Edit, OtherHouses, Visibility, VisibilityOff } from '@mui/icons-material';
 import { CloudDownload, CloudUpload, } from '@mui/icons-material';
@@ -159,19 +163,19 @@ const Employee = () => {
             width: 150,
             renderCell: (params) => {
                 const uniqueDepartments = Array.from(
-                  new Set(params.row.plantDetails.flatMap((plant) => plant.departments))
+                    new Set(params.row.plantDetails.flatMap((plant) => plant.departments))
                 );
-              
+
                 return (
-                  <span>
-                    {uniqueDepartments.join(', ')}
-                  </span>
+                    <span>
+                        {uniqueDepartments.join(', ')}
+                    </span>
                 );
-              },
+            },
             // valueOptions: Array.from(uniqueDepartments),
         },
         { field: 'empRole', headerName: 'Role', width: 150, headerAlign: "center", align: "center" },
-       // { field: 'reportTo', headerName: 'Report To', width: 100, headerAlign: "center", align: "center", },
+        // { field: 'reportTo', headerName: 'Report To', width: 100, headerAlign: "center", align: "center", },
 
 
     ];
@@ -201,7 +205,7 @@ const Employee = () => {
         } else {
             if (name === "departmentFilter") {
                 const departmentFilter = employeeList.filter((emp) => (
-                   emp.plantDetails.find(plant => plant.departments.includes(value))
+                    emp.plantDetails.find(plant => plant.departments.includes(value))
                 ));
                 setFilteredData(departmentFilter)
                 setFilterAllNames(prev => ({
@@ -296,25 +300,25 @@ const Employee = () => {
 
     const handleSetEmp = (params) => {
         console.log(params)
-        setEmployeeData(prev =>({
+        setEmployeeData(prev => ({
             ...prev,
-            employeeCode: params.row.employeeCode ? params.row. employeeCode : "",
-            title: params.row.title ? params.row. title : "",
-            firstName: params.row.firstName ? params.row.title:"",
-            lastName :params.row.lastName ? params.row.lastName:"",
-            dob:params.row.dob ? params.row.dob:"",
-            address: params.row.address? params.row.address:"",
-            city: params.row.city ? params.row.city:"",
-            state: params.row.state? params.row.state:"",
-            contactNumber: params.row.contactNumber ? params.row.contactNumber:"",
-            designation: params.row.designation ? params.row.designation:"",
-            plantDetails: params.row.plantDetails ? params.row.plantDetails:[],
-            mailId: params.row.mailId ? params.row.mailId:"",
-            doj: params.row.doj ? params.row.doj:"",
-            employmentStatus: params.row.employmentStatus ? params.row.employmentStatus: "",
-            reportTo: params.row.reportTo? params.row.reportTo:"",
-            empRole: params.row.empRole? params.row.empRole:"",
-            password: params.row.password? params.row.password:"",
+            employeeCode: params.row.employeeCode ? params.row.employeeCode : "",
+            title: params.row.title ? params.row.title : "",
+            firstName: params.row.firstName ? params.row.title : "",
+            lastName: params.row.lastName ? params.row.lastName : "",
+            dob: params.row.dob ? params.row.dob : "",
+            address: params.row.address ? params.row.address : "",
+            city: params.row.city ? params.row.city : "",
+            state: params.row.state ? params.row.state : "",
+            contactNumber: params.row.contactNumber ? params.row.contactNumber : "",
+            designation: params.row.designation ? params.row.designation : "",
+            plantDetails: params.row.plantDetails ? params.row.plantDetails : [],
+            mailId: params.row.mailId ? params.row.mailId : "",
+            doj: params.row.doj ? params.row.doj : "",
+            employmentStatus: params.row.employmentStatus ? params.row.employmentStatus : "",
+            reportTo: params.row.reportTo ? params.row.reportTo : "",
+            empRole: params.row.empRole ? params.row.empRole : "",
+            password: params.row.password ? params.row.password : "",
         }))
         setEmpDataId(params.id)
     }
@@ -1373,19 +1377,19 @@ const Employee = () => {
                                                 {item.department}
                                             </MenuItem>
                                         ))}
-                                        
+
                                     </TextField>
                                 </Grid>
 
 
-                               
+
                                 <Grid item xs={2}>
-                                   
-                                       
+
+
 
                                 </Grid>
 
-                                
+
                             </Grid>
                             <div>
                                 <div style={{ height: 300, width: '100%' }}>
@@ -1409,15 +1413,15 @@ const Employee = () => {
                                         }}
                                         slots={{
                                             toolbar: () => (
-                                              <div className='d-flex justify-content-between align-items-center'>
-                                                <GridToolbar />
-                                                <div>
-                                                {employeeSelectedRowIds.length !== 0 && <Button variant='contained' size='small' component="button" fullWidth type='button' color='error' onClick={() => handleDeleteOpen(true)}>Delete  Employee</Button>}
+                                                <div className='d-flex justify-content-between align-items-center'>
+                                                    <GridToolbar />
+                                                    <div>
+                                                        {employeeSelectedRowIds.length !== 0 && <Button variant='contained' size='small' component="button" fullWidth type='button' color='error' onClick={() => handleDeleteOpen(true)}>Delete  Employee</Button>}
+                                                    </div>
+
                                                 </div>
-                        
-                                              </div>
                                             ),
-                                          }}
+                                        }}
                                         onRowSelectionModelChange={(newRowSelectionModel, event) => {
                                             setEmployeeSelectedRowIds(newRowSelectionModel);
                                             console.log(event)
@@ -1427,7 +1431,7 @@ const Employee = () => {
                                         disableRowSelectionOnClick
                                         density="compact"
                                         checkboxSelection
-                                        
+
                                         pageSizeOptions={[5]}
                                     >
 
@@ -1465,6 +1469,7 @@ const Employee = () => {
 
 
                             </div>
+                            
                         </Paper>
                     </Grid>
 

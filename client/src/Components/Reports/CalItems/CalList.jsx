@@ -7,6 +7,11 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DataGrid, GridToolbar } from '@mui/x-data-grid';
 import dayjs from 'dayjs';
 import { Container, Paper } from '@mui/material';
+import { Add, Remove, HighlightOffRounded } from '@mui/icons-material';
+import {ArrowBack,Error, HomeMax, House, Mail, MailLock,  } from '@mui/icons-material';
+
+
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { Edit, EditRounded, PrintRounded } from '@mui/icons-material';
 import isSameOrAfter from 'dayjs/plugin/isSameOrAfter'
 import isSameOrBefore from 'dayjs/plugin/isSameOrBefore'
@@ -532,18 +537,18 @@ const CalList = () => {
 
                                     slots={{
                                         toolbar: () => (
-                                          <div className='d-flex justify-content-between align-items-center'>
-                                            <GridToolbar />
-                                            <div className='mt-2'>
-                                            {calListSelectedRowIds.length !== 0 &&  <Button variant='contained' type='button' size='small' color='error' onClick={() => setDeleteModalItem(true)}> Delete </Button>}
-                                            
-                                       
-                                   
+                                            <div className='d-flex justify-content-between align-items-center'>
+                                                <GridToolbar />
+                                                <div className='mt-2'>
+                                                    {calListSelectedRowIds.length !== 0 && <Button variant='contained' type='button' size='small' color='error' onClick={() => setDeleteModalItem(true)}> Delete </Button>}
+
+
+
+                                                </div>
+
                                             </div>
-                    
-                                          </div>
                                         ),
-                                      }}
+                                    }}
 
                                     density="compact"
                                     //disableColumnMenu={true}
@@ -568,6 +573,7 @@ const CalList = () => {
                                 <div className='me-2 '>
                                     <button type="button" className='btn btn-secondary' >Lable With BarCode Print</button>
                                 </div>
+                                
 
                             </div>
                             {employeeRole && employeeRole.employee !== "viewer" &&
@@ -576,7 +582,15 @@ const CalList = () => {
                                     <div className='me-2 '>
                                         <button type="button" className='btn btn-success' onClick={() => setCalAddOpen(true)}>Add</button>
                                     </div>
-                                    
+                                    <div className='me-2'>
+                                    <Button component={Link} to={`/home`}  variant="contained" size='small' color="warning">
+                                        <ArrowBackIcon /> Dash board
+                                    </Button>
+                                </div>
+                                <div >
+                                    <Button component={Link} to="/" size='small' variant='contained' startIcon={<ArrowBack />} endIcon={<House />} color='secondary'>Home</Button>
+                                </div>
+
 
 
                                 </div>}

@@ -8,7 +8,7 @@ import { DataGrid, GridToolbar } from '@mui/x-data-grid';
 import { Container, Paper } from '@mui/material';
 import { Edit, FilterAlt, Pages, PictureAsPdf, Print, PrintRounded } from '@mui/icons-material';
 import AddIcon from '@mui/icons-material/Add';
-import { Link as RouterLink } from 'react-router-dom';
+
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
@@ -18,6 +18,11 @@ import Alert from '@mui/material/Alert';
 import Snackbar from '@mui/material/Snackbar';
 import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
 import dayjs from 'dayjs';
+import { Add, Remove, HighlightOffRounded } from '@mui/icons-material';
+import {ArrowBack,Error, HomeMax, House, Mail, MailLock,  } from '@mui/icons-material';
+import { Link as RouterLink } from 'react-router-dom';
+
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 
 import DcEdit from './DcEdit';
 import DcAdd from './DcAdd';
@@ -80,7 +85,7 @@ const DcList = () => {
                 `${process.env.REACT_APP_PORT}/itemDc/getAllItemDc`
 
             );
-            const plantDc = response.data.result.filter(dc => (loggedEmp.plantDetails.map(plant => plant.plantName).includes(dc.dcPlant)) )
+            const plantDc = response.data.result.filter(dc => (loggedEmp.plantDetails.map(plant => plant.plantName).includes(dc.dcPlant)))
             setDcDataDcList(plantDc);
             setFilteredData(plantDc);
 
@@ -132,7 +137,7 @@ const DcList = () => {
 
 
 
-   
+
     const [vendorDataList, setVendorDataList] = useState([])
     const [vendorFullList, setVendorFullList] = useState([])
     const [vendorTypeList, setVendorTypeList] = useState([])
@@ -192,7 +197,7 @@ const DcList = () => {
     const [dcListDataList, setDcListDataList] = useState([])
 
 
-    
+
 
     useEffect(() => {
         const filteredItems = dcDataDcList.filter((item) => dayjs(item.dcDate).isSameOrAfter(dateData.fromDate) && dayjs(item.dcDate).isSameOrBefore(dateData.toDate))
@@ -603,7 +608,7 @@ const DcList = () => {
                                             <div className='d-flex justify-content-between align-items-center'>
                                                 <GridToolbar />
                                                 <div className='mt-2'>
-                                                {itemListSelectedRowIds.length !== 0 &&  <Button variant='contained' type='button' size='small' color='error' onClick={() => setDeleteModalItem(true)}> Delete </Button>}
+                                                    {itemListSelectedRowIds.length !== 0 && <Button variant='contained' type='button' size='small' color='error' onClick={() => setDeleteModalItem(true)}> Delete </Button>}
                                                 </div>
 
                                             </div>
@@ -676,9 +681,24 @@ const DcList = () => {
                         </div>
                         <div className='row'>
                             <div className='col d-flex '>
-                                <div className='me-2 '>
+                                {/* <div className='me-2 '>
                                     <button type="button" className='btn btn-secondary' >Print</button>
+                                </div> */}
+                                <div className='row'>
+                                    <div className='col d-flex justify-content-end'>
+                                        <div className='me-2'>
+                                            <Button component={Link} to={`/home`}  variant="contained" size='small' color="warning">
+                                                <ArrowBackIcon /> Dash board
+                                            </Button>
+                                        </div>
+                                        <div >
+                                            <Button component={Link} to="/" size='small' variant='contained' startIcon={<ArrowBack />} endIcon={<House />} color='secondary'>Home</Button>
+                                        </div>
+                                    </div>
+
+
                                 </div>
+
 
                             </div>
                             <div className='col d-flex justify-content-end'>
@@ -689,7 +709,7 @@ const DcList = () => {
                                             <AddIcon /> New Dc
                                         </Button>
                                     </div>
-                                   </React.Fragment>
+                                </React.Fragment>
                                 }
 
                                 <Dialog

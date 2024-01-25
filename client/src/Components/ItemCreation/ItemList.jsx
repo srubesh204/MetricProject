@@ -22,6 +22,7 @@ import { Link as RouterLink } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import isSameOrAfter from 'dayjs/plugin/isSameOrAfter'
 import isSameOrBefore from 'dayjs/plugin/isSameOrBefore'
+import { Add, ArrowBack,Error, HomeMax, House, Mail, MailLock,  } from '@mui/icons-material';
 import { useEmployee } from '../../App';
 import styled from "@emotion/styled";
 import { CloudDownload, CloudUpload, Delete,Send } from '@mui/icons-material';
@@ -862,15 +863,17 @@ const ItemList = () => {
                     >
                         <div className='row g-2  '>
                             <div className='row d-flex'>
-                                <div className='col-2'>
+                                <div className='col-3 d-flex'>
                                     <div className='me-2'>
                                         <Button component={Link} to={`/home`} variant="contained" size='small' color="warning">
-                                            <ArrowBackIcon /> Dashboard
+                                            <ArrowBackIcon /> Dash board
                                         </Button>
-
+                                    </div>
+                                    <div >
+                                        <Button component={Link} to="/" size='small' variant='contained' startIcon={<ArrowBack />} endIcon={<House />} color='secondary'>Home</Button>
                                     </div>
                                 </div>
-                                <div className='col-8'>
+                                <div className='col-7'>
                                     {dueDate === "Date" && <div className='col d-flex justify-content-end mb-2 g-2'>
                                         <div className="me-2 col-2 ">
                                             <DatePicker
