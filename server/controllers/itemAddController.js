@@ -639,7 +639,7 @@ const itemAddController = {
         item.itemReceiptDate = dayjs(item.itemReceiptDate).format("YYYY-MM-DD")
         item.itemLocation = item.itemLocation ?  (item.itemLocation).toLowerCase() : "department"
         item.itemStatus = item.itemStatus ? (item.itemStatus).toLowerCase() : "active"
-        item.itemItemMasterIMTENo = item.itemItemMasterIMTENo.split(",")
+        item.itemItemMasterIMTENo = item.itemItemMasterIMTENo ? item.itemItemMasterIMTENo.split(",") : ""
        
         
         return item;
