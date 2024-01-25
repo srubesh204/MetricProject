@@ -24,8 +24,9 @@ const HomeMail = () => {
 
    
 
+
     useEffect(() => {
-        setMailDetails(prev => ({ ...prev, to: emp.mailId, bcc: bccMailsOnly, employee: {...emp} }))
+        setMailDetails(prev => ({ ...prev, to: emp.mailId, bcc: bccMailsOnly, employee: { ...emp } }))
         const data = selectedRows.map((item, index) => ({
             itemId: item._id,
             itemPlant: item.itemPlant,
@@ -81,7 +82,7 @@ const HomeMail = () => {
         const { name, value } = e.target;
         console.log(name, value)
 
-        if(name === "vendorCc"){
+        if (name === "vendorCc") {
             console.log(value)
         }
         if (name === "cc") {
@@ -223,7 +224,7 @@ const HomeMail = () => {
                     </div>
                     <div className='col-md-6'>
                         <FormControl size='small' component="div" fullWidth>
-                            <InputLabel  id="vendorCcId">Vendor CC.</InputLabel>
+                            <InputLabel id="vendorCcId">Vendor CC.</InputLabel>
                             <Select
                                 labelId="vendorCcId"
                                 multiple
@@ -233,11 +234,12 @@ const HomeMail = () => {
                                 input={<OutlinedInput fullWidth label="Vendor CC." />}
                                 renderValue={(selected) => (
                                     <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
-                                        {selected.map((value) => { 
+                                        {selected.map((value) => {
                                             console.log(selected)
-                                            return(
-                                            <Chip key={value} size='small' label={value} />
-                                        )})}
+                                            return (
+                                                <Chip key={value} size='small' label={value} />
+                                            )
+                                        })}
                                     </Box>
                                 )}
                                 fullWidth
@@ -245,16 +247,16 @@ const HomeMail = () => {
 
                                 {vendors.length > 0 && vendors.map((venMail, index) => (
                                     [
-                                        
-                                            <ListSubheader>{venMail.aliasName}</ListSubheader>,
-                                            venMail.vendorContacts.map((contact, inx) => (
-                                                <MenuItem key={inx} value={contact.mailId}>
-                                                    <Checkbox checked={mailDetails.vendorCc.indexOf(contact.mailId) > -1} />
-                                                    <ListItemText size="small" primary={contact.name+ " - "+ contact.mailId} />
-                                                </MenuItem>
-                                            ))
 
-                                      
+                                        <ListSubheader>{venMail.aliasName}</ListSubheader>,
+                                        venMail.vendorContacts.map((contact, inx) => (
+                                            <MenuItem key={inx} value={contact.mailId}>
+                                                <Checkbox checked={mailDetails.vendorCc.indexOf(contact.mailId) > -1} />
+                                                <ListItemText size="small" primary={contact.name + " - " + contact.mailId} />
+                                            </MenuItem>
+                                        ))
+
+
                                     ])
                                 )}
                             </Select>
