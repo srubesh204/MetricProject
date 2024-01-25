@@ -87,7 +87,7 @@ const compDetailsController = {
 
       // Find the designation by desId and update it
       const updateCompDetails = await compDetailsSchema.findOneAndUpdate(
-        { _id: compDetailsId },
+        { compId: compDetailsId },
         updateCompDetailsFields,
         { new: true } // To return the updated document
       );
@@ -143,7 +143,7 @@ const compDetailsController = {
       // if (isNaN(desId)) {
       // Find the designation by desId and update it
       const getCompDetailsById = await compDetailsSchema.findOne(
-        { _id: compDetailsId }// To return the updated document
+        { compId : compDetailsId } // To return the updated document
       );
 
       if (!getCompDetailsById) {

@@ -5,7 +5,7 @@ const mongooseSequence = require('mongoose-sequence')(mongoose);
 const compDetailsSchema = new mongoose.Schema({
 
   compId: {
-    type: String,
+    type: Number,
     default: 1
   },
   userType: String,
@@ -17,10 +17,6 @@ const compDetailsSchema = new mongoose.Schema({
 });
 
 const plantSchema = new mongoose.Schema({
-  compId: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'compDetails', // Reference to the compDetailsSchema model
-  },
   plantName: {
     type: String,
     required: [true, "Plant Name required"],

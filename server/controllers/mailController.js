@@ -1,6 +1,7 @@
 const unitModel = require("../models/unitModel")
 const excelToJson = require('convert-excel-to-json');
 const nodemailer = require("nodemailer");
+const { compDetailsSchema, plantSchema } = require("../models/compDetailsModel");
 require('dotenv').config();
 //const transporter = require('../models/mailConfig');
 
@@ -16,7 +17,10 @@ const transporter1 = nodemailer.createTransport({
 
 const mailController = {
     mailSender: async (req, res) => {
-        const { to, subject, mailBody, departmentCc, vendorCc, bcc , selectedItems } = req.body;
+        const { to, subject, mailBody, departmentCc, vendorCc, bcc , selectedItems, employee } = req.body;
+
+        const compDetails = await compDetailsSchema.find({compId: 1});
+        const plantDetails = await plantSchema.find({plantName: selectedItems[0].plantName})
         console.log(selectedItems)
         // Mapping the selectedItems array to HTML rows
         const itemsRows = selectedItems.map((item, index) => `
@@ -63,7 +67,12 @@ const mailController = {
             </style>
 
             <body style="margin:0;padding:0;">
+            <p>Dear Sir/Madam,</p>
                 <p>${mailBody}</p>
+                <p>Thanks with Regards<br>
+                ${employee.firstName ? employee.firstName : ""} ${employee.lastName ? employee.lastName : ""} - ${employee.designation ? employee.designation : ""}<br>
+                ${compDetails.companyName}<br>
+                ${plantDetails.plantName} - ${plantDetails.plantAddress}</p>
                 <table role="presentation" style="width:100%; border-collapse:collapse; border: 1px solid black; border-spacing:0; background:#ffffff;">
                     <tbody>
                         <tr>
@@ -81,6 +90,7 @@ const mailController = {
                         
                     </tbody>
                 </table>
+                
             </body>
             </html>`,
             cc: [...new Set(...departmentCc, ...vendorCc)],
