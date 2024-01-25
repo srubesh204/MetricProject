@@ -618,17 +618,17 @@ const itemAddController = {
           V: 'itemCalAlertDays',
           W: 'itemCalibrationSource',
           X: 'itemSupplier',
-          Y: 'itemItemMasterName',
+          
           Z: 'itemCalDate',
           AA: 'itemDueDate',
           AB: 'itemCalibratedAt',
           AC: 'itemCertificateNo',
-          AD: 'itemCertificateName',
+          
           AE: 'itemUncertainity',
           AF: 'itemUncertainityUnit',
           AG: 'itemPlant',
           AH: 'itemPrevCalData',
-          AJ: 'itemItemMasterIMTENo'
+          AI: 'itemItemMasterIMTENo'
       }
       });
       console.log(jsonData)
