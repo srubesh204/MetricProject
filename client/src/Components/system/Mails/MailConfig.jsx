@@ -143,7 +143,7 @@ const MailConfig = () => {
     const addSubjectDataRow = () => {
         if (mailDetails.length !== 0) {
             setMailData((prev) => ({ ...prev, mailSubjects: [...prev.mailSubjects, mailDetails.mailSubject] }))
-            setMailDetails((prev) => ({... prev, mailSubject:""}))
+            setMailDetails((prev) => ({...prev, mailSubject:""}))
         }
     }
 
@@ -151,7 +151,7 @@ const MailConfig = () => {
     const addBodyRow = () => {
         if (mailDetails.length !== 0) {
             setMailData((prev) => ({ ...prev, mailBodies: [...prev.mailBodies, mailDetails.mailContent] }))
-            setMailDetails((prev) => ({... prev, mailContent:""}))
+            setMailDetails((prev) => ({...prev, mailContent:""}))
         }
     }
 

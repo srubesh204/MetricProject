@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react'
 import axios from 'axios'
 import Autocomplete from '@mui/material/Autocomplete';
-import { TextField, OutlinedInput, Select, styled, Button, ButtonGroup, Chip, Fab, MenuItem, FormControl, InputLabel, ListItemText, Checkbox } from '@mui/material';
+import { TextField, OutlinedInput, Select, styled, Button, ButtonGroup, Chip, Fab, MenuItem, FormControl, InputLabel, ListItemText, Checkbox, FormHelperText } from '@mui/material';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import Alert from '@mui/material/Alert';
 import Snackbar from '@mui/material/Snackbar';
@@ -262,6 +262,7 @@ const Vendor = () => {
         tempErrors.address = vendorData.address ? "" : "Address is Required"
         tempErrors.state = vendorData.state ? "" : "State is Required"
         tempErrors.city = vendorData.city ? "" : "City is Required"
+        tempErrors.vendorPlant = vendorData.vendorPlant.length > 0 ? "" : "Vendor Plant is Required"
 
         if (vendorData.oem === "1" || vendorData.customer === "1" || vendorData.supplier === "1" || vendorData.subContractor === "1") {
             tempErrors.vendorType = ""
@@ -835,7 +836,8 @@ const Vendor = () => {
 
                                 </div>
                                 <div className='col-md-2'>
-                                    <FormControl size='small' component="div" fullWidth>
+                                    <FormControl size='small' component="div" fullWidth {...(errors.vendorPlant !== "" && { error: true })}>
+                                    
                                         <InputLabel id="vendorPlantId">Select Plant</InputLabel>
                                         <Select
                                             labelId="vendorPlantId"
@@ -855,6 +857,7 @@ const Vendor = () => {
                                                 </MenuItem>
                                             ))}
                                         </Select>
+                                        <FormHelperText id="vendorPlantId">{errors.vendorPlant}</FormHelperText>
                                     </FormControl>
 
                                 </div>

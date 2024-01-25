@@ -1,9 +1,9 @@
 import React, { useEffect, useState, createContext } from 'react'
 import { TextField, MenuItem, Button } from '@mui/material';
 import { Box, Container, Grid, Paper, Typography } from "@mui/material";
-import { DataGrid, GridToolbar } from '@mui/x-data-grid';
+import { DataGrid, GridToolbar, GridToolbarQuickFilter } from '@mui/x-data-grid';
 import axios from 'axios';
-import { Edit, FilterAlt, PrintRounded } from '@mui/icons-material';
+import { Edit, FilterAlt, PrintRounded, Send } from '@mui/icons-material';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import dayjs from 'dayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
@@ -16,12 +16,13 @@ import isSameOrAfter from 'dayjs/plugin/isSameOrAfter'
 import isSameOrBefore from 'dayjs/plugin/isSameOrBefore'
 import { useEmployee } from '../../App';
 import TotalPrint from './TotalPrint';
+import MailSender from '../mailComponent/MailSender';
 dayjs.extend(isSameOrBefore)
 dayjs.extend(isSameOrAfter)
 export const TotalListContent = createContext(null);
 const TotalList = () => {
 
-  const [selectedRows, setSelectedRows] = useState([]);
+  
   const [totalPrintOpen, setTotalPrintOpen] = useState(false);
 
 
@@ -131,18 +132,6 @@ const TotalList = () => {
   console.log(partCutomerNames)
 
 
-
-
-
-
-
-
-
-
-
-
-
-  const [openModalStatus, setOpenModalStatus] = useState(false);
   const [itemStatusDataList, setItemStatusDataList] = useState([])
   const itemStatusFetchData = async () => {
     try {
@@ -161,46 +150,14 @@ const TotalList = () => {
   console.log(itemStatusDataList)
 
 
-  const [showDialog, setShowDialog] = useState(false);
-
-
-  const [vendorCalDataList, setVendorCalDataList] = useState([])
-  const calFetchData = async () => {
-    try {
-      const response = await axios.get(
-        `${process.env.REACT_APP_PORT}/vendor/getAllVendors`
-      );
-      setVendorCalDataList(response.data.result);
-
-    } catch (err) {
-      console.log(err);
-    }
-  };
-  useEffect(() => {
-    calFetchData();
-  }, []);
+ 
 
 
 
-  const [itemAddList, setItemAddList] = useState([]);
-
-  const itemAddFetch = async () => {
-    try {
-      const response = await axios.get(
-        `${process.env.REACT_APP_PORT}/itemAdd/getItemAddByIMTESort`
-      );
-      // You can use a different logic for generating the id
-
-      setItemAddList(response.data.result);
 
 
-    } catch (err) {
-      console.log(err);
-    }
-  };
-  useEffect(() => {
-    itemAddFetch();
-  }, []);
+
+
 
 
   const handleSnackClose = (event, reason) => {
@@ -254,7 +211,7 @@ const TotalList = () => {
   ];
 
 
-  const [itemListSelectedRowIds, setItemListSelectedRowIds] = useState([])
+  const [selectedItemList, setSelectedItemList] = useState([])
 
   const [filterAllNames, setFilterAllNames] = useState({
 
@@ -368,21 +325,7 @@ const TotalList = () => {
           }));
         }
       }
-      // if (name === "partName") {
-      //   const partName = itemList.filter((item) => (item.partName === value);
-      //   setFilteredItemListData(partName);
-      //   setFilterAllNames((prev) => ({
-      //     ...prev,
-      //     imteNo: "all",
-      //     itemType: "all",
-      //     currentLocation: "all",
-      //     customerWise: "all",
-      //     supplierWise: "all",
-      //     partName: value, // Update the partName value in the filterAllNames state
-      //     status: "all", // Reset other filters if needed
-      //     plantWise: "all",
-      //   }));
-      // }
+      
       if (name === "partName") {
         const filteredItems = itemList.filter((item) => (item.itemPartName.includes(value)));
 
@@ -477,40 +420,11 @@ const TotalList = () => {
 
 
   console.log(filteredItemListData)
-  {/* const dueDatePicker = (newValue, name) => {
-      let startDate = "";
-      let endDate = "";
-      let startDueDate = "";
-      let endDueDate = "";
-
-      // console.log(newValue.format("YYYY-MM-DD"));
-
-      if (name === "dueStartDate") {
-          startDate = newValue.format("YYYY-MM-DD");
-      }
-      if (name === "dueEndDate") {
-          endDate = newValue.format("YYYY-MM-DD");
-      }
-
-     
-          const filteredData = itemList.filter((item) => {
-              console.log(item.itemDueDate)
-              return (
-                  item.itemDueDate >= startDate && item.itemDueDate <= endDate)
-
-          }
-
-          );
-          console.log(filteredData)
-    
-
-
-  };*/}
+ 
   const dueDatePicker = (newValue, name) => {
     let startDate = "";
     let endDate = "";
-    let startDueDate = "";
-    let endDueDate = "";
+   
 
 
     if (name === "dueStartDate") {
@@ -535,32 +449,9 @@ const TotalList = () => {
     console.log(filteredData);
   };
 
-  {/*const updateVendor = async (params) => {
-      console.log(params)
-      setVendorData(params.row)
-      setVendorStateId(params.id)
-  }*/}
-  const [supplierList, setSupplierList] = useState([])
 
-  const [customerList, setCustomerList] = useState([])
 
-  const vendorFetch = async () => {
-    try {
-      const response = await axios.get(
-        `${process.env.REACT_APP_PORT}/vendor/getAllVendors`
-      );
-      console.log(response.data.result)
-      const customersList = response.data.result.filter((item) => item.customer === "1")
-      const suppliersList = response.data.result.filter((item) => item.oem === "1")
-      setSupplierList(suppliersList);
-      setCustomerList(customersList);
-    } catch (err) {
-      console.log(err);
-    }
-  };
-  useEffect(() => {
-    vendorFetch();
-  }, []);
+ 
   const [vendorDataList, setVendorDataList] = useState([])
   const vendorFetchData = async () => {
     try {
@@ -582,21 +473,7 @@ const TotalList = () => {
 
 
 
-  const [departmentList, setDepartmentList] = useState([]);
-
-  const depFetchData = async () => {
-    try {
-      const response = await axios.get(
-        `${process.env.REACT_APP_PORT}/department/getAllDepartments`
-      );
-      setDepartmentList(response.data.result);
-    } catch (err) {
-      console.log(err);
-    }
-  };
-  useEffect(() => {
-    depFetchData();
-  }, []);
+ 
 
 
 
@@ -607,7 +484,15 @@ const TotalList = () => {
   const [snackBarOpen, setSnackBarOpen] = useState(false)
   const [errorhandler, setErrorHandler] = useState({});
 
-  console.log(itemListSelectedRowIds)
+  console.log(selectedItemList)
+
+  const handleRowSelectionChange = (newSelection) => {
+    const selectedRowsData = filteredItemListData.filter((row) => newSelection.includes(row._id));
+   
+    setSelectedItemList(selectedRowsData)
+
+
+  };
 
 
 
@@ -686,20 +571,14 @@ const TotalList = () => {
 
 
   }
-  const [itemId, setItemId] = useState("")
-  const [statusInfo, setStatusInfo] = useState([])
+  
 
 
 
 
 
 
-  const handleConfirmDialogClose = () => {
-    setShowDialog(false);
-  };
-  const handleSelectionModelChange = (newSelection) => {
-    setItemListSelectedRowIds(newSelection);
-  };
+  
 
 
 
@@ -707,33 +586,46 @@ const TotalList = () => {
 
 
 
-  const handleCloseDialog = () => {
-    setOpenModalStatus(false);
-  };
-  const handleSave = () => {
-    if (itemListSelectedRowIds) {
-
-      console.log('Save logic:', itemListSelectedRowIds);
-      setOpenModalStatus(false); // Close dialog after saving
-    }
-  };
+  
 
   const [formatNoData, setFormatNoData] = useState([])
   const formatFetchData = async () => {
-      try {
-          const response = await axios.get(
-              `${process.env.REACT_APP_PORT}/formatNo/getFormatNoById/1`
-          );
-          const format = response.data.result
-          console.log(format)
-          setFormatNoData(format)
-      } catch (err) {
-          console.log(err);
-      }
+    try {
+      const response = await axios.get(
+        `${process.env.REACT_APP_PORT}/formatNo/getFormatNoById/1`
+      );
+      const format = response.data.result
+      console.log(format)
+      setFormatNoData(format)
+    } catch (err) {
+      console.log(err);
+    }
   };
   useEffect(() => {
-      formatFetchData();
+    formatFetchData();
   }, []);
+
+  
+
+  const [mailOpen, setMailOpen] = useState(false)
+
+  const TotalListChildData = {
+    mailOpen,
+    setMailOpen,
+    selectedRows : selectedItemList
+
+  }
+
+  const mailCheck = () => {
+    const singlePlant = selectedItemList.every((item, index, array) => item.itemPlant === array[0].itemPlant);
+
+    if (singlePlant && selectedItemList.length > 0) {
+      setMailOpen(true)
+
+    } 
+
+
+  }
 
   return (
     <div style={{ margin: "2rem" }}>
@@ -1006,14 +898,20 @@ const TotalList = () => {
                       "marginBottom": "1em"
                     }
                   }}
-                  onRowSelectionModelChange={(newRowSelectionModel, event) => {
-                    setItemListSelectedRowIds(newRowSelectionModel);
-
-
-                  }}
+                  onRowSelectionModelChange={handleRowSelectionChange}
 
                   slots={{
-                    toolbar: GridToolbar,
+                    toolbar: () => (
+                      <div className='d-flex justify-content-between align-items-center'>
+                        <GridToolbar />
+
+                        <div className='d-flex'>
+                          <GridToolbarQuickFilter />
+                          {selectedItemList.length > 0 && <Button onClick={() => mailCheck()} size='small' endIcon={<Send />} color="primary">Send Mail</Button>}
+                        </div>
+
+                      </div>
+                    ),
                   }}
 
                   density="compact"
@@ -1059,7 +957,7 @@ const TotalList = () => {
 
 
                 <div>
-                  <Button onClick={() => { setSelectedRows(); setTotalPrintOpen(true) }}><PrintRounded color='success' /></Button>
+                  <Button onClick={() => { setTotalPrintOpen(true) }}><PrintRounded color='success' /></Button>
 
                 </div>
 
@@ -1083,13 +981,16 @@ const TotalList = () => {
         </LocalizationProvider>
       </form>
 
+      
+
       <TotalListContent.Provider
-        value={{ totalPrintOpen, setTotalPrintOpen, selectedRows, itemList, filteredItemListData, partDataList, formatNoData }}
+        value={{ totalPrintOpen, setTotalPrintOpen, itemList, filteredItemListData, partDataList, formatNoData }}
       >
 
         <TotalPrint />
       </TotalListContent.Provider>
-
+      {selectedItemList.length > 0 && 
+      <MailSender {...TotalListChildData}/>}
     </div>
   )
 }

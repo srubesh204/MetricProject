@@ -5,7 +5,7 @@ import { useReactToPrint } from 'react-to-print';
 const TotalPrint = () => {
 
     const totalPrintData = useContext(TotalListContent)
-    const { totalPrintOpen, setTotalPrintOpen, selectedRows, filteredItemListData, formatNoData, itemList, partDataList } = totalPrintData
+    const { totalPrintOpen, setTotalPrintOpen, filteredItemListData, formatNoData, itemList, partDataList } = totalPrintData
 
 
     const componentRef = useRef();

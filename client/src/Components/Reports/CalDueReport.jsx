@@ -1,13 +1,14 @@
-import React, { useEffect, useState, createContext } from 'react' 
+import React, { useEffect, useState, createContext } from 'react'
 import { TextField, MenuItem, Button } from '@mui/material';
 import { Box, Container, Grid, Paper, Typography } from "@mui/material";
-import { DataGrid, GridToolbar } from '@mui/x-data-grid';
+import { DataGrid, GridToolbar, GridToolbarQuickFilter } from '@mui/x-data-grid';
 import axios from 'axios';
-import { Edit, FilterAlt, PrintRounded } from '@mui/icons-material';
+import { Edit, FilterAlt, PrintRounded, Send } from '@mui/icons-material';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import dayjs from 'dayjs';
+import MailSender from '../mailComponent/MailSender';
 //import MailSender from '../mailComponent/MailSender';
 
 
@@ -119,18 +120,18 @@ const CalDueReport = () => {
 
 
     ];
-    
+
     const [itemListSelectedRowIds, setItemListSelectedRowIds] = useState([])
-    
+
     const handleRowSelectionChange = (newSelection) => {
         const selectedRowsData = filteredItemListData.filter((row) => newSelection.includes(row._id));
         setItemListSelectedRowIds(selectedRowsData);
-        
-    
-    
-      };
 
-    
+
+
+    };
+
+
 
 
 
@@ -281,7 +282,7 @@ const CalDueReport = () => {
 
 
     };
-    console.log(itemListSelectedRowIds) 
+    console.log(itemListSelectedRowIds)
     const [dueDate, setDueDate] = useState("")
     const handleDueChange = (e) => {
         const { value } = e.target;
@@ -395,7 +396,23 @@ const CalDueReport = () => {
         setFilteredItemListData(filteredItems)
     }, [dateData.fromDate, dateData.toDate])
 
+    const mailCheck = () => {
+        const singlePlant = itemListSelectedRowIds.every((item, index, array) => item.itemPlant === array[0].itemPlant);
+    
+        if (singlePlant && itemListSelectedRowIds.length > 0) {
+          setMailOpen(true)
+    
+        } 
+    
+    
+      }
 
+    const [mailOpen, setMailOpen] = useState(false)
+    const TotalListChildData = {
+        mailOpen,
+        setMailOpen,
+        selectedRows : itemListSelectedRowIds
+      }
 
     return (
         <div className='px-5 pt-3'>
@@ -622,8 +639,18 @@ const CalDueReport = () => {
                                     onRowSelectionModelChange={handleRowSelectionChange}
                                     disableDensitySelector
                                     slots={{
-                                        toolbar: GridToolbar,
-                                    }}
+                                        toolbar: () => (
+                                          <div className='d-flex justify-content-between align-items-center'>
+                                            <GridToolbar />
+                    
+                                            <div className='d-flex'>
+                                              <GridToolbarQuickFilter />
+                                              {itemListSelectedRowIds.length > 0 && <Button onClick={() => mailCheck()} size='small' endIcon={<Send />} color="primary">Send Mail</Button>}
+                                            </div>
+                    
+                                          </div>
+                                        ),
+                                      }}
                                     density="compact"
                                     //disableColumnMenu={true}
                                     checkboxSelection
@@ -644,6 +671,8 @@ const CalDueReport = () => {
                 </LocalizationProvider>
                 {/* <MailSender /> */}
             </form>
+            {itemListSelectedRowIds.length > 0 &&
+                <MailSender {...TotalListChildData} />}
         </div>
     )
 }

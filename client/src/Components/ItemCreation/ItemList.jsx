@@ -1,7 +1,7 @@
 import React, { createContext, useEffect, useState } from 'react'
 import { TextField, MenuItem, Button, ButtonGroup, Backdrop, CircularProgress } from '@mui/material';
 import { Box, Container, Grid, Paper, Typography } from "@mui/material";
-import { DataGrid, GridToolbar,GridToolbarQuickFilter } from '@mui/x-data-grid';
+import { DataGrid, GridToolbar, GridToolbarQuickFilter } from '@mui/x-data-grid';
 import axios from 'axios';
 import { Edit, FilterAlt, PrintRounded } from '@mui/icons-material';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
@@ -22,12 +22,13 @@ import { Link as RouterLink } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import isSameOrAfter from 'dayjs/plugin/isSameOrAfter'
 import isSameOrBefore from 'dayjs/plugin/isSameOrBefore'
-import { Add, ArrowBack,Error, HomeMax, House, Mail, MailLock,  } from '@mui/icons-material';
+import { Add, ArrowBack, Error, HomeMax, House, Mail, MailLock, } from '@mui/icons-material';
 import { useEmployee } from '../../App';
 import styled from "@emotion/styled";
-import { CloudDownload, CloudUpload, Delete,Send } from '@mui/icons-material';
+import { CloudDownload, CloudUpload, Delete, Send } from '@mui/icons-material';
 import ItemListPrint from './ItemListPrint';
 import ItemMail from './ItemMail';
+import MailSender from '../mailComponent/MailSender';
 
 dayjs.extend(isSameOrBefore)
 dayjs.extend(isSameOrAfter)
@@ -35,9 +36,9 @@ export const ItemListContent = createContext(null);
 
 const ItemList = () => {
 
-   
+
     const [StatusCheckMsg, setStatusCheckMsg] = useState("")
-    const [mailOpen, setMailOpen] = useState(false)
+
 
 
     const employeeRole = useEmployee()
@@ -778,37 +779,36 @@ const ItemList = () => {
     const [statusInfo, setStatusInfo] = useState([])
 
 
-   
+
     const [mailIds, setMailIds] = useState([])
     const mailIdGather = () => {
-      if (itemListSelectedRowIds.length > 0) {
-        const deps = itemListSelectedRowIds.map(item => item.itemDepartment)
-        console.log(deps)
-  
-        const empEmails = employeeList.filter(emp => emp.plantDetails.find(plant => deps.find(dep => plant.departments.includes(dep))))
-        const uniqueEmails = [...new Set(empEmails)]
-        setMailIds(empEmails)
-        console.log(empEmails)
-        console.log(uniqueEmails)
-      }
+        if (itemListSelectedRowIds.length > 0) {
+            const deps = itemListSelectedRowIds.map(item => item.itemDepartment)
+            console.log(deps)
+
+            const empEmails = employeeList.filter(emp => emp.plantDetails.find(plant => deps.find(dep => plant.departments.includes(dep))))
+            const uniqueEmails = [...new Set(empEmails)]
+            setMailIds(empEmails)
+            console.log(empEmails)
+            console.log(uniqueEmails)
+        }
     }
 
     useEffect(() => {
         setStatusCheckMsg("");
-        
-      
-      mailIdGather()
+
+
+        mailIdGather()
     }, [itemListSelectedRowIds])
 
-  
-  
-    const handleRowSelectionChange = (newSelection) => {
-      const selectedRowsData = filteredData.filter((row) => newSelection.includes(row._id));
-      setItemListSelectedRowIds(selectedRowsData);
-      
-  
+    const [selectedItemList, setSelectedItemList] = useState([])
+
+    const handleRowSelectionChange = (newSelection, e) => {
+        const selectedRowsData = filteredItemListData.filter((row) => newSelection.includes(row._id));
+        setSelectedItemList(selectedRowsData)
+        setItemListSelectedRowIds(newSelection);
     };
-  
+
 
 
 
@@ -847,6 +847,15 @@ const ItemList = () => {
     useEffect(() => {
         formatFetchData();
     }, []);
+
+    const [mailOpen, setMailOpen] = useState(false)
+
+    const itemListMailData = {
+        mailOpen,
+        setMailOpen,
+        selectedRows: selectedItemList
+    }
+
 
     return (
         <div style={{ margin: "2rem" }}>
@@ -1171,25 +1180,19 @@ const ItemList = () => {
                                             "marginBottom": "1em"
                                         }
                                     }}
-                                   // onRowSelectionModelChange={handleRowSelectionChange}
-                                 onRowSelectionModelChange={(newRowSelectionModel, event) => {
-                                       setItemListSelectedRowIds(newRowSelectionModel);
+                                    onRowSelectionModelChange={handleRowSelectionChange}
 
-
-                                }}
 
                                     slots={{
                                         toolbar: () => (
                                             <div className='d-flex justify-content-between align-items-center'>
                                                 <GridToolbar />
                                                 <div className='d-flex justify-content-between align-items-end'>
-                                                <GridToolbarQuickFilter />
-                                                {itemListSelectedRowIds.length !== 0 && <Button onClick={() => mailCheck()} size='small' endIcon={<Send />} color="primary">Send Mail</Button>}
+                                                    {selectedItemList.length > 0 && <Button className='me-2' onClick={() => mailCheck()} variant='contained' size='small' endIcon={<Send />} color="primary">Send Mail</Button>}
+                                                    {itemListSelectedRowIds.length !== 0 && <Button className='me-2' variant='contained' type='button' size='small' color='error' onClick={() => setDeleteModalItem(true)}> Delete </Button>}
+                                                    <GridToolbarQuickFilter />
                                                 </div>
-                                                <div className='mt-2'>
-                                                    {itemListSelectedRowIds.length !== 0 && <Button variant='contained' type='button' size='small' color='error' onClick={() => setDeleteModalItem(true)}> Delete </Button>}
-
-                                                </div>
+                                                
 
                                             </div>
                                         ),
@@ -1374,14 +1377,10 @@ const ItemList = () => {
                         <ItemListPrint />
                     </ItemListContent.Provider>
 
-                    <ItemListContent.Provider
-                        value={{ mailOpen, setMailOpen, itemListSelectedRowIds, mailIds }}
-                    >
 
-                        <ItemMail />
-                    </ItemListContent.Provider>
 
                 </LocalizationProvider>
+                <MailSender {...itemListMailData} />
 
             </form>
                 : <Backdrop

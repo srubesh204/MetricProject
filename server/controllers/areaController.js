@@ -17,7 +17,7 @@ const areaController = {
     try {
 
       const { area, areaStatus } = req.body;
-
+ 
       let dd = req.body.area.toLowerCase().
         split(' ')
         .map((word) => word.charAt(0).toUpperCase() + word.slice(1))

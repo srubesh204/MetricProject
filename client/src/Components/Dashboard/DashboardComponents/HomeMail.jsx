@@ -9,6 +9,7 @@ import { HomeContent } from '../Home';
 import { Box, Checkbox, Chip, CircularProgress, FormControl, InputLabel, ListItemText, ListSubheader, MenuItem, OutlinedInput, Select, TextField } from '@mui/material';
 import { Send } from '@mui/icons-material';
 import axios from 'axios'
+import dayjs from 'dayjs';
 
 
 
@@ -34,8 +35,8 @@ const HomeMail = () => {
             itemAddMasterName: item.itemAddMasterName,
             itemRangeSize: item.itemRangeSize,
             itemRangeSizeUnit: item.itemRangeSizeUnit,
-            itemCalDate: item.itemCalDate,
-            itemDueDate: item.itemDueDate,
+            itemCalDate: dayjs(item.itemCalDate).format("DD-MM-YYYY"),
+            itemDueDate: dayjs(item.itemDueDate).format("DD-MM-YYYY"),
             itemCurrentLocation: item.itemCurrentLocation,
             itemLastLocation: item.itemLastLocation,
             itemCalibrationSource: item.itemCalibrationSource,
