@@ -1158,18 +1158,7 @@ const ItemAdd = () => {
 
                                         </tr>
 
-                                        {/* {
-                                            itemAddData.itemOEM.map((itemOem, index) => {
-                                                const selectedOem = OEMList.find(oem => oem._id === itemOem);
-                                                return (
-                                                    <tr key={index}>
-                                                        <td>{index + 1}</td>
-                                                        <td>{selectedOem ? selectedOem.aliasName : ''}</td>
-                                                    </tr>
-                                                );
-                                            })
-                                        } */}
-
+                                        
 
 
                                         {itemAddData.itemOEM.map((item, index) => (
@@ -1323,13 +1312,13 @@ const ItemAdd = () => {
                                                     value={itemAddData.itemPartName}
                                                     onChange={handleItemAddChange}
                                                     input={<OutlinedInput fullWidth label="Select Part" />}
-                                                    renderValue={(selected) => selected.map(item => partData.find(part => part._id === item).partName).join(", ")} MenuProps={MenuProps}
+                                                    renderValue={(selected) => selected.join(", ")} MenuProps={MenuProps}
                                                     fullWidth
                                                 >
                                                     {partData.map((name, index) => (
-                                                        <MenuItem key={index} value={name._id}>
-                                                            <Checkbox checked={itemAddData.itemPartName.indexOf(name._id) > -1} /> {/* Check if the item is selected */}
-                                                            <ListItemText primary={name.partName} />
+                                                        <MenuItem key={index} value={name.partNo}>
+                                                            <Checkbox checked={itemAddData.itemPartName.indexOf(name.partNo) > -1} />
+                                                            <ListItemText primary={name.partNo +" - "+ name.partName + " - "+ name.customer} />
                                                         </MenuItem>
                                                     ))}
                                                 </Select>
