@@ -1080,7 +1080,7 @@ const CalDialog = () => {
                                                             minColor = "orange"
                                                         }
                                                         else if (item.calMinOB >= item.calMinPS && item.calMinOB <= item.calMaxPS) {
-                                                            minColor = "#4cbb17"
+                                                            minColor = "green"
                                                         } else {
                                                             minColor = "red"
                                                         }
@@ -1089,7 +1089,7 @@ const CalDialog = () => {
                                                             maxColor = "orange"
                                                         }
                                                         else if (item.calMaxOB >= item.calMinPS && item.calMaxOB <= item.calMaxPS) {
-                                                            maxColor = "#4cbb17"
+                                                            maxColor = "green"
                                                         } else {
                                                             maxColor = "red"
                                                         }
@@ -1098,7 +1098,7 @@ const CalDialog = () => {
                                                             averageColor = "orange"
                                                         }
                                                         else if (item.calAverageOB >= item.calMinPS && item.calAverageOB <= item.calMaxPS) {
-                                                            averageColor = "#4cbb17"
+                                                            averageColor = "green"
                                                         } else {
                                                             averageColor = "red"
                                                         }
@@ -1112,7 +1112,7 @@ const CalDialog = () => {
                                                             minColor = "orange"
                                                         }
                                                         else if (item.calMinOB >= item.calMinPS && item.calMinOB <= item.calMaxPS) {
-                                                            minColor = "#4cbb17"
+                                                            minColor = "green"
                                                         } else {
                                                             minColor = "red"
                                                         }
@@ -1121,7 +1121,7 @@ const CalDialog = () => {
                                                             maxColor = "orange"
                                                         }
                                                         else if (item.calMaxOB >= item.calMinPS && item.calMaxOB <= item.calMaxPS) {
-                                                            maxColor = "#4cbb17"
+                                                            maxColor = "green"
                                                         } else {
                                                             maxColor = "red"
                                                         }
@@ -1130,7 +1130,7 @@ const CalDialog = () => {
                                                             averageColor = "orange"
                                                         }
                                                         else if (item.calAverageOB >= item.calMinPS && item.calAverageOB <= item.calMaxPS) {
-                                                            averageColor = "#4cbb17"
+                                                            averageColor = "green"
                                                         } else {
                                                             averageColor = "red"
                                                         }
@@ -1144,7 +1144,7 @@ const CalDialog = () => {
 
 
                                                     if (parseFloat(item.calMinOB) >= parseFloat(item.calMinPS) && parseFloat(item.calMinOB) <= parseFloat(item.calMaxPS)) {
-                                                        minColor = "#4cbb17";
+                                                        minColor = "green";
 
                                                     } else {
                                                         minColor = "red"
@@ -1153,7 +1153,7 @@ const CalDialog = () => {
 
 
                                                     if (parseFloat(item.calMaxOB) >= parseFloat(item.calMinPS) && parseFloat(item.calMaxOB) <= parseFloat(item.calMaxPS)) {
-                                                        maxColor = "#4cbb17"
+                                                        maxColor = "green"
 
                                                     } else {
                                                         maxColor = "red"
@@ -1161,7 +1161,7 @@ const CalDialog = () => {
                                                     }
 
                                                     if (parseFloat(item.calAverageOB) >= parseFloat(item.calMinPS) && parseFloat(item.calAverageOB) <= parseFloat(item.calMaxPS)) {
-                                                        averageColor = "#4cbb17";
+                                                        averageColor = "green";
 
                                                     } else {
                                                         averageColor = "red"
@@ -1231,7 +1231,7 @@ const CalDialog = () => {
 
                                                 let averageColor = "";
                                                 if (parseFloat(item.calAverageOB) >= parseFloat(item.calMinPSError) && parseFloat(item.calAverageOB) <= parseFloat(item.calMaxPSError)) {
-                                                    averageColor = "#4cbb17";
+                                                    averageColor = "green";
                                                 } else {
                                                     averageColor = "red"
                                                 }
@@ -1293,7 +1293,7 @@ const CalDialog = () => {
                                                 let averageColor = "";
 
                                                 if (parseFloat(item.calAverageOB) >= parseFloat(item.calMinPS) && parseFloat(item.calAverageOB) <= parseFloat(item.calMaxPS)) {
-                                                    averageColor = "#4cbb17";
+                                                    averageColor = "green";
 
                                                 } else {
                                                     averageColor = "red"
@@ -1303,7 +1303,7 @@ const CalDialog = () => {
                                                 let minColor = "";
 
                                                 if (parseFloat(item.calMinOB) >= parseFloat(item.calMinPS) && parseFloat(item.calMinOB) <= parseFloat(item.calMaxPS)) {
-                                                    minColor = "#4cbb17";
+                                                    minColor = "green";
 
                                                 } else {
                                                     minColor = "red"
@@ -1312,7 +1312,7 @@ const CalDialog = () => {
 
                                                 let maxColor = "";
                                                 if (parseFloat(item.calMaxOB) >= parseFloat(item.calMinPS) && parseFloat(item.calMaxOB) <= parseFloat(item.calMaxPS)) {
-                                                    maxColor = "#4cbb17"
+                                                    maxColor = "green"
 
                                                 } else {
                                                     maxColor = "red"
