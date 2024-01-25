@@ -149,41 +149,7 @@ const ItemAdd = () => {
 
 
 
-
-    // const itemMasterFetchData = async () => {
-    //     try {
-    //         const response = await axios.get(
-    //             `${process.env.REACT_APP_PORT}/itemMaster/getAllItemMasters`
-
-    //         );
-
-    //         console.log(response.data)
-    //         const masterItems = response.data.result.filter((item) => item.isItemMaster === "1")
-    //         setItemMasterDataList(response.data.result);
-
-    //     } catch (err) {
-    //         console.log(err);
-    //     }
-    // };
-    // useEffect(() => {
-    //     const distinctNamesSet = new Set(itemMasterDataList.map(item => item.itemAddMasterName));
-
-    //     // Convert the Set back to an array
-    //     const distinctNamesArray = [...distinctNamesSet];
-
-    //     // Sort the array
-    //     distinctNamesArray.sort();
-
-    //     console.log(distinctNamesArray);
-    //     itemMasterFetchData();
-    // }, []);
-
-
-
-
-
-
-    const [itemMasterDistNames, setItemMasterDistNames] = useState([])
+   
     const [itemMasterListByName, setItemMasterListByName] = useState([])
 
 
@@ -191,11 +157,11 @@ const ItemAdd = () => {
     const getDistinctItemName = async () => {
         try {
             const response = await axios.get(
-                `${process.env.REACT_APP_PORT}/itemAdd/getDistinctItemName`
+                `${process.env.REACT_APP_PORT}/itemAdd/getAllItemAdds`
             );
             console.log(response.data)
-            setItemMasterDistNames(response.data.result);
-
+            const isItemMaster = response.data.result.filter(item => item.isItemMaster === "1")
+            setItemMasterListByName(isItemMaster);
         } catch (err) {
             console.log(err);
         }
@@ -503,8 +469,7 @@ const ItemAdd = () => {
             );
             console.log(response.data)
             setImteList(response.data.result)
-
-
+            
         } catch (err) {
             console.log(err);
         }
@@ -690,14 +655,7 @@ const ItemAdd = () => {
         }
     };
 
-    // const handlePartCheckBox = (event) => {
-    //     const {target: { value }} = event;
-    //     setItemAddData((prev) => ({ ...prev, itemPartName: typeof value === 'string' ? value.split(',') : value })
-    //         // On autofill we get a stringified value.
-
-    //     );
-    // };
-    //
+   
     const [snackBarOpen, setSnackBarOpen] = useState(false)
 
     const handleSnackClose = (event, reason) => {
@@ -716,23 +674,7 @@ const ItemAdd = () => {
         setUploadMessage(null)
     }
 
-    const getItemMasterByName = async () => {
-        try {
-            const response = await axios.post(
-                `${process.env.REACT_APP_PORT}/itemAdd/getItemAddByName`, { itemItemMasterName: itemAddData.itemItemMasterName }
-            );
-            console.log(response.data)
-            setItemMasterListByName(response.data.result);
-        } catch (err) {
-            console.log(err);
-        }
-    };
-    useEffect(() => {
-        if (itemAddData.itemItemMasterName) {
-            getItemMasterByName();
-        }
-
-    }, [itemAddData.itemItemMasterName]);
+    
 
 
 
@@ -777,22 +719,7 @@ const ItemAdd = () => {
                                         <MenuItem key={index} value={item._id}>{item.itemDescription}</MenuItem>
                                     ))}
                                 </TextField>
-                                {/* <TextField
-                                    {...(errors.itemMasterRef !== "" && { helperText: errors.itemMasterRef, error: true })}
-                                    size='small'
-                                    select
-                                    variant='outlined'
-                                    label="Item Master"
-                                    name='itemMasterRef'
-                                    value={itemAddData.itemMasterRef}
-                                    fullWidth
-                                    onChange={handleItemAddChange}
-                                >
-                                    <MenuItem value=""><em>Select</em></MenuItem>
-                                    {distinctNamesArray.map((itemName, index) => (
-                                        <MenuItem key={index} value={itemName}>{itemName}</MenuItem>
-                                    ))}
-                                </TextField> */}
+                               
 
                             </div>
                             <div className="col-6">
@@ -807,17 +734,12 @@ const ItemAdd = () => {
                                         name='itemIMTENo' onChange={handleItemAddChange}  {...params} label="IMTE No" />}
                                     getOptionDisabled={option => true}
                                     clearOnBlur={false}
-                                //getOptionDisabled={options => true}
+                                
 
                                 />
 
 
-                                {/*  <TextField size='small' select variant='outlined' label="Item Prefix" name='itemIMTENo' value={itemAddData.itemIMTENo} fullWidth onChange={handleItemAddChange}>
-                                    <MenuItem value=""><em>Select</em></MenuItem>
-                                    {itemMasterDataPrefix.map((item) => (
-                                        <MenuItem value={item._id}>{item.itemPrefix}</MenuItem>
-                                    ))}
-                                    </TextField>*/}
+                               
 
                             </div>
                             <div className="col">
@@ -1027,14 +949,7 @@ const ItemAdd = () => {
                                 {itemAddData.itemCalibrationSource === "inhouse" &&
                                     <div className='row g-2'>
                                         <h6 className='text-center m-0'>Enter Master Details</h6>
-                                        <div className="col-md-12">
-                                            <TextField size='small' select fullWidth variant='outlined' onChange={handleItemAddChange} label="Select Master" name='itemItemMasterName' >
-                                                <MenuItem value=""><em>--Select--</em></MenuItem>
-                                                {itemMasterDistNames.map((item, index) => (
-                                                    <MenuItem key={index} value={item}>{item}</MenuItem>
-                                                ))}
-                                            </TextField>
-                                        </div>
+                                        
 
 
 
@@ -1051,15 +966,13 @@ const ItemAdd = () => {
                                                     onChange={handleItemAddChange}
                                                     input={<OutlinedInput fullWidth label="Select IMTE No" />}
                                                     // renderValue={(selected) => selected.map(item => item.itemIMTENo).join(", ")}
-                                                    renderValue={(selected) => selected.map(item => itemMasterListByName.find(sub => sub._id === item).itemIMTENo).join(", ")} MenuProps={MenuProps}
-
-
+                                                    renderValue={(selected) => selected.join(", ")} MenuProps={MenuProps}
                                                     fullWidth
                                                 >
                                                     {itemMasterListByName.map((name, index) => (
-                                                        <MenuItem key={index} value={name._id}>
-                                                            <Checkbox checked={itemAddData.itemItemMasterIMTENo.indexOf(name._id) > -1} />
-                                                            <ListItemText primary={name.itemIMTENo} />
+                                                        <MenuItem style={{padding: 0}} key={index} value={name.itemIMTENo}>
+                                                            <Checkbox checked={itemAddData.itemItemMasterIMTENo.indexOf(name.itemIMTENo) > -1} />
+                                                            <ListItemText primary={name.itemAddMasterName + " - " + name.itemIMTENo} />
                                                         </MenuItem>
                                                     ))}
                                                 </Select>
@@ -1183,12 +1096,12 @@ const ItemAdd = () => {
 
                                         {
                                             itemAddData.itemItemMasterIMTENo.map((itemSup, index) => {
-                                                const selectedImte = itemMasterListByName.find(sup => sup._id === itemSup);
+                                                const selectedImte = itemMasterListByName.find(sup => sup.itemIMTENo === itemSup);
                                                 return (
                                                     <tr key={index}>
                                                         <td>{index + 1}</td>
-                                                        <td>{selectedImte ? selectedImte.itemIMTENo : ''}</td>
-                                                        <td>{selectedImte ? selectedImte.itemDueDate : ''}</td>
+                                                        <td>{selectedImte ? selectedImte.itemAddMasterName + " - " + selectedImte.itemIMTENo : ''}</td>
+                                                        <td>{selectedImte ? dayjs(selectedImte.itemDueDate).format("DD-MM-YYYY") : ''}</td>
                                                     </tr>
                                                 );
                                             })

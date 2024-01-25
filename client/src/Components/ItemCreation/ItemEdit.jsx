@@ -23,8 +23,8 @@ const ItemEdit = () => {
     console.log(id)
 
 
-    const employeeRole = useEmployee();
-    console.log(employeeRole)
+    const { loggedEmp } = useEmployee();
+
     // Units Data
     const [units, setUnits] = useState([]);
     const UnitFetch = async () => {
@@ -80,32 +80,33 @@ const ItemEdit = () => {
         areaFetch()
     }, []);
 
-    const [placeOfUsages, setPlaceOfUsages] = useState([])
-    const placeOfUsageFetch = async () => {
+    const [isItemMasterList, setIsItemMasterList] = useState([])
+
+
+    const getItemMaster = async () => {
         try {
             const response = await axios.get(
-                `${process.env.REACT_APP_PORT}/placeOfUsage/getAllPlaceOfUsages`
+                `${process.env.REACT_APP_PORT}/itemAdd/getAllItemAdds`
             );
-            setPlaceOfUsages(response.data.result);
             console.log(response.data)
+            console.log(loggedEmp)
+            //
+            const plantItems = response.data.result.filter(item => loggedEmp.plantDetails.map(plant => plant.plantName).includes(item.itemPlant))
+            const isItemMaster = plantItems.filter(item => item.isItemMaster === "1")
+            console.log("Hi working")
+            console.log(isItemMaster)
+            setIsItemMasterList(isItemMaster);
         } catch (err) {
             console.log(err);
         }
     };
-
-
-
-
-
-
-    //get Designations
     useEffect(() => {
-        placeOfUsageFetch()
+        getItemMaster();
     }, []);
 
-    console.log({ Department: departments, Area: areas, placeOfUsage: placeOfUsages })
 
-    //item master list
+
+
     const [itemMasterDataList, setItemMasterDataList] = useState([])
     const itemMasterFetchData = async () => {
         try {
@@ -113,6 +114,7 @@ const ItemEdit = () => {
                 `${process.env.REACT_APP_PORT}/itemMaster/getAllItemMasters`
             );
             console.log(response.data)
+
             setItemMasterDataList(response.data.result);
 
         } catch (err) {
@@ -124,26 +126,12 @@ const ItemEdit = () => {
     }, []);
 
 
-    const [itemMasterDistNames, setItemMasterDistNames] = useState([])
-    const [itemMasterListByName, setItemMasterListByName] = useState([])
 
 
 
-    const getDistinctItemName = async () => {
-        try {
-            const response = await axios.get(
-                `${process.env.REACT_APP_PORT}/itemAdd/getDistinctItemName`
-            );
-            console.log(response.data)
-            setItemMasterDistNames(response.data.result);
 
-        } catch (err) {
-            console.log(err);
-        }
-    };
-    useEffect(() => {
-        getDistinctItemName();
-    }, []);
+
+
 
 
 
@@ -311,8 +299,8 @@ const ItemEdit = () => {
         itemUncertainityUnit: "",
         itemPrevCalData: "",
         itemPlant: "",
-        itemCreatedBy: employeeRole.loggedEmp._id,
-        itemLastModifiedBy: employeeRole.loggedEmp._id,
+        itemCreatedBy: loggedEmp._id,
+        itemLastModifiedBy: loggedEmp._id,
         itemLastModifiedAt: dayjs().format("YYYY-MM-DD")
     })
 
@@ -431,7 +419,7 @@ const ItemEdit = () => {
         if (name === "itemRangeSizeUnit") {
             setItemAddData((prev) => ({ ...prev, [name]: value, acceptanceCriteria: [{ acAccuracyUnit: value, acRangeSizeUnit: value }] }))
         }
-       
+
 
         if (name === "itemDepartment") {
 
@@ -459,7 +447,7 @@ const ItemEdit = () => {
             setItemAddData((prev) => ({ ...prev, itemPartName: value }));
         }*/}
         if (name === "itemItemMasterIMTENo") {
-            const updatedSelection = itemMasterListByName.filter(item => value.some(selectedItem => selectedItem.itemIMTENo === item.itemIMTENo));
+            const updatedSelection = isItemMasterList.filter(item => value.some(selectedItem => selectedItem.itemIMTENo === item.itemIMTENo));
             setItemAddData((prev) => ({ ...prev, itemItemMasterIMTENo: updatedSelection }));
         }
         if (name === "itemCalibrationSource") {
@@ -520,27 +508,6 @@ const ItemEdit = () => {
     }
 
 
-
-    {/* const handleItemAddChanges = (event) => {
-        const { value } = event.target;
-        const selectedIndex = itemAddData.itemPartName.indexOf(value);
-        let newSelected = [];
-
-        if (selectedIndex === -1) {
-            newSelected = [...itemAddData.itemPartName, value];
-        } else if (selectedIndex === 0) {
-            newSelected = [...itemAddData.itemPartName.slice(1)];
-        } else if (selectedIndex === itemAddData.itemPartName.length - 1) {
-            newSelected = [...itemAddData.itemPartName.slice(0, -1)];
-        } else if (selectedIndex > 0) {
-            newSelected = [
-                ...itemAddData.itemPartName.slice(0, selectedIndex),
-                ...itemAddData.itemPartName.slice(selectedIndex + 1),
-            ];
-        }
-
-        setItemAddData({ ...itemAddData, itemPartName: newSelected });
-    };*/}
 
     useEffect(() => {
         setItemAddData((prev) => ({
@@ -614,7 +581,9 @@ const ItemEdit = () => {
     };
 
     useEffect(() => {
-        itemMasterById();
+        if (itemAddData.itemMasterRef) {
+            itemMasterById();
+        }
     }, [itemAddData.itemMasterRef]);
 
 
@@ -684,18 +653,6 @@ const ItemEdit = () => {
         }))
     }
 
-    {/* const changeACValue = (index, name, value) => {
-
-        setItemAddData((prevItemAddData) => {
-            const updateAC = [...prevItemAddData.acceptanceCriteria]
-            updateAC[index] = {
-                ...updateAC[index], [name]: value,
-            };
-            return {
-                ...prevItemAddData, acceptanceCriteria: updateAC,
-            };
-        })
-    };*/}
 
     const changeACValue = (index, name, value) => {
         console.log('Received:', { index, name, value });
@@ -838,14 +795,6 @@ const ItemEdit = () => {
         }
     };
 
-    // const handlePartCheckBox = (event) => {
-    //     const {target: { value }} = event;
-    //     setItemAddData((prev) => ({ ...prev, itemPartName: typeof value === 'string' ? value.split(',') : value })
-    //         // On autofill we get a stringified value.
-
-    //     );
-    // };
-    //
 
     const handleSnackClose = (event, reason) => {
         if (reason === 'clickaway') {
@@ -860,26 +809,7 @@ const ItemEdit = () => {
         setUploadMessage(null)
     }
 
-    const getItemMasterByName = async () => {
-        try {
-            const response = await axios.post(
-                `${process.env.REACT_APP_PORT}/itemAdd/getItemAddByName`, { itemItemMasterName: itemAddData.itemItemMasterName }
 
-            );
-
-            console.log(response.data)
-            setItemMasterListByName(response.data.result);
-
-        } catch (err) {
-            console.log(err);
-        }
-    };
-    useEffect(() => {
-        if (itemAddData.itemItemMasterName) {
-            getItemMasterByName();
-        }
-
-    }, [itemAddData.itemItemMasterName]);
 
 
 
@@ -903,8 +833,8 @@ const ItemEdit = () => {
     const [plantDepartments, setPlantDepartments] = useState([])
 
     useEffect(() => {
-        console.log(employeeRole)
-        const filteredPlants = employeeRole.loggedEmp.plantDetails.filter(plant => plant.plantName === itemAddData.itemPlant);
+
+        const filteredPlants = loggedEmp.plantDetails.filter(plant => plant.plantName === itemAddData.itemPlant);
         console.log(filteredPlants)
         if (filteredPlants.length > 0) {
             setPlantDepartments(filteredPlants[0].departments)
@@ -1074,7 +1004,7 @@ const ItemEdit = () => {
 
                                             value={itemAddData.itemPlant} onChange={handleItemAddChange} size='small' select fullWidth variant='outlined' label="Select Plant" name='itemPlant' id='itemPlantId'>
                                             <MenuItem value="">Select Plant</MenuItem>
-                                            {employeeRole.loggedEmp.plantDetails.map((plant, index) => (
+                                            {loggedEmp.plantDetails.map((plant, index) => (
                                                 <MenuItem key={index} value={plant.plantName}>{plant.plantName}</MenuItem>
                                             ))}
                                         </TextField>
@@ -1086,20 +1016,7 @@ const ItemEdit = () => {
                                             ))}
                                         </TextField>
                                     </div>
-                                    {/* <div className="col-md-6">
-                                        <TextField size='small' onChange={handleItemAddChange} value={itemAddData.itemArea} select fullWidth variant='outlined' label="Area" name='itemArea' id='itemAreaId'>
-                                            {areas.map((item, index) => (
-                                                <MenuItem key={index} value={item.area}>{item.area}</MenuItem>
-                                            ))}
-                                        </TextField>
-                                    </div> */}
-                                    {/* <div className='col-md-6'>
-                                        <TextField size='small' onChange={handleItemAddChange} value={itemAddData.itemPlaceOfUsage} select fullWidth variant='outlined' label="Place" name='itemPlaceOfUsage' id='itemPlaceOfUsageId'>
-                                            {placeOfUsages.map((item, index) => (
-                                                <MenuItem key={index} value={item.placeOfUsage}>{item.placeOfUsage}</MenuItem>
-                                            ))}
-                                        </TextField>
-                                    </div> */}
+
 
 
                                 </div>
@@ -1147,44 +1064,13 @@ const ItemEdit = () => {
                             {itemAddData.itemCalibrationSource === "inhouse" &&
                                 <div className='row g-2'>
                                     <h6 className='text-center'>Enter Master Details</h6>
-                                    <div className="col-md-12">
-                                        <TextField size='small' select fullWidth variant='outlined' onChange={handleItemAddChange} label="Select Master" value={itemAddData.itemItemMasterName} name='itemItemMasterName' >
-                                            <MenuItem value=""><em>--Select--</em></MenuItem>
-                                            {itemMasterDistNames.map((item, index) => (
-                                                <MenuItem key={index} value={item}>{item}</MenuItem>
-                                            ))}
-                                        </TextField>
-                                    </div>
+
 
 
 
 
                                     <div className="col-md-12">
-                                        {/* <FormControl size='small' component="div" fullWidth>
-                                            <InputLabel id="itemItemMasterIMTENoId">Select IMTENo.</InputLabel>
-                                            <Select
-                                                labelId="itemItemMasterIMTENoId"
-                                                multiple
-                                                name="itemItemMasterIMTENo"
-                                                value={itemAddData.itemItemMasterIMTENo} // Ensure this holds the correct selected value(s)
-                                                onChange={handleItemAddChange}
-                                                input={<OutlinedInput fullWidth label="Select IMTE No" />}
-                                                renderValue={(selected) => (
-                                                    Array.isArray(selected) ?
-                                                        selected.map((item) => item.itemIMTENo).join(", ") :
-                                                        selected.itemIMTENo // Render a single selected value
-                                                )}
-                                                MenuProps={MenuProps}
-                                                fullWidth
-                                            >
-                                                {itemMasterListByName.map((name, index) => (
-                                                    <MenuItem key={index} value={name}>
-                                                        <Checkbox checked={itemAddData.itemItemMasterIMTENo.indexOf(name.itemIMTENo) > -1} />
-                                                        <ListItemText primary={name.itemIMTENo} />
-                                                    </MenuItem>
-                                                ))}
-                                            </Select>
-                                        </FormControl> */}
+
                                         <FormControl size='small' component="div" fullWidth>
                                             <InputLabel id="itemItemMasterIMTENoId">Select IMTENo.</InputLabel>
                                             <Select
@@ -1194,28 +1080,15 @@ const ItemEdit = () => {
                                                 value={itemAddData.itemItemMasterIMTENo} // Ensure this holds the correct selected value(s)
                                                 onChange={handleItemAddChange}
                                                 input={<OutlinedInput fullWidth label="Select IMTE No" />}
-                                                // renderValue={(selected) => (
-                                                //     Array.isArray(selected) ?
-                                                //         selected.map((item) => item.itemIMTENo).join(", ") :
-                                                //         selected.itemIMTENo // Render a single selected value
-                                                // )}
-                                                // 
-                                                //  renderValue={(selected) => selected.map(item => itemMasterListByName.find(sub => sub._id === item).itemIMTENo).join(", ")} MenuProps={MenuProps}
-                                                renderValue={(selected) => {
-                                                    const selectedParts = selected.map(item => {
-                                                        const foundPart = itemMasterListByName.find(part => part._id === item);
-                                                        return foundPart ? foundPart.itemIMTENo : "";
-                                                    }).filter(Boolean); // Filter out empty strings
 
-                                                    return selectedParts.join(", ");
-                                                }}
+                                                renderValue={(selected) => selected.join(", ")}
                                                 MenuProps={MenuProps}
                                                 fullWidth
                                             >
-                                                {itemMasterListByName.map((name, index) => (
-                                                    <MenuItem key={index} value={name._id}>
-                                                        <Checkbox checked={itemAddData.itemItemMasterIMTENo.indexOf(name._id) > -1} />
-                                                        <ListItemText primary={name.itemIMTENo} />
+                                                {isItemMasterList.map((name, index) => (
+                                                    <MenuItem style={{ padding: 0 }} key={index} value={name.itemIMTENo}>
+                                                        <Checkbox checked={itemAddData.itemItemMasterIMTENo.indexOf(name.itemIMTENo) > -1} />
+                                                        <ListItemText primary={name.itemAddMasterName + " - " + name.itemIMTENo} />
                                                     </MenuItem>
                                                 ))}
                                             </Select>
@@ -1276,28 +1149,7 @@ const ItemEdit = () => {
                                 <div className='row g-2'>
                                     <h6 className='text-center'>Enter oem Details</h6>
                                     <div className="col-md-7">
-                                        {/* <FormControl size='small' component="div" fullWidth>
-                                            <InputLabel id="itemOEMId">Select Supplier</InputLabel>
-                                            <Select
-                                                labelId="itemOEMId"
-                                                id="demo-multiple-checkbox"
-                                                multiple
-                                                name="itemOEM"
-                                                value={itemAddData.itemOEM}
-                                                onChange={handleItemAddChange}
-                                                input={<OutlinedInput fullWidth label="Select Supplier" />}
-                                                renderValue={(selected) => selected.join(', ')}
-                                                MenuProps={MenuProps}
-                                                fullWidth
-                                            >
-                                                {oemList.map((name, index) => (
-                                                    <MenuItem key={index} value={name.aliasName}>
-                                                        <Checkbox checked={itemAddData.itemOEM.indexOf(name.aliasName) > -1} />
-                                                        <ListItemText primary={name.aliasName} />
-                                                    </MenuItem>
-                                                ))}
-                                            </Select>
-                                        </FormControl> */}
+
 
 
                                         <FormControl size='small' component="div" fullWidth>
@@ -1352,12 +1204,12 @@ const ItemEdit = () => {
                                     </tr>
                                     {
                                         itemAddData.itemItemMasterIMTENo.map((itemSup, index) => {
-                                            const selectedImte = itemMasterListByName.find(sup => sup._id === itemSup);
+                                            const selectedImte = isItemMasterList.find(sup => sup.itemIMTENo === itemSup);
                                             return (
                                                 <tr key={index}>
                                                     <td>{index + 1}</td>
-                                                    <td>{selectedImte ? selectedImte.itemIMTENo : ''}</td>
-                                                    <td>{selectedImte ? selectedImte.itemDueDate : ''}</td>
+                                                    <td>{selectedImte ? selectedImte.itemAddMasterName + " - " + selectedImte.itemIMTENo : ''}</td>
+                                                    <td>{selectedImte ? dayjs(selectedImte.itemDueDate).format("DD-MM-YYYY") : ''}</td>
                                                 </tr>
                                             );
                                         })
@@ -1381,17 +1233,7 @@ const ItemEdit = () => {
                                     ))}
 
 
-                                    {/* {
-                                        itemAddData.itemSupplier.map((itemSup, index) => {
-                                            const selectedSupplier = supplierList.find(sup => sup._id === itemSup);
-                                            return (
-                                                <tr key={index}>
-                                                    <td>{index + 1}</td>
-                                                    <td>{selectedSupplier ? selectedSupplier.aliasName : ''}</td>
-                                                </tr>
-                                            );
-                                        })
-                                    } */}
+
 
 
 
@@ -1417,12 +1259,12 @@ const ItemEdit = () => {
                                             );
                                         })
                                     } */}
-                                     {itemAddData.itemOEM.map((item, index) => (
-                                            <tr key={index}>
-                                                <td>{index + 1}</td>
-                                                <td >{item}</td>
-                                            </tr>
-                                        ))} 
+                                    {itemAddData.itemOEM.map((item, index) => (
+                                        <tr key={index}>
+                                            <td>{index + 1}</td>
+                                            <td >{item}</td>
+                                        </tr>
+                                    ))}
 
 
                                 </tbody>

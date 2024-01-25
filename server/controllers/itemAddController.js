@@ -618,6 +618,7 @@ const itemAddController = {
           V: 'itemCalAlertDays',
           W: 'itemCalibrationSource',
           X: 'itemSupplier',
+          Y: 'itemItemMasterName',
           Z: 'itemCalDate',
           AA: 'itemDueDate',
           AB: 'itemCalibratedAt',
@@ -627,7 +628,6 @@ const itemAddController = {
           AF: 'itemUncertainityUnit',
           AG: 'itemPlant',
           AH: 'itemPrevCalData',
-          AI: 'itemItemMasterName',
           AJ: 'itemItemMasterIMTENo'
       }
       });
