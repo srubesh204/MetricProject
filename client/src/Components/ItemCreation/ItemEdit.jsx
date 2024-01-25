@@ -244,7 +244,6 @@ const ItemEdit = () => {
         itemMasterRef: "",
         selectedItemMaster: [],
         isItemMaster: "",
-
         itemAddMasterName: "",
         itemIMTENo: "",
         itemImage: "",
@@ -272,10 +271,8 @@ const ItemEdit = () => {
         itemOEM: [],
         itemCalDate: dayjs().format("YYYY-MM-DD"),
         itemDueDate: "",
-
         itemCalibratedAt: "",
         itemCertificateName: "",
-
         itemCertificateNo: "",
         itemPartName: [],
         itemOBType: "",
@@ -1415,7 +1412,7 @@ const ItemEdit = () => {
                                         </div>} */}
 
 
-                            {(itemAddData.isItemMaster === "0" && itemAddData.itemType !== "referenceStandard") && <Paper className='row-6-lg' elevation={12} sx={{ p: 2, mt: 2, height: "inherit" }} >
+                            {(itemAddData.isItemMaster !== "1" && itemAddData.itemType !== "referenceStandard") && <Paper className='row-6-lg' elevation={12} sx={{ p: 2, mt: 2, height: "inherit" }} >
 
                                 <h5 className='text-center'>Part</h5>
                                 <div className="row">
@@ -1430,26 +1427,18 @@ const ItemEdit = () => {
                                                 value={itemAddData.itemPartName}
                                                 onChange={handleItemAddChange}
                                                 input={<OutlinedInput fullWidth label="Select Part" />}
-                                                renderValue={(selected) => {
-                                                    const selectedParts = selected.map(item => {
-                                                        const foundPart = partData.find(part => part._id === item);
-                                                        return foundPart ? foundPart.partName : "";
-                                                    }).filter(Boolean); // Filter out empty strings
-
-                                                    return selectedParts.join(", ");
-                                                }}
+                                                renderValue={(selected) => selected.join(", ")}
                                                 MenuProps={MenuProps}
                                                 fullWidth
                                             >
                                                 {partData.map((name, index) => (
-                                                    <MenuItem key={index} value={name._id}>
-                                                        <Checkbox checked={itemAddData.itemPartName.indexOf(name._id) > -1} /> {/* Check if the item is selected */}
-                                                        <ListItemText primary={name.partName} />
+                                                    <MenuItem key={index} value={name.partNo}>
+                                                        <Checkbox checked={itemAddData.itemPartName.indexOf(name.partNo) > -1} />
+                                                        <ListItemText primary={name.partNo + " - " + name.partName + " - " + name.customer} />
                                                     </MenuItem>
                                                 ))}
                                             </Select>
                                         </FormControl>
-
                                     </div>
 
 

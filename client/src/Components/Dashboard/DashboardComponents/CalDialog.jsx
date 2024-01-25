@@ -1059,16 +1059,7 @@ const CalDialog = () => {
                                             </tr>
                                             {/* {calibrationData.calcalibrationData.map((item)=> ()} */}
                                             {calibrationData && calibrationData.calcalibrationData.map((item, index) => {
-                                                let color = ""
-                                                if (item.rowStatus === "ok") {
-                                                    color = "#4cbb17"
-                                                } else if (item.rowStatus === "notOk") {
-                                                    color = "red"
-                                                } else if (item.rowStatus === "conditionallyOk") {
-                                                    color = "orange"
-                                                } else {
-                                                    color = ""
-                                                }
+                                               
 
                                                 //color changer
                                                 let minColor = "";
@@ -1089,7 +1080,7 @@ const CalDialog = () => {
                                                             minColor = "orange"
                                                         }
                                                         else if (item.calMinOB >= item.calMinPS && item.calMinOB <= item.calMaxPS) {
-                                                            minColor = "green"
+                                                            minColor = "#4cbb17"
                                                         } else {
                                                             minColor = "red"
                                                         }
@@ -1098,7 +1089,7 @@ const CalDialog = () => {
                                                             maxColor = "orange"
                                                         }
                                                         else if (item.calMaxOB >= item.calMinPS && item.calMaxOB <= item.calMaxPS) {
-                                                            maxColor = "green"
+                                                            maxColor = "#4cbb17"
                                                         } else {
                                                             maxColor = "red"
                                                         }
@@ -1107,7 +1098,7 @@ const CalDialog = () => {
                                                             averageColor = "orange"
                                                         }
                                                         else if (item.calAverageOB >= item.calMinPS && item.calAverageOB <= item.calMaxPS) {
-                                                            averageColor = "green"
+                                                            averageColor = "#4cbb17"
                                                         } else {
                                                             averageColor = "red"
                                                         }
@@ -1121,7 +1112,7 @@ const CalDialog = () => {
                                                             minColor = "orange"
                                                         }
                                                         else if (item.calMinOB >= item.calMinPS && item.calMinOB <= item.calMaxPS) {
-                                                            minColor = "green"
+                                                            minColor = "#4cbb17"
                                                         } else {
                                                             minColor = "red"
                                                         }
@@ -1130,7 +1121,7 @@ const CalDialog = () => {
                                                             maxColor = "orange"
                                                         }
                                                         else if (item.calMaxOB >= item.calMinPS && item.calMaxOB <= item.calMaxPS) {
-                                                            maxColor = "green"
+                                                            maxColor = "#4cbb17"
                                                         } else {
                                                             maxColor = "red"
                                                         }
@@ -1139,7 +1130,7 @@ const CalDialog = () => {
                                                             averageColor = "orange"
                                                         }
                                                         else if (item.calAverageOB >= item.calMinPS && item.calAverageOB <= item.calMaxPS) {
-                                                            averageColor = "green"
+                                                            averageColor = "#4cbb17"
                                                         } else {
                                                             averageColor = "red"
                                                         }
