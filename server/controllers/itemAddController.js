@@ -618,7 +618,7 @@ const itemAddController = {
           V: 'itemCalAlertDays',
           W: 'itemCalibrationSource',
           X: 'itemSupplier',
-          
+          Y: 'itemPartName',
           Z: 'itemCalDate',
           AA: 'itemDueDate',
           AB: 'itemCalibratedAt',
@@ -639,8 +639,8 @@ const itemAddController = {
         item.itemReceiptDate = dayjs(item.itemReceiptDate).format("YYYY-MM-DD")
         item.itemLocation = item.itemLocation ?  (item.itemLocation).toLowerCase() : "department"
         item.itemStatus = item.itemStatus ? (item.itemStatus).toLowerCase() : "active"
-        item.itemItemMasterIMTENo = item.itemItemMasterIMTENo ? item.itemItemMasterIMTENo.split(",") : ""
-       
+        item.itemItemMasterIMTENo = item.itemItemMasterIMTENo ? item.itemItemMasterIMTENo.split(",") : []
+        item.itemPartName = item.itemPartName ? item.itemPartName.split(",") : []
         
         return item;
       });
