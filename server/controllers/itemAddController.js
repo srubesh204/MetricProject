@@ -625,9 +625,10 @@ const itemAddController = {
           AD: 'itemCertificateName',
           AE: 'itemUncertainity',
           AF: 'itemUncertainityUnit',
-          AG: 'itemPlant'
-
-
+          AG: 'itemPlant',
+          AH: 'itemPrevCalData',
+          AI: 'itemItemMasterName',
+          AJ: 'itemItemMasterIMTENo'
       }
       });
       console.log(jsonData)

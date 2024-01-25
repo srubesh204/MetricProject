@@ -431,11 +431,7 @@ const ItemEdit = () => {
         if (name === "itemRangeSizeUnit") {
             setItemAddData((prev) => ({ ...prev, [name]: value, acceptanceCriteria: [{ acAccuracyUnit: value, acRangeSizeUnit: value }] }))
         }
-        {/* setItemAddData((prevData) => ({
-            ...prevData,
-            [name]: value,
-            previousItemRangeSizeUnit: prevData.itemRangeSizeUnit, // Store the previous value
-        }));*/}
+       
 
         if (name === "itemDepartment") {
 
@@ -1489,12 +1485,13 @@ const ItemEdit = () => {
                                             onChange={handleItemAddChange}
                                             label="Calibrated at"
                                             select
+                                            value={itemAddData.itemCalibratedAt}
                                             name='itemCalibratedAt'
                                             id='itemCalibratedAtId'
                                         >
                                             <MenuItem value="inhouse">InHouse</MenuItem>
                                             {suppOEM.map((item, index) => (
-                                                <MenuItem key={index} value={item.aliasName}>{item.aliasName}</MenuItem>
+                                                <MenuItem key={index} value={item.fullName}>{item.fullName}</MenuItem>
                                             ))}
                                         </TextField>
                                         {itemAddData.isItemMaster === "1" &&
