@@ -17,6 +17,11 @@ import DialogTitle from '@mui/material/DialogTitle';
 import Snackbar from '@mui/material/Snackbar';
 import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
 import GrnAdd from './GrnAdd';
+import {ArrowBack,Error, HomeMax, House, Mail, MailLock,  } from '@mui/icons-material';
+import { Link as RouterLink } from 'react-router-dom';
+
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+
 
 import Alert from '@mui/material/Alert';
 import dayjs from 'dayjs';
@@ -516,10 +521,10 @@ const GrnList = () => {
                                                 <div className='d-flex justify-content-between align-items-center'>
                                                     <GridToolbar />
                                                     <div className='mt-2'>
-                                                    {itemListSelectedRowIds.length !== 0 &&  <Button variant='contained' type='button' size='small' color='error'onClick={() => setDeleteModalItem(true)}> Delete </Button>}
-                                                       
-                                      
-                                    
+                                                        {itemListSelectedRowIds.length !== 0 && <Button variant='contained' type='button' size='small' color='error' onClick={() => setDeleteModalItem(true)}> Delete </Button>}
+
+
+
 
 
                                                     </div>
@@ -594,8 +599,22 @@ const GrnList = () => {
 
                             <div className='row'>
                                 <div className='col d-flex '>
-                                    <div className='me-2 '>
+                                    {/* <div className='me-2 '>
                                         <button type="button" className='btn btn-secondary' >Print</button>
+                                    </div> */}
+                                    <div className='row'>
+                                        <div className='col d-flex justify-content-end'>
+                                            <div className='me-2'>
+                                                <Button component={Link} to={`/home`} variant="contained" size='small' color="warning">
+                                                    <ArrowBackIcon /> Dash board
+                                                </Button>
+                                            </div>
+                                            <div >
+                                                <Button component={Link} to="/" size='small' variant='contained' startIcon={<ArrowBack />} endIcon={<House />} color='secondary'>Home</Button>
+                                            </div>
+                                        </div>
+
+
                                     </div>
 
                                 </div>
@@ -606,7 +625,7 @@ const GrnList = () => {
                                             <AddIcon /> Add Item
                                         </Button>
                                     </div>
-                                    
+
                                     <Dialog
                                         open={deleteModalItem}
                                         onClose={() => setDeleteModalItem(false)}

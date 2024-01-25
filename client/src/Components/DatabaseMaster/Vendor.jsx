@@ -16,7 +16,10 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import dayjs from 'dayjs';
 import { Add, Remove, HighlightOffRounded } from '@mui/icons-material';
-
+import {ArrowBack,Error, HomeMax, House, Mail, MailLock,  } from '@mui/icons-material';
+import { Link as RouterLink } from 'react-router-dom';
+import { Link } from 'react-router-dom';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
@@ -424,14 +427,14 @@ const Vendor = () => {
                 .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
                 .join(' ');
             console.log(formattedValue)
-           
-            setVendorData((prev) => ({ ...prev, [name]: formattedValue })); 
+
+            setVendorData((prev) => ({ ...prev, [name]: formattedValue }));
 
 
         }
     };
 
-   
+
 
 
 
@@ -1234,7 +1237,7 @@ const Vendor = () => {
                             elevation={12}
                         >
 
-                            <h4 className='text-center'>Vendor List</h4>
+                            {/* <h4 className='text-center'>Vendor List</h4> */}
                             <div className="d-flex justify-content-between">
 
                                 <div className="col-3 mb-2">
@@ -1296,6 +1299,20 @@ const Vendor = () => {
 
 
                                 />
+                            </div>
+                            <div className='row'>
+                                <div className='col d-flex justify-content-end'>
+                                    <div className='me-2'>
+                                        <Button component={Link} to={`/home`} variant="contained" size='small' color="warning">
+                                            <ArrowBackIcon /> Dash board
+                                        </Button>
+                                    </div>
+                                    <div >
+                                        <Button component={Link} to="/" variant='contained' startIcon={<ArrowBack />} endIcon={<House />} color='secondary'>Home</Button>
+                                    </div>
+                                </div>
+
+
                             </div>
 
                             <Dialog

@@ -143,7 +143,7 @@ const MailConfig = () => {
     const addSubjectDataRow = () => {
         if (mailDetails.length !== 0) {
             setMailData((prev) => ({ ...prev, mailSubjects: [...prev.mailSubjects, mailDetails.mailSubject] }))
-            
+            setMailDetails((prev) => ({... prev, mailSubject:""}))
         }
     }
 
@@ -151,6 +151,7 @@ const MailConfig = () => {
     const addBodyRow = () => {
         if (mailDetails.length !== 0) {
             setMailData((prev) => ({ ...prev, mailBodies: [...prev.mailBodies, mailDetails.mailContent] }))
+            setMailDetails((prev) => ({... prev, mailContent:""}))
         }
     }
 
@@ -324,6 +325,7 @@ const MailConfig = () => {
                                     rows={2}
                                     onChange={handleMailChanges}
                                     value={mailDetails.mailSubject}
+                                    disabled={!isEditable}
 
                                     id="mailSubjectId"
                                     name="mailSubject"
@@ -333,7 +335,7 @@ const MailConfig = () => {
                                 //variant="standard"
                                 />
                                 <div className='text-end mt-2' >
-                                    <Button size='small' color='warning' onClick={() => addSubjectDataRow(true)} variant='contained'>Add </Button>
+                                    <Button size='small' color='warning' disabled={!isEditable} onClick={() => addSubjectDataRow(true)} variant='contained'>Add </Button>
                                 </div>
                             </div>
                             <div className='col'>
@@ -342,13 +344,13 @@ const MailConfig = () => {
                                     multiline
                                     rows={2}
                                     size="small"
-                                    // disabled={!isEditable}
+                                     disabled={!isEditable}
                                     onChange={handleMailChanges}
                                     value={mailDetails.mailContent}
                                     fullWidth
                                     name="mailContent" />
                                 <div className='text-end mt-2'>
-                                    <Button size='small' color='warning' onClick={() => addBodyRow(true)} variant='contained'>Add </Button>
+                                    <Button size='small' color='warning' disabled={!isEditable} onClick={() => addBodyRow(true)} variant='contained'>Add </Button>
                                 </div>
                             </div>
                         </div>
@@ -393,7 +395,7 @@ const MailConfig = () => {
                                                 <td style={{ width: "2%" }}>{index + 1}</td>
                                                 <td>{item}</td>
 
-                                                <th style={{ width: "2%" }}><Button size='small' color="error" aria-label="add" onClick={() => deleteMailRow(index)}>
+                                                <th style={{ width: "2%" }}><Button size='small' disabled={!isEditable} color="error" aria-label="add" onClick={() => deleteMailRow(index)}>
                                                     <Delete />
                                                 </Button></th>
 
@@ -418,7 +420,7 @@ const MailConfig = () => {
                                                 <td style={{ width: "2%" }}>{index + 1}</td>
                                                 <td >{item}</td>
 
-                                                <td style={{ width: "2%" }}><Button size='small' color="error" aria-label="add" onClick={() => deleteMailContentRow(index)}>
+                                                <td style={{ width: "2%" }}><Button size='small' color="error" aria-label="add" disabled={!isEditable} onClick={() => deleteMailContentRow(index)}>
                                                     <Delete />
                                                 </Button></td>
 

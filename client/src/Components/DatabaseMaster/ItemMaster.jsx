@@ -17,6 +17,11 @@ import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+
+import {ArrowBack,Error, HomeMax, House, Mail, MailLock,  } from '@mui/icons-material';
+import { Link as RouterLink } from 'react-router-dom';
+
 import DialogTitle from '@mui/material/DialogTitle';
 import { DataGrid, GridToolbar } from '@mui/x-data-grid';
 import Autocomplete from '@mui/material/Autocomplete';
@@ -1218,6 +1223,21 @@ const ItemMaster = () => {
                                         </tbody>
                                     </table>*/}
                                 </div>
+                                <div className='row'>
+                                    <div className='col d-flex justify-content-end'>
+                                        <div className='me-2'>
+                                            <Button component={Link} to={`/home`} variant="contained" size='small' color="warning">
+                                                <ArrowBackIcon /> Dash board
+                                            </Button>
+                                        </div>
+                                        <div >
+                                            <Button component={Link} to="/" variant='contained' startIcon={<ArrowBack />} endIcon={<House />} color='secondary'>Home</Button>
+                                        </div>
+                                    </div>
+
+
+                                </div>
+
                                 <Dialog
                                     open={deleteModal}
                                     onClose={() => setDeleteModal(false)}
