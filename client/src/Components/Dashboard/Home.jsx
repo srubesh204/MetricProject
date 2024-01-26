@@ -854,12 +854,9 @@ const Home = () => {
   };
 
   useEffect(() => {
-
     itemFetch();
     getAllDepartments();
-   
     empFetch();
-
   }, [])
 
 

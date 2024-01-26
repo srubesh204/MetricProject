@@ -20,20 +20,22 @@ const DcAdd = () => {
     const { employee, loggedEmp } = empRole
 
     const dcAddDatas = useContext(DcListContent)
-    const { dcOpen, setDcOpen, selectedRows, dcListFetchData, itemPlantList, dcDataDcList, ItemFetch } = dcAddDatas
+    const { dcOpen, setDcOpen, selectedRows, dcListFetchData, itemPlantList, dcDataDcList, ItemFetch, lastNo } = dcAddDatas
 
 
+    useEffect(()=> {
+        setDcAddData(prev => ({...prev, dcNo: lastNo}))
+    }, [lastNo])
 
+    console.log(lastNo)
 
-    console.log(selectedRows)
-    const [selectedExtraMaster, setSelectedExtraMaster] = useState([])
     const initialDcData = {
         dcPartyId: "",
         dcPartyType: "",
         dcPartyName: "",
         dcPartyCode: "",
         dcPartyAddress: "",
-        dcNo: "",
+        dcNo: lastNo,
         dcDate: dayjs().format("YYYY-MM-DD"),
         dcReason: "Calibration",
         dcCommonRemarks: "",
@@ -50,7 +52,7 @@ const DcAdd = () => {
         dcPartyName: "",
         dcPartyCode: "",
         dcPartyAddress: "",
-        dcNo: "",
+        dcNo: lastNo,
         dcDate: dayjs().format("YYYY-MM-DD"),
         dcReason: "Calibration",
         dcCommonRemarks: "",
@@ -216,17 +218,7 @@ const DcAdd = () => {
 
     
 
-    useEffect(()=> {
-        const dcNumbers = dcDataDcList.map(item => (item.dcId)).filter(Boolean).sort();
-        if (dcNumbers.length > 0) {
-            const lastNumber = dcNumbers[dcNumbers.length - 1] + 1
-            console.log(lastNumber)
-
-            setDcAddData(prev => ({ ...prev, dcNo: dayjs().year() + "-" + lastNumber }))
-        } else {
-            setDcAddData(prev => ({ ...prev, dcNo: dayjs().year() + "-" + 1 }))
-        }
-    }, [dcDataDcList])
+   
 
 
    
@@ -394,8 +386,8 @@ const DcAdd = () => {
             if (name === "dcPlant") {
                 // Set the selected itemPlant in state
                 setDcAddData ((prev) => ({ ...prev, dcPlant: value }));
-                const plantItems = itemPlantList.filter(item => item.itemPlant === value)
-                const distinctItemNames = [... new Set(plantItems.map(item => item.itemAddMasterName))]
+               
+                const distinctItemNames = [... new Set(itemPlantList.map(item => item.itemAddMasterName))]
                 setItemNameList(distinctItemNames)
                 console.log(distinctItemNames)
             }

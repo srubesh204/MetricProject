@@ -180,7 +180,7 @@ const ItemEdit = () => {
     //
 
     const initialItemAddData = {
-        itemMasterRef: "",
+        
         selectedItemMaster: [],
         isItemMaster: "",
         itemAddMasterName: "",
@@ -241,7 +241,7 @@ const ItemEdit = () => {
 
 
     const [itemAddData, setItemAddData] = useState({
-        itemMasterRef: "",
+        
         selectedItemMaster: [],
         isItemMaster: "",
         itemAddMasterName: "",
@@ -311,7 +311,7 @@ const ItemEdit = () => {
             console.log(itemData)
             setItemAddData((prev) => ({
                 ...prev,
-                itemMasterRef: itemData.itemMasterRef,
+               
                 selectedItemMaster: itemData.selectedItemMaster,
                 itemAddMasterName: itemData.itemAddMasterName,
                 itemIMTENo: itemData.itemIMTENo,
@@ -329,7 +329,7 @@ const ItemEdit = () => {
                 itemStatus: itemData.itemStatus,
                 itemReceiptDate: itemData.itemReceiptDate,
                 itemDepartment: itemData.itemDepartment,
-                // itemCurrentLocation: itemData.itemCurrentLocation,
+               
                 itemArea: itemData.itemArea,
                 itemPlaceOfUsage: itemData.itemPlaceOfUsage,
                 itemCalFreInMonths: itemData.itemCalFreInMonths,
@@ -400,14 +400,7 @@ const ItemEdit = () => {
 
 
 
-    {/* const handleItemAddChange = (e) => {
-        const { name, value } = e.target;
-        setItemAddData((prevData) => ({
-            ...prevData,
-            [name]: value,
-            previousItemRangeSizeUnit: prevData.itemRangeSizeUnit, // Store the previous value
-        }));
-    };*/}
+    
 
 
     const handleItemAddChange = (e) => {
@@ -552,36 +545,31 @@ const ItemEdit = () => {
 
     console.log(itemAddData)
     const [calibrationPointsData, setCalibrationPointsData] = useState([])
-    const itemMasterById = async () => {
-        try {
-            const response = await axios.get(
-                `${process.env.REACT_APP_PORT}/itemMaster/getItemMasterById/${itemAddData.itemMasterRef}`
-            );
-            console.log(response.data)
-            const { _id, itemType, itemDescription, itemPrefix, itemFqInMonths, calAlertInDay, wiNo, uncertainity, standartRef, itemImageName, status, itemMasterImage, workInsName, calibrationPoints } = response.data.result
+    const itemMasterById = () => {
+
+        const master = itemMasterDataList.filter(mas => mas.itemDescription === itemAddData.itemAddMasterName)
+        console.log(master)
+        if (master.length > 0) {
+            const { _id, itemType, itemDescription, itemPrefix, itemFqInMonths, calAlertInDay, wiNo, uncertainity, standardRef, itemImageName, status, itemMasterImage, workInsName, calibrationPoints } = master[0]
             setItemAddData((prev) => ({
                 ...prev,
-
                 itemType: itemType,
+                //itemIMTENo: itemPrefix,
                 itemImage: itemMasterImage,
-                itemAddMasterName: itemDescription,
                 itemCalFreInMonths: itemFqInMonths,
                 itemCalAlertDays: calAlertInDay,
-                selectedItemMaster: response.data.result
+
             }))
             setCalibrationPointsData(calibrationPoints)
-
-
-        } catch (err) {
-            console.log(err);
         }
     };
 
+
     useEffect(() => {
-        if (itemAddData.itemMasterRef) {
+        if (itemAddData.itemAddMasterName) {
             itemMasterById();
         }
-    }, [itemAddData.itemMasterRef]);
+    }, [itemAddData.itemAddMasterName]);
 
 
 
@@ -713,7 +701,7 @@ const ItemEdit = () => {
 
     const validateFunction = () => {
         let tempErrors = {};
-        tempErrors.itemMasterRef = itemAddData.itemMasterRef ? "" : "Item Master is Required"
+        tempErrors.itemAddMasterName = itemAddData.itemAddMasterName ? "" : "Item Master is Required"
 
         setErrors({ ...tempErrors })
 
@@ -852,18 +840,18 @@ const ItemEdit = () => {
 
                             <div className='col-9'>
                                 <TextField
-                                    {...(errors.itemMasterRef !== "" && { helperText: errors.itemMasterRef, error: true })}
-                                    size='small' select variant='outlined' label="Item Name" name='itemMasterRef' value={itemAddData.itemMasterRef} fullWidth onChange={handleItemAddChange}>
+                                    {...(errors.itemAddMasterName !== "" && { helperText: errors.itemAddMasterName, error: true })}
+                                    size='small' select variant='outlined' label="Item Name" name='itemAddMasterName' value={itemAddData.itemAddMasterName} fullWidth onChange={handleItemAddChange}>
                                     <MenuItem value=""><em>Select</em></MenuItem>
                                     {itemMasterDataList.map((item, index) => (
-                                        <MenuItem key={index} value={item._id}>{item.itemDescription}</MenuItem>
+                                        <MenuItem key={index} value={item.itemDescription}>{item.itemDescription}</MenuItem>
                                     ))}
                                 </TextField>
                             </div>
 
                             {/* <div className='col-md-4'>
                                 <TextField
-                                    {...(errors.itemMasterRef !== "" && { helperText: errors.itemMasterRef, error: true })}
+                                    {...(errors.itemAddMasterName !== "" && { helperText: errors.itemAddMasterName, error: true })}
                                     size='small' disabled variant='outlined' label="Item Master" name='itemAddMasterName' value={itemAddData.itemAddMasterName} fullWidth >
                                 </TextField>
                             </div> */}

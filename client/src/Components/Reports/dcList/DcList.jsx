@@ -19,7 +19,7 @@ import Snackbar from '@mui/material/Snackbar';
 import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
 import dayjs from 'dayjs';
 import { Add, Remove, HighlightOffRounded } from '@mui/icons-material';
-import {ArrowBack,Error, HomeMax, House, Mail, MailLock,  } from '@mui/icons-material';
+import { ArrowBack, Error, HomeMax, House, Mail, MailLock, } from '@mui/icons-material';
 import { Link as RouterLink } from 'react-router-dom';
 
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
@@ -38,25 +38,51 @@ const DcList = () => {
     const [dcEditOpen, setDcEditOpen] = useState(false);
     const [dcOpen, setDcOpen] = useState(false);
 
-    const [itemPlantList, setItemPlantList] = useState([])
-    const ItemFetch = async () => {
+    const [defaultDeps, setDefaultDeps] = useState([])
+
+    const itemMasterFetchData = async () => {
         try {
             const response = await axios.get(
-                `${process.env.REACT_APP_PORT}/itemAdd/getAllItemAdds`
+                `${process.env.REACT_APP_PORT}/department/getAllDepartments`
             );
-            console.log(response.data.result)
-            const plantItems = response.data.result.filter(item => (loggedEmp.plantDetails.map(plant => plant.plantName).includes(item.itemPlant) && item.dcStatus !== "1"))
-            console.log(plantItems)
-            setItemPlantList(plantItems);
-            setItemDepartment(plantItems)
+            console.log(response.data)
+            const defaultData = response.data.result.filter(deps => deps.defaultdep === "yes")
+            setDefaultDeps(defaultData.map(dep => dep.department))
+            console.log(defaultData)
 
         } catch (err) {
             console.log(err);
         }
     };
     useEffect(() => {
-        ItemFetch()
+        itemMasterFetchData();
     }, []);
+    console.log(defaultDeps)
+
+    const [itemPlantList, setItemPlantList] = useState([])
+    const ItemFetch = async (deps) => {
+        try {
+            const response = await axios.get(
+                `${process.env.REACT_APP_PORT}/itemAdd/getAllItemAdds`
+            );
+            console.log(response.data.result)
+            const plantItems = response.data.result.filter(item => (loggedEmp.plantDetails.map(plant => plant.plantName).includes(item.itemPlant) && item.dcStatus != "1"))
+            console.log(plantItems)
+            console.log(deps)
+            if (deps.length > 0) {
+                const departmentItems = plantItems.filter(item => deps.includes(item.itemCurrentLocation))
+                console.log(departmentItems)
+                setItemPlantList(departmentItems);
+                setItemDepartment(departmentItems);
+            }
+
+        } catch (err) {
+            console.log(err);
+        }
+    };
+    useEffect(() => {
+        ItemFetch(defaultDeps)
+    }, [defaultDeps]);
 
     //
     const [dcPrintOpen, setDcPrintOpen] = useState(false);
@@ -78,6 +104,8 @@ const DcList = () => {
         formatFetchData();
     }, []);
 
+    const [lastNo, setLastNo] = useState("1")
+
     const [dcDataDcList, setDcDataDcList] = useState([])
     const dcListFetchData = async () => {
         try {
@@ -86,6 +114,9 @@ const DcList = () => {
 
             );
             const plantDc = response.data.result.filter(dc => (loggedEmp.plantDetails.map(plant => plant.plantName).includes(dc.dcPlant)))
+            const dcNos = response.data.result.map(dc => dc.dcId).filter(Boolean).sort()
+            setLastNo((dayjs().year() + "-" + ((dcNos[dcNos.length - 1]) + 1))) 
+            console.log(dcNos[dcNos.length - 1])
             setDcDataDcList(plantDc);
             setFilteredData(plantDc);
 
@@ -687,7 +718,7 @@ const DcList = () => {
                                 <div className='row'>
                                     <div className='col d-flex justify-content-end'>
                                         <div className='me-2'>
-                                            <Button component={Link} to={`/home`}  variant="contained" size='small' color="warning">
+                                            <Button component={Link} to={`/home`} variant="contained" size='small' color="warning">
                                                 <ArrowBackIcon /> Dash board
                                             </Button>
                                         </div>
@@ -742,7 +773,7 @@ const DcList = () => {
                                 <DcEdit />
                             </DcListContent.Provider>
                             <DcListContent.Provider
-                                value={{ dcOpen, setDcOpen, selectedRows, dcListFetchData, printState, setPrintState, itemPlantList, dcDataDcList, ItemFetch }}
+                                value={{ dcOpen, setDcOpen, selectedRows, dcListFetchData, printState, setPrintState, itemPlantList, dcDataDcList, ItemFetch, lastNo }}
                             >
                                 <DcAdd />
                             </DcListContent.Provider>

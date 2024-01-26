@@ -122,24 +122,20 @@ const ItemAdd = () => {
             console.log(response.data)
             const masterItems = response.data.result.filter((item) => item.isItemMaster === "1")
             setItemMasterDataList(response.data.result);
+            const distinctNamesSet = new Set(response.data.result.map(item => item.itemDescription));
 
+            // Convert the Set back to an array
+            const distinctNamesArray = [...distinctNamesSet];
+
+            // Sort the array
+            distinctNamesArray.sort();
+            console.log(distinctNamesArray)
+            setDistinctNamesArray(distinctNamesArray)
         } catch (err) {
             console.log(err);
         }
     };
     useEffect(() => {
-        const distinctNamesSet = new Set(itemMasterDataList.map(item => item.itemAddMasterName));
-
-        // Convert the Set back to an array
-        const distinctNamesArray = [...distinctNamesSet];
-
-        // Sort the array
-        distinctNamesArray.sort();
-
-        console.log(distinctNamesArray);
-
-        const names = [...new Set(distinctNamesSet)]
-        setDistinctNamesArray(names)
         itemMasterFetchData();
     }, []);
 
@@ -149,7 +145,7 @@ const ItemAdd = () => {
 
 
 
-   
+
     const [itemMasterListByName, setItemMasterListByName] = useState([])
 
 
@@ -172,7 +168,7 @@ const ItemAdd = () => {
     }, []);
 
 
-    const [isSelectType, setIsSelectType] = useState(true);
+
 
 
     //
@@ -228,7 +224,7 @@ const ItemAdd = () => {
 
 
     const [itemAddData, setItemAddData] = useState({
-        itemMasterRef: "",
+
         selectedItemMaster: [],
         isItemMaster: "0",
         itemAddMasterName: "",
@@ -311,6 +307,7 @@ const ItemAdd = () => {
 
     };
 
+    const [availabelDeps, setAvailableDeps] = useState([])
 
 
     const handleItemAddChange = (e) => {
@@ -376,6 +373,11 @@ const ItemAdd = () => {
             }));
             console.log("working")
         }
+        if (name === "itemPlant") {
+            const departments = employeeRole.loggedEmp.plantDetails.filter(plant => plant.plantName === value)
+            console.log(departments)
+            setAvailableDeps(departments)
+        }
     }
 
 
@@ -412,34 +414,28 @@ const ItemAdd = () => {
 
 
     const [calibrationPointsData, setCalibrationPointsData] = useState([])
-    const itemMasterById = async () => {
-        try {
-            const response = await axios.get(
-                `${process.env.REACT_APP_PORT}/itemMaster/getItemMasterById/${itemAddData.itemMasterRef}`
-            );
-            console.log(response.data)
-            const { _id, itemType, itemDescription, itemPrefix, itemFqInMonths, calAlertInDay, wiNo, uncertainity, standartRef, itemImageName, status, itemMasterImage, workInsName, calibrationPoints } = response.data.result
+    const itemMasterById = () => {
+
+        const master = itemMasterDataList.filter(mas => mas.itemDescription === itemAddData.itemAddMasterName)
+        console.log(master)
+        if (master.length > 0) {
+            const { _id, itemType, itemDescription, itemPrefix, itemFqInMonths, calAlertInDay, wiNo, uncertainity, standardRef, itemImageName, status, itemMasterImage, workInsName, calibrationPoints } = master[0]
             setItemAddData((prev) => ({
                 ...prev,
                 itemType: itemType,
                 itemIMTENo: itemPrefix,
                 itemImage: itemMasterImage,
-                itemAddMasterName: itemDescription,
                 itemCalFreInMonths: itemFqInMonths,
                 itemCalAlertDays: calAlertInDay,
-                selectedItemMaster: response.data.result
+
             }))
             setCalibrationPointsData(calibrationPoints)
-
-
-        } catch (err) {
-            console.log(err);
         }
     };
 
     useEffect(() => {
-        itemMasterById();
-    }, [itemAddData.itemMasterRef]);
+        itemMasterById(itemAddData.itemAddMasterName);
+    }, [itemAddData.itemAddMasterName]);
 
     const [partData, setPartData] = useState([])
     const getPartList = async () => {
@@ -469,7 +465,7 @@ const ItemAdd = () => {
             );
             console.log(response.data)
             setImteList(response.data.result)
-            
+
         } catch (err) {
             console.log(err);
         }
@@ -553,7 +549,7 @@ const ItemAdd = () => {
 
     const validateFunction = () => {
         let tempErrors = {};
-        tempErrors.itemMasterRef = itemAddData.itemMasterRef ? "" : "Item Master is Required"
+        tempErrors.itemAddMasterName = itemAddData.itemAddMasterName ? "" : "Item Master is Required"
         tempErrors.itemIMTENo = itemAddData.itemIMTENo ? "" : "IMTE No is Required"
         tempErrors.itemType = itemAddData.itemType ? "" : "Item Type is Required"
         tempErrors.itemCalibrationSource = itemAddData.itemCalibrationSource ? "" : "Calibration Source is Required"
@@ -655,7 +651,7 @@ const ItemAdd = () => {
         }
     };
 
-   
+
     const [snackBarOpen, setSnackBarOpen] = useState(false)
 
     const handleSnackClose = (event, reason) => {
@@ -674,7 +670,7 @@ const ItemAdd = () => {
         setUploadMessage(null)
     }
 
-    
+
 
 
 
@@ -698,7 +694,7 @@ const ItemAdd = () => {
 
     };
 
-
+    console.log(availabelDeps)
 
 
 
@@ -712,14 +708,14 @@ const ItemAdd = () => {
 
                             <div className='col-9'>
                                 <TextField
-                                    {...(errors.itemMasterRef !== "" && { helperText: errors.itemMasterRef, error: true })}
-                                    size='small' select variant='outlined' label="Item Name" name='itemMasterRef' value={itemAddData.itemMasterRef} fullWidth onChange={handleItemAddChange}>
+                                    {...(errors.itemAddMasterName !== "" && { helperText: errors.itemAddMasterName, error: true })}
+                                    size='small' select variant='outlined' label="Item Name" name='itemAddMasterName' value={itemAddData.itemAddMasterName} fullWidth onChange={handleItemAddChange}>
                                     <MenuItem value=""><em>Select</em></MenuItem>
                                     {itemMasterDataList.map((item, index) => (
-                                        <MenuItem key={index} value={item._id}>{item.itemDescription}</MenuItem>
+                                        <MenuItem key={index} value={item.itemDescription}>{item.itemDescription}</MenuItem>
                                     ))}
                                 </TextField>
-                               
+
 
                             </div>
                             <div className="col-6">
@@ -734,12 +730,12 @@ const ItemAdd = () => {
                                         name='itemIMTENo' onChange={handleItemAddChange}  {...params} label="IMTE No" />}
                                     getOptionDisabled={option => true}
                                     clearOnBlur={false}
-                                
+
 
                                 />
 
 
-                               
+
 
                             </div>
                             <div className="col">
@@ -767,7 +763,7 @@ const ItemAdd = () => {
 
                     </Paper>
 
-                    {itemAddData.itemMasterRef !== "" && <React.Fragment>
+                    {itemAddData.itemAddMasterName !== "" && <React.Fragment>
                         <div className="row ">
                             <div className="col">
                                 <Paper className='mb-2 row-md-6' elevation={12} sx={{ p: 2 }}>
@@ -891,8 +887,8 @@ const ItemAdd = () => {
                                             <TextField
                                                 {...(errors.itemDepartment !== "" && { helperText: errors.itemDepartment, error: true })}
                                                 value={employeeRole.loggedEmp.plantDetails.length === 1 ? employeeRole.loggedEmp.plantDetails[0].plantName : itemAddData.itemDepartment} disabled={itemAddData.itemPlant === ""} onChange={handleItemAddChange} size='small' select fullWidth variant='outlined' label="Department" name='itemDepartment' id='itemDepartmentId'>
-                                                {employeeRole.loggedEmp.plantDetails.map((item, index) => (
-                                                    <MenuItem key={index} value={item.department}>{item.department}</MenuItem>
+                                                {availabelDeps.length > 0 && availabelDeps[0].departments.length > 0 && availabelDeps[0].departments.map((dep, index) => (
+                                                    <MenuItem key={index} value={dep}>{dep}</MenuItem>
                                                 ))}
                                             </TextField>
                                         </div>
@@ -949,7 +945,7 @@ const ItemAdd = () => {
                                 {itemAddData.itemCalibrationSource === "inhouse" &&
                                     <div className='row g-2'>
                                         <h6 className='text-center m-0'>Enter Master Details</h6>
-                                        
+
 
 
 
@@ -970,15 +966,15 @@ const ItemAdd = () => {
                                                     fullWidth
                                                 >
                                                     {itemMasterListByName.map((name, index) => (
-                                                        <MenuItem style={{padding: 0}} key={index} value={name.itemIMTENo}>
+                                                        <MenuItem style={{ padding: 0 }} key={index} value={name.itemIMTENo}>
                                                             <Checkbox checked={itemAddData.itemItemMasterIMTENo.indexOf(name.itemIMTENo) > -1} />
                                                             <ListItemText primary={name.itemAddMasterName + " - " + name.itemIMTENo} />
                                                         </MenuItem>
                                                     ))}
                                                 </Select>
                                             </FormControl>
-                                            
-                                            
+
+
                                         </div>
 
 
@@ -1158,7 +1154,7 @@ const ItemAdd = () => {
 
                                         </tr>
 
-                                        
+
 
 
                                         {itemAddData.itemOEM.map((item, index) => (
@@ -1318,7 +1314,7 @@ const ItemAdd = () => {
                                                     {partData.map((name, index) => (
                                                         <MenuItem key={index} value={name.partNo}>
                                                             <Checkbox checked={itemAddData.itemPartName.indexOf(name.partNo) > -1} />
-                                                            <ListItemText primary={name.partNo +" - "+ name.partName + " - "+ name.customer} />
+                                                            <ListItemText primary={name.partNo + " - " + name.partName + " - " + name.customer} />
                                                         </MenuItem>
                                                     ))}
                                                 </Select>

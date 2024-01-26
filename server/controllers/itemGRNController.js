@@ -44,7 +44,7 @@ const itemGRNController = {
 
           const itemData = await itemAddModel.findById(item.grnItemId)
           const { itemIMTENo, itemCurrentLocation: itemLastLocation, itemDepartment } = itemData
-          const updateItemFields = { itemIMTENo, itemCurrentLocation: itemDepartment, itemLastLocation, itemLocation: "department", grnId: result._id, grnStatus: "1", grnCreatedOn: grnDate, grnNo: grnNo }
+          const updateItemFields = { itemIMTENo, itemCurrentLocation: itemDepartment, itemLastLocation, itemLocation: "department", grnId: result._id, grnStatus: "1", grnCreatedOn: grnDate, grnNo: grnNo, }
           const updateResult = await itemAddModel.findOneAndUpdate(
             { _id: item._id },
             { $set: updateItemFields },
