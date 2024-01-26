@@ -304,7 +304,7 @@ const Employee = () => {
             ...prev,
             employeeCode: params.row.employeeCode ? params.row.employeeCode : "",
             title: params.row.title ? params.row.title : "",
-            firstName: params.row.firstName ? params.row.title : "",
+            firstName: params.row.firstName ? params.row.firstName : "",
             lastName: params.row.lastName ? params.row.lastName : "",
             dob: params.row.dob ? params.row.dob : "",
             address: params.row.address ? params.row.address : "",

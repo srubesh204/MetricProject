@@ -45,6 +45,7 @@ const ItemList = () => {
     const [printState, setPrintState] = useState(false)
     const [loaded, setLoaded] = useState(false);
 
+    
     const [itemList, setItemList] = useState([]);
     const [filteredItemListData, setFilteredItemListData] = useState([])
 
@@ -55,8 +56,9 @@ const ItemList = () => {
             const response = await axios.get(
                 `${process.env.REACT_APP_PORT}/itemAdd/getAllItemAdds`
             );
-
-            const plantwise = response.data.result.filter(item => employeeRole.loggedEmp.plantDetails.find(plant => plant.plantName === item.itemPlant))
+                console.log(response.data.result)
+            const plantwise = response.data.result.filter(item => employeeRole.loggedEmp.plantDetails.map(plant => plant.plantName).includes(item.itemPlant))
+            console.log(plantwise)
 
             const filterNames = ["itemIMTENo", "itemType", "itemDepartment", "itemPlant", "itemCalibrationSource", "itemCurrentLocation"]
 

@@ -33,7 +33,7 @@ import OnSiteList from './Components/Reports/onSiteGrn/OnSiteList';
 import OnSiteEditGrn from './Components/Reports/onSiteGrn/OnSiteEditGrn';
 import OnSiteDialog from './Components/Dashboard/DashboardComponents/OnSiteDialog';
 
-import Roles from './Components/system/Permissions';
+
 
 import { createContext, useContext, useEffect, useState } from 'react';
 import AccessDenied from './Components/ErrorComponents/AccessDenied';
@@ -95,7 +95,7 @@ const generateRoutes = (employee) => {
     { path: "/onSiteList", element: <OnSiteList /> },
     { path: "/onSiteEditGrn", element: <OnSiteEditGrn /> },
     { path: "/onSiteDialog", element: <OnSiteDialog /> },
-    { path: "/roles", element: <Roles /> },
+    
     { path: "/totalList", element: <TotalList /> },
     { path: "/calDueReport", element: <CalDueReport /> },
 

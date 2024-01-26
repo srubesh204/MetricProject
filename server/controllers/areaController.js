@@ -9,11 +9,11 @@ const areaController = {
       //res.status(200).json(employees);
     } catch (err) {
       console.error(err);
-      res.status(500).send('Error on Area');
+      res.status(500).send('Error on Area'); 
     }
   },
   createArea: async (req, res) => {
-
+ 
     try {
 
       const { area, areaStatus } = req.body;

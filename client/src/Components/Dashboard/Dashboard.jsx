@@ -57,8 +57,7 @@ import MailConfig from '../system/Mails/MailConfig';
 import FormatNumber from '../system/FormatNumber';
 import CompanyDetails from '../system/CompanyDetails';
 import InsHistoryCard from '../Reports/InsHistoryCard';
-import Roles from '../system/Permissions';
-import Permissions from '../system/Permissions';
+
 import TotalList from '../Reports/TotalList';
 import CalDueReport from '../Reports/CalDueReport';
 //
@@ -155,7 +154,7 @@ const Dashboard = () => {
       { name: "Mail Configuration", file: <MailConfig />, icon: <img src={`${process.env.REACT_APP_PORT}/icon/list-text.png`} alt="Mail Configuration Icon" style={{ width: '20px', height: '20px' }} /> },
       { name: "Format Number", file: <FormatNumber />, icon: <img src={`${process.env.REACT_APP_PORT}/icon/list-text.png`} alt="Format Number Icon" style={{ width: '20px', height: '20px' }} /> },
       { name: "Company Details", file: <CompanyDetails />, icon: <img src={`${process.env.REACT_APP_PORT}/icon/company details.png`} alt="Company Details Icon" style={{ width: '20px', height: '20px' }} /> },
-      { name: "Permissions", file: <Permissions />, icon: <img src={`${process.env.REACT_APP_PORT}/icon/list-text.png`} alt="Permissions Icon" style={{ width: '20px', height: '20px' }} /> },
+      
       { name: "Label Print", file: "", icon: <img src={`${process.env.REACT_APP_PORT}/icon/list-text.png`} alt="Label Print Icon" style={{ width: '20px', height: '20px' }} /> },
 
     ],
