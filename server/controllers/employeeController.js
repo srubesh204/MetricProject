@@ -213,12 +213,6 @@ const employeeController = {
           N: 'doj',
           O: 'employmentStatus',
           P: 'password',
-          
-
-
-           
-
-
       }
       });
       console.log(jsonData)
