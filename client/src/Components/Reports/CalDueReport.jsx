@@ -1,12 +1,15 @@
 import React, { useEffect, useState, createContext } from 'react'
 import { TextField, MenuItem, Button } from '@mui/material';
-import { Box, Container, Grid, Paper, Typography } from "@mui/material";
+import { Box, Container, Grid, Paper, Typography ,Link} from "@mui/material";
 import { DataGrid, GridToolbar, GridToolbarQuickFilter } from '@mui/x-data-grid';
 import axios from 'axios';
 import { Edit, FilterAlt, PrintRounded, Send } from '@mui/icons-material';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import {ArrowBack,Error, HomeMax, House, Mail, MailLock,  } from '@mui/icons-material';
+import { Link as RouterLink } from 'react-router-dom';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import dayjs from 'dayjs';
 import MailSender from '../mailComponent/MailSender';
 //import MailSender from '../mailComponent/MailSender';
@@ -398,21 +401,21 @@ const CalDueReport = () => {
 
     const mailCheck = () => {
         const singlePlant = itemListSelectedRowIds.every((item, index, array) => item.itemPlant === array[0].itemPlant);
-    
+
         if (singlePlant && itemListSelectedRowIds.length > 0) {
-          setMailOpen(true)
-    
-        } 
-    
-    
-      }
+            setMailOpen(true)
+
+        }
+
+
+    }
 
     const [mailOpen, setMailOpen] = useState(false)
     const TotalListChildData = {
         mailOpen,
         setMailOpen,
-        selectedRows : itemListSelectedRowIds
-      }
+        selectedRows: itemListSelectedRowIds
+    }
 
     return (
         <div className='px-5 pt-3'>
@@ -640,17 +643,17 @@ const CalDueReport = () => {
                                     disableDensitySelector
                                     slots={{
                                         toolbar: () => (
-                                          <div className='d-flex justify-content-between align-items-center'>
-                                            <GridToolbar />
-                    
-                                            <div className='d-flex'>
-                                              <GridToolbarQuickFilter />
-                                              {itemListSelectedRowIds.length > 0 && <Button onClick={() => mailCheck()} size='small' endIcon={<Send />} color="primary">Send Mail</Button>}
+                                            <div className='d-flex justify-content-between align-items-center'>
+                                                <GridToolbar />
+
+                                                <div className='d-flex'>
+                                                    <GridToolbarQuickFilter />
+                                                    {itemListSelectedRowIds.length > 0 && <Button onClick={() => mailCheck()} size='small' endIcon={<Send />} color="primary">Send Mail</Button>}
+                                                </div>
+
                                             </div>
-                    
-                                          </div>
                                         ),
-                                      }}
+                                    }}
                                     density="compact"
                                     //disableColumnMenu={true}
                                     checkboxSelection
@@ -662,6 +665,20 @@ const CalDueReport = () => {
 
                             </Box>
 
+
+
+                        </div>
+                        <div className='row'>
+                            <div className='col d-flex justify-content-end'>
+                                <div className='me-2'>
+                                    <Button component={Link} to={`/home`} variant="contained" size='small' color="warning">
+                                        <ArrowBackIcon /> Dash board
+                                    </Button>
+                                </div>
+                                <div >
+                                    <Button component={Link} to="/" size='small' variant='contained' startIcon={<ArrowBack />} endIcon={<House />} color='secondary'>Home</Button>
+                                </div>
+                            </div>
 
 
                         </div>

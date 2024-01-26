@@ -1,6 +1,6 @@
 import React, { useEffect, useState, createContext } from 'react'
 import { TextField, MenuItem, Button } from '@mui/material';
-import { Box, Container, Grid, Paper, Typography } from "@mui/material";
+import { Box, Container, Grid, Paper, Typography ,Link} from "@mui/material";
 import { DataGrid, GridToolbar, GridToolbarQuickFilter } from '@mui/x-data-grid';
 import axios from 'axios';
 import { Edit, FilterAlt, PrintRounded, Send } from '@mui/icons-material';
@@ -8,6 +8,10 @@ import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import dayjs from 'dayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import {ArrowBack,Error, HomeMax, House, Mail, MailLock,  } from '@mui/icons-material';
+import { Link as RouterLink } from 'react-router-dom';
+
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 
 import Alert from '@mui/material/Alert';
 import Snackbar from '@mui/material/Snackbar';
@@ -22,7 +26,7 @@ dayjs.extend(isSameOrAfter)
 export const TotalListContent = createContext(null);
 const TotalList = () => {
 
-  
+
   const [totalPrintOpen, setTotalPrintOpen] = useState(false);
 
 
@@ -150,7 +154,7 @@ const TotalList = () => {
   console.log(itemStatusDataList)
 
 
- 
+
 
 
 
@@ -325,7 +329,7 @@ const TotalList = () => {
           }));
         }
       }
-      
+
       if (name === "partName") {
         const filteredItems = itemList.filter((item) => (item.itemPartName.includes(value)));
 
@@ -420,11 +424,11 @@ const TotalList = () => {
 
 
   console.log(filteredItemListData)
- 
+
   const dueDatePicker = (newValue, name) => {
     let startDate = "";
     let endDate = "";
-   
+
 
 
     if (name === "dueStartDate") {
@@ -451,7 +455,7 @@ const TotalList = () => {
 
 
 
- 
+
   const [vendorDataList, setVendorDataList] = useState([])
   const vendorFetchData = async () => {
     try {
@@ -473,7 +477,7 @@ const TotalList = () => {
 
 
 
- 
+
 
 
 
@@ -488,7 +492,7 @@ const TotalList = () => {
 
   const handleRowSelectionChange = (newSelection) => {
     const selectedRowsData = filteredItemListData.filter((row) => newSelection.includes(row._id));
-   
+
     setSelectedItemList(selectedRowsData)
 
 
@@ -571,14 +575,6 @@ const TotalList = () => {
 
 
   }
-  
-
-
-
-
-
-
-  
 
 
 
@@ -586,7 +582,15 @@ const TotalList = () => {
 
 
 
-  
+
+
+
+
+
+
+
+
+
 
   const [formatNoData, setFormatNoData] = useState([])
   const formatFetchData = async () => {
@@ -605,14 +609,14 @@ const TotalList = () => {
     formatFetchData();
   }, []);
 
-  
+
 
   const [mailOpen, setMailOpen] = useState(false)
 
   const TotalListChildData = {
     mailOpen,
     setMailOpen,
-    selectedRows : selectedItemList
+    selectedRows: selectedItemList
 
   }
 
@@ -622,7 +626,7 @@ const TotalList = () => {
     if (singlePlant && selectedItemList.length > 0) {
       setMailOpen(true)
 
-    } 
+    }
 
 
   }
@@ -960,6 +964,20 @@ const TotalList = () => {
                   <Button onClick={() => { setTotalPrintOpen(true) }}><PrintRounded color='success' /></Button>
 
                 </div>
+                
+                  <div className='col d-flex justify-content-end'>
+                    <div className='me-2'>
+                      <Button component={Link} to={`/home`} variant="contained" size='small' color="warning">
+                        <ArrowBackIcon /> Dash board
+                      </Button>
+                    </div>
+                    <div >
+                      <Button component={Link} to="/" size='small' variant='contained' startIcon={<ArrowBack />} endIcon={<House />} color='secondary'>Home</Button>
+                    </div>
+                  </div>
+
+
+                
 
               </div>
               <Snackbar anchorOrigin={{ vertical: "top", horizontal: "right" }} open={snackBarOpen} autoHideDuration={6000} onClose={handleSnackClose}>
@@ -981,7 +999,7 @@ const TotalList = () => {
         </LocalizationProvider>
       </form>
 
-      
+
 
       <TotalListContent.Provider
         value={{ totalPrintOpen, setTotalPrintOpen, itemList, filteredItemListData, partDataList, formatNoData }}
@@ -989,8 +1007,8 @@ const TotalList = () => {
 
         <TotalPrint />
       </TotalListContent.Provider>
-      {selectedItemList.length > 0 && 
-      <MailSender {...TotalListChildData}/>}
+      {selectedItemList.length > 0 &&
+        <MailSender {...TotalListChildData} />}
     </div>
   )
 }

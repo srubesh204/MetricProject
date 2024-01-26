@@ -8,6 +8,10 @@ import axios from 'axios';
 import dayjs from 'dayjs';
 import { DisabledByDefault, FileOpen, Pages, PrintRounded } from '@mui/icons-material';
 import { useEmployee } from "../../App";
+import {ArrowBack,Error, HomeMax, House, Mail, MailLock,  } from '@mui/icons-material';
+import { Link as RouterLink } from 'react-router-dom';
+
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 
 import HistoryCardPrint from './HistoryCardPrint';
 import { Link } from "react-router-dom";
@@ -394,10 +398,10 @@ function InsHistoryCard() {
 
                                     <TextField className="me-2" label="Instrument Name" size="small" onChange={handleCalDetails} select name="calInsName" value={calDetails.calInsName} fullWidth >
                                         <MenuItem value="all">All</MenuItem >
-                                          {distItemName.map((cal) => (
+                                        {distItemName.map((cal) => (
                                             <MenuItem value={cal}>{cal}</MenuItem >
-                                        ))}  
-                                         {/* {itemNameList.map((item, index) => (
+                                        ))}
+                                        {/* {itemNameList.map((item, index) => (
                                             <MenuItem key={index} value={item}>
                                                 {item}
                                             </MenuItem>
@@ -584,7 +588,7 @@ function InsHistoryCard() {
 
                             }}
                             elevation={12}>
-                            <div style={{ height: 400, width: '100%' }}>
+                            <div className="mb-2" style={{ height: 350, width: '100%' }}>
                                 <DataGrid
                                     rows={selectedIMTEs}
                                     columns={selectedRow.length > 0 ? selectedRow[0].itemCalibrationSource === "outsource" ? grnColumns : calColumn : []}
@@ -612,6 +616,20 @@ function InsHistoryCard() {
                                     disableRowSelectionOnClick
                                     density="compact"
                                 />
+                            </div>
+                            <div className='row'>
+                                <div className='col d-flex justify-content-end'>
+                                    <div className='me-2'>
+                                        <Button component={Link} to={`/home`} variant="contained" size='small' color="warning">
+                                            <ArrowBackIcon /> Dash board
+                                        </Button>
+                                    </div>
+                                    <div >
+                                        <Button component={Link} to="/" size='small' variant='contained' startIcon={<ArrowBack />} endIcon={<House />} color='secondary'>Home</Button>
+                                    </div>
+                                </div>
+
+
                             </div>
 
 
