@@ -8,7 +8,7 @@ import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { HomeContent } from '../Home';
 import { Add, Close, Delete, ErrorOutline } from '@mui/icons-material';
-
+import { useEmployee } from '../../../App';
 dayjs.extend(isSameOrBefore)
 dayjs.extend(isSameOrAfter)
 
@@ -16,6 +16,7 @@ const CalDialog = () => {
 
 
     const calData = useContext(HomeContent)
+    const {loggedEmp} = useEmployee()
     const [lastResultData, setLastResultData] = useState([])
     const { calOpen, setCalOpen, selectedRows, itemMasters, activeEmps, masters } = calData
     const [calibrationDatas, setCalibrationDatas] = useState([])
@@ -80,7 +81,7 @@ const CalDialog = () => {
         calItemCalDate: dayjs().format('YYYY-MM-DD'),
         calItemDueDate: "",
         calItemEntryDate: dayjs().format('YYYY-MM-DD'),
-        calCalibratedBy: "",
+        calCalibratedBy: loggedEmp.firstName + " " + loggedEmp.lastName,
         calApprovedBy: "",
         calBeforeData: "no",
         calStatus: "status",
@@ -122,7 +123,7 @@ const CalDialog = () => {
         calItemCalDate: dayjs().format('YYYY-MM-DD'),
         calItemDueDate: "",
         calItemEntryDate: dayjs().format('YYYY-MM-DD'),
-        calCalibratedBy: "",
+        calCalibratedBy: loggedEmp.firstName + " " + loggedEmp.lastName,
         calApprovedBy: "",
         calBeforeData: "no",
         calStatus: "status",
@@ -980,13 +981,10 @@ const CalDialog = () => {
                                     value={calibrationData.calCalibratedBy}
                                     name='calCalibratedBy'
                                     fullWidth
-                                    select
                                     variant="outlined"
                                     onChange={handleCalData}
                                 >
-                                    {activeEmps.map((emp, index) => (
-                                        <MenuItem key={index} value={emp._id}>{`${emp.firstName ? emp.firstName : ""} ${emp.lastName ? emp.lastName : ""}`}</MenuItem>
-                                    ))}
+                                    
                                 </TextField>
 
 
