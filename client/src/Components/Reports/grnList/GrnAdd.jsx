@@ -21,7 +21,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 
 const GrnAdd = () => {
     const grnAddDatas = useContext(GrnListContent)
-    const { grnOpen, setGrnOpen, selectedRows, grnListFetchData, itemPlantList,dcStatus } = grnAddDatas
+    const { grnOpen, setGrnOpen, selectedRows, grnListFetchData, itemPlantList, dcStatus } = grnAddDatas
     const employeeRole = useEmployee()
     const { loggedEmp } = employeeRole
 
@@ -52,7 +52,7 @@ const GrnAdd = () => {
         grnNo: "",
         grnDate: dayjs().format("YYYY-MM-DD"),
         grnCommonRemarks: "",
-        grnPlant:"",
+        grnPlant: "",
         grnPartyItems: []
 
     }
@@ -68,7 +68,7 @@ const GrnAdd = () => {
         grnNo: "",
         grnDate: dayjs().format("YYYY-MM-DD"),
         grnCommonRemarks: "",
-        grnPlant:"",
+        grnPlant: "",
         grnPartyItems: []
     })
 
@@ -78,6 +78,13 @@ const GrnAdd = () => {
     })
 
 
+    const handleSnackClose = (event, reason) => {
+        if (reason === 'clickaway') {
+            return;
+        }
+
+        setSnackBarOpen(false);
+    }
 
 
 
@@ -135,13 +142,13 @@ const GrnAdd = () => {
             );
             setGrnList(response.data.result);
             const grnNumbers = response.data.result.map(item => (item.grnId)).filter(Boolean).sort();
-            if(grnNumbers.length > 0){
-                const lastNumber = grnNumbers[grnNumbers.length-1] + 1
-            console.log(lastNumber)
+            if (grnNumbers.length > 0) {
+                const lastNumber = grnNumbers[grnNumbers.length - 1] + 1
+                console.log(lastNumber)
 
-            setGrnAddData(prev => ({...prev, grnNo : dayjs().year()+"-"+lastNumber}))
-            }else{
-                setGrnAddData(prev => ({...prev, grnNo : dayjs().year()+"-"+1}))
+                setGrnAddData(prev => ({ ...prev, grnNo: dayjs().year() + "-" + lastNumber }))
+            } else {
+                setGrnAddData(prev => ({ ...prev, grnNo: dayjs().year() + "-" + 1 }))
             }
 
 
@@ -154,7 +161,7 @@ const GrnAdd = () => {
     }, []);
 
 
-   
+
 
 
     // const [itemAddList, setItemAddList] = useState([]);
@@ -314,12 +321,12 @@ const GrnAdd = () => {
     const handleGrnItemAdd = (e) => {
         const { name, value } = e.target;
         setItemAddDetails((prev) => ({ ...prev, [name]: value }))
-       
+
         if (name === "grnPlant") {
             // Set the selected itemPlant in state
             setGrnAddData((prev) => ({ ...prev, grnPlant: value }));
             const plantItems = itemPlantList.filter(item => item.itemPlant === value)
-            
+
             const distinctItemNames = [... new Set(plantItems.map(item => item.itemAddMasterName))]
             setItemNameList(distinctItemNames)
             console.log(distinctItemNames)
@@ -575,13 +582,37 @@ const GrnAdd = () => {
 
                 grnListFetchData()
                 setGrnAddData(initialGrnData)
+                console.log("GRN Create successfully");
                 setTimeout(() => setGrnOpen(false), 1000)
             } else {
                 setAlertMessage({ message: "Fill the required fields to submit", type: "error" })
                 setSnackBarOpen(true)
             }
         } catch (err) {
+            setSnackBarOpen(true)
+
+            if (err.response && err.response.status === 400) {
+                // Handle validation errors
+                console.log(err);
+                const errorData400 = err.response.data.errors;
+                const errorMessages400 = Object.values(errorData400).join(', ');
+                console.log(errorMessages400)
+                setErrorHandler({ status: 0, message: errorMessages400, code: "error" });
+            } else if (err.response && err.response.status === 500) {
+                // Handle other errors
+                console.log(err);
+                const errorData500 = err.response.data.error;
+                const errorMessages500 = Object.values(errorData500).join(', ');
+                console.log(errorMessages500)
+                setErrorHandler({ status: 0, message: errorMessages500, code: "error" });
+            } else {
+                console.log(err);
+                console.log(err.response.data.error)
+                setErrorHandler({ status: 0, message: "An error occurred", code: "error" });
+            }
+
             console.log(err);
+
         }
     };
 
@@ -1177,7 +1208,7 @@ const GrnAdd = () => {
                                         <TextField label="Imte No"
                                             id="grnItemIdId"
                                             select
-                                           
+
                                             fullWidth
                                             size="small"
                                             disabled={itemAddDetails.grnList === ""}
@@ -1678,8 +1709,13 @@ const GrnAdd = () => {
                                         {alertMessage.message}
                                     </Alert>
                                 </Snackbar> */}
-                                 <Snackbar anchorOrigin={{ vertical: "top", horizontal: "right" }} open={snackBarOpen} autoHideDuration={6000} onClose={() => setSnackBarOpen(false)}>
-                                    <Alert onClose={() => setSnackBarOpen(false)} severity={errorhandler.code} variant='filled' sx={{ width: '100%' }}>
+                                {/* <Snackbar variant="contained" anchorOrigin={{ vertical: "top", horizontal: "right" }} open={snackBarOpen} autoHideDuration={6000} onClose={handleSnackClose}>
+                                    <Alert variant="filled" onClose={handleSnackClose} severity={errorhandler.code} sx={{ width: '100%' }}>
+                                        {errorhandler.message}
+                                    </Alert>
+                                </Snackbar> */}
+                                <Snackbar anchorOrigin={{ vertical: "top", horizontal: "right" }} open={snackBarOpen} autoHideDuration={6000} onClose={handleSnackClose}>
+                                    <Alert onClose={handleSnackClose} severity={errorhandler.code} sx={{ width: '100%' }}>
                                         {errorhandler.message}
                                     </Alert>
                                 </Snackbar>

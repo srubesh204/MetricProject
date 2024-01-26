@@ -1230,9 +1230,7 @@ const ItemMaster = () => {
                                                 <ArrowBackIcon /> Dash board
                                             </Button>
                                         </div>
-                                        <div >
-                                            <Button component={Link} to="/" variant='contained' startIcon={<ArrowBack />} endIcon={<House />} color='secondary'>Home</Button>
-                                        </div>
+                                        
                                     </div>
 
 

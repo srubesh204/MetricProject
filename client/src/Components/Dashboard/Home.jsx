@@ -131,8 +131,8 @@ const Home = () => {
       const viewers = response.data.result.filter(emp => emp === "viewer")
 
 
-      const plantemps = response.data.result.filter(emp => emp.plantDetails.find(empPlant => employeeRole.loggedEmp.plantDetails.map(plant=> plant.plantName).includes(empPlant.plantName)))
-      const adminsList = plantemps.filter(emp => emp.empRole ==="admin" || emp.empRole ==="plantAdmin")
+      const plantemps = response.data.result.filter(emp => emp.plantDetails.find(empPlant => employeeRole.loggedEmp.plantDetails.map(plant => plant.plantName).includes(empPlant.plantName)))
+      const adminsList = plantemps.filter(emp => emp.empRole === "admin" || emp.empRole === "plantAdmin")
       const uniqueList = [...new Set(adminsList)]
       console.log(adminsList)
       setBccMails(uniqueList)
@@ -178,7 +178,7 @@ const Home = () => {
         `${process.env.REACT_APP_PORT}/vendor/getAllVendorWithTypes`
       );
       console.log(getAllVendorWithTypes)
-      
+
 
       const allPlantVendors = getAllVendorWithTypes.data.result.allVendors.filter(ven => employeeRole.loggedEmp.plantDetails.find(plant => ven.vendorPlant.includes(plant.plantName)))
       const allPlantCustomers = getAllVendorWithTypes.data.result.customers.filter(ven => employeeRole.loggedEmp.plantDetails.find(plant => ven.vendorPlant.includes(plant.plantName)))
@@ -202,8 +202,8 @@ const Home = () => {
       console.log(err);
     }
   };
- 
-  useEffect(()=>{
+
+  useEffect(() => {
     getVendorsByType();
   }, [])
   console.log(customers)
@@ -383,7 +383,7 @@ const Home = () => {
     ])
   }
 
-  
+
   const [plantDepartments, setPlantDepartments] = useState([])
 
   useEffect(() => {
@@ -395,7 +395,7 @@ const Home = () => {
       console.log(availableDeps)
 
       setPlantDepartments(availableDeps)
-      setPlantDeps(prev => ({...prev, itemDepartment: availableDeps.length === 1 ? availableDeps[0] : "All"}))
+      setPlantDeps(prev => ({ ...prev, itemDepartment: availableDeps.length === 1 ? availableDeps[0] : "All" }))
 
     } else {
       const filteredPlants = employeeRole.loggedEmp.plantDetails.filter(plant => plant.plantName === selectedPlantName);
@@ -405,7 +405,7 @@ const Home = () => {
         const availableDeps = filteredPlants[0].departments.filter(dep => filteredData.find(item => item.itemDepartment === dep))
         console.log(availableDeps)
         console.log(filteredPlants[0].departments)
-        setPlantDeps(prev => ({...prev, itemDepartment: availableDeps.length === 1 ? availableDeps[0] : "All"}))
+        setPlantDeps(prev => ({ ...prev, itemDepartment: availableDeps.length === 1 ? availableDeps[0] : "All" }))
         setPlantDepartments(availableDeps)
       } else {
         setPlantDepartments([])
@@ -424,14 +424,14 @@ const Home = () => {
 
   const LocationEmpFilter = (e) => {
     const { name, value } = e.target;
-    setPlantDeps(prev => ({...prev, [name]: value}))
+    setPlantDeps(prev => ({ ...prev, [name]: value }))
     if (name === "itemPlant") {
       if (value === "All") {
         console.log(activeEmps.allEmps)
         // Assuming activeEmps.allEmps and employeeRole.loggedEmp are arrays
-        setPlantDeps(prev => ({...prev, itemDepartment : "All"}))
+        setPlantDeps(prev => ({ ...prev, itemDepartment: "All" }))
         itemFetch();
-        
+
         setSelectedPlantName(value)
       } else {
         setSelectedPlantName(value)
@@ -929,7 +929,7 @@ const Home = () => {
   }
 
   const customerFilter = (name, value) => {
-    
+
     console.log(name, value)
     const filter = plantWiseList.filter((item) =>
       item.itemPartName.some((partData) => partData.customer === value)
@@ -981,7 +981,7 @@ const Home = () => {
   const MainFilter = (newValue, extraName) => {
 
     console.log(newValue, extraName)
-    setFilterNames(prev => ({...prev, [extraName]: newValue}))
+    setFilterNames(prev => ({ ...prev, [extraName]: newValue }))
     if (newValue === "All") {
 
       itemLocationFun()
@@ -1092,17 +1092,17 @@ const Home = () => {
 
   const [mailList, setMailList] = useState([])
   const getMailList = async () => {
-      try {
-          const response = await axios.get(
-              `${process.env.REACT_APP_PORT}/mailConfig/getAllMailConfig`
-          );
-          console.log(response.data.result)
-          setMailList(response.data.result)
+    try {
+      const response = await axios.get(
+        `${process.env.REACT_APP_PORT}/mailConfig/getAllMailConfig`
+      );
+      console.log(response.data.result)
+      setMailList(response.data.result)
 
 
-      } catch (err) {
-          console.log(err);
-      }
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   useEffect(() => {
@@ -1289,7 +1289,7 @@ const Home = () => {
 
                 </TextField>
                 {
-                  <TextField select onChange={(e) => LocationEmpFilter(e)} fullWidth size='small' name='itemDepartment' disabled={plantDepartments.length <= 1 } value={plantDeps.itemDepartment} defaultValue="All" label="Default Location">
+                  <TextField select onChange={(e) => LocationEmpFilter(e)} fullWidth size='small' name='itemDepartment' disabled={plantDepartments.length <= 1} value={plantDeps.itemDepartment} defaultValue="All" label="Default Location">
                     {plantDepartments.length !== 1 && <MenuItem value="All">All</MenuItem>}
                     {plantDepartments && plantDepartments.map((department, index) => (<MenuItem key={index} value={department}>{department}</MenuItem>))}
                   </TextField>}
@@ -1336,7 +1336,7 @@ const Home = () => {
 
                 <Autocomplete
                   disablePortal
-                  
+
                   id="combo-box-demo"
                   options={customers.length > 0 ? customers : []}
                   size='small'
@@ -1345,11 +1345,11 @@ const Home = () => {
                   name="customer"
                   value={filterNames.customer}
                   getOptionLabel={(cus) => cus.aliasName}
-                  renderInput={(params) => <TextField {...params} label="Customer" name='customer'/>}
+                  renderInput={(params) => <TextField {...params} label="Customer" name='customer' />}
                   disableClearable
                 />
 
-               
+
 
 
 
@@ -1604,9 +1604,11 @@ const Home = () => {
                 <div className="row">
 
                   <div className="col-md-9">
-                    <Button size='small' onClick={() => onSiteCheck()}>Onsite</Button>
-                    {(selectedRows.length === 1 && selectedRows[0].itemCalibrationSource === "inhouse") && <Button size='small' className='me-2' onClick={() => setCalOpen(true)}>Cal</Button>}
-                    {grnButtonVisibility && <Button size='small' onClick={() => grnCheck()} className='me-2'>Grn</Button>}
+                    {/* {(selectedRows.length === 1 && selectedRows[0].itemCalibrationSource === "outsource" ) && <Button size='small' onClick={() => onSiteCheck()}>Onsite</Button>} */}
+                    {(selectedRows.length === 1 && selectedRows[0].itemCalibrationSource === "outsource" && "Site") &&
+                      <Button size='small' onClick={() => onSiteCheck()}>Onsite</Button>
+                    }
+                    {(selectedRows.length === 1 && selectedRows[0].itemCalibrationSource === "inhouse") && <Button size='small' className='me-2' onClick={() => setCalOpen(true)}>Cal</Button>}                  {grnButtonVisibility && <Button size='small' onClick={() => grnCheck()} className='me-2'>Grn</Button>}
 
 
                     <Button size='small' onClick={() => dcCheck()}>Create DC</Button>
@@ -1737,7 +1739,7 @@ const Home = () => {
                 </HomeContent.Provider>
 
                 <HomeContent.Provider
-                  value={{ mailOpen, setMailOpen, selectedRows, mailIds, setErrorHandler, setSnackBarOpen, vendors, mailList, bccMails, emp: employeeRole.loggedEmp}}
+                  value={{ mailOpen, setMailOpen, selectedRows, mailIds, setErrorHandler, setSnackBarOpen, vendors, mailList, bccMails, emp: employeeRole.loggedEmp }}
                 >
                   <HomeMail />
                 </HomeContent.Provider>
