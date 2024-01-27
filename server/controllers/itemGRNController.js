@@ -15,8 +15,8 @@ const itemGRNController = {
   createItemGRN: async (req, res) => {
 
     try {
-      const { grnPartyRefNo, grnPartyId, grnPartyRefDate, grnPartyName, grnPartyCode, grnPartyAddress, grnNo, grnDate, grnCommonRemarks, grnPartyItems,grnPlant, grnDepartment } = req.body;
-      const itemGRNResult = new itemGRNModel({ grnPartyRefNo, grnPartyId, grnPartyRefDate, grnPartyName, grnPartyCode, grnPartyAddress, grnNo, grnDate, grnCommonRemarks, grnPartyItems,grnPlant, grnDepartment });
+      const { grnPartyRefNo, grnPartyId, grnPartyRefDate, grnPartyName, grnPartyCode, grnPartyAddress, grnNo, grnDate, grnCommonRemarks, grnPartyItems, grnPlant, grnDepartment } = req.body;
+      const itemGRNResult = new itemGRNModel({ grnPartyRefNo, grnPartyId, grnPartyRefDate, grnPartyName, grnPartyCode, grnPartyAddress, grnNo, grnDate, grnCommonRemarks, grnPartyItems, grnPlant, grnDepartment });
       const validationError = itemGRNResult.validateSync();
 
       if (validationError) {
@@ -43,8 +43,38 @@ const itemGRNController = {
         const updatePromises = grnPartyItems.map(async (item) => {
 
           const itemData = await itemAddModel.findById(item.grnItemId)
-          const { itemIMTENo, itemCurrentLocation: itemLastLocation, itemDepartment } = itemData
-          const updateItemFields = { itemIMTENo, itemCurrentLocation: itemDepartment, itemLastLocation, itemLocation: "department", grnId: result._id, grnStatus: "1", grnCreatedOn: grnDate, grnNo: grnNo, }
+          const {
+            itemIMTENo,
+            itemCurrentLocation: itemLastLocation,
+            itemDepartment,
+            itemCalDate: itemLastCalDate,
+            itemDueDate: itemLastDueDate,
+            dcStatus: lastDcStatus,
+            dcNo: lastDcNo,
+            dcId: lastDcId,
+            dcCreatedOn: lastDcCreatedOn
+          } = itemData
+          const updateItemFields = {
+            itemIMTENo,
+            itemCurrentLocation: itemDepartment,
+            itemLastLocation,
+            itemLocation: "department",
+            itemLastCalDate, itemLastDueDate,
+            itemCalDate: item.grnItemCalDate,
+            itemDueDate: item.grnItemDueDate,
+            grnId: result._id,
+            grnStatus: "1",
+            grnCreatedOn: grnDate,
+            grnNo: grnNo,
+            lastDcId,
+            lastDcStatus,
+            lastDcCreatedOn,
+            lastDcNo,
+            dcStatus: "0",
+            dcNo: "",
+            dcId: "",
+            dcCreatedOn: ""
+          }
           const updateResult = await itemAddModel.findOneAndUpdate(
             { _id: item._id },
             { $set: updateItemFields },
@@ -85,7 +115,7 @@ const itemGRNController = {
         // Add more fields as needed
       };
 
-      const prevItemGrn = await itemGRNModel.findById(itemGRNId) 
+      const prevItemGrn = await itemGRNModel.findById(itemGRNId)
       const { grnPartItems: prevPartyItems } = prevItemGrn
       const prevUpdatePromises = prevPartyItems.map(async (item) => {
 
