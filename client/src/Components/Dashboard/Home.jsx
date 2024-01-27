@@ -1617,7 +1617,7 @@ const Home = () => {
                   </div>
                   <div className="col-md-3 d-flex justify-content-end">
                     <Button component={Link} to="/itemmaster" size='small' className='me-1'>Item Master</Button>
-                    <Button component={Link} to="/itemList" size='small'>Item Entry</Button>
+                    <Button component={Link} to="/itemList" size='small'>Item List</Button>
                   </div>
                 </div>}
             </Paper>
