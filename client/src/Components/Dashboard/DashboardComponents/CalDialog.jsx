@@ -215,9 +215,9 @@ const CalDialog = () => {
 
         console.log("hi")
         if (selectedRows.length === 1) {
-            const filter = masters.filter(mas => mas._id === selectedRows[0].itemMasterRef)
+            const filter = masters.filter(mas => mas.itemDescription === selectedRows[0].itemAddMasterName)
            
-            // console.log(filter)
+            console.log(filter)
             setRefMaster(filter.length > 0 ? filter[0]: [])
 
             setCalibrationData((prev) => (
