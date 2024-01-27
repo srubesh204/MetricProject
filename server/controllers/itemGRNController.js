@@ -58,7 +58,7 @@ const itemGRNController = {
             itemIMTENo,
             itemCurrentLocation: itemDepartment,
             itemLastLocation,
-            itemLocation: "department",
+            itemLocation: ,
             itemLastCalDate, itemLastDueDate,
             itemCalDate: item.grnItemCalDate,
             itemDueDate: item.grnItemDueDate,
@@ -107,12 +107,22 @@ const itemGRNController = {
       // if (isNaN(desId)) {
       //   return res.status(400).json({ error: 'Invalid desId value' });
       // }
+      const { grnPartyRefNo, grnPartyId, grnPartyRefDate, grnPartyName, grnPartyCode, grnPartyAddress, grnNo, grnDate, grnCommonRemarks, grnPartyItems, grnPlant, grnDepartment } = req.body;
 
       // Create an object with the fields you want to update
       const updateItemGRNFields = {
-        /* Specify the fields and their updated values here */
-        grnPartyRefNo: req.body.grnPartyRefNo, grnPartyId: req.body.grnPartyId, grnPlant: req.body.grnPlant, grnDepartment: req.body.grnDepartment, grnPartyRefDate: req.body.grnPartyRefDate, grnPartyName: req.body.grnPartyName, grnPartyCode: req.body.grnPartyCode, grnPartyAddress: req.body.grnPartyAddress, grnNo: req.body.grnNo, grnDate: req.body.grnDate, grnCommonRemarks: req.body.grnCommonRemarks, grnPartyItems: req.body.grnPartItems, grnCalDate: req.body.grnCalDate, grnDueDate: req.body.grnDueDate, grnCertificateStatus: req.body.grnCertificateStatus, grnCertificateNo: req.body.grnCertificateNo, grnUncertainity: req.body.grnUncertainity // Example: updating the 'name' field
-        // Add more fields as needed
+        grnPartyRefNo,
+        grnPartyId,
+        grnPartyRefDate,
+        grnPartyName,
+        grnPartyCode,
+        grnPartyAddress,
+        grnNo,
+        grnDate,
+        grnCommonRemarks,
+        grnPartyItems,
+        grnPlant,
+        grnDepartment
       };
 
       const prevItemGrn = await itemGRNModel.findById(itemGRNId)
@@ -120,8 +130,27 @@ const itemGRNController = {
       const prevUpdatePromises = prevPartyItems.map(async (item) => {
 
         const itemData = await itemAddModel.findById(item._id)
-        const { itemIMTENo, itemLastLocation } = itemData
-        const updateItemFields = { itemIMTENo, itemCurrentLocation: itemLastLocation, itemLocation: "department", dcId: "", dcStatus: "0", dcCreatedOn: "", dcNo: "" }
+        const {
+          itemIMTENo,
+          itemLastLocation,
+          itemLastCalDate: itemCalDate,
+          itemLastDueDate: itemDueDate,
+          lastDcNo,
+          lastDcId,
+          lastDcCreatedOn
+
+        } = itemData
+        const updateItemFields = {
+          itemIMTENo,
+          itemCurrentLocation: itemLastLocation,
+          itemLocation: "department",
+          itemCalDate,
+          itemDueDate,
+          dcId: lastDcId,
+          dcStatus: "1",
+          dcCreatedOn: lastDcCreatedOn,
+          dcNo: lastDcNo
+        }
         const updateResult = await itemAddModel.findOneAndUpdate(
           { _id: item._id },
           { $set: updateItemFields },
