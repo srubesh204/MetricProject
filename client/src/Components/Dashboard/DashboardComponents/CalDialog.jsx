@@ -216,8 +216,10 @@ const CalDialog = () => {
         console.log("hi")
         if (selectedRows.length === 1) {
             const filter = masters.filter(mas => mas._id === selectedRows[0].itemMasterRef)
-            console.log(filter)
-            setRefMaster(filter[0])
+           
+            // console.log(filter)
+            setRefMaster(filter.length > 0 ? filter[0]: [])
+
             setCalibrationData((prev) => (
                 {
                     ...prev,
@@ -230,9 +232,9 @@ const CalDialog = () => {
                     calLC: selectedRows[0].itemLC || "",
                     calItemMake: selectedRows[0].itemMake || "",
                     calItemFreInMonths: selectedRows[0].itemCalFreInMonths || "",
-                    calItemUncertainity: filter[0] ? filter[0].uncertainty : "",
-                    calItemSOPNo: filter[0].SOPNo ? filter[0].SOPNo : "",
-                    calStandardRef: filter[0].standardRef || "",
+                    calItemUncertainity: filter.length> 0 && filter[0] ? filter[0].uncertainty : "",
+                    calItemSOPNo: filter.length> 0 && filter[0].SOPNo ? filter[0].SOPNo : "",
+                    calStandardRef: filter.length> 0 && filter[0].standardRef ? filter[0].standardRef: "",
                     calOBType: selectedRows[0].itemOBType || "",
                     // calCertificateNo: selectedRows[0].itemCertificateNo || "",
 
