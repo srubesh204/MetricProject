@@ -20,7 +20,7 @@ const DcAdd = () => {
     const { employee, loggedEmp } = empRole
 
     const dcAddDatas = useContext(DcListContent)
-    const { dcOpen, setDcOpen, selectedRows, dcListFetchData, itemPlantList, dcDataDcList, ItemFetch, lastNo } = dcAddDatas
+    const { dcOpen, setDcOpen, selectedRows, dcListFetchData, itemPlantList, ItemFetch, lastNo } = dcAddDatas
 
 
     useEffect(()=> {

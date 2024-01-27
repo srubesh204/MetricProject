@@ -113,7 +113,29 @@ const Home = () => {
   })
 
 
+  const [dcList, setDcList] = useState([])
+  const [lastNo, setLastNo] = useState("")
+  const dcListFetchData = async () => {
+    try {
+      const response = await axios.get(
+        `${process.env.REACT_APP_PORT}/itemDc/getAllItemDc`
 
+      );
+      const plantDc = response.data.result.filter(dc => (employeeRole.loggedEmp.plantDetails.map(plant => plant.plantName).includes(dc.dcPlant)))
+      const dcNos = response.data.result.map(dc => dc.dcId).filter(Boolean).sort()
+      setLastNo((dayjs().year() + "-" + ((dcNos[dcNos.length - 1]) + 1)))
+      console.log(dcNos[dcNos.length - 1])
+      setDcList(plantDc);
+      setFilteredData(plantDc);
+
+
+    } catch (err) {
+      console.log(err);
+    }
+  };
+  useEffect(() => {
+    dcListFetchData();
+  }, []);
 
 
 

@@ -6,15 +6,23 @@ const partSchema = new mongoose.Schema({
   partNo: {
     type: String,
     unique: [true, "PartNo should be unique"],
-    required: [true, "Part Field is Required"]
+    required: [true, "PartNo is Required"]
   },
   partName: {
     type: String,
-  default: 'N/A'
+    required: {
+      type: String,
+      required: [true, "PartName is Required"]
+    }
   },
- customer: {
+  customer: {
     type: String,
-  default: 'N/A'
+    required: [true, "Customer is Required"]
+
+  },
+  partPlant: {
+    type: String,
+    required: [true, "Plant Required"]
   },
   operationNo: String,
   partStatus: {
@@ -24,6 +32,6 @@ const partSchema = new mongoose.Schema({
 
 });
 partSchema.plugin(uniqueValidator);
-partSchema.plugin(mongooseSequence, { inc_field: 'partId', });
+partSchema.plugin(mongooseSequence, { inc_field: 'partId' });
 
 module.exports = mongoose.model('part', partSchema);

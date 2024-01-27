@@ -20,7 +20,7 @@ const HomeMail = () => {
 
 
     console.log(vendors)
-    const bccMailsOnly = bccMails ? bccMails.filter(emp => emp.empRole !== "superAdmin").map(emp => emp.mailId) : []
+    const bccMailsOnly = bccMails ? bccMails.map(emp => emp.mailId) : []
     console.log(bccMailsOnly)
 
 
