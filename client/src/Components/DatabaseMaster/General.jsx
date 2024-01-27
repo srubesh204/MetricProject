@@ -16,6 +16,8 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import { DataGrid, GridToolbar } from '@mui/x-data-grid';
 import Autocomplete from '@mui/material/Autocomplete';
+import { useEmployee } from '../../App';
+import dayjs from 'dayjs';
 import styled from '@emotion/styled';
 import { CloudDownload, CloudUpload, Delete } from '@mui/icons-material';
 
@@ -144,16 +146,16 @@ export const UnitDataBase = ({ style }) => {
         }
     };
 
-        
+
     useEffect(() => {
         if (generalExcelStatus) {
-          const timeoutId = setTimeout(() => {
-            setGeneralExcelStatus('');
-          }, 1000);
-    
-          return () => clearTimeout(timeoutId); 
+            const timeoutId = setTimeout(() => {
+                setGeneralExcelStatus('');
+            }, 1000);
+
+            return () => clearTimeout(timeoutId);
         }
-      }, [generalExcelStatus]);
+    }, [generalExcelStatus]);
 
 
     //validate function 
@@ -420,11 +422,11 @@ export const UnitDataBase = ({ style }) => {
                                     <div className="col d-flex">
                                         <div className="d-flex justify-content-center">
                                             <ButtonGroup className='me-3' size="small">
-                                                <Button component="label" variant="contained"  size="small">
+                                                <Button component="label" variant="contained" size="small">
                                                     Upload
                                                     <VisuallyHiddenInput type="file" onChange={handleGeneralExcel} />
                                                 </Button>
-                                                <Button  size="small" onClick={handleGeneralUpload}><CloudUpload /></Button>
+                                                <Button size="small" onClick={handleGeneralUpload}><CloudUpload /></Button>
                                             </ButtonGroup>
 
                                             <ButtonGroup size="small">
@@ -439,12 +441,12 @@ export const UnitDataBase = ({ style }) => {
                                     </div>
                                     <div className='col d-flex justify-content-end'>
                                         {unitStateId ? <div className='d-flex justify-content-end'><div className='me-2' >
-                                            <Button type="button"  color='warning' variant='contained' size="small" className='btn btn-secondary' onClick={() => setOpenModal(true)}>Modify</Button>
+                                            <Button type="button" color='warning' variant='contained' size="small" className='btn btn-secondary' onClick={() => setOpenModal(true)}>Modify</Button>
                                         </div>
                                             <div className='me-2' >
-                                                <Button type="button"  variant='contained' size="small" color='error' onClick={() => { setUnitStateId(null); setUnitData(initialUnitData) }}>Cancel</Button>
+                                                <Button type="button" variant='contained' size="small" color='error' onClick={() => { setUnitStateId(null); setUnitData(initialUnitData) }}>Cancel</Button>
                                             </div></div> : <div className="ms-auto">
-                                            <Button variant='contained' size="small"  color='success'  onClick={() => setOpenModal(true)}>+ Add Unit</Button>
+                                            <Button variant='contained' size="small" color='success' onClick={() => setOpenModal(true)}>+ Add Unit</Button>
                                         </div>}
 
 
@@ -456,7 +458,7 @@ export const UnitDataBase = ({ style }) => {
                                         {errorHandler.message}
                                     </Alert>
                                 </Snackbar>
-                                {generalExcelStatus && <p style={{color:'green'}}>{generalExcelStatus}</p>}
+                                {generalExcelStatus && <p style={{ color: 'green' }}>{generalExcelStatus}</p>}
                             </Paper>
                         </Grid>
 
@@ -491,15 +493,15 @@ export const UnitDataBase = ({ style }) => {
                                             }}
                                             slots={{
                                                 toolbar: () => (
-                                                  <div className='d-flex justify-content-between align-items-center'>
-                                                    <GridToolbar />
-                                                    <div>
-                                                    {unitSelectedRowIds.length !== 0 && <Button variant='contained' size="small" type='button' color='error' onClick={() => setDeleteModal(true)}>Delete </Button>}
+                                                    <div className='d-flex justify-content-between align-items-center'>
+                                                        <GridToolbar />
+                                                        <div>
+                                                            {unitSelectedRowIds.length !== 0 && <Button variant='contained' size="small" type='button' color='error' onClick={() => setDeleteModal(true)}>Delete </Button>}
+                                                        </div>
+
                                                     </div>
-                            
-                                                  </div>
                                                 ),
-                                              }}
+                                            }}
 
 
                                             onRowSelectionModelChange={(newRowSelectionModel, event) => {
@@ -581,6 +583,8 @@ export const PartDataBase = ({ style }) => {
 
 
     const [customerList, setCustomerList] = useState([])
+    const empRole = useEmployee()
+    const { employee, loggedEmp } = empRole
 
     const vendorFetch = async () => {
         try {
@@ -633,13 +637,29 @@ export const PartDataBase = ({ style }) => {
     console.log(partData)
 
 
+
+    const [lastNo, setLastNo] = useState("1")
+
     const [partDataList, setPartDataList] = useState([])
     const partFetchData = async () => {
         try {
             const response = await axios.get(
                 `${process.env.REACT_APP_PORT}/part/getAllParts`
             );
+
+            const plantPart = response.data.result.filter(dc => (loggedEmp.plantDetails.map(plant => plant.plantName).includes(dc.dcPlant)))
+            const partNos = response.data.result.map(dc => dc.calId).filter(Boolean).sort()
+            setLastNo((dayjs().year() + "-" + ((partNos[partNos.length - 1]) + 1)))
+            console.log(partNos[partNos.length - 1])
+            setPartDataList(plantPart);
+            // setFilteredCalData(plantPart);
+
+
+
+
             setPartDataList(response.data.result);
+
+
         } catch (err) {
             console.log(err);
         }
@@ -647,6 +667,40 @@ export const PartDataBase = ({ style }) => {
     useEffect(() => {
         partFetchData();
     }, []);
+
+    useEffect(() => {
+        setPartData(prev => ({ ...prev, partNo: lastNo }))
+    }, [lastNo])
+
+    console.log(lastNo)
+
+
+    // const [calDataDcList, setCalDataDcList] = useState([])
+    // const dcListFetchData = async () => {
+    //     try {
+    //         const response = await axios.get(
+    //             `${process.env.REACT_APP_PORT}/itemCal/getAllItemCals`
+
+    //         );
+    //         const plantCal = response.data.result.filter(dc => (loggedEmp.plantDetails.map(plant => plant.plantName).includes(dc.dcPlant)))
+    //         const calNos = response.data.result.map(dc => dc.calId).filter(Boolean).sort()
+    //         setLastNo((dayjs().year() + "-" + ((calNos[calNos.length - 1]) + 1))) 
+    //         console.log(calNos[calNos.length - 1])
+    //         setCalDataDcList(plantCal);
+    //       //  setFilteredCalData(plantCal);
+
+
+    //     } catch (err) {
+    //         console.log(err);
+    //     }
+    // };
+    // useEffect(() => {
+    //     dcListFetchData();
+    // }, []);
+
+
+
+
 
 
     const [partSelectedRowIds, setPartSelectedRowIds] = useState([]);
@@ -718,13 +772,13 @@ export const PartDataBase = ({ style }) => {
 
     useEffect(() => {
         if (generalExcelStatus) {
-          const timeoutId = setTimeout(() => {
-            setGeneralExcelStatus('');
-          }, 1000);
-    
-          return () => clearTimeout(timeoutId); 
+            const timeoutId = setTimeout(() => {
+                setGeneralExcelStatus('');
+            }, 1000);
+
+            return () => clearTimeout(timeoutId);
         }
-      }, [generalExcelStatus]);
+    }, [generalExcelStatus]);
 
 
 
@@ -994,7 +1048,30 @@ export const PartDataBase = ({ style }) => {
 
 
                                     <div className="row mb-2 g-2">
-                                        <div className="form-floating col-md-6"  >
+
+                                        <div className="form-floating col-md-3">
+
+                                            <TextField label="Plant"
+                                                id="partPlantId"
+                                                select
+                                                defaultValue="all"
+                                                // value={filterAllNames.plantWise}
+                                                fullWidth
+
+                                                onChange={handlePartDataBaseChange}
+                                                size="small"
+                                                name="partPlant" >
+
+                                                <MenuItem value="all">All</MenuItem>
+                                                {loggedEmp.plantDetails.map((item, index) => (
+                                                    <MenuItem key={index} value={item.plantName}>{item.plantName}</MenuItem>
+                                                ))}
+
+
+                                            </TextField>
+
+                                        </div>
+                                        <div className="form-floating col-md-3"  >
                                             <TextField label="Customer"
                                                 {...(errors.customer !== "" && { helperText: errors.customer, error: true })}
                                                 select
@@ -1078,26 +1155,26 @@ export const PartDataBase = ({ style }) => {
                                             </ButtonGroup>
                                         </div>
                                         <div className='col d-flex justify-content-end'>
-                                        {partStateId ?
-                                            <div className="d-flex justify-content-end">
-                                                <div className='me-2'>
-                                                    <Button type="button" variant='contained' size="small" color='warning'  onClick={() => setOpenModal(true)}>Modify</Button>
-                                                </div>
-                                                <div className='me-2'>
-                                                    <Button type="button" variant='contained' color='error' size="small" className='btn btn-danger' onClick={() => { setPartStateId(null); setPartData(initialPartData) }}>Cancel</Button>
-                                                </div>
-                                            </div> : <div className="ms-auto">
-                                                <Button variant='contained' size="small"  color='success' onClick={() => setOpenModal(true)}>+ Add Part</Button>
-                                            </div>}
+                                            {partStateId ?
+                                                <div className="d-flex justify-content-end">
+                                                    <div className='me-2'>
+                                                        <Button type="button" variant='contained' size="small" color='warning' onClick={() => setOpenModal(true)}>Modify</Button>
+                                                    </div>
+                                                    <div className='me-2'>
+                                                        <Button type="button" variant='contained' color='error' size="small" className='btn btn-danger' onClick={() => { setPartStateId(null); setPartData(initialPartData) }}>Cancel</Button>
+                                                    </div>
+                                                </div> : <div className="ms-auto">
+                                                    <Button variant='contained' size="small" color='success' onClick={() => setOpenModal(true)}>+ Add Part</Button>
+                                                </div>}
 
-                                    </div>
+                                        </div>
                                     </div>
                                 </div>
-                               
 
 
 
-                                {generalExcelStatus && <p style={{color:'green'}}>{generalExcelStatus}</p>}
+
+                                {generalExcelStatus && <p style={{ color: 'green' }}>{generalExcelStatus}</p>}
                                 {partStateId ? <Dialog
                                     open={openModal}
                                     onClose={() => setOpenModal(false)}
@@ -1178,15 +1255,15 @@ export const PartDataBase = ({ style }) => {
                                             }}
                                             slots={{
                                                 toolbar: () => (
-                                                  <div className='d-flex justify-content-between align-items-center'>
-                                                    <GridToolbar />
-                                                    <div>
-                                                    {partSelectedRowIds.length !== 0 && <Button variant='contained' type='button' size='small' color='error' onClick={() => setDeleteModal(true)}>Delete </Button>}
+                                                    <div className='d-flex justify-content-between align-items-center'>
+                                                        <GridToolbar />
+                                                        <div>
+                                                            {partSelectedRowIds.length !== 0 && <Button variant='contained' type='button' size='small' color='error' onClick={() => setDeleteModal(true)}>Delete </Button>}
+                                                        </div>
+
                                                     </div>
-                            
-                                                  </div>
                                                 ),
-                                              }}
+                                            }}
 
                                             onRowSelectionModelChange={(newRowSelectionModel, event) => {
                                                 setPartSelectedRowIds(newRowSelectionModel);

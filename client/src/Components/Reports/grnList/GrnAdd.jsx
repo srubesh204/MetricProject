@@ -21,7 +21,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 
 const GrnAdd = () => {
     const grnAddDatas = useContext(GrnListContent)
-    const { grnOpen, setGrnOpen, selectedRows, grnListFetchData, itemPlantList, dcStatus } = grnAddDatas
+    const { grnOpen, setGrnOpen, selectedRows, grnListFetchData, itemPlantList, dcStatus ,lastNo,grnDataDcList} = grnAddDatas
     const employeeRole = useEmployee()
     const { loggedEmp } = employeeRole
 
@@ -87,7 +87,11 @@ const GrnAdd = () => {
     }
 
 
+    useEffect(()=> {
+        setGrnAddData(prev => ({...prev, grnNo: lastNo}))
+    }, [lastNo])
 
+    console.log(lastNo)
 
 
     const [vendorDataList, setVendorDataList] = useState([])

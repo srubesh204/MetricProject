@@ -150,6 +150,31 @@ const GrnList = () => {
     }, [dateData.fromDate, dateData.toDate])
 
 
+    const [lastNo, setLastNo] = useState("1")
+
+    const [grnDataDcList, setGrnDataDcList] = useState([])
+    const dcListFetchData = async () => {
+        try {
+            const response = await axios.get(
+                `${process.env.REACT_APP_PORT}/itemGRN/getAllItemGRN`
+
+            );
+            const plantGRN = response.data.result.filter(dc => (loggedEmp.plantDetails.map(plant => plant.plantName).includes(dc.grnPlant)))
+            const grnNos = response.data.result.map(dc => dc.grnId).filter(Boolean).sort()
+            setLastNo((dayjs().year() + "-" + ((grnNos[grnNos.length - 1]) + 1))) 
+            console.log(grnNos[grnNos.length - 1])
+            setGrnDataDcList(plantGRN);
+            setFilteredData(plantGRN);
+
+
+        } catch (err) {
+            console.log(err);
+        }
+    };
+    useEffect(() => {
+        dcListFetchData();
+    }, []);
+    
     //
 
     const Columns = [
@@ -657,12 +682,12 @@ const GrnList = () => {
                                 </div>
 
                                 <GrnListContent.Provider
-                                    value={{ grnEditOpen, setGrnEditOpen, selectedRows, grnListFetchData, itemPlantList }}
+                                    value={{ grnEditOpen, setGrnEditOpen, selectedRows, grnListFetchData, itemPlantList ,grnDataDcList}}
                                 >
                                     <GrnEdit />
                                 </GrnListContent.Provider>
                                 <GrnListContent.Provider
-                                    value={{ grnOpen, setGrnOpen, selectedRows, grnListFetchData, itemPlantList }}
+                                    value={{ grnOpen, setGrnOpen, selectedRows, grnListFetchData, itemPlantList,grnDataDcList,lastNo}}
                                 >
                                     <GrnAdd />
                                 </GrnListContent.Provider>

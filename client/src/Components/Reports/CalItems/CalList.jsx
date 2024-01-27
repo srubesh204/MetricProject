@@ -232,6 +232,44 @@ const CalList = () => {
 
     }, []);
 
+    const [lastNo, setLastNo] = useState("1")
+
+    const [calDataDcList, setCalDataDcList] = useState([])
+    const dcListFetchData = async () => {
+        try {
+            const response = await axios.get(
+                `${process.env.REACT_APP_PORT}/itemCal/getAllItemCals`
+
+            );
+            const plantCal = response.data.result.filter(cal => (loggedEmp.plantDetails.map(plant => plant.plantName).includes(cal.calPlant)))
+            const calNos = response.data.result.map(cal => cal.calId).filter(Boolean).sort()
+            setLastNo((dayjs().year() + "-" + ((calNos[calNos.length - 1]) + 1))) 
+            console.log(calNos[calNos.length - 1])
+            setCalDataDcList(plantCal);
+            setFilteredCalData(plantCal);
+
+
+        } catch (err) {
+            console.log(err);
+        }
+    };
+    useEffect(() => {
+        dcListFetchData();
+    }, []);
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
     const [selectedCalRow, setSelectedCalRow] = useState([])
     console.log(filteredCalData)
 
@@ -629,7 +667,7 @@ const CalList = () => {
 
                     {employeeRole && employeeRole.employee !== "viewer" &&
                         <CalData.Provider
-                            value={{ employeeRole, calAddOpen, setCalAddOpen, itemMasters, activeEmps, itemAddList, setItemAddList }}
+                            value={{ employeeRole, calAddOpen, setCalAddOpen, itemMasters, activeEmps, itemAddList, setItemAddList,calDataDcList ,lastNo}}
                         >
                             <CalAddModel />
                         </CalData.Provider>}

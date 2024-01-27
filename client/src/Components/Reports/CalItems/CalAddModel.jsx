@@ -18,7 +18,7 @@ const CalAddModel = () => {
 
     const calData = useContext(CalData)
     const [lastResultData, setLastResultData] = useState([])
-    const { calAddOpen, setCalAddOpen, itemMasters, activeEmps, calListFetchData, itemAddList, setItemAddList } = calData
+    const { calAddOpen, setCalAddOpen, itemMasters, activeEmps, calListFetchData, itemAddList, setItemAddList,calDataDcList ,lastNo } = calData
 
     const employeeRole = useEmployee()
     const [calibrationDatas, setCalibrationDatas] = useState([])
@@ -130,6 +130,12 @@ const CalAddModel = () => {
         calDepartment: ""
     })
 
+
+    useEffect(()=> {
+        setCalibrationData(prev => ({...prev, calCertificateNo: lastNo}))
+    }, [lastNo])
+
+    console.log(lastNo)
 
     const getAllCalibrationData = async () => {
         try {
