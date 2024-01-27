@@ -22,7 +22,7 @@ const mailController = {
         const compDetails = await compDetailsSchema.find({compId: 1});
         const plantDetails = await plantSchema.find({plantName: selectedItems[0].itemPlant})
         console.log(plantDetails)
-        const ccs = [...new Set(vendorCc, departmentCc)]
+        const ccs = [...new Set([...vendorCc, ...departmentCc])]
         console.log(ccs)
         // console.log(plantDetails)
         // console.log(selectedItems)

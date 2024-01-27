@@ -58,7 +58,7 @@ const itemGRNController = {
             itemIMTENo,
             itemCurrentLocation: itemDepartment,
             itemLastLocation,
-            itemLocation: ,
+            itemLocation ,
             itemLastCalDate, itemLastDueDate,
             itemCalDate: item.grnItemCalDate,
             itemDueDate: item.grnItemDueDate,
