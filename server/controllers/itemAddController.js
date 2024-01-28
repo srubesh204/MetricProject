@@ -1,6 +1,7 @@
 const itemAddModel = require("../models/itemAddModel")
 const dayjs = require('dayjs')
 const excelToJson = require('convert-excel-to-json');
+const itemHistory = require("../models/itemHistory");
 
 const itemAddController = {
   getAllItemAdds: async (req, res) => {
@@ -154,7 +155,48 @@ const itemAddController = {
       }
 
       const createdItem = await itemAddModel.create(newItemFields);
+      console.log(createdItem)
       console.log("ItemAdd Created Successfully");
+
+      const historyRecord = new itemHistory({
+        itemId: createdItem._id,
+        selectedItemMaster,
+        itemPlant,
+        isItemMaster,
+        itemAddMasterName,
+        itemIMTENo,
+        itemType,
+        itemRangeSize,
+        itemRangeSizeUnit,
+        itemLC,
+        itemLCUnit,
+        itemModelNo,
+        itemStatus,
+        itemReceiptDate,
+        itemDepartment,
+        itemCurrentLocation,
+        itemLastLocation,
+        itemLocation: "department",
+        itemCalFreInMonths,
+        itemCalAlertDays,
+        itemCalibrationSource,
+        itemCalibrationDoneAt,
+        itemItemMasterName,
+        itemItemMasterIMTENo,
+        itemCalDate,
+        itemDueDate,
+        itemCalibratedAt,
+        itemCertificateName,
+        itemCertificateNo,
+        itemOBType,
+        itemUncertainity,
+        itemUncertainityUnit,
+        itemPrevCalData,
+        acceptanceCriteria,
+        itemCreatedBy,
+        itemLastModifiedBy,
+      });
+      await historyRecord.save();
       res.status(200).json({ result: createdItem, message: "ItemAdd Created Successfully" });
     } catch (error) {
       console.log(error);
@@ -583,9 +625,9 @@ const itemAddController = {
       if (!req.file) {
         return res.status(400).json({ error: 'No file uploaded' });
       }
-      
+
       const excelData = req.file.buffer; // Access the file buffer
-  
+
       // Convert Excel data to JSON
       const jsonData = excelToJson({
         source: excelData,
@@ -623,13 +665,13 @@ const itemAddController = {
           AA: 'itemDueDate',
           AB: 'itemCalibratedAt',
           AC: 'itemCertificateNo',
-          
+
           AE: 'itemUncertainity',
           AF: 'itemUncertainityUnit',
           AG: 'itemPlant',
           AH: 'itemPrevCalData',
           AI: 'itemItemMasterIMTENo'
-      }
+        }
       });
       console.log(jsonData)
 
@@ -637,14 +679,14 @@ const itemAddController = {
         item.itemCalDate = dayjs(item.itemCalDate).format("YYYY-MM-DD")
         item.itemDueDate = dayjs(item.itemDueDate).format("YYYY-MM-DD")
         item.itemReceiptDate = dayjs(item.itemReceiptDate).format("YYYY-MM-DD")
-        item.itemLocation = item.itemLocation ?  (item.itemLocation).toLowerCase() : "department"
+        item.itemLocation = item.itemLocation ? (item.itemLocation).toLowerCase() : "department"
         item.itemStatus = item.itemStatus ? (item.itemStatus).toLowerCase() : "active"
         item.itemItemMasterIMTENo = item.itemItemMasterIMTENo ? item.itemItemMasterIMTENo.split(",") : []
         item.itemPartName = item.itemPartName ? item.itemPartName.split(",") : []
-        
+
         return item;
       });
-  
+
       const uploadPromises = modifiedData.map(async (item) => {
         try {
           // Create an instance of designationModel and save it to the database
@@ -657,10 +699,10 @@ const itemAddController = {
           // return res.status(500).json({ error: 'Internal Server Error' });
         }
       });
-  
+
       // Execute all upload promises
       const uploadedItemAdds = await Promise.all(uploadPromises);
-  
+
       res.status(200).json({ uploadedItemAdds, message: 'Uploaded successfully' });
     } catch (error) {
       console.error('Error uploading Excel data:', error);

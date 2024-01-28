@@ -28,8 +28,8 @@ const versionRoute = require("./routes/versionRoute");
 const compDetailsRoute = require("./routes/compDetailsRoute");
 const formatNoRoute = require("./routes/formatNoRoute");
 const employeeController = require("./controllers/employeeController");
-const mailRoute = require("./routes/mailRoute")
-
+const mailRoute = require("./routes/mailRoute");
+const itemHistoryRoute = require("./routes/itemHistoryRoute")
 
 db.connectDatabase();
 //
@@ -60,6 +60,7 @@ app.use('/itemMasterImages', express.static('storage/Images/itemMasterImages'));
 app.use('/icon', express.static('storage/icons'));
 app.use('/error', express.static('storage/Images/errorImages'));
 app.use('/itemAdd', itemAddRoute);
+app.use('/itemHistory', itemHistoryRoute);
 app.use('/itemCal', itemCalRoute);
 app.use('/itemGRN', itemGRNRoute);
 app.use('/itemDc', itemDcRoute);

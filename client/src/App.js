@@ -43,6 +43,7 @@ import DcPrint from './Components/Reports/dcList/DcPrint';
 import TotalList from './Components/Reports/TotalList';
 import { Backdrop, CircularProgress } from '@mui/material';
 import CalDueReport from './Components/Reports/CalDueReport';
+import InsHistoryCard from './Components/Reports/InsHistoryCard';
 export const empRole = createContext(null);
 
 
@@ -62,10 +63,10 @@ export const EmployeeProvider = ({ children, employee }) => {
 
 const roleAccessRules = {
   
-  admin: ['/home', "/desdep", "/general", "/vendor", "/itemMaster", "/itemadd", "/itemEdit/:id", "/itemList", "/grnList", "/calList", "/onSiteList", '/roles', "/employee", '/test', '/rubyTest', '/dcPrint'],
-  plantAdmin: ['/home', "/desdep", "/general", "/vendor", "/itemMaster", "/itemadd", "/itemEdit/:id", "/itemList", "/grnList", "/calList", "/onSiteList", '/roles', "/employee", '/rubyTest', '/dcPrint', '/dcList'],
-  creator: ['/home', '/itemList', '/itemadd', '/itemEdit/:id', "/grnList", "/calList", "/onSiteList", '/dcPrint'],
-  viewer: ['/itemList', '/home', '/dcPrint'],
+  admin: ['/home', "/desdep", "/general", "/vendor", "/itemMaster", "/itemadd", "/itemEdit/:id", "/itemList", "/grnList", "/calList", "/onSiteList", '/roles', "/employee", '/test', '/rubyTest', '/dcPrint', "/insHisCard"],
+  plantAdmin: ['/home', "/desdep", "/general", "/vendor", "/itemMaster", "/itemadd", "/itemEdit/:id", "/itemList", "/grnList", "/calList", "/onSiteList", '/roles', "/employee", '/rubyTest', '/dcPrint', '/dcList', "/insHisCard"],
+  creator: ['/home', '/itemList', '/itemadd', '/itemEdit/:id', "/grnList", "/calList", "/onSiteList", '/dcPrint', "/insHisCard"],
+  viewer: ['/itemList', '/home', '/dcPrint', "/insHisCard"],
 };
 
 // Function to generate routes based on user role and access rules
@@ -95,9 +96,10 @@ const generateRoutes = (employee) => {
     { path: "/onSiteList", element: <OnSiteList /> },
     { path: "/onSiteEditGrn", element: <OnSiteEditGrn /> },
     { path: "/onSiteDialog", element: <OnSiteDialog /> },
-    
     { path: "/totalList", element: <TotalList /> },
     { path: "/calDueReport", element: <CalDueReport /> },
+    { path: "/insHisCard", element: <InsHistoryCard /> },
+
 
     // Add more common routes...
   ];

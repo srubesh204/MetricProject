@@ -474,9 +474,9 @@ const OnSiteDialog = () => {
       console.log(response.data)
       setAlertMessage(response.data.message)
       setSnackBarOpen(true)
-      setTimeout(() => setOnSiteOpen(false), 3000)
-
       setOnSiteGrnData(initialOnSiteData)
+      setTimeout(() => {setOnSiteOpen(false); window.location.reload()}, 3000)
+
     } catch (err) {
       console.log(err);
     }

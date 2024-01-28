@@ -1183,8 +1183,6 @@ const ItemList = () => {
                                         }
                                     }}
                                     onRowSelectionModelChange={handleRowSelectionChange}
-
-
                                     slots={{
                                         toolbar: () => (
                                             <div className='d-flex justify-content-between align-items-center'>

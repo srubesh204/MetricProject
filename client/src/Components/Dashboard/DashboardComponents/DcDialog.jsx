@@ -13,7 +13,7 @@ import { Add, Close, Delete } from '@mui/icons-material';
 const Dc = () => {
 
     const dcDatas = useContext(HomeContent)
-    const { dcOpen, setDcOpen, selectedRows, itemFetch, defaultDep } = dcDatas
+    const { dcOpen, setDcOpen, selectedRows, itemFetch, defaultDep, lastNo } = dcDatas
 
 
     console.log(selectedRows)
@@ -24,7 +24,7 @@ const Dc = () => {
         dcPartyName: "",
         dcPartyCode: "",
         dcPartyAddress: "",
-        dcNo: "",
+        dcNo: lastNo,
         dcDate: dayjs().format("YYYY-MM-DD"),
         dcReason: "",
         dcCommonRemarks: "",
@@ -38,7 +38,7 @@ const Dc = () => {
         dcPartyName: "",
         dcPartyCode: "",
         dcPartyAddress: "",
-        dcNo: "",
+        dcNo: lastNo,
         dcDate: dayjs().format("YYYY-MM-DD"),
         dcReason: "",
         dcCommonRemarks: "",
@@ -61,10 +61,7 @@ const Dc = () => {
             // Handle changes if needed
         }
     };
-    useEffect(() => {
-        // Update the value when dcNumber changes
-        setDcData({ ...dcData, dcNo: `${currentYear}-${dcNumber}` });
-    }, [dcNumber, currentYear]);
+    
 
     const settingDcData = () => {
         if (selectedRows.length > 0) {
@@ -74,7 +71,8 @@ const Dc = () => {
                     ...prev,
                     dcPlant: selectedRows[0].itemPlant,
                     dcDepartment: departments,
-                    dcPartyItems: selectedRows
+                    dcPartyItems: selectedRows,
+                    dcNo: lastNo
                 }
 
             ))
@@ -348,7 +346,7 @@ const Dc = () => {
                 setSnackBarOpen(true)
                 itemFetch();
                 setDcData(initialDcData)
-                setTimeout(() => setDcOpen(false), 1000)
+                setTimeout(() => {setDcOpen(false); window.location.reload()}, 500)
             } else {
                 setErrorHandler({ status: 0, message: errors, code: "error" });
             }
@@ -621,7 +619,7 @@ const Dc = () => {
                                                 disabled
                                                 onChange={handleDcChange}
                                                 size="small"
-                                                sx={{ width: "101%" }}
+                                                fullWidth
                                                 name="dcNo"
                                             />
 
