@@ -5,7 +5,7 @@ import { useReactToPrint } from 'react-to-print';
 
 const DcPrint = () => {
   const DcPrintData = useContext(DcListContent);
-  const { dcPrintOpen, setDcPrintOpen, selectedRows, formatNoData, printState, setPrintState } = DcPrintData;
+  const { dcPrintOpen, setDcPrintOpen, selectedRows, formatNoData, printState, setPrintState,companyList } = DcPrintData;
 
   const componentRef = useRef();
 
@@ -94,16 +94,17 @@ const DcPrint = () => {
   return (
       <div style={{ display: 'none', width: "100%" }}>
         <div ref={componentRef}>
-          <div style={{ padding: "10px", textAlign: "center", textDecoration: "underline" }}>DC List</div>
+          <div style={{ padding: "10px", textAlign: "center", textDecoration: "underline" }}>Delivery Challan</div>
           <div style={{ border: '0.5px solid black' }}>
             <div style={{ textAlign: 'center', borderBottom: '0.5px solid black', display: 'flex', flexDirection: 'column' }}>
-              <td style={{ padding: "10px", textAlign: "center" }}>{selectedRows.dcPartyName}</td>
-              <td>{selectedRows.dcPartyAddress}</td>
+              <td style={{ padding: "10px", textAlign: "center" }}>{companyList[0]?.companyName}</td>
+              {/* <td>{selectedRows.dcPartyAddress}</td> */}
               <td>Phone and Address</td>
             </div>
             <div style={{ display: 'flex', flexDirection: 'row', borderBottom: '0.5px solid black' }}>
               <div style={{ width: '60%', display: 'flex', flexDirection: 'column', paddingLeft: '10px', borderRight: '0.5px solid black' }}>
                 <td>To:</td>
+                <td style={{ padding: '0px 30px' }}>{selectedRows.dcPartyName}</td>
                 <td style={{ padding: '0px 30px' }}>{selectedRows.dcPartyAddress}</td>
               </div>
               <div style={{ width: '40%', display: 'flex', flexDirection: 'column', paddingLeft: '10px' }}>
