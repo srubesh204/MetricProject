@@ -16,7 +16,7 @@ const CalDialog = () => {
 
 
     const calData = useContext(HomeContent)
-    const {loggedEmp} = useEmployee()
+    const { loggedEmp } = useEmployee()
     const [lastResultData, setLastResultData] = useState([])
     const { calOpen, setCalOpen, selectedRows, itemMasters, activeEmps, masters } = calData
     const [calibrationDatas, setCalibrationDatas] = useState([])
@@ -114,8 +114,8 @@ const CalDialog = () => {
         calLC: "",
         calItemMake: "",
         calItemTemperature: "20±2°C",
-        calItemHumidity: "30% to 75%", 
-        calItemUncertainity:"",
+        calItemHumidity: "30% to 75%",
+        calItemUncertainity: "",
         calItemSOPNo: "",
         calStandardRef: "",
         calOBType: "",
@@ -123,7 +123,7 @@ const CalDialog = () => {
         calItemCalDate: dayjs().format('YYYY-MM-DD'),
         calItemDueDate: "",
         calItemEntryDate: dayjs().format('YYYY-MM-DD'),
-        calCalibratedBy: loggedEmp.firstName + " " + loggedEmp.lastName,
+        calCalibratedBy: (loggedEmp.firstName || "") + " " + (loggedEmp.lastName || ""),
         calApprovedBy: "",
         calBeforeData: "no",
         calStatus: "status",
@@ -154,7 +154,7 @@ const CalDialog = () => {
                     ...prev,
                     calPlant: selectedRows[0].itemPlant,
                     calDepartment: departments,
-                    
+
                 }
 
             ))
@@ -165,7 +165,7 @@ const CalDialog = () => {
         settingCalData()
     }, [selectedRows])
 
-   
+
 
     const [dcList, setDcList] = useState([])
 
@@ -216,9 +216,9 @@ const CalDialog = () => {
         console.log("hi")
         if (selectedRows.length === 1) {
             const filter = masters.filter(mas => mas.itemDescription === selectedRows[0].itemAddMasterName)
-           
+
             console.log(filter)
-            setRefMaster(filter.length > 0 ? filter[0]: [])
+            setRefMaster(filter.length > 0 ? filter[0] : [])
 
             setCalibrationData((prev) => (
                 {
@@ -232,9 +232,9 @@ const CalDialog = () => {
                     calLC: selectedRows[0].itemLC || "",
                     calItemMake: selectedRows[0].itemMake || "",
                     calItemFreInMonths: selectedRows[0].itemCalFreInMonths || "",
-                    calItemUncertainity: filter.length> 0 && filter[0] ? filter[0].uncertainty : "",
-                    calItemSOPNo: filter.length> 0 && filter[0].SOPNo ? filter[0].SOPNo : "",
-                    calStandardRef: filter.length> 0 && filter[0].standardRef ? filter[0].standardRef: "",
+                    calItemUncertainity: filter.length > 0 && filter[0] ? filter[0].uncertainty : "",
+                    calItemSOPNo: filter.length > 0 && filter[0].SOPNo ? filter[0].SOPNo : "",
+                    calStandardRef: filter.length > 0 && filter[0].standardRef ? filter[0].standardRef : "",
                     calOBType: selectedRows[0].itemOBType || "",
                     // calCertificateNo: selectedRows[0].itemCertificateNo || "",
 
@@ -623,13 +623,20 @@ const CalDialog = () => {
     };
 
     const [selectedEmp, setSelectedEmp] = useState([])
-    const getEmployeeByName = (empId) => {
-        const selectedEmp = activeEmps.filter((emp) => emp._id === empId);
-        setSelectedEmp(selectedEmp)
-    }
+
     useEffect(() => {
-        getEmployeeByName(calibrationData.calCalibratedBy)
-    }, [calibrationData.calCalibratedBy])
+
+        if (selectedRows.length > 0) {
+            console.log("working")
+            console.log(selectedRows[0].itemPlant)
+            const plantEmps = activeEmps.filter(emp => emp.plantDetails.some(plant => plant.plantName === selectedRows[0].itemPlant))
+            console.log(plantEmps)
+            const admins = plantEmps.filter(emp => emp.empRole === "plantAdmin" || emp.empRole === "admin")
+            console.log(admins)
+            setSelectedEmp(admins)
+        }
+
+    }, [selectedRows])
 
     const [lastResultShow, setLastResultShow] = useState(false)
 
@@ -704,7 +711,7 @@ const CalDialog = () => {
                 setAlertMessage(response.data.message)
                 setSnackBarOpen(true)
                 setCalibrationData(initialCalData);
-                setTimeout(() => { setCalOpen(false);  window.location.reload() }, 500)
+                setTimeout(() => { setCalOpen(false); window.location.reload() }, 500)
             }
         } catch (err) {
             setSnackBarOpen(true)
@@ -987,7 +994,7 @@ const CalDialog = () => {
                                     variant="outlined"
                                     onChange={handleCalData}
                                 >
-                                    
+
                                 </TextField>
 
 
@@ -995,9 +1002,7 @@ const CalDialog = () => {
                             <div className="col-md-6">
                                 <TextField
                                     {...(errors.calApprovedBy !== "" && { helperText: errors.calApprovedBy, error: true })}
-                                    InputProps={{
-                                        disabled: selectedEmp.length === 0,
-                                    }}
+
                                     id="calApprovedById"
                                     size='small'
                                     label="Approved By"
@@ -1009,7 +1014,7 @@ const CalDialog = () => {
                                     onChange={handleCalData}
                                 >
                                     {selectedEmp.map((emp, index) => (
-                                        <MenuItem key={index} value={emp._id}>{emp.firstName + " " + emp.lastName}</MenuItem>
+                                        <MenuItem key={index} value={emp._id}>{(emp.firstName || "") + " " + (emp.lastName || "") }</MenuItem>
                                     ))}
                                 </TextField>
                             </div>
@@ -1060,7 +1065,7 @@ const CalDialog = () => {
                                             </tr>
                                             {/* {calibrationData.calcalibrationData.map((item)=> ()} */}
                                             {calibrationData && calibrationData.calcalibrationData.map((item, index) => {
-                                               
+
 
                                                 //color changer
                                                 let minColor = "";
@@ -1594,7 +1599,7 @@ const CalDialog = () => {
             </DialogContent>
             <DialogActions className='d-flex justify-content-between'>
                 <div>
-                   
+
                 </div>
                 <div>
                     <Button variant='contained' color='error' className='me-3' onClick={() => { setCalOpen(false) }}>Cancel</Button>
