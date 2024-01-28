@@ -1,13 +1,13 @@
 import React, { useEffect, useState, createContext } from 'react'
 import { TextField, MenuItem, Button } from '@mui/material';
-import { Box, Container, Grid, Paper, Typography ,Link} from "@mui/material";
+import { Box, Container, Grid, Paper, Typography, Link } from "@mui/material";
 import { DataGrid, GridToolbar, GridToolbarQuickFilter } from '@mui/x-data-grid';
 import axios from 'axios';
 import { Edit, FilterAlt, PrintRounded, Send } from '@mui/icons-material';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import {ArrowBack,Error, HomeMax, House, Mail, MailLock,  } from '@mui/icons-material';
+import { ArrowBack, Error, HomeMax, House, Mail, MailLock, } from '@mui/icons-material';
 import { Link as RouterLink } from 'react-router-dom';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import dayjs from 'dayjs';
@@ -669,6 +669,10 @@ const CalDueReport = () => {
 
                         </div>
                         <div className='row'>
+                            <div>
+                                <Button variant="contained" size='small' color="success" >Print</Button>
+
+                            </div>
                             <div className='col d-flex justify-content-end'>
                                 <div className='me-2'>
                                     <Button component={Link} to={`/home`} variant="contained" size='small' color="warning">
