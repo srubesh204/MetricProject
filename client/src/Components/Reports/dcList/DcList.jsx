@@ -359,7 +359,25 @@ const DcList = () => {
     }
 
 
+    const [companyList, setCompanyList] = useState([])
 
+    const companyFetch = async () => {
+        try {
+            const response = await axios.get(
+                `${process.env.REACT_APP_PORT}/compDetails/getAllCompDetails`
+            );
+            setCompanyList(response.data.result);
+            //setFilterCompany(response.data.result);
+
+            console.log(response.data.result);
+        } catch (err) {
+            console.error(err);
+        }
+    };
+
+    useEffect(() => {
+        companyFetch();
+    }, []);
 
 
 
@@ -778,7 +796,7 @@ const DcList = () => {
 
 
                             <DcListContent.Provider
-                                value={{ dcPrintOpen, setDcPrintOpen, selectedRows, formatNoData, printState, setPrintState }}
+                                value={{ dcPrintOpen, setDcPrintOpen, selectedRows, formatNoData,companyList, printState, setPrintState }}
                             >
                                 {selectedRows.length !== 0 &&
                                     <DcPrint />}

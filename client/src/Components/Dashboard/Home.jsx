@@ -28,6 +28,9 @@ dayjs.extend(isSameOrAfter)
 const Home = () => {
 
   const employeeRole = useEmployee();
+  
+    const { loggedEmp } = employeeRole
+  
 
   const loggedInEmpId = sessionStorage.getItem('empId')
 
@@ -262,7 +265,7 @@ const Home = () => {
       } else {
         allItems = response.data.result
       }
-      
+
       const itemPart = allItems.map(item => item.itemPartName)
       console.log(itemPart)
 
@@ -1731,9 +1734,18 @@ const Home = () => {
 
                 </table>
               </div>
-              <div style={{ height: "20%", width: "100%", display: "flex", alignItems: "end", justifyContent: 'end' }}>
+              {/* style={{ height: "20%", width: "100%", display: "flex", alignItems: "end", justifyContent: 'end' }} */}
+              <div className='row'>
+              <div className='col' >
                 <Button component={Link} to="/" variant='contained' startIcon={<ArrowBack />} endIcon={<House />} color='secondary'>Home</Button>
               </div>
+              <div className='col d-flex justify-content-end  height: "20%", width: "100%"' >
+                <p>
+                  Welcome {loggedEmp.firstName}
+                </p>
+              </div>
+              </div>
+    
             </Paper>
             {employeeRole && employeeRole !== "viewer" &&
               <React.Fragment>
