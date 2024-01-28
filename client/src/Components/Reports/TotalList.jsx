@@ -777,7 +777,6 @@ const TotalList = () => {
 
               </div>
               <div className="col d-flex  mb-2">
-
                 <TextField label="Calibration source"
                   id="calibrationSourceId"
                   select
@@ -792,17 +791,10 @@ const TotalList = () => {
                     <MenuItem key={index} value={item}>{item}</MenuItem>
                   ))}
                 </TextField>
-
               </div>
-
-
-
             </div>
             <div className='row g-2'>
-
-
               <div className="col d-flex  mb-2">
-
                 <div className='col d-flex  me-2'>
                   <TextField label="Status"
                     id="statusId"
@@ -812,18 +804,15 @@ const TotalList = () => {
                     size="small"
                     name="status"
                     onChange={handleFilterChangeItemList}>
-
                     <MenuItem value="all">All</MenuItem>
                     <MenuItem value="active">Active</MenuItem>
                     <MenuItem value="spare">Spare</MenuItem>
                     <MenuItem value="breakdown">Breakdown</MenuItem>
                     <MenuItem value="missing">Missing</MenuItem>
                     <MenuItem value="rejection">Rejection</MenuItem>
-
                   </TextField>
                 </div>
                 <div className="col d-flex ">
-
                   <TextField label="Current Location "
                     id="itemCurrentLocationId"
                     select
@@ -837,9 +826,7 @@ const TotalList = () => {
                     {FilterNameList.itemCurrentLocation.map((item, index) => (
                       <MenuItem key={index} value={item}>{item}</MenuItem>
                     ))}
-
                   </TextField>
-
                 </div>
 
 

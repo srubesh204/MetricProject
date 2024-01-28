@@ -938,16 +938,11 @@ const ItemList = () => {
                                         {employeeRole.employee !== "viewer" && (
                                             <React.Fragment>
                                                 <div className='me-2'>
-                                                    <TextField
-                                                        size='small'
-                                                        label="Welcome"
-                                                        
-                                                        value={loggedEmp.firstName}  
-                                                        fullWidth
-                                                        variant="outlined"
-                                                    >
-                                                    </TextField>
+                                                    <p>
+                                                        Welcome {loggedEmp.firstName}
+                                                    </p>
                                                 </div>
+
                                             </React.Fragment>
                                         )}
 
@@ -1196,6 +1191,8 @@ const ItemList = () => {
                                         }
                                     }}
                                     onRowSelectionModelChange={handleRowSelectionChange}
+
+
                                     slots={{
                                         toolbar: () => (
                                             <div className='d-flex justify-content-between align-items-center'>
@@ -1259,7 +1256,10 @@ const ItemList = () => {
                         <div className='row'>
                             <div className=' col d-flex mb-2'>
                                 <div className='me-2' >
-                                    <button type="button" className='btn btn-sm' >History Card</button>
+                                    {/* <button type="button" className='btn btn-sm' >History Card</button> */}
+                                    <Button component={RouterLink} to={`/InsHistoryCard`} size='small' variant="contained" color="secondary">
+                                    History Card
+                                    </Button>
                                 </div>
                                 {employeeRole && employeeRole.employee !== "viewer" &&
                                     <div className='me-2' >
