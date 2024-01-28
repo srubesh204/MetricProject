@@ -5,7 +5,7 @@ import { useReactToPrint } from 'react-to-print';
 const TotalPrint = () => {
 
     const totalPrintData = useContext(TotalListContent)
-    const { totalPrintOpen, setTotalPrintOpen, filteredItemListData, formatNoData, itemList, partDataList } = totalPrintData
+    const { totalPrintOpen, setTotalPrintOpen, filteredItemListData, formatNoData, itemList, partDataList,companyList ,plantList } = totalPrintData
 
 
     const componentRef = useRef();
@@ -86,7 +86,15 @@ const TotalPrint = () => {
         {filteredItemListData.length > 0 && (
             <div style={{ display: 'none', width: "100%" }}>
             <div ref={componentRef}>
-            <h3 style={{ paddingBottom: "5px", textAlign: "center" }}>Gauge List</h3>
+            <div style={{ padding: "10px", textAlign: "center", textDecoration: "underline" }}>Gauge List</div>
+            {/* <div style={{ border: '0.5px solid black' }}> */}
+            <div style={{ textAlign: 'center', borderBottom: '0.5px solid black', display: 'flex', flexDirection: 'column' }}>
+              <td style={{ padding: "10px", textAlign: "center" }}>{companyList[0]?.companyName}</td>
+              {/* <td>{selectedRows.dcPartyAddress}</td> */}
+              {/* <td>Phone and Address</td> */}
+              <td style={{ padding: "10px", textAlign: "center" }}>{plantList[0]?.plantAddress}</td>
+            </div>
+
                 <table className='table table-sm table-bordered text-center align-middle table-responsive w-100' style={{border: "1px solid black"}}>
                     <thead>
                         <tr>
@@ -105,7 +113,9 @@ const TotalPrint = () => {
                     </thead>
                     <tbody>{renderTableRows()}</tbody>
                 </table>
+
             <tfoot>{Footer()}</tfoot>
+            {/* </div> */}
             </div>
             </div>
         )}
