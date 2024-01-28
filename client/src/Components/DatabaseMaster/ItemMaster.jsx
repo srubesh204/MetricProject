@@ -19,7 +19,7 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 
-import {ArrowBack,Error, HomeMax, House, Mail, MailLock,  } from '@mui/icons-material';
+import { ArrowBack, Error, HomeMax, House, Mail, MailLock, } from '@mui/icons-material';
 import { Link as RouterLink } from 'react-router-dom';
 
 import DialogTitle from '@mui/material/DialogTitle';
@@ -502,7 +502,7 @@ const ItemMaster = () => {
 
                 if (response.status === 200) {
                     // Image uploaded successfully
-                    setItemMasterData((prev) => ({ ...prev, itemMasterImage: selectedImage.name }));
+                    setItemMasterData((prev) => ({ ...prev, itemMasterImage: response.data.name }));
                     console.log('Image Uploaded Successfully');
 
                     // If you want to access the saved file path sent by the server
@@ -540,16 +540,7 @@ const ItemMaster = () => {
     const [iframeURL, setIframeURL] = useState({ fileURL: "", fileName: "", file: "" });
 
 
-    const handleFileSelect = (event) => {
-        const selectedFile = event.target.files[0];
-        console.log(selectedFile)
-        if (selectedFile) {
-            console.log("working")
-            setItemMasterData((prev) => ({ ...prev, workInsName: selectedFile.name }));
-            const fileURL = URL.createObjectURL(selectedFile);
-            setIframeURL({ fileURL: fileURL, fileName: selectedFile.name, file: selectedFile });
-        }
-    };
+
     const [uploadMessage, setUploadMessage] = useState("")
     const handleRemoveFile = () => {
         setItemMasterData((prev) => ({ ...prev, workInsName: "" }));
@@ -568,9 +559,9 @@ const ItemMaster = () => {
             try {
                 axios.post(`${process.env.REACT_APP_PORT}/upload/workInstructions`, formData)
                     .then(response => {
-                        setItemMasterData((prev) => ({ ...prev, workInsName: selectedFile.name }));
+                        setItemMasterData((prev) => ({ ...prev, workInsName: response.data.name }));
                         setUploadMessage(response.data.message)
-                        console.log(response);
+                        console.log(response.data);
                     })
                     .catch(error => {
                         setUploadMessage("")
@@ -853,13 +844,7 @@ const ItemMaster = () => {
                                                     Work Instruction Upload
                                                     <VisuallyHiddenInput type="file" onChange={handleWorkInstructionUpload} />
 
-                                                </Button>) : null}
-                                            {/* <Button className='ms-2' variant='contained' onClick={handleWorkInstructionUpload}>Upload</Button>*/}
-                                            {/*<button type='button' style={{ display: "none" }}  value={itemMasterData.workInsName}>Select File</button>*/}
-                                        </div>
-
-                                        {itemMasterData.workInsName &&
-                                            <div className=' d-flex justify-content-center mt-2  '>
+                                                </Button>) : <div className=' d-flex justify-content-center mt-2  '>
 
 
                                                 <Chip className='col-6' label={itemMasterData.workInsName} size='small' component="a" href={`${process.env.REACT_APP_PORT}/workInstructions/${itemMasterData.workInsName}`} target="_blank" clickable={true} color="primary" />
@@ -874,10 +859,9 @@ const ItemMaster = () => {
                                                         color="success"
                                                         icon={<Done />}
                                                     />}
-                                            </div>
+                                            </div>}
 
-                                        }
-
+                                        </div>
 
 
                                     </div>
@@ -1230,7 +1214,7 @@ const ItemMaster = () => {
                                                 <ArrowBackIcon /> Dash board
                                             </Button>
                                         </div>
-                                        
+
                                     </div>
 
 

@@ -158,6 +158,25 @@ const itemAddController = {
       console.log(createdItem)
       console.log("ItemAdd Created Successfully");
 
+      let obSize = [];
+      if(createdItem.itemType === "variable"){
+        obSize = acceptanceCriteria.map(item => {
+          return item.acParameter + ":" + item.acOBError
+        })
+      }else{
+        obSize = acceptanceCriteria.map(item => {
+
+          if(itemOBType === "minmax"){
+            return item.acParameter + ":" + item.acMinOB + "/" + item.acMaxOB
+          }else{
+            return item.acParameter + ":" + item.acAverageOB
+          }
+          
+        })
+      }
+      console.log(obSize)
+      
+
       const historyRecord = new itemHistory({
         itemId: createdItem._id,
         selectedItemMaster,
@@ -192,9 +211,10 @@ const itemAddController = {
         itemUncertainity,
         itemUncertainityUnit,
         itemPrevCalData,
-        acceptanceCriteria,
+        acceptanceCriteria: obSize,
         itemCreatedBy,
         itemLastModifiedBy,
+        
       });
       await historyRecord.save();
       res.status(200).json({ result: createdItem, message: "ItemAdd Created Successfully" });

@@ -8,7 +8,6 @@ const itemHistorySchema = new mongoose.Schema({
     type: String,
     required: [true, "ItemId missing"]
   },
-
   itemMasterRef: String,
   selectedItemMaster: [],
   isItemMaster: String,
@@ -18,16 +17,13 @@ const itemHistorySchema = new mongoose.Schema({
   },
   itemIMTENo: {
     type: String,
-    unique: [true, "IMTE No Should be Unique"],
+    required: [true, "Item IMTE No required"]
   },
-  
   itemType: String,
   itemRangeSize: String,
   itemRangeSizeUnit: String,
-  
   itemLC: String,
   itemLCUnit: String,
- 
   itemModelNo: String,
   itemStatus: String,
   itemReceiptDate: String,
@@ -35,16 +31,10 @@ const itemHistorySchema = new mongoose.Schema({
   itemCurrentLocation: String,
   itemLocation: String,
   itemLastLocation: String,
- 
- 
   itemCalFreInMonths: String,
   itemCalAlertDays: String,
   itemCalibrationSource: String,
   itemCalibrationDoneAt: String,
- 
- 
- 
-  
   itemUncertainity: String,
   itemUncertainityUnit: String,
   itemPrevCalData: String,
@@ -55,8 +45,7 @@ const itemHistorySchema = new mongoose.Schema({
   itemCalibratedAt: String,
   itemCertificateName: String,
   itemCertificateNo: String,
- 
- 
+  itemOBType: String,
   dcId: String,
   dcStatus: String,
   dcCreatedOn: String,
@@ -69,25 +58,7 @@ const itemHistorySchema = new mongoose.Schema({
   grnNo: String,
   grnStatus: String,
   grnCreatedOn: String,
-  acceptanceCriteria: [
-    {
-      acParameter: String,
-      acNominalSize: String,
-      acNominalSizeUnit: String,
-      acMinPS: String,
-      acMaxPS: String,
-      acWearLimitPS: {
-        type: String,
-        default: () => "--"
-      },
-      acMinOB: String,
-      acMaxOB: String,
-      acAverageOB: String,
-      acOBError: String,
-      acMinPSError: String,
-      acMaxPSError: String,
-    }
-  ],
+  acceptanceCriteria: [],
   itemUncertainity: String,
   createdAt: {
     type: String,
