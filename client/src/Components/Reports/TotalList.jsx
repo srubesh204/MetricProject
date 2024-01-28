@@ -947,19 +947,19 @@ const TotalList = () => {
             <div className='row'>
               <div className='col d-flex '>
                 {employeeRole.employee !== "viewer" && <React.Fragment>
-                  <div className='me-2' >
+                  {/* <div className='me-2' >
                     <label className='itemlistloade'>
                       <input className="form-control itemlistdownload" type="file" id="upload" />Upload</label>
                   </div>
                   <div className='me-2'>
                     <label className='itemlistloade'>
                       <input className="form-control itemlistdownload" type="file" id="download" />Download </label>
-                  </div>
+                  </div> */}
                 </React.Fragment>}
 
 
                 <div>
-                  <Button onClick={() => { setTotalPrintOpen(true) }}><PrintRounded color='success' /></Button>
+                  <Button  variant="contained" size='small' color="success" onClick={() => { setTotalPrintOpen(true) }}>Print</Button>
 
                 </div>
                 
@@ -969,9 +969,9 @@ const TotalList = () => {
                         <ArrowBackIcon /> Dash board
                       </Button>
                     </div>
-                    <div >
+                    {/* <div >
                       <Button component={Link} to="/" size='small' variant='contained' startIcon={<ArrowBack />} endIcon={<House />} color='secondary'>Home</Button>
-                    </div>
+                    </div> */}
                   </div>
 
 

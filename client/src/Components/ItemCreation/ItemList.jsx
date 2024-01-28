@@ -42,10 +42,11 @@ const ItemList = () => {
 
 
     const employeeRole = useEmployee()
+    const { loggedEmp } = employeeRole
     const [printState, setPrintState] = useState(false)
     const [loaded, setLoaded] = useState(false);
 
-    
+
     const [itemList, setItemList] = useState([]);
     const [filteredItemListData, setFilteredItemListData] = useState([])
 
@@ -56,7 +57,7 @@ const ItemList = () => {
             const response = await axios.get(
                 `${process.env.REACT_APP_PORT}/itemAdd/getAllItemAdds`
             );
-                console.log(response.data.result)
+            console.log(response.data.result)
             const plantwise = response.data.result.filter(item => employeeRole.loggedEmp.plantDetails.map(plant => plant.plantName).includes(item.itemPlant))
             console.log(plantwise)
 
@@ -114,6 +115,16 @@ const ItemList = () => {
 
 
     }
+
+    // const [selectedEmp, setSelectedEmp] = useState([])
+    // const getEmployeeByName = (empId) => {
+    //     const selectedEmp = activeEmps.filter((emp) => emp._id === empId);
+    //     setSelectedEmp(selectedEmp)
+    // }
+    // useEffect(() => {
+    //     getEmployeeByName(calibrationData.calCalibratedBy)
+    // }, [calibrationData.calCalibratedBy])
+
 
 
 
@@ -924,19 +935,21 @@ const ItemList = () => {
                                 </div>
                                 <div className='col-2'>
                                     <div className=' col d-flex justify-content-end'>
-                                        {employeeRole.employee !== "viewer" && <React.Fragment> <div className='me-2'>
-
-                                            <Button component={Link} to={`/itemAdd`} variant="contained" size='small' color="warning">
-                                                <AddIcon /> Add Item
-                                            </Button>
-
-                                        </div>
-
-                                            {/* <div className='me-2'>
-                                            {itemListSelectedRowIds.length !== 0 && <Button variant='contained' type='button' color='error' onClick={() => setDeleteModalItem(true)}><DeleteIcon /> Delete </Button>}
-                                        </div> */}
-                                        </React.Fragment>
-                                        }
+                                        {employeeRole.employee !== "viewer" && (
+                                            <React.Fragment>
+                                                <div className='me-2'>
+                                                    <TextField
+                                                        size='small'
+                                                        label="Welcome"
+                                                        
+                                                        value={loggedEmp.firstName}  
+                                                        fullWidth
+                                                        variant="outlined"
+                                                    >
+                                                    </TextField>
+                                                </div>
+                                            </React.Fragment>
+                                        )}
 
 
 
@@ -1194,7 +1207,7 @@ const ItemList = () => {
                                                     {itemListSelectedRowIds.length !== 0 && <Button className='me-2' variant='contained' type='button' size='small' color='error' onClick={() => setDeleteModalItem(true)}> Delete </Button>}
                                                     <GridToolbarQuickFilter />
                                                 </div>
-                                                
+
 
                                             </div>
                                         ),
@@ -1337,21 +1350,28 @@ const ItemList = () => {
                                         <Button size='small' onClick={handleItemAddUpload}><CloudUpload /></Button>
                                     </ButtonGroup>
 
-                                    <ButtonGroup>
+                                    {/* <ButtonGroup>
                                         <Button component="label" size='small' variant="contained" color='secondary'>
                                             Download
                                             <VisuallyHiddenInput type="file" />
                                         </Button>
                                         <Button size='small' color='secondary'><CloudDownload /></Button>
-                                    </ButtonGroup>
+                                    </ButtonGroup> */}
                                 </div>
 
 
-                                <div className='me-2 col-1 px-1'>
+                                {/* <div className='me-2 col-1 px-1'>
                                     <button type="button" className='btn btn-secondary btn-sm' >Sticker Print</button>
                                 </div>
                                 <div className='me-2 col-2'>
                                     <button type="button" className='btn btn-secondary btn-sm' >Sticker Print Barcode</button>
+                                </div> */}
+                                <div className='col d-flex justify-content-end'>
+
+                                    <Button component={Link} to={`/itemAdd`} variant="contained" size='small' color="warning">
+                                        <AddIcon /> Add Item
+                                    </Button>
+
                                 </div>
 
 
