@@ -592,8 +592,9 @@ export const PartDataBase = ({ style }) => {
                 `${process.env.REACT_APP_PORT}/vendor/getAllVendors`
             );
             console.log(response.data)
-            const customersList = response.data.result.filter((item) => item.customer === "1")
 
+            const plantCustomers = response.data.result.filter(cus => loggedEmp.plantDetails.map(plant => cus.vendorPlant.includes(plant.plantName)))
+            const customersList = plantCustomers.filter((item) => item.customer === "1")
             setCustomerList(customersList);
         } catch (err) {
             console.log(err);
@@ -623,7 +624,8 @@ export const PartDataBase = ({ style }) => {
         partName: "",
         customer: "",
         operationNo: "N/A",
-        partStatus: "Active"
+        partStatus: "Active",
+        partPlant: ""
     }
 
 
@@ -632,7 +634,8 @@ export const PartDataBase = ({ style }) => {
         partName: "",
         customer: "",
         operationNo: "N/A",
-        partStatus: "Active"
+        partStatus: "Active",
+        partPlant: ""
     })
     console.log(partData)
 
@@ -641,23 +644,19 @@ export const PartDataBase = ({ style }) => {
     const [lastNo, setLastNo] = useState("1")
 
     const [partDataList, setPartDataList] = useState([])
+    const [filteredData, setFilteredData] = useState([])
+
     const partFetchData = async () => {
         try {
             const response = await axios.get(
                 `${process.env.REACT_APP_PORT}/part/getAllParts`
             );
 
-            const plantPart = response.data.result.filter(dc => (loggedEmp.plantDetails.map(plant => plant.plantName).includes(dc.dcPlant)))
-            const partNos = response.data.result.map(dc => dc.calId).filter(Boolean).sort()
-            setLastNo((dayjs().year() + "-" + ((partNos[partNos.length - 1]) + 1)))
-            console.log(partNos[partNos.length - 1])
+            const plantPart = response.data.result.filter(part => (loggedEmp.plantDetails.map(plant => plant.plantName).includes(part.partPlant)))
+
+
             setPartDataList(plantPart);
-            // setFilteredCalData(plantPart);
-
-
-
-
-            setPartDataList(response.data.result);
+            setFilteredData(plantPart)
 
 
         } catch (err) {
@@ -668,35 +667,10 @@ export const PartDataBase = ({ style }) => {
         partFetchData();
     }, []);
 
-    useEffect(() => {
-        setPartData(prev => ({ ...prev, partNo: lastNo }))
-    }, [lastNo])
-
-    console.log(lastNo)
 
 
-    // const [calDataDcList, setCalDataDcList] = useState([])
-    // const dcListFetchData = async () => {
-    //     try {
-    //         const response = await axios.get(
-    //             `${process.env.REACT_APP_PORT}/itemCal/getAllItemCals`
-
-    //         );
-    //         const plantCal = response.data.result.filter(dc => (loggedEmp.plantDetails.map(plant => plant.plantName).includes(dc.dcPlant)))
-    //         const calNos = response.data.result.map(dc => dc.calId).filter(Boolean).sort()
-    //         setLastNo((dayjs().year() + "-" + ((calNos[calNos.length - 1]) + 1))) 
-    //         console.log(calNos[calNos.length - 1])
-    //         setCalDataDcList(plantCal);
-    //       //  setFilteredCalData(plantCal);
 
 
-    //     } catch (err) {
-    //         console.log(err);
-    //     }
-    // };
-    // useEffect(() => {
-    //     dcListFetchData();
-    // }, []);
 
 
 
@@ -790,6 +764,7 @@ export const PartDataBase = ({ style }) => {
         let tempErrors = {};
         tempErrors.partNo = partData.partNo ? "" : "Part No is Required"
         tempErrors.partName = partData.partName ? "" : "Part Name is Required"
+        tempErrors.partPlant = partData.customer ? "" : "Plant Required"
         tempErrors.customer = partData.customer ? "" : "Customer is Required"
         tempErrors.operationNo = partData.operationNo ? "" : "Operation No is Required"
 
@@ -968,7 +943,36 @@ export const PartDataBase = ({ style }) => {
     const [openModal, setOpenModal] = useState(false);
     const [deleteModal, setDeleteModal] = useState(false);
 
+    const [selectedPlantParts, setSelectedPlantParts] = useState([])
+    useEffect(() => {
+        const customerPlantFilter = customerList.filter(cus => cus.vendorPlant.includes(partData.partPlant))
+        setSelectedPlantParts(customerPlantFilter)
+    }, [partData.partPlant])
 
+    useEffect(() => {
+        const plantPartData = [...new Set(partDataList.map(part => part.partPlant))]
+        console.log(plantPartData)
+        const customers = [...new Set(partDataList.map(part => part.customer))]
+        console.log(customers)
+        setFilters(prev => ({ ...prev, plants: plantPartData, customers: customers }))
+    }, [partDataList])
+
+    const [filters, setFilters] = useState({
+        plants: [],
+        customers: []
+    })
+    console.log(filters)
+
+    const onChangeFilter = (e) => {
+        const {name, value} = e.target;
+        console.log(name, value)
+        if(value === "All"){
+            setFilteredData(partDataList)
+        }else{
+            const data = partDataList.filter(part => part[name] === value)
+            setFilteredData(data)
+        }
+    }
 
     return (
 
@@ -979,7 +983,7 @@ export const PartDataBase = ({ style }) => {
                     <Grid container spacing={2} >
 
 
-                        <Grid item xs={12} className="d-flex justify-content-center">
+                        <Grid item xs={12} >
                             <Paper sx={{
                                 p: 3,
                                 display: 'flex',
@@ -987,7 +991,7 @@ export const PartDataBase = ({ style }) => {
 
                             }}
                                 elevation={12}
-                                className="d-flex justify-content-center"
+
                             >
 
 
@@ -998,7 +1002,6 @@ export const PartDataBase = ({ style }) => {
                                                 id="partDbId"
                                                 fullWidth
                                                 disabled
-                                                defaultValue=""
                                                 placeholder="partDb"
                                                 size="small"
                                                 onChange={handlePartDataBaseChange}
@@ -1011,7 +1014,7 @@ export const PartDataBase = ({ style }) => {
                                                 {...(errors.partNo !== "" && { helperText: errors.partNo, error: true })}
                                                 id="partNoId"
                                                 defaultValue=""
-
+                                                fullWidth
                                                 size="small"
                                                 onChange={handlePartDataBaseChange}
                                                 value={partData.partNo}
@@ -1019,16 +1022,6 @@ export const PartDataBase = ({ style }) => {
 
                                         </div>
                                         <div className="form-floating col-md-6">
-                                            {/* <TextField label="Part Name"
-                                        {...(errors.partName !== "" && { helperText: errors.partName, error: true })}
-                                                id="partNameId"
-                                                defaultValue=""
-                                                fullWidth
-                                                size="small"
-                                                onChange={handlePartDataBaseChange}
-                                                onKeyDown={handleKeyDown}
-                                                value={partData.partName}
-                        name="partName" ></TextField>*/}
                                             <Autocomplete label="Part Name"
                                                 disablePortal
                                                 size="small"
@@ -1040,24 +1033,19 @@ export const PartDataBase = ({ style }) => {
                                                 renderInput={(params) =>
                                                     <TextField    {...(errors.partName !== "" && { helperText: errors.partName, error: true })} onKeyDown={handleKeyDown} onChange={handlePartDataBaseChange}
                                                         name="partName" {...params} label="Part Name" />} />
-
-
-
                                         </div>
                                     </div>
 
 
                                     <div className="row mb-2 g-2">
-
                                         <div className="form-floating col-md-3">
-
                                             <TextField label="Plant"
                                                 id="partPlantId"
                                                 select
                                                 defaultValue="all"
-                                                // value={filterAllNames.plantWise}
+                                                value={partData.partPlant}
                                                 fullWidth
-
+                                                {...(errors.partName !== "" && { helperText: errors.partPlant, error: true })}
                                                 onChange={handlePartDataBaseChange}
                                                 size="small"
                                                 name="partPlant" >
@@ -1066,17 +1054,16 @@ export const PartDataBase = ({ style }) => {
                                                 {loggedEmp.plantDetails.map((item, index) => (
                                                     <MenuItem key={index} value={item.plantName}>{item.plantName}</MenuItem>
                                                 ))}
-
-
                                             </TextField>
 
                                         </div>
+
                                         <div className="form-floating col-md-3"  >
                                             <TextField label="Customer"
                                                 {...(errors.customer !== "" && { helperText: errors.customer, error: true })}
                                                 select
                                                 id="customerId"
-                                                defaultValue=""
+                                                disabled={partData.partPlant === ""}
                                                 placeholder="customer"
                                                 size="small"
                                                 onChange={handlePartDataBaseChange}
@@ -1084,13 +1071,10 @@ export const PartDataBase = ({ style }) => {
                                                 value={partData.customer}
                                                 name="customer"
                                                 fullWidth>
-                                                {customerList.map((item, index) => (
+                                                {selectedPlantParts.map((item, index) => (
                                                     <MenuItem key={index} value={item.aliasName}>{item.aliasName}</MenuItem>
                                                 ))}
-
                                             </TextField>
-
-
                                         </div>
                                         <div className="form-floating col-md-4" >
                                             <TextField label="Operation No"
@@ -1223,22 +1207,38 @@ export const PartDataBase = ({ style }) => {
                             </Paper>
                         </Grid>
 
-
-
                         <Grid item xs={12} >
                             <Paper sx={{
                                 p: 2,
                                 display: 'flex',
                                 flexDirection: 'column',
-
                             }}
                                 elevation={12}
                             >
-                                <div>
-                                    <h5 className='text-center'>Part List</h5>
+                                <div className='row'>
+                                    <h5 className='text-center col-md-8'>Part List</h5>
+                                    <div className='col d-flex justify-content-end'>
+
+
+                                        <TextField id='plantFilterId' name='partPlant' className='me-2' onChange={onChangeFilter} size='small' label="Plant" fullWidth select>
+                                            <MenuItem value="All">All</MenuItem>
+                                            {filters.plants.map((plant, index) => (
+                                                <MenuItem key={index} value={plant}>{plant}</MenuItem>
+                                            ))}
+                                        </TextField>
+
+
+                                        <TextField id='customerFilterId' name='customer' onChange={onChangeFilter} size='small' label="Customer" fullWidth select>
+                                            <MenuItem value="All">All</MenuItem>
+                                            {filters.customers.map((cus, index) => (
+                                                <MenuItem key={index} value={cus}>{cus}</MenuItem>
+                                            ))}
+                                        </TextField>
+
+                                    </div>
                                     <div style={{ height: 400, width: '100%' }}>
                                         <DataGrid disableDensitySelector
-                                            rows={partDataList}
+                                            rows={filteredData}
                                             columns={partColumns}
                                             getRowId={(row) => row._id}
                                             initialState={{
@@ -1248,7 +1248,6 @@ export const PartDataBase = ({ style }) => {
                                             }}
                                             sx={{
                                                 ".MuiTablePagination-displayedRows": {
-
                                                     "marginTop": "1em",
                                                     "marginBottom": "1em"
                                                 }
@@ -1257,27 +1256,23 @@ export const PartDataBase = ({ style }) => {
                                                 toolbar: () => (
                                                     <div className='d-flex justify-content-between align-items-center'>
                                                         <GridToolbar />
-                                                        <div>
-                                                            {partSelectedRowIds.length !== 0 && <Button variant='contained' type='button' size='small' color='error' onClick={() => setDeleteModal(true)}>Delete </Button>}
-                                                        </div>
+                                                        <div className='d-flex justify-content-end'>
 
+                                                            <div>
+                                                                {partSelectedRowIds.length !== 0 && <Button variant='contained' type='button' size='small' color='error' onClick={() => setDeleteModal(true)}>Delete </Button>}
+                                                            </div>
+                                                        </div>
                                                     </div>
                                                 ),
                                             }}
-
                                             onRowSelectionModelChange={(newRowSelectionModel, event) => {
                                                 setPartSelectedRowIds(newRowSelectionModel);
                                                 console.log(event)
-
                                             }}
                                             onRowClick={updatePart}
                                             density="compact"
-
                                             checkboxSelection
-
-
                                         >
-
                                         </DataGrid>
 
 

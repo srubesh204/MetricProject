@@ -15,10 +15,8 @@ const partController = {
     createPart: async (req, res) => {
 
         try {
-          const { partNo, operationNo, partStatus } = req.body;
-            const partName = req.body.partName || "N/A";
-            const customer = req.body.customer || "N/A";
-            const partResult = new partModel({ partNo, partName, customer, operationNo, partStatus });
+          const { partNo, operationNo, partStatus, partName, customer, partPlant } = req.body;
+            const partResult = new partModel({ partNo, partName, customer, operationNo, partStatus, partPlant });
             const validationError = partResult.validateSync();
 
       if (validationError) {
@@ -61,15 +59,15 @@ const partController = {
             // }
 
             // Create an object with the fields you want to update
-            const { partNo, partName, customer, operationNo, partStatus } = req.body;
+            const { partNo, partName, customer, operationNo, partStatus, partPlant } = req.body;
 
             const updatePartFields = {
                 partNo,
                 partName,
                 customer,
                 operationNo,
-                partStatus
-                // Add more fields as needed
+                partStatus,
+                partPlant
             };
             const partUpdate = new partModel(updatePartFields);
 

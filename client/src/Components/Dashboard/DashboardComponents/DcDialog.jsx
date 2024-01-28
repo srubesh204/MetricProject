@@ -17,7 +17,7 @@ const Dc = () => {
 
 
     console.log(selectedRows)
-    const [selectedExtraMaster, setSelectedExtraMaster] = useState([])
+  
     const initialDcData = {
         dcPartyId: "",
         dcPartyType: "",
@@ -48,11 +48,7 @@ const Dc = () => {
     })
     console.log(dcData)
 
-    // const [data, setData] = useState({
-    //     dcNo: '',
-    //     dcPartyItems: [],
-    //     year: new Date().getFullYear() // Set the initial year to the current year
-    //   });
+   
     const [dcNumber, setDcNumber] = useState(1);
     const currentYear = dayjs().year();
     const [data, setData] = useState({ year: currentYear, dcNo: `${currentYear}-1` });
@@ -808,14 +804,7 @@ const Dc = () => {
                                     </Button>
                                 </DialogActions>
                             </Dialog>
-                            {/* <Snackbar anchorOrigin={{ vertical: "top", horizontal: "right" }} open={snackBarOpen} autoHideDuration={3000}
-                                onClose={() => setTimeout(() => {
-                                    setSnackBarOpen(false)
-                                }, 3000)}>
-                                <Alert onClose={() => setSnackBarOpen(false)} variant='filled' severity="success" sx={{ width: '100%' }}>
-                                    {alertMessage}
-                                </Alert>
-                            </Snackbar>  */}
+                            
                             <Snackbar anchorOrigin={{ vertical: "top", horizontal: "right" }} open={snackBarOpen} autoHideDuration={6000} onClose={() => setSnackBarOpen(false)}>
                                 <Alert onClose={() => setSnackBarOpen(false)} severity={errorhandler.code} variant='filled' sx={{ width: '100%' }}>
                                     {errorhandler.message}
@@ -828,9 +817,7 @@ const Dc = () => {
                 </div >
             </DialogContent>
             <DialogActions className='d-flex justify-content-between'>
-                <div>
-                    <Button variant='contained' color='warning' className='me-3'>Upload Report</Button>
-                </div>
+                
                 <div>
                     <Button variant='contained' color='error' className='me-3' onClick={() => handleClose()}>Cancel</Button>
                     <Button variant='contained' color='success' onClick={() => { setConfirmSubmit(true) }}>Submit</Button>

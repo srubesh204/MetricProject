@@ -23,7 +23,7 @@ const HomeMail = () => {
     const bccMailsOnly = bccMails ? bccMails.map(emp => emp.mailId) : []
     console.log(bccMailsOnly)
 
-   
+
 
 
     useEffect(() => {
