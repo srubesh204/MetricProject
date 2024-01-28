@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Fragment } from "react";
 import { Container, TextField, MenuItem, Paper, Button, Dialog, DialogTitle, DialogContent, DialogActions, IconButton, } from "@mui/material";
 import { AdapterDayjs, } from '@mui/x-date-pickers/AdapterDayjs';
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
@@ -19,7 +19,7 @@ export const HistoryCardContent = createContext(null);
 
 
 function InsHistoryCard() {
-    const [itemList, setItemList] = useState([]);
+
     const [itemCalList, setItemCalList] = useState([]);
     const [filteredData, setFilteredData] = useState([]);
     const [filteredIMTEs, setFilteredIMTEs] = useState([]);
@@ -32,7 +32,9 @@ function InsHistoryCard() {
     const [printState, setPrintState] = useState(false)
 
     const empRole = useEmployee()
-    const { employee, loggedEmp } = empRole
+    const { loggedEmp } = empRole
+
+
 
 
     const [historyCardPrintOpen, setHistoryCardPrintOpen] = useState(false);
@@ -53,28 +55,112 @@ function InsHistoryCard() {
         formatFetchData();
     }, []);
 
+    const [masters, setMasters] = useState([])
+    const masterFetch = async () => {
+        try {
+            const response = await axios.get(`${process.env.REACT_APP_PORT}/itemMaster/getAllItemMasters`);
+            console.log(response.data.result)
+            setMasters(response.data.result);
+        } catch (error) {
+            console.error('Error fetching data:', error);
+        }
+    };
+    useEffect(() => {
+        masterFetch()
+    }, [])
+
+
+
+    const [plantDepartments, setPlantDepartments] = useState([]);
+    const [itemList, setItemList] = useState([]);
+    const [selectedPlantDatas, setSelectedPlantDatas] = useState([])
+    const [selectedDepartmentData, setSelectedDepartmentData] = useState([])
+    const [itemListDistNames, setItemListDistNames] = useState([])
+    const [itemIMTEs, setItemIMTEs] = useState([])
+    const [selectedMasterData, setSelectedMasterData] = useState([])
+
+    const itemFetch = async () => {
+        try {
+            const response = await axios.get(`${process.env.REACT_APP_PORT}/itemAdd/getAllItemAdds`);
+            console.log(response.data.result)
+
+            const plantDatas = response.data.result.filter(item =>
+                loggedEmp.plantDetails.some(plant => plant.plantName === item.itemPlant)
+            );
+            console.log(plantDatas)
+            setItemList(plantDatas);
+        } catch (error) {
+            console.error('Error fetching data:', error);
+        }
+    };
+    useEffect(() => {
+        itemFetch()
+    }, [])
+
+    console.log(itemList)
     const [itemFilters, setItemFilters] = useState({
-        itemPlant: "All",
-        itemDepartment: "All",
-        itemName: "All",
-        itemIMTENo: "All"
+        itemPlant: "Select",
+        itemDepartment: "Select",
+        itemName: "Select",
+        itemIMTENo: "Select"
     })
 
 
     const handleFilters = (e) => {
-        const {name, value} = e.target;
-        setItemFilters(prev => ({...prev, [name]: value}))
+        const { name, value } = e.target;
+        setItemFilters(prev => ({ ...prev, [name]: value }))
+
+        
+       
+            if (name === "itemPlant") {
+
+                const dep = loggedEmp.plantDetails.filter(plant => plant.plantName === value);
+                const plantDatas = itemList.filter(item => item.itemPlant === value)
+                console.log(itemList)
+                setSelectedPlantDatas(plantDatas)
+                console.log(plantDatas)
+                const nameList = [...new Set(plantDatas.map(item => item.itemDepartment))]
+                console.log(dep)
+                setPlantDepartments(nameList)
+                setItemFilters(prev=> ({...prev, itemDepartment: "Select", itemName: "Select", itemIMTENo: "Select"}))
+            }
+            if (name === "itemDepartment") {
+                const filterList = selectedPlantDatas.filter(item => item.itemDepartment === value)
+                const nameList = [...new Set(filterList.map(item => item.itemAddMasterName))]
+                setItemListDistNames(nameList)
+                setItemFilters(prev=> ({...prev, itemName: "Select", itemIMTENo: "Select"}))
+                setSelectedDepartmentData(filterList)
+            }
+            if (name === "itemName") {
+                console.log(value)
+                const filterList = selectedDepartmentData.filter(item => item.itemAddMasterName === value)
+                setItemIMTEs(filterList)
+                setItemFilters(prev=> ({...prev, itemIMTENo: "Select"}))
+            }if(name === "itemIMTENo"){
+                const imteNo = selectedDepartmentData.filter(item => item.itemIMTENo === value)
+                setSelectedRow(imteNo)
+                const data = itemHistoryData.filter(item=> item.itemIMTENo === value)
+                console.log(data)
+                setFilteredData(data)
+
+                const master = masters.filter(mas => mas.itemDescription === imteNo[0].itemAddMasterName)
+                setSelectedMasterData(master[0])
+            }
+        
+
+
     }
 
+    console.log(selectedMasterData)
 
-   
+    const [itemHistoryData, setItemHistoryData] = useState([])
 
     useEffect(() => {
         const fetchData = async () => {
             try {
                 const response = await axios.get(`${process.env.REACT_APP_PORT}/itemHistory/getAllItemHistory`);
-                setItemList(response.data.result);
-                setFilteredData(response.data.result);
+                setItemHistoryData(response.data.result)
+                
 
                 const uniqueInstrumentNames = Array.from(new Set(response.data.result.map(item => item.itemAddMasterName)));
                 setDistItemNames(uniqueInstrumentNames);
@@ -88,21 +174,21 @@ function InsHistoryCard() {
 
 
 
-   
 
 
-    
+
+
 
     console.log(itemCalList)
     console.log(selectedIMTEs)
-    
-  
-   
+
+
+
 
     console.log(selectedRow)
     console.log(selectedRow.acceptanceCriteria)
 
-   
+
 
     const filterByDate = (items, fromDate, toDate) => {
         return items.filter((row) => {
@@ -118,117 +204,41 @@ function InsHistoryCard() {
 
 
 
-    const grnColumns = [
+    const historyColumns = [
         { field: 'id', headerName: 'Si.No', width: 50, align: "center", renderCell: (params) => params.api.getAllRowIds().indexOf(params.id) + 1 },
-        { field: 'certificateView', headerName: 'Certificate', width: 100, align: "center", renderCell: (params) => <IconButton size="small" component={Link} target="_blank" to={`${process.env.REACT_APP_PORT}/grnCertificates/${params.row.grnItemCertificate}`} ><FileOpen /></IconButton> },
-        { field: 'grnItemCalDate', headerName: 'Calibration Date', width: 150, align: "center", valueGetter: (params) => dayjs(params.row.grnItemCalDate).format('DD-MM-YYYY') },
-        { field: 'grnItemCalStatus', headerName: 'Calibration Status', width: 150, align: "center", },
-        { field: 'grnItemDueDate', headerName: 'Next calibration Date', width: 150, align: "center", valueGetter: (params) => dayjs(params.row.grnItemDueDate).format('DD-MM-YYYY') },
-        { field: 'grnItemCertificateStatus', headerName: 'Certificate Status', width: 150, align: "center", },
-        { field: 'grnItemCertificateNo', headerName: 'Certificate No', width: 150, align: "center", },
-        ...(selectedRow[0]?.itemType === 'variable'
-            ? [{
-                field: 'calOBError',
-                headerName: 'Observed Error',
-                width: 150,
-                align: 'center',
+        { field: 'certificateView', headerName: 'Certificate', width: 100, align: "center", renderCell: (params) => <IconButton size="small" component={Link} target="_blank" to={`${process.env.REACT_APP_PORT}/itemCertificates/${params.row.itemCertificateName}`} ><FileOpen /></IconButton> },
+        { field: 'itemCalDate', headerName: 'Calibration Date', width: 150, align: "center", valueGetter: (params) => dayjs(params.row.itemCalDate).format('DD-MM-YYYY') },
+        { field: 'itemDueDate', headerName: 'Calibration Due', width: 150, align: "center", valueGetter: (params) => dayjs(params.row.itemDueDate).format('DD-MM-YYYY') },
+        { field: 'itemCalStatus', headerName: 'Calibration Status', width: 150, align: "center", },
+        { field: 'itemCertStatus', headerName: 'Certificate Status', width: 150, align: "center"},
+        { field: 'itemCertificateNo', headerName: 'Certificate No', width: 150, align: "center"},
+        
+        {field: 'observedSize', headerName: "Observed Size", width: 150, align: "center",
                 renderCell: (params) => (
+                    
                     <div>
-                        {params.row.grnAcCriteria.map((grn, index) => (
+                        
+                        {params.row.acceptanceCriteria.map((item, index) => (
+                            
+                           
                             <span key={index}>
-                                {grn.grnAcOBError}
-                                {index < params.row.grnAcCriteria.length - 1 && <br />}
+                                {item}<br />
+                               
+                              
                             </span>
+                        
                         ))}
                     </div>
                 ),
-            }]
-            : [{
-                field: 'observedSize', headerName: "Observed Size", width: 150, align: "center",
-                renderCell: (params) => (
-                    <div>
-                        {params.row.grnAcCriteria.map((grn, index) => (
-                            <span key={index}>
-                                {"Min : " + grn.grnAcMinPSError}<br />
-                                {"Max : " + grn.grnAcMaxPSError}
-                                {index < params.row.grnAcCriteria.length - 1 && <br />}
-                            </span>
-                        ))}
-                    </div>
-                ),
-            }]),
+            },
         { field: 'itemCalibrationSource', headerName: 'Calibrated At', width: 150, align: "center" },
+        { field: 'itemCalibratedBy', headerName: 'Calibrated By', width: 150, align: "center" },
+        { field: 'itemApprovedBy', headerName: 'Approved By', width: 150, align: "center" },
+
     ];
 
-    const calColumn = [
-        { field: 'id', headerName: 'Si.No', width: 50, align: "center", renderCell: (params) => params.api.getAllRowIds().indexOf(params.id) + 1 },
-        { field: 'calItemCalDate', headerName: 'Calibration Date', width: 150, align: "center", valueGetter: (params) => dayjs(params.row.calItemCalDate).format('DD-MM-YYYY') },
-        { field: 'calStatus', headerName: 'Calibration Status', width: 150, align: "center", },
-        { field: 'calItemDueDate', headerName: 'Next calibration Date', width: 150, align: "center", valueGetter: (params) => dayjs(params.row.calItemDueDate).format('DD-MM-YYYY') },
-        { field: 'col5', headerName: 'Certificate Status', width: 150, align: "center", },
-        { field: 'calCertificateNo', headerName: 'Certificate No', width: 150, align: "center", },
-        ...(selectedRow[0]?.itemType === 'variable'
-            ? [{
-                field: 'calOBError',
-                headerName: 'Observed Error',
-                width: 150,
-                align: 'center',
-                renderCell: (params) => (
-                    <div>
-                        {params.row.calcalibrationData.map((cal, index) => (
-                            <span key={index}>
-                                {cal.calOBError}
-                                {index < params.row.calcalibrationData.length - 1 && <br />}
-                            </span>
-                        ))}
-                    </div>
-                ),
-            }]
-            : [{
-                field: 'observedSize', headerName: "Observed Size", width: 150, align: "center",
-                renderCell: (params) => (
-                    <div>
-                        {params.row.calcalibrationData.map((cal, index) => (
-                            <span key={index}>
-                                {"Min : " + cal.calMinPS}<br />
-                                {"Max : " + cal.calMaxPS}
-                                {index < params.row.calcalibrationData.length - 1 && <br />}
-                            </span>
-                        ))}
-                    </div>
-                ),
-            }]),
-        { field: 'itemCalibrationSource', headerName: 'Calibrated At', width: 150, align: "center", renderCell: (params) => params.row.calSource || selectedRow[0]?.itemCalibrationSource },
-    ];
-
-    console.log(selectedRow[0])
-
-    const [departments, setDepartments] = useState([])
-    const DepartmentFetch = async () => {
-        try {
-            const response = await axios.get(
-                `${process.env.REACT_APP_PORT}/department/getAllDepartments`
-            );
-            const defaultDepartment = response.data.result.filter((dep) => dep.defaultdep === "yes")
-            setDepartments(defaultDepartment);
-
-            console.log(response.data)
-        } catch (err) {
-            console.log(err);
-        }
-    };
-    //get Designations
-    useEffect(() => {
-        DepartmentFetch()
-    }, []);
-
-
-
-  
    
     
-
-
 
     return (
         <div>
@@ -252,21 +262,21 @@ function InsHistoryCard() {
 
                                         <TextField label="Plant Wise"
                                             className="me-2 col"
-                                            id="hisPlantId"
+                                            id="itemPlantId"
                                             select
                                             value={itemFilters.itemPlant}
                                             fullWidth
                                             onChange={handleFilters}
                                             size="small"
                                             name="itemPlant" >
-                                            <MenuItem value="All">All</MenuItem>
+                                            <MenuItem value="Select">Select</MenuItem>
                                             {loggedEmp.plantDetails.map((item, index) => (
                                                 <MenuItem key={index} value={item.plantName}>{item.plantName}</MenuItem>
                                             ))}
                                         </TextField>
 
                                         <TextField label="Default Location "
-                                            id="hisDepartmentId"
+                                            id="itemDepartmentId"
                                             className="me-2 col"
                                             select
                                             value={itemFilters.itemDepartment}
@@ -274,9 +284,9 @@ function InsHistoryCard() {
                                             onChange={handleFilters}
                                             size="small"
                                             name="itemDepartment" >
-                                            <MenuItem value="All">All</MenuItem>
-                                            {departments.map((item, index) => (
-                                                <MenuItem key={index} value={item.department}>{item.department}</MenuItem>
+                                            <MenuItem value="Select">Select</MenuItem>
+                                            {plantDepartments.map((item, index) => (
+                                                <MenuItem key={index} value={item}>{item}</MenuItem>
                                             ))}
 
 
@@ -286,10 +296,10 @@ function InsHistoryCard() {
 
 
 
-                                        <TextField className="me-2 col" label="Instrument Name" size="small" onChange={handleFilters} select name="itemName" value={itemFilters.itemName} fullWidth >
-                                            <MenuItem value="All">All</MenuItem >
-                                            {distItemName.map((cal) => (
-                                                <MenuItem value={cal}>{cal}</MenuItem >
+                                        <TextField className="me-2 col" label="Instrument Name" size="small" onChange={handleFilters} id="itemNameId" select name="itemName" value={itemFilters.itemName} fullWidth >
+                                            <MenuItem value="Select">Select</MenuItem >
+                                            {itemListDistNames.map((item) => (
+                                                <MenuItem value={item}>{item}</MenuItem >
                                             ))}
 
                                         </TextField>
@@ -298,16 +308,17 @@ function InsHistoryCard() {
                                             label="IMTE No"
                                             size="small"
                                             select
+                                            id="itemIMTENoId"
                                             onChange={handleFilters}
-                                            name="calInsIMTENo"
+                                            name="itemIMTENo"
                                             value={itemFilters.itemIMTENo}
                                             fullWidth
                                             className="col"
                                         >
-                                            <MenuItem value="All">All</MenuItem>
-                                            {filteredIMTEs.map(cal => (
-                                                <MenuItem key={cal.itemIMTENo} value={cal.itemIMTENo}>
-                                                    {cal.itemIMTENo}
+                                            <MenuItem value="Select">Select</MenuItem>
+                                            {itemIMTEs.map((item, index) => (
+                                                <MenuItem key={index} value={item.itemIMTENo}>
+                                                    {item.itemIMTENo}
                                                 </MenuItem>
                                             ))}
                                         </TextField>
@@ -353,7 +364,7 @@ function InsHistoryCard() {
 
                             <div className="row g-2">
                                 <div className=" col d-flex justify-content-start">
-                                    <div className="me-2"><Button variant="contained" size="small"  >Excel</Button></div>
+                                    
                                     {selectedRow[0]?.itemIMTENo && <div>
                                         <div><Button size="small" variant="contained" onClick={() => setPrintState(true)} startIcon={<PrintRounded />}>
                                             Print
@@ -365,13 +376,11 @@ function InsHistoryCard() {
 
                                 <div className="col d-flex justify-content-end">
 
-                                    {/* <Worker workerUrl={`https://unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.js`}>
-                                        <Viewer fileUrl={pdfUrl} onNumPagesChange={onNumPagesChange} />
-                                    </Worker> */}
-                                    <div className="me-2"><Button variant="contained" color="info" size="small">View Instructions</Button></div>
-                                    <div className="me-2"><Button variant="contained" color="info" size="small">View Drawing</Button></div>
+                                 
+                                    <div className="me-2"><Button component={Link} to={`${process.env.REACT_APP_PORT}/workInstructions/${selectedMasterData.workInsName}`} target="_blank" variant="contained" color="info" size="small">View Instructions</Button></div>
+                                    {/* <div className="me-2"><Button variant="contained" color="info" size="small">View Drawing</Button></div>
                                     <div className="me-2"><Button variant="contained" color="info" size="small">View R&R</Button></div>
-                                    <div ><Button variant="contained" color="info" size="small">View MSA</Button></div>
+                                    <div ><Button variant="contained" color="info" size="small">View MSA</Button></div> */}
                                 </div>
                             </div>
 
@@ -481,8 +490,8 @@ function InsHistoryCard() {
                             elevation={12}>
                             <div className="mb-2" style={{ height: 350, width: '100%' }}>
                                 <DataGrid
-                                    rows={selectedIMTEs}
-                                    columns={selectedRow.length > 0 ? selectedRow[0].itemCalibrationSource === "outsource" ? grnColumns : calColumn : []}
+                                    rows={filteredData}
+                                    columns={historyColumns}
                                     initialState={{
                                         pagination: {
                                             paginationModel: { page: 0, pageSize: 5 },
@@ -495,11 +504,9 @@ function InsHistoryCard() {
                                     }
                                     sx={{
                                         ".MuiTablePagination-displayedRows": {
-
                                             "marginTop": "1em",
                                             "marginBottom": "1em"
                                         },
-
                                     }}
                                     slots={{
                                         toolbar: GridToolbar,

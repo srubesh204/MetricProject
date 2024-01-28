@@ -10,7 +10,8 @@ const createDiskStorage = (destinationFolder) => {
       cb(null, `storage/${destinationFolder}`);
     },
     filename: (req, file, cb) => {
-      cb(null, file.originalname);
+      console.log(file)
+      cb(null, dayjs().format('YYYY-MM-DD') + file.originalname );
     },
   });
 };
@@ -21,7 +22,7 @@ const ItemImageStorage = multer.diskStorage({
   },
   filename: (req, file, cb) => {
     const ext = path.extname(file.originalname);
-    cb(null, file.originalname); // Rename the uploaded image file
+    cb(null, dayjs().format('YYYY-MM-DD') + file.originalname); // Rename the uploaded image file
   },
 });
 
@@ -46,7 +47,7 @@ router.post('/itemMasterImage', itemMasterImagesFolder.single('image'), (req, re
   }
 
   // File was provided, proceed with processing
-  res.status(200).json({ message: 'Item Image uploaded successfully' });
+  res.status(200).json({ message: 'Item Image uploaded successfully', name: req.file.filename });
 });
 
 
@@ -57,7 +58,7 @@ router.post('/VendorCertificateUpload', vendorCertificateUpload.single('file'), 
   }
 
   // File was provided, proceed with processing
-  res.status(200).json({ message: 'Vendor Certificate uploaded successfully' });
+  res.status(200).json({ message: 'Vendor Certificate uploaded successfully', name: req.file.filename });
 });
 
 router.post('/grnItemCertificateUp', grnItemCertificateFolder.single('file'), (req, res) => {
@@ -67,7 +68,7 @@ router.post('/grnItemCertificateUp', grnItemCertificateFolder.single('file'), (r
   }
 
   // File was provided, proceed with processing
-  res.status(200).json({ message: 'Grn Cal Certificate uploaded successfully' });
+  res.status(200).json({ message: 'Grn Cal Certificate uploaded successfully', name: req.file.filename });
 });
 
 router.post('/VendorCertificateUpload', vendorCertificateUpload.single('file'), (req, res) => {
@@ -77,7 +78,7 @@ router.post('/VendorCertificateUpload', vendorCertificateUpload.single('file'), 
   }
 
   // File was provided, proceed with processing
-  res.status(200).json({ message: 'Vendor Certificate uploaded successfully' });
+  res.status(200).json({ message: 'Vendor Certificate uploaded successfully',name: req.file.filename });
 });
 
 router.get('/getVendorCertificate/:fileName', (req, res) => {
@@ -107,7 +108,7 @@ router.post('/workInstructions', workInsUploadFolder.single('file'), (req, res) 
   }
 
   // File was provided, proceed with processing
-  res.status(200).json({ message: ' Work Instruction uploaded successfully' });
+  res.status(200).json({ message: 'Work Instruction uploaded successfully', name: req.file.filename });
 });
 
 router.post('/itemCertificates', itemCertificateFolder.single('file'), (req, res) => {
@@ -117,7 +118,7 @@ router.post('/itemCertificates', itemCertificateFolder.single('file'), (req, res
   }
 
   // File was provided, proceed with processing
-  res.status(200).json({ message: 'Item Certificate uploaded successfully' });
+  res.status(200).json({ message: 'Item Certificate uploaded successfully1', name: req.file.filename });
 });
 
 // Function to determine the content type based on the file extension

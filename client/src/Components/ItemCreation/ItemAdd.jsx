@@ -628,16 +628,18 @@ const ItemAdd = () => {
 
     const handleCertificateUpload = (event) => {
         const selectedFile = event.target.files[0];
+        console.log(selectedFile)
         if (selectedFile) {
             console.log("working")
-            setItemAddData((prev) => ({ ...prev, itemCertificateName: selectedFile.name }));
+           
             const formData = new FormData();
             formData.append('file', selectedFile);
             try {
-                axios.post(`${process.env.REACT_APP_PORT}/upload/workInstructions`, formData)
+                axios.post(`${process.env.REACT_APP_PORT}/upload/itemCertificates`, formData)
                     .then(response => {
                         setUploadMessage(response.data.message)
-                        console.log(response);
+                        console.log(response.data);
+                        setItemAddData((prev) => ({ ...prev, itemCertificateName: response.data.name }));
                     })
                     .catch(error => {
                         setUploadMessage("")
@@ -1282,7 +1284,7 @@ const ItemAdd = () => {
                                         {itemAddData.itemCertificateName &&
                                             <div className="col-md-7 d-flex justify-content-between">
 
-                                                <Chip label={itemAddData.itemCertificateName} size='small' component="a" href={`${process.env.REACT_APP_PORT}/workInstructions/${itemAddData.itemCertificateName}`} target="_blank" clickable={true} color="primary" />
+                                                <Chip label={itemAddData.itemCertificateName} size='small' component="a" href={`${process.env.REACT_APP_PORT}/itemCertificates/${itemAddData.itemCertificateName}`} target="_blank" clickable={true} color="primary" />
                                                 <HighlightOffRounded type="button" onClick={() => handleRemoveFile()} />
 
                                                 {uploadMessage &&

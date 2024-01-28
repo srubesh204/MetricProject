@@ -99,6 +99,23 @@ const itemCalController = {
 
       const createdItem = await itemCalModel.create(newItemFields);
 
+      let obSize = [];
+      if(createdItem.calItemType === "variable"){
+        obSize = calcalibrationData.map(item => {
+          return item.calParameter + ":" + item.calOBError
+        })
+      }else{
+        obSize = calcalibrationData.map(item => {
+
+          if(calItemType === "minmax"){
+            return item.calParameter + " : " + item.calMinOB + "/" + item.calMaxOB
+          }else{
+            return item.calParameter + " : " + item.calAverageOB
+          }
+          
+        })
+      }
+
       const historyRecord = new itemHistory({
         itemId: createdItem._id,
         selectedItemMaster,
@@ -133,7 +150,7 @@ const itemCalController = {
         itemUncertainity,
         itemUncertainityUnit,
         itemPrevCalData,
-        acceptanceCriteria,
+        acceptanceCriteria: obSize,
         itemCreatedBy,
         itemLastModifiedBy,
       });
