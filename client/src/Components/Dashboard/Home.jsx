@@ -1735,8 +1735,8 @@ const Home = () => {
                 </table>
               </div>
               {/* style={{ height: "20%", width: "100%", display: "flex", alignItems: "end", justifyContent: 'end' }} */}
-              <div className='row'>
-              <div className='col' >
+              <div className='row'  style={{ height: "20%", width: "100%", display: "flex", alignItems: "end",}}>
+              <div className='col' style={{ height: "20%", width: "100%", display: "flex", alignItems: "end", }} >
                 <Button component={Link} to="/" variant='contained' startIcon={<ArrowBack />} endIcon={<House />} color='secondary'>Home</Button>
               </div>
               <div className='col d-flex justify-content-end  height: "20%", width: "100%"' >
