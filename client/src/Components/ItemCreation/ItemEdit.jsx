@@ -419,23 +419,9 @@ const ItemEdit = () => {
                 itemCurrentLocation: value, // Ensure 'value' is correct here
             }));
         }
-        const selectedIndex = itemAddData.itemPartName.indexOf(value);
-        let updatedValues = [...itemAddData.itemPartName];
+     
 
-        if (selectedIndex === -1) {
-            // Add the selected value if it doesn't exist in the array
-            updatedValues = [...updatedValues, value];
-        } else {
-            // Remove the selected value if it exists in the array
-            updatedValues = updatedValues.filter((item) => item !== value);
-        }
-
-        // Update the state with the new selected values
-        setItemAddData({ ...itemAddData, itemPartName: updatedValues });
-
-        {/*} if (name === "itemPartName") {
-            setItemAddData((prev) => ({ ...prev, itemPartName: value }));
-        }*/}
+      
         if (name === "itemItemMasterIMTENo") {
             const updatedSelection = isItemMasterList.filter(item => value.some(selectedItem => selectedItem.itemIMTENo === item.itemIMTENo));
             setItemAddData((prev) => ({ ...prev, itemItemMasterIMTENo: updatedSelection }));

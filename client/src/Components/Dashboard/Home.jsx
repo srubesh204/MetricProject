@@ -262,8 +262,9 @@ const Home = () => {
       } else {
         allItems = response.data.result
       }
-
-
+      
+      const itemPart = allItems.map(item => item.itemPartName)
+      console.log(itemPart)
 
       setItemList(allItems);
       setPieDataFilter(allItems)
@@ -1072,7 +1073,7 @@ const Home = () => {
           setSnackBarOpen(true)
           setErrorHandler({ status: response.data.status, message: "Department Changed Successfully", code: "success" })
           setSelectedRows([])
-          itemFetch();
+          window.location.reload()
         }
       }
     } catch (err) {
@@ -1744,7 +1745,7 @@ const Home = () => {
                 </HomeContent.Provider>
 
                 <HomeContent.Provider
-                  value={{ dcOpen, setDcOpen, selectedRows, itemFetch, defaultDep }}
+                  value={{ dcOpen, setDcOpen, selectedRows, itemFetch, defaultDep, lastNo }}
                 >
                   <Dc />
                 </HomeContent.Provider>

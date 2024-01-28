@@ -8,7 +8,7 @@ import axios from 'axios';
 import dayjs from 'dayjs';
 import { DisabledByDefault, FileOpen, Pages, PrintRounded } from '@mui/icons-material';
 import { useEmployee } from "../../App";
-import {ArrowBack,Error, HomeMax, House, Mail, MailLock,  } from '@mui/icons-material';
+import { ArrowBack, Error, HomeMax, House, Mail, MailLock, } from '@mui/icons-material';
 import { Link as RouterLink } from 'react-router-dom';
 
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
@@ -53,29 +53,26 @@ function InsHistoryCard() {
         formatFetchData();
     }, []);
 
+    const [itemFilters, setItemFilters] = useState({
+        itemPlant: "All",
+        itemDepartment: "All",
+        itemName: "All",
+        itemIMTENo: "All"
+    })
 
 
-    const [grnData, setGrnData] = useState([])
-    const grnListFetchData = async () => {
-        try {
-            const response = await axios.get(
-                `${process.env.REACT_APP_PORT}/itemGRN/getAllItemGRN`
-            );
-            console.log(response.data.result)
-            setGrnData(response.data.result);
+    const handleFilters = (e) => {
+        const {name, value} = e.target;
+        setItemFilters(prev => ({...prev, [name]: value}))
+    }
 
-        } catch (err) {
-            console.log(err);
-        }
-    };
-    useEffect(() => {
-        grnListFetchData();
-    }, []);
+
+   
 
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await axios.get(`${process.env.REACT_APP_PORT}/itemAdd/getAllItemAdds`);
+                const response = await axios.get(`${process.env.REACT_APP_PORT}/itemHistory/getAllItemHistory`);
                 setItemList(response.data.result);
                 setFilteredData(response.data.result);
 
@@ -91,120 +88,21 @@ function InsHistoryCard() {
 
 
 
-    useEffect(() => {
-        const calData = async () => {
-            try {
-                const itemCals = await axios.get(`${process.env.REACT_APP_PORT}/itemCal/getAllItemCals`);
-                console.log(itemCals.data.result)
-                setItemCalList(itemCals.data.result);
-            } catch (error) {
-                console.error('Error fetching data:', error);
-            }
-        };
+   
 
-        calData();
-    }, []);
 
-    const [itemPlantList, setItemPlantList] = useState([])
-    const ItemFetch = async () => {
-        try {
-            const response = await axios.get(
-                `${process.env.REACT_APP_PORT}/itemAdd/getAllItemAdds`
-            );
-            console.log(response.data.result)
-            const plantItems = response.data.result.filter(item => (loggedEmp.plantDetails.map(plant => plant.plantName).includes(item.itemPlant) && item.dcStatus !== "1"))
-            console.log(plantItems)
-            setItemPlantList(plantItems);
-            // setItemDepartment(plantItems)
-
-        } catch (err) {
-            console.log(err);
-        }
-    };
-    useEffect(() => {
-        ItemFetch()
-    }, []);
+    
 
     console.log(itemCalList)
     console.log(selectedIMTEs)
-    const [itemNameList, setItemNameList] = useState([])
-    const handleCalDetails = (e) => {
-        const { name, value } = e.target;
-        if (name === "hisPlant") {
-            // Set the selected itemPlant in state
-            // setDcAddData ((prev) => ({ ...prev, dcPlant: value }));
-            const plantItems = itemPlantList.filter(item => item.itemPlant === value)
-            const distinctItemNames = [... new Set(plantItems.map(item => item.itemAddMasterName))]
-            setItemNameList(distinctItemNames)
-            console.log(distinctItemNames)
-        }
+    
+  
+   
 
-
-
-        if (name === "calInsName") {
-            handleInsChange(value);
-        }
-
-        if (name === "calInsIMTENo") {
-            handleInsIMTENoSelection(value);
-        } else {
-            resetFilteredData();
-        }
-        console.log(e, "1")
-    };
-
-    const handleInsChange = (value) => {
-        const imte = itemList.filter((item) => item.itemAddMasterName === value);
-        const distinctImte = imte.reduce((accumulator, currentObject) => {
-            // Check if an object with the same id already exists in the accumulator
-            const existingObject = accumulator.find(obj => obj.itemIMTENo === currentObject.itemIMTENo);
-
-            // If not, add the current object to the accumulator
-            if (!existingObject) {
-                accumulator.push(currentObject);
-            }
-
-            return accumulator;
-        }, []);
-        setFilteredIMTEs(distinctImte);
-    };
-    console.log(itemCalList[0]?.calcalibrationData)
-
-    const handleInsIMTENoSelection = (value) => {
-        console.log(value)
-        const selectedItemAdd = itemList.filter((item) => item.itemIMTENo === value)
-        console.log(selectedItemAdd)
-        setSelectedRow(selectedItemAdd)
-
-        if (selectedItemAdd[0].itemCalibrationSource === "outsource") {
-            console.log("hello")
-            const grnDataFilter = grnData.map(grn => {
-                const filteredPartyItems = grn.grnPartyItems.filter(grnItem => grnItem.grnItemIMTENo === value);
-                return {
-
-                    grnPartyItems: filteredPartyItems
-                };
-            });
-
-            // Now, grnDataFilter contains only the elements from grnData where at least one grnPartyItem matches the condition.
-            setSelectedIMTEs(grnDataFilter[0].grnPartyItems)
-            console.log(grnDataFilter[0].grnPartyItems)
-        } else {
-            const selectedImtes = itemCalList.filter(cal => cal.calIMTENo === value)
-            setSelectedIMTEs(selectedImtes)
-        }
-
-
-
-
-
-    };
     console.log(selectedRow)
     console.log(selectedRow.acceptanceCriteria)
 
-    const resetFilteredData = () => {
-        setFilteredData(itemList);
-    };
+   
 
     const filterByDate = (items, fromDate, toDate) => {
         return items.filter((row) => {
@@ -326,16 +224,9 @@ function InsHistoryCard() {
 
 
 
-    const handlePrintClick = () => {
-        setHistoryCardPrintOpen(true);
-    };
-
-    console.log(handlePrintClick)
-    const [showPdf, setShowPdf] = useState(false);
-    const handleButtonClick = () => {
-        setShowPdf(true);
-    };
-    const [iframeURL, setIframeURL] = useState({});
+  
+   
+    
 
 
 
@@ -355,106 +246,106 @@ function InsHistoryCard() {
                             }}
                             elevation={12}
                         >
-                            <div className="row g-2 mb-2">
-                                <div className="col-md-4 d-flex">
+                            <div className="row mb-2">
+                                <div className="col-md-7 ">
+                                    <div className="row g-2">
 
-                                    <TextField label="Plant Wise"
-                                        className="me-2"
-                                        id="hisPlantId"
+                                        <TextField label="Plant Wise"
+                                            className="me-2 col"
+                                            id="hisPlantId"
+                                            select
+                                            value={itemFilters.itemPlant}
+                                            fullWidth
+                                            onChange={handleFilters}
+                                            size="small"
+                                            name="itemPlant" >
+                                            <MenuItem value="All">All</MenuItem>
+                                            {loggedEmp.plantDetails.map((item, index) => (
+                                                <MenuItem key={index} value={item.plantName}>{item.plantName}</MenuItem>
+                                            ))}
+                                        </TextField>
 
-                                        select
-                                        // value={dcAddData.dcPlant}
-                                        fullWidth
-                                        // onChange={handleDcItemAdd}
-                                        size="small"
-                                        name="hisPlant" >
-                                        <MenuItem value="">Select</MenuItem>
-                                        {loggedEmp.plantDetails.map((item, index) => (
-                                            <MenuItem key={index} value={item.plantName}>{item.plantName}</MenuItem>
-                                        ))}
-                                    </TextField>
-
-                                    <TextField label="Default Location "
-                                        id="hisDepartmentId"
-                                        className="me-2"
-                                        select
-                                        defaultValue="all"
-                                        // value={filterAllNames.currentLocation}
-                                        fullWidth
-                                        // onChange={handleFilterChange}
-                                        size="small"
-                                        name="hisDepartment" >
-                                        <MenuItem value="all">All</MenuItem>
-                                        {departments.map((item, index) => (
-                                            <MenuItem key={index} value={item.department}>{item.department}</MenuItem>
-                                        ))}
+                                        <TextField label="Default Location "
+                                            id="hisDepartmentId"
+                                            className="me-2 col"
+                                            select
+                                            value={itemFilters.itemDepartment}
+                                            fullWidth
+                                            onChange={handleFilters}
+                                            size="small"
+                                            name="itemDepartment" >
+                                            <MenuItem value="All">All</MenuItem>
+                                            {departments.map((item, index) => (
+                                                <MenuItem key={index} value={item.department}>{item.department}</MenuItem>
+                                            ))}
 
 
-                                    </TextField>
-
+                                        </TextField>
 
 
 
 
-                                    <TextField className="me-2" label="Instrument Name" size="small" onChange={handleCalDetails} select name="calInsName" value={calDetails.calInsName} fullWidth >
-                                        <MenuItem value="all">All</MenuItem >
-                                        {distItemName.map((cal) => (
-                                            <MenuItem value={cal}>{cal}</MenuItem >
-                                        ))}
-                                        {/* {itemNameList.map((item, index) => (
-                                            <MenuItem key={index} value={item}>
-                                                {item}
-                                            </MenuItem>
-                                        ))}  */}
 
-                                    </TextField>
+                                        <TextField className="me-2 col" label="Instrument Name" size="small" onChange={handleFilters} select name="itemName" value={itemFilters.itemName} fullWidth >
+                                            <MenuItem value="All">All</MenuItem >
+                                            {distItemName.map((cal) => (
+                                                <MenuItem value={cal}>{cal}</MenuItem >
+                                            ))}
 
-                                    <TextField
-                                        label="IMTE No"
-                                        size="small"
-                                        select
-                                        onChange={handleCalDetails}
-                                        name="calInsIMTENo"
-                                        value={calDetails.calInsIMTENo}
-                                        fullWidth
-                                    >
-                                        <MenuItem value="all">All</MenuItem>
-                                        {filteredIMTEs.map(cal => (
-                                            <MenuItem key={cal.itemIMTENo} value={cal.itemIMTENo}>
-                                                {cal.itemIMTENo}
-                                            </MenuItem>
-                                        ))}
-                                    </TextField>
+                                        </TextField>
+
+                                        <TextField
+                                            label="IMTE No"
+                                            size="small"
+                                            select
+                                            onChange={handleFilters}
+                                            name="calInsIMTENo"
+                                            value={itemFilters.itemIMTENo}
+                                            fullWidth
+                                            className="col"
+                                        >
+                                            <MenuItem value="All">All</MenuItem>
+                                            {filteredIMTEs.map(cal => (
+                                                <MenuItem key={cal.itemIMTENo} value={cal.itemIMTENo}>
+                                                    {cal.itemIMTENo}
+                                                </MenuItem>
+                                            ))}
+                                        </TextField>
+                                    </div>
 
 
                                 </div>
+                                <div className="col"></div>
 
-                                <div className="col-md-8 d-flex justify-content-end">
-                                    <div className="me-2">
+                                <div className="col-md-3">
+                                    <div className="row g-2">
+
                                         <DatePicker
-                                            fullWidth
+
                                             id="fromDateId"
                                             name="fromDate"
                                             label="From Date"
-                                            sx={{ width: "100%" }}
+                                            className="col me-2"
+                                            fullWidth
                                             slotProps={{ textField: { size: 'small' } }}
                                             format="DD-MM-YYYY"
                                             value={fromDate}
                                             onChange={(date) => setFromDate(date)}
                                         />
-                                    </div>
-                                    <div >
+
                                         <DatePicker
-                                            fullWidth
+
                                             id="toDateId"
                                             name="toDate"
-                                            sx={{ width: "100%" }}
+                                            className="col"
+                                            fullWidth
                                             label="To Date"
                                             slotProps={{ textField: { size: 'small' } }}
                                             format="DD-MM-YYYY"
                                             value={toDate}
                                             onChange={(date) => setToDate(date)}
                                         />
+
                                     </div>
                                 </div>
                             </div>

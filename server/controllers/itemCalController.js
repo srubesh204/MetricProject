@@ -98,6 +98,47 @@ const itemCalController = {
       }
 
       const createdItem = await itemCalModel.create(newItemFields);
+
+      const historyRecord = new itemHistory({
+        itemId: createdItem._id,
+        selectedItemMaster,
+        itemPlant,
+        isItemMaster,
+        itemAddMasterName,
+        itemIMTENo,
+        itemType,
+        itemRangeSize,
+        itemRangeSizeUnit,
+        itemLC,
+        itemLCUnit,
+        itemModelNo,
+        itemStatus,
+        itemReceiptDate,
+        itemDepartment,
+        itemCurrentLocation,
+        itemLastLocation,
+        itemLocation: "department",
+        itemCalFreInMonths,
+        itemCalAlertDays,
+        itemCalibrationSource,
+        itemCalibrationDoneAt,
+        itemItemMasterName,
+        itemItemMasterIMTENo,
+        itemCalDate,
+        itemDueDate,
+        itemCalibratedAt,
+        itemCertificateName,
+        itemCertificateNo,
+        itemOBType,
+        itemUncertainity,
+        itemUncertainityUnit,
+        itemPrevCalData,
+        acceptanceCriteria,
+        itemCreatedBy,
+        itemLastModifiedBy,
+      });
+      await historyRecord.save();
+      
       console.log("ItemCal Created Successfully");
       res.status(200).json({ result: createdItem, message: "ItemCal Created Successfully" });
     } catch (error) {

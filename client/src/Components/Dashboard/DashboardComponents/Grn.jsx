@@ -50,7 +50,7 @@ const Grn = () => {
         grnPartyName: "",
         grnPartyCode: "",
         grnPartyAddress: "",
-        grnNo: "",
+
         grnDate: dayjs().format("YYYY-MM-DD"),
         grncCommonRemarks: "",
         grnPartyItems: []
@@ -74,8 +74,8 @@ const Grn = () => {
     console.log(grnData)
 
 
-   
-   
+
+
 
 
 
@@ -87,7 +87,7 @@ const Grn = () => {
                     ...prev,
                     grnPlant: selectedRows[0].itemPlant,
                     grnDepartment: departments,
-                    grnPartyItems: selectedRows
+                    //grnPartyItems: selectedRows
                 }
 
             ))
@@ -102,7 +102,7 @@ const Grn = () => {
 
 
 
-   
+
 
 
 
@@ -175,8 +175,8 @@ const Grn = () => {
                 console.log(lastNumber)
 
                 setGrnData(prev => ({ ...prev, grnNo: dayjs().year() + "-" + lastNumber }))
-            }else{
-                setGrnData(prev => ({...prev, grnNo : dayjs().year()+"-"+1}))
+            } else {
+                setGrnData(prev => ({ ...prev, grnNo: dayjs().year() + "-" + 1 }))
             }
 
 
@@ -189,7 +189,7 @@ const Grn = () => {
     }, []);
 
 
-   
+
 
 
 
@@ -361,11 +361,6 @@ const Grn = () => {
         grnUncertainity: "",
         grnItemCalStatus: "",
     })
-    //
-    // useEffect(() => {
-    //     const filteredImtes = selectedRows.filter((imtes) => !grnData.grnPartyItems.some(grnImte => imtes._id === grnImte._id))
-    //     setItemImtes(filteredImtes)
-    // }, [])
 
 
 
@@ -843,7 +838,7 @@ const Grn = () => {
         if (setSelectedGrnItem.length !== 0) {
             setGrnData((prev) => ({ ...prev, grnPartyItems: [...prev.grnPartyItems, selectedGrnItem] }))
             nonSelectedItems();
-            setSelectedGrnItem([]);
+            setSelectedGrnItem(initialGrnItem);
         }
 
     }
@@ -887,7 +882,7 @@ const Grn = () => {
                 setErrorHandler({ status: 0, message: "GRN Created Successfully", code: "success" });
                 setSnackBarOpen(true)
                 setGrnData(initialGrnData)
-                setTimeout(() => setGrnOpen(false), 1000)
+                setTimeout(() => { setGrnOpen(false); window.location.reload() }, 500)
             } else {
                 console.log(errors)
                 setErrorHandler({ status: 0, message: Object.values(errors).join(', '), code: "error" });
@@ -1130,6 +1125,7 @@ const Grn = () => {
                                             <div className=" col-6 me-2">
 
                                                 <TextField
+                                                    InputLabelProps={{ shrink: true }}
                                                     label="GRN No"
                                                     id="grnNoId"
                                                     value={grnData.grnNo}
@@ -1158,7 +1154,7 @@ const Grn = () => {
                                             </div>
                                         </div>
 
-                                        
+
                                         <div className='row '>
                                             <div className='mb-5'>
                                                 <TextField label="Common Remarks"
@@ -1210,7 +1206,7 @@ const Grn = () => {
 
                                         </TextField>
 
-                                        <TextField size='small' fullWidth variant='outlined' defaultValue="" id="grnItemStatusId" value={selectedGrnItem.grnItemStatus} onChange={handleGrnItemChange} select label="Grn Item Status" name='grnItemStatus' >
+                                        <TextField size='small' fullWidth variant='outlined' disabled={selectedGrnItem.grnItemId === ""} defaultValue="" id="grnItemStatusId" value={selectedGrnItem.grnItemStatus} onChange={handleGrnItemChange} select label="Grn Item Status" name='grnItemStatus' >
                                             <MenuItem value="">Select</MenuItem>
                                             <MenuItem value="Calibrated">Calibrated</MenuItem>
                                             <MenuItem value="Serviced">Serviced</MenuItem>

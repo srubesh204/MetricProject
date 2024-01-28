@@ -703,7 +703,8 @@ const CalDialog = () => {
                 );
                 setAlertMessage(response.data.message)
                 setSnackBarOpen(true)
-                setTimeout(() => { setCalOpen(false); setCalibrationData(initialCalData) }, 3000)
+                setCalibrationData(initialCalData);
+                setTimeout(() => { setCalOpen(false);  window.location.reload() }, 500)
             }
         } catch (err) {
             setSnackBarOpen(true)
