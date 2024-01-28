@@ -429,13 +429,13 @@ export const UnitDataBase = ({ style }) => {
                                                 <Button size="small" onClick={handleGeneralUpload}><CloudUpload /></Button>
                                             </ButtonGroup>
 
-                                            <ButtonGroup size="small">
+                                            {/* <ButtonGroup size="small">
                                                 <Button size="small" component="label" variant="contained" color='secondary'>
                                                     Download
                                                     <VisuallyHiddenInput type="file" />
                                                 </Button>
                                                 <Button size="small" color='secondary'><CloudDownload /></Button>
-                                            </ButtonGroup>
+                                            </ButtonGroup> */}
                                         </div>
 
                                     </div>
@@ -1146,13 +1146,13 @@ export const PartDataBase = ({ style }) => {
                                                 <Button size="small" onClick={handleGeneralUpload}><CloudUpload /></Button>
                                             </ButtonGroup>
 
-                                            <ButtonGroup size="small">
+                                            {/* <ButtonGroup size="small">
                                                 <Button size="small" component="label" variant="contained" color='secondary'>
                                                     Download
                                                     <VisuallyHiddenInput type="file" />
                                                 </Button>
                                                 <Button size="small" color='secondary'><CloudDownload /></Button>
-                                            </ButtonGroup>
+                                            </ButtonGroup> */}
                                         </div>
                                         <div className='col d-flex justify-content-end'>
                                             {partStateId ?

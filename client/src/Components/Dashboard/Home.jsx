@@ -530,13 +530,13 @@ const Home = () => {
       field: 'itemCalDate',
       headerName: 'Cal Date',
       type: 'number',
-      width: 100,
+      width: 100, valueGetter: (params) => dayjs(params.row.itemCalDate).format('DD-MM-YYYY')
       // editable: true,
     },
     {
       field: 'itemDueDate',
       headerName: 'Next Cal Date',
-      width: 100,
+      width: 100, valueGetter: (params) => dayjs(params.row.itemDueDate).format('DD-MM-YYYY')
     },
     {
       field: 'itemCurrentLocation',

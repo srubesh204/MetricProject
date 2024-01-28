@@ -1152,13 +1152,13 @@ const Vendor = () => {
                                                 <Button size="small" onClick={handleVendorUpload}><CloudUpload /></Button>
                                             </ButtonGroup>
 
-                                            <ButtonGroup size="small" >
+                                            {/* <ButtonGroup size="small" >
                                                 <Button component="label" variant="contained" color='secondary' size="small">
                                                     Download
                                                     <VisuallyHiddenInput type="file" />
                                                 </Button>
                                                 <Button color='secondary' size="small" ><CloudDownload /></Button>
-                                            </ButtonGroup>
+                                            </ButtonGroup> */}
                                         </div>
                                     </div>
 

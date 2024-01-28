@@ -987,13 +987,13 @@ const ItemMaster = () => {
                                             <Button size="small" onClick={handleItemMasterUpload}><CloudUpload /></Button>
                                         </ButtonGroup>
 
-                                        <ButtonGroup size="small">
+                                        {/* <ButtonGroup size="small">
                                             <Button size="small" component="label" variant="contained" color='secondary'>
                                                 Download
                                                 <VisuallyHiddenInputs type="file" />
                                             </Button>
                                             <Button size="small" color='secondary'><CloudDownload /></Button>
-                                        </ButtonGroup>
+                                        </ButtonGroup> */}
                                     </div>
 
 

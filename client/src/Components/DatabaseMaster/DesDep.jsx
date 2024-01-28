@@ -1103,13 +1103,13 @@ export const Department = () => {
                         <Button size="small" onClick={(e) => handleUpload(e, "dep")}><CloudUpload /></Button>
                       </ButtonGroup>
 
-                      <ButtonGroup size="small">
+                      {/* <ButtonGroup size="small">
                         <Button component="label" size="small" variant="contained" color='secondary'>
                           Download
                           <VisuallyHiddenInput type="file" />
                         </Button>
                         <Button color='secondary' size="small"   ><CloudDownload /></Button>
-                      </ButtonGroup>
+                      </ButtonGroup> */}
                     </div>
 
                   </div>
@@ -2283,13 +2283,13 @@ export const Designation = () => {
                       <Button size="small" onClick={handleDesUpload}><CloudUpload /></Button>
                     </ButtonGroup>
 
-                    <ButtonGroup size="small">
+                    {/* <ButtonGroup size="small">
                       <Button size="small" component="label" variant="contained" color='secondary' fullWidth>
                         Download
                         <VisuallyHiddenInput type="file" />
                       </Button>
                       <Button size="small" color='secondary'><CloudDownload /></Button>
-                    </ButtonGroup>
+                    </ButtonGroup> */}
                   </div>
 
                 </div>
