@@ -107,9 +107,9 @@ const itemCalController = {
 
         const itemData = await itemAddModel.findById(calItemId)
         let itemCondition = ""
-        if(calStatus === "rejected"){
+        if (calStatus === "rejected") {
           itemCondition = "rejection"
-        }else{
+        } else {
           itemCondition = "active"
         }
         const {
@@ -136,7 +136,7 @@ const itemCalController = {
           itemCalibrationDoneAt,
           itemItemMasterName,
           itemItemMasterIMTENo,
-         
+
           itemCalibratedAt,
           itemCertificateName,
           itemCertificateNo,
@@ -256,12 +256,14 @@ const itemCalController = {
       const itemCalId = req.params.id; // Assuming desId is part of the URL parameter
 
       const itemData = itemCalModel.findById(itemCalId)
-      console.log(itemData)
+
+      const {calItemId} =  itemData
+
       // if (isNaN(desId)) {
       //   return res.status(400).json({ error: 'Invalid desId value' });
       // }
       const {
-        calItemId,
+        
         calIMTENo,
         calItemName,
         calItemType,
@@ -289,11 +291,11 @@ const itemCalController = {
         calItemFreInMonths,
         calPlant,
         calDepartment,
-        calSource,
+        calSource
       } = req.body;
       // Create an object with the fields you want to update
-      const updateItemFields = {
-        calItemId,
+      const updatedCalField = {
+       
         calIMTENo,
         calItemName,
         calItemType,
@@ -315,17 +317,17 @@ const itemCalController = {
         calCalibratedById,
         calApprovedBy,
         calBeforeData,
-        calPlant,
-        calDepartment,
         calStatus,
         calcalibrationData,
         calMasterUsed,
         calItemFreInMonths,
-        calSource,
+        calPlant,
+        calDepartment,
+        calSource
       };
 
       // Find the designation by desId and update it
-      const itemCalUpdate = new itemCalModel(updateItemFields);
+      const itemCalUpdate = new itemCalModel(updatedCalField);
 
       const validationError = itemCalUpdate.validateSync();
       if (validationError) {
@@ -345,21 +347,25 @@ const itemCalController = {
       }
 
       // Find the designation by desId and update it
+      // Find the designation by desId and update it
+      console.log("till working")
       const updateItemCal = await itemCalModel.findOneAndUpdate(
         { _id: itemCalId },
-        updateItemFields,
+        { $set: updatedCalField }, // Use $set to update specific fields
         { new: true } // To return the updated document
       );
+      console.log("after working")
 
       if (!updateItemCal) {
         return res.status(404).json({ error: 'ItemCal not found' });
       } else {
         let itemCondition = ""
-        if(calStatus === "rejected"){
+        if (calStatus === "rejected") {
           itemCondition = "rejection"
-        }else{
+        } else {
           itemCondition = "active"
         }
+        console.log()
         const itemData = await itemAddModel.findById(calItemId)
 
         const {
@@ -374,7 +380,7 @@ const itemCalController = {
           itemLC,
           itemLCUnit,
           itemModelNo,
-          itemStatus,
+
           itemReceiptDate,
           itemDepartment,
           itemCalFreInMonths,
@@ -386,7 +392,7 @@ const itemCalController = {
           itemCalibratedAt,
           itemCertificateName,
           itemCertificateNo,
-          
+
           itemOBType,
           itemUncertainity,
           itemUncertainityUnit,
@@ -403,41 +409,43 @@ const itemCalController = {
           itemLastDueDate,
           itemLastCalDate,
           itemStatus: itemCondition,
-          
+
 
         }
+        const itemUpdate = new itemAddModel(updateItemFields);
+
         const updateResult = await itemAddModel.findOneAndUpdate(
           { _id: calItemId },
-          { $set: updateItemFields },
+          { $set: itemUpdate },
           { new: true }
         );
 
 
         let obSize = [];
-        if (createdItem.itemType === "variable") {
-          obSize = acceptanceCriteria.map(item => {
-            return item.acParameter + ":" + item.acOBError
+        if (updateItemCal.itemType === "variable") {
+          obSize = calcalibrationData.map(item => {
+            return item.calParameter + ":" + item.calOBError
           })
         } else {
 
 
-          obSize = acceptanceCriteria.map(item => {
+          obSize = calcalibrationData.map(item => {
 
             if (itemOBType === "minmax") {
-              return item.acParameter + ":" + item.acMinOB + "/" + item.acMaxOB
+              return item.calParameter + ":" + item.calMinOB + "/" + item.calMaxOB
             } else {
-              return item.acParameter + ":" + item.acAverageOB
+              return item.calParameter + ":" + item.calAverageOB
             }
 
           })
         }
-        console.log(obSize)
+
 
 
         const historyRecord = new itemHistory({
-          itemId: itemData._id,
-          
-          itemPlant,
+
+
+
           isItemMaster,
           itemAddMasterName,
           itemIMTENo,
@@ -450,7 +458,7 @@ const itemCalController = {
           itemStatus: itemCondition,
           itemReceiptDate,
           itemDepartment,
-          
+
           itemLocation: "department",
           itemCalFreInMonths,
           itemCalAlertDays,
@@ -476,7 +484,7 @@ const itemCalController = {
         });
 
         const historyResult = await itemHistory.findOneAndUpdate(
-          { itemCalId : itemCalId },
+          { itemCalId: itemCalId },
           { $set: historyRecord },
           { new: true }
         );

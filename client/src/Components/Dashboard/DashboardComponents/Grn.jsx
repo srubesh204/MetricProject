@@ -927,7 +927,7 @@ const Grn = () => {
                     })
                     .catch(error => {
                         setCertMessage("Error Uploading Certificate")
-                        console.log("Error")
+                        console.log(error)
                     });
             } catch (error) {
                 console.error('Error uploading the file:', error);

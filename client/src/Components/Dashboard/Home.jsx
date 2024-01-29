@@ -721,7 +721,7 @@ const Home = () => {
       case "Spare":
         setFilteredData(spareItems);
         break;
-      case "BreakDown":
+      case "Breakdown":
         setFilteredData(breakDownItems);
         break;
       case "Missing":
