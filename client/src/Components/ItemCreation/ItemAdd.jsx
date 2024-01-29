@@ -373,13 +373,14 @@ const ItemAdd = () => {
             }));
             console.log("working")
         }
-        if (name === "itemPlant") {
-            const departments = employeeRole.loggedEmp.plantDetails.filter(plant => plant.plantName === value)
-            console.log(departments)
-            setAvailableDeps(departments)
-        }
+        
     }
 
+    useEffect(()=> {
+        const departments = employeeRole.loggedEmp.plantDetails.filter(plant => plant.plantName === itemAddData.itemPlant)
+        console.log(departments)
+        setAvailableDeps(departments)
+    }, [itemAddData.itemPlant])
 
     let dueDates = new Date();
     const frequencyMonths = 6;
@@ -888,7 +889,7 @@ const ItemAdd = () => {
 
                                             <TextField
                                                 {...(errors.itemDepartment !== "" && { helperText: errors.itemDepartment, error: true })}
-                                                value={employeeRole.loggedEmp.plantDetails.length === 1 ? employeeRole.loggedEmp.plantDetails[0].plantName : itemAddData.itemDepartment} disabled={itemAddData.itemPlant === ""} onChange={handleItemAddChange} size='small' select fullWidth variant='outlined' label="Department" name='itemDepartment' id='itemDepartmentId'>
+                                                value={itemAddData.itemDepartment} disabled={itemAddData.itemPlant === ""} onChange={handleItemAddChange} size='small' select fullWidth variant='outlined' label="Department" name='itemDepartment' id='itemDepartmentId'>
                                                 {availabelDeps.length > 0 && availabelDeps[0].departments.length > 0 && availabelDeps[0].departments.map((dep, index) => (
                                                     <MenuItem key={index} value={dep}>{dep}</MenuItem>
                                                 ))}

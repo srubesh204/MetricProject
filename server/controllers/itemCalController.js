@@ -354,7 +354,6 @@ const itemCalController = {
           itemIMTENo,
           itemCalDate: itemLastCalDate,
           itemDueDate: itemLastDueDate,
-          
           isItemMaster,
           itemAddMasterName,
           itemType,
@@ -366,16 +365,12 @@ const itemCalController = {
           itemStatus,
           itemReceiptDate,
           itemDepartment,
-          itemCurrentLocation,
-          itemLastLocation,
           itemCalFreInMonths,
           itemCalAlertDays,
           itemCalibrationSource,
           itemCalibrationDoneAt,
           itemItemMasterName,
           itemItemMasterIMTENo,
-          itemCalDate,
-          itemDueDate,
           itemCalibratedAt,
           itemCertificateName,
           itemCertificateNo,
@@ -422,6 +417,8 @@ const itemCalController = {
           })
         }
         console.log(obSize)
+
+
         const historyRecord = new itemHistory({
           itemId: itemData._id,
           
@@ -463,9 +460,9 @@ const itemCalController = {
           itemLastModifiedBy,
         });
 
-        const historyResult = await itemAddModel.findOneAndUpdate(
+        const historyResult = await itemHistory.findOneAndUpdate(
           { itemCalId : itemCalId },
-          { $set: updateItemFields },
+          { $set: historyRecord },
           { new: true }
         );
       }
