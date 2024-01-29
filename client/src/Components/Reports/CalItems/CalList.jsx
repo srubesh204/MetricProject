@@ -604,7 +604,7 @@ const CalList = () => {
                                     checkboxSelection
                                     //onRowClick={handleRowClick}
                                     disableRowSelectionOnClick
-                                    pageSizeOptions={[5]}
+                                    pageSizeOptions={[12]}
                                 />
 
                             </Box>
