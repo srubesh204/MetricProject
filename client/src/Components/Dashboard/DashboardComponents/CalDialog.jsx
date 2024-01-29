@@ -18,7 +18,7 @@ const CalDialog = () => {
     const calData = useContext(HomeContent)
     const { loggedEmp } = useEmployee()
     const [lastResultData, setLastResultData] = useState([])
-    const { calOpen, setCalOpen, selectedRows, itemMasters, activeEmps, masters } = calData
+    const { calOpen, setCalOpen, selectedRows, itemMasters, activeEmps, masters, itemList } = calData
     const [calibrationDatas, setCalibrationDatas] = useState([])
 
 
@@ -52,6 +52,7 @@ const CalDialog = () => {
     };
     useEffect(() => {
         getAllCalibrationData();
+
     }, [selectedRows])
 
 
@@ -60,6 +61,8 @@ const CalDialog = () => {
 
 
     const [selectedExtraMaster, setSelectedExtraMaster] = useState([])
+
+
     console.log(selectedRows[0])
 
     const [initialCalData, setInitialCalData] = useState({
@@ -183,9 +186,9 @@ const CalDialog = () => {
                 const lastNumber = dcNumbers[dcNumbers.length - 1] + 1
                 console.log(lastNumber)
 
-                setCalibrationData(prev => ({ ...prev, calCertificateNo: dayjs().year() + "-" + lastNumber }))
+                setCalibrationData(prev => ({ ...prev, calCertificateNo: "Cal " + dayjs().year() + "-" + lastNumber }))
             } else {
-                setCalibrationData(prev => ({ ...prev, calCertificateNo: dayjs().year() + "-" + 1 }))
+                setCalibrationData(prev => ({ ...prev, calCertificateNo: "Cal " + dayjs().year() + "-" + 1 }))
             }
 
 
@@ -201,9 +204,15 @@ const CalDialog = () => {
 
 
 
+    useEffect(() => {
+        console.log("cal")
+        if (selectedRows.length > 0 && selectedRows[0].itemItemMasterIMTENo.length > 0) {
+            const masterData = itemList.filter(item => selectedRows[0].itemItemMasterIMTENo.map(mas => mas).includes(item.itemIMTENo))
+            console.log(masterData)
+            setCalibrationData(prev => ({...prev, calMasterUsed: masterData}))
+        }
 
-
-
+    }, [selectedRows])
 
 
 
@@ -260,7 +269,7 @@ const CalDialog = () => {
                                 rowStatus: ""
                             }
                         )),
-                    calMasterUsed: selectedRows[0].itemItemMasterIMTENo || ""
+                    
                 }
 
             ))
@@ -1014,7 +1023,7 @@ const CalDialog = () => {
                                     onChange={handleCalData}
                                 >
                                     {selectedEmp.map((emp, index) => (
-                                        <MenuItem key={index} value={emp._id}>{(emp.firstName || "") + " " + (emp.lastName || "") }</MenuItem>
+                                        <MenuItem key={index} value={emp._id}>{(emp.firstName || "") + " " + (emp.lastName || "")}</MenuItem>
                                     ))}
                                 </TextField>
                             </div>

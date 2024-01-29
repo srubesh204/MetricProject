@@ -106,7 +106,12 @@ const itemCalController = {
       if (Object.keys(createdItem).length !== 0) {
 
         const itemData = await itemAddModel.findById(calItemId)
-
+        let itemCondition = ""
+        if(calStatus === "rejected"){
+          itemCondition = "rejection"
+        }else{
+          itemCondition = "active"
+        }
         const {
           itemIMTENo,
           itemCalDate: itemLastCalDate,
@@ -131,8 +136,7 @@ const itemCalController = {
           itemCalibrationDoneAt,
           itemItemMasterName,
           itemItemMasterIMTENo,
-          itemCalDate,
-          itemDueDate,
+         
           itemCalibratedAt,
           itemCertificateName,
           itemCertificateNo,
@@ -151,6 +155,8 @@ const itemCalController = {
           itemDueDate: calItemDueDate,
           itemLastDueDate,
           itemLastCalDate,
+          itemStatus: itemCondition,
+          itemLastStatus: itemStatus
 
         }
         const updateResult = await itemAddModel.findOneAndUpdate(
@@ -190,7 +196,8 @@ const itemCalController = {
           itemLC,
           itemLCUnit,
           itemModelNo,
-          itemStatus,
+          itemStatus: itemCondition,
+          itemLastStatus: itemStatus,
           itemReceiptDate,
           itemDepartment,
           itemCurrentLocation,
@@ -347,7 +354,12 @@ const itemCalController = {
       if (!updateItemCal) {
         return res.status(404).json({ error: 'ItemCal not found' });
       } else {
-
+        let itemCondition = ""
+        if(calStatus === "rejected"){
+          itemCondition = "rejection"
+        }else{
+          itemCondition = "active"
+        }
         const itemData = await itemAddModel.findById(calItemId)
 
         const {
@@ -374,6 +386,7 @@ const itemCalController = {
           itemCalibratedAt,
           itemCertificateName,
           itemCertificateNo,
+          
           itemOBType,
           itemUncertainity,
           itemUncertainityUnit,
@@ -389,6 +402,8 @@ const itemCalController = {
           itemDueDate: calItemDueDate,
           itemLastDueDate,
           itemLastCalDate,
+          itemStatus: itemCondition,
+          
 
         }
         const updateResult = await itemAddModel.findOneAndUpdate(
@@ -432,7 +447,7 @@ const itemCalController = {
           itemLC,
           itemLCUnit,
           itemModelNo,
-          itemStatus,
+          itemStatus: itemCondition,
           itemReceiptDate,
           itemDepartment,
           
@@ -500,8 +515,8 @@ const itemCalController = {
         const calData = await itemCalModel.findById(itemCalId);
         const itemData = await itemAddModel.findById(calData.calItemId)
 
-        const { itemLastCalDate: itemCalDate, itemLastDueDate: itemDueDate } = itemData
-        const updateItemFields = { itemCalDate, itemDueDate }
+        const { itemLastCalDate: itemCalDate, itemLastDueDate: itemDueDate, itemLastStatus: itemStatus } = itemData
+        const updateItemFields = { itemCalDate, itemDueDate, itemStatus }
         const updateResult = await itemAddModel.findOneAndUpdate(
           { _id: calData.calItemId },
           { $set: updateItemFields },

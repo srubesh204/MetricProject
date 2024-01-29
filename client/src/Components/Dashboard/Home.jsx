@@ -1751,7 +1751,7 @@ const Home = () => {
               <React.Fragment>
 
                 <HomeContent.Provider
-                  value={{ calOpen, setCalOpen, selectedRows, itemMasters, activeEmps: activeEmps.allEmps, masters }}
+                  value={{ calOpen, setCalOpen, selectedRows, itemMasters, activeEmps: activeEmps.allEmps, masters, itemList }}
                 >
                   <CalDialog />
                 </HomeContent.Provider>
