@@ -30,7 +30,10 @@ const itemAddSchema = new mongoose.Schema({
   itemDepartment: String,
   itemCurrentLocation: String,
   itemLocation: String,
-  itemLastPlace: String,
+  itemLastPlace: {
+    type: String,
+    default: ()=> "department"
+  },
   itemLastLocation: String,
   itemArea: String,
   itemPlaceOfUsage: String,

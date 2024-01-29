@@ -74,7 +74,7 @@ const itemGRNSchema = new mongoose.Schema({
       grnMinPS: String,
       grnMaxPS: String,
       grnWearLimitPS: String,
-      grnBeforegrnibration: String,
+      grnBeforeCalibration: String,
       grnMinOB: String,
       grnMaxOB: String,
       grnAverageOB: String,

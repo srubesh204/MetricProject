@@ -1,0 +1,13 @@
+Edit,Si. No,IMTE No,Description,Range/Size,ItemLC,Make,Cal Date,Due Date,Frequency,Cal Source,Cal Done At ,Current Location,Defaul location,Status ,Type
+,,A/1,Vernier Height Gauge,0-300 ,-,-,04-10-2023,03-04-2024,6,inhouse,Perfect Calibration Centre Pvt.Ltd.,Standards Room,Standards Room,active,variable
+,,A/2,Bore Dial Gauge,35-60 ,-,-,04-10-2023,03-04-2024,6,outsource,Perfect Calibration Centre Pvt.Ltd.,GIRI Brothers,Standards Room,active,variable
+,,A/3,Cast Iron Weights,20 ,-,-,01-09-2023,31-08-2024,12,outsource,Perfect Calibration Centre Pvt.Ltd.,Perfect Calibration Centre Pvt.Ltd.,Standards Room,active,referenceStandard
+,,A/4,Plain Plug Gauge,20.45/20.57 ,-,-,08-10-2023,07-04-2024,6,outsource,Perfect Calibration Centre Pvt.Ltd.,Standards Room,Standards Room,active,attribute
+,,B/1,Vernier Height Gauge,0-300 ,-,-,04-10-2023,03-04-2024,6,outsource,Perfect Calibration Centre Pvt.Ltd.,Production,Maintenance,active,variable
+,,B/2,Bore Dial Gauge,35-60 ,-,-,04-10-2023,03-04-2024,6,outsource,Perfect Calibration Centre Pvt.Ltd.,Tool Room,Maintenance,active,variable
+,,B/3,Cast Iron Weights,20 ,-,-,01-09-2023,31-08-2024,12,outsource,Perfect Calibration Centre Pvt.Ltd.,Quality,Standards Room,active,referenceStandard
+,,B/4,Plain Plug Gauge,20.45/20.57 ,-,-,08-10-2023,07-04-2024,6,outsource,Perfect Calibration Centre Pvt.Ltd.,Sambros EN,Standards Room,active,attribute
+,,C/1,Vernier Height Gauge,0-300 ,-,-,04-10-2023,03-04-2024,6,outsource,Perfect Calibration Centre Pvt.Ltd.,Production,Lab,active,variable
+,,C/2,Cast Iron Weights,20 ,-,-,01-09-2023,31-08-2024,12,outsource,Perfect Calibration Centre Pvt.Ltd.,Quality,Lab,active,referenceStandard
+,,D/1,Vernier Height Gauge,0-300 ,-,-,04-10-2023,03-04-2024,6,outsource,Perfect Calibration Centre Pvt.Ltd.,Production,Lab,active,variable
+,,D/2,Bore Dial Gauge,35-60 ,-,-,04-10-2023,03-04-2024,6,outsource,Perfect Calibration Centre Pvt.Ltd.,Standards Room,Lab,active,variable

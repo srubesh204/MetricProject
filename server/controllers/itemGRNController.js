@@ -200,7 +200,7 @@ const itemGRNController = {
         const updateResult = await itemAddModel.findOneAndUpdate(
           { _id: grnItemId },
           { $set: updateItemFields },
-          { new: true  }
+          { new: true }
         );
 
         let obSize = [];
@@ -271,16 +271,16 @@ const itemGRNController = {
           itemUncertainity
         });
         const itemHistoryData = await historyRecord.save();
-        
+
         console.log(itemHistoryData, "Historysaved")
       }
-      
+
       return res.status(200).json({ message: "Item GRN Data Successfully Saved", status: 1 });
     } catch (error) {
-      
+
       session.endSession();
       console.log(error)
-      
+
       if (error.errors) {
         const errors500 = {};
         for (const key in error.errors) {
@@ -434,25 +434,52 @@ const itemGRNController = {
 
       for (const itemGRNId of itemGRNIds) {
         // Find and remove each vendor by _id
-        const itemData = await itemAddModel.findById(itemGRNId)
-        const {
-          lastDcStatus,
-          lastDcNo,
-          lastDcId,
-          lastDcCreatedOn, 
-          lastItemCalDate,
-          itemLastLocation,
+        const grnItem = await itemGRNModel.findById(itemGRNId)
+
+        if (Object.keys(grnItem).length !== 0) {
+
+          const itemData = await itemAddModel.findById(grnItem.grnItemId)
+          const {
+            lastDcStatus,
+            lastDcNo,
+            lastDcId,
+            lastDcCreatedOn,
+            lastItemCalDate,
+            itemLastLocation,
+            itemLastPlace,
+            lastItemDueDate,
+          } = itemData
+
+          const updateItemFields = {
+            dcStatus: lastDcStatus,
+            dcNo: lastDcNo,
+            dcId: lastDcId,
+            dcCreatedOn: lastDcCreatedOn,
+            itemLocation: itemLastPlace,
+            itemCurrentLocation: itemLastLocation,
+            itemCalDate: lastItemCalDate,
+            itemDueDate: lastItemDueDate,
+            grnId: "",
+            grnStatus: "0",
+            grnCreatedOn: "",
+            grnNo: "",
+          }
 
 
-        } = itemData
+          const updateResult = await itemAddModel.findOneAndUpdate(
+            { _id: grnItem.grnItemId },
+            { $set: updateItemFields },
+            { new: true }
+          );
 
-        const itemHistoryRemove = await itemHistory.findOneAndRemove({itemGrnId: itemGRNId})
-        
+          const itemHistoryRemove = await itemHistory.findOneAndRemove({ itemGrnId: itemGRNId })
+        }
+
         const deletedItemGRN = await itemGRNModel.findOneAndRemove({ _id: itemGRNId });
         console.log(deletedItemGRN)
         if (!deletedItemGRN) {
           console.log(`Item GRN with ID ${itemGRNId} not found.`);
-          res.status(500).json({ message: `Item GRN with ID not found.`});
+          res.status(500).json({ message: `Item GRN with ID not found.` });
         } else {
           console.log(`Item GRN with ID ${itemGRNId} deleted successfully.`);
           deleteResults.push(deletedItemGRN);

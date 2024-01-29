@@ -769,11 +769,11 @@ const DcList = () => {
                             <div className='col d-flex justify-content-end'>
 
                                 {empRole.employee !== "viewer" && <React.Fragment>
-                                    <div className='me-2 '>
+                                    {/* <div className='me-2 '>
                                         <Button component={Link} onClick={() => { setDcOpen(true) }} type='button' variant="contained" color="warning">
                                             <AddIcon /> New Dc
                                         </Button>
-                                    </div>
+                                    </div> */}
                                 </React.Fragment>
                                 }
 
