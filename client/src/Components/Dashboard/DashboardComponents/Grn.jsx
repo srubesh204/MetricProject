@@ -52,9 +52,9 @@ const Grn = () => {
         grnDepartment: [],
         grnPlant: "",
         grncCommonRemarks: "",
-        
+
         grnItemId: "",
-        grnItemMasterRef: "",
+      
         grnItemAddMasterName: "",
         grnItemType: "",
         grnItemIMTENo: "",
@@ -117,7 +117,7 @@ const Grn = () => {
         grnCommonRemarks: "",
 
         grnItemId: "",
-        grnItemMasterRef: "",
+       
         grnItemAddMasterName: "",
         grnItemType: "",
         grnItemIMTENo: "",
@@ -354,7 +354,8 @@ const Grn = () => {
             console.log(fetchedData)
             setGrnData((prev) => ({ ...prev, [name]: value }))
             if (value === "Calibrated") {
-                setGrnData({
+                setGrnData(prev => ({
+                    ...prev,
                     [name]: value,
                     grnItemId: fetchedData[0]._id,
                     grnItemAddMasterName: fetchedData[0].itemAddMasterName,
@@ -403,9 +404,10 @@ const Grn = () => {
                     grnItemCertificate: "",
                     grnUncertainity: "",
                     grnItemCalStatus: ""
-                })
+                }))
             } else {
-                setGrnData({
+                setGrnData(prev => ({
+                    ...prev,
                     [name]: value,
                     grnItemId: fetchedData[0]._id,
                     grnItemAddMasterName: fetchedData[0].itemAddMasterName,
@@ -454,7 +456,7 @@ const Grn = () => {
                     grnItemCertificate: "",
                     grnUncertainity: "",
                     grnItemCalStatus: ""
-                })
+                }))
             }
 
         } else {
@@ -835,7 +837,7 @@ const Grn = () => {
         tempErrors.grnPartyCode = grnData.grnPartyCode ? "" : "GRN Party Code is Required"
         tempErrors.grnPartyAddress = grnData.grnPartyAddress ? "" : "GRN Party Address is Required"
         tempErrors.grnNo = grnData.grnNo ? "" : "GRN Number is Required"
-        tempErrors.grnPartyItems = grnData.grnPartyItems.length !== 0 ? "" : "GRN Item Required"
+        tempErrors.grnPartyItems = grnData.grnItemId ? "" : "GRN Item Required"
 
         setErrors({ ...tempErrors })
 
@@ -862,8 +864,9 @@ const Grn = () => {
                 setSnackBarOpen(true)
             }
         } catch (err) {
+            console.log(err)
             setSnackBarOpen(true)
-
+            
             if (err.response && err.response.status === 400) {
                 // Handle validation errors
                 console.log(err);
@@ -879,8 +882,8 @@ const Grn = () => {
                 console.log(errorMessages500)
                 setErrorHandler({ status: 0, message: errorMessages500, code: "error" });
             } else {
-                console.log(err);
-                console.log(err.response.data.error)
+                //console.log(err);
+                //console.log(err.response.data.error)
                 setErrorHandler({ status: 0, message: "An error occurred", code: "error" });
             }
 
@@ -920,7 +923,7 @@ const Grn = () => {
                     .then(response => {
                         setCertMessage("Certificate Uploaded Successfully")
                         console.log("Certificate Uploaded Successfully")
-                        setGrnData((prev) => ({ ...prev, grnItemCertificate: selectedFile.name }));
+                        setGrnData((prev) => ({ ...prev, grnItemCertificate: response.data.name }));
                     })
                     .catch(error => {
                         setCertMessage("Error Uploading Certificate")

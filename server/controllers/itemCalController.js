@@ -215,42 +215,6 @@ const itemCalController = {
           itemCreatedBy,
           itemLastModifiedBy,
         });
-        
-       
-       
-      
-        itemAddMasterName,
-        itemPlant,
-        itemIMTENo,
-        itemType,
-        itemRangeSize,
-        itemRangeSizeUnit,
-        itemLC,
-        itemLCUnit,
-        itemModelNo,
-        itemStatus,
-        itemReceiptDate,
-        itemDepartment,
-        itemCurrentLocation,
-        
-        itemLastLocation,
-        itemCalFreInMonths,
-        itemCalAlertDays,
-        itemCalibrationSource,
-        itemCalibrationDoneAt,
-        itemUncertainity,
-        itemUncertainityUnit,
-        itemPrevCalData,
-        itemCalDate,
-        itemLastCalDate,
-        itemDueDate,
-        itemLastDueDate,
-        itemCalibratedAt,
-        itemCertificateName,
-        itemCertificateNo,
-        itemOBType,
-       
-        itemUncertainity,
 
 
         await historyRecord.save();

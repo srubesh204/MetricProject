@@ -1,5 +1,8 @@
 const itemGRNModel = require("../models/itemGRNModel")
-const itemAddModel = require('../models/itemAddModel')
+const itemAddModel = require('../models/itemAddModel');
+const itemHistory = require("../models/itemHistory");
+const mongoose = require('mongoose');
+
 
 const itemGRNController = {
   getAllItemGRN: async (req, res) => {
@@ -14,9 +17,98 @@ const itemGRNController = {
   },
   createItemGRN: async (req, res) => {
 
+
     try {
-      const { grnPartyRefNo, grnPartyId, grnPartyRefDate, grnPartyName, grnPartyCode, grnPartyAddress, grnNo, grnDate, grnCommonRemarks, grnPartyItems, grnPlant, grnDepartment } = req.body;
-      const itemGRNResult = new itemGRNModel({ grnPartyRefNo, grnPartyId, grnPartyRefDate, grnPartyName, grnPartyCode, grnPartyAddress, grnNo, grnDate, grnCommonRemarks, grnPartyItems, grnPlant, grnDepartment });
+      const {
+        grnPartyRefNo,
+        grnPartyId,
+        grnPartyRefDate,
+        grnPartyName,
+        grnPartyCode,
+        grnPartyAddress,
+        grnNo,
+        grnDate,
+        grnCommonRemarks,
+        grnPlant,
+        grnDepartment,
+        grnItemId,
+        grnItemAddMasterName,
+        grnItemType,
+        grnItemIMTENo,
+        grnItemRangeSize,
+        grnItemRangeSizeUnit,
+        grnItemMFRNo,
+        grnItemLC,
+        grnItemLCUnit,
+        grnItemMake,
+        grnItemModelNo,
+        grnItemReceiptDate,
+        grnItemDepartment,
+        grnItemArea,
+        grnItemPlaceOfUsage,
+        grnItemCalFreInMonths,
+        grnItemCalAlertDays,
+        grnItemCalibrationSource,
+        grnItemCalibrationDoneAt,
+        grnItemCalibratedAt,
+        grnItemOBType,
+        grnItemStatus,
+        grnAcCriteria,
+        grnItemUncertainity,
+        grnItemCalDate,
+        grnItemDueDate,
+        grnItemCertificateStatus,
+        grnItemCertificateNo,
+        grnItemCertificate,
+        grnUncertainity,
+        grnItemCalStatus,
+      } = req.body;
+
+
+      const itemGRNResult = new itemGRNModel({
+        grnPartyRefNo,
+        grnPartyId,
+        grnPartyRefDate,
+        grnPartyName,
+        grnPartyCode,
+        grnPartyAddress,
+        grnNo,
+        grnDate,
+        grnCommonRemarks,
+        grnPlant,
+        grnDepartment,
+        grnItemId,
+        grnItemAddMasterName,
+        grnItemType,
+        grnItemIMTENo,
+        grnItemRangeSize,
+        grnItemRangeSizeUnit,
+        grnItemMFRNo,
+        grnItemLC,
+        grnItemLCUnit,
+        grnItemMake,
+        grnItemModelNo,
+        grnItemReceiptDate,
+        grnItemDepartment,
+        grnItemArea,
+        grnItemPlaceOfUsage,
+        grnItemCalFreInMonths,
+        grnItemCalAlertDays,
+        grnItemCalibrationSource,
+        grnItemCalibrationDoneAt,
+        grnItemCalibratedAt,
+        grnItemOBType,
+        grnItemStatus,
+        grnAcCriteria,
+        grnItemUncertainity,
+        grnItemCalDate,
+        grnItemDueDate,
+        grnItemCertificateStatus,
+        grnItemCertificateNo,
+        grnItemCertificate,
+        grnUncertainity,
+        grnItemCalStatus,
+      });
       const validationError = itemGRNResult.validateSync();
 
       if (validationError) {
@@ -40,55 +132,153 @@ const itemGRNController = {
 
       if (Object.keys(result).length !== 0) {
 
-        const updatePromises = grnPartyItems.map(async (item) => {
 
-          const itemData = await itemAddModel.findById(item.grnItemId)
-          const {
-            itemIMTENo,
-            itemCurrentLocation: itemLastLocation,
-            itemDepartment,
-            itemCalDate: itemLastCalDate,
-            itemDueDate: itemLastDueDate,
-            dcStatus: lastDcStatus,
-            dcNo: lastDcNo,
-            dcId: lastDcId,
-            dcCreatedOn: lastDcCreatedOn
-          } = itemData
-          const updateItemFields = {
-            itemIMTENo,
-            itemCurrentLocation: itemDepartment,
-            itemLastLocation,
-            itemLocation ,
-            itemLastCalDate, itemLastDueDate,
-            itemCalDate: item.grnItemCalDate,
-            itemDueDate: item.grnItemDueDate,
-            grnId: result._id,
-            grnStatus: "1",
-            grnCreatedOn: grnDate,
-            grnNo: grnNo,
-            lastDcId,
-            lastDcStatus,
-            lastDcCreatedOn,
-            lastDcNo,
-            dcStatus: "0",
-            dcNo: "",
-            dcId: "",
-            dcCreatedOn: ""
+
+        const itemData = await itemAddModel.findById(grnItemId)
+        const {
+          _id,
+          itemIMTENo,
+          itemCurrentLocation: itemLastLocation,
+          itemDepartment,
+          itemCalDate: itemLastCalDate,
+          itemDueDate: itemLastDueDate,
+          dcStatus: lastDcStatus,
+          dcNo: lastDcNo,
+          dcId: lastDcId,
+          dcCreatedOn: lastDcCreatedOn,
+          itemPlant,
+          isItemMaster,
+          itemAddMasterName,
+          itemType,
+          itemRangeSize,
+          itemRangeSizeUnit,
+          itemLC,
+          itemLCUnit,
+          itemModelNo,
+          itemStatus,
+          itemReceiptDate,
+          itemCalFreInMonths,
+          itemCalAlertDays,
+          itemCalibrationSource,
+          itemCalibrationDoneAt,
+          itemCalibratedAt,
+          itemCertificateName,
+          itemCertificateNo,
+          itemOBType,
+          itemUncertainity,
+          itemUncertainityUnit,
+          itemPrevCalData,
+
+
+        } = itemData
+
+
+        const updateItemFields = {
+          itemIMTENo,
+          itemCurrentLocation: itemDepartment,
+          itemLastLocation,
+          itemLocation: "department",
+          itemLastCalDate,
+          itemLastDueDate,
+          itemCalDate: grnItemCalDate,
+          itemDueDate: grnItemDueDate,
+          grnId: result._id,
+          grnStatus: "1",
+          grnCreatedOn: grnDate,
+          grnNo: grnNo,
+          lastDcId,
+          lastDcStatus,
+          lastDcCreatedOn,
+          lastDcNo,
+          dcStatus: "0",
+          dcNo: "",
+          dcId: "",
+          dcCreatedOn: ""
+        }
+        const updateResult = await itemAddModel.findOneAndUpdate(
+          { _id: grnItemId },
+          { $set: updateItemFields },
+          { new: true  }
+        );
+
+        let obSize = [];
+        if (grnAcCriteria.length > 0) {
+          if (grnItemType === "variable") {
+            obSize = grnAcCriteria.map(item => {
+              return item.grnParameter + ":" + item.grnOBError
+            })
+          } else {
+            obSize = grnAcCriteria.map(item => {
+
+              if (grnItemOBType === "minmax") {
+                return item.grnParameter + " : " + item.grnMinOB + "/" + item.grnMaxOB
+              } else {
+                return item.grnParameter + " : " + item.grnAverageOB
+              }
+
+            })
           }
-          const updateResult = await itemAddModel.findOneAndUpdate(
-            { _id: item._id },
-            { $set: updateItemFields },
-            { new: true }
-          );
-          console.log("itemUpdated")
-          return updateResult;
-        });
-        const updatedItems = await Promise.all(updatePromises);
-      }
+        }
 
+
+        const historyRecord = new itemHistory({
+          itemIMTENo,
+          itemGrnId: result._id,
+          itemCurrentLocation: itemDepartment,
+          itemLastLocation,
+          itemLocation: "department",
+          itemLastCalDate,
+          itemLastDueDate,
+          itemCalDate: grnItemCalDate,
+          itemDueDate: grnItemDueDate,
+          grnId: result._id,
+          grnStatus: "1",
+          grnCreatedOn: grnDate,
+          grnNo: grnNo,
+          lastDcId,
+          lastDcStatus,
+          lastDcCreatedOn,
+          lastDcNo,
+          dcStatus: "0",
+          dcNo: "",
+          dcId: "",
+          dcCreatedOn: "",
+          itemId: _id,
+          itemCalId: "",
+          itemAddMasterName,
+          itemPlant,
+          itemType,
+          itemRangeSize,
+          itemRangeSizeUnit,
+          itemLC,
+          itemLCUnit,
+          itemModelNo,
+          itemStatus,
+          itemReceiptDate,
+          itemDepartment,
+          itemCalFreInMonths,
+          itemCalAlertDays,
+          itemCalibrationSource,
+          itemCalibrationDoneAt,
+          itemUncertainityUnit,
+          itemPrevCalData,
+          itemCalibratedAt,
+          itemCertificateName,
+          itemCertificateNo,
+          itemOBType,
+          itemUncertainity
+        });
+        const itemHistoryData = await historyRecord.save();
+        
+        console.log(itemHistoryData, "Historysaved")
+      }
+      
       return res.status(200).json({ message: "Item GRN Data Successfully Saved", status: 1 });
     } catch (error) {
+      
+      session.endSession();
       console.log(error)
+      
       if (error.errors) {
         const errors500 = {};
         for (const key in error.errors) {

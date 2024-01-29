@@ -10,20 +10,21 @@ const GrnPrint = () => {
 
     const GrnPrintData = useContext(GrnListContent)
     const { grnPrintOpen, setGrnPrintOpen, selectedRows, formatNoData, printState, setPrintState } = GrnPrintData
+    console.log(selectedRows)
 
     const renderTableRows = () => {
-        return selectedRows.grnPartyItems.map((row, index) => (
-            <tr key={index.toString()} style={{ width: "100%" }}>
-                <td style={{ width: "8%", padding: "15px 0px", textAlign: "center", borderRight: "0.5px solid black" }}>{index + 1}</td>
+        return  (
+            <tr style={{ width: "100%" }}>
+                <td style={{ width: "8%", padding: "15px 0px", textAlign: "center", borderRight: "0.5px solid black" }}>1</td>
                 <td style={{ width: '52%', padding: '15px 8px', textAlign: 'center', borderRight: "0.5px solid black" }}>
                     <div>
-                        <div style={{ textAlign: "left" }}>Item Name: {row.grnItemAddMasterName}, IMTE No: {row.grnItemIMTENo}</div>
-                        <div style={{ textAlign: "left" }}>Range/Size: {row.grnItemRangeSize}</div>
+                        <div style={{ textAlign: "left" }}>Item Name: {selectedRows.grnItemAddMasterName}, IMTE No: {selectedRows.grnItemIMTENo}</div>
+                        <div style={{ textAlign: "left" }}>Range/Size: {selectedRows.grnItemRangeSize}</div>
                     </div>
                 </td>
-                <td style={{ width: "40%", padding: "15px 0px", textAlign: "center" }}>{row.grnItemStatus}</td>
+                <td style={{ width: "40%", padding: "15px 0px", textAlign: "center" }}>{selectedRows.grnItemStatus}</td>
             </tr>
-        ));
+        ); 
     };
 
     const Footer = (data) => {

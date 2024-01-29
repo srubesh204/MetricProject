@@ -8,6 +8,8 @@ const itemHistorySchema = new mongoose.Schema({
     type: String,
     required: [true, "ItemId missing"]
   },
+  itemCalId: String,
+  itemGrnId: String,
   itemMasterRef: String,
   selectedItemMaster: [],
   isItemMaster: String,
@@ -80,3 +82,5 @@ itemHistorySchema.plugin(uniqueValidator);
 itemHistorySchema.plugin(mongooseSequence, { inc_field: 'itemHistoryId', });
 
 module.exports = mongoose.model('itemHistory', itemHistorySchema);
+
+

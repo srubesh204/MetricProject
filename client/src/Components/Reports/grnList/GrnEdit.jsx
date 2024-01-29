@@ -2388,41 +2388,7 @@ console.log(tempItem)*/}
                                         </React.Fragment> : ""}
                                 </Paper>}
 
-                            <Paper elevation={12} sx={{ p: 2 }} style={{ pointerEvents: editGrnId ? 'none' : 'auto' }} className='col-md-12'>
-                                <table className='table table-bordered table-responsive text-center align-middle' >
-                                    <tbody>
-                                        <tr>
-                                            <th>Si No</th>
-                                            <th>IMTE No</th>
-                                            <th>Master Name</th>
-                                            <th>Range/Size</th>
-                                            <th>Cal Certificate No</th>
-                                            <th>Cal Date</th>
-                                            <th>Next Due</th>
-                                            <th>Calibrated At</th>
-                                            <th>Remarks</th>
-                                            <th>Remove</th>
-                                            <th>Edit</th>
-                                        </tr>
-
-                                        {grnEditData.grnPartyItems.map((item, index) => (
-                                            <tr key={index} className={editGrnId === item.grnItemId ? "table-active" : ""}>
-                                                <td>{index + 1}</td>
-                                                <td>{item.grnItemIMTENo}</td>
-                                                <td>{item.grnItemAddMasterName}</td>
-                                                <td>{item.grnItemRangeSize}</td>
-                                                <td>{item.grnItemCertificateNo}</td>
-                                                <td>{item.grnItemCalDate}</td>
-                                                <td>{item.grnItemDueDate}</td>
-                                                <td>{item.grnItemCalibratedAt}</td>
-                                                <td>{item.grnItemStatus}</td>
-                                                <td width="5%"><Delete onClick={() => deleteGrnPartyItems(index)} color='error' /></td>
-                                                <th><Edit color='info' onClick={() => handleGrnItemEdit(item, index)} /></th>
-                                            </tr>
-                                        ))}
-                                    </tbody>
-                                </table>
-                            </Paper>
+                            
                             <Dialog
                                 open={confirmSubmit}
                                 onClose={(e, reason) => {

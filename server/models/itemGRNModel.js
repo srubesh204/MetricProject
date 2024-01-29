@@ -44,7 +44,7 @@ const itemGRNSchema = new mongoose.Schema({
   },
   grnCommonRemarks: String,
   grnItemId: String,
-  grnItemMasterRef: String,
+
   grnItemAddMasterName: String,
   grnItemType: String,
   grnItemIMTENo: String,
