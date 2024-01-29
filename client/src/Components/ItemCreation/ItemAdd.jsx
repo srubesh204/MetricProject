@@ -279,7 +279,7 @@ const ItemAdd = () => {
         itemUncertainity: "",
         itemUncertainityUnit: "",
         itemPrevCalData: "",
-        itemPlant: "",
+        itemPlant: employeeRole.loggedEmp.plantDetails.length === 1 ? employeeRole.loggedEmp.plantDetails[0].plantName : "",
         itemCreatedBy: employeeRole && employeeRole.loggedEmp._id,
     })
 
