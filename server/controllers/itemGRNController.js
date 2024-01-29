@@ -132,7 +132,12 @@ const itemGRNController = {
 
       if (Object.keys(result).length !== 0) {
 
-
+        let itemCondition = ""
+        if(grnItemCalStatus === "rejected"){
+          itemCondition = "rejection"
+        }else{
+          itemCondition = "active"
+        }
 
         const itemData = await itemAddModel.findById(grnItemId)
         const {
@@ -148,7 +153,6 @@ const itemGRNController = {
           dcId: lastDcId,
           dcCreatedOn: lastDcCreatedOn,
           itemPlant,
-          isItemMaster,
           itemAddMasterName,
           itemType,
           itemRangeSize,
@@ -182,6 +186,8 @@ const itemGRNController = {
           itemLocation: "department",
           itemLastCalDate,
           itemLastDueDate,
+          itemStatus: itemCondition,
+          itemLastStatus: itemStatus,
           itemCalDate: grnItemCalDate,
           itemDueDate: grnItemDueDate,
           grnId: result._id,
@@ -255,7 +261,8 @@ const itemGRNController = {
           itemLC,
           itemLCUnit,
           itemModelNo,
-          itemStatus,
+          itemStatus : itemCondition,
+          itemLastStatus: itemStatus,
           itemReceiptDate,
           itemDepartment,
           itemCalFreInMonths,
@@ -299,7 +306,53 @@ const itemGRNController = {
       // if (isNaN(desId)) {
       //   return res.status(400).json({ error: 'Invalid desId value' });
       // }
-      const { grnPartyRefNo, grnPartyId, grnPartyRefDate, grnPartyName, grnPartyCode, grnPartyAddress, grnNo, grnDate, grnCommonRemarks, grnPartyItems, grnPlant, grnDepartment } = req.body;
+      const { 
+        
+        grnPartyRefNo, 
+        grnPartyId, 
+        grnPartyRefDate, 
+        grnPartyName, 
+        grnPartyCode, 
+        grnPartyAddress, 
+        grnNo, 
+        grnDate, 
+        grnCommonRemarks, 
+        grnPartyItems, 
+        grnPlant, 
+        grnDepartment,
+        
+        grnItemId,
+        grnItemAddMasterName,
+        grnItemType,
+        grnItemIMTENo,
+        grnItemRangeSize,
+        grnItemRangeSizeUnit,
+        grnItemMFRNo,
+        grnItemLC,
+        grnItemLCUnit,
+        grnItemMake,
+        grnItemModelNo,
+        grnItemReceiptDate,
+        grnItemDepartment,
+        grnItemArea,
+        grnItemPlaceOfUsage,
+        grnItemCalFreInMonths,
+        grnItemCalAlertDays,
+        grnItemCalibrationSource,
+        grnItemCalibrationDoneAt,
+        grnItemCalibratedAt,
+        grnItemOBType,
+        grnItemStatus,
+        grnAcCriteria,
+        grnItemUncertainity,
+        grnItemCalDate,
+        grnItemDueDate,
+        grnItemCertificateStatus,
+        grnItemCertificateNo,
+        grnItemCertificate,
+        grnUncertainity,
+        grnItemCalStatus
+      } = req.body;
 
       // Create an object with the fields you want to update
       const updateItemGRNFields = {
@@ -314,45 +367,44 @@ const itemGRNController = {
         grnCommonRemarks,
         grnPartyItems,
         grnPlant,
-        grnDepartment
+        grnDepartment,
+
+        grnItemId,
+        grnItemAddMasterName,
+        grnItemType,
+        grnItemIMTENo,
+        grnItemRangeSize,
+        grnItemRangeSizeUnit,
+        grnItemMFRNo,
+        grnItemLC,
+        grnItemLCUnit,
+        grnItemMake,
+        grnItemModelNo,
+        grnItemReceiptDate,
+        grnItemDepartment,
+        grnItemArea,
+        grnItemPlaceOfUsage,
+        grnItemCalFreInMonths,
+        grnItemCalAlertDays,
+        grnItemCalibrationSource,
+        grnItemCalibrationDoneAt,
+        grnItemCalibratedAt,
+        grnItemOBType,
+        grnItemStatus,
+        grnAcCriteria,
+        grnItemUncertainity,
+        grnItemCalDate,
+        grnItemDueDate,
+        grnItemCertificateStatus,
+        grnItemCertificateNo,
+        grnItemCertificate,
+        grnUncertainity,
+        grnItemCalStatus
       };
 
-      const prevItemGrn = await itemGRNModel.findById(itemGRNId)
-      const { grnPartItems: prevPartyItems } = prevItemGrn
-      const prevUpdatePromises = prevPartyItems.map(async (item) => {
-
-        const itemData = await itemAddModel.findById(item._id)
-        const {
-          itemIMTENo,
-          itemLastLocation,
-          itemLastCalDate: itemCalDate,
-          itemLastDueDate: itemDueDate,
-          lastDcNo,
-          lastDcId,
-          lastDcCreatedOn
-
-        } = itemData
-        const updateItemFields = {
-          itemIMTENo,
-          itemCurrentLocation: itemLastLocation,
-          itemLocation: "department",
-          itemCalDate,
-          itemDueDate,
-          dcId: lastDcId,
-          dcStatus: "1",
-          dcCreatedOn: lastDcCreatedOn,
-          dcNo: lastDcNo
-        }
-        const updateResult = await itemAddModel.findOneAndUpdate(
-          { _id: item._id },
-          { $set: updateItemFields },
-          { new: true }
-        );
-        console.log(updateResult)
-        return updateResult;
-      });
-      const prevUpdatedValues = await Promise.all(prevUpdatePromises);
-
+      
+     
+     
       // Find the designation by desId and update it
       const itemGRNUpdate = new itemGRNModel(updateItemGRNFields);
 
@@ -382,29 +434,158 @@ const itemGRNController = {
 
       if (Object.keys(updateItemGRN).length !== 0) {
 
-        const updatePromises = grnPartyItems.map(async (item) => {
+        let itemCondition = ""
+        if(grnItemCalStatus === "rejected"){
+          itemCondition = "rejection"
+        }else{
+          itemCondition = "active"
+        }
 
-          const itemData = await itemAddModel.findById(item.grnItemId)
-          const { } = itemData
-          const updateItemFields = {
-            itemCalDate: item.grnItemCalDate,
-            itemDueDate: item.grnItemDueDate,
-            itemCertificateName: item.grnItemCertificate,
-            itemCertificateNo: item.grnItemCertificateNo,
-            grnStatus: "1",
-            grnId: itemGRNId,
-            grnCreatedOn: grnDate,
-            grnNo: grnNo
+        const itemData = await itemAddModel.findById(grnItemId)
+        const {
+          _id,
+          itemIMTENo,
+          itemCurrentLocation: itemLastLocation,
+          itemLocation: itemLastPlace,
+          itemDepartment,
+          itemCalDate: itemLastCalDate,
+          itemDueDate: itemLastDueDate,
+          dcStatus: lastDcStatus,
+          dcNo: lastDcNo,
+          dcId: lastDcId,
+          dcCreatedOn: lastDcCreatedOn,
+          itemPlant,
+          itemAddMasterName,
+          itemType,
+          itemRangeSize,
+          itemRangeSizeUnit,
+          itemLC,
+          itemLCUnit,
+          itemModelNo,
+          itemStatus,
+          itemReceiptDate,
+          itemCalFreInMonths,
+          itemCalAlertDays,
+          itemCalibrationSource,
+          itemCalibrationDoneAt,
+          itemCalibratedAt,
+          itemCertificateName,
+          itemCertificateNo,
+          itemOBType,
+          itemUncertainity,
+          itemUncertainityUnit,
+          itemPrevCalData,
+
+
+        } = itemData
+
+
+        const updateItemFields = {
+          itemIMTENo,
+          itemLastPlace,
+          itemCurrentLocation: itemDepartment,
+          itemLastLocation,
+          itemLocation: "department",
+          itemLastCalDate,
+          itemLastDueDate,
+          itemStatus: itemCondition,
+          itemLastStatus: itemStatus,
+          itemCalDate: grnItemCalDate,
+          itemDueDate: grnItemDueDate,
+          grnId: updateItemGRN._id,
+          grnStatus: "1",
+          grnCreatedOn: grnDate,
+          grnNo: grnNo,
+          lastDcId,
+          lastDcStatus,
+          lastDcCreatedOn,
+          lastDcNo,
+          dcStatus: "0",
+          dcNo: "",
+          dcId: "",
+          dcCreatedOn: ""
+        }
+        const updateResult = await itemAddModel.findOneAndUpdate(
+          { _id: grnItemId },
+          { $set: updateItemFields },
+          { new: true }
+        );
+
+        let obSize = [];
+        if (grnAcCriteria.length > 0) {
+          if (grnItemType === "variable") {
+            obSize = grnAcCriteria.map(item => {
+              return item.grnParameter + ":" + item.grnOBError
+            })
+          } else {
+            obSize = grnAcCriteria.map(item => {
+
+              if (grnItemOBType === "minmax") {
+                return item.grnParameter + " : " + item.grnMinOB + "/" + item.grnMaxOB
+              } else {
+                return item.grnParameter + " : " + item.grnAverageOB
+              }
+
+            })
           }
-          const updateResult = await itemAddModel.findOneAndUpdate(
-            { _id: item._id },
-            { $set: updateItemFields },
-            { new: true }
-          );
-          console.log("grnUpdated")
-          return updateResult;
+        }
+
+
+        const historyRecord = new itemHistory({
+          itemIMTENo,
+          itemGrnId: updateItemGRN._id,
+          itemCurrentLocation: itemDepartment,
+          itemLastLocation,
+          itemLocation: "department",
+          itemLastCalDate,
+          itemLastDueDate,
+          itemCalDate: grnItemCalDate,
+          itemDueDate: grnItemDueDate,
+          grnId: updateItemGRN._id,
+          grnStatus: "1",
+          grnCreatedOn: grnDate,
+          grnNo: grnNo,
+          lastDcId,
+          lastDcStatus,
+          lastDcCreatedOn,
+          lastDcNo,
+          dcStatus: "0",
+          dcNo: "",
+          dcId: "",
+          dcCreatedOn: "",
+          itemId: _id,
+          itemCalId: "",
+          itemAddMasterName,
+          itemPlant,
+          itemType,
+          itemRangeSize,
+          itemRangeSizeUnit,
+          itemLC,
+          itemLCUnit,
+          itemModelNo,
+          itemStatus : itemCondition,
+          itemLastStatus: itemStatus,
+          itemReceiptDate,
+          itemDepartment,
+          itemCalFreInMonths,
+          itemCalAlertDays,
+          itemCalibrationSource,
+          itemCalibrationDoneAt,
+          itemUncertainityUnit,
+          itemPrevCalData,
+          itemCalibratedAt,
+          itemCertificateName,
+          itemCertificateNo,
+          itemOBType,
+          itemUncertainity
         });
-        const updatedItems = await Promise.all(updatePromises);
+        const itemHistoryData = await itemHistory.findOneAndUpdate(
+          { itemGrnId: itemGRNId },
+          { $set: updateItemFields },
+          { new: true }
+        );
+
+        console.log(itemHistoryData, "History Updated")
       }
 
 
