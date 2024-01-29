@@ -514,8 +514,8 @@ console.log(tempItem)*/}
                     const response = await axios.get(
                         `${process.env.REACT_APP_PORT}/itemAdd/getItemAddById/${editGrnId}`
                     );
-                    dataObj.data = response.data.result; // Update the 'data' property
-                    console.log(dataObj.data); // Inside the function, it will reflect the changes
+                    dataObj = response.data.result; // Update the 'data' property
+                    console.log(dataObj); // Inside the function, it will reflect the changes
                 } catch (err) {
                     console.log(err);
                 }
@@ -524,35 +524,31 @@ console.log(tempItem)*/}
             getItemById(itemData)
                 .then(() => {
                     if (value === "Calibrated") {
-
-                        console.log("calibration")
-
-
                         setSelectedGrnItem((prev) => ({
                             ...prev,
                             [name]: value,
-                            grnItemId: itemData.data._id,
-                            grnItemAddMasterName: itemData.data.itemAddMasterName,
-                            grnItemIMTENo: itemData.data.itemIMTENo,
-                            grnItemType: itemData.data.itemType,
-                            grnItemRangeSize: itemData.data.itemRangeSize,
-                            grnItemRangeSizeUnit: itemData.data.itemRangeSizeUnit,
-                            grnItemMFRNo: itemData.data.itemMFRNo,
-                            grnItemLC: itemData.data.itemLC,
-                            grnItemLCUnit: itemData.data.itemLCUnit,
-                            grnItemMake: itemData.data.itemMake,
-                            grnItemModelNo: itemData.data.itemModelNo,
+                            grnItemId: itemData._id,
+                            grnItemAddMasterName: itemData.itemAddMasterName,
+                            grnItemIMTENo: itemData.itemIMTENo,
+                            grnItemType: itemData.itemType,
+                            grnItemRangeSize: itemData.itemRangeSize,
+                            grnItemRangeSizeUnit: itemData.itemRangeSizeUnit,
+                            grnItemMFRNo: itemData.itemMFRNo,
+                            grnItemLC: itemData.itemLC,
+                            grnItemLCUnit: itemData.itemLCUnit,
+                            grnItemMake: itemData.itemMake,
+                            grnItemModelNo: itemData.itemModelNo,
 
-                            grnItemDepartment: itemData.data.itemDepartment,
-                            grnItemArea: itemData.data.itemArea,
-                            grnItemPlaceOfUsage: itemData.data.itemPlaceOfUsage,
-                            grnItemCalFreInMonths: itemData.data.itemCalFreInMonths,
-                            grnItemCalAlertDays: itemData.data.itemCalAlertDays,
-                            grnItemCalibrationSource: itemData.data.itemCalibrationSource,
-                            grnItemCalibrationDoneAt: itemData.data.itemCalibrationDoneAt,
-                            grnItemCalibratedAt: itemData.data.itemCalibratedAt,
-                            grnItemOBType: itemData.data.itemOBType,
-                            grnAcCriteria: itemData.data.acceptanceCriteria.map((item) => (
+                            grnItemDepartment: itemData.itemDepartment,
+                            grnItemArea: itemData.itemArea,
+                            grnItemPlaceOfUsage: itemData.itemPlaceOfUsage,
+                            grnItemCalFreInMonths: itemData.itemCalFreInMonths,
+                            grnItemCalAlertDays: itemData.itemCalAlertDays,
+                            grnItemCalibrationSource: itemData.itemCalibrationSource,
+                            grnItemCalibrationDoneAt: itemData.itemCalibrationDoneAt,
+                            grnItemCalibratedAt: itemData.itemCalibratedAt,
+                            grnItemOBType: itemData.itemOBType,
+                            grnAcCriteria: itemData.acceptanceCriteria.map((item) => (
                                 {
                                     grnAcParameter: item.acParameter,
                                     grnAcNominalSize: item.acNominalSize,
@@ -570,7 +566,7 @@ console.log(tempItem)*/}
                                     rowStatus: ""
                                 }
                             )),
-                            grnItemUncertainity: itemData.data.itemUncertainity,
+                            grnItemUncertainity: itemData.itemUncertainity,
                             grnItemCalDate: dayjs().format("YYYY-MM-DD"),
                             grnItemDueDate: "",
                             grnItemCertificateStatus: "",

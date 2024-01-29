@@ -139,6 +139,7 @@ const itemGRNController = {
           _id,
           itemIMTENo,
           itemCurrentLocation: itemLastLocation,
+          itemLocation: itemLastPlace,
           itemDepartment,
           itemCalDate: itemLastCalDate,
           itemDueDate: itemLastDueDate,
@@ -175,6 +176,7 @@ const itemGRNController = {
 
         const updateItemFields = {
           itemIMTENo,
+          itemLastPlace,
           itemCurrentLocation: itemDepartment,
           itemLastLocation,
           itemLocation: "department",
@@ -432,13 +434,25 @@ const itemGRNController = {
 
       for (const itemGRNId of itemGRNIds) {
         // Find and remove each vendor by _id
+        const itemData = await itemAddModel.findById(itemGRNId)
+        const {
+          lastDcStatus,
+          lastDcNo,
+          lastDcId,
+          lastDcCreatedOn, 
+          lastItemCalDate,
+          itemLastLocation,
+
+
+        } = itemData
+
+        const itemHistoryRemove = await itemHistory.findOneAndRemove({itemGrnId: itemGRNId})
+        
         const deletedItemGRN = await itemGRNModel.findOneAndRemove({ _id: itemGRNId });
         console.log(deletedItemGRN)
         if (!deletedItemGRN) {
-          // If a vendor was not found, you can skip it or handle the error as needed.
           console.log(`Item GRN with ID ${itemGRNId} not found.`);
-          res.status(500).json({ message: `Item GRN with ID not found.` });
-
+          res.status(500).json({ message: `Item GRN with ID not found.`});
         } else {
           console.log(`Item GRN with ID ${itemGRNId} deleted successfully.`);
           deleteResults.push(deletedItemGRN);
