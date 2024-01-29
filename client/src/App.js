@@ -44,6 +44,7 @@ import TotalList from './Components/Reports/TotalList';
 import { Backdrop, CircularProgress } from '@mui/material';
 import CalDueReport from './Components/Reports/CalDueReport';
 import InsHistoryCard from './Components/Reports/InsHistoryCard';
+import CalDuePrint from './Components/Reports/CalDuePrint';
 export const empRole = createContext(null);
 
 
@@ -99,6 +100,7 @@ const generateRoutes = (employee) => {
     { path: "/totalList", element: <TotalList /> },
     { path: "/calDueReport", element: <CalDueReport /> },
     { path: "/insHisCard", element: <InsHistoryCard /> },
+    { path: "/calDuePrint", element: <CalDuePrint /> },
 
 
     // Add more common routes...

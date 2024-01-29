@@ -28,9 +28,9 @@ dayjs.extend(isSameOrAfter)
 const Home = () => {
 
   const employeeRole = useEmployee();
-  
-    const { loggedEmp } = employeeRole
-  
+
+  const { loggedEmp } = employeeRole
+
 
   const loggedInEmpId = sessionStorage.getItem('empId')
 
@@ -1735,17 +1735,17 @@ const Home = () => {
                 </table>
               </div>
               {/* style={{ height: "20%", width: "100%", display: "flex", alignItems: "end", justifyContent: 'end' }} */}
-              <div className='row'  style={{ height: "20%", width: "100%", display: "flex", alignItems: "end",}}>
-              <div className='col' style={{ height: "20%", width: "100%", display: "flex", alignItems: "end", }} >
-                <Button component={Link} to="/" variant='contained' startIcon={<ArrowBack />} endIcon={<House />} color='secondary'>Home</Button>
+              <div className='row' style={{ height: "20%", width: "100%", display: "flex", alignItems: "end", }}>
+                <div className='col mb-2' style={{ height: "20%", width: "100%", display: "flex", alignItems: "end", }} >
+                  <Button component={Link} to="/" variant='contained' startIcon={<ArrowBack />} endIcon={<House />} color='secondary'>Home</Button>
+                </div>
+                <div className='col d-flex justify-content-end  height: "10%", width: "50%"' >
+                  <p style={{ color: '#3498db', fontSize: '19px', fontWeight: 'bold' }}>
+                    Welcome {loggedEmp.firstName}
+                  </p>
+                </div>
               </div>
-              <div className='col d-flex justify-content-end  height: "20%", width: "100%"' >
-                <p>
-                  Welcome {loggedEmp.firstName}
-                </p>
-              </div>
-              </div>
-    
+
             </Paper>
             {employeeRole && employeeRole !== "viewer" &&
               <React.Fragment>

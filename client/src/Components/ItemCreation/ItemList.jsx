@@ -938,8 +938,13 @@ const ItemList = () => {
                                     <div className=' col d-flex justify-content-end'>
                                         {employeeRole.employee !== "viewer" && (
                                             <React.Fragment>
+                                                {/* <div className='me-2 '>
+                                                    <p >
+                                                        Welcome {loggedEmp.firstName}
+                                                    </p>
+                                                </div> */}
                                                 <div className='me-2'>
-                                                    <p>
+                                                    <p style={{ color: '#3498db', fontSize: '18px', fontWeight: 'bold' }}>
                                                         Welcome {loggedEmp.firstName}
                                                     </p>
                                                 </div>
@@ -1259,7 +1264,7 @@ const ItemList = () => {
                                 <div className='me-2' >
                                     {/* <button type="button" className='btn btn-sm' >History Card</button> */}
                                     <Button component={RouterLink} to={`/InsHistoryCard`} size='small' variant="contained" color="secondary">
-                                    History Card
+                                        History Card
                                     </Button>
                                 </div>
                                 {employeeRole && employeeRole.employee !== "viewer" &&

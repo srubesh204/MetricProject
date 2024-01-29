@@ -1,18 +1,21 @@
 import React, { useEffect, useState, createContext } from 'react'
 import { TextField, MenuItem, Button } from '@mui/material';
-import { Box, Container, Grid, Paper, Typography ,Link} from "@mui/material";
+import { Box, Container, Grid, Paper, Typography } from "@mui/material";
 import { DataGrid, GridToolbar, GridToolbarQuickFilter } from '@mui/x-data-grid';
 import axios from 'axios';
 import { Edit, FilterAlt, PrintRounded, Send } from '@mui/icons-material';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import {ArrowBack,Error, HomeMax, House, Mail, MailLock,  } from '@mui/icons-material';
+import { ArrowBack, Error, HomeMax, House, Mail, MailLock, } from '@mui/icons-material';
 import { Link as RouterLink } from 'react-router-dom';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import { Link } from "react-router-dom";
 import dayjs from 'dayjs';
+import CalDuePrint from './CalDuePrint';
 import MailSender from '../mailComponent/MailSender';
 //import MailSender from '../mailComponent/MailSender';
+export const CalDueReportContent = createContext(null);
 
 
 
@@ -20,6 +23,7 @@ import MailSender from '../mailComponent/MailSender';
 
 const CalDueReport = () => {
 
+    const [totalPrintOpen, setTotalPrintOpen] = useState(false);
 
     const [calDueList, setCalDueList] = useState([])
     const [filteredItemListData, setFilteredItemListData] = useState([])
@@ -82,7 +86,7 @@ const CalDueReport = () => {
     console.log(dateData)
 
 
-    const columns = [
+    const columns = [ 
 
         { field: 'id', headerName: 'Si. No', width: 60, renderCell: (params) => params.api.getAllRowIds().indexOf(params.id) + 1, headerAlign: "center", align: "center" },
         { field: 'itemIMTENo', headerName: 'IMTE No', width: 120, headerAlign: "center", align: "left" },
@@ -133,6 +137,65 @@ const CalDueReport = () => {
 
 
     };
+
+    const [formatNoData, setFormatNoData] = useState([])
+    const formatFetchData = async () => {
+        try {
+            const response = await axios.get(
+                `${process.env.REACT_APP_PORT}/formatNo/getFormatNoById/1`
+            );
+            const format = response.data.result
+            console.log(format)
+            setFormatNoData(format)
+        } catch (err) {
+            console.log(err);
+        }
+    };
+    useEffect(() => {
+        formatFetchData();
+    }, []);
+
+    const [companyList, setCompanyList] = useState([])
+
+    const companyFetch = async () => {
+        try {
+            const response = await axios.get(
+                `${process.env.REACT_APP_PORT}/compDetails/getAllCompDetails`
+            );
+            setCompanyList(response.data.result);
+            //setFilterCompany(response.data.result);
+
+            console.log(response.data.result);
+        } catch (err) {
+            console.error(err);
+        }
+    };
+
+    useEffect(() => {
+        companyFetch();
+    }, []);
+
+    const [plantList, setPlantList] = useState([])
+
+    const Fetch = async () => {
+        try {
+            const response = await axios.get(
+                `${process.env.REACT_APP_PORT}/compDetails/getAllPlantDetails`
+            );
+            setPlantList(response.data.result);
+            //setFilterCompany(response.data.result);
+
+            console.log(response.data.result);
+        } catch (err) {
+            console.error(err);
+        }
+    };
+
+    useEffect(() => {
+        Fetch();
+    }, []);
+
+
 
 
 
@@ -669,15 +732,19 @@ const CalDueReport = () => {
 
                         </div>
                         <div className='row'>
+                            <div className='col'>
+                                <Button variant="contained" size='small' color="success" onClick={() => { setTotalPrintOpen(true) }}>Print</Button>
+
+                            </div>
                             <div className='col d-flex justify-content-end'>
                                 <div className='me-2'>
                                     <Button component={Link} to={`/home`} variant="contained" size='small' color="warning">
                                         <ArrowBackIcon /> Dash board
                                     </Button>
                                 </div>
-                                <div >
+                                {/* <div >
                                     <Button component={Link} to="/" size='small' variant='contained' startIcon={<ArrowBack />} endIcon={<House />} color='secondary'>Home</Button>
-                                </div>
+                                </div> */}
                             </div>
 
 
@@ -686,10 +753,19 @@ const CalDueReport = () => {
 
 
                 </LocalizationProvider>
+                <CalDueReportContent.Provider
+                    value={{ totalPrintOpen, setTotalPrintOpen,filteredItemListData, calDueList, partDataList, formatNoData, companyList, plantList }}
+                >
+
+                    <CalDuePrint />
+                </CalDueReportContent.Provider>
+                {itemListSelectedRowIds.length > 0 &&
+                <MailSender {...TotalListChildData} />}
+
+
                 {/* <MailSender /> */}
             </form>
-            {itemListSelectedRowIds.length > 0 &&
-                <MailSender {...TotalListChildData} />}
+            
         </div>
     )
 }
