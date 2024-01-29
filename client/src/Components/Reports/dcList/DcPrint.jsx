@@ -96,10 +96,11 @@ const DcPrint = () => {
           <div style={{ padding: "10px", textAlign: "center", textDecoration: "underline" }}>Delivery Challan</div>
           <div style={{ border: '0.5px solid black' }}>
             <div style={{ textAlign: 'center', borderBottom: '0.5px solid black', display: 'flex', flexDirection: 'column' }}>
-              <td style={{ padding: "10px", textAlign: "center" }}>{companyList[0]?.companyName}</td>
+              <td style={{ padding: "5px", textAlign: "center" }}>{companyList[0]?.companyName}</td>
               {/* <td>{selectedRows.dcPartyAddress}</td> */}
               {/* <td>Phone and Address</td> */}
-              <td style={{ padding: "10px", textAlign: "center" }}>{plantList[0]?.plantAddress}</td>
+              <td style={{padding: "2px", textAlign: "center" }}>{plantList[0]?.plantName}</td>
+                    <td style={{padding: "2px", textAlign: "center" }}>{plantList[0]?.plantAddress}</td>
             </div>
             <div style={{ display: 'flex', flexDirection: 'row', borderBottom: '0.5px solid black' }}>
               <div style={{ width: '60%', display: 'flex', flexDirection: 'column', paddingLeft: '10px', borderRight: '0.5px solid black' }}>

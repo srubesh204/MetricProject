@@ -259,6 +259,27 @@ const GrnList = () => {
 
     };
 
+    const [plantList, setPlantList] = useState([])
+
+    const Fetch = async () => {
+        try {
+            const response = await axios.get(
+                `${process.env.REACT_APP_PORT}/compDetails/getAllPlantDetails`
+            );
+            setPlantList(response.data.result);
+            //setFilterCompany(response.data.result);
+
+            console.log(response.data.result);
+        } catch (err) {
+            console.error(err);
+        }
+    };
+
+    useEffect(() => {
+        Fetch();
+    }, []);
+
+
 
     const [vendorFullList, setVendorFullList] = useState([])
     const [vendorTypeList, setVendorTypeList] = useState([])
@@ -712,7 +733,7 @@ const GrnList = () => {
                                     <GrnAdd />
                                 </GrnListContent.Provider>
                                 <GrnListContent.Provider
-                                    value={{ grnPrintOpen, setGrnPrintOpen, selectedRows, formatNoData, printState, setPrintState }}
+                                    value={{ grnPrintOpen, setGrnPrintOpen, selectedRows, formatNoData, printState, setPrintState,companyList,plantList }}
                                 >
                                     {selectedRows.length !== 0 &&
                                         <GrnPrint />}

@@ -9,7 +9,7 @@ import { useReactToPrint } from 'react-to-print';
 const GrnPrint = () => {
 
     const GrnPrintData = useContext(GrnListContent)
-    const { grnPrintOpen, setGrnPrintOpen, selectedRows, formatNoData, printState, setPrintState } = GrnPrintData
+    const { grnPrintOpen, setGrnPrintOpen, selectedRows, formatNoData, printState, setPrintState,companyList ,plantList} = GrnPrintData
 
     const renderTableRows = () => {
         return selectedRows.grnPartyItems.map((row, index) => (
@@ -94,14 +94,16 @@ const GrnPrint = () => {
     return (
             <div style={{ display: 'none', width: "100%" }}>
                 <div ref={componentRef}>
-                    <div style={{ padding: "10px", textAlign: "center", textDecoration: "underline" }}>GRN List</div>
+                    <div style={{ padding: "10px", textAlign: "center", textDecoration: "underline" }}>GRN</div>
                     <div style={{ border: "0.5px solid black", width: "100%", height: "95%" }}>
-                        <h3 style={{ textAlign: "center", padding: "5px 0px 5px 0px", fontSize: "14px" }}>{selectedRows.grnPartyName}</h3>
-                        <div style={{ textAlign: "center", padding: "0px 0px 5px 0px", fontSize: "10px" }}>{selectedRows.grnPartyAddress}</div>
+                        <h1 style={{ textAlign: "center", padding: "5px 0px 0px 0px", fontSize: "14px" }}>{companyList[0]?.companyName}</h1>
+                        <div style={{ textAlign: "center", padding: "0px 0px 5px 0px", fontSize: "10px" }}>{plantList[0]?.plantName}</div>
+                        <div style={{ textAlign: "center", padding: "0px 0px 5px 0px", fontSize: "10px" }}>{plantList[0]?.plantAddress}</div>
                         <div style={{ textAlign: "center", padding: "0px 0px 5px 0px", fontSize: "10px", borderBottom: "0.5px solid black" }}>Phone and Address</div>
                         <div style={{ display: "flex", flexDirection: "row", padding: 0, borderBottom: "0.5px solid black" }}>
                             <div style={{ width: "60%", padding: "5px 0px 5px 5px", borderRight: "0.5px solid black", margin: 0 }}>
                                 <div>To:</div>
+                                <div>&nbsp;&nbsp;{selectedRows.grnPartyName}</div>
                                 <div>&nbsp;&nbsp;&nbsp;{selectedRows.grnPartyAddress}</div>
                             </div>
                             <div style={{ width: "40%" }}>

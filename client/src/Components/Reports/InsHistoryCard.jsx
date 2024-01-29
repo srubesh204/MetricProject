@@ -55,6 +55,47 @@ function InsHistoryCard() {
         formatFetchData();
     }, []);
 
+    const [companyList, setCompanyList] = useState([])
+
+    const companyFetch = async () => {
+        try {
+            const response = await axios.get(
+                `${process.env.REACT_APP_PORT}/compDetails/getAllCompDetails`
+            );
+            setCompanyList(response.data.result);
+            //setFilterCompany(response.data.result);
+
+            console.log(response.data.result);
+        } catch (err) {
+            console.error(err);
+        }
+    };
+
+    useEffect(() => {
+        companyFetch();
+    }, []);
+
+    const [plantList, setPlantList] = useState([])
+
+    const Fetch = async () => {
+        try {
+            const response = await axios.get(
+                `${process.env.REACT_APP_PORT}/compDetails/getAllPlantDetails`
+            );
+            setPlantList(response.data.result);
+            //setFilterCompany(response.data.result);
+
+            console.log(response.data.result);
+        } catch (err) {
+            console.error(err);
+        }
+    };
+
+    useEffect(() => {
+        Fetch();
+    }, []);
+
+
     const [masters, setMasters] = useState([])
     const masterFetch = async () => {
         try {
@@ -96,6 +137,7 @@ function InsHistoryCard() {
     useEffect(() => {
         itemFetch()
     }, [])
+    
 
     console.log(itemList)
     const [itemFilters, setItemFilters] = useState({
@@ -544,6 +586,8 @@ function InsHistoryCard() {
                     selectedInstrumentName: calDetails.calInsName,
                     selectedIMTENo: calDetails.calInsIMTENo,
                     distItemName,
+                    companyList,
+                    plantList,
                     formatNoData,
                     selectedIMTEs: filteredSelectedIMTEs,
                     printState, setPrintState,
