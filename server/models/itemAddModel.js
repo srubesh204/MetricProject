@@ -26,6 +26,7 @@ const itemAddSchema = new mongoose.Schema({
   itemMake: String,
   itemModelNo: String,
   itemStatus: String,
+  itemLastStatus: String,
   itemReceiptDate: String,
   itemDepartment: String,
   itemCurrentLocation: String,

@@ -181,15 +181,12 @@ const CalList = () => {
                 `${process.env.REACT_APP_PORT}/employee/getAllActiveEmployees`
             );
 
-            const selectedEmps = response.data.result.filter((emp) => emp.plant.find(plant => {
-                console.log(plant)
-                return (employeeRole.loggedEmp.plant.includes(plant))
-            }));
+            const plantemps = response.data.result.filter(emp => emp.plantDetails.find(empPlant => loggedEmp.plantDetails.map(plant => plant.plantName).includes(empPlant.plantName)))
 
-            const filter = selectedEmps.filter(emp => emp.empRole === "plantAdmin")
+           
 
 
-            setActiveEmps(filter)
+            setActiveEmps(plantemps)
         } catch (err) {
             console.log(err);
         }
@@ -570,7 +567,7 @@ const CalList = () => {
                                     getRowId={(row) => row._id}
                                     initialState={{
                                         pagination: {
-                                            paginationModel: { page: 0, pageSize: 5 },
+                                            paginationModel: { page: 0, pageSize: 12 },
                                         },
                                     }}
                                     sx={{
@@ -607,7 +604,7 @@ const CalList = () => {
                                     checkboxSelection
                                     //onRowClick={handleRowClick}
                                     disableRowSelectionOnClick
-                                    pageSizeOptions={[5]}
+                                    pageSizeOptions={[12]}
                                 />
 
                             </Box>

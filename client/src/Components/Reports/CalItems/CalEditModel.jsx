@@ -557,10 +557,11 @@ const CalEditModel = () => {
         }
     };
 
-    const [selectedEmp, setSelectedEmp] = useState([])
+    const [filterAdmins, setFilterAdmins] = useState([])
     const getEmployeeByName = (empId) => {
-        const selectedEmp = activeEmps.filter((emp) => emp._id === empId);
-        setSelectedEmp(selectedEmp)
+        const selectedEmp = activeEmps.filter((emp) => emp.empRole === "plantAdmin" || emp.empRole === "admin");
+        
+        setFilterAdmins(selectedEmp)
     }
     useEffect(() => {
         getEmployeeByName(calibrationData.calCalibratedBy)
@@ -902,8 +903,8 @@ const CalEditModel = () => {
                                     variant="outlined"
                                     onChange={handleCalData}
                                 >
-                                    {activeEmps.map((emp, index) => (
-                                        <MenuItem key={index} value={emp._id}>{emp.firstName + " " + emp.lastName}</MenuItem>
+                                    {filterAdmins.map((emp, index) => (
+                                        <MenuItem key={index} value={emp._id}>{emp.firstName ? emp.firstName : "" + " " + emp.lastName ? emp.lastName : ""}</MenuItem>
                                     ))}
                                 </TextField>
                             </div>

@@ -721,7 +721,7 @@ const Home = () => {
       case "Spare":
         setFilteredData(spareItems);
         break;
-      case "BreakDown":
+      case "Breakdown":
         setFilteredData(breakDownItems);
         break;
       case "Missing":
@@ -1751,7 +1751,7 @@ const Home = () => {
               <React.Fragment>
 
                 <HomeContent.Provider
-                  value={{ calOpen, setCalOpen, selectedRows, itemMasters, activeEmps: activeEmps.allEmps, masters }}
+                  value={{ calOpen, setCalOpen, selectedRows, itemMasters, activeEmps: activeEmps.allEmps, masters, itemList }}
                 >
                   <CalDialog />
                 </HomeContent.Provider>
