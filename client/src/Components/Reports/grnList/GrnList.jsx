@@ -174,6 +174,26 @@ const GrnList = () => {
     useEffect(() => {
         dcListFetchData();
     }, []);
+
+    const [companyList, setCompanyList] = useState([])
+
+    const companyFetch = async () => {
+        try {
+            const response = await axios.get(
+                `${process.env.REACT_APP_PORT}/compDetails/getAllCompDetails`
+            );
+            setCompanyList(response.data.result);
+            //setFilterCompany(response.data.result);
+
+            console.log(response.data.result);
+        } catch (err) {
+            console.error(err);
+        }
+    };
+
+    useEffect(() => {
+        companyFetch();
+    }, []);
     
     //
 

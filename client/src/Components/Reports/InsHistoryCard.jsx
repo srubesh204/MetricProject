@@ -522,9 +522,9 @@ function InsHistoryCard() {
                                             <ArrowBackIcon /> Dash board
                                         </Button>
                                     </div>
-                                    <div >
+                                    {/* <div >
                                         <Button component={Link} to="/" size='small' variant='contained' startIcon={<ArrowBack />} endIcon={<House />} color='secondary'>Home</Button>
-                                    </div>
+                                    </div> */}
                                 </div>
 
 
