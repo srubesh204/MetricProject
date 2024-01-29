@@ -10,7 +10,7 @@ const HistoryCardPrint = () => {
     const { selectedInstrumentName, selectedIMTENo, selectedRow } = useContext(HistoryCardContent)
 
     const historyCardPrintData = useContext(HistoryCardContent)
-    const { historyCardPrintOpen, setHistoryCardPrintOpen, selectedRows, formatNoData, selectedIMTEs, printState, setPrintState } = historyCardPrintData
+    const { historyCardPrintOpen, setHistoryCardPrintOpen, selectedRows, formatNoData, selectedIMTEs, printState, setPrintState, companyList, plantList, } = historyCardPrintData
 
     const selectedRowsArray = Array.isArray(selectedRows) ? selectedRows : [selectedRows];
 
@@ -115,9 +115,13 @@ const HistoryCardPrint = () => {
 
         <div style={{ display: 'none', width: "100%", height: "100%" }}>
             <div style={{ width: "100%", height: "100%" }} ref={componentRef} >
-
-
                 <div style={{ padding: "10px", textAlign: "center", textDecoration: "underline" }}>INSTRUMENTS/GAUGE HISTORY CARD</div>
+                <div style={{ textAlign: 'left', borderBottom: '0.5px solid black', display: 'flex', flexDirection: 'column' }}>
+                    <td style={{ padding: "2px", textAlign: "left" }}>{companyList[0]?.companyName}</td>
+                    {/* <td>{selectedRows.dcPartyAddress}</td> */}
+                    <td style={{ padding: "2px", textAlign: "left" }}>{plantList[0]?.plantName}</td>
+                    <td style={{ padding: "2px", textAlign: "left" }}>{plantList[0]?.plantAddress}</td>
+                </div>
                 <div style={{ border: "1px solid black" }}>
                     <table style={{ width: "100%", borderCollapse: "collapse" }}>
                         <tbody>

@@ -17,6 +17,28 @@ const Version = () => {
     }
   };
 
+  const [versionData,setVersionData] = useState({
+    versionNo:"",
+    versionRelDate:"",
+    lastVersion:"",
+    versionChange: "",
+    additionFeatures: "",
+
+  })
+  const handleInputChange = (e, sub) => {
+    const { name, value } = e.target
+    setVersionDatas((prev) => (
+        {
+            ...prev, [sub]: {
+                ...prev[sub], [name]: value
+            }
+        }
+    ))
+};
+
+
+
+
   useEffect(() => {
     versionFetch();
   }, []);
@@ -50,31 +72,31 @@ const Version = () => {
                                 <tr>
                                     <th>Version</th>
                                     <tr>
-                                        <td><input type="text" className='form-control form-control-sm' id="definedTemparatureId" name="definedTemparature" value={versionDatas?.[0]?.versionNo} /></td>
+                                        <td><input type="text" className='form-control form-control-sm' id="versionNoId" name="versionNo" onChange={handleInputChange} value={versionDatas?.[0]?. versionNo} /></td>
                                     </tr>
                                 </tr>
                                 <tr>
                                     <th>Released Date</th>
                                     <tr>
-                                        <td><input type="text" className='form-control form-control-sm' id="definedTemparatureId" name="definedTemparature" value={versionDatas?.[0]?.versionRelDate} /></td>
+                                        <td><input type="text" className='form-control form-control-sm' id="versionRelDateId" name="versionRelDate" onChange={handleInputChange} value={versionDatas?.[0]?.versionRelDate} /></td>
                                     </tr>
                                 </tr>
                                 <tr>
                                     <th>Current Released Version</th>
                                     <tr>
-                                        <td><input type="text" className='form-control form-control-sm' id="definedTemparatureId" name="definedTemparature" value={versionDatas?.[0]?.versionChange} /></td>
+                                        <td><input type="text" className='form-control form-control-sm' id="lastVersionId" name="lastVersion" onChange={handleInputChange} value={versionDatas?.[0]?.lastVersion} /></td>
                                     </tr>
                                 </tr>
                                 <tr>
                                     <th>Change</th>
                                     <tr>
-                                        <td><input type="text" className='form-control form-control-sm' id="definedTemparatureId" name="definedTemparature" value={versionDatas?.[0]?.lastVersion} /></td>
+                                        <td><input type="text" className='form-control form-control-sm' id="versionChangeId" name="versionChange" onChange={handleInputChange} value={versionDatas?.[0]?.versionChange} /></td>
                                     </tr>
                                 </tr>
                                 <tr>
                                     <th>Added Features</th>
                                     <tr>
-                                        <td><input type="text" className='form-control form-control-sm' id="definedTemparatureId" name="definedTemparature" value={versionDatas?.[0]?.additionFeatures} /></td>
+                                        <td><input type="text" className='form-control form-control-sm' id="additionFeaturesId" name="additionFeatures" onChange={handleInputChange} value={versionDatas?.[0]?.additionFeatures} /></td>
                                     </tr>
                                 </tr>
 
