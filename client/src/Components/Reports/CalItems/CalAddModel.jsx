@@ -18,7 +18,7 @@ const CalAddModel = () => {
 
     const calData = useContext(CalData)
     const [lastResultData, setLastResultData] = useState([])
-    const { calAddOpen, setCalAddOpen, itemMasters, activeEmps, calListFetchData, itemAddList, setItemAddList,calDataDcList ,lastNo } = calData
+    const { calAddOpen, setCalAddOpen, itemMasters, activeEmps, calListFetchData, itemAddList, setItemAddList,calDataDcList ,lastNo, masters } = calData
 
     const employeeRole = useEmployee()
     const [calibrationDatas, setCalibrationDatas] = useState([])
@@ -581,6 +581,8 @@ const CalAddModel = () => {
         if (name === "calIMTENo") {
 
             const selectedItem = itemIMTEs.filter((item) => item.itemIMTENo === value)
+
+            const filter = masters.filter(mas => mas.itemDescription === selectedItem[0].itemAddMasterName)
             setCalibrationData((prev) => (
                 {
                     ...prev,
@@ -593,10 +595,10 @@ const CalAddModel = () => {
                     calLC: selectedItem[0].itemLC,
                     calItemMake: selectedItem[0].itemMake,
                     calItemFreInMonths: selectedItem[0].itemCalFreInMonths,
-                    calItemUncertainity: selectedItem[0].selectedItemMaster[0].uncertainty,
-                    calItemSOPNo: selectedItem[0].selectedItemMaster[0].SOPNo,
-                    calStandardRef: selectedItem[0].selectedItemMaster[0].standardRef,
-                    calOBType: selectedItem[0].itemOBType,
+                    calItemUncertainity: filter.length > 0 && filter[0] ? filter[0].uncertainty : "",
+                    calItemSOPNo: filter.length > 0 && filter[0].SOPNo ? filter[0].SOPNo : "",
+                    calStandardRef: filter.length > 0 && filter[0].standardRef ? filter[0].standardRef : "",
+                    calOBType: selectedItem[0].itemOBType || "",
 
                     // calCalibratedBy: selectedItem[0],
                     // calApprovedBy: selectedItem[0],

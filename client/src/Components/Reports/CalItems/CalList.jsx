@@ -8,7 +8,7 @@ import { DataGrid, GridToolbar } from '@mui/x-data-grid';
 import dayjs from 'dayjs';
 import { Container, Paper } from '@mui/material';
 import { Add, Remove, HighlightOffRounded } from '@mui/icons-material';
-import {ArrowBack,Error, HomeMax, House, Mail, MailLock,  } from '@mui/icons-material';
+import { ArrowBack, Error, HomeMax, House, Mail, MailLock, } from '@mui/icons-material';
 import { Link } from "react-router-dom";
 
 
@@ -48,6 +48,24 @@ const CalList = () => {
 
         setSnackBarOpen(false);
     }
+
+    const [masters, setMasters] = useState([]);
+    const MasterFetch = async () => {
+        try {
+            const response = await axios.get(
+                `${process.env.REACT_APP_PORT}/itemMaster/getAllItemMasters`
+            );
+
+
+            setMasters(response.data.result)
+
+        } catch (err) {
+            console.log(err);
+        }
+    };
+    useEffect(() => {
+        MasterFetch();
+    }, []);
 
     const itemMasterFetchData = async () => {
         try {
@@ -244,7 +262,7 @@ const CalList = () => {
             );
             const plantCal = response.data.result.filter(cal => (loggedEmp.plantDetails.map(plant => plant.plantName).includes(cal.calPlant)))
             const calNos = response.data.result.map(cal => cal.calId).filter(Boolean).sort()
-            setLastNo((dayjs().year() + "-" + ((calNos[calNos.length - 1]) + 1))) 
+            setLastNo((dayjs().year() + "-" + ((calNos[calNos.length - 1]) + 1)))
             console.log(calNos[calNos.length - 1])
             setCalDataDcList(plantCal);
             setFilteredCalData(plantCal);
@@ -257,7 +275,7 @@ const CalList = () => {
     useEffect(() => {
         dcListFetchData();
     }, []);
-    
+
 
 
 
@@ -288,9 +306,8 @@ const CalList = () => {
         { field: 'calItemName', headerName: 'Item Description', width: 200, headerAlign: "center", align: "center", },
         { field: 'calRangeSize', headerName: 'Range/Size', width: 200, headerAlign: "center", align: "center", },
         { field: 'calItemCalDate', headerName: 'Calibration On', width: 200, valueGetter: (params) => dayjs(params.row.calItemCalDate).format('DD-MM-YYYY'), headerAlign: "center", align: "center", },
-        { field: 'itemDueDate', headerName: 'Next Due On', width: 200, valueGetter: (params) => dayjs(params.row.itemDueDate).format('DD-MM-YYYY'), headerAlign: "center", align: "center", },
+        { field: 'calItemDueDate', headerName: 'Next Due On', width: 200, valueGetter: (params) => dayjs(params.row.calItemDueDate).format('DD-MM-YYYY'), headerAlign: "center", align: "center", },
         { field: 'calStatus', headerName: 'Cal status', width: 200, headerAlign: "center", align: "center", },
-
         { field: 'printButton', headerName: 'Print', headerAlign: "center", align: "center", width: 100, renderCell: (params) => <Button onClick={() => { setSelectedRows(params.row); setPrintState(true) }}><PrintRounded color='success' /></Button> }
 
 
@@ -322,19 +339,14 @@ const CalList = () => {
         const { name, value } = e.target;
         if (value === "all") {
             setFilterMaster(itemAddList)
-
         } else {
             if (name === "itemName") {
                 const selectedItem = itemAddList.filter((item) => item.calItemName === value)
-
-
             }
-
             if (name === "itemIMTENo") {
                 const selectedItem = itemAddList.filter((item) => item.calIMTENo === value)
                 setFilteredCalData(selectedItem)
             }
-
             setDateData((prev) => ({ ...prev, [name]: value }))
         }
     }
@@ -612,7 +624,7 @@ const CalList = () => {
                                 <div className='me-2 '>
                                     <button type="button" className='btn btn-secondary' >Lable With BarCode Print</button>
                                 </div>
-                                
+
 
                             </div>
                             {employeeRole && employeeRole.employee !== "viewer" &&
@@ -622,11 +634,11 @@ const CalList = () => {
                                         <button type="button" className='btn btn-success' onClick={() => setCalAddOpen(true)}>Add</button>
                                     </div>
                                     <div className='me-2'>
-                                    <Button component={Link} to={`/home`}  variant="contained" size='small' color="warning">
-                                        <ArrowBackIcon /> Dash board
-                                    </Button>
-                                </div>
-                                {/* <div >
+                                        <Button component={Link} to={`/home`} variant="contained" size='small' color="warning">
+                                            <ArrowBackIcon /> Dash board
+                                        </Button>
+                                    </div>
+                                    {/* <div >
                                     <Button component={Link} to="/" size='small' variant='contained' startIcon={<ArrowBack />} endIcon={<House />} color='secondary'>Home</Button>
                                 </div> */}
 
@@ -668,7 +680,7 @@ const CalList = () => {
 
                     {employeeRole && employeeRole.employee !== "viewer" &&
                         <CalData.Provider
-                            value={{ employeeRole, calAddOpen, setCalAddOpen, itemMasters, activeEmps, itemAddList, setItemAddList,calDataDcList ,lastNo}}
+                            value={{ employeeRole, calAddOpen, setCalAddOpen, itemMasters, activeEmps, itemAddList, setItemAddList, calDataDcList, lastNo , masters}}
                         >
                             <CalAddModel />
                         </CalData.Provider>}
