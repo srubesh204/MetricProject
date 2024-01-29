@@ -85,7 +85,7 @@ const itemGRNSchema = new mongoose.Schema({
     },
   ],
   grnItemUncertainity: String,
-  grnItemCalDate: dayjs().format("YYYY-MM-DD"),
+  grnItemCalDate: String,
   grnItemDueDate: String,
   grnItemCertificateStatus: String,
   grnItemCertificateNo: String,
