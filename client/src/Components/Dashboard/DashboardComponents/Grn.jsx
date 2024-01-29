@@ -36,9 +36,6 @@ const Grn = () => {
     });
 
 
-    useEffect(() => {
-
-    }, [])
 
 
 
@@ -50,11 +47,61 @@ const Grn = () => {
         grnPartyName: "",
         grnPartyCode: "",
         grnPartyAddress: "",
-
+        grnNo: "",
         grnDate: dayjs().format("YYYY-MM-DD"),
+        grnDepartment: [],
+        grnPlant: "",
         grncCommonRemarks: "",
-        grnPartyItems: []
 
+        grnItemId: "",
+      
+        grnItemAddMasterName: "",
+        grnItemType: "",
+        grnItemIMTENo: "",
+        grnItemRangeSize: "",
+        grnItemRangeSizeUnit: "",
+        grnItemMFRNo: "",
+        grnItemLC: "",
+        grnItemLCUnit: "",
+        grnItemMake: "",
+        grnItemModelNo: "",
+        grnItemReceiptDate: "",
+        grnItemDepartment: "",
+        grnItemArea: "",
+        grnItemPlaceOfUsage: "",
+        grnItemCalFreInMonths: "",
+        grnItemCalAlertDays: "",
+        grnItemCalibrationSource: "",
+        grnItemCalibrationDoneAt: "",
+        grnItemCalibratedAt: "",
+        grnItemOBType: "",
+        grnItemStatus: "",
+        grnAcCriteria: [
+            {
+                grnParameter: "",
+                grnNominalSize: "",
+                grnNominalSizeUnit: "",
+                grnMinPS: "",
+                grnMaxPS: "",
+                grnWearLimitPS: "",
+                grnBeforegrnibration: "",
+                grnMinOB: "",
+                grnMaxOB: "",
+                grnAverageOB: "",
+                grnOBError: "",
+                grnMinPSError: "",
+                grnMaxPSError: "",
+                rowStatus: ""
+            },
+        ],
+        grnItemUncertainity: "",
+        grnItemCalDate: dayjs().format("YYYY-MM-DD"),
+        grnItemDueDate: "",
+        grnItemCertificateStatus: "",
+        grnItemCertificateNo: "",
+        grnItemCertificate: "",
+        grnUncertainity: "",
+        grnItemCalStatus: "",
     }
 
 
@@ -68,7 +115,56 @@ const Grn = () => {
         grnNo: "",
         grnDate: dayjs().format("YYYY-MM-DD"),
         grnCommonRemarks: "",
-        grnPartyItems: []
+
+        grnItemId: "",
+       
+        grnItemAddMasterName: "",
+        grnItemType: "",
+        grnItemIMTENo: "",
+        grnItemRangeSize: "",
+        grnItemRangeSizeUnit: "",
+        grnItemMFRNo: "",
+        grnItemLC: "",
+        grnItemLCUnit: "",
+        grnItemMake: "",
+        grnItemModelNo: "",
+        grnItemReceiptDate: "",
+        grnItemDepartment: "",
+        grnItemArea: "",
+        grnItemPlaceOfUsage: "",
+        grnItemCalFreInMonths: "",
+        grnItemCalAlertDays: "",
+        grnItemCalibrationSource: "",
+        grnItemCalibrationDoneAt: "",
+        grnItemCalibratedAt: "",
+        grnItemOBType: "",
+        grnItemStatus: "",
+        grnAcCriteria: [
+            {
+                grnParameter: "",
+                grnNominalSize: "",
+                grnNominalSizeUnit: "",
+                grnMinPS: "",
+                grnMaxPS: "",
+                grnWearLimitPS: "",
+                grnBeforegrnibration: "",
+                grnMinOB: "",
+                grnMaxOB: "",
+                grnAverageOB: "",
+                grnOBError: "",
+                grnMinPSError: "",
+                grnMaxPSError: "",
+                rowStatus: ""
+            },
+        ],
+        grnItemUncertainity: "",
+        grnItemCalDate: dayjs().format("YYYY-MM-DD"),
+        grnItemDueDate: "",
+        grnItemCertificateStatus: "",
+        grnItemCertificateNo: "",
+        grnItemCertificate: "",
+        grnUncertainity: "",
+        grnItemCalStatus: "",
 
     })
     console.log(grnData)
@@ -109,13 +205,10 @@ const Grn = () => {
 
 
 
-    const [itemAddDetails, setItemAddDetails] = useState({
-        grnList: "",
-        grnImteNo: ""
-    })
+   
 
 
-    const navigate = useNavigate();
+  
 
     const [vendorDataList, setVendorDataList] = useState([])
 
@@ -252,129 +345,17 @@ const Grn = () => {
         getImteList();
     }, []);
 
-    const [allItemImtes, setAllItemImtes] = useState([])
-    const [itemImtes, setItemImtes] = useState([])
-
-    const initialGrnItem = {
-        grnItemId: "",
-        grnItemMasterRef: "",
-        grnItemAddMasterName: "",
-        grnItemType: "",
-        grnItemIMTENo: "",
-        grnItemRangeSize: "",
-        grnItemRangeSizeUnit: "",
-        grnItemMFRNo: "",
-        grnItemLC: "",
-        grnItemLCUnit: "",
-        grnItemMake: "",
-        grnItemModelNo: "",
-
-        grnItemReceiptDate: "",
-        grnItemDepartment: "",
-        grnItemArea: "",
-        grnItemPlaceOfUsage: "",
-        grnItemCalFreInMonths: "",
-        grnItemCalAlertDays: "",
-        grnItemCalibrationSource: "",
-        grnItemCalibrationDoneAt: "",
-        grnItemCalibratedAt: "",
-        grnItemOBType: "",
-        grnItemStatus: "",
-        grnAcCriteria: [
-            {
-                grnParameter: "",
-                grnNominalSize: "",
-                grnNominalSizeUnit: "",
-                grnMinPS: "",
-                grnMaxPS: "",
-                grnWearLimitPS: "",
-                grnBeforegrnibration: "",
-                grnMinOB: "",
-                grnMaxOB: "",
-                grnAverageOB: "",
-                grnOBError: "",
-                grnMinPSError: "",
-                grnMaxPSError: "",
-                rowStatus: ""
-            },
-        ],
-        grnItemUncertainity: "",
-        grnItemCalDate: dayjs().format("YYYY-MM-DD"),
-        grnItemDueDate: "",
-        grnItemCertificateStatus: "",
-        grnItemCertificateNo: "",
-        grnItemCertificate: "",
-        grnUncertainity: "",
-        grnItemCalStatus: "",
-    }
-
-
-    const [selectedGrnItem, setSelectedGrnItem] = useState({
-        grnItemId: "",
-        grnItemMasterRef: "",
-        grnItemAddMasterName: "",
-        grnItemType: "",
-        grnItemIMTENo: "",
-        grnItemRangeSize: "",
-        grnItemRangeSizeUnit: "",
-        grnItemMFRNo: "",
-        grnItemLC: "",
-        grnItemLCUnit: "",
-        grnItemMake: "",
-        grnItemModelNo: "",
-
-        grnItemReceiptDate: "",
-        grnItemDepartment: "",
-        grnItemArea: "",
-        grnItemPlaceOfUsage: "",
-        grnItemCalFreInMonths: "",
-        grnItemCalAlertDays: "",
-        grnItemCalibrationSource: "",
-        grnItemCalibrationDoneAt: "",
-        grnItemCalibratedAt: "",
-        grnItemOBType: "",
-        grnItemStatus: "",
-        grnAcCriteria: [
-            {
-                grnParameter: "",
-                grnNominalSize: "",
-                grnNominalSizeUnit: "",
-                grnMinPS: "",
-                grnMaxPS: "",
-                grnWearLimitPS: "",
-                grnBeforegrnibration: "",
-                grnMinOB: "",
-                grnMaxOB: "",
-                grnAverageOB: "",
-                grnOBError: "",
-                grnMinPSError: "",
-                grnMaxPSError: "",
-                rowStatus: ""
-            },
-        ],
-        grnItemUncertainity: "",
-        grnItemCalDate: dayjs().format("YYYY-MM-DD"),
-        grnItemDueDate: "",
-        grnItemCertificateStatus: "",
-        grnItemCertificateNo: "",
-        grnItemCertificate: "",
-        grnUncertainity: "",
-        grnItemCalStatus: "",
-    })
-
-
-
-
     const handleGrnItemChange = (e) => {
         const { name, value } = e.target;
 
 
         if (name === "grnItemStatus") {
-            const fetchedData = selectedRows.filter((item) => item._id === selectedGrnItem.grnItemId)
+            const fetchedData = selectedRows.filter((item) => item._id === grnData.grnItemId)
             console.log(fetchedData)
-            setSelectedGrnItem((prev) => ({ ...prev, [name]: value }))
+            setGrnData((prev) => ({ ...prev, [name]: value }))
             if (value === "Calibrated") {
-                setSelectedGrnItem({
+                setGrnData(prev => ({
+                    ...prev,
                     [name]: value,
                     grnItemId: fetchedData[0]._id,
                     grnItemAddMasterName: fetchedData[0].itemAddMasterName,
@@ -423,9 +404,10 @@ const Grn = () => {
                     grnItemCertificate: "",
                     grnUncertainity: "",
                     grnItemCalStatus: ""
-                })
+                }))
             } else {
-                setSelectedGrnItem({
+                setGrnData(prev => ({
+                    ...prev,
                     [name]: value,
                     grnItemId: fetchedData[0]._id,
                     grnItemAddMasterName: fetchedData[0].itemAddMasterName,
@@ -474,17 +456,17 @@ const Grn = () => {
                     grnItemCertificate: "",
                     grnUncertainity: "",
                     grnItemCalStatus: ""
-                })
+                }))
             }
 
         } else {
-            setSelectedGrnItem((prev) => ({ ...prev, [name]: value }))
+            setGrnData((prev) => ({ ...prev, [name]: value }))
         }
 
 
 
     }
-    console.log(selectedGrnItem)
+   
     console.log(grnData)
 
 
@@ -494,7 +476,7 @@ const Grn = () => {
 
 
 
-        setSelectedGrnItem((prev) => {
+        setGrnData((prev) => {
             const updateAC = [...prev.grnAcCriteria]
             updateAC[index] = {
                 ...updateAC[index], [name]: value,
@@ -506,9 +488,9 @@ const Grn = () => {
 
 
         //setting rowStatus for referenceStandard
-        if (selectedGrnItem.grnItemType === "referenceStandard") {
+        if (grnData.grnItemType === "referenceStandard") {
             if (name === "grnAverageOB") {
-                setSelectedGrnItem(prev => {
+                setGrnData(prev => {
                     const updatedData = prev.grnAcCriteria.map((item, idx) => {
                         if (idx === index) {
                             let status = ""
@@ -541,7 +523,7 @@ const Grn = () => {
             }
 
             if (name === "grnMinOB" || name === "grnMaxOB") {
-                setSelectedGrnItem(prev => {
+                setGrnData(prev => {
                     const updatedData = prev.grnAcCriteria.map((item, idx) => {
                         if (idx === index) {
 
@@ -581,9 +563,9 @@ const Grn = () => {
         //rowStatus for varialble
 
         // attribute rowstatus  
-        if (selectedGrnItem.grnItemType === "attribute") {
+        if (grnData.grnItemType === "attribute") {
             if (name === "grnAverageOB") {
-                setSelectedGrnItem(prev => {
+                setGrnData(prev => {
                     const updatedData = prev.grnAcCriteria.map((item, idx) => {
                         if (idx === index) {
                             let status = ""
@@ -659,7 +641,7 @@ const Grn = () => {
             }
 
             if (name === "grnMinOB" || name === "grnMaxOB") {
-                setSelectedGrnItem(prev => {
+                setGrnData(prev => {
                     const updatedData = prev.grnAcCriteria.map((item, idx) => {
                         if (idx === index) {
                             let status = ""
@@ -744,10 +726,10 @@ const Grn = () => {
             }
         }
 
-        if (selectedGrnItem.grnItemType === "variable") {
+        if (grnData.grnItemType === "variable") {
 
             if (name === "grnAverageOB") {
-                setSelectedGrnItem(prev => {
+                setGrnData(prev => {
                     const updatedData = prev.grnAcCriteria.map((item, idx) => {
                         if (idx === index) {
                             let status = ""
@@ -796,27 +778,27 @@ const Grn = () => {
 
 
     useEffect(() => {
-        if (selectedGrnItem.length !== 0) {
-            const ifRejected = selectedGrnItem.grnAcCriteria.some((item) => item.rowStatus === "notOk")
-            const isEmpty = selectedGrnItem.grnAcCriteria.some((item) => item.rowStatus === "")
+        if (grnData.length !== 0) {
+            const ifRejected = grnData.grnAcCriteria.some((item) => item.rowStatus === "notOk")
+            const isEmpty = grnData.grnAcCriteria.some((item) => item.rowStatus === "")
 
             if (ifRejected) {
-                setSelectedGrnItem((prev) => ({ ...prev, grnItemCalStatus: "rejected" }))
+                setGrnData((prev) => ({ ...prev, grnItemCalStatus: "rejected" }))
             } else if (isEmpty) {
-                setSelectedGrnItem((prev) => ({ ...prev, grnItemCalStatus: "status" }))
+                setGrnData((prev) => ({ ...prev, grnItemCalStatus: "status" }))
             } else {
-                setSelectedGrnItem((prev) => ({ ...prev, grnItemCalStatus: "accepted" }))
+                setGrnData((prev) => ({ ...prev, grnItemCalStatus: "accepted" }))
             }
         }
 
 
-    }, [selectedGrnItem.grnAcCriteria])
+    }, [grnData.grnAcCriteria])
 
 
 
     useEffect(() => {
-        calculateResultDate(selectedGrnItem.grnItemCalDate, selectedGrnItem.grnItemCalFreInMonths);
-    }, [selectedGrnItem.grnItemCalDate, selectedGrnItem.grnItemCalFreInMonths]);
+        calculateResultDate(grnData.grnItemCalDate, grnData.grnItemCalFreInMonths);
+    }, [grnData.grnItemCalDate, grnData.grnItemCalFreInMonths]);
 
 
 
@@ -825,7 +807,7 @@ const Grn = () => {
         if (parsedDate.isValid() && !isNaN(parseInt(itemCalFreInMonths))) {
             const calculatedDate = parsedDate.add(parseInt(itemCalFreInMonths, 10), 'month').subtract(1, 'day');
             console.log(calculatedDate)
-            setSelectedGrnItem((prev) => ({
+            setGrnData((prev) => ({
                 ...prev,
                 grnItemDueDate: calculatedDate.format('YYYY-MM-DD'),
             }));
@@ -834,14 +816,7 @@ const Grn = () => {
 
 
 
-    const grnItemAdd = () => {
-        if (setSelectedGrnItem.length !== 0) {
-            setGrnData((prev) => ({ ...prev, grnPartyItems: [...prev.grnPartyItems, selectedGrnItem] }))
-            nonSelectedItems();
-            setSelectedGrnItem(initialGrnItem);
-        }
-
-    }
+   
 
 
 
@@ -862,7 +837,7 @@ const Grn = () => {
         tempErrors.grnPartyCode = grnData.grnPartyCode ? "" : "GRN Party Code is Required"
         tempErrors.grnPartyAddress = grnData.grnPartyAddress ? "" : "GRN Party Address is Required"
         tempErrors.grnNo = grnData.grnNo ? "" : "GRN Number is Required"
-        tempErrors.grnPartyItems = grnData.grnPartyItems.length !== 0 ? "" : "GRN Item Required"
+        tempErrors.grnPartyItems = grnData.grnItemId ? "" : "GRN Item Required"
 
         setErrors({ ...tempErrors })
 
@@ -877,7 +852,7 @@ const Grn = () => {
 
                     `${process.env.REACT_APP_PORT}/itemGRN/createItemGRN`, grnData
                 );
-                setSelectedGrnItem(initialGrnItem)
+                
                 console.log(response.data.result)
                 setErrorHandler({ status: 0, message: "GRN Created Successfully", code: "success" });
                 setSnackBarOpen(true)
@@ -889,8 +864,9 @@ const Grn = () => {
                 setSnackBarOpen(true)
             }
         } catch (err) {
+            console.log(err)
             setSnackBarOpen(true)
-
+            
             if (err.response && err.response.status === 400) {
                 // Handle validation errors
                 console.log(err);
@@ -906,8 +882,8 @@ const Grn = () => {
                 console.log(errorMessages500)
                 setErrorHandler({ status: 0, message: errorMessages500, code: "error" });
             } else {
-                console.log(err);
-                console.log(err.response.data.error)
+                //console.log(err);
+                //console.log(err.response.data.error)
                 setErrorHandler({ status: 0, message: "An error occurred", code: "error" });
             }
 
@@ -947,7 +923,7 @@ const Grn = () => {
                     .then(response => {
                         setCertMessage("Certificate Uploaded Successfully")
                         console.log("Certificate Uploaded Successfully")
-                        setSelectedGrnItem((prev) => ({ ...prev, grnItemCertificate: selectedFile.name }));
+                        setGrnData((prev) => ({ ...prev, grnItemCertificate: response.data.name }));
                     })
                     .catch(error => {
                         setCertMessage("Error Uploading Certificate")
@@ -1198,7 +1174,7 @@ const Grn = () => {
                                             className='me-2'
                                             // disabled={itemAddDetails.itemListNames === ""}
                                             onChange={handleGrnItemChange}
-                                            value={selectedGrnItem.grnItemId}
+                                            value={grnData.grnItemId}
                                             name="grnItemId" >
                                             {grnImtes.map((item, index) => (
                                                 <MenuItem key={index} value={item._id}>{item.itemIMTENo}</MenuItem>
@@ -1206,7 +1182,7 @@ const Grn = () => {
 
                                         </TextField>
 
-                                        <TextField size='small' fullWidth variant='outlined' disabled={selectedGrnItem.grnItemId === ""} defaultValue="" id="grnItemStatusId" value={selectedGrnItem.grnItemStatus} onChange={handleGrnItemChange} select label="Grn Item Status" name='grnItemStatus' >
+                                        <TextField size='small' fullWidth variant='outlined' disabled={grnData.grnItemId === ""} defaultValue="" id="grnItemStatusId" value={grnData.grnItemStatus} onChange={handleGrnItemChange} select label="Grn Item Status" name='grnItemStatus' >
                                             <MenuItem value="">Select</MenuItem>
                                             <MenuItem value="Calibrated">Calibrated</MenuItem>
                                             <MenuItem value="Serviced">Serviced</MenuItem>
@@ -1221,12 +1197,11 @@ const Grn = () => {
                                     <div className="col-md-6 d-flex justify-content-end">
 
 
-                                        <Button disabled={selectedGrnItem.grnItemStatus === "" || selectedGrnItem.grnItemStatus === undefined} startIcon={<Add />} color='warning' onClick={() => grnItemAdd()} sx={{ minWidth: "130px" }} variant='contained'>Add Item</Button>
 
-                                    </div>
+                                    </div> 
 
                                 </div>
-                                {selectedGrnItem.grnItemStatus === "Calibrated" ?
+                                {grnData.grnItemStatus === "Calibrated" ?
                                     <React.Fragment>
                                         <div className="row g-2 mt-1">
                                             <div className="col-md-2">
@@ -1239,8 +1214,8 @@ const Grn = () => {
 
                                                     slotProps={{ textField: { size: 'small', fullWidth: true } }}
                                                     format="DD-MM-YYYY"
-                                                    value={dayjs(selectedGrnItem.grnItemCalDate)}
-                                                    onChange={(newValue) => setSelectedGrnItem((prev) => ({ ...prev, grnItemCalDate: newValue.format('YYYY-MM-DD') }))}
+                                                    value={dayjs(grnData.grnItemCalDate)}
+                                                    onChange={(newValue) => setGrnData((prev) => ({ ...prev, grnItemCalDate: newValue.format('YYYY-MM-DD') }))}
                                                 />
 
                                             </div>
@@ -1252,10 +1227,10 @@ const Grn = () => {
                                                     name="grnItemDueDate"
                                                     label="Next Cal Date"
                                                     // sx={{ width: "100%" }}
-                                                    value={dayjs(selectedGrnItem.grnItemDueDate)}
+                                                    value={dayjs(grnData.grnItemDueDate)}
                                                     slotProps={{ textField: { size: 'small', fullWidth: true } }}
                                                     format="DD-MM-YYYY"
-                                                    onChange={(newValue) => setSelectedGrnItem((prev) => ({ ...prev, grnItemDueDate: newValue.format('YYYY-MM-DD') }))}
+                                                    onChange={(newValue) => setGrnData((prev) => ({ ...prev, grnItemDueDate: newValue.format('YYYY-MM-DD') }))}
                                                 />
 
 
@@ -1268,7 +1243,7 @@ const Grn = () => {
                                                 </TextField>
                                             </div>
 
-                                            {selectedGrnItem.grnItemCertificateStatus === "received" ? <React.Fragment>
+                                            {grnData.grnItemCertificateStatus === "received" ? <React.Fragment>
                                                 <div className="col-md-2">
 
                                                     <TextField label="Certificate No"
@@ -1289,18 +1264,18 @@ const Grn = () => {
                                                 <div className='col-md-2 d-flex justify-content-center ' >
 
 
-                                                    {(selectedGrnItem.grnItemCertificate !== "" && selectedGrnItem.grnItemCertificate !== undefined) ?
+                                                    {(grnData.grnItemCertificate !== "" && grnData.grnItemCertificate !== undefined) ?
                                                         <Chip
                                                             className='mt-2'
                                                             icon={<Done />}
                                                             size='large'
                                                             color="success"
-                                                            label={selectedGrnItem.grnItemCertificate}
+                                                            label={grnData.grnItemCertificate}
                                                             onClick={() => {
-                                                                const fileUrl = `${process.env.REACT_APP_PORT}/grnCertificates/${selectedGrnItem.grnItemCertificate}`;
+                                                                const fileUrl = `${process.env.REACT_APP_PORT}/grnCertificates/${grnData.grnItemCertificate}`;
                                                                 window.open(fileUrl, '_blank'); // Opens the file in a new tab/window
                                                             }}
-                                                            onDelete={() => setSelectedGrnItem((prev) => ({ ...prev, grnItemCertificate: "" }))}
+                                                            onDelete={() => setGrnData((prev) => ({ ...prev, grnItemCertificate: "" }))}
                                                             deleteIcon={<Delete color='error' />}
                                                         ></Chip> : <Button helperText="Hello" component="label" fullWidth variant="contained" startIcon={<CloudUpload />} >
                                                             Upload Certificate
@@ -1321,7 +1296,7 @@ const Grn = () => {
                                                 <h5>Calibration Data</h5>
                                                 <table className='table table-sm table-bordered table-responsive text-center align-middle'>
 
-                                                    {selectedGrnItem.grnItemType === "attribute" &&
+                                                    {grnData.grnItemType === "attribute" &&
 
                                                         <tbody >
                                                             <tr>
@@ -1332,14 +1307,14 @@ const Grn = () => {
                                                                 <th colSpan={3} width="30%">Permissible Size</th>
 
 
-                                                                <th width="20%" colSpan={selectedGrnItem.grnItemOBType === "average" ? 1 : 2}>Observed Size</th>
+                                                                <th width="20%" colSpan={grnData.grnItemOBType === "average" ? 1 : 2}>Observed Size</th>
                                                                 <th width="10%" rowSpan={2}>Status</th>
                                                             </tr>
                                                             <tr>
                                                                 <th width="6%">Min</th>
                                                                 <th width="6%">Max</th>
                                                                 <th width="10%">Wear Limit</th>
-                                                                {selectedGrnItem.grnItemOBType === "average" ?
+                                                                {grnData.grnItemOBType === "average" ?
                                                                     <React.Fragment>
                                                                         <th>Average</th>
                                                                     </React.Fragment> :
@@ -1349,8 +1324,8 @@ const Grn = () => {
                                                                     </React.Fragment>}
 
                                                             </tr>
-                                                            {/* {selectedGrnItem.grnAcCriteria.map((item)=> ()} */}
-                                                            {selectedGrnItem.grnAcCriteria.map((item, index) => {
+                                                            {/* {grnData.grnAcCriteria.map((item)=> ()} */}
+                                                            {grnData.grnAcCriteria.map((item, index) => {
                                                                 let color = ""
                                                                 if (item.rowStatus === "ok") {
                                                                     color = "#4cbb17"
@@ -1479,11 +1454,11 @@ const Grn = () => {
                                                                         <td>{item.grnMaxPS}</td>
                                                                         <td>{item.grnWearLimitPS}</td>
 
-                                                                        {selectedGrnItem.grnBeforeData === "yes" && <td><input className='form-control form-control-sm' onChange={(e) => changeGrnData(index, e.target.name, e.target.value)} name='grnBeforegrnibration' /></td>}
-                                                                        {selectedGrnItem.grnItemOBType === "average" &&
+                                                                        {grnData.grnBeforeData === "yes" && <td><input className='form-control form-control-sm' onChange={(e) => changeGrnData(index, e.target.name, e.target.value)} name='grnBeforegrnibration' /></td>}
+                                                                        {grnData.grnItemOBType === "average" &&
                                                                             <td><input className='form-control form-control-sm' name='grnAverageOB' style={{ color: averageColor, fontWeight: "bold" }} onChange={(e) => changeGrnData(index, e.target.name, e.target.value)} /></td>
                                                                         }
-                                                                        {selectedGrnItem.grnItemOBType === "minmax" &&
+                                                                        {grnData.grnItemOBType === "minmax" &&
                                                                             <React.Fragment>
                                                                                 <td>
                                                                                     <input className='form-control form-control-sm' style={{ color: minColor, fontWeight: "bold" }} name="grnMinOB" onChange={(e) => changeGrnData(index, e.target.name, e.target.value)} />
@@ -1519,7 +1494,7 @@ const Grn = () => {
                                                         </tbody>}
 
 
-                                                    {selectedGrnItem.grnItemType === "variable" &&
+                                                    {grnData.grnItemType === "variable" &&
 
                                                         <tbody>
                                                             <tr>
@@ -1536,7 +1511,7 @@ const Grn = () => {
                                                                 <th>Min</th>
                                                                 <th>Max</th>
                                                             </tr>
-                                                            {selectedGrnItem.grnAcCriteria.map((item, index) => {
+                                                            {grnData.grnAcCriteria.map((item, index) => {
 
                                                                 let averageColor = "";
                                                                 if (parseFloat(item.grnAverageOB) >= parseFloat(item.grnMinPSError) && parseFloat(item.grnAverageOB) <= parseFloat(item.grnMaxPSError)) {
@@ -1572,7 +1547,7 @@ const Grn = () => {
                                                         </tbody>
                                                     }
 
-                                                    {selectedGrnItem.grnItemType === "referenceStandard" &&
+                                                    {grnData.grnItemType === "referenceStandard" &&
                                                         <tbody>
                                                             <tr>
 
@@ -1580,15 +1555,15 @@ const Grn = () => {
                                                                 <th width="10%" rowSpan={2}>Range/Size</th>
                                                                 <th width="10%" rowSpan={2}>Unit</th>
                                                                 <th colSpan={2}>Permissible Size</th>
-                                                                {selectedGrnItem.grnBeforeData === "yes" && <th width="10%" rowSpan={2}>Before Calibration</th>}
-                                                                <th width="20%" colSpan={selectedGrnItem.grnItemOBType === "average" ? 1 : 2}>Observed Size</th>
+                                                                {grnData.grnBeforeData === "yes" && <th width="10%" rowSpan={2}>Before Calibration</th>}
+                                                                <th width="20%" colSpan={grnData.grnItemOBType === "average" ? 1 : 2}>Observed Size</th>
                                                                 <th width="10%" rowSpan={2}>Status</th>
                                                             </tr>
                                                             <tr>
                                                                 <th width="6%">Min</th>
                                                                 <th width="6%">Max</th>
 
-                                                                {selectedGrnItem.grnItemOBType === "average" ?
+                                                                {grnData.grnItemOBType === "average" ?
                                                                     <React.Fragment>
                                                                         <th>Average</th>
                                                                     </React.Fragment> :
@@ -1598,8 +1573,8 @@ const Grn = () => {
                                                                     </React.Fragment>}
 
                                                             </tr>
-                                                            {/* {selectedGrnItem.grnselectedGrnItem.map((item)=> ()} */}
-                                                            {selectedGrnItem.grnAcCriteria.map((item, index) => {
+                                                            {/* {grnData.grnselectedGrnItem.map((item)=> ()} */}
+                                                            {grnData.grnAcCriteria.map((item, index) => {
                                                                 let averageColor = "";
 
                                                                 if (parseFloat(item.grnAverageOB) >= parseFloat(item.grnMinPS) && parseFloat(item.grnAverageOB) <= parseFloat(item.grnMaxPS)) {
@@ -1638,11 +1613,11 @@ const Grn = () => {
                                                                         <td>{item.grnMinPS}</td>
                                                                         <td>{item.grnMaxPS}</td>
 
-                                                                        {selectedGrnItem.grnBeforeData === "yes" && <td><input className='form-control form-control-sm' onChange={(e) => changeGrnData(index, e.target.name, e.target.value)} name='grnBeforeCalibration' /></td>}
-                                                                        {selectedGrnItem.grnItemOBType === "average" &&
+                                                                        {grnData.grnBeforeData === "yes" && <td><input className='form-control form-control-sm' onChange={(e) => changeGrnData(index, e.target.name, e.target.value)} name='grnBeforeCalibration' /></td>}
+                                                                        {grnData.grnItemOBType === "average" &&
                                                                             <td><input className='form-control form-control-sm' name='grnAverageOB' style={{ color: averageColor, fontWeight: "bold" }} onChange={(e) => changeGrnData(index, e.target.name, e.target.value)} /></td>
                                                                         }
-                                                                        {selectedGrnItem.grnItemOBType === "minmax" &&
+                                                                        {grnData.grnItemOBType === "minmax" &&
                                                                             <React.Fragment>
                                                                                 <td><input className='form-control form-control-sm' style={{ color: minColor, fontWeight: "bold" }} name="grnMinOB" onChange={(e) => changeGrnData(index, e.target.name, e.target.value)} />
                                                                                 </td> <td><input className='form-control form-control-sm' style={{ color: maxColor, fontWeight: "bold" }} name="grnMaxOB" onChange={(e) => changeGrnData(index, e.target.name, e.target.value)} /></td>
@@ -1677,7 +1652,7 @@ const Grn = () => {
 
 
                                                 <div className='col-4 me-2'>
-                                                    <TextField size='small' inputProps={{ sx: { color: selectedGrnItem.grnItemCalStatus === "status" ? "" : selectedGrnItem.grnItemCalStatus === "accepted" ? "green" : "red" } }} fullWidth variant='outlined' id="grnItemCalStatusId" select label="Calibration Status" name='grnItemCalStatus' value={selectedGrnItem.grnItemCalStatus}>
+                                                    <TextField size='small' inputProps={{ sx: { color: grnData.grnItemCalStatus === "status" ? "" : grnData.grnItemCalStatus === "accepted" ? "green" : "red" } }} fullWidth variant='outlined' id="grnItemCalStatusId" select label="Calibration Status" name='grnItemCalStatus' value={grnData.grnItemCalStatus}>
                                                         <MenuItem value="status">Status</MenuItem>
                                                         <MenuItem value="accepted">Accepted</MenuItem>
                                                         <MenuItem value="rejected">Rejected</MenuItem>
@@ -1698,47 +1673,6 @@ const Grn = () => {
                                     </React.Fragment> : ""}
                             </Paper>
 
-                            <Paper sx={{
-                                p: 2,
-                                display: 'flex',
-                                flexDirection: 'column',
-                                mb: 1,
-
-                            }}
-                                elevation={12}>
-                                <h5>GRN Items</h5>
-                                <table className='table table-bordered table-responsive text-center align-middle'>
-                                    <tbody>
-                                        <tr>
-                                            <th>Si No</th>
-                                            <th>IMTE No</th>
-                                            <th>Master Name</th>
-                                            <th>Range/Size</th>
-                                            <th>Cal Certificate No</th>
-                                            <th>Cal Date</th>
-                                            <th>Next Due</th>
-                                            <th>Calibrated At</th>
-                                            <th>Remarks</th>
-                                            <th>Remove</th>
-                                        </tr>
-
-                                        {grnData.grnPartyItems.map((item, index) => (
-                                            <tr key={index}>
-                                                <td>{index + 1}</td>
-                                                <td>{item.grnItemIMTENo}</td>
-                                                <td>{item.grnItemAddMasterName}</td>
-                                                <td>{item.grnItemRangeSize}</td>
-                                                <td>{item.grnItemCertificateNo}</td>
-                                                <td>{item.grnItemCalDate}</td>
-                                                <td>{item.grnItemDueDate}</td>
-                                                <td>{item.grnItemCalibratedAt}</td>
-                                                <td>{item.grnItemStatus}</td>
-                                                <td width="5%"><Delete onClick={() => deleteGrnPartyItems(index)} color='error' /></td>
-                                            </tr>
-                                        ))}
-                                    </tbody>
-                                </table>
-                            </Paper>
 
 
 
@@ -1791,7 +1725,7 @@ const Grn = () => {
                     <Button variant='contained' color='warning' className='me-3'>Print</Button>
                 </div>
                 <div>
-                    <Button variant='contained' color='error' className='me-3' onClick={() => { setGrnOpen(false); setSelectedGrnItem([]); setGrnData(initialGrnData) }}>Cancel</Button>
+                    <Button variant='contained' color='error' className='me-3' onClick={() => { setGrnOpen(false); setGrnData([]); setGrnData(initialGrnData) }}>Cancel</Button>
                     <Button variant='contained' color='success' onClick={() => { setConfirmSubmit(true) }}>Submit</Button>
                 </div>
             </DialogActions>

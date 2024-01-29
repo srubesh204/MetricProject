@@ -119,7 +119,7 @@ const GrnList = () => {
         formatFetchData();
     }, []);
 
-    const [grnListDataList, setGrnListDataList] = useState([])
+   
     const [grnDataList, setGrnDataList] = useState([])
     const [filteredData, setFilteredData] = useState([])
 
@@ -200,22 +200,6 @@ const GrnList = () => {
     const Columns = [
         { field: 'id', headerName: 'Si. No', width: 100, renderCell: (params) => params.api.getAllRowIds().indexOf(params.id) + 1, headerAlign: "center", align: "center", },
         ...(employeeRole && employeeRole.employee !== "viewer" ? [{ field: 'button', headerName: 'Edit', headerAlign: "center", align: "center", width: 90, renderCell: (params) => <Button onClick={() => { setSelectedRows(params.row); setGrnEditOpen(true) }}><Edit color='success' /></Button> }] : []),
-
-
-        {
-            field: 'viewButton',
-            headerName: 'View',
-            width: 100,
-            headerAlign: "center", align: "center",
-
-            renderCell: (params) => (
-
-
-                <RemoveRedEyeIcon color="primary"
-                    onClick={() => handleViewClick(params.row)} />
-
-            ),
-        },
         { field: 'grnNo', headerName: 'Grn No', width: 200, headerAlign: "center", align: "center", },
         { field: 'grnDate', headerName: 'Grn Date', width: 200, headerAlign: "center", align: "center", },
         { field: 'grnPartyName', headerName: 'Party Name', width: 300, headerAlign: "center", align: "center", },
@@ -252,12 +236,8 @@ const GrnList = () => {
 
 
 
-    const [selectedRowView, setSelectedRowView] = useState(null);
-    const handleViewClick = (params) => {
-        setSelectedRowView(params); // Set the selected row data
-        setGrnListDataList(params.grnPartyItems)
-
-    };
+    
+    
 
     const [plantList, setPlantList] = useState([])
 
@@ -560,7 +540,7 @@ const GrnList = () => {
 
 
 
-                                <Box sx={{ height: 310, width: '100%', my: 2 }}>
+                                <Box sx={{ height: 500, width: '100%', my: 2 }}>
                                     <DataGrid
 
                                         rows={filteredData}
@@ -600,13 +580,13 @@ const GrnList = () => {
                                         }}
 
                                         density="compact"
-                                        //disableColumnMenu={true}
+                                        
 
                                         checkboxSelection
                                         //onRowClick={handleRowClick}
                                         onRowClick={handleRowClick}
                                         disableRowSelectionOnClick
-                                        pageSizeOptions={[5]}
+                                        pageSizeOptions={[10]}
                                     />
 
                                 </Box>
@@ -625,41 +605,7 @@ const GrnList = () => {
                         >
                             <div className='row'>
 
-                                <Box sx={{ height: 310, width: '100%', my: 2 }}>
-                                    <DataGrid
-
-                                        rows={grnListDataList}
-                                        columns={grnColumns}
-                                        getRowId={(row) => row.grnItemId}
-                                        initialState={{
-                                            pagination: {
-                                                paginationModel: { page: 0, pageSize: 5 },
-                                            },
-                                        }}
-                                        sx={{
-                                            ".MuiTablePagination-displayedRows": {
-                                                "marginTop": "1em",
-                                                "marginBottom": "1em"
-                                            }
-                                        }}
-                                        onRowSelectionModelChange={(newRowSelectionModel) => {
-                                            setgrnDataListSelectedRowIds(newRowSelectionModel);
-                                        }}
-
-                                        slots={{
-                                            toolbar: GridToolbar,
-                                        }}
-
-                                        density="compact"
-                                        //disableColumnMenu={true}
-
-                                        checkboxSelection
-                                        onRowClick={handleRowClick}
-                                        disableRowSelectionOnClick
-                                        pageSizeOptions={[5]}
-                                    />
-
-                                </Box>
+                                
 
                             </div>
 
@@ -686,11 +632,11 @@ const GrnList = () => {
                                 </div>
 
                                 <div className='col d-flex justify-content-end'>
-                                    <div className=' me-2'>
+                                    {/* <div className=' me-2'>
                                         <Button component={Link} onClick={() => { setGrnOpen(true) }} type='button' variant="contained" color="warning">
                                             <AddIcon /> Add Item
                                         </Button>
-                                    </div>
+                                    </div> */}
 
                                     <Dialog
                                         open={deleteModalItem}

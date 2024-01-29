@@ -616,23 +616,23 @@ const CalList = () => {
                         <div className='row'>
                             <div className='col d-flex '>
                                 <div className='me-2 '>
-                                    <Button onClick={() => { setSelectedRows(); setCalPrintOpen(true) }} ><PrintRounded color='success' /></Button>
+                                    <Button onClick={() => { setSelectedRows(); setCalPrintOpen(true) }} variant='contained'  endIcon={<PrintRounded />}>Print</Button>
                                 </div>
-                                <div className='me-2 '>
+                                {/* <div className='me-2 '>
                                     <button type="button" className='btn btn-secondary' > Label Print</button>
                                 </div>
                                 <div className='me-2 '>
                                     <button type="button" className='btn btn-secondary' >Lable With BarCode Print</button>
-                                </div>
+                                </div> */}
 
 
                             </div>
                             {employeeRole && employeeRole.employee !== "viewer" &&
                                 <div className='col d-flex justify-content-end'>
 
-                                    <div className='me-2 '>
+                                    {/* <div className='me-2 '>
                                         <button type="button" className='btn btn-success' onClick={() => setCalAddOpen(true)}>Add</button>
-                                    </div>
+                                    </div> */}
                                     <div className='me-2'>
                                         <Button component={Link} to={`/home`} variant="contained" size='small' color="warning">
                                             <ArrowBackIcon /> Dash board

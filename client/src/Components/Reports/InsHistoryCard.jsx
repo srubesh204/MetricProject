@@ -539,11 +539,7 @@ function InsHistoryCard() {
                                             paginationModel: { page: 0, pageSize: 5 },
                                         },
                                     }}
-                                    getRowId={
-                                        selectedRow.length > 0 && selectedRow[0].itemCalibrationSource === "outsource"
-                                            ? (row) => row.grnItemId
-                                            : (row) => row._id
-                                    }
+                                    getRowId={(row) => row._id}
                                     sx={{
                                         ".MuiTablePagination-displayedRows": {
                                             "marginTop": "1em",

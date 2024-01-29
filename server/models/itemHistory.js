@@ -8,6 +8,8 @@ const itemHistorySchema = new mongoose.Schema({
     type: String,
     required: [true, "ItemId missing"]
   },
+  itemCalId: String,
+  itemGrnId: String,
   itemMasterRef: String,
   selectedItemMaster: [],
   isItemMaster: String,
@@ -45,6 +47,9 @@ const itemHistorySchema = new mongoose.Schema({
   itemCalibratedAt: String,
   itemCertificateName: String,
   itemCertificateNo: String,
+  itemCalStatus: String,
+  itemCalibratedBy: String,
+  itemCalApprovedBy: String,
   itemOBType: String,
   dcId: String,
   dcStatus: String,
@@ -80,3 +85,5 @@ itemHistorySchema.plugin(uniqueValidator);
 itemHistorySchema.plugin(mongooseSequence, { inc_field: 'itemHistoryId', });
 
 module.exports = mongoose.model('itemHistory', itemHistorySchema);
+
+

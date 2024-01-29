@@ -207,6 +207,9 @@ const itemCalController = {
           itemCalibratedAt,
           itemCertificateName,
           itemCertificateNo,
+          itemCalStatus: calStatus,
+          itemCalibratedBy: calCalibratedBy,
+          itemCalApprovedBy: calApprovedBy,
           itemOBType,
           itemUncertainity,
           itemUncertainityUnit,
@@ -215,42 +218,6 @@ const itemCalController = {
           itemCreatedBy,
           itemLastModifiedBy,
         });
-        
-       
-       
-      
-        itemAddMasterName,
-        itemPlant,
-        itemIMTENo,
-        itemType,
-        itemRangeSize,
-        itemRangeSizeUnit,
-        itemLC,
-        itemLCUnit,
-        itemModelNo,
-        itemStatus,
-        itemReceiptDate,
-        itemDepartment,
-        itemCurrentLocation,
-        
-        itemLastLocation,
-        itemCalFreInMonths,
-        itemCalAlertDays,
-        itemCalibrationSource,
-        itemCalibrationDoneAt,
-        itemUncertainity,
-        itemUncertainityUnit,
-        itemPrevCalData,
-        itemCalDate,
-        itemLastCalDate,
-        itemDueDate,
-        itemLastDueDate,
-        itemCalibratedAt,
-        itemCertificateName,
-        itemCertificateNo,
-        itemOBType,
-       
-        itemUncertainity,
 
 
         await historyRecord.save();
@@ -379,7 +346,128 @@ const itemCalController = {
 
       if (!updateItemCal) {
         return res.status(404).json({ error: 'ItemCal not found' });
+      } else {
+
+        const itemData = await itemAddModel.findById(calItemId)
+
+        const {
+          itemIMTENo,
+          itemCalDate: itemLastCalDate,
+          itemDueDate: itemLastDueDate,
+          isItemMaster,
+          itemAddMasterName,
+          itemType,
+          itemRangeSize,
+          itemRangeSizeUnit,
+          itemLC,
+          itemLCUnit,
+          itemModelNo,
+          itemStatus,
+          itemReceiptDate,
+          itemDepartment,
+          itemCalFreInMonths,
+          itemCalAlertDays,
+          itemCalibrationSource,
+          itemCalibrationDoneAt,
+          itemItemMasterName,
+          itemItemMasterIMTENo,
+          itemCalibratedAt,
+          itemCertificateName,
+          itemCertificateNo,
+          itemOBType,
+          itemUncertainity,
+          itemUncertainityUnit,
+          itemPrevCalData,
+          itemCreatedBy,
+          itemLastModifiedBy
+        } = itemData
+
+
+        const updateItemFields = {
+          itemIMTENo,
+          itemCalDate: calItemCalDate,
+          itemDueDate: calItemDueDate,
+          itemLastDueDate,
+          itemLastCalDate,
+
+        }
+        const updateResult = await itemAddModel.findOneAndUpdate(
+          { _id: calItemId },
+          { $set: updateItemFields },
+          { new: true }
+        );
+
+
+        let obSize = [];
+        if (createdItem.itemType === "variable") {
+          obSize = acceptanceCriteria.map(item => {
+            return item.acParameter + ":" + item.acOBError
+          })
+        } else {
+
+
+          obSize = acceptanceCriteria.map(item => {
+
+            if (itemOBType === "minmax") {
+              return item.acParameter + ":" + item.acMinOB + "/" + item.acMaxOB
+            } else {
+              return item.acParameter + ":" + item.acAverageOB
+            }
+
+          })
+        }
+        console.log(obSize)
+
+
+        const historyRecord = new itemHistory({
+          itemId: itemData._id,
+          
+          itemPlant,
+          isItemMaster,
+          itemAddMasterName,
+          itemIMTENo,
+          itemType,
+          itemRangeSize,
+          itemRangeSizeUnit,
+          itemLC,
+          itemLCUnit,
+          itemModelNo,
+          itemStatus,
+          itemReceiptDate,
+          itemDepartment,
+          
+          itemLocation: "department",
+          itemCalFreInMonths,
+          itemCalAlertDays,
+          itemCalibrationSource,
+          itemCalibrationDoneAt,
+          itemItemMasterName,
+          itemItemMasterIMTENo,
+          itemCalDate: calItemCalDate,
+          itemDueDate: calItemDueDate,
+          itemCalibratedAt,
+          itemCertificateName,
+          itemCertificateNo,
+          itemCalStatus: calStatus,
+          itemCalibratedBy: calCalibratedBy,
+          itemCalApprovedBy: calApprovedBy,
+          itemOBType,
+          itemUncertainity,
+          itemUncertainityUnit,
+          itemPrevCalData,
+          acceptanceCriteria: obSize,
+          itemCreatedBy,
+          itemLastModifiedBy,
+        });
+
+        const historyResult = await itemHistory.findOneAndUpdate(
+          { itemCalId : itemCalId },
+          { $set: historyRecord },
+          { new: true }
+        );
       }
+
+
       console.log("ItemCal Updated Successfully")
       res.status(200).json({ result: updateItemCal, message: "ItemCal Updated Successfully" });
     } catch (error) {
