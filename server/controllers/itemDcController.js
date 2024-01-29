@@ -53,6 +53,8 @@ const itemDcController = {
             itemIMTENo,
             itemCurrentLocation: dcPartyName,
             itemLastLocation,
+
+            
             itemLocation: dcPartyType,
             dcId: result._id,
             dcStatus: "1",

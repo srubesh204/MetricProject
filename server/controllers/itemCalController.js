@@ -1,4 +1,6 @@
+const itemAddModel = require("../models/itemAddModel");
 const itemCalModel = require("../models/itemCalModel")
+const itemHistory = require("../models/itemHistory")
 const dayjs = require('dayjs')
 
 const itemCalController = {
@@ -82,6 +84,8 @@ const itemCalController = {
 
       const newItem = new itemCalModel(newItemFields);
 
+
+
       const validationError = newItem.validateSync();
       if (validationError) {
         const validationErrors = {};
@@ -99,29 +103,124 @@ const itemCalController = {
 
       const createdItem = await itemCalModel.create(newItemFields);
 
-      let obSize = [];
-      if(createdItem.calItemType === "variable"){
-        obSize = calcalibrationData.map(item => {
-          return item.calParameter + ":" + item.calOBError
-        })
-      }else{
-        obSize = calcalibrationData.map(item => {
+      if (Object.keys(createdItem).length !== 0) {
 
-          if(calItemType === "minmax"){
-            return item.calParameter + " : " + item.calMinOB + "/" + item.calMaxOB
-          }else{
-            return item.calParameter + " : " + item.calAverageOB
-          }
-          
-        })
-      }
+        const itemData = await itemAddModel.findById(calItemId)
 
-      const historyRecord = new itemHistory({
-        itemId: createdItem._id,
-        selectedItemMaster,
-        itemPlant,
-        isItemMaster,
+        const {
+          itemIMTENo,
+          itemCalDate: itemLastCalDate,
+          itemDueDate: itemLastDueDate,
+          itemPlant,
+          isItemMaster,
+          itemAddMasterName,
+          itemType,
+          itemRangeSize,
+          itemRangeSizeUnit,
+          itemLC,
+          itemLCUnit,
+          itemModelNo,
+          itemStatus,
+          itemReceiptDate,
+          itemDepartment,
+          itemCurrentLocation,
+          itemLastLocation,
+          itemCalFreInMonths,
+          itemCalAlertDays,
+          itemCalibrationSource,
+          itemCalibrationDoneAt,
+          itemItemMasterName,
+          itemItemMasterIMTENo,
+          itemCalDate,
+          itemDueDate,
+          itemCalibratedAt,
+          itemCertificateName,
+          itemCertificateNo,
+          itemOBType,
+          itemUncertainity,
+          itemUncertainityUnit,
+          itemPrevCalData,
+          itemCreatedBy,
+          itemLastModifiedBy
+        } = itemData
+
+
+        const updateItemFields = {
+          itemIMTENo,
+          itemCalDate: calItemCalDate,
+          itemDueDate: calItemDueDate,
+          itemLastDueDate,
+          itemLastCalDate,
+
+        }
+        const updateResult = await itemAddModel.findOneAndUpdate(
+          { _id: calItemId },
+          { $set: updateItemFields },
+          { new: true }
+        );
+        console.log("itemUpdated")
+
+        let obSize = [];
+        if (createdItem.calItemType === "variable") {
+          obSize = calcalibrationData.map(item => {
+            return item.calParameter + ":" + item.calOBError
+          })
+        } else {
+          obSize = calcalibrationData.map(item => {
+
+            if (calItemType === "minmax") {
+              return item.calParameter + " : " + item.calMinOB + "/" + item.calMaxOB
+            } else {
+              return item.calParameter + " : " + item.calAverageOB
+            }
+
+          })
+        }
+
+        const historyRecord = new itemHistory({
+          itemId: itemData._id,
+          itemCalId: createdItem._id,
+          itemPlant,
+          isItemMaster,
+          itemAddMasterName,
+          itemIMTENo,
+          itemType,
+          itemRangeSize,
+          itemRangeSizeUnit,
+          itemLC,
+          itemLCUnit,
+          itemModelNo,
+          itemStatus,
+          itemReceiptDate,
+          itemDepartment,
+          itemCurrentLocation,
+          itemLastLocation,
+          itemLocation: "department",
+          itemCalFreInMonths,
+          itemCalAlertDays,
+          itemCalibrationSource,
+          itemCalibrationDoneAt,
+          itemItemMasterName,
+          itemItemMasterIMTENo,
+          itemCalDate: calItemCalDate,
+          itemDueDate: calItemDueDate,
+          itemCalibratedAt,
+          itemCertificateName,
+          itemCertificateNo,
+          itemOBType,
+          itemUncertainity,
+          itemUncertainityUnit,
+          itemPrevCalData,
+          acceptanceCriteria: obSize,
+          itemCreatedBy,
+          itemLastModifiedBy,
+        });
+        
+       
+       
+      
         itemAddMasterName,
+        itemPlant,
         itemIMTENo,
         itemType,
         itemRangeSize,
@@ -133,29 +232,32 @@ const itemCalController = {
         itemReceiptDate,
         itemDepartment,
         itemCurrentLocation,
+        
         itemLastLocation,
-        itemLocation: "department",
         itemCalFreInMonths,
         itemCalAlertDays,
         itemCalibrationSource,
         itemCalibrationDoneAt,
-        itemItemMasterName,
-        itemItemMasterIMTENo,
+        itemUncertainity,
+        itemUncertainityUnit,
+        itemPrevCalData,
         itemCalDate,
+        itemLastCalDate,
         itemDueDate,
+        itemLastDueDate,
         itemCalibratedAt,
         itemCertificateName,
         itemCertificateNo,
         itemOBType,
+       
         itemUncertainity,
-        itemUncertainityUnit,
-        itemPrevCalData,
-        acceptanceCriteria: obSize,
-        itemCreatedBy,
-        itemLastModifiedBy,
-      });
-      await historyRecord.save();
-      
+
+
+        await historyRecord.save();
+      }
+
+
+
       console.log("ItemCal Created Successfully");
       res.status(200).json({ result: createdItem, message: "ItemCal Created Successfully" });
     } catch (error) {
@@ -173,7 +275,7 @@ const itemCalController = {
       res.status(500).json({ error: error, status: 0 });
     }
   },
- 
+
 
   updateItemCal: async (req, res) => {
     try {
@@ -302,8 +404,22 @@ const itemCalController = {
       console.log(req.body)
       const deleteResults = [];
 
+
       for (const itemCalId of itemCalIds) {
         // Find and remove each vendor by _id
+
+
+        const calData = await itemCalModel.findById(itemCalId);
+        const itemData = await itemAddModel.findById(calData.calItemId)
+
+        const { itemLastCalDate: itemCalDate, itemLastDueDate: itemDueDate } = itemData
+        const updateItemFields = { itemCalDate, itemDueDate }
+        const updateResult = await itemAddModel.findOneAndUpdate(
+          { _id: calData.calItemId },
+          { $set: updateItemFields },
+          { new: true }
+        );
+
         const deletedItemCal = await itemCalModel.findOneAndRemove({ _id: itemCalId });
         console.log(deletedItemCal)
         if (!deletedItemCal) {
@@ -313,6 +429,7 @@ const itemCalController = {
 
         } else {
           console.log(`ItemCal with ID ${itemCalId} deleted successfully.`);
+
           deleteResults.push(deletedItemCal);
         }
       }
