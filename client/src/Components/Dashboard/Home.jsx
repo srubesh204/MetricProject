@@ -129,7 +129,7 @@ const Home = () => {
       setLastNo("DC "+ (dayjs().year() + "-" + ((dcNos[dcNos.length - 1]) + 1)))
       console.log(dcNos[dcNos.length - 1])
       setDcList(plantDc);
-      setFilteredData(plantDc);
+      
 
 
     } catch (err) {
@@ -293,8 +293,8 @@ const Home = () => {
       console.log(itemPart)
 
       setItemList(allItems);
-      setPieDataFilter(allItems)
-      setFilteredData(allItems)
+     
+      
 
       //
       // Assuming plantWiseList is an array of objects
@@ -317,6 +317,8 @@ const Home = () => {
       const breakDownItems = allItems.filter((item) => item.itemStatus === "breakdown");
       const missingItems = allItems.filter((item) => item.itemStatus === "missing");
       const rejectionItems = allItems.filter((item) => item.itemStatus === "rejection");
+      setPieDataFilter(activeItems)
+      setFilteredData(activeItems)
 
       const pastDue = activeItems.filter((item) => dayjs(item.itemDueDate).isBefore(currentDate.format("YYYY-MM-DD")))
       const CurrentDue = activeItems.filter((item) => dayjs(item.itemDueDate).isSame(currentDate.format("YYYY-MM-DD")))
@@ -385,14 +387,16 @@ const Home = () => {
 
 
 
-    setFilteredData(plantWiseList)
-    setPieDataFilter(plantWiseList)
+    
 
     const activeItems = plantWiseList.filter((item) => item.itemStatus === "active");
     const spareItems = plantWiseList.filter((item) => item.itemStatus === "spare");
     const breakDownItems = plantWiseList.filter((item) => item.itemStatus === "breakdown");
     const missingItems = plantWiseList.filter((item) => item.itemStatus === "missing");
     const rejectionItems = plantWiseList.filter((item) => item.itemStatus === "rejection");
+
+    setFilteredData(activeItems)
+    setPieDataFilter(activeItems)
 
     const pastDue = activeItems.filter((item) => dayjs(item.itemDueDate).isBefore(currentDate.format("YYYY-MM-DD")))
     const CurrentDue = activeItems.filter((item) => dayjs(item.itemDueDate).isSame(currentDate.format("YYYY-MM-DD")))
