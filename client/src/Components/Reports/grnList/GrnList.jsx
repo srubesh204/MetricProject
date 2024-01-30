@@ -548,7 +548,7 @@ const GrnList = () => {
                                         getRowId={(row) => row._id}
                                         initialState={{
                                             pagination: {
-                                                paginationModel: { page: 0, pageSize: 5 },
+                                                paginationModel: { page: 0, pageSize: 8 },
                                             },
                                         }}
                                         sx={{

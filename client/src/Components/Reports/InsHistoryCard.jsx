@@ -493,7 +493,30 @@ function InsHistoryCard() {
                                     }}
                                     elevation={12}>
                                     <div className="col ">
-                                        <table className="table table-sm table-bordered text-center align-middle" style={{ fontSize: "small" }}>
+                                       {selectedRow.length > 0 && selectedRow[0].itemType === "variable" &&  <table className="table table-sm table-bordered text-center align-middle" style={{ fontSize: "small" }}>
+                                            <thead>
+                                                <tr >
+                                                    <th>Parameter</th>
+                                                    <th>Min</th>
+                                                    <th>Max</th>
+                                                    
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {
+                                                    selectedRow[0].acceptanceCriteria.map(item => (
+                                                        <tr>
+                                                            <td>{item.acParameter || '-'}</td>
+                                                            <td>{item.acMinPSError || '-'}</td>
+                                                            <td>{item.acMaxPSError || '-'}</td>
+                                                           
+                                                        </tr>
+                                                    ))
+                                                }
+
+                                            </tbody>
+                                        </table>}
+                                        {selectedRow.length > 0 && selectedRow[0].itemType === "attribute" && <table className="table table-sm table-bordered text-center align-middle" style={{ fontSize: "small" }}>
                                             <thead>
                                                 <tr >
                                                     <th>Parameter</th>
@@ -503,7 +526,7 @@ function InsHistoryCard() {
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                {selectedRow.length > 0 &&
+                                                {
                                                     selectedRow[0].acceptanceCriteria.map(item => (
                                                         <tr>
                                                             <td>{item.acParameter || '-'}</td>
@@ -515,7 +538,30 @@ function InsHistoryCard() {
                                                 }
 
                                             </tbody>
-                                        </table>
+                                        </table>}
+                                        {selectedRow.length > 0 && selectedRow[0].itemType === "referenceStandard" && <table className="table table-sm table-bordered text-center align-middle" style={{ fontSize: "small" }}>
+                                            <thead>
+                                                <tr >
+                                                    <th>Parameter</th>
+                                                    <th>Min</th>
+                                                    <th>Max</th>
+                                                    
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {
+                                                    selectedRow[0].acceptanceCriteria.map(item => (
+                                                        <tr>
+                                                            <td>{item.acParameter || '-'}</td>
+                                                            <td>{item.acMinPS || '-'}</td>
+                                                            <td>{item.acMaxPS || '-'}</td>
+                                                            
+                                                        </tr>
+                                                    ))
+                                                }
+
+                                            </tbody>
+                                        </table>}
                                     </div>
                                 </Paper>
                             </div>
