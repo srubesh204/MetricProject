@@ -345,7 +345,7 @@ const ItemList = () => {
         const { name, value } = e.target;
         console.log(e)
         if (value === "all") {
-            setFilteredItemListData(itemList)
+            setFilteredItemListData(plantDatas)
         } else {
 
             if (name === "plantWise") {
@@ -400,14 +400,16 @@ const ItemList = () => {
             }
 
             if (name === "customerWise") {
-                const customerWise = departmentDatas.filter((item) =>
-                    item.itemCustomer && Array.isArray(item.itemCustomer) && item.itemCustomer.includes(value)
-                );
-                console.log(customerWise)
 
-                const partData = partDataList.filter(part => part.customer === value)
+                const customerData = partDataList.filter(part => part.customer === value )
 
-                setCustomerParts(partData)
+                const customers = departmentDatas.filter(item => customerData.some(cus => item.ItemPartName.includes(cus.partNo)))
+                
+                console.log(customers)
+
+                
+                setFilteredItemListData(customers)
+                setCustomerParts(customerData)
                 setFilterAllNames(prev => ({
                     ...prev,
                     imteNo: "all",
