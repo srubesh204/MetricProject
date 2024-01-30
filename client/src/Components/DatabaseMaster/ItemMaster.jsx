@@ -287,7 +287,7 @@ const ItemMaster = () => {
                     `${process.env.REACT_APP_PORT}/itemMaster/createItemMaster`, itemMasterData
                 );
                 {/*console.log(response.data.message)*/ }
-                console.log(response)
+                console.log(response.data.result)
                 itemMasterFetchData();
                 setSnackBarOpen(true)
                 setErrorHandler({ status: response.data.status, message: response.data.message, code: "success" })
@@ -705,7 +705,7 @@ const ItemMaster = () => {
                                 </div>
 
                                 <div className="form-floating col">
-                                    <TextField label="Imte Prefix "   {...(errors.itemPrefix !== "" && { helperText: errors.imtePrefix, error: true })}
+                                    <TextField label="Imte Prefix "   
                                         id="itemPrefix"
                                         defaultValue=""
                                         sx={{ width: "100%" }}
@@ -715,6 +715,7 @@ const ItemMaster = () => {
                                         onChange={handleItemMasterBaseChange}
                                         name="itemPrefix" />
                                 </div>
+
 
                             </div>
                         </Paper>
@@ -736,7 +737,7 @@ const ItemMaster = () => {
                                     <div className='row mb-2 g-2'>
                                         <div className="form-floating col-md-6">
 
-                                            <TextField label="SOP No "   {...(errors.SOPNo !== "" && { helperText: errors.SOPNo, error: true })}
+                                            <TextField label="SOP No "  
                                                 id="SOPNoId"
                                                 defaultValue=""
                                                 sx={{ width: "100%" }}
@@ -764,7 +765,7 @@ const ItemMaster = () => {
                                         <div className="input-group col row g-2 m-0 d-flex">
 
                                             <div className='col'>
-                                                <TextField  {...(errors.uncertainty !== "" && { error: true })}
+                                                <TextField  
                                                     label="Uncertainty "
                                                     id="uncertaintyId"
                                                     defaultValue=""
@@ -777,10 +778,13 @@ const ItemMaster = () => {
                                                     name="uncertainty"
                                                 />
                                             </div>
+                                            {/* {...(errors.uncertainty !== "" && { error: true })} */}
+                                            {/* {...(errors.uncertaintyUnit !== "" && { error: true })}  */}
+                                            {/* {...(errors.calAlertInDay !== "" && { helperText: errors.calAlertInDay, error: true })} */}
 
                                             <div className='col'>
                                                 <TextField label="Unit"
-                                                    value={itemMasterData.uncertaintyUnit} {...(errors.uncertaintyUnit !== "" && { error: true })} onChange={handleItemMasterBaseChange} className="form-select" select size="small" id="uncertaintyUnitId" name="uncertaintyUnit" defaultValue="" >
+                                                    value={itemMasterData.uncertaintyUnit} onChange={handleItemMasterBaseChange} className="form-select" select size="small" id="uncertaintyUnitId" name="uncertaintyUnit" defaultValue="" >
                                                     {unitDataList.map((item, index) => (
                                                         <MenuItem key={index} value={item.unitName}>{item.unitName}</MenuItem>
                                                     ))}
@@ -792,13 +796,13 @@ const ItemMaster = () => {
                                                 </TextField>
                                             </div>
 
-                                            {(Object.keys(errors).length !== 0 && (errors.uncertainty !== "" || errors.uncertaintyUnit !== "")) && <div style={{ color: "red", fontSize: "small", marginLeft: "10px" }}>Uncertainity is Required</div>}
+                                            {/* {(Object.keys(errors).length !== 0 && (errors.uncertainty !== "" || errors.uncertaintyUnit !== "")) && <div style={{ color: "red", fontSize: "small", marginLeft: "10px" }}>Uncertainity is Required</div>} */}
 
 
                                         </div>
                                         <div className="form-floating col">
 
-                                            <TextField label="Cal Alert In Day "   {...(errors.calAlertInDay !== "" && { helperText: errors.calAlertInDay, error: true })}
+                                            <TextField label="Cal Alert In Day "   
                                                 id="calAlertInDayId"
                                                 defaultValue=""
                                                 sx={{ width: "100%" }}
@@ -814,7 +818,7 @@ const ItemMaster = () => {
                                     <div className='row g-2 mb-2 '>
 
                                         <div className="form-floating col">
-                                            <TextField label="StandardRef "   {...(errors.standardRef !== "" && { helperText: errors.standardRef, error: true })}
+                                            <TextField label="StandardRef "  
                                                 id="standardRefId"
                                                 defaultValue=""
                                                 sx={{ width: "100%" }}

@@ -38,7 +38,7 @@ const GrnPrint = () => {
                             <div style={{ width: '100%' }}>Date: {data.value.fGrn.date}</div>
                         </div>
                         <div style={{ borderLeft: '', paddingLeft: '5px', display: 'flex', flexDirection: 'column' }}>
-                            <div style={{ margin: '5px', fontSize: 10, fontWeight: 600, padding: '0 130px 40px 0', width: '100%' }}>For {selectedRows.dcPartyName}</div>
+                            <div style={{ margin: '5px', fontSize: 10, fontWeight: 600, padding: '0 130px 40px 0', width: '110%' }}>For  {companyList[0]?.companyName}</div>
                             <div style={{ fontSize: 9, textAlign: 'center', paddingLeft: '30px' }}>Authorized Signature</div>
                         </div>
                     </div>
@@ -96,10 +96,10 @@ const GrnPrint = () => {
                 <div ref={componentRef}>
                     <div style={{ padding: "10px", textAlign: "center", textDecoration: "underline" }}>GRN</div>
                     <div style={{ border: "0.5px solid black", width: "100%", height: "95%" }}>
-                        <h1 style={{ textAlign: "center", padding: "5px 0px 0px 0px", fontSize: "14px" }}>{companyList[0]?.companyName}</h1>
-                        <div style={{ textAlign: "center", padding: "0px 0px 5px 0px", fontSize: "10px" }}>{plantList[0]?.plantName}</div>
-                        <div style={{ textAlign: "center", padding: "0px 0px 5px 0px", fontSize: "10px" }}>{plantList[0]?.plantAddress}</div>
-                        <div style={{ textAlign: "center", padding: "0px 0px 5px 0px", fontSize: "10px", borderBottom: "0.5px solid black" }}>Phone and Address</div>
+                        <h1 style={{ textAlign: "center", padding: "2px 0px 0px 0px", fontSize: "14px" }}>{companyList[0]?.companyName}</h1>
+                        <div style={{ textAlign: "center", padding: "0px 0px 2px 0px", fontSize: "11px" }}>{plantList[0]?.plantName}</div>
+                        <div style={{ textAlign: "center", padding: "0px 0px 2px 0px", fontSize: "11px" }}>{plantList[0]?.plantAddress}</div>
+                        <div style={{ textAlign: "center", padding: "0px 0px 2px 0px", fontSize: "10px", borderBottom: "0.5px solid black" }}></div>
                         <div style={{ display: "flex", flexDirection: "row", padding: 0, borderBottom: "0.5px solid black" }}>
                             <div style={{ width: "60%", padding: "5px 0px 5px 5px", borderRight: "0.5px solid black", margin: 0 }}>
                                 <div>To:</div>

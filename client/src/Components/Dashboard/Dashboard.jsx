@@ -149,13 +149,13 @@ const Dashboard = () => {
     ],
     system: [
       { name: "Version", file: <Version />, icon: <img src={`${process.env.REACT_APP_PORT}/icon/list-text.png`} alt="Version Icon" style={{ width: '20px', height: '20px' }} /> },
-      { name: "Backup", file: <BackUp />, icon: <img src={`${process.env.REACT_APP_PORT}/icon/list-text.png`} alt="Backup Icon" style={{ width: '20px', height: '20px' }} /> },
-      { name: "Alerts Configuration", file: <AlertConfig />, icon: <img src={`${process.env.REACT_APP_PORT}/icon/list-text.png`} alt="Alerts Configuration Icon" style={{ width: '20px', height: '20px' }} /> },
+      // { name: "Backup", file: <BackUp />, icon: <img src={`${process.env.REACT_APP_PORT}/icon/list-text.png`} alt="Backup Icon" style={{ width: '20px', height: '20px' }} /> },
+      // { name: "Alerts Configuration", file: <AlertConfig />, icon: <img src={`${process.env.REACT_APP_PORT}/icon/list-text.png`} alt="Alerts Configuration Icon" style={{ width: '20px', height: '20px' }} /> },
       { name: "Mail Configuration", file: <MailConfig />, icon: <img src={`${process.env.REACT_APP_PORT}/icon/list-text.png`} alt="Mail Configuration Icon" style={{ width: '20px', height: '20px' }} /> },
       { name: "Format Number", file: <FormatNumber />, icon: <img src={`${process.env.REACT_APP_PORT}/icon/list-text.png`} alt="Format Number Icon" style={{ width: '20px', height: '20px' }} /> },
       { name: "Company Details", file: <CompanyDetails />, icon: <img src={`${process.env.REACT_APP_PORT}/icon/company details.png`} alt="Company Details Icon" style={{ width: '20px', height: '20px' }} /> },
       
-      { name: "Label Print", file: "", icon: <img src={`${process.env.REACT_APP_PORT}/icon/list-text.png`} alt="Label Print Icon" style={{ width: '20px', height: '20px' }} /> },
+      // { name: "Label Print", file: "", icon: <img src={`${process.env.REACT_APP_PORT}/icon/list-text.png`} alt="Label Print Icon" style={{ width: '20px', height: '20px' }} /> },
 
     ],
     Reports: [
@@ -165,8 +165,8 @@ const Dashboard = () => {
       { name: "History Card", file: <InsHistoryCard />, icon: <img src={`${process.env.REACT_APP_PORT}/icon/list-text.png`} alt="History Card Icon" style={{ width: '20px', height: '20px' }} /> },
       { name: "Gauge List", file: <TotalList />, icon: <img src={`${process.env.REACT_APP_PORT}/icon/list-text.png`} alt="Gauge List Icon" style={{ width: '20px', height: '20px' }} /> },
       { name: "Cal Due Report", file: <CalDueReport />, icon: <img src={`${process.env.REACT_APP_PORT}/icon/list-text.png`} alt="Cal Due Report Icon" style={{ width: '20px', height: '20px' }} /> },
-      { name: "Gauge Movement Report" },
-      { name: "Management Chart" },
+      // { name: "Gauge Movement Report" },
+      // { name: "Management Chart" },
     ]
 
   }
@@ -506,26 +506,26 @@ const Dashboard = () => {
 
 
               <ListItemButton onClick={handleToolOpen}>
-                <ListItemIcon>
+                {/* <ListItemIcon>
                 <img src={`${process.env.REACT_APP_PORT}/icon/settings.png`} alt="systemIcon" style={{ width: '24px', height: '24px' }} />
-                </ListItemIcon>
-                <ListItemText primary="Tools" />
+                </ListItemIcon> */}
+               {/* <ListItemText primary="Tools" />*/}
                 {toolOpen ? <ExpandLess /> : <ExpandMore />}
               </ListItemButton>
               <Collapse in={toolOpen} timeout="auto" unmountOnExit>
                 <List component="div" disablePadding>
                   <ListItemButton sx={{ pl: 4 }} onClick={() => openWinApps("Calculator")}>
-                    <ListItemIcon>
+                    {/* <ListItemIcon>
                       <AdminPanelSettingsIcon />
-                    </ListItemIcon>
-                    <ListItemText primary="Calculator" />
+                    </ListItemIcon> */}
+                    {/* <ListItemText primary="Calculator" /> */}
 
                   </ListItemButton>
                   <ListItemButton sx={{ pl: 4 }} onClick={() => openWinApps("Any Desk")}>
-                    <ListItemIcon>
+                    {/* <ListItemIcon>
                       <AdminPanelSettingsIcon />
-                    </ListItemIcon>
-                    <ListItemText primary="Any Desk" />
+                    </ListItemIcon> */}
+                    {/* <ListItemText primary="Any Desk" /> */}
 
                   </ListItemButton>
 
