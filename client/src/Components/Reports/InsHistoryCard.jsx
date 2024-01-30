@@ -255,7 +255,7 @@ function InsHistoryCard() {
         // { field: 'itemCertStatus', headerName: 'Certificate Status', width: 150, align: "center"},
         { field: 'itemCertificateNo', headerName: 'Certificate No', width: 150, align: "center"},
         
-        {field: 'observedSize', headerName: "Observed Size", width: 150, align: "center",
+        {field: 'observedSize', headerName: "Observed Size", width: 180, align: "center",
                 renderCell: (params) => (
                     
                     <div>
