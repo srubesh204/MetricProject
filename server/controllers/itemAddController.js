@@ -720,16 +720,17 @@ const itemAddController = {
           console.log(savedItemAdd)
 
           const data = {
-            itemCalDate: dayjs(savedItemAdd.itemCalDate).format("YYYY-MM-DD"),
-            itemDueDate: dayjs(savedItemAdd.itemDueDate).format("YYYY-MM-DD"),
-            itemIMTENo: savedItemAdd.itemIMTENo,
-            itemCalibratedAt: savedItemAdd.itemCalibratedAt,
-            itemCertificateNo: savedItemAdd.itemCertificateNo,
+            itemCalDate: savedItemAdd.itemCalDate ? dayjs(savedItemAdd.itemCalDate).format("YYYY-MM-DD") : "",
+            itemDueDate: savedItemAdd.itemDueDate ? dayjs(savedItemAdd.itemDueDate).format("YYYY-MM-DD") : "",
+            itemIMTENo: savedItemAdd.itemIMTENo ? savedItemAdd.itemIMTENo: "",
+            itemCalibratedAt: savedItemAdd.itemCalibratedAt ? savedItemAdd.itemCalibratedAt : "",
+            itemCertificateNo: savedItemAdd.itemCertificateNo ? savedItemAdd.itemCertificateNo : "",
             itemId: savedItemAdd._id
 
           }
           console.log(data)
-
+          const historyObj = new itemHistory(data);
+          const savedHistoryCard = await historyObj.save();
 
           return savedItemAdd;
 
