@@ -1034,9 +1034,9 @@ const CalDialog = () => {
 
                     <Paper elevation={12} sx={{ p: 2 }} className='col-md-12 mb-2'>
                         <div className="d-flex justify-content-between mb-2">
-                            <div> <FormControlLabel control={<Switch name='lastResult' onChange={handleCalData} />} label="Last Result" />
-                                <FormControlLabel control={<Switch name='beforeCalSwitch' onChange={handleCalData} />} label="Before Calibration" /></div>
-                            <div><h5 className='text-center'>Calibration Data</h5></div>
+                            {/* <div> <FormControlLabel control={<Switch name='lastResult' onChange={handleCalData} />} label="Last Result" />
+                                <FormControlLabel control={<Switch name='beforeCalSwitch' onChange={handleCalData} />} label="Before Calibration" /></div> */}
+                            <div><h5 className='text align-center'>Calibration Data</h5></div>
                             <div><TextField select inputProps={{ sx: { color: calibrationData.calStatus === "status" ? "" : calibrationData.calStatus === "accepted" ? "green" : "red", width: "100px" } }} name='calStatus' onChange={handleCalData} InputLabelProps={{ shrink: true }} label="Cal Status" size="small" value={calibrationData.calStatus}>
                                 <MenuItem value="status">Status</MenuItem>
                                 <MenuItem value="accepted">Accepted</MenuItem>
