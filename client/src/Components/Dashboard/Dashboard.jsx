@@ -505,48 +505,42 @@ const Dashboard = () => {
               </Collapse>
 
 
-              <ListItemButton onClick={handleToolOpen}>
-                {/* <ListItemIcon>
+              {/* <ListItemButton onClick={handleToolOpen}>
+                <ListItemIcon>
                 <img src={`${process.env.REACT_APP_PORT}/icon/settings.png`} alt="systemIcon" style={{ width: '24px', height: '24px' }} />
-                </ListItemIcon> */}
-               {/* <ListItemText primary="Tools" />*/}
+                </ListItemIcon>
+                <ListItemText primary="Tools" />
                 {toolOpen ? <ExpandLess /> : <ExpandMore />}
-              </ListItemButton>
-              <Collapse in={toolOpen} timeout="auto" unmountOnExit>
+              </ListItemButton> */}
+
+              
+              {/* <Collapse in={toolOpen} timeout="auto" unmountOnExit>
                 <List component="div" disablePadding>
                   <ListItemButton sx={{ pl: 4 }} onClick={() => openWinApps("Calculator")}>
-                    {/* <ListItemIcon>
+                    <ListItemIcon>
                       <AdminPanelSettingsIcon />
-                    </ListItemIcon> */}
-                    {/* <ListItemText primary="Calculator" /> */}
+                    </ListItemIcon>
+                    <ListItemText primary="Calculator" />
 
                   </ListItemButton>
                   <ListItemButton sx={{ pl: 4 }} onClick={() => openWinApps("Any Desk")}>
-                    {/* <ListItemIcon>
+                    <ListItemIcon>
                       <AdminPanelSettingsIcon />
-                    </ListItemIcon> */}
-                    {/* <ListItemText primary="Any Desk" /> */}
+                    </ListItemIcon> 
+               <ListItemText primary="Any Desk" />
 
                   </ListItemButton>
 
                 </List>
-              </Collapse>
+              </Collapse> */}
 
-              {/* {SecondaryListItems()} */}
+             {/* {SecondaryListItems()} */}
             </List>
           </Drawer>
           <Box
             component="main"
             style={{ flexGrow: 1, height: "100%", width: "75%" }}
-          // sx={{
-          //   backgroundColor: (theme) =>
-          //     theme.palette.mode === 'light'
-          //       ? theme.palette.grey[100]
-          //       : theme.palette.grey[900],
-          //   flexGrow: 1,
-          //   height: 'inherit',
-
-          // }}
+          
           >
             <Toolbar />
 
