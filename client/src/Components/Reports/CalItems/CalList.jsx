@@ -612,9 +612,7 @@ const CalList = () => {
                         </div>
                         <div className='row'>
                             <div className='col d-flex '>
-                                <div className='me-2 '>
-                                    <Button onClick={() => { setSelectedRows(); setCalPrintOpen(true) }} variant='contained'  endIcon={<PrintRounded />}>Print</Button>
-                                </div>
+                               
                                 {/* <div className='me-2 '>
                                     <button type="button" className='btn btn-secondary' > Label Print</button>
                                 </div>

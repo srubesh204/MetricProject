@@ -39,7 +39,7 @@ const CalAddModel = () => {
     console.log(selectedIMTE[0])
 
     const [initialCalData, setInitialCalData] = useState({
-        calItemId: "",
+        ItemCalId: "",
         calIMTENo: "",
         calItemName: "",
         calItemType: "",
@@ -84,7 +84,7 @@ const CalAddModel = () => {
     })
 
     const [calibrationData, setCalibrationData] = useState({
-        calItemId: "",
+        ItemCalId: "",
         calIMTENo: "",
         calItemName: "",
         calItemType: "",
@@ -586,7 +586,7 @@ const CalAddModel = () => {
             setCalibrationData((prev) => (
                 {
                     ...prev,
-                    calItemId: selectedItem[0]._id,
+                    ItemCalId: selectedItem[0]._id,
                     calIMTENo: selectedItem[0].itemIMTENo,
                     calItemName: selectedItem[0].itemAddMasterName,
                     calItemType: selectedItem[0].itemType,

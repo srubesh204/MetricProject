@@ -31,7 +31,7 @@ const CalEditModel = () => {
     console.log(selectedIMTE)
 
     const [initialCalData, setInitialCalData] = useState({
-        calItemId: "",
+        ItemCalId: "",
         calIMTENo: "",
         calItemName: "",
         calItemType: "",
@@ -76,7 +76,7 @@ const CalEditModel = () => {
     })
 
     const [calibrationData, setCalibrationData] = useState({
-        calItemId: "",
+        ItemCalId: "",
         calIMTENo: "",
         calItemName: "",
         calItemType: "",
@@ -127,7 +127,7 @@ const CalEditModel = () => {
         setCalibrationData((prev) => (
             {
                 ...prev,
-                calItemId : selectedCalRow.calItemId,
+                ItemCalId : selectedCalRow.ItemCalId,
                 calIMTENo : selectedCalRow.calIMTENo,
                 calItemName : selectedCalRow.calItemName,
                 calItemType : selectedCalRow.calItemType,
@@ -626,10 +626,6 @@ const CalEditModel = () => {
         }
     };
 
-    const [obStatus, setObStatus] = useState([]);
-
-    const [showLastResult, setShowLastResult] = useState(false)
-    const [itemIMTEs, setItemIMTEs] = useState([])
 
 
 
@@ -957,7 +953,7 @@ const CalEditModel = () => {
                                             {calibrationData.calcalibrationData.map((item, index) => {
                                                 let color = ""
                                                 if (item.rowStatus === "ok") {
-                                                    color = "#4cbb17"
+                                                    color = "green"
                                                 } else if (item.rowStatus === "notOk") {
                                                     color = "red"
                                                 } else if (item.rowStatus === "conditionallyOk") {
@@ -1049,7 +1045,7 @@ const CalEditModel = () => {
 
 
                                                     if (parseFloat(item.calMinOB) >= parseFloat(item.calMinPS) && parseFloat(item.calMinOB) <= parseFloat(item.calMaxPS)) {
-                                                        minColor = "#4cbb17";
+                                                        minColor = "green";
 
                                                     } else {
                                                         minColor = "red"
@@ -1058,7 +1054,7 @@ const CalEditModel = () => {
 
 
                                                     if (parseFloat(item.calMaxOB) >= parseFloat(item.calMinPS) && parseFloat(item.calMaxOB) <= parseFloat(item.calMaxPS)) {
-                                                        maxColor = "#4cbb17"
+                                                        maxColor = "green"
 
                                                     } else {
                                                         maxColor = "red"
@@ -1066,7 +1062,7 @@ const CalEditModel = () => {
                                                     }
 
                                                     if (parseFloat(item.calAverageOB) >= parseFloat(item.calMinPS) && parseFloat(item.calAverageOB) <= parseFloat(item.calMaxPS)) {
-                                                        averageColor = "#4cbb17";
+                                                        averageColor = "green";
 
                                                     } else {
                                                         averageColor = "red"
@@ -1136,7 +1132,7 @@ const CalEditModel = () => {
 
                                                 let averageColor = "";
                                                 if (parseFloat(item.calAverageOB) >= parseFloat(item.calMinPSError) && parseFloat(item.calAverageOB) <= parseFloat(item.calMaxPSError)) {
-                                                    averageColor = "#4cbb17";
+                                                    averageColor = "green";
                                                 } else {
                                                     averageColor = "red"
                                                 }
@@ -1208,7 +1204,7 @@ const CalEditModel = () => {
                                                 let averageColor = "";
 
                                                 if (parseFloat(item.calAverageOB) >= parseFloat(item.calMinPS) && parseFloat(item.calAverageOB) <= parseFloat(item.calMaxPS)) {
-                                                    averageColor = "#4cbb17";
+                                                    averageColor = "green";
 
                                                 } else {
                                                     averageColor = "red"
@@ -1218,7 +1214,7 @@ const CalEditModel = () => {
                                                 let minColor = "";
 
                                                 if (parseFloat(item.calMinOB) >= parseFloat(item.calMinPS) && parseFloat(item.calMinOB) <= parseFloat(item.calMaxPS)) {
-                                                    minColor = "#4cbb17";
+                                                    minColor = "green";
 
                                                 } else {
                                                     minColor = "red"
@@ -1227,7 +1223,7 @@ const CalEditModel = () => {
 
                                                 let maxColor = "";
                                                 if (parseFloat(item.calMaxOB) >= parseFloat(item.calMinPS) && parseFloat(item.calMaxOB) <= parseFloat(item.calMaxPS)) {
-                                                    maxColor = "#4cbb17"
+                                                    maxColor = "green"
 
                                                 } else {
                                                     maxColor = "red"

@@ -19,7 +19,7 @@ const itemCalController = {
   createItemCal: async (req, res) => {
     try {
       const {
-        calItemId,
+        ItemCalId,
         calIMTENo,
         calItemName,
         calItemType,
@@ -51,7 +51,7 @@ const itemCalController = {
       } = req.body;
 
       const newItemFields = {
-        calItemId,
+        ItemCalId,
         calIMTENo,
         calItemName,
         calItemType,
@@ -105,7 +105,7 @@ const itemCalController = {
 
       if (Object.keys(createdItem).length !== 0) {
 
-        const itemData = await itemAddModel.findById(calItemId)
+        const itemData = await itemAddModel.findById(ItemCalId)
         let itemCondition = ""
         if (calStatus === "rejected") {
           itemCondition = "rejection"
@@ -160,7 +160,7 @@ const itemCalController = {
 
         }
         const updateResult = await itemAddModel.findOneAndUpdate(
-          { _id: calItemId },
+          { _id: ItemCalId },
           { $set: updateItemFields },
           { new: true }
         );
@@ -253,17 +253,17 @@ const itemCalController = {
 
   updateItemCal: async (req, res) => {
     try {
-      const itemCalId = req.params.id; // Assuming desId is part of the URL parameter
+      const id = req.params.id; // Assuming desId is part of the URL parameter
 
-      const itemData = itemCalModel.findById(itemCalId)
+      
 
-      const {calItemId} =  itemData
+      
 
       // if (isNaN(desId)) {
       //   return res.status(400).json({ error: 'Invalid desId value' });
       // }
       const {
-        
+       
         calIMTENo,
         calItemName,
         calItemType,
@@ -295,7 +295,7 @@ const itemCalController = {
       } = req.body;
       // Create an object with the fields you want to update
       const updatedCalField = {
-       
+        
         calIMTENo,
         calItemName,
         calItemType,
@@ -350,7 +350,7 @@ const itemCalController = {
       // Find the designation by desId and update it
       console.log("till working")
       const updateItemCal = await itemCalModel.findOneAndUpdate(
-        { _id: itemCalId },
+        { _id: id },
         { $set: updatedCalField }, // Use $set to update specific fields
         { new: true } // To return the updated document
       );
@@ -365,8 +365,8 @@ const itemCalController = {
         } else {
           itemCondition = "active"
         }
-        console.log()
-        const itemData = await itemAddModel.findById(calItemId)
+        console.log(updateItemCal)
+        const itemData = await itemAddModel.find({_id: updateItemCal.ItemCalId})
 
         const {
           itemIMTENo,
@@ -415,8 +415,8 @@ const itemCalController = {
         const itemUpdate = new itemAddModel(updateItemFields);
 
         const updateResult = await itemAddModel.findOneAndUpdate(
-          { _id: calItemId },
-          { $set: itemUpdate },
+          { _id: updateItemCal.ItemCalId },
+          { $set: updateItemFields },
           { new: true }
         );
 
@@ -442,10 +442,7 @@ const itemCalController = {
 
 
 
-        const historyRecord = new itemHistory({
-
-
-
+        const historyRecord = {
           isItemMaster,
           itemAddMasterName,
           itemIMTENo,
@@ -458,7 +455,6 @@ const itemCalController = {
           itemStatus: itemCondition,
           itemReceiptDate,
           itemDepartment,
-
           itemLocation: "department",
           itemCalFreInMonths,
           itemCalAlertDays,
@@ -481,10 +477,10 @@ const itemCalController = {
           acceptanceCriteria: obSize,
           itemCreatedBy,
           itemLastModifiedBy,
-        });
+        } ;
 
         const historyResult = await itemHistory.findOneAndUpdate(
-          { itemCalId: itemCalId },
+          { itemCalId: id },
           { $set: historyRecord },
           { new: true }
         );
@@ -516,30 +512,30 @@ const itemCalController = {
       const deleteResults = [];
 
 
-      for (const itemCalId of itemCalIds) {
+      for (const id of itemCalIds) {
         // Find and remove each vendor by _id
 
 
-        const calData = await itemCalModel.findById(itemCalId);
-        const itemData = await itemAddModel.findById(calData.calItemId)
+        const calData = await itemCalModel.findById(id);
+        const itemData = await itemAddModel.findById(calData.ItemCalId)
 
         const { itemLastCalDate: itemCalDate, itemLastDueDate: itemDueDate, itemLastStatus: itemStatus } = itemData
         const updateItemFields = { itemCalDate, itemDueDate, itemStatus }
         const updateResult = await itemAddModel.findOneAndUpdate(
-          { _id: calData.calItemId },
+          { _id: calData.ItemCalId },
           { $set: updateItemFields },
           { new: true }
         );
 
-        const deletedItemCal = await itemCalModel.findOneAndRemove({ _id: itemCalId });
+        const deletedItemCal = await itemCalModel.findOneAndRemove({ _id: id });
         console.log(deletedItemCal)
         if (!deletedItemCal) {
           // If a vendor was not found, you can skip it or handle the error as needed.
-          console.log(`ItemCal with ID ${itemCalId} not found.`);
+          console.log(`ItemCal with ID ${id} not found.`);
           res.status(500).json({ message: `ItemCal with ID not found.` });
 
         } else {
-          console.log(`ItemCal with ID ${itemCalId} deleted successfully.`);
+          console.log(`ItemCal with ID ${id} deleted successfully.`);
 
           deleteResults.push(deletedItemCal);
         }
