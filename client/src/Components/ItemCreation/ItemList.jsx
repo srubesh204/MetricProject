@@ -1261,11 +1261,11 @@ const ItemList = () => {
                         </div>
                         <div className='row'>
                             <div className=' col d-flex mb-2'>
-                                <div className='me-2' >
+                                <div className='' >
                                     {/* <button type="button" className='btn btn-sm' >History Card</button> */}
-                                    <Button component={RouterLink} to={`/InsHistoryCard`} size='small' variant="contained" color="secondary">
+                                    {/* <Button component={RouterLink} to={`/InsHistoryCard`} size='small' variant="contained" color="secondary">
                                         History Card
-                                    </Button>
+                                    </Button> */}
                                 </div>
                                 {employeeRole && employeeRole.employee !== "viewer" &&
                                     <div className='me-2' >
