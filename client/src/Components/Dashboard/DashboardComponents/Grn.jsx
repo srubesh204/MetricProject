@@ -54,7 +54,7 @@ const Grn = () => {
         grncCommonRemarks: "",
 
         grnItemId: "",
-      
+
         grnItemAddMasterName: "",
         grnItemType: "",
         grnItemIMTENo: "",
@@ -117,7 +117,7 @@ const Grn = () => {
         grnCommonRemarks: "",
 
         grnItemId: "",
-       
+
         grnItemAddMasterName: "",
         grnItemType: "",
         grnItemIMTENo: "",
@@ -177,7 +177,7 @@ const Grn = () => {
 
     const settingDcData = () => {
         if (selectedRows.length > 0) {
-           
+
             setGrnData((prev) => (
                 {
                     ...prev,
@@ -205,10 +205,10 @@ const Grn = () => {
 
 
 
-   
 
 
-  
+
+
 
     const [vendorDataList, setVendorDataList] = useState([])
 
@@ -348,6 +348,11 @@ const Grn = () => {
     const handleGrnItemChange = (e) => {
         const { name, value } = e.target;
 
+        if (name === "grnItemId") {
+            const fetchedData = selectedRows.filter((item) => item._id === value)
+            setGrnData((prev) => ({ ...prev, [name]: value, grnItemAddMasterName: fetchedData[0].itemAddMasterName }))
+        }
+
 
         if (name === "grnItemStatus") {
             const fetchedData = selectedRows.filter((item) => item._id === grnData.grnItemId)
@@ -466,7 +471,7 @@ const Grn = () => {
 
 
     }
-   
+
     console.log(grnData)
 
 
@@ -816,7 +821,7 @@ const Grn = () => {
 
 
 
-   
+
 
 
 
@@ -852,7 +857,7 @@ const Grn = () => {
 
                     `${process.env.REACT_APP_PORT}/itemGRN/createItemGRN`, grnData
                 );
-                
+
                 console.log(response.data.result)
                 setErrorHandler({ status: 0, message: "GRN Created Successfully", code: "success" });
                 setSnackBarOpen(true)
@@ -866,7 +871,7 @@ const Grn = () => {
         } catch (err) {
             console.log(err)
             setSnackBarOpen(true)
-            
+
             if (err.response && err.response.status === 400) {
                 // Handle validation errors
                 console.log(err);
@@ -1182,6 +1187,19 @@ const Grn = () => {
 
                                         </TextField>
 
+
+                                        <TextField label="Common Remarks"
+                                            id="grnItemAddMasterNameId"
+                                            value={grnData.grnItemAddMasterName}
+                                            fullWidth
+                                            size="small"
+                                            name="grnItemAddMasterName"
+                                            disabled
+                                        >
+                                        </TextField>
+
+
+
                                         <TextField size='small' fullWidth variant='outlined' disabled={grnData.grnItemId === ""} defaultValue="" id="grnItemStatusId" value={grnData.grnItemStatus} onChange={handleGrnItemChange} select label="Grn Item Status" name='grnItemStatus' >
                                             <MenuItem value="">Select</MenuItem>
                                             <MenuItem value="Calibrated">Calibrated</MenuItem>
@@ -1198,7 +1216,7 @@ const Grn = () => {
 
 
 
-                                    </div> 
+                                    </div>
 
                                 </div>
                                 {grnData.grnItemStatus === "Calibrated" ?
