@@ -1694,7 +1694,7 @@ const Home = () => {
                   <div className="col-md-9">
                     {/* {(selectedRows.length === 1 && selectedRows[0].itemCalibrationSource === "outsource" ) && <Button size='small' onClick={() => onSiteCheck()}>Onsite</Button>} */}
                     {(selectedRows.length === 1 && selectedRows[0].itemCalibrationSource === "outsource" && "Site") &&
-                      <Button size='small' onClick={() => onSiteCheck()}>Onsite</Button>
+                      <Button size='small' className='me-2' onClick={() => onSiteCheck()}>Onsite GRN</Button>
                     }
                     {(selectedRows.length === 1 && selectedRows[0].itemCalibrationSource === "inhouse") && <Button size='small' className='me-2' onClick={() => setCalOpen(true)}>Cal</Button>}                  
                     {grnButtonVisibility && <Button size='small' onClick={() => grnCheck()} className='me-2'>Grn</Button>}
