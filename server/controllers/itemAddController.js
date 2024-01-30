@@ -2,6 +2,7 @@ const itemAddModel = require("../models/itemAddModel")
 const dayjs = require('dayjs')
 const excelToJson = require('convert-excel-to-json');
 const itemHistory = require("../models/itemHistory");
+const itemCalModel = require("../models/itemCalModel");
 
 const itemAddController = {
   getAllItemAdds: async (req, res) => {
@@ -416,6 +417,8 @@ const itemAddController = {
 
       for (const itemAddId of itemAddIds) {
         // Find and remove each vendor by _id
+
+        const calData = await itemCalModel.find({calItemId: itemAddId})
         const deletedItemAdd = await itemAddModel.findOneAndRemove({ _id: itemAddId });
         console.log(deletedItemAdd)
         if (!deletedItemAdd) {

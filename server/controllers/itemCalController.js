@@ -227,7 +227,7 @@ const itemCalController = {
         };
 
 
-        await historyRecord.save();
+        const createdItem = await itemHistory.create(historyRecord);
       }
 
 
