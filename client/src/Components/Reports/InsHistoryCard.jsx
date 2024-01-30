@@ -273,7 +273,7 @@ function InsHistoryCard() {
                     </div>
                 ),
             },
-        { field: 'itemCalibrationSource', headerName: 'Calibrated At', width: 150, align: "center" },
+        { field: 'itemCalibratedAt', headerName: 'Calibrated At', width: 150, align: "center" },
         { field: 'itemCalibratedBy', headerName: 'Calibrated By', width: 150, align: "center" },
         { field: 'itemCalApprovedBy', headerName: 'Approved By', width: 150, align: "center" },
 
