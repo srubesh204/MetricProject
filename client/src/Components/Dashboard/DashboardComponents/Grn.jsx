@@ -1192,6 +1192,7 @@ const Grn = () => {
                                             id="grnItemAddMasterNameId"
                                             value={grnData.grnItemAddMasterName}
                                             fullWidth
+                                            className='me-2'
                                             size="small"
                                             name="grnItemAddMasterName"
                                             disabled

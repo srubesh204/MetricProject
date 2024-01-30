@@ -50,12 +50,15 @@ const CalDueReport = () => {
                 `${process.env.REACT_APP_PORT}/itemAdd/getAllItemAdds`
             );
 
+            const plantItems = response.data.result.filter(item => employeeRole.loggedEmp.plantDetails.some(plant => item.itemPlant === plant.plantName))
+            const departmentItems = plantItems.filter(item => employeeRole.loggedEmp.plantDetails.some(plant => plant.departments.includes(item.itemDepartment)))
+
             const filterNames = ["itemIMTENo", "itemType", "itemDepartment", "itemPlant", "itemCalibrationSource", "itemCurrentLocation"]
 
             let updatedFilterNames = {};
 
             filterNames.forEach((element, index) => {
-                const data = response.data.result.map(item => item[element]);
+                const data = departmentItems.map(item => item[element]);
                 filterNames[index] = [...new Set(data)];
 
                 // Update the object with a dynamic key based on the 'element'
@@ -69,8 +72,8 @@ const CalDueReport = () => {
 
 
 
-            setCalDueList(response.data.result);
-            setFilteredItemListData(response.data.result)
+            setCalDueList(departmentItems);
+            setFilteredItemListData(departmentItems)
             console.log(response.data)
         } catch (err) {
             console.log(err);
@@ -86,7 +89,7 @@ const CalDueReport = () => {
     console.log(dateData)
 
 
-    const columns = [ 
+    const columns = [
 
         { field: 'id', headerName: 'Si. No', width: 60, renderCell: (params) => params.api.getAllRowIds().indexOf(params.id) + 1, headerAlign: "center", align: "center" },
         { field: 'itemIMTENo', headerName: 'IMTE No', width: 120, headerAlign: "center", align: "left" },
@@ -754,18 +757,18 @@ const CalDueReport = () => {
 
                 </LocalizationProvider>
                 <CalDueReportContent.Provider
-                    value={{ totalPrintOpen, setTotalPrintOpen,filteredItemListData, calDueList, partDataList, formatNoData, companyList, plantList }}
+                    value={{ totalPrintOpen, setTotalPrintOpen, filteredItemListData, calDueList, partDataList, formatNoData, companyList, plantList }}
                 >
 
                     <CalDuePrint />
                 </CalDueReportContent.Provider>
                 {itemListSelectedRowIds.length > 0 &&
-                <MailSender {...TotalListChildData} />}
+                    <MailSender {...TotalListChildData} />}
 
 
                 {/* <MailSender /> */}
             </form>
-            
+
         </div>
     )
 }

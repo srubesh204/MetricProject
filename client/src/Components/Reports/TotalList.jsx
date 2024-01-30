@@ -3,7 +3,7 @@ import { TextField, MenuItem, Button } from '@mui/material';
 import { Box, Container, Grid, Paper, Typography } from "@mui/material";
 import { DataGrid, GridToolbar, GridToolbarQuickFilter } from '@mui/x-data-grid';
 import axios from 'axios';
-import { Edit, FilterAlt, PrintRounded,  } from '@mui/icons-material';
+import { Edit, FilterAlt, PrintRounded, } from '@mui/icons-material';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import dayjs from 'dayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
@@ -78,12 +78,15 @@ const TotalList = () => {
       );
       // You can use a different logic for generating the id
 
+      const plantItems = response.data.result.filter(item => employeeRole.loggedEmp.plantDetails.some(plant => item.itemPlant === plant.plantName))
+      const departmentItems = plantItems.filter(item => employeeRole.loggedEmp.plantDetails.some(plant => plant.departments.includes(item.itemDepartment)))
+
       const filterNames = ["itemIMTENo", "itemType", "itemDepartment", "itemPlant", "itemCalibrationSource", "itemCurrentLocation"]
 
       let updatedFilterNames = {};
 
       filterNames.forEach((element, index) => {
-        const data = response.data.result.map(item => item[element]);
+        const data = departmentItems.map(item => item[element]);
         filterNames[index] = [...new Set(data)];
 
         // Update the object with a dynamic key based on the 'element'
@@ -96,8 +99,8 @@ const TotalList = () => {
 
       console.log(partDataList)
 
-      setItemList(response.data.result);
-      setFilteredItemListData(response.data.result);
+      setItemList(departmentItems);
+      setFilteredItemListData(departmentItems);
 
     } catch (err) {
       console.log(err);
@@ -157,40 +160,40 @@ const TotalList = () => {
   const [companyList, setCompanyList] = useState([])
 
   const companyFetch = async () => {
-      try {
-          const response = await axios.get(
-              `${process.env.REACT_APP_PORT}/compDetails/getAllCompDetails`
-          );
-          setCompanyList(response.data.result);
-          //setFilterCompany(response.data.result);
+    try {
+      const response = await axios.get(
+        `${process.env.REACT_APP_PORT}/compDetails/getAllCompDetails`
+      );
+      setCompanyList(response.data.result);
+      //setFilterCompany(response.data.result);
 
-          console.log(response.data.result);
-      } catch (err) {
-          console.error(err);
-      }
+      console.log(response.data.result);
+    } catch (err) {
+      console.error(err);
+    }
   };
 
   useEffect(() => {
-      companyFetch();
+    companyFetch();
   }, []);
   const [plantList, setPlantList] = useState([])
 
   const Fetch = async () => {
-      try {
-          const response = await axios.get(
-              `${process.env.REACT_APP_PORT}/compDetails/getAllPlantDetails`
-          );
-          setPlantList(response.data.result);
-          //setFilterCompany(response.data.result);
+    try {
+      const response = await axios.get(
+        `${process.env.REACT_APP_PORT}/compDetails/getAllPlantDetails`
+      );
+      setPlantList(response.data.result);
+      //setFilterCompany(response.data.result);
 
-          console.log(response.data.result);
-      } catch (err) {
-          console.error(err);
-      }
+      console.log(response.data.result);
+    } catch (err) {
+      console.error(err);
+    }
   };
 
   useEffect(() => {
-      Fetch();
+    Fetch();
   }, []);
 
 
@@ -983,23 +986,23 @@ const TotalList = () => {
 
 
                 <div>
-                  <Button  variant="contained" size='small' color="success" onClick={() => { setTotalPrintOpen(true) }}>Print</Button>
+                  <Button variant="contained" size='small' color="success" onClick={() => { setTotalPrintOpen(true) }}>Print</Button>
 
                 </div>
-                
-                  <div className='col d-flex justify-content-end'>
-                    <div className='me-2'>
-                      <Button component={Link} to={`/home`} variant="contained" size='small' color="warning">
-                        <ArrowBackIcon /> Dash board
-                      </Button>
-                    </div>
-                    {/* <div >
+
+                <div className='col d-flex justify-content-end'>
+                  <div className='me-2'>
+                    <Button component={Link} to={`/home`} variant="contained" size='small' color="warning">
+                      <ArrowBackIcon /> Dash board
+                    </Button>
+                  </div>
+                  {/* <div >
                       <Button component={Link} to="/" size='small' variant='contained' startIcon={<ArrowBack />} endIcon={<House />} color='secondary'>Home</Button>
                     </div> */}
-                  </div>
+                </div>
 
 
-                
+
 
               </div>
               <Snackbar anchorOrigin={{ vertical: "top", horizontal: "right" }} open={snackBarOpen} autoHideDuration={6000} onClose={handleSnackClose}>
@@ -1024,7 +1027,7 @@ const TotalList = () => {
 
 
       <TotalListContent.Provider
-        value={{ totalPrintOpen, setTotalPrintOpen, itemList, filteredItemListData, partDataList, formatNoData,companyList ,plantList }}
+        value={{ totalPrintOpen, setTotalPrintOpen, itemList, filteredItemListData, partDataList, formatNoData, companyList, plantList }}
       >
 
         <TotalPrint />

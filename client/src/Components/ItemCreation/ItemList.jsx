@@ -59,23 +59,24 @@ const ItemList = () => {
                 `${process.env.REACT_APP_PORT}/itemAdd/getAllItemAdds`
             );
             console.log(response.data.result)
-            const plantwise = response.data.result.filter(item => employeeRole.loggedEmp.plantDetails.map(plant => plant.plantName).includes(item.itemPlant))
-            console.log(plantwise)
+            const plantItems = response.data.result.filter(item => employeeRole.loggedEmp.plantDetails.some(plant => item.itemPlant === plant.plantName))
+            const departmentItems = plantItems.filter(item => employeeRole.loggedEmp.plantDetails.some(plant => plant.departments.includes(item.itemDepartment)))
+            console.log(departmentItems)
 
             const filterNames = ["itemIMTENo", "itemType", "itemDepartment", "itemPlant", "itemCalibrationSource", "itemCurrentLocation"]
 
             let updatedFilterNames = {};
 
             filterNames.forEach((element, index) => {
-                const data = plantwise.map(item => item[element]);
+                const data = departmentItems.map(item => item[element]);
                 filterNames[index] = [...new Set(data)];
                 // Update the object with a dynamic key based on the 'element'
                 updatedFilterNames[element] = filterNames[index];
             });
             // Update state outside the loop with the updated object
             setFilterNameList(prev => ({ ...prev, ...updatedFilterNames }));
-            setItemList(plantwise);
-            setFilteredItemListData(plantwise);
+            setItemList(departmentItems);
+            setFilteredItemListData(departmentItems);
 
             setLoaded(true)
 
@@ -116,15 +117,6 @@ const ItemList = () => {
 
 
     }
-
-    // const [selectedEmp, setSelectedEmp] = useState([])
-    // const getEmployeeByName = (empId) => {
-    //     const selectedEmp = activeEmps.filter((emp) => emp._id === empId);
-    //     setSelectedEmp(selectedEmp)
-    // }
-    // useEffect(() => {
-    //     getEmployeeByName(calibrationData.calCalibratedBy)
-    // }, [calibrationData.calCalibratedBy])
 
 
 
