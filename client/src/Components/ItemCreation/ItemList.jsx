@@ -51,8 +51,7 @@ const ItemList = () => {
     const [itemList, setItemList] = useState([]);
     const [filteredItemListData, setFilteredItemListData] = useState([])
 
-    const [plantDatas, setPlantDatas] = useState([])
-    const [departmentDatas, setDepartmentDatas] = useState([])
+
 
     const itemFetch = async () => {
         try {
@@ -70,7 +69,7 @@ const ItemList = () => {
 
             filterNames.forEach((element, index) => {
                 const data = departmentItems.map(item => item[element]);
-                filterNames[index] = ["All", ...new Set(data)];
+                filterNames[index] = [...new Set(data)];
                 // Update the object with a dynamic key based on the 'element'
                 updatedFilterNames[element] = filterNames[index];
             });
@@ -90,36 +89,12 @@ const ItemList = () => {
         itemFetch();
     }, []);
 
-    useEffect(()=>{
+    useEffect(()=> {
+        const partNos = [...new Set(departmentDatas.map(item => item.itemPartName))];
+        const customerNames = [...new Set(departmentDatas.map(item => item.itemPartName))];
+         
+    })
 
-        setFilterAllNames(prev => ({
-            ...prev,
-            imteNo: "All",
-            itemType: "All",
-            
-            customerWise: "All",
-            supplierWise: "All",
-            partName: "All",
-            status: "All",
-            calibrationSource: "All",
-            itemCurrentLocation: "All"
-        }))
-        const filterNames = ["itemIMTENo", "itemType", "itemDepartment", "itemPlant", "itemCalibrationSource", "itemCurrentLocation"]
-
-            let updatedFilterNames = {};
-
-            filterNames.forEach((element, index) => {
-                const data = departmentDatas.map(item => item[element]);
-                filterNames[index] = ["All", ...new Set(data)];
-                // Update the object with a dynamic key based on the 'element'
-                updatedFilterNames[element] = filterNames[index];
-            });
-            console.log(updatedFilterNames)
-            // Update state outside the loop with the updated object
-            setFilterNameList(prev => ({ ...prev, ...updatedFilterNames }));
-       
-            
-    }, [departmentDatas])
 
     const [employeeList, setEmployeeList] = useState([]);
     const empFetchData = async () => {
@@ -350,25 +325,26 @@ const ItemList = () => {
 
     const [filterAllNames, setFilterAllNames] = useState({
 
-        imteNo: "All",
-        itemType: "All",
-        currentLocation: "All",
-        customerWise: "All",
-        supplierWise: "All",
-        partName: "All",
-        status: "All",
-        plantWise: "All",
-        calibrationSource: "All",
-        itemCurrentLocation: "All"
+        imteNo: "all",
+        itemType: "all",
+        currentLocation: "all",
+        customerWise: "all",
+        supplierWise: "all",
+        partName: "all",
+        status: "all",
+        plantWise: "all",
+        calibrationSource: "all",
+        itemCurrentLocation: "all"
     })
 
-  
+    const [plantDatas, setPlantDatas] = useState([])
+    const [departmentDatas, setDepartmentDatas] = useState([])
 
     const [customerParts, setCustomerParts] = useState([])
     const handleFilterChangeItemList = (e) => {
         const { name, value } = e.target;
         console.log(e)
-        if (value === "All") {
+        if (value === "all") {
             setFilteredItemListData(itemList)
         } else {
 
@@ -377,16 +353,16 @@ const ItemList = () => {
                 setFilteredItemListData(plantWise)
                 setFilterAllNames(prev => ({
                     ...prev,
-                    imteNo: "All",
-                    itemType: "All",
-                    currentLocation: "All",
-                    customerWise: "All",
-                    supplierWise: "All",
-                    partName: "All",
-                    status: "All",
+                    imteNo: "all",
+                    itemType: "all",
+                    currentLocation: "all",
+                    customerWise: "all",
+                    supplierWise: "all",
+                    partName: "all",
+                    status: "all",
                     plantWise: value,
-                    calibrationSource: "All",
-                    itemCurrentLocation: "All"
+                    calibrationSource: "all",
+                    itemCurrentLocation: "all"
                 }))
                 setPlantDatas(plantWise)
             }
@@ -396,18 +372,31 @@ const ItemList = () => {
                 setFilteredItemListData(currentLocation)
                 setFilterAllNames(prev => ({
                     ...prev,
-                    imteNo: "All",
-                    itemType: "All",
+                    imteNo: "all",
+                    itemType: "all",
                     currentLocation: value,
-                    customerWise: "All",
-                    supplierWise: "All",
-                    partName: "All",
-                    status: "All",
-                    
-                    calibrationSource: "All",
-                    itemCurrentLocation: "All"
+                    customerWise: "all",
+                    supplierWise: "all",
+                    partName: "all",
+                    status: "all",
+                    plantWise: "all",
+                    calibrationSource: "all",
+                    itemCurrentLocation: "all"
                 }))
                 setDepartmentDatas(currentLocation)
+                const filterNames = ["itemIMTENo", "itemType", "itemCalibrationSource", "itemCurrentLocation"]
+
+                let updatedFilterNames = {};
+
+                filterNames.forEach((element, index) => {
+                    const data = currentLocation.map(item => item[element]);
+                    filterNames[index] = [...new Set(data)];
+                    // Update the object with a dynamic key based on the 'element'
+                    updatedFilterNames[element] = filterNames[index];
+                });
+                console.log(updatedFilterNames)
+                // Update state outside the loop with the updated object
+                setFilterNameList(prev => ({ ...prev, ...updatedFilterNames }));
             }
 
             if (name === "customerWise") {
@@ -421,19 +410,19 @@ const ItemList = () => {
                 setCustomerParts(partData)
                 setFilterAllNames(prev => ({
                     ...prev,
-                    imteNo: "All",
-                    itemType: "All",
-                    
+                    imteNo: "all",
+                    itemType: "all",
+                    currentLocation: "all",
                     customerWise: value,
-                    supplierWise: "All",
-                    partName: "All",
-                    status: "All",
-                    
-                    calibrationSource: "All",
-                    itemCurrentLocation: "All"
+                    supplierWise: "all",
+                    partName: "all",
+                    status: "all",
+                    plantWise: "all",
+                    calibrationSource: "all",
+                    itemCurrentLocation: "all"
                 }))
 
-                
+
             }
 
 
@@ -443,15 +432,15 @@ const ItemList = () => {
                 setFilterAllNames(prev => ({
                     ...prev,
                     imteNo: value,
-                    itemType: "All",
-                    
-                    customerWise: "All",
-                    supplierWise: "All",
-                    partName: "All",
-                    status: "All",
-                    
-                    calibrationSource: "All",
-                    itemCurrentLocation: "All"
+                    itemType: "all",
+                    currentLocation: "all",
+                    customerWise: "all",
+                    supplierWise: "all",
+                    partName: "all",
+                    status: "all",
+                    plantWise: "all",
+                    calibrationSource: "all",
+                    itemCurrentLocation: "all"
                 }))
             }
             if (name === "itemType") {
@@ -460,22 +449,22 @@ const ItemList = () => {
                 setFilteredItemListData(itemType)
                 setFilterAllNames(prev => ({
                     ...prev,
-                    imteNo: "All",
+                    imteNo: "all",
                     itemType: value,
-                    
-                    customerWise: "All",
-                    supplierWise: "All",
-                    partName: "All",
-                    status: "All",
-                    
-                    calibrationSource: "All",
-                    itemCurrentLocation: "All"
+                    currentLocation: "all",
+                    customerWise: "all",
+                    supplierWise: "all",
+                    partName: "all",
+                    status: "all",
+                    plantWise: "all",
+                    calibrationSource: "all",
+                    itemCurrentLocation: "all"
                 }))
 
 
             }
-            
-            
+
+
             if (name === "supplierWise") {
 
                 const supperlierWise = departmentDatas.filter((item) => item.itemSupplier.includes(value))
@@ -484,16 +473,16 @@ const ItemList = () => {
 
                 setFilterAllNames(prev => ({
                     ...prev,
-                    imteNo: "All",
+                    imteNo: "all",
                     itemType: value,
-                    
-                    customerWise: "All",
+                    currentLocation: "all",
+                    customerWise: "all",
                     supplierWise: value,
-                    partName: "All",
-                    status: "All",
-                    
-                    calibrationSource: "All",
-                    itemCurrentLocation: "All"
+                    partName: "all",
+                    status: "all",
+                    plantWise: "all",
+                    calibrationSource: "all",
+                    itemCurrentLocation: "all"
                 }))
             }
             if (name === "partName") {
@@ -505,16 +494,16 @@ const ItemList = () => {
                 console.log(filteredItems)
                 setFilterAllNames((prev) => ({
                     ...prev,
-                    imteNo: "All",
-                    itemType: "All",
-                    
-                    customerWise: "All",
-                    supplierWise: "All",
+                    imteNo: "all",
+                    itemType: "all",
+                    currentLocation: "all",
+                    customerWise: "all",
+                    supplierWise: "all",
                     partName: value, // Update the partName value in the filterAllNames state
-                    status: "All", // Reset other filters if needed
-                    
-                    calibrationSource: "All",
-                    itemCurrentLocation: "All"
+                    status: "all", // Reset other filters if needed
+                    plantWise: "all",
+                    calibrationSource: "all",
+                    itemCurrentLocation: "all"
                 }));
             }
             if (name === "status") {
@@ -522,35 +511,35 @@ const ItemList = () => {
                 setFilteredItemListData(partName)
                 setFilterAllNames(prev => ({
                     ...prev,
-                    imteNo: "All",
-                    itemType: "All",
-                    
-                    customerWise: "All",
-                    supplierWise: "All",
-                    partName: "All",
+                    imteNo: "all",
+                    itemType: "all",
+                    currentLocation: "all",
+                    customerWise: "all",
+                    supplierWise: "all",
+                    partName: "all",
                     status: value,
-                    
-                    calibrationSource: "All",
-                    itemCurrentLocation: "All"
+                    plantWise: "all",
+                    calibrationSource: "all",
+                    itemCurrentLocation: "all"
                 }))
             }
-           
+
             if (name === "calibrationSource") {
 
                 const calibrationSource = departmentDatas.filter((item) => (item.itemCalibrationSource === value))
                 setFilteredItemListData(calibrationSource)
                 setFilterAllNames(prev => ({
                     ...prev,
-                    imteNo: "All",
-                    itemType: "All",
-                    
-                    customerWise: "All",
-                    supplierWise: "All",
-                    partName: "All",
-                    status: "All",
-                    
+                    imteNo: "all",
+                    itemType: "all",
+                    currentLocation: "all",
+                    customerWise: "all",
+                    supplierWise: "all",
+                    partName: "all",
+                    status: "all",
+                    plantWise: "all",
                     calibrationSource: value,
-                    itemCurrentLocation: "All"
+                    itemCurrentLocation: "all"
 
                 }))
 
@@ -560,15 +549,15 @@ const ItemList = () => {
                 setFilteredItemListData(itemCurrentLocation)
                 setFilterAllNames(prev => ({
                     ...prev,
-                    imteNo: "All",
-                    itemType: "All",
-                    
-                    customerWise: "All",
-                    supplierWise: "All",
-                    partName: "All",
-                    status: "All",
-                    
-                    calibrationSource: "All",
+                    imteNo: "all",
+                    itemType: "all",
+                    currentLocation: "all",
+                    customerWise: "all",
+                    supplierWise: "all",
+                    partName: "all",
+                    status: "all",
+                    plantWise: "all",
+                    calibrationSource: "all",
                     itemCurrentLocation: value
                 }))
             }
@@ -665,12 +654,14 @@ const ItemList = () => {
     useEffect(() => {
         if (partDataList.length !== 0) {
 
-            const partCustomers = partDataList.filter(part => itemList.some(item => item.itemPartName.includes(part._id)))
+            const partCustomers = partDataList.filter(part => departmentDatas.some(item => item.itemPartName.includes(part.partNo)))
+            
+            console.log(partCustomers)
             setPartCutomerNames(partCustomers)
 
 
         }
-    }, [partDataList, itemList])
+    }, [departmentDatas])
 
 
 
@@ -770,23 +761,23 @@ const ItemList = () => {
 
 
         if (value === "all") {
-            setFilteredItemListData(itemList)
+            setFilteredItemListData(departmentDatas)
         } else {
 
 
             if (value === "Past") {
-                const pastData = itemList.filter((item) => dayjs(item.itemDueDate).isBefore(currentDate.format("YYYY-MM-DD")))
+                const pastData = departmentDatas.filter((item) => dayjs(item.itemDueDate).isBefore(currentDate.format("YYYY-MM-DD")))
                 setFilteredItemListData(pastData)
 
             }
             if (value === "Today") {
-                const CurrentDue = itemList.filter((item) => dayjs(item.itemDueDate).isSame(currentDate.format("YYYY-MM-DD")))
+                const CurrentDue = departmentDatas.filter((item) => dayjs(item.itemDueDate).isSame(currentDate.format("YYYY-MM-DD")))
 
                 setFilteredItemListData(CurrentDue)
             }
             if (value === "7") {
 
-                const filteredDataLast7Days = itemList.filter((item) => {
+                const filteredDataLast7Days = departmentDatas.filter((item) => {
                     console.log(item.itemDueDate)
                     return (dayjs(item.itemDueDate).isSameOrBefore(sevenDaysAgo) && dayjs(item.itemDueDate).isSameOrAfter(currentDate.format("YYYY-MM-DD")))
                 })
@@ -795,7 +786,7 @@ const ItemList = () => {
             }
             if (value === "15") {
 
-                const fifteenDaysFilter = itemList.filter((item) => {
+                const fifteenDaysFilter = departmentDatas.filter((item) => {
 
                     return (dayjs(item.itemDueDate).isBetween(currentDate.format("YYYY-MM-DD"), fifteenDaysAgo))
                 })
@@ -803,7 +794,7 @@ const ItemList = () => {
             }
             if (value === "30") {
 
-                const thirtyDaysFilter = itemList.filter((item) => {
+                const thirtyDaysFilter = departmentDatas.filter((item) => {
 
                     return (dayjs(item.itemDueDate).isBetween(currentDate.format("YYYY-MM-DD"), thirtyDaysAgo))
                 })
@@ -812,7 +803,7 @@ const ItemList = () => {
 
             if (value === ">30") {
 
-                const thirtyDaysFilter = itemList.filter((item) => {
+                const thirtyDaysFilter = departmentDatas.filter((item) => {
 
                     return (dayjs(item.itemDueDate).isAfter(thirtyDaysAgo))
                 })
@@ -820,7 +811,7 @@ const ItemList = () => {
             }
 
             if (value === "Date") {
-                setFilteredItemListData(itemList)
+                setFilteredItemListData(departmentDatas)
             }
 
         }
@@ -1002,13 +993,13 @@ const ItemList = () => {
                                 <TextField label="Plant Wise"
                                     id="plantWiseId"
                                     select
-                                    
-                                    value={filterAllNames.plantWise}
+                                    defaultValue="all"
+                                    // value={filterAllNames.plantWise}
                                     fullWidth
                                     size="small"
                                     onChange={handleFilterChangeItemList}
                                     name="plantWise" >
-                                    
+                                    <MenuItem value="all">All</MenuItem>
                                     {FilterNameList.itemPlant.map((item, index) => (
                                         <MenuItem key={index} value={item}>{item}</MenuItem>
                                     ))}
@@ -1022,12 +1013,12 @@ const ItemList = () => {
                                     id="currentLocationId"
                                     select
                                     defaultValue="all"
-                                    value={filterAllNames.currentLocation}
+                                    // value={filterAllNames.currentLocation}
                                     fullWidth
                                     onChange={handleFilterChangeItemList}
                                     size="small"
                                     name="currentLocation" >
-                                    
+                                    <MenuItem value="all">All</MenuItem>
                                     {FilterNameList.itemDepartment.map((item, index) => (
                                         <MenuItem key={index} value={item}>{item}</MenuItem>
                                     ))}
@@ -1043,13 +1034,13 @@ const ItemList = () => {
                                     required
                                     select
                                     value={filterAllNames.imteNo}
-                                    
+                                    defaultValue="all"
                                     fullWidth
                                     size="small"
-                                    
+
                                     onChange={handleFilterChangeItemList}
                                     name="imteNo" >
-                                    
+                                    <MenuItem value="all">All</MenuItem>
                                     {FilterNameList.itemIMTENo.map((item, index) => (
                                         <MenuItem key={index} value={item}>{item}</MenuItem>
                                     ))}
@@ -1067,7 +1058,7 @@ const ItemList = () => {
                                     onChange={handleFilterChangeItemList}
                                     size="small"
                                     name="itemType" >
-                                    <MenuItem value="All">All</MenuItem >
+                                    <MenuItem value="all">All</MenuItem >
                                     <MenuItem value="attribute">Attribute</MenuItem >
                                     <MenuItem value="variable">Variable</MenuItem >
                                     <MenuItem value="referenceStandard">Reference Standard</MenuItem >
@@ -1081,14 +1072,14 @@ const ItemList = () => {
                                 <TextField label="Calibration source"
                                     id="calibrationSourceId"
                                     select
-                                   
+                                    defaultValue={"all"}
                                     value={filterAllNames.calibrationSource}
                                     fullWidth
                                     size="small"
                                     // value={filterAllNames.calibrationSource}
                                     onChange={handleFilterChangeItemList}
                                     name="calibrationSource" >
-                                    
+                                    <MenuItem value="all">All</MenuItem>
                                     {FilterNameList.itemCalibrationSource.map((item, index) => (
                                         <MenuItem key={index} value={item}>{item}</MenuItem>
                                     ))}
@@ -1100,12 +1091,12 @@ const ItemList = () => {
                                 <TextField label="Due In Days"
                                     id="dueInDaysId"
                                     select
-                                    value={filterAllNames.dueDate}
+                                    defaultValue="all"
                                     fullWidth
                                     size="small"
                                     onChange={handleDueChange}
                                     name="dueInDays" >
-                                    <MenuItem value="All">All</MenuItem>
+                                    <MenuItem value="all">All</MenuItem>
                                     <MenuItem value="Past">Past</MenuItem >
                                     <MenuItem value="Today">Today</MenuItem >
                                     <MenuItem value="7">7</MenuItem >
@@ -1122,13 +1113,13 @@ const ItemList = () => {
                                 <TextField label="Customer Wise"
                                     id="customerWiseId"
                                     select
-                                    
+                                    defaultValue="all"
                                     fullWidth
                                     // value={filterAllNames.customerWise}
                                     size="small"
                                     onChange={handleFilterChangeItemList}
                                     name="customerWise" >
-                                    <MenuItem value="All">All</MenuItem>
+                                    <MenuItem value="all">All</MenuItem>
                                     {partCutomerNames.map((item, index) => (
                                         <MenuItem key={index} value={item.customer}>{item.customer}</MenuItem>
                                     ))}
@@ -1147,7 +1138,7 @@ const ItemList = () => {
                                     value={filterAllNames.partName}
 
                                     name="partName" >
-                                    <MenuItem value="All">All</MenuItem>
+                                    <MenuItem value="all">All</MenuItem>
                                     {customerParts.map((item, index) => (
                                         <MenuItem key={index} value={item._id}>{[item.partNo, item.partName].join(', ')}</MenuItem>
                                     ))}
@@ -1167,13 +1158,13 @@ const ItemList = () => {
                                     <TextField label="Status"
                                         id="statusId"
                                         select
-                                        defaultValue="All"
+                                        defaultValue="all"
                                         fullWidth
                                         size="small"
                                         name="status"
                                         onChange={handleFilterChangeItemList}>
 
-                                        <MenuItem value="All">All</MenuItem>
+                                        <MenuItem value="all">All</MenuItem>
                                         <MenuItem value="active">Active</MenuItem>
                                         <MenuItem value="spare">Spare</MenuItem>
                                         <MenuItem value="breakdown">Breakdown</MenuItem>
@@ -1193,7 +1184,7 @@ const ItemList = () => {
                                         onChange={handleFilterChangeItemList}
                                         size="small"
                                         name="itemCurrentLocation" >
-                                        
+                                        <MenuItem value="all">All</MenuItem>
                                         {FilterNameList.itemCurrentLocation.map((item, index) => (
                                             <MenuItem key={index} value={item}>{item}</MenuItem>
                                         ))}
