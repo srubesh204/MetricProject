@@ -77,7 +77,7 @@ const HistoryCardPrint = () => {
                     <td style={{ width: "9%", borderRight: "0.5px solid black", borderTop: "0.5px solid black" }}>{dayjs(row.itemCalDate).format("DD-MM-YYYY") || '-'}</td>
                     <td style={{ width: "9%", borderRight: "0.5px solid black", borderTop: "0.5px solid black" }}>{row.itemCalStatus || '-'}</td>
                     <td style={{ width: "9%", borderRight: "0.5px solid black", borderTop: "0.5px solid black" }}>{dayjs(row.itemDueDate).format("DD-MM-YYYY") || '-'}</td>
-                    <td style={{ width: "9%", borderRight: "0.5px solid black", borderTop: "0.5px solid black" }}>--</td>
+                    {/* <td style={{ width: "9%", borderRight: "0.5px solid black", borderTop: "0.5px solid black" }}>--</td> */}
                     <td style={{ width: "9%", borderRight: "0.5px solid black", borderTop: "0.5px solid black" }}>{row.itemCertificateNo || '-'}</td>
                     <td style={{ width: "9%", borderRight: "0.5px solid black", borderTop: "0.5px solid black" }}>
                         {row.acceptanceCriteria.map(acc => <React.Fragment key={index}>
@@ -178,9 +178,9 @@ const HistoryCardPrint = () => {
                                 <td style={{ width: "9%", borderRight: "0.5px solid black", margin: 0, fontWeight: "bold" }}>
                                     Next Calibration
                                 </td>
-                                <td style={{ width: "9%", borderRight: "0.5px solid black", margin: 0, fontWeight: "bold" }}>
+                                {/* <td style={{ width: "9%", borderRight: "0.5px solid black", margin: 0, fontWeight: "bold" }}>
                                     Certificate Status
-                                </td>
+                                </td> */}
                                 <td style={{ width: "9%", borderRight: "0.5px solid black", margin: 0, fontWeight: "bold" }}>
                                     Certificate No
                                 </td>
