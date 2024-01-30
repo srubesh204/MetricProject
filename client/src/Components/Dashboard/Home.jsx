@@ -1166,7 +1166,7 @@ const Home = () => {
   useEffect(() => {
     setStatusCheckMsg("");
     const grnBoolean = selectedRows.every(item => item.dcStatus === "1")
-    setGrnButtonVisibility(grnBoolean && selectedRows.length > 0)
+    setGrnButtonVisibility(grnBoolean && selectedRows.length === 1 )
     mailIdGather()
   }, [selectedRows])
 

@@ -919,7 +919,7 @@ const Grn = () => {
             const formData = new FormData();
             formData.append('file', selectedFile);
             try {
-                axios.post(`${process.env.REACT_APP_PORT}/upload/grnItemCertificateUp`, formData)
+                axios.post(`${process.env.REACT_APP_PORT}/upload/itemCertificates`, formData)
                     .then(response => {
                         setCertMessage("Certificate Uploaded Successfully")
                         console.log("Certificate Uploaded Successfully")

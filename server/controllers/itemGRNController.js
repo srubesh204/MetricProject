@@ -232,7 +232,7 @@ const itemGRNController = {
           }
         }
 
-
+        
         const historyRecord = new itemHistory({
           itemIMTENo,
           itemGrnId: result._id,
@@ -580,7 +580,7 @@ const itemGRNController = {
           itemUncertainityUnit,
           itemPrevCalData,
           itemCalibratedAt,
-          itemCertificateName,
+          itemCertificateName: grnItemCertificate,
           itemCertificateNo,
           itemOBType,
           itemUncertainity
