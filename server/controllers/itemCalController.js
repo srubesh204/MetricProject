@@ -106,6 +106,8 @@ const itemCalController = {
       if (Object.keys(createdItem).length !== 0) {
 
         const itemData = await itemAddModel.findById(ItemCalId)
+
+        console.log(itemData)
         let itemCondition = ""
         if (calStatus === "rejected") {
           itemCondition = "rejection"
@@ -148,7 +150,7 @@ const itemCalController = {
           itemLastModifiedBy
         } = itemData
 
-
+        console.log(itemIMTENo)
         const updateItemFields = {
           itemIMTENo,
           itemCalDate: calItemCalDate,
@@ -227,7 +229,7 @@ const itemCalController = {
         };
 
 
-        const createdItem = await itemHistory.create(historyRecord);
+        const itemHistoryCreate = await itemHistory.create(historyRecord);
       }
 
 

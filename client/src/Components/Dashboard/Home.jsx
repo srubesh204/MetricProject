@@ -141,6 +141,29 @@ const Home = () => {
   }, []);
 
 
+  const [calLastNo, setCalLastNo] = useState("")
+  const calFetch = async () => {
+    try {
+      const response = await axios.get(
+        `${process.env.REACT_APP_PORT}/itemCal/getAllItemCals`
+
+      );
+      const calNos = response.data.result.map(cal => cal.calId).filter(Boolean).sort()
+      console.log(calNos)
+      setCalLastNo((dayjs().year() + "-" + (calNos.length > 0 ? (calNos[calNos.length - 1]) + 1 : 1)))
+      
+
+
+    } catch (err) {
+      console.log(err);
+    }
+  };
+  useEffect(() => {
+    calFetch();
+  }, []);
+
+
+
 
   const [selectedPlantName, setSelectedPlantName] = useState("")
 
@@ -1751,7 +1774,7 @@ const Home = () => {
               <React.Fragment>
 
                 <HomeContent.Provider
-                  value={{ calOpen, setCalOpen, selectedRows, itemMasters, activeEmps: activeEmps.allEmps, masters, itemList }}
+                  value={{ calOpen, setCalOpen, selectedRows, itemMasters, activeEmps: activeEmps.allEmps, masters, itemList, calLastNo }}
                 >
                   <CalDialog />
                 </HomeContent.Provider>

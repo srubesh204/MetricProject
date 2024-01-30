@@ -126,7 +126,7 @@ const CalDialog = () => {
         calItemCalDate: dayjs().format('YYYY-MM-DD'),
         calItemDueDate: "",
         calItemEntryDate: dayjs().format('YYYY-MM-DD'),
-        calCalibratedBy: (loggedEmp.firstName || "") + " " + (loggedEmp.lastName || ""),
+        calCalibratedBy: loggedEmp.firstName || "" + " " + loggedEmp.lastName || "",
         calApprovedBy: "",
         calBeforeData: "no",
         calStatus: "status",
@@ -232,20 +232,20 @@ const CalDialog = () => {
             setCalibrationData((prev) => (
                 {
                     ...prev,
-                    ItemCalId: selectedRows[0]._id || "",
-                    calIMTENo: selectedRows[0].itemIMTENo || "",
-                    calItemName: selectedRows[0].itemAddMasterName || "",
-                    calItemType: selectedRows[0].itemType || "",
-                    calRangeSize: selectedRows[0].itemRangeSize || "",
-                    calItemMFRNo: selectedRows[0].itemMFRNo || "",
-                    calLC: selectedRows[0].itemLC || "",
-                    calItemMake: selectedRows[0].itemMake || "",
-                    calItemFreInMonths: selectedRows[0].itemCalFreInMonths || "",
+                    ItemCalId: selectedRows[0]._id ,
+                    calIMTENo: selectedRows[0].itemIMTENo,
+                    calItemName: selectedRows[0].itemAddMasterName,
+                    calItemType: selectedRows[0].itemType,
+                    calRangeSize: selectedRows[0].itemRangeSize,
+                    calItemMFRNo: selectedRows[0].itemMFRNo,
+                    calLC: selectedRows[0].itemLC,
+                    calItemMake: selectedRows[0].itemMake,
+                    calItemFreInMonths: selectedRows[0].itemCalFreInMonths,
                     calItemUncertainity: filter.length > 0 && filter[0] ? filter[0].uncertainty : "",
                     calItemSOPNo: filter.length > 0 && filter[0].SOPNo ? filter[0].SOPNo : "",
                     calStandardRef: filter.length > 0 && filter[0].standardRef ? filter[0].standardRef : "",
-                    calOBType: selectedRows[0].itemOBType || "",
-                    // calCertificateNo: selectedRows[0].itemCertificateNo || "",
+                    calOBType: selectedRows[0].itemOBType,
+                    // calCertificateNo: selectedRows[0].itemCertificateNo,
 
                     // calCalibratedBy: selectedRows[0],
                     // calApprovedBy: selectedRows[0],
@@ -770,7 +770,8 @@ const CalDialog = () => {
             <DialogTitle align='center'>Calibration</DialogTitle>
             <IconButton
                 aria-label="close"
-                onClick={() => setCalOpen(false)}
+                onClick={() => {setCalOpen(false);  window.location.reload()}}
+
                 sx={{
                     position: 'absolute',
                     right: 8,
@@ -1002,6 +1003,7 @@ const CalDialog = () => {
                                     fullWidth
                                     variant="outlined"
                                     onChange={handleCalData}
+                                    disabled
                                 >
 
                                 </TextField>
@@ -1611,7 +1613,7 @@ const CalDialog = () => {
 
                 </div>
                 <div>
-                    <Button variant='contained' color='error' className='me-3' onClick={() => { setCalOpen(false) }}>Cancel</Button>
+                    <Button variant='contained' color='error' className='me-3' onClick={() => { setCalOpen(false); window.location.reload() }}>Cancel</Button>
                     <Button variant='contained' color='success' onClick={() => { setConfirmSubmit(true) }}>Submit</Button>
                 </div>
             </DialogActions>
