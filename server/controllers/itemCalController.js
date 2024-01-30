@@ -255,7 +255,7 @@ const itemCalController = {
     try {
       const itemCalId = req.params.id; // Assuming desId is part of the URL parameter
 
-      const itemData = itemCalModel.findById(itemCalId)
+      const itemData = itemCalModel.find({_id :itemCalId})
 
       const {calItemId} =  itemData
 
@@ -366,7 +366,7 @@ const itemCalController = {
           itemCondition = "active"
         }
         console.log()
-        const itemData = await itemAddModel.findById(calItemId)
+        const itemData = await itemAddModel.find({_id: calItemId})
 
         const {
           itemIMTENo,
