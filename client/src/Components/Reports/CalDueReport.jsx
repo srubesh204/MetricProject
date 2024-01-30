@@ -14,6 +14,7 @@ import { Link } from "react-router-dom";
 import dayjs from 'dayjs';
 import CalDuePrint from './CalDuePrint';
 import MailSender from '../mailComponent/MailSender';
+import { useEmployee } from '../../App';
 //import MailSender from '../mailComponent/MailSender';
 export const CalDueReportContent = createContext(null);
 
@@ -22,6 +23,8 @@ export const CalDueReportContent = createContext(null);
 
 
 const CalDueReport = () => {
+
+    const employeeRole = useEmployee()
 
     const [totalPrintOpen, setTotalPrintOpen] = useState(false);
 
