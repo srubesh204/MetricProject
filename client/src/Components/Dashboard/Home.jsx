@@ -1438,7 +1438,7 @@ const Home = () => {
                     labelLine={false}
                   >
                     {data.map((entry, index) => (
-                      <Cell key={index} fill={calStatusColor[index % calStatusColor.length]} />
+                      <Cell key={index} fill={calStatusColor[index]} />
                     ))}
 
                   </Pie>
@@ -1501,7 +1501,7 @@ const Home = () => {
                     labelLine={false}
                   >
                     {data.map((entry, index) => (
-                      <Cell key={`cell-${index}`} fill={itemStatusColor[index % itemStatusColor.length]} />
+                      <Cell key={`cell-${index}`} fill={itemStatusColor[index]} />
                     ))}
 
                   </Pie>
@@ -1545,7 +1545,7 @@ const Home = () => {
                     labelLine={false}
                   >
                     {data.map((entry, index) => (
-                      <Cell key={`cell-${index}`} fill={itemLocationColor[index % itemLocationColor.length]} />
+                      <Cell key={`cell-${index}`} fill={itemLocationColor[index]} />
                     ))}
 
                   </Pie>
