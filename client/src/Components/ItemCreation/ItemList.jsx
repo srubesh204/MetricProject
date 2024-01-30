@@ -1128,7 +1128,7 @@ const ItemList = () => {
                                 </TextField>
 
                             </div>
-                            <div className="col d-flex mb-2">
+                            {/* <div className="col d-flex mb-2">
 
                                 <TextField label=" Part No & Part Name"
                                     id="partNameId"
@@ -1146,7 +1146,7 @@ const ItemList = () => {
                                     ))}
                                 </TextField>
 
-                            </div>
+                            </div> */}
 
 
 

@@ -254,6 +254,7 @@ const Home = () => {
   useEffect(() => {
     getVendorsByType();
   }, [])
+
   console.log(customers)
   console.log(employeeRole)
 
@@ -1422,11 +1423,11 @@ const Home = () => {
 
 
 
-                <Autocomplete
+                {/* <Autocomplete
                   disablePortal
 
                   id="combo-box-demo"
-                  options={customers.length > 0 ? customers : []}
+                  options={customers}
                   size='small'
                   fullWidth
                   onInputChange={(e, newValue) => MainFilter(newValue, "customer")}
@@ -1435,7 +1436,7 @@ const Home = () => {
                   getOptionLabel={(cus) => cus.aliasName}
                   renderInput={(params) => <TextField {...params} label="Customer" name='customer' />}
                   disableClearable
-                />
+                /> */}
 
 
 

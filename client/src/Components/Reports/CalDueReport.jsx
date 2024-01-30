@@ -632,7 +632,7 @@ const CalDueReport = () => {
 
                                 </TextField>
                             </div>
-                            <div className="col d-flex  mb-2">
+                            {/* <div className="col d-flex  mb-2">
                                 <TextField label="Customer Wise"
                                     id="customerWiseId"
                                     onChange={handleFilterChangeItemList}
@@ -649,9 +649,9 @@ const CalDueReport = () => {
 
                                 </TextField>
 
-                            </div>
+                            </div> */}
 
-                            <div className="col d-flex  mb-2">
+                            {/* <div className="col d-flex  mb-2">
 
                                 <TextField label="Part Name"
                                     id="partNameId"
@@ -667,7 +667,7 @@ const CalDueReport = () => {
                                         <MenuItem key={index} value={item._id}>{[item.partNo, item.partName].join(', ')}</MenuItem>
                                     ))}
                                 </TextField>
-                            </div>
+                            </div> */}
                             <div className="col d-flex  mr-1 ">
                                 <TextField label="Calibration Soure"
                                     onChange={handleFilterChangeItemList}
