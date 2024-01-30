@@ -18,17 +18,17 @@ const CalEditModel = () => {
 
     const calData = useContext(CalData)
     const [lastResultData, setLastResultData] = useState([])
-    const { calEditOpen, setCalEditOpen, selectedCalRow, itemMasters, activeEmps, calListFetchData } = calData
+    const { calEditOpen, setCalEditOpen, selectedCalRow, itemMasters, activeEmps, calListFetchData, employeeRole } = calData
     const [calibrationDatas, setCalibrationDatas] = useState([])
 
-    const [selectedIMTE, setSelectedIMTE] = useState([]);
+    
 
 
 
 
 
     const [selectedExtraMaster, setSelectedExtraMaster] = useState([])
-    console.log(selectedIMTE)
+    
 
     const [initialCalData, setInitialCalData] = useState({
         ItemCalId: "",
@@ -559,8 +559,12 @@ const CalEditModel = () => {
 
     const [filterAdmins, setFilterAdmins] = useState([])
     const getEmployeeByName = (empId) => {
-        const selectedEmp = activeEmps.filter((emp) => emp.empRole === "plantAdmin" || emp.empRole === "admin");
-        
+        const plants = employeeRole.loggedEmp.plantDetails.map(plant => plant.plantName)
+        console.log(plants)
+        const filter = activeEmps.filter(emp => emp.plantDetails.some(plant=> plants.includes(plant.plantName)))
+        console.log(filter)
+        const selectedEmp = filter.filter((emp) => emp.empRole === "plantAdmin" || emp.empRole === "admin");
+        console.log(selectedEmp)
         setFilterAdmins(selectedEmp)
     }
     useEffect(() => {
@@ -901,7 +905,7 @@ const CalEditModel = () => {
                                     onChange={handleCalData}
                                 >
                                     {filterAdmins.map((emp, index) => (
-                                        <MenuItem key={index} value={emp._id}>{emp.firstName ? emp.firstName : "" + " " + emp.lastName ? emp.lastName : ""}</MenuItem>
+                                        <MenuItem key={index} value={(emp.firstName? emp.firstName : "" )+" "+ (emp.lastName? emp.lastName : "" )}>{emp.firstName ? emp.firstName : "" + " " + emp.lastName ? emp.lastName : ""}</MenuItem>
                                     ))}
                                 </TextField>
                             </div>

@@ -522,8 +522,8 @@ const itemCalController = {
         const calData = await itemCalModel.findById(id);
         const itemData = await itemAddModel.findById(calData.ItemCalId)
 
-        const { itemLastCalDate: itemCalDate, itemLastDueDate: itemDueDate, itemLastStatus: itemStatus,  } = itemData
-        const updateItemFields = { itemCalDate, itemDueDate, itemStatus }
+        const { itemLastCalDate: itemCalDate, itemLastDueDate: itemDueDate, itemLastStatus: itemStatus, itemLastCertificateNo: itemCertificateNo  } = itemData
+        const updateItemFields = { itemCalDate, itemDueDate, itemStatus, itemCertificateNo }
         const updateResult = await itemAddModel.findOneAndUpdate(
           { _id: calData.ItemCalId },
           { $set: updateItemFields },
@@ -531,8 +531,9 @@ const itemCalController = {
         );
 
         const deletedItemCal = await itemCalModel.findOneAndRemove({ _id: id });
+        const deleteHistoryCard = await itemHistory.findOneAndRemove({ itemCalId: id });
         console.log(deletedItemCal)
-        if (!deletedItemCal) {
+        if (!deletedItemCal && !deleteHistoryCard) {
           // If a vendor was not found, you can skip it or handle the error as needed.
           console.log(`ItemCal with ID ${id} not found.`);
           res.status(500).json({ message: `ItemCal with ID not found.` });

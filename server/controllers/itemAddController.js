@@ -160,23 +160,23 @@ const itemAddController = {
       console.log("ItemAdd Created Successfully");
 
       let obSize = [];
-      if(createdItem.itemType === "variable"){
+      if (createdItem.itemType === "variable") {
         obSize = acceptanceCriteria.map(item => {
           return item.acParameter + ":" + item.acOBError
         })
-      }else{
+      } else {
         obSize = acceptanceCriteria.map(item => {
 
-          if(itemOBType === "minmax"){
+          if (itemOBType === "minmax") {
             return item.acParameter + ":" + item.acMinOB + "/" + item.acMaxOB
-          }else{
+          } else {
             return item.acParameter + ":" + item.acAverageOB
           }
-          
+
         })
       }
       console.log(obSize)
-      
+
 
       const historyRecord = new itemHistory({
         itemId: createdItem._id,
@@ -215,7 +215,7 @@ const itemAddController = {
         acceptanceCriteria: obSize,
         itemCreatedBy,
         itemLastModifiedBy,
-        
+
       });
       await historyRecord.save();
       res.status(200).json({ result: createdItem, message: "ItemAdd Created Successfully" });
@@ -418,7 +418,7 @@ const itemAddController = {
       for (const itemAddId of itemAddIds) {
         // Find and remove each vendor by _id
 
-        const calData = await itemCalModel.find({calItemId: itemAddId})
+        const calData = await itemCalModel.find({ calItemId: itemAddId })
         const deletedItemAdd = await itemAddModel.findOneAndRemove({ _id: itemAddId });
         console.log(deletedItemAdd)
         if (!deletedItemAdd) {
@@ -710,11 +710,26 @@ const itemAddController = {
         return item;
       });
 
+
+
       const uploadPromises = modifiedData.map(async (item) => {
         try {
           // Create an instance of designationModel and save it to the database
           const newItemAdd = new itemAddModel(item); // Assuming 'item' conforms to your ItemAddModel schema
           const savedItemAdd = await newItemAdd.save();
+
+          const data = {
+            itemCalDate: dayjs(savedItemAdd.itemCalDate).format("YYYY-MM-DD"),
+            itemDueDate: dayjs(savedItemAdd.itemDueDate).format("YYYY-MM-DD"),
+            itemIMTENo: savedItemAdd.itemIMTENo,
+            itemCalibratedAt: savedItemAdd.itemCalibratedAt,
+            itemCertificateNo: savedItemAdd.itemCertificateNo,
+            itemId: savedItemAdd._id
+
+          }
+          console.log(data)
+
+
           return savedItemAdd;
 
         } catch (error) {

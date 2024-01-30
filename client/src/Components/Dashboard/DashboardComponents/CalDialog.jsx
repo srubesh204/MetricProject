@@ -1025,7 +1025,7 @@ const CalDialog = () => {
                                     onChange={handleCalData}
                                 >
                                     {selectedEmp.map((emp, index) => (
-                                        <MenuItem key={index} value={emp._id}>{(emp.firstName || "") + " " + (emp.lastName || "")}</MenuItem>
+                                        <MenuItem key={index} value={(emp.firstName? emp.firstName : "" )+" "+ (emp.lastName? emp.lastName : "" )}>{(emp.firstName || "") + " " + (emp.lastName || "")}</MenuItem>
                                     ))}
                                 </TextField>
                             </div>

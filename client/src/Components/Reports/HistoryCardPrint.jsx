@@ -86,8 +86,8 @@ const HistoryCardPrint = () => {
                         </React.Fragment>)}
                     </td>
                     <td style={{ width: "9%", borderRight: "0.5px solid black", borderTop: "0.5px solid black" }}>{selectedRow && selectedRow[0]?.itemCalibrationSource || '-'}</td>
-                    <td style={{ width: "9%", borderRight: "0.5px solid black", borderTop: "0.5px solid black" }}>{row.calCalibratedBy || '-'}</td>
-                    <td style={{ width: "9%", borderRight: "0.5px solid black", borderTop: "0.5px solid black" }}>{row.calApprovedBy || '-'}</td>
+                    <td style={{ width: "9%", borderRight: "0.5px solid black", borderTop: "0.5px solid black" }}>{row.itemCalibratedBy || '-'}</td>
+                    <td style={{ width: "9%", borderRight: "0.5px solid black", borderTop: "0.5px solid black" }}>{row.itemCalApprovedBy || '-'}</td>
 
                 </tr>
 
@@ -138,7 +138,7 @@ const HistoryCardPrint = () => {
                                     <tr style={{ fontWeight: "bold" }}>Instrument / Gauge Name :    &nbsp;&nbsp;&nbsp;{selectedRow[0]?.itemAddMasterName || '-'}</tr>
                                     <tr style={{ fontWeight: "bold" }}>Range / Size :    &nbsp;&nbsp;&nbsp;{selectedRow[0]?.itemRangeSize || '-'} {selectedRow[0]?.itemRangeSizeUnit}</tr>
                                     <tr style={{ fontWeight: "bold" }}>Frequency of Calibration :    &nbsp;&nbsp;&nbsp;{selectedRow[0]?.itemCalFreInMonths}</tr>
-                                    <tr style={{ fontWeight: "bold" }}>Department :    &nbsp;&nbsp;&nbsp;{selectedRow[0]?.itemDepartment || '-'}</tr>
+                                    {/* <tr style={{ fontWeight: "bold" }}>Department :    &nbsp;&nbsp;&nbsp;{selectedRow[0]?.itemDepartment || '-'}</tr> */}
                                 </td>
                                 <td style={{ width: "30%", padding: "0px", textAlign: "center" }}>
                                     <td style={{ fontWeight: "bold", fontSize: "12px" }}>Permissible Size</td>
