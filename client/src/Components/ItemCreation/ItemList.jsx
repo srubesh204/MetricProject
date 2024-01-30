@@ -403,7 +403,7 @@ const ItemList = () => {
 
                 const customerData = partDataList.filter(part => part.customer === value )
 
-                const customers = departmentDatas.filter(item => customerData.some(cus => item.ItemPartName.includes(cus.partNo)))
+                const customers = departmentDatas.filter(item => customerData.some(cus => item.itemPartName.includes(cus.partNo)))
                 
                 console.log(customers)
 
@@ -1128,7 +1128,7 @@ const ItemList = () => {
                                 </TextField>
 
                             </div>
-                            <div className="col d-flex  mb-2">
+                            <div className="col d-flex mb-2">
 
                                 <TextField label=" Part No & Part Name"
                                     id="partNameId"
@@ -1142,7 +1142,7 @@ const ItemList = () => {
                                     name="partName" >
                                     <MenuItem value="all">All</MenuItem>
                                     {customerParts.map((item, index) => (
-                                        <MenuItem key={index} value={item._id}>{[item.partNo, item.partName].join(', ')}</MenuItem>
+                                        <MenuItem key={index} value={item.partNo}>{[item.partNo, item.partName].join(', ')}</MenuItem>
                                     ))}
                                 </TextField>
 
