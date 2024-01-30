@@ -126,7 +126,7 @@ const Home = () => {
       );
       const plantDc = response.data.result.filter(dc => (employeeRole.loggedEmp.plantDetails.map(plant => plant.plantName).includes(dc.dcPlant)))
       const dcNos = response.data.result.map(dc => dc.dcId).filter(Boolean).sort()
-      setLastNo((dayjs().year() + "-" + ((dcNos[dcNos.length - 1]) + 1)))
+      setLastNo("DC "+ (dayjs().year() + "-" + ((dcNos[dcNos.length - 1]) + 1)))
       console.log(dcNos[dcNos.length - 1])
       setDcList(plantDc);
       setFilteredData(plantDc);

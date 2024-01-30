@@ -138,10 +138,10 @@ const itemCalController = {
           itemCalibrationDoneAt,
           itemItemMasterName,
           itemItemMasterIMTENo,
-
+          itemCertificateNo,
           itemCalibratedAt,
           itemCertificateName,
-          itemCertificateNo,
+          
           itemOBType,
           itemUncertainity,
           itemUncertainityUnit,
@@ -158,8 +158,9 @@ const itemCalController = {
           itemLastDueDate,
           itemLastCalDate,
           itemStatus: itemCondition,
-          itemLastStatus: itemStatus
-
+          itemLastStatus: itemStatus,
+          itemCertificateNo: createdItem.calCertificateNo,
+          itemLastCertificateNo : itemCertificateNo
         }
         const updateResult = await itemAddModel.findOneAndUpdate(
           { _id: ItemCalId },
@@ -215,7 +216,8 @@ const itemCalController = {
           itemDueDate: calItemDueDate,
           itemCalibratedAt,
           itemCertificateName,
-          itemCertificateNo,
+          itemCertificateNo: createdItem.calCertificateNo,
+          itemLastCertificateNo: itemCertificateNo,
           itemCalStatus: calStatus,
           itemCalibratedBy: calCalibratedBy,
           itemCalApprovedBy: calApprovedBy,
@@ -382,7 +384,6 @@ const itemCalController = {
           itemLC,
           itemLCUnit,
           itemModelNo,
-
           itemReceiptDate,
           itemDepartment,
           itemCalFreInMonths,
@@ -393,8 +394,7 @@ const itemCalController = {
           itemItemMasterIMTENo,
           itemCalibratedAt,
           itemCertificateName,
-          itemCertificateNo,
-
+          
           itemOBType,
           itemUncertainity,
           itemUncertainityUnit,
@@ -411,6 +411,7 @@ const itemCalController = {
           itemLastDueDate,
           itemLastCalDate,
           itemStatus: itemCondition,
+          itemCertificateNo: updateItemCal.calCertificateNo,
 
 
         }
@@ -468,7 +469,7 @@ const itemCalController = {
           itemDueDate: calItemDueDate,
           itemCalibratedAt,
           itemCertificateName,
-          itemCertificateNo,
+          itemCertificateNo : updateItemCal.calCertificateNo,
           itemCalStatus: calStatus,
           itemCalibratedBy: calCalibratedBy,
           itemCalApprovedBy: calApprovedBy,
@@ -521,7 +522,7 @@ const itemCalController = {
         const calData = await itemCalModel.findById(id);
         const itemData = await itemAddModel.findById(calData.ItemCalId)
 
-        const { itemLastCalDate: itemCalDate, itemLastDueDate: itemDueDate, itemLastStatus: itemStatus } = itemData
+        const { itemLastCalDate: itemCalDate, itemLastDueDate: itemDueDate, itemLastStatus: itemStatus,  } = itemData
         const updateItemFields = { itemCalDate, itemDueDate, itemStatus }
         const updateResult = await itemAddModel.findOneAndUpdate(
           { _id: calData.ItemCalId },

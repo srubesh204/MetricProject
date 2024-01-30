@@ -74,18 +74,21 @@ const HistoryCardPrint = () => {
 
                 <tr key={index} style={{ textAlign: "center", borderCollapse: "collapse", fontSize: "9px" }}>
                     <td style={{ width: "5%", borderRight: "0.5px solid black", borderTop: "0.5px solid black" }}>{index + 1}</td>
-                    <td style={{ width: "9%", borderRight: "0.5px solid black", borderTop: "0.5px solid black" }}>{row.calItemCalDate || '-'}</td>
-                    <td style={{ width: "9%", borderRight: "0.5px solid black", borderTop: "0.5px solid black" }}>{row.calStatus || '-'}</td>
-                    <td style={{ width: "9%", borderRight: "0.5px solid black", borderTop: "0.5px solid black" }}>{row.calItemDueDate || '-'}</td>
+                    <td style={{ width: "9%", borderRight: "0.5px solid black", borderTop: "0.5px solid black" }}>{dayjs(row.itemCalDate).format("DD-MM-YYYY") || '-'}</td>
+                    <td style={{ width: "9%", borderRight: "0.5px solid black", borderTop: "0.5px solid black" }}>{row.itemCalStatus || '-'}</td>
+                    <td style={{ width: "9%", borderRight: "0.5px solid black", borderTop: "0.5px solid black" }}>{dayjs(row.itemDueDate).format("DD-MM-YYYY") || '-'}</td>
                     <td style={{ width: "9%", borderRight: "0.5px solid black", borderTop: "0.5px solid black" }}>--</td>
-                    <td style={{ width: "9%", borderRight: "0.5px solid black", borderTop: "0.5px solid black" }}>{row.calCertificateNo || '-'}</td>
+                    <td style={{ width: "9%", borderRight: "0.5px solid black", borderTop: "0.5px solid black" }}>{row.itemCertificateNo || '-'}</td>
                     <td style={{ width: "9%", borderRight: "0.5px solid black", borderTop: "0.5px solid black" }}>
-                        {selectedRow[0]?.itemType === 'variable' ? row.calcalibrationData && row.calcalibrationData[0]?.calOBError : row.calcalibrationData && row.calcalibrationData[0]?.calMinPS + "/" + row.calcalibrationData && row.calcalibrationData[0]?.calMaxPS}
+                        {row.acceptanceCriteria.map(acc => <React.Fragment key={index}>
+                            {acc}
+                            {index !== row.acceptanceCriteria.length - 1 && <br />} {/* Add <br /> after each item except the last one */}
+                        </React.Fragment>)}
                     </td>
                     <td style={{ width: "9%", borderRight: "0.5px solid black", borderTop: "0.5px solid black" }}>{selectedRow && selectedRow[0]?.itemCalibrationSource || '-'}</td>
                     <td style={{ width: "9%", borderRight: "0.5px solid black", borderTop: "0.5px solid black" }}>{row.calCalibratedBy || '-'}</td>
                     <td style={{ width: "9%", borderRight: "0.5px solid black", borderTop: "0.5px solid black" }}>{row.calApprovedBy || '-'}</td>
-                    <td style={{ width: "14%", borderTop: "0.5px solid black" }}>--</td>
+
                 </tr>
 
             )
@@ -191,11 +194,9 @@ const HistoryCardPrint = () => {
                                     Calibrated By
                                 </td>
                                 <td style={{ width: "9%", borderRight: "0.5px solid black", margin: 0, fontWeight: "bold" }}>
-                                    Verified By
+                                    Approved By
                                 </td>
-                                <td style={{ width: "14%", margin: 0, fontWeight: "bold" }}>
-                                    Remarks
-                                </td>
+
                             </tr>
                         </thead>
                         <tbody>

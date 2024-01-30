@@ -585,7 +585,7 @@ function InsHistoryCard() {
                     companyList,
                     plantList,
                     formatNoData,
-                    selectedIMTEs: filteredSelectedIMTEs,
+                    selectedIMTEs: filteredData,
                     printState, setPrintState,
                 }}
             >

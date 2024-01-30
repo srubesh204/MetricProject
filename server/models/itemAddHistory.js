@@ -29,6 +29,8 @@ const itemAddHistory = new mongoose.Schema({
   itemCalAlertDays: String,
   itemCalibrationSource: String,
   itemCalibrationDoneAt: String,
+  itemCertificateNo: String,
+  itemLastCertificateNo: String,
   itemItemMasterName: String,
   itemItemMasterIMTENo: [],
   itemSupplier: [],

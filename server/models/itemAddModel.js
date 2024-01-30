@@ -56,6 +56,7 @@ const itemAddSchema = new mongoose.Schema({
   itemCalibratedAt: String,
   itemCertificateName: String,
   itemCertificateNo: String,
+  itemLastCertificateNo: String,
   itemPartName: [],
   itemOBType: String,
   dcId: String,
