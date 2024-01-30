@@ -177,12 +177,12 @@ const Grn = () => {
 
     const settingDcData = () => {
         if (selectedRows.length > 0) {
-            const departments = [...new Set(selectedRows.map(item => item.itemCurrentLocation))]
+           
             setGrnData((prev) => (
                 {
                     ...prev,
                     grnPlant: selectedRows[0].itemPlant,
-                    grnDepartment: departments,
+                    grnDepartment: selectedRows[0].itemDepartment,
                     //grnPartyItems: selectedRows
                 }
 

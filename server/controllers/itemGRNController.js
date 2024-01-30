@@ -213,10 +213,12 @@ const itemGRNController = {
           { new: true }
         );
 
-        console.log(grnItemType)
+        console.log(grnAcCriteria)
         let obSize = [];
 
         if (grnAcCriteria.length > 0) {
+
+          console.log(grnItemType)
           if (grnItemType === "variable") {
             obSize = grnAcCriteria.map(item => {
               return item.grnParameter + ":" + item.grnOBError
@@ -285,7 +287,8 @@ const itemGRNController = {
           itemOBType,
           itemUncertainity,
           itemLastCertificateNo,
-          itemCertificateNo: grnItemCertificateNo
+          itemCertificateNo: grnItemCertificateNo,
+          acceptanceCriteria: obSize
         });
         const itemHistoryData = await historyRecord.save();
 
