@@ -167,12 +167,13 @@ const itemGRNController = {
           itemCalibrationSource,
           itemCalibrationDoneAt,
           itemCalibratedAt,
-          itemCertificateName,
-          itemCertificateNo,
+          
+          
           itemOBType,
           itemUncertainity,
           itemUncertainityUnit,
           itemPrevCalData,
+          itemCertificateNo : itemLastCertificateNo,
 
 
         } = itemData
@@ -201,7 +202,10 @@ const itemGRNController = {
           dcStatus: "0",
           dcNo: "",
           dcId: "",
-          dcCreatedOn: ""
+          dcCreatedOn: "",
+          itemCertificateNo: grnItemCertificateNo,
+          itemLastCertificateNo,
+
         }
         const updateResult = await itemAddModel.findOneAndUpdate(
           { _id: grnItemId },
@@ -268,14 +272,16 @@ const itemGRNController = {
           itemCalFreInMonths,
           itemCalAlertDays,
           itemCalibrationSource,
+          itemCalStatus: grnItemCalStatus,
           itemCalibrationDoneAt,
           itemUncertainityUnit,
           itemPrevCalData,
           itemCalibratedAt,
-          itemCertificateName,
-          itemCertificateNo,
+          itemCertificateName: grnItemCertificate,
           itemOBType,
-          itemUncertainity
+          itemUncertainity,
+          itemLastCertificateNo,
+          itemCertificateNo: grnItemCertificateNo
         });
         const itemHistoryData = await historyRecord.save();
 
@@ -531,7 +537,7 @@ const itemGRNController = {
         }
 
 
-        const historyRecord = new itemHistory({
+        const historyRecord = {
           itemIMTENo,
           itemGrnId: updateItemGRN._id,
           itemCurrentLocation: itemDepartment,
@@ -578,10 +584,10 @@ const itemGRNController = {
           itemCertificateNo,
           itemOBType,
           itemUncertainity
-        });
+        };
         const itemHistoryData = await itemHistory.findOneAndUpdate(
           { itemGrnId: itemGRNId },
-          { $set: updateItemFields },
+          { $set: historyRecord },
           { new: true }
         );
 
@@ -629,6 +635,11 @@ const itemGRNController = {
             itemLastLocation,
             itemLastPlace,
             lastItemDueDate,
+            itemCertificateNo: itemLastCertificateNo,
+            itemLastCertificateNo: itemCertificateNo,
+            itemStatus,
+            itemLastStatus,
+
           } = itemData
 
           const updateItemFields = {
@@ -640,10 +651,14 @@ const itemGRNController = {
             itemCurrentLocation: itemLastLocation,
             itemCalDate: lastItemCalDate,
             itemDueDate: lastItemDueDate,
+            itemStatus: itemLastStatus,
+            itemLastStatus: itemStatus,
             grnId: "",
             grnStatus: "0",
             grnCreatedOn: "",
             grnNo: "",
+            itemLastCertificateNo,
+            itemCertificateNo
           }
 
 
