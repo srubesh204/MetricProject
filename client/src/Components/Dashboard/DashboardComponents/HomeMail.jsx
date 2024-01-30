@@ -110,7 +110,9 @@ const HomeMail = () => {
             //setMailDetails(initialMailDetails)
             setSnackBarOpen(true)
             setErrorHandler({ status: "1", message: "Mail sent successfully", code: "success" })
-            //setMailOpen(false)
+            
+            setMailOpen(false)
+            window.location.reload()
         }
 
     }

@@ -73,6 +73,7 @@ const ItemList = () => {
                 // Update the object with a dynamic key based on the 'element'
                 updatedFilterNames[element] = filterNames[index];
             });
+            console.log(updatedFilterNames)
             // Update state outside the loop with the updated object
             setFilterNameList(prev => ({ ...prev, ...updatedFilterNames }));
             setItemList(departmentItems);
@@ -87,6 +88,10 @@ const ItemList = () => {
     useEffect(() => {
         itemFetch();
     }, []);
+
+    useEffect(()=>{
+
+    })
 
     const [employeeList, setEmployeeList] = useState([]);
     const empFetchData = async () => {
@@ -329,6 +334,9 @@ const ItemList = () => {
         itemCurrentLocation: "all"
     })
 
+    const [plantDatas, setPlantDatas] = useState([])
+    const [departmentDatas, setDepartmentDatas] = useState([])
+
     const [customerParts, setCustomerParts] = useState([])
     const handleFilterChangeItemList = (e) => {
         const { name, value } = e.target;
@@ -336,45 +344,28 @@ const ItemList = () => {
         if (value === "all") {
             setFilteredItemListData(itemList)
         } else {
-            if (name === "imteNo") {
-                const imteNo = itemList.filter((item) => (item.itemIMTENo === value))
-                setFilteredItemListData(imteNo)
+
+            if (name === "plantWise") {
+                const plantWise = itemList.filter((item) => (item.itemPlant === value))
+                setFilteredItemListData(plantWise)
                 setFilterAllNames(prev => ({
                     ...prev,
-                    imteNo: value,
+                    imteNo: "all",
                     itemType: "all",
                     currentLocation: "all",
                     customerWise: "all",
                     supplierWise: "all",
                     partName: "all",
                     status: "all",
-                    plantWise: "all",
+                    plantWise: value,
                     calibrationSource: "all",
                     itemCurrentLocation: "all"
                 }))
+                setPlantDatas(plantWise)
             }
-            if (name === "itemType") {
-                const itemType = itemList.filter((item) => (item.itemType === value))
 
-                setFilteredItemListData(itemType)
-                setFilterAllNames(prev => ({
-                    ...prev,
-                    imteNo: "all",
-                    itemType: value,
-                    currentLocation: "all",
-                    customerWise: "all",
-                    supplierWise: "all",
-                    partName: "all",
-                    status: "all",
-                    plantWise: "all",
-                    calibrationSource: "all",
-                    itemCurrentLocation: "all"
-                }))
-
-
-            }
             if (name === "currentLocation") {
-                const currentLocation = itemList.filter((item) => (item.itemDepartment === value))
+                const currentLocation = plantDatas.filter((item) => (item.itemDepartment === value))
                 setFilteredItemListData(currentLocation)
                 setFilterAllNames(prev => ({
                     ...prev,
@@ -389,9 +380,11 @@ const ItemList = () => {
                     calibrationSource: "all",
                     itemCurrentLocation: "all"
                 }))
+                setDepartmentDatas(currentLocation)
             }
+
             if (name === "customerWise") {
-                const customerWise = itemList.filter((item) =>
+                const customerWise = departmentDatas.filter((item) =>
                     item.itemCustomer && Array.isArray(item.itemCustomer) && item.itemCustomer.includes(value)
                 );
                 console.log(customerWise)
@@ -412,10 +405,53 @@ const ItemList = () => {
                     calibrationSource: "all",
                     itemCurrentLocation: "all"
                 }))
+
+                
             }
+
+
+            if (name === "imteNo") {
+                const imteNo = departmentDatas.filter((item) => (item.itemIMTENo === value))
+                setFilteredItemListData(imteNo)
+                setFilterAllNames(prev => ({
+                    ...prev,
+                    imteNo: value,
+                    itemType: "all",
+                    currentLocation: "all",
+                    customerWise: "all",
+                    supplierWise: "all",
+                    partName: "all",
+                    status: "all",
+                    plantWise: "all",
+                    calibrationSource: "all",
+                    itemCurrentLocation: "all"
+                }))
+            }
+            if (name === "itemType") {
+                const itemType = departmentDatas.filter((item) => (item.itemType === value))
+
+                setFilteredItemListData(itemType)
+                setFilterAllNames(prev => ({
+                    ...prev,
+                    imteNo: "all",
+                    itemType: value,
+                    currentLocation: "all",
+                    customerWise: "all",
+                    supplierWise: "all",
+                    partName: "all",
+                    status: "all",
+                    plantWise: "all",
+                    calibrationSource: "all",
+                    itemCurrentLocation: "all"
+                }))
+
+
+            }
+            
+            
             if (name === "supplierWise") {
 
-                const supperlierWise = itemList.filter((item) => item.itemSupplier.includes(value))
+                const supperlierWise = departmentDatas.filter((item) => item.itemSupplier.includes(value))
 
                 setFilteredItemListData(supperlierWise)
 
@@ -435,7 +471,7 @@ const ItemList = () => {
             }
             if (name === "partName") {
                 console.log(name, value)
-                const filteredItems = itemList.filter((item) => (item.itemPartName.includes(value)));
+                const filteredItems = departmentDatas.filter((item) => (item.itemPartName.includes(value)));
 
 
                 setFilteredItemListData(filteredItems);
@@ -455,7 +491,7 @@ const ItemList = () => {
                 }));
             }
             if (name === "status") {
-                const partName = itemList.filter((item) => (item.itemStatus === value))
+                const partName = departmentDatas.filter((item) => (item.itemStatus === value))
                 setFilteredItemListData(partName)
                 setFilterAllNames(prev => ({
                     ...prev,
@@ -471,26 +507,10 @@ const ItemList = () => {
                     itemCurrentLocation: "all"
                 }))
             }
-            if (name === "plantWise") {
-                const plantWise = itemList.filter((item) => (item.itemPlant === value))
-                setFilteredItemListData(plantWise)
-                setFilterAllNames(prev => ({
-                    ...prev,
-                    imteNo: "all",
-                    itemType: "all",
-                    currentLocation: "all",
-                    customerWise: "all",
-                    supplierWise: "all",
-                    partName: "all",
-                    status: "all",
-                    plantWise: value,
-                    calibrationSource: "all",
-                    itemCurrentLocation: "all"
-                }))
-            }
+           
             if (name === "calibrationSource") {
 
-                const calibrationSource = itemList.filter((item) => (item.itemCalibrationSource === value))
+                const calibrationSource = departmentDatas.filter((item) => (item.itemCalibrationSource === value))
                 setFilteredItemListData(calibrationSource)
                 setFilterAllNames(prev => ({
                     ...prev,
@@ -509,7 +529,7 @@ const ItemList = () => {
 
             }
             if (name === "itemCurrentLocation") {
-                const itemCurrentLocation = itemList.filter((item) => (item.itemCurrentLocation === value))
+                const itemCurrentLocation = departmentDatas.filter((item) => (item.itemCurrentLocation === value))
                 setFilteredItemListData(itemCurrentLocation)
                 setFilterAllNames(prev => ({
                     ...prev,
@@ -999,6 +1019,7 @@ const ItemList = () => {
                                     defaultValue="all"
                                     fullWidth
                                     size="small"
+                                    
                                     onChange={handleFilterChangeItemList}
                                     name="imteNo" >
                                     <MenuItem value="all">All</MenuItem>
