@@ -650,7 +650,7 @@ const itemGRNController = {
             dcStatus: lastDcStatus,
             dcNo: lastDcNo,
             dcId: lastDcId,
-            dcCreatedOn: lastDcCreatedOn,
+            
             itemLocation: itemLastPlace,
             itemCurrentLocation: itemLastLocation,
             itemCalDate: itemLastCalDate,
