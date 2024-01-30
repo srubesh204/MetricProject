@@ -618,9 +618,10 @@ const CalEditModel = () => {
             setAlertMessage(response.data.message)
             setSnackBarOpen(true)
             calListFetchData();
-            
-            setTimeout(() => { setCalEditOpen(false) }, 500)
             setCalibrationData(initialCalData)
+            setTimeout(() =>  setCalEditOpen(false) , 500)
+            console.log("closed")
+            
         } catch (err) {
             console.log(err);
         }
