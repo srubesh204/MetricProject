@@ -150,7 +150,7 @@ const Home = () => {
       );
       const calNos = response.data.result.map(cal => cal.calId).filter(Boolean).sort()
       console.log(calNos)
-      setCalLastNo((dayjs().year() + "-" + (calNos.length > 0 ? (calNos[calNos.length - 1]) + 1 : 1)))
+      setCalLastNo("Cal "+(dayjs().year() + "-" + (calNos.length > 0 ? (calNos[calNos.length - 1]) + 1 : 1)))
       
 
 
