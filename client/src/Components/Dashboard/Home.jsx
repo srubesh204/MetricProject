@@ -1195,7 +1195,7 @@ const Home = () => {
 
   useEffect(() => {
     setStatusCheckMsg("");
-    const grnBoolean = selectedRows.every(item => item.dcStatus === "1")
+    const grnBoolean = selectedRows.every(item => item.dcStatus === "1" && itemStatus === "active")
     setGrnButtonVisibility(grnBoolean && selectedRows.length === 1 )
     mailIdGather()
   }, [selectedRows])
@@ -1687,7 +1687,8 @@ const Home = () => {
                     {(selectedRows.length === 1 && selectedRows[0].itemCalibrationSource === "outsource" && "Site") &&
                       <Button size='small' onClick={() => onSiteCheck()}>Onsite</Button>
                     }
-                    {(selectedRows.length === 1 && selectedRows[0].itemCalibrationSource === "inhouse") && <Button size='small' className='me-2' onClick={() => setCalOpen(true)}>Cal</Button>}                  {grnButtonVisibility && <Button size='small' onClick={() => grnCheck()} className='me-2'>Grn</Button>}
+                    {(selectedRows.length === 1 && selectedRows[0].itemCalibrationSource === "inhouse") && <Button size='small' className='me-2' onClick={() => setCalOpen(true)}>Cal</Button>}                  
+                    {grnButtonVisibility && <Button size='small' onClick={() => grnCheck()} className='me-2'>Grn</Button>}
 
 
                     <Button size='small' onClick={() => dcCheck()}>Create DC</Button>
