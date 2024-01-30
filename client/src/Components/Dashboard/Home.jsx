@@ -129,7 +129,7 @@ const Home = () => {
       setLastNo("DC "+ (dayjs().year() + "-" + ((dcNos[dcNos.length - 1]) + 1)))
       console.log(dcNos[dcNos.length - 1])
       setDcList(plantDc);
-      
+      setFilteredData(plantDc);
 
 
     } catch (err) {
@@ -257,6 +257,8 @@ const Home = () => {
   console.log(customers)
   console.log(employeeRole)
 
+  const [activeItems, setActiveItems] = useState([])
+
   const itemFetch = async () => {
     try {
       console.log(employeeRole)
@@ -293,7 +295,8 @@ const Home = () => {
       console.log(itemPart)
 
       setItemList(allItems);
-     
+      setPieDataFilter(allItems)
+      setFilteredData(allItems)
       
 
       //
@@ -311,14 +314,13 @@ const Home = () => {
       setItemListOptions([{ itemIMTENo: "All" }, ...allItems])
 
       console.log(itemList)
-
       const activeItems = allItems.filter((item) => item.itemStatus === "active");
       const spareItems = allItems.filter((item) => item.itemStatus === "spare");
       const breakDownItems = allItems.filter((item) => item.itemStatus === "breakdown");
       const missingItems = allItems.filter((item) => item.itemStatus === "missing");
       const rejectionItems = allItems.filter((item) => item.itemStatus === "rejection");
-      setPieDataFilter(activeItems)
-      setFilteredData(activeItems)
+
+      setActiveItems(activeItems)
 
       const pastDue = activeItems.filter((item) => dayjs(item.itemDueDate).isBefore(currentDate.format("YYYY-MM-DD")))
       const CurrentDue = activeItems.filter((item) => dayjs(item.itemDueDate).isSame(currentDate.format("YYYY-MM-DD")))
@@ -387,7 +389,8 @@ const Home = () => {
 
 
 
-    
+    setFilteredData(plantWiseList)
+    setPieDataFilter(plantWiseList)
 
     const activeItems = plantWiseList.filter((item) => item.itemStatus === "active");
     const spareItems = plantWiseList.filter((item) => item.itemStatus === "spare");
@@ -395,8 +398,7 @@ const Home = () => {
     const missingItems = plantWiseList.filter((item) => item.itemStatus === "missing");
     const rejectionItems = plantWiseList.filter((item) => item.itemStatus === "rejection");
 
-    setFilteredData(activeItems)
-    setPieDataFilter(activeItems)
+    setActiveItems(activeItems)
 
     const pastDue = activeItems.filter((item) => dayjs(item.itemDueDate).isBefore(currentDate.format("YYYY-MM-DD")))
     const CurrentDue = activeItems.filter((item) => dayjs(item.itemDueDate).isSame(currentDate.format("YYYY-MM-DD")))
@@ -510,6 +512,8 @@ const Home = () => {
         const breakDownItems = plantData.filter((item) => item.itemStatus === "breakdown");
         const missingItems = plantData.filter((item) => item.itemStatus === "missing");
         const rejectionItems = plantData.filter((item) => item.itemStatus === "rejection");
+        
+        setActiveItems(activeItems)
 
         const pastDue = activeItems.filter((item) => dayjs(item.itemDueDate).isBefore(currentDate.format("YYYY-MM-DD")))
         const CurrentDue = activeItems.filter((item) => dayjs(item.itemDueDate).isSame(currentDate.format("YYYY-MM-DD")))
@@ -519,7 +523,7 @@ const Home = () => {
         const AboveThirtyDaysFilter = activeItems.filter((item) => dayjs(item.itemDueDate).isAfter(thirtyDaysAgo))
 
 
-        
+      
 
         const depLength = plantData.filter((item) => item.itemLocation === "department")
         const oemLength = plantData.filter((item) => item.itemLocation === "oem")
@@ -666,20 +670,20 @@ const Home = () => {
   })
 
 
-  const calStatusColor = ['#FF2B14', '#FE9E24', '#FF5701', '#00BEFF', '#01FF27', "#007321"];
-  const itemStatusColor = ['#007321', '#01FF27', '#010101', '#FF8042', "#0088FE", '#FF2B14'];
-  const itemLocationColor = ['#0088FE', '#00C49F', '#FFBB28', '#FF5701', "#010101"];
+  const calStatusColor = ['red', 'yellow', 'orange', 'green', "#0088FE", "black"];
+  const itemStatusColor = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', "#aca8c8", "red"];
+  const itemLocationColor = ['#0088FE', 'yellow', '#FFBB28', '#FF8042', "#aca8c8", "#78787a"];
   
   const [calStatusFitleredData, setCalStatusFitleredData] = useState([])
 
   const calStatusFunction = (name) => {
 
-    const pastDue = pieDataFilter.filter((item) => dayjs(item.itemDueDate).isBefore(currentDate.format("YYYY-MM-DD")))
-    const CurrentDue = pieDataFilter.filter((item) => dayjs(item.itemDueDate).isSame(currentDate.format("YYYY-MM-DD")))
-    const sevenDaysFilter = pieDataFilter.filter((item) => dayjs(item.itemDueDate).isBefore(sevenDaysAgo) && dayjs(item.itemDueDate).isAfter(currentDate.format("YYYY-MM-DD")))
-    const fifteenDaysFilter = pieDataFilter.filter((item) => dayjs(item.itemDueDate).isBetween(currentDate.format("YYYY-MM-DD"), fifteenDaysAgo))
-    const thirtyDaysFilter = pieDataFilter.filter((item) => dayjs(item.itemDueDate).isBetween(currentDate.format("YYYY-MM-DD"), thirtyDaysAgo))
-    const AboveThirtyDaysFilter = pieDataFilter.filter((item) => dayjs(item.itemDueDate).isAfter(thirtyDaysAgo))
+    const pastDue = activeItems.filter((item) => dayjs(item.itemDueDate).isBefore(currentDate.format("YYYY-MM-DD")))
+    const CurrentDue = activeItems.filter((item) => dayjs(item.itemDueDate).isSame(currentDate.format("YYYY-MM-DD")))
+    const sevenDaysFilter = activeItems.filter((item) => dayjs(item.itemDueDate).isBefore(sevenDaysAgo) && dayjs(item.itemDueDate).isAfter(currentDate.format("YYYY-MM-DD")))
+    const fifteenDaysFilter = activeItems.filter((item) => dayjs(item.itemDueDate).isBetween(currentDate.format("YYYY-MM-DD"), fifteenDaysAgo))
+    const thirtyDaysFilter = activeItems.filter((item) => dayjs(item.itemDueDate).isBetween(currentDate.format("YYYY-MM-DD"), thirtyDaysAgo))
+    const AboveThirtyDaysFilter = activeItems.filter((item) => dayjs(item.itemDueDate).isAfter(thirtyDaysAgo))
 
     const sourceFilter = (filterName) => {
 
@@ -954,6 +958,8 @@ const Home = () => {
     const missingItems = filter.filter((item) => item.itemStatus === "missing");
     const rejectionItems = filter.filter((item) => item.itemStatus === "rejection");
 
+    setActiveItems(activeItems)
+
     const pastDue = activeItems.filter((item) => dayjs(item.itemDueDate).isBefore(currentDate.format("YYYY-MM-DD")))
     const CurrentDue = activeItems.filter((item) => dayjs(item.itemDueDate).isSame(currentDate.format("YYYY-MM-DD")))
     const sevenDaysFilter = activeItems.filter((item) => dayjs(item.itemDueDate).isBetween(currentDate.format("YYYY-MM-DD"), sevenDaysAgo))
@@ -1014,6 +1020,7 @@ const Home = () => {
     const missingItems = filter.filter((item) => item.itemStatus === "missing");
     const rejectionItems = filter.filter((item) => item.itemStatus === "rejection");
 
+    setActiveItems(activeItems)
 
     const pastDue = activeItems.filter((item) => dayjs(item.itemDueDate).isBefore(currentDate.format("YYYY-MM-DD")))
     const CurrentDue = activeItems.filter((item) => dayjs(item.itemDueDate).isSame(currentDate.format("YYYY-MM-DD")))
@@ -1023,7 +1030,8 @@ const Home = () => {
     const AboveThirtyDaysFilter = activeItems.filter((item) => dayjs(item.itemDueDate).isAfter(thirtyDaysAgo))
 
 
-   
+    
+
     setCalStatus([
       { id: 0, value: pastDue.length, label: 'Past Due' },
       { id: 1, value: CurrentDue.length, label: 'Today' },
