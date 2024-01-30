@@ -656,7 +656,7 @@ const Home = () => {
 
   const calStatusColor = ['red', 'yellow', 'orange', 'green', "#0088FE", "black"];
   const itemStatusColor = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', "#aca8c8", "red"];
-  const itemLocationColor = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', "#aca8c8", "#78787a"];
+  const itemLocationColor = ['#0088FE', 'yellow', '#FFBB28', '#FF8042', "#aca8c8", "#78787a"];
   
   const [calStatusFitleredData, setCalStatusFitleredData] = useState([])
 
@@ -853,15 +853,16 @@ const Home = () => {
 
 
   const itemLocationLegend = ({ payload }) => {
+    console.log(payload)
     return (
-
+     
       <table className='table table-borderless' style={{ display: "flex", justifyContent: "center", alignItems: "center", padding: 0 }}>
         <tbody>
           {payload.map((entry, index) => (
             <tr key={index} style={{ padding: 0 }}>
-              <td style={{ padding: "2px" }} onClick={() => ItemLocationDisplay(entry.value)}><div style={{ width: '25px', height: '25px', backgroundColor: entry.color, marginRight: '10px', textAlign: "center", display: "flex", justifyContent: "center", alignItems: "center", cursor: "pointer" }}></div></td>
+              <td style={{ padding: "2px" }} onClick={() => ItemLocationDisplay(entry.value)}><div style={{ width: '25px', height: '25px', backgroundColor: itemLocationColor[index], marginRight: '10px', textAlign: "center", display: "flex", justifyContent: "center", alignItems: "center", cursor: "pointer" }}></div></td>
               <td style={{ padding: "2px" }}>{entry.value}</td>
-              <td style={{ fontWeight: "bolder", color: entry.color, padding: "2px" }} className='ms-2 ps-3'>{entry.payload.value}</td>
+              <td style={{ fontWeight: "bolder", color: itemLocationColor[index], padding: "2px" }} className='ms-2 ps-3'>{entry.payload.value}</td>
             </tr>
           ))}
         </tbody>
@@ -879,9 +880,9 @@ const Home = () => {
         <tbody>
           {payload.map((entry, index) => (
             <tr key={index} height={entry.value === "Total Items" ? "50px" : ""}>
-              <td style={{ padding: "2px" }} onClick={() => { itemStatusLegend(entry.value); console.log(entry) }}><div style={{ width: '25px', height: '25px', backgroundColor: entry.color, marginRight: '10px', textAlign: "center", display: "flex", justifyContent: "center", alignItems: "center", cursor: "pointer" }}></div></td>
+              <td style={{ padding: "2px" }} onClick={() => { itemStatusLegend(entry.value); console.log(entry) }}><div style={{ width: '25px', height: '25px', backgroundColor: itemStatusColor[index], marginRight: '10px', textAlign: "center", display: "flex", justifyContent: "center", alignItems: "center", cursor: "pointer" }}></div></td>
               <td style={{ padding: "2px" }}>{entry.value}</td>
-              <td style={{ padding: "2px", fontWeight: "bolder", color: entry.color }} className='ms-2 ps-3'>{entry.payload.value}</td>
+              <td style={{ padding: "2px", fontWeight: "bolder", color: itemStatusColor[index] }} className='ms-2 ps-3'>{entry.payload.value}</td>
             </tr>
           ))}
         </tbody>
@@ -890,14 +891,16 @@ const Home = () => {
   };
 
   const calibrationStatusLegendContent = ({ payload }) => {
+    console.log(payload)
     return (
+
       <table className='table table-borderless table-sm' style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
         <tbody>
           {payload.map((entry, index) => (
             <tr key={index}>
-              <td style={{ padding: "2px" }} onClick={() => { calStatusFunction(entry.value) }}><div style={{ width: '25px', height: '25px', backgroundColor: entry.color, marginRight: '10px', textAlign: "center", display: "flex", justifyContent: "center", alignItems: "center", cursor: "pointer" }}></div></td>
+              <td style={{ padding: "2px" }} onClick={() => { calStatusFunction(entry.value) }}><div style={{ width: '25px', height: '25px', backgroundColor: calStatusColor[index], marginRight: '10px', textAlign: "center", display: "flex", justifyContent: "center", alignItems: "center", cursor: "pointer" }}></div></td>
               <td style={{ padding: "2px" }}>{entry.value}</td>
-              <td style={{ padding: "2px", fontWeight: "bolder", color: entry.color }} className='ms-2 ps-3'>{entry.payload.value}</td>
+              <td style={{ padding: "2px", fontWeight: "bolder", color: calStatusColor[index] }} className='ms-2 ps-3'>{entry.payload.value}</td>
             </tr>
           ))}
         </tbody>
@@ -1434,7 +1437,7 @@ const Home = () => {
                     animationDuration={1000}
                     innerRadius={40}
                     activeIndex={activeIndex}
-                    activeShape={{ fill: '#8884d8', strokeWidth: 2 }}
+                    
                     labelLine={false}
                   >
                     {data.map((entry, index) => (
