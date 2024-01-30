@@ -66,7 +66,7 @@ const CalDialog = () => {
     console.log(selectedRows[0])
 
     const [initialCalData, setInitialCalData] = useState({
-        calItemId: "",
+        ItemCalId: "",
         calIMTENo: "",
         calItemName: "",
         calItemType: "",
@@ -108,7 +108,7 @@ const CalDialog = () => {
     })
 
     const [calibrationData, setCalibrationData] = useState({
-        calItemId: "",
+        ItemCalId: "",
         calIMTENo: "",
         calItemName: "",
         calItemType: "",
@@ -232,7 +232,7 @@ const CalDialog = () => {
             setCalibrationData((prev) => (
                 {
                     ...prev,
-                    calItemId: selectedRows[0]._id || "",
+                    ItemCalId: selectedRows[0]._id || "",
                     calIMTENo: selectedRows[0].itemIMTENo || "",
                     calItemName: selectedRows[0].itemAddMasterName || "",
                     calItemType: selectedRows[0].itemType || "",

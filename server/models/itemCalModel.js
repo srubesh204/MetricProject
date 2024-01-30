@@ -12,45 +12,41 @@ const counterSchema = new mongoose.Schema({
 const Counter = mongoose.model('Counter', counterSchema);
 
 const itemCal = new mongoose.Schema({
-  calAutoId: {
-    type: Number,
-    unique: [true]
+  ItemCalId: String,
+  calIMTENo: String,
+  calItemName: String,
+  calItemType: String,
+  calRangeSize: String,
+  calItemMFRNo: String,
+  calLC: String,
+  calItemMake: String,
+  calItemTemperature: String,
+  calItemHumidity: String,
+  calItemUncertainity: String,
+  calItemSOPNo: String,
+  calStandardRef: String,
+  calOBType: String,
+  calCertificateNo: {
+    type: String,
+    unique: true,
   },
-    calItemId: String,
-    calIMTENo: String,
-    calItemName: String,
-    calItemType: String,
-    calRangeSize: String,
-    calItemMFRNo: String,
-    calLC: String,
-    calItemMake: String,
-    calItemTemperature: String,
-    calItemHumidity: String,
-    calItemUncertainity:String,
-    calItemSOPNo: String,
-    calStandardRef: String,
-    calOBType: String,
-    calCertificateNo:{
-      type: String,
-      unique: true,
-    },
-    calItemCalDate: String,
-    calItemDueDate: String,
-    calItemEntryDate: String,
-    calCalibratedBy: String,
-    calCalibratedById: String,
-    calApprovedBy: String,
-    calBeforeData: String,
-    calStatus: String,
-    calSource: String,
-    calcalibrationData: [],
-    calMasterUsed: [],
-    calItemFreInMonths: String,
-    calPlant: String,
-    calDepartment: {
-      type: [],
-      required: [true, "Department Required"]
-    },
+  calItemCalDate: String,
+  calItemDueDate: String,
+  calItemEntryDate: String,
+  calCalibratedBy: String,
+  calCalibratedById: String,
+  calApprovedBy: String,
+  calBeforeData: String,
+  calStatus: String,
+  calSource: String,
+  calcalibrationData: [],
+  calMasterUsed: [],
+  calItemFreInMonths: String,
+  calPlant: String,
+  calDepartment: {
+    type: [],
+    required: [true, "Department Required"]
+  },
   calCreatedAt: {
     type: String,
     default: () => dayjs().format("YYYY-MM-DD"),
@@ -65,17 +61,6 @@ const itemCal = new mongoose.Schema({
 itemCal.plugin(uniqueValidator);
 itemCal.plugin(mongooseSequence, { inc_field: 'calId', });
 
-itemCal.pre('save', function (next) {
-  const doc = this;
-  Counter.findOneAndUpdate(
-    { _id: 'itemId' },
-    { $inc: { calItemIdSeq: 1, calCertificateNoSeq: 1 } },
-    { new: true, upsert: true }
-  ).then(counter => {
-    doc.calAutoId = counter.calItemIdSeq;
-    doc.calCertificateNo = counter.calCertificateNoSeq;
-    next();
-  }).catch(err => next(err));
-});
+
 
 module.exports = mongoose.model('itemCal', itemCal);

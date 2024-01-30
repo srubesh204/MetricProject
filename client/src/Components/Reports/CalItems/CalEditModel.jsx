@@ -31,7 +31,7 @@ const CalEditModel = () => {
     console.log(selectedIMTE)
 
     const [initialCalData, setInitialCalData] = useState({
-        calItemId: "",
+        ItemCalId: "",
         calIMTENo: "",
         calItemName: "",
         calItemType: "",
@@ -76,7 +76,7 @@ const CalEditModel = () => {
     })
 
     const [calibrationData, setCalibrationData] = useState({
-        calItemId: "",
+        ItemCalId: "",
         calIMTENo: "",
         calItemName: "",
         calItemType: "",
@@ -127,7 +127,7 @@ const CalEditModel = () => {
         setCalibrationData((prev) => (
             {
                 ...prev,
-                calItemId : selectedCalRow.calItemId,
+                ItemCalId : selectedCalRow.ItemCalId,
                 calIMTENo : selectedCalRow.calIMTENo,
                 calItemName : selectedCalRow.calItemName,
                 calItemType : selectedCalRow.calItemType,
@@ -626,10 +626,6 @@ const CalEditModel = () => {
         }
     };
 
-    const [obStatus, setObStatus] = useState([]);
-
-    const [showLastResult, setShowLastResult] = useState(false)
-    const [itemIMTEs, setItemIMTEs] = useState([])
 
 
 
