@@ -654,9 +654,9 @@ const Home = () => {
   })
 
 
-  const calStatusColor = ['red', 'yellow', 'orange', 'green', '#0088FE', "#78787a"];
-  const itemStatusColor = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', "#aca8c8", 'red'];
-  const itemLocationColor = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', "#aca8c8", "#78787a"];
+  const calStatusColor = ['#FF2B14', '#FE9E24', '#FF5701', '#00BEFF', '#01FF27', "#007321"];
+  const itemStatusColor = ['#007321', '#01FF27', '#010101', '#FF8042', "#0088FE", '#FF2B14'];
+  const itemLocationColor = ['#0088FE', '#00C49F', '#FFBB28', '#FF5701', "#010101"];
   
   const [calStatusFitleredData, setCalStatusFitleredData] = useState([])
 
