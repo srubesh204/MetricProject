@@ -153,11 +153,11 @@ const Dashboard = () => {
       // { name: "Alerts Configuration", file: <AlertConfig />, icon: <img src={`${process.env.REACT_APP_PORT}/icon/list-text.png`} alt="Alerts Configuration Icon" style={{ width: '20px', height: '20px' }} /> },
       { name: "Mail Configuration", file: <MailConfig />, icon: <img src={`${process.env.REACT_APP_PORT}/icon/list-text.png`} alt="Mail Configuration Icon" style={{ width: '20px', height: '20px' }} /> },
       { name: "Format Number", file: <FormatNumber />, icon: <img src={`${process.env.REACT_APP_PORT}/icon/list-text.png`} alt="Format Number Icon" style={{ width: '20px', height: '20px' }} /> },
-      { name: "Company Details", file: <CompanyDetails />, icon: <img src={`${process.env.REACT_APP_PORT}/icon/company details.png`} alt="Company Details Icon" style={{ width: '20px', height: '20px' }} /> },
+      empRole.employee=== "superAdmin" && { name: "Company Details", file: <CompanyDetails />, icon: <img src={`${process.env.REACT_APP_PORT}/icon/company details.png`} alt="Company Details Icon" style={{ width: '20px', height: '20px' }} /> },
       
       // { name: "Label Print", file: "", icon: <img src={`${process.env.REACT_APP_PORT}/icon/list-text.png`} alt="Label Print Icon" style={{ width: '20px', height: '20px' }} /> },
 
-    ],
+    ].filter(Boolean),
     Reports: [
       { name: "DC List", file: <DcList />, icon: <img src={`${process.env.REACT_APP_PORT}/icon/list-text.png`} alt="DC List Icon" style={{ width: '20px', height: '20px' }} /> },
       { name: "GRN List", file: <GrnList />, icon: <img src={`${process.env.REACT_APP_PORT}/icon/list-text.png`} alt="GRN List Icon" style={{ width: '20px', height: '20px' }} /> },
@@ -171,7 +171,7 @@ const Dashboard = () => {
 
   }
 
-
+console.log(MenuItems.system)
 
 
   console.log(fileName)
@@ -513,7 +513,7 @@ const Dashboard = () => {
                 {toolOpen ? <ExpandLess /> : <ExpandMore />}
               </ListItemButton> */}
 
-              
+
               {/* <Collapse in={toolOpen} timeout="auto" unmountOnExit>
                 <List component="div" disablePadding>
                   <ListItemButton sx={{ pl: 4 }} onClick={() => openWinApps("Calculator")}>

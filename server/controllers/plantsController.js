@@ -103,40 +103,19 @@ const plantDetailsController = {
                 errors500[key] = error.errors[key].message;
             }
             res.status(500).json({ error: error, status: 0 });
-            // if (error.errors) {
-            //     const errors500 = {};
-            //     for (const key in error.errors) {
-            //         errors500[key] = error.errors[key].message;
-            //     }
-            //     return res.status(500).json({ error: errors500, status: 0 });
-            // }
-
-            // return res.status(500).json({ error: 'Internal server error on Company Plants Details', status: 0 });
+            
         }
     },
     deletePlantDetails: async (req, res) => {
         try {
 
-            const { plantDetailsIds } = req.body; // Assuming an array of vendor IDs is sent in the request body
+            const plantDetailsId = req.params.id; // Assuming an array of vendor IDs is sent in the request body
             console.log(req.body)
-            const deleteResults = [];
+            
+            const deletedPlantDetails = await plantSchema.findOneAndRemove({ _id: plantDetailsId });
+            
 
-            for (const plantDetailsId of plantDetailsIds) {
-                // Find and remove each vendor by _id
-                const deletedPlantDetails = await plantSchema.findOneAndRemove({ _id: plantDetailsId });
-                console.log(deletedPlantDetails)
-                if (!deletedPlantDetails) {
-                    // If a vendor was not found, you can skip it or handle the error as needed.
-                    console.log(`Company Plants Details with ID ${plantDetailsId} not found.`);
-                    res.status(500).json({ message: `Company Plants Details not found.` });
-
-                } else {
-                    console.log(`Company Plants Details with ID ${plantDetailsId} deleted successfully.`);
-                    deleteResults.push(deletedPlantDetails);
-                }
-            }
-
-            return res.status(202).json({ message: 'Company Plants Details deleted successfully', results: `${deleteResults.length} Company Plants Details Deleted Successfull ` });
+            return res.status(202).json({ message: 'Company Plants Details deleted successfully', results: `Company Plants Details Deleted Successfull ` });
         } catch (error) {
             console.error(error);
             res.status(500).send('Internal Server Error');

@@ -14,7 +14,7 @@ router.get("/getAllPlantDetails", plantsController.getAllPlantDetails)
 router.get("/getPlantDetailsById/:id", plantsController.getPlantDetailsById )
 router.post("/createPlantDetails", plantsController.createPlantDetails)
 router.put("/updatePlantDetails/:id", plantsController.updatePlantDetails)
-router.delete("/deletePlantDetails", plantsController.deletePlantDetails)
+router.delete("/deletePlantDetails/:id", plantsController.deletePlantDetails)
 
  
 module.exports = router;

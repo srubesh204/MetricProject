@@ -335,10 +335,8 @@ const CompanyDetails = () => {
     const deletePlant = async () => {
         try {
             const response = await axios.delete(
-                `${process.env.REACT_APP_PORT}/compDetails/deletePlantDetail`,{
-                    data: {
-                        plantDetailsIds: selectedRowIds
-                     }
+                `${process.env.REACT_APP_PORT}/compDetails/deletePlantDetails/${selectedPlantId}`,{
+                    
                 }
               );
             console.log(response.data.result)
@@ -464,7 +462,7 @@ const CompanyDetails = () => {
 
     const handlePlantClick = (value) => {
         setSelectedPlantId(value._id)
-        setSelectedRowIds()
+       
         setPlantData((prev) => ({
             ...prev,
             plantName: value.plantName,

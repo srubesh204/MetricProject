@@ -18,7 +18,7 @@ const CalDialog = () => {
     const calData = useContext(HomeContent)
     const { loggedEmp } = useEmployee()
     const [lastResultData, setLastResultData] = useState([])
-    const { calOpen, setCalOpen, selectedRows, itemMasters, activeEmps, masters, itemList } = calData
+    const { calOpen, setCalOpen, selectedRows, itemMasters, activeEmps, masters, itemList, calLastNo } = calData
     const [calibrationDatas, setCalibrationDatas] = useState([])
 
 
@@ -157,7 +157,7 @@ const CalDialog = () => {
                     ...prev,
                     calPlant: selectedRows[0].itemPlant,
                     calDepartment: departments,
-
+                    calCertificateNo: calLastNo,
                 }
 
             ))
