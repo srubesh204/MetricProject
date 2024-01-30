@@ -654,7 +654,10 @@ const Home = () => {
   })
 
 
-  const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', "#aca8c8", "#78787a"];
+  const calStatusColor = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', "#aca8c8", "#78787a"];
+  const itemStatusColor = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', "#aca8c8", "#78787a"];
+  const itemLocationColor = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', "#aca8c8", "#78787a"];
+  
   const [calStatusFitleredData, setCalStatusFitleredData] = useState([])
 
   const calStatusFunction = (name) => {
@@ -1435,7 +1438,7 @@ const Home = () => {
                     labelLine={false}
                   >
                     {data.map((entry, index) => (
-                      <Cell key={index} fill={COLORS[index % COLORS.length]} />
+                      <Cell key={index} fill={calStatusColor[index % calStatusColor.length]} />
                     ))}
 
                   </Pie>
@@ -1498,7 +1501,7 @@ const Home = () => {
                     labelLine={false}
                   >
                     {data.map((entry, index) => (
-                      <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                      <Cell key={`cell-${index}`} fill={itemStatusColor[index % itemStatusColor.length]} />
                     ))}
 
                   </Pie>
@@ -1542,7 +1545,7 @@ const Home = () => {
                     labelLine={false}
                   >
                     {data.map((entry, index) => (
-                      <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                      <Cell key={`cell-${index}`} fill={itemLocationColor[index % itemLocationColor.length]} />
                     ))}
 
                   </Pie>

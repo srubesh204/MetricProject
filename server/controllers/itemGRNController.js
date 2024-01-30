@@ -213,7 +213,9 @@ const itemGRNController = {
           { new: true }
         );
 
+        console.log(grnItemType)
         let obSize = [];
+
         if (grnAcCriteria.length > 0) {
           if (grnItemType === "variable") {
             obSize = grnAcCriteria.map(item => {
@@ -231,6 +233,8 @@ const itemGRNController = {
             })
           }
         }
+
+
 
 
         const historyRecord = new itemHistory({
