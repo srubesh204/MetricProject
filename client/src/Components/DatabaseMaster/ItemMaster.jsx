@@ -258,13 +258,13 @@ const ItemMaster = () => {
         let tempErrors = {};
         tempErrors.itemType = itemMasterData.itemType ? "" : "Item Type is Required"
         tempErrors.itemDescription = itemMasterData.itemType ? "" : "Item Description is Required"
-        tempErrors.itemPrefix = itemMasterData.itemPrefix ? "" : "Item Prefix is Required"
-        tempErrors.SOPNo = itemMasterData.SOPNo ? "" : "SOP No is Required"
+        
+        
         tempErrors.itemFqInMonths = itemMasterData.itemFqInMonths ? "" : "Items Fq In Months is Required"
-        tempErrors.uncertainty = itemMasterData.uncertainty ? "" : "Uncertainty is Required"
-        tempErrors.uncertaintyUnit = itemMasterData.uncertaintyUnit ? "" : "Uncertainty is Required"
+        
+        
         tempErrors.calAlertInDay = itemMasterData.calAlertInDay ? "" : "Cal Alert In Days is Required"
-        tempErrors.standardRef = itemMasterData.standardRef ? "" : "StardardRef is Required"
+        
 
 
 
@@ -294,6 +294,7 @@ const ItemMaster = () => {
                 setItemMasterData(initialItemMasterData);
 
             } else {
+                console.log("error")
                 setErrorHandler({ status: 0, message: "Fill the required fields", code: "error" })
             }
         } catch (err) {
