@@ -832,7 +832,7 @@ const CalDialog = () => {
                                         variant="outlined"
                                     />
                                 </div>
-                                <div className="col-md-3">
+                                <div className="col-md-6">
                                     <TextField
                                         InputProps={{
                                             readOnly: true,
@@ -846,7 +846,7 @@ const CalDialog = () => {
                                         variant="outlined"
                                     />
                                 </div>
-                                <div className="col-md-3">
+                                {calibrationData.calItemType === "variable" && <div className="col-md-3">
                                     <TextField
                                         InputProps={{
                                             readOnly: true,
@@ -859,7 +859,7 @@ const CalDialog = () => {
                                         fullWidth
                                         variant="outlined"
                                     />
-                                </div>
+                                </div>}
                                 <div className="col-md-6">
                                     <TextField
                                         InputProps={{
