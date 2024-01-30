@@ -1195,8 +1195,16 @@ const Home = () => {
 
   useEffect(() => {
     setStatusCheckMsg("");
-    const grnBoolean = selectedRows.every(item => item.dcStatus === "1" && itemStatus === "active")
+    const grnBoolean = selectedRows.every(item => item.dcStatus === "1" && item.itemStatus === "active")
     setGrnButtonVisibility(grnBoolean && selectedRows.length === 1 )
+
+    const defaultDepartmentCheck = selectedRows.every(item =>
+      defaultDep.some(dep => item.itemCurrentLocation === dep.department)
+    );
+    const activeItemsCheck = selectedRows.every(item => item.itemStatus === "active")
+
+    const singlePlant = selectedRows.every((item, index, array) => item.itemPlant === array[0].itemPlant);
+    setDcButtonVisibility(defaultDepartmentCheck && singlePlant && selectedRows.length > 0 && activeItemsCheck)
     mailIdGather()
   }, [selectedRows])
 
@@ -1225,6 +1233,7 @@ const Home = () => {
 
   const [StatusCheckMsg, setStatusCheckMsg] = useState("")
   const [grnButtonVisibility, setGrnButtonVisibility] = useState(false)
+  const [dcButtonVisibility, setDcButtonVisibility] = useState(false)
 
 
 
@@ -1270,13 +1279,13 @@ const Home = () => {
 
 
   const onSiteCheck = () => {
-    const onSiteCheck = selectedRows.every(item => item.dcStatus === "1")
+    const onSiteCheck = selectedRows.every(item => (item.itemCalibrationSource === "outsource" || item.itemCalibrationSource === "OEM") && item.itemCalibrationDoneAt === "Site" )
 
 
     console.log(onSiteCheck)
     if (onSiteCheck) {
       setStatusCheckMsg("");
-      setOnSiteOpen(true);
+      setGrnOpen(true);
     } else {
       setStatusCheckMsg("Selected Item are not DC ed")
     }
@@ -1691,7 +1700,7 @@ const Home = () => {
                     {grnButtonVisibility && <Button size='small' onClick={() => grnCheck()} className='me-2'>Grn</Button>}
 
 
-                    <Button size='small' onClick={() => dcCheck()}>Create DC</Button>
+                    { dcButtonVisibility && <Button size='small' onClick={() => dcCheck()}>Create DC</Button>}
 
                     {StatusCheckMsg !== "" && <Chip icon={<Error />} color='error' label={StatusCheckMsg} />}
                   </div>
