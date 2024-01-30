@@ -33,7 +33,6 @@ const itemAddSchema = new mongoose.Schema({
   itemLocation: String,
   itemLastPlace: {
     type: String,
-    default: ()=> "department"
   },
   itemLastLocation: String,
   itemArea: String,
@@ -55,6 +54,7 @@ const itemAddSchema = new mongoose.Schema({
   itemLastDueDate: String,
   itemCalibratedAt: String,
   itemCertificateName: String,
+  itemLastCertificateName: String,
   itemCertificateNo: String,
   itemLastCertificateNo: String,
   itemPartName: [],

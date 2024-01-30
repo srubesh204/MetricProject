@@ -141,7 +141,7 @@ const itemCalController = {
           itemCertificateNo,
           itemCalibratedAt,
           itemCertificateName,
-          
+
           itemOBType,
           itemUncertainity,
           itemUncertainityUnit,
@@ -160,7 +160,7 @@ const itemCalController = {
           itemStatus: itemCondition,
           itemLastStatus: itemStatus,
           itemCertificateNo: createdItem.calCertificateNo,
-          itemLastCertificateNo : itemCertificateNo
+          itemLastCertificateNo: itemCertificateNo
         }
         const updateResult = await itemAddModel.findOneAndUpdate(
           { _id: ItemCalId },
@@ -259,15 +259,15 @@ const itemCalController = {
     try {
       const id = req.params.id; // Assuming desId is part of the URL parameter
 
-      
 
-      
+
+
 
       // if (isNaN(desId)) {
       //   return res.status(400).json({ error: 'Invalid desId value' });
       // }
       const {
-       
+
         calIMTENo,
         calItemName,
         calItemType,
@@ -299,7 +299,7 @@ const itemCalController = {
       } = req.body;
       // Create an object with the fields you want to update
       const updatedCalField = {
-        
+
         calIMTENo,
         calItemName,
         calItemType,
@@ -370,7 +370,7 @@ const itemCalController = {
           itemCondition = "active"
         }
         console.log(updateItemCal)
-        const itemData = await itemAddModel.find({_id: updateItemCal.ItemCalId})
+        const itemData = await itemAddModel.find({ _id: updateItemCal.ItemCalId })
 
         const {
           itemIMTENo,
@@ -394,7 +394,7 @@ const itemCalController = {
           itemItemMasterIMTENo,
           itemCalibratedAt,
           itemCertificateName,
-          
+
           itemOBType,
           itemUncertainity,
           itemUncertainityUnit,
@@ -430,8 +430,6 @@ const itemCalController = {
             return item.calParameter + ":" + item.calOBError
           })
         } else {
-
-
           obSize = calcalibrationData.map(item => {
 
             if (itemOBType === "minmax") {
@@ -469,7 +467,7 @@ const itemCalController = {
           itemDueDate: calItemDueDate,
           itemCalibratedAt,
           itemCertificateName,
-          itemCertificateNo : updateItemCal.calCertificateNo,
+          itemCertificateNo: updateItemCal.calCertificateNo,
           itemCalStatus: calStatus,
           itemCalibratedBy: calCalibratedBy,
           itemCalApprovedBy: calApprovedBy,
@@ -480,7 +478,7 @@ const itemCalController = {
           acceptanceCriteria: obSize,
           itemCreatedBy,
           itemLastModifiedBy,
-        } ;
+        };
 
         const historyResult = await itemHistory.findOneAndUpdate(
           { itemCalId: id },
@@ -522,7 +520,7 @@ const itemCalController = {
         const calData = await itemCalModel.findById(id);
         const itemData = await itemAddModel.findById(calData.ItemCalId)
 
-        const { itemLastCalDate: itemCalDate, itemLastDueDate: itemDueDate, itemLastStatus: itemStatus, itemLastCertificateNo: itemCertificateNo  } = itemData
+        const { itemLastCalDate: itemCalDate, itemLastDueDate: itemDueDate, itemLastStatus: itemStatus, itemLastCertificateNo: itemCertificateNo } = itemData
         const updateItemFields = { itemCalDate, itemDueDate, itemStatus, itemCertificateNo }
         const updateResult = await itemAddModel.findOneAndUpdate(
           { _id: calData.ItemCalId },
