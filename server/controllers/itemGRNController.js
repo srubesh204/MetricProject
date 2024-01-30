@@ -232,7 +232,7 @@ const itemGRNController = {
           }
         }
 
-        
+
         const historyRecord = new itemHistory({
           itemIMTENo,
           itemGrnId: result._id,
@@ -630,11 +630,11 @@ const itemGRNController = {
             lastDcStatus,
             lastDcNo,
             lastDcId,
-            lastDcCreatedOn,
-            lastItemCalDate,
+            itemLastDueDate,
+            itemLastCalDate,
             itemLastLocation,
             itemLastPlace,
-            lastItemDueDate,
+           
             itemCertificateNo: itemLastCertificateNo,
             itemLastCertificateNo: itemCertificateNo,
             itemStatus,
@@ -649,8 +649,8 @@ const itemGRNController = {
             dcCreatedOn: lastDcCreatedOn,
             itemLocation: itemLastPlace,
             itemCurrentLocation: itemLastLocation,
-            itemCalDate: lastItemCalDate,
-            itemDueDate: lastItemDueDate,
+            itemCalDate: itemLastCalDate,
+            itemDueDate: itemLastDueDate,
             itemStatus: itemLastStatus,
             itemLastStatus: itemStatus,
             grnId: "",
