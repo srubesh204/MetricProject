@@ -183,7 +183,7 @@ const itemCalController = {
           })
         }
 
-        const historyRecord = new itemHistory({
+        const historyRecord = {
           itemId: itemData._id,
           itemCalId: createdItem._id,
           itemPlant,
@@ -224,7 +224,7 @@ const itemCalController = {
           acceptanceCriteria: obSize,
           itemCreatedBy,
           itemLastModifiedBy,
-        });
+        };
 
 
         await historyRecord.save();
