@@ -181,6 +181,7 @@ const partController = {
           C: 'customer',
           D: 'operationNo',
           E: 'partStatus',
+          F: 'partPlant'
         }
       });
       console.log(jsonData)
