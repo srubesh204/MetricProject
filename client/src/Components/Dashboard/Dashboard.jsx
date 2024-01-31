@@ -41,7 +41,7 @@ import { useEmployee } from '../../App';
 import DcList from '../Reports/dcList/DcList';
 import GrnList from '../Reports/grnList/GrnList';
 import CalList from '../Reports/CalItems/CalList';
-import { Logout } from '@mui/icons-material';
+import { FormatListBulleted, Logout } from '@mui/icons-material';
 import { Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Tooltip } from '@mui/material';
 import dashboard from '../assets/dashboard.png'
 import admin from '../assets/admin.png'
@@ -153,7 +153,7 @@ const Dashboard = () => {
       // { name: "Alerts Configuration", file: <AlertConfig />, icon: <img src={`${process.env.REACT_APP_PORT}/icon/list-text.png`} alt="Alerts Configuration Icon" style={{ width: '20px', height: '20px' }} /> },
       { name: "Mail Configuration", file: <MailConfig />, icon: <img src={`${process.env.REACT_APP_PORT}/icon/list-text.png`} alt="Mail Configuration Icon" style={{ width: '20px', height: '20px' }} /> },
       { name: "Format Number", file: <FormatNumber />, icon: <img src={`${process.env.REACT_APP_PORT}/icon/list-text.png`} alt="Format Number Icon" style={{ width: '20px', height: '20px' }} /> },
-      empRole.employee=== "superAdmin" && { name: "Company Details", file: <CompanyDetails />, icon: <img src={`${process.env.REACT_APP_PORT}/icon/company details.png`} alt="Company Details Icon" style={{ width: '20px', height: '20px' }} /> },
+      empRole.employee=== "superAdmin" && { name: "Company Details", file: <CompanyDetails />, icon: <img src={`${process.env.REACT_APP_PORT}/icon/list-text.png`} alt="Company Details Icon" style={{ width: '20px', height: '20px' }} /> },
       
       // { name: "Label Print", file: "", icon: <img src={`${process.env.REACT_APP_PORT}/icon/list-text.png`} alt="Label Print Icon" style={{ width: '20px', height: '20px' }} /> },
 
@@ -459,7 +459,7 @@ console.log(MenuItems.system)
                 <List component="div" disablePadding >
                   <ListItemButton sx={{ pl: 4 }} to="/itemlist">
                     <ListItemIcon>
-                      -
+                    <FormatListBulleted />
                     </ListItemIcon>
                     <ListItemText primary="Item List" />
 
@@ -467,7 +467,7 @@ console.log(MenuItems.system)
                   {empRole && (empRole.employee === "superAdmin" || empRole.employee === "admin" || empRole.employee === "plantAdmin" || empRole.employee === "creator") &&
                     <ListItemButton sx={{ pl: 4 }} to="/itemAdd" >
                       <ListItemIcon>
-                       -
+                      <FormatListBulleted />
                       </ListItemIcon>
                       <ListItemText primary="Item Add" />
 
