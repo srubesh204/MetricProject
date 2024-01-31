@@ -448,6 +448,8 @@ console.log(MenuItems.system)
                     </List>
                   </Collapse>
                 </React.Fragment>}
+                          {empRole && empRole.employee !== "viewer" &&
+                <React.Fragment>
               <ListItemButton onClick={handleItemOpen}>
                 <ListItemIcon>
                 <img src={`${process.env.REACT_APP_PORT}/icon/measurement.png`} alt="systemIcon" style={{ width: '24px', height: '24px' }} />
@@ -457,6 +459,7 @@ console.log(MenuItems.system)
               </ListItemButton>
               <Collapse in={itemOpen} timeout="auto" unmountOnExit>
                 <List component="div" disablePadding >
+                
                   <ListItemButton sx={{ pl: 4 }} to="/itemlist">
                     <ListItemIcon>
                     <FormatListBulleted />
@@ -477,7 +480,8 @@ console.log(MenuItems.system)
                 </List>
 
               </Collapse>
-
+              </React.Fragment>
+}
               <ListItemButton onClick={() => handleAdminList("report")}>
                 <ListItemIcon>
                  <img src={`${process.env.REACT_APP_PORT}/icon/seo-report.png`} alt="systemIcon" style={{ width: '24px', height: '24px' }} />
