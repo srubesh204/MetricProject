@@ -126,7 +126,12 @@ const Home = () => {
       );
       const plantDc = response.data.result.filter(dc => (employeeRole.loggedEmp.plantDetails.map(plant => plant.plantName).includes(dc.dcPlant)))
       const dcNos = response.data.result.map(dc => dc.dcId).filter(Boolean).sort()
-      setLastNo("DC "+ (dayjs().year() + "-" + ((dcNos[dcNos.length - 1]) + 1)))
+      if(dcNos.length === 0){
+        setLastNo("DC "+ (dayjs().year() + "-" + 1))
+      }else{
+        setLastNo("DC "+ (dayjs().year() + "-" + ((dcNos[dcNos.length - 1]) + 1)))
+      }
+      
       console.log(dcNos[dcNos.length - 1])
       setDcList(plantDc);
       setFilteredData(plantDc);
@@ -254,6 +259,7 @@ const Home = () => {
   useEffect(() => {
     getVendorsByType();
   }, [])
+
   console.log(customers)
   console.log(employeeRole)
 
@@ -670,9 +676,7 @@ const Home = () => {
   })
 
 
-  const calStatusColor = ['#FF2B14', '#FE9E24', '#FF5701', '#00BEFF', '#00C49F', "#007321"];
-  const itemStatusColor = ['#007321', '#00C49F', '#010101', '#FF8042', "#0088FE", '#FF2B14'];
-  const itemLocationColor = ['#0088FE', '#00C49F', '#FFBB28', '#FF5701', "#010101"];
+  const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', "#aca8c8", "#78787a"];
   
   const [calStatusFitleredData, setCalStatusFitleredData] = useState([])
 
@@ -681,8 +685,8 @@ const Home = () => {
     const pastDue = activeItems.filter((item) => dayjs(item.itemDueDate).isBefore(currentDate.format("YYYY-MM-DD")))
     const CurrentDue = activeItems.filter((item) => dayjs(item.itemDueDate).isSame(currentDate.format("YYYY-MM-DD")))
     const sevenDaysFilter = activeItems.filter((item) => dayjs(item.itemDueDate).isBefore(sevenDaysAgo) && dayjs(item.itemDueDate).isAfter(currentDate.format("YYYY-MM-DD")))
-    const fifteenDaysFilter = activeItems.filter((item) => dayjs(item.itemDueDate).isBetween(currentDate.format("YYYY-MM-DD"), fifteenDaysAgo))
-    const thirtyDaysFilter = activeItems.filter((item) => dayjs(item.itemDueDate).isBetween(currentDate.format("YYYY-MM-DD"), thirtyDaysAgo))
+    const fifteenDaysFilter = activeItems.filter((item) => dayjs(item.itemDueDate).isBetween(sevenDaysAgo, fifteenDaysAgo))
+    const thirtyDaysFilter = activeItems.filter((item) => dayjs(item.itemDueDate).isBetween(fifteenDaysAgo, thirtyDaysAgo))
     const AboveThirtyDaysFilter = activeItems.filter((item) => dayjs(item.itemDueDate).isAfter(thirtyDaysAgo))
 
     const sourceFilter = (filterName) => {
@@ -876,9 +880,9 @@ const Home = () => {
         <tbody>
           {payload.map((entry, index) => (
             <tr key={index} style={{ padding: 0 }}>
-              <td style={{ padding: "2px" }} onClick={() => ItemLocationDisplay(entry.value)}><div style={{ width: '25px', height: '25px', backgroundColor: itemLocationColor[index], marginRight: '10px', textAlign: "center", display: "flex", justifyContent: "center", alignItems: "center", cursor: "pointer" }}></div></td>
+              <td style={{ padding: "2px" }} onClick={() => ItemLocationDisplay(entry.value)}><div style={{ width: '25px', height: '25px', backgroundColor: entry.color, marginRight: '10px', textAlign: "center", display: "flex", justifyContent: "center", alignItems: "center", cursor: "pointer" }}></div></td>
               <td style={{ padding: "2px" }}>{entry.value}</td>
-              <td style={{ fontWeight: "bolder", color: itemLocationColor[index], padding: "2px" }} className='ms-2 ps-3'>{entry.payload.value}</td>
+              <td style={{ fontWeight: "bolder", color: entry.color, padding: "2px" }} className='ms-2 ps-3'>{entry.payload.value}</td>
             </tr>
           ))}
         </tbody>
@@ -896,9 +900,9 @@ const Home = () => {
         <tbody>
           {payload.map((entry, index) => (
             <tr key={index} height={entry.value === "Total Items" ? "50px" : ""}>
-              <td style={{ padding: "2px" }} onClick={() => { itemStatusLegend(entry.value); console.log(entry) }}><div style={{ width: '25px', height: '25px', backgroundColor: itemStatusColor[index], marginRight: '10px', textAlign: "center", display: "flex", justifyContent: "center", alignItems: "center", cursor: "pointer" }}></div></td>
+              <td style={{ padding: "2px" }} onClick={() => { itemStatusLegend(entry.value); console.log(entry) }}><div style={{ width: '25px', height: '25px', backgroundColor: entry.color, marginRight: '10px', textAlign: "center", display: "flex", justifyContent: "center", alignItems: "center", cursor: "pointer" }}></div></td>
               <td style={{ padding: "2px" }}>{entry.value}</td>
-              <td style={{ padding: "2px", fontWeight: "bolder", color: itemStatusColor[index] }} className='ms-2 ps-3'>{entry.payload.value}</td>
+              <td style={{ padding: "2px", fontWeight: "bolder", color: entry.color }} className='ms-2 ps-3'>{entry.payload.value}</td>
             </tr>
           ))}
         </tbody>
@@ -914,9 +918,9 @@ const Home = () => {
         <tbody>
           {payload.map((entry, index) => (
             <tr key={index}>
-              <td style={{ padding: "2px" }} onClick={() => { calStatusFunction(entry.value) }}><div style={{ width: '25px', height: '25px', backgroundColor: calStatusColor[index], marginRight: '10px', textAlign: "center", display: "flex", justifyContent: "center", alignItems: "center", cursor: "pointer" }}></div></td>
+              <td style={{ padding: "2px" }} onClick={() => { calStatusFunction(entry.value) }}><div style={{ width: '25px', height: '25px', backgroundColor: entry.color, marginRight: '10px', textAlign: "center", display: "flex", justifyContent: "center", alignItems: "center", cursor: "pointer" }}></div></td>
               <td style={{ padding: "2px" }}>{entry.value}</td>
-              <td style={{ padding: "2px", fontWeight: "bolder", color: calStatusColor[index] }} className='ms-2 ps-3'>{entry.payload.value}</td>
+              <td style={{ padding: "2px", fontWeight: "bolder", color: entry.color }} className='ms-2 ps-3'>{entry.payload.value}</td>
             </tr>
           ))}
         </tbody>
@@ -1422,11 +1426,11 @@ const Home = () => {
 
 
 
-                <Autocomplete
+                {/* <Autocomplete
                   disablePortal
 
                   id="combo-box-demo"
-                  options={customers.length > 0 ? customers : []}
+                  options={customers}
                   size='small'
                   fullWidth
                   onInputChange={(e, newValue) => MainFilter(newValue, "customer")}
@@ -1435,7 +1439,7 @@ const Home = () => {
                   getOptionLabel={(cus) => cus.aliasName}
                   renderInput={(params) => <TextField {...params} label="Customer" name='customer' />}
                   disableClearable
-                />
+                /> */}
 
 
 
@@ -1474,7 +1478,7 @@ const Home = () => {
                     labelLine={false}
                   >
                     {data.map((entry, index) => (
-                      <Cell key={index} fill={entry.color} />
+                      <Cell key={index} fill={COLORS[index % COLORS.length]} />
                     ))}
 
                   </Pie>
@@ -1537,7 +1541,7 @@ const Home = () => {
                     labelLine={false}
                   >
                     {data.map((entry, index) => (
-                      <Cell key={`cell-${index}`} fill={itemStatusColor[index]} />
+                      <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                     ))}
 
                   </Pie>
@@ -1581,7 +1585,7 @@ const Home = () => {
                     labelLine={false}
                   >
                     {data.map((entry, index) => (
-                      <Cell key={`cell-${index}`} fill={itemLocationColor[index]} />
+                      <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                     ))}
 
                   </Pie>

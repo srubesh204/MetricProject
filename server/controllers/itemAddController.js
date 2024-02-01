@@ -264,7 +264,7 @@ const itemAddController = {
         itemReceiptDate,
         itemDepartment,
         itemPlant,
-        itemCurrentLocation,
+        
         itemLastLocation,
         itemArea,
         itemPlaceOfUsage,
@@ -322,7 +322,7 @@ const itemAddController = {
         itemReceiptDate,
         itemDepartment,
         itemPlant,
-        itemCurrentLocation,
+        
         itemLastLocation,
         itemArea,
         itemPlaceOfUsage,
@@ -688,7 +688,7 @@ const itemAddController = {
           AA: 'itemDueDate',
           AB: 'itemCalibratedAt',
           AC: 'itemCertificateNo',
-
+          AD: 'itemCalibrationDoneAt',
           AE: 'itemUncertainity',
           AF: 'itemUncertainityUnit',
           AG: 'itemPlant',

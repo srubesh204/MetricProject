@@ -684,7 +684,7 @@ const CalDueReport = () => {
 
                                 </TextField>
                             </div>
-                            <div className="col d-flex  mb-2">
+                            {/* <div className="col d-flex  mb-2">
                                 <TextField label="Customer Wise"
                                     id="customerWiseId"
                                     select
@@ -700,9 +700,9 @@ const CalDueReport = () => {
                                     ))}
                                 </TextField>
 
-                            </div>
+                            </div> */}
 
-                            <div className="col d-flex  mb-2">
+                            {/* <div className="col d-flex  mb-2">
 
                                 <TextField label=" Part No & Part Name"
                                     id="partNameId"
@@ -719,7 +719,7 @@ const CalDueReport = () => {
                                         <MenuItem key={index} value={item.partNo}>{[item.partNo, item.partName].join(', ')}</MenuItem>
                                     ))}
                                 </TextField>
-                            </div>
+                            </div> */}
                             <div className="col d-flex  mr-1 ">
                                 <TextField label="Calibration Soure"
                                     onChange={handleFilterChangeItemList}

@@ -868,7 +868,7 @@ const TotalList = () => {
 
 
               </div>
-              <div className="col d-flex  mb-2">
+              {/* <div className="col d-flex  mb-2">
 
                 <TextField label="Customer Wise"
                   id="customerWiseId"
@@ -885,9 +885,9 @@ const TotalList = () => {
                   ))}
                 </TextField>
 
-              </div>
+              </div> */}
 
-              <div className="col d-flex  mb-2">
+              {/* <div className="col d-flex  mb-2">
 
                 <TextField label=" Part No & Part Name"
                   id="partNameId"
@@ -905,7 +905,7 @@ const TotalList = () => {
                   ))}
                 </TextField>
 
-              </div>
+              </div> */}
               <div className="col d-flex  mb-2">
                 <TextField label="Calibration source"
                   id="calibrationSourceId"
