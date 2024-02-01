@@ -49,9 +49,8 @@ const Dc = () => {
     console.log(dcData)
 
    
-    const [dcNumber, setDcNumber] = useState(1);
-    const currentYear = dayjs().year();
-    const [data, setData] = useState({ year: currentYear, dcNo: `${currentYear}-1` });
+   
+   
 
 
     const handleDcChanges = (event) => {
@@ -447,6 +446,7 @@ const Dc = () => {
     const handleClose = () => {
         setDcData(initialDcData)
         setDcOpen(false)
+        window.location.reload()
     }
 
 

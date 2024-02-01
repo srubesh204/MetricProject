@@ -1742,7 +1742,7 @@ const Grn = () => {
             <DialogActions className='d-flex justify-content-between'>
                 +
                 <div>
-                    <Button variant='contained' color='error' className='me-3' onClick={() => { setGrnOpen(false); setGrnData([]); setGrnData(initialGrnData) }}>Cancel</Button>
+                    <Button variant='contained' color='error' className='me-3' onClick={() => { setGrnOpen(false); setGrnData([]); setGrnData(initialGrnData); window.location.reload() }}>Cancel</Button>
                     <Button variant='contained' color='success' onClick={() => { setConfirmSubmit(true) }}>Submit</Button>
                 </div>
             </DialogActions>

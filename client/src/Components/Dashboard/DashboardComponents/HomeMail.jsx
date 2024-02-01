@@ -299,7 +299,7 @@ const HomeMail = () => {
 
             </DialogContent>
             <DialogActions>
-                <Button onClick={() => setMailOpen(false)}>Cancel</Button>
+                <Button onClick={() => {setMailOpen(false); window.location.reload()}}>Cancel</Button>
                 <Button
                     size="small"
                     onClick={handleSubmit}
