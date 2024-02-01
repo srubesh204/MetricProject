@@ -1,11 +1,11 @@
 import React, { useContext, useRef } from 'react';
-import { CalDueReportContent } from './CalDueReport';
+import { TotalListContent } from './TotalList';
 import dayjs from 'dayjs';
 import { useReactToPrint } from 'react-to-print';
 
 const CalDuePrint = () => {
-    const calDuePrintData = useContext(CalDueReportContent)
-    const { totalPrintOpen, setTotalPrintOpen, filteredItemListData, formatNoData, itemList, partDataList,companyList ,plantList } = calDuePrintData
+    const calDuePrintData = useContext(TotalListContent)
+    const { calDuePrint,setCalDuePrint, filteredItemListData, formatNoData, itemList, partDataList,companyList ,plantList } = calDuePrintData
 
 
     const componentRef = useRef();
@@ -42,15 +42,15 @@ const CalDuePrint = () => {
               font-size: 6px;
           }
         `,
-        onAfterPrint: () => setTotalPrintOpen(false)
+        onAfterPrint: () => setCalDuePrint(false)
     });
 
      // Your conditional logic
-     if (totalPrintOpen) {
+     if (calDuePrint) {
         // Call the handlePrint function when needed
         handlePrint();
     }
-    console.log(totalPrintOpen)
+    console.log(calDuePrint)
     console.log(formatNoData)
 
     const renderTableRows = () => {

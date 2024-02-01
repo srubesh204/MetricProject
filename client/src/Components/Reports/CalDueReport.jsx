@@ -25,6 +25,7 @@ export const CalDueReportContent = createContext(null);
 const CalDueReport = () => {
 
     const employeeRole = useEmployee()
+    const [loaded, setLoaded] = useState(false);
 
     const [totalPrintOpen, setTotalPrintOpen] = useState(false);
 
@@ -52,9 +53,10 @@ const CalDueReport = () => {
             const response = await axios.get(
                 `${process.env.REACT_APP_PORT}/itemAdd/getAllItemAdds`
             );
-
+            console.log(response.data.result)
             const plantItems = response.data.result.filter(item => employeeRole.loggedEmp.plantDetails.some(plant => item.itemPlant === plant.plantName))
             const departmentItems = plantItems.filter(item => employeeRole.loggedEmp.plantDetails.some(plant => plant.departments.includes(item.itemDepartment)))
+            console.log(departmentItems)
 
             const filterNames = ["itemIMTENo", "itemType", "itemDepartment", "itemPlant", "itemCalibrationSource", "itemCurrentLocation"]
 
@@ -63,21 +65,17 @@ const CalDueReport = () => {
             filterNames.forEach((element, index) => {
                 const data = departmentItems.map(item => item[element]);
                 filterNames[index] = [...new Set(data)];
-
                 // Update the object with a dynamic key based on the 'element'
                 updatedFilterNames[element] = filterNames[index];
-                console.log(updatedFilterNames)
             });
-
+            console.log(updatedFilterNames)
             // Update state outside the loop with the updated object
             setFilterNameList(prev => ({ ...prev, ...updatedFilterNames }));
-
-
-
-
             setCalDueList(departmentItems);
-            setFilteredItemListData(departmentItems)
-            console.log(response.data)
+            setFilteredItemListData(departmentItems);
+
+            setLoaded(true)
+
         } catch (err) {
             console.log(err);
         }
@@ -212,89 +210,24 @@ const CalDueReport = () => {
         currentLocation: "all",
         customerWise: "all",
         partName: "all",
-        calibrationSource: "all"
+        calibrationSource: "all",
+        itemCurrentLocation: 'all'
 
 
     })
 
     console.log(itemListSelectedRowIds)
+    const [plantDatas, setPlantDatas] = useState([])
+    const [departmentDatas, setDepartmentDatas] = useState([])
+    const [customerParts, setCustomerParts] = useState([])
+
     const handleFilterChangeItemList = (e) => {
         const { name, value } = e.target;
         console.log(e)
-
         if (value === "all") {
-            setFilteredItemListData(calDueList)
+            setFilteredItemListData(plantDatas)
         } else {
 
-            if (name === "itemType") {
-                const itemType = calDueList.filter((item) => (item.itemType === value))
-                console.log(itemType)
-                setFilteredItemListData(itemType)
-                setFilterAllNames(prev => ({
-                    ...prev,
-                    itemType: value,
-                    currentLocation: "all",
-                    customerWise: "all",
-                    partName: "all",
-                    calibrationSource: "all"
-                }))
-
-
-            }
-            if (name === "currentLocation") {
-                const currentLocation = calDueList.filter((item) => (item.itemDepartment === value))
-                setFilteredItemListData(currentLocation)
-                setFilterAllNames(prev => ({
-                    ...prev,
-                    itemType: "all",
-                    currentLocation: value,
-                    customerWise: "all",
-                    partName: "all",
-                    calibrationSource: "all"
-                }))
-            }
-            if (name === "customerWise") {
-                const customerWise = calDueList.filter((item) =>
-                    item.itemCustomer && Array.isArray(item.itemCustomer) && item.itemCustomer.includes(value)
-                );
-                setFilteredItemListData(customerWise);
-                setFilterAllNames(prev => ({
-                    ...prev,
-                    itemType: "all",
-                    currentLocation: "all",
-                    customerWise: value,
-                    partName: "all",
-                    calibrationSource: "all"
-                }))
-            }
-
-            if (name === "partName") {
-                const filteredItems = calDueList.filter((item) => (item.itemPartName.includes(value)));
-
-                setFilteredItemListData(filteredItems);
-                console.log(filteredItems)
-                setFilterAllNames((prev) => ({
-                    ...prev,
-                    itemType: "all",
-                    currentLocation: "all",
-                    customerWise: "all",
-                    partName: value,
-                    calibrationSource: "all"
-                }));
-            }
-            if (name === "calibrationSource") {
-
-                const calibrationSource = calDueList.filter((item) => (item.itemCalibrationSource === value))
-                setFilteredItemListData(calibrationSource)
-                setFilterAllNames(prev => ({
-                    ...prev,
-                    itemType: "all",
-                    currentLocation: "all",
-                    customerWise: "all",
-                    partName: "all",
-                    calibrationSource: value
-                }))
-            }
             if (name === "plantWise") {
                 const plantWise = calDueList.filter((item) => (item.itemPlant === value))
                 setFilteredItemListData(plantWise)
@@ -311,7 +244,130 @@ const CalDueReport = () => {
                     calibrationSource: "all",
                     itemCurrentLocation: "all"
                 }))
+                setPlantDatas(plantWise)
             }
+            // if (name === "currentLocation") {
+            //     const currentLocation = calDueList.filter((item) => (item.itemDepartment === value))
+            //     setFilteredItemListData(currentLocation)
+            //     setFilterAllNames(prev => ({
+            //         ...prev,
+            //         itemType: "all",
+            //         currentLocation: value,
+            //         customerWise: "all",
+            //         partName: "all",
+            //         calibrationSource: "all"
+            //     }))
+            // }
+
+
+            if (name === "currentLocation") {
+                const currentLocation = plantDatas.filter((item) => (item.itemDepartment === value))
+                setFilteredItemListData(currentLocation)
+                setFilterAllNames(prev => ({
+                    ...prev,
+                    itemType: "all",
+                    currentLocation: value,
+                    customerWise: "all",
+                    partName: "all",
+                    calibrationSource: "all",
+                    itemCurrentLocation: "all"
+                }))
+                setDepartmentDatas(currentLocation)
+                const filterNames = ["itemIMTENo", "itemType", "itemCalibrationSource", "itemCurrentLocation"]
+
+                let updatedFilterNames = {};
+
+                filterNames.forEach((element, index) => {
+                    const data = currentLocation.map(item => item[element]);
+                    filterNames[index] = [...new Set(data)];
+                    // Update the object with a dynamic key based on the 'element'
+                    updatedFilterNames[element] = filterNames[index];
+                });
+                console.log(updatedFilterNames)
+                // Update state outside the loop with the updated object
+                setFilterNameList(prev => ({ ...prev, ...updatedFilterNames }));
+            }
+
+            if (name === "itemType") {
+                const itemType = departmentDatas.filter((item) => (item.itemType === value))
+
+                setFilteredItemListData(itemType)
+                setFilterAllNames(prev => ({
+                    ...prev,
+                    itemType: value,
+                    currentLocation: "all",
+                    customerWise: "all",
+                    partName: "all",
+                    calibrationSource: "all",
+                    itemCurrentLocation: "all"
+                }))
+
+
+            }
+            if (name === "customerWise") {
+                const customerData = partDataList.filter(part => part.customer === value)
+                const customers = departmentDatas.filter(item => customerData.some(cus => item.itemPartName.includes(cus.partNo)))
+                console.log(customers)
+                setFilteredItemListData(customers)
+                setCustomerParts(customerData)
+                setFilterAllNames(prev => ({
+                    ...prev,
+                    itemType: "all",
+                    currentLocation: "all",
+                    customerWise: value,
+                    partName: "all",
+                    calibrationSource: "all",
+                    itemCurrentLocation: "all"
+
+                }))
+            }
+
+            if (name === "partName") {
+                const filteredItems = calDueList.filter((item) => (item.itemPartName.includes(value)));
+
+                setFilteredItemListData(filteredItems);
+                console.log(filteredItems)
+                setFilterAllNames((prev) => ({
+                    ...prev,
+                    itemType: "all",
+                    currentLocation: "all",
+                    customerWise: "all",
+                    partName: value,
+                    calibrationSource: "all",
+                    itemCurrentLocation: "all"
+                }));
+            }
+            if (name === "calibrationSource") {
+
+                const calibrationSource = calDueList.filter((item) => (item.itemCalibrationSource === value))
+                setFilteredItemListData(calibrationSource)
+                setFilterAllNames(prev => ({
+                    ...prev,
+                    itemType: "all",
+                    currentLocation: "all",
+                    customerWise: "all",
+                    partName: "all",
+                    calibrationSource: value,
+                    itemCurrentLocation: "all"
+                }))
+            }
+            // if (name === "plantWise") {
+            //     const plantWise = calDueList.filter((item) => (item.itemPlant === value))
+            //     setFilteredItemListData(plantWise)
+            //     setFilterAllNames(prev => ({
+            //         ...prev,
+            //         imteNo: "all",
+            //         itemType: "all",
+            //         currentLocation: "all",
+            //         customerWise: "all",
+            //         supplierWise: "all",
+            //         partName: "all",
+            //         status: "all",
+            //         plantWise: value,
+            //         calibrationSource: "all",
+            //         itemCurrentLocation: "all"
+            //     }))
+            // }
             if (name === "currentLocation") {
                 const currentLocation = calDueList.filter((item) => (item.itemDepartment === value))
                 setFilteredItemListData(currentLocation)
@@ -454,20 +510,17 @@ const CalDueReport = () => {
     useEffect(() => {
         if (partDataList.length !== 0) {
 
-            const partCustomers = partDataList.filter(part => calDueList.some(item => item.itemPartName.includes(part._id)))
+            const partCustomers = partDataList.filter(part => departmentDatas.some(item => item.itemPartName.includes(part.partNo)))
             console.log(partCustomers)
             setPartCutomerNames(partCustomers)
-
         }
-    }, [partDataList, calDueList])
-
+    }, [departmentDatas])
     useEffect(() => {
         console.log(calDueList)
         const filteredItems = calDueList.filter((item) => dayjs(item.itemDueDate).isSameOrAfter(dateData.fromDate) && dayjs(item.itemDueDate).isSameOrBefore(dateData.toDate))
         console.log(filteredItems)
         setFilteredItemListData(filteredItems)
     }, [dateData.fromDate, dateData.toDate])
-
     const mailCheck = () => {
         const singlePlant = itemListSelectedRowIds.every((item, index, array) => item.itemPlant === array[0].itemPlant);
 
@@ -478,7 +531,6 @@ const CalDueReport = () => {
 
 
     }
-
     const [mailOpen, setMailOpen] = useState(false)
     const TotalListChildData = {
         mailOpen,
@@ -635,36 +687,36 @@ const CalDueReport = () => {
                             <div className="col d-flex  mb-2">
                                 <TextField label="Customer Wise"
                                     id="customerWiseId"
-                                    onChange={handleFilterChangeItemList}
                                     select
-                                    defaultValue={"all"}
+                                    defaultValue="all"
                                     fullWidth
-                                    value={filterAllNames.customer}
+                                    // value={filterAllNames.customerWise}
                                     size="small"
+                                    onChange={handleFilterChangeItemList}
                                     name="customerWise" >
                                     <MenuItem value="all">All</MenuItem>
                                     {partCutomerNames.map((item, index) => (
-                                        <MenuItem key={index} value={item}>{item.customer}</MenuItem>
+                                        <MenuItem key={index} value={item.customer}>{item.customer}</MenuItem>
                                     ))}
-
                                 </TextField>
 
                             </div>
 
                             <div className="col d-flex  mb-2">
 
-                                <TextField label="Part Name"
+                                <TextField label=" Part No & Part Name"
                                     id="partNameId"
-                                    onChange={handleFilterChangeItemList}
                                     select
-                                    defaultValue={"all"}
+                                    // value={filterAllNames.partName}
                                     fullWidth
                                     size="small"
+                                    onChange={handleFilterChangeItemList}
                                     value={filterAllNames.partName}
+
                                     name="partName" >
                                     <MenuItem value="all">All</MenuItem>
-                                    {partCutomerNames.map((item, index) => (
-                                        <MenuItem key={index} value={item._id}>{[item.partNo, item.partName].join(', ')}</MenuItem>
+                                    {customerParts.map((item, index) => (
+                                        <MenuItem key={index} value={item.partNo}>{[item.partNo, item.partName].join(', ')}</MenuItem>
                                     ))}
                                 </TextField>
                             </div>
@@ -690,7 +742,7 @@ const CalDueReport = () => {
                         </div>
 
                         <div>
-                            <Box sx={{ height: 490, width: '100%', my: 2 }}>
+                            {/* <Box sx={{ height: 490, width: '100%', my: 2 }}>
                                 <DataGrid
 
                                     rows={filteredItemListData}
@@ -732,7 +784,7 @@ const CalDueReport = () => {
 
 
 
-                            </Box>
+                            </Box> */}
 
 
 
@@ -740,7 +792,6 @@ const CalDueReport = () => {
                         <div className='row'>
                             <div className='col'>
                                 <Button variant="contained" size='small' color="success" onClick={() => { setTotalPrintOpen(true) }}>Print</Button>
-
                             </div>
                             <div className='col d-flex justify-content-end'>
                                 <div className='me-2'>
@@ -752,8 +803,6 @@ const CalDueReport = () => {
                                     <Button component={Link} to="/" size='small' variant='contained' startIcon={<ArrowBack />} endIcon={<House />} color='secondary'>Home</Button>
                                 </div> */}
                             </div>
-
-
                         </div>
                     </Paper>
 

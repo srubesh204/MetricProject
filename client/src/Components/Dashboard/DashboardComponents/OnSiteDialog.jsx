@@ -1084,15 +1084,10 @@ const OnSiteDialog = () => {
                     <div className='me-2 '>
                       <Button disabled={selectedGrnItem.osGrnItemStatus === "" || selectedGrnItem.osGrnItemStatus === undefined} startIcon={<Add />} onClick={() => OnSiteGrnAdd()} size='small' sx={{ minWidth: "130px" }} variant='contained'>Add Item</Button>
                     </div>
-
                   </div>
-
-
-
                 </div>
                 {selectedGrnItem.osGrnItemStatus === "Calibrated" ?
                   <React.Fragment>
-
                     <div className='row g-2 '>
                       <div className="col-md-2">
                         <DatePicker
@@ -1100,7 +1095,6 @@ const OnSiteDialog = () => {
                           id="osGrnItemCalDateId"
                           name="osGrnItemCalDate"
                           label="Cal Date"
-
                           slotProps={{ textField: { size: 'small', fullWidth: true } }}
                           format="DD-MM-YYYY"
                           value={dayjs(selectedGrnItem.osGrnItemCalDate)}
@@ -1120,8 +1114,6 @@ const OnSiteDialog = () => {
                           onChange={(newValue) => setSelectedGrnItem((prev) => ({ ...prev, osGrnItemDueDate: newValue.format('YYYY-MM-DD') }))}
                         />
                       </div>
-
-
                       <div className='col-md-2'>
                         <TextField size='small' fullWidth variant='outlined' id="grnItemCertificateStatusId" select label="Certificate Status" onChange={handleOnSiteGrnItemAdd} name='osGrnItemCertificateStatus'>
                           <MenuItem value="received">Received</MenuItem>
