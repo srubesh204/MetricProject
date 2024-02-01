@@ -71,7 +71,7 @@ const roleAccessRules = {
 };
 
 // Function to generate routes based on user role and access rules
-const generateRoutes = (employee) => {
+const generateRoutes = (employee, Element) => {
 
   
   const allowedRoutes = roleAccessRules[employee] || []; // Get allowed routes for the userRole
@@ -117,7 +117,7 @@ const generateRoutes = (employee) => {
   const generatedRoutes = routes
     .filter(route => allowedRoutes.includes(route.path))
     .map(({ path, element }) => (
-      <Route key={path} path={path} element={element} />
+      <Route key={path} path={path} element={<Element />} /> // Use Element here
     ));
 
   return generatedRoutes;
@@ -128,16 +128,14 @@ const generateRoutes = (employee) => {
 const PrivateRoute = ({ element: Element, employee }) => {
   const isLoggedIn = sessionStorage.getItem('loggedIn');
 
-
   if (!isLoggedIn) {
     return <Navigate to="/login" />;
   }
 
-  const routes = generateRoutes(employee);
+  const routes = generateRoutes(employee, Element); // Pass Element to generateRoutes
 
   return (
     <Routes>
-
       {routes}
       <Route path="*" element={<AccessDenied />} /> {/* Catch-all route for restricted access */}
     </Routes>
