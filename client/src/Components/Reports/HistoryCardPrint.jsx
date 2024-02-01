@@ -149,7 +149,7 @@ const HistoryCardPrint = () => {
                                             <td style={{ width: "33%", borderRight: "0.5px solid black", fontWeight: "bold" }}>Min / Max</td>
                                             <td style={{ width: "34%", fontWeight: "bold" }}>Wear Limit</td>
                                         </tr>
-                                        {selectedRow.length > 0 &&
+                                        {selectedRow.length > 0 &&selectedRow[0].itemType === "attribute" && 
                                             selectedRow[0].acceptanceCriteria.map((item, index) => (
                                                 <tr key={index} style={{ borderTop: "0.5px solid black" }}>
                                                     <td style={{ width: "33%", borderRight: "0.5px solid black" }}>{item.acParameter || '-'}</td>
@@ -157,8 +157,20 @@ const HistoryCardPrint = () => {
                                                     <td style={{ width: "34%" }}>{item.acWearLimitPS || '-'}</td>
                                                 </tr>
                                             ))}
+                                            {selectedRow.length > 0 && selectedRow[0].itemType === "variable" &&  
+                                            selectedRow[0].acceptanceCriteria.map((item, index) => (
+                                                <tr key={index} style={{ borderTop: "0.5px solid black" }}>
+                                                    <td style={{ width: "33%", borderRight: "0.5px solid black" }}>{item.acParameter || '-'}</td>
+                                                    <td style={{ width: "33%", borderRight: "0.5px solid black" }}>{item.acMinPSError || '-'}/{item.acMaxPSError || '-'}</td>
+                                                    {/* <td style={{ width: "34%" }}>{item.acWearLimitPS || '-'}</td> */}
+                                                </tr>
+                                            ))}
+
+
                                     </table>
                                 </td>
+
+                                
 
                             </tr>
                         </tbody>

@@ -164,7 +164,7 @@ const Dashboard = () => {
       { name: "Cal Data", file: <CalList />, icon: <img src={`${process.env.REACT_APP_PORT}/icon/list-text.png`} alt="Cal Data Icon" style={{ width: '20px', height: '20px' }} /> },
       { name: "History Card", file: <InsHistoryCard />, icon: <img src={`${process.env.REACT_APP_PORT}/icon/list-text.png`} alt="History Card Icon" style={{ width: '20px', height: '20px' }} /> },
       { name: "Gauge List", file: <TotalList />, icon: <img src={`${process.env.REACT_APP_PORT}/icon/list-text.png`} alt="Gauge List Icon" style={{ width: '20px', height: '20px' }} /> },
-      { name: "Cal Due Report", file: <CalDueReport />, icon: <img src={`${process.env.REACT_APP_PORT}/icon/list-text.png`} alt="Cal Due Report Icon" style={{ width: '20px', height: '20px' }} /> },
+      // { name: "Cal Due Report", file: <CalDueReport />, icon: <img src={`${process.env.REACT_APP_PORT}/icon/list-text.png`} alt="Cal Due Report Icon" style={{ width: '20px', height: '20px' }} /> },
       // { name: "Gauge Movement Report" },
       // { name: "Management Chart" },
     ]
@@ -172,7 +172,6 @@ const Dashboard = () => {
   }
 
 console.log(MenuItems.system)
-
 
   console.log(fileName)
 

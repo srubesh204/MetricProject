@@ -693,7 +693,9 @@ const itemAddController = {
           AF: 'itemUncertainityUnit',
           AG: 'itemPlant',
           AH: 'itemPrevCalData',
-          AI: 'itemItemMasterIMTENo'
+          AI: 'itemItemMasterIMTENo',
+        
+
         }
       });
       console.log(jsonData)
