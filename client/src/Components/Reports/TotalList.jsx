@@ -288,22 +288,16 @@ const TotalList = () => {
   const [departmentDatas, setDepartmentDatas] = useState([])
   const [itemTypeDatas, setItemTypeDatas] = useState([])
   const [itemMasteDatas, setItemMasterDatas] = useState([])
-
   const [customerParts, setCustomerParts] = useState([])
   const handleFilterChangeItemList = (e) => {
     const { name, value } = e.target;
     console.log(e)
-
-
     if (name === "plantWise") {
       const plantWise = itemList.filter((item) => (item.itemPlant === value))
       if (value === "all") {
         setFilteredItemListData(itemList)
         const filterNames = ["itemIMTENo", "itemType", " itemAddMasterName", "itemDepartment", "itemCalibrationSource", "itemCurrentLocation"]
-
         let updatedFilterNames = {};
-
-
         filterNames.forEach((element, index) => {
           const data = itemList.map(item => item[element]);
           filterNames[index] = [...new Set(data)];
@@ -317,6 +311,16 @@ const TotalList = () => {
         const customerData = partDataList.filter(part => part.customer === value)
         setPartCutomerNames(partCustomers)
         setCustomerParts(customerData)
+        setFilterAllNames(prev => ({
+          ...prev,
+          imteNo: "all",
+          plantWise: value,
+          itemType: "all",
+          currentLocation: "all",
+          itemAddMasterName: "all",
+          customerWise: "all"
+        }))
+        setPlantDatas(plantWise)
       } else {
         setFilteredItemListData(plantWise)
         const filterNames = ["itemIMTENo", "itemType", " itemAddMasterName", "itemDepartment", "itemCalibrationSource", "itemCurrentLocation"]
@@ -1031,7 +1035,7 @@ const TotalList = () => {
                     select
                     defaultValue="all"
                     fullWidth
-                    //value={filterAllNames.customerWise}
+                    value={filterAllNames.customerWise}
                     size="small"
                     onChange={handleFilterChangeItemList}
                     name="customerWise" >
@@ -1140,7 +1144,7 @@ const TotalList = () => {
                     <MenuItem value="Date">Date</MenuItem >
                   </TextField>
                 </div>
-                {dueDate === "Date" && <div className='col d-flex justify-content-end mb-2 g-2'>
+                {dueDate === "Date" && <div className='col d-flex justify-content-end'>
                   <div className="me-2 ">
                     <DatePicker
                       fullWidth

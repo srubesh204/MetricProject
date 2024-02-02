@@ -304,7 +304,6 @@ const ItemList = () => {
         { field: 'itemMake', headerName: 'Make', width: 90, headerAlign: "center", align: "center", },
         { field: 'itemCalDate', headerName: 'Cal Date', width: 100, headerAlign: "center", align: "center", valueGetter: (params) => dayjs(params.row.itemCalDate).format('DD-MM-YYYY') },
         { field: 'itemDueDate', headerName: 'Due Date', width: 110, headerAlign: "center", align: "center", valueGetter: (params) => dayjs(params.row.itemDueDate).format('DD-MM-YYYY') },
-
         { field: 'itemCalFreInMonths', headerName: 'Frequency', type: "number", width: 80, headerAlign: "center", align: "center" },
         { field: 'itemCalibrationSource', headerName: 'Cal Source', width: 120, headerAlign: "center", align: "center", },
         { field: 'itemCalibratedAt', headerName: 'Cal Done At ', width: 100, headerAlign: "center", align: "center" },
@@ -322,9 +321,7 @@ const ItemList = () => {
                 return itemType.charAt(0).toUpperCase() + itemType.slice(1).toLowerCase();
             },
         }
-
     ];
-
     const [deleteModalItem, setDeleteModalItem] = useState(false);
     const [itemListSelectedRowIds, setItemListSelectedRowIds] = useState([])
 
