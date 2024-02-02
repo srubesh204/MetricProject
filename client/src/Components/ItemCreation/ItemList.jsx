@@ -63,7 +63,7 @@ const ItemList = () => {
             const departmentItems = plantItems.filter(item => employeeRole.loggedEmp.plantDetails.some(plant => plant.departments.includes(item.itemDepartment)))
             console.log(departmentItems)
 
-            const filterNames = ["itemIMTENo", "itemType", "itemDepartment", "itemPlant", "itemCalibrationSource", "itemCurrentLocation"]
+            const filterNames = [ "itemAddMasterName", "itemIMTENo", "itemType", "itemDepartment", "itemPlant", "itemCalibrationSource", "itemCurrentLocation"]
 
             let updatedFilterNames = {};
 
@@ -334,7 +334,8 @@ const ItemList = () => {
         status: "all",
         plantWise: "all",
         calibrationSource: "all",
-        itemCurrentLocation: "all"
+        itemCurrentLocation: "all",
+        itemAddMasterName: "all"
     })
 
     const [plantDatas, setPlantDatas] = useState([])
@@ -344,6 +345,7 @@ const ItemList = () => {
     const handleFilterChangeItemList = (e) => {
         const { name, value } = e.target;
         console.log(e)
+        setFilterAllNames(prev=> ({...prev, [name]: value}))
         if (value === "all") {
             setFilteredItemListData(plantDatas)
         } else {
@@ -362,7 +364,8 @@ const ItemList = () => {
                     status: "all",
                     plantWise: value,
                     calibrationSource: "all",
-                    itemCurrentLocation: "all"
+                    itemCurrentLocation: "all",
+                    itemAddMasterName: "all",
                 }))
                 setPlantDatas(plantWise)
             }
@@ -381,10 +384,11 @@ const ItemList = () => {
                     status: "all",
                     plantWise: "all",
                     calibrationSource: "all",
-                    itemCurrentLocation: "all"
+                    itemCurrentLocation: "all",
+                    itemAddMasterName: "all",
                 }))
                 setDepartmentDatas(currentLocation)
-                const filterNames = ["itemIMTENo", "itemType", "itemCalibrationSource", "itemCurrentLocation"]
+                const filterNames = ["itemAddMasterName", "itemIMTENo", "itemType", "itemCalibrationSource", "itemCurrentLocation"]
 
                 let updatedFilterNames = {};
 
@@ -421,10 +425,30 @@ const ItemList = () => {
                     status: "all",
                     plantWise: "all",
                     calibrationSource: "all",
-                    itemCurrentLocation: "all"
+                    itemCurrentLocation: "all",
+                    itemAddMasterName: "all",
                 }))
 
 
+            }
+
+            if (name === "itemAddMasterName") {
+                const itemAddMasterName = departmentDatas.filter((item) => (item.itemAddMasterName === value))
+                setFilteredItemListData(itemAddMasterName)
+                setFilterAllNames(prev => ({
+                    ...prev,
+                    itemAddMasterName: value,
+                    imteNo: "all",
+                    itemType: "all",
+                    currentLocation: "all",
+                    customerWise: "all",
+                    supplierWise: "all",
+                    partName: "all",
+                    status: "all",
+                    plantWise: "all",
+                    calibrationSource: "all",
+                    itemCurrentLocation: "all"
+                }))
             }
 
 
@@ -442,7 +466,8 @@ const ItemList = () => {
                     status: "all",
                     plantWise: "all",
                     calibrationSource: "all",
-                    itemCurrentLocation: "all"
+                    itemCurrentLocation: "all",
+                    itemAddMasterName: "all",
                 }))
             }
             if (name === "itemType") {
@@ -460,7 +485,8 @@ const ItemList = () => {
                     status: "all",
                     plantWise: "all",
                     calibrationSource: "all",
-                    itemCurrentLocation: "all"
+                    itemCurrentLocation: "all",
+                    itemAddMasterName: "all",
                 }))
 
 
@@ -484,7 +510,8 @@ const ItemList = () => {
                     status: "all",
                     plantWise: "all",
                     calibrationSource: "all",
-                    itemCurrentLocation: "all"
+                    itemCurrentLocation: "all",
+                    itemAddMasterName: "all",
                 }))
             }
             if (name === "partName") {
@@ -505,7 +532,8 @@ const ItemList = () => {
                     status: "all", // Reset other filters if needed
                     plantWise: "all",
                     calibrationSource: "all",
-                    itemCurrentLocation: "all"
+                    itemCurrentLocation: "all",
+                    itemAddMasterName: "all",
                 }));
             }
             if (name === "status") {
@@ -522,7 +550,8 @@ const ItemList = () => {
                     status: value,
                     plantWise: "all",
                     calibrationSource: "all",
-                    itemCurrentLocation: "all"
+                    itemCurrentLocation: "all",
+                    itemAddMasterName: "all",
                 }))
             }
 
@@ -541,7 +570,8 @@ const ItemList = () => {
                     status: "all",
                     plantWise: "all",
                     calibrationSource: value,
-                    itemCurrentLocation: "all"
+                    itemCurrentLocation: "all",
+                    itemAddMasterName: "all",
 
                 }))
 
@@ -560,7 +590,8 @@ const ItemList = () => {
                     status: "all",
                     plantWise: "all",
                     calibrationSource: "all",
-                    itemCurrentLocation: value
+                    itemCurrentLocation: value,
+                    itemAddMasterName: "all",
                 }))
             }
 
@@ -1028,6 +1059,26 @@ const ItemList = () => {
                                 </TextField>
 
                             </div>
+                            <div className="col d-flex mb-2 ">
+
+                                <TextField label="Item Name"
+                                    id="itemAddMasterNameId"
+                                    required
+                                    select
+                                    value={filterAllNames.itemAddMasterName}
+                                    defaultValue="all"
+                                    fullWidth
+                                    size="small"
+
+                                    onChange={handleFilterChangeItemList}
+                                    name="itemAddMasterName" >
+                                    <MenuItem value="all">All</MenuItem>
+                                    {FilterNameList.itemAddMasterName.map((item, index) => (
+                                        <MenuItem key={index} value={item}>{item}</MenuItem>
+                                    ))}
+                                </TextField>
+
+                            </div>
 
                             <div className="col d-flex mb-2 ">
 
@@ -1180,7 +1231,7 @@ const ItemList = () => {
                                     <TextField label="Current Location "
                                         id="itemCurrentLocationId"
                                         select
-                                        defaultValue="all"
+                                        
                                         value={filterAllNames.itemCurrentLocation}
                                         fullWidth
                                         onChange={handleFilterChangeItemList}
