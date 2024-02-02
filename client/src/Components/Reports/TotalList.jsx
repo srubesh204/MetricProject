@@ -386,7 +386,7 @@ const TotalList = () => {
         }))
       } else {
         setFilteredItemListData(currentLocation)
-        const filterNames = ["itemIMTENo", "itemType", "itemCalibrationSource", "itemCurrentLocation"]
+        const filterNames = ["itemIMTENo", "itemType","itemAddMasterName", "itemCalibrationSource", "itemCurrentLocation"]
         let updatedFilterNames = {};
         filterNames.forEach((element, index) => {
           const data = currentLocation.map(item => item[element]);

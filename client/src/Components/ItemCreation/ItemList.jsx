@@ -348,9 +348,7 @@ const ItemList = () => {
             if (value === "all") {
                 setFilteredItemListData(itemList)
                 const filterNames = ["itemIMTENo", "itemType", "itemAddMasterName", "itemDepartment", "itemCalibrationSource", "itemCurrentLocation"]
-
                 let updatedFilterNames = {};
-
                 filterNames.forEach((element, index) => {
                     const data = itemList.map(item => item[element]);
                     filterNames[index] = [...new Set(data)];
