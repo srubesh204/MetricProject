@@ -277,6 +277,7 @@ const TotalList = () => {
     customerWise: 'all',
     partName: "all",
     calibrationSource: "all",
+    status: "all"
 
 
   })
@@ -339,7 +340,9 @@ const TotalList = () => {
           itemType: "all",
           currentLocation: "all",
           itemAddMasterName: "all",
-          calibrationSource: "all"
+          customerWise: "all"
+
+
         }))
         setPlantDatas(plantWise)
 
@@ -373,7 +376,9 @@ const TotalList = () => {
           itemType: "all",
           currentLocation: value,
           itemAddMasterName: "all",
-          calibrationSource: "all"
+          calibrationSource: "all",
+          itemCurrentLocation: "all",
+          status: "all"
         }))
       } else {
         setFilteredItemListData(currentLocation)
@@ -395,10 +400,11 @@ const TotalList = () => {
           itemType: "all",
           currentLocation: value,
           itemAddMasterName: "all",
-          calibrationSource: "all"
+          calibrationSource: "all",
+          itemCurrentLocation: "all",
+          status: "all"
         }))
         setDepartmentDatas(currentLocation)
-
       }
     }
     if (name === "itemType") {
@@ -422,9 +428,8 @@ const TotalList = () => {
           imteNo: "all",
           itemType: value,
           itemAddMasterName: "all",
-           calibrationSource: "all"
+          calibrationSource: "all"
         }))
-
       } else {
         setFilteredItemListData(itemType)
         const filterNames = ["itemIMTENo", "itemAddMasterName",]
@@ -444,7 +449,8 @@ const TotalList = () => {
           imteNo: "all",
           itemType: value,
           itemAddMasterName: "all",
-          calibrationSource: "all"
+          calibrationSource: "all",
+          itemCurrentLocation: "all",
         }))
         setItemTypeDatas(itemType)
       }
@@ -470,6 +476,7 @@ const TotalList = () => {
           itemAddMasterName: value,
           imteNo: "all",
           calibrationSource: "all",
+
         }))
       } else {
         setFilteredItemListData(itemAddMasterName)
@@ -511,50 +518,50 @@ const TotalList = () => {
         }))
       }
     }
-
-
-
     if (name === "customerWise") {
-
       const customerData = partDataList.filter(part => part.customer === value)
-
       const customers = plantDatas.filter(item => customerData.some(cus => item.itemPartName.includes(cus.partNo)))
-
       console.log(customers)
+      if (value === " all") {
+        setFilteredItemListData(plantDatas)
+        setCustomerParts(customerData)
+        setFilterAllNames(prev => ({
+          ...prev,
+          imteNo: "all",
+          itemType: "all",
+          customerWise: value,
+          supplierWise: "all",
+          partName: "all",
+          status: "all",
+          plantWise: "all",
+          itemAddMasterName: "all",
+          calibrationSource: "all",
+          itemCurrentLocation: "all"
+        }))
 
+      } else {
+        setFilteredItemListData(customers)
+        setCustomerParts(customerData)
+        setFilterAllNames(prev => ({
+          ...prev,
+          imteNo: "all",
+          itemType: "all",
+          customerWise: value,
+          supplierWise: "all",
+          partName: "all",
+          status: "all",
+          plantWise: "all",
+          itemAddMasterName: "all",
+          calibrationSource: "all",
+          itemCurrentLocation: "all"
+        }))
 
-      setFilteredItemListData(customers)
-      setCustomerParts(customerData)
-      setFilterAllNames(prev => ({
-        ...prev,
-        imteNo: "all",
-        itemType: "all",
-
-        customerWise: value,
-        supplierWise: "all",
-        partName: "all",
-        status: "all",
-        plantWise: "all",
-        itemAddMasterName: "all",
-        calibrationSource: "all",
-        itemCurrentLocation: "all"
-      }))
-
+      }
 
     }
-
-
-
-
-
-
-
     if (name === "supplierWise") {
-
       const supperlierWise = departmentDatas.filter((item) => item.itemSupplier.includes(value))
-
       setFilteredItemListData(supperlierWise)
-
       setFilterAllNames(prev => ({
         ...prev,
         imteNo: "all",
@@ -592,20 +599,22 @@ const TotalList = () => {
     }
     if (name === "status") {
       const partName = departmentDatas.filter((item) => (item.itemStatus === value))
-      setFilteredItemListData(partName)
-      setFilterAllNames(prev => ({
-        ...prev,
-        imteNo: "all",
-        itemType: "all",
-        currentLocation: "all",
-        customerWise: "all",
-        supplierWise: "all",
-        partName: "all",
-        status: value,
-        plantWise: "all",
-        calibrationSource: "all",
-        itemCurrentLocation: "all"
-      }))
+      if (value === "all") {
+        setFilteredItemListData(departmentDatas)
+        setFilterAllNames(prev => ({
+          ...prev,
+
+          status: value,
+
+        }))
+
+      } else {
+        setFilteredItemListData(partName)
+        setFilterAllNames(prev => ({
+          ...prev,
+          status: value,
+        }))
+      }
     }
     if (name === "calibrationSource") {
       const calibrationSource = departmentDatas.filter((item) => (item.itemCalibrationSource === value))
@@ -615,43 +624,32 @@ const TotalList = () => {
           ...prev,
           calibrationSource: value,
         }))
+      } else {
+        setFilteredItemListData(calibrationSource)
+        setFilterAllNames(prev => ({
+          ...prev,
+          calibrationSource: value,
+        }))
 
       }
-      setFilteredItemListData(calibrationSource)
-      setFilterAllNames(prev => ({
-        ...prev,
-        calibrationSource: value,
-
-
-      }))
-
     }
     if (name === "itemCurrentLocation") {
       const itemCurrentLocation = departmentDatas.filter((item) => (item.itemCurrentLocation === value))
-      setFilteredItemListData(itemCurrentLocation)
-      setFilterAllNames(prev => ({
-        ...prev,
-        imteNo: "all",
-        itemType: "all",
-        currentLocation: "all",
-        customerWise: "all",
-        supplierWise: "all",
-        partName: "all",
-        status: "all",
-        plantWise: "all",
-        calibrationSource: "all",
-        itemCurrentLocation: value,
-        itemAddMasterName: "all",
-      }))
+      if (value === "all") {
+        setFilteredItemListData(departmentDatas)
+        setFilterAllNames(prev => ({
+          ...prev,
+          itemCurrentLocation: value,
+        }))
+      } else {
+        setFilteredItemListData(itemCurrentLocation)
+        setFilterAllNames(prev => ({
+          ...prev,
+          itemCurrentLocation: value,
+        }))
+      }
     }
-
-
-
-
   };
-
-
-
   // if (name === "supplierWise") {
   //   if (value) {
   //     const supplierWise = departmentDatas.filter((item) => item.itemCurrentLocation && item.itemLocation !== "itemDepartment" && item.dcStatus === "1");
@@ -670,29 +668,17 @@ const TotalList = () => {
   //     }));
   //   }
   // }
-
-
   useEffect(() => {
     if (partDataList.length !== 0) {
-
       const partCustomers = partDataList.filter(part => plantDatas.some(item => item.itemPartName.includes(part.partNo)))
-
       console.log(partCustomers)
       setPartCutomerNames(partCustomers)
-
-
     }
   }, [plantDatas])
-
-
   console.log(filteredItemListData)
-
   const dueDatePicker = (newValue, name) => {
     let startDate = "";
     let endDate = "";
-
-
-
     if (name === "dueStartDate") {
       startDate = newValue.format("YYYY-MM-DD");
     }
@@ -734,18 +720,6 @@ const TotalList = () => {
   useEffect(() => {
     vendorFetchData();
   }, []);
-
-
-
-
-
-
-
-
-
-
-
-
 
   const [snackBarOpen, setSnackBarOpen] = useState(false)
   const [errorhandler, setErrorHandler] = useState({});
@@ -875,15 +849,11 @@ const TotalList = () => {
         })
         setFilteredItemListData(thirtyDaysFilter)
       }
-
       if (value === "Date") {
         setFilteredItemListData(itemList)
       }
 
     }
-
-
-
   }
 
 
