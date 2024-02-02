@@ -292,11 +292,77 @@ const TotalList = () => {
   const handleFilterChangeItemList = (e) => {
     const { name, value } = e.target;
     console.log(e)
+    // if (name === "plantWise") {
+    //   const plantWise = itemList.filter((item) => (item.itemPlant === value))
+    //   if (value === "all") {
+    //     setFilteredItemListData(itemList)
+    //     const filterNames = ["itemIMTENo", "itemType", " itemAddMasterName", "itemDepartment", "itemCalibrationSource", "itemCurrentLocation"]
+    //     let updatedFilterNames = {};
+    //     filterNames.forEach((element, index) => {
+    //       const data = itemList.map(item => item[element]);
+    //       filterNames[index] = [...new Set(data)];
+    //       // Update the object with a dynamic key based on the 'element'
+    //       updatedFilterNames[element] = filterNames[index];
+    //     });
+    //     console.log(updatedFilterNames)
+    //     // Update state outside the loop with the updated object
+    //     setFilterNameList(prev => ({ ...prev, ...updatedFilterNames }));
+    //     const partCustomers = partDataList.filter(part => itemList.some(item => item.itemPartName.includes(part.partNo)))
+    //     const customerData = partDataList.filter(part => part.customer === value)
+    //     setPartCutomerNames(partCustomers)
+    //     setCustomerParts(customerData)
+    //     setFilterAllNames(prev => ({
+    //       ...prev,
+    //       imteNo: "all",
+    //       plantWise: value,
+    //       itemType: "all",
+    //       currentLocation: "all",
+    //       itemAddMasterName: "all",
+    //       customerWise: "all"
+    //     }))
+    //     setPlantDatas(plantWise)
+    //   } else {
+    //     setFilteredItemListData(plantWise)
+    //     const filterNames = ["itemIMTENo", "itemType", " itemAddMasterName", "itemDepartment", "itemCalibrationSource", "itemCurrentLocation"]
+
+    //     let updatedFilterNames = {};
+
+    //     filterNames.forEach((element, index) => {
+    //       const data = plantWise.map(item => item[element]);
+    //       filterNames[index] = [...new Set(data)];
+    //       // Update the object with a dynamic key based on the 'element'
+    //       updatedFilterNames[element] = filterNames[index];
+    //     });
+
+    //     console.log(updatedFilterNames)
+    //     // Update state outside the loop with the updated object
+    //     setFilterNameList(prev => ({ ...prev, ...updatedFilterNames }));
+    //     setFilterAllNames(prev => ({
+    //       ...prev,
+    //       imteNo: "all",
+    //       plantWise: value,
+    //       itemType: "all",
+    //       currentLocation: "all",
+    //       itemAddMasterName: "all",
+    //       customerWise: "all"
+
+
+    //     }))
+    //     setPlantDatas(plantWise)
+
+    //     const partCustomers = partDataList.filter(part => plantWise.some(item => item.itemPartName.includes(part.partNo)))
+    //     const customerData = partDataList.filter(part => part.customer === value)
+    //     setPartCutomerNames(partCustomers)
+    //     setCustomerParts(customerData)
+
+    //   }
+    // }
+
     if (name === "plantWise") {
       const plantWise = itemList.filter((item) => (item.itemPlant === value))
       if (value === "all") {
         setFilteredItemListData(itemList)
-        const filterNames = ["itemIMTENo", "itemType", " itemAddMasterName", "itemDepartment", "itemCalibrationSource", "itemCurrentLocation"]
+        const filterNames = ["itemIMTENo", "itemType", "itemAddMasterName", "itemDepartment", "itemCalibrationSource", "itemCurrentLocation"]
         let updatedFilterNames = {};
         filterNames.forEach((element, index) => {
           const data = itemList.map(item => item[element]);
@@ -308,23 +374,12 @@ const TotalList = () => {
         // Update state outside the loop with the updated object
         setFilterNameList(prev => ({ ...prev, ...updatedFilterNames }));
         const partCustomers = partDataList.filter(part => itemList.some(item => item.itemPartName.includes(part.partNo)))
-        const customerData = partDataList.filter(part => part.customer === value)
-        setPartCutomerNames(partCustomers)
-        setCustomerParts(customerData)
-        setFilterAllNames(prev => ({
-          ...prev,
-          imteNo: "all",
-          plantWise: value,
-          itemType: "all",
-          currentLocation: "all",
-          itemAddMasterName: "all",
-          customerWise: "all"
-        }))
-        setPlantDatas(plantWise)
+           const customerData = partDataList.filter(part => part.customer === value)
+           setPartCutomerNames(partCustomers)
+           setCustomerParts(customerData)
       } else {
         setFilteredItemListData(plantWise)
-        const filterNames = ["itemIMTENo", "itemType", " itemAddMasterName", "itemDepartment", "itemCalibrationSource", "itemCurrentLocation"]
-
+        const filterNames = ["itemIMTENo", "itemType", "itemAddMasterName", "itemDepartment", "itemCalibrationSource", "itemCurrentLocation"]
         let updatedFilterNames = {};
 
         filterNames.forEach((element, index) => {
@@ -333,7 +388,6 @@ const TotalList = () => {
           // Update the object with a dynamic key based on the 'element'
           updatedFilterNames[element] = filterNames[index];
         });
-
         console.log(updatedFilterNames)
         // Update state outside the loop with the updated object
         setFilterNameList(prev => ({ ...prev, ...updatedFilterNames }));
@@ -343,18 +397,13 @@ const TotalList = () => {
           plantWise: value,
           itemType: "all",
           currentLocation: "all",
-          itemAddMasterName: "all",
-          customerWise: "all"
-
-
+          itemAddMasterName: "all"
         }))
         setPlantDatas(plantWise)
-
         const partCustomers = partDataList.filter(part => plantWise.some(item => item.itemPartName.includes(part.partNo)))
         const customerData = partDataList.filter(part => part.customer === value)
         setPartCutomerNames(partCustomers)
         setCustomerParts(customerData)
-
       }
     }
 
@@ -379,20 +428,17 @@ const TotalList = () => {
           imteNo: "all",
           itemType: "all",
           currentLocation: value,
-          itemAddMasterName: "all",
-          calibrationSource: "all",
-          itemCurrentLocation: "all",
-          status: "all"
+          itemAddMasterName: "all"
         }))
       } else {
         setFilteredItemListData(currentLocation)
-        const filterNames = ["itemIMTENo", "itemType","itemAddMasterName", "itemCalibrationSource", "itemCurrentLocation"]
+        const filterNames = ["itemIMTENo", "itemType", "itemAddMasterName", "itemCalibrationSource", "itemCurrentLocation"]
         let updatedFilterNames = {};
         filterNames.forEach((element, index) => {
           const data = currentLocation.map(item => item[element]);
           filterNames[index] = [...new Set(data)];
           // Update the object with a dynamic key based on the 'element'
-          updatedFilterNames[element] = filterNames[index];
+          updatedFilterNames[element] = filterNames[index].sort();
         });
         console.log(updatedFilterNames)
         // Update state outside the loop with the updated object
@@ -403,10 +449,7 @@ const TotalList = () => {
           imteNo: "all",
           itemType: "all",
           currentLocation: value,
-          itemAddMasterName: "all",
-          calibrationSource: "all",
-          itemCurrentLocation: "all",
-          status: "all"
+          itemAddMasterName: "all"
         }))
         setDepartmentDatas(currentLocation)
       }
@@ -479,8 +522,6 @@ const TotalList = () => {
           ...prev,
           itemAddMasterName: value,
           imteNo: "all",
-          calibrationSource: "all",
-
         }))
       } else {
         setFilteredItemListData(itemAddMasterName)
