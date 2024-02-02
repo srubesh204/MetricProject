@@ -180,12 +180,13 @@ const ItemEdit = () => {
     //
 
     const initialItemAddData = {
-        
+
         selectedItemMaster: [],
         isItemMaster: "",
         itemAddMasterName: "",
         itemPlant: "",
         itemIMTENo: "",
+        itemSAPNo: "",
         itemImage: "",
         itemType: "",
         itemRangeSize: "",
@@ -200,7 +201,7 @@ const ItemEdit = () => {
         itemDepartment: "",
 
         itemArea: "N/A",
-        itemPlaceOfUsage: "N/A",
+        itemPlaceOfUsage: "",
         itemCalFreInMonths: "",
         itemCalAlertDays: "",
         itemCalibrationSource: "",
@@ -241,11 +242,12 @@ const ItemEdit = () => {
 
 
     const [itemAddData, setItemAddData] = useState({
-        
+
         selectedItemMaster: [],
         isItemMaster: "",
         itemAddMasterName: "",
         itemIMTENo: "",
+        itemSAPNo: "",
         itemImage: "",
         itemType: "",
         itemRangeSize: "",
@@ -260,7 +262,7 @@ const ItemEdit = () => {
         itemDepartment: "",
         itemCurrentLocation: "",
         itemArea: "N/A",
-        itemPlaceOfUsage: "N/A",
+        itemPlaceOfUsage: "",
         itemCalFreInMonths: "",
         itemCalAlertDays: "",
         itemCalibrationSource: "",
@@ -311,10 +313,11 @@ const ItemEdit = () => {
             console.log(itemData)
             setItemAddData((prev) => ({
                 ...prev,
-               
+
                 selectedItemMaster: itemData.selectedItemMaster,
                 itemAddMasterName: itemData.itemAddMasterName,
                 itemIMTENo: itemData.itemIMTENo,
+                itemSAPNo: itemData.itemSAPNo,
                 isItemMaster: itemData.isItemMaster,
                 itemImage: itemData.itemImage,
                 itemPlant: itemData.itemPlant,
@@ -329,7 +332,7 @@ const ItemEdit = () => {
                 itemStatus: itemData.itemStatus,
                 itemReceiptDate: itemData.itemReceiptDate,
                 itemDepartment: itemData.itemDepartment,
-               
+
                 itemArea: itemData.itemArea,
                 itemPlaceOfUsage: itemData.itemPlaceOfUsage,
                 itemCalFreInMonths: itemData.itemCalFreInMonths,
@@ -400,7 +403,7 @@ const ItemEdit = () => {
 
 
 
-    
+
 
 
     const handleItemAddChange = (e) => {
@@ -419,9 +422,9 @@ const ItemEdit = () => {
                 itemCurrentLocation: value, // Ensure 'value' is correct here
             }));
         }
-     
 
-      
+
+
         if (name === "itemItemMasterIMTENo") {
             const updatedSelection = isItemMasterList.filter(item => value.some(selectedItem => selectedItem.itemIMTENo === item.itemIMTENo));
             setItemAddData((prev) => ({ ...prev, itemItemMasterIMTENo: updatedSelection }));
@@ -745,7 +748,7 @@ const ItemEdit = () => {
         const selectedFile = event.target.files[0];
         if (selectedFile) {
             console.log("working")
-            
+
             const formData = new FormData();
             formData.append('file', selectedFile);
             try {
@@ -753,7 +756,7 @@ const ItemEdit = () => {
                     .then(response => {
                         setUploadMessage(response.data.message)
                         console.log(response);
-                        setItemAddData((prev) => ({ ...prev, itemCertificateName: response.data.name}));
+                        setItemAddData((prev) => ({ ...prev, itemCertificateName: response.data.name }));
                     })
                     .catch(error => {
                         setUploadMessage("")
@@ -801,6 +804,26 @@ const ItemEdit = () => {
             }));
         }
     };
+
+    const [department, setDepartment] = useState([])
+    const DepFetch = async () => {
+        try {
+            const response = await axios.get(
+                `${process.env.REACT_APP_PORT}/department/getAllDepartments`
+            );
+            // const defaultDepartment = response.data.result.filter((dep) => dep.defaultdep === "yes")
+            setDepartment(response.data.result);
+
+            console.log(response.data)
+        } catch (err) {
+            console.log(err);
+        }
+    };
+    //get Designations
+    useEffect(() => {
+        DepFetch()
+    }, []);
+
 
     const [plantDepartments, setPlantDepartments] = useState([])
 
@@ -975,7 +998,7 @@ const ItemEdit = () => {
                                     Select Location
                                 </Typography>
                                 <div className="row g-2 mt-0 mb-2">
-                                    <div className="col-md-6">
+                                    <div className="col-md-4">
                                         <TextField
 
                                             value={itemAddData.itemPlant} onChange={handleItemAddChange} size='small' select fullWidth variant='outlined' label="Select Plant" name='itemPlant' id='itemPlantId'>
@@ -985,10 +1008,17 @@ const ItemEdit = () => {
                                             ))}
                                         </TextField>
                                     </div>
-                                    <div className="col-md-6 ">
+                                    <div className="col-md-4">
                                         <TextField value={itemAddData.itemDepartment} onChange={handleItemAddChange} size='small' select fullWidth variant='outlined' label="Department" name='itemDepartment' id='itemDepartmentId'>
                                             {plantDepartments && plantDepartments.map((item, index) => (
                                                 <MenuItem key={index} value={item}>{item}</MenuItem>
+                                            ))}
+                                        </TextField>
+                                    </div>
+                                    <div className="col-md-4">
+                                        <TextField value={itemAddData.itemPlaceOfUsage} onChange={handleItemAddChange} size='small' select fullWidth variant='outlined' label="secondary Location" name='itemPlaceOfUsage' id='itemPlaceOfUsageId'>
+                                            {department.map((item, index) => (
+                                                <MenuItem key={index} value={item.department}>{item.department}</MenuItem>
                                             ))}
                                         </TextField>
                                     </div>
@@ -1046,7 +1076,6 @@ const ItemEdit = () => {
 
 
                                     <div className="col-md-12">
-
                                         <FormControl size='small' component="div" fullWidth>
                                             <InputLabel id="itemItemMasterIMTENoId">Select IMTENo.</InputLabel>
                                             <Select
