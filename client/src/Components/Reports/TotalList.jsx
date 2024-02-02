@@ -1047,19 +1047,16 @@ const TotalList = () => {
                   <TextField label=" Part No & Part Name"
                     id="partNameId"
                     select
-
                     fullWidth
                     size="small"
                     onChange={handleFilterChangeItemList}
                     value={filterAllNames.partName}
-
                     name="partName" >
                     <MenuItem value="all">All</MenuItem>
                     {partCutomerNames.map((item, index) => (
                       <MenuItem key={index} value={item.partNo}>{[item.partNo, item.partName].join(', ')}</MenuItem>
                     ))}
                   </TextField>
-
                 </div>
                 {/* <div className="col d-flex  me-2">
                   <TextField label="Other Location"
@@ -1075,16 +1072,11 @@ const TotalList = () => {
                       <MenuItem key={index} value={item.fullName}>{item.fullName}</MenuItem>
                     ))}
                   </TextField>
-
-
-
                 </div> */}
-
                 <div className="col me-2">
                   <TextField label="Calibration source"
                     id="calibrationSourceId"
                     select
-
                     fullWidth
                     size="small"
                     value={filterAllNames.calibrationSource}
@@ -1146,10 +1138,44 @@ const TotalList = () => {
                     <MenuItem value="30">30</MenuItem >
                     <MenuItem value=">30">{'>'}30</MenuItem >
                     <MenuItem value="Date">Date</MenuItem >
-
                   </TextField>
-
                 </div>
+                {dueDate === "Date" && <div className='col d-flex justify-content-end mb-2 g-2'>
+                  <div className="me-2 ">
+                    <DatePicker
+                      fullWidth
+                      id="startDateId"
+                      name="dueStartDate"
+                      onChange={(newValue) => dueDatePicker(newValue, 'dueStartDate')}
+                      label="Start Date"
+                      slotProps={{ textField: { size: 'small' } }}
+                      format="DD-MM-YYYY"
+                    />
+                  </div>
+                  <div className="me-2">
+                    <DatePicker
+                      fullWidth
+                      id="endDateId"
+                      name="dueEndDate"
+                      onChange={(newValue) => dueDatePicker(newValue, 'dueEndDate')}
+                      label="End Date "
+                      slotProps={{ textField: { size: 'small' } }}
+                      format="DD-MM-YYYY"
+                    />
+                  </div>
+                  <div>
+                    <Button
+                      variant='contained'
+                      onClick={() => DatefilterFunction()}
+                      // startIcon={<FilterAlt />}
+                      size='small'
+                      color='warning'
+                    >
+                      Filter
+                    </Button>
+                  </div>
+                </div>}
+
                 {/* <div className="col  me-2 ">
                   <DatePicker
                     fullWidth
@@ -1181,41 +1207,7 @@ const TotalList = () => {
               {/* <div className="col-1 offset-7">
 
               </div> */}
-              {dueDate === "Date" && <div className='col d-flex justify-content-end mb-2 g-2'>
-                <div className="me-2 ">
-                  <DatePicker
-                    fullWidth
-                    id="startDateId"
-                    name="dueStartDate"
-                    onChange={(newValue) => dueDatePicker(newValue, 'dueStartDate')}
-                    label="Start Date"
-                    slotProps={{ textField: { size: 'small' } }}
-                    format="DD-MM-YYYY"
-                  />
-                </div>
-                <div className="me-2">
-                  <DatePicker
-                    fullWidth
-                    id="endDateId"
-                    name="dueEndDate"
-                    onChange={(newValue) => dueDatePicker(newValue, 'dueEndDate')}
-                    label="End Date "
-                    slotProps={{ textField: { size: 'small' } }}
-                    format="DD-MM-YYYY"
-                  />
-                </div>
-                <div>
-                  <Button
-                    variant='contained'
-                    onClick={() => DatefilterFunction()}
-                    startIcon={<FilterAlt />}
-                    size='small'
-                    color='warning'
-                  >
-                    Filter
-                  </Button>
-                </div>
-              </div>}
+
             </div>
             <div>
               <Box sx={{ height: 490, width: '100%', my: 2 }}>
@@ -1251,7 +1243,6 @@ const TotalList = () => {
                       </div>
                     ),
                   }}
-
                   density="compact"
                   //disableColumnMenu={true}
 
@@ -1260,24 +1251,18 @@ const TotalList = () => {
                   disableRowSelectionOnClick
                   pageSizeOptions={[5]}
                 />
-
-
-
               </Box>
-
-
-
             </div>
             <div className='row'>
 
-              <div className=' col d-flex justify-content-end'>
+              {/* <div className=' col d-flex justify-content-end'>
                 {employeeRole.employee !== "viewer" && <React.Fragment>
                   <div className='me-2'>
 
                   </div>
                 </React.Fragment>
                 }
-              </div>
+              </div> */}
 
             </div>
             <div className='row'>
@@ -1292,17 +1277,12 @@ const TotalList = () => {
                       <input className="form-control itemlistdownload" type="file" id="download" />Download </label>
                   </div> */}
                 </React.Fragment>}
-
-
                 <div>
                   <Button variant="contained" className='me-2' size='small' color="success" onClick={() => { setTotalPrintOpen(true) }}>Total List Print</Button>
-
                 </div>
                 {/* <div className='col'>
                   <Button variant="contained" size='small' color="success" onClick={() => { setCalDuePrint(true) }}>CalDueReport Print</Button>
-
                 </div> */}
-
                 <div className='col d-flex justify-content-end'>
                   <div className='me-2'>
                     <Button component={Link} to={`/home`} variant="contained" size='small' color="warning">
@@ -1313,36 +1293,19 @@ const TotalList = () => {
                       <Button component={Link} to="/" size='small' variant='contained' startIcon={<ArrowBack />} endIcon={<House />} color='secondary'>Home</Button>
                     </div> */}
                 </div>
-
-
-
-
               </div>
               <Snackbar anchorOrigin={{ vertical: "top", horizontal: "right" }} open={snackBarOpen} autoHideDuration={6000} onClose={handleSnackClose}>
                 <Alert onClose={handleSnackClose} severity={errorhandler.code} sx={{ width: '25%' }}>
                   {errorhandler.message}
                 </Alert>
               </Snackbar>
-
-
-
-
             </div>
-
-
-
-
           </Paper>
-
         </LocalizationProvider>
       </form>
-
-
-
       <TotalListContent.Provider
         value={{ totalPrintOpen, setTotalPrintOpen, itemList, filteredItemListData, partDataList, formatNoData, companyList, plantList }}
       >
-
         <TotalPrint />
       </TotalListContent.Provider>
       {selectedItemList.length > 0 &&
@@ -1350,7 +1313,6 @@ const TotalList = () => {
       <TotalListContent.Provider
         value={{ calDuePrint, setCalDuePrint, filteredItemListData, itemList, partDataList, formatNoData, companyList, plantList }}
       >
-
         <CalDuePrint />
       </TotalListContent.Provider>
 
