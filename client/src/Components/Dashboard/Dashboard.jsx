@@ -41,7 +41,7 @@ import { useEmployee } from '../../App';
 import DcList from '../Reports/dcList/DcList';
 import GrnList from '../Reports/grnList/GrnList';
 import CalList from '../Reports/CalItems/CalList';
-import { Logout } from '@mui/icons-material';
+import { FormatListBulleted, Logout } from '@mui/icons-material';
 import { Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Tooltip } from '@mui/material';
 import dashboard from '../assets/dashboard.png'
 import admin from '../assets/admin.png'
@@ -153,7 +153,7 @@ const Dashboard = () => {
       // { name: "Alerts Configuration", file: <AlertConfig />, icon: <img src={`${process.env.REACT_APP_PORT}/icon/list-text.png`} alt="Alerts Configuration Icon" style={{ width: '20px', height: '20px' }} /> },
       { name: "Mail Configuration", file: <MailConfig />, icon: <img src={`${process.env.REACT_APP_PORT}/icon/list-text.png`} alt="Mail Configuration Icon" style={{ width: '20px', height: '20px' }} /> },
       { name: "Format Number", file: <FormatNumber />, icon: <img src={`${process.env.REACT_APP_PORT}/icon/list-text.png`} alt="Format Number Icon" style={{ width: '20px', height: '20px' }} /> },
-      empRole.employee=== "superAdmin" && { name: "Company Details", file: <CompanyDetails />, icon: <img src={`${process.env.REACT_APP_PORT}/icon/company details.png`} alt="Company Details Icon" style={{ width: '20px', height: '20px' }} /> },
+      empRole.employee=== "superAdmin" && { name: "Company Details", file: <CompanyDetails />, icon: <img src={`${process.env.REACT_APP_PORT}/icon/list-text.png`} alt="Company Details Icon" style={{ width: '20px', height: '20px' }} /> },
       
       // { name: "Label Print", file: "", icon: <img src={`${process.env.REACT_APP_PORT}/icon/list-text.png`} alt="Label Print Icon" style={{ width: '20px', height: '20px' }} /> },
 
@@ -163,8 +163,8 @@ const Dashboard = () => {
       { name: "GRN List", file: <GrnList />, icon: <img src={`${process.env.REACT_APP_PORT}/icon/list-text.png`} alt="GRN List Icon" style={{ width: '20px', height: '20px' }} /> },
       { name: "Cal Data", file: <CalList />, icon: <img src={`${process.env.REACT_APP_PORT}/icon/list-text.png`} alt="Cal Data Icon" style={{ width: '20px', height: '20px' }} /> },
       { name: "History Card", file: <InsHistoryCard />, icon: <img src={`${process.env.REACT_APP_PORT}/icon/list-text.png`} alt="History Card Icon" style={{ width: '20px', height: '20px' }} /> },
-      { name: "Gauge List", file: <TotalList />, icon: <img src={`${process.env.REACT_APP_PORT}/icon/list-text.png`} alt="Gauge List Icon" style={{ width: '20px', height: '20px' }} /> },
-      { name: "Cal Due Report", file: <CalDueReport />, icon: <img src={`${process.env.REACT_APP_PORT}/icon/list-text.png`} alt="Cal Due Report Icon" style={{ width: '20px', height: '20px' }} /> },
+      { name: "Total List", file: <TotalList />, icon: <img src={`${process.env.REACT_APP_PORT}/icon/list-text.png`} alt="Total List Icon" style={{ width: '20px', height: '20px' }} /> },
+      // { name: "Cal Due Report", file: <CalDueReport />, icon: <img src={`${process.env.REACT_APP_PORT}/icon/list-text.png`} alt="Cal Due Report Icon" style={{ width: '20px', height: '20px' }} /> },
       // { name: "Gauge Movement Report" },
       // { name: "Management Chart" },
     ]
@@ -172,7 +172,6 @@ const Dashboard = () => {
   }
 
 console.log(MenuItems.system)
-
 
   console.log(fileName)
 
@@ -448,6 +447,8 @@ console.log(MenuItems.system)
                     </List>
                   </Collapse>
                 </React.Fragment>}
+                          {empRole && empRole.employee !== "viewer" &&
+                <React.Fragment>
               <ListItemButton onClick={handleItemOpen}>
                 <ListItemIcon>
                 <img src={`${process.env.REACT_APP_PORT}/icon/measurement.png`} alt="systemIcon" style={{ width: '24px', height: '24px' }} />
@@ -457,9 +458,10 @@ console.log(MenuItems.system)
               </ListItemButton>
               <Collapse in={itemOpen} timeout="auto" unmountOnExit>
                 <List component="div" disablePadding >
+                
                   <ListItemButton sx={{ pl: 4 }} to="/itemlist">
                     <ListItemIcon>
-                      -
+                    <FormatListBulleted />
                     </ListItemIcon>
                     <ListItemText primary="Item List" />
 
@@ -467,7 +469,7 @@ console.log(MenuItems.system)
                   {empRole && (empRole.employee === "superAdmin" || empRole.employee === "admin" || empRole.employee === "plantAdmin" || empRole.employee === "creator") &&
                     <ListItemButton sx={{ pl: 4 }} to="/itemAdd" >
                       <ListItemIcon>
-                       -
+                      <FormatListBulleted />
                       </ListItemIcon>
                       <ListItemText primary="Item Add" />
 
@@ -477,7 +479,8 @@ console.log(MenuItems.system)
                 </List>
 
               </Collapse>
-
+              </React.Fragment>
+}
               <ListItemButton onClick={() => handleAdminList("report")}>
                 <ListItemIcon>
                  <img src={`${process.env.REACT_APP_PORT}/icon/seo-report.png`} alt="systemIcon" style={{ width: '24px', height: '24px' }} />

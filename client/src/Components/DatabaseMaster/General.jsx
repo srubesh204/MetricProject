@@ -624,7 +624,7 @@ export const PartDataBase = ({ style }) => {
         partName: "",
         customer: "",
         operationNo: "N/A",
-        partStatus: "Active",
+        partStatus: "active",
         partPlant: ""
     }
 
@@ -634,7 +634,7 @@ export const PartDataBase = ({ style }) => {
         partName: "",
         customer: "",
         operationNo: "N/A",
-        partStatus: "Active",
+        partStatus: "active",
         partPlant: ""
     })
     console.log(partData)
@@ -1099,12 +1099,12 @@ export const PartDataBase = ({ style }) => {
                                                 placeholder="partStatus"
                                                 size="small"
                                                 onChange={handlePartDataBaseChange}
-                                                defaultValue="Active"
+                                             
                                                 value={partData.partStatus}
                                                 name="partStatus" >
 
-                                                <MenuItem value="Active">Active</MenuItem>
-                                                <MenuItem value="InActive">InActive</MenuItem>
+                                                <MenuItem value="active">Active</MenuItem>
+                                                <MenuItem value="inActive">InActive</MenuItem>
                                             </TextField>
 
                                         </div>

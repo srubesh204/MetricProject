@@ -41,14 +41,14 @@ const mailController = {
         const itemsRows = selectedItems.map((item, index) => `
         <tr>
             <td style="border: 1px solid #dddddd; text-align: center; padding: 8px;">${index + 1}</td>
-            <td style="border: 1px solid #dddddd; text-align: center; padding: 8px;">${item.itemAddMasterName}</td>
-            <td style="border: 1px solid #dddddd; text-align: center; padding: 8px;">${item.itemIMTENo}</td>
-            <td style="border: 1px solid #dddddd; text-align: center; padding: 8px;">${item.itemRangeSize + " " + item.itemRangeSizeUnit}</td>
-            <td style="border: 1px solid #dddddd; text-align: center; padding: 8px;">${item.itemCurrentLocation}</td>
-            <td style="border: 1px solid #dddddd; text-align: center; padding: 8px;">${item.itemCalDate}</td>
-            <td style="border: 1px solid #dddddd; text-align: center; padding: 8px;">${item.itemDueDate}</td>
-            <td style="border: 1px solid #dddddd; text-align: center; padding: 8px;">${item.itemCalibrationSource}</td>
-            <td style="border: 1px solid #dddddd; text-align: center; padding: 8px;">${item.itemSupplier.join(", ")}</td>
+            <td style="border: 1px solid #dddddd; text-align: center; padding: 8px;">${item.itemAddMasterName ? item.itemAddMasterName : "-"}</td>
+            <td style="border: 1px solid #dddddd; text-align: center; padding: 8px;">${item.itemIMTENo ? item.itemIMTENo : "-"}</td>
+            <td style="border: 1px solid #dddddd; text-align: center; padding: 8px;">${(item.itemRangeSize ? item.itemRangeSize : "-") + " " + (item.itemRangeSizeUnit ? item.itemRangeSizeUnit : "")}</td>
+            <td style="border: 1px solid #dddddd; text-align: center; padding: 8px;">${item.itemCurrentLocation ? item.itemCurrentLocation : "-"}</td>
+            <td style="border: 1px solid #dddddd; text-align: center; padding: 8px;">${item.itemCalDate ? item.itemCalDate : "-"}</td>
+            <td style="border: 1px solid #dddddd; text-align: center; padding: 8px;">${item.itemDueDate ? item.itemDueDate : "-"}</td>
+            <td style="border: 1px solid #dddddd; text-align: center; padding: 8px;">${item.itemCalibrationSource ? item.itemCalibrationSource : "-"}</td>
+            <td style="border: 1px solid #dddddd; text-align: center; padding: 8px;">${item.itemSupplier.join(", ")? item.itemSupplier.join(", ") : "-"}</td>
         </tr>
     `).join('');
 
@@ -83,7 +83,7 @@ const mailController = {
             <body style="margin:0;padding:0;">
             <p>Dear Sir/Madam,</p>
 
-            <p>               ${mailBody}</p>
+            <p>               ${mailBody ? mailBody : "-"}</p>
                 
                 <table role="presentation" style="width:100%; border-collapse:collapse; border: 1px solid black; border-spacing:0; background:#ffffff;">
                     <tbody>
