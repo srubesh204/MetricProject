@@ -1,6 +1,6 @@
 
 import './App.css';
-import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate, useLocation, Link } from 'react-router-dom';
 import { Department, Designation } from './Components/DatabaseMaster/DesDep';
 import Employee from './Components/DatabaseMaster/Employee';
 
@@ -41,10 +41,11 @@ import axios from 'axios';
 import RubeshTest from './Components/Test/RubeshTest';
 import DcPrint from './Components/Reports/dcList/DcPrint';
 import TotalList from './Components/Reports/TotalList';
-import { Backdrop, CircularProgress } from '@mui/material';
+import { Backdrop, Button, CircularProgress } from '@mui/material';
 import CalDueReport from './Components/Reports/CalDueReport';
 import InsHistoryCard from './Components/Reports/InsHistoryCard';
 import CalDuePrint from './Components/Reports/CalDuePrint';
+import { ArrowBack } from '@mui/icons-material';
 export const empRole = createContext(null);
 
 
@@ -63,7 +64,7 @@ export const EmployeeProvider = ({ children, employee }) => {
 };
 
 const roleAccessRules = {
-  
+
   admin: ['/home', "/desdep", "/general", "/vendor", "/itemMaster", "/itemadd", "/itemEdit/:id", "/itemList", "/grnList", "/calList", "/onSiteList", '/roles', "/employee", '/test', '/rubyTest', '/dcPrint', "/insHisCard"],
   plantAdmin: ['/home', "/desdep", "/general", "/vendor", "/itemMaster", "/itemadd", "/itemEdit/:id", "/itemList", "/grnList", "/calList", "/onSiteList", '/roles', "/employee", '/rubyTest', '/dcPrint', '/dcList', "/insHisCard"],
   creator: ['/home', '/itemList', '/itemadd', '/itemEdit/:id', "/grnList", "/calList", "/onSiteList", '/dcPrint', "/insHisCard"],
@@ -73,7 +74,7 @@ const roleAccessRules = {
 // Function to generate routes based on user role and access rules
 const generateRoutes = (employee, Element) => {
 
-  
+
   const allowedRoutes = roleAccessRules[employee] || []; // Get allowed routes for the userRole
 
   const routes = [
@@ -145,7 +146,7 @@ const PrivateRoute = ({ element: Element, employee }) => {
 
 function App() {
   const [loggedEmp, setLoggedEmp] = useState([]);
-  const [isLoggedIn, setIsLoggedIn] = useState(sessionStorage.getItem('loggedIn'));
+  const [isLoggedIn, setIsLoggedIn] = useState(sessionStorage.getItem('loggedIn') === 'true');
   const [employee, setEmployee] = useState(sessionStorage.getItem('employee'));
   const [empId, setEmpId] = useState(sessionStorage.getItem('empId'));
   const [isEmployeeLoaded, setIsEmployeeLoaded] = useState(false);
@@ -170,16 +171,10 @@ function App() {
     }
   }, [isLoggedIn, empId]);
 
-  // This effect watches for changes in isLoggedIn state
-  // If logged in status changes, update the state
-  useEffect(() => {
-    setIsLoggedIn(sessionStorage.getItem('loggedIn'));
-  }, [isLoggedIn]);
-
   // Function to handle successful login
   const handleLoginSuccess = () => {
     // Set isLoggedIn, employee, and empId from sessionStorage after successful login
-    setIsLoggedIn(sessionStorage.getItem('loggedIn'));
+    setIsLoggedIn(sessionStorage.getItem('loggedIn') === 'true');
     setEmployee(sessionStorage.getItem('employee'));
     setEmpId(sessionStorage.getItem('empId'));
   };
@@ -201,24 +196,37 @@ function App() {
           <Route
             path="/*"
             element={
-              isEmployeeLoaded ? (
-                <PrivateRoute employee={employee} />
-              ) : (
-                <Backdrop
+              isLoggedIn  ? (
+                isEmployeeLoaded ? (
+                  <PrivateRoute employee={employee} />
+                ) : (
+                  // Dialog for not logged in
+                  <Backdrop
                   style={{ zIndex: 1000 }}
-                  open={!isEmployeeLoaded}
+                  open={true} // Always show this dialog while employee data is loading
                 >
-                  <div class="spinner-border text-light" role="status">
-                    <span class="visually-hidden">Loading...</span>
-                  </div>
+                  <CircularProgress />
                 </Backdrop>
+                 
+                )
+              ) : (
+                // Dialog for loading employee data
+                <Backdrop
+                style={{ zIndex: 1000 }}
+                open={true} // Always show this dialog if not logged in
+              >
+                <div>
+                  <h2>You are not logged in</h2>
+                  <p>Please log in to access this page</p>
+                  <div className='text-end'><Button variant='contained' startIcon={<ArrowBack/>} component={Link} to="/login">Login Page</Button></div>
+                  
+                  {/* You can add a button here to navigate to the login page */}
+                </div>
+              </Backdrop>
               )
             }
           />
-          <Route
-            path="/login"
-            element={<Login onLoginSuccess={handleLoginSuccess} />}
-          />
+
           <Route path="/accessDenied" element={<AccessDenied />} />
         </Routes>
       </EmployeeProvider>

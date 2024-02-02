@@ -419,7 +419,7 @@ const ItemList = () => {
                     const data = currentLocation.map(item => item[element]);
                     filterNames[index] = [...new Set(data)];
                     // Update the object with a dynamic key based on the 'element'
-                    updatedFilterNames[element] = filterNames[index];
+                    updatedFilterNames[element] = filterNames[index].sort();
                 });
                 console.log(updatedFilterNames)
                 // Update state outside the loop with the updated object
@@ -712,20 +712,7 @@ const ItemList = () => {
             setFilterDates(prev => ({ ...prev, endDate: newValue.format("YYYY-MM-DD") }));
         }
 
-        //     const filteredData = itemList.filter((item) => {
-
-
-        //         // Assuming item.itemDueDate is a valid date
-        //         const itemDueDate = new Date(item.itemDueDate);
-
-        //         return (
-        //             (startDate === "" || itemDueDate >= new Date(startDate)) &&
-        //             (endDate === "" || itemDueDate <= new Date(endDate))
-        //         );
-        //     });
-
-
-        // };
+        
 
 
     };
