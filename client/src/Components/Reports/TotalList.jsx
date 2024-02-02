@@ -40,6 +40,7 @@ const TotalList = () => {
     itemIMTENo: [],
     itemType: [],
     itemDepartment: [],
+    itemAddMasterName: [],
     itemPlant: [],
     itemCalibrationSource: [],
     itemCurrentLocation: []
@@ -87,7 +88,7 @@ const TotalList = () => {
       const departmentItems = plantItems.filter(item => employeeRole.loggedEmp.plantDetails.some(plant => plant.departments.includes(item.itemDepartment)))
       console.log(departmentItems)
 
-      const filterNames = ["itemIMTENo", "itemType", "itemDepartment", "itemPlant", "itemCalibrationSource", "itemCurrentLocation"]
+      const filterNames = ["itemIMTENo", "itemType", " itemAddMasterName", "itemDepartment", "itemPlant", "itemCalibrationSource", "itemCurrentLocation"]
 
       let updatedFilterNames = {};
 
@@ -267,15 +268,16 @@ const TotalList = () => {
 
   const [filterAllNames, setFilterAllNames] = useState({
 
+    plantWise: "all",
     imteNo: "all",
     itemType: "all",
+    itemAddMasterName: "all",
     currentLocation: "all",
-    customerWise: "all",
-    supplierWise: "all",
+    itemCurrentLocation: "all",
+    customerWise: 'all',
     partName: "all",
-    status: "all",
-    plantWise: "all",
-    itemCurrentLocation: "all"
+    calibrationSource: "all",
+
 
   })
 
@@ -283,6 +285,8 @@ const TotalList = () => {
 
   const [plantDatas, setPlantDatas] = useState([])
   const [departmentDatas, setDepartmentDatas] = useState([])
+  const [itemTypeDatas, setItemTypeDatas] = useState([])
+  const [itemMasteDatas, setItemMasterDatas] = useState([])
 
   const [customerParts, setCustomerParts] = useState([])
   const handleFilterChangeItemList = (e) => {
@@ -294,9 +298,10 @@ const TotalList = () => {
       const plantWise = itemList.filter((item) => (item.itemPlant === value))
       if (value === "all") {
         setFilteredItemListData(itemList)
-        const filterNames = ["itemIMTENo", "itemType", "itemDepartment", "itemCalibrationSource", "itemCurrentLocation"]
+        const filterNames = ["itemIMTENo", "itemType", " itemAddMasterName", "itemDepartment", "itemCalibrationSource", "itemCurrentLocation"]
 
         let updatedFilterNames = {};
+
 
         filterNames.forEach((element, index) => {
           const data = itemList.map(item => item[element]);
@@ -307,9 +312,13 @@ const TotalList = () => {
         console.log(updatedFilterNames)
         // Update state outside the loop with the updated object
         setFilterNameList(prev => ({ ...prev, ...updatedFilterNames }));
+        const partCustomers = partDataList.filter(part => itemList.some(item => item.itemPartName.includes(part.partNo)))
+        const customerData = partDataList.filter(part => part.customer === value)
+        setPartCutomerNames(partCustomers)
+        setCustomerParts(customerData)
       } else {
         setFilteredItemListData(plantWise)
-        const filterNames = ["itemIMTENo", "itemType", "itemDepartment", "itemCalibrationSource", "itemCurrentLocation"]
+        const filterNames = ["itemIMTENo", "itemType", " itemAddMasterName", "itemDepartment", "itemCalibrationSource", "itemCurrentLocation"]
 
         let updatedFilterNames = {};
 
@@ -319,67 +328,197 @@ const TotalList = () => {
           // Update the object with a dynamic key based on the 'element'
           updatedFilterNames[element] = filterNames[index];
         });
+
         console.log(updatedFilterNames)
         // Update state outside the loop with the updated object
         setFilterNameList(prev => ({ ...prev, ...updatedFilterNames }));
         setFilterAllNames(prev => ({
           ...prev,
           imteNo: "all",
+          plantWise: value,
           itemType: "all",
           currentLocation: "all",
-          customerWise: "all",
-          supplierWise: "all",
-          partName: "all",
-          status: "all",
-
-          calibrationSource: "all",
-          itemCurrentLocation: "all"
+          itemAddMasterName: "all",
+          calibrationSource: "all"
         }))
         setPlantDatas(plantWise)
 
+        const partCustomers = partDataList.filter(part => plantWise.some(item => item.itemPartName.includes(part.partNo)))
+        const customerData = partDataList.filter(part => part.customer === value)
+        setPartCutomerNames(partCustomers)
+        setCustomerParts(customerData)
+
       }
-
-
-
     }
 
     if (name === "currentLocation") {
       const currentLocation = plantDatas.filter((item) => (item.itemDepartment === value))
-      setFilteredItemListData(currentLocation)
-      setFilterAllNames(prev => ({
-        ...prev,
-        imteNo: "all",
-        itemType: "all",
-        currentLocation: value,
-        customerWise: "all",
-        supplierWise: "all",
-        partName: "all",
-        status: "all",
-        plantWise: "all",
-        calibrationSource: "all",
-        itemCurrentLocation: "all"
-      }))
-      setDepartmentDatas(currentLocation)
-      const filterNames = ["itemIMTENo", "itemType", "itemCalibrationSource", "itemCurrentLocation"]
+      if (value === "all") {
+        setFilteredItemListData(plantDatas)
+        const filterNames = ["itemIMTENo", "itemType", "itemAddMasterName", "itemCalibrationSource", "itemCurrentLocation"]
+        let updatedFilterNames = {};
+        filterNames.forEach((element, index) => {
+          const data = plantDatas.map(item => item[element]);
+          filterNames[index] = [...new Set(data)];
+          // Update the object with a dynamic key based on the 'element'
+          updatedFilterNames[element] = filterNames[index];
+        });
+        console.log(updatedFilterNames)
+        // Update state outside the loop with the updated object
+        setFilterNameList(prev => ({ ...prev, ...updatedFilterNames }));
+        setFilteredItemListData(plantDatas)
+        setFilterAllNames(prev => ({
+          ...prev,
+          imteNo: "all",
+          itemType: "all",
+          currentLocation: value,
+          itemAddMasterName: "all",
+          calibrationSource: "all"
+        }))
+      } else {
+        setFilteredItemListData(currentLocation)
+        const filterNames = ["itemIMTENo", "itemType", "itemCalibrationSource", "itemCurrentLocation"]
+        let updatedFilterNames = {};
+        filterNames.forEach((element, index) => {
+          const data = currentLocation.map(item => item[element]);
+          filterNames[index] = [...new Set(data)];
+          // Update the object with a dynamic key based on the 'element'
+          updatedFilterNames[element] = filterNames[index];
+        });
+        console.log(updatedFilterNames)
+        // Update state outside the loop with the updated object
+        setFilterNameList(prev => ({ ...prev, ...updatedFilterNames }));
+        setFilteredItemListData(currentLocation)
+        setFilterAllNames(prev => ({
+          ...prev,
+          imteNo: "all",
+          itemType: "all",
+          currentLocation: value,
+          itemAddMasterName: "all",
+          calibrationSource: "all"
+        }))
+        setDepartmentDatas(currentLocation)
 
-      let updatedFilterNames = {};
-
-      filterNames.forEach((element, index) => {
-        const data = currentLocation.map(item => item[element]);
-        filterNames[index] = [...new Set(data)];
-        // Update the object with a dynamic key based on the 'element'
-        updatedFilterNames[element] = filterNames[index];
-      });
-      console.log(updatedFilterNames)
-      // Update state outside the loop with the updated object
-      setFilterNameList(prev => ({ ...prev, ...updatedFilterNames }));
+      }
     }
+    if (name === "itemType") {
+      const itemType = departmentDatas.filter((item) => (item.itemType === value))
+      if (value === "all") {
+        setFilteredItemListData(departmentDatas)
+        const filterNames = ["itemIMTENo", "itemAddMasterName",]
+        let updatedFilterNames = {};
+        filterNames.forEach((element, index) => {
+          const data = departmentDatas.map(item => item[element]);
+          filterNames[index] = [...new Set(data)];
+          // Update the object with a dynamic key based on the 'element'
+          updatedFilterNames[element] = filterNames[index];
+        });
+        console.log(updatedFilterNames)
+        // Update state outside the loop with the updated object
+        setFilterNameList(prev => ({ ...prev, ...updatedFilterNames }));
+        setFilteredItemListData(departmentDatas)
+        setFilterAllNames(prev => ({
+          ...prev,
+          imteNo: "all",
+          itemType: value,
+          itemAddMasterName: "all",
+           calibrationSource: "all"
+        }))
+
+      } else {
+        setFilteredItemListData(itemType)
+        const filterNames = ["itemIMTENo", "itemAddMasterName",]
+        let updatedFilterNames = {};
+        filterNames.forEach((element, index) => {
+          const data = itemType.map(item => item[element]);
+          filterNames[index] = [...new Set(data)];
+          // Update the object with a dynamic key based on the 'element'
+          updatedFilterNames[element] = filterNames[index];
+        });
+        console.log(updatedFilterNames)
+        // Update state outside the loop with the updated object
+        setFilterNameList(prev => ({ ...prev, ...updatedFilterNames }));
+        setFilteredItemListData(itemType)
+        setFilterAllNames(prev => ({
+          ...prev,
+          imteNo: "all",
+          itemType: value,
+          itemAddMasterName: "all",
+          calibrationSource: "all"
+        }))
+        setItemTypeDatas(itemType)
+      }
+    }
+    if (name === "itemAddMasterName") {
+      const itemAddMasterName = itemTypeDatas.filter((item) => (item.itemAddMasterName === value))
+      if (value === "all") {
+        setFilteredItemListData(itemTypeDatas)
+        const filterNames = ["itemIMTENo"]
+        let updatedFilterNames = {};
+        filterNames.forEach((element, index) => {
+          const data = itemTypeDatas.map(item => item[element]);
+          filterNames[index] = [...new Set(data)];
+          // Update the object with a dynamic key based on the 'element'
+          updatedFilterNames[element] = filterNames[index];
+        });
+        console.log(updatedFilterNames)
+        // Update state outside the loop with the updated object
+        setFilterNameList(prev => ({ ...prev, ...updatedFilterNames }));
+        setFilteredItemListData(itemTypeDatas)
+        setFilterAllNames(prev => ({
+          ...prev,
+          itemAddMasterName: value,
+          imteNo: "all",
+          calibrationSource: "all",
+        }))
+      } else {
+        setFilteredItemListData(itemAddMasterName)
+        const filterNames = ["itemIMTENo"]
+
+        let updatedFilterNames = {};
+
+        filterNames.forEach((element, index) => {
+          const data = itemAddMasterName.map(item => item[element]);
+          filterNames[index] = [...new Set(data)];
+          // Update the object with a dynamic key based on the 'element'
+          updatedFilterNames[element] = filterNames[index];
+        });
+        console.log(updatedFilterNames)
+        // Update state outside the loop with the updated object
+        setFilterNameList(prev => ({ ...prev, ...updatedFilterNames }));
+        setFilteredItemListData(itemAddMasterName)
+        setFilterAllNames(prev => ({
+          ...prev,
+          itemAddMasterName: value,
+          imteNo: "all",
+        }))
+        setItemMasterDatas(itemAddMasterName)
+      }
+    }
+    if (name === "imteNo") {
+      const imteNo = itemMasteDatas.filter((item) => (item.itemIMTENo === value))
+      if (value === "all") {
+        setFilteredItemListData(itemMasteDatas)
+        setFilterAllNames(prev => ({
+          ...prev,
+          imteNo: value,
+        }))
+      } else {
+        setFilteredItemListData(imteNo)
+        setFilterAllNames(prev => ({
+          ...prev,
+          imteNo: value,
+        }))
+      }
+    }
+
+
 
     if (name === "customerWise") {
 
       const customerData = partDataList.filter(part => part.customer === value)
 
-      const customers = departmentDatas.filter(item => customerData.some(cus => item.itemPartName.includes(cus.partNo)))
+      const customers = plantDatas.filter(item => customerData.some(cus => item.itemPartName.includes(cus.partNo)))
 
       console.log(customers)
 
@@ -390,12 +529,13 @@ const TotalList = () => {
         ...prev,
         imteNo: "all",
         itemType: "all",
-        currentLocation: "all",
+
         customerWise: value,
         supplierWise: "all",
         partName: "all",
         status: "all",
         plantWise: "all",
+        itemAddMasterName: "all",
         calibrationSource: "all",
         itemCurrentLocation: "all"
       }))
@@ -404,43 +544,9 @@ const TotalList = () => {
     }
 
 
-    if (name === "imteNo") {
-      const imteNo = departmentDatas.filter((item) => (item.itemIMTENo === value))
-      setFilteredItemListData(imteNo)
-      setFilterAllNames(prev => ({
-        ...prev,
-        imteNo: value,
-        itemType: "all",
-        currentLocation: "all",
-        customerWise: "all",
-        supplierWise: "all",
-        partName: "all",
-        status: "all",
-        plantWise: "all",
-        calibrationSource: "all",
-        itemCurrentLocation: "all"
-      }))
-    }
-    if (name === "itemType") {
-      const itemType = departmentDatas.filter((item) => (item.itemType === value))
-
-      setFilteredItemListData(itemType)
-      setFilterAllNames(prev => ({
-        ...prev,
-        imteNo: "all",
-        itemType: value,
-        currentLocation: "all",
-        customerWise: "all",
-        supplierWise: "all",
-        partName: "all",
-        status: "all",
-        plantWise: "all",
-        calibrationSource: "all",
-        itemCurrentLocation: "all"
-      }))
 
 
-    }
+
 
 
     if (name === "supplierWise") {
@@ -460,14 +566,13 @@ const TotalList = () => {
         status: "all",
         plantWise: "all",
         calibrationSource: "all",
-        itemCurrentLocation: "all"
+        itemCurrentLocation: "all",
+        itemAddMasterName: "all",
       }))
     }
     if (name === "partName") {
       console.log(name, value)
-      const filteredItems = departmentDatas.filter((item) => (item.itemPartName.includes(value)));
-
-
+      const filteredItems = plantDatas.filter((item) => (item.itemPartName.includes(value)));
       setFilteredItemListData(filteredItems);
       console.log(filteredItems)
       setFilterAllNames((prev) => ({
@@ -481,7 +586,8 @@ const TotalList = () => {
         status: "all", // Reset other filters if needed
         plantWise: "all",
         calibrationSource: "all",
-        itemCurrentLocation: "all"
+        itemCurrentLocation: "all",
+        itemAddMasterName: "all",
       }));
     }
     if (name === "status") {
@@ -501,23 +607,21 @@ const TotalList = () => {
         itemCurrentLocation: "all"
       }))
     }
-
     if (name === "calibrationSource") {
-
       const calibrationSource = departmentDatas.filter((item) => (item.itemCalibrationSource === value))
+      if (value === "all") {
+        setFilteredItemListData(departmentDatas)
+        setFilterAllNames(prev => ({
+          ...prev,
+          calibrationSource: value,
+        }))
+
+      }
       setFilteredItemListData(calibrationSource)
       setFilterAllNames(prev => ({
         ...prev,
-        imteNo: "all",
-        itemType: "all",
-        currentLocation: "all",
-        customerWise: "all",
-        supplierWise: "all",
-        partName: "all",
-        status: "all",
-        plantWise: "all",
         calibrationSource: value,
-        itemCurrentLocation: "all"
+
 
       }))
 
@@ -536,7 +640,8 @@ const TotalList = () => {
         status: "all",
         plantWise: "all",
         calibrationSource: "all",
-        itemCurrentLocation: value
+        itemCurrentLocation: value,
+        itemAddMasterName: "all",
       }))
     }
 
@@ -570,14 +675,14 @@ const TotalList = () => {
   useEffect(() => {
     if (partDataList.length !== 0) {
 
-      const partCustomers = partDataList.filter(part => departmentDatas.some(item => item.itemPartName.includes(part.partNo)))
+      const partCustomers = partDataList.filter(part => plantDatas.some(item => item.itemPartName.includes(part.partNo)))
 
       console.log(partCustomers)
       setPartCutomerNames(partCustomers)
 
 
     }
-  }, [departmentDatas])
+  }, [plantDatas])
 
 
   console.log(filteredItemListData)
@@ -659,6 +764,54 @@ const TotalList = () => {
 
 
   const [dueDate, setDueDate] = useState("")
+  const [startDate, setStartDate] = useState(null);
+  const [endDate, setEndDate] = useState(null);
+  const [filteredData, setFilteredData] = useState(itemList);
+  const [filterDates, setFilterDates] = useState({
+    startDate: "",
+    endDate: ""
+  })
+
+  const DatefilterFunction = () => {
+
+    const filter = itemList.filter((item) => dayjs(item.itemCalDate).isSameOrAfter(filterDates.startDate) && dayjs(item.itemCalDate).isSameOrBefore(filterDates.endDate))
+
+    console.log(filter)
+    setFilteredItemListData(filter)
+  }
+
+
+
+  const dueDateYear = (newValue, name) => {
+    if (name === 'dueStartDate') {
+      setStartDate(newValue);
+    }
+    if (name === 'dueEndDate') {
+      setEndDate(newValue);
+    }
+  };
+
+  const handleDueChanges = () => {
+    // Check if both start and end dates are selected
+    if (startDate && endDate) {
+      const filteredData = itemList.filter((item) => {
+        const itemDueDate = new Date(item.itemDueDate);
+
+        return (
+          itemDueDate >= new Date(startDate) &&
+          itemDueDate <= new Date(endDate)
+        );
+      });
+
+      // Update the state with the filtered data
+      setFilteredData(filteredData);
+      console.log()
+    } else {
+      // Handle case where either start or end date is not selected
+
+    }
+  };
+  console.log(filteredData);
 
 
   const handleDueChange = (e) => {
@@ -802,10 +955,8 @@ const TotalList = () => {
           }} elevation={12}
           >
             <div className='row g-2  '>
-              <Typography variant="h5" className="text-center mb-2">Total List</Typography>
-
+              {/* <Typography variant="h5" className="text-center mb-2">Total List</Typography> */}
               <div className="col d-flex  mr-1 ">
-
                 <TextField label="Plant Wise"
                   id="plantWiseId"
                   select
@@ -819,10 +970,7 @@ const TotalList = () => {
                   {FilterNameList.itemPlant.map((item, index) => (
                     <MenuItem key={index} value={item}>{item}</MenuItem>
                   ))}
-
                 </TextField>
-
-
               </div>
               <div className="col d-flex  mb-2">
 
@@ -830,7 +978,7 @@ const TotalList = () => {
                   id="currentLocationId"
                   select
                   defaultValue="all"
-                  // value={filterAllNames.currentLocation}
+                  value={filterAllNames.currentLocation}
                   fullWidth
                   onChange={handleFilterChangeItemList}
                   size="small"
@@ -842,6 +990,44 @@ const TotalList = () => {
 
                 </TextField>
 
+
+              </div>
+              <div className="col d-flex  mb-2">
+
+                <TextField label="Item Type"
+                  id="itemTypeId"
+                  select
+                  defaultValue="all"
+                  value={filterAllNames.itemType}
+                  fullWidth
+                  onChange={handleFilterChangeItemList}
+                  size="small"
+                  name="itemType" >
+                  <MenuItem value="all">All</MenuItem >
+                  <MenuItem value="attribute">Attribute</MenuItem >
+                  <MenuItem value="variable">Variable</MenuItem >
+                  <MenuItem value="referenceStandard">Reference Standard</MenuItem >
+                </TextField>
+
+              </div>
+              <div className="col ">
+                <TextField label="Item Name"
+                  id="itemAddMasterNameId"
+                  // required
+                  select
+                  value={filterAllNames.itemAddMasterName}
+                  defaultValue="all"
+                  fullWidth
+                  size="small"
+
+
+                  onChange={handleFilterChangeItemList}
+                  name="itemAddMasterName" >
+                  <MenuItem value="all">All</MenuItem>
+                  {FilterNameList.itemAddMasterName.map((item, index) => (
+                    <MenuItem key={index} value={item}>{item}</MenuItem>
+                  ))}
+                </TextField>
 
               </div>
 
@@ -863,106 +1049,72 @@ const TotalList = () => {
                 </TextField>
 
               </div>
-              <div className="col d-flex  mb-2">
-
-                <TextField label="Item Type"
-                  id="itemTypeId"
-                  select
-                  value={filterAllNames.itemType}
-                  fullWidth
-                  onChange={handleFilterChangeItemList}
-                  size="small"
-                  name="itemType" >
-                  <MenuItem value="all">All</MenuItem >
-                  <MenuItem value="attribute">Attribute</MenuItem >
-                  <MenuItem value="variable">Variable</MenuItem >
-                  <MenuItem value="referenceStandard">Reference Standard</MenuItem >
-                </TextField>
-
-              </div>
-
-              <div className="col d-flex  mb-2">
-
-                <TextField label="Other Location"
-                  id="supplierWiseId"
-                  select
-                  value={filterAllNames.supplierWise}
-                  fullWidth
-                  size="small"
-                  onChange={handleFilterChangeItemList}
-                  name="supplierWise" >
-                  <MenuItem value="all">All</MenuItem>
-                  {vendorDataList.map((item, index) => (
-                    <MenuItem key={index} value={item.fullName}>{item.fullName}</MenuItem>
-                  ))}
-                </TextField>
 
 
-
-              </div>
-              <div className="col d-flex  mb-2">
-
-                <TextField label="Customer Wise"
-                  id="customerWiseId"
-                  select
-                  defaultValue="all"
-                  fullWidth
-                  // value={filterAllNames.customerWise}
-                  size="small"
-                  onChange={handleFilterChangeItemList}
-                  name="customerWise" >
-                  <MenuItem value="all">All</MenuItem>
-                  {partCutomerNames.map((item, index) => (
-                    <MenuItem key={index} value={item.customer}>{item.customer}</MenuItem>
-                  ))}
-                </TextField>
-
-              </div>
-
-              <div className="col d-flex  mb-2">
-
-                <TextField label=" Part No & Part Name"
-                  id="partNameId"
-                  select
-                  // value={filterAllNames.partName}
-                  fullWidth
-                  size="small"
-                  onChange={handleFilterChangeItemList}
-                  value={filterAllNames.partName}
-
-                  name="partName" >
-                  <MenuItem value="all">All</MenuItem>
-                  {customerParts.map((item, index) => (
-                    <MenuItem key={index} value={item.partNo}>{[item.partNo, item.partName].join(', ')}</MenuItem>
-                  ))}
-                </TextField>
-
-              </div>
-              {/* <div className="col d-flex  mb-2">
-                <TextField label="Calibration source"
-                  id="calibrationSourceId"
-                  select
-                  defaultValue={"all"}
-                  fullWidth
-                  size="small"
-                  value={filterAllNames.calibrationSource}
-                  onChange={handleFilterChangeItemList}
-                  name="calibrationSource" >
-                  <MenuItem value="all">All</MenuItem>
-                  {FilterNameList.itemCalibrationSource.map((item, index) => (
-                    <MenuItem key={index} value={item}>{item}</MenuItem>
-                  ))}
-                </TextField>
-              </div> */}
             </div>
-            <div className='row g-3'>
-              <div className="col d-flex ">
-                
+            <div className='row g-3 mb-2'>
+              <div className="col d-flex  mb-2">
+                <div className="col d-flex me-2">
+
+                  <TextField label="Customer Wise"
+                    id="customerWiseId"
+                    select
+                    defaultValue="all"
+                    fullWidth
+                    //value={filterAllNames.customerWise}
+                    size="small"
+                    onChange={handleFilterChangeItemList}
+                    name="customerWise" >
+                    <MenuItem value="all">All</MenuItem>
+                    {partCutomerNames.map((item, index) => (
+                      <MenuItem key={index} value={item.customer}>{item.customer}</MenuItem>
+                    ))}
+                  </TextField>
+
+                </div>
+                <div className="col d-flex me-2">
+
+                  <TextField label=" Part No & Part Name"
+                    id="partNameId"
+                    select
+
+                    fullWidth
+                    size="small"
+                    onChange={handleFilterChangeItemList}
+                    value={filterAllNames.partName}
+
+                    name="partName" >
+                    <MenuItem value="all">All</MenuItem>
+                    {partCutomerNames.map((item, index) => (
+                      <MenuItem key={index} value={item.partNo}>{[item.partNo, item.partName].join(', ')}</MenuItem>
+                    ))}
+                  </TextField>
+
+                </div>
+                {/* <div className="col d-flex  me-2">
+                  <TextField label="Other Location"
+                    id="supplierWiseId"
+                    select
+                    value={filterAllNames.supplierWise}
+                    fullWidth
+                    size="small"
+                    onChange={handleFilterChangeItemList}
+                    name="supplierWise" >
+                    <MenuItem value="all">All</MenuItem>
+                    {vendorDataList.map((item, index) => (
+                      <MenuItem key={index} value={item.fullName}>{item.fullName}</MenuItem>
+                    ))}
+                  </TextField>
+
+
+
+                </div> */}
+
                 <div className="col me-2">
                   <TextField label="Calibration source"
                     id="calibrationSourceId"
                     select
-                    defaultValue={"all"}
+
                     fullWidth
                     size="small"
                     value={filterAllNames.calibrationSource}
@@ -974,7 +1126,6 @@ const TotalList = () => {
                     ))}
                   </TextField>
                 </div>
-
                 <div className='col  me-2'>
                   <TextField label="Status"
                     id="statusId"
@@ -997,7 +1148,7 @@ const TotalList = () => {
                     id="itemCurrentLocationId"
                     select
                     defaultValue="all"
-                    //  value={filterAllNames.itemCurrentLocation}
+                    value={filterAllNames.itemCurrentLocation}
                     fullWidth
                     onChange={handleFilterChangeItemList}
                     size="small"
@@ -1008,8 +1159,28 @@ const TotalList = () => {
                     ))}
                   </TextField>
                 </div>
-                <div className="col  me-2 ">
+                <div className="col">
+                  <TextField label="Due In Days"
+                    id="dueInDaysId"
+                    select
+                    defaultValue="all"
+                    fullWidth
+                    size="small"
+                    onChange={handleDueChange}
+                    name="dueInDays" >
+                    <MenuItem value="all">All</MenuItem>
+                    <MenuItem value="Past">Past</MenuItem >
+                    <MenuItem value="Today">Today</MenuItem >
+                    <MenuItem value="7">7</MenuItem >
+                    <MenuItem value="15">15</MenuItem >
+                    <MenuItem value="30">30</MenuItem >
+                    <MenuItem value=">30">{'>'}30</MenuItem >
+                    <MenuItem value="Date">Date</MenuItem >
 
+                  </TextField>
+
+                </div>
+                {/* <div className="col  me-2 ">
                   <DatePicker
                     fullWidth
                     id="fromDateId"
@@ -1022,9 +1193,8 @@ const TotalList = () => {
                     onChange={(newValue) =>
                       setDateData((prev) => ({ ...prev, fromDate: dayjs(newValue).format('YYYY-MM-DD') }))}
                   />
-                </div>
-                <div className="col me-2">
-
+                </div> */}
+                {/* <div className="col me-2">
                   <DatePicker
                     fullWidth
                     id="toDateId"
@@ -1035,47 +1205,45 @@ const TotalList = () => {
                     format="DD-MM-YYYY" value={dayjs(dateData.toDate)}
                     onChange={(newValue) =>
                       setDateData((prev) => ({ ...prev, toDate: dayjs(newValue).format('YYYY-MM-DD') }))}
-
                   />
-
-                </div>
-
-
-
+                </div> */}
               </div>
               {/* <div className="col-1 offset-7">
 
               </div> */}
-
               {dueDate === "Date" && <div className='col d-flex justify-content-end mb-2 g-2'>
                 <div className="me-2 ">
                   <DatePicker
-
                     fullWidth
                     id="startDateId"
                     name="dueStartDate"
-                    onChange={(newValue) => dueDatePicker(newValue, "dueStartDate")}
+                    onChange={(newValue) => dueDatePicker(newValue, 'dueStartDate')}
                     label="Start Date"
-
-
                     slotProps={{ textField: { size: 'small' } }}
-                    format="DD-MM-YYYY" />
+                    format="DD-MM-YYYY"
+                  />
                 </div>
                 <div className="me-2">
                   <DatePicker
-
                     fullWidth
                     id="endDateId"
                     name="dueEndDate"
-                    onChange={(newValue) => dueDatePicker(newValue, "dueEndDate")}
+                    onChange={(newValue) => dueDatePicker(newValue, 'dueEndDate')}
                     label="End Date "
-
-
                     slotProps={{ textField: { size: 'small' } }}
-                    format="DD-MM-YYYY" />
+                    format="DD-MM-YYYY"
+                  />
                 </div>
                 <div>
-                  <Button variant='contained' startIcon={<FilterAlt />} color='warning'>Filter</Button>
+                  <Button
+                    variant='contained'
+                    onClick={() => DatefilterFunction()}
+                    startIcon={<FilterAlt />}
+                    size='small'
+                    color='warning'
+                  >
+                    Filter
+                  </Button>
                 </div>
               </div>}
             </div>
