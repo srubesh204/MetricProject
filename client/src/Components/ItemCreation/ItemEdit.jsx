@@ -843,7 +843,7 @@ const ItemEdit = () => {
                                 </TextField>
                             </div> */}
 
-                            <div className="col-6">
+                            <div className="col-4">
                                 <Autocomplete
                                     disablePortal
                                     id="itemIMTENoId"
@@ -857,6 +857,10 @@ const ItemEdit = () => {
 
                                 />
                             </div>
+                            <div className="col-3">
+                                <TextField size='small' variant='outlined' value={itemAddData.itemSAPNo} label="SAP NO" onChange={handleItemAddChange} name='itemSAPNo' id='itemSAPNoId' fullWidth />
+
+                            </div>
                             <div className="col">
                                 <FormControlLabel
                                     control={<Checkbox name='isItemMaster' checked={itemAddData.isItemMaster === "1"} onChange={handleItemAddChange} />}
@@ -867,11 +871,11 @@ const ItemEdit = () => {
 
 
                         </div>
-                        <div className="col-lg-2 " >
+                        <div className="col-lg-3 " >
                             <Typography variant='h3' style={{ height: "50%", margin: "13% 0" }} className='text-center'>Item Edit</Typography>
                         </div>
 
-                        <div className="col-lg-5 d-flex justify-content-end">
+                        <div className="col-lg-4 d-flex justify-content-end">
                             {itemAddData.itemImage && <Card elevation={12} sx={{ width: "110px", height: "110px" }}>
 
                                 <img src={`${process.env.REACT_APP_PORT}/itemMasterImages/${itemAddData.itemImage}`} style={{ width: "100%", height: "100%" }} />

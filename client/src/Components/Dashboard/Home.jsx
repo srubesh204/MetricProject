@@ -126,7 +126,12 @@ const Home = () => {
       );
       const plantDc = response.data.result.filter(dc => (employeeRole.loggedEmp.plantDetails.map(plant => plant.plantName).includes(dc.dcPlant)))
       const dcNos = response.data.result.map(dc => dc.dcId).filter(Boolean).sort()
-      setLastNo("DC "+ (dayjs().year() + "-" + ((dcNos[dcNos.length - 1]) + 1)))
+      if(dcNos.length === 0){
+        setLastNo("DC "+ (dayjs().year() + "-" + 1))
+      }else{
+        setLastNo("DC "+ (dayjs().year() + "-" + ((dcNos[dcNos.length - 1]) + 1)))
+      }
+      
       console.log(dcNos[dcNos.length - 1])
       setDcList(plantDc);
       setFilteredData(plantDc);
@@ -1151,9 +1156,7 @@ const Home = () => {
       }
     }
   };
-
   const [mailIds, setMailIds] = useState([])
-
   const mailIdGather = () => {
     if (selectedRows.length > 0) {
       const plants = selectedRows.map(item => item.itemPlant)
@@ -1165,9 +1168,6 @@ const Home = () => {
       console.log(uniqueEmails)
     }
   }
-
-
-
   const [mailList, setMailList] = useState([])
   const getMailList = async () => {
     try {

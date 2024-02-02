@@ -26,6 +26,7 @@ const itemAddController = {
         itemPlant,
         itemAddMasterName,
         itemIMTENo,
+        itemSAPNo,
         itemImage,
         itemType,
         itemRangeSize,
@@ -78,6 +79,9 @@ const itemAddController = {
         // Assuming createdAt is part of the request body
       } = req.body;
 
+
+
+
       const newItemFields = {
         itemMasterRef,
         selectedItemMaster,
@@ -85,6 +89,7 @@ const itemAddController = {
         isItemMaster,
         itemAddMasterName,
         itemIMTENo,
+        itemSAPNo,
         itemImage,
         itemType,
         itemRangeSize,
@@ -139,6 +144,8 @@ const itemAddController = {
       };
 
       const newItem = new itemAddModel(newItemFields);
+      console.log("SAPNo",itemSAPNo)
+      console.log(newItemFields)
 
       const validationError = newItem.validateSync();
       if (validationError) {
@@ -156,8 +163,7 @@ const itemAddController = {
       }
 
       const createdItem = await itemAddModel.create(newItemFields);
-      console.log(createdItem)
-      console.log("ItemAdd Created Successfully");
+   
 
       let obSize = [];
       if (createdItem.itemType === "variable") {
@@ -185,6 +191,7 @@ const itemAddController = {
         isItemMaster,
         itemAddMasterName,
         itemIMTENo,
+        itemSAPNo,
         itemType,
         itemRangeSize,
         itemRangeSizeUnit,
@@ -251,6 +258,7 @@ const itemAddController = {
         isItemMaster,
         itemAddMasterName,
         itemIMTENo,
+        itemSAPNo,
         itemImage,
         itemType,
         itemRangeSize,
@@ -309,6 +317,7 @@ const itemAddController = {
         isItemMaster,
         itemAddMasterName,
         itemIMTENo,
+        itemSAPNo,
         itemImage,
         itemType,
         itemRangeSize,
@@ -693,7 +702,9 @@ const itemAddController = {
           AF: 'itemUncertainityUnit',
           AG: 'itemPlant',
           AH: 'itemPrevCalData',
-          AI: 'itemItemMasterIMTENo'
+          AI: 'itemItemMasterIMTENo',
+        
+
         }
       });
       console.log(jsonData)

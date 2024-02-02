@@ -30,7 +30,7 @@ const DcList = () => {
 
     const empRole = useEmployee()
     const { loggedEmp } = empRole
-    const [printState, setPrintState] = useState(false)
+    const [printState,  setPrintState] = useState(false)
     const [selectedRows, setSelectedRows] = useState([]);
     const [dcEditOpen, setDcEditOpen] = useState(false);
     const [dcOpen, setDcOpen] = useState(false);
