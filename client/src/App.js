@@ -1,6 +1,6 @@
 
 import './App.css';
-import { BrowserRouter, Routes, Route, Navigate, useLocation, Link } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { Department, Designation } from './Components/DatabaseMaster/DesDep';
 import Employee from './Components/DatabaseMaster/Employee';
 
@@ -41,7 +41,7 @@ import axios from 'axios';
 import RubeshTest from './Components/Test/RubeshTest';
 import DcPrint from './Components/Reports/dcList/DcPrint';
 import TotalList from './Components/Reports/TotalList';
-import { Backdrop, Button, CircularProgress } from '@mui/material';
+import { Backdrop, CircularProgress } from '@mui/material';
 import CalDueReport from './Components/Reports/CalDueReport';
 import InsHistoryCard from './Components/Reports/InsHistoryCard';
 import CalDuePrint from './Components/Reports/CalDuePrint';
@@ -65,7 +65,7 @@ export const EmployeeProvider = ({ children, employee }) => {
 };
 
 const roleAccessRules = {
-
+  
   admin: ['/home', "/desdep", "/general", "/vendor", "/itemMaster", "/itemadd", "/itemEdit/:id", "/itemList", "/grnList", "/calList", "/onSiteList", '/roles', "/employee", '/test', '/rubyTest', '/dcPrint', "/insHisCard"],
   plantAdmin: ['/home', "/desdep", "/general", "/vendor", "/itemMaster", "/itemadd", "/itemEdit/:id", "/itemList", "/grnList", "/calList", "/onSiteList", '/roles', "/employee", '/rubyTest', '/dcPrint', '/dcList', "/insHisCard"],
   creator: ['/home', '/itemList', '/itemadd', '/itemEdit/:id', "/grnList", "/calList", "/onSiteList", '/dcPrint', "/insHisCard"],
@@ -73,9 +73,9 @@ const roleAccessRules = {
 };
 
 // Function to generate routes based on user role and access rules
-const generateRoutes = (employee, Element) => {
+const generateRoutes = (employee) => {
 
-
+  
   const allowedRoutes = roleAccessRules[employee] || []; // Get allowed routes for the userRole
 
   const routes = [
@@ -120,7 +120,7 @@ const generateRoutes = (employee, Element) => {
   const generatedRoutes = routes
     .filter(route => allowedRoutes.includes(route.path))
     .map(({ path, element }) => (
-      <Route key={path} path={path} element={<Element />} /> // Use Element here
+      <Route key={path} path={path} element={element} />
     ));
 
   return generatedRoutes;
@@ -131,14 +131,16 @@ const generateRoutes = (employee, Element) => {
 const PrivateRoute = ({ element: Element, employee }) => {
   const isLoggedIn = sessionStorage.getItem('loggedIn');
 
+
   if (!isLoggedIn) {
     return <Navigate to="/login" />;
   }
 
-  const routes = generateRoutes(employee, Element); // Pass Element to generateRoutes
+  const routes = generateRoutes(employee);
 
   return (
     <Routes>
+
       {routes}
       <Route path="*" element={<AccessDenied />} /> {/* Catch-all route for restricted access */}
     </Routes>
@@ -148,7 +150,7 @@ const PrivateRoute = ({ element: Element, employee }) => {
 
 function App() {
   const [loggedEmp, setLoggedEmp] = useState([]);
-  const [isLoggedIn, setIsLoggedIn] = useState(sessionStorage.getItem('loggedIn') === 'true');
+  const [isLoggedIn, setIsLoggedIn] = useState(sessionStorage.getItem('loggedIn'));
   const [employee, setEmployee] = useState(sessionStorage.getItem('employee'));
   const [empId, setEmpId] = useState(sessionStorage.getItem('empId'));
   const [isEmployeeLoaded, setIsEmployeeLoaded] = useState(false);
@@ -173,10 +175,16 @@ function App() {
     }
   }, [isLoggedIn, empId]);
 
+  // This effect watches for changes in isLoggedIn state
+  // If logged in status changes, update the state
+  useEffect(() => {
+    setIsLoggedIn(sessionStorage.getItem('loggedIn'));
+  }, [isLoggedIn]);
+
   // Function to handle successful login
   const handleLoginSuccess = () => {
     // Set isLoggedIn, employee, and empId from sessionStorage after successful login
-    setIsLoggedIn(sessionStorage.getItem('loggedIn') === 'true');
+    setIsLoggedIn(sessionStorage.getItem('loggedIn'));
     setEmployee(sessionStorage.getItem('employee'));
     setEmpId(sessionStorage.getItem('empId'));
   };
@@ -198,37 +206,24 @@ function App() {
           <Route
             path="/*"
             element={
-              isLoggedIn  ? (
-                isEmployeeLoaded ? (
-                  <PrivateRoute employee={employee} />
-                ) : (
-                  // Dialog for not logged in
-                  <Backdrop
-                  style={{ zIndex: 1000 }}
-                  open={true} // Always show this dialog while employee data is loading
-                >
-                  <CircularProgress />
-                </Backdrop>
-                 
-                )
+              isEmployeeLoaded ? (
+                <PrivateRoute employee={employee} />
               ) : (
-                // Dialog for loading employee data
                 <Backdrop
-                style={{ zIndex: 1000 }}
-                open={true} // Always show this dialog if not logged in
-              >
-                <div>
-                  <h2>You are not logged in</h2>
-                  <p>Please log in to access this page</p>
-                  <div className='text-end'><Button variant='contained' startIcon={<ArrowBack/>} component={Link} to="/login">Login Page</Button></div>
-                  
-                  {/* You can add a button here to navigate to the login page */}
-                </div>
-              </Backdrop>
+                  style={{ zIndex: 1000 }}
+                  open={!isEmployeeLoaded}
+                >
+                  <div class="spinner-border text-light" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                  </div>
+                </Backdrop>
               )
             }
           />
-
+          <Route
+            path="/login"
+            element={<Login onLoginSuccess={handleLoginSuccess} />}
+          />
           <Route path="/accessDenied" element={<AccessDenied />} />
         </Routes>
       </EmployeeProvider>
