@@ -46,6 +46,7 @@ import CalDueReport from './Components/Reports/CalDueReport';
 import InsHistoryCard from './Components/Reports/InsHistoryCard';
 import CalDuePrint from './Components/Reports/CalDuePrint';
 import { ArrowBack } from '@mui/icons-material';
+import MeasurementUncertainty from './Components/Reports/MeasurementUncertainty';
 export const empRole = createContext(null);
 
 
@@ -102,6 +103,7 @@ const generateRoutes = (employee, Element) => {
     { path: "/calDueReport", element: <CalDueReport /> },
     { path: "/insHisCard", element: <InsHistoryCard /> },
     { path: "/calDuePrint", element: <CalDuePrint /> },
+    { path: "/measurementUncertainty", element: <MeasurementUncertainty /> },
 
 
     // Add more common routes...

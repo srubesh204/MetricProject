@@ -1076,7 +1076,7 @@ const TotalList = () => {
                     select
                     defaultValue="all"
                     fullWidth
-                    value={filterAllNames.customerWise}
+                   // value={filterAllNames.customerWise}
                     size="small"
                     onChange={handleFilterChangeItemList}
                     name="customerWise" >

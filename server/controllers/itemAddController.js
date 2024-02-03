@@ -668,10 +668,10 @@ const itemAddController = {
           rows: 1 // 2, 3, 4, etc.
         },
         columnToKey: {
-          A: 'itemMasterRef',
+          A: 'itemMasterRef',  
           B: 'itemAddMasterName',
           C: 'itemIMTENo',
-          D: 'itemImage',
+          D: 'itemSAPNo',
           E: 'itemType',
           F: 'itemRangeSize',
           G: 'itemRangeSizeUnit',

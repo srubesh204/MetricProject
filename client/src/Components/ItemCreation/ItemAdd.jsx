@@ -540,9 +540,7 @@ const ItemAdd = () => {
         })
     };
     //
-
     //PartCheckBox
-
     const ITEM_HEIGHT = 48;
     const ITEM_PADDING_TOP = 8;
     const MenuProps = {
@@ -553,14 +551,8 @@ const ItemAdd = () => {
             },
         },
     }
-
-
     const [open, setOpen] = useState(false)
     const navigate = useNavigate();
-
-
-
-
     //validate function 
     const [errors, setErrors] = useState({})
 
@@ -895,28 +887,9 @@ const ItemAdd = () => {
                                                 ))}
                                             </TextField>
                                         </div>
-
-
-
                                     </div>
                                 </Paper>
                             </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
                             <Paper className='col-lg ' elevation={12} sx={{ p: 2 }}>
                                 <Typography variant='h6' className='text-center'>Calibration</Typography>
