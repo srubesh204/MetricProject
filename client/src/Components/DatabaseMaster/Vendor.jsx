@@ -1106,7 +1106,7 @@ const Vendor = () => {
                                                 <tr>
                                                     <td>{index + 1}</td>
                                                     <td><input type="text" className='form-control form-control-sm' id="nameId" name="name" value={item.name} onChange={(e) => changeVendorRow(index, e.target.name, e.target.value)} /></td>
-                                                    <td><input type="number" className={`form-control form-control-sm ${item.contactNumber.length === 10 ? 'is-valid' : 'is-invalid'}`} id="contactNumber" name="contactNumber" value={item.contactNumber} onChange={(e) => changeVendorRow(index, e.target.name, e.target.value)} /></td>
+                                                    <td><input type="number" className={`form-control form-control-sm ${item.contactNumber && item.contactNumber.length === 10 ? 'is-valid' : 'is-invalid'}`} id="contactNumber" name="contactNumber" value={item.contactNumber} onChange={(e) => changeVendorRow(index, e.target.name, e.target.value)} /></td>
                                                     <td><input type="text" className='form-control form-control-sm' id="mailId" name="mailId" value={item.mailId} onChange={(e) => changeVendorRow(index, e.target.name, e.target.value)} /></td>
 
                                                     <td> <select className="form-select form-select-sm" id="vcStatusId" name="vcStatus" value={item.vcStatus} onChange={(e) => changeVendorRow(index, e.target.name, e.target.value)} aria-label="Floating label select example">

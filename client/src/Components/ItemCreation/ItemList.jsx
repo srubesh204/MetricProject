@@ -203,27 +203,26 @@ const ItemList = () => {
 
     const [openModalStatus, setOpenModalStatus] = useState(false);
 
+    const [statusInfo, setStatusInfo] = useState({
+
+        itemStatus: "",
+        itemStatusReason: ""
+    })
+    console.log(statusInfo)
 
     const updateItemStatus = async () => {
         try {
             const response = await axios.put(
-                `${process.env.REACT_APP_PORT}itemAdd/updateItemAdd/${statusInfo._id}`, statusInfo
+                `${process.env.REACT_APP_PORT}/itemAdd/updateItemStatus`, {itemIds: itemListSelectedRowIds, ...statusInfo}
             );
             setSnackBarOpen(true)
-            itemFetch()
-
-
-
+            itemFetch();
             console.log("Updated Successfully");
             setErrorHandler({ status: response.data.status, message: response.data.message, code: "success" })
-            setTimeout(() => {
-                window.location.reload();
-            }, 2000);
-
+            setStatusInfo({itemStatus: "", itemStatusReason: ""})
+            setOpenModalStatus(false);
         } catch (err) {
-
             setSnackBarOpen(true)
-
             if (err.response && err.response.status === 400) {
                 // Handle validation errors
                 console.log(err);
@@ -243,19 +242,18 @@ const ItemList = () => {
                 console.log(err.response.data.error)
                 setErrorHandler({ status: 0, message: "An error occurred", code: "error" });
             }
-
-
-
             console.log(err);
         }
     };
     const [showDialog, setShowDialog] = useState(false);
-    //
-    const oneMonthBefore = dayjs().subtract(dayjs().date() - 1, 'day')
+
+    const oneMonthBefore = dayjs().subtract(dayjs().date() - 1, 'day');
+
     const [dateData, setDateData] = useState({
         fromDate: oneMonthBefore.format('YYYY-MM-DD'),
         toDate: dayjs().format('YYYY-MM-DD')
     })
+
     const [FilterNameList, setFilterNameList] = useState({
         itemIMTENo: [],
         itemType: [],
@@ -265,7 +263,6 @@ const ItemList = () => {
         itemCalibrationSource: [],
         itemCurrentLocation: []
     })
-
 
     const handleSnackClose = (event, reason) => {
         if (reason === 'clickaway') {
@@ -346,9 +343,9 @@ const ItemList = () => {
 
     const [customerParts, setCustomerParts] = useState([])
     const handleFilterChangeItemList = (e) => {
-        const { name, value } = e.target;
-        console.log(e)
 
+        const { name, value } = e.target;
+        console.log(e);
         if (name === "plantWise") {
             const plantWise = itemList.filter((item) => (item.itemPlant === value))
             if (value === "all") {
@@ -948,8 +945,7 @@ const ItemList = () => {
 
     }
 
-    const [statusInfo, setStatusInfo] = useState([])
-
+  
 
 
     const [mailIds, setMailIds] = useState([])
@@ -982,7 +978,7 @@ const ItemList = () => {
     };
 
 
-
+    console.log(itemListSelectedRowIds)
 
 
 
@@ -1430,45 +1426,28 @@ const ItemList = () => {
                                     onClose={() => setOpenModalStatus(false)}
                                     aria-labelledby="alert-dialog-title"
                                     aria-describedby="alert-dialog-description"
-                                    maxWidth="lg-12"
-
+                                    maxWidth="sm"
+                                    fullWidth
                                 >
+                                    <DialogTitle className='text-center'>Status Change</DialogTitle>
                                     <DialogContent>
 
 
                                         <DialogContentText id="alert-dialog-description ">
+                                            
                                             <div className='row mb-2'>
-                                                <TextField
-                                                    id="itemIMTENoId"
-                                                    label="ItemIMTE"
-                                                    name="itemIMTENo"
-                                                    size='small'
-                                                    value={statusInfo.itemIMTENo}
-
-                                                    disabled
-
-                                                />
-                                            </div>
-                                            <div className='row mb-2' >
-                                                <TextField
-                                                    id="itemMasterId"
-                                                    size='small'
-                                                    name='itemMaster'
-                                                    label="Item Master"
-
-                                                    disabled
-                                                    value={statusInfo.itemAddMasterName}
-
-                                                />
-                                            </div>
-                                            <div className='row mb-2'>
-                                                <TextField size='small' select variant='outlined' className='mb-2' onChange={(e) => setStatusInfo((prev) => ({ ...prev, itemStatus: e.target.value }))} value={statusInfo.itemStatus} label="Item Status" name='itemStatus' id='itemStatusId'  >
+                                                <TextField margin="dense" size='small' select variant='outlined' className='mb-2' onChange={(e) => setStatusInfo((prev) => ({ ...prev, itemStatus: e.target.value }))} value={statusInfo.itemStatus} label="Item Status" name='itemStatus' id='itemStatusId'  >
                                                     <MenuItem value="active">Active</MenuItem>
                                                     <MenuItem value="inactive">InActive</MenuItem>
                                                     <MenuItem value="spare">Spare</MenuItem>
                                                     <MenuItem value="breakdown">Breakdown</MenuItem>
                                                     <MenuItem value="missing">Missing</MenuItem>
                                                     <MenuItem value="rejection">Rejection</MenuItem>
+
+                                                </TextField>
+
+                                                <TextField margin="dense" size='small' multiline rows={2} variant='outlined' className='mb-2' onChange={(e) => setStatusInfo((prev) => ({ ...prev, itemStatusReason: e.target.value }))} value={statusInfo.itemStatusReason} label="Reason" name='itemStatusReason' id='itemStatusReasonId'  >
+                                                   
 
                                                 </TextField>
 
@@ -1482,8 +1461,8 @@ const ItemList = () => {
                                     </DialogContent>
                                     <DialogActions>
                                         <Button onClick={() => setOpenModalStatus(false)}>Cancel</Button>
-                                        <Button onClick={() => { updateItemStatus(); setOpenModalStatus(false); }} autoFocus>
-                                            Save
+                                        <Button onClick={() => { updateItemStatus();  }} autoFocus>
+                                            Change Status
                                         </Button>
                                     </DialogActions>
                                 </Dialog>

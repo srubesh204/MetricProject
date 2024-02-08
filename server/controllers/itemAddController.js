@@ -38,6 +38,7 @@ const itemAddController = {
         itemMake,
         itemModelNo,
         itemStatus,
+        itemStatusReason,
         itemReceiptDate,
         itemDepartment,
         itemCurrentLocation,
@@ -114,6 +115,7 @@ const itemAddController = {
         itemMake,
         itemModelNo,
         itemStatus,
+        itemStatusReason,
         itemReceiptDate,
         itemDepartment,
         itemCurrentLocation,
@@ -450,7 +452,7 @@ const itemAddController = {
       const updateItemAdd = await itemAddModel.findOneAndUpdate(
         { _id: itemAddId },
         updateItemFields,
-        { new: true } // To return the updated document
+        { new: true }// To return the updated document
       );
 
       if (!updateItemAdd) {
@@ -585,6 +587,30 @@ const itemAddController = {
     } catch (error) {
       console.error(error);
       res.status(500).send('Internal Server Error');
+    }
+  },
+
+  updateItemStatus: async (req, res) => {
+    try {
+      const {itemIds, itemStatus, itemStatusReason} = req.body; // Assuming desId is part of the URL parameter
+      // if (isNaN(desId)) {
+      // Find the designation by desId and update it
+      console.log(req.body)
+      const changeStatus = [];
+      if(itemIds.length > 0){
+        for(const itemId of itemIds){
+          const updateItemAdd = await itemAddModel.findOneAndUpdate(
+            { _id : itemId },
+            {$set : {itemStatus, itemStatusReason}},
+            { new: true }
+          );
+          changeStatus.push(updateItemAdd)
+        }
+      }
+      res.status(200).json({ message: `Status changed for ${changeStatus.length} items`, status: "1" });
+    } catch (error) {
+      console.log(error);
+      res.status(500).json({ error: error, status: 0 });
     }
   },
 

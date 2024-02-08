@@ -214,18 +214,8 @@ function InsHistoryCard() {
         fetchData();
     }, []);
 
-
-
-
-
-
-
-
     console.log(itemCalList)
     console.log(selectedIMTEs)
-
-
-
 
     console.log(selectedRow)
     
