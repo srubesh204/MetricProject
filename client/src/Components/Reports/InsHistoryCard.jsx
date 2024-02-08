@@ -258,7 +258,7 @@ function InsHistoryCard() {
         { field: 'itemDueDate', headerName: 'Calibration Due', width: 150, align: "center", valueGetter: (params) => dayjs(params.row.itemDueDate).format('DD-MM-YYYY') },
         { field: 'itemCalStatus', headerName: 'Calibration Status', width: 150, align: "center", },
         // { field: 'itemCertStatus', headerName: 'Certificate Status', width: 150, align: "center"},
-        { field: 'itemCertificateNo', headerName: 'Certificate No', width: 150, align: "center" },
+        { field: 'itemCertificateNo', headerName: 'Certificate No', width: 180, align: "center" },
 
         {
             field: 'observedSize', headerName: "Observed Size", width: 180, align: "center",

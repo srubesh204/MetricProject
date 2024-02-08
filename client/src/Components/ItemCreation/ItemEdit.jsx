@@ -401,7 +401,7 @@ const ItemEdit = () => {
             setItemAddData((prev) => ({ ...prev, [name]: value, acceptanceCriteria: [{ acAccuracyUnit: value, acRangeSizeUnit: value }] }))
         }
         if (name === "itemDepartment") {
-             setItemAddData((prev) => ({
+            setItemAddData((prev) => ({
                 ...prev,
                 [name]: value,
                 itemCurrentLocation: value, // Ensure 'value' is correct here
@@ -703,6 +703,7 @@ const ItemEdit = () => {
 
     const handleCertificateUpload = (event) => {
         const selectedFile = event.target.files[0];
+        console.log(selectedFile)
         if (selectedFile) {
             console.log("working")
 
@@ -712,7 +713,7 @@ const ItemEdit = () => {
                 axios.post(`${process.env.REACT_APP_PORT}/upload/itemCertificates`, formData)
                     .then(response => {
                         setUploadMessage(response.data.message)
-                        console.log(response);
+                        console.log(response.data);
                         setItemAddData((prev) => ({ ...prev, itemCertificateName: response.data.name }));
                     })
                     .catch(error => {
@@ -726,6 +727,7 @@ const ItemEdit = () => {
 
         }
     };
+    
     const handleSnackClose = (event, reason) => {
         if (reason === 'clickaway') {
             return;
@@ -978,7 +980,7 @@ const ItemEdit = () => {
 
                                     </TextField>
                                 </div>
-                                <div className='col-lg-12'>
+                                <div className='col-md-6'>
                                     <TextField size='small' value={itemAddData.itemCalibrationSource} onChange={handleItemAddChange} fullWidth variant='outlined' select label="Calibration Source" name='itemCalibrationSource'>
                                         <MenuItem value=""><em>--Select--</em></MenuItem>
                                         <MenuItem value="inhouse">InHouse</MenuItem>
@@ -986,6 +988,19 @@ const ItemEdit = () => {
                                         <MenuItem value="oem">OEM</MenuItem>
                                     </TextField>
                                 </div>
+                                <div className='col-md-6'>
+                                    <RadioGroup
+                                        className="d-flex justify-content-center"
+                                        row
+                                        name='itemCalibrationDoneAt'
+                                        onChange={handleItemAddChange}
+                                        checked={itemAddData.itemCalibrationDoneAt}
+                                    >
+                                        <FormControlLabel value="Lab" checked={itemAddData.itemCalibrationDoneAt === "Lab"} control={<Radio />} label="Lab" />
+                                        <FormControlLabel value="Site" checked={itemAddData.itemCalibrationDoneAt === "Site"} control={<Radio />} label="Site" />
+                                    </RadioGroup>
+                                </div>
+
                             </div>
                             {itemAddData.itemCalibrationSource === "inhouse" &&
                                 <div className='row g-2'>
@@ -1025,7 +1040,7 @@ const ItemEdit = () => {
                             {itemAddData.itemCalibrationSource === "outsource" &&
                                 <div className='row g-2'>
                                     <h6 className='text-center'>Enter Supplier Details</h6>
-                                    <div className="col-md-7">
+                                    <div className="col-md">
 
                                         <FormControl size='small' component="div" fullWidth>
                                             <InputLabel id="itemSupplierId">Select Supplier</InputLabel>
@@ -1055,25 +1070,18 @@ const ItemEdit = () => {
                                     </div>
 
 
-                                    <RadioGroup
-                                        className="col-md-5 d-flex justify-content-center"
-                                        row
-                                        name='itemCalibrationDoneAt'
-                                        onChange={handleItemAddChange}
-                                        checked={itemAddData.itemCalibrationDoneAt}
-                                    >
-                                        <FormControlLabel value="Lab" checked={itemAddData.itemCalibrationDoneAt === "Lab"} control={<Radio />} label="Lab" />
-                                        <FormControlLabel value="Site" checked={itemAddData.itemCalibrationDoneAt === "Site"} control={<Radio />} label="Site" />
-                                    </RadioGroup>
+
 
 
 
                                 </div>}
 
+
+
                             {itemAddData.itemCalibrationSource === "oem" &&
                                 <div className='row g-2'>
                                     <h6 className='text-center'>Enter oem Details</h6>
-                                    <div className="col-md-7">
+                                    <div className="col-md">
 
 
 
@@ -1105,16 +1113,7 @@ const ItemEdit = () => {
 
 
                                     </div>
-                                    <RadioGroup
-                                        className="col-md-5 d-flex justify-content-center"
-                                        row
-                                        name='itemCalibrationDoneAt'
-                                        onChange={handleItemAddChange}
-
-                                    >
-                                        <FormControlLabel value="Lab" checked={itemAddData.itemCalibrationDoneAt === "Lab"} control={<Radio />} label="Lab" />
-                                        <FormControlLabel value="Site" checked={itemAddData.itemCalibrationDoneAt === "Site"} control={<Radio />} label="Site" />
-                                    </RadioGroup>
+                                    
 
 
 

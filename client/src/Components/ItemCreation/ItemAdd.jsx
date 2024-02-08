@@ -266,7 +266,7 @@ const ItemAdd = () => {
         itemCalFreInMonths: "",
         itemCalAlertDays: "",
         itemCalibrationSource: "",
-        itemCalibrationDoneAt: "",
+        itemCalibrationDoneAt: "Lab",
         itemItemMasterName: "",
         itemItemMasterIMTENo: [],
         itemSupplier: [],
@@ -908,7 +908,7 @@ const ItemAdd = () => {
 
                                         </TextField>
                                     </div>
-                                    <div className='col-lg-12'>
+                                    <div className='col-md-6'>
                                         <TextField
                                             {...(errors.itemCalibrationSource !== "" && { helperText: errors.itemCalibrationSource, error: true })}
                                             size='small' value={itemAddData.itemCalibrationSource} onChange={handleItemAddChange} fullWidth variant='outlined' select label="Calibration Source" name='itemCalibrationSource'>
@@ -917,6 +917,18 @@ const ItemAdd = () => {
                                             <MenuItem value="outsource">OutSource</MenuItem>
                                             <MenuItem value="oem">OEM</MenuItem>
                                         </TextField>
+                                    </div>
+                                    <div className='col-md-6'>
+                                        <RadioGroup
+                                            className="d-flex justify-content-center"
+                                            row
+                                            name='itemCalibrationDoneAt'
+                                            onChange={handleItemAddChange}
+                                            checked={itemAddData.itemCalibrationDoneAt}
+                                        >
+                                            <FormControlLabel value="Lab" checked={itemAddData.itemCalibrationDoneAt === "Lab"} control={<Radio />} label="Lab" />
+                                            <FormControlLabel value="Site" checked={itemAddData.itemCalibrationDoneAt === "Site"} control={<Radio />} label="Site" />
+                                        </RadioGroup>
                                     </div>
                                 </div>
                                 {itemAddData.itemCalibrationSource === "inhouse" &&
@@ -960,7 +972,7 @@ const ItemAdd = () => {
                                 {itemAddData.itemCalibrationSource === "outsource" &&
                                     <div className='row g-2'>
                                         <h6 className='text-center'>Enter Supplier Details</h6>
-                                        <div className="col-md-7">
+                                        <div className="col-md">
 
                                             <FormControl size='small' component="div" fullWidth>
                                                 <InputLabel id="itemSupplierId">Select Supplier</InputLabel>
@@ -990,25 +1002,17 @@ const ItemAdd = () => {
                                         </div>
 
 
-                                        <RadioGroup
-                                            className="col-md-5 d-flex justify-content-center"
-                                            row
-                                            name='itemCalibrationDoneAt'
-                                            onChange={handleItemAddChange}
-                                            checked={itemAddData.itemCalibrationDoneAt}
-                                        >
-                                            <FormControlLabel value="Lab" control={<Radio />} label="Lab" />
-                                            <FormControlLabel value="Site" control={<Radio />} label="Site" />
-                                        </RadioGroup>
+
 
 
 
                                     </div>}
+                               
 
                                 {itemAddData.itemCalibrationSource === "oem" &&
                                     <div className='row g-2'>
                                         <h6 className='text-center'>Enter oem Details</h6>
-                                        <div className="col-md-7">
+                                        <div className="col-md">
                                             <FormControl size='small' component="div" fullWidth>
                                                 <InputLabel id="itemOEMId">Select OEM</InputLabel>
                                                 <Select
@@ -1043,16 +1047,7 @@ const ItemAdd = () => {
 
 
                                         </div>
-                                        <RadioGroup
-                                            className="col-md-5 d-flex justify-content-center"
-                                            row
-                                            name='itemCalibrationDoneAt'
-                                            onChange={handleItemAddChange}
-
-                                        >
-                                            <FormControlLabel value="Lab" control={<Radio />} label="Lab" />
-                                            <FormControlLabel value="Site" control={<Radio />} label="Site" />
-                                        </RadioGroup>
+                                        
 
 
 

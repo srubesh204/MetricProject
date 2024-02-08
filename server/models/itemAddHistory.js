@@ -11,6 +11,7 @@ const itemAddHistory = new mongoose.Schema({
     required: [true, "IMTE No Required"]
   },
   itemImage: String,
+  itemInitialId: String,
   itemType: String,
   itemRangeSize: String,
   itemRangeSizeUnit: String,

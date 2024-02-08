@@ -617,7 +617,7 @@ const Home = () => {
     {
       field: 'itemIMTENo',
       headerName: 'IMTE No.',
-      width: 100,
+      width: 180,
       headerAlign: "start"
 
       // editable: true,
@@ -625,7 +625,7 @@ const Home = () => {
     {
       field: 'itemAddMasterName',
       headerName: 'Item Description',
-      width: 150,
+      width: 180,
       // editable: true,
       align: "left"
     },
@@ -874,12 +874,13 @@ const Home = () => {
     }
 
     if (name === "Suppliers") {
+      console.log(suppliers)
       const supTable = suppliers.map((sup) => {
         const filteredByDcLocation = pieDataFilter.filter((item) => item.itemLocation === "supplier");
         const filteredByOEM = filteredByDcLocation.filter((item) => item.itemCurrentLocation === sup.fullName);
 
         const quantity = filteredByOEM.length;
-
+        console.log(sup.fullName)
 
         if (quantity !== 0) {
           return { supName: sup.fullName, quantity };
@@ -1227,30 +1228,17 @@ const Home = () => {
 
 
 
-
-
-
-  useEffect(() => {
-    setStatusCheckMsg("");
-    const grnBoolean = selectedRows.every(item => item.dcStatus === "1" && item.itemStatus === "active")
-    setGrnButtonVisibility(grnBoolean && selectedRows.length === 1)
-
-    const defaultDepartmentCheck = selectedRows.every(item =>
-      defaultDep.some(dep => item.itemCurrentLocation === dep.department)
-    );
-    const activeItemsCheck = selectedRows.every(item => item.itemStatus === "active")
-
-    const singlePlant = selectedRows.every((item, index, array) => item.itemPlant === array[0].itemPlant);
-    setDcButtonVisibility(defaultDepartmentCheck && singlePlant && selectedRows.length > 0 && activeItemsCheck)
-    mailIdGather()
+  useEffect(()=> {
+    setStatusCheckMsg("")
   }, [selectedRows])
+
+
+ 
 
   const handleRowSelectionChange = (newSelection) => {
     const selectedRowsData = filteredData.filter((row) => newSelection.includes(row._id));
     setSelectedRows(selectedRowsData);
     setSelectedGrnRows(selectedRowsData)
-
-
   };
 
 
@@ -1269,24 +1257,28 @@ const Home = () => {
 
 
   const [StatusCheckMsg, setStatusCheckMsg] = useState("")
-  const [grnButtonVisibility, setGrnButtonVisibility] = useState(false)
-  const [dcButtonVisibility, setDcButtonVisibility] = useState(false)
+ 
 
 
 
   const dcCheck = () => {
+    
+
     const defaultDepartmentCheck = selectedRows.every(item =>
       defaultDep.some(dep => item.itemCurrentLocation === dep.department)
     );
+    const activeItemsCheck = selectedRows.every(item => item.itemStatus === "active" )
 
     const singlePlant = selectedRows.every((item, index, array) => item.itemPlant === array[0].itemPlant);
 
     console.log(defaultDepartmentCheck);
-    if (defaultDepartmentCheck && singlePlant) {
+    if (defaultDepartmentCheck && singlePlant && selectedRows.length > 0 && activeItemsCheck) {
       setStatusCheckMsg("");
       setDcOpen(true);
     } else {
-
+      if(singlePlant){
+        setStatusCheckMsg("Multiple plants no allowed")
+      }
 
       if (!defaultDepartmentCheck) {
         setStatusCheckMsg("Selected item are not in default location, To create a DC move the item to the default location");
@@ -1302,11 +1294,11 @@ const Home = () => {
 
 
   const grnCheck = () => {
-    const grnCheck = selectedRows.every(item => item.dcStatus === "1")
+    const grnBoolean = selectedRows.every(item => item.dcStatus === "1" && item.itemStatus === "active" )
 
 
-    console.log(grnCheck)
-    if (grnCheck) {
+    console.log(grnCheck && selectedRows.length === 1)
+    if (grnBoolean) {
       setStatusCheckMsg("");
       setGrnOpen(true);
     } else {
@@ -1317,14 +1309,47 @@ const Home = () => {
 
   const onSiteCheck = () => {
     const onSiteCheck = selectedRows.every(item => (item.itemCalibrationSource === "outsource" || item.itemCalibrationSource === "OEM") && item.itemCalibrationDoneAt === "Site")
-
-
     console.log(onSiteCheck)
     if (onSiteCheck) {
       setStatusCheckMsg("");
       setGrnOpen(true);
     } else {
       setStatusCheckMsg("Selected Item are not DC ed")
+    }
+  }
+
+  const calCheck = () => {
+    const defaultDepartmentCheck = selectedRows.every(item =>
+      defaultDep.some(dep => item.itemCurrentLocation === dep.department)
+    );
+   
+    if (selectedRows.length === 1 && selectedRows[0].itemCalibrationSource === "inhouse") {
+      
+      if(selectedRows[0].itemCalibrationDoneAt === "Lab"){
+        
+        if(defaultDepartmentCheck){
+          setCalOpen(true);
+          console.log("working")
+        }else{
+          setStatusCheckMsg("Selected item not in default location")
+          console.log(StatusCheckMsg)
+        }
+      }else if(selectedRows[0].itemCalibrationDoneAt === "Site"){
+        console.log("working")
+        setCalOpen(true)
+      }
+      setStatusCheckMsg("");
+      
+    } else {
+      if(selectedRows.length !== 1){
+        setStatusCheckMsg("Multiple selection not allowed for Calibration")
+      }
+      if(selectedRows.length === 0){
+        setStatusCheckMsg("Please select any one item")
+      }
+      if(selectedRows[0].itemCalibrationSource !== "inhouse"){
+        setStatusCheckMsg("Item must be a Inhouse Calibration")
+      }
     }
   }
 
@@ -1457,7 +1482,7 @@ const Home = () => {
                     renderInput={(params) => <TextField {...params} label="IMTE No" />}
                   />}
 
-                
+
 
 
 
@@ -1734,16 +1759,13 @@ const Home = () => {
 
                   <div className="col-md-9">
                     {/* {(selectedRows.length === 1 && selectedRows[0].itemCalibrationSource === "outsource" ) && <Button size='small' onClick={() => onSiteCheck()}>Onsite</Button>} */}
-                    {(selectedRows.length === 1 && selectedRows[0].itemCalibrationSource === "outsource" && "Site") &&
-                      <Button size='small' className='me-2' onClick={() => onSiteCheck()}>Onsite GRN</Button>
-                    }
-                    {(selectedRows.length === 1 && selectedRows[0].itemCalibrationSource === "inhouse") && <Button size='small' className='me-2' onClick={() => setCalOpen(true)}>Cal</Button>}
-                    {grnButtonVisibility && <Button size='small' onClick={() => grnCheck()} className='me-2'>Grn</Button>}
 
+                    <Button size='small' className='me-2' onClick={()=> calCheck()}>Cal</Button>
+                    <Button size='small' onClick={() => dcCheck()}>Create DC</Button>
+                    <Button size='small' onClick={() => grnCheck()} className='me-2'>Grn</Button>
+                    <Button size='small' className='me-2' onClick={() => onSiteCheck()}>Onsite GRN</Button>
 
-                    {dcButtonVisibility && <Button size='small' onClick={() => dcCheck()}>Create DC</Button>}
-
-                    {StatusCheckMsg !== "" && <Chip icon={<Error />} color='error' label={StatusCheckMsg} />}
+                    {StatusCheckMsg !== "" && <Chip icon={<Error />} className='ms-3' color='error' label={StatusCheckMsg} />}
                   </div>
                   <div className="col-md-3 d-flex justify-content-end">
                     <Button component={Link} to="/itemmaster" size='small' className='me-1'>Item Master</Button>

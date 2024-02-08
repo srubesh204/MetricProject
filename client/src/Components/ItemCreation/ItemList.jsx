@@ -294,8 +294,8 @@ const ItemList = () => {
             ]
             : []),
         { field: 'id', headerName: 'Si. No', width: 60, renderCell: (params) => params.api.getAllRowIds().indexOf(params.id) + 1, headerAlign: "center", align: "center" },
-        { field: 'itemIMTENo', headerName: 'IMTE No', width: 120, headerAlign: "center", align: "left" },
-        { field: 'itemAddMasterName', headerName: 'Description', width: 120, headerAlign: "center", align: "left" },
+        { field: 'itemIMTENo', headerName: 'IMTE No', width: 180, headerAlign: "center", align: "left" },
+        { field: 'itemAddMasterName', headerName: 'Description', width: 180, headerAlign: "center", align: "left" },
         {
             field: 'Range/Size',
             headerName: 'Range/Size',
@@ -740,13 +740,7 @@ const ItemList = () => {
         setFilteredItemListData(filteredItems)
     }, [dateData.fromDate, dateData.toDate])
 
-    const DatefilterFunction = () => {
-
-        const filter = itemList.filter((item) => dayjs(item.itemCalDate).isSameOrAfter(filterDates.startDate) && dayjs(item.itemCalDate).isSameOrBefore(filterDates.endDate))
-
-        console.log(filter)
-        setFilteredItemListData(filter)
-    }
+   
 
     const [vendorList, setVendorList] = useState([])
 
@@ -993,17 +987,7 @@ const ItemList = () => {
 
 
 
-    const handleRowClick = async (params) => {
-        if (itemListSelectedRowIds.length > 0) {
-
-            setShowDialog(true);
-        } else {
-
-
-            setStatusInfo(params.row);
-            setItemListSelectedRowIds([params.id]);
-        }
-    };
+   
 
     const handleConfirmDialogClose = () => {
         setShowDialog(false);
@@ -1387,7 +1371,7 @@ const ItemList = () => {
                                     //disableColumnMenu={true}
 
                                     checkboxSelection
-                                    onRowClick={handleRowClick}
+                                    
                                     disableRowSelectionOnClick
                                     pageSizeOptions={[5]}
                                 />

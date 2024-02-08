@@ -191,6 +191,7 @@ const itemAddController = {
         itemPlant,
         isItemMaster,
         itemAddMasterName,
+        
         itemIMTENo,
         itemSAPNo,
         itemType,
@@ -400,6 +401,73 @@ const itemAddController = {
 
       if (!updateItemAdd) {
         return res.status(404).json({ error: 'ItemAdd not found' });
+      }else{
+        let obSize = [];
+        if (updateItemAdd.itemType === "variable") {
+          obSize = acceptanceCriteria.map(item => {
+            return item.acParameter + ":" + item.acOBError
+          })
+        } else {
+          obSize = acceptanceCriteria.map(item => {
+  
+            if (itemOBType === "minmax") {
+              return item.acParameter + ":" + item.acMinOB + "/" + item.acMaxOB
+            } else {
+              return item.acParameter + ":" + item.acAverageOB
+            }
+  
+          })
+        }
+        console.log(obSize)
+  
+        console.log("history working")
+  
+        const historyRecord = new itemHistory({
+          itemId: updateItemAdd._id,
+          selectedItemMaster,
+          itemPlant,
+          isItemMaster,
+          itemAddMasterName,
+          itemIMTENo,
+          itemSAPNo,
+          itemType,
+          itemRangeSize,
+          itemRangeSizeUnit,
+          itemLC,
+          itemLCUnit,
+          itemModelNo,
+          itemStatus,
+          itemReceiptDate,
+          itemDepartment,
+          itemCurrentLocation : updateItemAdd.itemCurrentLocation,
+          itemLastLocation,
+          itemLocation: "department",
+          itemCalFreInMonths,
+          itemCalAlertDays,
+          itemCalibrationSource,
+          itemCalibrationDoneAt,
+          itemItemMasterName,
+          itemItemMasterIMTENo,
+          itemCalDate,
+          itemDueDate,
+          itemCalibratedAt,
+          itemCertificateName,
+          itemCertificateNo,
+          itemOBType,
+          itemUncertainity,
+          itemUncertainityUnit,
+          itemPrevCalData,
+          acceptanceCriteria: obSize,
+          itemCreatedBy,
+          itemLastModifiedBy,
+  
+        });
+        const updateItemHistory = await itemHistory.findOneAndUpdate(
+          { itemId : updateItemAdd._id },
+          updateItemFields,
+          
+        );
+        console.log(updateItemHistory)
       }
       console.log("ItemAdd Updated Successfully")
       res.status(200).json({ result: updateItemAdd, message: "ItemAdd Updated Successfully" });
