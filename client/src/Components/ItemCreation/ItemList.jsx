@@ -1,5 +1,5 @@
 import React, { createContext, useEffect, useState } from 'react'
-import { TextField, MenuItem, Button, ButtonGroup, Backdrop, CircularProgress } from '@mui/material';
+import { TextField, MenuItem, Button, ButtonGroup, Backdrop, CircularProgress, LinearProgress } from '@mui/material';
 import { Box, Container, Grid, Paper, Typography } from "@mui/material";
 import { DataGrid, GridToolbar, GridToolbarQuickFilter } from '@mui/x-data-grid';
 import axios from 'axios';
@@ -150,6 +150,8 @@ const ItemList = () => {
         setFile(selectedFile);
     };
 
+    const [uploadProgress, setUploadProgress] = React.useState(0);
+
     const handleItemAddUpload = async () => {
         try {
             if (!file) {
@@ -164,6 +166,10 @@ const ItemList = () => {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                 },
+                onUploadProgress: (progressEvent) => {
+                    const percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total);
+                    setUploadProgress(percentCompleted);
+                  }
             });
 
             setItemAddExcelStatus(response.data.message || 'Excel file uploaded successfully');
@@ -433,7 +439,7 @@ const ItemList = () => {
                     const data = currentLocation.map(item => item[element]);
                     filterNames[index] = [...new Set(data)];
                     // Update the object with a dynamic key based on the 'element'
-                    updatedFilterNames[element] = filterNames[index].sort();
+                    updatedFilterNames[element] = filterNames[index];
                 });
                 console.log(updatedFilterNames)
                 // Update state outside the loop with the updated object
@@ -705,7 +711,20 @@ const ItemList = () => {
             setFilterDates(prev => ({ ...prev, endDate: newValue.format("YYYY-MM-DD") }));
         }
 
-        
+        //     const filteredData = itemList.filter((item) => {
+
+
+        //         // Assuming item.itemDueDate is a valid date
+        //         const itemDueDate = new Date(item.itemDueDate);
+
+        //         return (
+        //             (startDate === "" || itemDueDate >= new Date(startDate)) &&
+        //             (endDate === "" || itemDueDate <= new Date(endDate))
+        //         );
+        //     });
+
+
+        // };
 
 
     };
@@ -844,9 +863,8 @@ const ItemList = () => {
             if (err.response && err.response.status === 400) {
                 // Handle validation errors
                 const errorData400 = err.response.data.errors;
-                const errorMessages400 = Object.values(errorData400).join(', ');
-                console.log(errorMessages400)
-                setErrorHandler({ status: 0, message: errorMessages400, code: "error" });
+                console.log(errorData400)
+              setErrorHandler({ status: 0, message: errorData400, code: "error" });
             } else if (err.response && err.response.status === 500) {
                 // Handle other errors
                 const errorData500 = err.response.data.error;
@@ -1503,6 +1521,7 @@ const ItemList = () => {
                                         </Button>
                                         <Button size='small' onClick={handleItemAddUpload}><CloudUpload /></Button>
                                     </ButtonGroup>
+                                    <LinearProgress variant="determinate" value={uploadProgress} />
 
                                     {/* <ButtonGroup>
                                         <Button component="label" size='small' variant="contained" color='secondary'>

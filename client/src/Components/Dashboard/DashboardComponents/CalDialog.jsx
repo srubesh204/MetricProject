@@ -1,5 +1,5 @@
 import React, { createContext, useEffect, useState, useContext } from 'react'
-import { Alert, Button, Chip, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, FormControlLabel, IconButton, MenuItem, Paper, Snackbar, Switch, TextField } from '@mui/material';
+import { Alert, Button, Chip, CircularProgress, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, FormControlLabel, IconButton, MenuItem, Paper, Snackbar, Switch, TextField, styled } from '@mui/material';
 import axios from 'axios';
 import dayjs from 'dayjs';
 import isSameOrAfter from 'dayjs/plugin/isSameOrAfter'
@@ -7,7 +7,7 @@ import isSameOrBefore from 'dayjs/plugin/isSameOrBefore'
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { HomeContent } from '../Home';
-import { Add, Close, Delete, ErrorOutline } from '@mui/icons-material';
+import { Add, Close, CloudUpload, Delete, Done, ErrorOutline } from '@mui/icons-material';
 import { useEmployee } from '../../../App';
 dayjs.extend(isSameOrBefore)
 dayjs.extend(isSameOrAfter)
@@ -20,6 +20,19 @@ const CalDialog = () => {
     const [lastResultData, setLastResultData] = useState([])
     const { calOpen, setCalOpen, selectedRows, itemMasters, activeEmps, masters, itemList, calLastNo } = calData
     const [calibrationDatas, setCalibrationDatas] = useState([])
+
+
+    const VisuallyHiddenInput = styled('input')({
+        clip: 'rect(0 0 0 0)',
+        clipPath: 'inset(50%)',
+        height: 1,
+        overflow: 'hidden',
+        position: 'absolute',
+        bottom: 0,
+        left: 0,
+        whiteSpace: 'nowrap',
+        width: 1,
+    });
 
 
     const getAllCalibrationData = async () => {
@@ -38,11 +51,9 @@ const CalDialog = () => {
                     return currentDate.isAfter(prevDate) ? current : prev;
                 });
                 setLastResultData(maxDateObject)
-
             } catch {
                 setLastResultData("")
             }
-
             const lastOneResult = Math.max(...response.data.result.map((item) => item.calCertificateNo))
             console.log(lastOneResult)
 
@@ -52,7 +63,6 @@ const CalDialog = () => {
     };
     useEffect(() => {
         getAllCalibrationData();
-
     }, [selectedRows])
 
 
@@ -79,6 +89,8 @@ const CalDialog = () => {
         calItemUncertainity: "",
         calItemSOPNo: "",
         calStandardRef: "",
+        calReportAvailable: "no",
+        calReportName: "",
         calOBType: "",
         calCertificateNo: calibrationDatas.length + 1,
         calItemCalDate: dayjs().format('YYYY-MM-DD'),
@@ -122,6 +134,8 @@ const CalDialog = () => {
         calItemSOPNo: "",
         calStandardRef: "",
         calOBType: "",
+        calReportAvailable: "no",
+        calReportName: "",
         calCertificateNo: "",
         calItemCalDate: dayjs().format('YYYY-MM-DD'),
         calItemDueDate: "",
@@ -209,7 +223,7 @@ const CalDialog = () => {
         if (selectedRows.length > 0 && selectedRows[0].itemItemMasterIMTENo.length > 0) {
             const masterData = itemList.filter(item => selectedRows[0].itemItemMasterIMTENo.map(mas => mas).includes(item.itemIMTENo))
             console.log(masterData)
-            setCalibrationData(prev => ({...prev, calMasterUsed: masterData}))
+            setCalibrationData(prev => ({ ...prev, calMasterUsed: masterData }))
         }
 
     }, [selectedRows])
@@ -232,7 +246,7 @@ const CalDialog = () => {
             setCalibrationData((prev) => (
                 {
                     ...prev,
-                    ItemCalId: selectedRows[0]._id ,
+                    ItemCalId: selectedRows[0]._id,
                     calIMTENo: selectedRows[0].itemIMTENo,
                     calItemName: selectedRows[0].itemAddMasterName,
                     calItemType: selectedRows[0].itemType,
@@ -269,7 +283,7 @@ const CalDialog = () => {
                                 rowStatus: ""
                             }
                         )),
-                    
+
                 }
 
             ))
@@ -398,6 +412,7 @@ const CalDialog = () => {
         // attribute rowstatus  
         if (calibrationData.calItemType === "attribute") {
             if (name === "calAverageOB") {
+                console.log("calAverage")
                 setCalibrationData(prev => {
                     const updatedData = prev.calcalibrationData.map((item, idx) => {
                         if (idx === index) {
@@ -475,14 +490,16 @@ const CalDialog = () => {
 
             if (name === "calMinOB" || name === "calMaxOB") {
                 setCalibrationData(prev => {
+                    console.log("Im MIN/MAX")
                     const updatedData = prev.calcalibrationData.map((item, idx) => {
                         if (idx === index) {
+
                             let status = ""
-                            if (item.calWearLimitPS !== "") {
+                            if (item.calWearLimitPS !== "" && item.calWearLimitPS !== "-") {
 
                                 if (item.calWearLimitPS <= item.calMinPS) {
 
-
+                                    console.log("work")
                                     const isMinInRange = parseFloat(item.calMinOB) >= parseFloat(item.calWearLimitPS) &&
                                         parseFloat(item.calMinOB) <= parseFloat(item.calMaxPS);
                                     const isMaxInRange = parseFloat(item.calMaxOB) >= parseFloat(item.calWearLimitPS) &&
@@ -517,13 +534,14 @@ const CalDialog = () => {
                                     parseFloat(item.calMinOB) <= parseFloat(item.calMaxPS);
                                 const isMaxInRange = parseFloat(item.calMaxOB) >= parseFloat(item.calMinPS) &&
                                     parseFloat(item.calMaxOB) <= parseFloat(item.calMaxPS);
-
+                                console.log(status)
                                 return {
                                     ...item,
                                     rowStatus: status,
                                 };
 
                             } else {
+                                console.log("no Wearlimit")
                                 const isMinInRange = parseFloat(item.calMinOB) >= parseFloat(item.calMinPS) &&
                                     parseFloat(item.calMinOB) <= parseFloat(item.calMaxPS);
                                 const isMaxInRange = parseFloat(item.calMaxOB) >= parseFloat(item.calMinPS) &&
@@ -561,16 +579,16 @@ const CalDialog = () => {
 
         if (calibrationData.calItemType === "variable") {
 
-            if (name === "calAverageOB") {
+            if (name === "calOBError") {
                 setCalibrationData(prev => {
                     const updatedData = prev.calcalibrationData.map((item, idx) => {
                         if (idx === index) {
                             let status = ""
 
-                            const isAverageInRange = parseFloat(item.calAverageOB) >= parseFloat(item.calMinPSError) &&
-                                parseFloat(item.calAverageOB) <= parseFloat(item.calMaxPSError);
+                            const isAverageInRange = parseFloat(item.calOBError) >= parseFloat(item.calMinPSError) &&
+                                parseFloat(item.calOBError) <= parseFloat(item.calMaxPSError);
 
-                            if (item.calAverageOB === "") {
+                            if (item.calOBError === "") {
                                 status = ""
                             } else {
                                 if (isAverageInRange) {
@@ -659,6 +677,9 @@ const CalDialog = () => {
         if (name === "lastResult") {
             setLastResultShow(checked)
         }
+        if (name === "calReportAvailable") {
+            setCalibrationData((prev) => ({ ...prev, calReportAvailable: checked ? "yes" : "no" }))
+        }
 
     }
     console.log(lastResultShow)
@@ -711,7 +732,10 @@ const CalDialog = () => {
     const [errorhandler, setErrorHandler] = useState({})
     console.log(errorhandler)
 
+    const [loading, setLoading] = useState(false)
+
     const submitCalForm = async () => {
+        setLoading(true)
         try {
             if (validateFunction()) {
                 const response = await axios.post(
@@ -747,10 +771,39 @@ const CalDialog = () => {
 
             console.log(err);
 
+        }finally{
+            setLoading(false)
         }
     };
+    const [certMessage, setCertMessage] = useState("")
 
 
+    const handleCalReportUpload = (event) => {
+        const selectedFile = event.target.files[0];
+        if (selectedFile) {
+            console.log("working");
+            const formData = new FormData();
+            formData.append('file', selectedFile);
+            formData.append('calCertificateNo', calibrationData.calCertificateNo); // Assuming calibrationData is defined
+
+            console.log("FormData content:", formData); // Optional: Log the FormData content to verify
+
+            try {
+                axios.post(`${process.env.REACT_APP_PORT}/upload/calReportUpload`, formData)
+                    .then(response => {
+                        setCertMessage("Calibration Report Uploaded Successfully");
+                        console.log("Certificate Uploaded Successfully");
+                        setCalibrationData((prev) => ({ ...prev, calReportName: response.data.name }));
+                    })
+                    .catch(error => {
+                        setCertMessage("Error Uploading Calibration Report");
+                        console.log(error);
+                    });
+            } catch (error) {
+                console.error('Error uploading the file:', error);
+            }
+        }
+    };
 
 
 
@@ -770,7 +823,7 @@ const CalDialog = () => {
             <DialogTitle align='center'>Calibration</DialogTitle>
             <IconButton
                 aria-label="close"
-                onClick={() => {setCalOpen(false);  window.location.reload()}}
+                onClick={() => { setCalOpen(false); window.location.reload() }}
 
                 sx={{
                     position: 'absolute',
@@ -860,7 +913,7 @@ const CalDialog = () => {
                                         variant="outlined"
                                     />
                                 </div>}
-                                <div className="col-md-6">
+                                <div className={calibrationData.calItemType !== "variable" ? "col-md-6" : "col-md-3"}>
                                     <TextField
                                         InputProps={{
                                             readOnly: true,
@@ -887,7 +940,6 @@ const CalDialog = () => {
                                         name='calItemMake'
                                         fullWidth
                                         variant="outlined"
-
                                     />
                                 </div>
                             </div>
@@ -1025,7 +1077,7 @@ const CalDialog = () => {
                                     onChange={handleCalData}
                                 >
                                     {selectedEmp.map((emp, index) => (
-                                        <MenuItem key={index} value={(emp.firstName? emp.firstName : "" )+" "+ (emp.lastName? emp.lastName : "" )}>{(emp.firstName || "") + " " + (emp.lastName || "")}</MenuItem>
+                                        <MenuItem key={index} value={emp._id}>{(emp.firstName || "") + " " + (emp.lastName || "")}</MenuItem>
                                     ))}
                                 </TextField>
                             </div>
@@ -1034,6 +1086,8 @@ const CalDialog = () => {
 
                     <Paper elevation={12} sx={{ p: 2 }} className='col-md-12 mb-2'>
                         <div className="d-flex justify-content-between mb-2">
+
+                            <div> <FormControlLabel control={<Switch name='calReportAvailable' checked={calibrationData.calReportAvailable === "yes"} onChange={handleCalData} color='success' />} label="Report Upload" /></div>
                             {/* <div> <FormControlLabel control={<Switch name='lastResult' onChange={handleCalData} />} label="Last Result" />
                                 <FormControlLabel control={<Switch name='beforeCalSwitch' onChange={handleCalData} />} label="Before Calibration" /></div> */}
                             <div><h5 className='text align-center'>Calibration Data</h5></div>
@@ -1045,7 +1099,30 @@ const CalDialog = () => {
 
                         </div>
 
-                        <div className="row">
+                        {calibrationData.calReportAvailable === "yes" && <div>
+
+
+                            {calibrationData.calReportName === "" ?
+                                <Button component="label" variant="contained" startIcon={<CloudUpload />}>
+                                    Upload Report
+                                    <VisuallyHiddenInput type="file" onChange={handleCalReportUpload} />
+                                </Button>
+                                : <Chip
+                                    className='mt-2'
+                                    icon={<Done />}
+                                    size='large'
+                                    color="success"
+                                    label={calibrationData.calReportName}
+                                    onClick={() => {
+                                        const fileUrl = `${process.env.REACT_APP_PORT}/calCertificates/${calibrationData.calReportName}`;
+                                        window.open(fileUrl, '_blank'); // Opens the file in a new tab/window
+                                    }}
+                                    onDelete={() => setCalibrationData((prev) => ({ ...prev, calReportName: "" }))}
+                                    deleteIcon={<Delete color='error' />}
+                                ></Chip>}
+                        </div>}
+
+                        {calibrationData.calReportAvailable === "no" && <div className="row">
                             <div className="col">
                                 <table className=' table table-bordered table-responsive text-center align-middle'>
                                     {calibrationData.calItemType === "attribute" &&
@@ -1055,9 +1132,9 @@ const CalDialog = () => {
                                                 <th width="20%" rowSpan={2}>Parameter</th>
                                                 <th width="10%" rowSpan={2}>Range/Size</th>
                                                 <th width="10%" rowSpan={2}>Unit</th>
-                                                <th colSpan={3} width="30%">Permissible Size</th>
+                                                <th colSpan={3} width="30%">Permissible Size ({(calibrationData && calibrationData.calcalibrationData.length > 0) ? calibrationData.calcalibrationData[0].calNominalSizeUnit : ""})</th>
                                                 {calibrationData.calBeforeData === "yes" && <th width="5%" rowSpan={2}>Before Calibration</th>}
-                                                <th width="20%" colSpan={calibrationData.calOBType === "average" ? 1 : 2}>Observed Size</th>
+                                                <th width="20%" colSpan={calibrationData.calOBType === "average" ? 1 : 2}>Observed Size ({(calibrationData && calibrationData.calcalibrationData.length > 0) ? calibrationData.calcalibrationData[0].calNominalSizeUnit : ""})</th>
                                                 <th width="10%" rowSpan={2}>Status</th>
                                             </tr>
                                             <tr>
@@ -1083,7 +1160,7 @@ const CalDialog = () => {
                                                 let maxColor = "";
                                                 let averageColor = "";
                                                 let size = "";
-                                                if (item.calWearLimitPS !== "") {
+                                                if (item.calWearLimitPS !== "" && item.calWearLimitPS !== "-") {
 
                                                     if (item.calWearLimitPS < item.calMinPS) {
                                                         size = "OD"
@@ -1234,9 +1311,9 @@ const CalDialog = () => {
                                                 <th rowSpan={2}>Parameter</th>
                                                 <th rowSpan={2}>Nominal Size</th>
                                                 <th rowSpan={2}>Unit</th>
-                                                <th colSpan={2}>Permissible Error</th>
+                                                <th colSpan={2}>Permissible Error ({(calibrationData && calibrationData.calcalibrationData.length > 0) ? calibrationData.calcalibrationData[0].calNominalSizeUnit : ""})</th>
 
-                                                <th rowSpan={2}>Observer Error</th>
+                                                <th rowSpan={2}>Observer Error ({(calibrationData && calibrationData.calcalibrationData.length > 0) ? calibrationData.calcalibrationData[0].calNominalSizeUnit : ""})</th>
 
                                                 <th rowSpan={2}>Status</th>
                                             </tr>
@@ -1247,7 +1324,7 @@ const CalDialog = () => {
                                             {calibrationData.calcalibrationData.length > 0 && calibrationData.calcalibrationData.map((item, index) => {
 
                                                 let averageColor = "";
-                                                if (parseFloat(item.calAverageOB) >= parseFloat(item.calMinPSError) && parseFloat(item.calAverageOB) <= parseFloat(item.calMaxPSError)) {
+                                                if (parseFloat(item.calOBError) >= parseFloat(item.calMinPSError) && parseFloat(item.calOBError) <= parseFloat(item.calMaxPSError)) {
                                                     averageColor = "green";
                                                 } else {
                                                     averageColor = "red"
@@ -1261,7 +1338,7 @@ const CalDialog = () => {
                                                         <td>{item.calNominalSizeUnit}</td>
                                                         <td>{item.calMinPSError}</td>
                                                         <td>{item.calMaxPSError}</td>
-                                                        <td><input className='form-control form-control-sm' name='calAverageOB' style={{ color: averageColor, fontWeight: "bold" }} onChange={(e) => changecalDataValue(index, e.target.name, e.target.value)} /></td>
+                                                        <td><input className='form-control form-control-sm' name='calOBError' style={{ color: averageColor, fontWeight: "bold" }} onChange={(e) => changecalDataValue(index, e.target.name, e.target.value)} /></td>
                                                         <td width="15%">
                                                             <select className='form-select form-select-sm' name="rowStatus" value={item.rowStatus} onChange={(e) => changecalDataValue(index, e.target.name, e.target.value)}>
                                                                 <option value="">Status</option>
@@ -1285,10 +1362,10 @@ const CalDialog = () => {
 
                                                 <th width="20%" rowSpan={2}>Parameter</th>
                                                 <th width="10%" rowSpan={2}>Range/Size</th>
-                                                <th width="10%" rowSpan={2}>Unit</th>
-                                                <th colSpan={2}>Permissible Size</th>
+                                                <th width="5%" rowSpan={2}>Unit</th>
+                                                <th colSpan={2}>Permissible Size ({(calibrationData && calibrationData.calcalibrationData.length > 0) ? calibrationData.calcalibrationData[0].calNominalSizeUnit : ""})</th>
                                                 {calibrationData.calBeforeData === "yes" && <th width="10%" rowSpan={2}>Before Calibration</th>}
-                                                <th width="20%" colSpan={calibrationData.calOBType === "average" ? 1 : 2}>Observed Size</th>
+                                                <th width="20%" colSpan={calibrationData.calOBType === "average" ? 1 : 2}>Observed Size ({(calibrationData && calibrationData.calcalibrationData.length > 0) ? calibrationData.calcalibrationData[0].calNominalSizeUnit : ""})</th>
                                                 <th width="10%" rowSpan={2}>Status</th>
                                             </tr>
                                             <tr>
@@ -1458,7 +1535,7 @@ const CalDialog = () => {
                                                         }
                                                         {lastResultData.calOBType === "average" &&
 
-                                                            <td colSpan={2}>{item.calAverageOB}</td>
+                                                            <td colSpan={2}>{item.calOBError}</td>
 
 
                                                         }
@@ -1517,12 +1594,12 @@ const CalDialog = () => {
                                             </tbody>}
                                     </table>
                                 </div> : <div><Chip icon={<ErrorOutline />} label="No previous calibration data available" color="error" /></div>)}
-                        </div>
+                        </div>}
 
 
 
                     </Paper>
-                    <Paper elevation={12} sx={{ p: 2 }} className='col-md-12'>
+                    {calibrationData.calReportAvailable === "no" && <Paper elevation={12} sx={{ p: 2 }} className='col-md-12'>
                         <div className="row mb-2">
 
                             <div className='col-md'> <h5 className='text-start'>Master Used</h5></div>
@@ -1564,16 +1641,16 @@ const CalDialog = () => {
                                         <td>{item.itemIMTENo}</td>
                                         <td>{item.itemAddMasterName}</td>
                                         <td>{item.itemRangeSize}</td>
-                                        <td>{ }</td>
-                                        <td>{item.itemCalDate}</td>
-                                        <td>{item.itemDueDate}</td>
+                                        <td>{item.itemCertificateNo}</td>
+                                        <td>{dayjs(item.itemCalDate).format("DD-MM-YYYY")}</td>
+                                        <td>{dayjs(item.itemDueDate).format("DD-MM-YYYY")}</td>
                                         <td>{item.itemCalibratedAt}</td>
                                         <td width="5%"><Delete color='error' onClick={(index) => deleteAC(index)} /></td>
                                     </tr>
                                 ))}
                             </tbody>
                         </table>
-                    </Paper>
+                    </Paper>}
 
                     <Dialog
                         open={confirmSubmit}
@@ -1608,13 +1685,19 @@ const CalDialog = () => {
                     </Snackbar>
                 </div>
             </DialogContent>
-            <DialogActions className='d-flex justify-content-between'>
-                <div>
-
-                </div>
-                <div>
-                    <Button variant='contained' color='error' className='me-3' onClick={() => { setCalOpen(false); window.location.reload() }}>Cancel</Button>
-                    <Button variant='contained' color='success' onClick={() => { setConfirmSubmit(true) }}>Submit</Button>
+            <DialogActions className='d-flex justify-content-end'>
+                
+                <div >
+                    <Button variant='contained' disabled={loading} color='error' className='me-3' onClick={() => { setCalOpen(false); window.location.reload() }}>Cancel</Button>
+                    <Button variant='contained' disabled={loading} color='success' onClick={() => { setConfirmSubmit(true) }}>
+                        
+                        {loading ? <CircularProgress
+                        sx={{
+                            color: "inherit",
+                        }}
+                        variant="indeterminate"
+                        size={20}
+                    />: "Submit"}</Button>
                 </div>
             </DialogActions>
 

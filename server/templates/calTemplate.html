@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Certificate</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:wght@700&display=swap" rel="stylesheet">
+    <link href="https://db.onlinewebfonts.com/c/8f368e0eff315719ee0fbbbdbf6c98bf?family=Microsoft+Himalaya"
+        rel="stylesheet">
+
+</head>
+
+<body>
+    <style>
+        @import url(https://db.onlinewebfonts.com/c/8f368e0eff315719ee0fbbbdbf6c98bf?family=Microsoft+Himalaya);
+        @import url('https://fonts.cdnfonts.com/css/tenorite');
+
+        body {
+            box-sizing: border-box;
+            padding: 1cm;
+            margin: 0;
+            size: A4;
+            font-size: 13px;
+            font-family: 'Tenorite', sans-serif;
+
+        }
+
+        .border-left {
+            border-left: 1.5px solid grey;
+        }
+
+        table {
+            width: 100%;
+        }
+
+        /* .page {
+      width: 21cm;
+      min-height: 29.7cm;
+      padding: 2cm;
+      margin: 1cm auto;
+      border: 1px #D3D3D3 solid;
+      border-radius: 5px;
+      background: white;
+      box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+    } */
+
+        @media print {
+
+            body,
+            page {
+                margin: 0;
+                box-shadow: 0;
+            }
+        }
+    </style>
+    <div class="mt-5 mb-4 pt-5 px-0 ms-3">
+        <div style="position: fixed; top: 2.5rem; right: 2.5rem;"><img src="{{logo}}"
+            width="80px" height="80px" /></div>
+        <table class="table table-sm table-borderless table-responsive">
+            <tbody>
+
+                <tr class="border border-secondary">
+
+                    <td>
+
+                        <table class="text-center align-middle">
+                            <tr>
+                                <td class="fs-3">
+                                    Calibration Certificate of<br><b>{{ItemName}}</b></td>
+                            </tr>
+                        </table>
+                    </td>
+
+                    <td style="padding-left: 6px;" class="border border-secondary" width=50%>
+                        <table style="line-height: 1.3em;">
+                            <tr>
+                                <td width=50%><span class="fw-semibold"> Certificate No.</span></td>
+                                <td>: {{CertificateNo}}</td>
+                            </tr>
+                            <tr>
+                                <td width=50%><span class="fw-semibold"> Date of Issue</span></td>
+                                <td>: {{dateOfIssue}}</td>
+                            </tr>
+                            <tr>
+                                <td width=50%><span class="fw-semibold"> Date of Calibration</span></td>
+                                <td>: {{dateOfCalibration}}</td>
+                            </tr>
+                            <tr>
+                                <td width=50%><span class="fw-semibold"> Next Calibration Due</span></td>
+                                <td>: {{nextCalibrationDue}}</td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td style="padding: 2px 0 0 6px;" class="border border-secondary">
+                        <table style="line-height: 1.3em;">
+                            <tr>
+                                <td rowSpan="4"><b style="font-size: 14px;">Name and Address of Customer:</b><br><b>M/s.
+                                        {{CompanyName}}</b><br>{{Plant}} - {{PlantAddress}}
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                    <td style="padding: 2px 0 0 6px;" class="border border-secondary">
+                        <table style="line-height: 1.3em;">
+                            <tr>
+                                <td colSpan="2" style="font-size: 14px;"><b>Description of Gauge / Instrument :</b></td>
+                            </tr>
+                            <tr>
+                                <td width=50%><span class="fw-semibold">Identification No.</span></td>
+                                <td>: {{identificationNo}}</td>
+                            </tr>
+                            <tr>
+                                <td width=50%><span class="fw-semibold">Sl No.</span></td>
+                                <td>: {{slNo}}</td>
+                            </tr>
+                            <tr>
+                                <td width=50%><span class="fw-semibold">Make</span></td>
+                                <td>: {{make}} </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+
+
+
+
+                <tr>
+                    <td colspan="2" class="m-0 p-0">
+                        <table class="table table-sm table-bordered text-center border-secondary align-middle "
+                            style="line-height: 1.1em; margin: 0px;">
+                            <tbody>
+                                <tr>
+                                    <th colspan="4">
+                                        Environmental Condition
+                                    </th>
+                                </tr>
+                                <tr>
+                                    <th width="25%">Temperature</th>
+                                    <td width="25%">{{temperature}}</td>
+                                    <th width="25%">Humidity</th>
+                                    <td width="25%">{{humitidy}}</td>
+                                </tr>
+                                <tr>
+                                    <th colspan="2">Standard Ref/Calibration Procedure No.</th>
+                                    <td colspan="2">
+                                        {{standardRef}}
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2" class="m-0 p-0">
+                        <table class="table table-sm table-bordered text-center border-secondary align-middle "
+                            style="line-height: 1.1em; margin: 0px; border-collapse: collapse;">
+                            <tbody>
+                                <tr>
+                                    <th colspan="6">Master Used for Calibration</th>
+                                </tr>
+                                <tr>
+                                    <th>SiNo</th>
+                                    <th>IMTE No.</th>
+                                    <th>Item Description</th>
+                                    <th>Certificate No.</th>
+                                    <th>Valid Upto</th>
+                                    <th>Traceability</th>
+                                </tr>
+                                {{masterUsed}}
+                            </tbody>
+                        </table>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="3" class="m-0 p-0">
+                        <table class="table table-sm table-bordered text-center border-secondary align-middle "
+                            style="line-height: 1.1em; margin: 0px;">
+                            <tbody>
+                                <!-- <tr>
+                                    <th colspan="4">Calibration results</th>
+                                </tr>
+                                <tr>
+                                    <th >Parameter</th>
+                                    <th >Nominal Size</th>
+                                    <th >Permissible Error</th>
+                                    <th > Observed Error</th>
+                                </tr> -->
+
+
+                                {{calCalibrationData}}
+                            </tbody>
+                        </table>
+                    </td>
+                </tr>
+
+
+                <tr>
+                    <td colSpan="2" class="text-center">
+                        <br>
+                        ★★★ END OF THE CERTIFICATE ★★★
+                        <br>
+                    </td>
+
+                </tr>
+
+                <tr>
+
+                    <td colspan="2">
+                        <table class="text-end" style="position: fixed; bottom: 2.5em; right: 2.5rem;">
+                           
+                            <tr>
+                                <td>
+
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="fw-medium">
+                                    {{authorisedBy}}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="fw-medium">
+                                    Approved By
+                                </td>
+                            </tr>
+
+                        </table>
+                    </td>
+                </tr>
+
+
+                <tr>
+                    <table style="position: fixed; bottom: 2.5em; left: 2.5rem;">
+                        <tr>
+                            <td> &nbsp;&nbsp;&nbsp;&nbsp;{{calibratedBy}} 
+                            </td>
+
+                        </tr>
+                        <tr>
+                            <td> Calibrated By
+                            </td>
+
+                        </tr>
+                        
+                        
+
+                    </table>
+
+
+                </tr>
+
+
+
+            </tbody>
+        </table>
+        <span style="position: fixed; bottom: 1.6em; left: 2.5rem; font-size: xx-small;">{{formatNo}}</span>
+        
+    </div>
+
+</body>
+
+</html>

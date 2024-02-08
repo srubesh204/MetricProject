@@ -55,6 +55,7 @@ const itemGRNSchema = new mongoose.Schema({
   grnItemLCUnit: String,
   grnItemMake: String,
   grnItemModelNo: String,
+  grnItemDcNo: String,
   grnItemReceiptDate: String,
   grnItemDepartment: String,
   grnItemArea: String,

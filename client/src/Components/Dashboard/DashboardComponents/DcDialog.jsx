@@ -1,5 +1,5 @@
 import React, { createContext, useEffect, useState, useContext } from 'react'
-import { Container, Box, Alert, Button, Dialog, DialogActions, DialogContent, InputLabel, DialogContentText, FormControl, Select, DialogTitle, OutlinedInput, FormControlLabel, IconButton, MenuItem, Paper, Checkbox, ListItemText, Snackbar, Switch, TextField } from '@mui/material';
+import { Container, Box, Alert, Button, Dialog, DialogActions, DialogContent, InputLabel, DialogContentText, FormControl, Select, DialogTitle, OutlinedInput, FormControlLabel, IconButton, MenuItem, Paper, Checkbox, ListItemText, Snackbar, Switch, TextField, CircularProgress } from '@mui/material';
 import axios from 'axios';
 import { DataGrid, GridToolbar } from '@mui/x-data-grid';
 import dayjs from 'dayjs';
@@ -17,7 +17,7 @@ const Dc = () => {
 
 
     console.log(selectedRows)
-  
+
     const initialDcData = {
         dcPartyId: "",
         dcPartyType: "",
@@ -48,9 +48,9 @@ const Dc = () => {
     })
     console.log(dcData)
 
-   
-   
-   
+
+
+
 
 
     const handleDcChanges = (event) => {
@@ -60,7 +60,7 @@ const Dc = () => {
             // Handle changes if needed
         }
     };
-    
+
 
     const settingDcData = () => {
         if (selectedRows.length > 0) {
@@ -70,7 +70,10 @@ const Dc = () => {
                     ...prev,
                     dcPlant: selectedRows[0].itemPlant,
                     dcDepartment: departments,
-                    dcPartyItems: selectedRows,
+                    dcPartyItems: selectedRows.map(item => ({
+                        ...item,
+                        dcItemRemarks: ""
+                    })),
                     dcNo: lastNo
                 }
 
@@ -142,13 +145,21 @@ const Dc = () => {
         { field: 'id', headerName: 'Si. No', width: 70, renderCell: (params) => params.api.getAllRowIds().indexOf(params.id) + 1 },
         { field: 'itemCalFreInMonths', headerName: 'Frequency', type: "number", width: 100 },
         {
-            field: 'dcCommonRemarks', headerName: 'Remarks', width: 250,
-            renderCell: (params) =>
-                <select className='form-select form-select-sm' name="">
-                    <option>Calibration</option>
-                    <option>Service</option>
-                    <option>Service and Calibration</option>
-                </select>
+            field: 'dcItemRemarks', headerName: 'Remarks', width: 250,
+            renderCell: (params) => {
+                console.log(params)
+                const rowIndex = params.rowIndex;
+
+                return (
+                    <select className='form-select form-select-sm' value={params.row.dcItemRemarks || ""} name="dcItemRemarks" onChange={(e) => handlePartyItemData(e, rowIndex)}>
+                        <option value="">Select</option>
+                        <option value="Calibration">Calibration</option>
+                        <option value="Service">Service</option>
+                        <option value="Service and Calibration">Service and Calibration</option>
+                    </select>
+                )
+            }
+
         },
         { field: 'delete', headerName: 'Delete', width: 100, renderCell: (index) => <Delete onClick={() => deleteAC(index)} /> },
     ]
@@ -207,16 +218,16 @@ const Dc = () => {
 
             const dcNumbers = response.data.result.map(item => (item.dcId)).filter(Boolean).sort();
             console.log(dcNumbers)
-            if(dcNumbers.length > 0){
-                const lastNumber = dcNumbers[dcNumbers.length-1] + 1
-            console.log(lastNumber)
+            if (dcNumbers.length > 0) {
+                const lastNumber = dcNumbers[dcNumbers.length - 1] + 1
+                console.log(lastNumber)
 
-            setDcData(prev => ({...prev, dcNo : dayjs().year()+"-"+lastNumber}))
-            }else{
+                setDcData(prev => ({ ...prev, dcNo: dayjs().year() + "-" + lastNumber }))
+            } else {
                 console.log("No number")
-                setDcData(prev => ({...prev, dcNo : dayjs().year()+"-"+1}))
+                setDcData(prev => ({ ...prev, dcNo: dayjs().year() + "-" + 1 }))
             }
-            
+
 
         } catch (err) {
             console.log(err);
@@ -331,7 +342,10 @@ const Dc = () => {
     const [errorhandler, setErrorHandler] = useState({})
     console.log(errorhandler)
 
+    const [loader, setLoader] = useState(false)
+
     const submitDC = async () => {
+        setLoader(true)
         try {
             console.log("working")
             if (validateFunction()) {
@@ -345,7 +359,7 @@ const Dc = () => {
                 setSnackBarOpen(true)
                 itemFetch();
                 setDcData(initialDcData)
-                setTimeout(() => {setDcOpen(false); window.location.reload()}, 500)
+                setTimeout(() => { setDcOpen(false); window.location.reload() }, 500)
             } else {
                 setErrorHandler({ status: 0, message: errors, code: "error" });
             }
@@ -374,6 +388,8 @@ const Dc = () => {
 
             console.log(err);
 
+        } finally {
+            setLoader(false)
         }
     };
 
@@ -463,10 +479,29 @@ const Dc = () => {
     //     }
     //   };
 
+    const handlePartyItemData = (e, index) => {
+        const { name, value } = e.target;
+        console.log(index)
+        // Create a copy of the dcPartyItems array
+        const updatedPartyItems = [...dcData.dcPartyItems];
+        console.log(updatedPartyItems)
+        // Update the specific object at the given index
+        updatedPartyItems[index] = {
+            ...updatedPartyItems[index],
+            dcItemRemarks: value // Update the specific key with the new value
+        };
+        console.log(updatedPartyItems[index])
+
+        // Update dcPartyItems in the state
+        setDcData(prev => ({
+            ...prev,
+            dcPartyItems: updatedPartyItems
+        }));
+    };
 
 
 
-
+    console.log(dcData)
 
 
 
@@ -743,7 +778,7 @@ const Dc = () => {
                                                 Please select a row.
                                             </div>
                                         )}
-                                        <DataGrid
+                                        {/* <DataGrid
 
                                             rows={dcData.dcPartyItems}
                                             columns={Columns}
@@ -773,7 +808,40 @@ const Dc = () => {
                                             //onRowClick={handleRowClick}
                                             disableRowSelectionOnClick
                                             pageSizeOptions={[5]}
-                                        />
+                                        /> */}
+                                        <table className='table table-sm table-bordered text-center align-middle'>
+                                            <tbody>
+                                                <tr>
+                                                    <th>SiNo</th>
+                                                    <th>Item IMTE No</th>
+                                                    <th>Item Name</th>
+                                                    <th>Range/Size</th>
+                                                    <th>Make</th>
+                                                    <th>Frequency</th>
+                                                    <th>Remarks</th>
+                                                    <th>Delete</th>
+                                                </tr>
+
+                                                {dcData.dcPartyItems.map((item, index) => (
+                                                    <tr>
+                                                        <td>{index + 1}</td>
+                                                        <td>{item.itemIMTENo}</td>
+                                                        <td>{item.itemAddMasterName}</td>
+                                                        <td>{item.itemRangeSize + item.itemRangeSizeUnit}</td>
+                                                        <td>{item.itemMake}</td>
+                                                        <td>{item.itemCalFreInMonths}</td>
+                                                        <td><select className='form-select form-select-sm' value={item.dcItemRemarks || ""} name="dcItemRemarks" onChange={(e) => handlePartyItemData(e, index)}>
+                                                            <option value="">Select</option>
+                                                            <option value="Calibration">Calibration</option>
+                                                            <option value="Service">Service</option>
+                                                            <option value="Service and Calibration">Service and Calibration</option>
+                                                        </select></td>
+                                                        <td><Delete onClick={() => deleteAC(index)} /></td>
+                                                    </tr>
+                                                ))}
+
+                                            </tbody>
+                                        </table>
 
                                     </Box>
 
@@ -802,7 +870,7 @@ const Dc = () => {
                                     </Button>
                                 </DialogActions>
                             </Dialog>
-                            
+
                             <Snackbar anchorOrigin={{ vertical: "top", horizontal: "right" }} open={snackBarOpen} autoHideDuration={6000} onClose={() => setSnackBarOpen(false)}>
                                 <Alert onClose={() => setSnackBarOpen(false)} severity={errorhandler.code} variant='filled' sx={{ width: '100%' }}>
                                     {errorhandler.message}
@@ -814,11 +882,11 @@ const Dc = () => {
                     </LocalizationProvider>
                 </div >
             </DialogContent>
-            <DialogActions className='d-flex justify-content-between'>
-                
+            <DialogActions className='d-flex justify-content-end'>
+
                 <div>
                     <Button variant='contained' color='error' className='me-3' onClick={() => handleClose()}>Cancel</Button>
-                    <Button variant='contained' color='success' onClick={() => { setConfirmSubmit(true) }}>Submit</Button>
+                    <Button variant='contained' color='success' onClick={() => { setConfirmSubmit(true) }}>Submit {loader ? <CircularProgress sx={{color: "inherit"}} variant="indeterminate" size={20} /> : ""}</Button>
                 </div>
             </DialogActions>
 

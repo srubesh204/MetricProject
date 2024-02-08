@@ -2,15 +2,17 @@ const express = require('express');
 const multer = require('multer');
 const router = express.Router();
 const path = require('path');
+const fs = require('fs')
 const dayjs = require('dayjs')
 
 const createDiskStorage = (destinationFolder) => {
   return multer.diskStorage({
     destination: (req, file, cb) => {
+      
       cb(null, `storage/${destinationFolder}`);
     },
     filename: (req, file, cb) => {
-      console.log(file)
+      
       cb(null, dayjs().format('YYYY-MM-DD') + file.originalname );
     },
   });
@@ -26,6 +28,18 @@ const ItemImageStorage = multer.diskStorage({
   },
 });
 
+const calCertificateStorage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, 'storage/calCertificates'); // Specify the folder where images will be stored
+  },
+  filename: (req, file, cb) => {
+    // Use calCertificateNo from the request body to set the filename
+    console.log(req.body)
+   
+    cb(null, file.originalname); // Set the filename
+  },
+});
+
 const VendorCertificateStorage = createDiskStorage('vendorCertificates');
 const WorkInstructionStorage = createDiskStorage('workInstructions');
 const itemCertificateStorage = createDiskStorage('itemCertificates');
@@ -37,6 +51,7 @@ const itemCertificateStorage = createDiskStorage('itemCertificates');
 const vendorCertificateUpload = multer({ storage: VendorCertificateStorage });
 const workInsUploadFolder = multer({ storage: WorkInstructionStorage });
 const itemCertificateFolder = multer({ storage: itemCertificateStorage });
+const calCertificateFolder = multer({ storage: calCertificateStorage });
 // const grnItemCertificateFolder = multer({ storage: grnItemCertificates });
 const itemMasterImagesFolder = multer({ storage: ItemImageStorage });
 
@@ -118,7 +133,23 @@ router.post('/itemCertificates', itemCertificateFolder.single('file'), (req, res
   }
 
   // File was provided, proceed with processing
-  res.status(200).json({ message: 'Item Certificate uploaded successfully1', name: req.file.filename });
+  res.status(200).json({ message: 'Item Certificate uploaded successfully', name: req.file.filename });
+});
+
+router.post('/calReportUpload', calCertificateFolder.single('file'), (req, res) => {
+  const { calCertificateNo } = req.body; 
+  if (!req.file) {
+    // No file was provided in the request
+    return res.status(400).json({ error: 'No file selected for upload' });
+  }
+  console.log(req.file)
+ 
+  fs.renameSync(req.file.path, req.file.path.replace(req.file.originalname, 
+    req.body.calCertificateNo + path.extname(req.file.originalname)));
+  console.log(req.file)
+  console.log("Report Uploaded Successfully")
+  // File was provided, proceed with processing
+  res.status(200).json({ message: 'Calibration Report uploaded successfully', name: `${req.body.calCertificateNo}.pdf` });
 });
 
 // Function to determine the content type based on the file extension

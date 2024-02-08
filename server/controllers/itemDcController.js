@@ -1,6 +1,12 @@
 const itemAddModel = require("../models/itemAddModel");
 const itemDcModel = require("../models/itemDcModel")
+const { compDetailsSchema } = require("../models/compDetailsModel");
+const { plantSchema } = require("../models/compDetailsModel");
 const dayjs = require('dayjs')
+const puppeteer = require('puppeteer');
+const fs = require('fs');
+const path = require('path');
+const formatNoModel = require("../models/formatNoModel");
 
 const itemDcController = {
   getAllItemDc: async (req, res) => {
@@ -19,6 +25,41 @@ const itemDcController = {
       const { dcPartyName, dcPartyId, dcPartyType, dcPartyCode, dcPartyAddress, dcNo, dcDate, dcReason, dcCommonRemarks, dcMasterName, dcPartyItems, dcPlant, dcDepartment } = req.body;
       const itemDcResult = new itemDcModel({ dcPartyName, dcPartyId, dcPartyType, dcPartyCode, dcPartyAddress, dcNo, dcDate, dcReason, dcCommonRemarks, dcMasterName, dcPartyItems, dcPlant, dcDepartment });
 
+
+      // const validationError = itemDcResult.validateSync();
+
+      // if (validationError) {
+      //   // Handle validation errors
+      //   const validationErrors = {};
+
+      //   if (validationError.errors) {
+      //     // Convert Mongoose validation error details to a more user-friendly format
+      //     for (const key in validationError.errors) {
+      //       validationErrors[key] = validationError.errors[key].message;
+      //     }
+      //   }
+      //   console.log(validationErrors)
+      //   return res.status(400).json({
+      //     errors: validationErrors
+      //   });
+      // }
+      // console.log("success")
+
+
+
+      // const result = await itemDcResult.save();
+
+      const getCompDetailsById = await compDetailsSchema.findOne(
+        { compId: 1 } // To return the updated document
+      );
+      const getPlantAddress = await plantSchema.findOne(
+        { plantName: dcPlant } // To return the updated document
+      );
+
+      const formatNo = await formatNoModel.findOne({ formatId: 1 });
+
+      const formatNumber = `${formatNo.fDc ? (formatNo.fDc.frNo + " " + formatNo.fDc.amNo + " " + formatNo.fDc.amDate) : ""}`
+      console.log(formatNumber)
 
       const validationError = itemDcResult.validateSync();
 
@@ -43,6 +84,8 @@ const itemDcController = {
 
       const result = await itemDcResult.save();
 
+
+
       if (Object.keys(result).length !== 0) {
         console.log(dcPartyType)
         const updatePromises = dcPartyItems.map(async (item) => {
@@ -54,7 +97,7 @@ const itemDcController = {
             itemCurrentLocation: dcPartyName,
             itemLastLocation,
 
-            
+
             itemLocation: dcPartyType,
             dcId: result._id,
             dcStatus: "1",
@@ -70,11 +113,67 @@ const itemDcController = {
           return updateResult;
         });
         const updatedItems = await Promise.all(updatePromises);
+
+
+        const itemsData = dcPartyItems.map((item, index) => {
+          let tableRow = `
+              <tr>
+                  <td style="padding: 0.50rem; vertical-align: top; border: 1px solid #6c757d ;" class="text-center align-middle">${index + 1}</td>
+                  <td style="padding: 0.50rem; vertical-align: top; border: 1px solid #6c757d ;" class="align-middle">Item Name: ${item.itemItemMasterName ? item.itemItemMasterName : "-"} IMTE No: ${item.itemIMTENo ? item.itemIMTENo : "-"}<br>
+                  Range/Size: ${item.itemRangeSize ? item.itemRangeSize : "" + ' ' + item.itemRangeSizeUnit ? item.itemRangeSizeUnit : ""} L.C.: ${(item.itemLC ? item.itemLC : "") + '' + (item.itemLCUnit ? item.itemLCUnit : '')}<br>
+                  Make: ${item.itemMake ? item.itemMake : "-"} Sr.No: ${item.itemMFRNo ? item.itemMFRNo : "-"} Cal. Frequency: ${item.itemCalFreInMonths ? item.itemCalFreInMonths : "-"} months</td>
+                  <td style="padding: 0.50rem; vertical-align: top; border: 1px solid #6c757d ;" class="text-center align-middle">${item.dcItemRemarks}</td>
+              </tr>
+          `;
+
+          return tableRow;
+        });
+
+
+        // Example usage:
+
+        const browser = await puppeteer.launch();
+        const page = await browser.newPage();
+
+        // Read the HTML template file
+        const filePath = path.resolve(__dirname, '../../server/templates/dcTemplate.html');
+        const htmlTemplate = fs.readFileSync(filePath, 'utf8');
+
+        // Replace placeholders with actual data
+        const modifiedHTML = htmlTemplate
+          
+          .replace(/{{dcPartyItems}}/g, itemsData.join(""))
+          .replace(/{{CompanyName}}/g, getCompDetailsById.companyName)
+          
+          .replace(/{{Plant}}/g, getPlantAddress.plantName)
+          .replace(/{{PlantAddress}}/g, getPlantAddress.plantAddress)
+          .replace(/{{dcPartyName}}/g, dcPartyName)
+          .replace(/{{dcPartyAddress}}/g, dcPartyAddress)
+          .replace(/{{dcNo}}/g, dcNo)
+          .replace(/{{dcDate}}/g, dcDate)
+          .replace(/{{dcCR}}/g, dcCommonRemarks)
+          .replace(/{{logo}}/g, process.env.SERVER_PORT + '/logo/' + getCompDetailsById.companyLogo)
+          .replace(/{{formatNo}}/g, formatNumber)
+
+
+        // Add more replace statements for additional placeholders as needed
+
+        // Set the modified HTML content
+
+        console.log(modifiedHTML)
+        await page.setContent(modifiedHTML, { waitUntil: 'networkidle0' });
+
+        // Generate PDF
+        await page.pdf({ path: `./storage/dcCertificate/${dcNo}.pdf`, format: 'A4' });
+
+        await browser.close();
+
+        console.log('PDF created successfully');
       }
 
 
 
-      return res.status(200).json({ message: "Item Dc Data Successfully Saved", status: 1, result: result });
+      return res.status(200).json({ message: "Item Dc Data Successfully Saved", status: 1, result: "result" });
     } catch (error) {
       console.log(error)
       if (error.errors) {
@@ -110,14 +209,15 @@ const itemDcController = {
 
         const itemData = await itemAddModel.findById(item._id)
         const { itemIMTENo, itemLastLocation } = itemData
-        const updateItemFields = { 
-          itemIMTENo, 
-          itemCurrentLocation: itemLastLocation, 
-          itemLocation: "department", 
-          dcId: "", 
-          dcStatus: "0", 
-          dcCreatedOn: "", 
-          dcNo: "" }
+        const updateItemFields = {
+          itemIMTENo,
+          itemCurrentLocation: itemLastLocation,
+          itemLocation: "department",
+          dcId: "",
+          dcStatus: "0",
+          dcCreatedOn: "",
+          dcNo: ""
+        }
         const updateResult = await itemAddModel.findOneAndUpdate(
           { _id: item._id },
           { $set: updateItemFields },
@@ -128,6 +228,17 @@ const itemDcController = {
       });
       const prevUpdatedValues = await Promise.all(prevUpdatePromises);
       //
+      const getCompDetailsById = await compDetailsSchema.findOne(
+        { compId: 1 } // To return the updated document
+      );
+      const getPlantAddress = await plantSchema.findOne(
+        { plantName: dcPlant } // To return the updated document
+      );
+
+      const formatNo = await formatNoModel.findOne({ formatId: 1 });
+
+      const formatNumber = `${formatNo.fDc ? (formatNo.fDc.frNo + " " + formatNo.fDc.amNo + " " + formatNo.fDc.amDate) : ""}`
+      console.log(formatNumber)
 
       const itemDcUpdate = new itemDcModel(updateItemDcFields);
 
@@ -160,16 +271,16 @@ const itemDcController = {
         const updatePromises = dcPartyItems.map(async (item) => {
 
           const itemData = await itemAddModel.findById(item._id)
-          const { itemIMTENo, itemCurrentLocation : itemLastLocation } = itemData
-          const updateItemFields = { 
-            itemIMTENo, 
-            itemCurrentLocation: dcPartyName, 
+          const { itemIMTENo, itemCurrentLocation: itemLastLocation } = itemData
+          const updateItemFields = {
+            itemIMTENo,
+            itemCurrentLocation: dcPartyName,
             itemLastLocation,
-            itemLocation: dcPartyType, 
-            dcId: updateItemDc._id, 
-            dcStatus: "1", 
-            dcCreatedOn: dcDate, 
-            dcNo: dcNo 
+            itemLocation: dcPartyType,
+            dcId: updateItemDc._id,
+            dcStatus: "1",
+            dcCreatedOn: dcDate,
+            dcNo: dcNo
           }
           const updateResult = await itemAddModel.findOneAndUpdate(
             { _id: item._id },
@@ -180,6 +291,62 @@ const itemDcController = {
           return updateResult;
         });
         const updatedItems = await Promise.all(updatePromises);
+
+
+        const itemsData = dcPartyItems.map((item, index) => {
+          let tableRow = `
+              <tr>
+                  <td style="padding: 0.50rem; vertical-align: top; border: 1px solid #6c757d ;" class="text-center align-middle">${index + 1}</td>
+                  <td style="padding: 0.50rem; vertical-align: top; border: 1px solid #6c757d ;" class="align-middle">Item Name: ${item.itemItemMasterName ? item.itemItemMasterName : "-"} IMTE No: ${item.itemIMTENo ? item.itemIMTENo : "-"}<br>
+                  Range/Size: ${item.itemRangeSize ? item.itemRangeSize : "" + ' ' + item.itemRangeSizeUnit ? item.itemRangeSizeUnit : ""} L.C.: ${(item.itemLC ? item.itemLC : "") + '' + (item.itemLCUnit ? item.itemLCUnit : '')}<br>
+                  Make: ${item.itemMake ? item.itemMake : "-"} Sr.No: ${item.itemMFRNo ? item.itemMFRNo : "-"} Cal. Frequency: ${item.itemCalFreInMonths ? item.itemCalFreInMonths : "-"} months</td>
+                  <td style="padding: 0.50rem; vertical-align: top; border: 1px solid #6c757d ;" class="text-center align-middle">${item.dcItemRemarks}</td>
+              </tr>
+          `;
+
+          return tableRow;
+        });
+
+
+        // Example usage:
+
+        const browser = await puppeteer.launch();
+        const page = await browser.newPage();
+
+        // Read the HTML template file
+        const filePath = path.resolve(__dirname, '../../server/templates/dcTemplate.html');
+        const htmlTemplate = fs.readFileSync(filePath, 'utf8');
+
+        // Replace placeholders with actual data
+        const modifiedHTML = htmlTemplate
+          
+          .replace(/{{dcPartyItems}}/g, itemsData.join(""))
+          .replace(/{{CompanyName}}/g, getCompDetailsById.companyName)
+          
+          .replace(/{{Plant}}/g, getPlantAddress.plantName)
+          .replace(/{{PlantAddress}}/g, getPlantAddress.plantAddress)
+          .replace(/{{dcPartyName}}/g, dcPartyName)
+          .replace(/{{dcPartyAddress}}/g, dcPartyAddress)
+          .replace(/{{dcNo}}/g, dcNo)
+          .replace(/{{dcDate}}/g, dcDate)
+          .replace(/{{dcCR}}/g, dcCommonRemarks)
+          .replace(/{{logo}}/g, process.env.SERVER_PORT + '/logo/' + getCompDetailsById.companyLogo)
+          .replace(/{{formatNo}}/g, formatNumber)
+
+
+        // Add more replace statements for additional placeholders as needed
+
+        // Set the modified HTML content
+
+        console.log(modifiedHTML)
+        await page.setContent(modifiedHTML, { waitUntil: 'networkidle0' });
+
+        // Generate PDF
+        await page.pdf({ path: `./storage/dcCertificate/${dcNo}.pdf`, format: 'A4' });
+
+        await browser.close();
+
+        console.log('PDF created successfully');
       }
 
       if (!updateItemDc) {

@@ -1,5 +1,5 @@
 import React, { createContext, useEffect, useState, useContext } from 'react'
-import { Alert, Button, Chip, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, FormControlLabel, IconButton, MenuItem, Paper, Snackbar, Switch, TextField } from '@mui/material';
+import { Alert, Button, Chip, CircularProgress, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, FormControlLabel, IconButton, MenuItem, Paper, Snackbar, Switch, TextField, styled } from '@mui/material';
 import axios from 'axios';
 import dayjs from 'dayjs';
 import isSameOrAfter from 'dayjs/plugin/isSameOrAfter'
@@ -7,7 +7,7 @@ import isSameOrBefore from 'dayjs/plugin/isSameOrBefore'
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { CalData } from './CalList'
-import { Add, Close, Delete, ErrorOutline } from '@mui/icons-material';
+import { Add, Close, CloudUpload, Delete, Done, ErrorOutline } from '@mui/icons-material';
 
 
 dayjs.extend(isSameOrBefore)
@@ -21,14 +21,24 @@ const CalEditModel = () => {
     const { calEditOpen, setCalEditOpen, selectedCalRow, itemMasters, activeEmps, calListFetchData, employeeRole } = calData
     const [calibrationDatas, setCalibrationDatas] = useState([])
 
-    
+    const VisuallyHiddenInput = styled('input')({
+        clip: 'rect(0 0 0 0)',
+        clipPath: 'inset(50%)',
+        height: 1,
+        overflow: 'hidden',
+        position: 'absolute',
+        bottom: 0,
+        left: 0,
+        whiteSpace: 'nowrap',
+        width: 1,
+    });
 
 
 
 
 
     const [selectedExtraMaster, setSelectedExtraMaster] = useState([])
-    
+
 
     const [initialCalData, setInitialCalData] = useState({
         ItemCalId: "",
@@ -45,6 +55,8 @@ const CalEditModel = () => {
         calItemSOPNo: "",
         calStandardRef: "",
         calOBType: "",
+        calReportAvailable: "no",
+        calReportName: "",
         calCertificateNo: calibrationDatas.length + 1,
         calItemCalDate: dayjs().format('YYYY-MM-DD'),
         calItemDueDate: "",
@@ -54,6 +66,8 @@ const CalEditModel = () => {
         calBeforeData: "no",
         calStatus: "status",
         calSource: "",
+        calPlant: "",
+        calDepartment: [],
         calcalibrationData: [{
             calParameter: "",
             calNominalSize: "",
@@ -72,7 +86,7 @@ const CalEditModel = () => {
         }],
         calMasterUsed: [],
         calPlant: "",
-        calDepartment:""
+        calDepartment: ""
     })
 
     const [calibrationData, setCalibrationData] = useState({
@@ -90,6 +104,8 @@ const CalEditModel = () => {
         calItemSOPNo: "",
         calStandardRef: "",
         calOBType: "",
+        calReportAvailable: "no",
+        calReportName: "",
         calCertificateNo: calibrationDatas.length + 1,
         calItemCalDate: dayjs().format('YYYY-MM-DD'),
         calItemDueDate: "",
@@ -99,6 +115,8 @@ const CalEditModel = () => {
         calBeforeData: "no",
         calStatus: "status",
         calSource: "",
+        calPlant: "",
+        calDepartment: [],
         calcalibrationData: [{
             calParameter: "",
             calNominalSize: "",
@@ -117,7 +135,7 @@ const CalEditModel = () => {
         }],
         calMasterUsed: [],
         calPlant: "",
-        calDepartment:""
+        calDepartment: ""
     })
 
     console.log(selectedCalRow)
@@ -127,33 +145,34 @@ const CalEditModel = () => {
         setCalibrationData((prev) => (
             {
                 ...prev,
-                ItemCalId : selectedCalRow.ItemCalId,
-                calIMTENo : selectedCalRow.calIMTENo,
-                calItemName : selectedCalRow.calItemName,
-                calItemType : selectedCalRow.calItemType,
-                calRangeSize : selectedCalRow.calRangeSize,
-                calItemMFRNo : selectedCalRow.calItemMFRNo,
-                calLC : selectedCalRow.calLC,
-                calItemMake : selectedCalRow.calItemMake,
-                calItemTemperature : selectedCalRow.calItemTemperature,
-                calItemHumidity : selectedCalRow.calItemHumidity,
-                calItemUncertainity : selectedCalRow.calItemUncertainity,
-                calItemSOPNo : selectedCalRow.calItemSOPNo,
-                calStandardRef : selectedCalRow.calStandardRef,
-                calOBType : selectedCalRow.calOBType,
-                calCertificateNo : selectedCalRow.calCertificateNo,
-                calItemCalDate : selectedCalRow.calItemCalDate,
-                calItemDueDate : selectedCalRow.calItemDueDate,
-                calItemEntryDate : selectedCalRow.calItemEntryDate,
-                calCalibratedBy : selectedCalRow.calCalibratedBy,
-                calApprovedBy : selectedCalRow.calApprovedBy,
-                calBeforeData : selectedCalRow.calBeforeData,
-                calStatus : selectedCalRow.calStatus,
-
-
-                calItemFreInMonths : selectedCalRow.calItemFreInMonths,
+                ItemCalId: selectedCalRow.ItemCalId,
+                calIMTENo: selectedCalRow.calIMTENo,
+                calItemName: selectedCalRow.calItemName,
+                calItemType: selectedCalRow.calItemType,
+                calRangeSize: selectedCalRow.calRangeSize,
+                calItemMFRNo: selectedCalRow.calItemMFRNo,
+                calLC: selectedCalRow.calLC,
+                calItemMake: selectedCalRow.calItemMake,
+                calItemTemperature: selectedCalRow.calItemTemperature,
+                calItemHumidity: selectedCalRow.calItemHumidity,
+                calItemUncertainity: selectedCalRow.calItemUncertainity,
+                calItemSOPNo: selectedCalRow.calItemSOPNo,
+                calStandardRef: selectedCalRow.calStandardRef,
+                calOBType: selectedCalRow.calOBType,
+                calCertificateNo: selectedCalRow.calCertificateNo,
+                calItemCalDate: selectedCalRow.calItemCalDate,
+                calItemDueDate: selectedCalRow.calItemDueDate,
+                calItemEntryDate: selectedCalRow.calItemEntryDate,
+                calCalibratedBy: selectedCalRow.calCalibratedBy,
+                calApprovedBy: selectedCalRow.calApprovedBy,
+                calBeforeData: selectedCalRow.calBeforeData,
+                calStatus: selectedCalRow.calStatus,
+                calReportAvailable: selectedCalRow.calReportAvailable,
+                calPlant: selectedCalRow.calPlant,
+                calDepartment: selectedCalRow.calDepartment,
+                calReportName: selectedCalRow.calReportName,
+                calItemFreInMonths: selectedCalRow.calItemFreInMonths,
                 calcalibrationData:
-
                     selectedCalRow.calcalibrationData.map((item) => (
                         {
                             calParameter: item.calParameter,
@@ -537,7 +556,7 @@ const CalEditModel = () => {
 
     }, [calibrationData.calcalibrationData])
 
-    
+
 
 
     useEffect(() => {
@@ -561,7 +580,7 @@ const CalEditModel = () => {
     const getEmployeeByName = (empId) => {
         const plants = employeeRole.loggedEmp.plantDetails.map(plant => plant.plantName)
         console.log(plants)
-        const filter = activeEmps.filter(emp => emp.plantDetails.some(plant=> plants.includes(plant.plantName)))
+        const filter = activeEmps.filter(emp => emp.plantDetails.some(plant => plants.includes(plant.plantName)))
         console.log(filter)
         const selectedEmp = filter.filter((emp) => emp.empRole === "plantAdmin" || emp.empRole === "admin");
         console.log(selectedEmp)
@@ -583,8 +602,9 @@ const CalEditModel = () => {
         if (name === "lastResult") {
             setLastResultShow(checked)
         }
-
-
+        if (name === "calReportAvailable") {
+            setCalibrationData((prev) => ({ ...prev, calReportAvailable: checked ? "yes" : "no" }))
+        }
     }
     console.log(lastResultShow)
 
@@ -614,7 +634,10 @@ const CalEditModel = () => {
     const [snackBarOpen, setSnackBarOpen] = useState(false)
     const [alertMessage, setAlertMessage] = useState("")
 
+    const [loading, setLoading] = useState(false)
+
     const updateItemCal = async () => {
+        setLoading(true)
         try {
             const response = await axios.put(
                 `${process.env.REACT_APP_PORT}/itemCal/updateItemCal/${selectedCalRow._id}`, calibrationData
@@ -623,16 +646,43 @@ const CalEditModel = () => {
             setSnackBarOpen(true)
             calListFetchData();
             setCalibrationData(initialCalData)
-            setTimeout(() =>  setCalEditOpen(false) , 500)
+            setTimeout(() => setCalEditOpen(false), 500)
             console.log("closed")
-            
+
         } catch (err) {
             console.log(err);
+        }finally{
+            setLoading(false)
         }
     };
 
 
+    const handleCalReportUpload = (event) => {
+        const selectedFile = event.target.files[0];
+        if (selectedFile) {
+            console.log("working");
+            const formData = new FormData();
+            formData.append('file', selectedFile);
+            formData.append('calCertificateNo', calibrationData.calCertificateNo); // Assuming calibrationData is defined
 
+            console.log("FormData content:", formData); // Optional: Log the FormData content to verify
+
+            try {
+                axios.post(`${process.env.REACT_APP_PORT}/upload/calReportUpload`, formData)
+                    .then(response => {
+                        //setCertMessage("Calibration Report Uploaded Successfully");
+                        console.log("Certificate Uploaded Successfully");
+                        setCalibrationData((prev) => ({ ...prev, calReportName: response.data.name }));
+                    })
+                    .catch(error => {
+                        //setCertMessage("Error Uploading Calibration Report");
+                        console.log(error);
+                    });
+            } catch (error) {
+                console.error('Error uploading the file:', error);
+            }
+        }
+    };
 
 
 
@@ -680,7 +730,7 @@ const CalEditModel = () => {
                                         label="Item Name"
                                         value={calibrationData.calItemName}
                                         fullWidth
-                                        
+
                                         variant="outlined"
                                     >
 
@@ -697,7 +747,7 @@ const CalEditModel = () => {
                                         InputProps={{
                                             readOnly: true,
                                         }}
-                                        
+
                                         variant="outlined"
 
                                     >
@@ -868,13 +918,13 @@ const CalEditModel = () => {
                                 />
                             </div>
                             <div className="col-md-6">
-                                <DatePicker format="DD-MM-YYYY" slotProps={{ textField: {size: 'small', fullWidth: true} }} value={dayjs(calibrationData.calItemCalDate)} label="Cal Date" onChange={(newValue) => setCalibrationData((prev) => ({ ...prev, calItemCalDate: newValue.format('YYYY-MM-DD') }))} />
+                                <DatePicker format="DD-MM-YYYY" slotProps={{ textField: { size: 'small', fullWidth: true } }} value={dayjs(calibrationData.calItemCalDate)} label="Cal Date" onChange={(newValue) => setCalibrationData((prev) => ({ ...prev, calItemCalDate: newValue.format('YYYY-MM-DD') }))} />
                             </div>
                             <div className="col-md-6">
-                                <DatePicker format="DD-MM-YYYY" slotProps={{ textField: {size: 'small', fullWidth: true} }} value={dayjs(calibrationData.calItemDueDate)} label="Due Date" onChange={(newValue) => setCalibrationData((prev) => ({ ...prev, calItemDueDate: newValue.format('YYYY-MM-DD') }))} />
+                                <DatePicker format="DD-MM-YYYY" slotProps={{ textField: { size: 'small', fullWidth: true } }} value={dayjs(calibrationData.calItemDueDate)} label="Due Date" onChange={(newValue) => setCalibrationData((prev) => ({ ...prev, calItemDueDate: newValue.format('YYYY-MM-DD') }))} />
                             </div>
                             <div className="col-md-6">
-                                <DatePicker format="DD-MM-YYYY" slotProps={{ textField: {size: 'small', fullWidth: true} }} value={dayjs(calibrationData.calItemEntryDate)} label="Cal Entry Date" onChange={(newValue) => setCalibrationData((prev) => ({ ...prev, calItemEntryDate: newValue.format('YYYY-MM-DD') }))} />
+                                <DatePicker format="DD-MM-YYYY" slotProps={{ textField: { size: 'small', fullWidth: true } }} value={dayjs(calibrationData.calItemEntryDate)} label="Cal Entry Date" onChange={(newValue) => setCalibrationData((prev) => ({ ...prev, calItemEntryDate: newValue.format('YYYY-MM-DD') }))} />
                             </div>
                             <div className="col-md-6">
                                 <TextField
@@ -886,14 +936,14 @@ const CalEditModel = () => {
                                     fullWidth
                                     variant="outlined"
                                     disabled
-                                >  
+                                >
                                 </TextField>
 
 
                             </div>
                             <div className="col-md-6">
                                 <TextField
-                                  
+
                                     id="calApprovedById"
                                     size='small'
                                     label="Approved By"
@@ -905,7 +955,7 @@ const CalEditModel = () => {
                                     onChange={handleCalData}
                                 >
                                     {filterAdmins.map((emp, index) => (
-                                        <MenuItem key={index} value={(emp.firstName? emp.firstName : "" )+" "+ (emp.lastName? emp.lastName : "" )}>{emp.firstName ? emp.firstName : "" + " " + emp.lastName ? emp.lastName : ""}</MenuItem>
+                                        <MenuItem key={index} value={emp._id}>{emp.firstName ? emp.firstName : "" + " " + emp.lastName ? emp.lastName : ""}</MenuItem>
                                     ))}
                                 </TextField>
                             </div>
@@ -914,7 +964,8 @@ const CalEditModel = () => {
 
                     <Paper elevation={12} sx={{ p: 2 }} className='col-md-12 mb-2'>
                         <div className="d-flex justify-content-between mb-2">
-                            <div> <FormControlLabel control={<Switch name='lastResult' onChange={handleCalData} />} label="Last Result" />
+                            <div> <FormControlLabel control={<Switch name='calReportAvailable' checked={calibrationData.calReportAvailable === "yes"} onChange={handleCalData} color='success' />} label="Report Upload" />
+                                <FormControlLabel control={<Switch name='lastResult' onChange={handleCalData} />} label="Last Result" />
                                 <FormControlLabel control={<Switch name='beforeCalSwitch' onChange={handleCalData} />} label="Before Calibration" /></div>
                             <div><h5 className='text-center'>Calibration Data</h5></div>
                             <div><TextField select inputProps={{ sx: { color: calibrationData.calStatus === "status" ? "" : calibrationData.calStatus === "accepted" ? "green" : "red", width: "100px" } }} name='calStatus' onChange={handleCalData} InputLabelProps={{ shrink: true }} label="Cal Status" size="small" value={calibrationData.calStatus}>
@@ -925,7 +976,30 @@ const CalEditModel = () => {
 
                         </div>
 
-                        <div className="row">
+                        {calibrationData.calReportAvailable === "yes" && <div>
+
+
+                            {calibrationData.calReportName === "" ?
+                                <Button component="label" variant="contained" startIcon={<CloudUpload />}>
+                                    Upload Report
+                                    <VisuallyHiddenInput type="file" onChange={handleCalReportUpload} />
+                                </Button>
+                                : <Chip
+                                    className='mt-2'
+                                    icon={<Done />}
+                                    size='large'
+                                    color="success"
+                                    label={calibrationData.calReportName}
+                                    onClick={() => {
+                                        const fileUrl = `${process.env.REACT_APP_PORT}/calCertificates/${calibrationData.calReportName}`;
+                                        window.open(fileUrl, '_blank'); // Opens the file in a new tab/window
+                                    }}
+                                    onDelete={() => setCalibrationData((prev) => ({ ...prev, calReportName: "" }))}
+                                    deleteIcon={<Delete color='error' />}
+                                ></Chip>}
+                        </div>}
+
+                        {calibrationData.calReportAvailable === "no" && <div className="row">
                             <div className="col">
                                 <table className=' table table-bordered table-responsive text-center align-middle'>
                                     {calibrationData.calItemType === "attribute" &&
@@ -1416,12 +1490,12 @@ const CalEditModel = () => {
                                             </tbody>}
                                     </table>
                                 </div> : <div><Chip icon={<ErrorOutline />} label="No previous calibration data available" color="error" /></div>)}
-                        </div>
+                        </div>}
 
 
 
                     </Paper>
-                    <Paper elevation={12} sx={{ p: 2 }} className='col-md-12'>
+                    {calibrationData.calReportAvailable === "no" && <Paper elevation={12} sx={{ p: 2 }} className='col-md-12'>
                         <div className="row mb-2">
 
                             <div className='col-md'> <h5 className='text-start'>Master Used</h5></div>
@@ -1463,7 +1537,7 @@ const CalEditModel = () => {
                                         <td>{item.itemIMTENo}</td>
                                         <td>{item.itemAddMasterName}</td>
                                         <td>{item.itemRangeSize}</td>
-                                        <td>{ }</td>
+                                        <td>{item.itemCertificateNo}</td>
                                         <td>{item.itemCalDate}</td>
                                         <td>{item.itemDueDate}</td>
                                         <td>{item.itemCalibratedAt}</td>
@@ -1472,7 +1546,7 @@ const CalEditModel = () => {
                                 ))}
                             </tbody>
                         </table>
-                    </Paper>
+                    </Paper>}
 
                     <Dialog
                         open={confirmSubmit}
@@ -1507,13 +1581,16 @@ const CalEditModel = () => {
                     </Snackbar>
                 </div>
             </DialogContent>
-            <DialogActions className='d-flex justify-content-between'>
-                <div>
-                 
-                </div>
+            <DialogActions className='d-flex justify-content-end'>
                 <div>
                     <Button variant='contained' color='error' className='me-3' onClick={() => { setCalEditOpen(false) }}>Cancel</Button>
-                    <Button variant='contained' color='success' onClick={() => { setConfirmSubmit(true) }}>Submit</Button>
+                    <Button variant='contained' color='success' onClick={() => { setConfirmSubmit(true) }}>{loading ? <CircularProgress
+                        sx={{
+                            color: "inherit",
+                        }}
+                        variant="indeterminate"
+                        size={20}
+                    />: "Submit"}</Button>
                 </div>
             </DialogActions>
 

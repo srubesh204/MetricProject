@@ -1,0 +1,30 @@
+@media print {
+    /* Global styles for the entire document */
+    body {
+      font-family: Arial, sans-serif;
+      font-size: 12px;
+      color: #333;
+      margin: 0; /* Remove default margin */
+      padding: 0; /* Remove default padding */
+    }
+  
+    /* Styles for the printable document */
+    .printable-document {
+      margin: 20px; /* Add margin to the printable document */
+      border: 1px solid #ccc; /* Add border around the printable document */
+      padding: 10px; /* Add padding to the printable document */
+      background-color: #fff; /* Set background color of the printable document */
+    }
+  
+    /* Styles for specific elements inside the printable document */
+    .printable-document h1 {
+      font-size: 18px; /* Increase font size for headings */
+      color: #000; /* Change color of headings */
+    }
+  
+    .printable-document p {
+      line-height: 1.5; /* Increase line height for paragraphs */
+      color: #333; /* Change color of text */
+    }
+  }
+  

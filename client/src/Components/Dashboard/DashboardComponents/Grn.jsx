@@ -14,7 +14,7 @@ import styled from '@emotion/styled';
 
 const Grn = () => {
     const grnDatas = useContext(HomeContent)
-    const { grnOpen, setGrnOpen, selectedRows } = grnDatas
+    const { grnOpen, setGrnOpen, selectedRows, lastGrnNo } = grnDatas
 
     const [grnImtes, setGrnImtes] = useState(selectedRows)
 
@@ -183,6 +183,7 @@ const Grn = () => {
                     ...prev,
                     grnPlant: selectedRows[0].itemPlant,
                     grnDepartment: selectedRows[0].itemDepartment,
+                    grnNo: lastGrnNo
                     //grnPartyItems: selectedRows
                 }
 
@@ -254,32 +255,6 @@ const Grn = () => {
 
 
 
-
-    const [grnList, setGrnList] = useState({})
-    const grnFetchData = async () => {
-        try {
-            const response = await axios.get(
-                `${process.env.REACT_APP_PORT}/itemGRN/getAllItemGRN`
-            );
-            setGrnList(response.data.result);
-            const grnNumbers = response.data.result.map(item => (item.grnId)).filter(Boolean).sort();
-            if (grnNumbers.length > 0) {
-                const lastNumber = grnNumbers[grnNumbers.length - 1] + 1
-                console.log(lastNumber)
-
-                setGrnData(prev => ({ ...prev, grnNo: dayjs().year() + "-" + lastNumber }))
-            } else {
-                setGrnData(prev => ({ ...prev, grnNo: dayjs().year() + "-" + 1 }))
-            }
-
-
-        } catch (err) {
-            console.log(err);
-        }
-    };
-    useEffect(() => {
-        grnFetchData();
-    }, []);
 
 
 
@@ -373,7 +348,7 @@ const Grn = () => {
                     grnItemLCUnit: fetchedData[0].itemLCUnit,
                     grnItemMake: fetchedData[0].itemMake,
                     grnItemModelNo: fetchedData[0].itemModelNo,
-
+                    grnItemDcNo: fetchedData[0].dcNo,
                     grnItemDepartment: fetchedData[0].itemDepartment,
                     grnItemArea: fetchedData[0].itemArea,
                     grnItemPlaceOfUsage: fetchedData[0].itemPlaceOfUsage,
@@ -425,7 +400,7 @@ const Grn = () => {
                     grnItemLCUnit: fetchedData[0].itemLCUnit,
                     grnItemMake: fetchedData[0].itemMake,
                     grnItemModelNo: fetchedData[0].itemModelNo,
-
+                    grnItemDcNo: fetchedData[0].dcNo,
                     grnItemDepartment: fetchedData[0].itemDepartment,
                     grnItemArea: fetchedData[0].itemArea,
                     grnItemPlaceOfUsage: fetchedData[0].itemPlaceOfUsage,
@@ -958,7 +933,7 @@ const Grn = () => {
             <DialogTitle align='center' >GRN</DialogTitle>
             <IconButton
                 aria-label="close"
-                onClick={() => setGrnOpen(false)}
+                onClick={() => {setGrnOpen(false); window.location.reload();}}
                 sx={{
                     position: 'absolute',
                     right: 8,

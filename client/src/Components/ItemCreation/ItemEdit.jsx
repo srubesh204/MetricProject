@@ -710,7 +710,7 @@ const ItemEdit = () => {
             setItemAddData(initialItemAddData)
             setTimeout(() => {
                 navigate('/itemList');
-            }, 3000);
+            }, 500);
 
 
         } catch (err) {
@@ -915,7 +915,7 @@ const ItemEdit = () => {
                                     <div className="col-lg-12">
                                         <TextField size='small' variant='outlined' label="MFR.Si.No." onChange={handleItemAddChange} name='itemMFRNo' value={itemAddData.itemMFRNo} id='itemMFRNoId' fullWidth />
                                     </div>
-                                    <div className='col-lg-8 d-flex justify-content-between'>
+                                    <div className='col-md-12 d-flex justify-content-between'>
                                         {itemAddData.itemType === "variable" && <TextField size='small' variant='outlined' name='itemLC' onChange={handleItemAddChange} id="itemLCId" value={itemAddData.itemLC} label="Least Count" fullWidth />}
 
 
@@ -960,7 +960,7 @@ const ItemEdit = () => {
                                                     setItemAddData((prev) => ({ ...prev, itemReceiptDate: newValue.format("DD-MM-YYYY") }))
                                                 }
                                                 label="Item Receipt Date"
-                                                slotProps={{ textField: { size: 'small' } }}
+                                                slotProps={{ textField: { size: 'small', fullWidth: true } }}
                                                 format="DD-MM-YYYY" />
                                         </div>
                                     </div>

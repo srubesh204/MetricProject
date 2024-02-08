@@ -14,8 +14,6 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { useNavigate } from 'react-router-dom';
-import { Error, SettingsBluetooth, Visibility, VisibilityOff } from '@mui/icons-material';
-import { Chip, IconButton, InputAdornment } from '@mui/material';
 
 
 
@@ -35,47 +33,24 @@ export default function Login(props) {
     setLoginData((prev) => ({ ...prev, [name]: value }))
   }
 
-  const [errors, setErrors] = React.useState({})
-
-  const [errorMsg, setErrorMsg] = React.useState("")
-
-  const validateFunction = () => {
-    let tempErrors = {};
-    tempErrors.employeeCode = loginData.employeeCode ? "" : "Employee Code required"
-    tempErrors.password = loginData.password ? "" : "Password required"
-
-
-
-    setErrors({ ...tempErrors })
-
-    return Object.values(tempErrors).every(x => x === "")
-  }
-  const [showPassword, setShowPassword] = React.useState(false)
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
+      const response = await axios.post(
+        `${process.env.REACT_APP_PORT}/login`, loginData
+      );
 
-      if (validateFunction()) {
-        const response = await axios.post(
-          `${process.env.REACT_APP_PORT}/login`, loginData
-        );
-
-        sessionStorage.setItem('employee', response.data.employee.empRole);
-        sessionStorage.setItem('empId', response.data.employee._id);
-        sessionStorage.setItem('loggedIn', true);
-        console.log(response)
-        if (props.onLoginSuccess) {
-          props.onLoginSuccess();
-        }
-        navigate("/")
+      sessionStorage.setItem('employee', response.data.employee.empRole);
+      sessionStorage.setItem('empId', response.data.employee._id);
+      sessionStorage.setItem('loggedIn', true);
+      console.log(response)
+      if (props.onLoginSuccess) {
+        props.onLoginSuccess();
       }
-
-
+      navigate("/")
     } catch (err) {
       console.log(err)
-      setErrorMsg("Employee Code or Password Wrong, Please try again!!")
-      setTimeout(() => setErrorMsg(""), 5000)
     }
     console.log(loginData)
   };
@@ -117,7 +92,6 @@ export default function Login(props) {
             <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 1 }}>
               <TextField
                 margin="normal"
-                {...(errors.employeeCode !== "" && { helperText: errors.employeeCode, error: true })}
                 required
                 fullWidth
                 id="employeeCodeId"
@@ -130,26 +104,11 @@ export default function Login(props) {
                 margin="normal"
                 required
                 fullWidth
-                {...(errors.password !== "" && { helperText: errors.password, error: true })}
                 name="password"
                 label="Password"
-                type={showPassword ? 'text' : 'password'}
+                type="password"
                 id="passwordId"
                 onChange={handleChange}
-                InputProps={{
-                  endAdornment: <InputAdornment position="end">
-                    <IconButton
-                      aria-label="toggle password visibility"
-                      // onClick={handleClickShowPassword}
-                      // onMouseDown={handleMouseDownPassword}
-                      edge="end"
-                      onClick={() => setShowPassword(!showPassword)}
-                    >
-                      {showPassword ? <VisibilityOff /> : <Visibility />}
-                    </IconButton>
-
-                  </InputAdornment>,
-                }}
               />
 
               <Button
@@ -160,10 +119,6 @@ export default function Login(props) {
               >
                 Sign In
               </Button>
-
-             {errorMsg &&  <div className='text-center'>
-                <Chip label={errorMsg} color="error" icon={<Error/>}  />
-              </div>}
 
             </Box>
           </Box>

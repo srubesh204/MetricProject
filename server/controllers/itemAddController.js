@@ -3,6 +3,7 @@ const dayjs = require('dayjs')
 const excelToJson = require('convert-excel-to-json');
 const itemHistory = require("../models/itemHistory");
 const itemCalModel = require("../models/itemCalModel");
+const itemDcModel = require("../models/itemDcModel")
 
 const itemAddController = {
   getAllItemAdds: async (req, res) => {
@@ -264,7 +265,7 @@ const itemAddController = {
         itemReceiptDate,
         itemDepartment,
         itemPlant,
-        
+
         itemLastLocation,
         itemArea,
         itemPlaceOfUsage,
@@ -322,7 +323,7 @@ const itemAddController = {
         itemReceiptDate,
         itemDepartment,
         itemPlant,
-        
+
         itemLastLocation,
         itemArea,
         itemPlaceOfUsage,
@@ -410,34 +411,49 @@ const itemAddController = {
   },
   deleteItemAdd: async (req, res) => {
     try {
+      const { itemAddIds } = req.body; // Assuming an array of itemAdd IDs is sent in the request body
 
-      const { itemAddIds } = req.body; // Assuming an array of vendor IDs is sent in the request body
-      console.log(req.body)
       const deleteResults = [];
+      const errors = [];
 
       for (const itemAddId of itemAddIds) {
-        // Find and remove each vendor by _id
+        // Check if the itemAddId is used in itemCalModel
+        const calData = await itemCalModel.findOne({ calItemId: itemAddId });
+        const itemData = await itemAddModel.findOne({ _id: itemAddId });
 
-        const calData = await itemCalModel.find({ calItemId: itemAddId })
-        const deletedItemAdd = await itemAddModel.findOneAndRemove({ _id: itemAddId });
-        console.log(deletedItemAdd)
-        if (!deletedItemAdd) {
-          // If a vendor was not found, you can skip it or handle the error as needed.
-          console.log(`ItemAdd with ID ${itemAddId} not found.`);
-          res.status(500).json({ message: `ItemAdd with ID not found.` });
-
+        if (calData || (itemData && itemData.dcStatus === "1")) {
+          // If the itemAddId is used in itemCalModel or if its dcStatus is "1", push an error message
+          errors.push(`Items are is already used cannot be deleted.`);
         } else {
-          console.log(`ItemAdd with ID ${itemAddId} deleted successfully.`);
-          deleteResults.push(deletedItemAdd);
+          // If the itemAddId is not used in itemCalModel and its dcStatus is not "1", proceed with deletion
+          const deletedItemAdd = await itemAddModel.findOneAndRemove({ _id: itemAddId });
+          const deleteHistoryCard = await itemHistory.deleteMany({ itemIMTENo: itemData.itemIMTENo });
+          if (!deletedItemAdd) {
+            errors.push(`Selected ItemAdd with ID ${itemAddId} not found.`);
+          } else {
+            deleteResults.push(deletedItemAdd);
+          }
         }
       }
 
-      return res.status(202).json({ message: 'ItemAdd deleted successfully', results: `${deleteResults.length} ItemAdd Deleted Successfull ` });
+      if (errors.length > 0) {
+        // If there are errors, send 400 Bad Request status with error messages
+        if(errors.length === 1){
+          return res.status(400).json({errors: "Selected Item already used cannot be deleted"});
+        }else{
+          return res.status(400).json({errors: "Selected Items are already used cannot be deleted"});
+        }
+       
+      }
+
+      return res.status(202).json({ message: 'ItemAdd deleted successfully', results: `${deleteResults.length} ItemAdd Deleted Successfully` });
     } catch (error) {
       console.error(error);
       res.status(500).send('Internal Server Error');
     }
   },
+
+
   getItemAddById: async (req, res) => {
     try {
       const itemAddId = req.params.id; // Assuming desId is part of the URL parameter
@@ -694,7 +710,7 @@ const itemAddController = {
           AG: 'itemPlant',
           AH: 'itemPrevCalData',
           AI: 'itemItemMasterIMTENo',
-        
+
 
         }
       });
@@ -724,7 +740,7 @@ const itemAddController = {
           const data = {
             itemCalDate: savedItemAdd.itemCalDate ? dayjs(savedItemAdd.itemCalDate).format("YYYY-MM-DD") : "",
             itemDueDate: savedItemAdd.itemDueDate ? dayjs(savedItemAdd.itemDueDate).format("YYYY-MM-DD") : "",
-            itemIMTENo: savedItemAdd.itemIMTENo ? savedItemAdd.itemIMTENo: "",
+            itemIMTENo: savedItemAdd.itemIMTENo ? savedItemAdd.itemIMTENo : "",
             itemCalibratedAt: savedItemAdd.itemCalibratedAt ? savedItemAdd.itemCalibratedAt : "",
             itemCertificateNo: savedItemAdd.itemCertificateNo ? savedItemAdd.itemCertificateNo : "",
             itemId: savedItemAdd._id

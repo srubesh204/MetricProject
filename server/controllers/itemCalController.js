@@ -2,6 +2,13 @@ const itemAddModel = require("../models/itemAddModel");
 const itemCalModel = require("../models/itemCalModel")
 const itemHistory = require("../models/itemHistory")
 const dayjs = require('dayjs')
+const { compDetailsSchema } = require("../models/compDetailsModel");
+const { plantSchema } = require("../models/compDetailsModel");
+const puppeteer = require('puppeteer');
+const fs = require('fs');
+const path = require('path');
+const formatNoModel = require("../models/formatNoModel");
+const employeeModel = require("../models/employeeModel")
 
 const itemCalController = {
   getAllItemCals: async (req, res) => {
@@ -33,6 +40,8 @@ const itemCalController = {
         calItemSOPNo,
         calStandardRef,
         calOBType,
+        calReportAvailable,
+        calReportName,
         calCertificateNo,
         calItemCalDate,
         calItemDueDate,
@@ -65,6 +74,8 @@ const itemCalController = {
         calItemSOPNo,
         calStandardRef,
         calOBType,
+        calReportAvailable,
+        calReportName,
         calCertificateNo,
         calItemCalDate,
         calItemDueDate,
@@ -81,6 +92,24 @@ const itemCalController = {
         calDepartment,
         calSource,
       };
+
+      const getCompDetailsById = await compDetailsSchema.findOne(
+        { compId: 1 } // To return the updated document
+      );
+      const getPlantAddress = await plantSchema.findOne(
+        { plantName: calPlant } // To return the updated document
+      );
+
+      const approvedByData = await employeeModel.findOne(
+        { _id: calApprovedBy } // To return the updated document
+      );
+
+
+      const formatNo = await formatNoModel.findOne({ formatId: 1 });
+
+      const formatNumber = `${formatNo.fCalDueDate ? (formatNo.fCalDueDate.frNo + " " + formatNo.fCalDueDate.amNo + " " + formatNo.fCalDueDate.amDate) : ""}`
+      console.log(formatNumber)
+
 
       const newItem = new itemCalModel(newItemFields);
 
@@ -169,23 +198,207 @@ const itemCalController = {
         );
         console.log("itemUpdated")
 
-        let obSize = [];
-        if (createdItem.calItemType === "variable") {
-          obSize = calcalibrationData.map(item => {
-            return item.calParameter + ":" + item.calOBError
-          })
-        } else {
-          obSize = calcalibrationData.map(item => {
 
-            if (calItemType === "minmax") {
-              return item.calParameter + " : " + item.calMinOB + "/" + item.calMaxOB
-            } else {
-              return item.calParameter + " : " + item.calAverageOB
-            }
 
-          })
+
+
+        if (calReportAvailable === "no") {
+          const masterTable = calMasterUsed.map((item, index) => {
+            let tableRow = `
+                  <tr>
+                      <td>${index + 1}</td>
+                      <td>${item.itemIMTENo}</td>
+                      <td>${item.itemAddMasterName}</td>
+                      <td>${item.itemCertificateNo}</td>
+                      <td>${dayjs(item.itemDueDate).format("DD-MM-YYYY")}</td>
+                      <td>${item.itemCalibratedAt}</td>
+                  </tr>
+              `;
+            return tableRow;
+          });
+
+
+          let calibrationTypeData = ``
+          if (calItemType === "referenceStandard") {
+            let refCalData = `
+            <tr>
+              <th colspan="4">Calibration results</th>
+            </tr>
+            <tr>
+              <th rowspan="2">Parameter</th>
+              <th rowspan="2">Nominal Size</th>
+              <th >Permissible Size (${(calcalibrationData.length > 0) ? calcalibrationData[0].calNominalSizeUnit : ""})</th>
+              <th rowspan="2">Observed Size (${(calcalibrationData.length > 0) ? calcalibrationData[0].calNominalSizeUnit : ""})</th>
+            </tr>
+            <tr>
+              <th>Min/Max</th>
+            </tr>
+            `
+            refCalData += calcalibrationData.map((item, index) => {
+              let returnTable = `
+                  <tr>
+                    <td>${item.calParameter}</td>
+                    <td>${item.calNominalSize}</td>
+                    <td>${item.calMinPS + "/" + item.calMaxPS}</td>
+                    ${calOBType === "minmax" ?
+                  "<td>" + item.calMinOB + " / " + item.calMaxOB + "</td>" :
+                  "<td>" + item.calAverageOB + "</td>"}
+                    
+                  </tr>`;
+              return returnTable;
+            }).join("");
+
+            calibrationTypeData += refCalData
+          }
+
+
+
+
+
+          if (calItemType === "attribute") {
+            let attributeCalData = `
+            <tr>
+                      <th colspan="5">Calibration results</th>
+                    </tr>
+                    <tr>
+                      <th rowspan="2">Parameter</th>
+                      <th rowspan="2">Nominal Size</th>
+                      <th colspan="2">Permissible Size (${(calcalibrationData.length > 0) ? calcalibrationData[0].calNominalSizeUnit : ""})</th>
+                      <th rowspan="2"> Observed Size (${(calcalibrationData.length > 0) ? calcalibrationData[0].calNominalSizeUnit : ""})</th>
+                    </tr>
+                    <tr>
+                      <th>Min/Max</th>
+                      <th>Wear Limit</th>
+                    </tr>
+      `;
+            attributeCalData += calcalibrationData.map((item, index) => {
+              let returnTable = `
+                    <tr>
+                      <td>${item.calParameter}</td>
+                      <td>${item.calNominalSize}</td>
+                      <td>${item.calMinPS + "/" + item.calMaxPS}</td>
+                      <td>${item.calWearLimitPS}</td>
+                      ${calOBType === "minmax" ?
+                  "<td>" + item.calMinOB + " / " + item.calMaxOB + "</td>" :
+                  "<td>" + item.calAverageOB + "</td>"}
+                    </tr>`;
+              return returnTable;
+            }).join(""); // Removed .join("") from here
+            calibrationTypeData += attributeCalData
+
+          }
+
+
+
+          if (calItemType === "variable") {
+            let variableCalData = `
+            <tr>
+              <th colspan="4">Calibration results</th>
+            </tr>
+            <tr>
+              <th >Parameter</th>
+              <th >Nominal Size</th>
+              <th >Permissible Error (${(calcalibrationData.length > 0) ? calcalibrationData[0].calNominalSizeUnit : ""})</th>
+              <th > Observed Error (${(calcalibrationData.length > 0) ? calcalibrationData[0].calNominalSizeUnit : ""})</th>
+            </tr>
+            `
+            variableCalData += calcalibrationData.map((item, index) => {
+              let returnTable = `
+                    <tr>
+                      <td>${item.calParameter}</td>
+                      <td>${item.calNominalSize}</td>
+                      <td>${item.calMinPSError + "/" + item.calMaxPSError}</td>
+                      <td>${item.calOBError}</td>
+                      
+                    </tr>`;
+              return returnTable;
+            }).join("");
+            calibrationTypeData += variableCalData
+          }
+
+          // Example usage:
+
+          const browser = await puppeteer.launch();
+          const page = await browser.newPage();
+
+          // Read the HTML template file
+          const filePath = path.resolve(__dirname, '../../server/templates/calTemplate.html');
+          const htmlTemplate = fs.readFileSync(filePath, 'utf8');
+
+          // Replace placeholders with actual data
+          const modifiedHTML = htmlTemplate
+            .replace(/{{ItemName}}/g, calItemName)
+            .replace(/{{CertificateNo}}/g, calCertificateNo)
+            .replace(/{{dateOfIssue}}/g, dayjs(calItemEntryDate).format("DD-MM-YYYY"))
+            .replace(/{{dateOfCalibration}}/g, dayjs(calItemCalDate).format("DD-MM-YYYY"))
+            .replace(/{{nextCalibrationDue}}/g, dayjs(calItemDueDate).format("DD-MM-YYYY"))
+
+            .replace(/{{identificationNo}}/g, calIMTENo)
+            .replace(/{{slNo}}/g, calItemMFRNo)
+            .replace(/{{make}}/g, calItemMake)
+
+            .replace(/{{temperature}}/g, calItemTemperature)
+            .replace(/{{humitidy}}/g, calItemHumidity)
+            .replace(/{{standardRef}}/g, calStandardRef)
+
+            .replace(/{{masterUsed}}/g, masterTable.join(""))
+
+            .replace(/{{calCalibrationData}}/g, calibrationTypeData)
+
+            .replace(/{{authorisedBy}}/g, calApprovedBy)
+
+            .replace(/{{CompanyName}}/g, getCompDetailsById.companyName)
+
+
+            .replace(/{{CompanyName}}/g, getCompDetailsById.companyName)
+            .replace(/{{Plant}}/g, getPlantAddress.plantName)
+            .replace(/{{PlantAddress}}/g, getPlantAddress.plantAddress)
+            .replace(/{{logo}}/g, process.env.SERVER_PORT + '/logo/' + getCompDetailsById.companyLogo)
+            .replace(/{{formatNo}}/g, formatNumber)
+            .replace(/{{calibratedBy}}/g, calCalibratedBy)
+
+
+
+
+          // Add more replace statements for additional placeholders as needed
+
+          // Set the modified HTML content
+
+          console.log(modifiedHTML)
+          await page.setContent(modifiedHTML, { waitUntil: 'networkidle0' });
+
+          // Generate PDF
+          await page.pdf({ path: `./storage/calCertificates/${calCertificateNo}.pdf`, format: 'A4' });
+
+          await browser.close();
+
+          console.log('PDF created successfully');
         }
 
+        let obSize = [];
+        if (calReportAvailable === "no") {
+          if (calcalibrationData.length > 0) {
+            if (calItemType === "variable") {
+              obSize = calcalibrationData.map(item => {
+                return item.calParameter + ":" + item.calOBError
+              })
+            } else {
+              obSize = calcalibrationData.map(item => {
+
+                if (calOBType === "minmax") {
+                  return item.calParameter + " : " + item.calMinOB + "/" + item.calMaxOB
+                } else {
+                  return item.calParameter + " : " + item.calAverageOB
+                }
+
+              })
+            }
+          }
+        } else {
+          obSize = ["Report Attached"]
+        }
+
+        console.log(obSize)
         const historyRecord = {
           itemId: itemData._id,
           itemCalId: createdItem._id,
@@ -235,9 +448,8 @@ const itemCalController = {
       }
 
 
-
       console.log("ItemCal Created Successfully");
-      res.status(200).json({ result: createdItem, message: "ItemCal Created Successfully" });
+      res.status(200).json({ result: "createdItem", message: "ItemCal Created Successfully" });
     } catch (error) {
       console.log(error);
 
@@ -281,6 +493,8 @@ const itemCalController = {
         calItemSOPNo,
         calStandardRef,
         calOBType,
+        calReportAvailable,
+        calReportName,
         calCertificateNo,
         calItemCalDate,
         calItemDueDate,
@@ -313,6 +527,8 @@ const itemCalController = {
         calItemSOPNo,
         calStandardRef,
         calOBType,
+        calReportAvailable,
+        calReportName,
         calCertificateNo,
         calItemCalDate,
         calItemDueDate,
@@ -328,7 +544,23 @@ const itemCalController = {
         calPlant,
         calDepartment,
         calSource
-      };
+      }; 
+
+      const getCompDetailsById = await compDetailsSchema.findOne(
+        { compId: 1 } // To return the updated document
+      );
+      const getPlantAddress = await plantSchema.findOne(
+        { plantName: calPlant } // To return the updated document
+      );
+
+      const approvedByData = await employeeModel.findOne(
+        { _id: calApprovedBy } // To return the updated document
+      );
+
+      const formatNo = await formatNoModel.findOne({ formatId: 1 });
+
+      const formatNumber = `${formatNo.fCalDueDate ? (formatNo.fCalDueDate.frNo + " " + formatNo.fCalDueDate.amNo + " " + formatNo.fCalDueDate.amDate) : ""}`
+      console.log(formatNumber)
 
       // Find the designation by desId and update it
       const itemCalUpdate = new itemCalModel(updatedCalField);
@@ -424,21 +656,201 @@ const itemCalController = {
         );
 
 
+        if (calReportAvailable === "no") {
+          const masterTable = calMasterUsed.map((item, index) => {
+            let tableRow = `
+                  <tr>
+                      <td>${index + 1}</td>
+                      <td>${item.itemIMTENo}</td>
+                      <td>${item.itemAddMasterName}</td>
+                      <td>${item.itemCertificateNo}</td>
+                      <td>${dayjs(item.itemDueDate).format("DD-MM-YYYY")}</td>
+                      <td>${item.itemCalibratedAt}</td>
+                  </tr>
+              `;
+            return tableRow;
+          });
+
+
+          let calibrationTypeData = ``
+          if (calItemType === "referenceStandard") {
+            let refCalData = `
+            <tr>
+              <th colspan="4">Calibration results</th>
+            </tr>
+            <tr>
+              <th rowspan="2">Parameter</th>
+              <th rowspan="2">Nominal Size</th>
+              <th >Permissible Size (${(calcalibrationData.length > 0) ? calcalibrationData[0].calNominalSizeUnit : ""})</th>
+              <th rowspan="2">Observed Size (${(calcalibrationData.length > 0) ? calcalibrationData[0].calNominalSizeUnit : ""})</th>
+            </tr>
+            <tr>
+              <th>Min/Max</th>
+            </tr>
+            `
+            refCalData += calcalibrationData.map((item, index) => {
+              let returnTable = `
+                  <tr>
+                    <td>${item.calParameter}</td>
+                    <td>${item.calNominalSize}</td>
+                    <td>${item.calMinPS + "/" + item.calMaxPS}</td>
+                    ${calOBType === "minmax" ?
+                  "<td>" + item.calMinOB + " / " + item.calMaxOB + "</td>" :
+                  "<td>" + item.calAverageOB + "</td>"}
+                    
+                  </tr>`;
+              return returnTable;
+            }).join("");
+
+            calibrationTypeData += refCalData
+          }
+
+
+
+
+
+          if (calItemType === "attribute") {
+            let attributeCalData = `
+            <tr>
+                      <th colspan="5">Calibration results</th>
+                    </tr>
+                    <tr>
+                      <th rowspan="2">Parameter</th>
+                      <th rowspan="2">Nominal Size</th>
+                      <th colspan="2">Permissible Size (${(calcalibrationData.length > 0) ? calcalibrationData[0].calNominalSizeUnit : ""})</th>
+                      <th rowspan="2"> Observed Size (${(calcalibrationData.length > 0) ? calcalibrationData[0].calNominalSizeUnit : ""})</th>
+                    </tr>
+                    <tr>
+                      <th>Min/Max</th>
+                      <th>Wear Limit</th>
+                    </tr>
+      `;
+            attributeCalData += calcalibrationData.map((item, index) => {
+              let returnTable = `
+                    <tr>
+                      <td>${item.calParameter}</td>
+                      <td>${item.calNominalSize}</td>
+                      <td>${item.calMinPS + "/" + item.calMaxPS}</td>
+                      <td>${item.calWearLimitPS}</td>
+                      ${calOBType === "minmax" ?
+                  "<td>" + item.calMinOB + " / " + item.calMaxOB + "</td>" :
+                  "<td>" + item.calAverageOB + "</td>"}
+                    </tr>`;
+              return returnTable;
+            }).join(""); // Removed .join("") from here
+            calibrationTypeData += attributeCalData
+
+          }
+
+
+
+          if (calItemType === "variable") {
+            let variableCalData = `
+            <tr>
+              <th colspan="4">Calibration results</th>
+            </tr>
+            <tr>
+              <th >Parameter</th>
+              <th >Nominal Size</th>
+              <th >Permissible Error (${(calcalibrationData.length > 0) ? calcalibrationData[0].calNominalSizeUnit : ""})</th>
+              <th > Observed Error (${(calcalibrationData.length > 0) ? calcalibrationData[0].calNominalSizeUnit : ""})</th>
+            </tr>
+            `
+            variableCalData += calcalibrationData.map((item, index) => {
+              let returnTable = `
+                    <tr>
+                      <td>${item.calParameter}</td>
+                      <td>${item.calNominalSize}</td>
+                      <td>${item.calMinPSError + "/" + item.calMaxPSError}</td>
+                      <td>${item.calOBError}</td>
+                      
+                    </tr>`;
+              return returnTable;
+            }).join("");
+            calibrationTypeData += variableCalData
+          }
+
+          // Example usage:
+
+          const browser = await puppeteer.launch();
+          const page = await browser.newPage();
+
+          // Read the HTML template file
+          const filePath = path.resolve(__dirname, '../../server/templates/calTemplate.html');
+          const htmlTemplate = fs.readFileSync(filePath, 'utf8');
+
+          // Replace placeholders with actual data
+          const modifiedHTML = htmlTemplate
+            .replace(/{{ItemName}}/g, calItemName)
+            .replace(/{{CertificateNo}}/g, calCertificateNo)
+            .replace(/{{dateOfIssue}}/g, dayjs(calItemEntryDate).format("DD-MM-YYYY"))
+            .replace(/{{dateOfCalibration}}/g, dayjs(calItemCalDate).format("DD-MM-YYYY"))
+            .replace(/{{nextCalibrationDue}}/g, dayjs(calItemDueDate).format("DD-MM-YYYY"))
+
+            .replace(/{{identificationNo}}/g, calIMTENo)
+            .replace(/{{slNo}}/g, calItemMFRNo)
+            .replace(/{{make}}/g, calItemMake)
+
+            .replace(/{{temperature}}/g, calItemTemperature)
+            .replace(/{{humitidy}}/g, calItemHumidity)
+            .replace(/{{standardRef}}/g, calStandardRef)
+
+            .replace(/{{masterUsed}}/g, masterTable.join(""))
+
+            .replace(/{{calCalibrationData}}/g, calibrationTypeData)
+
+            .replace(/{{authorisedBy}}/g, approvedByData ? approvedByData.firstName + " " + approvedByData.lastName : "")
+
+            .replace(/{{CompanyName}}/g, getCompDetailsById.companyName)
+
+
+            .replace(/{{CompanyName}}/g, getCompDetailsById.companyName)
+            .replace(/{{Plant}}/g, getPlantAddress.plantName)
+            .replace(/{{PlantAddress}}/g, getPlantAddress.plantAddress)
+            .replace(/{{logo}}/g, process.env.SERVER_PORT + '/logo/' + getCompDetailsById.companyLogo)
+            .replace(/{{formatNo}}/g, formatNumber)
+            .replace(/{{calibratedBy}}/g, calCalibratedBy)
+
+
+
+
+          // Add more replace statements for additional placeholders as needed
+
+          // Set the modified HTML content
+
+          console.log(modifiedHTML)
+          await page.setContent(modifiedHTML, { waitUntil: 'networkidle0' });
+
+          // Generate PDF
+          await page.pdf({ path: `./storage/calCertificates/${calCertificateNo}.pdf`, format: 'A4' });
+
+          await browser.close();
+
+          console.log('PDF created successfully');
+        }
+
+
         let obSize = [];
-        if (updateItemCal.itemType === "variable") {
-          obSize = calcalibrationData.map(item => {
-            return item.calParameter + ":" + item.calOBError
-          })
-        } else {
-          obSize = calcalibrationData.map(item => {
-
-            if (itemOBType === "minmax") {
-              return item.calParameter + ":" + item.calMinOB + "/" + item.calMaxOB
+        if (calReportAvailable === "no") {
+          if (calcalibrationData.length > 0) {
+            if (calItemType === "variable") {
+              obSize = calcalibrationData.map(item => {
+                return item.calParameter + ":" + item.calOBError
+              })
             } else {
-              return item.calParameter + ":" + item.calAverageOB
-            }
+              obSize = calcalibrationData.map(item => {
 
-          })
+                if (calOBType === "minmax") {
+                  return item.calParameter + " : " + item.calMinOB + "/" + item.calMaxOB
+                } else {
+                  return item.calParameter + " : " + item.calAverageOB
+                }
+
+              })
+            }
+          }
+        } else {
+          obSize = ["Report Attached"]
         }
 
 
@@ -531,6 +943,7 @@ const itemCalController = {
         const deletedItemCal = await itemCalModel.findOneAndRemove({ _id: id });
         const deleteHistoryCard = await itemHistory.findOneAndRemove({ itemCalId: id });
         console.log(deletedItemCal)
+        console.log(deleteHistoryCard)
         if (!deletedItemCal && !deleteHistoryCard) {
           // If a vendor was not found, you can skip it or handle the error as needed.
           console.log(`ItemCal with ID ${id} not found.`);

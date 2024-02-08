@@ -73,14 +73,14 @@ const Home = () => {
   const [itemStatus, setItemStatus] = useState([])
   const [calStatus, setCalStatus] = useState(
     [
-        { value: 0, label: 'Past Due' },
-        { value: 0, label: 'Today' },
-        { value: 0, label: 'Next 7 Days' },
-        { value: 0, label: '>7 to 15 Days' },
-        { value: 0, label: '>15 to 30 Days' },
-        { value: 0, label: '>30 Days' }
-      ])
-  
+      { value: 0, label: 'Past Due' },
+      { value: 0, label: 'Today' },
+      { value: 0, label: 'Next 7 Days' },
+      { value: 0, label: '>7 to 15 Days' },
+      { value: 0, label: '>15 to 30 Days' },
+      { value: 0, label: '>30 Days' }
+    ])
+
   const [departmentName, setDepartmentName] = useState("")
   const [allDepartments, setAllDepartments] = useState([])
 
@@ -125,13 +125,15 @@ const Home = () => {
 
       );
       const plantDc = response.data.result.filter(dc => (employeeRole.loggedEmp.plantDetails.map(plant => plant.plantName).includes(dc.dcPlant)))
-      const dcNos = response.data.result.map(dc => dc.dcId).filter(Boolean).sort()
-      if(dcNos.length === 0){
-        setLastNo("DC "+ (dayjs().year() + "-" + 1))
-      }else{
-        setLastNo("DC "+ (dayjs().year() + "-" + ((dcNos[dcNos.length - 1]) + 1)))
+      const dcNos = response.data.result.map(dc => dc.dcId).filter(Boolean)
+      const sortedDc = dcNos.sort((a, b) => a - b);
+      console.log(sortedDc)
+      if (dcNos.length === 0) {
+        setLastNo("DC-" + (dayjs().year() + "-" + 1))
+      } else {
+        setLastNo("DC-" + (dayjs().year() + "-" + ((dcNos[dcNos.length - 1]) + 1)))
       }
-      
+
       console.log(dcNos[dcNos.length - 1])
       setDcList(plantDc);
       setFilteredData(plantDc);
@@ -145,6 +147,34 @@ const Home = () => {
     dcListFetchData();
   }, []);
 
+  const [lastGrnNo, setLastGrnNo] = useState("")
+  const [grnList, setGrnList] = useState({})
+  const grnFetchData = async () => {
+    try {
+      const response = await axios.get(
+        `${process.env.REACT_APP_PORT}/itemGRN/getAllItemGRN`
+      );
+      setGrnList(response.data.result);
+      const grnNumbers = response.data.result.map(item => (item.grnId)).filter(Boolean).sort();
+      if (grnNumbers.length > 0) {
+        const lastNumber = grnNumbers[grnNumbers.length - 1] + 1
+        console.log(lastNumber)
+
+        setLastGrnNo("GRN-" + dayjs().year() + "-" + lastNumber)
+      } else {
+        setLastGrnNo("GRN-" + dayjs().year() + "-" + 1)
+      }
+
+
+    } catch (err) {
+      console.log(err);
+    }
+  };
+  useEffect(() => {
+    grnFetchData();
+  }, []);
+
+
 
   const [calLastNo, setCalLastNo] = useState("")
   const calFetch = async () => {
@@ -155,8 +185,8 @@ const Home = () => {
       );
       const calNos = response.data.result.map(cal => cal.calId).filter(Boolean).sort()
       console.log(calNos)
-      setCalLastNo("Cal "+(dayjs().year() + "-" + (calNos.length > 0 ? (calNos[calNos.length - 1]) + 1 : 1)))
-      
+      setCalLastNo("Cal " + (dayjs().year() + "-" + (calNos.length > 0 ? (calNos[calNos.length - 1]) + 1 : 1)))
+
 
 
     } catch (err) {
@@ -303,7 +333,7 @@ const Home = () => {
       setItemList(allItems);
       setPieDataFilter(allItems)
       setFilteredData(allItems)
-      
+
 
       //
       // Assuming plantWiseList is an array of objects
@@ -336,7 +366,7 @@ const Home = () => {
       const AboveThirtyDaysFilter = activeItems.filter((item) => dayjs(item.itemDueDate).isAfter(thirtyDaysAgo))
 
 
-      
+
 
 
       const depLength = allItems.filter((item) => item.itemLocation === "department")
@@ -414,7 +444,7 @@ const Home = () => {
     const AboveThirtyDaysFilter = activeItems.filter((item) => dayjs(item.itemDueDate).isAfter(thirtyDaysAgo))
 
 
-   
+
 
     const depLength = plantWiseList.filter((item) => item.itemLocation === "department")
     const oemLength = plantWiseList.filter((item) => item.itemLocation === "oem")
@@ -518,7 +548,7 @@ const Home = () => {
         const breakDownItems = plantData.filter((item) => item.itemStatus === "breakdown");
         const missingItems = plantData.filter((item) => item.itemStatus === "missing");
         const rejectionItems = plantData.filter((item) => item.itemStatus === "rejection");
-        
+
         setActiveItems(activeItems)
 
         const pastDue = activeItems.filter((item) => dayjs(item.itemDueDate).isBefore(currentDate.format("YYYY-MM-DD")))
@@ -529,7 +559,7 @@ const Home = () => {
         const AboveThirtyDaysFilter = activeItems.filter((item) => dayjs(item.itemDueDate).isAfter(thirtyDaysAgo))
 
 
-      
+
 
         const depLength = plantData.filter((item) => item.itemLocation === "department")
         const oemLength = plantData.filter((item) => item.itemLocation === "oem")
@@ -583,11 +613,13 @@ const Home = () => {
 
 
   const ItemListColumns = [
-    { field: 'id', headerName: 'Si. No', width: 20, renderCell: (params) => params.api.getAllRowIds().indexOf(params.id) + 1 },
+    { field: 'id', headerName: 'Si. No', width: 20, renderCell: (params) => params.api.getAllRowIds().indexOf(params.id) + 1, align: "center" },
     {
       field: 'itemIMTENo',
       headerName: 'IMTE No.',
-      width: 150,
+      width: 100,
+      headerAlign: "start"
+
       // editable: true,
     },
     {
@@ -600,7 +632,6 @@ const Home = () => {
     {
       field: 'itemCalDate',
       headerName: 'Cal Date',
-      type: 'number',
       width: 100, valueGetter: (params) => dayjs(params.row.itemCalDate).format('DD-MM-YYYY')
       // editable: true,
     },
@@ -610,17 +641,18 @@ const Home = () => {
       width: 100, valueGetter: (params) => dayjs(params.row.itemDueDate).format('DD-MM-YYYY')
     },
     {
+      field: 'itemPlant',
+      headerName: 'Plant',
+      width: 80,
+      align: "left"
+    },
+    {
       field: 'itemCurrentLocation',
       headerName: 'Current Location',
       width: 100,
       align: "left"
     },
-    {
-      field: 'itemLastLocation',
-      headerName: 'Last Location',
-      width: 100,
-      align: "left"
-    },
+
     {
       field: 'itemCalibrationSource',
       headerName: 'Calibration Source',
@@ -630,6 +662,12 @@ const Home = () => {
     {
       field: 'itemSupplier',
       headerName: 'Supplier',
+      width: 100,
+      align: "left"
+    },
+    {
+      field: 'itemLastLocation',
+      headerName: 'Last Location',
       width: 100,
       align: "left"
     },
@@ -677,7 +715,7 @@ const Home = () => {
 
 
   const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', "#aca8c8", "#78787a"];
-  
+
   const [calStatusFitleredData, setCalStatusFitleredData] = useState([])
 
   const calStatusFunction = (name) => {
@@ -875,7 +913,7 @@ const Home = () => {
   const itemLocationLegend = ({ payload }) => {
     console.log(payload)
     return (
-     
+
       <table className='table table-borderless' style={{ display: "flex", justifyContent: "center", alignItems: "center", padding: 0 }}>
         <tbody>
           {payload.map((entry, index) => (
@@ -972,7 +1010,7 @@ const Home = () => {
     const AboveThirtyDaysFilter = activeItems.filter((item) => dayjs(item.itemDueDate).isAfter(thirtyDaysAgo))
 
 
-    
+
 
     const depLength = filter.filter((item) => item.itemLocation === "department")
     const oemLength = filter.filter((item) => item.itemLocation === "oem")
@@ -1034,7 +1072,7 @@ const Home = () => {
     const AboveThirtyDaysFilter = activeItems.filter((item) => dayjs(item.itemDueDate).isAfter(thirtyDaysAgo))
 
 
-    
+
 
     setCalStatus([
       { id: 0, value: pastDue.length, label: 'Past Due' },
@@ -1200,7 +1238,7 @@ const Home = () => {
   useEffect(() => {
     setStatusCheckMsg("");
     const grnBoolean = selectedRows.every(item => item.dcStatus === "1" && item.itemStatus === "active")
-    setGrnButtonVisibility(grnBoolean && selectedRows.length === 1 )
+    setGrnButtonVisibility(grnBoolean && selectedRows.length === 1)
 
     const defaultDepartmentCheck = selectedRows.every(item =>
       defaultDep.some(dep => item.itemCurrentLocation === dep.department)
@@ -1283,7 +1321,7 @@ const Home = () => {
 
 
   const onSiteCheck = () => {
-    const onSiteCheck = selectedRows.every(item => (item.itemCalibrationSource === "outsource" || item.itemCalibrationSource === "OEM") && item.itemCalibrationDoneAt === "Site" )
+    const onSiteCheck = selectedRows.every(item => (item.itemCalibrationSource === "outsource" || item.itemCalibrationSource === "OEM") && item.itemCalibrationDoneAt === "Site")
 
 
     console.log(onSiteCheck)
@@ -1397,6 +1435,18 @@ const Home = () => {
                 alignItems="center"
                 spacing={2}>
 
+                <TextField select onChange={(e) => MainFilter(e.target.value, "itemType")} fullWidth size='small' value={filterNames.itemType} name='itemType' label="Item Type">
+                  <MenuItem value="All">All</MenuItem>
+                  <MenuItem value="variable">Variable</MenuItem>
+                  <MenuItem value="attribute">Attribute</MenuItem>
+                  <MenuItem value="referenceStandard">Ref Standard</MenuItem>
+                </TextField>
+
+                <TextField select onChange={(e) => MainFilter(e.target.value, "itemAddMasterName")} fullWidth size='small' value={filterNames.itemAddMasterName} name='itemAddMasterName' label="Item Description">
+                  <MenuItem value="All">All</MenuItem>
+                  {itemDistinctNames.length > 0 && itemDistinctNames.map((item, index) => <MenuItem key={index} value={item}>{item}</MenuItem>)}
+                </TextField>
+
                 {itemListOptions.length > 0 &&
                   <Autocomplete
                     disablePortal
@@ -1412,17 +1462,9 @@ const Home = () => {
                     renderInput={(params) => <TextField {...params} label="IMTE No" />}
                   />}
 
-                <TextField select onChange={(e) => MainFilter(e.target.value, "itemAddMasterName")} fullWidth size='small' value={filterNames.itemAddMasterName} name='itemAddMasterName' label="Item Description">
-                  <MenuItem value="All">All</MenuItem>
-                  {itemDistinctNames.length > 0 && itemDistinctNames.map((item, index) => <MenuItem key={index} value={item}>{item}</MenuItem>)}
-                </TextField>
+                
 
-                <TextField select onChange={(e) => MainFilter(e.target.value, "itemType")} fullWidth size='small' value={filterNames.itemType} name='itemType' label="Item Type">
-                  <MenuItem value="All">All</MenuItem>
-                  <MenuItem value="variable">Variable</MenuItem>
-                  <MenuItem value="attribute">Attribute</MenuItem>
-                  <MenuItem value="referenceStandard">Ref Standard</MenuItem>
-                </TextField>
+
 
 
 
@@ -1474,7 +1516,7 @@ const Home = () => {
                     animationDuration={1000}
                     innerRadius={40}
                     activeIndex={activeIndex}
-                    
+
                     labelLine={false}
                   >
                     {data.map((entry, index) => (
@@ -1700,11 +1742,11 @@ const Home = () => {
                     {(selectedRows.length === 1 && selectedRows[0].itemCalibrationSource === "outsource" && "Site") &&
                       <Button size='small' className='me-2' onClick={() => onSiteCheck()}>Onsite GRN</Button>
                     }
-                    {(selectedRows.length === 1 && selectedRows[0].itemCalibrationSource === "inhouse") && <Button size='small' className='me-2' onClick={() => setCalOpen(true)}>Cal</Button>}                  
+                    {(selectedRows.length === 1 && selectedRows[0].itemCalibrationSource === "inhouse") && <Button size='small' className='me-2' onClick={() => setCalOpen(true)}>Cal</Button>}
                     {grnButtonVisibility && <Button size='small' onClick={() => grnCheck()} className='me-2'>Grn</Button>}
 
 
-                    { dcButtonVisibility && <Button size='small' onClick={() => dcCheck()}>Create DC</Button>}
+                    {dcButtonVisibility && <Button size='small' onClick={() => dcCheck()}>Create DC</Button>}
 
                     {StatusCheckMsg !== "" && <Chip icon={<Error />} color='error' label={StatusCheckMsg} />}
                   </div>
@@ -1829,7 +1871,7 @@ const Home = () => {
                   <Dc />
                 </HomeContent.Provider>
                 <HomeContent.Provider
-                  value={{ grnOpen, setGrnOpen, selectedRows }}
+                  value={{ grnOpen, setGrnOpen, selectedRows, lastGrnNo }}
                 >
                   <Grn />
                 </HomeContent.Provider>

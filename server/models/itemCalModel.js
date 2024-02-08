@@ -26,9 +26,16 @@ const itemCal = new mongoose.Schema({
   calItemSOPNo: String,
   calStandardRef: String,
   calOBType: String,
+  calReportName: String,
   calCertificateNo: {
     type: String,
     unique: true,
+  },
+  calReportAvailable: {
+    type: String,
+    enum: ['yes', 'no'],
+    default: 'yes',
+    required: [true, "Report status required"]
   },
   calItemCalDate: String,
   calItemDueDate: String,

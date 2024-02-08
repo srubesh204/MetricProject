@@ -1,134 +1,30 @@
-import React, { useContext, useEffect, useRef } from 'react';
-import { DcListContent } from './DcList';
-import dayjs from 'dayjs';
-import { useReactToPrint } from 'react-to-print';
+import React from 'react'
+import html2pdf from 'html2pdf.js';
 
-const DcPrint = () => {
-  const DcPrintData = useContext(DcListContent);
-  const { dcPrintOpen, setDcPrintOpen, selectedRows, formatNoData, printState, setPrintState,companyList ,plantList} = DcPrintData;
+const DcPrint = (data) => {
 
-  const componentRef = useRef();
-
-
-  const handlePrint = useReactToPrint({
-    content: () => componentRef.current,
-    pageStyle: `
-            @page {
-                size: A4;
-                margin: 1cm;
-            }
-            body {
-                margin: 0;
-            }
-            table {
-                width: 100%;
-                border-collapse: collapse;
-            }
-            .footer {
-                position: fixed;
-                bottom: 0;
-                left: 0;
-                width: 100%;
-                height: 120px; /* Set the height based on your footer height */
-                font-size: 6px;
-            }
-        `,
-    onAfterPrint: () => setPrintState(false)
-  });
-
-  useEffect(() => {
-    if (printState) {
-      console.log("Working");
-      handlePrint();
-    }
-  }, [printState, handlePrint]);
-
-  const renderTableRows = () => {
-    return selectedRows.dcPartyItems.map((row, index) => (
-      <tr key={index.toString()}>
-        <td style={{ width: '8%', borderTop: '0.5px solid black', borderRight: '0.5px solid black', textAlign: 'center' }}>{index + 1}</td>
-        <td style={{ borderTop: '0.5px solid black', borderRight: '0.5px solid black', display: 'flex', flexDirection: 'column' }}>
-          <td>Item Name: {row.itemItemMasterName},    IMTE No: {row.itemIMTENo}</td>
-          <td>Range/Size: {row.itemRangeSize + ' ' + row.itemRangeSizeUnit}, L.C.: {row.itemLC + ' ' + row.itemLCUnit}</td>
-          <td>Make: {row.itemMake},    Sr.No: {row.itemMFRNo} ,Cal. Frequency: {row.itemCalFreInMonths} </td>
-        </td>
-        <td style={{ width: '30%', borderTop: '0.5px solid black', textAlign: 'center' }}>{row.dcItemRemarks}</td>
-      </tr>
-    ));
+  const handleGeneratePDF = () => {
+    const element = document.getElementById('content-to-print');
+    html2pdf().from(element).save('your-file-name.pdf');
   };
-
-  const Footer = (data) => {
-    return (
-      <tr className="footer">
-        <td style={{ height: '80px', fontSize: '12px' }}>
-          <div style={{ display: 'flex', flexDirection: 'row', border: '0.5px solid black' }}>
-            <div style={{ width: '70%', display: 'flex', flexDirection: 'column', paddingLeft: '5px' }}>
-              <div style={{ width: '100%', paddingBottom: '30px' }}>
-                Name and Signature of the person to whom the goods were delivered for Transporting with the status of the person signing.
-              </div>
-              <div style={{ width: '100%' }}>Date: {data.value.fDc.date}</div>
-            </div>
-            <div style={{ borderLeft: '0.5px solid black', paddingLeft: '2px', display: 'flex', flexDirection: 'column' }}>
-              <div style={{ margin: '5px', fontSize: 9, fontWeight: 500, padding: '0 110px 40px 0', width: '110%' }}>For {companyList[0]?.companyName}</div>
-              <div style={{ fontSize: 9, textAlign: 'center' }}>Authorized Signature</div>
-            </div>
-          </div>
-          <div style={{ display: 'flex', flexDirection: 'row', height: '10px' }}>
-            <div style={{ position: 'absolute', fontSize: '8px' }}>Format Number: {data.value.fDc.frNo}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;     Amendment No.: {data.value.fDc.amNo}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;     Amendment Date.: {data.value.fDc.amDate}</div>
-          </div>
-        </td>
-      </tr>
-    );
-  };
-
-
-
- 
-
-  // Your conditional logic
- 
-
-  console.log(printState)
-
+  const { selectedRows } = data
+  console.log(data)
   return (
-      <div style={{ display: 'none', width: "100%" }}>
-        <div ref={componentRef}>
-          <div style={{ padding: "10px", textAlign: "center", textDecoration: "underline" }}>Delivery Challan</div>
-          <div style={{ border: '0.5px solid black' }}>
-            <div style={{ textAlign: 'center', borderBottom: '0.5px solid black', display: 'flex', flexDirection: 'column' }}>
-              <td style={{ padding: "2px", textAlign: "center" }}>{companyList[0]?.companyName}</td>
-              {/* <td>{selectedRows.dcPartyAddress}</td> */}
-              {/* <td>Phone and Address</td> */}
-              <td style={{padding: "1px", textAlign: "center" }}>{plantList[0]?.plantName}</td>
-                    <td style={{padding: "1px", textAlign: "center" }}>{plantList[0]?.plantAddress}</td>
-            </div>
-            <div style={{ display: 'flex', flexDirection: 'row', borderBottom: '0.5px solid black' }}>
-              <div style={{ width: '60%', display: 'flex', flexDirection: 'column', paddingLeft: '10px', borderRight: '0.5px solid black' }}>
-                <td>To:</td>
-                <td style={{ padding: '0px 30px' }}>{selectedRows.dcPartyName}</td>
-                <td style={{ padding: '0px 30px' }}>{selectedRows.dcPartyAddress}</td>
-              </div>
-              <div style={{ width: '40%', display: 'flex', flexDirection: 'column', paddingLeft: '10px' }}>
-                <td>DC No: {selectedRows.dcNo}</td>
-                <td>DC Date: {dayjs(selectedRows.dcDate).format('DD-MM-YYYY')}</td>
-                <td>Narration: {selectedRows.dcReason}</td>
-              </div>
-            </div>
-            <table style={{ width: '100%', borderCollapse: 'collapse' }}>
-              <thead>
-                <tr>
-                  <th style={{ width: '8%', borderRight: '0.5px solid black', textAlign: 'center' }}>Si No</th>
-                  <th style={{ width: '72%', borderRight: '0.5px solid black', textAlign: 'center' }}>Item Description</th>
-                  <th style={{ width: '20%', textAlign: 'center' }}>Remarks</th>
-                </tr>
-              </thead>
-              <tbody>{renderTableRows()}</tbody>
-              <tfoot>{Footer({ value: formatNoData })}</tfoot>
-            </table>
-          </div>
-        </div>
-      </div>
-  );
-};
+    <div id="content-to-print" style={{margin: "5px", border: "1px solid"}}>
+      <h1>Headin</h1>
+      <p>Title</p>
+      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec et aliquam arcu, consectetur semper nisi. Nulla convallis sodales eros, nec pellentesque massa convallis sed. Suspendisse ullamcorper nisl quis nisl lobortis consequat. Duis ut lectus vitae erat dignissim molestie non et mi. Fusce vitae egestas metus, vitae laoreet leo. In porta non neque at blandit. Sed vel porta orci, egestas interdum orci. Vivamus condimentum sit amet arcu nec sollicitudin. Nam dolor turpis, laoreet at lorem ac, aliquam vestibulum justo. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Aenean tempor leo non hendrerit rutrum.
 
-export default DcPrint;
+        Mauris venenatis augue ut diam bibendum porttitor. Sed viverra auctor massa ac tincidunt. Nullam mollis sit amet nibh quis sodales. Curabitur nec neque eu magna egestas aliquam non quis sem. Nam nisl tellus, ultrices in consectetur vel, hendrerit sed felis. Etiam posuere, nunc eget congue pellentesque, diam diam molestie dui, nec pretium lectus eros vitae sem. Etiam volutpat urna tortor, in ultricies est porta aliquam. Nulla quis tortor eget erat fermentum porta. Pellentesque maximus at lacus sit amet eleifend. Duis egestas orci at nibh varius blandit. Proin consequat volutpat scelerisque.
+
+        Phasellus porta venenatis ante et pulvinar. Fusce tellus nisl, iaculis at mi venenatis, commodo pulvinar orci. Vivamus eget rutrum eros, id facilisis dui. Duis mattis nulla leo, sit amet dignissim enim faucibus ut. Maecenas et sagittis tortor. Etiam odio mi, pretium quis suscipit sit amet, faucibus nec quam. In quis bibendum diam, quis vulputate nisl. Quisque vel dui sed lorem venenatis faucibus. Donec at dolor quam. Etiam faucibus diam ac dui aliquet, at pharetra ligula tristique.
+
+        Fusce in pellentesque tortor. Nunc leo velit, efficitur quis augue non, molestie feugiat tortor. Sed lorem metus, semper a nisi id, volutpat consequat nulla. Morbi ultricies sapien in ligula scelerisque, non pretium urna posuere. Curabitur rutrum et ex ut pellentesque. Nulla placerat ut augue a euismod. Nullam laoreet in quam non pharetra. Curabitur tempus id turpis et consequat. Suspendisse pulvinar porttitor mi, ut consequat magna euismod id.
+
+        Curabitur dapibus erat elit, eu congue enim luctus nec. Etiam eget massa vehicula, lacinia eros eu, consequat ex. Curabitur pretium felis augue, ut tempor lorem sagittis hendrerit. Nullam placerat massa et arcu ullamcorper blandit. In libero nisl, pellentesque rutrum dapibus vel, cursus sed eros. Morbi lobortis ultrices eros id porttitor. Donec sit amet enim tellus. Fusce elementum diam ac ipsum dignissim posuere. Donec nec justo ex. Etiam consectetur turpis id leo tempor tincidunt. Morbi cursus, ante vel pretium rutrum, sapien libero efficitur lacus, ac pellentesque velit augue sit amet metus. Nunc sapien erat, ultricies eget libero eu, pretium vestibulum felis. Donec ullamcorper placerat erat, eget dignissim lacus imperdiet eu. Ut vehicula ac diam in malesuada. Pellentesque ligula quam, lacinia ac lacus nec, viverra ullamcorper odio. Aliquam aliquam mollis nibh, eget suscipit erat.</p>
+      {/* Add more content here if needed */}
+    </div>
+  )
+}
+
+export default DcPrint

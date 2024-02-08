@@ -1,5 +1,412 @@
 [{
   "_id": {
+    "$oid": "65abab1a4989d7cf7faddefe"
+  },
+  "employeeCode": "5",
+  "title": "Mr.",
+  "firstName": "Nalini",
+  "address": "Ambattur",
+  "city": "Chennai",
+  "state": "Tamilnadu",
+  "contactNumber": "9384314231",
+  "designation": "Calibration Engineer",
+  "mailId": "csd@metric.co.in ",
+  "empRole": "plantAdmin",
+  "employmentStatus": "Active",
+  "password": "5",
+  "plantDetails": [
+    {
+      "plantName": "Plant-4",
+      "departments": [
+        "Quality",
+        "Maintenance",
+        "Lab",
+        "Standards Room"
+      ]
+    }
+  ],
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "65abab1a4989d7cf7faddeff"
+  },
+  "employeeCode": "6",
+  "title": "Mr.",
+  "firstName": "Bala",
+  "address": "Ambattur",
+  "city": "Chennai",
+  "state": "Tamilnadu",
+  "contactNumber": "9384314231",
+  "designation": "Calibration Engineer",
+  "mailId": "sbc2calibration@gmail.com",
+  "empRole": "creator",
+  "employmentStatus": "Active",
+  "password": "6",
+  "plantDetails": [
+    {
+      "plantName": "Plant-1",
+      "departments": [
+        "Standards Room"
+      ]
+    }
+  ],
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "65abab1a4989d7cf7faddf00"
+  },
+  "employeeCode": "7",
+  "title": "Mr.",
+  "firstName": "Murali",
+  "address": "Ambattur",
+  "city": "Chennai",
+  "state": "Tamilnadu",
+  "contactNumber": "9384314231",
+  "designation": "Calibration Engineer",
+  "mailId": "ishunalini15@gmail.com",
+  "empRole": "creator",
+  "employmentStatus": "Active",
+  "password": "7",
+  "plantDetails": [
+    {
+      "plantName": "Plant-2",
+      "departments": [
+        "Standards Room"
+      ]
+    }
+  ],
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "65abab1a4989d7cf7faddf01"
+  },
+  "employeeCode": "8",
+  "title": "Mr.",
+  "firstName": "Krishnan",
+  "address": "Ambattur",
+  "city": "Chennai",
+  "state": "Tamilnadu",
+  "contactNumber": "9384314231",
+  "designation": "Calibration Engineer",
+  "mailId": "ishunalini15@gmail.com",
+  "empRole": "creator",
+  "employmentStatus": "Active",
+  "password": "8",
+  "plantDetails": [
+    {
+      "plantName": "Plant-3",
+      "departments": [
+        "Lab"
+      ]
+    }
+  ],
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "65abab1a4989d7cf7faddf02"
+  },
+  "employeeCode": "9",
+  "title": "Ms.",
+  "firstName": "Nalini",
+  "address": "Ambattur",
+  "city": "Chennai",
+  "state": "Tamilnadu",
+  "contactNumber": "9384314231",
+  "designation": "Calibration Engineer",
+  "mailId": "ishunalini15@gmail.com",
+  "empRole": "creator",
+  "employmentStatus": "Active",
+  "password": "9",
+  "plantDetails": [
+    {
+      "plantName": "Plant-4",
+      "departments": [
+        "Lab"
+      ]
+    }
+  ],
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "65abab1a4989d7cf7faddf03"
+  },
+  "employeeCode": "10",
+  "title": "Mr.",
+  "firstName": "Krishnan",
+  "address": "Ambattur",
+  "city": "Chennai",
+  "state": "Tamilnadu",
+  "contactNumber": "9384314231",
+  "designation": "Calibration Engineer",
+  "mailId": "csd@metric.co.in ",
+  "empRole": "viewer",
+  "employmentStatus": "Active",
+  "password": "10",
+  "plantDetails": [
+    {
+      "plantName": "Plant-1",
+      "departments": [
+        "Standards Room"
+      ]
+    }
+  ],
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "65abab1a4989d7cf7faddf04"
+  },
+  "employeeCode": "11",
+  "title": "Mr.",
+  "firstName": "Srini",
+  "address": "Ambattur",
+  "city": "Chennai",
+  "state": "Tamilnadu",
+  "contactNumber": "9384314231",
+  "designation": "Calibration Engineer",
+  "mailId": "csd@metric.co.in ",
+  "empRole": "viewer",
+  "employmentStatus": "Active",
+  "password": "11",
+  "plantDetails": [
+    {
+      "plantName": "Plant-2",
+      "departments": [
+        "Maintenance",
+        "Standards Room"
+      ]
+    }
+  ],
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "65abab1a4989d7cf7faddf05"
+  },
+  "employeeCode": "12",
+  "title": "Mr.",
+  "firstName": "Krishnan",
+  "address": "Ambattur",
+  "city": "Chennai",
+  "state": "Tamilnadu",
+  "contactNumber": "9384314231",
+  "designation": "Calibration Engineer",
+  "mailId": "csd@metric.co.in ",
+  "empRole": "viewer",
+  "employmentStatus": "Active",
+  "password": "12",
+  "plantDetails": [
+    {
+      "plantName": "Plant-3",
+      "departments": [
+        "Lab",
+        "Standards Room"
+      ]
+    }
+  ],
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "65abab1a4989d7cf7faddefc"
+  },
+  "employeeCode": "3",
+  "title": "Mr.",
+  "firstName": "Ayyappan",
+  "address": "Ambattur",
+  "city": "Chennai",
+  "state": "Tamilnadu",
+  "contactNumber": "9384314231",
+  "designation": "Quality Supervisor",
+  "mailId": "csd@metric.co.in ",
+  "empRole": "plantAdmin",
+  "employmentStatus": "Active",
+  "password": "3",
+  "plantDetails": [
+    {
+      "plantName": "Plant-2",
+      "departments": [
+        "Quality",
+        "Maintenance",
+        "Lab",
+        "Standards Room"
+      ]
+    }
+  ],
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "65abab1a4989d7cf7faddf06"
+  },
+  "employeeCode": "13",
+  "title": "Mr.",
+  "firstName": "Bala",
+  "address": "Ambattur",
+  "city": "Chennai",
+  "state": "Tamilnadu",
+  "contactNumber": "9384314231",
+  "designation": "Calibration Engineer",
+  "mailId": "csd@metric.co.in ",
+  "empRole": "viewer",
+  "employmentStatus": "Active",
+  "password": "13",
+  "plantDetails": [
+    {
+      "plantName": "Plant-4",
+      "departments": [
+        "Lab"
+      ]
+    }
+  ],
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "65abab1a4989d7cf7faddefb"
+  },
+  "employeeCode": "2",
+  "title": "Mr.",
+  "firstName": "Prakash",
+  "address": "Ambattur",
+  "city": "Chennai",
+  "state": "Tamilnadu",
+  "contactNumber": "8939940090",
+  "designation": "Quality Supervisor",
+  "mailId": "csd@metric.co.in ",
+  "empRole": "plantAdmin",
+  "employmentStatus": "Active",
+  "password": "2",
+  "plantDetails": [
+    {
+      "plantName": "Plant-1",
+      "departments": [
+        "Quality",
+        "Maintenance",
+        "Lab",
+        "Standards Room"
+      ]
+    }
+  ],
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "65abab1a4989d7cf7faddefd"
+  },
+  "employeeCode": "4",
+  "title": "Mr.",
+  "firstName": "Pandian",
+  "address": "Ambattur",
+  "city": "Chennai",
+  "state": "Tamilnadu",
+  "contactNumber": "9384314231",
+  "designation": "Quality Supervisor",
+  "mailId": "csd@metric.co.in ",
+  "empRole": "plantAdmin",
+  "employmentStatus": "Active",
+  "password": "4",
+  "plantDetails": [
+    {
+      "plantName": "Plant-3",
+      "departments": [
+        "Quality",
+        "Maintenance",
+        "Lab",
+        "Standards Room"
+      ]
+    }
+  ],
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "65abad194989d7cf7faddf76"
+  },
+  "employeeCode": "14",
+  "title": "Mr.",
+  "firstName": "Murali1",
+  "address": "Ambattur",
+  "city": "Chennai",
+  "state": "Tamilnadu",
+  "contactNumber": "9384314231",
+  "designation": "Calibration Engineer",
+  "mailId": "ishunalini15@gmail.com",
+  "empRole": "creator",
+  "employmentStatus": "Active",
+  "password": "14",
+  "plantDetails": [
+    {
+      "plantName": "Plant-2",
+      "departments": [
+        "Maintenance"
+      ]
+    }
+  ],
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "65abadf04989d7cf7faddf8e"
+  },
+  "employeeCode": "15",
+  "title": "Mr.",
+  "firstName": "Krishnan1",
+  "address": "Ambattur",
+  "city": "Chennai",
+  "state": "Tamilnadu",
+  "contactNumber": "9384314231",
+  "designation": "Calibration Engineer",
+  "mailId": "ishunalini15@gmail.com",
+  "empRole": "creator",
+  "employmentStatus": "Active",
+  "password": "15",
+  "plantDetails": [
+    {
+      "plantName": "Plant-3",
+      "departments": [
+        "Standards Room"
+      ]
+    }
+  ],
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "65abbaa24989d7cf7fade74b"
+  },
+  "employeeCode": "16",
+  "title": "Mr.",
+  "firstName": "Lawrance1",
+  "address": "Ambattur",
+  "city": "Chennai",
+  "state": "Tamilnadu",
+  "contactNumber": "9884048594",
+  "designation": "Quality Manager",
+  "mailId": "csd@metric.co.in ",
+  "empRole": "admin",
+  "employmentStatus": "Active",
+  "password": "16",
+  "plantDetails": [
+    {
+      "plantName": "Plant-4",
+      "departments": [
+        "Quality",
+        "Maintenance",
+        "Lab",
+        "Standards Room"
+      ]
+    }
+  ],
+  "__v": 0
+},
+{
+  "_id": {
     "$oid": "65abbb47da604d1fec013675"
   },
   "employeeCode": "Metric",
@@ -16,115 +423,41 @@
   "password": "Metric@123",
   "plantDetails": [
     {
-      "plantName": "Unit-2",
+      "plantName": "Plant-1",
       "departments": [
-        "Quality"
+        "Quality",
+        "Maintenance",
+        "Lab",
+        "Standards Room"
+      ]
+    },
+    {
+      "plantName": "Plant-2",
+      "departments": [
+        "Quality",
+        "Maintenance",
+        "Lab",
+        "Standards Room"
+      ]
+    },
+    {
+      "plantName": "Plant-3",
+      "departments": [
+        "Quality",
+        "Maintenance",
+        "Lab",
+        "Standards Room"
+      ]
+    },
+    {
+      "plantName": "Plant-4",
+      "departments": [
+        "Quality",
+        "Maintenance",
+        "Lab",
+        "Standards Room"
       ]
     }
   ],
-  "__v": 0,
-  "dob": "",
-  "doj": "",
-  "lastName": "",
-  "reportTo": ""
-},
-{
-  "_id": {
-    "$oid": "65bb664c596866488df4b2ce"
-  },
-  "employeeCode": "SBCUII008",
-  "title": "Mr.",
-  "firstName": "Prakash",
-  "address": "Ambattur",
-  "city": "Chennai",
-  "state": "Tamilnadu",
-  "contactNumber": "8939940090",
-  "designation": "Quality Supervisor",
-  "mailId": "qcsbc2@gmail.com",
-  "empRole": "plantAdmin",
-  "employmentStatus": "Active",
-  "password": "008",
-  "plantDetails": [],
-  "employeeId": 1,
-  "__v": 0
-},
-{
-  "_id": {
-    "$oid": "65bb664c596866488df4b2cf"
-  },
-  "employeeCode": "1",
-  "title": "Mr.",
-  "firstName": "Ayyappan",
-  "address": "Ambattur",
-  "city": "Chennai",
-  "state": "Tamilnadu",
-  "contactNumber": "9384314231",
-  "designation": "Calibration Engineer",
-  "mailId": "sbc2calibration@gmail.com",
-  "empRole": "creator",
-  "employmentStatus": "Active",
-  "password": "1",
-  "plantDetails": [],
-  "employeeId": 2,
-  "__v": 0
-},
-{
-  "_id": {
-    "$oid": "65bb664c596866488df4b2cd"
-  },
-  "employeeCode": "SBCUII004",
-  "title": "Mr.",
-  "firstName": "Lawrance",
-  "address": "Ambattur",
-  "city": "Chennai",
-  "state": "Tamilnadu",
-  "contactNumber": "9884048594",
-  "designation": "Quality Manager",
-  "mailId": "lawrance@sribalajicastings.com",
-  "empRole": "admin",
-  "employmentStatus": "Active",
-  "password": "004",
-  "plantDetails": [],
-  "employeeId": 3,
-  "__v": 0
-},
-{
-  "_id": {
-    "$oid": "65bb664c596866488df4b2d1"
-  },
-  "employeeCode": "50",
-  "title": "Mr.",
-  "firstName": "Bala",
-  "address": "Ambattur",
-  "city": "Chennai",
-  "state": "Tamilnadu",
-  "contactNumber": "9789087046",
-  "designation": "Calibration Engineer",
-  "mailId": "rbmkrishh@gmail.com",
-  "empRole": "creator",
-  "employmentStatus": "Active",
-  "password": "50",
-  "plantDetails": [],
-  "employeeId": 4,
-  "__v": 0
-},
-{
-  "_id": {
-    "$oid": "65bb664c596866488df4b2d0"
-  },
-  "employeeCode": "SBCUII529",
-  "title": "Mr.",
-  "firstName": "Sridhar",
-  "address": "Ambattur",
-  "city": "Chennai",
-  "state": "Tamilnadu",
-  "contactNumber": "8825930758",
-  "designation": "Management Representative",
-  "mailId": "quality2@sribalajicastings.com",
-  "empRole": "viewer",
-  "employmentStatus": "Active",
-  "password": "529",
-  "plantDetails": [],
-  "employeeId": 5,
   "__v": 0
 }]

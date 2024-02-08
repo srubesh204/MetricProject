@@ -203,7 +203,7 @@ const GrnList = () => {
         { field: 'grnNo', headerName: 'Grn No', width: 200, headerAlign: "center", align: "center", },
         { field: 'grnDate', headerName: 'Grn Date', width: 200, headerAlign: "center", align: "center", },
         { field: 'grnPartyName', headerName: 'Party Name', width: 300, headerAlign: "center", align: "center", },
-        { field: 'printButton', headerName: 'Print', headerAlign: "center", align: "center", width: 100, renderCell: (params) => <Button onClick={() => { setSelectedRows(params.row); setGrnPrintOpen(true) }}><PrintRounded onClick={() => setPrintState(true)} color='success' /></Button> }
+        { field: 'printButton', headerName: 'Print', headerAlign: "center", align: "center", width: 100, renderCell: (params) => <Button component={Link} to={`${process.env.REACT_APP_PORT}/grnCertificates/${params.row.grnNo}.pdf`} target='_blank'><PrintRounded  color='success' /></Button> }
     ]
 
 

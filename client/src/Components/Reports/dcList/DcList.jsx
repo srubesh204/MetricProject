@@ -25,12 +25,18 @@ import DcEdit from './DcEdit';
 import DcAdd from './DcAdd';
 import { useEmployee } from '../../../App';
 import DcPrint from './DcPrint';
+import { useReactToPrint } from 'react-to-print';
+import html2pdf from 'html2pdf.js';
+
 export const DcListContent = createContext(null);
+
 const DcList = () => {
 
     const empRole = useEmployee()
     const { loggedEmp } = empRole
-    const [printState,  setPrintState] = useState(false)
+
+
+    const [printState, setPrintState] = useState(false)
     const [selectedRows, setSelectedRows] = useState([]);
     const [dcEditOpen, setDcEditOpen] = useState(false);
     const [dcOpen, setDcOpen] = useState(false);
@@ -290,7 +296,7 @@ const DcList = () => {
         { field: 'dcNo', headerName: 'Dc No', headerAlign: "center", align: "center", width: 100 },
         { field: 'dcDate', headerName: 'Dc Date', headerAlign: "center", align: "center", width: 200 },
         { field: 'dcPartyName', headerName: 'Dc PartyName', headerAlign: "center", align: "center", width: 300 },
-        { field: 'printButton', headerName: 'Print', headerAlign: "center", align: "center", width: 100, renderCell: (params) => <Button onClick={() => { setSelectedRows(params.row); setDcPrintOpen(true) }}><PrintRounded color='success' onClick={() => setPrintState(true)} /></Button> }
+        { field: 'printButton', headerName: 'Print', headerAlign: "center", align: "center", width: 100, renderCell: (params) => <Button component={Link} to={`${process.env.REACT_APP_PORT}/dcCertificate/${params.row.dcNo}.pdf`} target='_blank'><PrintRounded color='success' /></Button> }
     ]
 
 
@@ -298,7 +304,7 @@ const DcList = () => {
 
 
 
-
+    const [printModel, setPrintModel] = useState(false)
 
 
 
@@ -510,6 +516,22 @@ const DcList = () => {
     console.log(dcDataDcList)
 
 
+    const sampleData = {
+        title: 'Printable Document',
+        content: 'This is some sample content to be printed.',
+        // Add more data here if needed
+    };
+
+    
+    
+
+    
+   
+
+
+    console.log(selectedRows)
+
+ 
 
     return (
         <div className='px-5 pt-3'>
@@ -767,6 +789,10 @@ const DcList = () => {
 
                             </div>
                             <div className='col d-flex justify-content-end'>
+                           
+
+                                {/* Hidden section to render PrintContent */}
+
 
                                 {empRole.employee !== "viewer" && <React.Fragment>
                                     {/* <div className='me-2 '>
@@ -799,6 +825,27 @@ const DcList = () => {
                                     </DialogActions>
                                 </Dialog>
 
+
+                                <Dialog
+                                    open={printModel}
+                                    onClose={() => setPrintModel(false)}
+                                    aria-labelledby="alert-dialog-title"
+                                    aria-describedby="alert-dialog-description"
+                                >
+                                    <DialogTitle id="alert-dialog-title">
+                                        {" ItemAdd delete confirmation?"}
+                                    </DialogTitle>
+                                    <DialogContent>
+                                        <DcPrint data={{ selectedRows }} />
+                                    </DialogContent>
+                                    <DialogActions>
+                                        <Button onClick={() => setPrintModel(false)}>Cancel</Button>
+                                        <Button onClick={() => { deleteDcData(); setDeleteModalItem(false); }} autoFocus>
+                                            Print
+                                        </Button>
+                                    </DialogActions>
+                                </Dialog>
+
                             </div>
 
                             <DcListContent.Provider
@@ -814,12 +861,6 @@ const DcList = () => {
 
 
 
-                            <DcListContent.Provider
-                                value={{ dcPrintOpen, setDcPrintOpen, selectedRows, formatNoData,companyList, printState, setPrintState,plantList}}
-                            >
-                                {selectedRows.length !== 0 &&
-                                    <DcPrint />}
-                            </DcListContent.Provider>
                         </div>
                     </Paper>
                     <Snackbar anchorOrigin={{ vertical: "top", horizontal: "right" }} open={snackBarOpen} autoHideDuration={6000} onClose={handleSnackClose}>
@@ -832,8 +873,9 @@ const DcList = () => {
                 </form>
 
             </LocalizationProvider>
-
         </div>
+
+
     )
 }
 
