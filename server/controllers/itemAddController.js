@@ -76,7 +76,20 @@ const itemAddController = {
         acMinPSError,
         acMaxPSError,
         itemCreatedBy,
-        itemLastModifiedBy
+        itemLastModifiedBy,
+        calibrationCost,
+        gaugeUsage,
+        lifealertDays,
+        purchaseRefNo,
+        purchaseDate,
+        purchaseCost,
+        specialRemark,
+        drawingIssueNo,
+        drawingNo,
+        rdName,
+        msaName,
+        otherFile,
+
         // Assuming createdAt is part of the request body
       } = req.body;
 
@@ -141,11 +154,23 @@ const itemAddController = {
         acMaxPSError,
         itemCreatedBy,
         itemLastModifiedBy,
+        calibrationCost,
+        gaugeUsage,
+        lifealertDays,
+        purchaseRefNo,
+        purchaseDate,
+        purchaseCost,
+        specialRemark,
+        drawingIssueNo,
+        drawingNo,
+        rdName,
+        msaName,
+        otherFile,
 
       };
 
       const newItem = new itemAddModel(newItemFields);
-      console.log("SAPNo",itemSAPNo)
+      console.log("SAPNo", itemSAPNo)
       console.log(newItemFields)
 
       const validationError = newItem.validateSync();
@@ -164,7 +189,7 @@ const itemAddController = {
       }
 
       const createdItem = await itemAddModel.create(newItemFields);
-   
+
 
       let obSize = [];
       if (createdItem.itemType === "variable") {
@@ -191,7 +216,7 @@ const itemAddController = {
         itemPlant,
         isItemMaster,
         itemAddMasterName,
-        
+
         itemIMTENo,
         itemSAPNo,
         itemType,
@@ -224,6 +249,9 @@ const itemAddController = {
         acceptanceCriteria: obSize,
         itemCreatedBy,
         itemLastModifiedBy,
+        rdName,
+        msaName,
+        otherFile,
 
       });
       await historyRecord.save();
@@ -310,7 +338,20 @@ const itemAddController = {
         acMinPSError,
         acMaxPSError,
         itemCreatedBy,
-        itemLastModifiedBy
+        itemLastModifiedBy,
+
+        calibrationCost,
+        gaugeUsage,
+        lifealertDays,
+        purchaseRefNo,
+        purchaseDate,
+        purchaseCost,
+        specialRemark,
+        drawingIssueNo,
+        drawingNo,
+        rdName,
+        msaName,
+        otherFile,
       } = req.body;
       // Create an object with the fields you want to update
       const updateItemFields = {
@@ -369,7 +410,20 @@ const itemAddController = {
         acMinPSError,
         acMaxPSError,
         itemCreatedBy,
-        itemLastModifiedBy
+        itemLastModifiedBy,
+
+        calibrationCost,
+        gaugeUsage,
+        lifealertDays,
+        purchaseRefNo,
+        purchaseDate,
+        purchaseCost,
+        specialRemark,
+        drawingIssueNo,
+        drawingNo,
+        rdName,
+        msaName,
+        otherFile,
       };
 
       // Find the designation by desId and update it
@@ -401,7 +455,7 @@ const itemAddController = {
 
       if (!updateItemAdd) {
         return res.status(404).json({ error: 'ItemAdd not found' });
-      }else{
+      } else {
         let obSize = [];
         if (updateItemAdd.itemType === "variable") {
           obSize = acceptanceCriteria.map(item => {
@@ -409,20 +463,20 @@ const itemAddController = {
           })
         } else {
           obSize = acceptanceCriteria.map(item => {
-  
+
             if (itemOBType === "minmax") {
               return item.acParameter + ":" + item.acMinOB + "/" + item.acMaxOB
             } else {
               return item.acParameter + ":" + item.acAverageOB
             }
-  
+
           })
         }
         console.log(obSize)
-  
+
         console.log("history working")
-  
-        const historyRecord = new itemHistory({
+
+        const historyRecord = {
           itemId: updateItemAdd._id,
           selectedItemMaster,
           itemPlant,
@@ -439,7 +493,7 @@ const itemAddController = {
           itemStatus,
           itemReceiptDate,
           itemDepartment,
-          itemCurrentLocation : updateItemAdd.itemCurrentLocation,
+          itemCurrentLocation: updateItemAdd.itemCurrentLocation,
           itemLastLocation,
           itemLocation: "department",
           itemCalFreInMonths,
@@ -460,12 +514,16 @@ const itemAddController = {
           acceptanceCriteria: obSize,
           itemCreatedBy,
           itemLastModifiedBy,
-  
-        });
+          rdName,
+          msaName,
+          otherFile,
+
+        };
+        
         const updateItemHistory = await itemHistory.findOneAndUpdate(
-          { itemId : updateItemAdd._id },
-          updateItemFields,
-          
+          { itemId: updateItemAdd._id },
+          {$set: historyRecord},
+
         );
         console.log(updateItemHistory)
       }
@@ -515,12 +573,12 @@ const itemAddController = {
 
       if (errors.length > 0) {
         // If there are errors, send 400 Bad Request status with error messages
-        if(errors.length === 1){
-          return res.status(400).json({errors: "Selected Item already used cannot be deleted"});
-        }else{
-          return res.status(400).json({errors: "Selected Items are already used cannot be deleted"});
+        if (errors.length === 1) {
+          return res.status(400).json({ errors: "Selected Item already used cannot be deleted" });
+        } else {
+          return res.status(400).json({ errors: "Selected Items are already used cannot be deleted" });
         }
-       
+
       }
 
       return res.status(202).json({ message: 'ItemAdd deleted successfully', results: `${deleteResults.length} ItemAdd Deleted Successfully` });
@@ -752,7 +810,7 @@ const itemAddController = {
           rows: 1 // 2, 3, 4, etc.
         },
         columnToKey: {
-          A: 'itemMasterRef',  
+          A: 'itemMasterRef',
           B: 'itemAddMasterName',
           C: 'itemIMTENo',
           D: 'itemSAPNo',

@@ -30,6 +30,7 @@ const formatNoRoute = require("./routes/formatNoRoute");
 const employeeController = require("./controllers/employeeController");
 const mailRoute = require("./routes/mailRoute");
 const itemHistoryRoute = require("./routes/itemHistoryRoute")
+const measurementUncertaintyRoute = require("./routes/measurementUncertaintyRoute");
 const fs = require('fs');
 
 
@@ -57,6 +58,7 @@ app.use('/upload', uploadRoute);
 app.use('/vendorCertificates', express.static('storage/vendorCertificates'));
 app.use('/workInstructions', express.static('storage/workInstructions'));
 app.use('/itemCertificates', express.static('storage/itemCertificates'));
+app.use('/additionalCertificates', express.static('storage/additionalCertificates'));
 app.use('/grnCertificates', express.static('storage/grnItemCertificates'));
 app.use('/itemMasterImages', express.static('storage/Images/itemMasterImages'));
 app.use('/dcCertificate', express.static('storage/dcCertificate'));
@@ -78,6 +80,7 @@ app.use('/compDetails', compDetailsRoute);
 app.use('/placeOfUsage', placeOfUsageRoute);
 app.use('/mailConfig', mailConfigRoute);
 app.use('/mail', mailRoute)
+app.use('/measurementUncertainty', measurementUncertaintyRoute)
  
 //
 app.post('/login', employeeController.employeeLoginCheck)

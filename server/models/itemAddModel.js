@@ -106,7 +106,21 @@ const itemAddSchema = new mongoose.Schema({
   },
   itemLastModifiedBy: {
     type: String,
-  }
+  },
+  calibrationCost: String,
+  gaugeUsage: String,
+  lifealertDays: String,
+  purchaseRefNo: String,
+  purchaseDate: String,
+  purchaseCost: String,
+  specialRemark: String,
+  drawingIssueNo: String,
+  drawingNo: String,
+  rdName: String,
+  msaName: String,
+  otherFile: String,
+  
+
 });
 itemAddSchema.plugin(uniqueValidator);
 itemAddSchema.plugin(mongooseSequence, { inc_field: 'itemId', });

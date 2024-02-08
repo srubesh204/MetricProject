@@ -18,6 +18,19 @@ const createDiskStorage = (destinationFolder) => {
   });
 };
 
+const createAdditionalStorage = (destinationFolder) => {
+  return multer.diskStorage({
+    destination: (req, file, cb) => {
+      
+      cb(null, `storage/${destinationFolder}`);
+    },
+    filename: (req, file, cb) => {
+      
+      cb(null, file.originalname );
+    },
+  });
+};
+
 const ItemImageStorage = multer.diskStorage({
   destination: (req, file, cb) => {
     cb(null, 'storage/Images/itemMasterImages'); // Specify the folder where images will be stored
@@ -43,6 +56,7 @@ const calCertificateStorage = multer.diskStorage({
 const VendorCertificateStorage = createDiskStorage('vendorCertificates');
 const WorkInstructionStorage = createDiskStorage('workInstructions');
 const itemCertificateStorage = createDiskStorage('itemCertificates');
+const additionalCertificateStorage = createAdditionalStorage('additionalCertificates');
 // const grnItemCertificates = createDiskStorage('grnItemCertificates');
 
 
@@ -52,6 +66,8 @@ const vendorCertificateUpload = multer({ storage: VendorCertificateStorage });
 const workInsUploadFolder = multer({ storage: WorkInstructionStorage });
 const itemCertificateFolder = multer({ storage: itemCertificateStorage });
 const calCertificateFolder = multer({ storage: calCertificateStorage });
+const additionalCertificateFolder = multer({ storage: additionalCertificateStorage });
+
 // const grnItemCertificateFolder = multer({ storage: grnItemCertificates });
 const itemMasterImagesFolder = multer({ storage: ItemImageStorage });
 
@@ -151,6 +167,56 @@ router.post('/calReportUpload', calCertificateFolder.single('file'), (req, res) 
   // File was provided, proceed with processing
   res.status(200).json({ message: 'Calibration Report uploaded successfully', name: `${req.body.calCertificateNo}.pdf` });
 });
+
+router.post('/additionalCertificates', additionalCertificateFolder.single('file'), (req, res) => {
+  if (!req.file) {
+    // No file was provided in the request
+    return res.status(400).json({ error: 'No file selected for upload' });
+  }
+
+  fs.renameSync(req.file.path, req.file.path.replace(req.file.originalname, 
+    req.body.rdName + path.extname(req.file.originalname)));
+  console.log(req.file)
+  console.log("Additional Uploaded Successfully")
+  res.status(200).json({ message: 'Calibration Report uploaded successfully', name: `${req.body.rdName}.pdf` });
+
+  // File was provided, proceed with processing
+ 
+});
+
+router.post('/msaCertificates', additionalCertificateFolder.single('file'), (req, res) => {
+  if (!req.file) {
+    // No file was provided in the request
+    return res.status(400).json({ error: 'No file selected for upload' });
+  }
+
+  fs.renameSync(req.file.path, req.file.path.replace(req.file.originalname, 
+    req.body.msaName + path.extname(req.file.originalname)));
+  console.log(req.file)
+  console.log("Additional Uploaded Successfully")
+  res.status(200).json({ message: 'Calibration Report uploaded successfully', name: `${req.body.msaName}.pdf` });
+
+  // File was provided, proceed with processing
+ 
+});
+
+router.post('/otherFilesCertificates', additionalCertificateFolder.single('file'), (req, res) => {
+  if (!req.file) {
+    // No file was provided in the request
+    return res.status(400).json({ error: 'No file selected for upload' });
+  }
+
+  fs.renameSync(req.file.path, req.file.path.replace(req.file.originalname, 
+    req.body.otherFile + path.extname(req.file.originalname)));
+  console.log(req.file)
+  console.log("Additional Uploaded Successfully")
+  res.status(200).json({ message: 'Calibration Report uploaded successfully', name: `${req.body.otherFile}.pdf` });
+
+  // File was provided, proceed with processing
+ 
+});
+
+
 
 // Function to determine the content type based on the file extension
 function getContentType(fileName) {

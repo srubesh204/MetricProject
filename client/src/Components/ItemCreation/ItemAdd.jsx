@@ -9,7 +9,7 @@ import { Delete, Done } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
 import { Link as RouterLink } from 'react-router-dom';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import { Add, Remove, HighlightOffRounded, UploadFile } from '@mui/icons-material';
+import { Add, Remove, HighlightOffRounded, UploadFile, Close, CloudUpload } from '@mui/icons-material';
 import { Link } from '@mui/material';
 import { useEmployee } from '../../App';
 
@@ -18,7 +18,7 @@ const ItemAdd = () => {
     // Units Data
 
     const employeeRole = useEmployee();
-
+    const [addOpenData, setAddOpenData] = useState(false)
     const [units, setUnits] = useState([]);
     const UnitFetch = async () => {
         try {
@@ -300,6 +300,19 @@ const ItemAdd = () => {
         itemPrevCalData: "",
         itemPlant: employeeRole.loggedEmp.plantDetails.length === 1 ? employeeRole.loggedEmp.plantDetails[0].plantName : "",
         itemCreatedBy: employeeRole && employeeRole.loggedEmp._id,
+
+        calibrationCost: "",
+        gaugeUsage: "",
+        lifealertDays: "",
+        purchaseRefNo: "",
+        purchaseDate: "",
+        purchaseCost: "",
+        specialRemark: "",
+        drawingIssueNo: "",
+        drawingNo: "",
+        rdName: "",
+        msaName: "",
+        otherFile: "",
     })
     //upload Button
     const VisuallyHiddenInput = styled('input')({
@@ -660,6 +673,76 @@ const ItemAdd = () => {
         }
     };
 
+    const [certMessage, setCertMessage] = useState(null)
+
+    const handleAdditionalCertificate = (event, name) => {
+        const selectedFile = event.target.files[0];
+        if (selectedFile) {
+            const formData = new FormData();
+            formData.append('file', selectedFile);
+            formData.append('rdName', itemAddData.itemIMTENo + "R&R");  // Append rdName to the formData
+            try {
+                axios.post(`${process.env.REACT_APP_PORT}/upload/additionalCertificates`, formData)
+                    .then(response => {
+                        setItemAddData((prev) => ({ ...prev, rdName: response.data.name }));
+                        setCertMessage("Additional Certificates Uploaded Successfully");
+                        console.log("Additional Certificates Uploaded Successfully");
+                    })
+                    .catch(error => {
+                        setCertMessage("Error Uploading Certificate");
+                        console.log(error);
+                    });
+            } catch (error) {
+                console.error('Error uploading the file:', error);
+            }
+        }
+    };
+    const handleMSACertificate = (event, name) => {
+        const selectedFile = event.target.files[0];
+        if (selectedFile) {
+            const formData = new FormData();
+            formData.append('file', selectedFile);
+            formData.append('msaName', itemAddData.itemIMTENo + "MSA");// Append rdName to the formData
+            try {
+                axios.post(`${process.env.REACT_APP_PORT}/upload/msaCertificates`, formData)
+                    .then(response => {
+                        setItemAddData((prev) => ({ ...prev, msaName: response.data.name }));
+                        setCertMessage("MSA Certificates Uploaded Successfully");
+                        console.log(" MSA Certificates Uploaded Successfully");
+                    })
+                    .catch(error => {
+                        setCertMessage("Error Uploading Certificate");
+                        console.log(error);
+                    });
+            } catch (error) {
+                console.error('Error uploading the file:', error);
+            }
+        }
+    };
+
+    const handleOtherFilesCertificate = (event, name) => {
+        const selectedFile = event.target.files[0];
+        if (selectedFile) {
+            const formData = new FormData();
+            formData.append('file', selectedFile);
+            formData.append('otherFile', itemAddData.itemIMTENo + "OtherFiles");// Append rdName to the formData
+            try {
+                axios.post(`${process.env.REACT_APP_PORT}/upload/otherFilesCertificates`, formData)
+                    .then(response => {
+                        setItemAddData((prev) => ({ ...prev, otherFile: response.data.name }));
+                        setCertMessage("OtherFiles Certificates Uploaded Successfully");
+                        console.log(" OtherFiles Certificates Uploaded Successfully");
+                    })
+                    .catch(error => {
+                        setCertMessage("Error Uploading Certificate");
+                        console.log(error);
+                    });
+            } catch (error) {
+                console.error('Error uploading the file:', error);
+            }
+        }
+    };
+
 
     const [snackBarOpen, setSnackBarOpen] = useState(false)
 
@@ -1007,7 +1090,7 @@ const ItemAdd = () => {
 
 
                                     </div>}
-                               
+
 
                                 {itemAddData.itemCalibrationSource === "oem" &&
                                     <div className='row g-2'>
@@ -1047,7 +1130,7 @@ const ItemAdd = () => {
 
 
                                         </div>
-                                        
+
 
 
 
@@ -1652,7 +1735,215 @@ const ItemAdd = () => {
                                 </table>
                             </Paper>}
 
+                            <Dialog fullWidth={true} keepMounted maxWidth="xl" open={addOpenData} sx={{ color: "#f1f4f4" }}
+                                onClose={(e, reason) => {
+                                    console.log(reason)
+                                    if (reason !== 'backdropClick' && reason !== 'escapeKeyDown') {
+                                        setAddOpenData(false)
+                                    }
+                                }}>
+                                <DialogTitle align='center' >Additional Information</DialogTitle>
+                                <IconButton
+                                    aria-label="close"
+                                    onClick={() => setAddOpenData(false)}
+                                    sx={{
+                                        position: 'absolute',
+                                        right: 5,
+                                        top: 5,
+                                        color: (theme) => theme.palette.grey[500],
+                                    }}
+                                >
+                                    <Close />
+                                </IconButton>
+
+                                <DialogContent >
+                                    <div className='row g-2 mb-2'>
+                                        <div className='col'>
+                                            <TextField label="Calibration Cost"
+                                                id="calibrationCostId"
+                                                defaultValue=""
+                                                value={itemAddData.calibrationCost}
+                                                onChange={handleItemAddChange}
+                                                size="small"
+                                                fullWidth
+                                                name="calibrationCost" />
+
+                                        </div>
+                                        <div className='col'>
+                                            <TextField label="Gauge life in days"
+                                                id="gaugeUsageId"
+                                                defaultValue=""
+                                                size="small"
+                                                fullWidth
+                                                value={itemAddData.gaugeUsage}
+                                                onChange={handleItemAddChange}
+                                                name="gaugeUsage" />
+
+                                        </div>
+                                        <div className='col'>
+
+                                            <TextField label="Gauge life alert in days"
+                                                id="lifealertDaysId"
+                                                defaultValue=""
+                                                size="small"
+                                                value={itemAddData.lifealertDays}
+                                                onChange={handleItemAddChange}
+                                                fullWidth
+                                                name="lifealertDays" />
+                                        </div>
+                                    </div>
+                                    <div className='row g-2 mb-2'>
+                                        <div className='col'>
+                                            <TextField label="Purchase Ref.No"
+                                                id="purchaseRefNoId"
+                                                defaultValue=""
+                                                value={itemAddData.purchaseRefNo}
+                                                onChange={handleItemAddChange}
+                                                size="small"
+                                                fullWidth
+                                                name="purchaseRefNo" />
+                                        </div>
+                                        <div className='col' style={{ width: "200%" }}>
+                                            <TextField label="Purchase Date"
+                                                id="purchaseDateId"
+                                                defaultValue=""
+                                                value={itemAddData.purchaseDate}
+                                                onChange={handleItemAddChange}
+                                                size="small"
+                                                fullWidth
+                                                name="purchaseDate" />
+                                            {/* <DatePicker
+                                                fullWidth
+                                                id="purchaseDateId"
+                                                name="purchaseDate"
+                                                value={dayjs(itemAddData.purchaseDate)}
+                                                onChange={(newValue) =>
+                                                    setItemAddData((prev) => ({ ...prev, purchaseDate: newValue.format("YYYY-MM-DD") }))
+                                                }
+                                                label="Purchase Date"
+                                                slotProps={{ textField: { size: 'small' } }}
+                                                className="h-100"
+                                            format="DD-MM-YYYY" />*/}
+                                        </div>
+                                        <div className='col'>
+                                            <TextField label="Purchase Cost"
+                                                id="purchaseCostId"
+                                                defaultValue=""
+                                                size="small"
+                                                fullWidth
+                                                value={itemAddData.purchaseCost}
+                                                onChange={handleItemAddChange}
+                                                name="purchaseCost" />
+                                        </div>
+
+                                    </div>
+                                    <div className='row g-2 mb-2'>
+                                        <div className='col'>
+                                            <TextField label="Special Remark"
+                                                id="specialRemarkId"
+                                                defaultValue=""
+                                                size="small"
+                                                value={itemAddData.specialRemark}
+                                                onChange={handleItemAddChange}
+                                                fullWidth
+                                                name="specialRemark" />
+                                        </div>
+                                        <div className='col'>
+                                            <TextField label="Drawing Issue No"
+                                                id="drawingIssueNoId"
+                                                defaultValue=""
+                                                size="small"
+                                                value={itemAddData.drawingIssueNo}
+                                                onChange={handleItemAddChange}
+                                                fullWidth
+                                                name="drawingIssueNo" />
+                                        </div>
+                                        <div className='col'>
+                                            <TextField label="Drawing No"
+                                                id="drawingNoId"
+                                                defaultValue=""
+                                                size="small"
+                                                onChange={handleItemAddChange}
+                                                value={itemAddData.drawingNo}
+                                                fullWidth
+                                                name="drawingNo" />
+                                        </div>
+                                    </div>
+                                    <div className='row g-2'>
+                                        <div className='col-md-6 d-flex' >
+                                            {itemAddData.rdName === "" ?
+                                                <Button helperText="Hello" className='me-2' size='small' component="label" fullWidth variant="contained" startIcon={<CloudUpload />} >
+                                                    R&R Upload
+                                                    <VisuallyHiddenInput type="file" onChange={handleAdditionalCertificate} />
+                                                </Button>
+                                                : <div className='d-flex justify-content-center '>
+                                                    {(itemAddData.rdName !== "" && itemAddData.rdName !== undefined) &&
+                                                        <Chip
+                                                            className='mt-2'
+                                                            icon={<Done />}
+                                                            color="success"
+                                                            label={itemAddData.rdName}
+                                                            onClick={() => {
+                                                                const fileUrl = `${process.env.REACT_APP_PORT}/additionalCertificates/${itemAddData.rdName}`;
+                                                                window.open(fileUrl, '_blank'); // Opens the file in a new tab/window
+                                                            }}
+                                                            onDelete={() => setItemAddData((prev) => ({ ...prev, rdName: "" }))}
+                                                        />}
+                                                </div>}
+                                            {itemAddData.msaName === "" ?
+                                                <Button helperText="Hello" className='me-2' component="label" size='small' fullWidth variant="contained" startIcon={<CloudUpload />} >
+                                                    MSA Upload
+                                                    <VisuallyHiddenInput type="file" onChange={handleMSACertificate} />
+                                                </Button>
+                                                : <div className='d-flex justify-content-center '>
+                                                    {(itemAddData.msaName !== "" && itemAddData.msaName !== undefined) &&
+                                                        <Chip
+                                                            className='mt-2'
+                                                            icon={<Done />}
+                                                            color="success"
+                                                            label={itemAddData.msaName}
+                                                            onClick={() => {
+                                                                const fileUrl = `${process.env.REACT_APP_PORT}/msaCertificates/${itemAddData.msaName}`;
+                                                                window.open(fileUrl, '_blank'); // Opens the file in a new tab/window
+                                                            }}
+                                                            onDelete={() => setItemAddData((prev) => ({ ...prev, msaName: "" }))}
+                                                        />}
+                                                </div>}
+
+                                            {itemAddData.otherFile === "" ?
+                                            <Button helperText="Hello" component="label" size='small' fullWidth variant="contained" startIcon={<CloudUpload />} >
+                                                Other Files Upload
+                                                <VisuallyHiddenInput type="file" onChange={handleOtherFilesCertificate} />
+                                            </Button>
+                                           : <div className='d-flex justify-content-center '>
+                                                {(itemAddData.otherFile !== "" && itemAddData.otherFile !== undefined) &&
+                                                    <Chip
+                                                        className='mt-2'
+                                                        icon={<Done />}
+                                                        color="success"
+                                                        label={itemAddData.otherFile}
+                                                        onClick={() => {
+                                                            const fileUrl = `${process.env.REACT_APP_PORT}/otherFilesCertificates/${itemAddData.otherFile}`;
+                                                            window.open(fileUrl, '_blank'); // Opens the file in a new tab/window
+                                                        }}
+                                                        onDelete={() => setItemAddData((prev) => ({ ...prev, otherFile: "" }))}
+                                                    />}
+                                            </div>}
+                                        </div>
+                                    </div>
+                                </DialogContent>
+                            </Dialog>
+
+
                             <div className="d-flex justify-content-end">
+                                <Button
+                                    color="secondary"
+                                    className='me-2'
+                                    variant='contained'
+                                    onClick={() => setAddOpenData(true)}
+                                >
+                                    Additional Information
+                                </Button>
 
                                 <Button variant='contained' color='warning' onClick={() => setOpen(true)} className='me-3' type="button">
                                     Item Create
