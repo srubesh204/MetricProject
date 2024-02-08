@@ -1302,7 +1302,7 @@ const Home = () => {
       setStatusCheckMsg("");
       setGrnOpen(true);
     } else {
-      setStatusCheckMsg("Selected Item are not DC ed")
+      setStatusCheckMsg("Please ensure the item is created in the DC before proceeding")
     }
   }
 
@@ -1314,7 +1314,7 @@ const Home = () => {
       setStatusCheckMsg("");
       setGrnOpen(true);
     } else {
-      setStatusCheckMsg("Selected Item are not DC ed")
+      setStatusCheckMsg("Select a item to be calibrated at site")
     }
   }
 
@@ -1331,14 +1331,14 @@ const Home = () => {
           setCalOpen(true);
           console.log("working")
         }else{
-          setStatusCheckMsg("Selected item not in default location")
+          setStatusCheckMsg("Move the item to the default location then try again!")
           console.log(StatusCheckMsg)
         }
       }else if(selectedRows[0].itemCalibrationDoneAt === "Site"){
         console.log("working")
         setCalOpen(true)
       }
-      setStatusCheckMsg("");
+      
       
     } else {
       if(selectedRows.length !== 1){
