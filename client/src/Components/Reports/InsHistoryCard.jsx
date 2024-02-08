@@ -214,18 +214,8 @@ function InsHistoryCard() {
         fetchData();
     }, []);
 
-
-
-
-
-
-
-
     console.log(itemCalList)
     console.log(selectedIMTEs)
-
-
-
 
     console.log(selectedRow)
     console.log(selectedRow.acceptanceCriteria)
@@ -271,8 +261,6 @@ function InsHistoryCard() {
 
                         <span key={index}>
                             {item}<br />
-
-
                         </span>
 
                     ))}

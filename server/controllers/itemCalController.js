@@ -188,6 +188,7 @@ const itemCalController = {
           itemLastCalDate,
           itemStatus: itemCondition,
           itemLastStatus: itemStatus,
+          itemCalibratedAt: "inhouse",
           itemCertificateNo: createdItem.calCertificateNo,
           itemLastCertificateNo: itemCertificateNo
         }
@@ -196,7 +197,7 @@ const itemCalController = {
           { $set: updateItemFields },
           { new: true }
         );
-        console.log("itemUpdated")
+        
 
 
 
