@@ -81,11 +81,6 @@ app.use('/mail', mailRoute)
  
 //
 app.post('/login', employeeController.employeeLoginCheck)
-
-
-
-
-
 const port = 3003;
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);

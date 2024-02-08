@@ -97,6 +97,24 @@ const ItemAdd = () => {
     };
 
 
+    const [department, setDepartment] = useState([])
+    const DepFetch = async () => {
+        try {
+            const response = await axios.get(
+                `${process.env.REACT_APP_PORT}/department/getAllDepartments`
+            );
+            // const defaultDepartment = response.data.result.filter((dep) => dep.defaultdep === "yes")
+            setDepartment(response.data.result);
+
+            console.log(response.data)
+        } catch (err) {
+            console.log(err);
+        }
+    };
+    //get Designations
+    useEffect(() => {
+        DepFetch()
+    }, []);
 
 
 
@@ -229,6 +247,7 @@ const ItemAdd = () => {
         isItemMaster: "0",
         itemAddMasterName: "",
         itemIMTENo: "",
+        itemSAPNo: "",
         itemImage: "",
         itemType: "",
         itemRangeSize: "",
@@ -243,7 +262,7 @@ const ItemAdd = () => {
         itemDepartment: "",
         itemCurrentLocation: "",
         itemArea: "N/A",
-        itemPlaceOfUsage: "N/A",
+        itemPlaceOfUsage: "",
         itemCalFreInMonths: "",
         itemCalAlertDays: "",
         itemCalibrationSource: "",
@@ -282,7 +301,6 @@ const ItemAdd = () => {
         itemPlant: employeeRole.loggedEmp.plantDetails.length === 1 ? employeeRole.loggedEmp.plantDetails[0].plantName : "",
         itemCreatedBy: employeeRole && employeeRole.loggedEmp._id,
     })
-
     //upload Button
     const VisuallyHiddenInput = styled('input')({
         clip: 'rect(0 0 0 0)',
@@ -373,10 +391,8 @@ const ItemAdd = () => {
             }));
             console.log("working")
         }
-        
     }
-
-    useEffect(()=> {
+    useEffect(() => {
         const departments = employeeRole.loggedEmp.plantDetails.filter(plant => plant.plantName === itemAddData.itemPlant)
         console.log(departments)
         setAvailableDeps(departments)
@@ -524,9 +540,7 @@ const ItemAdd = () => {
         })
     };
     //
-
     //PartCheckBox
-
     const ITEM_HEIGHT = 48;
     const ITEM_PADDING_TOP = 8;
     const MenuProps = {
@@ -537,14 +551,8 @@ const ItemAdd = () => {
             },
         },
     }
-
-
     const [open, setOpen] = useState(false)
     const navigate = useNavigate();
-
-
-
-
     //validate function 
     const [errors, setErrors] = useState({})
 
@@ -586,12 +594,10 @@ const ItemAdd = () => {
                 const response = await axios.post(
                     `${process.env.REACT_APP_PORT}/itemAdd/createItemAdd`, itemAddData
                 );
-
+                console.log(response.data.result)
                 setSnackBarOpen(true)
-
                 console.log("Item Created Successfully")
                 setErrorHandler({ status: response.data.status, message: response.data.message, code: "success" })
-
                 setTimeout(() => {
                     navigate('/itemList');
                 }, 2000);
@@ -632,7 +638,7 @@ const ItemAdd = () => {
         console.log(selectedFile)
         if (selectedFile) {
             console.log("working")
-           
+
             const formData = new FormData();
             formData.append('file', selectedFile);
             try {
@@ -673,18 +679,9 @@ const ItemAdd = () => {
         setUploadMessage(null)
     }
 
-
-
-
-
-
-
     useEffect(() => {
         calculateResultDate(itemAddData.itemCalDate, itemAddData.itemCalFreInMonths);
     }, [itemAddData.itemCalDate, itemAddData.itemCalFreInMonths]);
-
-
-
     const calculateResultDate = (itemCalDate, itemCalFreInMonths) => {
         const parsedDate = dayjs(itemCalDate);
         if (parsedDate.isValid() && !isNaN(parseInt(itemCalFreInMonths))) {
@@ -698,17 +695,12 @@ const ItemAdd = () => {
     };
 
     console.log(availabelDeps)
-
-
-
-
     return (
         <div style={{ margin: "2rem", backgroundColor: "#f5f5f5" }}>
             <form>
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                     <Paper className='row' elevation={12} sx={{ p: 1.5, mb: 2, mx: 0 }}>
                         <div className="col-lg-5 row g-2">
-
                             <div className='col-9'>
                                 <TextField
                                     {...(errors.itemAddMasterName !== "" && { helperText: errors.itemAddMasterName, error: true })}
@@ -718,10 +710,8 @@ const ItemAdd = () => {
                                         <MenuItem key={index} value={item.itemDescription}>{item.itemDescription}</MenuItem>
                                     ))}
                                 </TextField>
-
-
                             </div>
-                            <div className="col-6">
+                            <div className="col-4">
                                 <Autocomplete
                                     disablePortal
                                     id="itemIMTENoId"
@@ -733,12 +723,10 @@ const ItemAdd = () => {
                                         name='itemIMTENo' onChange={handleItemAddChange}  {...params} label="IMTE No" />}
                                     getOptionDisabled={option => true}
                                     clearOnBlur={false}
-
-
                                 />
-
-
-
+                            </div>
+                            <div className="col-3">
+                                <TextField size='small' variant='outlined' value={itemAddData.itemSAPNo} label="SAP NO" onChange={handleItemAddChange} name='itemSAPNo' id='itemSAPNoId' fullWidth />
 
                             </div>
                             <div className="col">
@@ -746,16 +734,13 @@ const ItemAdd = () => {
                                     control={<Checkbox name='isItemMaster' onChange={handleItemAddChange} />}
                                     label="Use as Master"
                                 />
-
                             </div>
-
-
                         </div>
-                        <div className="col-lg-2 " >
-                            <Typography variant='h3' style={{ height: "50%", margin: "13% 0" }} className='text-center'>Item Add</Typography>
+                        <div className="col-lg-3 " >
+                            <Typography variant='h3' style={{ height: "100%", margin: "13% 0" }} className='text-center'>Item Add</Typography>
                         </div>
 
-                        <div className="col-lg-5 d-flex justify-content-end">
+                        <div className="col-lg-4 d-flex justify-content-end">
                             {itemAddData.itemImage && <Card elevation={12} sx={{ width: "110px", height: "110px" }}>
 
                                 <img src={`${process.env.REACT_APP_PORT}/itemMasterImages/${itemAddData.itemImage}`} style={{ width: "100%", height: "100%" }} />
@@ -864,7 +849,7 @@ const ItemAdd = () => {
                                         Select Location
                                     </Typography>
                                     <div className="row g-2 mb-2">
-                                        <div className="col-md-6">
+                                        <div className="col-md-4">
                                             <TextField
                                                 {...(errors.itemDepartment !== "" && { helperText: errors.itemDepartment, error: true })}
                                                 value={employeeRole.loggedEmp.plantDetails.length === 1 ? employeeRole.loggedEmp.plantDetails[0].plantName : itemAddData.itemPlant}
@@ -885,37 +870,26 @@ const ItemAdd = () => {
                                                 ))}
                                             </TextField>
                                         </div>
-                                        <div className="col-md-6">
+                                        <div className="col-md-4">
 
                                             <TextField
                                                 {...(errors.itemDepartment !== "" && { helperText: errors.itemDepartment, error: true })}
-                                                value={itemAddData.itemDepartment} disabled={itemAddData.itemPlant === ""} onChange={handleItemAddChange} size='small' select fullWidth variant='outlined' label="Department" name='itemDepartment' id='itemDepartmentId'>
+                                                value={itemAddData.itemDepartment} disabled={itemAddData.itemPlant === ""} onChange={handleItemAddChange} size='small' select fullWidth variant='outlined' label="Primary Location" name='itemDepartment' id='itemDepartmentId'>
                                                 {availabelDeps.length > 0 && availabelDeps[0].departments.length > 0 && availabelDeps[0].departments.map((dep, index) => (
                                                     <MenuItem key={index} value={dep}>{dep}</MenuItem>
                                                 ))}
                                             </TextField>
                                         </div>
-
-
+                                        <div className="col-md-4">
+                                            <TextField value={itemAddData.itemPlaceOfUsage} onChange={handleItemAddChange} size='small' select fullWidth variant='outlined' label="secondary Location" name='itemPlaceOfUsage' id='itemPlaceOfUsageId'>
+                                                {department.map((item, index) => (
+                                                    <MenuItem key={index} value={item.department}>{item.department}</MenuItem>
+                                                ))}
+                                            </TextField>
+                                        </div>
                                     </div>
                                 </Paper>
                             </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
                             <Paper className='col-lg ' elevation={12} sx={{ p: 2 }}>
                                 <Typography variant='h6' className='text-center'>Calibration</Typography>

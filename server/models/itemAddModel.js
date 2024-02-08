@@ -16,6 +16,7 @@ const itemAddSchema = new mongoose.Schema({
     unique: [true, "IMTE No Should be Unique"],
     required: [true, "IMTE No Required"]
   },
+  itemSAPNo: String,
   itemImage: String,
   itemType: String,
   itemRangeSize: String,
@@ -96,7 +97,6 @@ const itemAddSchema = new mongoose.Schema({
     default: () => dayjs().format("YYYY-MM-DD"),
     immutable: true,
   },
-
   updatedAt: {
     type: String,
     default: () => dayjs().format("YYYY-MM-DD")

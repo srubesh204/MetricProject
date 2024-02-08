@@ -49,16 +49,12 @@ const HistoryCardPrint = () => {
             `,
         onAfterPrint: () => setPrintState(false)
     });
-
-
     // Your conditional logic
     if (printState) {
         // Call the handlePrint function when needed
         handlePrint();
     }
-
     console.log(printState)
-
     const renderTableRows = () => {
         if (!selectedIMTEs || selectedIMTEs.length === 0) {
             // Handle the case where selectedIMTEs is undefined or empty
@@ -88,13 +84,10 @@ const HistoryCardPrint = () => {
                     <td style={{ width: "9%", borderRight: "0.5px solid black", borderTop: "0.5px solid black" }}>{selectedRow && selectedRow[0]?.itemCalibratedAt || '-'}</td>
                     <td style={{ width: "9%", borderRight: "0.5px solid black", borderTop: "0.5px solid black" }}>{row.itemCalibratedBy || '-'}</td>
                     <td style={{ width: "9%", borderRight: "0.5px solid black", borderTop: "0.5px solid black" }}>{row.itemCalApprovedBy || '-'}</td>
-
                 </tr>
-
             )
         });
     };
-
     const Footer = (data) => {
         return (
             <tr className="footer">
@@ -106,16 +99,8 @@ const HistoryCardPrint = () => {
             </tr>
         );
     };
-
-
-
     console.log(selectedRow[0]?.itemType)
-
-
     return (
-
-
-
         <div style={{ display: 'none', width: "100%", height: "100%" }}>
             <div style={{ width: "100%", height: "100%" }} ref={componentRef} >
                 <div style={{ padding: "10px", textAlign: "center", textDecoration: "underline" }}>INSTRUMENTS/GAUGE HISTORY CARD</div>
@@ -130,26 +115,26 @@ const HistoryCardPrint = () => {
                         <tbody>
                             <tr style={{ width: "100", fontSize: "12px" }}>
                                 <td style={{ width: "30%", padding: "5px", margin: 0, borderRight: "0.5px solid black" }}>
-                                    <tr style={{ fontWeight: "bold" }}>Gauge Number :    &nbsp;&nbsp;&nbsp;{selectedRow[0]?.itemIMTENo || '-'}</tr>
-                                    <tr style={{ fontWeight: "bold" }}>Gauge Serial No :    &nbsp;&nbsp;&nbsp;{selectedRow[0]?.itemMFRNo || '-'}</tr>
-                                    <tr style={{ fontWeight: "bold" }}>Calibration Source :    &nbsp;&nbsp;&nbsp;{selectedRow[0]?.itemCalibrationSource || '-'}</tr>
+                                    <tr style={{ fontWeight: "" }}>Gauge Number :    &nbsp;&nbsp;&nbsp;{selectedRow[0]?.itemIMTENo || '-'}</tr>
+                                    <tr style={{ fontWeight: "" }}>Gauge Serial No :    &nbsp;&nbsp;&nbsp;{selectedRow[0]?.itemMFRNo || '-'}</tr>
+                                    <tr style={{ fontWeight: "" }}>Calibration Source :    &nbsp;&nbsp;&nbsp;{selectedRow[0]?.itemCalibrationSource || '-'}</tr>
                                 </td>
                                 <td style={{ width: "40%", padding: "5px", margin: 0, borderRight: "0.5px solid black" }}>
-                                    <tr style={{ fontWeight: "bold" }}>Instrument / Gauge Name :    &nbsp;&nbsp;&nbsp;{selectedRow[0]?.itemAddMasterName || '-'}</tr>
-                                    <tr style={{ fontWeight: "bold" }}>Range / Size :    &nbsp;&nbsp;&nbsp;{selectedRow[0]?.itemRangeSize || '-'} {selectedRow[0]?.itemRangeSizeUnit}</tr>
-                                    <tr style={{ fontWeight: "bold" }}>Frequency of Calibration :    &nbsp;&nbsp;&nbsp;{selectedRow[0]?.itemCalFreInMonths}</tr>
+                                    <tr style={{ fontWeight: "" }}>Instrument / Gauge Name :    &nbsp;&nbsp;&nbsp;{selectedRow[0]?.itemAddMasterName || '-'}</tr>
+                                    <tr style={{ fontWeight: "" }}>Range / Size :    &nbsp;&nbsp;&nbsp;{selectedRow[0]?.itemRangeSize || '-'} {selectedRow[0]?.itemRangeSizeUnit}</tr>
+                                    <tr style={{ fontWeight: "" }}>Frequency of Calibration :    &nbsp;&nbsp;&nbsp;{selectedRow[0]?.itemCalFreInMonths}</tr>
                                     {/* <tr style={{ fontWeight: "bold" }}>Department :    &nbsp;&nbsp;&nbsp;{selectedRow[0]?.itemDepartment || '-'}</tr> */}
                                 </td>
                                 <td style={{ width: "30%", padding: "0px", textAlign: "center" }}>
                                     <td style={{ fontWeight: "bold", fontSize: "12px" }}>Permissible Size</td>
-                                    <table style={{ width: "100%", margin: 0, borderCollapse: "collapse" }}>
+                                    {selectedRow.length > 0 && selectedRow[0].itemType === "attribute" && <table style={{ width: "100%", margin: 0, borderCollapse: "collapse" }}>
 
                                         <tr style={{ borderTop: "0.5px solid black" }}>
                                             <td style={{ width: "33%", borderRight: "0.5px solid black", fontWeight: "bold" }}>Parameter</td>
                                             <td style={{ width: "33%", borderRight: "0.5px solid black", fontWeight: "bold" }}>Min / Max</td>
                                             <td style={{ width: "34%", fontWeight: "bold" }}>Wear Limit</td>
                                         </tr>
-                                        {selectedRow.length > 0 &&selectedRow[0].itemType === "attribute" && 
+                                        {selectedRow.length > 0 &&
                                             selectedRow[0].acceptanceCriteria.map((item, index) => (
                                                 <tr key={index} style={{ borderTop: "0.5px solid black" }}>
                                                     <td style={{ width: "33%", borderRight: "0.5px solid black" }}>{item.acParameter || '-'}</td>
@@ -157,7 +142,15 @@ const HistoryCardPrint = () => {
                                                     <td style={{ width: "34%" }}>{item.acWearLimitPS || '-'}</td>
                                                 </tr>
                                             ))}
-                                            {selectedRow.length > 0 && selectedRow[0].itemType === "variable" &&  
+                                    </table>}
+                                    {selectedRow.length > 0 && selectedRow[0].itemType === "variable" && <table style={{ width: "100%", margin: 0, borderCollapse: "collapse" }}>
+
+                                        <tr style={{ borderTop: "0.5px solid black" }}>
+                                            <td style={{ width: "33%", borderRight: "0.5px solid black", fontWeight: "bold" }}>Parameter</td>
+                                            <td style={{ width: "33%", borderRight: "0.5px solid black", fontWeight: "bold" }}>Min / Max</td>
+                                            {/* <td style={{ width: "34%", fontWeight: "bold" }}>Wear Limit</td> */}
+                                        </tr>
+                                        {selectedRow.length > 0 &&
                                             selectedRow[0].acceptanceCriteria.map((item, index) => (
                                                 <tr key={index} style={{ borderTop: "0.5px solid black" }}>
                                                     <td style={{ width: "33%", borderRight: "0.5px solid black" }}>{item.acParameter || '-'}</td>
@@ -165,13 +158,27 @@ const HistoryCardPrint = () => {
                                                     {/* <td style={{ width: "34%" }}>{item.acWearLimitPS || '-'}</td> */}
                                                 </tr>
                                             ))}
+                                    </table>}
+                                    {selectedRow.length > 0 && selectedRow[0].itemType === "referenceStandard" && <table style={{ width: "100%", margin: 0, borderCollapse: "collapse" }}>
 
+                                        <tr style={{ borderTop: "0.5px solid black" }}>
+                                            <td style={{ width: "33%", borderRight: "0.5px solid black", fontWeight: "bold" }}>Parameter</td>
+                                            <td style={{ width: "33%", borderRight: "0.5px solid black", fontWeight: "bold" }}>Min / Max</td>
+                                            {/* <td style={{ width: "34%", fontWeight: "bold" }}>Wear Limit</td> */}
+                                        </tr>
+                                        {selectedRow.length > 0 &&
+                                            selectedRow[0].acceptanceCriteria.map((item, index) => (
+                                                <tr key={index} style={{ borderTop: "0.5px solid black" }}>
+                                                    <td style={{ width: "33%", borderRight: "0.5px solid black" }}>{item.acParameter || '-'}</td>
+                                                    <td style={{ width: "33%", borderRight: "0.5px solid black" }}>{item.acMinPS || '-'}/{item.acMaxPS || '-'}</td>
+                                                    {/* <td style={{ width: "34%" }}>{item.acWearLimitPS || '-'}</td> */}
+                                                </tr>
+                                            ))}
+                                    </table>}
+                                   
+                                   
 
-                                    </table>
                                 </td>
-
-                                
-
                             </tr>
                         </tbody>
                     </table>

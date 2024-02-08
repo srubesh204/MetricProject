@@ -180,12 +180,13 @@ const ItemEdit = () => {
     //
 
     const initialItemAddData = {
-        
+
         selectedItemMaster: [],
         isItemMaster: "",
         itemAddMasterName: "",
         itemPlant: "",
         itemIMTENo: "",
+        itemSAPNo: "",
         itemImage: "",
         itemType: "",
         itemRangeSize: "",
@@ -200,7 +201,7 @@ const ItemEdit = () => {
         itemDepartment: "",
 
         itemArea: "N/A",
-        itemPlaceOfUsage: "N/A",
+        itemPlaceOfUsage: "",
         itemCalFreInMonths: "",
         itemCalAlertDays: "",
         itemCalibrationSource: "",
@@ -241,11 +242,12 @@ const ItemEdit = () => {
 
 
     const [itemAddData, setItemAddData] = useState({
-        
+
         selectedItemMaster: [],
         isItemMaster: "",
         itemAddMasterName: "",
         itemIMTENo: "",
+        itemSAPNo: "",
         itemImage: "",
         itemType: "",
         itemRangeSize: "",
@@ -260,7 +262,7 @@ const ItemEdit = () => {
         itemDepartment: "",
         itemCurrentLocation: "",
         itemArea: "N/A",
-        itemPlaceOfUsage: "N/A",
+        itemPlaceOfUsage: "",
         itemCalFreInMonths: "",
         itemCalAlertDays: "",
         itemCalibrationSource: "",
@@ -311,10 +313,11 @@ const ItemEdit = () => {
             console.log(itemData)
             setItemAddData((prev) => ({
                 ...prev,
-               
+
                 selectedItemMaster: itemData.selectedItemMaster,
                 itemAddMasterName: itemData.itemAddMasterName,
                 itemIMTENo: itemData.itemIMTENo,
+                itemSAPNo: itemData.itemSAPNo,
                 isItemMaster: itemData.isItemMaster,
                 itemImage: itemData.itemImage,
                 itemPlant: itemData.itemPlant,
@@ -329,7 +332,7 @@ const ItemEdit = () => {
                 itemStatus: itemData.itemStatus,
                 itemReceiptDate: itemData.itemReceiptDate,
                 itemDepartment: itemData.itemDepartment,
-               
+
                 itemArea: itemData.itemArea,
                 itemPlaceOfUsage: itemData.itemPlaceOfUsage,
                 itemCalFreInMonths: itemData.itemCalFreInMonths,
@@ -388,40 +391,22 @@ const ItemEdit = () => {
         whiteSpace: 'nowrap',
         width: 1,
     });
-
-
-
     useEffect(() => {
         getItemDataById();
     }, [])
-
-
-
-
-
-
-    
-
-
     const handleItemAddChange = (e) => {
 
         const { name, value, checked } = e.target;
         if (name === "itemRangeSizeUnit") {
             setItemAddData((prev) => ({ ...prev, [name]: value, acceptanceCriteria: [{ acAccuracyUnit: value, acRangeSizeUnit: value }] }))
         }
-
-
         if (name === "itemDepartment") {
-
-            setItemAddData((prev) => ({
+             setItemAddData((prev) => ({
                 ...prev,
                 [name]: value,
                 itemCurrentLocation: value, // Ensure 'value' is correct here
             }));
         }
-     
-
-      
         if (name === "itemItemMasterIMTENo") {
             const updatedSelection = isItemMasterList.filter(item => value.some(selectedItem => selectedItem.itemIMTENo === item.itemIMTENo));
             setItemAddData((prev) => ({ ...prev, itemItemMasterIMTENo: updatedSelection }));
@@ -439,7 +424,6 @@ const ItemEdit = () => {
                 console.log("oem")
                 setItemAddData((prev) => ({ ...prev, itemItemMasterIMTENo: [], itemSupplier: [] }));
             }
-
 
         }
         if (name === "itemCalDate") {
@@ -464,8 +448,6 @@ const ItemEdit = () => {
             setItemAddData((prev) => ({ ...prev, itemOEM: typeof value === 'string' ? value.split(',') : value }));
         }
 
-
-
         setItemAddData((prev) => ({ ...prev, [name]: value }));
 
         if (name === "isItemMaster") {
@@ -482,9 +464,6 @@ const ItemEdit = () => {
             console.log("working")
         }
     }
-
-
-
     useEffect(() => {
         setItemAddData((prev) => ({
             ...prev,
@@ -492,9 +471,6 @@ const ItemEdit = () => {
             itemCurrentLocation: itemAddData.itemDepartment, // Ensure 'value' is correct here
         }));
     }, [itemAddData.itemDepartment])
-
-
-
     const handleItemDue = (e) => {
         const { name, value } = e.target;
         if (name === "calibrationDate") {
@@ -502,7 +478,6 @@ const ItemEdit = () => {
         }
 
     }
-
     let dueDates = new Date();
     const frequencyMonths = 6;
     let newDueDate = new Date(dueDates);
@@ -525,14 +500,9 @@ const ItemEdit = () => {
         dueDate = new Date(currentYear, currentMonth + calibrationFrequencyMonths + 1, 0);
     }
     console.log(dueDate)
-
-
-
-
     console.log(itemAddData)
     const [calibrationPointsData, setCalibrationPointsData] = useState([])
     const itemMasterById = () => {
-
         const master = itemMasterDataList.filter(mas => mas.itemDescription === itemAddData.itemAddMasterName)
         console.log(master)
         if (master.length > 0) {
@@ -549,17 +519,11 @@ const ItemEdit = () => {
             setCalibrationPointsData(calibrationPoints)
         }
     };
-
-
     useEffect(() => {
         if (itemAddData.itemAddMasterName) {
             itemMasterById();
         }
     }, [itemAddData.itemAddMasterName]);
-
-
-
-
     const [partData, setPartData] = useState([])
     const getPartList = async () => {
         try {
@@ -578,8 +542,6 @@ const ItemEdit = () => {
     useEffect(() => {
         getPartList();
     }, []);
-
-
     const [imteList, setImteList] = useState([])
     const getImteList = async () => {
         try {
@@ -623,8 +585,6 @@ const ItemEdit = () => {
             }]
         }))
     }
-
-
     const changeACValue = (index, name, value) => {
         console.log('Received:', { index, name, value });
 
@@ -745,7 +705,7 @@ const ItemEdit = () => {
         const selectedFile = event.target.files[0];
         if (selectedFile) {
             console.log("working")
-            
+
             const formData = new FormData();
             formData.append('file', selectedFile);
             try {
@@ -753,7 +713,7 @@ const ItemEdit = () => {
                     .then(response => {
                         setUploadMessage(response.data.message)
                         console.log(response);
-                        setItemAddData((prev) => ({ ...prev, itemCertificateName: response.data.name}));
+                        setItemAddData((prev) => ({ ...prev, itemCertificateName: response.data.name }));
                     })
                     .catch(error => {
                         setUploadMessage("")
@@ -766,8 +726,6 @@ const ItemEdit = () => {
 
         }
     };
-
-
     const handleSnackClose = (event, reason) => {
         if (reason === 'clickaway') {
             return;
@@ -780,15 +738,6 @@ const ItemEdit = () => {
         setItemAddData((prev) => ({ ...prev, itemCertificateName: "" }));
         setUploadMessage(null)
     }
-
-
-
-
-
-
-
-
-
     const calculateResultDate = (newValue) => {
         const itemCalDate = dayjs(newValue).format('YYYY-MM-DD')
         const parsedDate = dayjs(itemCalDate);
@@ -801,11 +750,26 @@ const ItemEdit = () => {
             }));
         }
     };
+    const [department, setDepartment] = useState([])
+    const DepFetch = async () => {
+        try {
+            const response = await axios.get(
+                `${process.env.REACT_APP_PORT}/department/getAllDepartments`
+            );
+            // const defaultDepartment = response.data.result.filter((dep) => dep.defaultdep === "yes")
+            setDepartment(response.data.result);
 
-    const [plantDepartments, setPlantDepartments] = useState([])
-
+            console.log(response.data)
+        } catch (err) {
+            console.log(err);
+        }
+    };
+    //get Designations
     useEffect(() => {
-
+        DepFetch()
+    }, []);
+    const [plantDepartments, setPlantDepartments] = useState([])
+    useEffect(() => {
         const filteredPlants = loggedEmp.plantDetails.filter(plant => plant.plantName === itemAddData.itemPlant);
         console.log(filteredPlants)
         if (filteredPlants.length > 0) {
@@ -815,9 +779,6 @@ const ItemEdit = () => {
         }
 
     }, [itemAddData.itemPlant])
-
-
-
     return (
         <div style={{ margin: "2rem", backgroundColor: "#f5f5f5" }}>
             <form>
@@ -843,7 +804,7 @@ const ItemEdit = () => {
                                 </TextField>
                             </div> */}
 
-                            <div className="col-6">
+                            <div className="col-4">
                                 <Autocomplete
                                     disablePortal
                                     id="itemIMTENoId"
@@ -857,29 +818,24 @@ const ItemEdit = () => {
 
                                 />
                             </div>
+                            <div className="col-3">
+                                <TextField size='small' variant='outlined' value={itemAddData.itemSAPNo} label="SAP NO" onChange={handleItemAddChange} name='itemSAPNo' id='itemSAPNoId' fullWidth />
+                            </div>
                             <div className="col">
                                 <FormControlLabel
                                     control={<Checkbox name='isItemMaster' checked={itemAddData.isItemMaster === "1"} onChange={handleItemAddChange} />}
                                     label="Use as Master"
                                 />
-
                             </div>
-
-
                         </div>
-                        <div className="col-lg-2 " >
+                        <div className="col-lg-3 " >
                             <Typography variant='h3' style={{ height: "50%", margin: "13% 0" }} className='text-center'>Item Edit</Typography>
                         </div>
-
-                        <div className="col-lg-5 d-flex justify-content-end">
+                        <div className="col-lg-4 d-flex justify-content-end">
                             {itemAddData.itemImage && <Card elevation={12} sx={{ width: "110px", height: "110px" }}>
-
                                 <img src={`${process.env.REACT_APP_PORT}/itemMasterImages/${itemAddData.itemImage}`} style={{ width: "100%", height: "100%" }} />
-
                             </Card>}
                         </div>
-
-
                     </Paper>
                     <div className="row ">
                         <div className="col">
@@ -888,11 +844,9 @@ const ItemEdit = () => {
                                 <div className="row g-2 mb-2">
                                     <div className="col-lg-4">
                                         <TextField size='small' select variant='outlined' onChange={handleItemAddChange} label="Item Type" name='itemType' fullWidth value={itemAddData.itemType}>
-
                                             <MenuItem value="attribute">Attribute</MenuItem>
                                             <MenuItem value="variable">Variable</MenuItem>
                                             <MenuItem value="referenceStandard">Reference Standard</MenuItem>
-
                                         </TextField>
                                     </div>
                                     <div className='col-lg-8 d-flex justify-content-between'>
@@ -905,10 +859,6 @@ const ItemEdit = () => {
                                                 <MenuItem key={index} value={unit.unitName}>{unit.unitName}</MenuItem>
                                             ))}
                                         </TextField>
-
-
-
-
                                     </div>
                                 </div>
                                 <div className="row g-2">
@@ -917,15 +867,12 @@ const ItemEdit = () => {
                                     </div>
                                     <div className='col-md-12 d-flex justify-content-between'>
                                         {itemAddData.itemType === "variable" && <TextField size='small' variant='outlined' name='itemLC' onChange={handleItemAddChange} id="itemLCId" value={itemAddData.itemLC} label="Least Count" fullWidth />}
-
-
                                         {itemAddData.itemType === "variable" && <TextField select size='small' variant='outlined' label="Unit" name='itemLCUnit' onChange={handleItemAddChange} value={itemAddData.itemLCUnit} style={{ width: "100%" }} >
                                             <MenuItem value=""><em>None</em></MenuItem>
                                             {units.map((unit, index) => (
                                                 <MenuItem key={index} value={unit.unitName}>{unit.unitName}</MenuItem>
                                             ))}
                                         </TextField>}
-
                                     </div>
                                     <div className="row g-1">
                                         <div className="col-lg-12 me-1">
@@ -971,7 +918,7 @@ const ItemEdit = () => {
                                     Select Location
                                 </Typography>
                                 <div className="row g-2 mt-0 mb-2">
-                                    <div className="col-md-6">
+                                    <div className="col-md-4">
                                         <TextField
 
                                             value={itemAddData.itemPlant} onChange={handleItemAddChange} size='small' select fullWidth variant='outlined' label="Select Plant" name='itemPlant' id='itemPlantId'>
@@ -981,10 +928,17 @@ const ItemEdit = () => {
                                             ))}
                                         </TextField>
                                     </div>
-                                    <div className="col-md-6 ">
-                                        <TextField value={itemAddData.itemDepartment} onChange={handleItemAddChange} size='small' select fullWidth variant='outlined' label="Department" name='itemDepartment' id='itemDepartmentId'>
+                                    <div className="col-md-4">
+                                        <TextField value={itemAddData.itemDepartment} onChange={handleItemAddChange} size='small' select fullWidth variant='outlined' label="Primary Location" name='itemDepartment' id='itemDepartmentId'>
                                             {plantDepartments && plantDepartments.map((item, index) => (
                                                 <MenuItem key={index} value={item}>{item}</MenuItem>
+                                            ))}
+                                        </TextField>
+                                    </div>
+                                    <div className="col-md-4">
+                                        <TextField value={itemAddData.itemPlaceOfUsage} onChange={handleItemAddChange} size='small' select fullWidth variant='outlined' label="Secondary Location" name='itemPlaceOfUsage' id='itemPlaceOfUsageId'>
+                                            {department.map((item, index) => (
+                                                <MenuItem key={index} value={item.department}>{item.department}</MenuItem>
                                             ))}
                                         </TextField>
                                     </div>
@@ -1042,7 +996,6 @@ const ItemEdit = () => {
 
 
                                     <div className="col-md-12">
-
                                         <FormControl size='small' component="div" fullWidth>
                                             <InputLabel id="itemItemMasterIMTENoId">Select IMTENo.</InputLabel>
                                             <Select

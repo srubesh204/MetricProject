@@ -1194,9 +1194,7 @@ const Home = () => {
       }
     }
   };
-
   const [mailIds, setMailIds] = useState([])
-
   const mailIdGather = () => {
     if (selectedRows.length > 0) {
       const plants = selectedRows.map(item => item.itemPlant)
@@ -1208,9 +1206,6 @@ const Home = () => {
       console.log(uniqueEmails)
     }
   }
-
-
-
   const [mailList, setMailList] = useState([])
   const getMailList = async () => {
     try {
