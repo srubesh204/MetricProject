@@ -1320,14 +1320,18 @@ const Home = () => {
 
 
   const grnCheck = () => {
-    const grnBoolean = selectedRows.every(item => item.dcStatus === "1" && item.itemStatus !== "missing" && item.itemStatus !== "spare" )
-
+    const grnBoolean = selectedRows.every(item => item.dcStatus === "1")
+    const itemStatus = selectedRows.every(item => item.itemStatus !== "missing" && item.itemStatus !== "spare")
 
     console.log(grnCheck && selectedRows.length === 1)
-    if (grnBoolean) {
+    if (grnBoolean && itemStatus && selectedRows.length === 1) {
       setStatusCheckMsg("");
       setGrnOpen(true);
     } else {
+      if(selectedRows.length !== 1){
+        setStatusCheckMsg("Multiple selection not allowed")
+      }
+      
       setStatusCheckMsg("Please ensure the item is created in the DC before proceeding")
     }
   }
