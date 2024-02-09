@@ -1,9 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react'
 import axios from 'axios'
-import { DataGrid,GridToolbar } from '@mui/x-data-grid';
+import { DataGrid, GridToolbar, GridToolbarQuickFilter } from '@mui/x-data-grid';
 import { FileCopy } from '@mui/icons-material';
-import {IconButton } from "@mui/material";
+import { IconButton } from "@mui/material";
 import { Box, Container, Grid, Paper, Typography } from "@mui/material";
+import { TextField, MenuItem, Button } from '@mui/material';
 import FileOpenIcon from '@mui/icons-material/FileOpen';
 import { Link } from "react-router-dom";
 
@@ -16,6 +17,7 @@ const VendorUpload = () => {
                 `${process.env.REACT_APP_PORT}/vendor/getAllVendors`
             );
             setVendorDataList(response.data.result);
+            setFilteredData(response.data.result)
 
         } catch (err) {
             console.log(err);
@@ -45,7 +47,7 @@ const VendorUpload = () => {
         },
         {
             field: 'Vendor Certificate View', headerName: 'Vendor Certificate View', width: 150, align: "center", renderCell: (params) =>
-                    <IconButton size="small" component={Link} target="_blank" to={`${process.env.REACT_APP_PORT}/vendorCertificates/${params.row.certificate}`} ><FileOpenIcon /></IconButton>          
+                <IconButton size="small" component={Link} target="_blank" to={`${process.env.REACT_APP_PORT}/vendorCertificates/${params.row.certificate}`} ><FileOpenIcon /></IconButton>
         },
 
 
@@ -95,66 +97,101 @@ const VendorUpload = () => {
     //     setDepartmentData(params.row)
     //     setDepStateId(params.id)
     //   }
+    const [filteredData, setFilteredData] = useState([])
+
+    const handleFilterChange = (e) => {
+        const { name, value } = e.target;
+        if (name === "vendorType") {
+            if (value === "all") {
+                setFilteredData(vendorDataList)
+            } else {
+                const vendorType = vendorDataList.filter((item) => (item[value] === "1"))
+                setFilteredData(vendorType)
+            }
+        }
+    }
 
 
     return (
         <div style={{ fontSize: "smaller", padding: "3px", margin: "5px", my: "5px" }}>
 
 
-<Paper sx={{
-            p: 4,
-            display: 'flex',
-            flexDirection: 'column',
-            mb: 1,
+            <Paper sx={{
+                p: 4,
+                display: 'flex',
+                flexDirection: 'column',
+                mb: 1,
 
-          }} elevation={12}
-          >
-            <div className='row g-2'>
-                <div style={{ height: 480, width: '100%', marginTop: "0.5rem" }}>
-                    <DataGrid disableDensitySelector
-                        rows={vendorDataList}
-                        columns={vendorListColumns}
-                        getRowId={(row) => row._id}
-                        initialState={{
-                            pagination: {
-                                paginationModel: { page: 0, pageSize: 10 },
-                            },
-                        }}
-                        sx={{
-                            ".MuiTablePagination-displayedRows": {
+            }} elevation={12}
+            >
+                <div className='row g-2'>
 
-                                "marginTop": "1em",
-                                "marginBottom": "1em"
-                            }
-                        }}
+                    <div className='col-4 me-2'>
+                        <TextField label="Vendor Type"
+                            id="vendorTypeId"
+                            select
+                            defaultValue=""
+                          onChange={handleFilterChange}
+                            size="small"
+                            sx={{ width: "101%" }}
 
-                        slots={{
-                            toolbar: () => (
-                                <div className='d-flex justify-content-between align-items-center'>
-                                    <GridToolbar />
-                                </div>
-                            ),
-                        }}
+                            name="vendorType" >
+                            <MenuItem value="all">All</MenuItem>
+                            <MenuItem value="oem">OEM</MenuItem>
+                            <MenuItem value="customer">Customer</MenuItem>
+                            <MenuItem value="supplier">Supplier</MenuItem>
+                            <MenuItem value="subContractor">SubContractor</MenuItem>
 
-                        onRowSelectionModelChange={(newRowSelectionModel, event) => {
-                            // setSelectedRowIds(newRowSelectionModel);
-                            console.log(event)
+                        </TextField>
 
-                        }}
+                    </div>
 
-                        // onRowClick={updateVendor}
+                    <div style={{ height: 480, width: '100%', marginTop: "0.5rem" }}>
+                        <DataGrid disableDensitySelector
+                            rows={filteredData}
+                            columns={vendorListColumns}
+                            getRowId={(row) => row._id}
+                            initialState={{
+                                pagination: {
+                                    paginationModel: { page: 0, pageSize: 10 },
+                                },
+                            }}
+                            sx={{
+                                ".MuiTablePagination-displayedRows": {
 
-                        density="compact"
-                        //disableColumnMenu={true}
+                                    "marginTop": "1em",
+                                    "marginBottom": "1em"
+                                }
+                            }}
 
-                     
-                        pageSizeOptions={[10]}
+                            slots={{
+                                toolbar: () => (
+                                    <div className='d-flex justify-content-between align-items-center'>
+                                        <GridToolbar />
+                                        <GridToolbarQuickFilter />
+                                    </div>
+                                ),
+                            }}
+
+                            onRowSelectionModelChange={(newRowSelectionModel, event) => {
+                                // setSelectedRowIds(newRowSelectionModel);
+                                console.log(event)
+
+                            }}
+
+                            // onRowClick={updateVendor}
+
+                            density="compact"
+                            //disableColumnMenu={true}
 
 
-                    />
+                            pageSizeOptions={[10]}
+
+
+                        />
+                    </div>
+
                 </div>
-
-            </div>
             </Paper>
 
 

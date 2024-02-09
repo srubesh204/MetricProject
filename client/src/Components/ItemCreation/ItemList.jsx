@@ -311,7 +311,8 @@ const ItemList = () => {
         { field: 'itemCalibrationSource', headerName: 'Cal Source', width: 120, headerAlign: "center", align: "center", },
         { field: 'itemCalibratedAt', headerName: 'Cal Done At ', width: 100, headerAlign: "center", align: "center" },
         { field: 'itemCurrentLocation', headerName: 'Current Location', width: 120, headerAlign: "center", align: "center", },
-        { field: 'itemDepartment', headerName: 'Defaul location', width: 100, headerAlign: "center", align: "center", },
+        { field: 'itemPlant', headerName: 'Item Plant', width: 100, headerAlign: "center", align: "center", },
+        { field: 'itemDepartment', headerName: 'Primary Location', width: 100, headerAlign: "center", align: "center", },
         { field: 'itemStatus', headerName: 'Status ', width: 70, headerAlign: "center", align: "center", },
         // { field: 'itemCalibrationSource', headerName: 'Cal Source', renderCell: (params) => params.row.itemSupplier.toString(), width: 110, headerAlign: "center", align: "center", },
         {
@@ -1117,7 +1118,7 @@ const ItemList = () => {
                                     </TextField>
                                 </div>
                                 <div className="col  ">
-                                    <TextField label="Default Location "
+                                    <TextField label="Primary Location "
                                         id="currentLocationId"
                                         select
                                         defaultValue="all"

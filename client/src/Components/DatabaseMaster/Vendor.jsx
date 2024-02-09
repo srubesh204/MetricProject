@@ -541,11 +541,12 @@ const Vendor = () => {
             console.log("working")
             setVendorData((prev) => ({ ...prev, certificate: selectedFile.name }));
             const fileURL = URL.createObjectURL(selectedFile);
-            
+          
             setIframeURL({ fileURL: fileURL, fileName: selectedFile.name, file: selectedFile });
 
             const formData = new FormData();
             formData.append('file', selectedFile);
+            formData.append('certificate', vendorData.vendorCode + "Certificate");
             try {
                 axios.post(`${process.env.REACT_APP_PORT}/upload/VendorCertificateUpload`, formData)
                     .then(response => {

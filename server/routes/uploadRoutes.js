@@ -8,12 +8,12 @@ const dayjs = require('dayjs')
 const createDiskStorage = (destinationFolder) => {
   return multer.diskStorage({
     destination: (req, file, cb) => {
-      
+
       cb(null, `storage/${destinationFolder}`);
     },
     filename: (req, file, cb) => {
-      
-      cb(null, dayjs().format('YYYY-MM-DD') + file.originalname );
+
+      cb(null, dayjs().format('YYYY-MM-DD') + file.originalname);
     },
   });
 };
@@ -21,12 +21,12 @@ const createDiskStorage = (destinationFolder) => {
 const createAdditionalStorage = (destinationFolder) => {
   return multer.diskStorage({
     destination: (req, file, cb) => {
-      
+
       cb(null, `storage/${destinationFolder}`);
     },
     filename: (req, file, cb) => {
-      
-      cb(null, file.originalname );
+
+      cb(null, file.originalname);
     },
   });
 };
@@ -50,7 +50,7 @@ const calCertificateStorage = multer.diskStorage({
   filename: (req, file, cb) => {
     // Use calCertificateNo from the request body to set the filename
     console.log(req.body)
-   
+
     cb(null, file.originalname); // Set the filename
   },
 });
@@ -110,6 +110,11 @@ router.post('/VendorCertificateUpload', vendorCertificateUpload.single('file'), 
     return res.status(400).json({ error: 'No file selected for upload' });
   }
 
+  fs.renameSync(req.file.path, req.file.path.replace(req.file.originalname,
+    req.body.certificate + path.extname(req.file.originalname)));
+  console.log(req.file)
+  console.log(" Uploaded Successfully")
+
   // File was provided, proceed with processing
 
   res.status(200).json({ message: 'Calibration Report uploaded successfully', name: `${req.body.certificate}.pdf` });
@@ -156,14 +161,14 @@ router.post('/itemCertificates', itemCertificateFolder.single('file'), (req, res
 });
 
 router.post('/calReportUpload', calCertificateFolder.single('file'), (req, res) => {
-  const { calCertificateNo } = req.body; 
+  const { calCertificateNo } = req.body;
   if (!req.file) {
     // No file was provided in the request
     return res.status(400).json({ error: 'No file selected for upload' });
   }
   console.log(req.file)
- 
-  fs.renameSync(req.file.path, req.file.path.replace(req.file.originalname, 
+
+  fs.renameSync(req.file.path, req.file.path.replace(req.file.originalname,
     req.body.calCertificateNo + path.extname(req.file.originalname)));
   console.log(req.file)
   console.log("Report Uploaded Successfully")
@@ -177,14 +182,14 @@ router.post('/additionalCertificates', additionalCertificateFolder.single('file'
     return res.status(400).json({ error: 'No file selected for upload' });
   }
 
-  fs.renameSync(req.file.path, req.file.path.replace(req.file.originalname, 
+  fs.renameSync(req.file.path, req.file.path.replace(req.file.originalname,
     req.body.rdName + path.extname(req.file.originalname)));
   console.log(req.file)
   console.log("Additional Uploaded Successfully")
   res.status(200).json({ message: 'Calibration Report uploaded successfully', name: `${req.body.rdName}.pdf` });
 
   // File was provided, proceed with processing
- 
+
 });
 
 router.post('/msaCertificates', additionalCertificateFolder.single('file'), (req, res) => {
@@ -192,14 +197,14 @@ router.post('/msaCertificates', additionalCertificateFolder.single('file'), (req
     // No file was provided in the request
     return res.status(400).json({ error: 'No file selected for upload' });
   }
-  fs.renameSync(req.file.path, req.file.path.replace(req.file.originalname, 
+  fs.renameSync(req.file.path, req.file.path.replace(req.file.originalname,
     req.body.msaName + path.extname(req.file.originalname)));
   console.log(req.file)
   console.log(" Uploaded Successfully")
   res.status(200).json({ message: 'Calibration Report uploaded successfully', name: `${req.body.msaName}.pdf` });
 
   // File was provided, proceed with processing
- 
+
 });
 
 
@@ -209,14 +214,14 @@ router.post('/otherFilesCertificates', additionalCertificateFolder.single('file'
     return res.status(400).json({ error: 'No file selected for upload' });
   }
 
-  fs.renameSync(req.file.path, req.file.path.replace(req.file.originalname, 
+  fs.renameSync(req.file.path, req.file.path.replace(req.file.originalname,
     req.body.otherFile + path.extname(req.file.originalname)));
   console.log(req.file)
   console.log("Additional Uploaded Successfully")
   res.status(200).json({ message: 'Calibration Report uploaded successfully', name: `${req.body.otherFile}.pdf` });
 
   // File was provided, proceed with processing
- 
+
 });
 
 
