@@ -55,7 +55,7 @@ const calCertificateStorage = multer.diskStorage({
   },
 });
 
-const VendorCertificateStorage = createDiskStorage('vendorCertificates');
+const VendorCertificateStorage = createAdditionalStorage('vendorCertificates');
 const WorkInstructionStorage = createDiskStorage('workInstructions');
 const itemCertificateStorage = createDiskStorage('itemCertificates');
 const additionalCertificateStorage = createAdditionalStorage('additionalCertificates');
@@ -111,7 +111,8 @@ router.post('/VendorCertificateUpload', vendorCertificateUpload.single('file'), 
   }
 
   // File was provided, proceed with processing
-  res.status(200).json({ message: 'Vendor Certificate uploaded successfully',name: req.file.filename });
+
+  res.status(200).json({ message: 'Calibration Report uploaded successfully', name: `${req.body.certificate}.pdf` });
 });
 
 router.get('/getVendorCertificate/:fileName', (req, res) => {

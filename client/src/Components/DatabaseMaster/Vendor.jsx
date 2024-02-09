@@ -16,7 +16,7 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import dayjs from 'dayjs';
 import { Add, Remove, HighlightOffRounded } from '@mui/icons-material';
-import {ArrowBack,Error, HomeMax, House, Mail, MailLock,  } from '@mui/icons-material';
+import { ArrowBack, Error, HomeMax, House, Mail, MailLock, } from '@mui/icons-material';
 import { Link as RouterLink } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
@@ -187,6 +187,8 @@ const Vendor = () => {
 
 
     }, [vendorData.state]);
+
+  
 
 
 
@@ -529,6 +531,9 @@ const Vendor = () => {
         event.preventDefault();
     };
 
+    // const encodedFileName = encodeURIComponent('System Design (2).pdf');
+    // const fileURL = `${process.env.REACT_APP_PORT}/vendorCertificates/${encodedFileName}`;
+
     const [uploadMessage, setUploadMessage] = useState("")
     const handleCertificateUpload = (event) => {
         const selectedFile = event.target.files[0];
@@ -536,6 +541,7 @@ const Vendor = () => {
             console.log("working")
             setVendorData((prev) => ({ ...prev, certificate: selectedFile.name }));
             const fileURL = URL.createObjectURL(selectedFile);
+            
             setIframeURL({ fileURL: fileURL, fileName: selectedFile.name, file: selectedFile });
 
             const formData = new FormData();
@@ -822,7 +828,7 @@ const Vendor = () => {
                             </div>
                             <div className='row g-2 mt-2' >
 
-                                <div className='col-md-5'>
+                                <div className='col-md-4'>
                                     <TextField label="Address"
                                         {...(errors.address !== "" && { helperText: errors.address, error: true })}
                                         id="addressId"
@@ -837,7 +843,7 @@ const Vendor = () => {
                                 </div>
                                 <div className='col-md-2'>
                                     <FormControl size='small' component="div" fullWidth {...(errors.vendorPlant !== "" && { error: true })}>
-                                    
+
                                         <InputLabel id="vendorPlantId">Select Plant</InputLabel>
                                         <Select
                                             labelId="vendorPlantId"
@@ -863,7 +869,7 @@ const Vendor = () => {
                                 </div>
 
 
-                                <div className='col-md-5'>
+                                <div className='col-md-6'>
                                     <div>
                                         <div className='d-flex justify-content-end '>
                                             <div className="form-check form-check-inline ">
@@ -1001,8 +1007,6 @@ const Vendor = () => {
                                                 ref={fileInputRef}
                                                 style={{ display: 'none' }}
                                                 onChange={handleCertificateUpload}
-
-
                                             />
                                             <button type='button' style={{ display: "none" }} onClick={() => fileInputRef.current.click()} value={vendorData.certificate}>Select File</button>
                                         </div>
@@ -1022,19 +1026,11 @@ const Vendor = () => {
                                                 }}
                                             >
                                                 <div>
-
                                                     <p className='m-0'>
                                                         Drag and drop or click here
                                                     </p>
-
-
-
                                                 </div>
-
                                             </div>
-
-
-
                                             {vendorData.certificate &&
                                                 <div className='d-flex ' style={{ width: "60%", height: '100%', border: '2px dashed #ccc' }}>
 
@@ -1066,11 +1062,6 @@ const Vendor = () => {
                                         }
 
                                     </div>
-
-
-
-
-
                                 </div>
 
                             </Paper>
