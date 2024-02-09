@@ -54,7 +54,6 @@ function InsHistoryCard() {
     useEffect(() => {
         formatFetchData();
     }, []);
-
     const [companyList, setCompanyList] = useState([])
 
     const companyFetch = async () => {
@@ -191,6 +190,7 @@ function InsHistoryCard() {
     }
 
     console.log(selectedMasterData)
+    console.log(selectedRow)
 
     const [itemHistoryData, setItemHistoryData] = useState([])
 
@@ -215,10 +215,7 @@ function InsHistoryCard() {
     console.log(selectedIMTEs)
 
     console.log(selectedRow)
-    console.log(selectedRow.acceptanceCriteria)
-
-
-
+    
     const filterByDate = (items, fromDate, toDate) => {
         return items.filter((row) => {
             const calDate = dayjs(row.calItemCalDate);
@@ -231,15 +228,15 @@ function InsHistoryCard() {
 
     const filteredSelectedIMTEs = filterByDate(selectedIMTEs, fromDate, toDate);
 
-
+    console.log(selectedRow)
 
     const historyColumns = [
         { field: 'id', headerName: 'Si.No', width: 50, align: "center", renderCell: (params) => params.api.getAllRowIds().indexOf(params.id) + 1 },
         {
             field: 'certificateView', headerName: 'Certificate', width: 100, align: "center", renderCell: (params) =>
-                params.row.itemCalibrationSource === "inhouse" ? 
-                <IconButton size="small" component={Link} target="_blank" to={`${process.env.REACT_APP_PORT}/calCertificates/${params.row.itemCertificateNo}.pdf`} ><FileCopy /></IconButton> :
-                <IconButton size="small" component={Link} target="_blank" to={`${process.env.REACT_APP_PORT}/itemCertificates/${params.row.itemCertificateName}`} ><FileOpen /></IconButton>
+                params.row.itemCalibrationSource === "inhouse" ?
+                    <IconButton size="small" component={Link} target="_blank" to={`${process.env.REACT_APP_PORT}/calCertificates/${params.row.itemCertificateNo}.pdf`} ><FileCopy /></IconButton> :
+                    <IconButton size="small" component={Link} target="_blank" to={`${process.env.REACT_APP_PORT}/itemCertificates/${params.row.itemCertificateName}`} ><FileOpen /></IconButton>
         },
         { field: 'itemCalDate', headerName: 'Calibration Date', width: 150, align: "center", valueGetter: (params) => dayjs(params.row.itemCalDate).format('DD-MM-YYYY') },
         { field: 'itemDueDate', headerName: 'Calibration Due', width: 150, align: "center", valueGetter: (params) => dayjs(params.row.itemDueDate).format('DD-MM-YYYY') },
@@ -252,14 +249,10 @@ function InsHistoryCard() {
             renderCell: (params) => (
 
                 <div>
-
                     {params.row.acceptanceCriteria.map((item, index) => (
-
-
                         <span key={index}>
                             {item}<br />
                         </span>
-
                     ))}
                 </div>
             ),
@@ -408,8 +401,13 @@ function InsHistoryCard() {
                                 </div>
 
                                 <div className="col d-flex justify-content-end">
-
-
+                                    <div className="me-2"><Button component={Link} to={`${process.env.REACT_APP_PORT}/additionalCertificates/${selectedRow.length > 0 ? selectedRow[0].rdName : ""}`} target="_blank" variant="contained" color="info" size="small">R&R</Button></div>
+                                    <div className="me-2">
+                                        <Button component={Link} to={`${process.env.REACT_APP_PORT}/additionalCertificates/${selectedRow.length > 0 ? selectedRow[0].msaName : ""}`} target="_blank" variant="contained" color="info" size="small">MSA</Button>
+                                    </div>
+                                    <div className="me-2">
+                                        <Button component={Link} to={`${process.env.REACT_APP_PORT}/additionalCertificates/${selectedRow.length > 0 ? selectedRow[0].otherFile : ""}`} target="_blank" variant="contained" color="info" size="small">Drawing</Button>
+                                    </div>
                                     <div className="me-2"><Button component={Link} to={`${process.env.REACT_APP_PORT}/workInstructions/${selectedMasterData.workInsName}`} target="_blank" variant="contained" color="info" size="small">View Instructions</Button></div>
                                     {/* <div className="me-2"><Button variant="contained" color="info" size="small">View Drawing</Button></div>
                                     <div className="me-2"><Button variant="contained" color="info" size="small">View R&R</Button></div>
@@ -495,7 +493,7 @@ function InsHistoryCard() {
                                             </thead>
                                             <tbody>
                                                 {
-                                                    selectedRow[0].acceptanceCriteria.map(item => (
+                                                    selectedRow.length > 0 && selectedRow[0].acceptanceCriteria.map(item => (
                                                         <tr>
                                                             <td>{item.acParameter || '-'}</td>
                                                             <td>{item.acMinPSError || '-'}</td>
@@ -518,7 +516,7 @@ function InsHistoryCard() {
                                             </thead>
                                             <tbody>
                                                 {
-                                                    selectedRow[0].acceptanceCriteria.map(item => (
+                                                    selectedRow.length > 0 && selectedRow[0].acceptanceCriteria.map(item => (
                                                         <tr>
                                                             <td>{item.acParameter || '-'}</td>
                                                             <td>{item.acMinPS || '-'}</td>
@@ -541,7 +539,7 @@ function InsHistoryCard() {
                                             </thead>
                                             <tbody>
                                                 {
-                                                    selectedRow[0].acceptanceCriteria.map(item => (
+                                                    selectedRow.length > 0 && selectedRow[0].acceptanceCriteria.map(item => (
                                                         <tr>
                                                             <td>{item.acParameter || '-'}</td>
                                                             <td>{item.acMinPS || '-'}</td>
