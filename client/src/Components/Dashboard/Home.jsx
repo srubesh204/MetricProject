@@ -1190,7 +1190,7 @@ const Home = () => {
         console.log(errorMessages500)
         setErrorHandler({ status: 0, message: errorMessages500, code: "error" });
       } else {
-        console.log(err.response.data.error)
+        console.log(err)
         setErrorHandler({ status: 0, message: "An error occurred", code: "error" });
       }
     }
@@ -1267,7 +1267,7 @@ const Home = () => {
     const defaultDepartmentCheck = selectedRows.every(item =>
       defaultDep.some(dep => item.itemCurrentLocation === dep.department)
     );
-    const activeItemsCheck = selectedRows.every(item => item.itemStatus === "active" )
+    const activeItemsCheck = selectedRows.every(item => item.itemStatus !== "missing" || item.itemStatus !== "spare")
 
     const singlePlant = selectedRows.every((item, index, array) => item.itemPlant === array[0].itemPlant);
 
@@ -1276,16 +1276,20 @@ const Home = () => {
       setStatusCheckMsg("");
       setDcOpen(true);
     } else {
-      if(singlePlant){
-        setStatusCheckMsg("Multiple plants no allowed")
+      if(!singlePlant){
+        setStatusCheckMsg("Multiple plants not allowed")
       }
 
       if (!defaultDepartmentCheck) {
         setStatusCheckMsg("Selected item are not in default location, To create a DC move the item to the default location");
       }
 
-      if (!singlePlant) {
-        setStatusCheckMsg("Mulitple plant not allowed");
+      if(!activeItemsCheck){
+        setStatusCheckMsg("Check item status")
+      }
+
+      if(!selectedRows.length > 0){
+        setStatusCheckMsg("Please select any one item")
       }
 
       setDcOpen(false);
@@ -1294,7 +1298,7 @@ const Home = () => {
 
 
   const grnCheck = () => {
-    const grnBoolean = selectedRows.every(item => item.dcStatus === "1" && item.itemStatus === "active" )
+    const grnBoolean = selectedRows.every(item => item.dcStatus === "1" && item.itemStatus !== "missing" && item.itemStatus !== "spare" )
 
 
     console.log(grnCheck && selectedRows.length === 1)
