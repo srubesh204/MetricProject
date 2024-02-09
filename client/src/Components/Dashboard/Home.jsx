@@ -302,23 +302,23 @@ const Home = () => {
       );
       let allItems = []
       if (employeeRole.employee === "admin") {
-        
+
         const departmentItems = response.data.result.filter(item => employeeRole.loggedEmp.plantDetails.some(plant => plant.departments.includes(item.itemDepartment)))
         console.log(departmentItems)
         allItems = departmentItems
         console.log(allItems)
       } else if (employeeRole.employee === "plantAdmin") {
-        
+
         const departmentItems = response.data.result.filter(item => employeeRole.loggedEmp.plantDetails.some(plant => plant.departments.includes(item.itemDepartment)))
         allItems = departmentItems
         console.log(allItems)
       } else if (employeeRole.employee === "creator") {
-        
+
         const departmentItems = response.data.result.filter(item => employeeRole.loggedEmp.plantDetails.some(plant => plant.departments.includes(item.itemDepartment)))
         allItems = departmentItems
         console.log(allItems)
       } else if (employeeRole.employee === "viewer") {
-        
+
         const departmentItems = response.data.result.filter(item => employeeRole.loggedEmp.plantDetails.some(plant => plant.departments.includes(item.itemDepartment)))
         allItems = departmentItems
         console.log(allItems)
@@ -713,7 +713,9 @@ const Home = () => {
   })
 
 
-  const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', "#aca8c8", "#78787a"];
+  const calStatusColor = ['#FF4545', '#00C49F', '#FFBB28', '#FF8042', "#ACA8C8", "#0088FE"];
+  const itemStatusColor = ["#595959", "#00C49F", "orange", "#FF8042", "#0088FE", "#FF4545"];
+  const itemLocationColor = ["#984EA3", "violet", "orange", "#00C49F", "#0088FE"];
 
   const [calStatusFitleredData, setCalStatusFitleredData] = useState([])
 
@@ -1075,12 +1077,12 @@ const Home = () => {
 
 
     setCalStatus([
-      { id: 0, value: pastDue.length, label: 'Past Due' },
-      { id: 1, value: CurrentDue.length, label: 'Today' },
-      { id: 2, value: sevenDaysFilter.length, label: '7 Days' },
-      { id: 3, value: fifteenDaysFilter.length, label: '15 Days' },
-      { id: 4, value: thirtyDaysFilter.length, label: '30 Days' },
-      { id: 5, value: AboveThirtyDaysFilter.length, label: '>30 Days' }
+      { value: pastDue.length, label: 'Past Due' },
+      { value: CurrentDue.length, label: 'Today' },
+      {value: sevenDaysFilter.length, label: '7 Days' },
+      {value: fifteenDaysFilter.length, label: '15 Days' },
+      {value: thirtyDaysFilter.length, label: '30 Days' },
+      {value: AboveThirtyDaysFilter.length, label: '>30 Days' }
     ])
     setItemStatus([
       { id: 0, value: filter.length, label: 'Total Items' },
@@ -1552,9 +1554,12 @@ const Home = () => {
 
                     labelLine={false}
                   >
-                    {data.map((entry, index) => (
-                      <Cell key={index} fill={COLORS[index % COLORS.length]} />
-                    ))}
+                    {calStatus.map((entry, index) => {
+                      console.log(entry)
+                      return (
+                        <Cell key={`cell-${index}`} fill={calStatusColor[index % calStatusColor.length]} />
+                      )
+                    })}
 
                   </Pie>
 
@@ -1615,8 +1620,8 @@ const Home = () => {
                     activeShape={{ fill: '#ffffff', strokeWidth: 2 }}
                     labelLine={false}
                   >
-                    {data.map((entry, index) => (
-                      <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                    {itemStatus.map((entry, index) => (
+                      <Cell key={`cell-${index}`} fill={itemStatusColor[index % itemStatusColor.length]} />
                     ))}
 
                   </Pie>
@@ -1659,8 +1664,8 @@ const Home = () => {
                     activeShape={{ fill: '#ffffff' }}
                     labelLine={false}
                   >
-                    {data.map((entry, index) => (
-                      <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                    {itemLocationData.map((entry, index) => (
+                      <Cell key={`cell-${index}`} fill={itemLocationColor[index % itemLocationColor.length]} />
                     ))}
 
                   </Pie>
