@@ -694,7 +694,7 @@ const DcEdit = () => {
 
 
 
-                            <Paper
+                            {/* <Paper
                                 sx={{
                                     p: 2,
                                     display: 'flex',
@@ -727,14 +727,14 @@ const DcEdit = () => {
                                     </div>
                                     <div className=' col d-flex justify-content-end'>
                                         <div className='me-2 '>
-                                            {/*<button type="button" className='btn btn-secondary' onClick={addDcValue} >Add Item</button>*/}
+                                            
                                             <Button startIcon={<Add />} onClick={() => dcItemAdd()} size='small' sx={{ minWidth: "130px" }} variant='contained'>Add Item</Button>
                                         </div>
 
                                     </div>
 
                                 </div>
-                            </Paper>
+                            </Paper> */}
 
                             <Paper
                                 sx={{
