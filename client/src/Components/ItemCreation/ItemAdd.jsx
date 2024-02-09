@@ -1877,7 +1877,7 @@ const ItemAdd = () => {
                                     </div>
                                     <div className='row g-2'>
 
-                                    <table className=' table-bordered '>
+                                        <table className=' table-bordered '>
                                             <tbody>
                                                 <tr>
                                                     <td>
@@ -2020,23 +2020,43 @@ const ItemAdd = () => {
                             </Dialog>
 
 
-                            <div className="d-flex justify-content-end">
-                                <Button
-                                    color="secondary"
-                                    className='me-2'
-                                    variant='contained'
-                                    onClick={() => setAddOpenData(true)}
-                                >
-                                    Additional Information
-                                </Button>
+                            <div className="d-flex justify-content-center">
+                                <div className='col'>
+                                    <Button
+                                        color="secondary"
+                                        className='col '
+                                        variant='contained'
+                                        onClick={() => setAddOpenData(true)}
+                                    >
+                                        Additional Information
+                                    </Button>
+                                </div>
 
-                                <Button variant='contained' color='warning' onClick={() => setOpen(true)} className='me-3' type="button">
-                                    Item Create
-                                </Button>
-                                <Button component={RouterLink} to={`/itemList/`} variant="contained" color="error">
-                                    <ArrowBackIcon /> Back To List
-                                </Button>
+                                <div className="d-flex justify-content-end">
+                                    <Button variant='contained' color='warning' onClick={() => setOpen(true)} className='me-3' type="button">
+                                        Item Create
+                                    </Button>
+                                    <Button component={RouterLink} to={`/itemList/`} variant="contained" color="error">
+                                        <ArrowBackIcon /> Back To List
+                                    </Button>
+                                </div>
+                               
+
                             </div>
+
+
+
+
+
+                            
+
+
+
+
+
+
+
+
 
 
                             <Snackbar anchorOrigin={{ vertical: "top", horizontal: "right" }} open={snackBarOpen} autoHideDuration={6000} onClose={handleSnackClose}>

@@ -222,7 +222,8 @@ const TotalList = () => {
     { field: 'itemCalibrationSource', headerName: 'Cal Source', headerAlign: "center", align: "center", },
     { field: 'itemCalibratedAt', headerName: 'Calibrated At ', width: 110, headerAlign: "center", align: "center", },
     { field: 'itemCurrentLocation', headerName: 'Current location', width: 120, headerAlign: "center", align: "center", },
-    { field: 'itemDepartment', headerName: 'Defaul location', width: 100, headerAlign: "center", align: "center", },
+    { field: 'itemPlant', headerName: 'ItemPlant ', width: 100, headerAlign: "center", align: "center", },
+    { field: 'itemDepartment', headerName: 'Primary location', width: 100, headerAlign: "center", align: "center", },
     { field: 'itemStatus', headerName: 'Status ', width: 60, headerAlign: "center", align: "center", },
 
     {
@@ -239,9 +240,8 @@ const TotalList = () => {
     { field: 'itemMFRNo', headerName: 'ItemMFRNo ', width: 90, headerAlign: "center", align: "center", },
     { field: 'itemModelNo', headerName: 'ItemModelNo ', width: 90, headerAlign: "center", align: "center", valueGetter: (params) => params.row.itemModelNo || "-"  },
     { field: 'itemMasterRef', headerName: 'ItemMasterRef ', width: 100, headerAlign: "center", align: "center", },
-    { field: 'itemPlant', headerName: 'ItemPlant ', width: 100, headerAlign: "center", align: "center", },
     { field: 'itemReceiptDate', headerName: 'ItemReceiptDate ', width: 100, headerAlign: "center", align: "center", },
-    { field: 'itemPlaceOfUsage', headerName: 'ItemPlaceOfUsage ', width: 90, headerAlign: "center", align: "center", },
+    { field: 'itemPlaceOfUsage', headerName: 'Secondary Location ', width: 90, headerAlign: "center", align: "center", },
     { field: 'itemLocation', headerName: 'ItemLocation ', width: 90, headerAlign: "center", align: "center", },
     { field: 'itemCalAlertDays', headerName: 'ItemCalAlertDays ', width: 90, headerAlign: "center", align: "center", },
     { field: 'itemPrevCalData', headerName: 'ItemPrevCalDate ', width: 90, headerAlign: "center", align: "center", },
@@ -991,7 +991,7 @@ const TotalList = () => {
               </div>
               <div className="col d-flex  mb-2">
 
-                <TextField label="Default Location "
+                <TextField label="Primary Location "
                   id="currentLocationId"
                   select
                   defaultValue="all"

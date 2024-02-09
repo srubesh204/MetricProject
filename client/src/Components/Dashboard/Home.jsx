@@ -1474,7 +1474,7 @@ const Home = () => {
 
                 </TextField>
                 {
-                  <TextField select onChange={(e) => LocationEmpFilter(e)} fullWidth size='small' name='itemDepartment' disabled={plantDepartments.length <= 1} value={plantDeps.itemDepartment} defaultValue="All" label="Default Location">
+                  <TextField select onChange={(e) => LocationEmpFilter(e)} fullWidth size='small' name='itemDepartment' disabled={plantDepartments.length <= 1} value={plantDeps.itemDepartment} defaultValue="All" label="Primary Location">
                     {plantDepartments.length !== 1 && <MenuItem value="All">All</MenuItem>}
                     {plantDepartments && plantDepartments.map((department, index) => (<MenuItem key={index} value={department}>{department}</MenuItem>))}
                   </TextField>}

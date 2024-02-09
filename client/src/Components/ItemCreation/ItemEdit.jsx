@@ -1895,33 +1895,34 @@ const ItemEdit = () => {
                                                             />}
                                                     </div>
                                                 </td>
-
                                             </tr>
-
                                         </tbody>
                                     </table>
-
                                 </div>
                             </DialogContent>
                         </Dialog>
+                        <div className="d-flex justify-content-center">
+                            <div className='col'>
+                                <Button
+                                    color="secondary"
+                                    className='me-2'
+                                    variant='contained'
+                                    onClick={() => setAddOpenData(true)}
+                                >
+                                    Additional Information
+                                </Button>
+                            </div>
+                            <div className="d-flex justify-content-end">
 
-                        <div className="d-flex justify-content-end">
-                            <Button
-                                color="secondary"
-                                className='me-2'
-                                variant='contained'
-                                onClick={() => setAddOpenData(true)}
-                            >
-                                Additional Information
-                            </Button>
 
-                            <Button variant='contained' color='warning' onClick={() => { setOpen(true) }} className='me-3' type="button"  >
-                                <BorderColor />  Update
-                            </Button>
-                            <Button variant='contained' component={RouterLink} to={`/itemList/`} color='error' onClick={() => setItemAddData(initialItemAddData)} type="reset">
-                                <ArrowBackIcon /> Back To List
-                            </Button>
+                                <Button variant='contained' color='warning' onClick={() => { setOpen(true) }} className='me-3' type="button"  >
+                                    <BorderColor />  Update
+                                </Button>
+                                <Button variant='contained' component={RouterLink} to={`/itemList/`} color='error' onClick={() => setItemAddData(initialItemAddData)} type="reset">
+                                    <ArrowBackIcon /> Back To List
+                                </Button>
 
+                            </div>
                         </div>
 
 
@@ -1952,13 +1953,6 @@ const ItemEdit = () => {
                             </DialogActions>
                         </Dialog>
                     </div>
-
-
-
-
-
-
-
                 </LocalizationProvider >
             </form >
         </div >
