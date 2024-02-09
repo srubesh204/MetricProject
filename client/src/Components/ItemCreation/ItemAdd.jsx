@@ -1882,7 +1882,7 @@ const ItemAdd = () => {
                                                     R&R Upload
                                                     <VisuallyHiddenInput type="file" onChange={handleAdditionalCertificate} />
                                                 </Button>
-                                                : <div className='d-flex justify-content-center '>
+                                                : <div className='row  justify-content-center '>
                                                     {(itemAddData.rdName !== "" && itemAddData.rdName !== undefined) &&
                                                         <Chip
                                                             className='mt-2'
