@@ -8,6 +8,7 @@ const upload = multer({ storage: storage }).single('file');
  
 router.get("/getAllItemAdds", itemAddController.getAllItemAdds)
 router.get("/getItemAddById/:id", itemAddController.getItemAddById)
+router.post("/getItemByPlant", itemAddController.getItemByPlant)
 router.get("/getItemAddByIMTESort", itemAddController.getItemAddByIMTESort)
 router.get("/getDistinctItemName", itemAddController.getDistinctItemName)
 router.post("/getItemAddByName", itemAddController.getItemAddByName)

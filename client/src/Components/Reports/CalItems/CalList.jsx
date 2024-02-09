@@ -34,7 +34,7 @@ dayjs.extend(isSameOrAfter)
 
 const CalList = () => {
     const employeeRole = useEmployee()
-    const { loggedEmp } = employeeRole
+    const { loggedEmp, allowedPlants } = employeeRole
     const [itemAddList, setItemAddList] = useState([])
     const [itemMasters, setItemMasters] = useState([])
     const [IMTENos, setIMTENos] = useState([])
@@ -69,15 +69,14 @@ const CalList = () => {
 
     const itemMasterFetchData = async () => {
         try {
-            const response = await axios.get(
-                `${process.env.REACT_APP_PORT}/itemAdd/getAllItemAdds`
-
-            );
-            const plantItems = response.data.result.filter(item => (loggedEmp.plantDetails.map(plant => plant.plantName).includes(item.itemPlant) && item.itemCalibrationSource === "inhouse"))
-            const masterItems = plantItems.filter((item) => item.isItemMaster === "1")
-            setItemAddList(plantItems);
+            const response = await axios.post(
+                `${process.env.REACT_APP_PORT}/itemAdd/getItemByPlant`, { allowedPlants: allowedPlants }
+              );
+            
+            const masterItems = response.data.result.filter((item) => item.isItemMaster === "1")
+            setItemAddList(response.data.result);
             setItemMasters(masterItems)
-            console.log(plantItems)
+        
         } catch (err) {
             console.log(err);
         }

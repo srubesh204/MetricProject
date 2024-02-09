@@ -23,7 +23,7 @@ const ItemEdit = () => {
     console.log(id)
 
 
-    const { loggedEmp } = useEmployee();
+    const { loggedEmp, allowedPlants } = useEmployee();
 
     // Units Data
     const [units, setUnits] = useState([]);
@@ -85,16 +85,10 @@ const ItemEdit = () => {
 
     const getItemMaster = async () => {
         try {
-            const response = await axios.get(
-                `${process.env.REACT_APP_PORT}/itemAdd/getAllItemAdds`
-            );
-            console.log(response.data)
-            console.log(loggedEmp)
-            //
-            const plantItems = response.data.result.filter(item => loggedEmp.plantDetails.map(plant => plant.plantName).includes(item.itemPlant))
-            const isItemMaster = plantItems.filter(item => item.isItemMaster === "1")
-            console.log("Hi working")
-            console.log(isItemMaster)
+            const response = await axios.post(
+                `${process.env.REACT_APP_PORT}/itemAdd/getItemByPlant`, { allowedPlants: allowedPlants }
+              );
+            const isItemMaster = response.data.result.filter(item => item.isItemMaster === "1")
             setIsItemMasterList(isItemMaster);
         } catch (err) {
             console.log(err);
@@ -152,9 +146,9 @@ const ItemEdit = () => {
 
     const vendorListFetch = async () => {
         try {
-            const response = await axios.get(
-                `${process.env.REACT_APP_PORT}/vendor/getAllVendors`
-            );
+            const response = await axios.post(
+                `${process.env.REACT_APP_PORT}/vendor/getVendorByPlants`, { allowedPlants: allowedPlants }
+              );
             const vendorList = response.data.result
             const customerList = vendorList.filter((item) => item.customer === "1" || item.supplier === "1");
             const oemList = vendorList.filter((item) => item.oem === "1");
@@ -527,9 +521,10 @@ const ItemEdit = () => {
     const [partData, setPartData] = useState([])
     const getPartList = async () => {
         try {
-            const response = await axios.get(
-                `${process.env.REACT_APP_PORT}/part/getAllParts`
+            const response = await axios.post(
+                `${process.env.REACT_APP_PORT}/part/getPartsByPlant`, {allowedPlants: allowedPlants}
             );
+
             console.log(response.data)
             setPartData(response.data.result)
 

@@ -21,7 +21,7 @@ const DcEdit = () => {
     const { employee, loggedEmp } = empRole
 
     const dcEditDatas = useContext(DcListContent)
-    const { dcEditOpen, setDcEditOpen, selectedRows, dcListFetchData, itemPlantList } = dcEditDatas
+    const { dcEditOpen, setDcEditOpen, selectedRows, dcListFetchData, itemPlantList, allowedPlants } = dcEditDatas
     console.log(selectedRows)
     const [errorhandler, setErrorHandler] = useState({});
 
@@ -207,27 +207,11 @@ const DcEdit = () => {
 
     const [vendorDataList, setVendorDataList] = useState([])
 
-    {/*const vendorFetchData = async () => {
-        try {
-            const response = await axios.get(
-                `${process.env.REACT_APP_PORT}/vendor/getAllVendors`
-            );
-            setVendorDataList(response.data.result);
-            const filteredData = response.data.result.filter((dcItem) => !dcEditData.dcPartyItems.some(vendor => dcName._id === vendor._id === dcCode._id ===vendor._id === dcAddress._id === vendor.id))
-            setFilteredData(filteredData)
-        } catch (err) {
-            console.log(err);
-        }
-    };
-    useEffect(() => {
-        vendorFetchData();
-    }, []);*/}
-
     const vendorFetchData = async () => {
         try {
-            const response = await axios.get(
-                `${process.env.REACT_APP_PORT}/vendor/getAllVendors`
-            );
+            const response = await axios.post(
+                `${process.env.REACT_APP_PORT}/vendor/getVendorByPlants`, { allowedPlants: allowedPlants }
+              );
             setVendorDataList(response.data.result);
 
             // Assuming dcEditData is defined somewhere in your code

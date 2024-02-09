@@ -14,14 +14,13 @@ import styled from '@emotion/styled';
 
 const Grn = () => {
     const grnDatas = useContext(HomeContent)
-    const { grnOpen, setGrnOpen, selectedRows, lastGrnNo } = grnDatas
+    const { grnOpen, setGrnOpen, selectedRows, lastGrnNo, dcPartyDetails, vendors } = grnDatas
 
-    const [grnImtes, setGrnImtes] = useState(selectedRows)
+   
 
-    useEffect(() => {
-        setGrnImtes(selectedRows)
-    }, [selectedRows])
+ 
 
+    console.log(dcPartyDetails.fullName)
 
     const VisuallyHiddenInput = styled('input')({
         clip: 'rect(0 0 0 0)',
@@ -107,17 +106,15 @@ const Grn = () => {
 
     const [grnData, setGrnData] = useState({
         grnPartyRefNo: "",
-        grnPartyId: "",
         grnPartyRefDate: dayjs().format("YYYY-MM-DD"),
-        grnPartyName: "",
-        grnPartyCode: "",
-        grnPartyAddress: "",
         grnNo: "",
         grnDate: dayjs().format("YYYY-MM-DD"),
         grnCommonRemarks: "",
-
+        grnPartyName: "",
+        grnPartyAddress: "",
+        grnPartyCode: "",
+        grnPartyId: "",
         grnItemId: "",
-
         grnItemAddMasterName: "",
         grnItemType: "",
         grnItemIMTENo: "",
@@ -176,14 +173,21 @@ const Grn = () => {
 
 
     const settingDcData = () => {
-        if (selectedRows.length > 0) {
+        if (selectedRows.length > 0 && lastGrnNo && dcPartyDetails) {
 
             setGrnData((prev) => (
                 {
                     ...prev,
                     grnPlant: selectedRows[0].itemPlant,
                     grnDepartment: selectedRows[0].itemDepartment,
-                    grnNo: lastGrnNo
+                    grnNo: lastGrnNo,
+                    grnPartyName: dcPartyDetails.fullName,
+                    grnPartyAddress: dcPartyDetails.address,
+                    grnPartyCode: dcPartyDetails.vendorCode,
+                    grnPartyId: dcPartyDetails._id,
+                    grnItemId: selectedRows[0].item_id,
+                    grnItemAddMasterName: selectedRows[0].itemAddMasterName,
+                    grnItemIMTENo: selectedRows[0].itemIMTENo
                     //grnPartyItems: selectedRows
                 }
 
@@ -193,40 +197,16 @@ const Grn = () => {
     };
     useEffect(() => {
         settingDcData()
-    }, [selectedRows])
+    }, [selectedRows, dcPartyDetails, lastGrnNo])
+
+
+
+    console.log(grnData)
 
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-    const [vendorDataList, setVendorDataList] = useState([])
-
-    const vendorFetchData = async () => {
-        try {
-            const response = await axios.get(
-                `${process.env.REACT_APP_PORT}/vendor/getAllVendors`
-            );
-            setVendorDataList(response.data.result);
-            //setFilteredData(response.data.result);
-        } catch (err) {
-            console.log(err);
-        }
-    };
-    useEffect(() => {
-        vendorFetchData();
-    }, []);
+    
 
 
     const handleGrnChange = (e) => {
@@ -245,7 +225,8 @@ const Grn = () => {
                 grnPartyName: response.data.result.fullName,
                 grnPartyAddress: response.data.result.address,
                 grnPartyCode: response.data.result.vendorCode,
-                grnPartyId: response.data.result._id
+                grnPartyId: response.data.result._id,
+                
             }))
 
         } catch (err) {
@@ -270,9 +251,7 @@ const Grn = () => {
                 `${process.env.REACT_APP_PORT}/itemAdd/getItemAddByIMTESort`
             );
             // You can use a different logic for generating the id
-
             setItemAddList(response.data.result);
-
 
         } catch (err) {
             console.log(err);
@@ -323,42 +302,37 @@ const Grn = () => {
     const handleGrnItemChange = (e) => {
         const { name, value } = e.target;
 
-        if (name === "grnItemId") {
-            const fetchedData = selectedRows.filter((item) => item._id === value)
-            setGrnData((prev) => ({ ...prev, [name]: value, grnItemAddMasterName: fetchedData[0].itemAddMasterName }))
-        }
 
 
         if (name === "grnItemStatus") {
-            const fetchedData = selectedRows.filter((item) => item._id === grnData.grnItemId)
-            console.log(fetchedData)
+            
             setGrnData((prev) => ({ ...prev, [name]: value }))
             if (value === "Calibrated") {
                 setGrnData(prev => ({
                     ...prev,
                     [name]: value,
-                    grnItemId: fetchedData[0]._id,
-                    grnItemAddMasterName: fetchedData[0].itemAddMasterName,
-                    grnItemIMTENo: fetchedData[0].itemIMTENo,
-                    grnItemType: fetchedData[0].itemType,
-                    grnItemRangeSize: fetchedData[0].itemRangeSize,
-                    grnItemRangeSizeUnit: fetchedData[0].itemRangeSizeUnit,
-                    grnItemMFRNo: fetchedData[0].itemMFRNo,
-                    grnItemLC: fetchedData[0].itemLC,
-                    grnItemLCUnit: fetchedData[0].itemLCUnit,
-                    grnItemMake: fetchedData[0].itemMake,
-                    grnItemModelNo: fetchedData[0].itemModelNo,
-                    grnItemDcNo: fetchedData[0].dcNo,
-                    grnItemDepartment: fetchedData[0].itemDepartment,
-                    grnItemArea: fetchedData[0].itemArea,
-                    grnItemPlaceOfUsage: fetchedData[0].itemPlaceOfUsage,
-                    grnItemCalFreInMonths: fetchedData[0].itemCalFreInMonths,
-                    grnItemCalAlertDays: fetchedData[0].itemCalAlertDays,
-                    grnItemCalibrationSource: fetchedData[0].itemCalibrationSource,
-                    grnItemCalibrationDoneAt: fetchedData[0].itemCalibrationDoneAt,
-                    grnItemCalibratedAt: fetchedData[0].itemCalibratedAt,
-                    grnItemOBType: fetchedData[0].itemOBType,
-                    grnAcCriteria: fetchedData[0].acceptanceCriteria.map((item) => (
+                    grnItemId: selectedRows[0]._id,
+                    grnItemAddMasterName: selectedRows[0].itemAddMasterName,
+                    grnItemIMTENo: selectedRows[0].itemIMTENo,
+                    grnItemType: selectedRows[0].itemType,
+                    grnItemRangeSize: selectedRows[0].itemRangeSize,
+                    grnItemRangeSizeUnit: selectedRows[0].itemRangeSizeUnit,
+                    grnItemMFRNo: selectedRows[0].itemMFRNo,
+                    grnItemLC: selectedRows[0].itemLC,
+                    grnItemLCUnit: selectedRows[0].itemLCUnit,
+                    grnItemMake: selectedRows[0].itemMake,
+                    grnItemModelNo: selectedRows[0].itemModelNo,
+                    grnItemDcNo: selectedRows[0].dcNo,
+                    grnItemDepartment: selectedRows[0].itemDepartment,
+                    grnItemArea: selectedRows[0].itemArea,
+                    grnItemPlaceOfUsage: selectedRows[0].itemPlaceOfUsage,
+                    grnItemCalFreInMonths: selectedRows[0].itemCalFreInMonths,
+                    grnItemCalAlertDays: selectedRows[0].itemCalAlertDays,
+                    grnItemCalibrationSource: selectedRows[0].itemCalibrationSource,
+                    grnItemCalibrationDoneAt: selectedRows[0].itemCalibrationDoneAt,
+                    grnItemCalibratedAt: selectedRows[0].itemCalibratedAt,
+                    grnItemOBType: selectedRows[0].itemOBType,
+                    grnAcCriteria: selectedRows[0].acceptanceCriteria.map((item) => (
                         {
                             grnParameter: item.acParameter,
                             grnNominalSize: item.acNominalSize,
@@ -376,7 +350,7 @@ const Grn = () => {
                             rowStatus: ""
                         }
                     )),
-                    grnItemUncertainity: fetchedData[0].itemUncertainity,
+                    grnItemUncertainity: selectedRows[0].itemUncertainity,
                     grnItemCalDate: dayjs().format("YYYY-MM-DD"),
                     grnItemDueDate: "",
                     grnItemCertificateStatus: "",
@@ -389,28 +363,28 @@ const Grn = () => {
                 setGrnData(prev => ({
                     ...prev,
                     [name]: value,
-                    grnItemId: fetchedData[0]._id,
-                    grnItemAddMasterName: fetchedData[0].itemAddMasterName,
-                    grnItemIMTENo: fetchedData[0].itemIMTENo,
-                    grnItemType: fetchedData[0].itemType,
-                    grnItemRangeSize: fetchedData[0].itemRangeSize,
-                    grnItemRangeSizeUnit: fetchedData[0].itemRangeSizeUnit,
-                    grnItemMFRNo: fetchedData[0].itemMFRNo,
-                    grnItemLC: fetchedData[0].itemLC,
-                    grnItemLCUnit: fetchedData[0].itemLCUnit,
-                    grnItemMake: fetchedData[0].itemMake,
-                    grnItemModelNo: fetchedData[0].itemModelNo,
-                    grnItemDcNo: fetchedData[0].dcNo,
-                    grnItemDepartment: fetchedData[0].itemDepartment,
-                    grnItemArea: fetchedData[0].itemArea,
-                    grnItemPlaceOfUsage: fetchedData[0].itemPlaceOfUsage,
-                    grnItemCalFreInMonths: fetchedData[0].itemCalFreInMonths,
-                    grnItemCalAlertDays: fetchedData[0].itemCalAlertDays,
-                    grnItemCalibrationSource: fetchedData[0].itemCalibrationSource,
-                    grnItemCalibrationDoneAt: fetchedData[0].itemCalibrationDoneAt,
+                    grnItemId: selectedRows[0]._id,
+                    grnItemAddMasterName: selectedRows[0].itemAddMasterName,
+                    grnItemIMTENo: selectedRows[0].itemIMTENo,
+                    grnItemType: selectedRows[0].itemType,
+                    grnItemRangeSize: selectedRows[0].itemRangeSize,
+                    grnItemRangeSizeUnit: selectedRows[0].itemRangeSizeUnit,
+                    grnItemMFRNo: selectedRows[0].itemMFRNo,
+                    grnItemLC: selectedRows[0].itemLC,
+                    grnItemLCUnit: selectedRows[0].itemLCUnit,
+                    grnItemMake: selectedRows[0].itemMake,
+                    grnItemModelNo: selectedRows[0].itemModelNo,
+                    grnItemDcNo: selectedRows[0].dcNo,
+                    grnItemDepartment: selectedRows[0].itemDepartment,
+                    grnItemArea: selectedRows[0].itemArea,
+                    grnItemPlaceOfUsage: selectedRows[0].itemPlaceOfUsage,
+                    grnItemCalFreInMonths: selectedRows[0].itemCalFreInMonths,
+                    grnItemCalAlertDays: selectedRows[0].itemCalAlertDays,
+                    grnItemCalibrationSource: selectedRows[0].itemCalibrationSource,
+                    grnItemCalibrationDoneAt: selectedRows[0].itemCalibrationDoneAt,
                     grnItemCalibratedAt: "",
-                    grnItemOBType: fetchedData[0].itemOBType,
-                    grnAcCriteria: fetchedData[0].acceptanceCriteria.map((item) => (
+                    grnItemOBType: selectedRows[0].itemOBType,
+                    grnAcCriteria: selectedRows[0].acceptanceCriteria.map((item) => (
                         {
                             grnParameter: item.acParameter,
                             grnNominalSize: item.acNominalSize,
@@ -428,7 +402,7 @@ const Grn = () => {
                             rowStatus: ""
                         }
                     )),
-                    grnItemUncertainity: fetchedData[0].itemUncertainity,
+                    grnItemUncertainity: selectedRows[0].itemUncertainity,
                     grnItemCalDate: "",
                     grnItemDueDate: "",
                     grnItemCertificateStatus: "",
@@ -744,16 +718,6 @@ const Grn = () => {
 
     };
 
-    const deleteGrnPartyItems = (index) => {
-        setGrnData((prev) => {
-            const AC = [...prev.grnPartyItems]
-            AC.splice(index, 1);
-            return {
-                ...prev, grnPartyItems: AC,
-            };
-        })
-        nonSelectedItems();
-    };
 
 
 
@@ -875,20 +839,10 @@ const Grn = () => {
 
 
 
-    const nonSelectedItems = () => {
-
-        const remainingMasters = selectedRows.filter(item =>
-            !grnData.grnPartyItems.some(grn => grn.grnItemId === item._id)
-        );
-        setGrnImtes(remainingMasters)
 
 
-    }
 
 
-    useEffect(() => {
-        nonSelectedItems()
-    }, [grnData.grnPartyItems])
 
     const [certMessage, setCertMessage] = useState(null)
 
@@ -933,7 +887,7 @@ const Grn = () => {
             <DialogTitle align='center' >GRN</DialogTitle>
             <IconButton
                 aria-label="close"
-                onClick={() => {setGrnOpen(false); window.location.reload();}}
+                onClick={() => { setGrnOpen(false); window.location.reload(); }}
                 sx={{
                     position: 'absolute',
                     right: 8,
@@ -1012,17 +966,17 @@ const Grn = () => {
                                                     <TextField label="Party Name"
                                                         id="grnPartyNameId"
                                                         select
-                                                        //  value={grnData.grnPartyName}
+                                                        value={grnData.grnPartyName}
 
                                                         onChange={(e) => setPartyData(e.target.value)}
+                                                        disabled
 
-                                                        //  sx={{ width: "100%" }}
                                                         size="small"
                                                         fullWidth
                                                         {...(errors.grnPartyName !== "" && { helperText: errors.grnPartyName, error: true })}
                                                         name="grnPartyName" >
-                                                        {vendorDataList.map((item, index) => (
-                                                            <MenuItem key={index} value={item._id}>{item.fullName}</MenuItem>
+                                                        {vendors.map((item, index) => (
+                                                            <MenuItem key={index} value={item.fullName}>{item.fullName}</MenuItem>
                                                         ))}
                                                     </TextField>
                                                 </div>
@@ -1032,11 +986,11 @@ const Grn = () => {
                                                         id="grnPartyCodeId"
                                                         defaultValue=""
                                                         onChange={handleGrnChange}
-                                                        // sx={{ width: "100%" }}
+
                                                         size="small"
                                                         value={grnData.grnPartyCode}
                                                         {...(errors.grnPartyCode !== "" && { helperText: errors.grnPartyCode, error: true })}
-
+                                                        disabled
                                                         fullWidth
                                                         name="grnPartyCode" />
 
@@ -1053,6 +1007,7 @@ const Grn = () => {
                                                     id="grnPartyAddressId"
                                                     defaultValue=""
                                                     size="small"
+                                                    disabled
                                                     onChange={handleGrnChange}
                                                     value={grnData.grnPartyAddress}
                                                     {...(errors.grnPartyAddress !== "" && { helperText: errors.grnPartyAddress, error: true })}
@@ -1146,19 +1101,20 @@ const Grn = () => {
 
 
                                         <TextField label="Imte No"
-                                            id="grnItemId"
-                                            select
+                                            id="grnItemIMTENo"
+                                            
                                             defaultValue="all"
                                             fullWidth
                                             size="small"
                                             className='me-2'
                                             // disabled={itemAddDetails.itemListNames === ""}
                                             onChange={handleGrnItemChange}
-                                            value={grnData.grnItemId}
-                                            name="grnItemId" >
-                                            {grnImtes.map((item, index) => (
-                                                <MenuItem key={index} value={item._id}>{item.itemIMTENo}</MenuItem>
-                                            ))}
+                                            value={grnData.grnItemIMTENo}
+                                            inputProps={{
+                                                readOnly : true
+                                            }}
+                                            name="grnItemIMTENo" >
+                                            
 
                                         </TextField>
 

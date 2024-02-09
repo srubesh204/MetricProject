@@ -18,6 +18,7 @@ const ItemAdd = () => {
     // Units Data
 
     const employeeRole = useEmployee();
+    const {allowedPlants} = employeeRole
 
     const [units, setUnits] = useState([]);
     const UnitFetch = async () => {
@@ -170,9 +171,9 @@ const ItemAdd = () => {
 
     const getDistinctItemName = async () => {
         try {
-            const response = await axios.get(
-                `${process.env.REACT_APP_PORT}/itemAdd/getAllItemAdds`
-            );
+            const response = await axios.post(
+                `${process.env.REACT_APP_PORT}/itemAdd/getItemByPlant`, { allowedPlants: allowedPlants }
+              );
             console.log(response.data)
             const isItemMaster = response.data.result.filter(item => item.isItemMaster === "1")
             setItemMasterListByName(isItemMaster);
@@ -204,9 +205,9 @@ const ItemAdd = () => {
 
     const vendorListFetch = async () => {
         try {
-            const response = await axios.get(
-                `${process.env.REACT_APP_PORT}/vendor/getAllVendors`
-            );
+            const response = await axios.post(
+                `${process.env.REACT_APP_PORT}/vendor/getVendorByPlants`, { allowedPlants: allowedPlants }
+              );
             const vendorList = response.data.result
             const customerList = vendorList.filter((item) => item.customer === "1" || item.supplier === "1");
             const OEMList = vendorList.filter((item) => item.oem === "1");
@@ -219,7 +220,7 @@ const ItemAdd = () => {
             setOEMList(OEMList);
             setSupplierList(SupplierList)
             setSuppOEM(suppOEM)
-            console.log(SupplierList)
+            
 
         } catch (err) {
             console.log(err);
@@ -228,6 +229,11 @@ const ItemAdd = () => {
     useEffect(() => {
         vendorListFetch();
     }, []);
+
+    // useEffect(()=> {
+    //     const plantVendors = vendorList.filter(ven => ven.vendorPlant.includes(itemAddData.itemPlant))
+
+    // }, [itemAddData.itemPlant])
 
     //
 
@@ -457,8 +463,8 @@ const ItemAdd = () => {
     const [partData, setPartData] = useState([])
     const getPartList = async () => {
         try {
-            const response = await axios.get(
-                `${process.env.REACT_APP_PORT}/part/getAllParts`
+            const response = await axios.post(
+                `${process.env.REACT_APP_PORT}/part/getPartsByPlant`, {allowedPlants: allowedPlants}
             );
             console.log(response.data)
             setPartData(response.data.result)

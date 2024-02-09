@@ -154,6 +154,7 @@ function App() {
   const [employee, setEmployee] = useState(sessionStorage.getItem('employee'));
   const [empId, setEmpId] = useState(sessionStorage.getItem('empId'));
   const [isEmployeeLoaded, setIsEmployeeLoaded] = useState(false);
+  const [allowedPlants, setAllowedPlants] = useState([])
 
   useEffect(() => {
     const fetchEmployeeData = async () => {
@@ -163,6 +164,9 @@ function App() {
         );
         console.log(response.data.result)
         setLoggedEmp(response.data.result);
+        const plantDetails = response.data.result.plantDetails.map(plant => plant.plantName)
+        console.log(response.data.result)
+        setAllowedPlants(plantDetails)
         setIsEmployeeLoaded(true); // Set the flag to indicate employee data is loaded
       } catch (err) {
         console.log(err);
@@ -193,7 +197,7 @@ function App() {
 
   return (
     <div className="App">
-      <EmployeeProvider employee={{ employee, loggedEmp }}>
+      <EmployeeProvider employee={{ employee, loggedEmp, allowedPlants }}>
         <Routes>
           <Route
             path="/"

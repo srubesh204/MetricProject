@@ -3,10 +3,12 @@ import axios from 'axios';
 import { Card, CardContent, CardActions, Button, Container, Grid, Paper, TextField, Typography, CardMedia, InputLabel, Input, FormControl, FormHelperText, FormGroup, FormLabel, MenuItem, Select, Menu, FormControlLabel, Radio, RadioGroup, TableContainer, Table, TableHead, TableRow, TableCell, TableBody, IconButton, OutlinedInput, Box, Chip, Snackbar, Alert, Dialog, DialogTitle, DialogContent, DialogActions, DialogContentText, Checkbox, ListItemText, Autocomplete } from '@mui/material'
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { useEmployee } from '../../App';
 import dayjs from 'dayjs';
 const MeasurementUncertainty = () => {
 
-
+    const empRole = useEmployee();
+    const {loggedEmp, allowedPlants} = empRole
     const [uncertainityData, setUncertainityData] = useState({
         instrumentSelect: "",
         cte: "",
@@ -43,9 +45,9 @@ const MeasurementUncertainty = () => {
     const [itemNameList, setItemNameList] = useState([])
     const itemNameFetch = async () => {
         try {
-            const response = await axios.get(
-                `${process.env.REACT_APP_PORT}/itemAdd/getAllItemAdds`
-            );
+            const response = await axios.post(
+                `${process.env.REACT_APP_PORT}/itemAdd/getItemByPlant`, { allowedPlants: allowedPlants }
+              );
             setItemNameList(response.data.result);
             console.log(response.data)
         } catch (err) {

@@ -12,6 +12,26 @@ const vendorController = {
       res.status(500).send('Error on Vendor Data');
     }
   },
+
+  getVendorByPlants: async (req, res) => {
+    const { allowedPlants } = req.body
+    try {
+
+      const vendorByPlant = await vendorModel.aggregate([
+        {
+          $match: {
+            "vendorPlant": { $in: allowedPlants ? allowedPlants : [] } // Specify the values to match
+          }
+        }
+      ])
+      res.status(202).json({ result: vendorByPlant, status: 1 });
+      //res.status(200).json(employees);
+    } catch (err) {
+      console.error(err);
+      res.status(500).send('Error on Vendor Data');
+    }
+  },
+
   createVendor: async (req, res) => {
 
     try {
@@ -184,7 +204,7 @@ const vendorController = {
       const fetchVendor = async (category) => {
         return await vendorModel.find({ [category]: "1" });
       };
-  
+
       const [allVendors, customers, subContractors, suppliers, oems] = await Promise.all([
         fetchAllVendors(),
         fetchVendor('customer'),
@@ -192,7 +212,7 @@ const vendorController = {
         fetchVendor('supplier'),
         fetchVendor('oem'),
       ]);
-  
+
       res.status(202).json({
         result: { allVendors, customers, subContractors, suppliers, oems },
         status: 1,
@@ -208,9 +228,9 @@ const vendorController = {
       if (!req.file) {
         return res.status(400).json({ error: 'No file uploaded' });
       }
-      
+
       const excelData = req.file.buffer; // Access the file buffer
-  
+
       // Convert Excel data to JSON
       const jsonData = excelToJson({
         source: excelData,
@@ -218,7 +238,7 @@ const vendorController = {
           rows: 1
         },
         columnToKey: {
-          A: 'vendorCode',   
+          A: 'vendorCode',
           B: 'aliasName',
           C: 'fullName',
           D: 'dor',
@@ -232,10 +252,10 @@ const vendorController = {
           L: 'certificate',
           M: 'certificateValidity',
           N: 'vendorStatus'
-      }
+        }
       });
       console.log(jsonData)
-  
+
       const uploadPromises = jsonData.Sheet1.map(async (item) => {
         try {
           // Create an instance of designationModel and save it to the database
@@ -245,22 +265,22 @@ const vendorController = {
 
         } catch (error) {
           console.error('Error saving vendor:', error);
-         
+
         }
       });
-  
+
       // Execute all upload promises
       const uploadedVendor = await Promise.all(uploadPromises);
-  
+
       res.status(200).json({ uploadedVendor, message: 'Uploaded successfully' });
     } catch (error) {
       console.error('Error uploading Excel data:', error);
       res.status(500).json({ error: 'Internal Server Error' });
     }
   }
-  
-  
-  
+
+
+
 }
 
 

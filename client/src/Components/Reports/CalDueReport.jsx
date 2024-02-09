@@ -25,6 +25,7 @@ export const CalDueReportContent = createContext(null);
 const CalDueReport = () => {
 
     const employeeRole = useEmployee()
+    const {allowedPlants} = employeeRole
     const [loaded, setLoaded] = useState(false);
 
     const [totalPrintOpen, setTotalPrintOpen] = useState(false);
@@ -50,12 +51,12 @@ const CalDueReport = () => {
 
     const calDueFetch = async () => {
         try {
-            const response = await axios.get(
-                `${process.env.REACT_APP_PORT}/itemAdd/getAllItemAdds`
-            );
+            const response = await axios.post(
+                `${process.env.REACT_APP_PORT}/itemAdd/getItemByPlant`, { allowedPlants: allowedPlants }
+              );
             console.log(response.data.result)
-            const plantItems = response.data.result.filter(item => employeeRole.loggedEmp.plantDetails.some(plant => item.itemPlant === plant.plantName))
-            const departmentItems = plantItems.filter(item => employeeRole.loggedEmp.plantDetails.some(plant => plant.departments.includes(item.itemDepartment)))
+           
+            const departmentItems = response.data.result.filter(item => employeeRole.loggedEmp.plantDetails.some(plant => plant.departments.includes(item.itemDepartment)))
             console.log(departmentItems)
 
             const filterNames = ["itemIMTENo", "itemType", "itemDepartment", "itemPlant", "itemCalibrationSource", "itemCurrentLocation"]
@@ -492,9 +493,10 @@ const CalDueReport = () => {
     const [partCutomerNames, setPartCutomerNames] = useState([])
     const partFetchData = async () => {
         try {
-            const response = await axios.get(
-                `${process.env.REACT_APP_PORT}/part/getAllParts`
+            const response = await axios.post(
+                `${process.env.REACT_APP_PORT}/part/getPartsByPlant`, {allowedPlants: allowedPlants}
             );
+
 
             setPartDataList(response.data.result);
         } catch (err) {

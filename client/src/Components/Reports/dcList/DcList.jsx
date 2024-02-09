@@ -33,7 +33,7 @@ export const DcListContent = createContext(null);
 const DcList = () => {
 
     const empRole = useEmployee()
-    const { loggedEmp } = empRole
+    const { loggedEmp, allowedPlants } = empRole
 
 
     const [printState, setPrintState] = useState(false)
@@ -65,15 +65,15 @@ const DcList = () => {
     const [itemPlantList, setItemPlantList] = useState([])
     const ItemFetch = async (deps) => {
         try {
-            const response = await axios.get(
-                `${process.env.REACT_APP_PORT}/itemAdd/getAllItemAdds`
-            );
+            const response = await axios.post(
+                `${process.env.REACT_APP_PORT}/itemAdd/getItemByPlant`, { allowedPlants: allowedPlants }
+              );
             console.log(response.data.result)
-            const plantItems = response.data.result.filter(item => (loggedEmp.plantDetails.map(plant => plant.plantName).includes(item.itemPlant) && item.dcStatus != "1"))
-            console.log(plantItems)
+           
+            
             console.log(deps)
             if (deps.length > 0) {
-                const departmentItems = plantItems.filter(item => deps.includes(item.itemCurrentLocation))
+                const departmentItems = response.data.result.filter(item => deps.includes(item.itemCurrentLocation))
                 console.log(departmentItems)
                 setItemPlantList(departmentItems);
                 setItemDepartment(departmentItems);
@@ -179,9 +179,9 @@ const DcList = () => {
 
     const FetchData = async () => {
         try {
-            const response = await axios.get(
-                `${process.env.REACT_APP_PORT}/vendor/getAllVendors`
-            );
+            const response = await axios.post(
+                `${process.env.REACT_APP_PORT}/vendor/getVendorByPlants`, { allowedPlants: allowedPlants }
+              );
             console.log(response.data)
 
             setVendorFullList(response.data.result);
@@ -849,7 +849,7 @@ const DcList = () => {
                             </div>
 
                             <DcListContent.Provider
-                                value={{ dcEditOpen, setDcEditOpen, selectedRows, dcListFetchData, printState, setPrintState, itemPlantList, dcDataDcList, ItemFetch }}
+                                value={{ dcEditOpen, setDcEditOpen, selectedRows, dcListFetchData, printState, setPrintState, itemPlantList, dcDataDcList, ItemFetch, allowedPlants }}
                             >
                                 <DcEdit />
                             </DcListContent.Provider>

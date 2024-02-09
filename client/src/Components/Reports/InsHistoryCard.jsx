@@ -32,7 +32,7 @@ function InsHistoryCard() {
     const [printState, setPrintState] = useState(false)
 
     const empRole = useEmployee()
-    const { loggedEmp } = empRole
+    const { loggedEmp, allowedPlants } = empRole
 
 
 
@@ -122,14 +122,11 @@ function InsHistoryCard() {
 
     const itemFetch = async () => {
         try {
-            const response = await axios.get(`${process.env.REACT_APP_PORT}/itemAdd/getAllItemAdds`);
+            const response = await axios.post(
+                `${process.env.REACT_APP_PORT}/itemAdd/getItemByPlant`, { allowedPlants: allowedPlants }
+              );
             console.log(response.data.result)
-
-            const plantDatas = response.data.result.filter(item =>
-                loggedEmp.plantDetails.some(plant => plant.plantName === item.itemPlant)
-            );
-            console.log(plantDatas)
-            setItemList(plantDatas);
+            setItemList(response.data.result);
         } catch (error) {
             console.error('Error fetching data:', error);
         }
