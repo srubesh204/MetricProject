@@ -259,14 +259,33 @@ const TotalList = () => {
         return itemType.charAt(0).toUpperCase() + itemType.slice(1).toLowerCase();
       } 
     },
+    { field: 'itemSAPNo', headerName: 'ItemSAPNo ', width: 90, headerAlign: "center", align: "center", },
+    { field: 'itemMFRNo', headerName: 'ItemMFRNo ', width: 90, headerAlign: "center", align: "center", },
+    { field: 'itemModelNo', headerName: 'ItemModelNo ', width: 90, headerAlign: "center", align: "center", },
     { field: 'itemMasterRef', headerName: 'ItemMasterRef ', width: 100, headerAlign: "center", align: "center", },
     { field: 'itemPlant', headerName: 'ItemPlant ', width: 100, headerAlign: "center", align: "center", },
     { field: 'itemReceiptDate', headerName: 'ItemReceiptDate ', width: 100, headerAlign: "center", align: "center", },
     { field: 'itemPlaceOfUsage', headerName: 'ItemPlaceOfUsage ', width: 90, headerAlign: "center", align: "center", },
     { field: 'itemLocation', headerName: 'ItemLocation ', width: 90, headerAlign: "center", align: "center", },
     { field: 'itemCalAlertDays', headerName: 'ItemCalAlertDays ', width: 90, headerAlign: "center", align: "center", },
-    { field: 'itemPrevCalDate', headerName: 'ItemPrevCalDate ', width: 90, headerAlign: "center", align: "center", },
+    { field: 'itemPrevCalData', headerName: 'ItemPrevCalDate ', width: 90, headerAlign: "center", align: "center", },
     { field: 'itemCertificateName', headerName: 'ItemCertificateName ', width: 90, headerAlign: "center", align: "center", },
+    { field: 'itemCertificateNo', headerName: 'ItemCertificateNo ', width: 90, headerAlign: "center", align: "center", },
+    { field: 'itemItemMasterName', headerName: 'ItemItemMasterName ', width: 90, headerAlign: "center", align: "center", },
+    { field: 'itemUncertainity', headerName: 'ItemUncertainity ', width: 90, headerAlign: "center", align: "center", },
+    { field: 'itemPartName', headerName: 'ItemPartName ', width: 90, headerAlign: "center", align: "center", },
+    { field: 'itemOBType', headerName: 'ItemOBType ', width: 90, headerAlign: "center", align: "center", },
+    { field: 'calibrationCost', headerName: 'CalibrationCost ', width: 90, headerAlign: "center", align: "center", },
+    { field: 'gaugeUsage', headerName: 'Gauge life in days ', width: 130, headerAlign: "center", align: "center", },
+    { field: 'lifealertDays', headerName: 'Gauge life alert in days', width: 120, headerAlign: "center", align: "center", },
+    { field: 'purchaseRefNo', headerName: 'PurchaseRefNo', width: 90, headerAlign: "center", align: "center", },
+    { field: 'purchaseDate', headerName: 'PurchaseDate', width: 90, headerAlign: "center", align: "center", },
+    { field: 'specialRemark', headerName: 'SpecialRemark', width: 90, headerAlign: "center", align: "center", },
+    { field: 'drawingIssueNo', headerName: 'DrawingIssueNo', width: 90, headerAlign: "center", align: "center", },
+    { field: 'drawingNo', headerName: 'DrawingNo', width: 90, headerAlign: "center", align: "center", },
+    // { field: 'rdName', headerName: 'rdName', width: 90, headerAlign: "center", align: "center", },
+
+
 
   ];
 
