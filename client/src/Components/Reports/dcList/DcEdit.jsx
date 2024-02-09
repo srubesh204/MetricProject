@@ -664,10 +664,12 @@ const DcEdit = () => {
                                                 size="small"
                                                 sx={{ width: "101%" }}
                                                 name="dcReason" >
-                                                <MenuItem value="All">All</MenuItem>
+                                                <MenuItem value="">Select</MenuItem>
+                                                <MenuItem value="Nil">Nil</MenuItem>
                                                 <MenuItem value="Service">Service</MenuItem>
-                                                <MenuItem value="Service & Calibration">Service & Calibration</MenuItem>
+                                                <MenuItem value="ServiceCalibration">Service & Calibration</MenuItem>
                                                 <MenuItem value="Calibration">Calibration</MenuItem>
+                                                <MenuItem value="others">Others</MenuItem>
 
                                             </TextField>
 

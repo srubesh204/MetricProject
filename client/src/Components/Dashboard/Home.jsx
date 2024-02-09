@@ -1328,11 +1328,16 @@ const Home = () => {
       setStatusCheckMsg("");
       setGrnOpen(true);
     } else {
-      if(selectedRows.length !== 1){
+      if(selectedRows.length > 1){
         setStatusCheckMsg("Multiple selection not allowed")
+      }else if(selectedRows.length === 0){
+        setStatusCheckMsg("Please select any one item")
+      }else{
+        setStatusCheckMsg("Please ensure the item is created in the DC before proceeding")
       }
       
-      setStatusCheckMsg("Please ensure the item is created in the DC before proceeding")
+      
+      
     }
   }
 
@@ -1364,7 +1369,7 @@ const Home = () => {
           setStatusCheckMsg("Move the item to the default location then try again!")
           console.log(StatusCheckMsg)
         }
-      } else if (selectedRows[0].itemCalibrationDoneAt === "Site") {
+      } else if (selectedRows.length > 0 && selectedRows[0].itemCalibrationDoneAt === "Site") {
         console.log("working")
         setCalOpen(true)
       }
@@ -1377,7 +1382,7 @@ const Home = () => {
       if (selectedRows.length === 0) {
         setStatusCheckMsg("Please select any one item")
       }
-      if (selectedRows[0].itemCalibrationSource !== "inhouse") {
+      if (selectedRows.length> 0 && selectedRows[0].itemCalibrationSource !== "inhouse") {
         setStatusCheckMsg("Item must be a Inhouse Calibration")
       }
     }
