@@ -605,9 +605,7 @@ const CalList = () => {
                                     disableRowSelectionOnClick
                                     pageSizeOptions={[12]}
                                 />
-
                             </Box>
-
                         </div>
                         <div className='row'>
                             <div className='col d-flex '>
