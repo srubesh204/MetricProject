@@ -1826,85 +1826,81 @@ const ItemEdit = () => {
                                     </div>
                                 </div>
                                 <div className='row g-2'>
-                                    <div className='col-md-6 d-flex' >
+                                    <table className=' table-bordered '>
+                                        <tbody>
+                                            <tr>
+                                                <td>
+                                                    <Button helperText="Hello" className='me-2' size='small' component="label" fullWidth variant="contained" startIcon={<CloudUpload />} >
+                                                        R&R Upload
+                                                        <VisuallyHiddenInput type="file" onChange={handleAdditionalCertificate} />
+                                                    </Button>
+                                                </td>
+                                                <td>
+                                                    <div className='d-flex justify-content-center '>
+                                                        {(itemAddData.rdName !== "" && itemAddData.rdName !== undefined) &&
+                                                            <Chip
+                                                                className='col-12'
+                                                                icon={<Done />}
+                                                                color="success"
+                                                                label={itemAddData.rdName}
+                                                                onClick={() => {
+                                                                    const fileUrl = `${process.env.REACT_APP_PORT}/additionalCertificates/${itemAddData.rdName}`;
+                                                                    window.open(fileUrl, '_blank'); // Opens the file in a new tab/window
+                                                                }}
+                                                                onDelete={() => setItemAddData((prev) => ({ ...prev, rdName: "" }))}
+                                                            />}
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <Button helperText="Hello" className='me-2' component="label" size='small' fullWidth variant="contained" startIcon={<CloudUpload />} >
+                                                        MSA Upload
+                                                        <VisuallyHiddenInput type="file" onChange={handleMSACertificate} />
+                                                    </Button>
+                                                </td>
+                                                <td>
+                                                    <div className='d-flex justify-content-center '>
+                                                        {(itemAddData.msaName !== "" && itemAddData.msaName !== undefined) &&
+                                                            <Chip
+                                                                className='col-12'
+                                                                icon={<Done />}
+                                                                color="success"
+                                                                label={itemAddData.msaName}
+                                                                onClick={() => {
+                                                                    const fileUrl = `${process.env.REACT_APP_PORT}/msaCertificates/${itemAddData.msaName}`;
+                                                                    window.open(fileUrl, '_blank'); // Opens the file in a new tab/window
+                                                                }}
+                                                                onDelete={() => setItemAddData((prev) => ({ ...prev, msaName: "" }))}
+                                                            />}
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <Button helperText="Hello" component="label" size='small' fullWidth variant="contained" startIcon={<CloudUpload />} >
+                                                        Drawing Upload
+                                                        <VisuallyHiddenInput type="file" onChange={handleOtherFilesCertificate} />
+                                                    </Button>
+                                                </td>
+                                                <td>
+                                                    <div className='d-flex justify-content-center '>
+                                                        {(itemAddData.otherFile !== "" && itemAddData.otherFile !== undefined) &&
+                                                            <Chip
+                                                                className='col-12'
+                                                                icon={<Done />}
+                                                                color="success"
+                                                                label={itemAddData.otherFile}
+                                                                onClick={() => {
+                                                                    const fileUrl = `${process.env.REACT_APP_PORT}/otherFilesCertificates/${itemAddData.otherFile}`;
+                                                                    window.open(fileUrl, '_blank'); // Opens the file in a new tab/window
+                                                                }}
+                                                                onDelete={() => setItemAddData((prev) => ({ ...prev, otherFile: "" }))}
+                                                            />}
+                                                    </div>
+                                                </td>
 
-                                        <table>
-                                            <tbody>
-                                                <tr>
-                                                    <td>
-                                                        <Button helperText="Hello" className='me-2' size='small' component="label" fullWidth variant="contained" startIcon={<CloudUpload />} >
-                                                            R&R Upload
-                                                            <VisuallyHiddenInput type="file" onChange={handleAdditionalCertificate} />
-                                                        </Button>
-                                                    </td>
-                                                    <td>
-                                                        <div className='d-flex justify-content-center '>
-                                                            {(itemAddData.rdName !== "" && itemAddData.rdName !== undefined) &&
-                                                                <Chip
-                                                                    className='mt-2'
-                                                                    icon={<Done />}
-                                                                    color="success"
-                                                                    label={itemAddData.rdName}
-                                                                    onClick={() => {
-                                                                        const fileUrl = `${process.env.REACT_APP_PORT}/additionalCertificates/${itemAddData.rdName}`;
-                                                                        window.open(fileUrl, '_blank'); // Opens the file in a new tab/window
-                                                                    }}
-                                                                    onDelete={() => setItemAddData((prev) => ({ ...prev, rdName: "" }))}
-                                                                />}
-                                                        </div>
+                                            </tr>
 
-                                                    </td>
-                                                    <td>
-                                                        <Button helperText="Hello" className='me-2' component="label" size='small' fullWidth variant="contained" startIcon={<CloudUpload />} >
-                                                            MSA Upload
-                                                            <VisuallyHiddenInput type="file" onChange={handleMSACertificate} />
-                                                        </Button>
-                                                    </td>
-                                                    <td>
-                                                        <div className='d-flex justify-content-center '>
-                                                            {(itemAddData.msaName !== "" && itemAddData.msaName !== undefined) &&
-                                                                <Chip
-                                                                    className='mt-2'
-                                                                    icon={<Done />}
-                                                                    color="success"
-                                                                    label={itemAddData.msaName}
-                                                                    onClick={() => {
-                                                                        const fileUrl = `${process.env.REACT_APP_PORT}/msaCertificates/${itemAddData.msaName}`;
-                                                                        window.open(fileUrl, '_blank'); // Opens the file in a new tab/window
-                                                                    }}
-                                                                    onDelete={() => setItemAddData((prev) => ({ ...prev, msaName: "" }))}
-                                                                />}
-                                                        </div>
-                                                    </td>
-                                                    <td>
-                                                        <Button helperText="Hello" component="label" size='small' fullWidth variant="contained" startIcon={<CloudUpload />} >
-                                                            Drawing Upload
-                                                            <VisuallyHiddenInput type="file" onChange={handleOtherFilesCertificate} />
-                                                        </Button>
-                                                    </td>
-                                                    <td>
-                                                        <div className='d-flex justify-content-center '>
-                                                            {(itemAddData.otherFile !== "" && itemAddData.otherFile !== undefined) &&
-                                                                <Chip
-                                                                    className='mt-2'
-                                                                    icon={<Done />}
-                                                                    color="success"
-                                                                    label={itemAddData.otherFile}
-                                                                    onClick={() => {
-                                                                        const fileUrl = `${process.env.REACT_APP_PORT}/otherFilesCertificates/${itemAddData.otherFile}`;
-                                                                        window.open(fileUrl, '_blank'); // Opens the file in a new tab/window
-                                                                    }}
-                                                                    onDelete={() => setItemAddData((prev) => ({ ...prev, otherFile: "" }))}
-                                                                />}
-                                                        </div>
-                                                    </td>
+                                        </tbody>
+                                    </table>
 
-                                                </tr>
-
-                                            </tbody>
-                                        </table>
-
-                                    </div>
                                 </div>
                             </DialogContent>
                         </Dialog>
