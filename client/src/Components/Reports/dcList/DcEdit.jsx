@@ -664,10 +664,12 @@ const DcEdit = () => {
                                                 size="small"
                                                 sx={{ width: "101%" }}
                                                 name="dcReason" >
-                                                <MenuItem value="All">All</MenuItem>
+                                                <MenuItem value="">Select</MenuItem>
+                                                <MenuItem value="Nil">Nil</MenuItem>
                                                 <MenuItem value="Service">Service</MenuItem>
-                                                <MenuItem value="Service & Calibration">Service & Calibration</MenuItem>
+                                                <MenuItem value="ServiceCalibration">Service & Calibration</MenuItem>
                                                 <MenuItem value="Calibration">Calibration</MenuItem>
+                                                <MenuItem value="others">Others</MenuItem>
 
                                             </TextField>
 
@@ -692,7 +694,7 @@ const DcEdit = () => {
 
 
 
-                            <Paper
+                            {/* <Paper
                                 sx={{
                                     p: 2,
                                     display: 'flex',
@@ -725,14 +727,14 @@ const DcEdit = () => {
                                     </div>
                                     <div className=' col d-flex justify-content-end'>
                                         <div className='me-2 '>
-                                            {/*<button type="button" className='btn btn-secondary' onClick={addDcValue} >Add Item</button>*/}
+                                            
                                             <Button startIcon={<Add />} onClick={() => dcItemAdd()} size='small' sx={{ minWidth: "130px" }} variant='contained'>Add Item</Button>
                                         </div>
 
                                     </div>
 
                                 </div>
-                            </Paper>
+                            </Paper> */}
 
                             <Paper
                                 sx={{
