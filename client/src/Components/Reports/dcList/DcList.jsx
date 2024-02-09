@@ -609,7 +609,7 @@ const DcList = () => {
                                 </div>
                                 <div className='col '>
 
-                                    <TextField label="Default Location "
+                                    <TextField label="Primary Location "
                                         id="dcDepartmentId"
                                         select
                                         defaultValue="all"

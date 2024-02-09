@@ -301,7 +301,7 @@ function InsHistoryCard() {
                                             ))}
                                         </TextField>
 
-                                        <TextField label="Default Location "
+                                        <TextField label="Primary Location "
                                             id="itemDepartmentId"
                                             className="me-2 col"
                                             select

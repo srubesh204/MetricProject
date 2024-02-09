@@ -496,7 +496,7 @@ const CalList = () => {
                                     </TextField>
                                 </div>
                                 <div className='col '>
-                                    <TextField label="Default Location "
+                                    <TextField label="Primary Location "
                                         id="itemDepartmentId"
                                         select
                                         defaultValue="all"
