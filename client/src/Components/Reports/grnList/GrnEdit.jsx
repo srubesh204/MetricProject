@@ -17,7 +17,7 @@ import ItemEdit from '../../ItemCreation/ItemEdit';
 
 const GrnEdit = () => {
     const grnEditDatas = useContext(GrnListContent)
-    const { grnEditOpen, setGrnEditOpen, selectedRows, grnListFetchData, itemPlantList } = grnEditDatas
+    const { grnEditOpen, setGrnEditOpen, selectedRows, grnListFetchData, itemPlantList, allowedPlants } = grnEditDatas
     const empRole = useEmployee()
     const { employee, loggedEmp } = empRole
     console.log(selectedRows)
@@ -262,8 +262,8 @@ const GrnEdit = () => {
 
     const vendorFetchData = async () => {
         try {
-            const response = await axios.get(
-                `${process.env.REACT_APP_PORT}/vendor/getAllVendors`
+            const response = await axios.post(
+                `${process.env.REACT_APP_PORT}/vendor/getVendorByPlants`, { allowedPlants: allowedPlants }
             );
             setVendorDataList(response.data.result);
             //setFilteredData(response.data.result);

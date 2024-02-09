@@ -584,17 +584,18 @@ export const PartDataBase = ({ style }) => {
 
     const [customerList, setCustomerList] = useState([])
     const empRole = useEmployee()
-    const { employee, loggedEmp } = empRole
+    const { employee, loggedEmp, allowedPlants } = empRole
+    console.log(allowedPlants)
 
     const vendorFetch = async () => {
         try {
-            const response = await axios.get(
-                `${process.env.REACT_APP_PORT}/vendor/getAllVendors`
+            const response = await axios.post(
+                `${process.env.REACT_APP_PORT}/vendor/getVendorByPlants`, {allowedPlants: allowedPlants}
             );
             console.log(response.data)
 
-            const plantCustomers = response.data.result.filter(cus => loggedEmp.plantDetails.map(plant => cus.vendorPlant.includes(plant.plantName)))
-            const customersList = plantCustomers.filter((item) => item.customer === "1")
+            
+            const customersList = response.data.result.filter((item) => item.customer === "1")
             setCustomerList(customersList);
         } catch (err) {
             console.log(err);
@@ -648,16 +649,12 @@ export const PartDataBase = ({ style }) => {
 
     const partFetchData = async () => {
         try {
-            const response = await axios.get(
-                `${process.env.REACT_APP_PORT}/part/getAllParts`
+            const response = await axios.post(
+                `${process.env.REACT_APP_PORT}/part/getPartsByPlant`, {allowedPlants: allowedPlants}
             );
 
-            const plantPart = response.data.result.filter(part => (loggedEmp.plantDetails.map(plant => plant.plantName).includes(part.partPlant)))
-
-
-            setPartDataList(plantPart);
-            setFilteredData(plantPart)
-
+            setPartDataList(response.data.result);
+            setFilteredData(response.data.result)
 
         } catch (err) {
             console.log(err);
@@ -964,11 +961,11 @@ export const PartDataBase = ({ style }) => {
     console.log(filters)
 
     const onChangeFilter = (e) => {
-        const {name, value} = e.target;
+        const { name, value } = e.target;
         console.log(name, value)
-        if(value === "All"){
+        if (value === "All") {
             setFilteredData(partDataList)
-        }else{
+        } else {
             const data = partDataList.filter(part => part[name] === value)
             setFilteredData(data)
         }
@@ -1099,7 +1096,7 @@ export const PartDataBase = ({ style }) => {
                                                 placeholder="partStatus"
                                                 size="small"
                                                 onChange={handlePartDataBaseChange}
-                                             
+
                                                 value={partData.partStatus}
                                                 name="partStatus" >
 

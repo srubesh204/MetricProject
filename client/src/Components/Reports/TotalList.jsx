@@ -32,6 +32,7 @@ const TotalList = () => {
 
 
   const employeeRole = useEmployee()
+  const {allowedPlants} = employeeRole
 
   console.log(dayjs("2023-11-17").isSameOrBefore("2023-11-21"))
   const [itemList, setItemList] = useState([]);
@@ -53,9 +54,10 @@ const TotalList = () => {
   const [partCutomerNames, setPartCutomerNames] = useState([])
   const partFetchData = async () => {
     try {
-      const response = await axios.get(
-        `${process.env.REACT_APP_PORT}/part/getAllParts`
-      );
+      const response = await axios.post(
+        `${process.env.REACT_APP_PORT}/part/getPartsByPlant`, {allowedPlants: allowedPlants}
+    );
+
 
       setPartDataList(response.data.result);
     } catch (err) {
@@ -80,12 +82,12 @@ const TotalList = () => {
 
   const itemFetch = async () => {
     try {
-      const response = await axios.get(
-        `${process.env.REACT_APP_PORT}/itemAdd/getAllItemAdds`
+      const response = await axios.post(
+        `${process.env.REACT_APP_PORT}/itemAdd/getItemByPlant`, { allowedPlants: allowedPlants }
       );
       console.log(response.data.result)
-      const plantItems = response.data.result.filter(item => employeeRole.loggedEmp.plantDetails.some(plant => item.itemPlant === plant.plantName))
-      const departmentItems = plantItems.filter(item => employeeRole.loggedEmp.plantDetails.some(plant => plant.departments.includes(item.itemDepartment)))
+      
+      const departmentItems = response.data.result.filter(item => employeeRole.loggedEmp.plantDetails.some(plant => plant.departments.includes(item.itemDepartment)))
       console.log(departmentItems)
 
       const filterNames = ["itemIMTENo", "itemType", " itemAddMasterName", "itemDepartment", "itemPlant", "itemCalibrationSource", "itemCurrentLocation"]
@@ -146,27 +148,6 @@ const TotalList = () => {
 
 
   console.log(partCutomerNames)
-
-
-  const [itemStatusDataList, setItemStatusDataList] = useState([])
-  const itemStatusFetchData = async () => {
-    try {
-      const response = await axios.get(
-        `${process.env.REACT_APP_PORT}/vendor/getAllVendors`
-      );
-      setItemStatusDataList(response.data.result);
-
-    } catch (err) {
-      console.log(err);
-    }
-  };
-  useEffect(() => {
-    itemStatusFetchData();
-  }, []);
-  console.log(itemStatusDataList)
-
-
-
 
   const [companyList, setCompanyList] = useState([])
 
@@ -770,22 +751,22 @@ const TotalList = () => {
 
 
 
-  const [vendorDataList, setVendorDataList] = useState([])
-  const vendorFetchData = async () => {
-    try {
-      const response = await axios.get(
-        `${process.env.REACT_APP_PORT}/vendor/getAllVendors`
-      );
-      setVendorDataList(response.data.result);
+  // const [vendorDataList, setVendorDataList] = useState([])
+  // const vendorFetchData = async () => {
+  //   try {
+  //     const response = await axios.post(
+  //       `${process.env.REACT_APP_PORT}/vendor/getVendorByPlants`, { allowedPlants: allowedPlants }
+  //     );
+  //     setVendorDataList(response.data.result);
 
 
-    } catch (err) {
-      console.log(err);
-    }
-  };
-  useEffect(() => {
-    vendorFetchData();
-  }, []);
+  //   } catch (err) {
+  //     console.log(err);
+  //   }
+  // };
+  // useEffect(() => {
+  //   vendorFetchData();
+  // }, []);
 
   const [snackBarOpen, setSnackBarOpen] = useState(false)
   const [errorhandler, setErrorHandler] = useState({});
