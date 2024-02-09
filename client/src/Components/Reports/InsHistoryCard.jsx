@@ -219,9 +219,6 @@ function InsHistoryCard() {
 
     console.log(selectedRow)
     
-
-
-
     const filterByDate = (items, fromDate, toDate) => {
         return items.filter((row) => {
             const calDate = dayjs(row.calItemCalDate);
@@ -408,6 +405,12 @@ function InsHistoryCard() {
 
                                 <div className="col d-flex justify-content-end">
                                     <div className="me-2"><Button component={Link} to={`${process.env.REACT_APP_PORT}/additionalCertificates/${selectedRow.length > 0 ? selectedRow[0].rdName : ""}`} target="_blank" variant="contained" color="info" size="small">R&R</Button></div>
+                                    <div className="me-2">
+                                        <Button component={Link} to={`${process.env.REACT_APP_PORT}/additionalCertificates/${selectedRow.length > 0 ? selectedRow[0].msaName : ""}`} target="_blank" variant="contained" color="info" size="small">MSA</Button>
+                                    </div>
+                                    <div className="me-2">
+                                        <Button component={Link} to={`${process.env.REACT_APP_PORT}/additionalCertificates/${selectedRow.length > 0 ? selectedRow[0].otherFile : ""}`} target="_blank" variant="contained" color="info" size="small">Drawing</Button>
+                                    </div>
                                     <div className="me-2"><Button component={Link} to={`${process.env.REACT_APP_PORT}/workInstructions/${selectedMasterData.workInsName}`} target="_blank" variant="contained" color="info" size="small">View Instructions</Button></div>
                                     {/* <div className="me-2"><Button variant="contained" color="info" size="small">View Drawing</Button></div>
                                     <div className="me-2"><Button variant="contained" color="info" size="small">View R&R</Button></div>
@@ -539,7 +542,7 @@ function InsHistoryCard() {
                                             </thead>
                                             <tbody>
                                                 {
-                                                   selectedRow.length > 0 &&  selectedRow[0].acceptanceCriteria.map(item => (
+                                                    selectedRow.length > 0 && selectedRow[0].acceptanceCriteria.map(item => (
                                                         <tr>
                                                             <td>{item.acParameter || '-'}</td>
                                                             <td>{item.acMinPS || '-'}</td>

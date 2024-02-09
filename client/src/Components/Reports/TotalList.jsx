@@ -257,9 +257,16 @@ const TotalList = () => {
       renderCell: (params) => {
         const itemType = params.row.itemType.toString();
         return itemType.charAt(0).toUpperCase() + itemType.slice(1).toLowerCase();
-      },
+      } 
     },
-
+    { field: 'itemMasterRef', headerName: 'ItemMasterRef ', width: 100, headerAlign: "center", align: "center", },
+    { field: 'itemPlant', headerName: 'ItemPlant ', width: 100, headerAlign: "center", align: "center", },
+    { field: 'itemReceiptDate', headerName: 'ItemReceiptDate ', width: 100, headerAlign: "center", align: "center", },
+    { field: 'itemPlaceOfUsage', headerName: 'ItemPlaceOfUsage ', width: 90, headerAlign: "center", align: "center", },
+    { field: 'itemLocation', headerName: 'ItemLocation ', width: 90, headerAlign: "center", align: "center", },
+    { field: 'itemCalAlertDays', headerName: 'ItemCalAlertDays ', width: 90, headerAlign: "center", align: "center", },
+    { field: 'itemPrevCalDate', headerName: 'ItemPrevCalDate ', width: 90, headerAlign: "center", align: "center", },
+    { field: 'itemCertificateName', headerName: 'ItemCertificateName ', width: 90, headerAlign: "center", align: "center", },
 
   ];
 

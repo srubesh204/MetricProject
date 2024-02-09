@@ -1872,7 +1872,7 @@ const ItemEdit = () => {
                                             </div>}
                                             {itemAddData.otherFile === "" ?
                                         <Button helperText="Hello" component="label" size='small' fullWidth variant="contained" startIcon={<CloudUpload />} >
-                                            Other Files Upload
+                                            Drawing Upload
                                             <VisuallyHiddenInput type="file" onChange={handleOtherFilesCertificate} />
                                         </Button>
                                        : <div className='d-flex justify-content-center '>
@@ -1893,8 +1893,6 @@ const ItemEdit = () => {
                                 </div>
                             </DialogContent>
                         </Dialog>
-
-
 
                         <div className="d-flex justify-content-end">
                             <Button

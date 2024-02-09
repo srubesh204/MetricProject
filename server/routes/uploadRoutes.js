@@ -31,6 +31,8 @@ const createAdditionalStorage = (destinationFolder) => {
   });
 };
 
+
+
 const ItemImageStorage = multer.diskStorage({
   destination: (req, file, cb) => {
     cb(null, 'storage/Images/itemMasterImages'); // Specify the folder where images will be stored
@@ -189,16 +191,16 @@ router.post('/msaCertificates', additionalCertificateFolder.single('file'), (req
     // No file was provided in the request
     return res.status(400).json({ error: 'No file selected for upload' });
   }
-
   fs.renameSync(req.file.path, req.file.path.replace(req.file.originalname, 
     req.body.msaName + path.extname(req.file.originalname)));
   console.log(req.file)
-  console.log("Additional Uploaded Successfully")
+  console.log(" Uploaded Successfully")
   res.status(200).json({ message: 'Calibration Report uploaded successfully', name: `${req.body.msaName}.pdf` });
 
   // File was provided, proceed with processing
  
 });
+
 
 router.post('/otherFilesCertificates', additionalCertificateFolder.single('file'), (req, res) => {
   if (!req.file) {
