@@ -335,10 +335,11 @@ const DcEdit = () => {
                 dcListFetchData()
 
                 setTimeout(() => setDcEditOpen(false), 1000)
-            }
+            } 
         } catch (err) {
-            console.log(err);
-            setAlertMessage({ dcMessage: err.message, dcType: "error" })
+            console.log(err.response.data.error);
+            setSnackBarOpen(true) 
+            setAlertMessage({ dcMessage: err.response.data.error, dcType: "error" })
         }finally{
             setLoader(false)
         }

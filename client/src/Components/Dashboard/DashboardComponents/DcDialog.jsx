@@ -72,7 +72,8 @@ const Dc = () => {
                     dcDepartment: departments,
                     dcPartyItems: selectedRows.map(item => ({
                         ...item,
-                        dcItemRemarks: ""
+                        dcItemRemarks: "",
+                       
                     })),
                     dcNo: lastNo
                 }
@@ -169,8 +170,8 @@ const Dc = () => {
 
     // const [dcPartyItem, setDcPartyItem] = useState([])
 
-   
-   
+
+
 
 
 
@@ -858,7 +859,7 @@ const Dc = () => {
 
                 <div>
                     <Button variant='contained' color='error' className='me-3' onClick={() => handleClose()}>Cancel</Button>
-                    <Button variant='contained' color='success' onClick={() => { setConfirmSubmit(true) }}>Submit {loader ? <CircularProgress sx={{color: "inherit"}} variant="indeterminate" size={20} /> : ""}</Button>
+                    <Button variant='contained' color='success' onClick={() => { setConfirmSubmit(true) }}>Submit {loader ? <CircularProgress sx={{ color: "inherit" }} variant="indeterminate" size={20} /> : ""}</Button>
                 </div>
             </DialogActions>
 
