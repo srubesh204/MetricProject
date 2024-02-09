@@ -4,6 +4,7 @@ import { DataGrid,GridToolbar } from '@mui/x-data-grid';
 import { FileCopy } from '@mui/icons-material';
 import {IconButton } from "@mui/material";
 import { Box, Container, Grid, Paper, Typography } from "@mui/material";
+import FileOpenIcon from '@mui/icons-material/FileOpen';
 import { Link } from "react-router-dom";
 
 const VendorUpload = () => {
@@ -44,7 +45,7 @@ const VendorUpload = () => {
         },
         {
             field: 'Vendor Certificate View', headerName: 'Vendor Certificate View', width: 150, align: "center", renderCell: (params) =>
-                    <IconButton size="small" component={Link} target="_blank" to={`${process.env.REACT_APP_PORT}/vendorCertificates/${params.row.certificate}`} ><FileCopy /></IconButton>          
+                    <IconButton size="small" component={Link} target="_blank" to={`${process.env.REACT_APP_PORT}/vendorCertificates/${params.row.certificate}`} ><FileOpenIcon /></IconButton>          
         },
 
 
@@ -131,8 +132,6 @@ const VendorUpload = () => {
                             toolbar: () => (
                                 <div className='d-flex justify-content-between align-items-center'>
                                     <GridToolbar />
-                                    
-
                                 </div>
                             ),
                         }}
