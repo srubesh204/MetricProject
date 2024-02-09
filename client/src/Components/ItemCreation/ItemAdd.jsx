@@ -18,7 +18,7 @@ const ItemAdd = () => {
     // Units Data
 
     const employeeRole = useEmployee();
-    const {allowedPlants} = employeeRole
+    const { allowedPlants } = employeeRole
 
     const [addOpenData, setAddOpenData] = useState(false)
     const [units, setUnits] = useState([]);
@@ -174,7 +174,7 @@ const ItemAdd = () => {
         try {
             const response = await axios.post(
                 `${process.env.REACT_APP_PORT}/itemAdd/getItemByPlant`, { allowedPlants: allowedPlants }
-              );
+            );
             console.log(response.data)
             const isItemMaster = response.data.result.filter(item => item.isItemMaster === "1")
             setItemMasterListByName(isItemMaster);
@@ -208,7 +208,7 @@ const ItemAdd = () => {
         try {
             const response = await axios.post(
                 `${process.env.REACT_APP_PORT}/vendor/getVendorByPlants`, { allowedPlants: allowedPlants }
-              );
+            );
             const vendorList = response.data.result
             const customerList = vendorList.filter((item) => item.customer === "1" || item.supplier === "1");
             const OEMList = vendorList.filter((item) => item.oem === "1");
@@ -221,7 +221,7 @@ const ItemAdd = () => {
             setOEMList(OEMList);
             setSupplierList(SupplierList)
             setSuppOEM(suppOEM)
-            
+
 
         } catch (err) {
             console.log(err);
@@ -478,7 +478,7 @@ const ItemAdd = () => {
     const getPartList = async () => {
         try {
             const response = await axios.post(
-                `${process.env.REACT_APP_PORT}/part/getPartsByPlant`, {allowedPlants: allowedPlants}
+                `${process.env.REACT_APP_PORT}/part/getPartsByPlant`, { allowedPlants: allowedPlants }
             );
             console.log(response.data)
             setPartData(response.data.result)
@@ -1876,13 +1876,91 @@ const ItemAdd = () => {
                                         </div>
                                     </div>
                                     <div className='row g-2'>
-                                        <div className='col-md-6 d-flex' >
+
+                                    <table className=' table-bordered '>
+                                            <tbody>
+                                                <tr>
+                                                    <td>
+                                                        <Button helperText="Hello" className='me-2' size='small' component="label" fullWidth variant="contained" startIcon={<CloudUpload />} >
+                                                            R&R Upload
+                                                            <VisuallyHiddenInput type="file" onChange={handleAdditionalCertificate} />
+                                                        </Button>
+                                                    </td>
+                                                    <td>
+                                                        <div className='d-flex justify-content-center '>
+                                                            {(itemAddData.rdName !== "" && itemAddData.rdName !== undefined) &&
+                                                                <Chip
+                                                                    className='col-12'
+                                                                    icon={<Done />}
+                                                                    color="success"
+                                                                    label={itemAddData.rdName}
+                                                                    onClick={() => {
+                                                                        const fileUrl = `${process.env.REACT_APP_PORT}/additionalCertificates/${itemAddData.rdName}`;
+                                                                        window.open(fileUrl, '_blank'); // Opens the file in a new tab/window
+                                                                    }}
+                                                                    onDelete={() => setItemAddData((prev) => ({ ...prev, rdName: "" }))}
+                                                                />}
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        <Button helperText="Hello" className='me-2' component="label" size='small' fullWidth variant="contained" startIcon={<CloudUpload />} >
+                                                            MSA Upload
+                                                            <VisuallyHiddenInput type="file" onChange={handleMSACertificate} />
+                                                        </Button>
+                                                    </td>
+                                                    <td>
+                                                        <div className='d-flex justify-content-center '>
+                                                            {(itemAddData.msaName !== "" && itemAddData.msaName !== undefined) &&
+                                                                <Chip
+                                                                    className='col-12'
+                                                                    icon={<Done />}
+                                                                    color="success"
+                                                                    label={itemAddData.msaName}
+                                                                    onClick={() => {
+                                                                        const fileUrl = `${process.env.REACT_APP_PORT}/msaCertificates/${itemAddData.msaName}`;
+                                                                        window.open(fileUrl, '_blank'); // Opens the file in a new tab/window
+                                                                    }}
+                                                                    onDelete={() => setItemAddData((prev) => ({ ...prev, msaName: "" }))}
+                                                                />}
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        <Button helperText="Hello" component="label" size='small' fullWidth variant="contained" startIcon={<CloudUpload />} >
+                                                            Drawing Upload
+                                                            <VisuallyHiddenInput type="file" onChange={handleOtherFilesCertificate} />
+                                                        </Button>
+                                                    </td>
+                                                    <td>
+                                                        <div className='d-flex justify-content-center '>
+                                                            {(itemAddData.otherFile !== "" && itemAddData.otherFile !== undefined) &&
+                                                                <Chip
+                                                                    className='col-12'
+                                                                    icon={<Done />}
+                                                                    color="success"
+                                                                    label={itemAddData.otherFile}
+                                                                    onClick={() => {
+                                                                        const fileUrl = `${process.env.REACT_APP_PORT}/otherFilesCertificates/${itemAddData.otherFile}`;
+                                                                        window.open(fileUrl, '_blank'); // Opens the file in a new tab/window
+                                                                    }}
+                                                                    onDelete={() => setItemAddData((prev) => ({ ...prev, otherFile: "" }))}
+                                                                />}
+                                                        </div>
+                                                    </td>
+
+                                                </tr>
+
+                                            </tbody>
+                                        </table>
+
+
+
+                                        {/* <div className='col-md-6 d-flex' >
                                             {itemAddData.rdName === "" ?
                                                 <Button helperText="Hello" className='me-2' size='small' component="label" fullWidth variant="contained" startIcon={<CloudUpload />} >
                                                     R&R Upload
                                                     <VisuallyHiddenInput type="file" onChange={handleAdditionalCertificate} />
                                                 </Button>
-                                                : <div className='d-flex justify-content-center '>
+                                                : <div className='row  justify-content-center '>
                                                     {(itemAddData.rdName !== "" && itemAddData.rdName !== undefined) &&
                                                         <Chip
                                                             className='mt-2'
@@ -1936,7 +2014,7 @@ const ItemAdd = () => {
                                                         onDelete={() => setItemAddData((prev) => ({ ...prev, otherFile: "" }))}
                                                     />}
                                             </div>}
-                                        </div>
+                                        </div> */}
                                     </div>
                                 </DialogContent>
                             </Dialog>
