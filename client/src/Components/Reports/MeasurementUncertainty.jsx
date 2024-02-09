@@ -4,9 +4,12 @@ import { Card, CardContent, CardActions, Button, Container, Grid, Paper, TextFie
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { Delete } from '@mui/icons-material';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { useEmployee } from '../../App';
 import dayjs from 'dayjs';
 const MeasurementUncertainty = () => {
 
+    const empRole = useEmployee();
+    const {loggedEmp, allowedPlants} = empRole
     const ITEM_HEIGHT = 48;
     const ITEM_PADDING_TOP = 8;
     const MenuProps = {
@@ -144,9 +147,9 @@ const MeasurementUncertainty = () => {
     const [itemNameList, setItemNameList] = useState([])
     const itemNameFetch = async () => {
         try {
-            const response = await axios.get(
-                `${process.env.REACT_APP_PORT}/itemAdd/getAllItemAdds`
-            );
+            const response = await axios.post(
+                `${process.env.REACT_APP_PORT}/itemAdd/getItemByPlant`, { allowedPlants: allowedPlants }
+              );
             setItemNameList(response.data.result);
             console.log(response.data)
         } catch (err) {

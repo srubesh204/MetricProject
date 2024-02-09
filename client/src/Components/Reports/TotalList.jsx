@@ -32,6 +32,7 @@ const TotalList = () => {
 
 
   const employeeRole = useEmployee()
+  const {allowedPlants} = employeeRole
 
   console.log(dayjs("2023-11-17").isSameOrBefore("2023-11-21"))
   const [itemList, setItemList] = useState([]);
@@ -53,9 +54,10 @@ const TotalList = () => {
   const [partCutomerNames, setPartCutomerNames] = useState([])
   const partFetchData = async () => {
     try {
-      const response = await axios.get(
-        `${process.env.REACT_APP_PORT}/part/getAllParts`
-      );
+      const response = await axios.post(
+        `${process.env.REACT_APP_PORT}/part/getPartsByPlant`, {allowedPlants: allowedPlants}
+    );
+
 
       setPartDataList(response.data.result);
     } catch (err) {
@@ -80,12 +82,12 @@ const TotalList = () => {
 
   const itemFetch = async () => {
     try {
-      const response = await axios.get(
-        `${process.env.REACT_APP_PORT}/itemAdd/getAllItemAdds`
+      const response = await axios.post(
+        `${process.env.REACT_APP_PORT}/itemAdd/getItemByPlant`, { allowedPlants: allowedPlants }
       );
       console.log(response.data.result)
-      const plantItems = response.data.result.filter(item => employeeRole.loggedEmp.plantDetails.some(plant => item.itemPlant === plant.plantName))
-      const departmentItems = plantItems.filter(item => employeeRole.loggedEmp.plantDetails.some(plant => plant.departments.includes(item.itemDepartment)))
+      
+      const departmentItems = response.data.result.filter(item => employeeRole.loggedEmp.plantDetails.some(plant => plant.departments.includes(item.itemDepartment)))
       console.log(departmentItems)
 
       const filterNames = ["itemIMTENo", "itemType", " itemAddMasterName", "itemDepartment", "itemPlant", "itemCalibrationSource", "itemCurrentLocation"]
@@ -147,27 +149,6 @@ const TotalList = () => {
 
   console.log(partCutomerNames)
 
-
-  const [itemStatusDataList, setItemStatusDataList] = useState([])
-  const itemStatusFetchData = async () => {
-    try {
-      const response = await axios.get(
-        `${process.env.REACT_APP_PORT}/vendor/getAllVendors`
-      );
-      setItemStatusDataList(response.data.result);
-
-    } catch (err) {
-      console.log(err);
-    }
-  };
-  useEffect(() => {
-    itemStatusFetchData();
-  }, []);
-  console.log(itemStatusDataList)
-
-
-
-
   const [companyList, setCompanyList] = useState([])
 
   const companyFetch = async () => {
@@ -206,11 +187,6 @@ const TotalList = () => {
   useEffect(() => {
     Fetch();
   }, []);
-
-
-
-
-
 
 
   const handleSnackClose = (event, reason) => {
@@ -257,8 +233,34 @@ const TotalList = () => {
       renderCell: (params) => {
         const itemType = params.row.itemType.toString();
         return itemType.charAt(0).toUpperCase() + itemType.slice(1).toLowerCase();
-      },
+      } 
     },
+    { field: 'itemSAPNo', headerName: 'ItemSAPNo ', width: 90, headerAlign: "center", align: "center",  valueGetter: (params) => params.row.itemSAPNo || "-"  },
+    { field: 'itemMFRNo', headerName: 'ItemMFRNo ', width: 90, headerAlign: "center", align: "center", },
+    { field: 'itemModelNo', headerName: 'ItemModelNo ', width: 90, headerAlign: "center", align: "center", valueGetter: (params) => params.row.itemModelNo || "-"  },
+    { field: 'itemMasterRef', headerName: 'ItemMasterRef ', width: 100, headerAlign: "center", align: "center", },
+    { field: 'itemPlant', headerName: 'ItemPlant ', width: 100, headerAlign: "center", align: "center", },
+    { field: 'itemReceiptDate', headerName: 'ItemReceiptDate ', width: 100, headerAlign: "center", align: "center", },
+    { field: 'itemPlaceOfUsage', headerName: 'ItemPlaceOfUsage ', width: 90, headerAlign: "center", align: "center", },
+    { field: 'itemLocation', headerName: 'ItemLocation ', width: 90, headerAlign: "center", align: "center", },
+    { field: 'itemCalAlertDays', headerName: 'ItemCalAlertDays ', width: 90, headerAlign: "center", align: "center", },
+    { field: 'itemPrevCalData', headerName: 'ItemPrevCalDate ', width: 90, headerAlign: "center", align: "center", },
+    { field: 'itemCertificateName', headerName: 'ItemCertificateName ', width: 90, headerAlign: "center", align: "center", },
+    { field: 'itemCertificateNo', headerName: 'ItemCertificateNo ', width: 90, headerAlign: "center", align: "center", },
+    { field: 'itemUncertainity', headerName: 'ItemUncertainity ', width: 90, headerAlign: "center", align: "center", },
+    { field: 'itemPartName', headerName: 'ItemPartName ', width: 90, headerAlign: "center", align: "center", },
+    { field: 'itemOBType', headerName: 'ItemOBType ', width: 90, headerAlign: "center", align: "center", },
+    { field: 'calibrationCost', headerName: 'CalibrationCost ', width: 90, headerAlign: "center", align: "center", valueGetter: (params) => params.row.calibrationCost || "-"  },
+    { field: 'gaugeUsage', headerName: 'Gauge life in days ', width: 130, headerAlign: "center", align: "center", valueGetter: (params) => params.row.gaugeUsage || "-"  },
+    { field: 'lifealertDays', headerName: 'Gauge life alert in days', width: 120, headerAlign: "center", align: "center",valueGetter: (params) => params.row.lifealertDays || "-"  },
+    { field: 'purchaseRefNo', headerName: 'PurchaseRefNo', width: 90, headerAlign: "center", align: "center", valueGetter: (params) => params.row.purchaseRefNo || "-"  },
+    { field: 'purchaseDate', headerName: 'PurchaseDate', width: 90, headerAlign: "center", align: "center",valueGetter: (params) => params.row.purchaseDate || "-"  },
+    { field: 'specialRemark', headerName: 'SpecialRemark', width: 90, headerAlign: "center", align: "center", valueGetter: (params) => params.row.specialRemark || "-"  },
+    { field: 'drawingIssueNo', headerName: 'DrawingIssueNo', width: 90, headerAlign: "center", align: "center", valueGetter: (params) => params.row.drawingIssueNo || "-"  },
+    { field: 'drawingNo', headerName: 'DrawingNo', width: 90, headerAlign: "center", align: "center",  valueGetter: (params) => params.row.drawingNo || "-" },
+    // { field: 'rdName', headerName: 'rdName', width: 90, headerAlign: "center", align: "center", },
+    // { field: 'itemItemMasterName', headerName: 'ItemItemMasterName ', width: 90, headerAlign: "center", align: "center", },
+
 
 
   ];
@@ -749,22 +751,22 @@ const TotalList = () => {
 
 
 
-  const [vendorDataList, setVendorDataList] = useState([])
-  const vendorFetchData = async () => {
-    try {
-      const response = await axios.get(
-        `${process.env.REACT_APP_PORT}/vendor/getAllVendors`
-      );
-      setVendorDataList(response.data.result);
+  // const [vendorDataList, setVendorDataList] = useState([])
+  // const vendorFetchData = async () => {
+  //   try {
+  //     const response = await axios.post(
+  //       `${process.env.REACT_APP_PORT}/vendor/getVendorByPlants`, { allowedPlants: allowedPlants }
+  //     );
+  //     setVendorDataList(response.data.result);
 
 
-    } catch (err) {
-      console.log(err);
-    }
-  };
-  useEffect(() => {
-    vendorFetchData();
-  }, []);
+  //   } catch (err) {
+  //     console.log(err);
+  //   }
+  // };
+  // useEffect(() => {
+  //   vendorFetchData();
+  // }, []);
 
   const [snackBarOpen, setSnackBarOpen] = useState(false)
   const [errorhandler, setErrorHandler] = useState({});

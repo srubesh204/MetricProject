@@ -29,7 +29,7 @@ const Home = () => {
 
   const employeeRole = useEmployee();
 
-  const { loggedEmp } = employeeRole
+  const { loggedEmp, allowedPlants } = employeeRole
 
 
   const loggedInEmpId = sessionStorage.getItem('empId')
@@ -257,19 +257,17 @@ const Home = () => {
 
   const getVendorsByType = async () => {
     try {
-      const getAllVendorWithTypes = await axios.get(
-        `${process.env.REACT_APP_PORT}/vendor/getAllVendorWithTypes`
+      const response = await axios.post(
+        `${process.env.REACT_APP_PORT}/vendor/getVendorByPlants`, { allowedPlants: allowedPlants }
       );
-      console.log(getAllVendorWithTypes)
-
-
-      const allPlantVendors = getAllVendorWithTypes.data.result.allVendors.filter(ven => employeeRole.loggedEmp.plantDetails.find(plant => ven.vendorPlant.includes(plant.plantName)))
-      const allPlantCustomers = getAllVendorWithTypes.data.result.customers.filter(ven => employeeRole.loggedEmp.plantDetails.find(plant => ven.vendorPlant.includes(plant.plantName)))
-      const allPlantSubContractors = getAllVendorWithTypes.data.result.subContractors.filter(ven => employeeRole.loggedEmp.plantDetails.find(plant => ven.vendorPlant.includes(plant.plantName)))
-      const allPlantSuppliers = getAllVendorWithTypes.data.result.suppliers.filter(ven => employeeRole.loggedEmp.plantDetails.find(plant => ven.vendorPlant.includes(plant.plantName)))
-      const allPlantOems = getAllVendorWithTypes.data.result.oems.filter(ven => employeeRole.loggedEmp.plantDetails.find(plant => ven.vendorPlant.includes(plant.plantName)))
+      console.log(response.data.result)
+      const allPlantVendors = response.data.result
+      const allPlantCustomers = response.data.result.filter((item) => item.customer === "1")
+      const allPlantSubContractors = response.data.result.filter((item) => item.subContractor === "1")
+      const allPlantSuppliers = response.data.result.filter((item) => item.supplier === "1")
+      const allPlantOems = response.data.result.filter((item) => item.oem === "1")
       console.log(allPlantVendors)
-      const contactDetails = [...new Set(getAllVendorWithTypes.data.result.allVendors.flatMap(item => item.vendorContacts.map(contact => contact.mailId)))];
+      const contactDetails = [...new Set(response.data.result.flatMap(item => item.vendorContacts.map(contact => contact.mailId)))];
 
       setVendors(allPlantVendors)
       setVendorMails(contactDetails)
@@ -286,6 +284,7 @@ const Home = () => {
     }
   };
 
+
   useEffect(() => {
     getVendorsByType();
   }, [])
@@ -298,29 +297,29 @@ const Home = () => {
   const itemFetch = async () => {
     try {
       console.log(employeeRole)
-      const response = await axios.get(
-        `${process.env.REACT_APP_PORT}/itemAdd/getAllItemAdds`
+      const response = await axios.post(
+        `${process.env.REACT_APP_PORT}/itemAdd/getItemByPlant`, { allowedPlants: allowedPlants }
       );
       let allItems = []
       if (employeeRole.employee === "admin") {
-        const plantItems = response.data.result.filter(item => employeeRole.loggedEmp.plantDetails.some(plant => item.itemPlant === plant.plantName))
-        const departmentItems = plantItems.filter(item => employeeRole.loggedEmp.plantDetails.some(plant => plant.departments.includes(item.itemDepartment)))
+
+        const departmentItems = response.data.result.filter(item => employeeRole.loggedEmp.plantDetails.some(plant => plant.departments.includes(item.itemDepartment)))
         console.log(departmentItems)
         allItems = departmentItems
         console.log(allItems)
       } else if (employeeRole.employee === "plantAdmin") {
-        const plantItems = response.data.result.filter(item => employeeRole.loggedEmp.plantDetails.some(plant => item.itemPlant === plant.plantName))
-        const departmentItems = plantItems.filter(item => employeeRole.loggedEmp.plantDetails.some(plant => plant.departments.includes(item.itemDepartment)))
+
+        const departmentItems = response.data.result.filter(item => employeeRole.loggedEmp.plantDetails.some(plant => plant.departments.includes(item.itemDepartment)))
         allItems = departmentItems
         console.log(allItems)
       } else if (employeeRole.employee === "creator") {
-        const plantItems = response.data.result.filter(item => employeeRole.loggedEmp.plantDetails.some(plant => item.itemPlant === plant.plantName))
-        const departmentItems = plantItems.filter(item => employeeRole.loggedEmp.plantDetails.some(plant => plant.departments.includes(item.itemDepartment)))
+
+        const departmentItems = response.data.result.filter(item => employeeRole.loggedEmp.plantDetails.some(plant => plant.departments.includes(item.itemDepartment)))
         allItems = departmentItems
         console.log(allItems)
       } else if (employeeRole.employee === "viewer") {
-        const plantItems = response.data.result.filter(item => employeeRole.loggedEmp.plantDetails.some(plant => item.itemPlant === plant.plantName))
-        const departmentItems = plantItems.filter(item => employeeRole.loggedEmp.plantDetails.some(plant => plant.departments.includes(item.itemDepartment)))
+
+        const departmentItems = response.data.result.filter(item => employeeRole.loggedEmp.plantDetails.some(plant => plant.departments.includes(item.itemDepartment)))
         allItems = departmentItems
         console.log(allItems)
       } else {
@@ -714,7 +713,9 @@ const Home = () => {
   })
 
 
-  const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', "#aca8c8", "#78787a"];
+  const calStatusColor = ['#FF4545', '#00C49F', '#FFBB28', '#FF8042', "#ACA8C8", "#0088FE"];
+  const itemStatusColor = ["#595959", "#00C49F", "orange", "#FF8042", "#0088FE", "#FF4545"];
+  const itemLocationColor = ["#984EA3", "violet", "orange", "#00C49F", "#0088FE"];
 
   const [calStatusFitleredData, setCalStatusFitleredData] = useState([])
 
@@ -1076,12 +1077,12 @@ const Home = () => {
 
 
     setCalStatus([
-      { id: 0, value: pastDue.length, label: 'Past Due' },
-      { id: 1, value: CurrentDue.length, label: 'Today' },
-      { id: 2, value: sevenDaysFilter.length, label: '7 Days' },
-      { id: 3, value: fifteenDaysFilter.length, label: '15 Days' },
-      { id: 4, value: thirtyDaysFilter.length, label: '30 Days' },
-      { id: 5, value: AboveThirtyDaysFilter.length, label: '>30 Days' }
+      { value: pastDue.length, label: 'Past Due' },
+      { value: CurrentDue.length, label: 'Today' },
+      {value: sevenDaysFilter.length, label: '7 Days' },
+      {value: fifteenDaysFilter.length, label: '15 Days' },
+      {value: thirtyDaysFilter.length, label: '30 Days' },
+      {value: AboveThirtyDaysFilter.length, label: '>30 Days' }
     ])
     setItemStatus([
       { id: 0, value: filter.length, label: 'Total Items' },
@@ -1226,14 +1227,28 @@ const Home = () => {
     getMailList();
   }, []);
 
+  const [dcPartyDetails, setDcPartyDetails] = useState([])
 
-
-  useEffect(()=> {
+  useEffect(() => {
     setStatusCheckMsg("")
+    if (selectedRows.length === 1) {
+      if (selectedRows[0].dcStatus === "1") {
+        console.log("dcworking")
+        const vendorPartyDetail = dcList.filter(dc => dc._id === selectedRows[0].dcId)
+        console.log(vendorPartyDetail)
+        const vendorDetails = vendors.filter(ven => ven._id === vendorPartyDetail[0].dcPartyId)
+        console.log(...vendorDetails)
+        setDcPartyDetails(...vendorDetails)
+      }
+
+    }
+
+
+    // dcPartyId
   }, [selectedRows])
 
 
- 
+
 
   const handleRowSelectionChange = (newSelection) => {
     const selectedRowsData = filteredData.filter((row) => newSelection.includes(row._id));
@@ -1257,12 +1272,12 @@ const Home = () => {
 
 
   const [StatusCheckMsg, setStatusCheckMsg] = useState("")
- 
+
 
 
 
   const dcCheck = () => {
-    
+
 
     const defaultDepartmentCheck = selectedRows.every(item =>
       defaultDep.some(dep => item.itemCurrentLocation === dep.department)
@@ -1326,32 +1341,32 @@ const Home = () => {
     const defaultDepartmentCheck = selectedRows.every(item =>
       defaultDep.some(dep => item.itemCurrentLocation === dep.department)
     );
-   
+
     if (selectedRows.length === 1 && selectedRows[0].itemCalibrationSource === "inhouse") {
-      
-      if(selectedRows[0].itemCalibrationDoneAt === "Lab"){
-        
-        if(defaultDepartmentCheck){
+
+      if (selectedRows[0].itemCalibrationDoneAt === "Lab") {
+
+        if (defaultDepartmentCheck) {
           setCalOpen(true);
           console.log("working")
-        }else{
+        } else {
           setStatusCheckMsg("Move the item to the default location then try again!")
           console.log(StatusCheckMsg)
         }
-      }else if(selectedRows[0].itemCalibrationDoneAt === "Site"){
+      } else if (selectedRows[0].itemCalibrationDoneAt === "Site") {
         console.log("working")
         setCalOpen(true)
       }
-      
-      
+
+
     } else {
-      if(selectedRows.length !== 1){
+      if (selectedRows.length !== 1) {
         setStatusCheckMsg("Multiple selection not allowed for Calibration")
       }
-      if(selectedRows.length === 0){
+      if (selectedRows.length === 0) {
         setStatusCheckMsg("Please select any one item")
       }
-      if(selectedRows[0].itemCalibrationSource !== "inhouse"){
+      if (selectedRows[0].itemCalibrationSource !== "inhouse") {
         setStatusCheckMsg("Item must be a Inhouse Calibration")
       }
     }
@@ -1543,9 +1558,12 @@ const Home = () => {
 
                     labelLine={false}
                   >
-                    {data.map((entry, index) => (
-                      <Cell key={index} fill={COLORS[index % COLORS.length]} />
-                    ))}
+                    {calStatus.map((entry, index) => {
+                      console.log(entry)
+                      return (
+                        <Cell key={`cell-${index}`} fill={calStatusColor[index % calStatusColor.length]} />
+                      )
+                    })}
 
                   </Pie>
 
@@ -1606,8 +1624,8 @@ const Home = () => {
                     activeShape={{ fill: '#ffffff', strokeWidth: 2 }}
                     labelLine={false}
                   >
-                    {data.map((entry, index) => (
-                      <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                    {itemStatus.map((entry, index) => (
+                      <Cell key={`cell-${index}`} fill={itemStatusColor[index % itemStatusColor.length]} />
                     ))}
 
                   </Pie>
@@ -1650,8 +1668,8 @@ const Home = () => {
                     activeShape={{ fill: '#ffffff' }}
                     labelLine={false}
                   >
-                    {data.map((entry, index) => (
-                      <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                    {itemLocationData.map((entry, index) => (
+                      <Cell key={`cell-${index}`} fill={itemLocationColor[index % itemLocationColor.length]} />
                     ))}
 
                   </Pie>
@@ -1764,7 +1782,7 @@ const Home = () => {
                   <div className="col-md-9">
                     {/* {(selectedRows.length === 1 && selectedRows[0].itemCalibrationSource === "outsource" ) && <Button size='small' onClick={() => onSiteCheck()}>Onsite</Button>} */}
 
-                    <Button size='small' className='me-2' onClick={()=> calCheck()}>Cal</Button>
+                    <Button size='small' className='me-2' onClick={() => calCheck()}>Cal</Button>
                     <Button size='small' onClick={() => dcCheck()}>Create DC</Button>
                     <Button size='small' onClick={() => grnCheck()} className='me-2'>Grn</Button>
                     <Button size='small' className='me-2' onClick={() => onSiteCheck()}>Onsite GRN</Button>
@@ -1887,12 +1905,12 @@ const Home = () => {
                 </HomeContent.Provider>
 
                 <HomeContent.Provider
-                  value={{ dcOpen, setDcOpen, selectedRows, itemFetch, defaultDep, lastNo }}
+                  value={{ dcOpen, setDcOpen, selectedRows, itemFetch, defaultDep, lastNo, vendors }}
                 >
                   <Dc />
                 </HomeContent.Provider>
                 <HomeContent.Provider
-                  value={{ grnOpen, setGrnOpen, selectedRows, lastGrnNo }}
+                  value={{ grnOpen, setGrnOpen, selectedRows, lastGrnNo, dcPartyDetails, vendors }}
                 >
                   <Grn />
                 </HomeContent.Provider>

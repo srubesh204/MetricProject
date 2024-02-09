@@ -32,7 +32,7 @@ function InsHistoryCard() {
     const [printState, setPrintState] = useState(false)
 
     const empRole = useEmployee()
-    const { loggedEmp } = empRole
+    const { loggedEmp, allowedPlants } = empRole
 
 
 
@@ -121,14 +121,11 @@ function InsHistoryCard() {
 
     const itemFetch = async () => {
         try {
-            const response = await axios.get(`${process.env.REACT_APP_PORT}/itemAdd/getAllItemAdds`);
+            const response = await axios.post(
+                `${process.env.REACT_APP_PORT}/itemAdd/getItemByPlant`, { allowedPlants: allowedPlants }
+              );
             console.log(response.data.result)
-
-            const plantDatas = response.data.result.filter(item =>
-                loggedEmp.plantDetails.some(plant => plant.plantName === item.itemPlant)
-            );
-            console.log(plantDatas)
-            setItemList(plantDatas);
+            setItemList(response.data.result);
         } catch (error) {
             console.error('Error fetching data:', error);
         }
@@ -219,9 +216,6 @@ function InsHistoryCard() {
 
     console.log(selectedRow)
     
-
-
-
     const filterByDate = (items, fromDate, toDate) => {
         return items.filter((row) => {
             const calDate = dayjs(row.calItemCalDate);
@@ -408,6 +402,12 @@ function InsHistoryCard() {
 
                                 <div className="col d-flex justify-content-end">
                                     <div className="me-2"><Button component={Link} to={`${process.env.REACT_APP_PORT}/additionalCertificates/${selectedRow.length > 0 ? selectedRow[0].rdName : ""}`} target="_blank" variant="contained" color="info" size="small">R&R</Button></div>
+                                    <div className="me-2">
+                                        <Button component={Link} to={`${process.env.REACT_APP_PORT}/additionalCertificates/${selectedRow.length > 0 ? selectedRow[0].msaName : ""}`} target="_blank" variant="contained" color="info" size="small">MSA</Button>
+                                    </div>
+                                    <div className="me-2">
+                                        <Button component={Link} to={`${process.env.REACT_APP_PORT}/additionalCertificates/${selectedRow.length > 0 ? selectedRow[0].otherFile : ""}`} target="_blank" variant="contained" color="info" size="small">Drawing</Button>
+                                    </div>
                                     <div className="me-2"><Button component={Link} to={`${process.env.REACT_APP_PORT}/workInstructions/${selectedMasterData.workInsName}`} target="_blank" variant="contained" color="info" size="small">View Instructions</Button></div>
                                     {/* <div className="me-2"><Button variant="contained" color="info" size="small">View Drawing</Button></div>
                                     <div className="me-2"><Button variant="contained" color="info" size="small">View R&R</Button></div>
@@ -539,7 +539,7 @@ function InsHistoryCard() {
                                             </thead>
                                             <tbody>
                                                 {
-                                                   selectedRow.length > 0 &&  selectedRow[0].acceptanceCriteria.map(item => (
+                                                    selectedRow.length > 0 && selectedRow[0].acceptanceCriteria.map(item => (
                                                         <tr>
                                                             <td>{item.acParameter || '-'}</td>
                                                             <td>{item.acMinPS || '-'}</td>
