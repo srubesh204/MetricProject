@@ -7,6 +7,7 @@ const puppeteer = require('puppeteer');
 const fs = require('fs');
 const path = require('path');
 const formatNoModel = require("../models/formatNoModel");
+const itemGRNModel = require("../models/itemGRNModel");
 
 const itemDcController = {
   getAllItemDc: async (req, res) => {
@@ -141,10 +142,10 @@ const itemDcController = {
 
         // Replace placeholders with actual data
         const modifiedHTML = htmlTemplate
-          
+
           .replace(/{{dcPartyItems}}/g, itemsData.join(""))
           .replace(/{{CompanyName}}/g, getCompDetailsById.companyName)
-          
+
           .replace(/{{Plant}}/g, getPlantAddress.plantName)
           .replace(/{{PlantAddress}}/g, getPlantAddress.plantAddress)
           .replace(/{{dcPartyName}}/g, dcPartyName)
@@ -205,82 +206,25 @@ const itemDcController = {
       // Setting the prevData to status "0" 
       const prevItemDc = await itemDcModel.findById(itemDcId)
       const { dcPartyItems: prevPartyItems } = prevItemDc
-      const prevUpdatePromises = prevPartyItems.map(async (item) => {
 
-        const itemData = await itemAddModel.findById(item._id)
-        const { itemIMTENo, itemLastLocation } = itemData
-        const updateItemFields = {
-          itemIMTENo,
-          itemCurrentLocation: itemLastLocation,
-          itemLocation: "department",
-          dcId: "",
-          dcStatus: "0",
-          dcCreatedOn: "",
-          dcNo: ""
-        }
-        const updateResult = await itemAddModel.findOneAndUpdate(
-          { _id: item._id },
-          { $set: updateItemFields },
-          { new: true }
-        );
-        console.log(updateResult)
-        return updateResult;
-      });
-      const prevUpdatedValues = await Promise.all(prevUpdatePromises);
-      //
-      const getCompDetailsById = await compDetailsSchema.findOne(
-        { compId: 1 } // To return the updated document
-      );
-      const getPlantAddress = await plantSchema.findOne(
-        { plantName: dcPlant } // To return the updated document
-      );
+      const dcDeleteStatus = prevPartyItems.every(item => item.dcStatus !== 1)
 
-      const formatNo = await formatNoModel.findOne({ formatId: 1 });
-
-      const formatNumber = `${formatNo.fDc ? (formatNo.fDc.frNo + " " + formatNo.fDc.amNo + " " + formatNo.fDc.amDate) : ""}`
-      console.log(formatNumber)
-
-      const itemDcUpdate = new itemDcModel(updateItemDcFields);
-
-
-      const validationError = itemDcUpdate.validateSync();
-      if (validationError) {
-        // Handle validation errors
-        const validationErrors = {};
-
-        if (validationError.errors) {
-          // Convert Mongoose validation error details to a more user-friendly format
-          for (const key in validationError.errors) {
-            validationErrors[key] = validationError.errors[key].message;
-          }
-        }
-
-        return res.status(400).json({
-          errors: validationErrors
-        });
-      }
-
-      // Find the designation by desId and update it
-      const updateItemDc = await itemDcModel.findOneAndUpdate(
-        { _id: itemDcId },
-        updateItemDcFields,
-        { new: true } // To return the updated document
-      );
-
-      if (Object.keys(updateItemDc).length !== 0) {
-        const updatePromises = dcPartyItems.map(async (item) => {
+      if (dcDeleteStatus) {
+        res.status(500).json({ error: 'DC cannot be deleted, used in GRN' });
+      } else {
+        const grnData = await itemGRNModel.findOne({ grnItemDcNo: dcNo })
+        const prevUpdatePromises = prevPartyItems.map(async (item) => {
 
           const itemData = await itemAddModel.findById(item._id)
-          const { itemIMTENo, itemCurrentLocation: itemLastLocation } = itemData
+          const { itemIMTENo, itemLastLocation } = itemData
           const updateItemFields = {
             itemIMTENo,
-            itemCurrentLocation: dcPartyName,
-            itemLastLocation,
-            itemLocation: dcPartyType,
-            dcId: updateItemDc._id,
-            dcStatus: "1",
-            dcCreatedOn: dcDate,
-            dcNo: dcNo
+            itemCurrentLocation: itemLastLocation,
+            itemLocation: "department",
+            dcId: "",
+            dcStatus: "0",
+            dcCreatedOn: "",
+            dcNo: ""
           }
           const updateResult = await itemAddModel.findOneAndUpdate(
             { _id: item._id },
@@ -290,11 +234,75 @@ const itemDcController = {
           console.log(updateResult)
           return updateResult;
         });
-        const updatedItems = await Promise.all(updatePromises);
+        const prevUpdatedValues = await Promise.all(prevUpdatePromises);
+        //
+        const getCompDetailsById = await compDetailsSchema.findOne(
+          { compId: 1 } // To return the updated document
+        );
+        const getPlantAddress = await plantSchema.findOne(
+          { plantName: dcPlant } // To return the updated document
+        );
+
+        const formatNo = await formatNoModel.findOne({ formatId: 1 });
+
+        const formatNumber = `${formatNo.fDc ? (formatNo.fDc.frNo + " " + formatNo.fDc.amNo + " " + formatNo.fDc.amDate) : ""}`
+        console.log(formatNumber)
+
+        const itemDcUpdate = new itemDcModel(updateItemDcFields);
 
 
-        const itemsData = dcPartyItems.map((item, index) => {
-          let tableRow = `
+        const validationError = itemDcUpdate.validateSync();
+        if (validationError) {
+          // Handle validation errors
+          const validationErrors = {};
+
+          if (validationError.errors) {
+            // Convert Mongoose validation error details to a more user-friendly format
+            for (const key in validationError.errors) {
+              validationErrors[key] = validationError.errors[key].message;
+            }
+          }
+
+          return res.status(400).json({
+            errors: validationErrors
+          });
+        }
+
+        // Find the designation by desId and update it
+        const updateItemDc = await itemDcModel.findOneAndUpdate(
+          { _id: itemDcId },
+          updateItemDcFields,
+          { new: true } // To return the updated document
+        );
+
+        if (Object.keys(updateItemDc).length !== 0) {
+          const updatePromises = dcPartyItems.map(async (item) => {
+
+            const itemData = await itemAddModel.findById(item._id)
+            const { itemIMTENo, itemCurrentLocation: itemLastLocation } = itemData
+            const updateItemFields = {
+              itemIMTENo,
+              itemCurrentLocation: dcPartyName,
+              itemLastLocation,
+              itemLocation: dcPartyType,
+              dcId: updateItemDc._id,
+              dcStatus: "1",
+              dcCreatedOn: dcDate,
+              dcNo: dcNo
+            }
+            const updateResult = await itemAddModel.findOneAndUpdate(
+              { _id: item._id },
+              { $set: updateItemFields },
+              { new: true }
+            );
+            console.log(updateResult)
+            return updateResult;
+          });
+          const updatedItems = await Promise.all(updatePromises);
+
+
+          const itemsData = dcPartyItems.map((item, index) => {
+            let tableRow = `
               <tr>
                   <td style="padding: 0.50rem; vertical-align: top; border: 1px solid #6c757d ;" class="text-center align-middle">${index + 1}</td>
                   <td style="padding: 0.50rem; vertical-align: top; border: 1px solid #6c757d ;" class="align-middle">Item Name: ${item.itemItemMasterName ? item.itemItemMasterName : "-"} IMTE No: ${item.itemIMTENo ? item.itemIMTENo : "-"}<br>
@@ -304,56 +312,59 @@ const itemDcController = {
               </tr>
           `;
 
-          return tableRow;
-        });
+            return tableRow;
+          });
 
 
-        // Example usage:
+          // Example usage:
 
-        const browser = await puppeteer.launch();
-        const page = await browser.newPage();
+          const browser = await puppeteer.launch();
+          const page = await browser.newPage();
 
-        // Read the HTML template file
-        const filePath = path.resolve(__dirname, '../../server/templates/dcTemplate.html');
-        const htmlTemplate = fs.readFileSync(filePath, 'utf8');
+          // Read the HTML template file
+          const filePath = path.resolve(__dirname, '../../server/templates/dcTemplate.html');
+          const htmlTemplate = fs.readFileSync(filePath, 'utf8');
 
-        // Replace placeholders with actual data
-        const modifiedHTML = htmlTemplate
-          
-          .replace(/{{dcPartyItems}}/g, itemsData.join(""))
-          .replace(/{{CompanyName}}/g, getCompDetailsById.companyName)
-          
-          .replace(/{{Plant}}/g, getPlantAddress.plantName)
-          .replace(/{{PlantAddress}}/g, getPlantAddress.plantAddress)
-          .replace(/{{dcPartyName}}/g, dcPartyName)
-          .replace(/{{dcPartyAddress}}/g, dcPartyAddress)
-          .replace(/{{dcNo}}/g, dcNo)
-          .replace(/{{dcDate}}/g, dcDate)
-          .replace(/{{dcCR}}/g, dcCommonRemarks)
-          .replace(/{{logo}}/g, process.env.SERVER_PORT + '/logo/' + getCompDetailsById.companyLogo)
-          .replace(/{{formatNo}}/g, formatNumber)
+          // Replace placeholders with actual data
+          const modifiedHTML = htmlTemplate
+
+            .replace(/{{dcPartyItems}}/g, itemsData.join(""))
+            .replace(/{{CompanyName}}/g, getCompDetailsById.companyName)
+
+            .replace(/{{Plant}}/g, getPlantAddress.plantName)
+            .replace(/{{PlantAddress}}/g, getPlantAddress.plantAddress)
+            .replace(/{{dcPartyName}}/g, dcPartyName)
+            .replace(/{{dcPartyAddress}}/g, dcPartyAddress)
+            .replace(/{{dcNo}}/g, dcNo)
+            .replace(/{{dcDate}}/g, dcDate)
+            .replace(/{{dcCR}}/g, dcCommonRemarks)
+            .replace(/{{logo}}/g, process.env.SERVER_PORT + '/logo/' + getCompDetailsById.companyLogo)
+            .replace(/{{formatNo}}/g, formatNumber)
 
 
-        // Add more replace statements for additional placeholders as needed
+          // Add more replace statements for additional placeholders as needed
 
-        // Set the modified HTML content
+          // Set the modified HTML content
 
-        console.log(modifiedHTML)
-        await page.setContent(modifiedHTML, { waitUntil: 'networkidle0' });
+          console.log(modifiedHTML)
+          await page.setContent(modifiedHTML, { waitUntil: 'networkidle0' });
 
-        // Generate PDF
-        await page.pdf({ path: `./storage/dcCertificate/${dcNo}.pdf`, format: 'A4' });
+          // Generate PDF
+          await page.pdf({ path: `./storage/dcCertificate/${dcNo}.pdf`, format: 'A4' });
 
-        await browser.close();
+          await browser.close();
 
-        console.log('PDF created successfully');
+          console.log('PDF created successfully');
+        }
+
+        if (!updateItemDc) {
+          return res.status(404).json({ error: 'Item Dc not found' });
+        }
+        console.log("Item Dc Updated Successfully")
+        res.status(200).json({ result: updateItemDc, message: "Item Dc Updated Successfully" });
       }
 
-      if (!updateItemDc) {
-        return res.status(404).json({ error: 'Item Dc not found' });
-      }
-      console.log("Item Dc Updated Successfully")
-      res.status(200).json({ result: updateItemDc, message: "Item Dc Updated Successfully" });
+
     } catch (error) {
       console.log(error);
       if (error.code === 11000) {
@@ -374,59 +385,76 @@ const itemDcController = {
       const deleteResults = [];
 
       for (const itemDcId of itemDcIds) {
+
+
         const dcData = await itemDcModel.findById(itemDcId);
-        console.log(dcData);
+        const grnData = await itemGRNModel.findOne({ grnItemDcNo: dcData.dcNo })
+
+
+        console.log(grnData);
 
         if (dcData.dcPartyItems.length !== 0) {
-          const updatePromises = dcData.dcPartyItems.map(async (item) => {
-            const itemData = await itemAddModel.findById(item._id);
 
-            if (itemData) {
-              const { itemIMTENo, itemCurrentLocation, itemLastLocation } = itemData;
-              const updateItemFields = {
-                itemIMTENo,
-                itemCurrentLocation: itemLastLocation,
-                itemLastLocation: itemCurrentLocation,
-                itemLocation: "department",
-                dcId: "",
-                dcStatus: "0",
-                dcCreatedOn: "",
-                dcNo: "",
-              };
 
-              const updateResult = await itemAddModel.findOneAndUpdate(
-                { _id: item._id },
-                { $set: updateItemFields },
-                { new: true }
-              );
+          if (!grnData) {
+            const updatePromises = dcData.dcPartyItems.map(async (item) => {
+              const itemData = await itemAddModel.findById(item._id);
 
-              console.log("itemUpdated");
-              return updateResult;
-            } else {
-              throw new Error(`Item Data not found for item with ID: ${item._id}`);
-            }
-          });
+              if (itemData) {
+                const { itemIMTENo, itemCurrentLocation, itemLastLocation } = itemData;
+                const updateItemFields = {
+                  itemIMTENo,
+                  itemCurrentLocation: itemLastLocation,
+                  itemLastLocation: itemCurrentLocation,
+                  itemLocation: "department",
+                  dcId: "",
+                  dcStatus: "0",
+                  dcCreatedOn: "",
+                  dcNo: "",
+                };
 
-          const updatedItems = await Promise.all(updatePromises);
-          console.log("Updated items:", updatedItems);
+                const updateResult = await itemAddModel.findOneAndUpdate(
+                  { _id: item._id },
+                  { $set: updateItemFields },
+                  { new: true }
+                );
+
+                console.log("itemUpdated");
+                return updateResult;
+              } else {
+                throw new Error(`Item Data not found for item with ID: ${item._id}`);
+              }
+            });
+
+            const updatedItems = await Promise.all(updatePromises);
+            console.log("Updated items:", updatedItems);
+          }
+
         }
-
-        const deletedItemDc = await itemDcModel.findOneAndRemove({ _id: itemDcId });
-
-        if (!deletedItemDc) {
-          console.log(`Item Dc with ID ${itemDcId} not found.`);
-          throw new Error(`Item Dc with ID ${itemDcId} not found.`);
+        if (grnData) {
+          res.status(500).json({ error: 'DC cannot be deleted, used in GRN' });
         } else {
-          console.log(`Item Dc with ID ${itemDcId} deleted successfully.`);
-          deleteResults.push(deletedItemDc);
+          const deletedItemDc = await itemDcModel.findOneAndRemove({ _id: itemDcId });
+          if (!deletedItemDc) {
+
+            throw new Error(`Item Dc with ID ${itemDcId} not be deleted.`);
+
+          } else {
+            console.log(`Item Dc with ID ${itemDcId} deleted successfully.`);
+            deleteResults.push(deletedItemDc);
+            return res.status(202).json({
+              message: 'Item Dc deleted successfully',
+              results: `${deleteResults.length} Item Dc Deleted Successfully`,
+              deletedItems: deleteResults,
+            });
+          }
         }
+
+
+
       }
 
-      return res.status(202).json({
-        message: 'Item Dc deleted successfully',
-        results: `${deleteResults.length} Item Dc Deleted Successfully`,
-        deletedItems: deleteResults,
-      });
+
     } catch (error) {
       console.error(error);
       res.status(500).json({ error: error.message || 'Internal Server Error' });
