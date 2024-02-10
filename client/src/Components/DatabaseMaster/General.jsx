@@ -1064,7 +1064,7 @@ export const PartDataBase = ({ style }) => {
                                                 placeholder="customer"
                                                 size="small"
                                                 onChange={handlePartDataBaseChange}
-                                                onKeyDown={handleKeyDown}
+                                               
                                                 value={partData.customer}
                                                 name="customer"
                                                 fullWidth>
@@ -1081,7 +1081,7 @@ export const PartDataBase = ({ style }) => {
                                                 placeholder="operationNo"
                                                 size="small"
                                                 onChange={handlePartDataBaseChange}
-                                                onKeyDown={handleKeyDown}
+                                               
                                                 value={partData.operationNo}
                                                 name="operationNo"
                                                 fullWidth
