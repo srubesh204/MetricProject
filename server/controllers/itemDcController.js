@@ -207,15 +207,28 @@ const itemDcController = {
       const prevItemDc = await itemDcModel.findById(itemDcId)
       const { dcPartyItems: prevPartyItems } = prevItemDc
 
-      const dcDeleteStatus = prevPartyItems.every(item => item.dcStatus !== 1)
+      //console.log(dcPartyItems)
 
-      if (dcDeleteStatus) {
-        res.status(500).json({ error: 'DC cannot be deleted, used in GRN' });
-      } else {
+      const dcDeleteStatus = (await Promise.all(dcPartyItems.map(async (item) => {
+        const itemAddData = await itemAddModel.findOne({ _id: item._id });
+        const status = itemAddData.dcStatus === "1";
+        return status; // Return the status for each item
+      }))).every(status => status);
+
+      console.log(dcDeleteStatus)
+
+      // console.log(dcPartyItems[0].dcStatus)
+      // console.log(dcDeleteStatus)
+
+
+
+      if (!dcDeleteStatus) {
         const grnData = await itemGRNModel.findOne({ grnItemDcNo: dcNo })
-        const prevUpdatePromises = prevPartyItems.map(async (item) => {
+        const prevUpdatePromises = prevPartyItems.filter(item => item.dcStatus === "1").map(async (item) => {
 
           const itemData = await itemAddModel.findById(item._id)
+
+
           const { itemIMTENo, itemLastLocation } = itemData
           const updateItemFields = {
             itemIMTENo,
@@ -362,6 +375,8 @@ const itemDcController = {
         }
         console.log("Item Dc Updated Successfully")
         res.status(200).json({ result: updateItemDc, message: "Item Dc Updated Successfully" });
+      } else {
+        res.status(500).json({ error: 'Item cannot be deleted, used in GRN' });
       }
 
 
