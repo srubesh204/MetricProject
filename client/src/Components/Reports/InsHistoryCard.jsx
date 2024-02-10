@@ -143,7 +143,8 @@ function InsHistoryCard() {
         itemIMTENo: "Select"
     })
 
-
+    // const sortedFilterNameList = itemListDistNames.itemName.sort();
+    
     const handleFilters = (e) => {
         const { name, value } = e.target;
         setItemFilters(prev => ({ ...prev, [name]: value }))
@@ -164,8 +165,9 @@ function InsHistoryCard() {
         }
         if (name === "itemDepartment") {
             const filterList = selectedPlantDatas.filter(item => item.itemDepartment === value)
-            const nameList = [...new Set(filterList.map(item => item.itemAddMasterName))]
+            const nameList = [...new Set(filterList.map(item => item.itemAddMasterName))].sort()
             setItemListDistNames(nameList)
+
             setItemFilters(prev => ({ ...prev, itemName: "Select", itemIMTENo: "Select" }))
             setSelectedDepartmentData(filterList)
         }
@@ -199,8 +201,6 @@ function InsHistoryCard() {
             try {
                 const response = await axios.get(`${process.env.REACT_APP_PORT}/itemHistory/getAllItemHistory`);
                 setItemHistoryData(response.data.result)
-
-
                 const uniqueInstrumentNames = Array.from(new Set(response.data.result.map(item => item.itemAddMasterName)));
                 setDistItemNames(uniqueInstrumentNames);
             } catch (error) {
