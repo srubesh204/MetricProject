@@ -35,7 +35,7 @@ const VendorUpload = () => {
         {
             field: 'fullName',
             headerName: 'Full Name',
-            width: 200,
+            width: 210,
             headerAlign: "center", align: "center",
         },
         {
@@ -46,7 +46,7 @@ const VendorUpload = () => {
             headerAlign: "center", align: "center",
         },
         {
-            field: 'Vendor Certificate View', headerName: 'Vendor Certificate View', width: 150, align: "center", renderCell: (params) =>
+            field: 'Vendor Certificate View', headerName: 'Vendor Certificate View', width: 180, align: "center", renderCell: (params) =>
                 <IconButton size="small" component={Link} target="_blank" to={`${process.env.REACT_APP_PORT}/vendorCertificates/${params.row.certificate}`} ><FileOpenIcon /></IconButton>
         },
 

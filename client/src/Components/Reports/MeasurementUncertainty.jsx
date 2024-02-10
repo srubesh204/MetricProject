@@ -27,7 +27,7 @@ const MeasurementUncertainty = () => {
         }
         setSnackBarOpen(false);
     }
-    const [openModalVendor, setOpenModalVendor] = useState(false);
+    const [openModalUNC, setOpenModalUNC] = useState(false);
     const initialUncertainty = {
         uncItemName: "",
         uncRangeSize: "",
@@ -775,7 +775,7 @@ const MeasurementUncertainty = () => {
                     <div className='row'>
                         <div className='d-flex justify-content-end' >
                             <div className='me-2'>
-                                <Button variant='contained' size="small" color='success' onClick={() => setOpenModalVendor(true)}>+ Add Uncertainty</Button>
+                                <Button variant='contained' size="small" color='success' onClick={() => setOpenModalUNC(true)}>+ Add Uncertainty</Button>
                             </div>
                             <div className='' >
                                 <Button variant='contained' type='button' size='small' color='error' >List</Button>
@@ -784,8 +784,8 @@ const MeasurementUncertainty = () => {
                         </div>
 
                         <Dialog
-                            open={openModalVendor}
-                            onClose={() => setOpenModalVendor(false)}
+                            open={openModalUNC}
+                            onClose={() => setOpenModalUNC(false)}
                             aria-labelledby="alert-dialog-title"
                             aria-describedby="alert-dialog-description"
                         >
@@ -798,8 +798,8 @@ const MeasurementUncertainty = () => {
                                 </DialogContentText>
                             </DialogContent>
                             <DialogActions>
-                                <Button onClick={() => setOpenModalVendor(false)}>Cancel</Button>
-                                <Button onClick={(e) => { uncertaintySubmit(e); setOpenModalVendor(false); }} autoFocus>
+                                <Button onClick={() => setOpenModalUNC(false)}>Cancel</Button>
+                                <Button onClick={(e) => { uncertaintySubmit(e); setOpenModalUNC(false); }} autoFocus>
                                     Add
                                 </Button>
                             </DialogActions>

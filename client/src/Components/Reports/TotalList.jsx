@@ -32,7 +32,7 @@ const TotalList = () => {
 
 
   const employeeRole = useEmployee()
-  const {allowedPlants} = employeeRole
+  const { allowedPlants } = employeeRole
 
   console.log(dayjs("2023-11-17").isSameOrBefore("2023-11-21"))
   const [itemList, setItemList] = useState([]);
@@ -47,7 +47,7 @@ const TotalList = () => {
     itemCurrentLocation: []
   })
 
-
+  const sortedFilterNameList = FilterNameList.itemAddMasterName.sort();
 
 
   const [partDataList, setPartDataList] = useState([])
@@ -55,8 +55,8 @@ const TotalList = () => {
   const partFetchData = async () => {
     try {
       const response = await axios.post(
-        `${process.env.REACT_APP_PORT}/part/getPartsByPlant`, {allowedPlants: allowedPlants}
-    );
+        `${process.env.REACT_APP_PORT}/part/getPartsByPlant`, { allowedPlants: allowedPlants }
+      );
 
 
       setPartDataList(response.data.result);
@@ -86,7 +86,7 @@ const TotalList = () => {
         `${process.env.REACT_APP_PORT}/itemAdd/getItemByPlant`, { allowedPlants: allowedPlants }
       );
       console.log(response.data.result)
-      
+
       const departmentItems = response.data.result.filter(item => employeeRole.loggedEmp.plantDetails.some(plant => plant.departments.includes(item.itemDepartment)))
       console.log(departmentItems)
 
@@ -234,11 +234,11 @@ const TotalList = () => {
       renderCell: (params) => {
         const itemType = params.row.itemType.toString();
         return itemType.charAt(0).toUpperCase() + itemType.slice(1).toLowerCase();
-      } 
+      }
     },
-    { field: 'itemSAPNo', headerName: 'ItemSAPNo ', width: 90, headerAlign: "center", align: "center",  valueGetter: (params) => params.row.itemSAPNo || "-"  },
+    { field: 'itemSAPNo', headerName: 'ItemSAPNo ', width: 90, headerAlign: "center", align: "center", valueGetter: (params) => params.row.itemSAPNo || "-" },
     { field: 'itemMFRNo', headerName: 'ItemMFRNo ', width: 90, headerAlign: "center", align: "center", },
-    { field: 'itemModelNo', headerName: 'ItemModelNo ', width: 90, headerAlign: "center", align: "center", valueGetter: (params) => params.row.itemModelNo || "-"  },
+    { field: 'itemModelNo', headerName: 'ItemModelNo ', width: 90, headerAlign: "center", align: "center", valueGetter: (params) => params.row.itemModelNo || "-" },
     { field: 'itemMasterRef', headerName: 'ItemMasterRef ', width: 100, headerAlign: "center", align: "center", },
     { field: 'itemReceiptDate', headerName: 'ItemReceiptDate ', width: 100, headerAlign: "center", align: "center", },
     { field: 'itemPlaceOfUsage', headerName: 'Secondary Location ', width: 90, headerAlign: "center", align: "center", },
@@ -250,14 +250,14 @@ const TotalList = () => {
     { field: 'itemUncertainity', headerName: 'ItemUncertainity ', width: 90, headerAlign: "center", align: "center", },
     { field: 'itemPartName', headerName: 'ItemPartName ', width: 90, headerAlign: "center", align: "center", },
     { field: 'itemOBType', headerName: 'ItemOBType ', width: 90, headerAlign: "center", align: "center", },
-    { field: 'calibrationCost', headerName: 'CalibrationCost ', width: 90, headerAlign: "center", align: "center", valueGetter: (params) => params.row.calibrationCost || "-"  },
-    { field: 'gaugeUsage', headerName: 'Gauge life in days ', width: 130, headerAlign: "center", align: "center", valueGetter: (params) => params.row.gaugeUsage || "-"  },
-    { field: 'lifealertDays', headerName: 'Gauge life alert in days', width: 120, headerAlign: "center", align: "center",valueGetter: (params) => params.row.lifealertDays || "-"  },
-    { field: 'purchaseRefNo', headerName: 'PurchaseRefNo', width: 90, headerAlign: "center", align: "center", valueGetter: (params) => params.row.purchaseRefNo || "-"  },
-    { field: 'purchaseDate', headerName: 'PurchaseDate', width: 90, headerAlign: "center", align: "center",valueGetter: (params) => params.row.purchaseDate || "-"  },
-    { field: 'specialRemark', headerName: 'SpecialRemark', width: 90, headerAlign: "center", align: "center", valueGetter: (params) => params.row.specialRemark || "-"  },
-    { field: 'drawingIssueNo', headerName: 'DrawingIssueNo', width: 90, headerAlign: "center", align: "center", valueGetter: (params) => params.row.drawingIssueNo || "-"  },
-    { field: 'drawingNo', headerName: 'DrawingNo', width: 90, headerAlign: "center", align: "center",  valueGetter: (params) => params.row.drawingNo || "-" },
+    { field: 'calibrationCost', headerName: 'CalibrationCost ', width: 90, headerAlign: "center", align: "center", valueGetter: (params) => params.row.calibrationCost || "-" },
+    { field: 'gaugeUsage', headerName: 'Gauge life in days ', width: 130, headerAlign: "center", align: "center", valueGetter: (params) => params.row.gaugeUsage || "-" },
+    { field: 'lifealertDays', headerName: 'Gauge life alert in days', width: 120, headerAlign: "center", align: "center", valueGetter: (params) => params.row.lifealertDays || "-" },
+    { field: 'purchaseRefNo', headerName: 'PurchaseRefNo', width: 90, headerAlign: "center", align: "center", valueGetter: (params) => params.row.purchaseRefNo || "-" },
+    { field: 'purchaseDate', headerName: 'PurchaseDate', width: 90, headerAlign: "center", align: "center", valueGetter: (params) => params.row.purchaseDate || "-" },
+    { field: 'specialRemark', headerName: 'SpecialRemark', width: 90, headerAlign: "center", align: "center", valueGetter: (params) => params.row.specialRemark || "-" },
+    { field: 'drawingIssueNo', headerName: 'DrawingIssueNo', width: 90, headerAlign: "center", align: "center", valueGetter: (params) => params.row.drawingIssueNo || "-" },
+    { field: 'drawingNo', headerName: 'DrawingNo', width: 90, headerAlign: "center", align: "center", valueGetter: (params) => params.row.drawingNo || "-" },
     // { field: 'rdName', headerName: 'rdName', width: 90, headerAlign: "center", align: "center", },
     // { field: 'itemItemMasterName', headerName: 'ItemItemMasterName ', width: 90, headerAlign: "center", align: "center", },
 
@@ -376,9 +376,9 @@ const TotalList = () => {
         // Update state outside the loop with the updated object
         setFilterNameList(prev => ({ ...prev, ...updatedFilterNames }));
         const partCustomers = partDataList.filter(part => itemList.some(item => item.itemPartName.includes(part.partNo)))
-           const customerData = partDataList.filter(part => part.customer === value)
-           setPartCutomerNames(partCustomers)
-           setCustomerParts(customerData)
+        const customerData = partDataList.filter(part => part.customer === value)
+        setPartCutomerNames(partCustomers)
+        setCustomerParts(customerData)
       } else {
         setFilteredItemListData(plantWise)
         const filterNames = ["itemIMTENo", "itemType", "itemAddMasterName", "itemDepartment", "itemCalibrationSource", "itemCurrentLocation"]
@@ -513,6 +513,8 @@ const TotalList = () => {
         filterNames.forEach((element, index) => {
           const data = itemTypeDatas.map(item => item[element]);
           filterNames[index] = [...new Set(data)];
+          //
+          filterNames.sort()
           // Update the object with a dynamic key based on the 'element'
           updatedFilterNames[element] = filterNames[index];
         });
@@ -1028,7 +1030,7 @@ const TotalList = () => {
 
               </div>
               <div className="col ">
-                <TextField label="Item Name"
+                {/* <TextField label="Item Name"
                   id="itemAddMasterNameId"
                   // required
                   select
@@ -1043,6 +1045,25 @@ const TotalList = () => {
                   <MenuItem value="all">All</MenuItem>
                   {FilterNameList.itemAddMasterName.map((item, index) => (
                     <MenuItem key={index} value={item}>{item}</MenuItem>
+                  ))}
+                </TextField> */}
+
+                <TextField
+                  label="Item Name"
+                  id="itemAddMasterNameId"
+                  select
+                  value={filterAllNames.itemAddMasterName}
+                  defaultValue="all"
+                  fullWidth
+                  size="small"
+                  onChange={handleFilterChangeItemList}
+                  name="itemAddMasterName"
+                >
+                  <MenuItem value="all">All</MenuItem>
+                  {sortedFilterNameList.map((item, index) => (
+                    <MenuItem key={index} value={item}>
+                      {item}
+                    </MenuItem>
                   ))}
                 </TextField>
 
@@ -1078,7 +1099,7 @@ const TotalList = () => {
                     select
                     defaultValue="all"
                     fullWidth
-                   // value={filterAllNames.customerWise}
+                    // value={filterAllNames.customerWise}
                     size="small"
                     onChange={handleFilterChangeItemList}
                     name="customerWise" >

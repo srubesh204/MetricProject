@@ -56,10 +56,10 @@ const ItemList = () => {
     const itemFetch = async () => {
         try {
             const response = await axios.post(
-                `${process.env.REACT_APP_PORT}/itemAdd/getItemByPlant`, {allowedPlants: allowedPlants}
+                `${process.env.REACT_APP_PORT}/itemAdd/getItemByPlant`, { allowedPlants: allowedPlants }
             );
             console.log(response.data.result)
-          
+
             const departmentItems = response.data.result.filter(item => employeeRole.loggedEmp.plantDetails.some(plant => plant.departments.includes(item.itemDepartment)))
             console.log(departmentItems)
 
@@ -96,6 +96,15 @@ const ItemList = () => {
     })
 
 
+
+
+
+
+
+
+
+
+
     const [employeeList, setEmployeeList] = useState([]);
     const empFetchData = async () => {
         try {
@@ -125,9 +134,6 @@ const ItemList = () => {
 
 
     }
-
-
-
 
     const VisuallyHiddenInput = styled('input')({
         clip: 'rect(0 0 0 0)',
@@ -169,7 +175,7 @@ const ItemList = () => {
                 onUploadProgress: (progressEvent) => {
                     const percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total);
                     setUploadProgress(percentCompleted);
-                  }
+                }
             });
 
             setItemAddExcelStatus(response.data.message || 'Excel file uploaded successfully');
@@ -213,13 +219,13 @@ const ItemList = () => {
     const updateItemStatus = async () => {
         try {
             const response = await axios.put(
-                `${process.env.REACT_APP_PORT}/itemAdd/updateItemStatus`, {itemIds: itemListSelectedRowIds, ...statusInfo}
+                `${process.env.REACT_APP_PORT}/itemAdd/updateItemStatus`, { itemIds: itemListSelectedRowIds, ...statusInfo }
             );
             setSnackBarOpen(true)
             itemFetch();
             console.log("Updated Successfully");
             setErrorHandler({ status: response.data.status, message: response.data.message, code: "success" })
-            setStatusInfo({itemStatus: "", itemStatusReason: ""})
+            setStatusInfo({ itemStatus: "", itemStatusReason: "" })
             setOpenModalStatus(false);
         } catch (err) {
             setSnackBarOpen(true)
@@ -263,6 +269,9 @@ const ItemList = () => {
         itemCalibrationSource: [],
         itemCurrentLocation: []
     })
+    const sortedFilterNameList = FilterNameList.itemAddMasterName.sort();
+
+
 
     const handleSnackClose = (event, reason) => {
         if (reason === 'clickaway') {
@@ -339,8 +348,8 @@ const ItemList = () => {
 
     const [plantDatas, setPlantDatas] = useState([])
     const [departmentDatas, setDepartmentDatas] = useState([])
-    const [itemTypeDatas,setItemTypeDatas] = useState([])
-    const [itemMasteDatas,setItemMasterDatas] = useState([])
+    const [itemTypeDatas, setItemTypeDatas] = useState([])
+    const [itemMasteDatas, setItemMasterDatas] = useState([])
 
     const [customerParts, setCustomerParts] = useState([])
     const handleFilterChangeItemList = (e) => {
@@ -377,12 +386,12 @@ const ItemList = () => {
                 // Update state outside the loop with the updated object
                 setFilterNameList(prev => ({ ...prev, ...updatedFilterNames }));
                 setFilterAllNames(prev => ({
-                  ...prev,
+                    ...prev,
                     imteNo: "all",
                     plantWise: value,
                     itemType: "all",
                     currentLocation: "all",
-                    itemAddMasterName: "all"  
+                    itemAddMasterName: "all"
                 }))
                 setPlantDatas(plantWise)
             }
@@ -391,7 +400,7 @@ const ItemList = () => {
             const currentLocation = plantDatas.filter((item) => (item.itemDepartment === value))
             if (value === "all") {
                 setFilteredItemListData(plantDatas)
-                const filterNames = ["itemIMTENo", "itemType","itemAddMasterName", "itemCalibrationSource", "itemCurrentLocation"]
+                const filterNames = ["itemIMTENo", "itemType", "itemAddMasterName", "itemCalibrationSource", "itemCurrentLocation"]
                 let updatedFilterNames = {};
                 filterNames.forEach((element, index) => {
                     const data = plantDatas.map(item => item[element]);
@@ -404,15 +413,15 @@ const ItemList = () => {
                 setFilterNameList(prev => ({ ...prev, ...updatedFilterNames }));
                 setFilteredItemListData(plantDatas)
                 setFilterAllNames(prev => ({
-                 ...prev,
+                    ...prev,
                     imteNo: "all",
                     itemType: "all",
                     currentLocation: value,
-                    itemAddMasterName: "all"   
+                    itemAddMasterName: "all"
                 }))
             } else {
                 setFilteredItemListData(currentLocation)
-                const filterNames = ["itemIMTENo", "itemType","itemAddMasterName", "itemCalibrationSource", "itemCurrentLocation"]
+                const filterNames = ["itemIMTENo", "itemType", "itemAddMasterName", "itemCalibrationSource", "itemCurrentLocation"]
                 let updatedFilterNames = {};
                 filterNames.forEach((element, index) => {
                     const data = currentLocation.map(item => item[element]);
@@ -425,11 +434,11 @@ const ItemList = () => {
                 setFilterNameList(prev => ({ ...prev, ...updatedFilterNames }));
                 setFilteredItemListData(currentLocation)
                 setFilterAllNames(prev => ({
-                 ...prev,
+                    ...prev,
                     imteNo: "all",
                     itemType: "all",
                     currentLocation: value,
-                    itemAddMasterName: "all"   
+                    itemAddMasterName: "all"
                 }))
                 setDepartmentDatas(currentLocation)
             }
@@ -438,7 +447,7 @@ const ItemList = () => {
             const itemType = departmentDatas.filter((item) => (item.itemType === value))
             if (value === "all") {
                 setFilteredItemListData(departmentDatas)
-                const filterNames = ["itemIMTENo", "itemAddMasterName", ]
+                const filterNames = ["itemIMTENo", "itemAddMasterName",]
                 let updatedFilterNames = {};
                 filterNames.forEach((element, index) => {
                     const data = departmentDatas.map(item => item[element]);
@@ -454,12 +463,12 @@ const ItemList = () => {
                     ...prev,
                     imteNo: "all",
                     itemType: value,
-                    itemAddMasterName: "all"  
+                    itemAddMasterName: "all"
                 }))
                 setItemTypeDatas(itemType)
             } else {
                 setFilteredItemListData(itemType)
-                const filterNames = ["itemIMTENo",  "itemAddMasterName", ]
+                const filterNames = ["itemIMTENo", "itemAddMasterName",]
                 let updatedFilterNames = {};
                 filterNames.forEach((element, index) => {
                     const data = itemType.map(item => item[element]);
@@ -475,7 +484,7 @@ const ItemList = () => {
                     ...prev,
                     imteNo: "all",
                     itemType: value,
-                    itemAddMasterName: "all"  
+                    itemAddMasterName: "all"
                 }))
                 setItemTypeDatas(itemType)
             }
@@ -491,10 +500,11 @@ const ItemList = () => {
                     filterNames[index] = [...new Set(data)];
                     // Update the object with a dynamic key based on the 'element'
                     updatedFilterNames[element] = filterNames[index];
+
                 });
                 console.log(updatedFilterNames)
                 // Update state outside the loop with the updated object
-                setFilterNameList(prev => ({ ...prev, ...updatedFilterNames }));  
+                setFilterNameList(prev => ({ ...prev, ...updatedFilterNames }));
                 setFilteredItemListData(itemTypeDatas)
                 setFilterAllNames(prev => ({
                     ...prev,
@@ -537,7 +547,7 @@ const ItemList = () => {
                 setFilteredItemListData(imteNo)
                 setFilterAllNames(prev => ({
                     ...prev,
-                    imteNo: value,   
+                    imteNo: value,
                 }))
             }
         }
@@ -738,7 +748,7 @@ const ItemList = () => {
         setFilteredItemListData(filteredItems)
     }, [dateData.fromDate, dateData.toDate])
 
-   
+
 
     const [vendorList, setVendorList] = useState([])
 
@@ -747,7 +757,7 @@ const ItemList = () => {
         try {
             const response = await axios.post(
                 `${process.env.REACT_APP_PORT}/vendor/getVendorByPlants`, { allowedPlants: allowedPlants }
-              );
+            );
             setVendorList(response.data.result)
 
         } catch (err) {
@@ -760,6 +770,19 @@ const ItemList = () => {
 
 
 
+    // useEffect(() => {
+    //     if (FilterNameList && FilterNameList.length > 0) {
+    //         const distinctNames = FilterNameList.map(item => item.itemAddMasterName);
+    //         const sortedDistinctNames = [...new Set(distinctNames)].sort();
+    //         setFilterNameList(sortedDistinctNames);
+    //     }
+    // }, [FilterNameList]);
+
+    // console.log(FilterNameList)
+
+
+
+
     const [partCutomerNames, setPartCutomerNames] = useState([])
 
     const [partDataList, setPartDataList] = useState([])
@@ -768,7 +791,7 @@ const ItemList = () => {
         try {
 
             const response = await axios.post(
-                `${process.env.REACT_APP_PORT}/part/getPartsByPlant`, {allowedPlants: allowedPlants}
+                `${process.env.REACT_APP_PORT}/part/getPartsByPlant`, { allowedPlants: allowedPlants }
             );
 
             setPartDataList(response.data.result);
@@ -859,7 +882,7 @@ const ItemList = () => {
                 // Handle validation errors
                 const errorData400 = err.response.data.errors;
                 console.log(errorData400)
-              setErrorHandler({ status: 0, message: errorData400, code: "error" });
+                setErrorHandler({ status: 0, message: errorData400, code: "error" });
             } else if (err.response && err.response.status === 500) {
                 // Handle other errors
                 const errorData500 = err.response.data.error;
@@ -947,7 +970,7 @@ const ItemList = () => {
 
     }
 
-  
+
 
 
     const [mailIds, setMailIds] = useState([])
@@ -985,7 +1008,7 @@ const ItemList = () => {
 
 
 
-   
+
 
     const handleConfirmDialogClose = () => {
         setShowDialog(false);
@@ -1106,7 +1129,7 @@ const ItemList = () => {
                                         id="plantWiseId"
                                         select
                                         defaultValue="all"
-                                       // value={filterAllNames.plantWise}
+                                        // value={filterAllNames.plantWise}
                                         fullWidth
                                         size="small"
                                         onChange={handleFilterChangeItemList}
@@ -1151,7 +1174,7 @@ const ItemList = () => {
                                     </TextField>
                                 </div>
                                 <div className="col ">
-                                    <TextField label="Item Name"
+                                    {/* <TextField label="Item Name"
                                         id="itemAddMasterNameId"
                                         // required
                                         select
@@ -1165,7 +1188,25 @@ const ItemList = () => {
                                         {FilterNameList.itemAddMasterName.map((item, index) => (
                                             <MenuItem key={index} value={item}>{item}</MenuItem>
                                         ))}
+                                    </TextField> */}
+                                    <TextField
+                                        label="Item Name"
+                                        id="itemAddMasterNameId"
+                                        select
+                                        value={filterAllNames.itemAddMasterName}
+                                        defaultValue="all"
+                                        fullWidth
+                                        size="small"
+                                        onChange={handleFilterChangeItemList}
+                                        name="itemAddMasterName"
+                                    >
+                                        <MenuItem value="all">All</MenuItem>
+                                        {sortedFilterNameList.map((item, index) => (
+                                            <MenuItem key={index} value={item}>{item}
+                                            </MenuItem>
+                                        ))}
                                     </TextField>
+
                                 </div>
                                 <div className="col ">
                                     <TextField label="Imte No"
@@ -1369,7 +1410,7 @@ const ItemList = () => {
                                     //disableColumnMenu={true}
 
                                     checkboxSelection
-                                    
+
                                     disableRowSelectionOnClick
                                     pageSizeOptions={[5]}
                                 />
@@ -1384,7 +1425,6 @@ const ItemList = () => {
                                         </Button>
                                     </DialogActions>
                                 </Dialog>
-
 
                             </Box>
                             <Dialog
@@ -1436,7 +1476,7 @@ const ItemList = () => {
 
 
                                         <DialogContentText id="alert-dialog-description ">
-                                            
+
                                             <div className='row mb-2'>
                                                 <TextField margin="dense" size='small' select variant='outlined' className='mb-2' onChange={(e) => setStatusInfo((prev) => ({ ...prev, itemStatus: e.target.value }))} value={statusInfo.itemStatus} label="Item Status" name='itemStatus' id='itemStatusId'  >
                                                     <MenuItem value="active">Active</MenuItem>
@@ -1449,7 +1489,7 @@ const ItemList = () => {
                                                 </TextField>
 
                                                 <TextField margin="dense" size='small' multiline rows={2} variant='outlined' className='mb-2' onChange={(e) => setStatusInfo((prev) => ({ ...prev, itemStatusReason: e.target.value }))} value={statusInfo.itemStatusReason} label="Reason" name='itemStatusReason' id='itemStatusReasonId'  >
-                                                   
+
 
                                                 </TextField>
 
@@ -1463,7 +1503,7 @@ const ItemList = () => {
                                     </DialogContent>
                                     <DialogActions>
                                         <Button onClick={() => setOpenModalStatus(false)}>Cancel</Button>
-                                        <Button onClick={() => { updateItemStatus();  }} autoFocus>
+                                        <Button onClick={() => { updateItemStatus(); }} autoFocus>
                                             Change Status
                                         </Button>
                                     </DialogActions>

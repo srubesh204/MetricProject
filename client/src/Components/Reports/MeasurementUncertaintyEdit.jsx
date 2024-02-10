@@ -4,6 +4,7 @@ import { Card, CardContent, CardActions, Button, Container, Grid, Paper, TextFie
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { Delete } from '@mui/icons-material';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { useNavigate } from 'react-router-dom';
 import { useParams } from 'react-router-dom';
 import dayjs from 'dayjs';
 
@@ -109,6 +110,8 @@ const MeasurementUncertaintyEdit = () => {
         })
     };
 
+    const [openModalUNC, setOpenModalUNC] = useState(false);
+
     const getItemDataById = async () => {
         try {
             const response = await axios.get(
@@ -160,6 +163,54 @@ const MeasurementUncertaintyEdit = () => {
     useEffect(() => {
         uncFetch()
     }, []);
+
+    const navigate = useNavigate();
+    const updateItemData = async (e) => {
+        e.preventDefault();
+        try {
+            const response = await axios.put(
+                `${process.env.REACT_APP_PORT}/measurementUncertainty/updateMeasurementUncertainty/${id}`, uncertaintyData
+            );
+
+            setSnackBarOpen(true)
+
+            console.log("Uncertainty Update Successfully")
+            setErrorHandler({ status: response.data.status, message: response.data.message, code: "success" })
+            setUncertaintyData(initialUncertainty)
+            setTimeout(() => {
+                navigate('/measurementUncertaintyList');
+            }, 500);
+
+
+        } catch (err) {
+
+            setSnackBarOpen(true)
+
+
+            console.log(err)
+
+            if (err.response && err.response.status === 400) {
+                // Handle validation errors
+                const errorData400 = err.response.data.errors;
+                const errorMessages400 = Object.values(errorData400).join(', ');
+                console.log(errorMessages400)
+                setErrorHandler({ status: 0, message: errorMessages400, code: "error" });
+            } else if (err.response && err.response.status === 500) {
+                // Handle other errors
+                const errorData500 = err.response.data.error;
+                const errorMessages500 = Object.values(errorData500).join(', ');
+                console.log(errorMessages500)
+                setErrorHandler({ status: 0, message: errorMessages500, code: "error" });
+            } else {
+                console.log(err.response.data.error)
+                setErrorHandler({ status: 0, message: "An error occurred", code: "error" });
+            }
+        }
+    };
+
+
+
+
 
     const [uncData, setUncData] = useState([])
     const Fetch = async () => {
@@ -315,7 +366,7 @@ const MeasurementUncertaintyEdit = () => {
                                     </TextField>
                                 </div>
                                 <div className="col me-2">
-                                    
+
                                     <TextField
                                         label="Range / Size"
                                         value={`${selectedRow[0]?.itemRangeSize || ''} ${selectedRow[0]?.itemRangeSizeUnit || ''}`}
@@ -327,7 +378,7 @@ const MeasurementUncertaintyEdit = () => {
                                 </div>
                                 <div className="col me-2">
                                     <TextField label="L.C.in (mm)"
-                                          value={`${selectedRow[0]?.itemLC || ''} `} fullWidth size="small" name="lC" InputProps={{ readOnly: true }} InputLabelProps={{ shrink: true }}></TextField>
+                                        value={`${selectedRow[0]?.itemLC || ''} `} fullWidth size="small" name="lC" InputProps={{ readOnly: true }} InputLabelProps={{ shrink: true }}></TextField>
                                 </div>
                                 <div className="col me-2">
                                     <TextField size='small' fullWidth variant='outlined' label="Uncertainty in(mm)" onChange={handlePlantChange} value={masterDetails.uncertainty} name='uncertainty' id='uncertaintyId'>
@@ -349,7 +400,7 @@ const MeasurementUncertaintyEdit = () => {
                                     {/* <Button size='small' color='warning' variant='contained' onClick={() => addUncertainty()}>Add </Button> */}
                                     <Button variant='contained' color='warning' onClick={() => addUncertainty()} >Add Row</Button>
                                 </div>
-                               
+
                             </div>
                             <div className='row g-2'>
                                 <table className='table table-sm table-bordered table-responsive  align-middle'>
@@ -723,16 +774,16 @@ const MeasurementUncertaintyEdit = () => {
                     <div className='row'>
                         <div className='d-flex justify-content-end' >
                             <div className='me-2' >
-                                <Button variant='contained' type='button' size='small' color='warning' >Update</Button>
+                                <Button variant='contained' type='button' size='small' color='warning' onClick={() => setOpenModalUNC(true)} >Update</Button>
                             </div>
                             <div className='' >
                                 <Button variant='contained' type='button' size='small' color='error' >List</Button>
                             </div>
                         </div>
 
-                        {/* <Dialog
-                            open={openModalVendor}
-                            onClose={() => setOpenModalVendor(false)}
+                        <Dialog
+                            open={openModalUNC}
+                            onClose={() => setOpenModalUNC(false)}
                             aria-labelledby="alert-dialog-title"
                             aria-describedby="alert-dialog-description"
                         >
@@ -745,12 +796,12 @@ const MeasurementUncertaintyEdit = () => {
                                 </DialogContentText>
                             </DialogContent>
                             <DialogActions>
-                                <Button onClick={() => setOpenModalVendor(false)}>Cancel</Button>
-                                <Button onClick={(e) => { uncertaintySubmit(e); setOpenModalVendor(false); }} autoFocus>
+                                <Button onClick={() => setOpenModalUNC(false)}>Cancel</Button>
+                                <Button onClick={(e) => { updateItemData(e); setOpenModalUNC(false); }} autoFocus>
                                     Add
                                 </Button>
                             </DialogActions>
-                        </Dialog> */}
+                        </Dialog>
 
 
 

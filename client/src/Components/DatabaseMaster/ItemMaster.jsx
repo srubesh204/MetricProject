@@ -68,6 +68,7 @@ const ItemMaster = () => {
 
     })
 
+   
     const handleFilterChange = (e) => {
         const { name, value } = e.target;
         if (value === "all") {
@@ -180,7 +181,6 @@ const ItemMaster = () => {
 
 
 
-
     const [itemMasterDataList, setItemMasterDataList] = useState([])
 
     const [FilterNameList, setFilterNameList] = useState({
@@ -188,6 +188,7 @@ const ItemMaster = () => {
         itemDescription: [],
 
     })
+
 
     const itemMasterFetchData = async () => {
         try {
@@ -225,6 +226,7 @@ const ItemMaster = () => {
     }, []);
 
     console.log(FilterNameList)
+    const sortedFilterNameList = FilterNameList.itemDescription.sort();
 
     const [itemMasteSelectedRowIds, setItemMasteSelectedRowIds] = useState([]);
     const itemMasterColumns = [
