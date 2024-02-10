@@ -25,7 +25,7 @@ export const HomeContent = createContext(null);
 dayjs.extend(isSameOrBefore)
 dayjs.extend(isSameOrAfter)
 
-const Home = () => {
+const TestHome = () => {
 
   const employeeRole = useEmployee();
 
@@ -1243,12 +1243,9 @@ const Home = () => {
         console.log("dcworking")
         const vendorPartyDetail = dcList.filter(dc => dc._id === selectedRows[0].dcId)
         console.log(vendorPartyDetail)
-        if(vendorPartyDetail){
-          const vendorDetails = vendors.filter(ven => ven._id === vendorPartyDetail[0].dcPartyId)
-          console.log(...vendorDetails)
-          setDcPartyDetails(...vendorDetails)
-        }
-       
+        const vendorDetails = vendors.filter(ven => ven._id === vendorPartyDetail[0].dcPartyId)
+        console.log(...vendorDetails)
+        setDcPartyDetails(...vendorDetails)
       }
 
     }
@@ -1914,7 +1911,7 @@ const Home = () => {
               </div>
 
             </Paper>
-            {employeeRole && employeeRole !== "viewer" &&
+            {/* {employeeRole && employeeRole !== "viewer" &&
               <React.Fragment>
 
                 <HomeContent.Provider
@@ -1945,7 +1942,7 @@ const Home = () => {
                 >
                   <HomeMail />
                 </HomeContent.Provider>
-              </React.Fragment>}
+              </React.Fragment>} */}
 
 
 
@@ -1981,4 +1978,4 @@ const Home = () => {
   )
 }
 
-export default Home
+export default TestHome
