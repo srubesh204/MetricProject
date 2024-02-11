@@ -670,6 +670,12 @@ const Home = () => {
       width: 100,
       align: "left"
     },
+    {
+      field: 'itemCalibrationDoneAt',
+      headerName: 'Cal Done At',
+      width: 100,
+      align: "center"
+    },
   ];
 
 
@@ -1243,7 +1249,7 @@ const Home = () => {
         console.log("dcworking")
         const vendorPartyDetail = dcList.filter(dc => dc._id === selectedRows[0].dcId)
         console.log(vendorPartyDetail)
-        if(vendorPartyDetail){
+        if(vendorPartyDetail.length > 0){
           const vendorDetails = vendors.filter(ven => ven._id === vendorPartyDetail[0].dcPartyId)
           console.log(...vendorDetails)
           setDcPartyDetails(...vendorDetails)
@@ -1346,13 +1352,28 @@ const Home = () => {
 
 
   const onSiteCheck = () => {
-    const onSiteCheck = selectedRows.every(item => (item.itemCalibrationSource === "outsource" || item.itemCalibrationSource === "OEM") && item.itemCalibrationDoneAt === "Site")
+    const onSiteCheck = selectedRows.every(item => (item.itemCalibrationSource === "outsource" || item.itemCalibrationSource === "OEM"))
+    const notInSite = selectedRows.every(item => item.itemCalibrationDoneAt === "Site")
+    const nonDcItems = selectedRows.every(item => item.dcStatus !== "1")
     console.log(onSiteCheck)
-    if (onSiteCheck) {
+    if (onSiteCheck && notInSite && selectedRows.length === 1 && nonDcItems ) {
       setStatusCheckMsg("");
       setGrnOpen(true);
     } else {
-      setStatusCheckMsg("Select a item to be calibrated at site")
+      if(!notInSite){
+        setStatusCheckMsg("Select a item to be calibrated at Site")
+      }
+      if(!onSiteCheck){
+        setStatusCheckMsg("Only OEM or Supplier are allowed for Onsite GRN")
+      }
+      if(selectedRows.length !== 1){
+        setStatusCheckMsg("Please select only one item, multiple selections are not allowed")
+      }
+
+      if(!nonDcItems){
+        setStatusCheckMsg("Onsite GRN not allowed, Select GRN")
+      }
+      
     }
   }
 

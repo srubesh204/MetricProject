@@ -189,15 +189,11 @@ const itemGRNController = {
           itemCalibrationSource,
           itemCalibrationDoneAt,
           itemCalibratedAt,
-
-
           itemOBType,
           itemUncertainity,
           itemUncertainityUnit,
           itemPrevCalData,
           itemCertificateNo: itemLastCertificateNo,
-
-
         } = itemData
 
 
@@ -322,7 +318,8 @@ const itemGRNController = {
             <td style="padding: 0.50rem; vertical-align: top; border: 1px solid #6c757d ;" class="align-middle">Item Name: ${grnItemAddMasterName ? grnItemAddMasterName : "-"} IMTE No: ${grnItemIMTENo ? grnItemIMTENo : "-"}<br>
             Range/Size: ${grnItemRangeSize ? grnItemRangeSize : "" + ' ' + grnItemRangeSizeUnit ? grnItemRangeSizeUnit : ""} L.C.: ${(grnItemLC ? grnItemLC : "") + '' + (grnItemLCUnit ? grnItemLCUnit : '')}<br>
             Make: ${grnItemMake ? grnItemMake : "-"} Sr.No: ${grnItemMFRNo ? grnItemMFRNo : "-"} Cal. Frequency: ${grnItemCalFreInMonths ? grnItemCalFreInMonths : "-"} months</td>
-            <td style="padding: 0.50rem; vertical-align: top; border: 1px solid #6c757d ;" class="text-center align-middle">${grnCommonRemarks}</td>
+            <td style="padding: 0.50rem; vertical-align: top; border: 1px solid #6c757d ;" class="text-center align-middle">${grnItemDcNo}</td>
+            <td style="padding: 0.50rem; vertical-align: top; border: 1px solid #6c757d ;" class="text-center align-middle">${grnItemStatus}</td>
         </tr>
     `;
 
@@ -413,7 +410,7 @@ const itemGRNController = {
         grnPartyItems,
         grnPlant,
         grnDepartment,
-
+        grnItemDcNo,
         grnItemId,
         grnItemAddMasterName,
         grnItemType,
@@ -461,7 +458,7 @@ const itemGRNController = {
         grnPartyItems,
         grnPlant,
         grnDepartment,
-
+        grnItemDcNo,
         grnItemId,
         grnItemAddMasterName,
         grnItemType,
@@ -698,11 +695,12 @@ const itemGRNController = {
             <td style="padding: 0.50rem; vertical-align: top; border: 1px solid #6c757d ;" class="align-middle">Item Name: ${grnItemAddMasterName ? grnItemAddMasterName : "-"} IMTE No: ${grnItemIMTENo ? grnItemIMTENo : "-"}<br>
             Range/Size: ${grnItemRangeSize ? grnItemRangeSize : "" + ' ' + grnItemRangeSizeUnit ? grnItemRangeSizeUnit : ""} L.C.: ${(grnItemLC ? grnItemLC : "") + '' + (grnItemLCUnit ? grnItemLCUnit : '')}<br>
             Make: ${grnItemMake ? grnItemMake : "-"} Sr.No: ${grnItemMFRNo ? grnItemMFRNo : "-"} Cal. Frequency: ${grnItemCalFreInMonths ? grnItemCalFreInMonths : "-"} months</td>
-            <td style="padding: 0.50rem; vertical-align: top; border: 1px solid #6c757d ;" class="text-center align-middle">${grnCommonRemarks}</td>
+            <td style="padding: 0.50rem; vertical-align: top; border: 1px solid #6c757d ;" class="text-center align-middle">${updateItemGRN.grnItemDcNo}</td>
+            <td style="padding: 0.50rem; vertical-align: top; border: 1px solid #6c757d ;" class="text-center align-middle">${grnItemStatus}</td>
         </tr>
     `;
 
-
+          
 
         // Example usage:
 
@@ -743,7 +741,7 @@ const itemGRNController = {
         await page.pdf({ path: `./storage/grnCertificates/${grnNo}.pdf`, format: 'A4' });
 
         await browser.close();
-
+        console.log(process.env.SERVER_PORT)
         console.log('PDF created successfully');
       }
 
@@ -786,22 +784,21 @@ const itemGRNController = {
             itemLastDueDate,
             itemLastCalDate,
             itemLastLocation,
+            itemCurrentLocation,
             itemLastPlace,
-
             itemCertificateNo: itemLastCertificateNo,
             itemLastCertificateNo: itemCertificateNo,
             itemStatus,
             itemLastStatus,
-
           } = itemData
 
           const updateItemFields = {
             dcStatus: lastDcStatus,
             dcNo: lastDcNo,
             dcId: lastDcId,
-
             itemLocation: itemLastPlace,
             itemCurrentLocation: itemLastLocation,
+            itemLastLocation: itemCurrentLocation,
             itemCalDate: itemLastCalDate,
             itemDueDate: itemLastDueDate,
             itemStatus: itemLastStatus,

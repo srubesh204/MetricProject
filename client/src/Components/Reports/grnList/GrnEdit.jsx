@@ -156,7 +156,6 @@ const GrnEdit = () => {
                 grnAcMinPS: "",
                 grnAcMaxPS: "",
                 grnAcWearLimitPS: "",
-
                 grnAcMinOB: "",
                 grnAcMaxOB: "",
                 grnAcAverageOB: "",
@@ -926,7 +925,7 @@ const GrnEdit = () => {
                                                     }
                                                     label="Party Ref Date"
                                                     //onChange={handleGrnChange}
-
+                                                    disabled
 
                                                     slotProps={{ textField: { size: 'small', fullWidth: true } }}
                                                     format="DD-MM-YYYY" />
@@ -945,7 +944,7 @@ const GrnEdit = () => {
                                                     id="grnPartyNameId"
                                                     select
                                                     value={grnEditData.grnPartyId}
-
+                                                    disabled
                                                     onChange={(e) => setPartyData(e.target.value)}
 
                                                     //  sx={{ width: "100%" }}
@@ -967,7 +966,7 @@ const GrnEdit = () => {
                                                     // sx={{ width: "100%" }}
                                                     size="small"
                                                     value={grnEditData.grnPartyCode}
-
+                                                    disabled
                                                     fullWidth
                                                     name="grnPartyCode" />
 
@@ -982,13 +981,14 @@ const GrnEdit = () => {
 
                                             <TextField label="PartyAddress"
                                                 id="grnPartyAddressId"
-                                                defaultValue=""
+                                                
+                                                disabled
                                                 size="small"
                                                 onChange={handleGrnChange}
                                                 value={grnEditData.grnPartyAddress}
                                                 sx={{ width: "100%" }}
                                                 name="grnPartyAddress" />
-
+                                                
                                         </div>
 
                                     </Paper>
@@ -1013,7 +1013,7 @@ const GrnEdit = () => {
                                                 <TextField
                                                     label="GRN NO"
                                                     id="grnNoId"
-                                                    defaultValue=""
+                                                    disabled
                                                     value={grnEditData.grnNo}
                                                     size="small"
                                                     onChange={handleGrnChange}
@@ -1030,6 +1030,7 @@ const GrnEdit = () => {
                                                     fullWidth
                                                     id="grnDateId"
                                                     name="grnDate"
+                                                    disabled
                                                     value={dayjs(grnEditData.grnPartyRefDate)}
                                                     onChange={(newValue) =>
                                                         setGrnEditData((prev) => ({ ...prev, grnDate: newValue.format("YYYY-MM-DD") }))

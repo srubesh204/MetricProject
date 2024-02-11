@@ -187,13 +187,10 @@ const CompanyDetails = () => {
     const handleImageChange = async (e) => {
         const selectedImage = e.target.files[0];
         if (selectedImage) {
-            setCompanyData((prev) => ({ ...prev, companyLogo: selectedImage.name }));
-
             const formData = new FormData();
             formData.append('image', selectedImage); // Append the selected image to the FormData
-
             try {
-                const response = await axios.post(`${process.env.REACT_APP_PORT}/upload/itemMasterImage`, formData, {
+                const response = await axios.post(`${process.env.REACT_APP_PORT}/upload/compLogoUpload`, formData, {
                     headers: {
                         'Content-Type': 'multipart/form-data',
                     },
@@ -201,13 +198,10 @@ const CompanyDetails = () => {
 
                 if (response.status === 200) {
                     // Image uploaded successfully
-                    console.log('Image Uploaded Successfully');
-
-                    // If you want to access the saved file path sent by the server
-                    const filePath = response.data.filePath; // Assuming the server sends 'filePath' in the response
-                    // Use 'filePath' as needed in your application
+                    setCompanyData((prev) => ({ ...prev, companyLogo: response.data.name }));
+                    console.log('Logo Uploaded Successfully');
                 } else {
-                    console.log('Error Uploading Image');
+                    console.log('Error Uploading Logo');
                 }
             } catch (error) {
                 console.error('Error uploading the image:', error);
@@ -314,31 +308,31 @@ const CompanyDetails = () => {
         }
     };
 
-//     const plantDetailId = /* retrieve the plant detail ID from your data or state */;
+    //     const plantDetailId = /* retrieve the plant detail ID from your data or state */;
 
-// fetch(`http://localhost:3001/compDetails/deletePlantDetail/${plantDetailId}`, {
-//   method: 'DELETE',
-// })
-//   .then(response => {
-//     if (!response.ok) {
-//       throw new Error(`HTTP error! Status: ${response.status}`);
-//     }
-//     return response.json();
-//   })
-//   .then(data => {
-//     console.log('Delete successful:', data);
-//   })
-//   .catch(error => {
-//     console.error('Error deleting plant detail:', error);
-//   });
+    // fetch(`http://localhost:3001/compDetails/deletePlantDetail/${plantDetailId}`, {
+    //   method: 'DELETE',
+    // })
+    //   .then(response => {
+    //     if (!response.ok) {
+    //       throw new Error(`HTTP error! Status: ${response.status}`);
+    //     }
+    //     return response.json();
+    //   })
+    //   .then(data => {
+    //     console.log('Delete successful:', data);
+    //   })
+    //   .catch(error => {
+    //     console.error('Error deleting plant detail:', error);
+    //   });
 
     const deletePlant = async () => {
         try {
             const response = await axios.delete(
-                `${process.env.REACT_APP_PORT}/compDetails/deletePlantDetails/${selectedPlantId}`,{
-                    
-                }
-              );
+                `${process.env.REACT_APP_PORT}/compDetails/deletePlantDetails/${selectedPlantId}`, {
+
+            }
+            );
             console.log(response.data.result)
             plantFetch();
             setPlantSnackBar(true)
@@ -371,52 +365,52 @@ const CompanyDetails = () => {
         }
     };
 
-//     const [errorhandler, setErrorHandler] = useState(false)
-//     const [snackBarOpen, setSnackBarOpen] = useState(false)
-//  const deletePlant = async (id) => {
+    //     const [errorhandler, setErrorHandler] = useState(false)
+    //     const [snackBarOpen, setSnackBarOpen] = useState(false)
+    //  const deletePlant = async (id) => {
 
-//         try {
-//              const response = await axios.delete(
-//      `${process.env.REACT_APP_PORT}/compDetails/deletePlantDetail`, 
-//         {
-//           data: {
-//             selectedPlantId: selectedRowIds
-//           }
-//     }
-//              );
-//              console.log(response.data)
+    //         try {
+    //              const response = await axios.delete(
+    //      `${process.env.REACT_APP_PORT}/compDetails/deletePlantDetail`, 
+    //         {
+    //           data: {
+    //             selectedPlantId: selectedRowIds
+    //           }
+    //     }
+    //              );
+    //              console.log(response.data)
 
-//              setSnackBarOpen(true)
+    //              setSnackBarOpen(true)
 
-//           setErrorHandler({ status: response.data.status, message: response.data.message, code: "success" })
+    //           setErrorHandler({ status: response.data.status, message: response.data.message, code: "success" })
 
-//                       setPlantData(initialPlantData)
-//      plantFetch();
-//          } catch (err) {
+    //                       setPlantData(initialPlantData)
+    //      plantFetch();
+    //          } catch (err) {
 
-//              setSnackBarOpen(true)
+    //              setSnackBarOpen(true)
 
-//            if (err.response && err.response.status === 400) {
-//                  // Handle validation errors
-//                  const errorData400 = err.response.data.errors;
-//                 const errorMessages400 = Object.values(errorData400).join(', ');
-//                  console.log(errorMessages400)
-//                  setErrorHandler({ status: 0, message: errorMessages400, code: "error" });
-//              } else if (err.response && err.response.status === 500) {
-//                  // Handle other errors
-//                  const errorData500 = err.response.data.error;
-//                  const errorMessages500 = Object.values(errorData500).join(', ');
-//                  console.log(errorMessages500)
-//                  setErrorHandler({ status: 0, message: errorMessages500, code: "error" });
-//              } else {
-//                  console.log(err.response.data.error)
-//                  setErrorHandler({ status: 0, message: "An error occurred", code: "error" });
-//              }
-//              console.log(err);
-//          }
-//      };
+    //            if (err.response && err.response.status === 400) {
+    //                  // Handle validation errors
+    //                  const errorData400 = err.response.data.errors;
+    //                 const errorMessages400 = Object.values(errorData400).join(', ');
+    //                  console.log(errorMessages400)
+    //                  setErrorHandler({ status: 0, message: errorMessages400, code: "error" });
+    //              } else if (err.response && err.response.status === 500) {
+    //                  // Handle other errors
+    //                  const errorData500 = err.response.data.error;
+    //                  const errorMessages500 = Object.values(errorData500).join(', ');
+    //                  console.log(errorMessages500)
+    //                  setErrorHandler({ status: 0, message: errorMessages500, code: "error" });
+    //              } else {
+    //                  console.log(err.response.data.error)
+    //                  setErrorHandler({ status: 0, message: "An error occurred", code: "error" });
+    //              }
+    //              console.log(err);
+    //          }
+    //      };
 
-   
+
 
     const VisuallyHiddenInput = styled('input')({
         clip: 'rect(0 0 0 0)',
@@ -462,7 +456,7 @@ const CompanyDetails = () => {
 
     const handlePlantClick = (value) => {
         setSelectedPlantId(value._id)
-       
+
         setPlantData((prev) => ({
             ...prev,
             plantName: value.plantName,
@@ -555,35 +549,43 @@ const CompanyDetails = () => {
                                 </div>
 
                                 <div className='col-md-2'>
-                                    <label htmlFor="fileInput" style={{ display: 'block', width: '100%', height: '150px', border: '2px dashed black', borderRadius: "10px", position: 'relative', cursor: 'pointer' }} className='text-center align-middle'>
+                                    {!companyData.companyLogo && <div>
+                                        <label htmlFor="fileInput" style={{ display: 'block', width: '100%', height: '150px', width: "150px", border: '2px dashed black', borderRadius: "10px", position: 'relative', cursor: 'pointer' }} className='text-center align-middle'>
 
-                                        <input
-                                            type="file"
-                                            id="fileInput"
-                                            accept="image/*"
-                                            style={{
-                                                width: '100%',
-                                                height: '100%',
-                                                opacity: 0,
-                                                overflow: 'hidden',
-                                                position: 'absolute',
-                                                top: 0,
-                                                left: 0,
-                                                cursor: 'pointer',
-                                            }}
+                                            <input
+                                                type="file"
+                                                id="fileInput"
+                                                accept="image/*"
+                                                style={{
+                                                    width: '100%',
+                                                    height: '100%',
+                                                    opacity: 0,
+                                                    overflow: 'hidden',
+                                                    position: 'absolute',
+                                                    top: 0,
+                                                    left: 0,
+                                                    cursor: 'pointer',
+                                                }}
+                                                onChange={handleImageChange}
+                                                ref={fileInputRef}
+                                                disabled={!isEditable}
+                                            />
+                                            Select here to Upload Image
+                                            {/* Your other content or styling for the square box */}
+                                        </label>
+                                    </div>}
 
-                                            ref={fileInputRef}
-                                        />
-                                        Drag or Select
-                                        {/* Your other content or styling for the square box */}
-                                    </label>
                                     {companyData.companyLogo && <div style={{ margin: 0 }}>
                                         <div className='d-flex justify-content-center' style={{ width: "100%", height: "100%" }}>
-                                            <Badge type="button" badgeContent={"X"} onClick={() => setCompanyData((prev) => ({ ...prev, companyLogo: "" }))} style={{ width: "100%", height: "100%" }} color="error"><img src={`${process.env.REACT_APP_PORT}/itemMasterImages/${companyData.companyLogo}`} alt={`${companyData.companyLogo} Image`} style={{ width: "100%", height: "100%", margin: "auto", display: "block", background: "inherit", backgroundSize: "cover" }}></img></Badge>
+                                            <Badge invisible={!isEditable} type="button" badgeContent={"X"} onClick={() => isEditable && setCompanyData((prev) => ({ ...prev, companyLogo: "" }))} style={{ width: "100%", height: "150px%" }} color="error">
+                                                <img disabled={!isEditable} src={`${process.env.REACT_APP_PORT}/logo/${companyData.companyLogo}`} alt={`${companyData.companyLogo} Image`} style={{ width: "100%", height: "100%", margin: "auto", display: "block", background: "inherit", backgroundSize: "cover" }}>
+                                                </img>
+                                            </Badge>
                                         </div>
 
                                     </div>}
                                 </div>
+
                                 {isEditable && <div className='text-end mt-2'>
                                     <Button size='small' className='me-2' variant='contained' disabled={!isEditable} color='warning' onClick={(e) => updateCompanyDetails(e)}>Update Company Details</Button>
                                     <Button size='small' variant='contained' disabled={!isEditable} color='error' onClick={() => setIsEditable(false)}>Cancel</Button>

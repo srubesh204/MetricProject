@@ -59,6 +59,7 @@ const VendorCertificateStorage = createAdditionalStorage('vendorCertificates');
 const WorkInstructionStorage = createDiskStorage('workInstructions');
 const itemCertificateStorage = createDiskStorage('itemCertificates');
 const additionalCertificateStorage = createAdditionalStorage('additionalCertificates');
+const logoStorage = createDiskStorage('logo');
 // const grnItemCertificates = createDiskStorage('grnItemCertificates');
 
 
@@ -69,6 +70,7 @@ const workInsUploadFolder = multer({ storage: WorkInstructionStorage });
 const itemCertificateFolder = multer({ storage: itemCertificateStorage });
 const calCertificateFolder = multer({ storage: calCertificateStorage });
 const additionalCertificateFolder = multer({ storage: additionalCertificateStorage });
+const logoFolder = multer({ storage: logoStorage });
 
 // const grnItemCertificateFolder = multer({ storage: grnItemCertificates });
 const itemMasterImagesFolder = multer({ storage: ItemImageStorage });
@@ -222,6 +224,16 @@ router.post('/otherFilesCertificates', additionalCertificateFolder.single('file'
 
   // File was provided, proceed with processing
 
+});
+
+router.post('/compLogoUpload', logoFolder.single('image'), (req, res) => {
+  if (!req.file) {
+    // No file was provided in the request
+    return res.status(400).json({ error: 'No image selected for upload' });
+  }
+
+  // File was provided, proceed with processing
+  res.status(200).json({ message: 'Logo uploaded successfully', name: req.file.filename });
 });
 
 

@@ -492,11 +492,8 @@ const ItemMaster = () => {
     const handleImageChange = async (e) => {
         const selectedImage = e.target.files[0];
         if (selectedImage) {
-
-
             const formData = new FormData();
             formData.append('image', selectedImage); // Append the selected image to the FormData
-
             try {
                 const response = await axios.post(`${process.env.REACT_APP_PORT}/upload/itemMasterImage`, formData, {
                     headers: {
@@ -902,9 +899,7 @@ const ItemMaster = () => {
                                         {/* Your other content or styling for the square box */}
                                     </label>
                                 </div>}
-                                {/* {image &&  <div style={{ width: "100%", height: "100%", margin: "0 0px 0 0", padding: 0 }}>
-                                <img src={image} width="200px" height="200px" alt="Uploaded" style={{ maxWidth: '100%' }} />
-                                </div>} */}
+                                
                                 {itemMasterData.itemMasterImage && <div style={{ margin: 0 }}>
                                     <div className='d-flex justify-content-center' style={{ width: "100%", height: "100%" }}>
                                         <Badge type="button" badgeContent={"X"} onClick={() => setItemMasterData((prev) => ({ ...prev, itemMasterImage: "" }))} style={{ width: "100%", height: "100%" }} color="error"><img src={`${process.env.REACT_APP_PORT}/itemMasterImages/${itemMasterData.itemMasterImage}`} alt={`${itemMasterData.itemMasterImage} Image`} style={{ width: "100%", height: "100%", margin: "auto", display: "block", background: "inherit", backgroundSize: "cover" }}></img></Badge>

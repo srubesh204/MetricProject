@@ -214,10 +214,11 @@ const Grn = () => {
         setGrnData((prev) => ({ ...prev, [name]: value }));
     }
 
-    const setPartyData = async (id) => {
+    const setPartyData = async (e) => {
+        const {name , value} = e.target
         try {
             const response = await axios.get(
-                `${process.env.REACT_APP_PORT}/vendor/getVendorById/${id}`
+                `${process.env.REACT_APP_PORT}/vendor/getVendorById/${value}`
             );
             console.log(response)
             setGrnData((prev) => ({
@@ -964,19 +965,19 @@ const Grn = () => {
                                                 <div className=" col-6 me-2">
 
                                                     <TextField label="Party Name"
-                                                        id="grnPartyNameId"
+                                                        id="grnPartyIdId"
                                                         select
-                                                        value={grnData.grnPartyName}
+                                                        value={grnData.grnPartyId}
 
-                                                        onChange={(e) => setPartyData(e.target.value)}
-                                                        disabled
+                                                        onChange={(e) => setPartyData(e)}
+                                                       
 
                                                         size="small"
                                                         fullWidth
                                                         {...(errors.grnPartyName !== "" && { helperText: errors.grnPartyName, error: true })}
-                                                        name="grnPartyName" >
+                                                        name="grnPartyId" >
                                                         {vendors.map((item, index) => (
-                                                            <MenuItem key={index} value={item.fullName}>{item.fullName}</MenuItem>
+                                                            <MenuItem key={index} value={item._id}>{item.fullName}</MenuItem>
                                                         ))}
                                                     </TextField>
                                                 </div>

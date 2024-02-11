@@ -207,22 +207,33 @@ const itemDcController = {
       const prevItemDc = await itemDcModel.findById(itemDcId)
       const { dcPartyItems: prevPartyItems } = prevItemDc
 
-      //console.log(dcPartyItems)
+      const dcDeleteStatus = () => {
+        // Get dcStatus of items in prevDcPartyItems
+        const prevDcStatus = prevPartyItems .dcPartyItems.filter(item => item.dcStatus === "0");
 
-      const dcDeleteStatus = (await Promise.all(dcPartyItems.map(async (item) => {
+        // Check if any item with dcStatus === "0" in prevDcPartyItems is not present in dcPartyItems
+        const hasDifferentStatus = prevDcStatus.some(prevItem => !dcPartyItems.find(item => item._id === prevItem._id && item.dcStatus === "0"));
+
+        // If any item with dcStatus === "0" is found in prevDcPartyItems that is not present in dcPartyItems, return false
+        return !hasDifferentStatus;
+      };
+
+      const allItemsStatus = await Promise.all(dcPartyItems.map(async (item) => {
         const itemAddData = await itemAddModel.findOne({ _id: item._id });
-        const status = itemAddData.dcStatus === "1";
-        return status; // Return the status for each item
-      }))).every(status => status);
+        return itemAddData.dcStatus === "1";
+      }));
 
-      console.log(dcDeleteStatus)
+      // Check if all items in dcPartyItems have dcStatus === "1" and if all items with dcStatus === "0" in prevDcPartyItems are present in dcPartyItems
+      const isDcStatusValid = allItemsStatus.every(status => status) && dcDeleteStatus();
+
+      console.log(!isDcStatusValid)
 
       // console.log(dcPartyItems[0].dcStatus)
       // console.log(dcDeleteStatus)
 
 
 
-      if (!dcDeleteStatus) {
+      if (!isDcStatusValid) {
         const grnData = await itemGRNModel.findOne({ grnItemDcNo: dcNo })
         const prevUpdatePromises = prevPartyItems.filter(item => item.dcStatus === "1").map(async (item) => {
 
@@ -289,7 +300,7 @@ const itemDcController = {
         );
 
         if (Object.keys(updateItemDc).length !== 0) {
-          const updatePromises = dcPartyItems.map(async (item) => {
+          const updatePromises = dcPartyItems.filter(item => item.dcStatus === "1").map(async (item) => {
 
             const itemData = await itemAddModel.findById(item._id)
             const { itemIMTENo, itemCurrentLocation: itemLastLocation } = itemData
@@ -316,14 +327,14 @@ const itemDcController = {
 
           const itemsData = dcPartyItems.map((item, index) => {
             let tableRow = `
-              <tr>
-                  <td style="padding: 0.50rem; vertical-align: top; border: 1px solid #6c757d ;" class="text-center align-middle">${index + 1}</td>
-                  <td style="padding: 0.50rem; vertical-align: top; border: 1px solid #6c757d ;" class="align-middle">Item Name: ${item.itemItemMasterName ? item.itemItemMasterName : "-"} IMTE No: ${item.itemIMTENo ? item.itemIMTENo : "-"}<br>
-                  Range/Size: ${item.itemRangeSize ? item.itemRangeSize : "" + ' ' + item.itemRangeSizeUnit ? item.itemRangeSizeUnit : ""} L.C.: ${(item.itemLC ? item.itemLC : "") + '' + (item.itemLCUnit ? item.itemLCUnit : '')}<br>
-                  Make: ${item.itemMake ? item.itemMake : "-"} Sr.No: ${item.itemMFRNo ? item.itemMFRNo : "-"} Cal. Frequency: ${item.itemCalFreInMonths ? item.itemCalFreInMonths : "-"} months</td>
-                  <td style="padding: 0.50rem; vertical-align: top; border: 1px solid #6c757d ;" class="text-center align-middle">${item.dcItemRemarks}</td>
-              </tr>
-          `;
+                <tr>
+                    <td style="padding: 0.50rem; vertical-align: top; border: 1px solid #6c757d ;" class="text-center align-middle">${index + 1}</td>
+                    <td style="padding: 0.50rem; vertical-align: top; border: 1px solid #6c757d ;" class="align-middle">Item Name: ${item.itemItemMasterName ? item.itemItemMasterName : "-"} IMTE No: ${item.itemIMTENo ? item.itemIMTENo : "-"}<br>
+                    Range/Size: ${item.itemRangeSize ? item.itemRangeSize : "" + ' ' + item.itemRangeSizeUnit ? item.itemRangeSizeUnit : ""} L.C.: ${(item.itemLC ? item.itemLC : "") + '' + (item.itemLCUnit ? item.itemLCUnit : '')}<br>
+                    Make: ${item.itemMake ? item.itemMake : "-"} Sr.No: ${item.itemMFRNo ? item.itemMFRNo : "-"} Cal. Frequency: ${item.itemCalFreInMonths ? item.itemCalFreInMonths : "-"} months</td>
+                    <td style="padding: 0.50rem; vertical-align: top; border: 1px solid #6c757d ;" class="text-center align-middle">${item.dcItemRemarks}</td>
+                </tr>
+            `;
 
             return tableRow;
           });
@@ -399,82 +410,56 @@ const itemDcController = {
 
       const deleteResults = [];
 
-      for (const itemDcId of itemDcIds) {
-
-
+      await Promise.all(itemDcIds.map(async (itemDcId) => {
         const dcData = await itemDcModel.findById(itemDcId);
-        const grnData = await itemGRNModel.findOne({ grnItemDcNo: dcData.dcNo })
+        const grnData = await itemGRNModel.findOne({ grnItemDcNo: dcData.dcNo });
+        console.log(grnData)
 
-
-        console.log(grnData);
-
-        if (dcData.dcPartyItems.length !== 0) {
-
-
-          if (!grnData) {
+        if (!grnData) {
+          if (dcData.dcPartyItems.length !== 0) {
             const updatePromises = dcData.dcPartyItems.map(async (item) => {
               const itemData = await itemAddModel.findById(item._id);
-
-              if (itemData) {
-                const { itemIMTENo, itemCurrentLocation, itemLastLocation } = itemData;
-                const updateItemFields = {
-                  itemIMTENo,
-                  itemCurrentLocation: itemLastLocation,
-                  itemLastLocation: itemCurrentLocation,
-                  itemLocation: "department",
-                  dcId: "",
-                  dcStatus: "0",
-                  dcCreatedOn: "",
-                  dcNo: "",
-                };
-
-                const updateResult = await itemAddModel.findOneAndUpdate(
-                  { _id: item._id },
-                  { $set: updateItemFields },
-                  { new: true }
-                );
-
-                console.log("itemUpdated");
-                return updateResult;
-              } else {
+              if (!itemData) {
                 throw new Error(`Item Data not found for item with ID: ${item._id}`);
               }
+              const { itemIMTENo, itemCurrentLocation, itemLastLocation } = itemData;
+              const updateItemFields = {
+                itemIMTENo,
+                itemCurrentLocation: itemLastLocation,
+                itemLastLocation: itemCurrentLocation,
+                itemLocation: "department",
+                dcId: "",
+                dcStatus: "0",
+                dcCreatedOn: "",
+                dcNo: "",
+              };
+              return itemAddModel.findByIdAndUpdate(item._id, { $set: updateItemFields }, { new: true });
             });
-
             const updatedItems = await Promise.all(updatePromises);
             console.log("Updated items:", updatedItems);
           }
-
-        }
-        if (grnData) {
-          res.status(500).json({ error: 'DC cannot be deleted, used in GRN' });
-        } else {
-          const deletedItemDc = await itemDcModel.findOneAndRemove({ _id: itemDcId });
+          const deletedItemDc = await itemDcModel.findByIdAndDelete(itemDcId);
           if (!deletedItemDc) {
-
-            throw new Error(`Item Dc with ID ${itemDcId} not be deleted.`);
-
-          } else {
-            console.log(`Item Dc with ID ${itemDcId} deleted successfully.`);
-            deleteResults.push(deletedItemDc);
-            return res.status(202).json({
-              message: 'Item Dc deleted successfully',
-              results: `${deleteResults.length} Item Dc Deleted Successfully`,
-              deletedItems: deleteResults,
-            });
+            throw new Error(`Item Dc with ID ${itemDcId} not deleted.`);
           }
+          console.log(`Item Dc with ID ${itemDcId} deleted successfully.`);
+          deleteResults.push(deletedItemDc);
+        } else {
+          throw new Error('DC cannot be deleted, used in GRN');
         }
+      }));
 
-
-
-      }
-
-
+      res.status(202).json({
+        message: 'Item Dc(s) deleted successfully',
+        results: `${deleteResults.length} Item Dc(s) Deleted Successfully`,
+        deletedItems: deleteResults,
+      });
     } catch (error) {
       console.error(error);
       res.status(500).json({ error: error.message || 'Internal Server Error' });
     }
   },
+
 
   getItemDcById: async (req, res) => {
     try {
