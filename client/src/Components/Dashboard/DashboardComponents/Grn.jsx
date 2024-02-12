@@ -1,5 +1,5 @@
 import React, { createContext, useEffect, useState, useContext } from 'react'
-import { Container, Box, Alert, Button, Dialog, DialogActions, DialogContent, InputLabel, DialogContentText, FormControl, Select, DialogTitle, OutlinedInput, FormControlLabel, IconButton, MenuItem, Paper, Checkbox, ListItemText, Snackbar, Switch, TextField, Chip } from '@mui/material';
+import { Container, Box, Alert, Button, Dialog, DialogActions, DialogContent, InputLabel, DialogContentText, FormControl, Select, DialogTitle, OutlinedInput, FormControlLabel, IconButton, MenuItem, Paper, Checkbox, ListItemText, Snackbar, Switch, TextField, Chip, CircularProgress } from '@mui/material';
 import axios from 'axios';
 import { DataGrid, GridToolbar } from '@mui/x-data-grid';
 import dayjs from 'dayjs';
@@ -14,7 +14,7 @@ import styled from '@emotion/styled';
 
 const Grn = () => {
     const grnDatas = useContext(HomeContent)
-    const { grnOpen, setGrnOpen, selectedRows, lastGrnNo, dcPartyDetails, vendors } = grnDatas
+    const { grnOpen, setGrnOpen, selectedRows, lastGrnNo, dcPartyDetails, vendors, isOnSiteGRN } = grnDatas
 
    
 
@@ -34,7 +34,33 @@ const Grn = () => {
         width: 1,
     });
 
+    const settingDcData = () => {
+        if (selectedRows.length > 0 && lastGrnNo && dcPartyDetails) {
+            console.log(dcPartyDetails)
+            setGrnData((prev) => (
+                {
+                    ...prev,
+                    grnPlant: selectedRows[0].itemPlant,
+                    grnDepartment: selectedRows[0].itemDepartment,
+                    grnNo: lastGrnNo,
+                    grnPartyName: dcPartyDetails.fullName,
+                    grnPartyAddress: dcPartyDetails.address,
+                    grnPartyCode: dcPartyDetails.vendorCode,
+                    grnPartyId: dcPartyDetails._id,
+                    grnItemId: selectedRows[0].item_id,
+                    grnItemAddMasterName: selectedRows[0].itemAddMasterName,
+                    grnItemIMTENo: selectedRows[0].itemIMTENo,
+                    isOnSiteGRN: dcPartyDetails.length === 0 ? "yes": "no"
+                    //grnPartyItems: selectedRows
+                }
 
+            ))
+        }
+
+    };
+    useEffect(() => {
+        settingDcData()
+    }, [selectedRows, dcPartyDetails, lastGrnNo, isOnSiteGRN])
 
 
 
@@ -51,7 +77,7 @@ const Grn = () => {
         grnDepartment: [],
         grnPlant: "",
         grncCommonRemarks: "",
-
+        isOnSiteGRN: "no",
         grnItemId: "",
 
         grnItemAddMasterName: "",
@@ -172,32 +198,7 @@ const Grn = () => {
 
 
 
-    const settingDcData = () => {
-        if (selectedRows.length > 0 && lastGrnNo && dcPartyDetails) {
-
-            setGrnData((prev) => (
-                {
-                    ...prev,
-                    grnPlant: selectedRows[0].itemPlant,
-                    grnDepartment: selectedRows[0].itemDepartment,
-                    grnNo: lastGrnNo,
-                    grnPartyName: dcPartyDetails.fullName,
-                    grnPartyAddress: dcPartyDetails.address,
-                    grnPartyCode: dcPartyDetails.vendorCode,
-                    grnPartyId: dcPartyDetails._id,
-                    grnItemId: selectedRows[0].item_id,
-                    grnItemAddMasterName: selectedRows[0].itemAddMasterName,
-                    grnItemIMTENo: selectedRows[0].itemIMTENo
-                    //grnPartyItems: selectedRows
-                }
-
-            ))
-        }
-
-    };
-    useEffect(() => {
-        settingDcData()
-    }, [selectedRows, dcPartyDetails, lastGrnNo])
+   
 
 
 
@@ -214,10 +215,11 @@ const Grn = () => {
         setGrnData((prev) => ({ ...prev, [name]: value }));
     }
 
-    const setPartyData = async (id) => {
+    const setPartyData = async (e) => {
+        const {name , value} = e.target
         try {
             const response = await axios.get(
-                `${process.env.REACT_APP_PORT}/vendor/getVendorById/${id}`
+                `${process.env.REACT_APP_PORT}/vendor/getVendorById/${value}`
             );
             console.log(response)
             setGrnData((prev) => ({
@@ -789,7 +791,10 @@ const Grn = () => {
     }
 
     console.log(errors)
+
+    const [isLoading, setIsLoading] = useState(false)
     const submitGrnForm = async () => {
+        setIsLoading(true)
         try {
             if (validateFunction()) {
                 const response = await axios.post(
@@ -833,6 +838,8 @@ const Grn = () => {
 
             console.log(err);
 
+        }finally{
+            setIsLoading(false)
         }
     };
 
@@ -964,19 +971,19 @@ const Grn = () => {
                                                 <div className=" col-6 me-2">
 
                                                     <TextField label="Party Name"
-                                                        id="grnPartyNameId"
+                                                        id="grnPartyIdId"
                                                         select
-                                                        value={grnData.grnPartyName}
-
-                                                        onChange={(e) => setPartyData(e.target.value)}
-                                                        disabled
+                                                        value={grnData.grnPartyId}
+                                                        disabled={isOnSiteGRN === "no"}
+                                                        onChange={(e) => setPartyData(e)}
+                                                       
 
                                                         size="small"
                                                         fullWidth
                                                         {...(errors.grnPartyName !== "" && { helperText: errors.grnPartyName, error: true })}
-                                                        name="grnPartyName" >
+                                                        name="grnPartyId" >
                                                         {vendors.map((item, index) => (
-                                                            <MenuItem key={index} value={item.fullName}>{item.fullName}</MenuItem>
+                                                            <MenuItem key={index} value={item._id}>{item.fullName}</MenuItem>
                                                         ))}
                                                     </TextField>
                                                 </div>
@@ -1671,10 +1678,10 @@ const Grn = () => {
                 </div>
             </DialogContent>
             <DialogActions className='d-flex justify-content-between'>
-                +
+                
                 <div>
                     <Button variant='contained' color='error' className='me-3' onClick={() => { setGrnOpen(false); setGrnData([]); setGrnData(initialGrnData); window.location.reload() }}>Cancel</Button>
-                    <Button variant='contained' color='success' onClick={() => { setConfirmSubmit(true) }}>Submit</Button>
+                    <Button variant='contained' color='success' onClick={() => { setConfirmSubmit(true) }}>Submit {isLoading ? <CircularProgress sx={{ color: "inherit" }} variant="indeterminate" size={20} /> : ""}</Button>
                 </div>
             </DialogActions>
 

@@ -7,6 +7,7 @@ import { Box, Container, Grid, Paper, Typography } from "@mui/material";
 import { TextField, MenuItem, Button } from '@mui/material';
 import FileOpenIcon from '@mui/icons-material/FileOpen';
 import { Link } from "react-router-dom";
+import dayjs from 'dayjs';
 
 const VendorUpload = () => {
 
@@ -43,7 +44,7 @@ const VendorUpload = () => {
             headerName: 'CertificateValidity',
             //   description: 'This column has a value getter and is not sortable.',
             width: 150,
-            headerAlign: "center", align: "center",
+            headerAlign: "center", align: "center", renderCell : (params) => params.row.certificateValidity ? dayjs(params.row.certificateValidity).format("DD-MM-YYYY") : "",
         },
         {
             field: 'Vendor Certificate View',

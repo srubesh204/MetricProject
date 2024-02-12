@@ -623,6 +623,8 @@ const ItemEdit = () => {
         }
     }, [itemAddData.itemAddMasterName]);
     const [partData, setPartData] = useState([])
+    const [plantWisePart, setPlantWisePart] = useState([])
+
     const getPartList = async () => {
         try {
             const response = await axios.post(
@@ -631,7 +633,7 @@ const ItemEdit = () => {
 
             console.log(response.data)
             setPartData(response.data.result)
-
+            setPlantWisePart(response.data.result)
 
         } catch (err) {
             console.log(err);
@@ -641,6 +643,12 @@ const ItemEdit = () => {
     useEffect(() => {
         getPartList();
     }, []);
+
+    useEffect(()=> {
+        const filteredPart = partData.filter(part => part.partPlant === itemAddData.itemPlant)
+        setPlantWisePart(filteredPart)
+    }, [itemAddData.itemPlant])
+
     const [imteList, setImteList] = useState([])
     const getImteList = async () => {
         try {
@@ -1450,6 +1458,7 @@ const ItemEdit = () => {
                                                 multiple
                                                 id="demo-multiple-checkbox"
                                                 name="itemPartName"
+                                                disabled={!itemAddData.itemPlant}
                                                 value={itemAddData.itemPartName}
                                                 onChange={handleItemAddChange}
                                                 input={<OutlinedInput fullWidth label="Select Part" />}
@@ -1457,7 +1466,7 @@ const ItemEdit = () => {
                                                 MenuProps={MenuProps}
                                                 fullWidth
                                             >
-                                                {partData.map((name, index) => (
+                                                {plantWisePart.length > 0 && plantWisePart.map((name, index) => (
                                                     <MenuItem key={index} value={name.partNo}>
                                                         <Checkbox checked={itemAddData.itemPartName.indexOf(name.partNo) > -1} />
                                                         <ListItemText primary={name.partNo + " - " + name.partName + " - " + name.customer} />

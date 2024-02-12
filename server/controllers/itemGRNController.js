@@ -70,6 +70,7 @@ const itemGRNController = {
         grnItemCertificate,
         grnUncertainity,
         grnItemCalStatus,
+        isOnSiteGRN
       } = req.body;
 
 
@@ -117,6 +118,7 @@ const itemGRNController = {
         grnItemCertificate,
         grnUncertainity,
         grnItemCalStatus,
+        isOnSiteGRN
       });
 
       const getCompDetailsById = await compDetailsSchema.findOne(
@@ -166,10 +168,13 @@ const itemGRNController = {
           _id,
           itemIMTENo,
           itemCurrentLocation: itemLastLocation,
+          itemCurrentLocation,
           itemLocation: itemLastPlace,
           itemDepartment,
           itemCalDate: itemLastCalDate,
           itemDueDate: itemLastDueDate,
+          itemCalDate,
+          itemDueDate,
           dcStatus: lastDcStatus,
           dcNo: lastDcNo,
           dcId: lastDcId,
@@ -189,30 +194,26 @@ const itemGRNController = {
           itemCalibrationSource,
           itemCalibrationDoneAt,
           itemCalibratedAt,
-
-
           itemOBType,
           itemUncertainity,
           itemUncertainityUnit,
           itemPrevCalData,
           itemCertificateNo: itemLastCertificateNo,
-
-
         } = itemData
 
 
         const updateItemFields = {
           itemIMTENo,
-          itemLastPlace,
-          itemCurrentLocation: itemDepartment,
-          itemLastLocation,
+          itemLastPlace : isOnSiteGRN ==="yes" ? "" : itemLastPlace,
+          itemCurrentLocation: isOnSiteGRN ==="yes" ? itemCurrentLocation : itemDepartment,
+          itemLastLocation: isOnSiteGRN ==="yes" ? "" : itemLastLocation,
           itemLocation: "department",
-          itemLastCalDate,
-          itemLastDueDate,
+          itemLastCalDate : grnItemStatus === "Calibrated" ? itemLastCalDate : itemCalDate,
+          itemLastDueDate : grnItemStatus === "Calibrated" ? itemLastDueDate : itemDueDate,
           itemStatus: itemCondition,
           itemLastStatus: itemStatus,
-          itemCalDate: grnItemCalDate,
-          itemDueDate: grnItemDueDate,
+          itemCalDate: grnItemStatus === "Calibrated" ? grnItemCalDate : itemLastCalDate,
+          itemDueDate: grnItemStatus === "Calibrated" ? grnItemDueDate : itemLastDueDate,
           grnId: result._id,
           grnStatus: "1",
           grnCreatedOn: grnDate,
@@ -267,10 +268,10 @@ const itemGRNController = {
           itemCurrentLocation: itemDepartment,
           itemLastLocation,
           itemLocation: "department",
-          itemLastCalDate,
-          itemLastDueDate,
-          itemCalDate: grnItemCalDate,
-          itemDueDate: grnItemDueDate,
+          itemLastCalDate : grnItemStatus === "Calibrated" ? itemLastCalDate : itemCalDate,
+          itemLastDueDate : grnItemStatus === "Calibrated" ? itemLastDueDate : itemDueDate,
+          itemCalDate: grnItemStatus === "Calibrated" ? grnItemCalDate : itemLastCalDate,
+          itemDueDate: grnItemStatus === "Calibrated" ? grnItemDueDate : itemLastDueDate,
           grnId: result._id,
           grnStatus: "1",
           grnCreatedOn: grnDate,
@@ -322,7 +323,8 @@ const itemGRNController = {
             <td style="padding: 0.50rem; vertical-align: top; border: 1px solid #6c757d ;" class="align-middle">Item Name: ${grnItemAddMasterName ? grnItemAddMasterName : "-"} IMTE No: ${grnItemIMTENo ? grnItemIMTENo : "-"}<br>
             Range/Size: ${grnItemRangeSize ? grnItemRangeSize : "" + ' ' + grnItemRangeSizeUnit ? grnItemRangeSizeUnit : ""} L.C.: ${(grnItemLC ? grnItemLC : "") + '' + (grnItemLCUnit ? grnItemLCUnit : '')}<br>
             Make: ${grnItemMake ? grnItemMake : "-"} Sr.No: ${grnItemMFRNo ? grnItemMFRNo : "-"} Cal. Frequency: ${grnItemCalFreInMonths ? grnItemCalFreInMonths : "-"} months</td>
-            <td style="padding: 0.50rem; vertical-align: top; border: 1px solid #6c757d ;" class="text-center align-middle">${grnCommonRemarks}</td>
+            <td style="padding: 0.50rem; vertical-align: top; border: 1px solid #6c757d ;" class="text-center align-middle">${grnItemDcNo}</td>
+            <td style="padding: 0.50rem; vertical-align: top; border: 1px solid #6c757d ;" class="text-center align-middle">${grnItemStatus}</td>
         </tr>
     `;
 
@@ -413,7 +415,7 @@ const itemGRNController = {
         grnPartyItems,
         grnPlant,
         grnDepartment,
-
+        grnItemDcNo,
         grnItemId,
         grnItemAddMasterName,
         grnItemType,
@@ -444,7 +446,8 @@ const itemGRNController = {
         grnItemCertificateNo,
         grnItemCertificate,
         grnUncertainity,
-        grnItemCalStatus
+        grnItemCalStatus,
+        isOnSiteGRN
       } = req.body;
 
       // Create an object with the fields you want to update
@@ -461,7 +464,7 @@ const itemGRNController = {
         grnPartyItems,
         grnPlant,
         grnDepartment,
-
+        grnItemDcNo,
         grnItemId,
         grnItemAddMasterName,
         grnItemType,
@@ -492,7 +495,8 @@ const itemGRNController = {
         grnItemCertificateNo,
         grnItemCertificate,
         grnUncertainity,
-        grnItemCalStatus
+        grnItemCalStatus,
+        isOnSiteGRN
       };
 
 
@@ -551,10 +555,13 @@ const itemGRNController = {
           _id,
           itemIMTENo,
           itemCurrentLocation: itemLastLocation,
+          itemCurrentLocation,
           itemLocation: itemLastPlace,
           itemDepartment,
           itemCalDate: itemLastCalDate,
           itemDueDate: itemLastDueDate,
+          itemCalDate,
+          itemDueDate,
           dcStatus: lastDcStatus,
           dcNo: lastDcNo,
           dcId: lastDcId,
@@ -580,23 +587,22 @@ const itemGRNController = {
           itemUncertainity,
           itemUncertainityUnit,
           itemPrevCalData,
-
-
         } = itemData
 
-
+        console.log(isOnSiteGRN)
         const updateItemFields = {
           itemIMTENo,
-          itemLastPlace,
-          itemCurrentLocation: itemDepartment,
-          itemLastLocation,
+          itemLastPlace: updateItemGRN.isOnSiteGRN ==="yes" ? "" : itemLastPlace,
+          itemCurrentLocation: updateItemGRN.isOnSiteGRN ==="yes" ? itemCurrentLocation : itemDepartment,
+          itemLastLocation : updateItemGRN.isOnSiteGRN ==="yes" ? "" : itemLastLocation,
           itemLocation: "department",
-          itemLastCalDate,
-          itemLastDueDate,
+          itemLastCalDate : grnItemStatus === "Calibrated" ? itemLastCalDate : itemCalDate,
+          itemLastDueDate : grnItemStatus === "Calibrated" ? itemLastDueDate : itemDueDate,
+          itemCalDate: grnItemStatus === "Calibrated" ? grnItemCalDate : itemLastCalDate,
+          itemDueDate: grnItemStatus === "Calibrated" ? grnItemDueDate : itemLastDueDate,
           itemStatus: itemCondition,
           itemLastStatus: itemStatus,
-          itemCalDate: grnItemCalDate,
-          itemDueDate: grnItemDueDate,
+          
           grnId: updateItemGRN._id,
           grnStatus: "1",
           grnCreatedOn: grnDate,
@@ -698,11 +704,12 @@ const itemGRNController = {
             <td style="padding: 0.50rem; vertical-align: top; border: 1px solid #6c757d ;" class="align-middle">Item Name: ${grnItemAddMasterName ? grnItemAddMasterName : "-"} IMTE No: ${grnItemIMTENo ? grnItemIMTENo : "-"}<br>
             Range/Size: ${grnItemRangeSize ? grnItemRangeSize : "" + ' ' + grnItemRangeSizeUnit ? grnItemRangeSizeUnit : ""} L.C.: ${(grnItemLC ? grnItemLC : "") + '' + (grnItemLCUnit ? grnItemLCUnit : '')}<br>
             Make: ${grnItemMake ? grnItemMake : "-"} Sr.No: ${grnItemMFRNo ? grnItemMFRNo : "-"} Cal. Frequency: ${grnItemCalFreInMonths ? grnItemCalFreInMonths : "-"} months</td>
-            <td style="padding: 0.50rem; vertical-align: top; border: 1px solid #6c757d ;" class="text-center align-middle">${grnCommonRemarks}</td>
+            <td style="padding: 0.50rem; vertical-align: top; border: 1px solid #6c757d ;" class="text-center align-middle">${updateItemGRN.grnItemDcNo}</td>
+            <td style="padding: 0.50rem; vertical-align: top; border: 1px solid #6c757d ;" class="text-center align-middle">${grnItemStatus}</td>
         </tr>
     `;
 
-
+          
 
         // Example usage:
 
@@ -743,7 +750,7 @@ const itemGRNController = {
         await page.pdf({ path: `./storage/grnCertificates/${grnNo}.pdf`, format: 'A4' });
 
         await browser.close();
-
+        console.log(process.env.SERVER_PORT)
         console.log('PDF created successfully');
       }
 
@@ -786,22 +793,21 @@ const itemGRNController = {
             itemLastDueDate,
             itemLastCalDate,
             itemLastLocation,
+            itemCurrentLocation,
             itemLastPlace,
-
             itemCertificateNo: itemLastCertificateNo,
             itemLastCertificateNo: itemCertificateNo,
             itemStatus,
             itemLastStatus,
-
           } = itemData
 
           const updateItemFields = {
             dcStatus: lastDcStatus,
             dcNo: lastDcNo,
             dcId: lastDcId,
-
-            itemLocation: itemLastPlace,
-            itemCurrentLocation: itemLastLocation,
+            itemLocation: grnItem.isOnSiteGRN ? "department" : itemLastPlace,
+            itemCurrentLocation: grnItem.isOnSiteGRN ? itemCurrentLocation : itemLastLocation,
+            itemLastLocation: grnItem.isOnSiteGRN ? "" : itemCurrentLocation,
             itemCalDate: itemLastCalDate,
             itemDueDate: itemLastDueDate,
             itemStatus: itemLastStatus,

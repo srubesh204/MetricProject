@@ -276,8 +276,8 @@ const DcList = () => {
     const Columns = [
 
         { field: 'id', headerName: 'Si. No', headerAlign: "center", align: "center", width: 70, renderCell: (params) => params.api.getAllRowIds().indexOf(params.id) + 1 },
-        ...(empRole && empRole.employee !== 'viewer'
-            ? [{ field: 'editButton', headerAlign: "center", align: "center", headerName: 'Edit', width: 100, renderCell: (params) => <Button onClick={() => { setSelectedRows(params.row); setDcEditOpen(true) }}><Edit color='success' /></Button> }] : []),
+        // ...(empRole && empRole.employee !== 'viewer'
+        //     ? [{ field: 'editButton', headerAlign: "center", align: "center", headerName: 'Edit', width: 100, renderCell: (params) => <Button onClick={() => { setSelectedRows(params.row); setDcEditOpen(true) }}><Edit color='success' /></Button> }] : []),
         {
             field: 'viewButton',
             headerAlign: "center",
@@ -294,7 +294,7 @@ const DcList = () => {
             ),
         },
         { field: 'dcNo', headerName: 'Dc No', headerAlign: "center", align: "center", width: 100 },
-        { field: 'dcDate', headerName: 'Dc Date', headerAlign: "center", align: "center", width: 200 },
+        { field: 'dcDate', headerName: 'Dc Date', headerAlign: "center", align: "center", width: 200, renderCell : (params) => dayjs(params.row.dcDate).format("DD-MM-YYYY") },
         { field: 'dcPartyName', headerName: 'Dc PartyName', headerAlign: "center", align: "center", width: 300 },
         { field: 'printButton', headerName: 'Print', headerAlign: "center", align: "center", width: 100, renderCell: (params) => <Button component={Link} to={`${process.env.REACT_APP_PORT}/dcCertificate/${params.row.dcNo}.pdf`} target='_blank'><PrintRounded color='success' /></Button> }
     ]

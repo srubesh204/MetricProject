@@ -82,7 +82,7 @@ const itemAddSchema = new mongoose.Schema({
       acMaxPS: String,
       acWearLimitPS: {
         type: String,
-        default: () => "--"
+        
       },
       acMinOB: String,
       acMaxOB: String,
