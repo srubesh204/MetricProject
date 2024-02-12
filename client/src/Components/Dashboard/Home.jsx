@@ -84,8 +84,27 @@ const Home = () => {
   const [departmentName, setDepartmentName] = useState("")
   const [allDepartments, setAllDepartments] = useState([])
 
+  const [partDataList, setPartDataList] = useState([])
+  const partFetchData = async () => {
+    try {
+      const response = await axios.post(
+        `${process.env.REACT_APP_PORT}/part/getPartsByPlant`, { allowedPlants: allowedPlants }
+      );
+
+      setPartDataList(response.data.result);
+      
+
+    } catch (err) {
+      console.log(err);
+    }
+  };
+  useEffect(() => {
+    partFetchData();
+  }, []);
+
 
   const [masters, setMasters] = useState([]);
+
   const itemMasterFetchData = async () => {
     try {
       const response = await axios.get(
@@ -1063,9 +1082,9 @@ const Home = () => {
   const customerFilter = (name, value) => {
 
     console.log(name, value)
-    const filter = plantWiseList.filter((item) =>
-      item.itemPartName.some((partData) => partData.customer === value)
-    );
+    const filter = plantWiseList.filter(item => {
+      return item.itemPartName.some(partNo => partDataList.some(part => part.partNo === partNo && part.customer === value));
+  });
 
     console.log(filter)
     setFilteredData(filter)
@@ -1246,12 +1265,12 @@ const Home = () => {
         console.log("dcworking")
         const vendorPartyDetail = dcList.filter(dc => dc._id === selectedRows[0].dcId)
         console.log(vendorPartyDetail)
-        if(vendorPartyDetail.length > 0){
+        if (vendorPartyDetail.length > 0) {
           const vendorDetails = vendors.filter(ven => ven._id === vendorPartyDetail[0].dcPartyId)
           console.log(...vendorDetails)
           setDcPartyDetails(...vendorDetails)
         }
-       
+
       }
 
     }
@@ -1304,7 +1323,7 @@ const Home = () => {
       setStatusCheckMsg("");
       setDcOpen(true);
     } else {
-      if(!singlePlant){
+      if (!singlePlant) {
         setStatusCheckMsg("Multiple plants not allowed")
       }
 
@@ -1312,11 +1331,11 @@ const Home = () => {
         setStatusCheckMsg("Selected item are not in default location, To create a DC move the item to the default location");
       }
 
-      if(!activeItemsCheck){
+      if (!activeItemsCheck) {
         setStatusCheckMsg("Check item status")
       }
 
-      if(!selectedRows.length > 0){
+      if (!selectedRows.length > 0) {
         setStatusCheckMsg("Please select any one item")
       }
 
@@ -1335,16 +1354,16 @@ const Home = () => {
       setStatusCheckMsg("");
       setGrnOpen(true);
     } else {
-      if(selectedRows.length > 1){
+      if (selectedRows.length > 1) {
         setStatusCheckMsg("Multiple selection not allowed")
-      }else if(selectedRows.length === 0){
+      } else if (selectedRows.length === 0) {
         setStatusCheckMsg("Please select any one item")
-      }else{
+      } else {
         setStatusCheckMsg("Please ensure the item is created in the DC before proceeding")
       }
-      
-      
-      
+
+
+
     }
   }
 
@@ -1355,26 +1374,26 @@ const Home = () => {
     const notInSite = selectedRows.every(item => item.itemCalibrationDoneAt === "Site")
     const nonDcItems = selectedRows.every(item => item.dcStatus !== "1")
     console.log(onSiteCheck)
-    if (onSiteCheck && notInSite && selectedRows.length === 1 && nonDcItems ) {
-      
+    if (onSiteCheck && notInSite && selectedRows.length === 1 && nonDcItems) {
+
       console.log("onsite")
       setStatusCheckMsg("");
       setGrnOpen(true);
     } else {
-      if(!notInSite){
+      if (!notInSite) {
         setStatusCheckMsg("Select a item to be calibrated at Site")
       }
-      if(!onSiteCheck){
+      if (!onSiteCheck) {
         setStatusCheckMsg("Only OEM or Supplier are allowed for Onsite GRN")
       }
-      if(selectedRows.length !== 1){
+      if (selectedRows.length !== 1) {
         setStatusCheckMsg("Please select only one item, multiple selections are not allowed")
       }
 
-      if(!nonDcItems){
+      if (!nonDcItems) {
         setStatusCheckMsg("Onsite GRN not allowed, Select GRN")
       }
-      
+
     }
   }
 
@@ -1407,7 +1426,7 @@ const Home = () => {
       if (selectedRows.length === 0) {
         setStatusCheckMsg("Please select any one item")
       }
-      if (selectedRows.length> 0 && selectedRows[0].itemCalibrationSource !== "inhouse") {
+      if (selectedRows.length > 0 && selectedRows[0].itemCalibrationSource !== "inhouse") {
         setStatusCheckMsg("Item must be a Inhouse Calibration")
       }
     }
@@ -1437,12 +1456,16 @@ const Home = () => {
 
   }
 
-
+  const [partCustomerList, setPartCustomerList] = useState([])
   useEffect(() => {
     console.log(plantWiseList)
     const distinctNames = plantWiseList.map(item => item.itemAddMasterName);
     const distinctImtes = plantWiseList.map(item => item.itemIMTENo);
-    const partDetails = plantWiseList.map(item => item.itemPartName )
+    const partDetails = [...new Set(plantWiseList.flatMap(item => item.itemPartName))]
+    const partDatas = partDataList.filter(part => partDetails.includes(part.partNo))
+    const customersData = ["All",...new Set(partDatas.map(part => part.customer))]
+    setPartCustomerList(customersData)
+    console.log(customersData)
     console.log(distinctNames)
     distinctNames.sort()
     distinctImtes.sort()
@@ -1549,17 +1572,17 @@ const Home = () => {
 
 
 
-                 <Autocomplete
+                <Autocomplete
                   disablePortal
 
                   id="combo-box-demo"
-                  options={customers}
+                  options={partCustomerList}
                   size='small'
                   fullWidth
                   onInputChange={(e, newValue) => MainFilter(newValue, "customer")}
                   name="customer"
                   value={filterNames.customer}
-                  getOptionLabel={(cus) => cus.aliasName}
+                  getOptionLabel={(cus) => cus}
                   renderInput={(params) => <TextField {...params} label="Customer" name='customer' />}
                   disableClearable
                 />
@@ -1827,7 +1850,7 @@ const Home = () => {
                     <Button size='small' className='me-2' onClick={() => calCheck()}>Cal</Button>
                     <Button size='small' onClick={() => dcCheck()}>Create DC</Button>
                     <Button size='small' onClick={() => grnCheck()} className='me-2'>Grn</Button>
-                    <Button size='small' className='me-2' onClick={() => {setIsOnSiteGRN("yes"); onSiteCheck()}}>Onsite GRN</Button>
+                    <Button size='small' className='me-2' onClick={() => { setIsOnSiteGRN("yes"); onSiteCheck() }}>Onsite GRN</Button>
 
                     {StatusCheckMsg !== "" && <Chip icon={<Error />} className='ms-3' color='error' label={StatusCheckMsg} />}
                   </div>

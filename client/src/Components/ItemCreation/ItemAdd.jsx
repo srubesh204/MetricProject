@@ -496,8 +496,9 @@ const ItemAdd = () => {
     }, []);
 
     useEffect(()=> {
-        
-    }, [])
+        const filteredPart = partData.filter(part => part.partPlant === itemAddData.itemPlant)
+        setPlantWisePart(filteredPart)
+    }, [itemAddData.itemPlant])
 
     const [imteList, setImteList] = useState([])
     const getImteList = async () => {
@@ -1376,8 +1377,9 @@ const ItemAdd = () => {
                                                     input={<OutlinedInput fullWidth label="Select Part" />}
                                                     renderValue={(selected) => selected.join(", ")} MenuProps={MenuProps}
                                                     fullWidth
+                                                    disabled={!itemAddData.itemPlant}
                                                 >
-                                                    {plantWisePart.map((name, index) => (
+                                                    {plantWisePart.length > 0 && plantWisePart.map((name, index) => (
                                                         <MenuItem key={index} value={name.partNo}>
                                                             <Checkbox checked={itemAddData.itemPartName.indexOf(name.partNo) > -1} />
                                                             <ListItemText primary={name.partNo + " - " + name.partName + " - " + name.customer} />
