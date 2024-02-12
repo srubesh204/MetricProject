@@ -1105,6 +1105,22 @@ const Home = () => {
     const thirtyDaysFilter = activeItems.filter((item) => dayjs(item.itemDueDate).isBetween(fifteenDaysAgo, thirtyDaysAgo))
     const AboveThirtyDaysFilter = activeItems.filter((item) => dayjs(item.itemDueDate).isAfter(thirtyDaysAgo))
 
+    const depLength = filter.filter((item) => item.itemLocation === "department")
+    const oemLength = filter.filter((item) => item.itemLocation === "oem")
+    const customersLength = filter.filter((item) => item.itemLocation === "customer")
+    const subContractorLength = filter.filter((item) => item.itemLocation === "subContractor")
+    const supplierLength = filter.filter((item) => item.itemLocation === "supplier")
+
+
+    setItemLocationData([
+      { value: depLength.length, label: "Departments" },
+      { value: subContractorLength.length, label: "Sub Contractors" },
+      { value: customersLength.length, label: "Customers" },
+      { value: supplierLength.length, label: "Suppliers" },
+      { value: oemLength.length, label: "OEM" }
+    ]);
+
+
     setCalStatus([
       { value: pastDue.length, label: 'Past Due' },
       { value: CurrentDue.length, label: 'Today' },

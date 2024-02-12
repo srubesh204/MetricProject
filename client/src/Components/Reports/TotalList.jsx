@@ -1297,7 +1297,8 @@ const TotalList = () => {
                     }
                   }}
                   onRowSelectionModelChange={handleRowSelectionChange}
-
+                  disableDensitySelector
+                  disableColumnFilter
                   slots={{
                     toolbar: () => (
                       <div className='d-flex justify-content-between align-items-center'>
@@ -1305,6 +1306,7 @@ const TotalList = () => {
 
                         <div className='d-flex'>
                           <GridToolbarQuickFilter />
+                          <div></div>
                           {selectedItemList.length > 0 && <Button onClick={() => mailCheck()} size='small' endIcon={<Send />} color="primary">Send Mail</Button>}
                         </div>
 
