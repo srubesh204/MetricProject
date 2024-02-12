@@ -43,7 +43,7 @@ const VendorUpload = () => {
             headerName: 'CertificateValidity',
             //   description: 'This column has a value getter and is not sortable.',
             width: 150,
-            headerAlign: "center", align: "center",
+            headerAlign: "center", align: "center", renderCell : (params) => dayjs(params.row.certificateValidity).format("DD-MM-YYYY"),
         },
         {
             field: 'Vendor Certificate View', headerName: 'Vendor Certificate View', width: 180, align: "center", renderCell: (params) =>

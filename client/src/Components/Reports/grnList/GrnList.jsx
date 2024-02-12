@@ -201,7 +201,7 @@ const GrnList = () => {
         { field: 'id', headerName: 'Si. No', width: 100, renderCell: (params) => params.api.getAllRowIds().indexOf(params.id) + 1, headerAlign: "center", align: "center", },
          ...(employeeRole && employeeRole.employee !== "viewer" ? [{ field: 'button', headerName: 'Edit', headerAlign: "center", align: "center", width: 90, renderCell: (params) => <Button onClick={() => { setSelectedRows(params.row); setGrnEditOpen(true) }}><Edit color='success' /></Button> }] : []),
         { field: 'grnNo', headerName: 'Grn No', width: 200, headerAlign: "center", align: "center", },
-        { field: 'grnDate', headerName: 'Grn Date', width: 200, headerAlign: "center", align: "center", },
+        { field: 'grnDate', headerName: 'Grn Date', width: 200, headerAlign: "center", align: "center", renderCell: (params) => dayjs(params.row.grnDate).format("DD-MM-YYYY") },
         { field: 'grnPartyName', headerName: 'Party Name', width: 300, headerAlign: "center", align: "center", },
         { field: 'printButton', headerName: 'Print', headerAlign: "center", align: "center", width: 100, renderCell: (params) => <Button component={Link} to={`${process.env.REACT_APP_PORT}/grnCertificates/${params.row.grnNo}.pdf`} target='_blank'><PrintRounded  color='success' /></Button> }
     ]
