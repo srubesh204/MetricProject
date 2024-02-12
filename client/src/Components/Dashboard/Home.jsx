@@ -1147,7 +1147,7 @@ const Home = () => {
   })
 
   const MainFilter = (newValue, extraName) => {
-
+    setSelectedLoc("")
     console.log(newValue, extraName)
     setFilterNames(prev => ({ ...prev, [extraName]: newValue }))
     if (newValue === "All") {
