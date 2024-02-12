@@ -70,6 +70,7 @@ const itemGRNController = {
         grnItemCertificate,
         grnUncertainity,
         grnItemCalStatus,
+        isOnSiteGRN
       } = req.body;
 
 
@@ -117,6 +118,7 @@ const itemGRNController = {
         grnItemCertificate,
         grnUncertainity,
         grnItemCalStatus,
+        isOnSiteGRN
       });
 
       const getCompDetailsById = await compDetailsSchema.findOne(
@@ -166,10 +168,13 @@ const itemGRNController = {
           _id,
           itemIMTENo,
           itemCurrentLocation: itemLastLocation,
+          itemCurrentLocation,
           itemLocation: itemLastPlace,
           itemDepartment,
           itemCalDate: itemLastCalDate,
           itemDueDate: itemLastDueDate,
+          itemCalDate,
+          itemDueDate,
           dcStatus: lastDcStatus,
           dcNo: lastDcNo,
           dcId: lastDcId,
@@ -199,12 +204,12 @@ const itemGRNController = {
 
         const updateItemFields = {
           itemIMTENo,
-          itemLastPlace,
-          itemCurrentLocation: itemDepartment,
-          itemLastLocation,
+          itemLastPlace : isOnSiteGRN ==="yes" ? "" : itemLastPlace,
+          itemCurrentLocation: isOnSiteGRN ==="yes" ? itemCurrentLocation : itemDepartment,
+          itemLastLocation: isOnSiteGRN ==="yes" ? "" : itemLastLocation,
           itemLocation: "department",
-          itemLastCalDate : grnItemStatus === "Calibrated" ? itemLastCalDate : "",
-          itemLastDueDate : grnItemStatus === "Calibrated" ? itemLastDueDate : "",
+          itemLastCalDate : grnItemStatus === "Calibrated" ? itemLastCalDate : itemCalDate,
+          itemLastDueDate : grnItemStatus === "Calibrated" ? itemLastDueDate : itemDueDate,
           itemStatus: itemCondition,
           itemLastStatus: itemStatus,
           itemCalDate: grnItemStatus === "Calibrated" ? grnItemCalDate : itemLastCalDate,
@@ -263,8 +268,8 @@ const itemGRNController = {
           itemCurrentLocation: itemDepartment,
           itemLastLocation,
           itemLocation: "department",
-          itemLastCalDate : grnItemStatus === "Calibrated" ? itemLastCalDate : "",
-          itemLastDueDate : grnItemStatus === "Calibrated" ? itemLastDueDate : "",
+          itemLastCalDate : grnItemStatus === "Calibrated" ? itemLastCalDate : itemCalDate,
+          itemLastDueDate : grnItemStatus === "Calibrated" ? itemLastDueDate : itemDueDate,
           itemCalDate: grnItemStatus === "Calibrated" ? grnItemCalDate : itemLastCalDate,
           itemDueDate: grnItemStatus === "Calibrated" ? grnItemDueDate : itemLastDueDate,
           grnId: result._id,
@@ -441,7 +446,8 @@ const itemGRNController = {
         grnItemCertificateNo,
         grnItemCertificate,
         grnUncertainity,
-        grnItemCalStatus
+        grnItemCalStatus,
+        isOnSiteGRN
       } = req.body;
 
       // Create an object with the fields you want to update
@@ -489,7 +495,8 @@ const itemGRNController = {
         grnItemCertificateNo,
         grnItemCertificate,
         grnUncertainity,
-        grnItemCalStatus
+        grnItemCalStatus,
+        isOnSiteGRN
       };
 
 
@@ -548,10 +555,13 @@ const itemGRNController = {
           _id,
           itemIMTENo,
           itemCurrentLocation: itemLastLocation,
+          itemCurrentLocation,
           itemLocation: itemLastPlace,
           itemDepartment,
           itemCalDate: itemLastCalDate,
           itemDueDate: itemLastDueDate,
+          itemCalDate,
+          itemDueDate,
           dcStatus: lastDcStatus,
           dcNo: lastDcNo,
           dcId: lastDcId,
@@ -577,23 +587,22 @@ const itemGRNController = {
           itemUncertainity,
           itemUncertainityUnit,
           itemPrevCalData,
-
-
         } = itemData
 
-
+        console.log(isOnSiteGRN)
         const updateItemFields = {
           itemIMTENo,
-          itemLastPlace,
-          itemCurrentLocation: itemDepartment,
-          itemLastLocation,
+          itemLastPlace: updateItemGRN.isOnSiteGRN ==="yes" ? "" : itemLastPlace,
+          itemCurrentLocation: updateItemGRN.isOnSiteGRN ==="yes" ? itemCurrentLocation : itemDepartment,
+          itemLastLocation : updateItemGRN.isOnSiteGRN ==="yes" ? "" : itemLastLocation,
           itemLocation: "department",
-          itemLastCalDate : grnItemStatus === "Calibrated" ? itemLastCalDate : "",
-          itemLastDueDate : grnItemStatus === "Calibrated" ? itemLastDueDate : "",
+          itemLastCalDate : grnItemStatus === "Calibrated" ? itemLastCalDate : itemCalDate,
+          itemLastDueDate : grnItemStatus === "Calibrated" ? itemLastDueDate : itemDueDate,
+          itemCalDate: grnItemStatus === "Calibrated" ? grnItemCalDate : itemLastCalDate,
+          itemDueDate: grnItemStatus === "Calibrated" ? grnItemDueDate : itemLastDueDate,
           itemStatus: itemCondition,
           itemLastStatus: itemStatus,
-          itemCalDate: grnItemCalDate,
-          itemDueDate: grnItemDueDate,
+          
           grnId: updateItemGRN._id,
           grnStatus: "1",
           grnCreatedOn: grnDate,
@@ -796,9 +805,9 @@ const itemGRNController = {
             dcStatus: lastDcStatus,
             dcNo: lastDcNo,
             dcId: lastDcId,
-            itemLocation: itemLastPlace,
-            itemCurrentLocation: itemLastLocation,
-            itemLastLocation: itemCurrentLocation,
+            itemLocation: grnItem.isOnSiteGRN ? "department" : itemLastPlace,
+            itemCurrentLocation: grnItem.isOnSiteGRN ? itemCurrentLocation : itemLastLocation,
+            itemLastLocation: grnItem.isOnSiteGRN ? "" : itemCurrentLocation,
             itemCalDate: itemLastCalDate,
             itemDueDate: itemLastDueDate,
             itemStatus: itemLastStatus,

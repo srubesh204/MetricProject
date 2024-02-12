@@ -1329,6 +1329,7 @@ const Home = () => {
 
 
   const grnCheck = () => {
+    setIsOnSiteGRN("no")
     const grnBoolean = selectedRows.every(item => item.dcStatus === "1")
     const itemStatus = selectedRows.every(item => item.itemStatus !== "missing" && item.itemStatus !== "spare")
 
@@ -1350,13 +1351,16 @@ const Home = () => {
     }
   }
 
-
+  const [isOnSiteGRN, setIsOnSiteGRN] = useState("no")
   const onSiteCheck = () => {
+    setIsOnSiteGRN("yes")
     const onSiteCheck = selectedRows.every(item => (item.itemCalibrationSource === "outsource" || item.itemCalibrationSource === "OEM"))
     const notInSite = selectedRows.every(item => item.itemCalibrationDoneAt === "Site")
     const nonDcItems = selectedRows.every(item => item.dcStatus !== "1")
     console.log(onSiteCheck)
     if (onSiteCheck && notInSite && selectedRows.length === 1 && nonDcItems ) {
+      
+      console.log("onsite")
       setStatusCheckMsg("");
       setGrnOpen(true);
     } else {
@@ -1825,7 +1829,7 @@ const Home = () => {
                     <Button size='small' className='me-2' onClick={() => calCheck()}>Cal</Button>
                     <Button size='small' onClick={() => dcCheck()}>Create DC</Button>
                     <Button size='small' onClick={() => grnCheck()} className='me-2'>Grn</Button>
-                    <Button size='small' className='me-2' onClick={() => onSiteCheck()}>Onsite GRN</Button>
+                    <Button size='small' className='me-2' onClick={() => {setIsOnSiteGRN("yes"); onSiteCheck()}}>Onsite GRN</Button>
 
                     {StatusCheckMsg !== "" && <Chip icon={<Error />} className='ms-3' color='error' label={StatusCheckMsg} />}
                   </div>
@@ -1950,16 +1954,16 @@ const Home = () => {
                   <Dc />
                 </HomeContent.Provider>
                 <HomeContent.Provider
-                  value={{ grnOpen, setGrnOpen, selectedRows, lastGrnNo, dcPartyDetails, vendors }}
+                  value={{ grnOpen, setGrnOpen, selectedRows, lastGrnNo, dcPartyDetails, vendors, isOnSiteGRN }}
                 >
                   <Grn />
                 </HomeContent.Provider>
 
-                <HomeContent.Provider
+                {/* <HomeContent.Provider
                   value={{ onSiteOpen, setOnSiteOpen, selectedRows }}
                 >
                   <OnSiteDialog />
-                </HomeContent.Provider>
+                </HomeContent.Provider> */}
 
                 <HomeContent.Provider
                   value={{ mailOpen, setMailOpen, selectedRows, mailIds, setErrorHandler, setSnackBarOpen, vendors, mailList, bccMails, emp: employeeRole.loggedEmp }}

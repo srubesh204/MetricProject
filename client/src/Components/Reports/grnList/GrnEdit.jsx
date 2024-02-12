@@ -228,6 +228,7 @@ const GrnEdit = () => {
                 grnItemCertificate: selectedRows.grnItemCertificate,
                 grnUncertainity: selectedRows.grnUncertainity,
                 grnItemCalStatus: selectedRows.grnItemCalStatus,
+                isOnSiteGRN: selectedRows.isOnSiteGRN
             }));
             const plantItems = itemPlantList.filter(item => item.itemPlant === selectedRows.grnPlant)
             setSelectedPlantItems(plantItems)
@@ -925,7 +926,7 @@ const GrnEdit = () => {
                                                     }
                                                     label="Party Ref Date"
                                                     //onChange={handleGrnChange}
-                                                    disabled
+                                                    
 
                                                     slotProps={{ textField: { size: 'small', fullWidth: true } }}
                                                     format="DD-MM-YYYY" />
@@ -1030,7 +1031,7 @@ const GrnEdit = () => {
                                                     fullWidth
                                                     id="grnDateId"
                                                     name="grnDate"
-                                                    disabled
+                                                    
                                                     value={dayjs(grnEditData.grnPartyRefDate)}
                                                     onChange={(newValue) =>
                                                         setGrnEditData((prev) => ({ ...prev, grnDate: newValue.format("YYYY-MM-DD") }))
