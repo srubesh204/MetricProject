@@ -276,8 +276,8 @@ const DcList = () => {
     const Columns = [
 
         { field: 'id', headerName: 'Si. No', headerAlign: "center", align: "center", width: 70, renderCell: (params) => params.api.getAllRowIds().indexOf(params.id) + 1 },
-        ...(empRole && empRole.employee !== 'viewer'
-            ? [{ field: 'editButton', headerAlign: "center", align: "center", headerName: 'Edit', width: 100, renderCell: (params) => <Button onClick={() => { setSelectedRows(params.row); setDcEditOpen(true) }}><Edit color='success' /></Button> }] : []),
+        // ...(empRole && empRole.employee !== 'viewer'
+        //     ? [{ field: 'editButton', headerAlign: "center", align: "center", headerName: 'Edit', width: 100, renderCell: (params) => <Button onClick={() => { setSelectedRows(params.row); setDcEditOpen(true) }}><Edit color='success' /></Button> }] : []),
         {
             field: 'viewButton',
             headerAlign: "center",

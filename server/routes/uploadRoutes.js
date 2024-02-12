@@ -183,12 +183,16 @@ router.post('/additionalCertificates', additionalCertificateFolder.single('file'
     // No file was provided in the request
     return res.status(400).json({ error: 'No file selected for upload' });
   }
+  const fileName = req.body.rdName.replace(/\//g, '-')
+  const newPath = req.file.path.replace(
+    req.file.originalname,
+    fileName + path.extname(req.file.originalname)
+  );
 
-  fs.renameSync(req.file.path, req.file.path.replace(req.file.originalname,
-    req.body.rdName + path.extname(req.file.originalname)));
+  fs.renameSync(req.file.path, newPath);
   console.log(req.file)
   console.log("Additional Uploaded Successfully")
-  res.status(200).json({ message: 'Calibration Report uploaded successfully', name: `${req.body.rdName}.pdf` });
+  res.status(200).json({ message: 'Calibration Report uploaded successfully', name: `${fileName}.pdf` });
 
   // File was provided, proceed with processing
 
@@ -199,11 +203,17 @@ router.post('/msaCertificates', additionalCertificateFolder.single('file'), (req
     // No file was provided in the request
     return res.status(400).json({ error: 'No file selected for upload' });
   }
-  fs.renameSync(req.file.path, req.file.path.replace(req.file.originalname,
-    req.body.msaName + path.extname(req.file.originalname)));
+
+  const fileName = req.body.msaName.replace(/\//g, '-')
+  const newPath = req.file.path.replace(
+    req.file.originalname,
+    fileName + path.extname(req.file.originalname)
+  );
+
+  fs.renameSync(req.file.path, newPath);
   console.log(req.file)
   console.log(" Uploaded Successfully")
-  res.status(200).json({ message: 'Calibration Report uploaded successfully', name: `${req.body.msaName}.pdf` });
+  res.status(200).json({ message: 'Calibration Report uploaded successfully', name: `${fileName}.pdf` });
 
   // File was provided, proceed with processing
 
@@ -216,11 +226,16 @@ router.post('/otherFilesCertificates', additionalCertificateFolder.single('file'
     return res.status(400).json({ error: 'No file selected for upload' });
   }
 
-  fs.renameSync(req.file.path, req.file.path.replace(req.file.originalname,
-    req.body.otherFile + path.extname(req.file.originalname)));
+  const fileName = req.body.otherFile.replace(/\//g, '-')
+  const newPath = req.file.path.replace(
+    req.file.originalname,
+    fileName + path.extname(req.file.originalname)
+  );
+
+  fs.renameSync(req.file.path, newPath);
   console.log(req.file)
   console.log("Additional Uploaded Successfully")
-  res.status(200).json({ message: 'Calibration Report uploaded successfully', name: `${req.body.otherFile}.pdf` });
+  res.status(200).json({ message: 'Calibration Report uploaded successfully', name: `${fileName}.pdf` });
 
   // File was provided, proceed with processing
 

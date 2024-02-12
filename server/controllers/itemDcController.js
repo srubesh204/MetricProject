@@ -207,24 +207,41 @@ const itemDcController = {
       const prevItemDc = await itemDcModel.findById(itemDcId)
       const { dcPartyItems: prevPartyItems } = prevItemDc
 
-      const dcDeleteStatus = () => {
-        // Get dcStatus of items in prevDcPartyItems
-        const prevDcStatus = prevPartyItems .dcPartyItems.filter(item => item.dcStatus === "0");
+      const dcDeleteStatus = async () => {
+        // Fetch item data from itemAddModel for items with dcStatus === "0" in prevPartyItems
+        const prevItemsData = await Promise.all(prevPartyItems.map(async (prevItem) => {
+          return await itemAddModel.findOne({ _id: prevItem._id });
+        }));
+        console.log(prevItemsData.length)
+        // Filter items with dcStatus !== "1" in prevItemsData
+        const prevDcStatus = prevItemsData.filter(prevItemData => prevItemData.dcStatus !== "1");
 
-        // Check if any item with dcStatus === "0" in prevDcPartyItems is not present in dcPartyItems
-        const hasDifferentStatus = prevDcStatus.some(prevItem => !dcPartyItems.find(item => item._id === prevItem._id && item.dcStatus === "0"));
+        // Fetch item data from itemAddModel for items with dcStatus !== "1" in dcPartyItems
+        const dcItemsData = await Promise.all(dcPartyItems.map(async (dcItem) => {
+          return await itemAddModel.findOne({ _id: dcItem._id });
+        }));
+        console.log(dcItemsData.length)
 
-        // If any item with dcStatus === "0" is found in prevDcPartyItems that is not present in dcPartyItems, return false
+        // Filter items with dcStatus !== "1" in dcItemsData
+        const dcDcStatus = dcItemsData.filter(dcItemData => dcItemData.dcStatus !== "1");
+
+        // Check if any item with dcStatus !== "1" in prevDcPartyItems is not present in dcPartyItems
+        const hasDifferentStatus = prevDcStatus.some(prevItem => !dcDcStatus.find(item => item._id === prevItem._id));
+
+        // If any item with dcStatus !== "1" is found in prevDcPartyItems that is not present in dcPartyItems, return false
         return !hasDifferentStatus;
       };
+
+
 
       const allItemsStatus = await Promise.all(dcPartyItems.map(async (item) => {
         const itemAddData = await itemAddModel.findOne({ _id: item._id });
         return itemAddData.dcStatus === "1";
       }));
-
+      const dcCheckStatus = await dcDeleteStatus()
+      //console.log(dcCheckStatus)
       // Check if all items in dcPartyItems have dcStatus === "1" and if all items with dcStatus === "0" in prevDcPartyItems are present in dcPartyItems
-      const isDcStatusValid = allItemsStatus.every(status => status) && dcDeleteStatus();
+      const isDcStatusValid = allItemsStatus.every(status => status) && dcCheckStatus;
 
       console.log(!isDcStatusValid)
 
@@ -233,162 +250,162 @@ const itemDcController = {
 
 
 
-      if (!isDcStatusValid) {
-        const grnData = await itemGRNModel.findOne({ grnItemDcNo: dcNo })
-        const prevUpdatePromises = prevPartyItems.filter(item => item.dcStatus === "1").map(async (item) => {
+      // if (!isDcStatusValid) {
+      //   const grnData = await itemGRNModel.findOne({ grnItemDcNo: dcNo })
+      //   const prevUpdatePromises = prevPartyItems.filter(item => item.dcStatus === "1").map(async (item) => {
 
-          const itemData = await itemAddModel.findById(item._id)
-
-
-          const { itemIMTENo, itemLastLocation } = itemData
-          const updateItemFields = {
-            itemIMTENo,
-            itemCurrentLocation: itemLastLocation,
-            itemLocation: "department",
-            dcId: "",
-            dcStatus: "0",
-            dcCreatedOn: "",
-            dcNo: ""
-          }
-          const updateResult = await itemAddModel.findOneAndUpdate(
-            { _id: item._id },
-            { $set: updateItemFields },
-            { new: true }
-          );
-          console.log(updateResult)
-          return updateResult;
-        });
-        const prevUpdatedValues = await Promise.all(prevUpdatePromises);
-        //
-        const getCompDetailsById = await compDetailsSchema.findOne(
-          { compId: 1 } // To return the updated document
-        );
-        const getPlantAddress = await plantSchema.findOne(
-          { plantName: dcPlant } // To return the updated document
-        );
-
-        const formatNo = await formatNoModel.findOne({ formatId: 1 });
-
-        const formatNumber = `${formatNo.fDc ? (formatNo.fDc.frNo + " " + formatNo.fDc.amNo + " " + formatNo.fDc.amDate) : ""}`
-        console.log(formatNumber)
-
-        const itemDcUpdate = new itemDcModel(updateItemDcFields);
+      //     const itemData = await itemAddModel.findById(item._id)
 
 
-        const validationError = itemDcUpdate.validateSync();
-        if (validationError) {
-          // Handle validation errors
-          const validationErrors = {};
+      //     const { itemIMTENo, itemLastLocation } = itemData
+      //     const updateItemFields = {
+      //       itemIMTENo,
+      //       itemCurrentLocation: itemLastLocation,
+      //       itemLocation: "department",
+      //       dcId: "",
+      //       dcStatus: "0",
+      //       dcCreatedOn: "",
+      //       dcNo: ""
+      //     }
+      //     const updateResult = await itemAddModel.findOneAndUpdate(
+      //       { _id: item._id },
+      //       { $set: updateItemFields },
+      //       { new: true }
+      //     );
+      //     console.log(updateResult)
+      //     return updateResult;
+      //   });
+      //   const prevUpdatedValues = await Promise.all(prevUpdatePromises);
+      //   //
+      //   const getCompDetailsById = await compDetailsSchema.findOne(
+      //     { compId: 1 } // To return the updated document
+      //   );
+      //   const getPlantAddress = await plantSchema.findOne(
+      //     { plantName: dcPlant } // To return the updated document
+      //   );
 
-          if (validationError.errors) {
-            // Convert Mongoose validation error details to a more user-friendly format
-            for (const key in validationError.errors) {
-              validationErrors[key] = validationError.errors[key].message;
-            }
-          }
+      //   const formatNo = await formatNoModel.findOne({ formatId: 1 });
 
-          return res.status(400).json({
-            errors: validationErrors
-          });
-        }
+      //   const formatNumber = `${formatNo.fDc ? (formatNo.fDc.frNo + " " + formatNo.fDc.amNo + " " + formatNo.fDc.amDate) : ""}`
+      //   console.log(formatNumber)
 
-        // Find the designation by desId and update it
-        const updateItemDc = await itemDcModel.findOneAndUpdate(
-          { _id: itemDcId },
-          updateItemDcFields,
-          { new: true } // To return the updated document
-        );
-
-        if (Object.keys(updateItemDc).length !== 0) {
-          const updatePromises = dcPartyItems.filter(item => item.dcStatus === "1").map(async (item) => {
-
-            const itemData = await itemAddModel.findById(item._id)
-            const { itemIMTENo, itemCurrentLocation: itemLastLocation } = itemData
-            const updateItemFields = {
-              itemIMTENo,
-              itemCurrentLocation: dcPartyName,
-              itemLastLocation,
-              itemLocation: dcPartyType,
-              dcId: updateItemDc._id,
-              dcStatus: "1",
-              dcCreatedOn: dcDate,
-              dcNo: dcNo
-            }
-            const updateResult = await itemAddModel.findOneAndUpdate(
-              { _id: item._id },
-              { $set: updateItemFields },
-              { new: true }
-            );
-            console.log(updateResult)
-            return updateResult;
-          });
-          const updatedItems = await Promise.all(updatePromises);
+      //   const itemDcUpdate = new itemDcModel(updateItemDcFields);
 
 
-          const itemsData = dcPartyItems.map((item, index) => {
-            let tableRow = `
-                <tr>
-                    <td style="padding: 0.50rem; vertical-align: top; border: 1px solid #6c757d ;" class="text-center align-middle">${index + 1}</td>
-                    <td style="padding: 0.50rem; vertical-align: top; border: 1px solid #6c757d ;" class="align-middle">Item Name: ${item.itemItemMasterName ? item.itemItemMasterName : "-"} IMTE No: ${item.itemIMTENo ? item.itemIMTENo : "-"}<br>
-                    Range/Size: ${item.itemRangeSize ? item.itemRangeSize : "" + ' ' + item.itemRangeSizeUnit ? item.itemRangeSizeUnit : ""} L.C.: ${(item.itemLC ? item.itemLC : "") + '' + (item.itemLCUnit ? item.itemLCUnit : '')}<br>
-                    Make: ${item.itemMake ? item.itemMake : "-"} Sr.No: ${item.itemMFRNo ? item.itemMFRNo : "-"} Cal. Frequency: ${item.itemCalFreInMonths ? item.itemCalFreInMonths : "-"} months</td>
-                    <td style="padding: 0.50rem; vertical-align: top; border: 1px solid #6c757d ;" class="text-center align-middle">${item.dcItemRemarks}</td>
-                </tr>
-            `;
+      //   const validationError = itemDcUpdate.validateSync();
+      //   if (validationError) {
+      //     // Handle validation errors
+      //     const validationErrors = {};
 
-            return tableRow;
-          });
+      //     if (validationError.errors) {
+      //       // Convert Mongoose validation error details to a more user-friendly format
+      //       for (const key in validationError.errors) {
+      //         validationErrors[key] = validationError.errors[key].message;
+      //       }
+      //     }
+
+      //     return res.status(400).json({
+      //       errors: validationErrors
+      //     });
+      //   }
+
+      //   // Find the designation by desId and update it
+      //   const updateItemDc = await itemDcModel.findOneAndUpdate(
+      //     { _id: itemDcId },
+      //     updateItemDcFields,
+      //     { new: true } // To return the updated document
+      //   );
+
+      //   if (Object.keys(updateItemDc).length !== 0) {
+      //     const updatePromises = dcPartyItems.filter(item => item.dcStatus === "1").map(async (item) => {
+
+      //       const itemData = await itemAddModel.findById(item._id)
+      //       const { itemIMTENo, itemCurrentLocation: itemLastLocation } = itemData
+      //       const updateItemFields = {
+      //         itemIMTENo,
+      //         itemCurrentLocation: dcPartyName,
+      //         itemLastLocation,
+      //         itemLocation: dcPartyType,
+      //         dcId: updateItemDc._id,
+      //         dcStatus: "1",
+      //         dcCreatedOn: dcDate,
+      //         dcNo: dcNo
+      //       }
+      //       const updateResult = await itemAddModel.findOneAndUpdate(
+      //         { _id: item._id },
+      //         { $set: updateItemFields },
+      //         { new: true }
+      //       );
+      //       console.log(updateResult)
+      //       return updateResult;
+      //     });
+      //     const updatedItems = await Promise.all(updatePromises);
 
 
-          // Example usage:
+      //     const itemsData = dcPartyItems.map((item, index) => {
+      //       let tableRow = `
+      //           <tr>
+      //               <td style="padding: 0.50rem; vertical-align: top; border: 1px solid #6c757d ;" class="text-center align-middle">${index + 1}</td>
+      //               <td style="padding: 0.50rem; vertical-align: top; border: 1px solid #6c757d ;" class="align-middle">Item Name: ${item.itemItemMasterName ? item.itemItemMasterName : "-"} IMTE No: ${item.itemIMTENo ? item.itemIMTENo : "-"}<br>
+      //               Range/Size: ${item.itemRangeSize ? item.itemRangeSize : "" + ' ' + item.itemRangeSizeUnit ? item.itemRangeSizeUnit : ""} L.C.: ${(item.itemLC ? item.itemLC : "") + '' + (item.itemLCUnit ? item.itemLCUnit : '')}<br>
+      //               Make: ${item.itemMake ? item.itemMake : "-"} Sr.No: ${item.itemMFRNo ? item.itemMFRNo : "-"} Cal. Frequency: ${item.itemCalFreInMonths ? item.itemCalFreInMonths : "-"} months</td>
+      //               <td style="padding: 0.50rem; vertical-align: top; border: 1px solid #6c757d ;" class="text-center align-middle">${item.dcItemRemarks}</td>
+      //           </tr>
+      //       `;
 
-          const browser = await puppeteer.launch();
-          const page = await browser.newPage();
-
-          // Read the HTML template file
-          const filePath = path.resolve(__dirname, '../../server/templates/dcTemplate.html');
-          const htmlTemplate = fs.readFileSync(filePath, 'utf8');
-
-          // Replace placeholders with actual data
-          const modifiedHTML = htmlTemplate
-
-            .replace(/{{dcPartyItems}}/g, itemsData.join(""))
-            .replace(/{{CompanyName}}/g, getCompDetailsById.companyName)
-
-            .replace(/{{Plant}}/g, getPlantAddress.plantName)
-            .replace(/{{PlantAddress}}/g, getPlantAddress.plantAddress)
-            .replace(/{{dcPartyName}}/g, dcPartyName)
-            .replace(/{{dcPartyAddress}}/g, dcPartyAddress)
-            .replace(/{{dcNo}}/g, dcNo)
-            .replace(/{{dcDate}}/g, dcDate)
-            .replace(/{{dcCR}}/g, dcCommonRemarks)
-            .replace(/{{logo}}/g, process.env.SERVER_PORT + '/logo/' + getCompDetailsById.companyLogo)
-            .replace(/{{formatNo}}/g, formatNumber)
+      //       return tableRow;
+      //     });
 
 
-          // Add more replace statements for additional placeholders as needed
+      //     // Example usage:
 
-          // Set the modified HTML content
+      //     const browser = await puppeteer.launch();
+      //     const page = await browser.newPage();
 
-          console.log(modifiedHTML)
-          await page.setContent(modifiedHTML, { waitUntil: 'networkidle0' });
+      //     // Read the HTML template file
+      //     const filePath = path.resolve(__dirname, '../../server/templates/dcTemplate.html');
+      //     const htmlTemplate = fs.readFileSync(filePath, 'utf8');
 
-          // Generate PDF
-          await page.pdf({ path: `./storage/dcCertificate/${dcNo}.pdf`, format: 'A4' });
+      //     // Replace placeholders with actual data
+      //     const modifiedHTML = htmlTemplate
 
-          await browser.close();
+      //       .replace(/{{dcPartyItems}}/g, itemsData.join(""))
+      //       .replace(/{{CompanyName}}/g, getCompDetailsById.companyName)
 
-          console.log('PDF created successfully');
-        }
+      //       .replace(/{{Plant}}/g, getPlantAddress.plantName)
+      //       .replace(/{{PlantAddress}}/g, getPlantAddress.plantAddress)
+      //       .replace(/{{dcPartyName}}/g, dcPartyName)
+      //       .replace(/{{dcPartyAddress}}/g, dcPartyAddress)
+      //       .replace(/{{dcNo}}/g, dcNo)
+      //       .replace(/{{dcDate}}/g, dcDate)
+      //       .replace(/{{dcCR}}/g, dcCommonRemarks)
+      //       .replace(/{{logo}}/g, process.env.SERVER_PORT + '/logo/' + getCompDetailsById.companyLogo)
+      //       .replace(/{{formatNo}}/g, formatNumber)
 
-        if (!updateItemDc) {
-          return res.status(404).json({ error: 'Item Dc not found' });
-        }
-        console.log("Item Dc Updated Successfully")
-        res.status(200).json({ result: updateItemDc, message: "Item Dc Updated Successfully" });
-      } else {
-        res.status(500).json({ error: 'Item cannot be deleted, used in GRN' });
-      }
+
+      //     // Add more replace statements for additional placeholders as needed
+
+      //     // Set the modified HTML content
+
+      //     console.log(modifiedHTML)
+      //     await page.setContent(modifiedHTML, { waitUntil: 'networkidle0' });
+
+      //     // Generate PDF
+      //     await page.pdf({ path: `./storage/dcCertificate/${dcNo}.pdf`, format: 'A4' });
+
+      //     await browser.close();
+
+      //     console.log('PDF created successfully');
+      //   }
+
+      //   if (!updateItemDc) {
+      //     return res.status(404).json({ error: 'Item Dc not found' });
+      //   }
+      //   console.log("Item Dc Updated Successfully")
+      //   res.status(200).json({ result: updateItemDc, message: "Item Dc Updated Successfully" });
+      // } else {
+      //   res.status(500).json({ error: 'Item cannot be deleted, used in GRN' });
+      // }
 
 
     } catch (error) {

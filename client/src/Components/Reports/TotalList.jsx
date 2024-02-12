@@ -3,7 +3,7 @@ import { TextField, MenuItem, Button } from '@mui/material';
 import { Box, Container, Grid, Paper, Typography } from "@mui/material";
 import { DataGrid, GridToolbar, GridToolbarQuickFilter } from '@mui/x-data-grid';
 import axios from 'axios';
-import { Edit, FilterAlt, PrintRounded, } from '@mui/icons-material';
+import {FilterAlt } from '@mui/icons-material';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import dayjs from 'dayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
@@ -76,8 +76,8 @@ const TotalList = () => {
   const [filteredItemListData, setFilteredItemListData] = useState([])
   const oneMonthBefore = dayjs().subtract(dayjs().date() - 1, 'day')
   const [dateData, setDateData] = useState({
-    fromDate: oneMonthBefore.format('YYYY-MM-DD'),
-    toDate: dayjs().format('YYYY-MM-DD')
+    fromDate: "",
+    toDate: ""
   })
 
   const itemFetch = async () => {
@@ -122,15 +122,18 @@ const TotalList = () => {
 
   })
 
+  const dateFilter = () => {
+    if(dateData.fromDate && dateData.toDate){
+      const filteredItems = itemList.filter((item) => dayjs(item.itemDueDate).isBetween(dayjs(dateData.fromDate), dayjs(dateData.toDate), 'day', '[]'))
+      console.log(filteredItems)
+      setFilteredItemListData(filteredItems)
+    }
+  }
 
-  useEffect(() => {
-    const filteredItems = itemList.filter((item) => dayjs(item.itemCalDate).isSameOrAfter(dateData.fromDate) && dayjs(item.itemCalDate).isSameOrBefore(dateData.toDate))
-    console.log(filteredItems)
-    setFilteredItemListData(filteredItems)
-  }, [dateData.fromDate, dateData.toDate])
+ 
 
 
-  console.log(FilterNameList)
+  console.log(dateData)
   const [today, setToday] = useState(dayjs().format('YYYY-MM-DD'))
   console.log(today)
 
@@ -1110,7 +1113,7 @@ const TotalList = () => {
                   </TextField>
 
                 </div>
-                <div className="col d-flex me-2">
+                {/* <div className="col d-flex me-2">
 
                   <TextField label=" Part No & Part Name"
                     id="partNameId"
@@ -1125,7 +1128,7 @@ const TotalList = () => {
                       <MenuItem key={index} value={item.partNo}>{[item.partNo, item.partName].join(', ')}</MenuItem>
                     ))}
                   </TextField>
-                </div>
+                </div> */}
                 {/* <div className="col d-flex  me-2">
                   <TextField label="Other Location"
                     id="supplierWiseId"
@@ -1189,25 +1192,7 @@ const TotalList = () => {
                     ))}
                   </TextField>
                 </div>
-                <div className="col">
-                  <TextField label="Due In Days"
-                    id="dueInDaysId"
-                    select
-                    defaultValue="all"
-                    fullWidth
-                    size="small"
-                    onChange={handleDueChange}
-                    name="dueInDays" >
-                    <MenuItem value="all">All</MenuItem>
-                    <MenuItem value="Past">Past</MenuItem >
-                    <MenuItem value="Today">Today</MenuItem >
-                    <MenuItem value="7">7</MenuItem >
-                    <MenuItem value="15">15</MenuItem >
-                    <MenuItem value="30">30</MenuItem >
-                    <MenuItem value=">30">{'>'}30</MenuItem >
-                    <MenuItem value="Date">Date</MenuItem >
-                  </TextField>
-                </div>
+                
                 {dueDate === "Date" && <div className='col d-flex justify-content-end'>
                   <div className="me-2 ">
                     <DatePicker
@@ -1244,33 +1229,7 @@ const TotalList = () => {
                   </div>
                 </div>}
 
-                {/* <div className="col  me-2 ">
-                  <DatePicker
-                    fullWidth
-                    id="fromDateId"
-                    name="fromDate"
-                    size="small"
-                    label="From Date"
-                    slotProps={{ textField: { size: 'small', } }}
-                    format="DD-MM-YYYY"
-                    value={dayjs(dateData.fromDate)}
-                    onChange={(newValue) =>
-                      setDateData((prev) => ({ ...prev, fromDate: dayjs(newValue).format('YYYY-MM-DD') }))}
-                  />
-                </div> */}
-                {/* <div className="col me-2">
-                  <DatePicker
-                    fullWidth
-                    id="toDateId"
-                    name="toDate"
-                    size="small"
-                    label="To Date"
-                    slotProps={{ textField: { size: 'small' } }}
-                    format="DD-MM-YYYY" value={dayjs(dateData.toDate)}
-                    onChange={(newValue) =>
-                      setDateData((prev) => ({ ...prev, toDate: dayjs(newValue).format('YYYY-MM-DD') }))}
-                  />
-                </div> */}
+               
               </div>
               {/* <div className="col-1 offset-7">
 
@@ -1303,11 +1262,47 @@ const TotalList = () => {
                     toolbar: () => (
                       <div className='d-flex justify-content-between align-items-center'>
                         <GridToolbar />
-
                         <div className='d-flex'>
-                          <GridToolbarQuickFilter />
-                          <div></div>
-                          {selectedItemList.length > 0 && <Button onClick={() => mailCheck()} size='small' endIcon={<Send />} color="primary">Send Mail</Button>}
+
+                          <div className='d-flex justify-content-end mt-2'>
+                            <DatePicker
+                              fullWidth
+                              className='me-2'
+                              id="fromDateId"
+                              name="fromDate"
+                              size="small"
+                              variant="standard"
+                              label="From Date"
+                              slotProps={{ textField: { size: 'small', fullWidth: true } }}
+                              format="DD-MM-YYYY"
+                              value={dayjs(dateData.fromDate)}
+                              onChange={(newValue) =>
+                                setDateData((prev) => ({ ...prev, fromDate: dayjs(newValue).format('YYYY-MM-DD') }))
+                              }
+                              style={{ width: '150px' }} // Adjust the width according to your preference
+                            />
+
+                            <DatePicker
+                              fullWidth
+                              className='me-2'
+                              id="toDateId"
+                              name="toDate"
+                              size="small"
+                              variant="standard"
+                              label="To Date"
+                              slotProps={{ textField: { size: 'small', fullWidth: true } }}
+                              format="DD-MM-YYYY" value={dayjs(dateData.toDate)}
+                              onChange={(newValue) =>
+                                setDateData((prev) => ({ ...prev, toDate: dayjs(newValue).format('YYYY-MM-DD') }))}
+                            />
+                            <div className='me-2'><Button onClick={()=> dateFilter()} variant='contained' color='success' endIcon={<FilterAlt />}>Filter</Button></div>
+                            
+                          </div>
+
+                          <div className='mt-2'><GridToolbarQuickFilter /></div>
+
+
+                          {selectedItemList.length > 0 && <Button className='mt-2' onClick={() => mailCheck()} size='small' endIcon={<Send />} color="primary">Send Mail</Button>}
                         </div>
 
                       </div>

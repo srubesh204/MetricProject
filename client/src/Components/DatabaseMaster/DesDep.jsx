@@ -1846,6 +1846,7 @@ export const Designation = () => {
       });
 
       setDesExcelStatus(response.data.message || 'Excel file uploaded successfully');
+      desFetchData()
     } catch (error) {
       if (error.response) {
         setDesExcelStatus(`Error: ${error.response.data.error || 'Something went wrong'}`);
