@@ -1086,9 +1086,6 @@ const Home = () => {
     const thirtyDaysFilter = activeItems.filter((item) => dayjs(item.itemDueDate).isBetween(fifteenDaysAgo, thirtyDaysAgo))
     const AboveThirtyDaysFilter = activeItems.filter((item) => dayjs(item.itemDueDate).isAfter(thirtyDaysAgo))
 
-
-
-
     setCalStatus([
       { value: pastDue.length, label: 'Past Due' },
       { value: CurrentDue.length, label: 'Today' },
@@ -1114,7 +1111,7 @@ const Home = () => {
     customer: "All"
   })
 
-  const   MainFilter = (newValue, extraName) => {
+  const MainFilter = (newValue, extraName) => {
 
     console.log(newValue, extraName)
     setFilterNames(prev => ({ ...prev, [extraName]: newValue }))
@@ -1445,6 +1442,7 @@ const Home = () => {
     console.log(plantWiseList)
     const distinctNames = plantWiseList.map(item => item.itemAddMasterName);
     const distinctImtes = plantWiseList.map(item => item.itemIMTENo);
+    const partDetails = plantWiseList.map(item => item.itemPartName )
     console.log(distinctNames)
     distinctNames.sort()
     distinctImtes.sort()

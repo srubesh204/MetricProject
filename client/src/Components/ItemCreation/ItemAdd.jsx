@@ -474,6 +474,8 @@ const ItemAdd = () => {
         itemMasterById(itemAddData.itemAddMasterName);
     }, [itemAddData.itemAddMasterName]);
 
+    const [plantWisePart, setPlantWisePart] = useState([])
+
     const [partData, setPartData] = useState([])
     const getPartList = async () => {
         try {
@@ -482,7 +484,7 @@ const ItemAdd = () => {
             );
             console.log(response.data)
             setPartData(response.data.result)
-
+            setPlantWisePart(response.data.result)
 
         } catch (err) {
             console.log(err);
@@ -493,6 +495,9 @@ const ItemAdd = () => {
         getPartList();
     }, []);
 
+    useEffect(()=> {
+        
+    }, [])
 
     const [imteList, setImteList] = useState([])
     const getImteList = async () => {
@@ -1372,7 +1377,7 @@ const ItemAdd = () => {
                                                     renderValue={(selected) => selected.join(", ")} MenuProps={MenuProps}
                                                     fullWidth
                                                 >
-                                                    {partData.map((name, index) => (
+                                                    {plantWisePart.map((name, index) => (
                                                         <MenuItem key={index} value={name.partNo}>
                                                             <Checkbox checked={itemAddData.itemPartName.indexOf(name.partNo) > -1} />
                                                             <ListItemText primary={name.partNo + " - " + name.partName + " - " + name.customer} />
