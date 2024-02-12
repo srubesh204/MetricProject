@@ -46,9 +46,25 @@ const VendorUpload = () => {
             headerAlign: "center", align: "center",
         },
         {
-            field: 'Vendor Certificate View', headerName: 'Vendor Certificate View', width: 180, align: "center", renderCell: (params) =>
-                <IconButton size="small" component={Link} target="_blank" to={`${process.env.REACT_APP_PORT}/vendorCertificates/${params.row.certificate}`} ><FileOpenIcon /></IconButton>
-        },
+            field: 'Vendor Certificate View',
+            headerName: 'Vendor Certificate View',
+            width: 180,
+            align: 'center',
+            renderCell: (params) => (
+              params.row.certificate ? (
+                <IconButton size="small" component={Link} target="_blank" to={`${process.env.REACT_APP_PORT}/vendorCertificates/${params.row.certificate}`}>
+                  <FileOpenIcon />
+                </IconButton>
+              ) : (
+                // Render something else when the file is not uploaded
+                <span></span>
+              )
+            ),
+          }
+        // {
+        //     field: 'Vendor Certificate View', headerName: 'Vendor Certificate View', width: 180, align: "center", renderCell: (params) =>
+        //         <IconButton size="small" component={Link} target="_blank" to={`${process.env.REACT_APP_PORT}/vendorCertificates/${params.row.certificate}`} ><FileOpenIcon /></IconButton>
+        // },
 
 
         // {
