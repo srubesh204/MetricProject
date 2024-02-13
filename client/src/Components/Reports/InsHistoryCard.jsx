@@ -123,7 +123,7 @@ function InsHistoryCard() {
         try {
             const response = await axios.post(
                 `${process.env.REACT_APP_PORT}/itemAdd/getItemByPlant`, { allowedPlants: allowedPlants }
-              );
+            );
             console.log(response.data.result)
             setItemList(response.data.result);
         } catch (error) {
@@ -144,7 +144,7 @@ function InsHistoryCard() {
     })
 
     // const sortedFilterNameList = itemListDistNames.itemName.sort();
-    
+
     const handleFilters = (e) => {
         const { name, value } = e.target;
         setItemFilters(prev => ({ ...prev, [name]: value }))
@@ -191,8 +191,8 @@ function InsHistoryCard() {
 
     }
 
-    console.log(selectedMasterData)
-    console.log(selectedRow)
+   // console.log(selectedMasterData)
+    //console.log(selectedRow)
 
     const [itemHistoryData, setItemHistoryData] = useState([])
 
@@ -211,11 +211,11 @@ function InsHistoryCard() {
         fetchData();
     }, []);
 
-    console.log(itemCalList)
-    console.log(selectedIMTEs)
+    //console.log(itemCalList)
+    //console.log(selectedIMTEs)
 
-    console.log(selectedRow)
-    
+    //console.log(selectedRow)
+
     const filterByDate = (items, fromDate, toDate) => {
         return items.filter((row) => {
             const calDate = dayjs(row.calItemCalDate);
@@ -228,22 +228,43 @@ function InsHistoryCard() {
 
     const filteredSelectedIMTEs = filterByDate(selectedIMTEs, fromDate, toDate);
 
-    console.log(selectedRow)
+   // console.log(selectedRow)
 
     const historyColumns = [
-        { field: 'id', headerName: 'Si.No', width: 50, align: "center", renderCell: (params) => params.api.getAllRowIds().indexOf(params.id) + 1 },
+        { field: 'id', headerName: 'Sr.No', width: 50, align: "center", renderCell: (params) => params.api.getAllRowIds().indexOf(params.id) + 1 },
         {
-            field: 'certificateView', headerName: 'Certificate', width: 100, align: "center", renderCell: (params) =>
-                params.row.itemCalibrationSource === "inhouse" ?
-                    <IconButton size="small" component={Link} target="_blank" to={`${process.env.REACT_APP_PORT}/calCertificates/${params.row.itemCertificateNo}.pdf`} ><FileCopy /></IconButton> :
-                    <IconButton size="small" component={Link} target="_blank" to={`${process.env.REACT_APP_PORT}/itemCertificates/${params.row.itemCertificateName}`} ><FileOpen /></IconButton>
+            field: 'certificateView',
+            headerName: 'Certificate',
+            width: 200,
+            align: 'center',
+            renderCell: (params) => (
+                params.row.itemCalibrationSource === 'inhouse' && params.row.itemCertificateNo ? (
+                    <IconButton size="small" component={Link} target="_blank" to={`${process.env.REACT_APP_PORT}/calCertificates/${params.row.itemCertificateNo}.pdf`}>
+                        <FileCopy />
+                    </IconButton>
+                ) : (
+                    params.row.itemCertificateName ? (
+                        <IconButton size="small" component={Link} target="_blank" to={`${process.env.REACT_APP_PORT}/itemCertificates/${params.row.itemCertificateName}`}>
+                            <FileOpen />
+                        </IconButton>
+                    ) : (
+                        // Render something else when there is no file uploaded
+                        <span></span>
+                    )
+                )
+            ),
         },
+        // {
+        //     field: 'certificateView', headerName: 'Certificate', width: 100, align: "center", renderCell: (params) =>
+        //         params.row.itemCalibrationSource === "inhouse" ?
+        //             <IconButton size="small" component={Link} target="_blank" to={`${process.env.REACT_APP_PORT}/calCertificates/${params.row.itemCertificateNo}.pdf`} ><FileCopy /></IconButton> :
+        //             <IconButton size="small" component={Link} target="_blank" to={`${process.env.REACT_APP_PORT}/itemCertificates/${params.row.itemCertificateName}`} ><FileOpen /></IconButton>
+        // },
         { field: 'itemCalDate', headerName: 'Calibration Date', width: 150, align: "center", valueGetter: (params) => dayjs(params.row.itemCalDate).format('DD-MM-YYYY') },
         { field: 'itemDueDate', headerName: 'Calibration Due', width: 150, align: "center", valueGetter: (params) => dayjs(params.row.itemDueDate).format('DD-MM-YYYY') },
         { field: 'itemCalStatus', headerName: 'Calibration Status', width: 150, align: "center", },
         // { field: 'itemCertStatus', headerName: 'Certificate Status', width: 150, align: "center"},
         { field: 'itemCertificateNo', headerName: 'Certificate No', width: 180, align: "center" },
-
         {
             field: 'observedSize', headerName: "Observed Size", width: 180, align: "center",
             renderCell: (params) => (
@@ -585,6 +606,8 @@ function InsHistoryCard() {
                                         toolbar: GridToolbar,
                                     }}
                                     disableRowSelectionOnClick
+                                    disableColumnFilter
+                                    disableDensitySelector
                                     density="compact"
                                 />
                             </div>

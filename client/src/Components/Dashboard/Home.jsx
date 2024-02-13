@@ -1968,6 +1968,7 @@ const Home = () => {
                 <div className='col mb-2' style={{ height: "20%", width: "100%", display: "flex", alignItems: "end", }} >
                   <Button component={Link} to="/" variant='contained' startIcon={<ArrowBack />} endIcon={<House />} color='secondary'>Home</Button>
                 </div>
+                
                 <div className='col d-flex justify-content-end  height: "10%", width: "50%"' >
                   <p style={{ color: '#3498db', fontSize: '19px', fontWeight: 'bold' }}>
                     Welcome {loggedEmp.firstName}

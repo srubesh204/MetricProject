@@ -77,7 +77,7 @@ export const UnitDataBase = ({ style }) => {
         //         return Number.isInteger(rowIndex) ? rowIndex + 1 : '';
         //     }
         // },
-        { field: 'id', headerName: 'Si. No', width: 100, renderCell: (params) => params.api.getAllRowIds().indexOf(params.id) + 1, headerAlign: "center", align: "center", },
+        { field: 'id', headerName: 'Sr. No', width: 100, renderCell: (params) => params.api.getAllRowIds().indexOf(params.id) + 1, headerAlign: "center", align: "center", },
 
         { field: 'unitName', headerName: 'UnitName', width: "150", headerAlign: "center", align: "center", },
 
@@ -476,6 +476,7 @@ export const UnitDataBase = ({ style }) => {
 
                                     <div style={{ height: 400, width: '100%' }}>
                                         <DataGrid disableDensitySelector
+                                            disableColumnFilter
                                             rows={unitDataList}
                                             columns={unitColumns}
                                             getRowId={(row) => row._id}
@@ -590,11 +591,11 @@ export const PartDataBase = ({ style }) => {
     const vendorFetch = async () => {
         try {
             const response = await axios.post(
-                `${process.env.REACT_APP_PORT}/vendor/getVendorByPlants`, {allowedPlants: allowedPlants}
+                `${process.env.REACT_APP_PORT}/vendor/getVendorByPlants`, { allowedPlants: allowedPlants }
             );
             console.log(response.data)
 
-            
+
             const customersList = response.data.result.filter((item) => item.customer === "1")
             setCustomerList(customersList);
         } catch (err) {
@@ -650,7 +651,7 @@ export const PartDataBase = ({ style }) => {
     const partFetchData = async () => {
         try {
             const response = await axios.post(
-                `${process.env.REACT_APP_PORT}/part/getPartsByPlant`, {allowedPlants: allowedPlants}
+                `${process.env.REACT_APP_PORT}/part/getPartsByPlant`, { allowedPlants: allowedPlants }
             );
 
             setPartDataList(response.data.result);
@@ -676,7 +677,7 @@ export const PartDataBase = ({ style }) => {
 
     const [partSelectedRowIds, setPartSelectedRowIds] = useState([]);
     const partColumns = [
-        { field: 'id', headerName: 'Si. No', width: 100, renderCell: (params) => params.api.getAllRowIds().indexOf(params.id) + 1, headerAlign: "center", align: "center", },
+        { field: 'id', headerName: 'Sr. No', width: 100, renderCell: (params) => params.api.getAllRowIds().indexOf(params.id) + 1, headerAlign: "center", align: "center", },
 
         { field: 'partNo', headerName: 'PartNo', width: "150", headerAlign: "center", align: "center" },
         { field: 'partName', headerName: 'partName', width: "190", headerAlign: "center", align: "center" },
@@ -1064,7 +1065,7 @@ export const PartDataBase = ({ style }) => {
                                                 placeholder="customer"
                                                 size="small"
                                                 onChange={handlePartDataBaseChange}
-                                               
+
                                                 value={partData.customer}
                                                 name="customer"
                                                 fullWidth>
@@ -1081,7 +1082,7 @@ export const PartDataBase = ({ style }) => {
                                                 placeholder="operationNo"
                                                 size="small"
                                                 onChange={handlePartDataBaseChange}
-                                               
+
                                                 value={partData.operationNo}
                                                 name="operationNo"
                                                 fullWidth
@@ -1235,6 +1236,7 @@ export const PartDataBase = ({ style }) => {
                                     </div>
                                     <div style={{ height: 400, width: '100%' }}>
                                         <DataGrid disableDensitySelector
+                                            disableColumnFilter
                                             rows={filteredData}
                                             columns={partColumns}
                                             getRowId={(row) => row._id}

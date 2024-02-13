@@ -198,7 +198,7 @@ const GrnList = () => {
     //
 
     const Columns = [
-        { field: 'id', headerName: 'Si. No', width: 100, renderCell: (params) => params.api.getAllRowIds().indexOf(params.id) + 1, headerAlign: "center", align: "center", },
+        { field: 'id', headerName: 'Sr. No', width: 100, renderCell: (params) => params.api.getAllRowIds().indexOf(params.id) + 1, headerAlign: "center", align: "center", },
          ...(employeeRole && employeeRole.employee !== "viewer" ? [{ field: 'button', headerName: 'Edit', headerAlign: "center", align: "center", width: 90, renderCell: (params) => <Button onClick={() => { setSelectedRows(params.row); setGrnEditOpen(true) }}><Edit color='success' /></Button> }] : []),
         { field: 'grnNo', headerName: 'Grn No', width: 200, headerAlign: "center", align: "center", },
         { field: 'grnDate', headerName: 'Grn Date', width: 200, headerAlign: "center", align: "center", renderCell: (params) => dayjs(params.row.grnDate).format("DD-MM-YYYY") },
@@ -339,7 +339,7 @@ const GrnList = () => {
 
     const grnColumns = [
 
-        { field: 'grnItemId', headerName: 'Si. No', width: 70, renderCell: (params) => params.api.getAllRowIds().indexOf(params.id) + 1, headerAlign: "center", align: "center", },
+        { field: 'grnItemId', headerName: 'Sr. No', width: 70, renderCell: (params) => params.api.getAllRowIds().indexOf(params.id) + 1, headerAlign: "center", align: "center", },
         { field: 'grnItemIMTENo', headerName: 'Item IMTENo', width: 150, headerAlign: "center", align: "center" },
         { field: 'grnItemAddMasterName', headerName: 'Item Description', width: 200, headerAlign: "center", align: "center" },
         { field: 'grnItemRangeSize', headerName: 'Range/Size', width: 100, headerAlign: "center", align: "center" },
@@ -555,6 +555,8 @@ const GrnList = () => {
                                         //onRowClick={handleRowClick}
                                         onRowClick={handleRowClick}
                                         disableRowSelectionOnClick
+                                        disableColumnFilter
+                                        disableDensitySelector
                                         pageSizeOptions={[10]}
                                     />
 
@@ -562,6 +564,10 @@ const GrnList = () => {
                             </Paper>
 
                         </div>
+                        
+
+
+
 
                         <Paper
                             sx={{

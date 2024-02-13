@@ -299,7 +299,7 @@ const ItemList = () => {
                 },
             ]
             : []),
-        { field: 'id', headerName: 'Si. No', width: 60, renderCell: (params) => params.api.getAllRowIds().indexOf(params.id) + 1, headerAlign: "center", align: "center" },
+        { field: 'id', headerName: 'Sr. No', width: 60, renderCell: (params) => params.api.getAllRowIds().indexOf(params.id) + 1, headerAlign: "center", align: "center" },
         { field: 'itemIMTENo', headerName: 'IMTE No', width: 180, headerAlign: "center", align: "left" },
         { field: 'itemAddMasterName', headerName: 'Description', width: 180, headerAlign: "center", align: "left" },
         {
@@ -1410,7 +1410,8 @@ const ItemList = () => {
                                     //disableColumnMenu={true}
 
                                     checkboxSelection
-
+                                     disableColumnFilter
+                                     disableDensitySelector
                                     disableRowSelectionOnClick
                                     pageSizeOptions={[5]}
                                 />

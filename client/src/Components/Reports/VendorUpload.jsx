@@ -30,7 +30,7 @@ const VendorUpload = () => {
 
     const vendorListColumns = [
 
-        { field: 'id', headerName: 'Si. No', width: 70, renderCell: (params) => params.api.getAllRowIds().indexOf(params.id) + 1, headerAlign: "center", align: "center", },
+        { field: 'id', headerName: 'Sr. No', width: 70, renderCell: (params) => params.api.getAllRowIds().indexOf(params.id) + 1, headerAlign: "center", align: "center", },
         { field: 'vendorCode', headerName: 'VendorCode', width: 130, headerAlign: "center", align: "center", },
 
         {
@@ -189,7 +189,7 @@ const VendorUpload = () => {
                                     </div>
                                 ),
                             }}
-
+                            disableColumnFilter
                             onRowSelectionModelChange={(newRowSelectionModel, event) => {
                                 // setSelectedRowIds(newRowSelectionModel);
                                 console.log(event)

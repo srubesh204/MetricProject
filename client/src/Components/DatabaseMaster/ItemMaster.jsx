@@ -230,7 +230,7 @@ const ItemMaster = () => {
 
     const [itemMasteSelectedRowIds, setItemMasteSelectedRowIds] = useState([]);
     const itemMasterColumns = [
-        { field: 'id', headerName: 'Si. No', width: 70, renderCell: (params) => params.api.getAllRowIds().indexOf(params.id) + 1, headerAlign: "center", align: "center", },
+        { field: 'id', headerName: 'Sr. No', width: 70, renderCell: (params) => params.api.getAllRowIds().indexOf(params.id) + 1, headerAlign: "center", align: "center", },
         { field: 'itemType', headerName: 'Item Type', width: 70, headerAlign: "center", align: "center" },
         { field: 'itemDescription', headerName: 'Item Description', width: 150, headerAlign: "center", align: "center" },
         { field: 'itemPrefix', headerName: 'Item Prefix', width: 150, headerAlign: "center", align: "center" },
@@ -1102,6 +1102,7 @@ const ItemMaster = () => {
                                     <div style={{ height: 440, width: '100%' }}>
                                         <DataGrid
                                             density='compact' disableDensitySelector
+                                            disableColumnFilter
                                             rows={filteredData}
                                             columns={itemMasterColumns}
                                             getRowId={(row) => row._id}
@@ -1129,7 +1130,7 @@ const ItemMaster = () => {
                                                         <GridToolbar />
 
 
-                                                        <div className="col-4 mt-2">
+                                                        <div className="col me-2 mt-2">
                                                             <TextField fullWidth label="Item Type Sort" onChange={handleFilterChange} value={filterAllName.itemTypeSort} className="form-select" select size="small" id="itemTypeSortId" name="itemTypeSort" defaultValue="" >
 
                                                                 <MenuItem value="all">All</MenuItem >
@@ -1140,7 +1141,7 @@ const ItemMaster = () => {
                                                             </TextField>
 
                                                         </div>
-                                                        <div className=" col-3 mt-2">
+                                                        <div className=" col me-2 mt-2">
                                                             <TextField fullWidth label="Item Description Sort" onChange={handleFilterChange} value={filterAllName.itemDescriptionSort} className="form-select" select size="small" id="itemDescriptionSortId" name="itemDescriptionSort" defaultValue="" >
 
                                                                 <MenuItem value="all">All</MenuItem >
@@ -1150,7 +1151,7 @@ const ItemMaster = () => {
 
                                                             </TextField>
                                                         </div>
-                                                        <div className='mt-2'>
+                                                        <div className=' me-2 mt-2'>
                                                             {itemMasteSelectedRowIds.length !== 0 && <Button variant='contained' size='small' type='button' color='error' onClick={() => setDeleteModal(true)}>Delete </Button>}
                                                         </div>
 
