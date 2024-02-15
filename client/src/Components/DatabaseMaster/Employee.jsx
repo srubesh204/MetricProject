@@ -138,7 +138,7 @@ const Employee = () => {
     const [employeeSelectedRowIds, setEmployeeSelectedRowIds] = useState([]);
 
     const employeeColumns = [
-        { field: 'id', headerName: 'Si. No', width: 50, renderCell: (params) => params.api.getAllRowIds().indexOf(params.id) + 1, headerAlign: "center", align: "center" },
+        { field: 'id', headerName: 'Sr. No', width: 50, renderCell: (params) => params.api.getAllRowIds().indexOf(params.id) + 1, headerAlign: "center", align: "center" },
 
         { field: 'employeeCode', headerName: 'Emp.Code', width: 80, headerAlign: "center", align: "center" },
         {
@@ -1398,6 +1398,8 @@ const Employee = () => {
                                         columns={employeeColumns}
                                         getRowId={(row) => row._id}
                                         disableDensitySelector
+                                        disableColumnFilter
+                                        
                                         initialState={{
                                             pagination: {
                                                 paginationModel: { page: 0, pageSize: 5 },

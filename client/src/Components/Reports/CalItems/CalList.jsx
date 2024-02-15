@@ -560,6 +560,7 @@ const CalList = () => {
                         <div className='row'>
                             <Box sx={{ height: "75vh", width: '100%', my: 2 }}>
                                 <DataGrid disableDensitySelector
+                                disableColumnFilter
 
                                     rows={filteredCalData}
                                     columns={calListColumns}

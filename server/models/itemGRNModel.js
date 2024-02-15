@@ -67,6 +67,7 @@ const itemGRNSchema = new mongoose.Schema({
   grnItemCalibratedAt: String,
   grnItemOBType: String,
   grnItemStatus: String,
+  grnAssingStatus: String,
   grnAcCriteria: [
     {
       grnParameter: String,

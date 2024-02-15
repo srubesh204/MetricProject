@@ -259,7 +259,7 @@ export const Department = () => {
 
   const columns = [
 
-    { field: 'id', headerName: 'Si.No', width: 90, renderCell: (params) => params.api.getAllRowIds().indexOf(params.id) + 1, headerAlign: "center", align: "center" },
+    { field: 'id', headerName: 'Sr.No', width: 90, renderCell: (params) => params.api.getAllRowIds().indexOf(params.id) + 1, headerAlign: "center", align: "center" },
 
     { field: 'department', headerName: 'Department', headerAlign: "center", align: "center", width: "200" },
     { field: 'departmentStatus', headerName: 'Status', headerAlign: "center", align: "center", width: "200" },
@@ -1212,7 +1212,8 @@ export const Department = () => {
                       rows={departmentList}
                       columns={columns}
                       disableDensitySelector
-                      disableColumnSelector
+                      // disableColumnSelector
+                      disableColumnFilter
                       getRowId={(row) => row._id}
                       initialState={{
                         pagination: {
@@ -1941,7 +1942,7 @@ export const Designation = () => {
 
 
   const designationColumns = [
-    { field: 'id', headerName: 'Si. No', width: 70, renderCell: (params) => params.api.getAllRowIds().indexOf(params.id) + 1, headerAlign: "center", align: "center" },
+    { field: 'id', headerName: 'Sr. No', width: 70, renderCell: (params) => params.api.getAllRowIds().indexOf(params.id) + 1, headerAlign: "center", align: "center" },
 
     { field: 'designation', headerName: 'Designation', width: "200", headerAlign: "center", align: "center", },
     { field: 'designationStatus', headerName: 'Designation Status', width: "150", headerAlign: "center", align: "center", },
@@ -2416,6 +2417,7 @@ export const Designation = () => {
                   }}
                   onRowClick={handleDesRowClick}
                   disableRowSelectionOnClick
+                  disableColumnFilter
                   getRowClassName={(params) => params.id === desStateId ? { backgroundColor: "green" } : {}}
                   density="compact"
 

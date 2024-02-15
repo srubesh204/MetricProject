@@ -96,7 +96,7 @@ export const MeasurementUncertaintyList = () => {
                                 </div>
                             ),
                         }}
-
+                        disableColumnFilter
                         onRowSelectionModelChange={(newRowSelectionModel, event) => {
                             // setSelectedRowIds(newRowSelectionModel);
                             console.log(event)

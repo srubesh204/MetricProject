@@ -16,9 +16,9 @@ const Grn = () => {
     const grnDatas = useContext(HomeContent)
     const { grnOpen, setGrnOpen, selectedRows, lastGrnNo, dcPartyDetails, vendors, isOnSiteGRN } = grnDatas
 
-   
 
- 
+
+
 
     console.log(dcPartyDetails.fullName)
 
@@ -50,7 +50,7 @@ const Grn = () => {
                     grnItemId: selectedRows[0].item_id,
                     grnItemAddMasterName: selectedRows[0].itemAddMasterName,
                     grnItemIMTENo: selectedRows[0].itemIMTENo,
-                    isOnSiteGRN: dcPartyDetails.length === 0 ? "yes": "no"
+                    isOnSiteGRN: dcPartyDetails.length === 0 ? "yes" : "no"
                     //grnPartyItems: selectedRows
                 }
 
@@ -101,6 +101,7 @@ const Grn = () => {
         grnItemCalibratedAt: "",
         grnItemOBType: "",
         grnItemStatus: "",
+        grnAssingStatus: "",
         grnAcCriteria: [
             {
                 grnParameter: "",
@@ -162,6 +163,7 @@ const Grn = () => {
         grnItemCalibratedAt: "",
         grnItemOBType: "",
         grnItemStatus: "",
+        grnAssingStatus: "",
         grnAcCriteria: [
             {
                 grnParameter: "",
@@ -198,7 +200,7 @@ const Grn = () => {
 
 
 
-   
+
 
 
 
@@ -207,7 +209,7 @@ const Grn = () => {
 
 
 
-    
+
 
 
     const handleGrnChange = (e) => {
@@ -216,7 +218,7 @@ const Grn = () => {
     }
 
     const setPartyData = async (e) => {
-        const {name , value} = e.target
+        const { name, value } = e.target
         try {
             const response = await axios.get(
                 `${process.env.REACT_APP_PORT}/vendor/getVendorById/${value}`
@@ -228,7 +230,7 @@ const Grn = () => {
                 grnPartyAddress: response.data.result.address,
                 grnPartyCode: response.data.result.vendorCode,
                 grnPartyId: response.data.result._id,
-                
+
             }))
 
         } catch (err) {
@@ -307,7 +309,7 @@ const Grn = () => {
 
 
         if (name === "grnItemStatus") {
-            
+
             setGrnData((prev) => ({ ...prev, [name]: value }))
             if (value === "Calibrated") {
                 setGrnData(prev => ({
@@ -838,7 +840,7 @@ const Grn = () => {
 
             console.log(err);
 
-        }finally{
+        } finally {
             setIsLoading(false)
         }
     };
@@ -976,7 +978,7 @@ const Grn = () => {
                                                         value={grnData.grnPartyId}
                                                         disabled={isOnSiteGRN === "no"}
                                                         onChange={(e) => setPartyData(e)}
-                                                       
+
 
                                                         size="small"
                                                         fullWidth
@@ -1109,7 +1111,7 @@ const Grn = () => {
 
                                         <TextField label="Imte No"
                                             id="grnItemIMTENo"
-                                            
+
                                             defaultValue="all"
                                             fullWidth
                                             size="small"
@@ -1118,10 +1120,10 @@ const Grn = () => {
                                             onChange={handleGrnItemChange}
                                             value={grnData.grnItemIMTENo}
                                             inputProps={{
-                                                readOnly : true
+                                                readOnly: true
                                             }}
                                             name="grnItemIMTENo" >
-                                            
+
 
                                         </TextField>
 
@@ -1139,7 +1141,7 @@ const Grn = () => {
 
 
 
-                                        <TextField size='small' fullWidth variant='outlined' disabled={grnData.grnItemId === ""} defaultValue="" id="grnItemStatusId" value={grnData.grnItemStatus} onChange={handleGrnItemChange} select label="Grn Item Status" name='grnItemStatus' >
+                                        <TextField size='small' fullWidth variant='outlined' className='me-2' disabled={grnData.grnItemId === ""} defaultValue="" id="grnItemStatusId" value={grnData.grnItemStatus} onChange={handleGrnItemChange} select label="Grn Item Status" name='grnItemStatus' >
                                             <MenuItem value="">Select</MenuItem>
                                             <MenuItem value="Calibrated">Calibrated</MenuItem>
                                             <MenuItem value="Serviced">Serviced</MenuItem>
@@ -1147,6 +1149,41 @@ const Grn = () => {
                                             <MenuItem value="Not Calibrated">Not Calibrated</MenuItem>
                                             <MenuItem value="Other Reason">Other Reason</MenuItem>
                                         </TextField>
+                                        {/* {grnData.grnItemStatus === ! "Calibrated" || ""  ?
+                                         <React.Fragment>
+                                        <TextField size='small' fullWidth variant='outlined' defaultValue="" id="grnAssingStatusId" value={grnData.grnAssingStatus} onChange={handleGrnItemChange} select label="Grn Assing Status" name='grnAssingStatus' >
+                                            <MenuItem value="">Select</MenuItem>
+                                            <MenuItem value="active">Active</MenuItem>
+                                            <MenuItem value="spare">Spare</MenuItem>
+                                            <MenuItem value="breakdown">Breakdown</MenuItem>
+                                            <MenuItem value="missing">Missing</MenuItem>
+                                            <MenuItem value="rejection">Rejection</MenuItem>
+                                        </TextField> </React.Fragment> : ""} */}
+                                        {grnData.grnItemStatus !== "Calibrated" && grnData.grnItemStatus !== "" && (
+                                            <TextField
+                                                size='small'
+                                                fullWidth
+                                                variant='outlined'
+                                                defaultValue=""
+                                                id="grnAssingStatusId"
+                                                value={grnData.grnAssingStatus}
+                                                onChange={handleGrnItemChange}
+                                                select
+                                                label="Changes Status"
+                                                name='grnAssingStatus'
+                                            >
+                                                <MenuItem value="all">All</MenuItem>
+                                                <MenuItem value="active">Active</MenuItem>
+                                                <MenuItem value="spare">Spare</MenuItem>
+                                                <MenuItem value="breakdown">Breakdown</MenuItem>
+                                                <MenuItem value="missing">Missing</MenuItem>
+                                                <MenuItem value="rejection">Rejection</MenuItem>
+                                            </TextField>
+                                        )}
+
+
+
+
 
                                     </div>
 
@@ -1257,13 +1294,10 @@ const Grn = () => {
 
                                                         <tbody >
                                                             <tr>
-
                                                                 <th width="20%" rowSpan={2}>Parameter</th>
                                                                 <th width="10%" rowSpan={2}>Range/Size</th>
                                                                 <th width="10%" rowSpan={2}>Unit</th>
                                                                 <th colSpan={3} width="30%">Permissible Size</th>
-
-
                                                                 <th width="20%" colSpan={grnData.grnItemOBType === "average" ? 1 : 2}>Observed Size</th>
                                                                 <th width="10%" rowSpan={2}>Status</th>
                                                             </tr>
@@ -1285,7 +1319,7 @@ const Grn = () => {
                                                             {grnData.grnAcCriteria.map((item, index) => {
                                                                 let color = ""
                                                                 if (item.rowStatus === "ok") {
-                                                                    color = "#4cbb17"
+                                                                    color = "green"
                                                                 } else if (item.rowStatus === "notOk") {
                                                                     color = "red"
                                                                 } else if (item.rowStatus === "conditionallyOk") {
@@ -1358,7 +1392,6 @@ const Grn = () => {
                                                                         } else {
                                                                             maxColor = "red"
                                                                         }
-
                                                                         if (item.grnAverageOB <= item.grnWearLimitPS && item.grnAverageOB > item.grnMaxPS) {
                                                                             averageColor = "orange"
                                                                         }
@@ -1371,30 +1404,21 @@ const Grn = () => {
 
                                                                     //   handleStatus(index, minColor, maxColor);
 
-
-
                                                                 } else {
-
-
                                                                     if (parseFloat(item.grnMinOB) >= parseFloat(item.grnMinPS) && parseFloat(item.grnMinOB) <= parseFloat(item.grnMaxPS)) {
-                                                                        minColor = "#4cbb17";
+                                                                        minColor = "green";
 
                                                                     } else {
                                                                         minColor = "red"
-
                                                                     }
-
-
                                                                     if (parseFloat(item.grnMaxOB) >= parseFloat(item.grnMinPS) && parseFloat(item.grnMaxOB) <= parseFloat(item.grnMaxPS)) {
-                                                                        maxColor = "#4cbb17"
+                                                                        maxColor = "green"
 
                                                                     } else {
                                                                         maxColor = "red"
-
                                                                     }
-
                                                                     if (parseFloat(item.grnAverageOB) >= parseFloat(item.grnMinPS) && parseFloat(item.grnAverageOB) <= parseFloat(item.grnMaxPS)) {
-                                                                        averageColor = "#4cbb17";
+                                                                        averageColor = "green";
 
                                                                     } else {
                                                                         averageColor = "red"
@@ -1472,7 +1496,7 @@ const Grn = () => {
 
                                                                 let averageColor = "";
                                                                 if (parseFloat(item.grnAverageOB) >= parseFloat(item.grnMinPSError) && parseFloat(item.grnAverageOB) <= parseFloat(item.grnMaxPSError)) {
-                                                                    averageColor = "#4cbb17";
+                                                                    averageColor = "green";
                                                                 } else {
                                                                     averageColor = "red"
                                                                 }
@@ -1535,7 +1559,7 @@ const Grn = () => {
                                                                 let averageColor = "";
 
                                                                 if (parseFloat(item.grnAverageOB) >= parseFloat(item.grnMinPS) && parseFloat(item.grnAverageOB) <= parseFloat(item.grnMaxPS)) {
-                                                                    averageColor = "#4cbb17";
+                                                                    averageColor = "green";
 
                                                                 } else {
                                                                     averageColor = "red"
@@ -1545,7 +1569,7 @@ const Grn = () => {
                                                                 let minColor = "";
 
                                                                 if (parseFloat(item.grnMinOB) >= parseFloat(item.grnMinPS) && parseFloat(item.grnMinOB) <= parseFloat(item.grnMaxPS)) {
-                                                                    minColor = "#4cbb17";
+                                                                    minColor = "green";
 
                                                                 } else {
                                                                     minColor = "red"
@@ -1554,7 +1578,7 @@ const Grn = () => {
 
                                                                 let maxColor = "";
                                                                 if (parseFloat(item.grnMaxOB) >= parseFloat(item.grnMinPS) && parseFloat(item.grnMaxOB) <= parseFloat(item.grnMaxPS)) {
-                                                                    maxColor = "#4cbb17"
+                                                                    maxColor = "green"
 
                                                                 } else {
                                                                     maxColor = "red"
@@ -1678,7 +1702,7 @@ const Grn = () => {
                 </div>
             </DialogContent>
             <DialogActions className='d-flex justify-content-between'>
-                
+
                 <div>
                     <Button variant='contained' color='error' className='me-3' onClick={() => { setGrnOpen(false); setGrnData([]); setGrnData(initialGrnData); window.location.reload() }}>Cancel</Button>
                     <Button variant='contained' color='success' onClick={() => { setConfirmSubmit(true) }}>Submit {isLoading ? <CircularProgress sx={{ color: "inherit" }} variant="indeterminate" size={20} /> : ""}</Button>

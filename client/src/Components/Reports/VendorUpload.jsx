@@ -30,7 +30,7 @@ const VendorUpload = () => {
 
     const vendorListColumns = [
 
-        { field: 'id', headerName: 'Si. No', width: 70, renderCell: (params) => params.api.getAllRowIds().indexOf(params.id) + 1, headerAlign: "center", align: "center", },
+        { field: 'id', headerName: 'Sr. No', width: 70, renderCell: (params) => params.api.getAllRowIds().indexOf(params.id) + 1, headerAlign: "center", align: "center", },
         { field: 'vendorCode', headerName: 'VendorCode', width: 130, headerAlign: "center", align: "center", },
 
         {
@@ -47,9 +47,25 @@ const VendorUpload = () => {
             headerAlign: "center", align: "center", renderCell : (params) => params.row.certificateValidity ? dayjs(params.row.certificateValidity).format("DD-MM-YYYY") : "",
         },
         {
-            field: 'Vendor Certificate View', headerName: 'Vendor Certificate View', width: 180, align: "center", renderCell: (params) =>
-                <IconButton size="small" component={Link} target="_blank" to={`${process.env.REACT_APP_PORT}/vendorCertificates/${params.row.certificate}`} ><FileOpenIcon /></IconButton>
-        },
+            field: 'Vendor Certificate View',
+            headerName: 'Vendor Certificate View',
+            width: 180,
+            align: 'center',
+            renderCell: (params) => (
+              params.row.certificate ? (
+                <IconButton size="small" component={Link} target="_blank" to={`${process.env.REACT_APP_PORT}/vendorCertificates/${params.row.certificate}`}>
+                  <FileOpenIcon />
+                </IconButton>
+              ) : (
+                // Render something else when the file is not uploaded
+                <span></span>
+              )
+            ),
+          }
+        // {
+        //     field: 'Vendor Certificate View', headerName: 'Vendor Certificate View', width: 180, align: "center", renderCell: (params) =>
+        //         <IconButton size="small" component={Link} target="_blank" to={`${process.env.REACT_APP_PORT}/vendorCertificates/${params.row.certificate}`} ><FileOpenIcon /></IconButton>
+        // },
 
 
         // {
@@ -173,7 +189,7 @@ const VendorUpload = () => {
                                     </div>
                                 ),
                             }}
-
+                            disableColumnFilter
                             onRowSelectionModelChange={(newRowSelectionModel, event) => {
                                 // setSelectedRowIds(newRowSelectionModel);
                                 console.log(event)

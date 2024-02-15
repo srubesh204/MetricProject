@@ -198,11 +198,13 @@ const GrnList = () => {
     //
 
     const Columns = [
-        { field: 'id', headerName: 'Si. No', width: 100, renderCell: (params) => params.api.getAllRowIds().indexOf(params.id) + 1, headerAlign: "center", align: "center", },
+        { field: 'id', headerName: 'Sr. No', width: 100, renderCell: (params) => params.api.getAllRowIds().indexOf(params.id) + 1, headerAlign: "center", align: "center", },
          ...(employeeRole && employeeRole.employee !== "viewer" ? [{ field: 'button', headerName: 'Edit', headerAlign: "center", align: "center", width: 90, renderCell: (params) => <Button onClick={() => { setSelectedRows(params.row); setGrnEditOpen(true) }}><Edit color='success' /></Button> }] : []),
-        { field: 'grnNo', headerName: 'Grn No', width: 200, headerAlign: "center", align: "center", },
-        { field: 'grnDate', headerName: 'Grn Date', width: 200, headerAlign: "center", align: "center", renderCell: (params) => dayjs(params.row.grnDate).format("DD-MM-YYYY") },
-        { field: 'grnPartyName', headerName: 'Party Name', width: 300, headerAlign: "center", align: "center", },
+        { field: 'grnNo', headerName: 'Grn No', width: 150, headerAlign: "center", align: "center", },
+        { field: 'grnItemIMTENo', headerName: 'IMTENo', width: 150, headerAlign: "center", align: "center" },
+        { field: 'grnItemAddMasterName', headerName: 'Description', width: 150, headerAlign: "center", align: "center" },
+        { field: 'grnDate', headerName: 'Grn Date', width: 150, headerAlign: "center", align: "center", renderCell: (params) => dayjs(params.row.grnDate).format("DD-MM-YYYY") },
+        { field: 'grnPartyName', headerName: 'Party Name', width: 200, headerAlign: "center", align: "center", },
         { field: 'printButton', headerName: 'Print', headerAlign: "center", align: "center", width: 100, renderCell: (params) => <Button component={Link} to={`${process.env.REACT_APP_PORT}/grnCertificates/${params.row.grnNo}.pdf`} target='_blank'><PrintRounded  color='success' /></Button> }
     ]
 
@@ -339,9 +341,9 @@ const GrnList = () => {
 
     const grnColumns = [
 
-        { field: 'grnItemId', headerName: 'Si. No', width: 70, renderCell: (params) => params.api.getAllRowIds().indexOf(params.id) + 1, headerAlign: "center", align: "center", },
+        { field: 'grnItemId', headerName: 'Sr. No', width: 70, renderCell: (params) => params.api.getAllRowIds().indexOf(params.id) + 1, headerAlign: "center", align: "center", },
         { field: 'grnItemIMTENo', headerName: 'Item IMTENo', width: 150, headerAlign: "center", align: "center" },
-        { field: 'grnItemAddMasterName', headerName: 'Item Description', width: 200, headerAlign: "center", align: "center" },
+        { field: 'grnItemAddMasterName', headerName: 'Item Description', width: 150, headerAlign: "center", align: "center" },
         { field: 'grnItemRangeSize', headerName: 'Range/Size', width: 100, headerAlign: "center", align: "center" },
         { field: 'grnPartyRefNo', headerName: 'Dc Ref', width: 100, headerAlign: "center", align: "center" },
 
@@ -555,6 +557,8 @@ const GrnList = () => {
                                         //onRowClick={handleRowClick}
                                         onRowClick={handleRowClick}
                                         disableRowSelectionOnClick
+                                        disableColumnFilter
+                                        disableDensitySelector
                                         pageSizeOptions={[10]}
                                     />
 
@@ -562,7 +566,7 @@ const GrnList = () => {
                             </Paper>
 
                         </div>
-
+                       
                         <Paper
                             sx={{
                                 p: 2,

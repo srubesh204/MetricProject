@@ -275,7 +275,7 @@ const DcList = () => {
     //
     const Columns = [
 
-        { field: 'id', headerName: 'Si. No', headerAlign: "center", align: "center", width: 70, renderCell: (params) => params.api.getAllRowIds().indexOf(params.id) + 1 },
+        { field: 'id', headerName: 'Sr. No', headerAlign: "center", align: "center", width: 70, renderCell: (params) => params.api.getAllRowIds().indexOf(params.id) + 1 },
         // ...(empRole && empRole.employee !== 'viewer'
         //     ? [{ field: 'editButton', headerAlign: "center", align: "center", headerName: 'Edit', width: 100, renderCell: (params) => <Button onClick={() => { setSelectedRows(params.row); setDcEditOpen(true) }}><Edit color='success' /></Button> }] : []),
         {
@@ -507,7 +507,7 @@ const DcList = () => {
 
 
     const dcListColumns = [
-        { field: 'id', headerName: 'Si. No', width: 70, renderCell: (params) => params.api.getAllRowIds().indexOf(params.id) + 1, headerAlign: "center", align: "center", },
+        { field: 'id', headerName: 'Sr. No', width: 70, renderCell: (params) => params.api.getAllRowIds().indexOf(params.id) + 1, headerAlign: "center", align: "center", },
         { field: 'itemIMTENo', headerName: 'Item IMTENo', width: 150, headerAlign: "center", align: "center", },
         { field: 'itemAddMasterName', headerName: 'Item Description', headerAlign: "center", align: "center", width: 150 },
         { field: 'itemRangeSize', headerName: 'Range/Size', headerAlign: "center", align: "center", width: 100 },
@@ -670,6 +670,7 @@ const DcList = () => {
                         <div className='row'>
                             <Box sx={{ height: 310, width: '100%', my: 2 }}>
                                 <DataGrid disableDensitySelector
+                                disableColumnFilter
 
                                     rows={filteredData}
                                     columns={Columns}
@@ -729,6 +730,7 @@ const DcList = () => {
                         <div className='row'>
                             <Box sx={{ height: 310, width: '100%', my: 2 }}>
                                 <DataGrid disableDensitySelector
+                                       disableColumnFilter
                                     rows={dcListDataList}
                                     columns={dcListColumns}
                                     getRowId={(row) => row._id}

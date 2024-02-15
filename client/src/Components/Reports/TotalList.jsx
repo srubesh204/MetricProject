@@ -204,7 +204,7 @@ const TotalList = () => {
 
   const columns = [
 
-    { field: 'id', headerName: 'Si. No', width: 60, renderCell: (params) => params.api.getAllRowIds().indexOf(params.id) + 1, headerAlign: "center", align: "center" },
+    { field: 'id', headerName: 'Sr. No', width: 60, renderCell: (params) => params.api.getAllRowIds().indexOf(params.id) + 1, headerAlign: "center", align: "center" },
     { field: 'itemIMTENo', headerName: 'IMTE No', width: 150, headerAlign: "center", align: "left" },
     { field: 'itemAddMasterName', headerName: 'Description', width: 120, headerAlign: "center", align: "left" },
     {
@@ -243,7 +243,7 @@ const TotalList = () => {
     { field: 'itemMFRNo', headerName: 'ItemMFRNo ', width: 90, headerAlign: "center", align: "center", },
     { field: 'itemModelNo', headerName: 'ItemModelNo ', width: 90, headerAlign: "center", align: "center", valueGetter: (params) => params.row.itemModelNo || "-" },
     { field: 'itemMasterRef', headerName: 'ItemMasterRef ', width: 100, headerAlign: "center", align: "center", },
-    { field: 'itemReceiptDate', headerName: 'ItemReceiptDate ', width: 100, headerAlign: "center", align: "center", },
+    { field: 'itemReceiptDate', headerName: 'ItemReceiptDate ', width: 100, headerAlign: "center", align: "center", valueGetter: (params) => dayjs(params.row.itemReceiptDate).format('DD-MM-YYYY') },
     { field: 'itemPlaceOfUsage', headerName: 'Secondary Location ', width: 90, headerAlign: "center", align: "center", },
     { field: 'itemLocation', headerName: 'ItemLocation ', width: 90, headerAlign: "center", align: "center", },
     { field: 'itemCalAlertDays', headerName: 'ItemCalAlertDays ', width: 90, headerAlign: "center", align: "center", },
@@ -257,7 +257,7 @@ const TotalList = () => {
     { field: 'gaugeUsage', headerName: 'Gauge life in days ', width: 130, headerAlign: "center", align: "center", valueGetter: (params) => params.row.gaugeUsage || "-" },
     { field: 'lifealertDays', headerName: 'Gauge life alert in days', width: 120, headerAlign: "center", align: "center", valueGetter: (params) => params.row.lifealertDays || "-" },
     { field: 'purchaseRefNo', headerName: 'PurchaseRefNo', width: 90, headerAlign: "center", align: "center", valueGetter: (params) => params.row.purchaseRefNo || "-" },
-    { field: 'purchaseDate', headerName: 'PurchaseDate', width: 90, headerAlign: "center", align: "center", valueGetter: (params) => params.row.purchaseDate || "-" },
+    { field: 'purchaseDate', headerName: 'PurchaseDate', width: 90, headerAlign: "center", align: "center",  valueGetter: (params) => dayjs(params.row.purchaseDate).format('DD-MM-YYYY')  },
     { field: 'specialRemark', headerName: 'SpecialRemark', width: 90, headerAlign: "center", align: "center", valueGetter: (params) => params.row.specialRemark || "-" },
     { field: 'drawingIssueNo', headerName: 'DrawingIssueNo', width: 90, headerAlign: "center", align: "center", valueGetter: (params) => params.row.drawingIssueNo || "-" },
     { field: 'drawingNo', headerName: 'DrawingNo', width: 90, headerAlign: "center", align: "center", valueGetter: (params) => params.row.drawingNo || "-" },
@@ -283,8 +283,6 @@ const TotalList = () => {
     partName: "all",
     calibrationSource: "all",
     status: "all"
-
-
   })
 
   // Track if all filters are cleared
@@ -494,7 +492,7 @@ const TotalList = () => {
         });
         console.log(updatedFilterNames)
         // Update state outside the loop with the updated object
-        setFilterNameList(prev => ({ ...prev, ...updatedFilterNames }));
+        setFilterNameList(prev => ({ ...prev, ...updatedFilterNames}));
         setFilteredItemListData(itemType)
         setFilterAllNames(prev => ({
           ...prev,
@@ -571,8 +569,10 @@ const TotalList = () => {
       }
     }
     if (name === "customerWise") {
-      const customerData = partDataList.filter(part => part.customer === value)
+       const customerData = partDataList.filter(part => part.customer === value)
+    //  const customerData =["All",...new Set(customers.map(part => part.customer))]
       const customers = plantDatas.filter(item => customerData.some(cus => item.itemPartName.includes(cus.partNo)))
+      
       console.log(customers)
       if (value === " all") {
         setFilteredItemListData(plantDatas)
@@ -1266,7 +1266,7 @@ const TotalList = () => {
 
                           <div className='d-flex justify-content-end mt-2'>
                             <DatePicker
-                              fullWidth
+                              // fullWidth
                               className='me-2'
                               id="fromDateId"
                               name="fromDate"
@@ -1283,7 +1283,7 @@ const TotalList = () => {
                             />
 
                             <DatePicker
-                              fullWidth
+                              // fullWidth
                               className='me-2'
                               id="toDateId"
                               name="toDate"
