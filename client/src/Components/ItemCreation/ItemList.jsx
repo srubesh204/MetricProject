@@ -27,9 +27,10 @@ import { useEmployee } from '../../App';
 import styled from "@emotion/styled";
 import { CloudDownload, CloudUpload, Delete, Send } from '@mui/icons-material';
 import ItemListPrint from './ItemListPrint';
+
 import ItemMail from './ItemMail';
 import MailSender from '../mailComponent/MailSender';
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import { BrowserRouter as Router, Route} from 'react-router-dom';
 
 dayjs.extend(isSameOrBefore)
 dayjs.extend(isSameOrAfter)
@@ -215,6 +216,14 @@ const ItemList = () => {
         itemStatusReason: ""
     })
     console.log(statusInfo)
+    const handleChangeStatus = (e) => {
+        const { name, value } = e.target;
+        setStatusInfo((prev) => ({ ...prev, [name]: value }));
+    }
+
+
+    
+
 
     const updateItemStatus = async () => {
         try {
@@ -1410,8 +1419,8 @@ const ItemList = () => {
                                     //disableColumnMenu={true}
 
                                     checkboxSelection
-                                     disableColumnFilter
-                                     disableDensitySelector
+                                    disableColumnFilter
+                                    disableDensitySelector
                                     disableRowSelectionOnClick
                                     pageSizeOptions={[5]}
                                 />
@@ -1459,6 +1468,13 @@ const ItemList = () => {
                                     {/* <Button component={RouterLink} to={`/InsHistoryCard`} size='small' variant="contained" color="secondary">
                                         History Card
                                     </Button> */}
+                                   
+                                         {/* <Route path="/insHisCard" component={InsHistoryCard} />  */}
+
+                                        <Button component={Link} to="/insHisCard" size='small' variant="contained" color="secondary">
+                                            History Card
+                                        </Button>
+                                   
                                 </div>
                                 {employeeRole && employeeRole.employee !== "viewer" &&
                                     <div className='me-2' >
@@ -1479,7 +1495,7 @@ const ItemList = () => {
                                         <DialogContentText id="alert-dialog-description ">
 
                                             <div className='row mb-2'>
-                                                <TextField margin="dense" size='small' select variant='outlined' className='mb-2' onChange={(e) => setStatusInfo((prev) => ({ ...prev, itemStatus: e.target.value }))} value={statusInfo.itemStatus} label="Item Status" name='itemStatus' id='itemStatusId'  >
+                                                <TextField margin="dense" size='small' select variant='outlined' className='mb-2' onChange={handleChangeStatus} value={statusInfo.itemStatus} label="Item Status" name='itemStatus' id='itemStatusId'  >
                                                     <MenuItem value="active">Active</MenuItem>
                                                     <MenuItem value="inactive">InActive</MenuItem>
                                                     <MenuItem value="spare">Spare</MenuItem>
@@ -1489,7 +1505,7 @@ const ItemList = () => {
 
                                                 </TextField>
 
-                                                <TextField margin="dense" size='small' multiline rows={2} variant='outlined' className='mb-2' onChange={(e) => setStatusInfo((prev) => ({ ...prev, itemStatusReason: e.target.value }))} value={statusInfo.itemStatusReason} label="Reason" name='itemStatusReason' id='itemStatusReasonId'  >
+                                                <TextField margin="dense" size='small' multiline rows={2} variant='outlined' className='mb-2' onChange={handleChangeStatus}  value={statusInfo.itemStatusReason} label="Reason" name='itemStatusReason' id='itemStatusReasonId'  >
 
 
                                                 </TextField>

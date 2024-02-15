@@ -168,7 +168,7 @@ const ItemAdd = () => {
 
     const [itemMasterListByName, setItemMasterListByName] = useState([])
 
-
+   // const acceptanceCriteria = [...];
 
     const getDistinctItemName = async () => {
         try {
@@ -774,6 +774,8 @@ const ItemAdd = () => {
         setItemAddData((prev) => ({ ...prev, itemCertificateName: "" }));
         setUploadMessage(null)
     }
+
+
 
     useEffect(() => {
         calculateResultDate(itemAddData.itemCalDate, itemAddData.itemCalFreInMonths);
@@ -1415,7 +1417,7 @@ const ItemAdd = () => {
                                                 <th>Parameter</th>
                                                 <th>Nominal Size</th>
                                                 <th>Unit</th>
-                                                <th colspan="3">Permissible Size</th>
+                                                <th colspan="3">Permissible Size  ({itemAddData.acceptanceCriteria.length > 0 ? itemAddData.acceptanceCriteria[0].acNominalSizeUnit : ''}) </th>
                                                 <th width="20%" colspan="2" className='text-center'>Observed size
                                                     <RadioGroup
                                                         className='d-flex justify-content-around'
@@ -1491,8 +1493,9 @@ const ItemAdd = () => {
                                                 <th>Parameter</th>
                                                 <th>Nominal Size</th>
                                                 <th>Unit</th>
-                                                <th colSpan={2}>Permissible Error </th>
-                                                <th>Observed Error</th>
+                                                {/* <th colSpan={2}>Permissible Error ({units.length > 0 ? units[0].unitName : ''})</th> */}
+                                                <th colSpan={2}>Permissible Error ({itemAddData.acceptanceCriteria.length > 0 ? itemAddData.acceptanceCriteria[0].acNominalSizeUnit : ''})</th>
+                                                <th>Observed Error({itemAddData.acceptanceCriteria.length > 0 ? itemAddData.acceptanceCriteria[0].acNominalSizeUnit : ''}) </th>
 
                                                 <th > Delete</th>
 
@@ -1512,9 +1515,6 @@ const ItemAdd = () => {
                                                         {units.map((item, index) => (
                                                             <option key={index} value={item.unitName}>{item.unitName}</option>
                                                         ))}
-
-
-
                                                     </select></td>
                                                     <td><input type="text" className="form-control form-control-sm" id="acMinPSErrorId" name="acMinPSError" value={item.acMinPSError} placeholder='Min' onChange={(e) => changeACValue(index, e.target.name, e.target.value)} /></td>
                                                     <td><input type="text" className="form-control form-control-sm" id="acMaxPSErrorId" name="acMaxPSError" value={item.acMaxPSError} placeholder='Max' onChange={(e) => changeACValue(index, e.target.name, e.target.value)} /></td>
@@ -1543,7 +1543,7 @@ const ItemAdd = () => {
                                                 <th>Parameter</th>
                                                 <th>Nominal Size</th>
                                                 <th>Unit</th>
-                                                <th colspan="2">Permissible Size</th>
+                                                <th colspan="2">Permissible Size ({itemAddData.acceptanceCriteria.length > 0 ? itemAddData.acceptanceCriteria[0].acNominalSizeUnit : ''}) </th>
                                                 <th width="20%" colspan="2" className='text-center'>Observed size
                                                     <RadioGroup
                                                         className='d-flex justify-content-around'

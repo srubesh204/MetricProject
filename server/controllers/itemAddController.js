@@ -891,8 +891,6 @@ const itemAddController = {
           AG: 'itemPlant',
           AH: 'itemPrevCalData',
           AI: 'itemItemMasterIMTENo',
-
-
         }
       });
       console.log(jsonData)

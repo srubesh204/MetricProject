@@ -283,8 +283,6 @@ const TotalList = () => {
     partName: "all",
     calibrationSource: "all",
     status: "all"
-
-
   })
 
   // Track if all filters are cleared
@@ -494,7 +492,7 @@ const TotalList = () => {
         });
         console.log(updatedFilterNames)
         // Update state outside the loop with the updated object
-        setFilterNameList(prev => ({ ...prev, ...updatedFilterNames }));
+        setFilterNameList(prev => ({ ...prev, ...updatedFilterNames}));
         setFilteredItemListData(itemType)
         setFilterAllNames(prev => ({
           ...prev,
@@ -571,8 +569,10 @@ const TotalList = () => {
       }
     }
     if (name === "customerWise") {
-      const customerData = partDataList.filter(part => part.customer === value)
+       const customerData = partDataList.filter(part => part.customer === value)
+    //  const customerData =["All",...new Set(customers.map(part => part.customer))]
       const customers = plantDatas.filter(item => customerData.some(cus => item.itemPartName.includes(cus.partNo)))
+      
       console.log(customers)
       if (value === " all") {
         setFilteredItemListData(plantDatas)

@@ -92,7 +92,7 @@ const Home = () => {
       );
 
       setPartDataList(response.data.result);
-      
+
 
     } catch (err) {
       console.log(err);
@@ -1084,7 +1084,7 @@ const Home = () => {
     console.log(name, value)
     const filter = plantWiseList.filter(item => {
       return item.itemPartName.some(partNo => partDataList.some(part => part.partNo === partNo && part.customer === value));
-  });
+    });
 
     console.log(filter)
     setFilteredData(filter)
@@ -1479,7 +1479,7 @@ const Home = () => {
     const distinctImtes = plantWiseList.map(item => item.itemIMTENo);
     const partDetails = [...new Set(plantWiseList.flatMap(item => item.itemPartName))]
     const partDatas = partDataList.filter(part => partDetails.includes(part.partNo))
-    const customersData = ["All",...new Set(partDatas.map(part => part.customer))]
+    const customersData = ["All", ...new Set(partDatas.map(part => part.customer))]
     setPartCustomerList(customersData)
     console.log(customersData)
     console.log(distinctNames)
@@ -1860,7 +1860,7 @@ const Home = () => {
               {employeeRole.employee && employeeRole.employee !== "viewer" &&
                 <div className="row">
 
-                  <div className="col-md-9">
+                  <div className="col-md-5">
                     {/* {(selectedRows.length === 1 && selectedRows[0].itemCalibrationSource === "outsource" ) && <Button size='small' onClick={() => onSiteCheck()}>Onsite</Button>} */}
 
                     <Button size='small' className='me-2' onClick={() => calCheck()}>Cal</Button>
@@ -1868,11 +1868,21 @@ const Home = () => {
                     <Button size='small' onClick={() => grnCheck()} className='me-2'>Grn</Button>
                     <Button size='small' className='me-2' onClick={() => { setIsOnSiteGRN("yes"); onSiteCheck() }}>Onsite GRN</Button>
 
+
                     {StatusCheckMsg !== "" && <Chip icon={<Error />} className='ms-3' color='error' label={StatusCheckMsg} />}
                   </div>
-                  <div className="col-md-3 d-flex justify-content-end">
+                  <div className="col-md-7 d-flex justify-content-end">
+                    <Button component={Link} to="/calList" size='small' className='me-1'  >
+                      Cal List
+                    </Button>
+                    <Button component={Link} to="/dcList" size='small' className='me-1'  >
+                      DC List
+                    </Button>
+                    <Button component={Link} to="/grnList" size='small' className='me-1'  >
+                      Grn List
+                    </Button>
                     <Button component={Link} to="/itemmaster" size='small' className='me-1'>Item Master</Button>
-                    <Button component={Link} to="/itemList" size='small'>Item List</Button>
+                    <Button component={Link} to="/itemList" className='me-1' size='small'>Item List</Button>
                   </div>
                 </div>}
             </Paper>
@@ -1966,9 +1976,14 @@ const Home = () => {
               {/* style={{ height: "20%", width: "100%", display: "flex", alignItems: "end", justifyContent: 'end' }} */}
               <div className='row' style={{ height: "20%", width: "100%", display: "flex", alignItems: "end", }}>
                 <div className='col mb-2' style={{ height: "20%", width: "100%", display: "flex", alignItems: "end", }} >
-                  <Button component={Link} to="/" variant='contained' startIcon={<ArrowBack />} endIcon={<House />} color='secondary'>Home</Button>
+                  <Button component={Link} to="/" variant='contained' size='small'className='me-1' startIcon={<ArrowBack />} endIcon={<House />} color='secondary'>Home</Button>
+                  <Button component={Link} to="/insHisCard"  variant='contained' size='small' >
+                      History 
+                    </Button>
                 </div>
-                
+
+
+
                 <div className='col d-flex justify-content-end  height: "10%", width: "50%"' >
                   <p style={{ color: '#3498db', fontSize: '19px', fontWeight: 'bold' }}>
                     Welcome {loggedEmp.firstName}

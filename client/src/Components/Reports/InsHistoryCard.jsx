@@ -10,6 +10,7 @@ import { DisabledByDefault, FileCopy, FileOpen, Pages, PrintRounded } from '@mui
 import { useEmployee } from "../../App";
 import { ArrowBack, Error, HomeMax, House, Mail, MailLock, } from '@mui/icons-material';
 import { Link as RouterLink } from 'react-router-dom';
+import Autocomplete from '@mui/material/Autocomplete';
 
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 
@@ -143,14 +144,30 @@ function InsHistoryCard() {
         itemIMTENo: "Select"
     })
 
+    const MainFilter = (newValue, extraName) => {
+
+        console.log(newValue, extraName)
+        setItemFilters(prev => ({ ...prev, [extraName]: newValue }))
+        if (newValue === "All") {
+
+
+
+        }
+        else {
+
+            if (extraName === "itemIMTENo") {
+
+            }
+        }
+    }
+
+
+
     // const sortedFilterNameList = itemListDistNames.itemName.sort();
 
     const handleFilters = (e) => {
         const { name, value } = e.target;
         setItemFilters(prev => ({ ...prev, [name]: value }))
-
-
-
         if (name === "itemPlant") {
 
             const dep = loggedEmp.plantDetails.filter(plant => plant.plantName === value);
@@ -178,20 +195,23 @@ function InsHistoryCard() {
             setItemFilters(prev => ({ ...prev, itemIMTENo: "Select" }))
         } if (name === "itemIMTENo") {
             const imteNo = selectedDepartmentData.filter(item => item.itemIMTENo === value)
-            setSelectedRow(imteNo)
-            const data = itemHistoryData.filter(item => item.itemIMTENo === value)
-            console.log(data)
-            setFilteredData(data)
+            if (imteNo.length > 0) {
+                setSelectedRow(imteNo)
+                const data = itemHistoryData.filter(item => item.itemIMTENo === value)
+                console.log(data)
+                setFilteredData(data)
 
-            const master = masters.filter(mas => mas.itemDescription === imteNo[0].itemAddMasterName)
-            setSelectedMasterData(master[0])
+                const master = masters.filter(mas => mas.itemDescription === imteNo[0].itemAddMasterName)
+                setSelectedMasterData(master[0])
+            }
+
         }
 
 
 
     }
 
-   // console.log(selectedMasterData)
+    // console.log(selectedMasterData)
     //console.log(selectedRow)
 
     const [itemHistoryData, setItemHistoryData] = useState([])
@@ -228,7 +248,7 @@ function InsHistoryCard() {
 
     const filteredSelectedIMTEs = filterByDate(selectedIMTEs, fromDate, toDate);
 
-   // console.log(selectedRow)
+    // console.log(selectedRow)
 
     const historyColumns = [
         { field: 'id', headerName: 'Sr.No', width: 50, align: "center", renderCell: (params) => params.api.getAllRowIds().indexOf(params.id) + 1 },
@@ -281,7 +301,6 @@ function InsHistoryCard() {
         { field: 'itemCalibratedAt', headerName: 'Calibrated At', width: 150, align: "center" },
         { field: 'itemCalibratedBy', headerName: 'Calibrated By', width: 150, align: "center" },
         { field: 'itemCalApprovedBy', headerName: 'Approved By', width: 150, align: "center" },
-
     ];
 
 
@@ -308,7 +327,7 @@ function InsHistoryCard() {
                                     <div className="row g-2">
 
                                         <TextField label="Plant Wise"
-                                            className="me-2 col"
+                                            className="me-2  col"
                                             id="itemPlantId"
                                             select
                                             value={itemFilters.itemPlant}
@@ -324,7 +343,7 @@ function InsHistoryCard() {
 
                                         <TextField label="Primary Location "
                                             id="itemDepartmentId"
-                                            className="me-2 col"
+                                            className="me-2  col"
                                             select
                                             value={itemFilters.itemDepartment}
                                             fullWidth
@@ -343,7 +362,7 @@ function InsHistoryCard() {
 
 
 
-                                        <TextField className="me-2 col" label="Instrument Name" size="small" onChange={handleFilters} id="itemNameId" select name="itemName" value={itemFilters.itemName} fullWidth >
+                                        <TextField className="me-2   col" label="Instrument Name" size="small" onChange={handleFilters} id="itemNameId" select name="itemName" value={itemFilters.itemName} fullWidth >
                                             <MenuItem value="Select">Select</MenuItem >
                                             {itemListDistNames.map((item) => (
                                                 <MenuItem value={item}>{item}</MenuItem >
@@ -369,17 +388,39 @@ function InsHistoryCard() {
                                                 </MenuItem>
                                             ))}
                                         </TextField>
+                                        {/* <Autocomplete
+                                            disablePortal
+                                            id="combo-box-demo"
+                                            className="col mt-2 "
+                                            options={itemIMTEs}
+                                            size='small'
+                                            fullWidth
+                                            value={itemFilters.itemIMTENo}
+                                            onInputChange={(e, newValue) => MainFilter(newValue, "itemIMTENo")}
+                                            name="itemIMTENo"
+                                            getOptionLabel={(item) => item.itemIMTENo}
+                                            renderInput={(params) => <TextField {...params} label="IMTE No" />}
+                                        /> */}
+                                        {/* <Autocomplete
+                                            disablePortal
+                                            id="itemIMTENo"
+                                            className="col mt-2"
+                                            options={itemIMTEs}
+                                            size='small'
+                                            fullWidth
+                                            value={itemFilters.itemIMTENo}
+                                            onInputChange={(newValue) => handleFilters({ target: { name: "itemIMTENo", value: newValue } })}
+                                            name="itemIMTENo"
+                                            getOptionLabel={(item) => item.itemIMTENo}
+                                            renderInput={(params) => <TextField {...params} label="IMTE No" />}
+                                        /> */}
                                     </div>
-
-
                                 </div>
                                 <div className="col"></div>
 
                                 <div className="col-md-3">
                                     <div className="row g-2">
-
                                         <DatePicker
-
                                             id="fromDateId"
                                             name="fromDate"
                                             label="From Date"
@@ -392,7 +433,6 @@ function InsHistoryCard() {
                                         />
 
                                         <DatePicker
-
                                             id="toDateId"
                                             name="toDate"
                                             className="col"
@@ -429,7 +469,7 @@ function InsHistoryCard() {
                                     <div className="me-2">
                                         <Button component={Link} to={`${process.env.REACT_APP_PORT}/additionalCertificates/${selectedRow.length > 0 ? selectedRow[0].otherFile : ""}`} target="_blank" variant="contained" color="info" size="small">Drawing</Button>
                                     </div>
-                                    <div className="me-2"><Button component={Link} to={`${process.env.REACT_APP_PORT}/workInstructions/${selectedMasterData.workInsName}`} target="_blank" variant="contained" color="info" size="small">View Instructions</Button></div>
+                                    <div className="me-2"><Button component={Link} to={`${process.env.REACT_APP_PORT}/workInstructions/${selectedMasterData ? selectedMasterData.workInsName : ""}`} target="_blank" variant="contained" color="info" size="small">View Instructions</Button></div>
                                     {/* <div className="me-2"><Button variant="contained" color="info" size="small">View Drawing</Button></div>
                                     <div className="me-2"><Button variant="contained" color="info" size="small">View R&R</Button></div>
                                     <div ><Button variant="contained" color="info" size="small">View MSA</Button></div> */}
