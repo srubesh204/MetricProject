@@ -267,6 +267,25 @@ const employeeController = {
       res.status(500).json({ error: error, status: 0 });
     }
   },
+  getMailIdsByPlant : async (req, res) => {
+    try{
+      const {allowedPlants} = req.body
+
+      const emails = await employeeModel.aggregate([
+        {
+          $match: {
+            "plantDetails.plantName": { $in: allowedPlants ? allowedPlants : [] }
+          }
+        },
+        {
+          $project: { mailId: 1, firstName: 1, _id: 0 }  // Only return the mailId field
+        }
+      ])
+      res.status(202).json({result: emails, status: 1, message: "Mail Id get Successfully"})
+    }catch{
+
+    }
+  }
 
   
 

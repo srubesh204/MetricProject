@@ -88,6 +88,7 @@ const MeasurementUncertainty = () => {
     const initialUncertainty = {
         uncItemName: "",
         uncRangeSize: "",
+        uncRangeSizeUnit: "-",
         uncLC: "",
         uncMaterial: "",
         uncDate: dayjs().format('YYYY-MM-DD'),
@@ -95,9 +96,10 @@ const MeasurementUncertainty = () => {
         uncStartTemp: "",
         uncEndTemp: "",
         uncMeanTemp: "",
-        uncRefTemp: "",
+        uncRefTemp: "20",
         uncTEMaster: "",
         uncTEDUC: "",
+        uncTI: "",
         uncR1: "",
         uncR2: "",
         uncR3: "",
@@ -113,7 +115,8 @@ const MeasurementUncertainty = () => {
         combinedUnc: "",
         uncCoverageFactor: "",
         uncDegOfFreedom: "",
-        uncUncertainity: ""
+        uncUncertainity: "",
+        uncTypeBResult: []
 
     }
     const [uncertainityData, setUncertainityData] = useState({
@@ -248,7 +251,7 @@ const MeasurementUncertainty = () => {
                     }
                     break;
                 case "6":
-                    estimatesXi = uncertainityData.uncMasterDetails.length > 2 ? Number(uncertainityData.uncMasterDetails[1].accuracy).toFixed(4) : "";
+                    estimatesXi = uncertainityData.uncMasterDetails.length > 2 ? Number(uncertainityData.uncMasterDetails[2].accuracy).toFixed(4) : "";
                     factor = Number(item.factor);
                     if (estimatesXi) {
                         if (item.factor_root === "sqrt") {
@@ -448,13 +451,13 @@ const MeasurementUncertainty = () => {
         });
 
         console.log(modifiedData);
-        setTypeBEvalData(prev => ([...prev, ...modifiedData]));
+        setUncertainityData(prev => ({...prev, uncTypeBResult : [...prev.uncTypeBResult, ...modifiedData]}));
         setSelectedValues([]);
     }
 
 
 
-    console.log(typeBEvalData)
+    
 
 
     console.log(masterDetails)
@@ -504,10 +507,10 @@ const MeasurementUncertainty = () => {
     };
 
     const deleteTypeBEval = (index) => {
-        setTypeBEvalData((prev) => {
-            const updatedData = [...prev]; // Create a copy of the previous state array
+        setUncertainityData((prev) => {
+            const updatedData = [...prev.uncTypeBResult]; // Create a copy of the previous state array
             updatedData.splice(index, 1); // Remove the element at the specified index
-            return updatedData; // Return the updated array
+            return {...prev, uncTypeBResult: updatedData} // Return the updated array
         });
     };
 
@@ -560,8 +563,9 @@ const MeasurementUncertainty = () => {
     const [errors, setErrors] = useState({})
     const validateFunction = () => {
         let tempErrors = {};
-        tempErrors.uncItemName = uncertainityData.uncItemName ? "" : "uncItemName  is Required"
-        tempErrors.uncRangeSize = uncertainityData.uncRangeSize ? "" : "uncRangeSize is Required"
+        tempErrors.uncItemName = uncertainityData.uncItemName ? "" : "ItemName  is Required"
+        tempErrors.uncRangeSize = uncertainityData.uncRangeSize ? "" : "RangeSize is Required"
+        tempErrors.uncRangeSizeUnit = uncertainityData.uncRangeSizeUnit !== "-" ? "" : "Unit is Required"
         setErrors({ ...tempErrors })
         return Object.values(tempErrors).every(x => x === "")
     }
@@ -572,7 +576,7 @@ const MeasurementUncertainty = () => {
         e.preventDefault();
         try {
 
-            setUncertainityData(prev => ({...prev, uncTypeBResult : typeBEvalData}))
+            
             if (validateFunction() && uncertainityData.uncTypeBResult.length > 0) {
                 const response = await axios.post(
                     `${process.env.REACT_APP_PORT}/measurementUncertainty/createMeasurementUncertainty`, uncertainityData
@@ -586,6 +590,8 @@ const MeasurementUncertainty = () => {
                 setErrorHandler({ status: response.data.status, message: response.data.message, code: "success" })
 
             } else {
+                console.log("Error")
+                setSnackBarOpen(true)
                 setErrorHandler({ status: 0, message: "Fill the required fields", code: "error" })
             }
         } catch (err) {
@@ -680,8 +686,8 @@ const MeasurementUncertainty = () => {
         let degOfFreedom = 0;
         let uncCoverageFactor = 0;
 
-        if (typeBEvalData.length > 0) {
-            const calculate = typeBEvalData.map(item => {
+        if (uncertainityData.uncTypeBResult.length > 0) {
+            const calculate = uncertainityData.uncTypeBResult.map(item => {
                 const sqrtFun = item.uncContribution * item.uncContribution
                 definedValue += sqrtFun
                 if (item.typeBId === "18") {
@@ -728,7 +734,7 @@ const MeasurementUncertainty = () => {
                         <div className='row g-2'>
                             <h6 className="col-12 text-center">DUC Details</h6>
                             <div className="col">
-                                <TextField size='small' fullWidth variant='outlined' onChange={handleUncertaintyChange} value={uncertainityData.uncItemName} label="DUC Name" name='uncItemName' id='uncItemNameId'>
+                                <TextField size='small' fullWidth variant='outlined' {...(errors.uncItemName !== "" && { helperText: errors.uncItemName, error: true })} onChange={handleUncertaintyChange} value={uncertainityData.uncItemName} label="DUC Name" name='uncItemName' id='uncItemNameId'>
                                     {itemNameList.map((item, index) => (
                                         <MenuItem key={index} value={item.itemAddMasterName}>{item.itemAddMasterName}</MenuItem>
                                     ))}
@@ -736,7 +742,7 @@ const MeasurementUncertainty = () => {
                             </div>
                             <div className="col d-flex ">
 
-                                <TextField size='small' fullWidth variant='outlined' label="Range/Size(L)" onChange={handleUncertaintyChange} value={uncertainityData.uncRangeSize} name='uncRangeSize' id='uncRangeSizeId'>
+                                <TextField size='small' fullWidth type='number' variant='outlined' label="Range/Size(L)" onChange={handleUncertaintyChange} value={uncertainityData.uncRangeSize} name='uncRangeSize' id='uncRangeSizeId'>
                                 </TextField>
                                 <TextField select style={{ width: "50%" }} size='small' fullWidth variant='outlined' label="Unit" onChange={handleUncertaintyChange} value={uncertainityData.uncRangeSizeUnit} name='uncRangeSizeUnit' id='uncRangeSizeUnitId'>
                                     <MenuItem value="-">Select</MenuItem>
@@ -747,7 +753,7 @@ const MeasurementUncertainty = () => {
                             </div>
                             <div className="col">
 
-                                <TextField size='small' fullWidth variant='outlined' label={`Least Count (${uncertainityData.uncRangeSizeUnit})`} onChange={handleUncertaintyChange} value={uncertainityData.uncLC} name='uncLC' id='uncLCId'>
+                                <TextField size='small' fullWidth type='number' variant='outlined' label={`Least Count (${uncertainityData.uncRangeSizeUnit})`} onChange={handleUncertaintyChange} value={uncertainityData.uncLC} name='uncLC' id='uncLCId'>
                                 </TextField>
                             </div>
                             <div className="col">
@@ -794,15 +800,16 @@ const MeasurementUncertainty = () => {
                                 ></TextField>
                             </div>
                             <div className="col">
-                                <TextField label={`L.C.in (${uncertainityData.uncRangeSizeUnit})`}
-                                    value={masterDetails.lC} fullWidth size="small" name="lC" InputProps={{ readOnly: true }} ></TextField>
+                                <TextField
+                                    label={`L.C.in (${uncertainityData.uncRangeSizeUnit})`}
+                                    value={masterDetails.lC} onChange={handlePlantChange} type='number' fullWidth size="small" name="lC"  ></TextField>
                             </div>
                             <div className="col">
-                                <TextField size='small' fullWidth variant='outlined' label={`Uncertainty in (${uncertainityData.uncRangeSizeUnit})`} onChange={handlePlantChange} value={masterDetails.uncertainty} name='uncertainty' id='uncertaintyId'>
+                                <TextField type='number' size='small' fullWidth variant='outlined' label={`Uncertainty in (${uncertainityData.uncRangeSizeUnit})`} onChange={handlePlantChange} value={masterDetails.uncertainty} name='uncertainty' id='uncertaintyId'>
                                 </TextField>
                             </div>
                             <div className="col">
-                                <TextField size='small' fullWidth variant='outlined' label={`Accuracy in (${uncertainityData.uncRangeSizeUnit})`} onChange={handlePlantChange} value={masterDetails.accuracy} name='accuracy' id='accuracyId'>
+                                <TextField type='number' size='small' fullWidth variant='outlined' label={`Accuracy in (${uncertainityData.uncRangeSizeUnit})`} onChange={handlePlantChange} value={masterDetails.accuracy} name='accuracy' id='accuracyId'>
                                 </TextField>
                             </div>
                             <div className="col">
@@ -832,7 +839,7 @@ const MeasurementUncertainty = () => {
                                         </tr>
                                         {uncertainityData.uncMasterDetails.map((item, index) => (
                                             <tr key={index} >
-                                                <td>{index + 1}</td>
+                                                <td>Master {index + 1}</td>
                                                 <td>{item.masterName + " - " + item.masterIMTENo}</td>
                                                 <td>{item.rangeSize}</td>
                                                 <td>{item.lC}</td>
@@ -877,11 +884,11 @@ const MeasurementUncertainty = () => {
                                     </tr>
                                     <tr>
                                         <td className="col">
-                                            <input className='form-control form-control-sm' value={uncertainityData.uncStartTemp} onChange={handleUncertaintyChange} name='uncStartTemp' id='uncStartTempId' />
+                                            <input type='number' className='form-control form-control-sm' value={uncertainityData.uncStartTemp} onChange={handleUncertaintyChange} name='uncStartTemp' id='uncStartTempId' />
 
                                         </td>
                                         <td className="col">
-                                            <input className='form-control form-control-sm' value={uncertainityData.uncEndTemp} onChange={handleUncertaintyChange} name='uncEndTemp' id='uncEndTempId' />
+                                            <input type='number' className='form-control form-control-sm' value={uncertainityData.uncEndTemp} onChange={handleUncertaintyChange} name='uncEndTemp' id='uncEndTempId' />
 
                                         </td>
                                         <td className="col">
@@ -889,15 +896,16 @@ const MeasurementUncertainty = () => {
 
                                         </td>
                                         <td className="col">
-                                            <input className='form-control form-control-sm' value={uncertainityData.uncRefTemp} onChange={handleUncertaintyChange} name='uncRefTemp' id='uncRefTempId' />
+                                            <input type='number' className='form-control form-control-sm' value={uncertainityData.uncRefTemp} onChange={handleUncertaintyChange} name='uncRefTemp' id='uncRefTempId' />
 
                                         </td>
                                         <td className="col">
-                                            <input disabled className='form-control form-control-sm' value={uncertainityData.uncTEMaster} onChange={handleUncertaintyChange} name='uncTEMaster' id='uncTEMasterId' />
+                                            <input type='number' disabled className='form-control form-control-sm' value={uncertainityData.uncTEMaster} onChange={handleUncertaintyChange} name='uncTEMaster' id='uncTEMasterId' />
 
                                         </td>
                                         <td className="col">
                                             <input
+                                                type='number'
                                                 className='form-control form-control-sm'
                                                 value={uncertainityData.uncTEDUC}
                                                 onChange={handleUncertaintyChange}
@@ -908,6 +916,7 @@ const MeasurementUncertainty = () => {
                                         </td>
                                         <td>
                                             <input
+                                                type='number'
                                                 className='form-control form-control-sm'
                                                 value={uncertainityData.uncTI}
                                                 onChange={handleUncertaintyChange}
@@ -953,40 +962,40 @@ const MeasurementUncertainty = () => {
                                         </tr>
                                         <tr>
                                             <td>
-                                                <input className='form-control form-control-sm' type='number' value={uncertainityData.uncR1} onChange={handleUncertaintyChange} name="uncR1" id='uncR1Id' />
+                                                <input type='number' className='form-control form-control-sm' value={uncertainityData.uncR1} onChange={handleUncertaintyChange} name="uncR1" id='uncR1Id' />
                                             </td>
                                             <td>
-                                                <input className='form-control form-control-sm' type='number' value={uncertainityData.uncR2} onChange={handleUncertaintyChange} name="uncR2" id='uncR2Id' />
+                                                <input type='number' className='form-control form-control-sm' value={uncertainityData.uncR2} onChange={handleUncertaintyChange} name="uncR2" id='uncR2Id' />
                                             </td>
                                             <td>
-                                                <input className='form-control form-control-sm' type='number' value={uncertainityData.uncR3} onChange={handleUncertaintyChange} name="uncR3" id='uncR3Id' />
+                                                <input type='number' className='form-control form-control-sm' value={uncertainityData.uncR3} onChange={handleUncertaintyChange} name="uncR3" id='uncR3Id' />
                                             </td>
                                             <td>
-                                                <input className='form-control form-control-sm' type='number' value={uncertainityData.uncR4} onChange={handleUncertaintyChange} name="uncR4" id='uncR4Id' />
+                                                <input type='number' className='form-control form-control-sm' value={uncertainityData.uncR4} onChange={handleUncertaintyChange} name="uncR4" id='uncR4Id' />
                                             </td>
                                             <td>
-                                                <input className='form-control form-control-sm' type='number' value={uncertainityData.uncR5} onChange={handleUncertaintyChange} name="uncR5" id='uncR5Id' />
+                                                <input type='number' className='form-control form-control-sm' value={uncertainityData.uncR5} onChange={handleUncertaintyChange} name="uncR5" id='uncR5Id' />
                                             </td>
                                             <td>
-                                                <input className='form-control form-control-sm' type='number' value={uncertainityData.uncR6} onChange={handleUncertaintyChange} name="uncR6" id='uncR6Id' />
+                                                <input type='number' className='form-control form-control-sm' value={uncertainityData.uncR6} onChange={handleUncertaintyChange} name="uncR6" id='uncR6Id' />
                                             </td>
                                             <td>
-                                                <input className='form-control form-control-sm' type='number' value={uncertainityData.uncR7} onChange={handleUncertaintyChange} name="uncR7" id='uncR7Id' />
+                                                <input type='number' className='form-control form-control-sm' value={uncertainityData.uncR7} onChange={handleUncertaintyChange} name="uncR7" id='uncR7Id' />
                                             </td>
                                             <td>
-                                                <input className='form-control form-control-sm' type='number' value={uncertainityData.uncR8} onChange={handleUncertaintyChange} name="uncR8" id='uncR8Id' />
+                                                <input type='number' className='form-control form-control-sm' value={uncertainityData.uncR8} onChange={handleUncertaintyChange} name="uncR8" id='uncR8Id' />
                                             </td>
                                             <td>
-                                                <input className='form-control form-control-sm' type='number' value={uncertainityData.uncR9} onChange={handleUncertaintyChange} name="uncR9" id='uncR9Id' />
+                                                <input type='number' className='form-control form-control-sm' value={uncertainityData.uncR9} onChange={handleUncertaintyChange} name="uncR9" id='uncR9Id' />
                                             </td>
                                             <td>
-                                                <input className='form-control form-control-sm' type='number' value={uncertainityData.uncR10} onChange={handleUncertaintyChange} name="uncR10" id='uncR10Id' />
+                                                <input type='number' className='form-control form-control-sm' value={uncertainityData.uncR10} onChange={handleUncertaintyChange} name="uncR10" id='uncR10Id' />
                                             </td>
                                             <td>
-                                                <input disabled className='form-control form-control-sm' value={uncertainityData.uncStdDeviation} onChange={handleUncertaintyChange} name="uncStdDeviation" id='uncStdDeviationId' />
+                                                <input type='number' disabled className='form-control form-control-sm' value={uncertainityData.uncStdDeviation} onChange={handleUncertaintyChange} name="uncStdDeviation" id='uncStdDeviationId' />
                                             </td>
                                             <td>
-                                                <input disabled className='form-control form-control-sm' type='number' value={uncertainityData.uncN} onChange={handleUncertaintyChange} name="uncN" id='uncNId' />
+                                                <input type='number' disabled className='form-control form-control-sm' value={uncertainityData.uncN} onChange={handleUncertaintyChange} name="uncN" id='uncNId' />
                                             </td>
                                         </tr>
                                     </tbody>
@@ -1010,23 +1019,23 @@ const MeasurementUncertainty = () => {
                                         fullWidth
                                     >
                                         {uncertainityData.uncRangeSizeUnit === "min" ?
-                                            
-                                                typeBEval.filter(item => !["13","14","15","16","17"].includes(item.uncertainity_typeb_eval_id)).map((unc, index) => (
-                                                    <MenuItem key={index} value={unc} disabled={typeBEvalData.find(value => value.typeBId === unc.uncertainity_typeb_eval_id)}>
-                                                        <Checkbox checked={selectedValues.find(value => value.uncertainity_typeb_eval_id === unc.uncertainity_typeb_eval_id)} />
-                                                        <ListItemText primary={unc.uncertainity_component} />
-                                                    </MenuItem>
-                                                ))
-                                            
+
+                                            typeBEval.filter(item => !["13", "14", "15", "16", "17"].includes(item.uncertainity_typeb_eval_id)).map((unc, index) => (
+                                                <MenuItem key={index} value={unc} disabled={uncertainityData.uncTypeBResult.find(value => value.typeBId === unc.uncertainity_typeb_eval_id)}>
+                                                    <Checkbox checked={selectedValues.find(value => value.uncertainity_typeb_eval_id === unc.uncertainity_typeb_eval_id)} />
+                                                    <ListItemText primary={unc.uncertainity_component} />
+                                                </MenuItem>
+                                            ))
+
                                             :
-                                            
-                                                typeBEval.map((unc, index) => (
-                                                    <MenuItem key={index} value={unc} disabled={typeBEvalData.find(value => value.typeBId === unc.uncertainity_typeb_eval_id)}>
-                                                        <Checkbox checked={selectedValues.find(value => value.uncertainity_typeb_eval_id === unc.uncertainity_typeb_eval_id)} />
-                                                        <ListItemText primary={unc.uncertainity_component} />
-                                                    </MenuItem>
-                                                ))
-                                            
+
+                                            typeBEval.map((unc, index) => (
+                                                <MenuItem key={index} value={unc} disabled={uncertainityData.uncTypeBResult.find(value => value.typeBId === unc.uncertainity_typeb_eval_id)}>
+                                                    <Checkbox checked={selectedValues.find(value => value.uncertainity_typeb_eval_id === unc.uncertainity_typeb_eval_id)} />
+                                                    <ListItemText primary={unc.uncertainity_component} />
+                                                </MenuItem>
+                                            ))
+
                                         }
 
 
@@ -1057,17 +1066,17 @@ const MeasurementUncertainty = () => {
                                 <tbody>
                                     <tr>
                                         <th colSpan={2}>Source of uncertainty Xi</th>
-                                        <th>Estimates <br/><code style={{ fontSize: "15px" }}>(Xi)</code> </th>
+                                        <th>Estimates <br /><code style={{ fontSize: "15px" }}>(Xi)</code> </th>
                                         <th>Probability Distribution  </th>
                                         <th width="6%">Type</th>
-                                        <th>Factor <br/><code style={{ fontSize: "15px" }}>(x)</code></th>
+                                        <th>Factor <br /><code style={{ fontSize: "15px" }}>(x)</code></th>
                                         <th>Standard Uncertainty <br /><code style={{ fontSize: "15px" }}>u = (Xi / x)</code></th>
                                         <th>Sensitivity Coefficient <br /><code style={{ fontSize: "15px" }}>(y)</code></th>
-                                        <th>Uncertainty contribution <br/><code style={{ fontSize: "15px" }}>ui = (x * y)</code></th>
-                                        <th>Degree of freedom <br/><code style={{ fontSize: "15px" }}>vi = (n - 1)</code></th>
+                                        <th>Uncertainty contribution <br /><code style={{ fontSize: "15px" }}>ui = (x * y)</code></th>
+                                        <th>Degree of freedom <br /><code style={{ fontSize: "15px" }}>vi = (n - 1)</code></th>
                                         <th>Remove</th>
                                     </tr>
-                                    {typeBEvalData.map((item, index) => (
+                                    {uncertainityData.uncTypeBResult.map((item, index) => (
                                         <tr key={index}>
                                             <td>U{index + 1}</td>
                                             <td>{item.srcOfUNCXi}</td>
@@ -1119,7 +1128,7 @@ const MeasurementUncertainty = () => {
                             </table>
                         </div>
                     </Paper>
-                   
+
                     <div className='row'>
                         <div className='d-flex justify-content-end' >
                             <div className='me-2'>

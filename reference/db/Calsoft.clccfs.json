@@ -1,0 +1,192 @@
+[{
+  "_id": {
+    "$oid": "65cc98bf7712e90ad26322ba"
+  },
+  "clccf_id": 1,
+  "degrees_freedom": "v",
+  "fraction_percent": "95.45"
+},
+{
+  "_id": {
+    "$oid": "65cc98bf7712e90ad26322bb"
+  },
+  "clccf_id": 2,
+  "degrees_freedom": "1",
+  "fraction_percent": "13.97"
+},
+{
+  "_id": {
+    "$oid": "65cc98bf7712e90ad26322bc"
+  },
+  "clccf_id": 3,
+  "degrees_freedom": "2",
+  "fraction_percent": "4.53"
+},
+{
+  "_id": {
+    "$oid": "65cc98bf7712e90ad26322bd"
+  },
+  "clccf_id": 4,
+  "degrees_freedom": "3",
+  "fraction_percent": "3.31"
+},
+{
+  "_id": {
+    "$oid": "65cc98bf7712e90ad26322be"
+  },
+  "clccf_id": 5,
+  "degrees_freedom": "4",
+  "fraction_percent": "2.87"
+},
+{
+  "_id": {
+    "$oid": "65cc98bf7712e90ad26322bf"
+  },
+  "clccf_id": 6,
+  "degrees_freedom": "5",
+  "fraction_percent": "2.65"
+},
+{
+  "_id": {
+    "$oid": "65cc98bf7712e90ad26322c0"
+  },
+  "clccf_id": 7,
+  "degrees_freedom": "6",
+  "fraction_percent": "2.52"
+},
+{
+  "_id": {
+    "$oid": "65cc98bf7712e90ad26322c1"
+  },
+  "clccf_id": 8,
+  "degrees_freedom": "7",
+  "fraction_percent": "2.43"
+},
+{
+  "_id": {
+    "$oid": "65cc98bf7712e90ad26322c2"
+  },
+  "clccf_id": 9,
+  "degrees_freedom": "8",
+  "fraction_percent": "2.37"
+},
+{
+  "_id": {
+    "$oid": "65cc98bf7712e90ad26322c3"
+  },
+  "clccf_id": 10,
+  "degrees_freedom": "9",
+  "fraction_percent": "2.32"
+},
+{
+  "_id": {
+    "$oid": "65cc98bf7712e90ad26322c4"
+  },
+  "clccf_id": 11,
+  "degrees_freedom": "10",
+  "fraction_percent": "2.28"
+},
+{
+  "_id": {
+    "$oid": "65cc98bf7712e90ad26322c5"
+  },
+  "clccf_id": 12,
+  "degrees_freedom": "11",
+  "fraction_percent": "2.25"
+},
+{
+  "_id": {
+    "$oid": "65cc98bf7712e90ad26322c6"
+  },
+  "clccf_id": 13,
+  "degrees_freedom": "12",
+  "fraction_percent": "2.23"
+},
+{
+  "_id": {
+    "$oid": "65cc98bf7712e90ad26322c7"
+  },
+  "clccf_id": 14,
+  "degrees_freedom": "13",
+  "fraction_percent": "2.21"
+},
+{
+  "_id": {
+    "$oid": "65cc98bf7712e90ad26322c8"
+  },
+  "clccf_id": 15,
+  "degrees_freedom": "14",
+  "fraction_percent": "2.20"
+},
+{
+  "_id": {
+    "$oid": "65cc98bf7712e90ad26322c9"
+  },
+  "clccf_id": 16,
+  "degrees_freedom": "15",
+  "fraction_percent": "2.18"
+},
+{
+  "_id": {
+    "$oid": "65cc98bf7712e90ad26322ca"
+  },
+  "clccf_id": 17,
+  "degrees_freedom": "16",
+  "fraction_percent": "2.17"
+},
+{
+  "_id": {
+    "$oid": "65cc98bf7712e90ad26322cb"
+  },
+  "clccf_id": 18,
+  "degrees_freedom": "17",
+  "fraction_percent": "2.16"
+},
+{
+  "_id": {
+    "$oid": "65cc98bf7712e90ad26322cc"
+  },
+  "clccf_id": 19,
+  "degrees_freedom": "18",
+  "fraction_percent": "2.15"
+},
+{
+  "_id": {
+    "$oid": "65cc98bf7712e90ad26322cd"
+  },
+  "clccf_id": 20,
+  "degrees_freedom": "19",
+  "fraction_percent": "2.14"
+},
+{
+  "_id": {
+    "$oid": "65cc98bf7712e90ad26322ce"
+  },
+  "clccf_id": 21,
+  "degrees_freedom": "20",
+  "fraction_percent": "2.13"
+},
+{
+  "_id": {
+    "$oid": "65cc98bf7712e90ad26322cf"
+  },
+  "clccf_id": 22,
+  "degrees_freedom": "25",
+  "fraction_percent": "2.11"
+},
+{
+  "_id": {
+    "$oid": "65cc98bf7712e90ad26322d0"
+  },
+  "clccf_id": 23,
+  "degrees_freedom": "30",
+  "fraction_percent": "2.09"
+},
+{
+  "_id": {
+    "$oid": "65cc98bf7712e90ad26322d1"
+  },
+  "clccf_id": 24,
+  "degrees_freedom": "Infinity",
+  "fraction_percent": "2.000"
+}]

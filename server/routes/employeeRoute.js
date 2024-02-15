@@ -13,7 +13,7 @@ router.post("/createEmployee", employeeController.createEmployee)
 router.put("/updateEmployee/:id", employeeController.updateEmployee)
 router.delete("/deleteEmployee", employeeController.deleteEmployee)
 router.post("/uploadEmployeeInExcel", upload, employeeController.uploadEmployeeInExcel)
-
+router.post("/getMailIdsByPlant", employeeController.getMailIdsByPlant) 
 router.put("/updateEmployeePlantDetails", employeeController.updateEmployeePlantDetails)
 
 module.exports = router;

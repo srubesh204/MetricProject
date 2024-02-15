@@ -13,8 +13,72 @@ const measurementUncertaintyController = {
   },
   createMeasurementUncertainty: async (req, res) => {
     try {
-      const { uncItemName, uncRangeSize, uncLC, uncMaterial, uncDate, uncMasterDetails, uncStartTemp, uncEndTemp, uncMeanTemp, uncRefTemp, uncTEMaster, uncTEDUC, uncR1, uncR2, uncR3, uncR4, uncR5, uncStdDeviation, uncN } = req.body;
-      const measurementUncertaintyResult = new measurementUncertaintyModel({ uncItemName, uncRangeSize, uncLC, uncMaterial, uncDate, uncMasterDetails, uncStartTemp, uncEndTemp, uncMeanTemp, uncRefTemp, uncTEMaster, uncTEDUC, uncR1, uncR2, uncR3, uncR4, uncR5, uncStdDeviation, uncN });
+      const {
+        uncItemName,
+        uncRangeSize,
+        uncRangeSizeUnit,
+        uncLC,
+        uncMaterial,
+        uncDate,
+        uncMasterDetails,
+        uncStartTemp,
+        uncEndTemp,
+        uncMeanTemp,
+        uncRefTemp,
+        uncTEMaster,
+        uncTEDUC,
+        uncTI,
+        uncR1,
+        uncR2,
+        uncR3,
+        uncR4,
+        uncR5,
+        uncR6,
+        uncR7,
+        uncR8,
+        uncR9,
+        uncR10,
+        uncStdDeviation,
+        uncN,
+        combinedUnc,
+        uncCoverageFactor,
+        uncDegOfFreedom,
+        uncUncertainity,
+        uncTypeBResult
+      } = req.body
+      const measurementUncertaintyResult = new measurementUncertaintyModel({
+        uncItemName,
+        uncRangeSize,
+        uncRangeSizeUnit,
+        uncLC,
+        uncMaterial,
+        uncDate,
+        uncMasterDetails,
+        uncStartTemp,
+        uncEndTemp,
+        uncMeanTemp,
+        uncRefTemp,
+        uncTEMaster,
+        uncTEDUC,
+        uncTI,
+        uncR1,
+        uncR2,
+        uncR3,
+        uncR4,
+        uncR5,
+        uncR6,
+        uncR7,
+        uncR8,
+        uncR9,
+        uncR10,
+        uncStdDeviation,
+        uncN,
+        combinedUnc,
+        uncCoverageFactor,
+        uncDegOfFreedom,
+        uncUncertainity,
+        uncTypeBResult
+      });
       const validationError = measurementUncertaintyResult.validateSync();
       if (validationError) {
         // Handle validation errors
@@ -52,10 +116,9 @@ const measurementUncertaintyController = {
       // }
 
       // Create an object with the fields you want to update
-      const { uncItemName, uncRangeSize, uncLC, uncMaterial, uncDate, uncMasterDetails, uncStartTemp, uncEndTemp, uncMeanTemp, uncRefTemp, uncTEMaster, uncTEDUC, uncR1, uncR2, uncR3, uncR4, uncR5, uncStdDeviation, uncN } = req.body;
-      const updateImFields = {
-        uncItemName,
+      const { uncItemName,
         uncRangeSize,
+        uncRangeSizeUnit,
         uncLC,
         uncMaterial,
         uncDate,
@@ -66,13 +129,57 @@ const measurementUncertaintyController = {
         uncRefTemp,
         uncTEMaster,
         uncTEDUC,
+        uncTI,
         uncR1,
         uncR2,
         uncR3,
         uncR4,
         uncR5,
+        uncR6,
+        uncR7,
+        uncR8,
+        uncR9,
+        uncR10,
         uncStdDeviation,
-        uncN
+        uncN,
+        combinedUnc,
+        uncCoverageFactor,
+        uncDegOfFreedom,
+        uncUncertainity,
+        uncTypeBResult } = req.body;
+        
+      const updateImFields = {
+        uncItemName,
+        uncRangeSize,
+        uncRangeSizeUnit,
+        uncLC,
+        uncMaterial,
+        uncDate,
+        uncMasterDetails,
+        uncStartTemp,
+        uncEndTemp,
+        uncMeanTemp,
+        uncRefTemp,
+        uncTEMaster,
+        uncTEDUC,
+        uncTI,
+        uncR1,
+        uncR2,
+        uncR3,
+        uncR4,
+        uncR5,
+        uncR6,
+        uncR7,
+        uncR8,
+        uncR9,
+        uncR10,
+        uncStdDeviation,
+        uncN,
+        combinedUnc,
+        uncCoverageFactor,
+        uncDegOfFreedom,
+        uncUncertainity,
+        uncTypeBResult
         // Add more fields as needed
       };
       // Find the designation by desId and update it
