@@ -31,6 +31,9 @@ const employeeController = require("./controllers/employeeController");
 const mailRoute = require("./routes/mailRoute");
 const itemHistoryRoute = require("./routes/itemHistoryRoute")
 const measurementUncertaintyRoute = require("./routes/measurementUncertaintyRoute");
+const uncMaterialCteRoute = require('./routes/uncMaterialCteRoute')
+const uncTypeBRoute = require('./routes/uncTypeBRoute')
+
 const fs = require('fs');
 
 
@@ -81,6 +84,9 @@ app.use('/placeOfUsage', placeOfUsageRoute);
 app.use('/mailConfig', mailConfigRoute);
 app.use('/mail', mailRoute)
 app.use('/measurementUncertainty', measurementUncertaintyRoute)
+app.use('/unc', measurementUncertaintyRoute)
+app.use('/unc', uncMaterialCteRoute)
+app.use('/unc', uncTypeBRoute)
  
 //
 app.post('/login', employeeController.employeeLoginCheck)

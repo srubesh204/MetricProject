@@ -8,4 +8,4 @@ const uncClSchema = new mongoose.Schema({
 });
 uncClSchema.plugin(uniqueValidator);
 
-module.exports = mongoose.model('unccl', uncClSchema);
+module.exports = mongoose.model('unccl', uncClSchema); 
