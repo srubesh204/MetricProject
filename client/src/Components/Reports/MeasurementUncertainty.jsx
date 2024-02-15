@@ -113,7 +113,8 @@ const MeasurementUncertainty = () => {
         combinedUnc: "",
         uncCoverageFactor: "",
         uncDegOfFreedom: "",
-        uncUncertainity: ""
+        uncUncertainity: "",
+        uncTypeBResult: []
 
     }
     const [uncertainityData, setUncertainityData] = useState({
@@ -248,7 +249,7 @@ const MeasurementUncertainty = () => {
                     }
                     break;
                 case "6":
-                    estimatesXi = uncertainityData.uncMasterDetails.length > 2 ? Number(uncertainityData.uncMasterDetails[1].accuracy).toFixed(4) : "";
+                    estimatesXi = uncertainityData.uncMasterDetails.length > 2 ? Number(uncertainityData.uncMasterDetails[2].accuracy).toFixed(4) : "";
                     factor = Number(item.factor);
                     if (estimatesXi) {
                         if (item.factor_root === "sqrt") {
@@ -560,8 +561,9 @@ const MeasurementUncertainty = () => {
     const [errors, setErrors] = useState({})
     const validateFunction = () => {
         let tempErrors = {};
-        tempErrors.uncItemName = uncertainityData.uncItemName ? "" : "uncItemName  is Required"
-        tempErrors.uncRangeSize = uncertainityData.uncRangeSize ? "" : "uncRangeSize is Required"
+        tempErrors.uncItemName = uncertainityData.uncItemName ? "" : "ItemName  is Required"
+        tempErrors.uncRangeSize = uncertainityData.uncRangeSize ? "" : "RangeSize is Required"
+        tempErrors.uncRangeSizeUnit = uncertainityData.uncRangeSizeUnit === "-" ? "" : "Unit is Required"
         setErrors({ ...tempErrors })
         return Object.values(tempErrors).every(x => x === "")
     }
@@ -586,6 +588,8 @@ const MeasurementUncertainty = () => {
                 setErrorHandler({ status: response.data.status, message: response.data.message, code: "success" })
 
             } else {
+                console.log("Error")
+                setSnackBarOpen(true)
                 setErrorHandler({ status: 0, message: "Fill the required fields", code: "error" })
             }
         } catch (err) {
@@ -728,7 +732,7 @@ const MeasurementUncertainty = () => {
                         <div className='row g-2'>
                             <h6 className="col-12 text-center">DUC Details</h6>
                             <div className="col">
-                                <TextField size='small' fullWidth variant='outlined' onChange={handleUncertaintyChange} value={uncertainityData.uncItemName} label="DUC Name" name='uncItemName' id='uncItemNameId'>
+                                <TextField size='small' fullWidth variant='outlined' {...(errors.uncItemName !== "" && { helperText: errors.uncItemName, error: true })} onChange={handleUncertaintyChange} value={uncertainityData.uncItemName} label="DUC Name" name='uncItemName' id='uncItemNameId'>
                                     {itemNameList.map((item, index) => (
                                         <MenuItem key={index} value={item.itemAddMasterName}>{item.itemAddMasterName}</MenuItem>
                                     ))}
@@ -795,7 +799,7 @@ const MeasurementUncertainty = () => {
                             </div>
                             <div className="col">
                                 <TextField label={`L.C.in (${uncertainityData.uncRangeSizeUnit})`}
-                                    value={masterDetails.lC} fullWidth size="small" name="lC" InputProps={{ readOnly: true }} ></TextField>
+                                    value={masterDetails.lC} fullWidth size="small" name="lC" ></TextField>
                             </div>
                             <div className="col">
                                 <TextField size='small' fullWidth variant='outlined' label={`Uncertainty in (${uncertainityData.uncRangeSizeUnit})`} onChange={handlePlantChange} value={masterDetails.uncertainty} name='uncertainty' id='uncertaintyId'>
@@ -832,7 +836,7 @@ const MeasurementUncertainty = () => {
                                         </tr>
                                         {uncertainityData.uncMasterDetails.map((item, index) => (
                                             <tr key={index} >
-                                                <td>{index + 1}</td>
+                                                <td>Master {index + 1}</td>
                                                 <td>{item.masterName + " - " + item.masterIMTENo}</td>
                                                 <td>{item.rangeSize}</td>
                                                 <td>{item.lC}</td>
