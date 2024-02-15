@@ -799,7 +799,7 @@ const MeasurementUncertainty = () => {
                             </div>
                             <div className="col">
                                 <TextField label={`L.C.in (${uncertainityData.uncRangeSizeUnit})`}
-                                    value={masterDetails.lC} fullWidth size="small" name="lC" ></TextField>
+                                    value={masterDetails.lC} onChange={handlePlantChange} fullWidth size="small" name="lC" ></TextField>
                             </div>
                             <div className="col">
                                 <TextField size='small' fullWidth variant='outlined' label={`Uncertainty in (${uncertainityData.uncRangeSizeUnit})`} onChange={handlePlantChange} value={masterDetails.uncertainty} name='uncertainty' id='uncertaintyId'>
