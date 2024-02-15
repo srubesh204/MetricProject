@@ -75,7 +75,7 @@ const employeeController = {
       // Create an object with the fields you want to update
       const updateEmpFields = {
         /* Specify the fields and their updated values here */
-        employeeCode , title ,  firstName,  lastName, dob , address , city , state , contactNumber , designation, mailId , doj ,  employmentStatus,  reportTo, empRole, password, plantDetails  // Example: updating the 'name' field
+        employeeCode, title, firstName, lastName, dob, address, city, state, contactNumber, designation, mailId, doj, employmentStatus, reportTo, empRole, password, plantDetails  // Example: updating the 'name' field
         // Add more fields as needed
       } = req.body;
       const updatedEmployee = new employeeModel(updateEmpFields);
@@ -168,17 +168,17 @@ const employeeController = {
       console.log(error);
       res.status(500).json({ error: error, status: 0 });
     }
-  }, 
+  },
   employeeLoginCheck: async (req, res) => {
     try {
-      const {employeeCode, password} = req.body
+      const { employeeCode, password } = req.body
       // Fetch employee data from MongoDB based on the provided employee code
       const employee = await employeeModel.findOne({ employeeCode });
-  
+
       if (!employee || employee.password !== password) {
         return res.status(401).json({ message: 'UserName or Password Wrong' });
       }
-      
+
       res.status(200).json({ employee }); // Send user data to the frontend
     } catch (error) {
       res.status(500).json({ message: 'Internal server error' });
@@ -190,9 +190,9 @@ const employeeController = {
       if (!req.file) {
         return res.status(400).json({ error: 'No file uploaded' });
       }
-      
+
       const excelData = req.file.buffer; // Access the file buffer
-  
+
       // Convert Excel data to JSON
       const jsonData = excelToJson({
         source: excelData,
@@ -213,10 +213,10 @@ const employeeController = {
           N: 'doj',
           O: 'employmentStatus',
           P: 'password',
-      }
+        }
       });
       console.log(jsonData)
-  
+
       const uploadPromises = jsonData.Sheet1.map(async (item) => {
         try {
           // Create an instance of designationModel and save it to the database
@@ -226,13 +226,13 @@ const employeeController = {
 
         } catch (error) {
           console.error('Error saving employee:', error);
-         
+
         }
       });
-  
+
       // Execute all upload promises
       const uploadedEmployee = await Promise.all(uploadPromises);
-  
+
       res.status(200).json({ uploadedEmployee, message: 'Uploaded successfully' });
     } catch (error) {
       console.error('Error uploading Excel data:', error);
@@ -243,13 +243,13 @@ const employeeController = {
     try {
       // Assuming desId is part of the URL parameter
 
-      
+
       // if (isNaN(desId)) {
       //   return res.status(400).json({ error: 'Invalid desId value' });
       // }
-     
-      
-     
+
+
+
       console.log("ItemAdd Updated Successfully")
       res.status(200).json({ result: updatedItems, message: "ItemAdd Updated Successfully" });
     } catch (error) {
@@ -267,9 +267,10 @@ const employeeController = {
       res.status(500).json({ error: error, status: 0 });
     }
   },
-  getMailIdsByPlant : async (req, res) => {
-    try{
-      const {allowedPlants} = req.body
+  getMailIdsByPlant: async (req, res) => {
+    try {
+      const { allowedPlants } = req.body
+      console.log(allowedPlants)
 
       const emails = await employeeModel.aggregate([
         {
@@ -281,13 +282,13 @@ const employeeController = {
           $project: { mailId: 1, firstName: 1, _id: 0 }  // Only return the mailId field
         }
       ])
-      res.status(202).json({result: emails, status: 1, message: "Mail Id get Successfully"})
-    }catch{
-
+      res.status(202).json({ result: emails, status: 1, message: "Mail Id get Successfully" })
+    } catch (err) {
+      console.log(err)
     }
   }
 
-  
+
 
 }
 module.exports = employeeController; 

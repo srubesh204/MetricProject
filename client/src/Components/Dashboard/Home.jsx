@@ -1245,19 +1245,20 @@ const Home = () => {
 
   const getMailPlant = async () => {
     console.log(mailIds)
-    try {
-      const response = await axios.get(
-        `${process.env.REACT_APP_PORT}/employee/getMailIdsByPlant`, { allowedPlants : selectedRows.length > 0 ? selectedRows[0].itemPlant : [] }
-      );
-      console.log(response.data.result)
-      setMailIds(response.data.result)
-
-
-    } catch (err) {
-      console.log(err);
+    if(selectedRows.length > 0){
+      try {
+        const response = await axios.post(
+          `${process.env.REACT_APP_PORT}/employee/getMailIdsByPlant`, { allowedPlants : [selectedRows[0].itemPlant]}
+        );
+        console.log(response.data.result)
+        setMailIds(response.data.result)
+  
+  
+      } catch (err) {
+        console.log(err);
+      }
     }
   };
-
   useEffect(() => {
     getMailPlant();
   }, [selectedRows]);
