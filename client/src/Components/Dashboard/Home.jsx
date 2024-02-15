@@ -1242,17 +1242,14 @@ const Home = () => {
     }
   };
   const [mailIds, setMailIds] = useState([])
-  const mailIdGather = () => {
-    if (selectedRows.length > 0) {
-      const plants = selectedRows.map(item => item.itemPlant)
-      console.log(plants)
+ //
+ // mail id function here
+  //`${process.env.REACT_APP_PORT}/employee/getMailIdsByPlant`, { allowedPlants : selectedRows.length > 0 ? selectedRows[0].itemPlant : [] }
 
-      const empEmails = activeEmps.allEmps.filter(emp => emp.plantDetails.find(plant => plants.find(itemPlant => plant.plantName == itemPlant)))
-      const uniqueEmails = [...new Set(empEmails)]
-      setMailIds(empEmails)
-      console.log(uniqueEmails)
-    }
-  }
+
+
+
+ ///
   const [mailList, setMailList] = useState([])
   const getMailList = async () => {
     try {
