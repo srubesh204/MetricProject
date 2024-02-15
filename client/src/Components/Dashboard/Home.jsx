@@ -1853,6 +1853,7 @@ const Home = () => {
                   }}
 
                   checkboxSelection
+                  disableColumnFilter
                   // onRowClick={handleSelectRow}
                   slots={{
                     toolbar: () => (
@@ -1996,7 +1997,7 @@ const Home = () => {
                 <div className='col mb-2' style={{ height: "20%", width: "100%", display: "flex", alignItems: "end", }} >
                   <Button component={Link} to="/" size='small' className=''>Home</Button>
                   <Button component={Link} to="/insHisCard" size='small' >
-                    HistoryCard
+                    History Card
                   </Button>
                 </div>
 

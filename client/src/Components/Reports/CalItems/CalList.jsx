@@ -71,12 +71,12 @@ const CalList = () => {
         try {
             const response = await axios.post(
                 `${process.env.REACT_APP_PORT}/itemAdd/getItemByPlant`, { allowedPlants: allowedPlants }
-              );
-            
+            );
+
             const masterItems = response.data.result.filter((item) => item.isItemMaster === "1")
             setItemAddList(response.data.result);
             setItemMasters(masterItems)
-        
+
         } catch (err) {
             console.log(err);
         }
@@ -182,7 +182,7 @@ const CalList = () => {
 
             const plantemps = response.data.result.filter(emp => emp.plantDetails.find(empPlant => loggedEmp.plantDetails.map(plant => plant.plantName).includes(empPlant.plantName)))
 
-           
+
 
 
             setActiveEmps(plantemps)
@@ -295,16 +295,16 @@ const CalList = () => {
     console.log(selectedCalRow)
 
     const calListColumns = [
-        { field: 'id', headerName: 'Entry. No', width: 100, renderCell: (params) => params.api.getAllRowIds().indexOf(params.id) + 1, headerAlign: "center", align: "center", },
-        ...(employeeRole && employeeRole.employee !== "viewer" ? [{ field: 'editButton', headerAlign: "center", align: "center", headerName: 'Edit', width: 100, renderCell: (params) => <EditRounded color='warning' onClick={() => setCalEditData(params)} /> }] : []),
-        { field: 'calItemEntryDate', headerName: 'Entry Date', width: 200, valueGetter: (params) => dayjs(params.row.calItemEntryDate).format('DD-MM-YYYY'), headerAlign: "center", align: "center", },
-        { field: 'calIMTENo', headerName: 'Item IMTENo', width: 200, headerAlign: "center", align: "center", },
-        { field: 'calItemName', headerName: 'Item Description', width: 200, headerAlign: "center", align: "center", },
-        { field: 'calRangeSize', headerName: 'Range/Size', width: 200, headerAlign: "center", align: "center", },
-        { field: 'calItemCalDate', headerName: 'Calibration On', width: 200, valueGetter: (params) => dayjs(params.row.calItemCalDate).format('DD-MM-YYYY'), headerAlign: "center", align: "center", },
-        { field: 'calItemDueDate', headerName: 'Next Due On', width: 200, valueGetter: (params) => dayjs(params.row.calItemDueDate).format('DD-MM-YYYY'), headerAlign: "center", align: "center", },
-        { field: 'calStatus', headerName: 'Cal status', width: 200, headerAlign: "center", align: "center", },
-        { field: 'printButton', headerName: 'Print', headerAlign: "center", align: "center", width: 100, renderCell: (params) => <Button component={Link} to={`${process.env.REACT_APP_PORT}/calCertificates/${params.row.calCertificateNo}.pdf`} target='_blank'><PrintRounded color='success' /></Button> }
+        { field: 'id', headerName: 'Entry. No', width: 60, renderCell: (params) => params.api.getAllRowIds().indexOf(params.id) + 1, headerAlign: "center", align: "center", },
+        ...(employeeRole && employeeRole.employee !== "viewer" ? [{ field: 'editButton', headerAlign: "center", align: "center", headerName: 'Edit', width: 60, renderCell: (params) => <EditRounded color='warning' onClick={() => setCalEditData(params)} /> }] : []),
+        { field: 'calItemEntryDate', headerName: 'Entry Date', width: 90, valueGetter: (params) => dayjs(params.row.calItemEntryDate).format('DD-MM-YYYY'), headerAlign: "center", align: "center", },
+        { field: 'calIMTENo', headerName: 'Item IMTENo', width: 150, headerAlign: "center", align: "center", },
+        { field: 'calItemName', headerName: 'Item Description', width: 150, headerAlign: "center", align: "center", },
+        { field: 'calRangeSize', headerName: 'Range/Size', width: 100, headerAlign: "center", align: "center", },
+        { field: 'calItemCalDate', headerName: 'Calibration On', width: 100, valueGetter: (params) => dayjs(params.row.calItemCalDate).format('DD-MM-YYYY'), headerAlign: "center", align: "center", },
+        { field: 'calItemDueDate', headerName: 'Next Due On', width: 100, valueGetter: (params) => dayjs(params.row.calItemDueDate).format('DD-MM-YYYY'), headerAlign: "center", align: "center", },
+        { field: 'calStatus', headerName: 'Cal status', width: 90, headerAlign: "center", align: "center", },
+        { field: 'printButton', headerName: 'Print', headerAlign: "center", align: "center", width: 60, renderCell: (params) => <Button component={Link} to={`${process.env.REACT_APP_PORT}/calCertificates/${params.row.calCertificateNo}.pdf`} target='_blank'><PrintRounded color='success' /></Button> }
 
 
 
@@ -462,6 +462,38 @@ const CalList = () => {
 
                             <div className='col d-flex'>
                                 <div className='col me-2'>
+                                    <TextField label="Plant Wise"
+                                        id="itemPlantId"
+                                        select
+                                        defaultValue="all"
+                                        // value={filterAllNames.plantWise}
+                                        fullWidth
+                                        onChange={handleFilter}
+                                        size="small"
+                                        name="itemPlant" >
+                                        <MenuItem value="all">All</MenuItem>
+                                        {loggedEmp.plantDetails.map((item, index) => (
+                                            <MenuItem key={index} value={item.plantName}>{item.plantName}</MenuItem>
+                                        ))}
+                                    </TextField>
+                                </div>
+                                <div className='col me-2 '>
+                                    <TextField label="Primary Location "
+                                        id="itemDepartmentId"
+                                        select
+                                        defaultValue="all"
+                                        // value={filterAllNames.currentLocation}
+                                        fullWidth
+                                        onChange={handleFilter}
+                                        size="small"
+                                        name="itemDepartment" >
+                                        <MenuItem value="all">All</MenuItem>
+                                        {departments.map((item, index) => (
+                                            <MenuItem key={index} value={item.department}>{item.department}</MenuItem>
+                                        ))}
+                                    </TextField>
+                                </div>
+                                <div className='col me-2'>
                                     <TextField label="Item Description"
                                         id="imteNoId" select defaultValue="all" fullWidth size="small" name="itemName" onChange={handleFilter}>
                                         <MenuItem value="all">All</MenuItem>
@@ -478,48 +510,9 @@ const CalList = () => {
                                         ))}
                                     </TextField>
                                 </div>
-                                <div className='col me-2'>
-
-                                    <TextField label="Plant Wise"
-                                        id="itemPlantId"
-                                        select
-                                        defaultValue="all"
-                                        // value={filterAllNames.plantWise}
-                                        fullWidth
-                                        onChange={handleFilter}
-                                        size="small"
-                                        name="itemPlant" >
-                                        <MenuItem value="all">All</MenuItem>
-                                        {loggedEmp.plantDetails.map((item, index) => (
-                                            <MenuItem key={index} value={item.plantName}>{item.plantName}</MenuItem>
-                                        ))}
-                                    </TextField>
-                                </div>
-                                <div className='col '>
-                                    <TextField label="Primary Location "
-                                        id="itemDepartmentId"
-                                        select
-                                        defaultValue="all"
-                                        // value={filterAllNames.currentLocation}
-                                        fullWidth
-                                        onChange={handleFilter}
-                                        size="small"
-                                        name="itemDepartment" >
-                                        <MenuItem value="all">All</MenuItem>
-                                        {departments.map((item, index) => (
-                                            <MenuItem key={index} value={item.department}>{item.department}</MenuItem>
-                                        ))}
-
-
-                                    </TextField>
-
-                                </div>
-
-
                             </div>
                             <div className=' col d-flex justify-content-end'>
                                 <div className="col-3 me-2">
-
                                     <DatePicker
                                         fullWidth
                                         id="fromDateId"
@@ -560,7 +553,7 @@ const CalList = () => {
                         <div className='row'>
                             <Box sx={{ height: "75vh", width: '100%', my: 2 }}>
                                 <DataGrid disableDensitySelector
-                                disableColumnFilter
+                                    disableColumnFilter
 
                                     rows={filteredCalData}
                                     columns={calListColumns}
@@ -610,7 +603,7 @@ const CalList = () => {
                         </div>
                         <div className='row'>
                             <div className='col d-flex '>
-                               
+
                                 {/* <div className='me-2 '>
                                     <button type="button" className='btn btn-secondary' > Label Print</button>
                                 </div>
@@ -673,14 +666,14 @@ const CalList = () => {
 
                     {employeeRole && employeeRole.employee !== "viewer" &&
                         <CalData.Provider
-                            value={{ employeeRole, calAddOpen, setCalAddOpen, itemMasters, activeEmps, itemAddList, setItemAddList, calDataDcList, lastNo , masters}}
+                            value={{ employeeRole, calAddOpen, setCalAddOpen, itemMasters, activeEmps, itemAddList, setItemAddList, calDataDcList, lastNo, masters }}
                         >
                             <CalAddModel />
                         </CalData.Provider>}
 
                     {employeeRole && employeeRole.employee !== "viewer" &&
                         <CalData.Provider
-                            value={{ employeeRole, calEditOpen, setCalEditOpen, selectedCalRow, itemMasters, activeEmps, itemAddList, setItemAddList , calListFetchData}}
+                            value={{ employeeRole, calEditOpen, setCalEditOpen, selectedCalRow, itemMasters, activeEmps, itemAddList, setItemAddList, calListFetchData }}
                         >
                             {selectedCalRow.length !== 0 && <CalEditModel />}
                         </CalData.Provider>}

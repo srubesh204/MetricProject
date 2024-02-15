@@ -570,6 +570,7 @@ const TotalList = () => {
     }
     if (name === "customerWise") {
        const customerData = partDataList.filter(part => part.customer === value)
+       
     //  const customerData =["All",...new Set(customers.map(part => part.customer))]
       const customers = plantDatas.filter(item => customerData.some(cus => item.itemPartName.includes(cus.partNo)))
       
