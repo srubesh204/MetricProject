@@ -455,12 +455,8 @@ const MeasurementUncertainty = () => {
         setSelectedValues([]);
     }
 
-
-
-    
-
-
     console.log(masterDetails)
+
     const handlePlantChange = (e) => {
         const { name, value } = e.target;
         setMasterDetails((prev) => ({ ...prev, [name]: value }));
@@ -513,24 +509,6 @@ const MeasurementUncertainty = () => {
             return {...prev, uncTypeBResult: updatedData} // Return the updated array
         });
     };
-
-    // const [uncertaintyList, setUncertaintyList] = useState([])
-    // const uncFetch = async () => {
-    //     try {
-    //         const response = await axios.get(
-    //             `${process.env.REACT_APP_PORT}/measurementUncertainty/getAllMeasurementUncertainty`
-    //         );
-    //         setUncertaintyList(response.data.result);
-    //         console.log(response.data)
-    //     } catch (err) {
-    //         console.log(err);
-    //     }
-    // };
-    // useEffect(() => {
-    //     uncFetch()
-    // }, []);
-
-
 
 
 

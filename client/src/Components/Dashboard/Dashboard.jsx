@@ -356,13 +356,17 @@ console.log(MenuItems.system)
           </AppBar>
           <Drawer variant="permanent" open={togglerOpen}>
             <Toolbar
+              disablePadding
+              disableGutters
               sx={{
                 display: 'flex',
                 alignItems: 'center',
-                justifyContent: 'flex-end',
-                px: [1],
+                justifyContent: 'space-between',
+                width:"100%"
               }}
             >
+              
+              <img src='/CalSmartMetricLogo.png'  style={{marginLeft: "24px", width: 204.5, height: 56.5, objectFit: "contain"}} /> 
               <IconButton onClick={toggleDrawer}>
                 <ChevronLeftIcon />
               </IconButton>
