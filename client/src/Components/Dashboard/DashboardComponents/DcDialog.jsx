@@ -651,7 +651,7 @@ const Dc = () => {
 
                                         </div>
                                         <div className="col me-2">
-                                            <TextField label="Reason"
+                                            <TextField label="Common Reason"
                                                 {...(errors.dcReason !== "" && { helperText: errors.dcReason, error: true })}
                                                 id="dcReasonId"
                                                 select

@@ -1418,7 +1418,7 @@ const ItemAdd = () => {
                                                 <th>Nominal Size</th>
                                                 <th>Unit</th>
                                                 <th colspan="3">Permissible Size  ({itemAddData.acceptanceCriteria.length > 0 ? itemAddData.acceptanceCriteria[0].acNominalSizeUnit : ''}) </th>
-                                                <th width="20%" colspan="2" className='text-center'>Observed size
+                                                <th width="20%" colspan="2" className='text-center'>Observed size ({itemAddData.acceptanceCriteria.length > 0 ? itemAddData.acceptanceCriteria[0].acNominalSizeUnit : ''})
                                                     <RadioGroup
                                                         className='d-flex justify-content-around'
                                                         row
@@ -1544,7 +1544,7 @@ const ItemAdd = () => {
                                                 <th>Nominal Size</th>
                                                 <th>Unit</th>
                                                 <th colspan="2">Permissible Size ({itemAddData.acceptanceCriteria.length > 0 ? itemAddData.acceptanceCriteria[0].acNominalSizeUnit : ''}) </th>
-                                                <th width="20%" colspan="2" className='text-center'>Observed size
+                                                <th width="20%" colspan="2" className='text-center'>Observed size ({itemAddData.acceptanceCriteria.length > 0 ? itemAddData.acceptanceCriteria[0].acNominalSizeUnit : ''})
                                                     <RadioGroup
                                                         className='d-flex justify-content-around'
                                                         row

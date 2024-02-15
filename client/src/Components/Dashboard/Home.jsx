@@ -1974,19 +1974,19 @@ const Home = () => {
                 </table>
               </div>
               {/* style={{ height: "20%", width: "100%", display: "flex", alignItems: "end", justifyContent: 'end' }} */}
-              <div className='row' style={{ height: "20%", width: "100%", display: "flex", alignItems: "end", }}>
+              <div className='row' style={{ height: "23%", width: "100%", display: "flex", alignItems: "end", }}>
                 <div className='col mb-2' style={{ height: "20%", width: "100%", display: "flex", alignItems: "end", }} >
-                  <Button component={Link} to="/" variant='contained' size='small'className='me-1' startIcon={<ArrowBack />} endIcon={<House />} color='secondary'>Home</Button>
-                  <Button component={Link} to="/insHisCard"  variant='contained' size='small' >
-                      History 
+                  <Button component={Link} to="/"  size='small'className=''>Home</Button>
+                  <Button component={Link} to="/insHisCard"   size='small' >
+                      HistoryCard
                     </Button>
                 </div>
 
 
 
-                <div className='col d-flex justify-content-end  height: "10%", width: "50%"' >
-                  <p style={{ color: '#3498db', fontSize: '19px', fontWeight: 'bold' }}>
-                    Welcome {loggedEmp.firstName}
+                <div className='col d-flex justify-content-end  height: "20%", width: "50%"' >
+                  <p style={{ color: '#3498db', fontSize: '18px', fontWeight: 'bold',align:"right" }}>
+                       Welcome {loggedEmp.firstName}
                   </p>
                 </div>
               </div>
