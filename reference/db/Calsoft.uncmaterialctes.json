@@ -1,0 +1,45 @@
+[{
+  "_id": {
+    "$oid": "65c06e51ef408bc2e6031400"
+  },
+  "cte_id": 1,
+  "material_name": "Steel",
+  "material_cte": "0.0115",
+  "cte_unit": "mm/m°C"
+},
+{
+  "_id": {
+    "$oid": "65c06e51ef408bc2e6031401"
+  },
+  "cte_id": 2,
+  "material_name": "Carbide",
+  "material_cte": "0.0047",
+  "cte_unit": "mm/m°C"
+},
+{
+  "_id": {
+    "$oid": "65c06e51ef408bc2e6031402"
+  },
+  "cte_id": 3,
+  "material_name": "Ceramic",
+  "material_cte": "0.0105",
+  "cte_unit": "mm/m°C"
+},
+{
+  "_id": {
+    "$oid": "65c06e51ef408bc2e6031403"
+  },
+  "cte_id": 4,
+  "material_name": "Glass",
+  "material_cte": "0.008",
+  "cte_unit": "mm/m°C"
+},
+{
+  "_id": {
+    "$oid": "65c06e51ef408bc2e6031404"
+  },
+  "cte_id": 5,
+  "material_name": "Granite",
+  "material_cte": "0.008",
+  "cte_unit": "mm/m°C"
+}]
