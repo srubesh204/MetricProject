@@ -481,15 +481,15 @@ const itemAddController = {
         let obSize = [];
         if (updateItemAdd.itemType === "variable") {
           obSize = acceptanceCriteria.map(item => {
-            return item.acParameter + ":" + item.acOBError
+            return item.acParameter + ":" + (item.acOBError ? item.acOBError : "")
           })
         } else {
           obSize = acceptanceCriteria.map(item => {
 
             if (itemOBType === "minmax") {
-              return item.acParameter + ":" + item.acMinOB + "/" + item.acMaxOB
+              return item.acParameter + ":" + (item.acMinOB ? item.acMinOB : "") + "/" + (item.acMaxOB ? item.acMaxOB : "")
             } else {
-              return item.acParameter + ":" + item.acAverageOB
+              return item.acParameter + ":" + (item.acAverageOB ? item.acAverageOB : "")
             }
 
           })

@@ -305,7 +305,7 @@ const itemGRNController = {
           itemCalibrationDoneAt,
           itemUncertainityUnit,
           itemPrevCalData,
-          itemCalibratedAt,
+          itemCalibratedAt : grnPartyName,
           itemCertificateName: grnItemCertificate,
           itemOBType,
           itemUncertainity,

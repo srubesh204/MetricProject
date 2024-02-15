@@ -84,7 +84,7 @@ app.use('/measurementUncertainty', measurementUncertaintyRoute)
  
 //
 app.post('/login', employeeController.employeeLoginCheck)
-const port = 3003;
-app.listen(port, () => {
-  console.log(`Server is running on port ${port}`);
+
+app.listen(process.env.SERVER_PORT_NO || 3003, () => {
+  console.log(`Server is running on port ${process.env.SERVER_PORT_NO}`);
 });

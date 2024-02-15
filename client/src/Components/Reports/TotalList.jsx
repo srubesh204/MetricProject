@@ -802,7 +802,7 @@ const TotalList = () => {
 
     const filter = itemList.filter((item) => dayjs(item.itemCalDate).isSameOrAfter(filterDates.startDate) && dayjs(item.itemCalDate).isSameOrBefore(filterDates.endDate))
 
-    console.log(filter)
+    console.table(filter)
     setFilteredItemListData(filter)
   }
 
@@ -931,7 +931,7 @@ const TotalList = () => {
         `${process.env.REACT_APP_PORT}/formatNo/getFormatNoById/1`
       );
       const format = response.data.result
-      console.log(format)
+      console.table(format)
       setFormatNoData(format)
     } catch (err) {
       console.log(err);
