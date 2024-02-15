@@ -24,7 +24,7 @@
             position: fixed;
             bottom: 0;
             width: 100%;
-            
+
             /* for demo */
             background: yellow;
             /* for demo */
@@ -34,7 +34,7 @@
             position: fixed;
             top: 0mm;
             width: 100%;
-            
+
             /* for demo */
             background: yellow;
             /* for demo */
@@ -90,8 +90,7 @@
                         </table>
                     </td>
                     <td width="20%" class="text-end">
-                        <img src="{{logo}}"
-                            width="80px" height="80px" />
+                        <img src="{{logo}}" width="80px" height="80px" />
                     </td>
                 </tr>
 
@@ -122,10 +121,7 @@
                                     <th style="width: 30%;">Dc Date :</th>
                                     <td style="width: 70%;">{{dcDate}}</td>
                                 </tr>
-                                <tr>
-                                    <th style="width: 50%; font-size: smaller;">Common Remarks :</th>
-                                    <td style="width: 50%;">{{dcCR}}</td>
-                                </tr>
+
                             </tbody>
                         </table>
                     </td>
@@ -164,22 +160,22 @@
                                 <tr>
                                     <td class="text-center" style="font-size: small;">
                                         Authorised
-                                            Signatory
+                                        Signatory
                                     </td>
                                 </tr>
-                               
+
                             </tbody>
                         </table>
                     </td>
-                    
+
                 </tr>
-               
+
             </tbody>
         </table>
         <div style="font-size: xx-small; margin: 0; padding: 0;">{{formatNo}}</div>
     </div>
 
-    <table >
+    <table>
 
         <thead>
             <tr>
@@ -192,12 +188,21 @@
 
         <tbody class="table table-bordered border border-secondary align-middle" style="padding: 5px;">
             <tr>
-                <th style="padding: 0.50rem; vertical-align: top; border: 1px solid #6c757d ;" width="5%" class="text-center">SiNo</th>
-                <th style="padding: 0.50rem; vertical-align: top; border: 1px solid #6c757d ;" width="75%" class="text-center">Item Description</th>
-                <th style="padding: 0.50rem; vertical-align: top; border: 1px solid #6c757d ;" style="width: 20%;" class="text-center">Remarks</th>
+                <th style="padding: 0.50rem; vertical-align: top; border: 1px solid #6c757d ;" width="5%"
+                    class="text-center">SiNo</th>
+                <th style="padding: 0.50rem; vertical-align: top; border: 1px solid #6c757d ;" width="75%"
+                    class="text-center">Item Description</th>
+                <th style="padding: 0.50rem; vertical-align: top; border: 1px solid #6c757d ;" style="width: 20%;"
+                    class="text-center">Remarks</th>
             </tr>
 
             {{dcPartyItems}}
+            <tr style="border: 1px white solid;">
+                <td colspan="3"> Common Reason: {{dcCReason}}</td>
+            </tr>
+            <tr style="border: 1px white solid;;">
+                <td colspan="3">Common Remarks: {{dcCR}}</td>
+            </tr>
 
         </tbody>
 
@@ -211,6 +216,8 @@
         </tfoot>
 
     </table>
+
+
 </body>
 
 </html>

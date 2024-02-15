@@ -125,6 +125,7 @@ const itemDcController = {
                   Make: ${item.itemMake ? item.itemMake : "-"} Sr.No: ${item.itemMFRNo ? item.itemMFRNo : "-"} Cal. Frequency: ${item.itemCalFreInMonths ? item.itemCalFreInMonths : "-"} months</td>
                   <td style="padding: 0.50rem; vertical-align: top; border: 1px solid #6c757d ;" class="text-center align-middle">${item.dcItemRemarks}</td>
               </tr>
+             
           `;
 
           return tableRow;
@@ -153,6 +154,7 @@ const itemDcController = {
           .replace(/{{dcNo}}/g, dcNo)
           .replace(/{{dcDate}}/g, dcDate)
           .replace(/{{dcCR}}/g, dcCommonRemarks)
+          .replace(/{{dcCReason}}/, dcReason)
           .replace(/{{logo}}/g, process.env.SERVER_PORT + '/logo/' + getCompDetailsById.companyLogo)
           .replace(/{{formatNo}}/g, formatNumber)
 
@@ -245,140 +247,141 @@ const itemDcController = {
 
       console.log(!isDcStatusValid)
 
-      // console.log(dcPartyItems[0].dcStatus)
-      // console.log(dcDeleteStatus)
+        // console.log(dcPartyItems[0].dcStatus)
+        // console.log(dcDeleteStatus)
 
 
 
-      // if (!isDcStatusValid) {
-      //   const grnData = await itemGRNModel.findOne({ grnItemDcNo: dcNo })
-      //   const prevUpdatePromises = prevPartyItems.filter(item => item.dcStatus === "1").map(async (item) => {
+        // if (!isDcStatusValid) {
+        //   const grnData = await itemGRNModel.findOne({ grnItemDcNo: dcNo })
+        //   const prevUpdatePromises = prevPartyItems.filter(item => item.dcStatus === "1").map(async (item) => {
 
-      //     const itemData = await itemAddModel.findById(item._id)
-
-
-      //     const { itemIMTENo, itemLastLocation } = itemData
-      //     const updateItemFields = {
-      //       itemIMTENo,
-      //       itemCurrentLocation: itemLastLocation,
-      //       itemLocation: "department",
-      //       dcId: "",
-      //       dcStatus: "0",
-      //       dcCreatedOn: "",
-      //       dcNo: ""
-      //     }
-      //     const updateResult = await itemAddModel.findOneAndUpdate(
-      //       { _id: item._id },
-      //       { $set: updateItemFields },
-      //       { new: true }
-      //     );
-      //     console.log(updateResult)
-      //     return updateResult;
-      //   });
-      //   const prevUpdatedValues = await Promise.all(prevUpdatePromises);
-      //   //
-      //   const getCompDetailsById = await compDetailsSchema.findOne(
-      //     { compId: 1 } // To return the updated document
-      //   );
-      //   const getPlantAddress = await plantSchema.findOne(
-      //     { plantName: dcPlant } // To return the updated document
-      //   );
-
-      //   const formatNo = await formatNoModel.findOne({ formatId: 1 });
-
-      //   const formatNumber = `${formatNo.fDc ? (formatNo.fDc.frNo + " " + formatNo.fDc.amNo + " " + formatNo.fDc.amDate) : ""}`
-      //   console.log(formatNumber)
-
-      //   const itemDcUpdate = new itemDcModel(updateItemDcFields);
+        //     const itemData = await itemAddModel.findById(item._id)
 
 
-      //   const validationError = itemDcUpdate.validateSync();
-      //   if (validationError) {
-      //     // Handle validation errors
-      //     const validationErrors = {};
+        //     const { itemIMTENo, itemLastLocation } = itemData
+        //     const updateItemFields = {
+        //       itemIMTENo,
+        //       itemCurrentLocation: itemLastLocation,
+        //       itemLocation: "department",
+        //       dcId: "",
+        //       dcStatus: "0",
+        //       dcCreatedOn: "",
+        //       dcNo: ""
+        //     }
+        //     const updateResult = await itemAddModel.findOneAndUpdate(
+        //       { _id: item._id },
+        //       { $set: updateItemFields },
+        //       { new: true }
+        //     );
+        //     console.log(updateResult)
+        //     return updateResult;
+        //   });
+        //   const prevUpdatedValues = await Promise.all(prevUpdatePromises);
+        //   //
+        //   const getCompDetailsById = await compDetailsSchema.findOne(
+        //     { compId: 1 } // To return the updated document
+        //   );
+        //   const getPlantAddress = await plantSchema.findOne(
+        //     { plantName: dcPlant } // To return the updated document
+        //   );
 
-      //     if (validationError.errors) {
-      //       // Convert Mongoose validation error details to a more user-friendly format
-      //       for (const key in validationError.errors) {
-      //         validationErrors[key] = validationError.errors[key].message;
-      //       }
-      //     }
+        //   const formatNo = await formatNoModel.findOne({ formatId: 1 });
 
-      //     return res.status(400).json({
-      //       errors: validationErrors
-      //     });
-      //   }
+        //   const formatNumber = `${formatNo.fDc ? (formatNo.fDc.frNo + " " + formatNo.fDc.amNo + " " + formatNo.fDc.amDate) : ""}`
+        //   console.log(formatNumber)
 
-      //   // Find the designation by desId and update it
-      //   const updateItemDc = await itemDcModel.findOneAndUpdate(
-      //     { _id: itemDcId },
-      //     updateItemDcFields,
-      //     { new: true } // To return the updated document
-      //   );
-
-      //   if (Object.keys(updateItemDc).length !== 0) {
-      //     const updatePromises = dcPartyItems.filter(item => item.dcStatus === "1").map(async (item) => {
-
-      //       const itemData = await itemAddModel.findById(item._id)
-      //       const { itemIMTENo, itemCurrentLocation: itemLastLocation } = itemData
-      //       const updateItemFields = {
-      //         itemIMTENo,
-      //         itemCurrentLocation: dcPartyName,
-      //         itemLastLocation,
-      //         itemLocation: dcPartyType,
-      //         dcId: updateItemDc._id,
-      //         dcStatus: "1",
-      //         dcCreatedOn: dcDate,
-      //         dcNo: dcNo
-      //       }
-      //       const updateResult = await itemAddModel.findOneAndUpdate(
-      //         { _id: item._id },
-      //         { $set: updateItemFields },
-      //         { new: true }
-      //       );
-      //       console.log(updateResult)
-      //       return updateResult;
-      //     });
-      //     const updatedItems = await Promise.all(updatePromises);
+        //   const itemDcUpdate = new itemDcModel(updateItemDcFields);
 
 
-      //     const itemsData = dcPartyItems.map((item, index) => {
-      //       let tableRow = `
-      //           <tr>
-      //               <td style="padding: 0.50rem; vertical-align: top; border: 1px solid #6c757d ;" class="text-center align-middle">${index + 1}</td>
-      //               <td style="padding: 0.50rem; vertical-align: top; border: 1px solid #6c757d ;" class="align-middle">Item Name: ${item.itemItemMasterName ? item.itemItemMasterName : "-"} IMTE No: ${item.itemIMTENo ? item.itemIMTENo : "-"}<br>
-      //               Range/Size: ${item.itemRangeSize ? item.itemRangeSize : "" + ' ' + item.itemRangeSizeUnit ? item.itemRangeSizeUnit : ""} L.C.: ${(item.itemLC ? item.itemLC : "") + '' + (item.itemLCUnit ? item.itemLCUnit : '')}<br>
-      //               Make: ${item.itemMake ? item.itemMake : "-"} Sr.No: ${item.itemMFRNo ? item.itemMFRNo : "-"} Cal. Frequency: ${item.itemCalFreInMonths ? item.itemCalFreInMonths : "-"} months</td>
-      //               <td style="padding: 0.50rem; vertical-align: top; border: 1px solid #6c757d ;" class="text-center align-middle">${item.dcItemRemarks}</td>
-      //           </tr>
-      //       `;
+        //   const validationError = itemDcUpdate.validateSync();
+        //   if (validationError) {
+        //     // Handle validation errors
+        //     const validationErrors = {};
 
-      //       return tableRow;
-      //     });
+        //     if (validationError.errors) {
+        //       // Convert Mongoose validation error details to a more user-friendly format
+        //       for (const key in validationError.errors) {
+        //         validationErrors[key] = validationError.errors[key].message;
+        //       }
+        //     }
+
+        //     return res.status(400).json({
+        //       errors: validationErrors
+        //     });
+        //   }
+
+        //   // Find the designation by desId and update it
+        //   const updateItemDc = await itemDcModel.findOneAndUpdate(
+        //     { _id: itemDcId },
+        //     updateItemDcFields,
+        //     { new: true } // To return the updated document
+        //   );
+
+        //   if (Object.keys(updateItemDc).length !== 0) {
+        //     const updatePromises = dcPartyItems.filter(item => item.dcStatus === "1").map(async (item) => {
+
+        //       const itemData = await itemAddModel.findById(item._id)
+        //       const { itemIMTENo, itemCurrentLocation: itemLastLocation } = itemData
+        //       const updateItemFields = {
+        //         itemIMTENo,
+        //         itemCurrentLocation: dcPartyName,
+        //         itemLastLocation,
+        //         itemLocation: dcPartyType,
+        //         dcId: updateItemDc._id,
+        //         dcStatus: "1",
+        //         dcCreatedOn: dcDate,
+        //         dcNo: dcNo
+        //       }
+        //       const updateResult = await itemAddModel.findOneAndUpdate(
+        //         { _id: item._id },
+        //         { $set: updateItemFields },
+        //         { new: true }
+        //       );
+        //       console.log(updateResult)
+        //       return updateResult;
+        //     });
+        //     const updatedItems = await Promise.all(updatePromises);
 
 
-      //     // Example usage:
+        //     const itemsData = dcPartyItems.map((item, index) => {
+        //       let tableRow = `
+        //           <tr>
+        //               <td style="padding: 0.50rem; vertical-align: top; border: 1px solid #6c757d ;" class="text-center align-middle">${index + 1}</td>
+        //               <td style="padding: 0.50rem; vertical-align: top; border: 1px solid #6c757d ;" class="align-middle">Item Name: ${item.itemItemMasterName ? item.itemItemMasterName : "-"} IMTE No: ${item.itemIMTENo ? item.itemIMTENo : "-"}<br>
+        //               Range/Size: ${item.itemRangeSize ? item.itemRangeSize : "" + ' ' + item.itemRangeSizeUnit ? item.itemRangeSizeUnit : ""} L.C.: ${(item.itemLC ? item.itemLC : "") + '' + (item.itemLCUnit ? item.itemLCUnit : '')}<br>
+        //               Make: ${item.itemMake ? item.itemMake : "-"} Sr.No: ${item.itemMFRNo ? item.itemMFRNo : "-"} Cal. Frequency: ${item.itemCalFreInMonths ? item.itemCalFreInMonths : "-"} months</td>
+        //               <td style="padding: 0.50rem; vertical-align: top; border: 1px solid #6c757d ;" class="text-center align-middle">${item.dcItemRemarks}</td>
+        //           </tr>
+        //       `;
 
-      //     const browser = await puppeteer.launch();
-      //     const page = await browser.newPage();
+        //       return tableRow;
+        //     });
 
-      //     // Read the HTML template file
-      //     const filePath = path.resolve(__dirname, '../../server/templates/dcTemplate.html');
-      //     const htmlTemplate = fs.readFileSync(filePath, 'utf8');
 
-      //     // Replace placeholders with actual data
-      //     const modifiedHTML = htmlTemplate
+        //     // Example usage:
 
-      //       .replace(/{{dcPartyItems}}/g, itemsData.join(""))
-      //       .replace(/{{CompanyName}}/g, getCompDetailsById.companyName)
+        //     const browser = await puppeteer.launch();
+        //     const page = await browser.newPage();
 
-      //       .replace(/{{Plant}}/g, getPlantAddress.plantName)
-      //       .replace(/{{PlantAddress}}/g, getPlantAddress.plantAddress)
-      //       .replace(/{{dcPartyName}}/g, dcPartyName)
-      //       .replace(/{{dcPartyAddress}}/g, dcPartyAddress)
-      //       .replace(/{{dcNo}}/g, dcNo)
-      //       .replace(/{{dcDate}}/g, dcDate)
-      //       .replace(/{{dcCR}}/g, dcCommonRemarks)
+        //     // Read the HTML template file
+        //     const filePath = path.resolve(__dirname, '../../server/templates/dcTemplate.html');
+        //     const htmlTemplate = fs.readFileSync(filePath, 'utf8');
+
+        //     // Replace placeholders with actual data
+        //     const modifiedHTML = htmlTemplate
+
+        //       .replace(/{{dcPartyItems}}/g, itemsData.join(""))
+        //       .replace(/{{CompanyName}}/g, getCompDetailsById.companyName)
+
+        //       .replace(/{{Plant}}/g, getPlantAddress.plantName)
+        //       .replace(/{{PlantAddress}}/g, getPlantAddress.plantAddress)
+        //       .replace(/{{dcPartyName}}/g, dcPartyName)
+        //       .replace(/{{dcPartyAddress}}/g, dcPartyAddress)
+        //       .replace(/{{dcNo}}/g, dcNo)
+        //       .replace(/{{dcDate}}/g, dcDate)
+        //      .replace(/{{dcCR}}/g, dcCommonRemarks)
+       //       .replace(/{{dcCReason}}/, dcReason)
       //       .replace(/{{logo}}/g, process.env.SERVER_PORT + '/logo/' + getCompDetailsById.companyLogo)
       //       .replace(/{{formatNo}}/g, formatNumber)
 

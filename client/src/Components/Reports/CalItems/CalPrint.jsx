@@ -192,9 +192,9 @@ const CalPrint = () => {
                                 <tr style={{ textAlign: "center", display: "flex", flexDirection: "row", fontWeight: "bold", width: "100%" }}>
                                     <td style={{ width: "16%", border: "0.1px solid black" }}>Parameter </td>
                                     <td style={{ width: "14%", border: "0.1px solid black" }}>Nominal Size</td>
-                                    <td colSpan="2" style={{ width: "28%", border: "0.1px solid black" }}>Permissible Size</td>
+                                    <td colSpan="2" style={{ width: "28%", border: "0.1px solid black" }}>Permissible Size </td>
                                     {/* <td style={{ width: "14%", border: "0.1px solid black" }}>Permissible Size Max</td> */}
-                                    <td colSpan="2" style={{ width: "28%", border: "0.1px solid black" }}>Observed Size</td>
+                                    <td colSpan="2" style={{ width: "28%", border: "0.1px solid black" }}>Observed Size  </td>
                                     
                                     <td style={{ width: "14%", border: "0.1px solid black" }}>Cal status</td>
                                 </tr>
