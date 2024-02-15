@@ -736,7 +736,7 @@ const MeasurementUncertainty = () => {
                             </div>
                             <div className="col d-flex ">
 
-                                <TextField size='small' fullWidth variant='outlined' label="Range/Size(L)" onChange={handleUncertaintyChange} value={uncertainityData.uncRangeSize} name='uncRangeSize' id='uncRangeSizeId'>
+                                <TextField size='small' fullWidth type='number' variant='outlined' label="Range/Size(L)" onChange={handleUncertaintyChange} value={uncertainityData.uncRangeSize} name='uncRangeSize' id='uncRangeSizeId'>
                                 </TextField>
                                 <TextField select style={{ width: "50%" }} size='small' fullWidth variant='outlined' label="Unit" onChange={handleUncertaintyChange} value={uncertainityData.uncRangeSizeUnit} name='uncRangeSizeUnit' id='uncRangeSizeUnitId'>
                                     <MenuItem value="-">Select</MenuItem>
