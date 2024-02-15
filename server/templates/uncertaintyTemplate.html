@@ -4,22 +4,230 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="./bootstrap.min.css">
+    <script src="./bootstrap.bundle.min.js"></script>
     <title>Uncertainty Print</title>
     <style>
         @media print {
-            body,
+
+            body {
+
+
+                margin: 0.7cm;
+                font-size: 12px;
+            }
+
             page {
                 size: A4;
                 margin: 0;
                 box-shadow: 0;
+                font-family: "Poppins", sans-serif;
+                font-weight: 400;
+                font-style: normal;
+
             }
+
+
+
+
         }
     </style>
 </head>
 
 <body>
-    <div style="width: 100%; height: 100%;">
-        <h1>Uncertainty Calculation</h1>
+    <div style="width: 100%; height: 100%; ">
+
+        <h4 class="text-center">EVALUATION OF UNCERTAINTY IN MEASUREMENT</h4>
+
+        <table class="table table-borderless">
+            <tbody>
+                <tr>
+                    <td>
+                        <table>
+                            <tbody>
+                                <tr>
+                                    <td width="80%">
+                                        <b>1. LABORATORY :</b> {{companyName}}
+                                    </td>
+                                    <td>
+                                        <b>DATE :</b> {{uncDate}}
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <table>
+                            <tbody>
+                                <tr>
+                                    <td><b>2. DEVICE UNDER CALIBRATION :</b> {{uncItemName}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="">
+
+                        <table class="table p-0 m-0 table-bordered border-black">
+                            <tbody>
+                                <tr>
+                                    <td><b>Range(mm) :</b> 0.0115</td>
+                                    <td><b>Resolution(mm) :</b> 0.0012</td>
+                                    <td><b>Coefficient of Thermal Expansion (DUC)-(αD)(µm/m/°c) :</b> 11.5</td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <b>3. STANDARDS / EQUIPMENT USED FOR CALIBRATION :</b>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="">
+                        <table class="table p-0 m-0 table-bordered border-black">
+                            <tbody>
+                                <tr>
+                                    <th>Sr.No</th>
+                                    <th>Master Name</th>
+                                    <th>Range/Size</th>
+                                    <th>L.C.</th>
+                                    <th>Uncertainty</th>
+                                    <th>Accuracy</th>
+                                    <th>Material</th>
+                                </tr>
+                                {{uncMasterDetails}}
+                            </tbody>
+                        </table>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <b>4. ENVIRONMENTAL PARAMETERS</b>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <table class="table  p-0 m-0 table-bordered border-black">
+                            <tbody>
+                                <tr class="text-center">
+                                    <th>Start Temp <br /><code style="font-size: 10px">T1 (°C)</code></th>
+                                    <th>End Temp <br /><code style="font-size: 10px">T2 (°C)</code></th>
+                                    <th>Mean Temp<br /><code style="font-size: 10px">(TA=(T1+T2)/2)</code></th>
+                                    <th>Ref. Temp<br /><code style="font-size: 10px">(TR)</code></th>
+                                    <th>Thermal Expansion of master<br /><code
+                                            style="font-size: 10px">(mm/m°C)(αM)</code></th>
+                                    <th>Thermal Expansion of DUC<br /><code style="font-size: 10px">(mm/m°C)(αD)</code>
+                                    </th>
+                                    <th>Uncertainty of Temperature Indicator<br /><code
+                                            style="font-size: 10px">(°C) UT (±)</code></th>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        {{uncStartTemp}}
+                                    </td>
+                                    <td>
+                                        {{uncEndTemp}}
+                                    </td>
+                                    <td>
+                                        {{uncMeanTemp}}
+                                    </td>
+                                    <td>
+                                        {{uncRefTemp}}
+                                    </td>
+                                    <td>
+                                        {{uncTEMaster}}
+                                    </td>
+                                    <td>
+                                        {{uncTEDUC}}
+                                    </td>
+                                    <td>
+                                        {{uncTI}}
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </td>
+                </tr>
+                <tr>
+                    <td><b>5. REPEATABILITY</b></td>
+                </tr>
+                <tr>
+                    <td>
+                        <table class='table text-center table-bordered align-middle border-black'>
+                            <tbody>
+                                <tr>
+                                    <th>R1</th>
+                                    <th>R2</th>
+                                    <th>R3</th>
+                                    <th>R4</th>
+                                    <th>R5</th>
+                                    <th>R6</th>
+                                    <th>R7</th>
+                                    <th>R8</th>
+                                    <th>R9</th>
+                                    <th>R10</th>
+                                    <th>Standard Deviation</th>
+                                    <th>n</th>
+                                </tr>
+                                <tr>
+                                    <td>
+                                       {{uncR1}} 
+                                    </td>
+                                    <td>
+                                       {{uncR2}} 
+                                    </td>
+                                    <td>
+                                        {{uncR3}} 
+                                    </td>
+                                    <td>
+                                        {{uncR4}} 
+                                    </td>
+                                    <td>
+                                        {{uncR5}} 
+                                    </td>
+                                    <td>
+                                        {{uncR6}} 
+                                    </td>
+                                    <td>
+                                       {{uncR7}} 
+                                    </td>
+                                    <td>
+                                       {{uncR8}}  
+                                    <td>
+                                        {{uncR9}} 
+                                    </td>
+                                    <td>
+                                        {{uncR10}} 
+                                    </td>
+                                    <td>
+                                        {{uncStdDeviation}} 
+                                    </td>
+                                    <td>
+                                        {{uncN}} 
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+
+
+
 
     </div>
 </body>
