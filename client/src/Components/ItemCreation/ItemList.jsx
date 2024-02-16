@@ -321,7 +321,7 @@ const ItemList = () => {
             valueGetter: (params) =>
                 `${params.row.itemRangeSize || ''} ${params.row.itemRangeSizeUnit || ''}`,
         },
-        { field: 'itemLC', headerName: 'ItemLC', width: 60, headerAlign: "center", align: "left", valueGetter: (params) => `${params.row.itemLC || "-"} ${params.row.itemLcUnit || ''}` },
+        { field: 'itemLC', headerName: 'ItemLC', width: 60, headerAlign: "center", align: "left", valueGetter: (params) => `${params.row.itemLC || ""} ${params.row.itemLCUnit || ''}` },
         { field: 'itemMake', headerName: 'Make', width: 90, headerAlign: "center", align: "center", },
         { field: 'itemCalDate', headerName: 'Cal Date', width: 100, headerAlign: "center", align: "center", valueGetter: (params) => dayjs(params.row.itemCalDate).format('DD-MM-YYYY') },
         { field: 'itemDueDate', headerName: 'Due Date', width: 110, headerAlign: "center", align: "center", valueGetter: (params) => dayjs(params.row.itemDueDate).format('DD-MM-YYYY') },
