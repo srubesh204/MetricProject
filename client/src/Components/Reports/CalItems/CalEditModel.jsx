@@ -791,7 +791,7 @@ const CalEditModel = () => {
                                         variant="outlined"
                                     />
                                 </div>
-                                {calItemType === "variable" &&  <div className="col-md-3">
+                                {calibrationData.calItemType === "variable" &&  <div className="col-md-3">
                                     <TextField
                                         InputProps={{
                                             readOnly: true,
