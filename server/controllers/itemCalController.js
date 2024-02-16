@@ -30,6 +30,7 @@ const itemCalController = {
         calItemName,
         calItemType,
         calRangeSize,
+        calRangeSizeUnit,
         calItemMFRNo,
         calLC,
         calItemMake,
@@ -65,6 +66,7 @@ const itemCalController = {
         calItemName,
         calItemType,
         calRangeSize,
+        calRangeSizeUnit,
         calItemMFRNo,
         calLC,
         calItemMake,
@@ -332,6 +334,8 @@ const itemCalController = {
             .replace(/{{dateOfCalibration}}/g, calItemCalDate ? dayjs(calItemCalDate).format("DD-MM-YYYY") : "-")
             .replace(/{{nextCalibrationDue}}/g, calItemDueDate ? dayjs(calItemDueDate).format("DD-MM-YYYY") : "-")
 
+            .replace(/{{itemRangeSize}}/g, calRangeSize ? calRangeSize : "-")
+            .replace(/{{itemRangeSizeUnit}}/g, calRangeSizeUnit ? calRangeSizeUnit : "")
             .replace(/{{identificationNo}}/g, calIMTENo ? calIMTENo : "-")
             .replace(/{{slNo}}/g, calItemMFRNo ? calItemMFRNo : "-")
             .replace(/{{make}}/g, calItemMake ? calItemMake : "-")
@@ -356,6 +360,8 @@ const itemCalController = {
             .replace(/{{logo}}/g, process.env.SERVER_PORT + '/logo/' + getCompDetailsById.companyLogo)
             .replace(/{{formatNo}}/g, formatNumber ? formatNumber : "-")
             .replace(/{{calibratedBy}}/g, calCalibratedBy ? calCalibratedBy : "")
+            .replace(/{{calStatus}}/g, calStatus ? "<li> Acceptance Remarks : "+calStatus+"</li>" : "")
+            .replace(/{{calItemUncertainity}}/g, calItemUncertainity ? "<li>The Expanded uncertainty is ± "+calItemUncertainity+ " "+ calItemUncertainityUnit +" at 95.45% confidence level with coverage factor k=2.</li>" : "")
 
 
 
@@ -488,6 +494,7 @@ const itemCalController = {
         calItemName,
         calItemType,
         calRangeSize,
+        calRangeSizeUnit,
         calItemMFRNo,
         calLC,
         calItemMake,
@@ -523,6 +530,7 @@ const itemCalController = {
         calItemName,
         calItemType,
         calRangeSize,
+        calRangeSizeUnit,
         calItemMFRNo,
         calLC,
         calItemMake,
@@ -797,7 +805,9 @@ const itemCalController = {
             .replace(/{{dateOfIssue}}/g, calItemEntryDate ? dayjs(calItemEntryDate).format("DD-MM-YYYY") : "-")
             .replace(/{{dateOfCalibration}}/g, calItemCalDate ? dayjs(calItemCalDate).format("DD-MM-YYYY") : "-")
             .replace(/{{nextCalibrationDue}}/g, calItemDueDate ? dayjs(calItemDueDate).format("DD-MM-YYYY") : "-")
-
+            
+            .replace(/{{itemRangeSize}}/g, calRangeSize ? calRangeSize : "-")
+            .replace(/{{itemRangeSizeUnit}}/g, calRangeSizeUnit ? calRangeSizeUnit : "")
             .replace(/{{identificationNo}}/g, calIMTENo ? calIMTENo : "-")
             .replace(/{{slNo}}/g, calItemMFRNo ? calItemMFRNo : "-")
             .replace(/{{make}}/g, calItemMake ? calItemMake : "-")
