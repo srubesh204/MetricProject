@@ -2030,9 +2030,7 @@ const ItemAdd = () => {
                             <div className="d-flex justify-content-center">
                                 <div className='col'>
                                     <Button
-                                        color="secondary"
                                         className='col '
-                                        variant='contained'
                                         onClick={() => setAddOpenData(true)}
                                     >
                                         Additional Information
@@ -2040,11 +2038,11 @@ const ItemAdd = () => {
                                 </div>
 
                                 <div className="d-flex justify-content-end">
-                                    <Button variant='contained' color='warning' onClick={() => setOpen(true)} className='me-3' type="button">
+                                    <Button  onClick={() => setOpen(true)} className='me-3' type="button">
                                         Item Create
                                     </Button>
-                                    <Button component={RouterLink} to={`/itemList/`} variant="contained" color="error">
-                                        <ArrowBackIcon /> Back To List
+                                    <Button component={RouterLink} to={`/itemList/`} >
+                                        Back To List
                                     </Button>
                                 </div>
                                

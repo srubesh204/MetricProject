@@ -518,7 +518,7 @@ const DcList = () => {
             sortable: false,
             width: 130,
             valueGetter: (params) =>
-                `${params.row.itemRangeSize || ''} ${params.row.itemLCUnit || ''}`,
+                `${params.row.itemRangeSize || ''} ${params.row.itemRangeSizeUnit || ''}`,
         },
         { field: 'dcItemRemarks', headerName: 'Remarks', headerAlign: "center", align: "center", width: 200 },
     ]

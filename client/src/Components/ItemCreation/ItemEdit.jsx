@@ -1913,28 +1913,21 @@ const ItemEdit = () => {
                         <div className="d-flex justify-content-center">
                             <div className='col'>
                                 <Button
-                                    color="secondary"
                                     className='me-2'
-                                    variant='contained'
                                     onClick={() => setAddOpenData(true)}
                                 >
                                     Additional Information
                                 </Button>
                             </div>
                             <div className="d-flex justify-content-end">
-
-
-                                <Button variant='contained' color='warning' onClick={() => { setOpen(true) }} className='me-3' type="button"  >
-                                    <BorderColor />  Update
+                                <Button  onClick={() => { setOpen(true) }} className='me-3' type="button"  >
+                                     Update
                                 </Button>
-                                <Button variant='contained' component={RouterLink} to={`/itemList/`} color='error' onClick={() => setItemAddData(initialItemAddData)} type="reset">
-                                    <ArrowBackIcon /> Back To List
+                                <Button  component={RouterLink} to={`/itemList/`}  onClick={() => setItemAddData(initialItemAddData)} type="reset">
+                                     Back To List
                                 </Button>
-
                             </div>
                         </div>
-
-
                         <Snackbar anchorOrigin={{ vertical: "top", horizontal: "right" }} open={snackBarOpen} autoHideDuration={6000} onClose={handleSnackClose}>
                             <Alert variant="filled" onClose={handleSnackClose} severity={errorhandler.code} sx={{ width: '25%' }}>
                                 {errorhandler.message}

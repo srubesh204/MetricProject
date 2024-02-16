@@ -297,9 +297,9 @@ const CalList = () => {
     const calListColumns = [
         { field: 'id', headerName: 'Entry. No', width: 60, renderCell: (params) => params.api.getAllRowIds().indexOf(params.id) + 1, headerAlign: "center", align: "center", },
         ...(employeeRole && employeeRole.employee !== "viewer" ? [{ field: 'editButton', headerAlign: "center", align: "center", headerName: 'Edit', width: 60, renderCell: (params) => <EditRounded color='warning' onClick={() => setCalEditData(params)} /> }] : []),
-        { field: 'calItemEntryDate', headerName: 'Entry Date', width: 90, valueGetter: (params) => dayjs(params.row.calItemEntryDate).format('DD-MM-YYYY'), headerAlign: "center", align: "center", },
-        { field: 'calIMTENo', headerName: 'Item IMTENo', width: 150, headerAlign: "center", align: "center", },
-        { field: 'calItemName', headerName: 'Item Description', width: 150, headerAlign: "center", align: "center", },
+        { field: 'calItemEntryDate', headerName: 'Entry Date', width: 100, valueGetter: (params) => dayjs(params.row.calItemEntryDate).format('DD-MM-YYYY'), headerAlign: "center", align: "center", },
+        { field: 'calIMTENo', headerName: 'Item IMTENo', width: 180, headerAlign: "center", align: "center", },
+        { field: 'calItemName', headerName: 'Item Description', width: 190, headerAlign: "center", align: "center", },
         // { field: 'calRangeSize', headerName: 'Range/Size', width: 100, headerAlign: "center", align: "center", },
         {
             field: 'Range/Size',
@@ -307,7 +307,7 @@ const CalList = () => {
             headerAlign: "center", align: "center",
             description: 'This column has a value getter and is not sortable.',
             sortable: false,
-            width: 130,
+            width: 150,
             valueGetter: (params) =>
                 `${params.row.calRangeSize || ''} ${params.row.calLC || ''}`,
         },
@@ -610,34 +610,24 @@ const CalList = () => {
                             </Box>
                         </div>
                         <div className='row'>
-                            <div className='col d-flex '>
-
-                                {/* <div className='me-2 '>
-                                    <button type="button" className='btn btn-secondary' > Label Print</button>
-                                </div>
-                                <div className='me-2 '>
-                                    <button type="button" className='btn btn-secondary' >Lable With BarCode Print</button>
-                                </div> */}
-
-
-                            </div>
                             {employeeRole && employeeRole.employee !== "viewer" &&
-                                <div className='col d-flex justify-content-end'>
+                                <div className='col d-flex '>
 
                                     {/* <div className='me-2 '>
                                         <button type="button" className='btn btn-success' onClick={() => setCalAddOpen(true)}>Add</button>
                                     </div> */}
-                                     <div>
-                                        <Button component={Link} to="/insHisCard" className='me-2' size='small' >
-                                            History  Card
-                                        </Button>
-                                    </div>
+
                                     <div className='me-2'>
                                         <Button component={Link} to={`/home`} className='me-2' variant="contained" size='small' color="warning">
                                             <ArrowBackIcon /> Dash board
                                         </Button>
                                     </div>
-                                   
+                                    <div>
+                                        <Button component={Link} to="/insHisCard" className='me-2' size='small' >
+                                            History  Card
+                                        </Button>
+                                    </div>
+
                                     {/* <div >
                                     <Button component={Link} to="/" size='small' variant='contained' startIcon={<ArrowBack />} endIcon={<House />} color='secondary'>Home</Button>
                                 </div> */}

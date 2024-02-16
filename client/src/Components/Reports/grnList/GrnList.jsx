@@ -402,52 +402,24 @@ const GrnList = () => {
                             elevation={12}
                         >
                             <div className='row g-2'>
+
                                 <div className='col'>
-                                    <TextField fullWidth label="Vendor Type" select size="small" id="vendorTypeId" onChange={handleFilterChange} name="vendorType" defaultValue="all" >
-                                        <MenuItem value="all">All</MenuItem>
-                                        <MenuItem value="oem">OEM</MenuItem>
-                                        <MenuItem value="customer">Customer</MenuItem>
-                                        <MenuItem value="supplier">Supplier</MenuItem>
-                                        <MenuItem value="subContractor">SubContractor</MenuItem>
-                                    </TextField>
-
-                                </div>
-                                <div className='col'>
-                                    <TextField fullWidth label="Party Name" select size="small" onChange={handleFilterChange} id="partyNameId" name="partyName" defaultValue="all" >
-
-                                        <MenuItem value="all">All</MenuItem>
-                                        {vendorTypeList.map((item, index) => (
-                                            <MenuItem key={index} value={item.fullName}>{item.fullName}</MenuItem>
-                                        ))}
-
-
-                                    </TextField>
-
-                                </div>
-                                <div className='col'>
-
                                     <TextField label="Plant Wise"
                                         id="grnPlantId"
                                         select
                                         defaultValue="all"
                                         // value={filterAllNames.plantWise}
                                         fullWidth
-
                                         onChange={handleFilterChange}
                                         size="small"
                                         name="grnPlant" >
-
                                         <MenuItem value="all">All</MenuItem>
                                         {loggedEmp.plantDetails.map((item, index) => (
                                             <MenuItem key={index} value={item.plantName}>{item.plantName}</MenuItem>
                                         ))}
-
-
                                     </TextField>
-
                                 </div>
                                 <div className='col '>
-
                                     <TextField label="Primary Location "
                                         id="dcDepartmentId"
                                         select
@@ -461,8 +433,23 @@ const GrnList = () => {
                                         {departments.map((item, index) => (
                                             <MenuItem key={index} value={item.department}>{item.department}</MenuItem>
                                         ))}
-
-
+                                    </TextField>
+                                </div>
+                                <div className='col'>
+                                    <TextField fullWidth label="Vendor Type" select size="small" id="vendorTypeId" onChange={handleFilterChange} name="vendorType" defaultValue="all" >
+                                        <MenuItem value="all">All</MenuItem>
+                                        <MenuItem value="oem">OEM</MenuItem>
+                                        <MenuItem value="customer">Customer</MenuItem>
+                                        <MenuItem value="supplier">Supplier</MenuItem>
+                                        <MenuItem value="subContractor">SubContractor</MenuItem>
+                                    </TextField>
+                                </div>
+                                <div className='col'>
+                                    <TextField fullWidth label="Party Name" select size="small" onChange={handleFilterChange} id="partyNameId" name="partyName" defaultValue="all" >
+                                        <MenuItem value="all">All</MenuItem>
+                                        {vendorTypeList.map((item, index) => (
+                                            <MenuItem key={index} value={item.fullName}>{item.fullName}</MenuItem>
+                                        ))}
                                     </TextField>
 
                                 </div>
@@ -492,12 +479,8 @@ const GrnList = () => {
                                             setDateData((prev) => ({ ...prev, toDate: dayjs(newValue).format('YYYY-MM-DD') }))}
                                         format="DD-MM-YYYY" />
                                 </div>
-
                             </div>
-
                         </Paper>
-
-
                         <div className='row g-2'>
                             <Paper
                                 sx={{
@@ -508,12 +491,8 @@ const GrnList = () => {
                                 }}
                                 elevation={12}
                             >
-
-
-
                                 <Box sx={{ height: 500, width: '100%', my: 2 }}>
                                     <DataGrid
-
                                         rows={filteredData}
                                         columns={Columns}
                                         getRowId={(row) => row._id}
@@ -551,8 +530,6 @@ const GrnList = () => {
                                         }}
 
                                         density="compact"
-
-
                                         checkboxSelection
                                         //onRowClick={handleRowClick}
                                         onRowClick={handleRowClick}
@@ -561,7 +538,6 @@ const GrnList = () => {
                                         disableDensitySelector
                                         pageSizeOptions={[10]}
                                     />
-
                                 </Box>
                             </Paper>
 
@@ -595,7 +571,7 @@ const GrnList = () => {
                                                 </Button>
                                             </div>
                                             <div>
-                                                <Button component={Link} to="/insHisCard"  size='small' >
+                                                <Button component={Link} to="/insHisCard" size='small' >
                                                     History  Card
                                                 </Button>
                                             </div>
