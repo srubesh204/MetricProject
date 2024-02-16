@@ -493,7 +493,6 @@ const GrnList = () => {
                             >
                                 <Box sx={{ height: 500, width: '100%', my: 2 }}>
                                     <DataGrid
-
                                         rows={filteredData}
                                         columns={Columns}
                                         getRowId={(row) => row._id}
@@ -531,8 +530,6 @@ const GrnList = () => {
                                         }}
 
                                         density="compact"
-
-
                                         checkboxSelection
                                         //onRowClick={handleRowClick}
                                         onRowClick={handleRowClick}
@@ -541,7 +538,6 @@ const GrnList = () => {
                                         disableDensitySelector
                                         pageSizeOptions={[10]}
                                     />
-
                                 </Box>
                             </Paper>
 
