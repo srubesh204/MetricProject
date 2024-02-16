@@ -1231,7 +1231,7 @@ const CalEditModel = () => {
                                                         <td>{item.calNominalSizeUnit}</td>
                                                         <td>{item.calMinPSError}</td>
                                                         <td>{item.calMaxPSError}</td>
-                                                        <td><input className='form-control form-control-sm' name='calAverageOB' style={{ color: averageColor, fontWeight: "bold" }} value={item.calAverageOB} onChange={(e) => changecalDataValue(index, e.target.name, e.target.value)} /></td>
+                                                        <td><input className='form-control form-control-sm' name='calOBError' style={{ color: averageColor, fontWeight: "bold" }} value={item.calOBError} onChange={(e) => changecalDataValue(index, e.target.name, e.target.value)} /></td>
                                                         <td width="15%">
                                                             <select className='form-select form-select-sm' name="rowStatus" value={item.rowStatus} onChange={(e) => changecalDataValue(index, e.target.name, e.target.value)}>
                                                                 <option value="">Status</option>
