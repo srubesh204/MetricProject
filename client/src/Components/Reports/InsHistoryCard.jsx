@@ -676,7 +676,7 @@ function InsHistoryCard() {
                                 />
                             </div>
                             <div className='row'>
-                                <div className='col d-flex justify-content-end'>
+                                <div className='col'>
                                     <div className='me-2'>
                                         <Button component={Link} to={`/home`} variant="contained" size='small' color="warning">
                                             <ArrowBackIcon /> Dash board
