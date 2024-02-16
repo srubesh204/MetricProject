@@ -230,12 +230,12 @@ const itemCalController = {
             refCalData += calcalibrationData.map((item, index) => {
               let returnTable = `
                   <tr>
-                    <td>${item.calParameter}</td>
-                    <td>${item.calNominalSize}</td>
-                    <td>${item.calMinPS + "/" + item.calMaxPS}</td>
+                    <td>${item.calParameter ? item.calParameter : "-"}</td>
+                    <td>${item.calNominalSize ? item.calNominalSize : "-"}</td>
+                    <td>${(item.calMinPS ? item.calMinPS : "-") + "/" + (item.calMaxPS ? item.calMaxPS : "-")}</td>
                     ${calOBType === "minmax" ?
-                  "<td>" + item.calMinOB + " / " + item.calMaxOB + "</td>" :
-                  "<td>" + item.calAverageOB + "</td>"}
+                  "<td>" + (item.calMinOB ? item.calMinOB : "-") + " / " + (item.calMaxOB ? item.calMaxOB : "-") + "</td>" :
+                  "<td>" + (item.calAverageOB ? item.calAverageOB : "-") + "</td>"}
                     
                   </tr>`;
               return returnTable;
@@ -255,7 +255,7 @@ const itemCalController = {
                     </tr>
                     <tr>
                       <th rowspan="2">Parameter</th>
-                      <th rowspan="2">Nominal Size (${(calcalibrationData.length > 0) ? calcalibrationData[0].calNominalSizeUnit : ""})</th>
+                      <th rowspan="2">Nominal Size</th>
                       <th colspan="2">Permissible Size (${(calcalibrationData.length > 0) ? calcalibrationData[0].calNominalSizeUnit : ""})</th>
                       <th rowspan="2"> Observed Size (${(calcalibrationData.length > 0) ? calcalibrationData[0].calNominalSizeUnit : ""})</th>
                     </tr>
@@ -267,13 +267,13 @@ const itemCalController = {
             attributeCalData += calcalibrationData.map((item, index) => {
               let returnTable = `
                     <tr>
-                      <td>${item.calParameter}</td>
-                      <td>${item.calNominalSize}</td>
-                      <td>${item.calMinPS + "/" + item.calMaxPS}</td>
-                      <td>${item.calWearLimitPS}</td>
+                      <td>${item.calParameter ? item.calParameter : "-"}</td>
+                      <td>${item.calNominalSize ? item.calNominalSize : "-"}</td>
+                      <td>${(item.calMinPS ? item.calMinPS : "-") + "/" + (item.calMaxPS ? item.calMaxPS : "-")}</td>
+                      <td>${item.calWearLimitPS ? item.calWearLimitPS : "-"}</td>
                       ${calOBType === "minmax" ?
-                  "<td>" + item.calMinOB + " / " + item.calMaxOB + "</td>" :
-                  "<td>" + item.calAverageOB + "</td>"}
+                  "<td>" + (item.calMinOB ? item.calMinOB : "-") + " / " + (item.calMaxOB ? item.calMaxOB : "-") + "</td>" :
+                  "<td>" + (item.calAverageOB ? item.calAverageOB : "-") + "</td>"}
                     </tr>`;
               return returnTable;
             }).join(""); // Removed .join("") from here
@@ -298,10 +298,10 @@ const itemCalController = {
             variableCalData += calcalibrationData.map((item, index) => {
               let returnTable = `
                     <tr>
-                      <td>${item.calParameter}</td>
-                      <td>${item.calNominalSize}</td>
-                      <td>${item.calMinPSError + "/" + item.calMaxPSError}</td>
-                      <td>${item.calOBError}</td>
+                      <td>${item.calParameter ? item.calParameter : "-"}</td>
+                      <td>${item.calNominalSize ? item.calNominalSize : "-"}</td>
+                      <td>${(item.calMinPSError ? item.calMinPSError : "-") + "/" + (item.calMaxPSError ? item.calMaxPSError : "-")}</td>
+                      <td>${item.calOBError ? item.calOBError : "-"}</td>
                       
                     </tr>`;
               return returnTable;
@@ -320,35 +320,36 @@ const itemCalController = {
 
           // Replace placeholders with actual data
           const modifiedHTML = htmlTemplate
-            .replace(/{{ItemName}}/g, calItemName)
-            .replace(/{{CertificateNo}}/g, calCertificateNo)
-            .replace(/{{dateOfIssue}}/g, dayjs(calItemEntryDate).format("DD-MM-YYYY"))
-            .replace(/{{dateOfCalibration}}/g, dayjs(calItemCalDate).format("DD-MM-YYYY"))
-            .replace(/{{nextCalibrationDue}}/g, dayjs(calItemDueDate).format("DD-MM-YYYY"))
+            .replace(/{{ItemName}}/g, calItemName ? calItemName : "-")
+            .replace(/{{CertificateNo}}/g, calCertificateNo ? calCertificateNo : "-")
+            .replace(/{{dateOfIssue}}/g, calItemEntryDate ? dayjs(calItemEntryDate).format("DD-MM-YYYY") : "-")
+            .replace(/{{dateOfCalibration}}/g, calItemCalDate ? dayjs(calItemCalDate).format("DD-MM-YYYY") : "-")
+            .replace(/{{nextCalibrationDue}}/g, calItemDueDate ? dayjs(calItemDueDate).format("DD-MM-YYYY") : "-")
 
-            .replace(/{{identificationNo}}/g, calIMTENo)
-            .replace(/{{slNo}}/g, calItemMFRNo)
-            .replace(/{{make}}/g, calItemMake)
+            .replace(/{{identificationNo}}/g, calIMTENo ? calIMTENo : "-")
+            .replace(/{{slNo}}/g, calItemMFRNo ? calItemMFRNo : "-")
+            .replace(/{{make}}/g, calItemMake ? calItemMake : "-")
 
-            .replace(/{{temperature}}/g, calItemTemperature)
-            .replace(/{{humitidy}}/g, calItemHumidity)
-            .replace(/{{standardRef}}/g, calStandardRef)
+            .replace(/{{temperature}}/g, calItemTemperature ? calItemTemperature : "-")
+            .replace(/{{humitidy}}/g, calItemHumidity ? calItemHumidity : "-")
+            .replace(/{{standardRef}}/g, calStandardRef ? calStandardRef : "-")
+            .replace(/{{calItemSOPNo}}/g, calItemSOPNo ? calItemSOPNo : "-")
 
             .replace(/{{masterUsed}}/g, masterTable.join(""))
 
-            .replace(/{{calCalibrationData}}/g, calibrationTypeData)
+            .replace(/{{calCalibrationData}}/g, calibrationTypeData ? calibrationTypeData : "-")
 
-            .replace(/{{authorisedBy}}/g, calApprovedBy)
+            .replace(/{{authorisedBy}}/g, approvedByData ? approvedByData.firstName + " " + approvedByData.lastName : "")
 
-            .replace(/{{CompanyName}}/g, getCompDetailsById.companyName)
+            .replace(/{{CompanyName}}/g, getCompDetailsById ? getCompDetailsById.companyName : "-")
 
 
-            .replace(/{{CompanyName}}/g, getCompDetailsById.companyName)
-            .replace(/{{Plant}}/g, getPlantAddress.plantName)
-            .replace(/{{PlantAddress}}/g, getPlantAddress.plantAddress)
+            .replace(/{{CompanyName}}/g, getCompDetailsById ? getCompDetailsById.companyName : "-")
+            .replace(/{{Plant}}/g, getPlantAddress ? getPlantAddress.plantName : "-")
+            .replace(/{{PlantAddress}}/g, getPlantAddress ? getPlantAddress.plantAddress : "-")
             .replace(/{{logo}}/g, process.env.SERVER_PORT + '/logo/' + getCompDetailsById.companyLogo)
-            .replace(/{{formatNo}}/g, formatNumber)
-            .replace(/{{calibratedBy}}/g, calCalibratedBy)
+            .replace(/{{formatNo}}/g, formatNumber ? formatNumber : "-")
+            .replace(/{{calibratedBy}}/g, calCalibratedBy ? calCalibratedBy : "")
 
 
 
@@ -658,11 +659,11 @@ const itemCalController = {
             let tableRow = `
                   <tr>
                       <td>${index + 1}</td>
-                      <td>${item.itemIMTENo}</td>
-                      <td>${item.itemAddMasterName}</td>
-                      <td>${item.itemCertificateNo}</td>
-                      <td>${dayjs(item.itemDueDate).format("DD-MM-YYYY")}</td>
-                      <td>${item.itemCalibratedAt}</td>
+                      <td>${item.itemIMTENo ? item.itemIMTENo : "-"}</td>
+                      <td>${item.itemAddMasterName ? item.itemAddMasterName : "-"}</td>
+                      <td>${item.itemCertificateNo ? item.itemCertificateNo : "-"}</td>
+                      <td>${item.itemDueDate ? dayjs(item.itemDueDate).format("DD-MM-YYYY") : "-"}</td>
+                      <td>${item.itemCalibratedAt ? item.itemCalibratedAt : "-"}</td>
                   </tr>
               `;
             return tableRow;
@@ -725,13 +726,13 @@ const itemCalController = {
             attributeCalData += calcalibrationData.map((item, index) => {
               let returnTable = `
                     <tr>
-                      <td>${item.calParameter}</td>
-                      <td>${item.calNominalSize}</td>
-                      <td>${item.calMinPS + "/" + item.calMaxPS}</td>
-                      <td>${item.calWearLimitPS}</td>
+                      <td>${item.calParameter ? item.calParameter : "-"}</td>
+                      <td>${item.calNominalSize ? item.calNominalSize : "-"}</td>
+                      <td>${(item.calMinPS ? item.calMinPS : "-") + "/" + (item.calMaxPS ? item.calMaxPS : "-")}</td>
+                      <td>${item.calWearLimitPS ? item.calWearLimitPS : "-"}</td>
                       ${calOBType === "minmax" ?
-                  "<td>" + item.calMinOB + " / " + item.calMaxOB + "</td>" :
-                  "<td>" + item.calAverageOB + "</td>"}
+                  "<td>" + (item.calMinOB ? item.calMinOB : "-") + " / " + (item.calMaxOB ? item.calMaxOB : "-") + "</td>" :
+                  "<td>" + (item.calAverageOB ? item.calAverageOB : "-") + "</td>"}
                     </tr>`;
               return returnTable;
             }).join(""); // Removed .join("") from here
@@ -756,10 +757,10 @@ const itemCalController = {
             variableCalData += calcalibrationData.map((item, index) => {
               let returnTable = `
                     <tr>
-                      <td>${item.calParameter}</td>
-                      <td>${item.calNominalSize}</td>
-                      <td>${item.calMinPSError + "/" + item.calMaxPSError}</td>
-                      <td>${item.calOBError}</td>
+                      <td>${item.calParameter ? item.calParameter : "-"}</td>
+                      <td>${item.calNominalSize ? item.calNominalSize : "-"}</td>
+                      <td>${(item.calMinPSError ? item.calMinPSError : "-") + "/" + (item.calMaxPSError ? item.calMaxPSError : "-")}</td>
+                      <td>${item.calOBError ? item.calOBError : "-"}</td>
                       
                     </tr>`;
               return returnTable;
@@ -778,35 +779,35 @@ const itemCalController = {
 
           // Replace placeholders with actual data
           const modifiedHTML = htmlTemplate
-            .replace(/{{ItemName}}/g, calItemName)
-            .replace(/{{CertificateNo}}/g, calCertificateNo)
-            .replace(/{{dateOfIssue}}/g, dayjs(calItemEntryDate).format("DD-MM-YYYY"))
-            .replace(/{{dateOfCalibration}}/g, dayjs(calItemCalDate).format("DD-MM-YYYY"))
-            .replace(/{{nextCalibrationDue}}/g, dayjs(calItemDueDate).format("DD-MM-YYYY"))
+            .replace(/{{ItemName}}/g, calItemName ? calItemName : "-")
+            .replace(/{{CertificateNo}}/g, calCertificateNo ? calCertificateNo : "-")
+            .replace(/{{dateOfIssue}}/g, calItemEntryDate ? dayjs(calItemEntryDate).format("DD-MM-YYYY") : "-")
+            .replace(/{{dateOfCalibration}}/g, calItemCalDate ? dayjs(calItemCalDate).format("DD-MM-YYYY") : "-")
+            .replace(/{{nextCalibrationDue}}/g, calItemDueDate ? dayjs(calItemDueDate).format("DD-MM-YYYY") : "-")
 
-            .replace(/{{identificationNo}}/g, calIMTENo)
-            .replace(/{{slNo}}/g, calItemMFRNo)
-            .replace(/{{make}}/g, calItemMake)
+            .replace(/{{identificationNo}}/g, calIMTENo ? calIMTENo : "-")
+            .replace(/{{slNo}}/g, calItemMFRNo ? calItemMFRNo : "-")
+            .replace(/{{make}}/g, calItemMake ? calItemMake : "-")
 
-            .replace(/{{temperature}}/g, calItemTemperature)
-            .replace(/{{humitidy}}/g, calItemHumidity)
-            .replace(/{{standardRef}}/g, calStandardRef)
+            .replace(/{{temperature}}/g, calItemTemperature ? calItemTemperature : "-")
+            .replace(/{{humitidy}}/g, calItemHumidity ? calItemHumidity : "-")
+            .replace(/{{standardRef}}/g, calStandardRef ? calStandardRef : "-")
+            .replace(/{{calItemSOPNo}}/g, calItemSOPNo ? calItemSOPNo : "-")
+            .replace(/{{masterUsed}}/g, masterTable ? masterTable.join("") : "-")
 
-            .replace(/{{masterUsed}}/g, masterTable.join(""))
+            .replace(/{{calCalibrationData}}/g, calibrationTypeData ? calibrationTypeData : "-")
 
-            .replace(/{{calCalibrationData}}/g, calibrationTypeData)
+            .replace(/{{authorisedBy}}/g, approvedByData ? (approvedByData.firstName + " " + approvedByData.lastName) : "")
 
-            .replace(/{{authorisedBy}}/g, approvedByData ? approvedByData.firstName + " " + approvedByData.lastName : "")
-
-            .replace(/{{CompanyName}}/g, getCompDetailsById.companyName)
+            .replace(/{{CompanyName}}/g, getCompDetailsById ? getCompDetailsById.companyName : "-")
 
 
-            .replace(/{{CompanyName}}/g, getCompDetailsById.companyName)
-            .replace(/{{Plant}}/g, getPlantAddress.plantName)
-            .replace(/{{PlantAddress}}/g, getPlantAddress.plantAddress)
+            .replace(/{{CompanyName}}/g, getCompDetailsById ? getCompDetailsById.companyName : "-")
+            .replace(/{{Plant}}/g, getPlantAddress ? getPlantAddress.plantName : "-")
+            .replace(/{{PlantAddress}}/g, getPlantAddress ? getPlantAddress.plantAddress : "-")
             .replace(/{{logo}}/g, process.env.SERVER_PORT + '/logo/' + getCompDetailsById.companyLogo)
-            .replace(/{{formatNo}}/g, formatNumber)
-            .replace(/{{calibratedBy}}/g, calCalibratedBy)
+            .replace(/{{formatNo}}/g, formatNumber ? formatNumber : "-")
+            .replace(/{{calibratedBy}}/g, calCalibratedBy ? calCalibratedBy : "-")
 
 
 

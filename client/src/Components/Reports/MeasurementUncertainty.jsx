@@ -112,11 +112,12 @@ const MeasurementUncertainty = () => {
         uncR10: "",
         uncStdDeviation: "",
         uncN: "",
-        combinedUnc: "",
+        uncCombinedUnc: "",
         uncCoverageFactor: "",
         uncDegOfFreedom: "",
         uncUncertainity: "",
-        uncTypeBResult: []
+        uncTypeBResult: [],
+        uncPreparedBy: loggedEmp.firstName + " " + loggedEmp.lastName
 
     }
     const [uncertainityData, setUncertainityData] = useState({
@@ -146,11 +147,12 @@ const MeasurementUncertainty = () => {
         uncR10: "",
         uncStdDeviation: "",
         uncN: "",
-        combinedUnc: "",
+        uncCombinedUnc: "",
         uncCoverageFactor: "",
         uncDegOfFreedom: "",
         uncUncertainity: "",
-        uncTypeBResult: []
+        uncTypeBResult: [],
+        uncPreparedBy: loggedEmp.firstName + " " + loggedEmp.lastName
     })
 
 
@@ -677,7 +679,7 @@ const MeasurementUncertainty = () => {
             definedValue = Math.sqrt(definedValue).toFixed(4)
 
         }
-        console.log(Math.pow(definedValue, 4) * lastDOF)
+        console.log(definedValue)
         degOfFreedom = ((Math.pow(definedValue, 4) * lastDOF) / (Math.pow(lastUncComb, 4))).toFixed(1)
 
         if (degOfFreedom >= 10 && degOfFreedom <= 20) {
@@ -691,7 +693,7 @@ const MeasurementUncertainty = () => {
         }
 
         console.log(degOfFreedom)
-        setUncertainityData(prev => ({ ...prev, combinedUnc: definedValue + " " + uncertainityData.uncRangeSizeUnit, uncDegOfFreedom: degOfFreedom, uncCoverageFactor: uncCoverageFactor, uncUncertainity: (definedValue * uncCoverageFactor).toFixed(4) + " " + uncertainityData.uncRangeSizeUnit }))
+        setUncertainityData(prev => ({ ...prev, uncCombinedUnc: definedValue + " " + uncertainityData.uncRangeSizeUnit, uncDegOfFreedom: Math.ceil(degOfFreedom), uncCoverageFactor: uncCoverageFactor, uncUncertainity: (definedValue * uncCoverageFactor).toFixed(4) + " " + uncertainityData.uncRangeSizeUnit }))
 
         // const coverageFactorValue = clccfData.find(item => item.degrees_freedom === degreesFreedom)
     }
@@ -1094,7 +1096,7 @@ const MeasurementUncertainty = () => {
                                 <tbody>
                                     <tr>
                                         <th width="10%">Combined Uncertainty(Uc)</th>
-                                        <td><input readOnly type="text" className='form-control form-control-sm' value={uncertainityData.combinedUnc} /></td>
+                                        <td><input readOnly type="text" className='form-control form-control-sm' value={uncertainityData.uncCombinedUnc} /></td>
                                         <th width="10%" >Coverage Factor(k)</th>
                                         <td><input readOnly type="text" className='form-control form-control-sm' value={uncertainityData.uncCoverageFactor} /></td>
                                         <th width="10%" >Degree of Freedom(veff)</th>

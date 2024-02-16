@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const uniqueValidator = require('mongoose-unique-validator');
+const mongooseSequence = require('mongoose-sequence')(mongoose);
 
 const measurementUncertaintySchema = new mongoose.Schema({
    uncItemName: String,
@@ -28,13 +29,17 @@ const measurementUncertaintySchema = new mongoose.Schema({
    uncR10: String,
    uncStdDeviation: String,
    uncN: String,
-   combinedUnc: String,
+   uncCombinedUnc: String,
    uncCoverageFactor: String,
    uncDegOfFreedom: String,
    uncUncertainity: String,
-   uncTypeBResult: []
+   uncTypeBResult: [],
+   uncPreparedBy: String
 });
 measurementUncertaintySchema.plugin(uniqueValidator);
-//measurementUncertaintySchema.plugin(mongooseSequence, { inc_field: 'dcId' });
+measurementUncertaintySchema.plugin(mongooseSequence, {
+   inc_field: 'uncertaintyId',
+   format: (num) => `UNC${num}`
+ });
 
 module.exports = mongoose.model('measurementUncertainty', measurementUncertaintySchema);

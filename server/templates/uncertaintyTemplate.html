@@ -16,45 +16,48 @@
         @media print {
 
             body {
-
-
-                margin: 0.7cm;
+                margin: 1cm;
                 font-size: 12px;
             }
 
-            page {
+            @page {
                 size: A4;
-                margin: 0;
+                margin: 1cm;
                 box-shadow: 0;
                 font-family: "Poppins", sans-serif;
                 font-weight: 400;
                 font-style: normal;
-
+                font-size: 12px;
+            }
+            td {
+                padding: 4px;
             }
 
 
 
-
         }
+        td {
+                padding: 4px;
+            }
     </style>
 </head>
 
 <body>
-    <div style="width: 100%; height: 100%; ">
-
-        <h4 class="text-center">EVALUATION OF UNCERTAINTY IN MEASUREMENT</h4>
+    <div style="width: 100%; height: 100%; font-size: 12px;" >
+        <img style="position: fixed; right: 0; top: 0;" src="{{companyLogo}}" width="80px" height="80px" />
+        <h5 class="text-center text-decoration-underline">EVALUATION OF MEASUREMENT UNCERTAINTY</h5>
 
         <table class="table table-borderless">
             <tbody>
                 <tr>
-                    <td>
-                        <table>
+                    <td class="py-0 m-0" style="padding-left: 4px;">
+                        <table class="py-0 m-0 table table-sm table-borderless">
                             <tbody>
                                 <tr>
-                                    <td width="80%">
+                                    <td>
                                         <b>1. COMPANY NAME :</b> {{companyName}}
                                     </td>
-                                    <td>
+                                    <td width="50%" class="text-start">
                                         <b>DATE :</b> {{uncDate}}
                                     </td>
                                 </tr>
@@ -63,8 +66,8 @@
                     </td>
                 </tr>
                 <tr>
-                    <td>
-                        <table>
+                    <td class="py-0 m-0" style="padding-left: 4px;"">
+                        <table class="py-0 m-0 table table-sm table-borderless py-0 m-0">
                             <tbody>
                                 <tr>
                                     <td><b>2. DEVICE UNDER CALIBRATION :</b> {{uncItemName}}</td>
@@ -74,14 +77,14 @@
                     </td>
                 </tr>
                 <tr>
-                    <td class="">
+                    <td class="py-0 m-0">
 
-                        <table class="table p-0 m-0 table-bordered border-secondary">
+                        <table class="table table-sm p-0 m-0 table-bordered border-secondary">
                             <tbody>
                                 <tr>
-                                    <td><b>Range(mm) : </b>{{uncRangeSize}}</td>
-                                    <td><b>Resolution(mm) : </b>{{uncLC}}</td>
-                                    <td><b>Coefficient of Thermal Expansion (DUC)-(αD)(µm/m/°c) : </b>{{uncMaterial}}</td>
+                                    <td><b>Range ({{uncRangeSizeUnit}}) : </b>{{uncRangeSize}}</td>
+                                    <td><b>Resolution ({{uncRangeSizeUnit}}) : </b>{{uncLC}}</td>
+                                    <td><b>Coefficient of Thermal Expansion (DUC)-(αD)(mm/m°C) : </b>{{uncMaterial}}</td>
                                 </tr>
                             </tbody>
                         </table>
@@ -90,21 +93,21 @@
                     </td>
                 </tr>
                 <tr>
-                    <td>
+                    <td class="py-0 m-0">
                         <b>3. STANDARDS / EQUIPMENT USED FOR CALIBRATION :</b>
                     </td>
                 </tr>
                 <tr>
-                    <td class="">
-                        <table class="table p-0 m-0 table-bordered border-secondary">
+                    <td class="py-0 m-0">
+                        <table class="table table-sm p-0 m-0 table-bordered border-secondary text-center align-middle">
                             <tbody>
                                 <tr>
                                     <th>Sr.No</th>
-                                    <th>Master Name</th>
-                                    <th>Range/Size</th>
-                                    <th>L.C.</th>
-                                    <th>Uncertainty</th>
-                                    <th>Accuracy</th>
+                                    <th width="30%">Master Name</th>
+                                    <th>Range/Size ({{uncRangeSizeUnit}})</th>
+                                    <th>L.C. ({{uncRangeSizeUnit}})</th>
+                                    <th>Uncertainty ({{uncRangeSizeUnit}})</th>
+                                    <th>Accuracy ({{uncRangeSizeUnit}})</th>
                                     <th>Material</th>
                                 </tr>
                                 {{uncMasterDetails}}
@@ -113,13 +116,13 @@
                     </td>
                 </tr>
                 <tr>
-                    <td>
+                    <td class="py-0 m-0">
                         <b>4. ENVIRONMENTAL PARAMETERS</b>
                     </td>
                 </tr>
                 <tr>
-                    <td>
-                        <table class="table p-0 m-0 table-bordered border-secondary">
+                    <td class="py-0 m-0">
+                        <table class="table table-sm p-0 m-0 table-bordered border-secondary text-center align-middle">
                             <tbody>
                                 <tr class="text-center">
                                     <th>Start Temp <br /><code style="font-size: 10px">T1 (°C)</code></th>
@@ -161,11 +164,11 @@
                     </td>
                 </tr>
                 <tr>
-                    <td><b>5. REPEATABILITY</b></td>
+                    <td class="py-0 m-0"><b>5. REPEATABILITY ({{uncRangeSizeUnit}})</b></td>
                 </tr>
                 <tr>
-                    <td>
-                        <table class='table text-center table-bordered align-middle border-secondary'>
+                    <td class="py-0 m-0">
+                        <table class='table table-sm py-0 m-0 text-center table-bordered align-middle border-secondary'>
                             <tbody>
                                 <tr>
                                     <th>R1</th>
@@ -222,17 +225,17 @@
                         </table>
                     </td>
                 </tr>
-                <tr class="py-0">
-                    <td class="py-0">
+                <tr >
+                    <td class="py-0 m-0">
                         <b>6. UNCERTAINTY BUDGET</b>
                     </td>
                 </tr>
                 <tr>
-                    <td class="py-0">
+                    <td class="py-0 m-0" style="font-size: 10px;">
                         <table class='table table-sm table table-bordered table-responsive text-center align-middle border border-secondary'  >
                             <tbody>
                                 <tr>
-                                    <th colSpan={2}>Source of uncertainty Xi</th>
+                                    <th colspan="2">Source of uncertainty Xi</th>
                                     <th>Estimates <br /><code style="font-size: 10px">(Xi)</code> </th>
                                     <th>Probability Distribution  </th>
                                     <th width="6%">Type</th>
@@ -249,26 +252,33 @@
                 </tr>
                 <tr>
                     <td class="m-0 p-0">
-                        <table class="table table-borderless p-0 m-0">
+                        <table class="table text-center align-middle table-sm table-borderless p-0 m-0">
                             <tbody>
                                 <tr>
-                                    <th>Combined Uncertainty (Uc) :</th>
-                                    <td><code>{{uncCombinedUncertainity}}</code></td>
-                                    <th>Coverge Factor (k) :</th>
-                                    <td><code>{{uncCoverageFactor}}</code></td>
-                                    <th>Degree of freedom (veff):</th>
-                                    <td><code>{{degOfFreedom}}</code></td>
+                                    <th >Combined Uncertainty <code>(Uc) : {{uncCombinedUnc}}</code></th>
+                                    
+                                    <th>Coverge Factor <code>(k) : {{uncCoverageFactor}}</code></th>
+                                    
+                                    <th>Degree of freedom <code>(veff): {{uncDegOfFreedom}}</code></th>
+                                    
                                 </tr>
                             </tbody>
                         </table>
                     </td>
                 </tr>
                 <tr>
-                    <td class="text-end fs-5">
+                   
+                    <td class="text-end fs-6">
                         <span class="p-2" style="background-color: #f3f3f3;">
-                            <b>Expanded Uncertainty (U):</b>  <code>± {{uncUncertainty}}</code>
+                            <b>Expanded Uncertainty (U): </b><code>± {{uncUncertainity}}</code>
                         </span>
                         
+                    </td>
+                </tr>
+                <tr>
+                    <td class="m-0 py-0">
+                        {{uncPreparedBy}}<br/>
+                        Prepared By
                     </td>
                 </tr>
             </tbody>
