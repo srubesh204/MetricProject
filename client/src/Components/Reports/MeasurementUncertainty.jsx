@@ -4,7 +4,9 @@ import { Card, CardContent, CardActions, Button, Container, Grid, Paper, TextFie
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { Calculate, Delete } from '@mui/icons-material';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { useNavigate } from 'react-router-dom';
 import { useEmployee } from '../../App';
+import { Link } from 'react-router-dom';
 import dayjs from 'dayjs';
 const MeasurementUncertainty = () => {
 
@@ -453,7 +455,7 @@ const MeasurementUncertainty = () => {
         });
 
         console.log(modifiedData);
-        setUncertainityData(prev => ({...prev, uncTypeBResult : [...prev.uncTypeBResult, ...modifiedData]}));
+        setUncertainityData(prev => ({ ...prev, uncTypeBResult: [...prev.uncTypeBResult, ...modifiedData] }));
         setSelectedValues([]);
     }
 
@@ -508,7 +510,7 @@ const MeasurementUncertainty = () => {
         setUncertainityData((prev) => {
             const updatedData = [...prev.uncTypeBResult]; // Create a copy of the previous state array
             updatedData.splice(index, 1); // Remove the element at the specified index
-            return {...prev, uncTypeBResult: updatedData} // Return the updated array
+            return { ...prev, uncTypeBResult: updatedData } // Return the updated array
         });
     };
 
@@ -539,6 +541,7 @@ const MeasurementUncertainty = () => {
     useEffect(() => {
         itemNameFetch()
     }, []);
+    const navigate = useNavigate();
 
     const [errors, setErrors] = useState({})
     const validateFunction = () => {
@@ -556,18 +559,22 @@ const MeasurementUncertainty = () => {
         e.preventDefault();
         try {
 
-            
+
             if (validateFunction() && uncertainityData.uncTypeBResult.length > 0) {
                 const response = await axios.post(
                     `${process.env.REACT_APP_PORT}/measurementUncertainty/createMeasurementUncertainty`, uncertainityData
                 );
                 console.log(response.data.message)
 
+
                 setSnackBarOpen(true)
-                // uncFetch();
-                // setUncertainityData(initialUncertainty);
+                //uncFetch();
+                setUncertainityData(initialUncertainty);
                 console.log("uncertainty Create successfully");
                 setErrorHandler({ status: response.data.status, message: response.data.message, code: "success" })
+                setTimeout(() => {
+                    navigate('/measurementUncertaintyList');
+                }, 1000);
 
             } else {
                 console.log("Error")
@@ -1114,9 +1121,12 @@ const MeasurementUncertainty = () => {
                             <div className='me-2'>
                                 <CustomisedButton variant='contained' size="small" color='success' onClick={() => setOpenModalUNC(true)}>+ Add Uncertainty</CustomisedButton>
                             </div>
-                            <div className='' >
+                            {/* <div className='' >
                                 <CustomisedButton variant='contained' type='button' size='small' color='error' >List</CustomisedButton>
-                            </div>
+                            </div> */}
+                            <Button component={Link} variant='contained' to={`/measurementUncertaintyList/`} >
+                            Uncertainty List
+                            </Button>
 
                         </div>
 

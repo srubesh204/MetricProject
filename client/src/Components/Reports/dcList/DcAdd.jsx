@@ -93,8 +93,6 @@ const DcAdd = () => {
             }
         }
         setDcAddData((prev) => ({ ...prev, [name]: value }))
-
-
     };
 
 
