@@ -1343,27 +1343,29 @@ const TotalList = () => {
                       <input className="form-control itemlistdownload" type="file" id="download" />Download </label>
                   </div> */}
                 </React.Fragment>}
-                <div>
-                  <Button className='me-2' size='small' onClick={() => { setTotalPrintOpen(true) }}>Total List Print</Button>
+                <div className='me-2'>
+                  <Button component={Link} to={`/home`} variant="contained" size='small' color="warning">
+                    <ArrowBackIcon /> Dash board
+                  </Button>
                 </div>
                 <div>
                   <Button component={Link} to="/insHisCard" className='me-2' size='small' >
                     History  Card
                   </Button>
                 </div>
+                <div>
+                  <Button className='me-2' size='small' onClick={() => { setTotalPrintOpen(true) }}>Print</Button>
+                </div>
+
                 {/* <div className='col'>
                   <Button variant="contained" size='small' color="success" onClick={() => { setCalDuePrint(true) }}>CalDueReport Print</Button>
                 </div> */}
-                <div className='col d-flex justify-content-end'>
-                  <div className='me-2'>
-                    <Button component={Link} to={`/home`} variant="contained" size='small' color="warning">
-                      <ArrowBackIcon /> Dash board
-                    </Button>
-                  </div>
+               
+
                   {/* <div >
                       <Button component={Link} to="/" size='small' variant='contained' startIcon={<ArrowBack />} endIcon={<House />} color='secondary'>Home</Button>
                     </div> */}
-                </div>
+              
               </div>
               <Snackbar anchorOrigin={{ vertical: "top", horizontal: "right" }} open={snackBarOpen} autoHideDuration={6000} onClose={handleSnackClose}>
                 <Alert onClose={handleSnackClose} severity={errorhandler.code} sx={{ width: '25%' }}>

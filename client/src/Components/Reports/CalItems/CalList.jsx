@@ -297,9 +297,9 @@ const CalList = () => {
     const calListColumns = [
         { field: 'id', headerName: 'Entry. No', width: 60, renderCell: (params) => params.api.getAllRowIds().indexOf(params.id) + 1, headerAlign: "center", align: "center", },
         ...(employeeRole && employeeRole.employee !== "viewer" ? [{ field: 'editButton', headerAlign: "center", align: "center", headerName: 'Edit', width: 60, renderCell: (params) => <EditRounded color='warning' onClick={() => setCalEditData(params)} /> }] : []),
-        { field: 'calItemEntryDate', headerName: 'Entry Date', width: 90, valueGetter: (params) => dayjs(params.row.calItemEntryDate).format('DD-MM-YYYY'), headerAlign: "center", align: "center", },
-        { field: 'calIMTENo', headerName: 'Item IMTENo', width: 150, headerAlign: "center", align: "center", },
-        { field: 'calItemName', headerName: 'Item Description', width: 150, headerAlign: "center", align: "center", },
+        { field: 'calItemEntryDate', headerName: 'Entry Date', width: 100, valueGetter: (params) => dayjs(params.row.calItemEntryDate).format('DD-MM-YYYY'), headerAlign: "center", align: "center", },
+        { field: 'calIMTENo', headerName: 'Item IMTENo', width: 180, headerAlign: "center", align: "center", },
+        { field: 'calItemName', headerName: 'Item Description', width: 190, headerAlign: "center", align: "center", },
         // { field: 'calRangeSize', headerName: 'Range/Size', width: 100, headerAlign: "center", align: "center", },
         {
             field: 'Range/Size',
@@ -307,7 +307,7 @@ const CalList = () => {
             headerAlign: "center", align: "center",
             description: 'This column has a value getter and is not sortable.',
             sortable: false,
-            width: 130,
+            width: 150,
             valueGetter: (params) =>
                 `${params.row.calRangeSize || ''} ${params.row.calLC || ''}`,
         },
