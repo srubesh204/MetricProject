@@ -738,7 +738,7 @@ const Home = () => {
   })
 
 
-  const calStatusColor = ['#FF4545', '#00C49F', '#FFBB28', '#FF8042', "#ACA8C8", "#0088FE"];
+  const calStatusColor = ['#FF4545','#FFBB28','#00C49F', '#FF8042', "#ACA8C8", "#0088FE"];
   const itemStatusColor = ["#595959", "orange", "#FF8042", "#0088FE", "#FF4545"];
   const itemLocationColor = ["#984EA3", "violet", "orange", "#00C49F", "#0088FE"];
 

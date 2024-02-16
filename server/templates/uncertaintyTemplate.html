@@ -52,7 +52,7 @@
                             <tbody>
                                 <tr>
                                     <td width="80%">
-                                        <b>1. LABORATORY :</b> {{companyName}}
+                                        <b>1. COMPANY NAME :</b> {{companyName}}
                                     </td>
                                     <td>
                                         <b>DATE :</b> {{uncDate}}
@@ -76,12 +76,12 @@
                 <tr>
                     <td class="">
 
-                        <table class="table p-0 m-0 table-bordered border-black">
+                        <table class="table p-0 m-0 table-bordered border-secondary">
                             <tbody>
                                 <tr>
-                                    <td><b>Range(mm) :</b> 0.0115</td>
-                                    <td><b>Resolution(mm) :</b> 0.0012</td>
-                                    <td><b>Coefficient of Thermal Expansion (DUC)-(αD)(µm/m/°c) :</b> 11.5</td>
+                                    <td><b>Range(mm) : </b>{{uncRangeSize}}</td>
+                                    <td><b>Resolution(mm) : </b>{{uncLC}}</td>
+                                    <td><b>Coefficient of Thermal Expansion (DUC)-(αD)(µm/m/°c) : </b>{{uncMaterial}}</td>
                                 </tr>
                             </tbody>
                         </table>
@@ -96,7 +96,7 @@
                 </tr>
                 <tr>
                     <td class="">
-                        <table class="table p-0 m-0 table-bordered border-black">
+                        <table class="table p-0 m-0 table-bordered border-secondary">
                             <tbody>
                                 <tr>
                                     <th>Sr.No</th>
@@ -119,7 +119,7 @@
                 </tr>
                 <tr>
                     <td>
-                        <table class="table  p-0 m-0 table-bordered border-black">
+                        <table class="table p-0 m-0 table-bordered border-secondary">
                             <tbody>
                                 <tr class="text-center">
                                     <th>Start Temp <br /><code style="font-size: 10px">T1 (°C)</code></th>
@@ -165,7 +165,7 @@
                 </tr>
                 <tr>
                     <td>
-                        <table class='table text-center table-bordered align-middle border-black'>
+                        <table class='table text-center table-bordered align-middle border-secondary'>
                             <tbody>
                                 <tr>
                                     <th>R1</th>
@@ -220,6 +220,55 @@
                                 </tr>
                             </tbody>
                         </table>
+                    </td>
+                </tr>
+                <tr class="py-0">
+                    <td class="py-0">
+                        <b>6. UNCERTAINTY BUDGET</b>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="py-0">
+                        <table class='table table-sm table table-bordered table-responsive text-center align-middle border border-secondary'  >
+                            <tbody>
+                                <tr>
+                                    <th colSpan={2}>Source of uncertainty Xi</th>
+                                    <th>Estimates <br /><code style="font-size: 10px">(Xi)</code> </th>
+                                    <th>Probability Distribution  </th>
+                                    <th width="6%">Type</th>
+                                    <th>Factor <br /><code style="font-size: 10px">(x)</code></th>
+                                    <th>Standard Uncertainty <br /><code style="font-size: 10px">u = (Xi / x)</code></th>
+                                    <th>Sensitivity Coefficient <br /><code style="font-size: 10px">(y)</code></th>
+                                    <th>Uncertainty contribution <br /><code style="font-size: 10px">ui = (x * y)</code></th>
+                                    <th>Degree of freedom <br /><code style="font-size: 10px">vi = (n - 1)</code></th>
+                                </tr>
+                                {{uncTypeBResult}}
+                            </tbody>
+                        </table>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="m-0 p-0">
+                        <table class="table table-borderless p-0 m-0">
+                            <tbody>
+                                <tr>
+                                    <th>Combined Uncertainty (Uc) :</th>
+                                    <td><code>{{uncCombinedUncertainity}}</code></td>
+                                    <th>Coverge Factor (k) :</th>
+                                    <td><code>{{uncCoverageFactor}}</code></td>
+                                    <th>Degree of freedom (veff):</th>
+                                    <td><code>{{degOfFreedom}}</code></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="text-end fs-5">
+                        <span class="p-2" style="background-color: #f3f3f3;">
+                            <b>Expanded Uncertainty (U):</b>  <code>± {{uncUncertainty}}</code>
+                        </span>
+                        
                     </td>
                 </tr>
             </tbody>

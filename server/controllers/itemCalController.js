@@ -197,7 +197,7 @@ const itemCalController = {
           { $set: updateItemFields },
           { new: true }
         );
-        
+
 
 
 
@@ -365,8 +365,12 @@ const itemCalController = {
 
           // Set the modified HTML content
 
-          console.log(modifiedHTML)
-          await page.setContent(modifiedHTML, { waitUntil: 'networkidle0' });
+          const cssPath = path.resolve(__dirname, '../templates/bootstrap.min.css');
+
+          await page.setContent(modifiedHTML, { waitUntil: 'domcontentloaded' });
+
+          // Add the CSS file
+          await page.addStyleTag({ path: cssPath });
 
           // Generate PDF
           await page.pdf({ path: `./storage/calCertificates/${calCertificateNo}.pdf`, format: 'A4' });
@@ -545,7 +549,7 @@ const itemCalController = {
         calPlant,
         calDepartment,
         calSource
-      }; 
+      };
 
       const getCompDetailsById = await compDetailsSchema.findOne(
         { compId: 1 } // To return the updated document
@@ -819,8 +823,12 @@ const itemCalController = {
 
           // Set the modified HTML content
 
-          console.log(modifiedHTML)
-          await page.setContent(modifiedHTML, { waitUntil: 'networkidle0' });
+          const cssPath = path.resolve(__dirname, '../templates/bootstrap.min.css');
+
+          await page.setContent(modifiedHTML, { waitUntil: 'domcontentloaded' });
+  
+          // Add the CSS file
+          await page.addStyleTag({ path: cssPath });
 
           // Generate PDF
           await page.pdf({ path: `./storage/calCertificates/${calCertificateNo}.pdf`, format: 'A4' });

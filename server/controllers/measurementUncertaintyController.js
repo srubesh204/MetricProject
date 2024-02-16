@@ -1,5 +1,9 @@
+const { default: puppeteer } = require("puppeteer");
+const { compDetailsSchema } = require("../models/compDetailsModel");
 const measurementUncertaintyModel = require("../models/measurementUncertaintyModel")
 const excelToJson = require('convert-excel-to-json');
+const path = require("path");
+const fs = require('fs');
 const measurementUncertaintyController = {
   getAllMeasurementUncertainty: async (req, res) => {
     try {
@@ -79,6 +83,11 @@ const measurementUncertaintyController = {
         uncUncertainity,
         uncTypeBResult
       });
+
+      const getCompDetailsById = await compDetailsSchema.findOne(
+        { compId: 1 } // To return the updated document
+      );
+
       const validationError = measurementUncertaintyResult.validateSync();
       if (validationError) {
         // Handle validation errors
@@ -94,7 +103,42 @@ const measurementUncertaintyController = {
         });
       }
       console.log("success")
-      await measurementUncertaintyResult.save();
+      //const uncResult = await measurementUncertaintyResult.save();
+
+
+      //if (Object.keys(uncResult).length !== 0) {
+      const browser = await puppeteer.launch();
+        const page = await browser.newPage();
+
+        // Read the HTML template file
+        const filePath = path.resolve(__dirname, '../../server/templates/uncertaintyTemplate.html');
+        const htmlTemplate = fs.readFileSync(filePath, 'utf8');
+
+        // Replace placeholders with actual data
+        const modifiedHTML = htmlTemplate
+
+          .replace(/{{companyName}}/g, getCompDetailsById ? getCompDetailsById.getCompDetailsById : "")
+          .replace(/{{uncDate}}/g, uncDate ? uncDate : "")
+          .replace(/{{uncItemName}}/g, uncItemName ? uncItemName : "")
+          
+
+
+        // Add more replace statements for additional placeholders as needed
+
+        // Set the modified HTML content
+
+        console.log(modifiedHTML)
+        const cssPath = path.resolve(__dirname, '../templates/bootstrap.min.css');
+        
+        await page.setContent(modifiedHTML, { waitUntil: 'domcontentloaded' });
+        await page.addStyleTag({ path: cssPath });
+        // Generate PDF
+        await page.pdf({ path: `./storage/uncertaintyCertificates/${grnNo}.pdf`, format: 'A4' });
+
+        await browser.close();
+        console.log(process.env.SERVER_PORT)
+        console.log('Uncertainty PDF created successfully');
+     // }
       return res.status(200).json({ message: "Measurement Uncertainty Data Successfully Saved", status: 1 });
     } catch (error) {
       console.log(error)
