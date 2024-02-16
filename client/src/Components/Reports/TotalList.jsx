@@ -3,7 +3,7 @@ import { TextField, MenuItem, Button } from '@mui/material';
 import { Box, Container, Grid, Paper, Typography } from "@mui/material";
 import { DataGrid, GridToolbar, GridToolbarQuickFilter } from '@mui/x-data-grid';
 import axios from 'axios';
-import {FilterAlt } from '@mui/icons-material';
+import { FilterAlt } from '@mui/icons-material';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import dayjs from 'dayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
@@ -123,14 +123,14 @@ const TotalList = () => {
   })
 
   const dateFilter = () => {
-    if(dateData.fromDate && dateData.toDate){
+    if (dateData.fromDate && dateData.toDate) {
       const filteredItems = itemList.filter((item) => dayjs(item.itemDueDate).isBetween(dayjs(dateData.fromDate), dayjs(dateData.toDate), 'day', '[]'))
       console.log(filteredItems)
       setFilteredItemListData(filteredItems)
     }
   }
 
- 
+
 
 
   console.log(dateData)
@@ -257,7 +257,7 @@ const TotalList = () => {
     { field: 'gaugeUsage', headerName: 'Gauge life in days ', width: 130, headerAlign: "center", align: "center", valueGetter: (params) => params.row.gaugeUsage || "-" },
     { field: 'lifealertDays', headerName: 'Gauge life alert in days', width: 120, headerAlign: "center", align: "center", valueGetter: (params) => params.row.lifealertDays || "-" },
     { field: 'purchaseRefNo', headerName: 'PurchaseRefNo', width: 90, headerAlign: "center", align: "center", valueGetter: (params) => params.row.purchaseRefNo || "-" },
-    { field: 'purchaseDate', headerName: 'PurchaseDate', width: 90, headerAlign: "center", align: "center",  valueGetter: (params) => dayjs(params.row.purchaseDate).format('DD-MM-YYYY')  },
+    { field: 'purchaseDate', headerName: 'PurchaseDate', width: 90, headerAlign: "center", align: "center", valueGetter: (params) => dayjs(params.row.purchaseDate).format('DD-MM-YYYY') },
     { field: 'specialRemark', headerName: 'SpecialRemark', width: 90, headerAlign: "center", align: "center", valueGetter: (params) => params.row.specialRemark || "-" },
     { field: 'drawingIssueNo', headerName: 'DrawingIssueNo', width: 90, headerAlign: "center", align: "center", valueGetter: (params) => params.row.drawingIssueNo || "-" },
     { field: 'drawingNo', headerName: 'DrawingNo', width: 90, headerAlign: "center", align: "center", valueGetter: (params) => params.row.drawingNo || "-" },
@@ -492,7 +492,7 @@ const TotalList = () => {
         });
         console.log(updatedFilterNames)
         // Update state outside the loop with the updated object
-        setFilterNameList(prev => ({ ...prev, ...updatedFilterNames}));
+        setFilterNameList(prev => ({ ...prev, ...updatedFilterNames }));
         setFilteredItemListData(itemType)
         setFilterAllNames(prev => ({
           ...prev,
@@ -569,11 +569,11 @@ const TotalList = () => {
       }
     }
     if (name === "customerWise") {
-       const customerData = partDataList.filter(part => part.customer === value)
-       
-    //  const customerData =["All",...new Set(customers.map(part => part.customer))]
+      const customerData = partDataList.filter(part => part.customer === value)
+
+      //  const customerData =["All",...new Set(customers.map(part => part.customer))]
       const customers = plantDatas.filter(item => customerData.some(cus => item.itemPartName.includes(cus.partNo)))
-      
+
       console.log(customers)
       if (value === " all") {
         setFilteredItemListData(plantDatas)
@@ -1193,7 +1193,7 @@ const TotalList = () => {
                     ))}
                   </TextField>
                 </div>
-                
+
                 {dueDate === "Date" && <div className='col d-flex justify-content-end'>
                   <div className="me-2 ">
                     <DatePicker
@@ -1230,7 +1230,7 @@ const TotalList = () => {
                   </div>
                 </div>}
 
-               
+
               </div>
               {/* <div className="col-1 offset-7">
 
@@ -1296,8 +1296,8 @@ const TotalList = () => {
                               onChange={(newValue) =>
                                 setDateData((prev) => ({ ...prev, toDate: dayjs(newValue).format('YYYY-MM-DD') }))}
                             />
-                            <div className='me-2'><Button onClick={()=> dateFilter()} variant='contained' color='success' endIcon={<FilterAlt />}>Filter</Button></div>
-                            
+                            <div className='me-2'><Button onClick={() => dateFilter()} >Filter</Button></div>
+
                           </div>
 
                           <div className='mt-2'><GridToolbarQuickFilter /></div>
@@ -1344,7 +1344,12 @@ const TotalList = () => {
                   </div> */}
                 </React.Fragment>}
                 <div>
-                  <Button variant="contained" className='me-2' size='small' color="success" onClick={() => { setTotalPrintOpen(true) }}>Total List Print</Button>
+                  <Button className='me-2' size='small' onClick={() => { setTotalPrintOpen(true) }}>Total List Print</Button>
+                </div>
+                <div>
+                  <Button component={Link} to="/insHisCard" className='me-2' size='small' >
+                    History  Card
+                  </Button>
                 </div>
                 {/* <div className='col'>
                   <Button variant="contained" size='small' color="success" onClick={() => { setCalDuePrint(true) }}>CalDueReport Print</Button>

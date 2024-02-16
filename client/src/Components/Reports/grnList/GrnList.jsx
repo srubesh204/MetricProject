@@ -17,7 +17,7 @@ import DialogTitle from '@mui/material/DialogTitle';
 import Snackbar from '@mui/material/Snackbar';
 import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
 import GrnAdd from './GrnAdd';
-import {ArrowBack,Error, HomeMax, House, Mail, MailLock,  } from '@mui/icons-material';
+import { ArrowBack, Error, HomeMax, House, Mail, MailLock, } from '@mui/icons-material';
 import { Link as RouterLink } from 'react-router-dom';
 import { Link } from "react-router-dom";
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
@@ -119,7 +119,7 @@ const GrnList = () => {
         formatFetchData();
     }, []);
 
-   
+
     const [grnDataList, setGrnDataList] = useState([])
     const [filteredData, setFilteredData] = useState([])
 
@@ -161,7 +161,7 @@ const GrnList = () => {
             );
             const plantGRN = response.data.result.filter(dc => (loggedEmp.plantDetails.map(plant => plant.plantName).includes(dc.grnPlant)))
             const grnNos = response.data.result.map(dc => dc.grnId).filter(Boolean).sort()
-            setLastNo((dayjs().year() + "-" + ((grnNos[grnNos.length - 1]) + 1))) 
+            setLastNo((dayjs().year() + "-" + ((grnNos[grnNos.length - 1]) + 1)))
             console.log(grnNos[grnNos.length - 1])
             setGrnDataDcList(plantGRN);
             setFilteredData(plantGRN);
@@ -194,18 +194,18 @@ const GrnList = () => {
     useEffect(() => {
         companyFetch();
     }, []);
-    
+
     //
 
     const Columns = [
         { field: 'id', headerName: 'Sr. No', width: 100, renderCell: (params) => params.api.getAllRowIds().indexOf(params.id) + 1, headerAlign: "center", align: "center", },
-         ...(employeeRole && employeeRole.employee !== "viewer" ? [{ field: 'button', headerName: 'Edit', headerAlign: "center", align: "center", width: 90, renderCell: (params) => <Button onClick={() => { setSelectedRows(params.row); setGrnEditOpen(true) }}><Edit color='success' /></Button> }] : []),
+        ...(employeeRole && employeeRole.employee !== "viewer" ? [{ field: 'button', headerName: 'Edit', headerAlign: "center", align: "center", width: 90, renderCell: (params) => <Button onClick={() => { setSelectedRows(params.row); setGrnEditOpen(true) }}><Edit color='success' /></Button> }] : []),
         { field: 'grnNo', headerName: 'Grn No', width: 150, headerAlign: "center", align: "center", },
         { field: 'grnItemIMTENo', headerName: 'IMTENo', width: 150, headerAlign: "center", align: "center" },
         { field: 'grnItemAddMasterName', headerName: 'Description', width: 150, headerAlign: "center", align: "center" },
         { field: 'grnDate', headerName: 'Grn Date', width: 150, headerAlign: "center", align: "center", renderCell: (params) => dayjs(params.row.grnDate).format("DD-MM-YYYY") },
         { field: 'grnPartyName', headerName: 'Party Name', width: 200, headerAlign: "center", align: "center", },
-        { field: 'printButton', headerName: 'Print', headerAlign: "center", align: "center", width: 100, renderCell: (params) => <Button component={Link} to={`${process.env.REACT_APP_PORT}/grnCertificates/${params.row.grnNo}.pdf`} target='_blank'><PrintRounded  color='success' /></Button> }
+        { field: 'printButton', headerName: 'Print', headerAlign: "center", align: "center", width: 100, renderCell: (params) => <Button component={Link} to={`${process.env.REACT_APP_PORT}/grnCertificates/${params.row.grnNo}.pdf`} target='_blank'><PrintRounded color='success' /></Button> }
     ]
 
 
@@ -219,9 +219,9 @@ const GrnList = () => {
         try {
             const response = await axios.post(
                 `${process.env.REACT_APP_PORT}/itemAdd/getItemByPlant`, { allowedPlants: allowedPlants }
-              );
+            );
             console.log(response.data.result)
-           
+
             const DcItems = response.data.result.filter(item => item.dcStatus === "1")
             console.log(DcItems)
             setItemPlantList(DcItems);
@@ -264,7 +264,7 @@ const GrnList = () => {
         try {
             const response = await axios.post(
                 `${process.env.REACT_APP_PORT}/vendor/getVendorByPlants`, { allowedPlants: allowedPlants }
-              );
+            );
             setVendorFullList(response.data.result);
             setVendorTypeList(response.data.result)
             // setFilteredData(response.data.result);
@@ -551,7 +551,7 @@ const GrnList = () => {
                                         }}
 
                                         density="compact"
-                                        
+
 
                                         checkboxSelection
                                         //onRowClick={handleRowClick}
@@ -566,7 +566,7 @@ const GrnList = () => {
                             </Paper>
 
                         </div>
-                       
+
                         <Paper
                             sx={{
                                 p: 2,
@@ -578,7 +578,7 @@ const GrnList = () => {
                         >
                             <div className='row'>
 
-                                
+
 
                             </div>
 
@@ -592,6 +592,11 @@ const GrnList = () => {
                                             <div className='me-2'>
                                                 <Button component={Link} to={`/home`} variant="contained" size='small' color="warning">
                                                     <ArrowBackIcon /> Dash board
+                                                </Button>
+                                            </div>
+                                            <div>
+                                                <Button component={Link} to="/insHisCard"  size='small' >
+                                                    History  Card
                                                 </Button>
                                             </div>
                                             {/* <div >
@@ -642,17 +647,17 @@ const GrnList = () => {
                                 </div>
 
                                 <GrnListContent.Provider
-                                    value={{ grnEditOpen, setGrnEditOpen, selectedRows, grnListFetchData, itemPlantList ,grnDataDcList, allowedPlants}}
+                                    value={{ grnEditOpen, setGrnEditOpen, selectedRows, grnListFetchData, itemPlantList, grnDataDcList, allowedPlants }}
                                 >
                                     <GrnEdit />
                                 </GrnListContent.Provider>
                                 <GrnListContent.Provider
-                                    value={{ grnOpen, setGrnOpen, selectedRows, grnListFetchData, itemPlantList,grnDataDcList,lastNo}}
+                                    value={{ grnOpen, setGrnOpen, selectedRows, grnListFetchData, itemPlantList, grnDataDcList, lastNo }}
                                 >
                                     <GrnAdd />
                                 </GrnListContent.Provider>
                                 <GrnListContent.Provider
-                                    value={{ grnPrintOpen, setGrnPrintOpen, selectedRows, formatNoData, printState, setPrintState,companyList,plantList }}
+                                    value={{ grnPrintOpen, setGrnPrintOpen, selectedRows, formatNoData, printState, setPrintState, companyList, plantList }}
                                 >
                                     {selectedRows.length !== 0 &&
                                         <GrnPrint />}
