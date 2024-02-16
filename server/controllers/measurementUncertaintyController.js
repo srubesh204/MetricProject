@@ -361,5 +361,34 @@ const measurementUncertaintyController = {
       res.status(500).json({ error: error, status: 0 });
     }
   },
+  deleteMeasurementUncertainty: async (req, res) => {
+    try {
+
+      const { uncertaintyIds } = req.body; // Assuming an array of vendor IDs is sent in the request body
+      console.log(req.body)
+      const deleteResults = [];
+
+      for (const uncertaintyId of uncertaintyIds) {
+        // Find and remove each vendor by _id
+        const deletedUncertainty = await measurementUncertaintyModel.findOneAndRemove({ _id: uncertaintyId });
+        console.log(deletedUncertainty)
+        if (!deletedUncertainty) {
+          // If a vendor was not found, you can skip it or handle the error as needed.
+          console.log(`Uncertainty with ID ${uncertaintyId} not found.`);
+          res.status(500).json({ message: `Vendor with ID not found.` });
+
+        } else {
+          console.log(`Uncertainty with ID ${uncertaintyId} deleted successfully.`);
+          deleteResults.push(deletedUncertainty);
+        }
+      }
+
+      return res.status(202).json({ message: 'Measurement Uncertainty deleted successfully', results: `${deleteResults.length} Measurement Uncertainty Deleted Successfull ` });
+    } catch (error) {
+      console.error(error);
+      res.status(500).send('Internal Server Error');
+    }
+  },
+
 }
 module.exports = measurementUncertaintyController;

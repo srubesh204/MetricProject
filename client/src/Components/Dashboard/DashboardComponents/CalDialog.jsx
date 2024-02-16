@@ -1130,7 +1130,7 @@ const CalDialog = () => {
                                                 <th width="20%" rowSpan={2}>Parameter</th>
                                                 <th width="10%" rowSpan={2}>Range/Size ({(calibrationData && calibrationData.calcalibrationData.length > 0) ? calibrationData.calcalibrationData[0].calNominalSizeUnit : ""}) </th>
                                                 <th width="10%" rowSpan={2}>Unit</th>
-                                                <th colSpan={3} width="30%">Permissible Size  <span style={{ fontSize: "10px" }}>({(calibrationData && calibrationData.calcalibrationData.length > 0) ? calibrationData.calcalibrationData[0].calNominalSizeUnit : ""}) </span> </th>
+                                                <th colSpan={3} width="30%">Permissible Size  <span>({(calibrationData && calibrationData.calcalibrationData.length > 0) ? calibrationData.calcalibrationData[0].calNominalSizeUnit : ""}) </span> </th>
                                                 {calibrationData.calBeforeData === "yes" && <th width="5%" rowSpan={2}>Before Calibration</th>}
                                                 <th width="20%" colSpan={calibrationData.calOBType === "average" ? 1 : 2}>Observed Size ({(calibrationData && calibrationData.calcalibrationData.length > 0) ? calibrationData.calcalibrationData[0].calNominalSizeUnit : ""})</th>
                                                 <th width="10%" rowSpan={2}>Status</th>

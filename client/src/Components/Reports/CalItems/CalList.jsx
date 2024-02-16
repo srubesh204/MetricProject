@@ -10,7 +10,7 @@ import { Container, Paper } from '@mui/material';
 import { Add, Remove, HighlightOffRounded } from '@mui/icons-material';
 import { ArrowBack, Error, HomeMax, House, Mail, MailLock, } from '@mui/icons-material';
 import { Link } from "react-router-dom";
-
+import Autocomplete from '@mui/material/Autocomplete';
 
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { Edit, EditRounded, PrintRounded } from '@mui/icons-material';
@@ -86,6 +86,9 @@ const CalList = () => {
     }, []);
 
     console.log(itemAddList)
+    const [imteNo, setImteNo] = useState({
+        calIMTENo: ""
+    })
 
 
     const [plantDatas, setPlantDatas] = useState([]);
@@ -124,10 +127,7 @@ const CalList = () => {
                 const plantName = itemAddList.filter((item) => item.plantName === value)
                 setFilterAddress(plantName)
             }
-
         }
-
-
     }
 
 
@@ -162,10 +162,7 @@ const CalList = () => {
                 const companyName = itemAddList.filter((item) => item.companyName === value)
                 setFilterAddress(companyName)
             }
-
         }
-
-
     }
 
 
@@ -181,10 +178,6 @@ const CalList = () => {
             );
 
             const plantemps = response.data.result.filter(emp => emp.plantDetails.find(empPlant => loggedEmp.plantDetails.map(plant => plant.plantName).includes(empPlant.plantName)))
-
-
-
-
             setActiveEmps(plantemps)
         } catch (err) {
             console.log(err);
@@ -262,8 +255,6 @@ const CalList = () => {
             console.log(calNos[calNos.length - 1])
             setCalDataDcList(plantCal);
             setFilteredCalData(plantCal);
-
-
         } catch (err) {
             console.log(err);
         }
@@ -315,9 +306,7 @@ const CalList = () => {
         { field: 'calItemDueDate', headerName: 'Next Due On', width: 100, valueGetter: (params) => dayjs(params.row.calItemDueDate).format('DD-MM-YYYY'), headerAlign: "center", align: "center", },
         { field: 'calStatus', headerName: 'Cal status', width: 90, headerAlign: "center", align: "center", },
         { field: 'printButton', headerName: 'Print', headerAlign: "center", align: "center", width: 60, renderCell: (params) => <Button component={Link} to={`${process.env.REACT_APP_PORT}/calCertificates/${params.row.calCertificateNo}.pdf`} target='_blank'><PrintRounded color='success' /></Button> }
-
     ]
-
     const [filterMaster, setFilterMaster] = useState([])
     const [departments, setDepartments] = useState([])
     const DepartmentFetch = async () => {
@@ -327,7 +316,6 @@ const CalList = () => {
             );
             const defaultDepartment = response.data.result.filter((dep) => dep.defaultdep === "yes")
             setDepartments(defaultDepartment);
-
             console.log(response.data)
         } catch (err) {
             console.log(err);
@@ -337,8 +325,6 @@ const CalList = () => {
     useEffect(() => {
         DepartmentFetch()
     }, []);
-
-
     const handleMasterFilter = (e) => {
         const { name, value } = e.target;
         if (value === "all") {
@@ -381,12 +367,15 @@ const CalList = () => {
                 const itemDepartment = calListDataList.filter((item) => (item.itemDepartment && item.itemDepartment.includes(value)));
                 setFilteredCalData(itemDepartment);
             }
+           
 
             setDateData((prev) => ({ ...prev, [name]: value }))
         }
-
-
     }
+
+    const handleAutocompleteChange = (event, newValue) => {
+        setFilteredCalData((prev) => ({ ...prev, calIMTENo: newValue }));
+    };
 
     const dateFilter = () => {
         const filteredItems = calListDataList.filter((item) => dayjs(item.calItemCalDate).isSameOrAfter(dateData.fromDate) && dayjs(item.calItemCalDate).isSameOrBefore(dateData.toDate))
@@ -517,6 +506,22 @@ const CalList = () => {
                                             <MenuItem key={index} value={item}>{item}</MenuItem>
                                         ))}
                                     </TextField>
+
+
+                                    {/* <Autocomplete
+                                        id="itemIMTENoId"
+                                        onChange={handleAutocompleteChange}
+                                        options={IMTENos}
+                                         value={imteNo.calIMTENo}
+                                        size='small'
+                                        className='col'
+                                        fullWidth
+                                        isOptionEqualToValue={(option, value) => option === value}
+                                        renderInput={(params) => (
+                                            <TextField {...params} label="Item IMTE No" name="itemIMTENo" />
+                                        )}
+                                    /> */}
+                                    
                                 </div>
                             </div>
                             <div className=' col d-flex justify-content-end'>

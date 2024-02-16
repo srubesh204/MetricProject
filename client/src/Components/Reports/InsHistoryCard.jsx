@@ -35,9 +35,6 @@ function InsHistoryCard() {
     const empRole = useEmployee()
     const { loggedEmp, allowedPlants } = empRole
 
-
-
-
     const [historyCardPrintOpen, setHistoryCardPrintOpen] = useState(false);
     const [formatNoData, setFormatNoData] = useState([])
     const formatFetchData = async () => {
@@ -163,6 +160,11 @@ function InsHistoryCard() {
 
 
 
+
+
+
+
+
     // const sortedFilterNameList = itemListDistNames.itemName.sort();
 
     const handleFilters = (e) => {
@@ -210,6 +212,27 @@ function InsHistoryCard() {
 
 
     }
+    // const searchFilter = () => {
+    //     if (itemFilters.itemPlant && itemFilters.itemDepartment && itemFilters.itemName && itemFilters.itemIMTENo) {
+    //         const filteredItems = itemList.filter((item) => (item.itemPlant)(item.itemDepartment) (item.itemName)(item.itemIMTENo))
+    //         console.log(filteredItems)
+    //         setFilteredData(filteredItems)
+    //     }
+    // }
+    const searchFilter = () => {
+        if (itemFilters.itemPlant && itemFilters.itemDepartment && itemFilters.itemName && itemFilters.itemIMTENo) {
+            const filteredItems = itemList.filter((item) => (
+                item.itemPlant === itemFilters.itemPlant &&
+                item.itemDepartment === itemFilters.itemDepartment &&
+                item.itemName === itemFilters.itemName &&
+                item.itemIMTENo === itemFilters.itemIMTENo
+            ));
+
+            console.log(filteredItems);
+            setFilteredData(filteredItems);
+        }
+    };
+
 
     // console.log(selectedMasterData)
     //console.log(selectedRow)
@@ -305,26 +328,26 @@ function InsHistoryCard() {
             width: 150,
             align: "center",
             renderCell: (params) => (
-              params.row &&
-              params.row.itemCalibrationSource !== 'outsource' &&
-              params.row.itemCalibratedBy
-                ? params.row.itemCalibratedBy
-                : params.row.itemCalibrationSource !== "" ? "" : null
+                params.row &&
+                    params.row.itemCalibrationSource !== 'outsource' &&
+                    params.row.itemCalibratedBy
+                    ? params.row.itemCalibratedBy
+                    : params.row.itemCalibrationSource !== "" ? "" : null
             )
-          },
-          {
+        },
+        {
             field: 'itemCalApprovedBy',
             headerName: 'Approved By',
             width: 150,
             align: "center",
             renderCell: (params) => (
-              params.row &&
-              params.row.itemCalibrationSource !== 'outsource' &&
-              params.row.itemCalApprovedBy
-                ? params.row.itemCalApprovedBy
-                : params.row.itemCalibrationSource !== "" ? "" : null
+                params.row &&
+                    params.row.itemCalibrationSource !== 'outsource' &&
+                    params.row.itemCalApprovedBy
+                    ? params.row.itemCalApprovedBy
+                    : params.row.itemCalibrationSource !== "" ? "" : null
             )
-          },
+        },
 
         // { field: 'itemCalApprovedBy', headerName: 'Approved By', width: 150, align: "center" },
     ];
@@ -349,7 +372,6 @@ function InsHistoryCard() {
                             <div className="row mb-2">
                                 <div className="col-md-7 ">
                                     <div className="row g-2">
-
                                         <TextField label="Plant Wise"
                                             className="me-2  col"
                                             id="itemPlantId"
@@ -364,7 +386,6 @@ function InsHistoryCard() {
                                                 <MenuItem key={index} value={item.plantName}>{item.plantName}</MenuItem>
                                             ))}
                                         </TextField>
-
                                         <TextField label="Primary Location "
                                             id="itemDepartmentId"
                                             className="me-2  col"
@@ -378,14 +399,7 @@ function InsHistoryCard() {
                                             {plantDepartments.map((item, index) => (
                                                 <MenuItem key={index} value={item}>{item}</MenuItem>
                                             ))}
-
-
                                         </TextField>
-
-
-
-
-
                                         <TextField className="me-2   col" label="Instrument Name" size="small" onChange={handleFilters} id="itemNameId" select name="itemName" value={itemFilters.itemName} fullWidth >
                                             <MenuItem value="Select">Select</MenuItem >
                                             {itemListDistNames.map((item) => (
@@ -412,6 +426,7 @@ function InsHistoryCard() {
                                                 </MenuItem>
                                             ))}
                                         </TextField>
+
                                         {/* <Autocomplete
                                             disablePortal
                                             id="combo-box-demo"
@@ -438,10 +453,9 @@ function InsHistoryCard() {
                                             getOptionLabel={(item) => item.itemIMTENo}
                                             renderInput={(params) => <TextField {...params} label="IMTE No" />}
                                         /> */}
+                                        <Button type="button" className="col" onClick={() => searchFilter()} >search</Button>
                                     </div>
                                 </div>
-                                <div className="col"></div>
-
                                 <div className="col-md-3">
                                     <div className="row g-2">
                                         <DatePicker
@@ -455,7 +469,6 @@ function InsHistoryCard() {
                                             value={fromDate}
                                             onChange={(date) => setFromDate(date)}
                                         />
-
                                         <DatePicker
                                             id="toDateId"
                                             name="toDate"
@@ -467,24 +480,17 @@ function InsHistoryCard() {
                                             value={toDate}
                                             onChange={(date) => setToDate(date)}
                                         />
-
                                     </div>
                                 </div>
                             </div>
-
-
                             <div className="row g-2">
                                 <div className=" col d-flex justify-content-start">
-
                                     {selectedRow[0]?.itemIMTENo && <div>
                                         <div><Button size="small" variant="contained" onClick={() => setPrintState(true)} startIcon={<PrintRounded />}>
                                             Print
                                         </Button></div>
                                     </div>}
-
-
                                 </div>
-
                                 <div className="col d-flex justify-content-end">
                                     <div className="me-2"><Button component={Link} to={`${process.env.REACT_APP_PORT}/additionalCertificates/${selectedRow.length > 0 ? selectedRow[0].rdName : ""}`} target="_blank" variant="contained" color="info" size="small">R&R</Button></div>
                                     <div className="me-2">
@@ -499,7 +505,6 @@ function InsHistoryCard() {
                                     <div ><Button variant="contained" color="info" size="small">View MSA</Button></div> */}
                                 </div>
                             </div>
-
                         </Paper>
                         <div className="row g-2 mb-2">
                             <div className="col-8">
@@ -508,7 +513,6 @@ function InsHistoryCard() {
                                         p: 2,
                                         display: 'flex',
                                         flexDirection: 'column',
-
                                     }}
                                     elevation={12}>
                                     <div className="row g-2 mb-2">

@@ -740,7 +740,6 @@ const Dc = () => {
                                     display: 'flex',
                                     flexDirection: 'column',
                                     mb: 1,
-
                                 }}
                                 elevation={12}
                             >
@@ -794,7 +793,6 @@ const Dc = () => {
                                                      <th>Remarks</th> 
                                                     <th>Delete</th>
                                                 </tr>
-
                                                 {dcData.dcPartyItems.map((item, index) => (
                                                     <tr>
                                                         <td>{index + 1}</td>
@@ -812,10 +810,8 @@ const Dc = () => {
                                                         <td><Delete onClick={() => deleteAC(index)} /></td>
                                                     </tr>
                                                 ))}
-
                                             </tbody>
                                         </table>
-
                                     </Box>
 
                                 </div>
