@@ -230,12 +230,12 @@ const itemCalController = {
             refCalData += calcalibrationData.map((item, index) => {
               let returnTable = `
                   <tr>
-                    <td>${item.calParameter}</td>
-                    <td>${item.calNominalSize}</td>
-                    <td>${item.calMinPS + "/" + item.calMaxPS}</td>
+                    <td>${item.calParameter ? item.calParameter : "-"}</td>
+                    <td>${item.calNominalSize ? item.calNominalSize : "-"}</td>
+                    <td>${(item.calMinPS ? item.calMinPS : "-") + "/" + (item.calMaxPS ? item.calMaxPS : "-")}</td>
                     ${calOBType === "minmax" ?
-                  "<td>" + item.calMinOB + " / " + item.calMaxOB + "</td>" :
-                  "<td>" + item.calAverageOB + "</td>"}
+                  "<td>" + (item.calMinOB ? item.calMinOB : "-") + " / " + (item.calMaxOB ? item.calMaxOB : "-") + "</td>" :
+                  "<td>" + (item.calAverageOB ? item.calAverageOB : "-") + "</td>"}
                     
                   </tr>`;
               return returnTable;
@@ -255,7 +255,7 @@ const itemCalController = {
                     </tr>
                     <tr>
                       <th rowspan="2">Parameter</th>
-                      <th rowspan="2">Nominal Size (${(calcalibrationData.length > 0) ? calcalibrationData[0].calNominalSizeUnit : ""})</th>
+                      <th rowspan="2">Nominal Size</th>
                       <th colspan="2">Permissible Size (${(calcalibrationData.length > 0) ? calcalibrationData[0].calNominalSizeUnit : ""})</th>
                       <th rowspan="2"> Observed Size (${(calcalibrationData.length > 0) ? calcalibrationData[0].calNominalSizeUnit : ""})</th>
                     </tr>
@@ -267,13 +267,13 @@ const itemCalController = {
             attributeCalData += calcalibrationData.map((item, index) => {
               let returnTable = `
                     <tr>
-                      <td>${item.calParameter}</td>
-                      <td>${item.calNominalSize}</td>
-                      <td>${item.calMinPS + "/" + item.calMaxPS}</td>
-                      <td>${item.calWearLimitPS}</td>
+                      <td>${item.calParameter ? item.calParameter : "-"}</td>
+                      <td>${item.calNominalSize ? item.calNominalSize : "-"}</td>
+                      <td>${(item.calMinPS ? item.calMinPS : "-") + "/" + (item.calMaxPS ? item.calMaxPS : "-")}</td>
+                      <td>${item.calWearLimitPS ? item.calWearLimitPS : "-"}</td>
                       ${calOBType === "minmax" ?
-                  "<td>" + item.calMinOB + " / " + item.calMaxOB + "</td>" :
-                  "<td>" + item.calAverageOB + "</td>"}
+                  "<td>" + (item.calMinOB ? item.calMinOB : "-") + " / " + (item.calMaxOB ? item.calMaxOB : "-") + "</td>" :
+                  "<td>" + (item.calAverageOB ? item.calAverageOB : "-") + "</td>"}
                     </tr>`;
               return returnTable;
             }).join(""); // Removed .join("") from here
@@ -298,10 +298,10 @@ const itemCalController = {
             variableCalData += calcalibrationData.map((item, index) => {
               let returnTable = `
                     <tr>
-                      <td>${item.calParameter}</td>
-                      <td>${item.calNominalSize}</td>
-                      <td>${item.calMinPSError + "/" + item.calMaxPSError}</td>
-                      <td>${item.calOBError}</td>
+                      <td>${item.calParameter ? item.calParameter : "-"}</td>
+                      <td>${item.calNominalSize ? item.calNominalSize : "-"}</td>
+                      <td>${(item.calMinPSError ? item.calMinPSError : "-") + "/" + (item.calMaxPSError ? item.calMaxPSError : "-")}</td>
+                      <td>${item.calOBError ? item.calOBError : "-"}</td>
                       
                     </tr>`;
               return returnTable;
