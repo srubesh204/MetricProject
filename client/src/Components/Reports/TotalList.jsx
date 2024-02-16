@@ -132,7 +132,6 @@ const TotalList = () => {
 
 
 
-
   console.log(dateData)
   const [today, setToday] = useState(dayjs().format('YYYY-MM-DD'))
   console.log(today)

@@ -108,37 +108,37 @@ const measurementUncertaintyController = {
 
       //if (Object.keys(uncResult).length !== 0) {
       const browser = await puppeteer.launch();
-        const page = await browser.newPage();
+      const page = await browser.newPage();
 
-        // Read the HTML template file
-        const filePath = path.resolve(__dirname, '../../server/templates/uncertaintyTemplate.html');
-        const htmlTemplate = fs.readFileSync(filePath, 'utf8');
+      // Read the HTML template file
+      const filePath = path.resolve(__dirname, '../../server/templates/uncertaintyTemplate.html');
+      const htmlTemplate = fs.readFileSync(filePath, 'utf8');
 
-        // Replace placeholders with actual data
-        const modifiedHTML = htmlTemplate
+      // Replace placeholders with actual data
+      const modifiedHTML = htmlTemplate
 
-          .replace(/{{companyName}}/g, getCompDetailsById ? getCompDetailsById.getCompDetailsById : "")
-          .replace(/{{uncDate}}/g, uncDate ? uncDate : "")
-          .replace(/{{uncItemName}}/g, uncItemName ? uncItemName : "")
-          
+        .replace(/{{companyName}}/g, getCompDetailsById ? getCompDetailsById.getCompDetailsById : "")
+        .replace(/{{uncDate}}/g, uncDate ? uncDate : "")
+        .replace(/{{uncItemName}}/g, uncItemName ? uncItemName : "")
 
 
-        // Add more replace statements for additional placeholders as needed
 
-        // Set the modified HTML content
+      // Add more replace statements for additional placeholders as needed
 
-        console.log(modifiedHTML)
-        const cssPath = path.resolve(__dirname, '../templates/bootstrap.min.css');
-        
-        await page.setContent(modifiedHTML, { waitUntil: 'domcontentloaded' });
-        await page.addStyleTag({ path: cssPath });
-        // Generate PDF
-        await page.pdf({ path: `./storage/uncertaintyCertificates/${grnNo}.pdf`, format: 'A4' });
+      // Set the modified HTML content
 
-        await browser.close();
-        console.log(process.env.SERVER_PORT)
-        console.log('Uncertainty PDF created successfully');
-     // }
+      console.log(modifiedHTML)
+      const cssPath = path.resolve(__dirname, '../templates/bootstrap.min.css');
+
+      await page.setContent(modifiedHTML, { waitUntil: 'domcontentloaded' });
+      await page.addStyleTag({ path: cssPath });
+      // Generate PDF
+      await page.pdf({ path: `./storage/uncertaintyCertificates/${grnNo}.pdf`, format: 'A4' });
+
+      await browser.close();
+      console.log(process.env.SERVER_PORT)
+      console.log('Uncertainty PDF created successfully');
+      // }
       return res.status(200).json({ message: "Measurement Uncertainty Data Successfully Saved", status: 1 });
     } catch (error) {
       console.log(error)
@@ -191,7 +191,7 @@ const measurementUncertaintyController = {
         uncDegOfFreedom,
         uncUncertainity,
         uncTypeBResult } = req.body;
-        
+
       const updateImFields = {
         uncItemName,
         uncRangeSize,
@@ -265,6 +265,48 @@ const measurementUncertaintyController = {
       res.status(500).json({ error: error, status: 0 });
     }
   },
+
+  deleteMeasurementUncertainty: async (req, res) => {
+    try {
+
+      const { uncertaintyIds } = req.body; // Assuming an array of vendor IDs is sent in the request body
+      console.log(req.body)
+      const deleteResults = [];
+
+      for (const uncertaintyId of uncertaintyIds) {
+        // Find and remove each vendor by _id
+        const deletedUncertainty = await measurementUncertaintyModel.findOneAndRemove({ _id: uncertaintyId });
+        console.log(deletedUncertainty)
+        if (!deletedUncertainty) {
+          // If a vendor was not found, you can skip it or handle the error as needed.
+          console.log(`Uncertainty with ID ${uncertaintyId} not found.`);
+          res.status(500).json({ message: `Vendor with ID not found.` });
+
+        } else {
+          console.log(`Uncertainty with ID ${uncertaintyId} deleted successfully.`);
+          deleteResults.push(deletedUncertainty);
+        }
+      }
+
+      return res.status(202).json({ message: 'Measurement Uncertainty deleted successfully', results: `${deleteResults.length} Measurement Uncertainty Deleted Successfull ` });
+    } catch (error) {
+      console.error(error);
+      res.status(500).send('Internal Server Error');
+    }
+  },
+
+
+
+
+
+
+
+
+
+
+
+
+
   getUncertaintyById: async (req, res) => {
     try {
       const itemUNCId = req.params.id; // Assuming desId is part of the URL parameter

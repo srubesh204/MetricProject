@@ -5,4 +5,5 @@ router.get("/getAllMeasurementUncertainty",measurementUncertaintyController.getA
 router.get("/getUncertaintyById/:id", measurementUncertaintyController.getUncertaintyById)
 router.post("/createMeasurementUncertainty",measurementUncertaintyController.createMeasurementUncertainty)
 router.put("/updateMeasurementUncertainty/:id", measurementUncertaintyController.updateMeasurementUncertainty)
+router.delete("/deleteMeasurementUncertainty", measurementUncertaintyController.deleteMeasurementUncertainty)
 module.exports = router;
