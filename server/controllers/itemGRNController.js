@@ -206,12 +206,12 @@ const itemGRNController = {
 
         const updateItemFields = {
           itemIMTENo,
-          itemLastPlace : isOnSiteGRN ==="yes" ? "" : itemLastPlace,
-          itemCurrentLocation: isOnSiteGRN ==="yes" ? itemCurrentLocation : itemDepartment,
-          itemLastLocation: isOnSiteGRN ==="yes" ? "" : itemLastLocation,
+          itemLastPlace: isOnSiteGRN === "yes" ? "" : itemLastPlace,
+          itemCurrentLocation: isOnSiteGRN === "yes" ? itemCurrentLocation : itemDepartment,
+          itemLastLocation: isOnSiteGRN === "yes" ? "" : itemLastLocation,
           itemLocation: "department",
-          itemLastCalDate : grnItemStatus === "Calibrated" ? itemLastCalDate : itemCalDate,
-          itemLastDueDate : grnItemStatus === "Calibrated" ? itemLastDueDate : itemDueDate,
+          itemLastCalDate: grnItemStatus === "Calibrated" ? itemLastCalDate : itemCalDate,
+          itemLastDueDate: grnItemStatus === "Calibrated" ? itemLastDueDate : itemDueDate,
           itemStatus: itemCondition,
           itemLastStatus: itemStatus,
           itemCalDate: grnItemStatus === "Calibrated" ? grnItemCalDate : itemLastCalDate,
@@ -270,8 +270,8 @@ const itemGRNController = {
           itemCurrentLocation: itemDepartment,
           itemLastLocation,
           itemLocation: "department",
-          itemLastCalDate : grnItemStatus === "Calibrated" ? itemLastCalDate : itemCalDate,
-          itemLastDueDate : grnItemStatus === "Calibrated" ? itemLastDueDate : itemDueDate,
+          itemLastCalDate: grnItemStatus === "Calibrated" ? itemLastCalDate : itemCalDate,
+          itemLastDueDate: grnItemStatus === "Calibrated" ? itemLastDueDate : itemDueDate,
           itemCalDate: grnItemStatus === "Calibrated" ? grnItemCalDate : itemLastCalDate,
           itemDueDate: grnItemStatus === "Calibrated" ? grnItemDueDate : itemLastDueDate,
           grnId: result._id,
@@ -307,7 +307,7 @@ const itemGRNController = {
           itemCalibrationDoneAt,
           itemUncertainityUnit,
           itemPrevCalData,
-          itemCalibratedAt : grnPartyName,
+          itemCalibratedAt: grnPartyName,
           itemCertificateName: grnItemCertificate,
           itemOBType,
           itemUncertainity,
@@ -365,7 +365,10 @@ const itemGRNController = {
         // Set the modified HTML content
 
         console.log(modifiedHTML)
-        await page.setContent(modifiedHTML, { waitUntil: 'networkidle0' });
+        const cssPath = path.resolve(__dirname, '../templates/bootstrap.min.css');
+        
+        await page.setContent(modifiedHTML, { waitUntil: 'domcontentloaded' });
+        await page.addStyleTag({ path: cssPath });
 
         // Generate PDF
         await page.pdf({ path: `./storage/grnCertificates/${grnNo}.pdf`, format: 'A4' });
@@ -596,17 +599,17 @@ const itemGRNController = {
         console.log(isOnSiteGRN)
         const updateItemFields = {
           itemIMTENo,
-          itemLastPlace: updateItemGRN.isOnSiteGRN ==="yes" ? "" : itemLastPlace,
-          itemCurrentLocation: updateItemGRN.isOnSiteGRN ==="yes" ? itemCurrentLocation : itemDepartment,
-          itemLastLocation : updateItemGRN.isOnSiteGRN ==="yes" ? "" : itemLastLocation,
+          itemLastPlace: updateItemGRN.isOnSiteGRN === "yes" ? "" : itemLastPlace,
+          itemCurrentLocation: updateItemGRN.isOnSiteGRN === "yes" ? itemCurrentLocation : itemDepartment,
+          itemLastLocation: updateItemGRN.isOnSiteGRN === "yes" ? "" : itemLastLocation,
           itemLocation: "department",
-          itemLastCalDate : grnItemStatus === "Calibrated" ? itemLastCalDate : itemCalDate,
-          itemLastDueDate : grnItemStatus === "Calibrated" ? itemLastDueDate : itemDueDate,
+          itemLastCalDate: grnItemStatus === "Calibrated" ? itemLastCalDate : itemCalDate,
+          itemLastDueDate: grnItemStatus === "Calibrated" ? itemLastDueDate : itemDueDate,
           itemCalDate: grnItemStatus === "Calibrated" ? grnItemCalDate : itemLastCalDate,
           itemDueDate: grnItemStatus === "Calibrated" ? grnItemDueDate : itemLastDueDate,
           itemStatus: itemCondition,
           itemLastStatus: itemStatus,
-          
+
           grnId: updateItemGRN._id,
           grnStatus: "1",
           grnCreatedOn: grnDate,
@@ -713,7 +716,7 @@ const itemGRNController = {
         </tr>
     `;
 
-          
+
 
         // Example usage:
 
@@ -748,8 +751,10 @@ const itemGRNController = {
         // Set the modified HTML content
 
         console.log(modifiedHTML)
-        await page.setContent(modifiedHTML, { waitUntil: 'networkidle0' });
-
+        const cssPath = path.resolve(__dirname, '../templates/bootstrap.min.css');
+        
+        await page.setContent(modifiedHTML, { waitUntil: 'domcontentloaded' });
+        await page.addStyleTag({ path: cssPath });
         // Generate PDF
         await page.pdf({ path: `./storage/grnCertificates/${grnNo}.pdf`, format: 'A4' });
 
