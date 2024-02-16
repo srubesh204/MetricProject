@@ -150,7 +150,7 @@ export const MeasurementUncertaintyList = () => {
                 <form>
                     <Paper
                         sx={{
-                            p: 1,
+                            p: 2,
                             mb: 1
                         }}
                         elevation={12}
