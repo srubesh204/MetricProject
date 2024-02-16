@@ -320,35 +320,36 @@ const itemCalController = {
 
           // Replace placeholders with actual data
           const modifiedHTML = htmlTemplate
-            .replace(/{{ItemName}}/g, calItemName)
-            .replace(/{{CertificateNo}}/g, calCertificateNo)
-            .replace(/{{dateOfIssue}}/g, dayjs(calItemEntryDate).format("DD-MM-YYYY"))
-            .replace(/{{dateOfCalibration}}/g, dayjs(calItemCalDate).format("DD-MM-YYYY"))
-            .replace(/{{nextCalibrationDue}}/g, dayjs(calItemDueDate).format("DD-MM-YYYY"))
+            .replace(/{{ItemName}}/g, calItemName ? calItemName : "-")
+            .replace(/{{CertificateNo}}/g, calCertificateNo ? calCertificateNo : "-")
+            .replace(/{{dateOfIssue}}/g, calItemEntryDate ? dayjs(calItemEntryDate).format("DD-MM-YYYY") : "-")
+            .replace(/{{dateOfCalibration}}/g, calItemCalDate ? dayjs(calItemCalDate).format("DD-MM-YYYY") : "-")
+            .replace(/{{nextCalibrationDue}}/g, calItemDueDate ? dayjs(calItemDueDate).format("DD-MM-YYYY") : "-")
 
-            .replace(/{{identificationNo}}/g, calIMTENo)
-            .replace(/{{slNo}}/g, calItemMFRNo)
-            .replace(/{{make}}/g, calItemMake)
+            .replace(/{{identificationNo}}/g, calIMTENo ? calIMTENo : "-")
+            .replace(/{{slNo}}/g, calItemMFRNo ? calItemMFRNo : "-")
+            .replace(/{{make}}/g, calItemMake ? calItemMake : "-")
 
-            .replace(/{{temperature}}/g, calItemTemperature)
-            .replace(/{{humitidy}}/g, calItemHumidity)
-            .replace(/{{standardRef}}/g, calStandardRef)
+            .replace(/{{temperature}}/g, calItemTemperature ? calItemTemperature : "-")
+            .replace(/{{humitidy}}/g, calItemHumidity ? calItemHumidity : "-")
+            .replace(/{{standardRef}}/g, calStandardRef ? calStandardRef : "-")
+            .replace(/{{calItemSOPNo}}/g, calItemSOPNo ? calItemSOPNo : "-")
 
             .replace(/{{masterUsed}}/g, masterTable.join(""))
 
-            .replace(/{{calCalibrationData}}/g, calibrationTypeData)
+            .replace(/{{calCalibrationData}}/g, calibrationTypeData ? calibrationTypeData : "-")
 
-            .replace(/{{authorisedBy}}/g, calApprovedBy)
+            .replace(/{{authorisedBy}}/g, approvedByData ? approvedByData.firstName + " " + approvedByData.lastName : "")
 
-            .replace(/{{CompanyName}}/g, getCompDetailsById.companyName)
+            .replace(/{{CompanyName}}/g, getCompDetailsById ? getCompDetailsById.companyName : "-")
 
 
-            .replace(/{{CompanyName}}/g, getCompDetailsById.companyName)
-            .replace(/{{Plant}}/g, getPlantAddress.plantName)
-            .replace(/{{PlantAddress}}/g, getPlantAddress.plantAddress)
+            .replace(/{{CompanyName}}/g, getCompDetailsById ? getCompDetailsById.companyName : "-")
+            .replace(/{{Plant}}/g, getPlantAddress ? getPlantAddress.plantName : "-")
+            .replace(/{{PlantAddress}}/g, getPlantAddress ? getPlantAddress.plantAddress : "-")
             .replace(/{{logo}}/g, process.env.SERVER_PORT + '/logo/' + getCompDetailsById.companyLogo)
-            .replace(/{{formatNo}}/g, formatNumber)
-            .replace(/{{calibratedBy}}/g, calCalibratedBy)
+            .replace(/{{formatNo}}/g, formatNumber ? formatNumber : "-")
+            .replace(/{{calibratedBy}}/g, calCalibratedBy ? calCalibratedBy : "")
 
 
 
@@ -791,7 +792,7 @@ const itemCalController = {
             .replace(/{{temperature}}/g, calItemTemperature ? calItemTemperature : "-")
             .replace(/{{humitidy}}/g, calItemHumidity ? calItemHumidity : "-")
             .replace(/{{standardRef}}/g, calStandardRef ? calStandardRef : "-")
-
+            .replace(/{{calItemSOPNo}}/g, calItemSOPNo ? calItemSOPNo : "-")
             .replace(/{{masterUsed}}/g, masterTable ? masterTable.join("") : "-")
 
             .replace(/{{calCalibrationData}}/g, calibrationTypeData ? calibrationTypeData : "-")
