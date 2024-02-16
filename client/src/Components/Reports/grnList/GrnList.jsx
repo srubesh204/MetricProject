@@ -479,12 +479,8 @@ const GrnList = () => {
                                             setDateData((prev) => ({ ...prev, toDate: dayjs(newValue).format('YYYY-MM-DD') }))}
                                         format="DD-MM-YYYY" />
                                 </div>
-
                             </div>
-
                         </Paper>
-
-
                         <div className='row g-2'>
                             <Paper
                                 sx={{
@@ -495,9 +491,6 @@ const GrnList = () => {
                                 }}
                                 elevation={12}
                             >
-
-
-
                                 <Box sx={{ height: 500, width: '100%', my: 2 }}>
                                     <DataGrid
 
