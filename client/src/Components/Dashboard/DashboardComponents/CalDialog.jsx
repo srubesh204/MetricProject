@@ -1148,7 +1148,6 @@ const CalDialog = () => {
                                                         <th>Min</th>
                                                         <th>Max</th>
                                                     </React.Fragment>}
-
                                             </tr>
                                             {/* {calibrationData.calcalibrationData.map((item)=> ()} */}
                                             {calibrationData && calibrationData.calcalibrationData.map((item, index) => {
@@ -1306,12 +1305,10 @@ const CalDialog = () => {
                                         <tbody>
                                             <tr>
                                                 <th rowSpan={2}>Parameter</th>
-                                                <th rowSpan={2}>Nominal Size ({(calibrationData && calibrationData.calcalibrationData.length > 0) ? calibrationData.calcalibrationData[0].calNominalSizeUnit : ""}) </th>
+                                                <th rowSpan={2}>Nominal Size </th>
                                                 <th rowSpan={2}>Unit</th>
                                                 <th colSpan={2}>Permissible Error ({(calibrationData && calibrationData.calcalibrationData.length > 0) ? calibrationData.calcalibrationData[0].calNominalSizeUnit : ""})</th>
-
                                                 <th rowSpan={2}>Observer Error ({(calibrationData && calibrationData.calcalibrationData.length > 0) ? calibrationData.calcalibrationData[0].calNominalSizeUnit : ""})</th>
-
                                                 <th rowSpan={2}>Status</th>
                                             </tr>
                                             <tr>
