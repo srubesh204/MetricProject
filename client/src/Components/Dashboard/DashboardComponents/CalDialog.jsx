@@ -87,6 +87,7 @@ const CalDialog = () => {
         calItemTemperature: "20±2°c",
         calItemHumidity: "30+75%",
         calItemUncertainity: "",
+        calItemUncertainityUnit: "",
         calItemSOPNo: "",
         calStandardRef: "",
         calReportAvailable: "no",
@@ -131,6 +132,7 @@ const CalDialog = () => {
         calItemTemperature: "20±2°C",
         calItemHumidity: "30% to 75%",
         calItemUncertainity: "",
+        calItemUncertainityUnit: "",
         calItemSOPNo: "",
         calStandardRef: "",
         calOBType: "",
@@ -258,11 +260,8 @@ const CalDialog = () => {
                     calItemUncertainity: filter.length > 0 && filter[0] ? filter[0].uncertainty : "",
                     calItemSOPNo: filter.length > 0 && filter[0].SOPNo ? filter[0].SOPNo : "",
                     calStandardRef: filter.length > 0 && filter[0].standardRef ? filter[0].standardRef : "",
+                    calItemUncertainityUnit : filter.length > 0 && filter[0].uncertaintyUnit ? filter[0].uncertaintyUnit : "",
                     calOBType: selectedRows[0].itemOBType,
-                    // calCertificateNo: selectedRows[0].itemCertificateNo,
-
-                    // calCalibratedBy: selectedRows[0],
-                    // calApprovedBy: selectedRows[0],
                     calcalibrationData:
 
                         selectedRows.length > 0 && selectedRows[0].acceptanceCriteria.map((item) => (

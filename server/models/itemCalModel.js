@@ -23,6 +23,7 @@ const itemCal = new mongoose.Schema({
   calItemTemperature: String,
   calItemHumidity: String,
   calItemUncertainity: String,
+  calItemUncertainityUnit: String,
   calItemSOPNo: String,
   calStandardRef: String,
   calOBType: String,

@@ -668,16 +668,16 @@ const CalList = () => {
 
 
 
-                    {employeeRole && employeeRole.employee !== "viewer" &&
+                    {/* {employeeRole && employeeRole.employee !== "viewer" &&
                         <CalData.Provider
                             value={{ employeeRole, calAddOpen, setCalAddOpen, itemMasters, activeEmps, itemAddList, setItemAddList, calDataDcList, lastNo, masters }}
                         >
                             <CalAddModel />
-                        </CalData.Provider>}
+                        </CalData.Provider>} */}
 
                     {employeeRole && employeeRole.employee !== "viewer" &&
                         <CalData.Provider
-                            value={{ employeeRole, calEditOpen, setCalEditOpen, selectedCalRow, itemMasters, activeEmps, itemAddList, setItemAddList, calListFetchData }}
+                            value={{ employeeRole, calEditOpen, setCalEditOpen, selectedCalRow, itemMasters, activeEmps, itemAddList, setItemAddList, calListFetchData, masters }}
                         >
                             {selectedCalRow.length !== 0 && <CalEditModel />}
                         </CalData.Provider>}

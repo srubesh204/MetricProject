@@ -36,6 +36,7 @@ const itemCalController = {
         calItemTemperature,
         calItemHumidity,
         calItemUncertainity,
+        calItemUncertainityUnit,
         calItemSOPNo,
         calStandardRef,
         calOBType,
@@ -70,6 +71,7 @@ const itemCalController = {
         calItemTemperature,
         calItemHumidity,
         calItemUncertainity,
+        calItemUncertainityUnit,
         calItemSOPNo,
         calStandardRef,
         calOBType,
@@ -222,6 +224,7 @@ const itemCalController = {
               <th rowspan="2">Nominal Size (${(calcalibrationData.length > 0) ? calcalibrationData[0].calNominalSizeUnit : ""})</th>
               <th >Permissible Size (${(calcalibrationData.length > 0) ? calcalibrationData[0].calNominalSizeUnit : ""})</th>
               <th rowspan="2">Observed Size (${(calcalibrationData.length > 0) ? calcalibrationData[0].calNominalSizeUnit : ""})</th>
+              <th>Cal Status</th>
             </tr>
             <tr>
               <th>Min/Max</th>
@@ -236,7 +239,7 @@ const itemCalController = {
                     ${calOBType === "minmax" ?
                   "<td>" + (item.calMinOB ? item.calMinOB : "-") + " / " + (item.calMaxOB ? item.calMaxOB : "-") + "</td>" :
                   "<td>" + (item.calAverageOB ? item.calAverageOB : "-") + "</td>"}
-                    
+                  <td>${item.rowStatus ? item.rowStatus : "-"}</td>
                   </tr>`;
               return returnTable;
             }).join("");
@@ -258,6 +261,7 @@ const itemCalController = {
                       <th rowspan="2">Nominal Size</th>
                       <th colspan="2">Permissible Size (${(calcalibrationData.length > 0) ? calcalibrationData[0].calNominalSizeUnit : ""})</th>
                       <th rowspan="2"> Observed Size (${(calcalibrationData.length > 0) ? calcalibrationData[0].calNominalSizeUnit : ""})</th>
+                      <th rowspan="2>Cal Status</th>
                     </tr>
                     <tr>
                       <th>Min/Max</th>
@@ -274,6 +278,7 @@ const itemCalController = {
                       ${calOBType === "minmax" ?
                   "<td>" + (item.calMinOB ? item.calMinOB : "-") + " / " + (item.calMaxOB ? item.calMaxOB : "-") + "</td>" :
                   "<td>" + (item.calAverageOB ? item.calAverageOB : "-") + "</td>"}
+                  <td>${item.rowStatus ? item.rowStatus : "-"}</td>
                     </tr>`;
               return returnTable;
             }).join(""); // Removed .join("") from here
@@ -292,7 +297,8 @@ const itemCalController = {
               <th >Parameter</th>
               <th >Nominal Size (${(calcalibrationData.length > 0) ? calcalibrationData[0].calNominalSizeUnit : ""}) </th>
               <th >Permissible Error (${(calcalibrationData.length > 0) ? calcalibrationData[0].calNominalSizeUnit : ""})</th>
-              <th > Observed Error (${(calcalibrationData.length > 0) ? calcalibrationData[0].calNominalSizeUnit : ""})</th>
+              <th >Observed Error (${(calcalibrationData.length > 0) ? calcalibrationData[0].calNominalSizeUnit : ""})</th>
+              <th>Cal Status</th>
             </tr>
             `
             variableCalData += calcalibrationData.map((item, index) => {
@@ -302,7 +308,7 @@ const itemCalController = {
                       <td>${item.calNominalSize ? item.calNominalSize : "-"}</td>
                       <td>${(item.calMinPSError ? item.calMinPSError : "-") + "/" + (item.calMaxPSError ? item.calMaxPSError : "-")}</td>
                       <td>${item.calOBError ? item.calOBError : "-"}</td>
-                      
+                      <td>${item.rowStatus ? item.rowStatus : "-"}</td>
                     </tr>`;
               return returnTable;
             }).join("");
@@ -488,6 +494,7 @@ const itemCalController = {
         calItemTemperature,
         calItemHumidity,
         calItemUncertainity,
+        calItemUncertainityUnit,
         calItemSOPNo,
         calStandardRef,
         calOBType,
@@ -522,6 +529,7 @@ const itemCalController = {
         calItemTemperature,
         calItemHumidity,
         calItemUncertainity,
+        calItemUncertainityUnit,
         calItemSOPNo,
         calStandardRef,
         calOBType,
@@ -674,13 +682,14 @@ const itemCalController = {
           if (calItemType === "referenceStandard") {
             let refCalData = `
             <tr>
-              <th colspan="4">Calibration results</th>
+              <th colspan="5">Calibration results</th>
             </tr>
             <tr>
               <th rowspan="2">Parameter</th>
               <th rowspan="2">Nominal Size</th>
               <th >Permissible Size (${(calcalibrationData.length > 0) ? calcalibrationData[0].calNominalSizeUnit : ""})</th>
               <th rowspan="2">Observed Size (${(calcalibrationData.length > 0) ? calcalibrationData[0].calNominalSizeUnit : ""})</th>
+              <th rowspan="2">Cal Status</th>
             </tr>
             <tr>
               <th>Min/Max</th>
@@ -695,6 +704,7 @@ const itemCalController = {
                     ${calOBType === "minmax" ?
                   "<td>" + item.calMinOB + " / " + item.calMaxOB + "</td>" :
                   "<td>" + item.calAverageOB + "</td>"}
+                  <td>${item.rowStatus ? item.rowStatus : "-"}</td>
                     
                   </tr>`;
               return returnTable;
@@ -710,13 +720,14 @@ const itemCalController = {
           if (calItemType === "attribute") {
             let attributeCalData = `
             <tr>
-                      <th colspan="5">Calibration results</th>
+                      <th colspan="6">Calibration results</th>
                     </tr>
                     <tr>
                       <th rowspan="2">Parameter</th>
                       <th rowspan="2">Nominal Size</th>
                       <th colspan="2">Permissible Size (${(calcalibrationData.length > 0) ? calcalibrationData[0].calNominalSizeUnit : ""})</th>
                       <th rowspan="2"> Observed Size (${(calcalibrationData.length > 0) ? calcalibrationData[0].calNominalSizeUnit : ""})</th>
+                      <th rowspan="2">Cal Status</th>
                     </tr>
                     <tr>
                       <th>Min/Max</th>
@@ -733,6 +744,7 @@ const itemCalController = {
                       ${calOBType === "minmax" ?
                   "<td>" + (item.calMinOB ? item.calMinOB : "-") + " / " + (item.calMaxOB ? item.calMaxOB : "-") + "</td>" :
                   "<td>" + (item.calAverageOB ? item.calAverageOB : "-") + "</td>"}
+                  <td>${item.rowStatus ? item.rowStatus : "-"}</td>
                     </tr>`;
               return returnTable;
             }).join(""); // Removed .join("") from here
@@ -745,13 +757,14 @@ const itemCalController = {
           if (calItemType === "variable") {
             let variableCalData = `
             <tr>
-              <th colspan="4">Calibration results</th>
+              <th colspan="5">Calibration results</th>
             </tr>
             <tr>
               <th >Parameter</th>
               <th >Nominal Size</th>
               <th >Permissible Error (${(calcalibrationData.length > 0) ? calcalibrationData[0].calNominalSizeUnit : ""})</th>
-              <th > Observed Error (${(calcalibrationData.length > 0) ? calcalibrationData[0].calNominalSizeUnit : ""})</th>
+              <th >Observed Error (${(calcalibrationData.length > 0) ? calcalibrationData[0].calNominalSizeUnit : ""})</th>
+              <th>Cal Status</th>
             </tr>
             `
             variableCalData += calcalibrationData.map((item, index) => {
@@ -761,7 +774,7 @@ const itemCalController = {
                       <td>${item.calNominalSize ? item.calNominalSize : "-"}</td>
                       <td>${(item.calMinPSError ? item.calMinPSError : "-") + "/" + (item.calMaxPSError ? item.calMaxPSError : "-")}</td>
                       <td>${item.calOBError ? item.calOBError : "-"}</td>
-                      
+                      <td>${item.rowStatus ? item.rowStatus : "-"}</td>
                     </tr>`;
               return returnTable;
             }).join("");
@@ -808,6 +821,8 @@ const itemCalController = {
             .replace(/{{logo}}/g, process.env.SERVER_PORT + '/logo/' + getCompDetailsById.companyLogo)
             .replace(/{{formatNo}}/g, formatNumber ? formatNumber : "-")
             .replace(/{{calibratedBy}}/g, calCalibratedBy ? calCalibratedBy : "-")
+            .replace(/{{calStatus}}/g, calStatus ? "<li> Acceptance Remarks : "+calStatus+"</li>" : "")
+            .replace(/{{calItemUncertainity}}/g, calItemUncertainity ? "<li>The Expanded uncertainty is ± "+calItemUncertainity+ " "+ calItemUncertainityUnit +" at 95.45% confidence level with coverage factor k=2.</li>" : "")
 
 
 
@@ -819,7 +834,7 @@ const itemCalController = {
           const cssPath = path.resolve(__dirname, '../templates/bootstrap.min.css');
 
           await page.setContent(modifiedHTML, { waitUntil: 'domcontentloaded' });
-  
+
           // Add the CSS file
           await page.addStyleTag({ path: cssPath });
 
