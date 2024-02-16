@@ -610,34 +610,24 @@ const CalList = () => {
                             </Box>
                         </div>
                         <div className='row'>
-                            <div className='col d-flex '>
-
-                                {/* <div className='me-2 '>
-                                    <button type="button" className='btn btn-secondary' > Label Print</button>
-                                </div>
-                                <div className='me-2 '>
-                                    <button type="button" className='btn btn-secondary' >Lable With BarCode Print</button>
-                                </div> */}
-
-
-                            </div>
                             {employeeRole && employeeRole.employee !== "viewer" &&
-                                <div className='col d-flex justify-content-end'>
+                                <div className='col d-flex '>
 
                                     {/* <div className='me-2 '>
                                         <button type="button" className='btn btn-success' onClick={() => setCalAddOpen(true)}>Add</button>
                                     </div> */}
-                                     <div>
-                                        <Button component={Link} to="/insHisCard" className='me-2' size='small' >
-                                            History  Card
-                                        </Button>
-                                    </div>
+
                                     <div className='me-2'>
                                         <Button component={Link} to={`/home`} className='me-2' variant="contained" size='small' color="warning">
                                             <ArrowBackIcon /> Dash board
                                         </Button>
                                     </div>
-                                   
+                                    <div>
+                                        <Button component={Link} to="/insHisCard" className='me-2' size='small' >
+                                            History  Card
+                                        </Button>
+                                    </div>
+
                                     {/* <div >
                                     <Button component={Link} to="/" size='small' variant='contained' startIcon={<ArrowBack />} endIcon={<House />} color='secondary'>Home</Button>
                                 </div> */}

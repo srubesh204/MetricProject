@@ -1469,6 +1469,9 @@ const ItemList = () => {
 
                                     {/* <Route path="/insHisCard" component={InsHistoryCard} />  */}
 
+                        
+                                        <Button component={Link} to="/"  size='small'>Home</Button>
+                                    
                                     <Button component={Link} to="/insHisCard" className='me-2' size='small' >
                                         History  Card
                                     </Button>
@@ -1534,9 +1537,7 @@ const ItemList = () => {
                                     </Button>
 
                                 </div>}
-                                <div >
-                                    <Button component={Link} to="/" size='small'>Home</Button>
-                                </div>
+
 
                                 <div className="d-flex justify-content-center">
 
