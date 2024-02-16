@@ -58,8 +58,8 @@
         }
     </style>
     <div class="mt-5 mb-4 pt-5 px-0 ms-3">
-        <div style="position: fixed; top: 2.5rem; right: 2.5rem;"><img src="{{logo}}"
-            width="80px" height="80px" /></div>
+        <div style="position: fixed; top: 2.5rem; right: 2.5rem;"><img src="{{logo}}" width="80px" height="80px" />
+        </div>
         <table class="table table-sm table-borderless table-responsive">
             <tbody>
 
@@ -111,6 +111,10 @@
                         <table style="line-height: 1.3em;">
                             <tr>
                                 <td colSpan="2" style="font-size: 14px;"><b>Description of Gauge / Instrument :</b></td>
+                            </tr>
+                            <tr>
+                                <td width=50%><span class="fw-semibold">Range/Size</span></td>
+                                <td>: {{itemRangeSize}} {{itemRangeSizeUnit}}</td>
                             </tr>
                             <tr>
                                 <td width=50%><span class="fw-semibold">Identification No.</span></td>
@@ -195,11 +199,23 @@
 
 
                                 {{calCalibrationData}}
+
                             </tbody>
+
                         </table>
                     </td>
                 </tr>
+                <tr>
+                    <td colspan="2" class="text-start" style="font-size: 12px;">
+                        Remarks :
+                        <ul>
+                            {{calStatus}}
+                            {{calItemUncertainity}}
+                            <li>This certificate is digitally signed and does not require any seal or signature </li>
+                        </ul>
+                    </td>
 
+                </tr>
 
                 <tr>
                     <td colSpan="2" class="text-center">
@@ -214,7 +230,7 @@
 
                     <td colspan="2">
                         <table class="text-end" style="position: fixed; bottom: 2.5em; right: 2.5rem;">
-                           
+
                             <tr>
                                 <td>
 
@@ -239,7 +255,7 @@
                 <tr>
                     <table style="position: fixed; bottom: 2.5em; left: 2.5rem;">
                         <tr>
-                            <td> &nbsp;&nbsp;&nbsp;&nbsp;{{calibratedBy}} 
+                            <td> &nbsp;&nbsp;&nbsp;&nbsp;{{calibratedBy}}
                             </td>
 
                         </tr>
@@ -248,8 +264,8 @@
                             </td>
 
                         </tr>
-                        
-                        
+
+
 
                     </table>
 
@@ -261,7 +277,7 @@
             </tbody>
         </table>
         <span style="position: fixed; bottom: 1.6em; left: 2.5rem; font-size: xx-small;">{{formatNo}}</span>
-        
+
     </div>
 
 </body>

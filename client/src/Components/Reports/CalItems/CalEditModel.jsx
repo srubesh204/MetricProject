@@ -18,7 +18,7 @@ const CalEditModel = () => {
 
     const calData = useContext(CalData)
     const [lastResultData, setLastResultData] = useState([])
-    const { calEditOpen, setCalEditOpen, selectedCalRow, itemMasters, activeEmps, calListFetchData, employeeRole } = calData
+    const { calEditOpen, setCalEditOpen, selectedCalRow, itemMasters, activeEmps, calListFetchData, employeeRole, masters } = calData
     const [calibrationDatas, setCalibrationDatas] = useState([])
 
     const VisuallyHiddenInput = styled('input')({
@@ -46,12 +46,14 @@ const CalEditModel = () => {
         calItemName: "",
         calItemType: "",
         calRangeSize: "",
+        calRangeSizeUnit: "",
         calItemMFRNo: "",
         calLC: "",
         calItemMake: "",
         calItemTemperature: "",
         calItemHumidity: "",
         calItemUncertainity: "",
+        calItemUncertainityUnit: "",
         calItemSOPNo: "",
         calStandardRef: "",
         calOBType: "",
@@ -95,12 +97,14 @@ const CalEditModel = () => {
         calItemName: "",
         calItemType: "",
         calRangeSize: "",
+        calRangeSizeUnit: "",
         calItemMFRNo: "",
         calLC: "",
         calItemMake: "",
         calItemTemperature: "",
         calItemHumidity: "",
         calItemUncertainity: "",
+        calItemUncertainityUnit: "",
         calItemSOPNo: "",
         calStandardRef: "",
         calOBType: "",
@@ -141,7 +145,8 @@ const CalEditModel = () => {
     console.log(selectedCalRow)
     useEffect(() => {
 
-
+        const filter = masters.filter(mas => mas.itemDescription === selectedCalRow.calItemName)
+        console.log(filter)
         setCalibrationData((prev) => (
             {
                 ...prev,
@@ -150,14 +155,16 @@ const CalEditModel = () => {
                 calItemName: selectedCalRow.calItemName,
                 calItemType: selectedCalRow.calItemType,
                 calRangeSize: selectedCalRow.calRangeSize,
+                calRangeSizeUnit: selectedCalRow.calRangeSizeUnit,
                 calItemMFRNo: selectedCalRow.calItemMFRNo,
                 calLC: selectedCalRow.calLC,
                 calItemMake: selectedCalRow.calItemMake,
                 calItemTemperature: selectedCalRow.calItemTemperature,
                 calItemHumidity: selectedCalRow.calItemHumidity,
-                calItemUncertainity: selectedCalRow.calItemUncertainity,
-                calItemSOPNo: selectedCalRow.calItemSOPNo,
-                calStandardRef: selectedCalRow.calStandardRef,
+                calItemUncertainity: filter.length > 0 && filter[0] ? filter[0].uncertainty : "",
+                calItemSOPNo: filter.length > 0 && filter[0].SOPNo ? filter[0].SOPNo : "",
+                calStandardRef: filter.length > 0 && filter[0].standardRef ? filter[0].standardRef : "",
+                calItemUncertainityUnit : filter.length > 0 && filter[0].uncertaintyUnit ? filter[0].uncertaintyUnit : "",
                 calOBType: selectedCalRow.calOBType,
                 calCertificateNo: selectedCalRow.calCertificateNo,
                 calItemCalDate: selectedCalRow.calItemCalDate,
@@ -651,7 +658,7 @@ const CalEditModel = () => {
 
         } catch (err) {
             console.log(err);
-        }finally{
+        } finally {
             setLoading(false)
         }
     };
@@ -1590,7 +1597,7 @@ const CalEditModel = () => {
                         }}
                         variant="indeterminate"
                         size={20}
-                    />: "Submit"}</Button>
+                    /> : "Submit"}</Button>
                 </div>
             </DialogActions>
 
