@@ -14,7 +14,6 @@ const itemCalController = {
   getAllItemCals: async (req, res) => {
     try {
       const getAllItemCals = await itemCalModel.find();
-
       res.status(202).json({ result: getAllItemCals, status: 1 });
       //res.status(200).json(employees);
 
@@ -92,25 +91,18 @@ const itemCalController = {
         calDepartment,
         calSource,
       };
-
       const getCompDetailsById = await compDetailsSchema.findOne(
         { compId: 1 } // To return the updated document
       );
       const getPlantAddress = await plantSchema.findOne(
         { plantName: calPlant } // To return the updated document
       );
-
       const approvedByData = await employeeModel.findOne(
         { _id: calApprovedBy } // To return the updated document
       );
-
-
       const formatNo = await formatNoModel.findOne({ formatId: 1 });
-
       const formatNumber = `${formatNo.fCalDueDate ? (formatNo.fCalDueDate.frNo + " " + formatNo.fCalDueDate.amNo + " " + formatNo.fCalDueDate.amDate) : ""}`
       console.log(formatNumber)
-
-
       const newItem = new itemCalModel(newItemFields);
 
 
@@ -227,7 +219,7 @@ const itemCalController = {
             </tr>
             <tr>
               <th rowspan="2">Parameter</th>
-              <th rowspan="2">Nominal Size</th>
+              <th rowspan="2">Nominal Size (${(calcalibrationData.length > 0) ? calcalibrationData[0].calNominalSizeUnit : ""})</th>
               <th >Permissible Size (${(calcalibrationData.length > 0) ? calcalibrationData[0].calNominalSizeUnit : ""})</th>
               <th rowspan="2">Observed Size (${(calcalibrationData.length > 0) ? calcalibrationData[0].calNominalSizeUnit : ""})</th>
             </tr>
@@ -263,7 +255,7 @@ const itemCalController = {
                     </tr>
                     <tr>
                       <th rowspan="2">Parameter</th>
-                      <th rowspan="2">Nominal Size</th>
+                      <th rowspan="2">Nominal Size (${(calcalibrationData.length > 0) ? calcalibrationData[0].calNominalSizeUnit : ""})</th>
                       <th colspan="2">Permissible Size (${(calcalibrationData.length > 0) ? calcalibrationData[0].calNominalSizeUnit : ""})</th>
                       <th rowspan="2"> Observed Size (${(calcalibrationData.length > 0) ? calcalibrationData[0].calNominalSizeUnit : ""})</th>
                     </tr>
@@ -298,7 +290,7 @@ const itemCalController = {
             </tr>
             <tr>
               <th >Parameter</th>
-              <th >Nominal Size</th>
+              <th >Nominal Size (${(calcalibrationData.length > 0) ? calcalibrationData[0].calNominalSizeUnit : ""}) </th>
               <th >Permissible Error (${(calcalibrationData.length > 0) ? calcalibrationData[0].calNominalSizeUnit : ""})</th>
               <th > Observed Error (${(calcalibrationData.length > 0) ? calcalibrationData[0].calNominalSizeUnit : ""})</th>
             </tr>

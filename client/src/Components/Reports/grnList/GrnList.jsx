@@ -520,9 +520,6 @@ const GrnList = () => {
                                                         {itemListSelectedRowIds.length !== 0 && <Button variant='contained' type='button' size='small' color='error' onClick={() => setDeleteModalItem(true)}> Delete </Button>}
 
 
-
-
-
                                                     </div>
 
                                                 </div>
