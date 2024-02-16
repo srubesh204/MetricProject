@@ -164,7 +164,7 @@ const itemDcController = {
         // Set the modified HTML content
 
         console.log(modifiedHTML)
-        await page.setContent(modifiedHTML, { waitUntil: 'networkidle0' });
+        await page.setContent(modifiedHTML, { waitUntil: 'load' });
 
         // Generate PDF
         await page.pdf({ path: `./storage/dcCertificate/${dcNo}.pdf`, format: 'A4' });
