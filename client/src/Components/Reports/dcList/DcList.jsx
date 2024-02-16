@@ -67,10 +67,10 @@ const DcList = () => {
         try {
             const response = await axios.post(
                 `${process.env.REACT_APP_PORT}/itemAdd/getItemByPlant`, { allowedPlants: allowedPlants }
-              );
+            );
             console.log(response.data.result)
-           
-            
+
+
             console.log(deps)
             if (deps.length > 0) {
                 const departmentItems = response.data.result.filter(item => deps.includes(item.itemCurrentLocation))
@@ -181,7 +181,7 @@ const DcList = () => {
         try {
             const response = await axios.post(
                 `${process.env.REACT_APP_PORT}/vendor/getVendorByPlants`, { allowedPlants: allowedPlants }
-              );
+            );
             console.log(response.data)
 
             setVendorFullList(response.data.result);
@@ -294,7 +294,7 @@ const DcList = () => {
             ),
         },
         { field: 'dcNo', headerName: 'Dc No', headerAlign: "center", align: "center", width: 100 },
-        { field: 'dcDate', headerName: 'Dc Date', headerAlign: "center", align: "center", width: 200, renderCell : (params) => dayjs(params.row.dcDate).format("DD-MM-YYYY") },
+        { field: 'dcDate', headerName: 'Dc Date', headerAlign: "center", align: "center", width: 200, renderCell: (params) => dayjs(params.row.dcDate).format("DD-MM-YYYY") },
         { field: 'dcPartyName', headerName: 'Dc PartyName', headerAlign: "center", align: "center", width: 300 },
         { field: 'printButton', headerName: 'Print', headerAlign: "center", align: "center", width: 100, renderCell: (params) => <Button component={Link} to={`${process.env.REACT_APP_PORT}/dcCertificate/${params.row.dcNo}.pdf`} target='_blank'><PrintRounded color='success' /></Button> }
     ]
@@ -510,7 +510,16 @@ const DcList = () => {
         { field: 'id', headerName: 'Sr. No', width: 70, renderCell: (params) => params.api.getAllRowIds().indexOf(params.id) + 1, headerAlign: "center", align: "center", },
         { field: 'itemIMTENo', headerName: 'Item IMTENo', width: 150, headerAlign: "center", align: "center", },
         { field: 'itemAddMasterName', headerName: 'Item Description', headerAlign: "center", align: "center", width: 150 },
-        { field: 'itemRangeSize', headerName: 'Range/Size', headerAlign: "center", align: "center", width: 100 },
+        {
+            field: 'Range/Size',
+            headerName: 'Range/Size',
+            headerAlign: "center", align: "center",
+            description: 'This column has a value getter and is not sortable.',
+            sortable: false,
+            width: 130,
+            valueGetter: (params) =>
+                `${params.row.itemRangeSize || ''} ${params.row.itemLCUnit || ''}`,
+        },
         { field: 'dcItemRemarks', headerName: 'Remarks', headerAlign: "center", align: "center", width: 200 },
     ]
     console.log(dcDataDcList)
@@ -522,16 +531,16 @@ const DcList = () => {
         // Add more data here if needed
     };
 
-    
-    
 
-    
-   
+
+
+
+
 
 
     console.log(selectedRows)
 
- 
+
 
     return (
         <div className='px-5 pt-3'>
@@ -554,39 +563,8 @@ const DcList = () => {
                         <div className='row '>
 
                             <div className='col d-flex '>
+
                                 <div className='col me-2'>
-                                    <TextField label="Vendor Type"
-                                        id="vendorTypeId"
-                                        select
-                                        defaultValue=""
-                                        onChange={handleFilterChange}
-                                        size="small"
-                                        sx={{ width: "101%" }}
-
-                                        name="vendorType" >
-                                        <MenuItem value=""><em>--Select--</em></MenuItem>
-                                        <MenuItem value="oem">OEM</MenuItem>
-                                        <MenuItem value="customer">Customer</MenuItem>
-                                        <MenuItem value="supplier">Supplier</MenuItem>
-                                        <MenuItem value="subContractor">SubContractor</MenuItem>
-
-                                    </TextField>
-
-                                </div>
-                                <div className='col me-2'>
-                                    <TextField fullWidth label="Party Name" className="col" select size="small" onChange={handleFilterChange} id="partyNameId" name="partyName" defaultValue="" >
-
-                                        <MenuItem value="all">All</MenuItem>
-                                        {vendorTypeList.map((item, index) => (
-                                            <MenuItem key={index} value={item.fullName}>{item.fullName}</MenuItem>
-                                        ))}
-
-
-                                    </TextField>
-
-                                </div>
-                                <div className='col me-2'>
-
                                     <TextField label="Plant Wise"
                                         id="dcPlantId"
                                         select
@@ -602,13 +580,10 @@ const DcList = () => {
                                         {loggedEmp.plantDetails.map((item, index) => (
                                             <MenuItem key={index} value={item.plantName}>{item.plantName}</MenuItem>
                                         ))}
-
-
                                     </TextField>
 
                                 </div>
                                 <div className='col '>
-
                                     <TextField label="Primary Location "
                                         id="dcDepartmentId"
                                         select
@@ -622,11 +597,39 @@ const DcList = () => {
                                         {departments.map((item, index) => (
                                             <MenuItem key={index} value={item.department}>{item.department}</MenuItem>
                                         ))}
+                                    </TextField>
+                                </div>
+                                <div className='col me-2'>
+                                    <TextField label="Vendor Type"
+                                        id="vendorTypeId"
+                                        select
+                                        defaultValue=""
+                                        onChange={handleFilterChange}
+                                        size="small"
+                                        sx={{ width: "101%" }}
+                                        name="vendorType" >
+                                        <MenuItem value=""><em>--Select--</em></MenuItem>
+                                        <MenuItem value="oem">OEM</MenuItem>
+                                        <MenuItem value="customer">Customer</MenuItem>
+                                        <MenuItem value="supplier">Supplier</MenuItem>
+                                        <MenuItem value="subContractor">SubContractor</MenuItem>
+                                    </TextField>
+
+                                </div>
+                                <div className='col me-2'>
+                                    <TextField fullWidth label="Party Name" className="col" select size="small" onChange={handleFilterChange} id="partyNameId" name="partyName" defaultValue="" >
+
+                                        <MenuItem value="all">All</MenuItem>
+                                        {vendorTypeList.map((item, index) => (
+                                            <MenuItem key={index} value={item.fullName}>{item.fullName}</MenuItem>
+                                        ))}
 
 
                                     </TextField>
 
                                 </div>
+
+
                             </div>
                             <div className=' col d-flex justify-content-end'>
                                 <div className="col-3 me-2">
@@ -670,7 +673,7 @@ const DcList = () => {
                         <div className='row'>
                             <Box sx={{ height: 310, width: '100%', my: 2 }}>
                                 <DataGrid disableDensitySelector
-                                disableColumnFilter
+                                    disableColumnFilter
 
                                     rows={filteredData}
                                     columns={Columns}
@@ -730,7 +733,7 @@ const DcList = () => {
                         <div className='row'>
                             <Box sx={{ height: 310, width: '100%', my: 2 }}>
                                 <DataGrid disableDensitySelector
-                                       disableColumnFilter
+                                    disableColumnFilter
                                     rows={dcListDataList}
                                     columns={dcListColumns}
                                     getRowId={(row) => row._id}
@@ -780,6 +783,11 @@ const DcList = () => {
                                                 <ArrowBackIcon /> Dash board
                                             </Button>
                                         </div>
+                                        <div>
+                                            <Button component={Link} to="/insHisCard"  size='small' >
+                                                History  Card
+                                            </Button>
+                                        </div>
                                         {/* <div >
                                             <Button component={Link} to="/" size='small' variant='contained' startIcon={<ArrowBack />} endIcon={<House />} color='secondary'>Home</Button>
                                         </div> */}
@@ -791,7 +799,7 @@ const DcList = () => {
 
                             </div>
                             <div className='col d-flex justify-content-end'>
-                           
+
 
                                 {/* Hidden section to render PrintContent */}
 

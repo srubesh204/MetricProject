@@ -300,13 +300,21 @@ const CalList = () => {
         { field: 'calItemEntryDate', headerName: 'Entry Date', width: 90, valueGetter: (params) => dayjs(params.row.calItemEntryDate).format('DD-MM-YYYY'), headerAlign: "center", align: "center", },
         { field: 'calIMTENo', headerName: 'Item IMTENo', width: 150, headerAlign: "center", align: "center", },
         { field: 'calItemName', headerName: 'Item Description', width: 150, headerAlign: "center", align: "center", },
-        { field: 'calRangeSize', headerName: 'Range/Size', width: 100, headerAlign: "center", align: "center", },
+        // { field: 'calRangeSize', headerName: 'Range/Size', width: 100, headerAlign: "center", align: "center", },
+        {
+            field: 'Range/Size',
+            headerName: 'Range/Size',
+            headerAlign: "center", align: "center",
+            description: 'This column has a value getter and is not sortable.',
+            sortable: false,
+            width: 130,
+            valueGetter: (params) =>
+                `${params.row.calRangeSize || ''} ${params.row.calLC || ''}`,
+        },
         { field: 'calItemCalDate', headerName: 'Calibration On', width: 100, valueGetter: (params) => dayjs(params.row.calItemCalDate).format('DD-MM-YYYY'), headerAlign: "center", align: "center", },
         { field: 'calItemDueDate', headerName: 'Next Due On', width: 100, valueGetter: (params) => dayjs(params.row.calItemDueDate).format('DD-MM-YYYY'), headerAlign: "center", align: "center", },
         { field: 'calStatus', headerName: 'Cal status', width: 90, headerAlign: "center", align: "center", },
         { field: 'printButton', headerName: 'Print', headerAlign: "center", align: "center", width: 60, renderCell: (params) => <Button component={Link} to={`${process.env.REACT_APP_PORT}/calCertificates/${params.row.calCertificateNo}.pdf`} target='_blank'><PrintRounded color='success' /></Button> }
-
-
 
     ]
 
@@ -619,11 +627,17 @@ const CalList = () => {
                                     {/* <div className='me-2 '>
                                         <button type="button" className='btn btn-success' onClick={() => setCalAddOpen(true)}>Add</button>
                                     </div> */}
+                                     <div>
+                                        <Button component={Link} to="/insHisCard" className='me-2' size='small' >
+                                            History  Card
+                                        </Button>
+                                    </div>
                                     <div className='me-2'>
-                                        <Button component={Link} to={`/home`} variant="contained" size='small' color="warning">
+                                        <Button component={Link} to={`/home`} className='me-2' variant="contained" size='small' color="warning">
                                             <ArrowBackIcon /> Dash board
                                         </Button>
                                     </div>
+                                   
                                     {/* <div >
                                     <Button component={Link} to="/" size='small' variant='contained' startIcon={<ArrowBack />} endIcon={<House />} color='secondary'>Home</Button>
                                 </div> */}
