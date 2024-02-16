@@ -520,10 +520,10 @@ const CalEditModel = () => {
                         if (idx === index) {
                             let status = ""
 
-                            const isAverageInRange = parseFloat(item.calAverageOB) >= parseFloat(item.calMinPSError) &&
-                                parseFloat(item.calAverageOB) <= parseFloat(item.calMaxPSError);
+                            const isAverageInRange = parseFloat(item.calOBError) >= parseFloat(item.calMinPSError) &&
+                                parseFloat(item.calOBError) <= parseFloat(item.calMaxPSError);
 
-                            if (item.calAverageOB === "") {
+                            if (item.calOBError === "") {
                                 status = ""
                             } else {
                                 if (isAverageInRange) {
@@ -1217,7 +1217,7 @@ const CalEditModel = () => {
                                             {calibrationData.calcalibrationData.map((item, index) => {
 
                                                 let averageColor = "";
-                                                if (parseFloat(item.calAverageOB) >= parseFloat(item.calMinPSError) && parseFloat(item.calAverageOB) <= parseFloat(item.calMaxPSError)) {
+                                                if (parseFloat(item.calOBError) >= parseFloat(item.calMinPSError) && parseFloat(item.calOBError) <= parseFloat(item.calMaxPSError)) {
                                                     averageColor = "green";
                                                 } else {
                                                     averageColor = "red"
