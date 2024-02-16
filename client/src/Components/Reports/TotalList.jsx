@@ -215,7 +215,7 @@ const TotalList = () => {
       sortable: false,
       width: 130,
       valueGetter: (params) =>
-        `${params.row.itemRangeSize || ''} ${params.row.itemLCUnit || ''}`,
+        `${params.row.itemRangeSize || ''} ${params.row.itemRangeSizeUnit || ''}`,
     },
     { field: 'itemLC', headerName: 'ItemLC', width: 60, headerAlign: "center", align: "center", valueGetter: (params) => params.row.itemLC || "-" },
     { field: 'itemMake', headerName: 'Make', width: 90, headerAlign: "center", align: "center", },
