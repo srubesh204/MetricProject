@@ -563,7 +563,7 @@ const MeasurementUncertainty = () => {
 
                 setSnackBarOpen(true)
                 // uncFetch();
-                setUncertainityData(initialUncertainty);
+                // setUncertainityData(initialUncertainty);
                 console.log("uncertainty Create successfully");
                 setErrorHandler({ status: response.data.status, message: response.data.message, code: "success" })
 

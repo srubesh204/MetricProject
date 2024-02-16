@@ -35,5 +35,6 @@ const measurementUncertaintySchema = new mongoose.Schema({
    uncTypeBResult: []
 });
 measurementUncertaintySchema.plugin(uniqueValidator);
+//measurementUncertaintySchema.plugin(mongooseSequence, { inc_field: 'dcId' });
 
 module.exports = mongoose.model('measurementUncertainty', measurementUncertaintySchema);
