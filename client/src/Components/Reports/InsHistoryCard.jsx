@@ -299,11 +299,35 @@ function InsHistoryCard() {
             ),
         },
         { field: 'itemCalibratedAt', headerName: 'Calibrated At', width: 150, align: "center" },
-        { field: 'itemCalibratedBy', headerName: 'Calibrated By', width: 150, align: "center" },
-        { field: 'itemCalApprovedBy', headerName: 'Approved By', width: 150, align: "center" },
+        {
+            field: 'itemCalibratedBy',
+            headerName: 'Calibrated By',
+            width: 150,
+            align: "center",
+            renderCell: (params) => (
+              params.row &&
+              params.row.itemCalibrationSource !== 'outsource' &&
+              params.row.itemCalibratedBy
+                ? params.row.itemCalibratedBy
+                : params.row.itemCalibrationSource !== "" ? "" : null
+            )
+          },
+          {
+            field: 'itemCalApprovedBy',
+            headerName: 'Approved By',
+            width: 150,
+            align: "center",
+            renderCell: (params) => (
+              params.row &&
+              params.row.itemCalibrationSource !== 'outsource' &&
+              params.row.itemCalApprovedBy
+                ? params.row.itemCalApprovedBy
+                : params.row.itemCalibrationSource !== "" ? "" : null
+            )
+          },
+
+        // { field: 'itemCalApprovedBy', headerName: 'Approved By', width: 150, align: "center" },
     ];
-
-
 
 
     return (

@@ -1128,9 +1128,8 @@ const CalDialog = () => {
                                     {calibrationData.calItemType === "attribute" &&
                                         <tbody>
                                             <tr>
-
                                                 <th width="20%" rowSpan={2}>Parameter</th>
-                                                <th width="10%" rowSpan={2}>Range/Size</th>
+                                                <th width="10%" rowSpan={2}>Range/Size ({(calibrationData && calibrationData.calcalibrationData.length > 0) ? calibrationData.calcalibrationData[0].calNominalSizeUnit : ""}) </th>
                                                 <th width="10%" rowSpan={2}>Unit</th>
                                                 <th colSpan={3} width="30%">Permissible Size  <span style={{ fontSize: "10px" }}>({(calibrationData && calibrationData.calcalibrationData.length > 0) ? calibrationData.calcalibrationData[0].calNominalSizeUnit : ""}) </span> </th>
                                                 {calibrationData.calBeforeData === "yes" && <th width="5%" rowSpan={2}>Before Calibration</th>}
@@ -1153,8 +1152,6 @@ const CalDialog = () => {
                                             </tr>
                                             {/* {calibrationData.calcalibrationData.map((item)=> ()} */}
                                             {calibrationData && calibrationData.calcalibrationData.map((item, index) => {
-
-
                                                 //color changer
                                                 let minColor = "";
                                                 let maxColor = "";
@@ -1309,7 +1306,7 @@ const CalDialog = () => {
                                         <tbody>
                                             <tr>
                                                 <th rowSpan={2}>Parameter</th>
-                                                <th rowSpan={2}>Nominal Size</th>
+                                                <th rowSpan={2}>Nominal Size ({(calibrationData && calibrationData.calcalibrationData.length > 0) ? calibrationData.calcalibrationData[0].calNominalSizeUnit : ""}) </th>
                                                 <th rowSpan={2}>Unit</th>
                                                 <th colSpan={2}>Permissible Error ({(calibrationData && calibrationData.calcalibrationData.length > 0) ? calibrationData.calcalibrationData[0].calNominalSizeUnit : ""})</th>
 

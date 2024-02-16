@@ -30,7 +30,7 @@ import ItemListPrint from './ItemListPrint';
 
 import ItemMail from './ItemMail';
 import MailSender from '../mailComponent/MailSender';
-import { BrowserRouter as Router, Route} from 'react-router-dom';
+import { BrowserRouter as Router, Route } from 'react-router-dom';
 
 dayjs.extend(isSameOrBefore)
 dayjs.extend(isSameOrAfter)
@@ -222,7 +222,7 @@ const ItemList = () => {
     }
 
 
-    
+
 
 
     const updateItemStatus = async () => {
@@ -1070,9 +1070,7 @@ const ItemList = () => {
                                             <ArrowBackIcon /> Dash board
                                         </Button>
                                     </div>
-                                    <div >
-                                        <Button component={Link} to="/" size='small' variant='contained' startIcon={<ArrowBack />} endIcon={<House />} color='secondary'>Home</Button>
-                                    </div>
+
                                 </div>
                                 <div className='col d-flex justify-content-center'>
                                     <Typography variant="h5" className="text-center mb-2">Item List</Typography>
@@ -1468,17 +1466,17 @@ const ItemList = () => {
                                     {/* <Button component={RouterLink} to={`/InsHistoryCard`} size='small' variant="contained" color="secondary">
                                         History Card
                                     </Button> */}
-                                   
-                                         {/* <Route path="/insHisCard" component={InsHistoryCard} />  */}
 
-                                        <Button component={Link} to="/insHisCard" size='small' variant="contained" color="secondary">
-                                            History Card
-                                        </Button>
-                                   
+                                    {/* <Route path="/insHisCard" component={InsHistoryCard} />  */}
+
+                                    <Button component={Link} to="/insHisCard" className='me-2' size='small' >
+                                        History  Card
+                                    </Button>
+
                                 </div>
                                 {employeeRole && employeeRole.employee !== "viewer" &&
                                     <div className='me-2' >
-                                        {itemListSelectedRowIds.length !== 0 && <button type="button" className='btn btn-warning btn-sm' onClick={() => setOpenModalStatus(true)} >Change status</button>} </div>}
+                                        {itemListSelectedRowIds.length !== 0 && <Button type="button" size='small' onClick={() => setOpenModalStatus(true)} >Change status</Button>} </div>}
 
                                 <Dialog
                                     open={openModalStatus}
@@ -1505,7 +1503,7 @@ const ItemList = () => {
 
                                                 </TextField>
 
-                                                <TextField margin="dense" size='small' multiline rows={2} variant='outlined' className='mb-2' onChange={handleChangeStatus}  value={statusInfo.itemStatusReason} label="Reason" name='itemStatusReason' id='itemStatusReasonId'  >
+                                                <TextField margin="dense" size='small' multiline rows={2} variant='outlined' className='mb-2' onChange={handleChangeStatus} value={statusInfo.itemStatusReason} label="Reason" name='itemStatusReason' id='itemStatusReasonId'  >
 
 
                                                 </TextField>
@@ -1531,28 +1529,29 @@ const ItemList = () => {
 
 
                                 {employeeRole.employee !== "viewer" && <div className='me-2' >
-                                    <Button component={RouterLink} to={`/itemMaster`} size='small' variant="contained" color="secondary">
+                                    <Button component={RouterLink} to={`/itemMaster`} size='small' >
                                         Item Master
                                     </Button>
 
                                 </div>}
+                                <div >
+                                    <Button component={Link} to="/" size='small'>Home</Button>
+                                </div>
 
                                 <div className="d-flex justify-content-center">
+
+                                    <div className='me-2'>
+                                        <Button className='mb-2' size='small' onClick={() => setPrintState(true)}> Print</Button>
+                                    </div>
                                     <div className='col'>
                                         <ButtonGroup className='me-2'>
-                                            <Button component="label" size='small' variant="contained" >
+                                            <Button component="label" size='small'  >
                                                 Upload
                                                 <VisuallyHiddenInput type="file" onChange={handleItemAddExcel} />
                                             </Button>
                                             <Button size='small' onClick={handleItemAddUpload}><CloudUpload /></Button>
                                         </ButtonGroup>
                                     </div>
-                                    <div className='me-2'>
-                                        <Button color="secondary" className='mb-2' variant='contained' startIcon={<PrintRounded />} size='small' onClick={() => setPrintState(true)}> Print</Button>
-
-                                    </div>
-
-
                                     {/* <ButtonGroup>
                                         <Button component="label" size='small' variant="contained" color='secondary'>
                                             Download

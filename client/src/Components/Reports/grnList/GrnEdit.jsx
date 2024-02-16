@@ -1258,29 +1258,18 @@ const GrnEdit = () => {
                                                         </Button>}
                                                 </div>
                                             </React.Fragment> : ""}
-
-
                                         </div>
-
-
-
-
                                         <div className='row mt-3'>
                                             <div className="col-md">
                                                 <h5>Calibration Data</h5>
                                                 <table className='table table-sm table-bordered table-responsive text-center align-middle'>
-
                                                     {grnEditData.grnItemType === "attribute" &&
-
                                                         <tbody >
                                                             <tr>
-
                                                                 <th width="20%" rowSpan={2}>Parameter</th>
                                                                 <th width="10%" rowSpan={2}>Range/Size</th>
                                                                 <th width="10%" rowSpan={2}>Unit</th>
                                                                 <th colSpan={3} width="30%">Permissible Size</th>
-
-
                                                                 <th width="20%" colSpan={grnEditData.grnItemOBType === "average" ? 1 : 2}>Observed Size</th>
                                                                 <th width="10%" rowSpan={2}>Status</th>
                                                             </tr>

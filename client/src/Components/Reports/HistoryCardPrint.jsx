@@ -54,6 +54,7 @@ const HistoryCardPrint = () => {
         // Call the handlePrint function when needed
         handlePrint();
     }
+
     console.log(printState)
     const renderTableRows = () => {
         if (!selectedIMTEs || selectedIMTEs.length === 0) {
@@ -82,8 +83,16 @@ const HistoryCardPrint = () => {
                         </React.Fragment>)}
                     </td>
                     <td style={{ width: "9%", borderRight: "0.5px solid black", borderTop: "0.5px solid black" }}>{selectedRow && selectedRow[0]?.itemCalibratedAt || '-'}</td>
-                    <td style={{ width: "9%", borderRight: "0.5px solid black", borderTop: "0.5px solid black" }}>{row.itemCalibratedBy || '-'}</td>
-                    <td style={{ width: "9%", borderRight: "0.5px solid black", borderTop: "0.5px solid black" }}>{row.itemCalApprovedBy || '-'}</td>
+                    {selectedRow[0].itemCalibrationSource !== "outsource" && selectedRow[0].itemCalibrationSource !== "" && (
+                        <td style={{ width: "9%", borderRight: "0.5px solid black", borderTop: "0.5px solid black" }}>
+                            {row.itemCalibratedBy ? row.itemCalibratedBy : '-'}
+                        </td>
+                    )}
+                    {selectedRow[0].itemCalibrationSource !== "outsource" && selectedRow[0].itemCalibrationSource !== "" && (
+                        <td style={{ width: "9%", borderRight: "0.5px solid black", borderTop: "0.5px solid black" }}>
+                            {row.itemCalApprovedBy ? row.itemCalApprovedBy : '-'}
+                        </td>
+                    )}
                 </tr>
             )
         });
@@ -175,8 +184,8 @@ const HistoryCardPrint = () => {
                                                 </tr>
                                             ))}
                                     </table>}
-                                   
-                                   
+
+
 
                                 </td>
                             </tr>
@@ -209,12 +218,18 @@ const HistoryCardPrint = () => {
                                 <td style={{ width: "9%", borderRight: "0.5px solid black", margin: 0, fontWeight: "bold" }}>
                                     Calibration At
                                 </td>
-                                <td style={{ width: "9%", borderRight: "0.5px solid black", margin: 0, fontWeight: "bold" }}>
-                                    Calibrated By
-                                </td>
-                                <td style={{ width: "9%", borderRight: "0.5px solid black", margin: 0, fontWeight: "bold" }}>
-                                    Approved By
-                                </td>
+
+                                {selectedRow[0]?.itemCalibrationSource !== "outsource" && selectedRow[0]?.itemCalibrationSource !== "" && (
+                                    <td style={{ width: "9%", borderRight: "0.5px solid black", margin: 0, fontWeight: "bold" }}>
+                                        Calibrated By
+                                    </td>
+                                )}
+
+                                {selectedRow[0]?.itemCalibrationSource !== "outsource" && selectedRow[0]?.itemCalibrationSource !== "" && (
+                                    <td style={{ width: "9%", borderRight: "0.5px solid black", margin: 0, fontWeight: "bold" }}>
+                                        Approved By
+                                    </td>
+                                )}
 
                             </tr>
                         </thead>
