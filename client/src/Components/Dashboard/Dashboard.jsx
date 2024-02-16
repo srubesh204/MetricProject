@@ -366,7 +366,7 @@ console.log(MenuItems.system)
               }}
             >
               
-              <img src='/CalSmartMetricLogo.png'  style={{marginLeft: "24px", width: 204.5, height: 56.5, objectFit: "contain"}} /> 
+              <img src='/CalSmartLogo.png'  style={{marginLeft: "24px", width: 201, height: 52, objectFit: "contain"}} /> 
               <IconButton onClick={toggleDrawer}>
                 <ChevronLeftIcon />
               </IconButton>
