@@ -640,7 +640,6 @@ const MeasurementUncertainty = () => {
             parseFloat(uncertainityData.uncR10),
         ];
 
-
         const numericValues = excelData.filter(value => typeof value === 'number' && !isNaN(value));
 
         if (numericValues.length < 3) {
@@ -728,7 +727,6 @@ const MeasurementUncertainty = () => {
                                 </TextField>
                             </div>
                             <div className="col d-flex ">
-
                                 <TextField size='small' fullWidth type='number' variant='outlined' label="Range/Size(L)" onChange={handleUncertaintyChange} value={uncertainityData.uncRangeSize} name='uncRangeSize' id='uncRangeSizeId'>
                                 </TextField>
                                 <TextField select style={{ width: "50%" }} size='small' fullWidth variant='outlined' label="Unit" onChange={handleUncertaintyChange} value={uncertainityData.uncRangeSizeUnit} name='uncRangeSizeUnit' id='uncRangeSizeUnitId'>
@@ -736,7 +734,6 @@ const MeasurementUncertainty = () => {
                                     <MenuItem value="mm">mm</MenuItem>
                                     <MenuItem value="min">min</MenuItem>
                                 </TextField>
-
                             </div>
                             <div className="col">
                                 <TextField size='small' fullWidth type='number' variant='outlined' label={`Least Count (${uncertainityData.uncRangeSizeUnit})`} onChange={handleUncertaintyChange} value={uncertainityData.uncLC} name='uncLC' id='uncLCId'>
