@@ -520,10 +520,10 @@ const CalEditModel = () => {
                         if (idx === index) {
                             let status = ""
 
-                            const isAverageInRange = parseFloat(item.calAverageOB) >= parseFloat(item.calMinPSError) &&
-                                parseFloat(item.calAverageOB) <= parseFloat(item.calMaxPSError);
+                            const isAverageInRange = parseFloat(item.calOBError) >= parseFloat(item.calMinPSError) &&
+                                parseFloat(item.calOBError) <= parseFloat(item.calMaxPSError);
 
-                            if (item.calAverageOB === "") {
+                            if (item.calOBError === "") {
                                 status = ""
                             } else {
                                 if (isAverageInRange) {
@@ -791,7 +791,7 @@ const CalEditModel = () => {
                                         variant="outlined"
                                     />
                                 </div>
-                                <div className="col-md-3">
+                                {calibrationData.calItemType === "variable" &&  <div className="col-md-3">
                                     <TextField
                                         InputProps={{
                                             readOnly: true,
@@ -804,7 +804,7 @@ const CalEditModel = () => {
                                         fullWidth
                                         variant="outlined"
                                     />
-                                </div>
+                                </div>}
                                 <div className="col-md-6">
                                     <TextField
                                         InputProps={{
@@ -1217,7 +1217,7 @@ const CalEditModel = () => {
                                             {calibrationData.calcalibrationData.map((item, index) => {
 
                                                 let averageColor = "";
-                                                if (parseFloat(item.calAverageOB) >= parseFloat(item.calMinPSError) && parseFloat(item.calAverageOB) <= parseFloat(item.calMaxPSError)) {
+                                                if (parseFloat(item.calOBError) >= parseFloat(item.calMinPSError) && parseFloat(item.calOBError) <= parseFloat(item.calMaxPSError)) {
                                                     averageColor = "green";
                                                 } else {
                                                     averageColor = "red"
@@ -1231,7 +1231,7 @@ const CalEditModel = () => {
                                                         <td>{item.calNominalSizeUnit}</td>
                                                         <td>{item.calMinPSError}</td>
                                                         <td>{item.calMaxPSError}</td>
-                                                        <td><input className='form-control form-control-sm' name='calAverageOB' style={{ color: averageColor, fontWeight: "bold" }} value={item.calAverageOB} onChange={(e) => changecalDataValue(index, e.target.name, e.target.value)} /></td>
+                                                        <td><input className='form-control form-control-sm' name='calOBError' style={{ color: averageColor, fontWeight: "bold" }} value={item.calOBError} onChange={(e) => changecalDataValue(index, e.target.name, e.target.value)} /></td>
                                                         <td width="15%">
                                                             <select className='form-select form-select-sm' name="rowStatus" value={item.rowStatus} onChange={(e) => changecalDataValue(index, e.target.name, e.target.value)}>
                                                                 <option value="">Status</option>
