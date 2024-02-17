@@ -3,7 +3,7 @@ const uniqueValidator = require('mongoose-unique-validator');
 
 const mailConfigSchema = new mongoose.Schema({
  
-  mailFixedId: Number,
+  _id : {type: String, default: "mailData"},
   mailId : String,
   mailPassword : String,
   portNumber : String,

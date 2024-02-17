@@ -11,45 +11,7 @@ const compDetailsController = {
       res.status(500).send('Error on Company Details');
     }
   },
-  createCompDetails: async (req, res) => {
-
-    try {
-      const { userType, companyName, companyAddress, companyPlants, companyLogo, companyImage } = req.body;
-      const compDetailsResult = new compDetailsSchema({ userType, companyName, companyAddress, companyPlants, companyLogo, companyImage });
-      const validationError = compDetailsResult.validateSync();
-
-      if (validationError) {
-        // Handle validation errors
-        const validationErrors = {};
-
-        if (validationError.errors) {
-          // Convert Mongoose validation error details to a more user-friendly format
-          for (const key in validationError.errors) {
-            validationErrors[key] = validationError.errors[key].message;
-          }
-        }
-
-        return res.status(400).json({
-          errors: validationErrors
-        });
-      }
-      console.log("success")
-
-      await compDetailsResult.save();
-      return res.status(200).json({ message: "Company Details Successfully Saved", status: 1 });
-    } catch (error) {
-      console.log(error)
-      if (error.errors) {
-        const errors500 = {};
-        for (const key in error.errors) {
-          errors500[key] = error.errors[key].message;
-        }
-        return res.status(500).json({ error: errors500, status: 0 });
-      }
-
-      return res.status(500).json({ error: 'Internal server error on Company Details', status: 0 });
-    }
-  },
+  
 
   updateCompDetails: async (req, res) => {
     try {
@@ -61,7 +23,12 @@ const compDetailsController = {
       // Create an object with the fields you want to update
       const updateCompDetailsFields = {
         /* Specify the fields and their updated values here */
-        userType: req.body.userType, companyName: req.body.companyName, companyAddress: req.body.companyAddress, companyPlants: req.body.companyPlants, companyLogo: req.body.companyLogo, companyImage: req.body.companyImage,// Example: updating the 'name' field
+        userType: req.body.userType, 
+        companyName: req.body.companyName, 
+        companyAddress: req.body.companyAddress, 
+        companyPlants: req.body.companyPlants, 
+        companyLogo: req.body.companyLogo, 
+        companyImage: req.body.companyImage,// Example: updating the 'name' field
         // Add more fields as needed
       };
 
@@ -87,9 +54,9 @@ const compDetailsController = {
 
       // Find the designation by desId and update it
       const updateCompDetails = await compDetailsSchema.findOneAndUpdate(
-        { compId: compDetailsId },
+        { _id: compDetailsId },
         updateCompDetailsFields,
-        { new: true } // To return the updated document
+        { new: true, upsert: true } // To return the updated document
       );
 
       if (!updateCompDetails) {
@@ -142,9 +109,7 @@ const compDetailsController = {
       const compDetailsId = req.params.id; // Assuming desId is part of the URL parameter
       // if (isNaN(desId)) {
       // Find the designation by desId and update it
-      const getCompDetailsById = await compDetailsSchema.findOne(
-        { compId : compDetailsId } // To return the updated document
-      );
+      const getCompDetailsById = await compDetailsSchema.findById(compDetailsId);
 
       if (!getCompDetailsById) {
         return res.status(404).json({ error: 'Company Details not found' });

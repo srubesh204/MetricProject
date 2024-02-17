@@ -4,10 +4,7 @@ const mongooseSequence = require('mongoose-sequence')(mongoose);
 
 const compDetailsSchema = new mongoose.Schema({
 
-  compId: {
-    type: Number,
-    default: 1
-  },
+  _id : {type: String, default: "companyData"},
   userType: String,
   companyName: String,
   companyAddress: String,

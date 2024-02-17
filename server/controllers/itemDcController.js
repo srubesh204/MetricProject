@@ -23,8 +23,8 @@ const itemDcController = {
   createItemDc: async (req, res) => {
 
     try {
-      const { dcPartyName, dcPartyId, dcPartyType, dcPartyCode, dcPartyAddress, dcNo, dcDate, dcReason, dcCommonRemarks, dcMasterName, dcPartyItems, dcPlant, dcDepartment } = req.body;
-      const itemDcResult = new itemDcModel({ dcPartyName, dcPartyId, dcPartyType, dcPartyCode, dcPartyAddress, dcNo, dcDate, dcReason, dcCommonRemarks, dcMasterName, dcPartyItems, dcPlant, dcDepartment });
+      const { dcPartyName, dcPartyId, dcPartyType, dcPartyCode, dcPartyAddress, dcDate, dcReason, dcCommonRemarks, dcMasterName, dcPartyItems, dcPlant, dcDepartment } = req.body;
+      const itemDcResult = new itemDcModel({ dcPartyName, dcPartyId, dcPartyType, dcPartyCode, dcPartyAddress, dcDate, dcReason, dcCommonRemarks, dcMasterName, dcPartyItems, dcPlant, dcDepartment });
 
 
       // const validationError = itemDcResult.validateSync();
@@ -50,17 +50,15 @@ const itemDcController = {
 
       // const result = await itemDcResult.save();
 
-      const getCompDetailsById = await compDetailsSchema.findOne(
-        { compId: 1 } // To return the updated document
-      );
+      const getCompDetailsById = await compDetailsSchema.findById("companyData");
       const getPlantAddress = await plantSchema.findOne(
         { plantName: dcPlant } // To return the updated document
       );
 
-      const formatNo = await formatNoModel.findOne({ formatId: 1 });
+      const formatNo = await formatNoModel.findById("formatNo");
 
-      const formatNumber = `${formatNo.fDc ? (formatNo.fDc.frNo + " " + formatNo.fDc.amNo + " " + formatNo.fDc.amDate) : ""}`
-      console.log(formatNumber)
+      const formatNumber = `${formatNo && formatNo.fDc ? (formatNo.fDc.frNo + " " + formatNo.fDc.amNo + " " + formatNo.fDc.amDate) : ""}`
+      console.log(getCompDetailsById)
 
       const validationError = itemDcResult.validateSync();
 
@@ -79,7 +77,7 @@ const itemDcController = {
           errors: validationErrors
         });
       }
-      console.log("success")
+     
 
 
 
@@ -88,7 +86,7 @@ const itemDcController = {
 
 
       if (Object.keys(result).length !== 0) {
-        console.log(dcPartyType)
+        
         const updatePromises = dcPartyItems.map(async (item) => {
 
           const itemData = await itemAddModel.findById(item._id)
@@ -103,14 +101,14 @@ const itemDcController = {
             dcId: result._id,
             dcStatus: "1",
             dcCreatedOn: dcDate,
-            dcNo: dcNo
+            dcNo: result.dcNo
           }
           const updateResult = await itemAddModel.findOneAndUpdate(
             { _id: item._id },
             { $set: updateItemFields },
             { new: true }
           );
-          console.log("itemUpdated")
+          
           return updateResult;
         });
         const updatedItems = await Promise.all(updatePromises);
@@ -145,17 +143,17 @@ const itemDcController = {
         const modifiedHTML = htmlTemplate
 
           .replace(/{{dcPartyItems}}/g, itemsData.join(""))
-          .replace(/{{CompanyName}}/g, getCompDetailsById.companyName)
+          .replace(/{{CompanyName}}/g, getCompDetailsById && getCompDetailsById.companyName ? getCompDetailsById.companyName : "")
 
           .replace(/{{Plant}}/g, getPlantAddress.plantName)
           .replace(/{{PlantAddress}}/g, getPlantAddress.plantAddress)
           .replace(/{{dcPartyName}}/g, dcPartyName)
           .replace(/{{dcPartyAddress}}/g, dcPartyAddress)
-          .replace(/{{dcNo}}/g, dcNo)
+          .replace(/{{dcNo}}/g, result.dcNo)
           .replace(/{{dcDate}}/g, dcDate)
           .replace(/{{dcCR}}/g, dcCommonRemarks)
           .replace(/{{dcCReason}}/, dcReason)
-          .replace(/{{logo}}/g, process.env.SERVER_PORT + '/logo/' + getCompDetailsById.companyLogo)
+          .replace(/{{logo}}/g, process.env.SERVER_PORT + '/logo/' + getCompDetailsById.companyLogo || "")
           .replace(/{{formatNo}}/g, formatNumber)
 
 
@@ -163,7 +161,7 @@ const itemDcController = {
 
         // Set the modified HTML content
 
-        console.log(modifiedHTML)
+        
         const cssPath = path.resolve(__dirname, '../templates/bootstrap.min.css');
 
         await page.setContent(modifiedHTML, { waitUntil: 'domcontentloaded' });
@@ -172,7 +170,7 @@ const itemDcController = {
         await page.addStyleTag({ path: cssPath });
 
         // Generate PDF
-        await page.pdf({ path: `./storage/dcCertificate/${dcNo}.pdf`, format: 'A4' });
+        await page.pdf({ path: `./storage/dcCertificate/${result.dcNo}.pdf`, format: 'A4' });
 
         await browser.close();
 
@@ -204,8 +202,8 @@ const itemDcController = {
       // }
 
       // Create an object with the fields you want to update
-      const { dcPartyName, dcPartyId, dcPartyType, dcPartyCode, dcPartyAddress, dcNo, dcDate, dcReason, dcCommonRemarks, dcMasterName, dcPartyItems, dcPlant, dcDepartment } = req.body;
-      const updateItemDcFields = { dcPartyName, dcPartyId, dcPartyType, dcPartyCode, dcPartyAddress, dcNo, dcDate, dcReason, dcCommonRemarks, dcMasterName, dcPartyItems, dcPlant, dcDepartment };
+      const { dcPartyName, dcPartyId, dcPartyType, dcPartyCode, dcPartyAddress, dcDate, dcReason, dcCommonRemarks, dcMasterName, dcPartyItems, dcPlant, dcDepartment } = req.body;
+      const updateItemDcFields = { dcPartyName, dcPartyId, dcPartyType, dcPartyCode, dcPartyAddress, dcDate, dcReason, dcCommonRemarks, dcMasterName, dcPartyItems, dcPlant, dcDepartment };
 
 
 

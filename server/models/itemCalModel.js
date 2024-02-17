@@ -1,15 +1,16 @@
 const mongoose = require('mongoose');
 const dayjs = require('dayjs')
 const uniqueValidator = require('mongoose-unique-validator');
-const mongooseSequence = require('mongoose-sequence')(mongoose);
+const formatNoModel = require('./formatNoModel');
 
-const counterSchema = new mongoose.Schema({
-  _id: { type: String, required: true },
-  calItemIdSeq: { type: Number, default: 0 },
-  calCertificateNoSeq: { type: Number, default: 0 }
+
+const CalNoCounterSchema = new mongoose.Schema({
+  _id: { type: String, default: 'CalNoCounter' },
+  seq: { type: Number, default: 0 },
+  year: { type: Number, default: new Date().getFullYear() }
 });
 
-const Counter = mongoose.model('Counter', counterSchema);
+const CalNoCounter = mongoose.model('CalNoCounter', CalNoCounterSchema);
 
 const itemCal = new mongoose.Schema({
   ItemCalId: String,
@@ -67,9 +68,32 @@ const itemCal = new mongoose.Schema({
   }
 
 });
+
+itemCal.pre('save', async function(next) {
+  const currentYear = new Date().getFullYear();
+  const counter = await CalNoCounter.findById('CalNoCounter');
+  const prefix = await formatNoModel.findById('formatNo')
+  console.log(prefix)
+  if (!counter) {
+    // If the counter document doesn't exist, create it
+    await CalNoCounter.create({ _id: 'CalNoCounter', seq: 1, year: currentYear });
+    this.calCertificateNo = `${prefix && prefix.fCommonPrefix ? prefix.fCommonPrefix : ""}CAL${currentYear}-01`;
+  } else if (counter.year !== currentYear) {
+    // If the year has changed, reset the counter and update the year
+    counter.seq = 1;
+    counter.year = currentYear;
+    await counter.save();
+    this.calCertificateNo = `${prefix && prefix.fCommonPrefix ? prefix.fCommonPrefix : ""}CAL${currentYear}-01`;
+  } else {
+    // Otherwise, increment the counter
+    counter.seq++;
+    await counter.save();
+    this.calCertificateNo = `${prefix && prefix.fCommonPrefix ? prefix.fCommonPrefix : ""}CAL${currentYear}-${String(counter.seq).padStart(2, '0')}`;
+  }
+
+  next();
+});
+
+
 itemCal.plugin(uniqueValidator);
-itemCal.plugin(mongooseSequence, { inc_field: 'calId', });
-
-
-
 module.exports = mongoose.model('itemCal', itemCal);

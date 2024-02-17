@@ -1,6 +1,15 @@
 const mongoose = require('mongoose');
 const uniqueValidator = require('mongoose-unique-validator');
-const mongooseSequence = require('mongoose-sequence')(mongoose);
+const formatNoModel = require('./formatNoModel');
+
+const GrnNoCounterSchema = new mongoose.Schema({
+  _id: { type: String, default: 'GrnNoCounter' },
+  seq: { type: Number, default: 0 },
+  year: { type: Number, default: new Date().getFullYear() }
+});
+
+const GrnNoCounter = mongoose.model('GrnNoCounter', GrnNoCounterSchema);
+
 const itemGRNSchema = new mongoose.Schema({
   grnPartyRefNo: {
     type: String,
@@ -96,6 +105,31 @@ const itemGRNSchema = new mongoose.Schema({
   grnItemCalStatus: String,
 
 });
+
+itemGRNSchema.pre('save', async function(next) {
+  const currentYear = new Date().getFullYear();
+  const counter = await GrnNoCounter.findById('GrnNoCounter');
+  const prefix = await formatNoModel.findById('formatNo')
+
+  if (!counter) {
+    // If the counter document doesn't exist, create it
+    await GrnNoCounter.create({ _id: 'GrnNoCounter', seq: 1, year: currentYear });
+    this.grnNo = `${prefix && prefix.fCommonPrefix ? prefix.fCommonPrefix : ""}GRN${currentYear}-01`;
+  } else if (counter.year !== currentYear) {
+    // If the year has changed, reset the counter and update the year
+    counter.seq = 1;
+    counter.year = currentYear;
+    await counter.save();
+    this.grnNo = `${prefix && prefix.fCommonPrefix ? prefix.fCommonPrefix : ""}GRN${currentYear}-01`;
+  } else {
+    // Otherwise, increment the counter
+    counter.seq++;
+    await counter.save();
+    this.grnNo = `${prefix && prefix.fCommonPrefix ? prefix.fCommonPrefix : ""}GRN${currentYear}-${String(counter.seq).padStart(2, '0')}`;
+  }
+  next();
+});
+
+
 itemGRNSchema.plugin(uniqueValidator);
-itemGRNSchema.plugin(mongooseSequence, { inc_field: 'grnId', });
 module.exports = mongoose.model('itemGRN', itemGRNSchema);
