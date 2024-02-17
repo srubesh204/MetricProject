@@ -2114,8 +2114,6 @@ export const Designation = () => {
         console.log(err.response.data.error)
         setErrorHandler({ status: 0, message: "An error occurred", code: "error" });
       }
-
-
       console.log(err);
     }
   };

@@ -167,6 +167,9 @@ const designationController = {
       // Convert Excel data to JSON
       const jsonData = excelToJson({
         source: excelData,
+        header: {
+          rows: 1
+        },
         columnToKey: {
           A: 'designation',
           B: 'designationStatus'

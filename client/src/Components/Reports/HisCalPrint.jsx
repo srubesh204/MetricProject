@@ -60,13 +60,13 @@ const HisCalPrint = () => {
 
     return (
         <div style={{ display: 'none' }}>
-            <div ref={componentRef} style={{display: "flex", flexDirection: "row", justifyContent: "center", alignItems: "center"}}>
-            
+            <div ref={componentRef} style={{ display: "flex", flexDirection: "row", justifyContent: "center", alignItems: "center" }}>
+
                 {/* <PDFViewer width="100%" height="100%">
                 <Document >
                     <Page size="A4" style={{ fontSize: "10px", padding: "10px 15px" }}> */}
-                <table style={{width: "100%",}}>
-                    <tbody style={{width: "100%"}}>
+                <table style={{ width: "100%", }}>
+                    <tbody style={{ width: "100%" }}>
                         <h3 style={{ padding: "10px", textAlign: "center", textDecoration: "underline" }}>Calibration Certificate</h3>
                         <tr style={{ width: "100%", height: "95%", fontSize: "80%", textAlign: "center" }}>
 
@@ -93,6 +93,7 @@ const HisCalPrint = () => {
                                             <div style={{ flex: 1, fontWeight: "bold", border: "0.1px solid black", height: "80%" }}>Address</div>
                                         </div>
                                     </tr>
+                    
                                     <tr style={{ textAlign: "center", width: "30%", margin: 0 }}>
                                         <div style={{ display: "flex", flexDirection: "column", height: "100%" }}>
                                             <div style={{ border: "0.1px solid black", height: "20%" }}>{filterCompany[0]?.companyName}</div>
@@ -195,7 +196,7 @@ const HisCalPrint = () => {
                                     <td colSpan="2" style={{ width: "28%", border: "0.1px solid black" }}>Permissible Size</td>
                                     {/* <td style={{ width: "14%", border: "0.1px solid black" }}>Permissible Size Max</td> */}
                                     <td colSpan="2" style={{ width: "28%", border: "0.1px solid black" }}>Observed Size</td>
-                                    
+
                                     <td style={{ width: "14%", border: "0.1px solid black" }}>Cal status</td>
                                 </tr>
 
@@ -203,14 +204,14 @@ const HisCalPrint = () => {
                                     <tr key={index} style={{ textAlign: "center", display: "flex", flexDirection: "row", width: "100%" }}>
                                         <td style={{ width: "16%", border: "0.1px solid black" }}>{item.calParameter || '-'}</td>
                                         <td style={{ width: "14%", border: "0.1px solid black" }}>{item.calNominalSize || '-'}</td>
-                                        <td colSpan="2" style={{ width: "28%", border: "0.1px solid black" }}>{item.calMinPS + " / " +item.calMaxPS}</td>
-                                        
-                                        {selectedRows.calOBType === "average" ? 
-                                        <td colSpan="2" style={{ width: "28%", border: "0.1px solid black" }}>{item.calAverageOB || '-'} </td>
-                                        :
-                                        <td colSpan="2" style={{ width: "28%", border: "0.1px solid black" }}>{item.calMinOB + " / " + item.calMaxOB} </td>}
-                                        
-                                        
+                                        <td colSpan="2" style={{ width: "28%", border: "0.1px solid black" }}>{item.calMinPS + " / " + item.calMaxPS}</td>
+
+                                        {selectedRows.calOBType === "average" ?
+                                            <td colSpan="2" style={{ width: "28%", border: "0.1px solid black" }}>{item.calAverageOB || '-'} </td>
+                                            :
+                                            <td colSpan="2" style={{ width: "28%", border: "0.1px solid black" }}>{item.calMinOB + " / " + item.calMaxOB} </td>}
+
+
                                         <td style={{ width: "14%", border: "0.1px solid black" }}>{item.rowStatus || '-'}</td>
                                     </tr>
                                 ))}
