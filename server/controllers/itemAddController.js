@@ -945,6 +945,16 @@ const itemAddController = {
       console.error('Error uploading Excel data:', error);
       res.status(500).json({ error: 'Internal Server Error' });
     }
+  },
+  getItemTransactStatus: async (req, res) => {
+    try{
+      const itemId = req.params.id
+      console.log(req.query)
+      res.status(202).json({message: "Success"})
+    }catch(err){
+      console.log(err)
+    }
+
   }
 
 

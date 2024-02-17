@@ -17,45 +17,9 @@ const FormatNumber = () => {
         setMailSnackBar(false);
     }
 
-    const initialFormatData = {
-        formatId:"",
-        fDc: {
-            frNo: "",
-            amNo: "",
-            amDate: "",
-        },
-        fGrn: {
-            frNo: "",
-            amNo: "",
-            amDate: "",
-        },
-        fCertificate: {
-            frNo: "",
-            amNo: "",
-            amDate: "",
-        },
-        fHistoryCard: {
-            frNo: "",
-            amNo: "",
-            amDate: "",
-        },
-        fTotalList: {
-            frNo: "",
-            amNo: "",
-            amDate: "",
-        },
-        fCalDueDate: {
-            frNo: "",
-            amNo: "",
-            amDate: "",
-        },
-        fCertificatePrefix: "",
-        fDeTemperature: "",
-        fDeHumidity: "",
-    }
     const [isEditable, setIsEditable] = useState(false)
     const [formatData, setFormatData] = useState({
-        formatId:"",
+
         fDc: {
             frNo: "",
             amNo: "",
@@ -81,14 +45,13 @@ const FormatNumber = () => {
             amNo: "",
             amDate: "",
         },
-        fCalDueDate: {
+        fUncDate: {
             frNo: "",
             amNo: "",
             amDate: "",
         },
-        fCertificatePrefix: "",
-        fDeTemperature: "",
-        fDeHumidity: "",
+        fCommonPrefix: "",
+
     });
 
     const handleFormatChange = (e) => {
@@ -115,54 +78,56 @@ const FormatNumber = () => {
     const formatFetchData = async () => {
         try {
             const response = await axios.get(
-                `${process.env.REACT_APP_PORT}/formatNo/getFormatNoById/1`
+                `${process.env.REACT_APP_PORT}/formatNo/getFormatNoById/formatNo`
             );
             const format = response.data.result
             console.log(format)
-            setFormatData((prev) => ({
-                ...prev,
-                
-                fDc: {
-                    ...prev.fDc,
-                    frNo: format.fDc.frNo,
-                    amNo: format.fDc.amNo,
-                    amDate: format.fDc.amDate,
-                },
-                fGrn: {
-                    ...prev.fGrn,
-                    frNo: format.fGrn.frNo,
-                    amNo: format.fGrn.amNo,
-                    amDate: format.fGrn.amDate,
-                },
-                fCertificate: {
-                    ...prev.fCertificate,
-                    frNo: format.fCertificate.frNo,
-                    amNo: format.fCertificate.amNo,
-                    amDate: format.fCertificate.amDate,
-                },
-                fHistoryCard: {
-                    ...prev.fHistoryCard,
-                    frNo: format.fHistoryCard.frNo,
-                    amNo: format.fHistoryCard.amNo,
-                    amDate: format.fHistoryCard.amDate,
-                },
-                fTotalList: {
-                    ...prev.fTotalList,
-                    frNo: format.fTotalList.frNo,
-                    amNo: format.fTotalList.amNo,
-                    amDate: format.fTotalList.amDate,
-                },
-                fCalDueDate: {
-                    ...prev.fCalDueDate,
-                    frNo: format.fCalDueDate.frNo,
-                    amNo: format.fCalDueDate.amNo,
-                    amDate: format.fCalDueDate.amDate,
+            if (format) {
+                setFormatData((prev) => ({
+                    ...prev,
 
-                },
-                fCertificatePrefix: format.fCertificatePrefix,
-                fDeTemperature: format.fDeTemperature,
-                fDeHumidity: format.fDeHumidity,
-            }));
+                    fDc: {
+                        ...prev.fDc,
+                        frNo: format.fDc.frNo,
+                        amNo: format.fDc.amNo,
+                        amDate: format.fDc.amDate,
+                    },
+                    fGrn: {
+                        ...prev.fGrn,
+                        frNo: format.fGrn.frNo,
+                        amNo: format.fGrn.amNo,
+                        amDate: format.fGrn.amDate,
+                    },
+                    fCertificate: {
+                        ...prev.fCertificate,
+                        frNo: format.fCertificate.frNo,
+                        amNo: format.fCertificate.amNo,
+                        amDate: format.fCertificate.amDate,
+                    },
+                    fHistoryCard: {
+                        ...prev.fHistoryCard,
+                        frNo: format.fHistoryCard.frNo,
+                        amNo: format.fHistoryCard.amNo,
+                        amDate: format.fHistoryCard.amDate,
+                    },
+                    fTotalList: {
+                        ...prev.fTotalList,
+                        frNo: format.fTotalList.frNo,
+                        amNo: format.fTotalList.amNo,
+                        amDate: format.fTotalList.amDate,
+                    },
+                    fUncDate: {
+                        ...prev.fUncDate,
+                        frNo: format.fUncDate.frNo,
+                        amNo: format.fUncDate.amNo,
+                        amDate: format.fUncDate.amDate,
+
+                    },
+                    fCommonPrefix: format.fCommonPrefix,
+
+                }));
+            }
+
         } catch (err) {
             console.log(err);
         }
@@ -175,12 +140,12 @@ const FormatNumber = () => {
     const updateMailData = async () => {
         try {
             const response = await axios.put(
-                `${process.env.REACT_APP_PORT}/formatNo/updateFormatNo/1`, formatData
+                `${process.env.REACT_APP_PORT}/formatNo/updateFormatNo/formatNo`, formatData
 
             );
             console.log(response.data)
             formatFetchData()
-            setFormatData(initialFormatData);
+
             setMailSnackBar(true)
             setErrorHandler({ status: response.data.status, message: response.data.message, code: "success" })
             setIsEditable(false)
@@ -307,11 +272,11 @@ const FormatNumber = () => {
 
                                 </tr>
                                 <tr>
-                                    <th>Cal Due Report</th>
+                                    <th>Uncertainty</th>
 
-                                    <td><input type="text" className='form-control form-control-sm' disabled={!isEditable} value={formatData.fCalDueDate.frNo} id="frNoId" onChange={(e) => handleInputChange(e, 'fCalDueDate')} name="frNo" /></td>
-                                    <td><input type="text" className='form-control form-control-sm' disabled={!isEditable} value={formatData.fCalDueDate.amNo} id="amNoId" onChange={(e) => handleInputChange(e, 'fCalDueDate')} name="amNo" /></td>
-                                    <td><input type="text" className='form-control form-control-sm' disabled={!isEditable} value={formatData.fCalDueDate.amDate} id="amDateId" onChange={(e) => handleInputChange(e, 'fCalDueDate')} name="amDate" /></td>
+                                    <td><input type="text" className='form-control form-control-sm' disabled={!isEditable} value={formatData.fUncDate.frNo} id="frNoId" onChange={(e) => handleInputChange(e, 'fUncDate')} name="frNo" /></td>
+                                    <td><input type="text" className='form-control form-control-sm' disabled={!isEditable} value={formatData.fUncDate.amNo} id="amNoId" onChange={(e) => handleInputChange(e, 'fUncDate')} name="amNo" /></td>
+                                    <td><input type="text" className='form-control form-control-sm' disabled={!isEditable} value={formatData.fUncDate.amDate} id="amDateId" onChange={(e) => handleInputChange(e, 'fUncDate')} name="amDate" /></td>
 
 
                                 </tr>
@@ -346,23 +311,12 @@ const FormatNumber = () => {
                                     <tbody>
 
                                         <tr>
-                                            <th style={{ width: "50%" }}>Certificate Prefix</th>
+                                            <th style={{ width: "50%" }}>Common Prefix</th>
 
-                                            <td><input type="text" className='form-control form-control-sm' disabled={!isEditable} id="fCertificatePrefixId" value={formatData.fCertificatePrefix} name="fCertificatePrefix" onChange={handleFormatChange} /></td>
-
-                                        </tr>
-                                        <tr>
-                                            <th>Defined Temparature</th>
-
-                                            <td><input type="text" className='form-control form-control-sm' disabled={!isEditable} id="fDeTemperatureId" value={formatData.fDeTemperature} name="fDeTemperature" onChange={handleFormatChange} /></td>
+                                            <td><input type="text" className='form-control form-control-sm' disabled={!isEditable} id="fCommonPrefixId" value={formatData.fCommonPrefix} name="fCommonPrefix" onChange={handleFormatChange} /></td>
 
                                         </tr>
-                                        <tr>
-                                            <th>Defined Humidity</th>
 
-                                            <td><input type="text" className='form-control form-control-sm' disabled={!isEditable} id="fDeHumidityId" value={formatData.fDeHumidity} name="fDeHumidity" onChange={handleFormatChange} /></td>
-
-                                        </tr>
 
 
 
@@ -376,7 +330,7 @@ const FormatNumber = () => {
                                     <Button size='small' variant='contained' onClick={() => setOpenModal(true)} >Modify</Button>
                                 </div>
                                 <div>
-                                    <Button size='small' color='error' variant='contained' onClick={() => {setIsEditable(false); formatFetchData();}} >Cancel</Button>
+                                    <Button size='small' color='error' variant='contained' onClick={() => { setIsEditable(false); formatFetchData(); }} >Cancel</Button>
                                 </div>
 
 

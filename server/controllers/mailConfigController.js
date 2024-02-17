@@ -11,46 +11,7 @@ const mailConfigController = {
           res.status(500).send('Error on Mail Configuration');
         }
       },
-      createMailConfig: async (req, res) => {
-       
-        try {
-          const { mailId, mailPassword, portNumber, inMailServer, outMailServer,mailContent,} = req.body;
-          const mailConfigResult = new mailConfigModel({mailId, mailPassword, portNumber, inMailServer, outMailServer, mailContent});
-          const validationError = mailConfigResult.validateSync();
-
-          if (validationError) {
-            // Handle validation errors
-            const validationErrors = {};
-    
-            if (validationError.errors) {
-              // Convert Mongoose validation error details to a more user-friendly format
-              for (const key in validationError.errors) {
-                validationErrors[key] = validationError.errors[key].message;
-              }
-            }
-    
-            return res.status(400).json({
-              errors: validationErrors
-            });
-          }
-          console.log("success")
-    
-                await mailConfigResult.save();
-                return res.status(200).json({ message: "Mail Configuration Successfully Saved", status: 1 });
-            } catch (error) {
-                console.log(error)
-                if (error.errors) {
-                    const errors500 = {};
-                    for (const key in error.errors) {
-                        errors500[key] = error.errors[key].message;
-                    }
-                    return res.status(500).json({ error: errors500, status: 0 });
-                }
-    
-                return res.status(500).json({ error: 'Internal server error on Mail Configuration', status: 0 });
-            }
-        },
-         
+      
         updateMailConfig: async (req, res) => {
           try {
             const mailConfigId = req.params.id; // Assuming desId is part of the URL parameter
@@ -87,9 +48,9 @@ const mailConfigController = {
   
             // Find the designation by desId and update it
             const updateMailConfig = await mailConfigModel.findOneAndUpdate(
-                { mailFixedId: mailConfigId },
+                { _id: mailConfigId },
                 {$set : updateMailConfigFields},
-                { new: true } // To return the updated document
+                { new: true, upsert: true } // To return the updated document
             );
   
             if (!updateMailConfig) {
@@ -142,9 +103,7 @@ const mailConfigController = {
       const mailConfigId = req.params.id; // Assuming desId is part of the URL parameter
       // if (isNaN(desId)) {
       // Find the designation by desId and update it
-      const getMailConfigById = await mailConfigModel.findOne(
-          { mailFixedId : mailConfigId }// To return the updated document
-      );
+      const getMailConfigById = await mailConfigModel.findById(mailConfigId)
 
       if (!getMailConfigById) {
           return res.status(404).json({ error: 'Mail Configuration not found' });

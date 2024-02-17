@@ -2,11 +2,8 @@ const mongoose = require('mongoose');
 const uniqueValidator = require('mongoose-unique-validator');
 
 const formatNoSchema = new mongoose.Schema({
- 
-  formatId : {
-    type: String,
-    default: 1
-  },
+  _id: {type:String, default: "formatNo"},
+  
   fDc : {
     frNo:String,
     amNo:String,
@@ -32,15 +29,13 @@ const formatNoSchema = new mongoose.Schema({
     amNo:String,
     amDate:String,
   },
-  fCalDueDate :  {
+  fUncDate :  {
     frNo:String,
     amNo:String,
     amDate:String,
   },
-
-  fCertificatePrefix : String,
-  fDeTemperature : String,
-  fDeHumidity : String
+  fCommonPrefix : String,
+  
    
 });
 formatNoSchema.plugin(uniqueValidator);

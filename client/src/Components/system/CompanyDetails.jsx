@@ -75,7 +75,7 @@ const CompanyDetails = () => {
     const companysFetchData = async () => {
         try {
             const response = await axios.get(
-                `${process.env.REACT_APP_PORT}/compDetails/getCompDetailsById/1`
+                `${process.env.REACT_APP_PORT}/compDetails/getCompDetailsById/companyData`
             );
             const details = response.data.result
             console.log(details)
@@ -117,7 +117,7 @@ const CompanyDetails = () => {
         e.preventDefault();
         try {
             const response = await axios.put(
-                `${process.env.REACT_APP_PORT}/compDetails/updateCompDetails/1`, companyData
+                `${process.env.REACT_APP_PORT}/compDetails/updateCompDetails/companyData`, companyData
             );
             console.log(response.data)
 
@@ -531,19 +531,7 @@ const CompanyDetails = () => {
 
 
                                         </div>
-                                        <div className='col-md-4'>
-                                            <Button size='small' component="label" fullWidth variant="contained" disabled={!isEditable} startIcon={<CloudUpload />} >
-                                                Upload ComPany Logo
-                                                <VisuallyHiddenInput type="file" onChange={handleCompany} />
-                                            </Button>
-                                        </div>
-
-                                        <div className='col-md-3'>
-                                            <Button size='small' component="label" fullWidth variant="contained" disabled={!isEditable} startIcon={<CloudUpload />} >
-                                                Company Image
-                                                <VisuallyHiddenInput type="file" />
-                                            </Button>
-                                        </div>
+                                       
                                     </div>
 
                                 </div>

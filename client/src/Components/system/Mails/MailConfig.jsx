@@ -57,7 +57,7 @@ const MailConfig = () => {
     const mailFetchData = async () => {
         try {
             const response = await axios.get(
-                `${process.env.REACT_APP_PORT}/mailConfig/getMailConfigById/1`
+                `${process.env.REACT_APP_PORT}/mailConfig/getMailConfigById/mailData`
             );
             const mail = response.data.result
             console.log(mail)
@@ -98,7 +98,7 @@ const MailConfig = () => {
     const updateMailData = async () => {
         try {
             const response = await axios.put(
-                `${process.env.REACT_APP_PORT}/mailConfig/updateMailConfig/1`, mailData
+                `${process.env.REACT_APP_PORT}/mailConfig/updateMailConfig/mailData`, mailData
 
             );
             console.log(response.data)

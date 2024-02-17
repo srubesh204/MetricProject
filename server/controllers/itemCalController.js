@@ -43,7 +43,7 @@ const itemCalController = {
         calOBType,
         calReportAvailable,
         calReportName,
-        calCertificateNo,
+        
         calItemCalDate,
         calItemDueDate,
         calItemEntryDate,
@@ -79,7 +79,7 @@ const itemCalController = {
         calOBType,
         calReportAvailable,
         calReportName,
-        calCertificateNo,
+       
         calItemCalDate,
         calItemDueDate,
         calItemEntryDate,
@@ -330,7 +330,7 @@ const itemCalController = {
           // Replace placeholders with actual data
           const modifiedHTML = htmlTemplate
             .replace(/{{ItemName}}/g, calItemName ? calItemName : "-")
-            .replace(/{{CertificateNo}}/g, calCertificateNo ? calCertificateNo : "-")
+            .replace(/{{CertificateNo}}/g, createdItem.calCertificateNo ? createdItem.calCertificateNo : "-")
             .replace(/{{dateOfIssue}}/g, calItemEntryDate ? dayjs(calItemEntryDate).format("DD-MM-YYYY") : "-")
             .replace(/{{dateOfCalibration}}/g, calItemCalDate ? dayjs(calItemCalDate).format("DD-MM-YYYY") : "-")
             .replace(/{{nextCalibrationDue}}/g, calItemDueDate ? dayjs(calItemDueDate).format("DD-MM-YYYY") : "-")
@@ -379,7 +379,7 @@ const itemCalController = {
           await page.addStyleTag({ path: cssPath });
 
           // Generate PDF
-          await page.pdf({ path: `./storage/calCertificates/${calCertificateNo}.pdf`, format: 'A4' });
+          await page.pdf({ path: `./storage/calCertificates/${createdItem.calCertificateNo}.pdf`, format: 'A4' });
 
           await browser.close();
 
@@ -508,7 +508,7 @@ const itemCalController = {
         calOBType,
         calReportAvailable,
         calReportName,
-        calCertificateNo,
+        
         calItemCalDate,
         calItemDueDate,
         calItemEntryDate,
@@ -544,7 +544,7 @@ const itemCalController = {
         calOBType,
         calReportAvailable,
         calReportName,
-        calCertificateNo,
+        
         calItemCalDate,
         calItemDueDate,
         calItemEntryDate,
