@@ -176,7 +176,7 @@ const[uncPlantName,setPlantName] = useState({
                     >
                         <div className='row g-2 mb-2'>
                             <h6 className="text-center ">MeausrementUncertaintyList</h6>
-                            <div className='col'>
+                            {/* <div className='col'>
                                 <TextField label="Plant Wise"
                                     id="uncPlantId"
                                     select
@@ -192,10 +192,10 @@ const[uncPlantName,setPlantName] = useState({
                                     ))}
                                 </TextField>
 
-                            </div>
+                            </div> */}
 
 
-                            <div className='col'>
+                            <div className='col-3'>
                                 <DatePicker
                                     fullWidth
                                     id="fromDateId"
@@ -211,7 +211,7 @@ const[uncPlantName,setPlantName] = useState({
                                 />
 
                             </div>
-                            <div className='col'>
+                            <div className='col-3'>
                                 <DatePicker
                                     fullWidth
                                     id="toDateId"
