@@ -1275,7 +1275,7 @@ const Home = () => {
   const getMailList = async () => {
     try {
       const response = await axios.get(
-        `${process.env.REACT_APP_PORT}/mailConfig/getAllMailConfig`
+        `${process.env.REACT_APP_PORT}/mailConfig/getMailConfigById/mailData`
       );
       console.log(response.data.result)
       setMailList(response.data.result)

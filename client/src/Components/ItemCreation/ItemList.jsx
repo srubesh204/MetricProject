@@ -1027,7 +1027,7 @@ const ItemList = () => {
     const formatFetchData = async () => {
         try {
             const response = await axios.get(
-                `${process.env.REACT_APP_PORT}/formatNo/getFormatNoById/1`
+                `${process.env.REACT_APP_PORT}/formatNo/getFormatNoById/formatNo`
             );
             const format = response.data.result
             console.log(format)
