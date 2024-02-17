@@ -27,7 +27,7 @@ const itemAddController = {
           $match: {
             "itemPlant": { $in: allowedPlants ? allowedPlants : [] } // Specify the values to match
           }
-        }
+        }, {$sort : {itemAddMasterName : 1, itemIMTENo: 1}}
       ])
      
       res.status(202).json({ result: itemAddResult, status: 1 });

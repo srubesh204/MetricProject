@@ -169,7 +169,7 @@ const HomeMail = () => {
 
                         //variant="standard"
                         >
-                            {mailList.length > 0 && mailList[0].mailSubjects.map((item, index) => (
+                            {mailList && mailList.mailSubjects && mailList.mailSubjects.map((item, index) => (
                                 <MenuItem key={index} value={item}>{item}</MenuItem>
                             ))}
                         </TextField>
@@ -192,7 +192,7 @@ const HomeMail = () => {
                             fullWidth
                         //variant="standard"
                         >
-                            {mailList.length > 0 && mailList[0].mailBodies.map((item, index) => (
+                            {mailList && mailList.mailSubjects && mailList.mailBodies.map((item, index) => (
                                 <MenuItem key={index} value={item}>{item}</MenuItem>
                             ))}
                         </TextField>

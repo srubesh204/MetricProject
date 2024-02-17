@@ -21,7 +21,7 @@ const MailSender = ({ mailOpen, setMailOpen, selectedRows }) => {
     const getMailList = async () => {
         try {
             const response = await axios.get(
-                `${process.env.REACT_APP_PORT}/mailConfig/getAllMailConfig`
+                `${process.env.REACT_APP_PORT}/mailConfig/getMailConfigById/mailData`
             );
             console.log(response.data.result)
             setMailContent(response.data.result)
@@ -35,6 +35,8 @@ const MailSender = ({ mailOpen, setMailOpen, selectedRows }) => {
       getVendorsByType();
       empFetch();
     }, []);
+
+    console.log(mailContent)
     const [vendors, setVendors] = useState([])
     const getVendorsByType = async () => {
         try {
@@ -253,7 +255,7 @@ const MailSender = ({ mailOpen, setMailOpen, selectedRows }) => {
 
                         //variant="standard"
                         >
-                            {mailContent.length > 0 && mailContent[0].mailSubjects.map((item, index) => (
+                            {mailContent && mailContent.mailSubjects && mailContent.mailSubjects.map((item, index) => (
                                 <MenuItem key={index} value={item}>{item}</MenuItem>
                             ))}
                         </TextField>
@@ -276,7 +278,7 @@ const MailSender = ({ mailOpen, setMailOpen, selectedRows }) => {
                             fullWidth
                         //variant="standard"
                         >
-                            {mailContent.length > 0 && mailContent[0].mailBodies.map((item, index) => (
+                            {mailContent && mailContent.mailSubjects && mailContent.mailBodies.map((item, index) => (
                                 <MenuItem key={index} value={item}>{item}</MenuItem>
                             ))}
                         </TextField>
