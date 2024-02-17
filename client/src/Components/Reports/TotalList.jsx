@@ -140,10 +140,16 @@ const TotalList = () => {
 
   useEffect(() => {
     if (partDataList.length !== 0) {
+      const partDetails = [...new Set(itemList.flatMap(item => item.itemPartName))]
+      const partDatas = partDataList.filter(part => partDetails.includes(part.partNo))
+      const customersData = ["All", ...new Set(partDatas.map(part => part.customer))]
+      setPartCutomerNames(customersData)
+      console.log(customersData)
+ 
 
-      const partCustomers = partDataList.filter(part => itemList.some(item => item.itemPartName.includes(part._id)))
-      console.log(partCustomers)
-      setPartCutomerNames(partCustomers)
+      // const partCustomers = partDataList.filter(part => itemList.some(item => item.itemPartName.includes(part._id)))
+      // console.log(partCustomers)
+      // setPartCutomerNames(partCustomers)
 
     }
   }, [partDataList, itemList])
@@ -1093,10 +1099,9 @@ const TotalList = () => {
 
 
             </div>
-            <div className='row g-3 mb-2'>
+            <div className='row g-2 mb-2'>
               <div className="col d-flex  mb-2">
                 <div className="col d-flex me-2">
-
                   <TextField label="Customer Wise"
                     id="customerWiseId"
                     select
@@ -1111,9 +1116,8 @@ const TotalList = () => {
                       <MenuItem key={index} value={item.customer}>{item.customer}</MenuItem>
                     ))}
                   </TextField>
-
                 </div>
-                {/* <div className="col d-flex me-2">
+                <div className="col d-flex me-2">
 
                   <TextField label=" Part No & Part Name"
                     id="partNameId"
@@ -1128,7 +1132,7 @@ const TotalList = () => {
                       <MenuItem key={index} value={item.partNo}>{[item.partNo, item.partName].join(', ')}</MenuItem>
                     ))}
                   </TextField>
-                </div> */}
+                </div>
                 {/* <div className="col d-flex  me-2">
                   <TextField label="Other Location"
                     id="supplierWiseId"
@@ -1359,12 +1363,12 @@ const TotalList = () => {
                 {/* <div className='col'>
                   <Button variant="contained" size='small' color="success" onClick={() => { setCalDuePrint(true) }}>CalDueReport Print</Button>
                 </div> */}
-               
 
-                  {/* <div >
+
+                {/* <div >
                       <Button component={Link} to="/" size='small' variant='contained' startIcon={<ArrowBack />} endIcon={<House />} color='secondary'>Home</Button>
                     </div> */}
-              
+
               </div>
               <Snackbar anchorOrigin={{ vertical: "top", horizontal: "right" }} open={snackBarOpen} autoHideDuration={6000} onClose={handleSnackClose}>
                 <Alert onClose={handleSnackClose} severity={errorhandler.code} sx={{ width: '25%' }}>

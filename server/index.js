@@ -67,6 +67,7 @@ app.use('/itemMasterImages', express.static('storage/Images/itemMasterImages'));
 app.use('/dcCertificate', express.static('storage/dcCertificate'));
 app.use('/grnCertificates', express.static('storage/grnCertificates'));
 app.use('/calCertificates', express.static('storage/calCertificates'));
+app.use('/uncertaintyCertificates', express.static('storage/uncertaintyCertificates'));
 app.use('/logo', express.static('storage/logo'));
 app.use('/icon', express.static('storage/icons'));
 app.use('/error', express.static('storage/Images/errorImages'));

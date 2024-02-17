@@ -1090,8 +1090,8 @@ const CalDialog = () => {
                         <div className="d-flex justify-content-between mb-2">
 
                             <div> <FormControlLabel control={<Switch name='calReportAvailable' checked={calibrationData.calReportAvailable === "yes"} onChange={handleCalData} color='success' />} label="Report Upload" /></div>
-                            {/* <div> <FormControlLabel control={<Switch name='lastResult' onChange={handleCalData} />} label="Last Result" />
-                                <FormControlLabel control={<Switch name='beforeCalSwitch' onChange={handleCalData} />} label="Before Calibration" /></div> */}
+                            <div> <FormControlLabel control={<Switch name='lastResult' onChange={handleCalData} />} label="Last Result" />
+                                <FormControlLabel control={<Switch name='beforeCalSwitch' onChange={handleCalData} />} label="Before Calibration" /></div>
                             <div><h5 className='text align-center'>Calibration Data</h5></div>
                             <div><TextField select inputProps={{ sx: { color: calibrationData.calStatus === "status" ? "" : calibrationData.calStatus === "accepted" ? "green" : "red", width: "100px" } }} name='calStatus' onChange={handleCalData} InputLabelProps={{ shrink: true }} label="Cal Status" size="small" value={calibrationData.calStatus}>
                                 <MenuItem value="status">Status</MenuItem>

@@ -874,7 +874,7 @@ const itemAddController = {
           P: 'itemCurrentLocation',
           Q: 'itemLocation',
           R: 'itemLastLocation',
-          S: 'itemArea',
+          S: 'isItemMaster',
           T: 'itemPlaceOfUsage',
           U: 'itemCalFreInMonths',
           V: 'itemCalAlertDays',

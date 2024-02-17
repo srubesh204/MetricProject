@@ -13,6 +13,7 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import { TextField, MenuItem, Button } from '@mui/material';
+import { useEmployee } from '../../App';
 import dayjs from 'dayjs';
 import { Link } from 'react-router-dom';
 import Alert from '@mui/material/Alert';
@@ -21,6 +22,9 @@ import Snackbar from '@mui/material/Snackbar';
 import { Edit, FilterAlt, PrintRounded } from '@mui/icons-material';
 
 export const MeasurementUncertaintyList = () => {
+
+    const empRole = useEmployee()
+    const { loggedEmp } = empRole
 
     const [deleteModalItem, setDeleteModalItem] = useState(false);
     const [snackBarOpen, setSnackBarOpen] = useState(false)
@@ -47,13 +51,17 @@ export const MeasurementUncertaintyList = () => {
         uncFetch()
     }, []);
 
-
+const[uncPlantName,setPlantName] = useState({
+    uncPlant:""
+})
 
 
     const uncertaintyListColumns = [
         { field: 'uncertaintyId', headerName: 'UNC ID', width: 100, renderCell: (params) => (params.uncId), headerAlign: "center", align: "center", },
         { field: 'uncItemName', headerName: 'ItemName', width: 200, headerAlign: "center", align: "center", },
         { field: 'uncDate', headerName: 'UNC Date', width: 200, headerAlign: "center", align: "center", valueGetter: (params) => dayjs(params.row.uncDate).format('DD-MM-YYYY') },
+        { field: 'printButton', headerName: 'Print', headerAlign: "center", align: "center", width: 100, renderCell: (params) => <Button component={Link} to={`${process.env.REACT_APP_PORT}/uncertaintyCertificates/UNC${dayjs().year() + "-" + params.row.uncertaintyId}.pdf`} target='_blank'><PrintRounded color='success' /></Button> }
+
 
         // {
         //     field: 'uncRangeSize',
@@ -132,16 +140,27 @@ export const MeasurementUncertaintyList = () => {
         setFilteredData(filteredItems)
     }, [dateData.fromDate, dateData.toDate])
 
-    const handleUncertaintyChange = (e) => {
+
+    const handleFilterChange = (e) => {
         const { name, value } = e.target;
+      
+            if (value === "all") {
+                setFilteredData(uncertaintyList)
+            } else {
+                if (name === "uncPlant") {
+                    const uncPlant = uncertaintyList.filter((item) => (item.uncPlant === value));
+                    setFilteredData(uncPlant);
+                }
+
+                // const uncPlant = uncertaintyList.filter((item) =>  (item.uncPlant === value))
+                // setFilteredData(uncPlant)
+            }
+            
+        
         setDateData((prev) => ({ ...prev, [name]: value }));
 
 
     }
-
-
-
-
 
 
     return (
@@ -157,6 +176,25 @@ export const MeasurementUncertaintyList = () => {
                     >
                         <div className='row g-2 mb-2'>
                             <h6 className="text-center ">MeausrementUncertaintyList</h6>
+                            {/* <div className='col'>
+                                <TextField label="Plant Wise"
+                                    id="uncPlantId"
+                                    select
+                                    defaultValue="all"
+                                   
+                                    fullWidth
+                                    onChange={handleFilterChange}
+                                    size="small"
+                                    name="uncPlant" >
+                                    <MenuItem value="all">All</MenuItem>
+                                    {loggedEmp.plantDetails.map((item, index) => (
+                                        <MenuItem key={index} value={item.plantName}>{item.plantName}</MenuItem>
+                                    ))}
+                                </TextField>
+
+                            </div> */}
+
+
                             <div className='col-3'>
                                 <DatePicker
                                     fullWidth
@@ -167,9 +205,9 @@ export const MeasurementUncertaintyList = () => {
                                     sx={{ width: "100%" }}
                                     slotProps={{ textField: { size: 'small' } }}
                                     format="DD-MM-YYYY"
-                                // value={dayjs(dateData.fromDate)}
-                                // onChange={(newValue) =>
-                                //     setDateData((prev) => ({ ...prev, fromDate: dayjs(newValue).format('YYYY-MM-DD') }))}
+                                value={dayjs(dateData.fromDate)}
+                                onChange={(newValue) =>
+                                    setDateData((prev) => ({ ...prev, fromDate: dayjs(newValue).format('YYYY-MM-DD') }))}
                                 />
 
                             </div>
@@ -182,9 +220,9 @@ export const MeasurementUncertaintyList = () => {
                                     sx={{ width: "100%" }}
                                     slotProps={{ textField: { size: 'small' } }}
                                     format="DD-MM-YYYY"
-                                //  value={dayjs(dateData.toDate)}
-                                // onChange={(newValue) =>
-                                //     setDateData((prev) => ({ ...prev, toDate: dayjs(newValue).format('YYYY-MM-DD') }))} 
+                                 value={dayjs(dateData.toDate)}
+                                onChange={(newValue) =>
+                                    setDateData((prev) => ({ ...prev, toDate: dayjs(newValue).format('YYYY-MM-DD') }))} 
 
                                 />
 

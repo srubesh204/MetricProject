@@ -118,6 +118,7 @@ const MeasurementUncertainty = () => {
         uncCoverageFactor: "",
         uncDegOfFreedom: "",
         uncUncertainity: "",
+        uncPlant: "",
         uncTypeBResult: [],
         uncPreparedBy: loggedEmp.firstName + " " + loggedEmp.lastName
 
@@ -154,6 +155,7 @@ const MeasurementUncertainty = () => {
         uncDegOfFreedom: "",
         uncUncertainity: "",
         uncTypeBResult: [],
+        uncPlant: "",
         uncPreparedBy: loggedEmp.firstName + " " + loggedEmp.lastName
     })
 
