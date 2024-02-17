@@ -1078,11 +1078,10 @@ export const PartDataBase = ({ style }) => {
                                             <TextField label="Operation No"
                                                 {...(errors.operationNo !== "" && { helperText: errors.operationNo, error: true })}
                                                 id="operationNoId"
-                                                defaultValue=""
                                                 placeholder="operationNo"
+                                                InputLabelProps={{shrink: true}}
                                                 size="small"
                                                 onChange={handlePartDataBaseChange}
-
                                                 value={partData.operationNo}
                                                 name="operationNo"
                                                 fullWidth
