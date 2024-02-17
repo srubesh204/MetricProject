@@ -1,6 +1,6 @@
 import React, { createContext, useEffect, useState, useContext } from 'react'
-import { Container, Box, Alert, Button, Dialog, DialogActions, DialogContent, Fab, InputLabel, DialogContentText, FormControl, Select, DialogTitle, OutlinedInput, FormControlLabel, IconButton, MenuItem, Paper, Checkbox, ListItemText, Snackbar, Switch, TextField, Chip } from '@mui/material';
-import { Add, Close, Delete, CloudUpload, Edit, Done } from '@mui/icons-material';
+import { Container, Box, Alert, Button, Dialog, DialogActions, DialogContent, Fab, InputLabel, DialogContentText, FormControl, Select, DialogTitle, OutlinedInput, FormControlLabel, IconButton, MenuItem, Paper, Checkbox, ListItemText, Snackbar, Switch, TextField, Chip, InputAdornment } from '@mui/material';
+import { Add, Close, Delete, CloudUpload, Edit, Done, VisibilityOff, Visibility } from '@mui/icons-material';
 import { Remove, HighlightOffRounded } from '@mui/icons-material';
 
 import axios from 'axios'
@@ -143,7 +143,7 @@ const MailConfig = () => {
     const addSubjectDataRow = () => {
         if (mailDetails.length !== 0) {
             setMailData((prev) => ({ ...prev, mailSubjects: [...prev.mailSubjects, mailDetails.mailSubject] }))
-            setMailDetails((prev) => ({...prev, mailSubject:""}))
+            setMailDetails((prev) => ({ ...prev, mailSubject: "" }))
         }
     }
 
@@ -151,7 +151,7 @@ const MailConfig = () => {
     const addBodyRow = () => {
         if (mailDetails.length !== 0) {
             setMailData((prev) => ({ ...prev, mailBodies: [...prev.mailBodies, mailDetails.mailContent] }))
-            setMailDetails((prev) => ({...prev, mailContent:""}))
+            setMailDetails((prev) => ({ ...prev, mailContent: "" }))
         }
     }
 
@@ -179,6 +179,7 @@ const MailConfig = () => {
         })
     };
 
+    const [showPassword, setShowPassword] = useState(false)
 
 
 
@@ -225,12 +226,28 @@ const MailConfig = () => {
                             <div className='col'>
                                 <TextField label="PassWord"
                                     id="mailPasswordId"
+                                    type={showPassword ? "text" : "password"}
                                     disabled={!isEditable}
                                     size="small"
                                     onChange={handleMailChange}
                                     value={mailData.mailPassword}
                                     sx={{ width: "100%" }}
-                                    name="mailPassword" />
+                                    name="mailPassword"
+                                    InputProps={{
+                                        endAdornment: <InputAdornment position="end"> <IconButton
+                                            disabled={!isEditable}
+                                            aria-label="toggle password visibility"
+                                            onClick={() => setShowPassword(!showPassword)}
+                                            edge="end"
+                                        >
+                                            {showPassword ? <VisibilityOff /> : <Visibility />}
+                                        </IconButton></InputAdornment>,
+                                    }}
+                                />
+
+
+
+
                             </div>
                             <div className='col'>
                                 <TextField label="Port Number"
@@ -327,7 +344,7 @@ const MailConfig = () => {
                                     multiline
                                     rows={2}
                                     size="small"
-                                     disabled={!isEditable}
+                                    disabled={!isEditable}
                                     onChange={handleMailChanges}
                                     value={mailDetails.mailContent}
                                     fullWidth
