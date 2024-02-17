@@ -1369,7 +1369,7 @@ const Home = () => {
       }
 
       if (!defaultDepartmentCheck) {
-        setStatusCheckMsg("Selected item are not in default location, To create a DC move the item to the default location");
+        setStatusCheckMsg("Selected item are not in primary location, To create a DC move the item to the primary location");
       }
 
       if (!activeItemsCheck) {
@@ -1451,7 +1451,7 @@ const Home = () => {
           setCalOpen(true);
           console.log("working")
         } else {
-          setStatusCheckMsg("Move the item to the default location then try again!")
+          setStatusCheckMsg("Move the item to the primary location then try again!")
           console.log(StatusCheckMsg)
         }
       } else if (selectedRows.length > 0 && selectedRows[0].itemCalibrationDoneAt === "Site") {
@@ -1800,7 +1800,7 @@ const Home = () => {
                     <InputLabel htmlFor="grouped-select">Select Department</InputLabel>
                     <Select id="grouped-select" label="Select Department" onChange={DepartmentChange}>
                       <MenuItem >Select Department</MenuItem>
-                      <ListSubheader color='primary' sx={{ fontSize: "12px" }}>Default Department</ListSubheader>
+                      <ListSubheader color='primary' sx={{ fontSize: "12px" }}>Primary Department</ListSubheader>
                       {allDepartments
                         .filter(item => item.defaultdep === "yes")
                         .map((item, index) => (
