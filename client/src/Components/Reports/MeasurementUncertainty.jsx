@@ -463,7 +463,6 @@ const MeasurementUncertainty = () => {
     }
 
     console.log(masterDetails)
-
     const handlePlantChange = (e) => {
         const { name, value } = e.target;
         setMasterDetails((prev) => ({ ...prev, [name]: value }));
@@ -508,7 +507,6 @@ const MeasurementUncertainty = () => {
             };
         })
     };
-
     const deleteTypeBEval = (index) => {
         setUncertainityData((prev) => {
             const updatedData = [...prev.uncTypeBResult]; // Create a copy of the previous state array
@@ -516,9 +514,6 @@ const MeasurementUncertainty = () => {
             return { ...prev, uncTypeBResult: updatedData } // Return the updated array
         });
     };
-
-
-
     const handleUncertaintyChange = (e) => {
         const { name, value } = e.target;
         setUncertainityData((prev) => ({ ...prev, [name]: value }));
@@ -544,6 +539,14 @@ const MeasurementUncertainty = () => {
     useEffect(() => {
         itemNameFetch()
     }, []);
+
+    const sortedFilterNameList = itemNameList && itemNameList.itemAddMasterName
+    ? [...itemNameList.itemAddMasterName].sort()
+    : [];
+  
+    // const sortedFilterNameList = itemNameList.itemAddMasterName.sort();
+
+
     const navigate = useNavigate();
 
     const [errors, setErrors] = useState({})
@@ -561,15 +564,11 @@ const MeasurementUncertainty = () => {
     const uncertaintySubmit = async (e) => {
         e.preventDefault();
         try {
-
-
             if (validateFunction() && uncertainityData.uncTypeBResult.length > 0) {
                 const response = await axios.post(
                     `${process.env.REACT_APP_PORT}/measurementUncertainty/createMeasurementUncertainty`, uncertainityData
                 );
                 console.log(response.data.message)
-
-
                 setSnackBarOpen(true)
                 //uncFetch();
                 setUncertainityData(initialUncertainty);
@@ -605,8 +604,6 @@ const MeasurementUncertainty = () => {
                 console.log(err.response.data.error)
                 setErrorHandler({ status: 0, message: "An error occurred", code: "error" });
             }
-
-
             console.log(err);
 
         }
@@ -742,7 +739,6 @@ const MeasurementUncertainty = () => {
 
                             </div>
                             <div className="col">
-
                                 <TextField size='small' fullWidth type='number' variant='outlined' label={`Least Count (${uncertainityData.uncRangeSizeUnit})`} onChange={handleUncertaintyChange} value={uncertainityData.uncLC} name='uncLC' id='uncLCId'>
                                 </TextField>
                             </div>

@@ -225,37 +225,28 @@ const MailConfig = () => {
                             <div className='col'>
                                 <TextField label="PassWord"
                                     id="mailPasswordId"
-
                                     disabled={!isEditable}
                                     size="small"
                                     onChange={handleMailChange}
                                     value={mailData.mailPassword}
                                     sx={{ width: "100%" }}
                                     name="mailPassword" />
-
                             </div>
                             <div className='col'>
                                 <TextField label="Port Number"
                                     id="portNumberId"
-
                                     size="small"
                                     disabled={!isEditable}
                                     onChange={handleMailChange}
                                     value={mailData.portNumber}
                                     sx={{ width: "100%" }}
                                     name="portNumber" />
-
                             </div>
-
                         </div>
-
-
-
                         <div className='row g-2 mb-2'>
                             <div className='col'>
                                 <TextField label="Incoming Mail Server"
                                     id="inMailServerId"
-
                                     size="small"
                                     disabled={!isEditable}
                                     onChange={handleMailChange}
@@ -265,16 +256,14 @@ const MailConfig = () => {
 
                             </div>
                             <div className='col'>
-                                <TextField label="outGoing Mail Server"
+                                <TextField label="outgoing Mail Server"
                                     id="outMailServerId"
-
                                     size="small"
                                     disabled={!isEditable}
                                     onChange={handleMailChange}
                                     value={mailData.outMailServer}
                                     fullWidth
                                     name="outMailServer" />
-
                             </div>
 
                             {/* {isEditable && <div className=' col d-flex justify-content-end '>
@@ -285,11 +274,7 @@ const MailConfig = () => {
                                     <Button size='small' color='error' sx={{ minWidth: "130px" }} variant='contained' onClick={() => setIsEditable(false)}>Cancel</Button>
                                 </div>
 
-
                             </div>} */}
-
-
-
                         </div>
                     </Paper>
 
@@ -316,8 +301,6 @@ const MailConfig = () => {
                                     value={mailDetails.mailSubject}
                                     sx={{ width: "100%", height: "100%" }}
                                     name="mailSubject" /> */}
-
-
                                 <TextField
                                     size='small'
                                     multiline
