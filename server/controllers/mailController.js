@@ -35,7 +35,7 @@ const mailController = {
 
         
        
-            const compDetails = await compDetailsSchema.find({compId: 1});
+            const compDetails = await compDetailsSchema.findById("companyData");
             const plantDetails = await plantSchema.find({plantName: selectedItems[0].itemPlant})
             console.log(plantDetails)
             const ccs = [...new Set([...vendorCc, ...departmentCc])]
@@ -122,7 +122,7 @@ const mailController = {
                    
                     <p>Thanks with Regards<br>
                     ${employee && employee.firstName ? employee.firstName : ""} ${employee && employee.lastName ? employee.lastName : ""} - ${employee && employee.designation ? employee.designation : ""}<br>
-                    ${compDetails && compDetails[0].companyName}<br>
+                    ${compDetails && compDetails.companyName}<br>
                     ${plantDetails.length > 0 && plantDetails[0].plantName ? plantDetails[0].plantName : ""} - ${plantDetails.length > 0 && plantDetails[0].plantAddress ? plantDetails[0].plantAddress : ""}</p>
                     <br>
                    
