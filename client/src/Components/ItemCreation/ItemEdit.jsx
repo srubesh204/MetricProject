@@ -63,6 +63,23 @@ const ItemEdit = () => {
         DepartmentFetch()
     }, []);
 
+    const [itemStatus, setItemStatus] = useState([])
+    const itemStatusCheck = async () => {
+        try {
+            const response = await axios.get(
+                `${process.env.REACT_APP_PORT}/itemAdd/getItemTransactStatus/${id}`
+            );
+            setItemStatus(response.data.status);
+            console.log(response.data)
+        } catch (err) {
+            console.log(err);
+        }
+    };
+    //get Designations
+    useEffect(() => {
+        itemStatusCheck()
+    }, []);
+
 
     const [areas, setAreas] = useState([])
     const areaFetch = async () => {
@@ -1307,7 +1324,7 @@ const ItemEdit = () => {
                                 <Typography variant='h6' className='text-center'>Enter Previous Calibration Data</Typography>
                                 <div className="row g-2 p-2">
                                     <TextField
-                                        size='small' select variant='outlined' label="Previous Calibration Data" id='itemPrevCalDataId' onChange={handleItemAddChange} name='itemPrevCalData' value={itemAddData.itemPrevCalData} fullWidth>
+                                        size='small' disabled={itemStatus} select variant='outlined' label="Previous Calibration Data" id='itemPrevCalDataId' onChange={handleItemAddChange} name='itemPrevCalData' value={itemAddData.itemPrevCalData} fullWidth>
                                         <MenuItem>Select Type</MenuItem>
                                         <MenuItem value="available">Available</MenuItem>
                                         <MenuItem value="notAvailable">Not Available</MenuItem>
@@ -1315,7 +1332,7 @@ const ItemEdit = () => {
                                     </TextField>
                                     <div className="col-md-6">
                                         <DatePicker
-                                            disabled={itemAddData.itemPrevCalData !== "available"}
+                                            disabled={itemAddData.itemPrevCalData !== "available" || itemStatus}
                                             fullWidth
                                             id="itemCalDateId"
                                             name="itemCalDate"
@@ -1333,7 +1350,7 @@ const ItemEdit = () => {
                                     </div>
                                     <div className="col-md-6">
                                         <DatePicker
-                                            disabled={itemAddData.itemPrevCalData !== "available"}
+                                            disabled={itemAddData.itemPrevCalData !== "available" || itemStatus}
                                             fullWidth
                                             id="itemDueDateId"
                                             name="itemDueDate"
@@ -1351,7 +1368,7 @@ const ItemEdit = () => {
                                         )}
                                     </div>
                                     <div className="col-lg-12 d-flex justify-content-between">
-                                        <TextField disabled={itemAddData.itemPrevCalData !== "available"}
+                                        <TextField disabled={itemAddData.itemPrevCalData !== "available" || itemStatus}
                                             size='small'
                                             fullWidth
                                             variant='outlined'
@@ -1369,7 +1386,7 @@ const ItemEdit = () => {
                                         </TextField>
                                         {itemAddData.isItemMaster === "1" &&
                                             <React.Fragment>
-                                                <TextField disabled={itemAddData.itemPrevCalData !== "available"}
+                                                <TextField disabled={itemAddData.itemPrevCalData !== "available" || itemStatus}
                                                     className='ms-2'
                                                     fullWidth
                                                     label="Uncertainity"
@@ -1381,7 +1398,7 @@ const ItemEdit = () => {
                                                     value={itemAddData.itemUncertainity}
                                                 />
 
-                                                <TextField disabled={itemAddData.itemPrevCalData !== "available"}
+                                                <TextField disabled={itemAddData.itemPrevCalData !== "available" || itemStatus}
                                                     select
                                                     size='small'
                                                     variant='outlined'
@@ -1402,9 +1419,9 @@ const ItemEdit = () => {
 
 
                                     <div className="col-md-12 d-flex justify-content-between">
-                                        <TextField disabled={itemAddData.itemPrevCalData !== "available"} size='small' fullWidth variant='outlined' onChange={handleItemAddChange} value={itemAddData.itemCertificateNo} label="Certificate No" name='itemCertificateNo'></TextField>
+                                        <TextField disabled={itemAddData.itemPrevCalData !== "available" || itemStatus} size='small' fullWidth variant='outlined' onChange={handleItemAddChange} value={itemAddData.itemCertificateNo} label="Certificate No" name='itemCertificateNo'></TextField>
 
-                                        <Button component="label" disabled={itemAddData.itemPrevCalData !== "available"} className='ms-2' value={itemAddData.itemCertificateName} variant="contained" fullWidth >
+                                        <Button component="label" disabled={itemAddData.itemPrevCalData !== "available" || itemStatus} className='ms-2' value={itemAddData.itemCertificateName} variant="contained" fullWidth >
 
                                             Certificate Upload
                                             <VisuallyHiddenInput type="file" onChange={handleCertificateUpload} />
