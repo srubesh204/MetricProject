@@ -33,7 +33,7 @@ const itemGRNController = {
         grnPartyName,
         grnPartyCode,
         grnPartyAddress,
-        grnNo,
+       
         grnDate,
         grnCommonRemarks,
         grnPlant,
@@ -82,7 +82,7 @@ const itemGRNController = {
         grnPartyName,
         grnPartyCode,
         grnPartyAddress,
-        grnNo,
+        
         grnDate,
         grnCommonRemarks,
         grnPlant,
@@ -123,16 +123,14 @@ const itemGRNController = {
         isOnSiteGRN
       });
 
-      const getCompDetailsById = await compDetailsSchema.findOne(
-        { compId: 1 } // To return the updated document
-      );
+      const getCompDetailsById = await compDetailsSchema.findById("companyData");
       const getPlantAddress = await plantSchema.findOne(
         { plantName: grnPlant } // To return the updated document
       );
 
-      const formatNo = await formatNoModel.findOne({ formatId: 1 });
+      const formatNo = await formatNoModel.findById("formatNo");
 
-      const formatNumber = `${formatNo.fGrn ? (formatNo.fGrn.frNo + " " + formatNo.fGrn.amNo + " " + formatNo.fGrn.amDate) : ""}`
+      const formatNumber = `${formatNo && formatNo.fGrn ? (formatNo.fGrn.frNo + " " + formatNo.fGrn.amNo + " " + formatNo.fGrn.amDate) : ""}`
       console.log(formatNumber)
 
       const validationError = itemGRNResult.validateSync();
@@ -164,7 +162,7 @@ const itemGRNController = {
         } else {
           itemCondition = "active"
         }
-
+ 
         const itemData = await itemAddModel.findById(grnItemId)
         const {
           _id,
@@ -206,20 +204,20 @@ const itemGRNController = {
 
         const updateItemFields = {
           itemIMTENo,
-          itemLastPlace: isOnSiteGRN === "yes" ? "" : itemLastPlace,
-          itemCurrentLocation: isOnSiteGRN === "yes" ? itemCurrentLocation : itemDepartment,
-          itemLastLocation: isOnSiteGRN === "yes" ? "" : itemLastLocation,
+          itemLastPlace: result.isOnSiteGRN === "yes" ? "" : itemLastPlace,
+          itemCurrentLocation: result.isOnSiteGRN === "yes" ? itemCurrentLocation : itemDepartment,
+          itemLastLocation: result.isOnSiteGRN === "yes" ? "" : itemLastLocation,
           itemLocation: "department",
-          itemLastCalDate: grnItemStatus === "Calibrated" ? itemLastCalDate : itemCalDate,
-          itemLastDueDate: grnItemStatus === "Calibrated" ? itemLastDueDate : itemDueDate,
+          itemLastCalDate: result.grnItemStatus === "Calibrated" ? itemLastCalDate : itemCalDate,
+          itemLastDueDate: result.grnItemStatus === "Calibrated" ? itemLastDueDate : itemDueDate,
           itemStatus: itemCondition,
           itemLastStatus: itemStatus,
-          itemCalDate: grnItemStatus === "Calibrated" ? grnItemCalDate : itemLastCalDate,
-          itemDueDate: grnItemStatus === "Calibrated" ? grnItemDueDate : itemLastDueDate,
+          itemCalDate: result.grnItemStatus === "Calibrated" ? result.grnItemCalDate : itemLastCalDate,
+          itemDueDate: result.grnItemStatus === "Calibrated" ? result.grnItemDueDate : itemLastDueDate,
           grnId: result._id,
           grnStatus: "1",
-          grnCreatedOn: grnDate,
-          grnNo: grnNo,
+          grnCreatedOn: result.grnDate,
+          grnNo: result.grnNo,
           lastDcId,
           lastDcStatus,
           lastDcCreatedOn,
@@ -228,7 +226,7 @@ const itemGRNController = {
           dcNo: "",
           dcId: "",
           dcCreatedOn: "",
-          itemCertificateNo: grnItemCertificateNo,
+          itemCertificateNo: result.grnItemCertificateNo,
           itemLastCertificateNo,
 
         }
@@ -238,18 +236,18 @@ const itemGRNController = {
           { new: true }
         );
 
-        console.log(grnAcCriteria)
+        console.log(result.grnAcCriteria)
         let obSize = [];
 
-        if (grnAcCriteria.length > 0) {
+        if (result.grnAcCriteria.length > 0) {
 
-          console.log(grnItemType)
-          if (grnItemType === "variable") {
-            obSize = grnAcCriteria.map(item => {
+          console.log(result.grnItemType)
+          if (result.grnItemType === "variable") {
+            obSize = result.grnAcCriteria.map(item => {
               return item.grnParameter + ":" + item.grnOBError
             })
           } else {
-            obSize = grnAcCriteria.map(item => {
+            obSize = result.grnAcCriteria.map(item => {
 
               if (grnItemOBType === "minmax") {
                 return item.grnParameter + " : " + item.grnMinOB + "/" + item.grnMaxOB
@@ -270,14 +268,14 @@ const itemGRNController = {
           itemCurrentLocation: itemDepartment,
           itemLastLocation,
           itemLocation: "department",
-          itemLastCalDate: grnItemStatus === "Calibrated" ? itemLastCalDate : itemCalDate,
-          itemLastDueDate: grnItemStatus === "Calibrated" ? itemLastDueDate : itemDueDate,
-          itemCalDate: grnItemStatus === "Calibrated" ? grnItemCalDate : itemLastCalDate,
-          itemDueDate: grnItemStatus === "Calibrated" ? grnItemDueDate : itemLastDueDate,
+          itemLastCalDate: result.grnItemStatus === "Calibrated" ? itemLastCalDate : itemCalDate,
+          itemLastDueDate: result.grnItemStatus === "Calibrated" ? itemLastDueDate : itemDueDate,
+          itemCalDate: result.grnItemStatus === "Calibrated" ? result.grnItemCalDate : itemLastCalDate,
+          itemDueDate: result.grnItemStatus === "Calibrated" ? result.grnItemDueDate : itemLastDueDate,
           grnId: result._id,
           grnStatus: "1",
-          grnCreatedOn: grnDate,
-          grnNo: grnNo,
+          grnCreatedOn: result.grnDate,
+          grnNo: result.grnNo,
           lastDcId,
           lastDcStatus,
           lastDcCreatedOn,
@@ -303,16 +301,16 @@ const itemGRNController = {
           itemCalFreInMonths,
           itemCalAlertDays,
           itemCalibrationSource,
-          itemCalStatus: grnItemCalStatus,
+          itemCalStatus: result.grnItemCalStatus,
           itemCalibrationDoneAt,
           itemUncertainityUnit,
           itemPrevCalData,
-          itemCalibratedAt: grnPartyName,
-          itemCertificateName: grnItemCertificate,
+          itemCalibratedAt: result.grnPartyName,
+          itemCertificateName: result.grnItemCertificate,
           itemOBType,
           itemUncertainity,
           itemLastCertificateNo,
-          itemCertificateNo: grnItemCertificateNo,
+          itemCertificateNo: result.grnItemCertificateNo,
           acceptanceCriteria: obSize
         });
         const itemHistoryData = await historyRecord.save();
@@ -322,11 +320,11 @@ const itemGRNController = {
         let tableRow = `
         <tr>
             <td style="padding: 0.50rem; vertical-align: top; border: 1px solid #6c757d ;" class="text-center align-middle">1</td>
-            <td style="padding: 0.50rem; vertical-align: top; border: 1px solid #6c757d ;" class="align-middle">Item Name: ${grnItemAddMasterName ? grnItemAddMasterName : "-"} IMTE No: ${grnItemIMTENo ? grnItemIMTENo : "-"}<br>
-            Range/Size: ${grnItemRangeSize ? grnItemRangeSize : "" + ' ' + grnItemRangeSizeUnit ? grnItemRangeSizeUnit : ""} L.C.: ${(grnItemLC ? grnItemLC : "") + '' + (grnItemLCUnit ? grnItemLCUnit : '')}<br>
-            Make: ${grnItemMake ? grnItemMake : "-"} Sr.No: ${grnItemMFRNo ? grnItemMFRNo : "-"} Cal. Frequency: ${grnItemCalFreInMonths ? grnItemCalFreInMonths : "-"} months</td>
-            <td style="padding: 0.50rem; vertical-align: top; border: 1px solid #6c757d ;" class="text-center align-middle">${grnItemDcNo}</td>
-            <td style="padding: 0.50rem; vertical-align: top; border: 1px solid #6c757d ;" class="text-center align-middle">${grnItemStatus}</td>
+            <td style="padding: 0.50rem; vertical-align: top; border: 1px solid #6c757d ;" class="align-middle">Item Name: ${result.grnItemAddMasterName ? result.grnItemAddMasterName : "-"} IMTE No: ${result.grnItemIMTENo ? result.grnItemIMTENo : "-"}<br>
+            Range/Size: ${result.grnItemRangeSize ? result.grnItemRangeSize : "" + ' ' + result.grnItemRangeSizeUnit ? result.grnItemRangeSizeUnit : ""} L.C.: ${(result.grnItemLC ? result.grnItemLC : "") + '' + (result.grnItemLCUnit ? result.grnItemLCUnit : '')}<br>
+            Make: ${result.grnItemMake ? result.grnItemMake : "-"} Sr.No: ${result.grnItemMFRNo ? result.grnItemMFRNo : "-"} Cal. Frequency: ${result.grnItemCalFreInMonths ? result.grnItemCalFreInMonths : "-"} months</td>
+            <td style="padding: 0.50rem; vertical-align: top; border: 1px solid #6c757d ;" class="text-center align-middle">${result.grnItemDcNo ? result.grnItemDcNo : "-"}</td>
+            <td style="padding: 0.50rem; vertical-align: top; border: 1px solid #6c757d ;" class="text-center align-middle">${result.grnItemStatus ? result.grnItemStatus : "-"}</td>
         </tr>
     `;
 
@@ -348,14 +346,14 @@ const itemGRNController = {
           .replace(/{{Company Name}}/g, getCompDetailsById.companyName ? getCompDetailsById.companyName : "")
           .replace(/{{Plant}}/g, getPlantAddress.plantName ? getPlantAddress.plantName : "")
           .replace(/{{PlantAddress}}/g, getPlantAddress.plantAddress ? getPlantAddress.plantAddress : "")
-          .replace(/{{dcPartyName}}/g, grnPartyName ? grnPartyName : "")
-          .replace(/{{dcPartyAddress}}/g, grnPartyAddress ? grnPartyAddress : "")
-          .replace(/{{dcNo}}/g, grnNo ? grnNo : "")
-          .replace(/{{partyDcNo}}/g, grnItemDcNo ? grnItemDcNo : "")
-          .replace(/{{partyRefNo}}/g, grnPartyRefNo ? grnPartyRefNo : "")
-          .replace(/{{partyRefDate}}/g, grnPartyRefDate ? dayjs(grnPartyRefDate).format('DD-MM-YYYY') : "")
-          .replace(/{{dcDate}}/g, grnDate ? dayjs(grnDate).format('DD-MM-YYYY') : "")
-          .replace(/{{dcCR}}/g, grnCommonRemarks ? grnCommonRemarks : "")
+          .replace(/{{dcPartyName}}/g, result.grnPartyName ? result.grnPartyName : "")
+          .replace(/{{dcPartyAddress}}/g, result.grnPartyAddress ? result.grnPartyAddress : "")
+          .replace(/{{dcNo}}/g, result.grnNo ? result.grnNo : "")
+          .replace(/{{partyDcNo}}/g, result.grnItemDcNo ? result.grnItemDcNo : "")
+          .replace(/{{partyRefNo}}/g, result.$setgrnPartyRefNo ? result.$setgrnPartyRefNo : "")
+          .replace(/{{partyRefDate}}/g, result.grnPartyRefDate ? dayjs(result.grnPartyRefDate).format('DD-MM-YYYY') : "")
+          .replace(/{{dcDate}}/g, result.grnDate ? dayjs(result.grnDate).format('DD-MM-YYYY') : "")
+          .replace(/{{dcCR}}/g, result.grnCommonRemarks ? result.grnCommonRemarks : "")
           .replace(/{{logo}}/g, process.env.SERVER_PORT + '/logo/' + getCompDetailsById.companyLogo)
           .replace(/{{formatNo}}/g, formatNumber ? formatNumber : "")
 
@@ -371,7 +369,7 @@ const itemGRNController = {
         await page.addStyleTag({ path: cssPath });
 
         // Generate PDF
-        await page.pdf({ path: `./storage/grnCertificates/${grnNo}.pdf`, format: 'A4' });
+        await page.pdf({ path: `./storage/grnCertificates/${result.grnNo}.pdf`, format: 'A4' });
 
         await browser.close();
 
