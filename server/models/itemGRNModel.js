@@ -37,7 +37,8 @@ const itemGRNSchema = new mongoose.Schema({
   },
   grnNo: {
     type: String,
-    required: [true, "GRN Number Required"]
+    unique: [true, "GRN Number should be unique"],
+    
   },
   grnDate: {
     type: String,
@@ -125,7 +126,9 @@ itemGRNSchema.pre('save', async function(next) {
     // Otherwise, increment the counter
     counter.seq++;
     await counter.save();
+    
     this.grnNo = `${prefix && prefix.fCommonPrefix ? prefix.fCommonPrefix : ""}GRN${currentYear}-${String(counter.seq).padStart(2, '0')}`;
+    console.log()
   }
   next();
 });
