@@ -164,7 +164,7 @@ const itemDcController = {
         
         const cssPath = path.resolve(__dirname, '../templates/bootstrap.min.css');
 
-        await page.setContent(modifiedHTML, { waitUntil: 'domcontentloaded' });
+        await page.setContent(modifiedHTML, { waitUntil: 'networkidle0' });
 
         // Add the CSS file
         await page.addStyleTag({ path: cssPath });
