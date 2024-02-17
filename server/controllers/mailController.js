@@ -36,6 +36,7 @@ const mailController = {
         
        
             const compDetails = await compDetailsSchema.findById("companyData");
+            console.log(compDetails)
             const plantDetails = await plantSchema.find({plantName: selectedItems[0].itemPlant})
             console.log(plantDetails)
             const ccs = [...new Set([...vendorCc, ...departmentCc])]
