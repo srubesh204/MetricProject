@@ -31,6 +31,7 @@ const createTransporter = async () => {
 const mailController = {
     mailSender: async (req, res) => {
         try {
+            const mailDetails = await mailData();
             const { to, subject, mailBody, departmentCc, vendorCc, bcc , selectedItems, employee } = req.body;
 
         
