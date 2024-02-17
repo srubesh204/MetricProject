@@ -17,6 +17,7 @@ import { useEmployee } from '../../App';
 import dayjs from 'dayjs';
 import { Link } from 'react-router-dom';
 import Alert from '@mui/material/Alert';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 
 import Snackbar from '@mui/material/Snackbar';
 import { Edit, FilterAlt, PrintRounded } from '@mui/icons-material';
@@ -51,9 +52,9 @@ export const MeasurementUncertaintyList = () => {
         uncFetch()
     }, []);
 
-const[uncPlantName,setPlantName] = useState({
-    uncPlant:""
-})
+    const [uncPlantName, setPlantName] = useState({
+        uncPlant: ""
+    })
 
 
     const uncertaintyListColumns = [
@@ -143,20 +144,20 @@ const[uncPlantName,setPlantName] = useState({
 
     const handleFilterChange = (e) => {
         const { name, value } = e.target;
-      
-            if (value === "all") {
-                setFilteredData(uncertaintyList)
-            } else {
-                if (name === "uncPlant") {
-                    const uncPlant = uncertaintyList.filter((item) => (item.uncPlant === value));
-                    setFilteredData(uncPlant);
-                }
 
-                // const uncPlant = uncertaintyList.filter((item) =>  (item.uncPlant === value))
-                // setFilteredData(uncPlant)
+        if (value === "all") {
+            setFilteredData(uncertaintyList)
+        } else {
+            if (name === "uncPlant") {
+                const uncPlant = uncertaintyList.filter((item) => (item.uncPlant === value));
+                setFilteredData(uncPlant);
             }
-            
-        
+
+            // const uncPlant = uncertaintyList.filter((item) =>  (item.uncPlant === value))
+            // setFilteredData(uncPlant)
+        }
+
+
         setDateData((prev) => ({ ...prev, [name]: value }));
 
 
@@ -175,7 +176,7 @@ const[uncPlantName,setPlantName] = useState({
                         elevation={12}
                     >
                         <div className='row g-2 mb-2'>
-                            <h6 className="text-center ">MeausrementUncertaintyList</h6>
+                            <h6 className="text-center">Meausrement Uncertainty List</h6>
                             {/* <div className='col'>
                                 <TextField label="Plant Wise"
                                     id="uncPlantId"
@@ -205,9 +206,9 @@ const[uncPlantName,setPlantName] = useState({
                                     sx={{ width: "100%" }}
                                     slotProps={{ textField: { size: 'small' } }}
                                     format="DD-MM-YYYY"
-                                value={dayjs(dateData.fromDate)}
-                                onChange={(newValue) =>
-                                    setDateData((prev) => ({ ...prev, fromDate: dayjs(newValue).format('YYYY-MM-DD') }))}
+                                    value={dayjs(dateData.fromDate)}
+                                    onChange={(newValue) =>
+                                        setDateData((prev) => ({ ...prev, fromDate: dayjs(newValue).format('YYYY-MM-DD') }))}
                                 />
 
                             </div>
@@ -220,9 +221,9 @@ const[uncPlantName,setPlantName] = useState({
                                     sx={{ width: "100%" }}
                                     slotProps={{ textField: { size: 'small' } }}
                                     format="DD-MM-YYYY"
-                                 value={dayjs(dateData.toDate)}
-                                onChange={(newValue) =>
-                                    setDateData((prev) => ({ ...prev, toDate: dayjs(newValue).format('YYYY-MM-DD') }))} 
+                                    value={dayjs(dateData.toDate)}
+                                    onChange={(newValue) =>
+                                        setDateData((prev) => ({ ...prev, toDate: dayjs(newValue).format('YYYY-MM-DD') }))}
 
                                 />
 
@@ -263,20 +264,24 @@ const[uncPlantName,setPlantName] = useState({
 
                                     // }}
                                     onRowSelectionModelChange={handleRowSelectionChange}
-
                                     // onRowClick={updateVendor}
-
                                     density="compact"
                                     //disableColumnMenu={true}
-
-
                                     pageSizeOptions={[10]}
-
-
                                 />
                             </div>
-                            <div className='d-flex justify-content-end'>
-                                <Button component={Link} variant='contained' to={`/measurementUncertainty/`} >
+
+                        </div>
+                        <div className='row g-2'>
+                            <div className='col me-2'>
+                                <Button component={Link} to={`/home`} variant="contained" size='small' color="warning">
+                                    <ArrowBackIcon /> Dash board
+                                </Button>
+                                <Button component={Link} to="/" size='small' >Home</Button>
+                            </div>
+
+                            <div className=' col d-flex justify-content-end'>
+                                <Button component={Link} to={`/measurementUncertainty/`} >
                                     Uncertainty ADD
                                 </Button>
                             </div>
