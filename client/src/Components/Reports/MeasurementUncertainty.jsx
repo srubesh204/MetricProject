@@ -4,6 +4,7 @@ import { Card, CardContent, CardActions, Button, Container, Grid, Paper, TextFie
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { Calculate, Delete } from '@mui/icons-material';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { useNavigate } from 'react-router-dom';
 import { useEmployee } from '../../App';
 import { Link } from 'react-router-dom';
@@ -1119,19 +1120,24 @@ const MeasurementUncertainty = () => {
                     </Paper>
 
                     <div className='row'>
-                        <div className='d-flex justify-content-end' >
+                        <div className='col'>
+                            <Button component={Link} to={`/home`} variant="contained" size='small' color="warning">
+                                <ArrowBackIcon /> Dash board
+                            </Button>
+                            <Button component={Link} to="/" size='small' >Home</Button>
+                        </div>
+                        <div className=' col d-flex justify-content-end' >
+
                             <div className='me-2'>
-                                <CustomisedButton variant='contained' size="small" color='success' onClick={() => setOpenModalUNC(true)}>+ Add Uncertainty</CustomisedButton>
+                                <CustomisedButton  size="small" onClick={() => setOpenModalUNC(true)}> Add Uncertainty</CustomisedButton>
                             </div>
                             {/* <div className='' >
                                 <CustomisedButton variant='contained' type='button' size='small' color='error' >List</CustomisedButton>
                             </div> */}
-                            <Button component={Link} variant='contained' to={`/measurementUncertaintyList/`} >
-                            Uncertainty List
+                            <Button component={Link}  to={`/measurementUncertaintyList/`} >
+                                Uncertainty List
                             </Button>
-
                         </div>
-
                         <Dialog
                             open={openModalUNC}
                             onClose={() => setOpenModalUNC(false)}
@@ -1153,12 +1159,6 @@ const MeasurementUncertainty = () => {
                                 </CustomisedButton>
                             </DialogActions>
                         </Dialog>
-
-
-
-
-
-
                         <Snackbar variant="contained" anchorOrigin={{ vertical: "top", horizontal: "right" }} open={snackBarOpen} autoHideDuration={6000} onClose={handleSnackClose}>
                             <Alert variant="filled" onClose={handleSnackClose} severity={errorhandler.code} sx={{ width: '25%' }}>
                                 {errorhandler.message}
