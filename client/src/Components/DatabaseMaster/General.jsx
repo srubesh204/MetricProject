@@ -1070,7 +1070,7 @@ export const PartDataBase = ({ style }) => {
                                                 name="customer"
                                                 fullWidth>
                                                 {selectedPlantParts.map((item, index) => (
-                                                    <MenuItem key={index} value={item.aliasName}>{item.aliasName}</MenuItem>
+                                                    <MenuItem key={index} value={item.fullName}>{item.fullName}</MenuItem>
                                                 ))}
                                             </TextField>
                                         </div>

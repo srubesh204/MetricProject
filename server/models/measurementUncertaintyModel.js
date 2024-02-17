@@ -33,6 +33,7 @@ const measurementUncertaintySchema = new mongoose.Schema({
    uncCoverageFactor: String,
    uncDegOfFreedom: String,
    uncUncertainity: String,
+   uncPlant: String,
    uncTypeBResult: [],
    uncPreparedBy: String
 });

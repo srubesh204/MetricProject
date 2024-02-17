@@ -50,6 +50,7 @@ const measurementUncertaintyController = {
         uncDegOfFreedom,
         uncUncertainity,
         uncTypeBResult,
+        uncPlant,
         uncPreparedBy
       } = req.body
       const measurementUncertaintyResult = new measurementUncertaintyModel({
@@ -84,6 +85,7 @@ const measurementUncertaintyController = {
         uncDegOfFreedom,
         uncUncertainity,
         uncTypeBResult,
+        uncPlant,
         uncPreparedBy
       });
 
