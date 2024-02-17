@@ -18,6 +18,8 @@ const HistoryCardPrint = () => {
         console.log('Format No Data:', formatNoData.fHistoryCard?.frNo);
     }, [formatNoData]);
 
+    console.log(companyList)
+
     const componentRef = useRef();
 
     const handlePrint = useReactToPrint({
@@ -113,6 +115,9 @@ const HistoryCardPrint = () => {
         <div style={{ display: 'none', width: "100%", height: "100%" }}>
             <div style={{ width: "100%", height: "100%" }} ref={componentRef} >
                 <div style={{ padding: "10px", textAlign: "center", textDecoration: "underline" }}>INSTRUMENTS/GAUGE HISTORY CARD</div>
+                <div style={{ textAlign: 'left',display: 'flex', flexDirection: 'column' }}>
+                <td style={{ padding: "2px", textAlign: "right" }}><img src={`${process.env.REACT_APP_PORT}/logo/${companyList[0]?.companyLogo}`} width="90px" height="90px" /></td>
+                </div>
                 <div style={{ textAlign: 'left', borderBottom: '0.5px solid black', display: 'flex', flexDirection: 'column' }}>
                     <td style={{ padding: "2px", textAlign: "left" }}>{companyList[0]?.companyName}</td>
                     {/* <td>{selectedRows.dcPartyAddress}</td> */}

@@ -5,7 +5,7 @@ import { useReactToPrint } from 'react-to-print';
 const TotalPrint = () => {
 
     const totalPrintData = useContext(TotalListContent)
-    const { totalPrintOpen, setTotalPrintOpen, filteredItemListData, formatNoData, itemList, partDataList,companyList ,plantList } = totalPrintData
+    const { totalPrintOpen, setTotalPrintOpen, filteredItemListData, formatNoData, itemList, partDataList, companyList, plantList } = totalPrintData
 
 
     const componentRef = useRef();
@@ -50,7 +50,7 @@ const TotalPrint = () => {
         handlePrint();
     }
 
-    console.log(totalPrintOpen)
+    console.log(companyList)
     console.log(formatNoData)
 
     const renderTableRows = () => {
@@ -75,52 +75,52 @@ const TotalPrint = () => {
 
     const Footer = (data) => {
         return (
-          <tr className="footer">
+            <tr className="footer">
                 <div style={{ position: 'absolute', fontSize: '8px' }}>Format Number: {formatNoData && formatNoData.fTotalList?.frNo}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;     Amendment No.: {formatNoData && formatNoData.fTotalList?.amNo}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;     Amendment Date.: {formatNoData && formatNoData.fTotalList?.amDate}</div>
-          </tr>
+            </tr>
         );
-      };
+    };
 
     return (
         < React.Fragment>
-        {filteredItemListData.length > 0 && (
-            <div style={{ display: 'none', width: "100%" }}>
-            <div ref={componentRef}>
-            <div style={{ padding: "10px", textAlign: "center", textDecoration: "underline" }}>Gauge List</div>
-            {/* <div style={{ border: '0.5px solid black' }}> */}
-            <div style={{ textAlign: 'center', borderBottom: '0.5px solid black', display: 'flex', flexDirection: 'column' }}>
-              <td style={{ padding: "5px", textAlign: "center" }}>{companyList[0]?.companyName}</td>
-              {/* <td>{selectedRows.dcPartyAddress}</td> */}
-              <td style={{ padding: "2px", textAlign: "center" }}>{plantList[0]?.plantName}</td>
-              <td style={{ padding: "5px", textAlign: "center" }}>{plantList[0]?.plantAddress}</td>
-            </div>
+            {filteredItemListData.length > 0 && (
+                <div style={{ display: 'none', width: "100%" }}>
+                    <div ref={componentRef}>
+                        <div style={{ padding: "10px", textAlign: "center", textDecoration: "underline" }}> Total Instrument/Gauge List</div>
+                        {/* <div style={{ border: '0.5px solid black' }}> */}
+                        <div style={{ textAlign: 'center', borderBottom: '0.5px solid black', display: 'flex', flexDirection: 'column' }}>
+                            <td style={{ padding: "0px", textAlign: "right" }}><img src={`${process.env.REACT_APP_PORT}/logo/${companyList[0].companyLogo}`} width="90px" height="90px" /></td>
+                            <td style={{ padding: "0px", textAlign: "left" }}>{companyList[0]?.companyName}</td>
+                            {/* <td>{selectedRows.dcPartyAddress}</td> */}
+                            <td style={{ padding: "0px", textAlign: "left" }}>{plantList[0]?.plantName}</td>
+                            <td style={{ padding: "0px", textAlign: "left" }}>{plantList[0]?.plantAddress}</td>
+                        </div>
+                        <table className='table table-sm table-bordered text-center align-middle table-responsive w-100' style={{ border: "1px solid black" }}>
+                            <thead>
+                                <tr>
+                                    <th style={{ width: '5%', border: '0.5px solid black', fontSize: '10px', textAlign: 'center' }}>Si. No</th>
+                                    <th style={{ width: '9%', border: '0.5px solid black', fontSize: '10px', textAlign: 'center' }}>IMTE No</th>
+                                    <th style={{ width: '10%', border: '0.5px solid black', fontSize: '10px', textAlign: 'center' }}>Description</th>
+                                    <th style={{ width: '13%', border: '0.5px solid black', fontSize: '10px', textAlign: 'center' }}>Range/Size</th>
+                                    <th style={{ width: '7%', border: '0.5px solid black', fontSize: '10px', textAlign: 'center' }}>ItemLC</th>
+                                    <th style={{ width: '5%', border: '0.5px solid black', fontSize: '10px', textAlign: 'center' }}>Make</th>
+                                    <th style={{ width: '7%', border: '0.5px solid black', fontSize: '10px', textAlign: 'center' }}>Cal Date</th>
+                                    <th style={{ width: '7%', border: '0.5px solid black', fontSize: '10px', textAlign: 'center' }}>Due Date</th>
+                                    <th style={{ width: '5%', border: '0.5px solid black', fontSize: '10px', textAlign: 'center' }}>Frequency</th>
+                                    <th style={{ width: '8%', border: '0.5px solid black', fontSize: '10px', textAlign: 'center' }}>Current location</th>
+                                    <th style={{ width: '18%', border: '0.5px solid black', fontSize: '10px', textAlign: 'center' }}>Callbration Source</th>
+                                </tr>
+                            </thead>
+                            <tbody>{renderTableRows()}</tbody>
+                        </table>
 
-                <table className='table table-sm table-bordered text-center align-middle table-responsive w-100' style={{border: "1px solid black"}}>
-                    <thead>
-                        <tr>
-                            <th style={{ width: '5%', border: '0.5px solid black', fontSize: '10px', textAlign: 'center' }}>Si. No</th>
-                            <th style={{ width: '9%', border: '0.5px solid black', fontSize: '10px', textAlign: 'center' }}>IMTE No</th>
-                            <th style={{ width: '10%', border: '0.5px solid black', fontSize: '10px', textAlign: 'center' }}>Description</th>
-                            <th style={{ width: '13%', border: '0.5px solid black', fontSize: '10px', textAlign: 'center' }}>Range/Size</th>
-                            <th style={{ width: '7%', border: '0.5px solid black', fontSize: '10px', textAlign: 'center' }}>ItemLC</th>
-                            <th style={{ width: '5%', border: '0.5px solid black', fontSize: '10px', textAlign: 'center' }}>Make</th>
-                            <th style={{ width: '7%', border: '0.5px solid black', fontSize: '10px', textAlign: 'center' }}>Cal Date</th>
-                            <th style={{ width: '7%', border: '0.5px solid black', fontSize: '10px', textAlign: 'center' }}>Due Date</th>
-                            <th style={{ width: '5%', border: '0.5px solid black', fontSize: '10px', textAlign: 'center' }}>Frequency</th>
-                            <th style={{ width: '8%', border: '0.5px solid black', fontSize: '10px', textAlign: 'center' }}>Current location</th>
-                            <th style={{ width: '18%', border: '0.5px solid black', fontSize: '10px', textAlign: 'center' }}>Callbration Source</th>
-                        </tr>
-                    </thead>
-                    <tbody>{renderTableRows()}</tbody>
-                </table>
-
-            <tfoot>{Footer()}</tfoot>
-            {/* </div> */}
-            </div>
-            </div>
-        )}
-        {/* <Button onClick={handlePrint}>Print this out!</Button> */}
-    </React.Fragment>
+                        <tfoot>{Footer()}</tfoot>
+                        {/* </div> */}
+                    </div>
+                </div>
+            )}
+            {/* <Button onClick={handlePrint}>Print this out!</Button> */}
+        </React.Fragment>
     )
 }
 
