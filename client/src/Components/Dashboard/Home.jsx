@@ -690,6 +690,13 @@ const Home = () => {
       align: "left"
     },
     {
+      field: 'itemPlaceOfUsage',
+      headerName: 'Secondary Location',
+      width: 100,
+      align: "left"
+    },
+
+    {
       field: 'itemCalibrationDoneAt',
       headerName: 'Cal Done At',
       width: 100,
