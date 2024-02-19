@@ -915,7 +915,7 @@ const ItemEdit = () => {
                             <div className='col-9'>
                                 <TextField
                                     {...(errors.itemAddMasterName !== "" && { helperText: errors.itemAddMasterName, error: true })}
-                                    size='small' select variant='outlined' label="Item Name" name='itemAddMasterName' value={itemAddData.itemAddMasterName} fullWidth onChange={handleItemAddChange}>
+                                    size='small' select variant='outlined' label="Item Name" name='itemAddMasterName' disabled={itemStatus} value={itemAddData.itemAddMasterName} fullWidth onChange={handleItemAddChange}>
                                     <MenuItem value=""><em>Select</em></MenuItem>
                                     {itemMasterDataList.map((item, index) => (
                                         <MenuItem key={index} value={item.itemDescription}>{item.itemDescription}</MenuItem>
@@ -933,11 +933,12 @@ const ItemEdit = () => {
                             <div className="col-4">
                                 <Autocomplete
                                     disablePortal
+                                    disabled={itemStatus}
                                     id="itemIMTENoId"
                                     value={itemAddData.itemIMTENo}
                                     options={imteList.map((item) => ({ label: item.itemIMTENo }))}
                                     size='small'
-                                    renderInput={(params) => <TextField name='itemIMTENo' onChange={handleItemAddChange}  {...params} label="IMTE No" />}
+                                    renderInput={(params) => <TextField name='itemIMTENo' disabled={itemStatus} onChange={handleItemAddChange}  {...params} label="IMTE No" />}
                                     getOptionDisabled={option => true}
                                     clearOnBlur={false}
                                 //getOptionDisabled={options => true}
@@ -969,7 +970,7 @@ const ItemEdit = () => {
                                 <Typography variant='h6' className='text-center'>Item General Details</Typography>
                                 <div className="row g-2 mb-2">
                                     <div className="col-lg-4">
-                                        <TextField size='small' select variant='outlined' onChange={handleItemAddChange} label="Item Type" name='itemType' fullWidth value={itemAddData.itemType}>
+                                        <TextField disabled size='small' select variant='outlined' onChange={handleItemAddChange} label="Item Type" name='itemType' fullWidth value={itemAddData.itemType}>
                                             <MenuItem value="attribute">Attribute</MenuItem>
                                             <MenuItem value="variable">Variable</MenuItem>
                                             <MenuItem value="referenceStandard">Reference Standard</MenuItem>

@@ -95,18 +95,16 @@ const itemCalController = {
         calDepartment,
         calSource,
       };
-      const getCompDetailsById = await compDetailsSchema.findOne(
-        { compId: 1 } // To return the updated document
-      );
+      const getCompDetailsById = await compDetailsSchema.findById("companyData");
       const getPlantAddress = await plantSchema.findOne(
         { plantName: calPlant } // To return the updated document
       );
       const approvedByData = await employeeModel.findOne(
         { _id: calApprovedBy } // To return the updated document
       );
-      const formatNo = await formatNoModel.findOne({ formatId: 1 });
+      const formatNo = await formatNoModel.findById("formatNo");
       const formatNumber = `${formatNo.fCalDueDate ? (formatNo.fCalDueDate.frNo + " " + formatNo.fCalDueDate.amNo + " " + formatNo.fCalDueDate.amDate) : ""}`
-      console.log(formatNumber)
+     
       const newItem = new itemCalModel(newItemFields);
 
 
@@ -561,9 +559,7 @@ const itemCalController = {
         calSource
       };
 
-      const getCompDetailsById = await compDetailsSchema.findOne(
-        { compId: 1 } // To return the updated document
-      );
+      const getCompDetailsById = await compDetailsSchema.findById("companyData") // To return the updated document
       const getPlantAddress = await plantSchema.findOne(
         { plantName: calPlant } // To return the updated document
       );
@@ -572,7 +568,7 @@ const itemCalController = {
         { _id: calApprovedBy } // To return the updated document
       );
 
-      const formatNo = await formatNoModel.findOne({ formatId: 1 });
+      const formatNo = await formatNoModel.findById("formatNo");
 
       const formatNumber = `${formatNo.fCalDueDate ? (formatNo.fCalDueDate.frNo + " " + formatNo.fCalDueDate.amNo + " " + formatNo.fCalDueDate.amDate) : ""}`
       console.log(formatNumber)

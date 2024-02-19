@@ -858,7 +858,7 @@ const ItemAdd = () => {
                                         <div className="col-lg-4">
                                             <TextField
                                                 {...(errors.itemType !== "" && { helperText: errors.itemType, error: true })}
-                                                size='small' select variant='outlined' onChange={handleItemAddChange} label="Item Type" name='itemType' fullWidth value={itemAddData.itemType || ""}>
+                                                size='small' disabled select variant='outlined' onChange={handleItemAddChange} label="Item Type" name='itemType' fullWidth value={itemAddData.itemType || ""}>
                                                 <MenuItem><em>Select Type</em></MenuItem>
                                                 <MenuItem value="attribute">Attribute</MenuItem>
                                                 <MenuItem value="variable">Variable</MenuItem>
