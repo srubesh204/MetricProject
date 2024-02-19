@@ -33,19 +33,19 @@ const PlantActual = () => {
         { field: 'itemAddMasterName', headerName: 'Item Description', width: 180, headerAlign: "center", align: "center", },
         {
             field: 'itemIMTENo',
-            headerName: 'ItemIMTENo',
+            headerName: 'Item IMTENo',
             width: 210,
             headerAlign: "center", align: "center",
         },
         {
-            field: 'itemCalDate',
-            headerName: 'Plan Cal Date',
+            field: 'itemDueDate',
+            headerName: 'Item Cal Date',
             width: 150,
             headerAlign: "center", align: "center", valueGetter: (params) => dayjs(params.row.itemDueDate).format('DD-MM-YYYY')
         },
         {
             field: 'itemLastDueDate',
-            headerName: 'Last cal Due Date',
+            headerName: ' Item Last cal Due Date',
             width: 150,
             headerAlign: "center", align: "center", valueGetter: (params) => dayjs(params.row.itemLastDueDate).format('DD-MM-YYYY')
         }
