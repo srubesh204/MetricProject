@@ -39,31 +39,34 @@ const PlantActual = () => {
         },
         {
             field: 'itemCalDate',
-            headerName: 'Present Cal Date',
+            headerName: 'Plan Cal Date',
             width: 150,
-            headerAlign: "center", align: "center", valueGetter: (params) => dayjs(params.row.itemCalDate).format('DD-MM-YYYY')
+            headerAlign: "center", align: "center", valueGetter: (params) => dayjs(params.row.itemDueDate).format('DD-MM-YYYY')
         },
         {
-            field: 'Last cal Due Date',
+            field: 'itemLastDueDate',
             headerName: 'Last cal Due Date',
-            width: 200,
-            headerAlign: 'center',
-            align: 'center',
-            renderCell: (params) => {
-                const currentDueDate = dayjs(params.row.itemDueDate).format('DD-MM-YYYY');
-                
-                const previousDueDate = dayjs(params.row.itemLastDueDate).format('DD-MM-YYYY')
-                    
-
-                // Now you can use currentDueDate and previousDueDate for your comparison logic
-                return (
-                    <div>
-                        <div>{`Plan: ${currentDueDate}`}</div>
-                        <div>{`Actual: ${previousDueDate}`}</div>
-                    </div>
-                );
-            },
-        },
+            width: 150,
+            headerAlign: "center", align: "center", valueGetter: (params) => dayjs(params.row.itemLastDueDate).format('DD-MM-YYYY')
+        }
+        // {
+        //     field: 'Last cal Due Date',
+        //     headerName: 'Last cal Due Date',
+        //     width: 200,
+        //     headerAlign: 'center',
+        //     align: 'center',
+        //     renderCell: (params) => {
+        //         const currentDueDate = dayjs(params.row.itemDueDate).format('DD-MM-YYYY');
+        //         const previousDueDate = dayjs(params.row.itemLastDueDate).format('DD-MM-YYYY')
+        //         // Now you can use currentDueDate and previousDueDate for your comparison logic
+        //         return (
+        //             <div>
+        //                 <div>{`Plan: ${currentDueDate}`}</div>
+        //                 <div>{`Actual: ${previousDueDate}`}</div>
+        //             </div>
+        //         );
+        //     },
+        // },
     ]
 
 
