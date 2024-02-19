@@ -43,7 +43,7 @@ const itemCalController = {
         calOBType,
         calReportAvailable,
         calReportName,
-        
+
         calItemCalDate,
         calItemDueDate,
         calItemEntryDate,
@@ -79,7 +79,7 @@ const itemCalController = {
         calOBType,
         calReportAvailable,
         calReportName,
-       
+
         calItemCalDate,
         calItemDueDate,
         calItemEntryDate,
@@ -95,18 +95,16 @@ const itemCalController = {
         calDepartment,
         calSource,
       };
-      const getCompDetailsById = await compDetailsSchema.findOne(
-        { compId: 1 } // To return the updated document
-      );
+      const getCompDetailsById = await compDetailsSchema.findById("companyData");
       const getPlantAddress = await plantSchema.findOne(
         { plantName: calPlant } // To return the updated document
       );
       const approvedByData = await employeeModel.findOne(
         { _id: calApprovedBy } // To return the updated document
       );
-      const formatNo = await formatNoModel.findOne({ formatId: 1 });
+      const formatNo = await formatNoModel.findById("formatNo");
       const formatNumber = `${formatNo.fCalDueDate ? (formatNo.fCalDueDate.frNo + " " + formatNo.fCalDueDate.amNo + " " + formatNo.fCalDueDate.amDate) : ""}`
-      console.log(formatNumber)
+     
       const newItem = new itemCalModel(newItemFields);
 
 
@@ -361,8 +359,8 @@ const itemCalController = {
             .replace(/{{logo}}/g, process.env.SERVER_PORT + '/logo/' + getCompDetailsById.companyLogo)
             .replace(/{{formatNo}}/g, formatNumber ? formatNumber : "-")
             .replace(/{{calibratedBy}}/g, calCalibratedBy ? calCalibratedBy : "")
-            .replace(/{{calStatus}}/g, calStatus ? "<li> Acceptance Remarks : "+calStatus+"</li>" : "")
-            .replace(/{{calItemUncertainity}}/g, calItemUncertainity ? "<li>The Expanded uncertainty is ± "+calItemUncertainity+ " "+ calItemUncertainityUnit +" at 95.45% confidence level with coverage factor k=2.</li>" : "")
+            .replace(/{{calStatus}}/g, calStatus ? "<li> Acceptance Remarks : " + calStatus + "</li>" : "")
+            .replace(/{{calItemUncertainity}}/g, calItemUncertainity ? "<li>The Expanded uncertainty is ± " + calItemUncertainity + " " + calItemUncertainityUnit + " at 95.45% confidence level with coverage factor k=2.</li>" : "")
 
 
 
@@ -508,7 +506,7 @@ const itemCalController = {
         calOBType,
         calReportAvailable,
         calReportName,
-        
+
         calItemCalDate,
         calItemDueDate,
         calItemEntryDate,
@@ -544,7 +542,7 @@ const itemCalController = {
         calOBType,
         calReportAvailable,
         calReportName,
-        
+
         calItemCalDate,
         calItemDueDate,
         calItemEntryDate,
@@ -561,9 +559,7 @@ const itemCalController = {
         calSource
       };
 
-      const getCompDetailsById = await compDetailsSchema.findOne(
-        { compId: 1 } // To return the updated document
-      );
+      const getCompDetailsById = await compDetailsSchema.findById("companyData") // To return the updated document
       const getPlantAddress = await plantSchema.findOne(
         { plantName: calPlant } // To return the updated document
       );
@@ -572,7 +568,7 @@ const itemCalController = {
         { _id: calApprovedBy } // To return the updated document
       );
 
-      const formatNo = await formatNoModel.findOne({ formatId: 1 });
+      const formatNo = await formatNoModel.findById("formatNo");
 
       const formatNumber = `${formatNo.fCalDueDate ? (formatNo.fCalDueDate.frNo + " " + formatNo.fCalDueDate.amNo + " " + formatNo.fCalDueDate.amDate) : ""}`
       console.log(formatNumber)
@@ -806,7 +802,7 @@ const itemCalController = {
             .replace(/{{dateOfIssue}}/g, calItemEntryDate ? dayjs(calItemEntryDate).format("DD-MM-YYYY") : "-")
             .replace(/{{dateOfCalibration}}/g, calItemCalDate ? dayjs(calItemCalDate).format("DD-MM-YYYY") : "-")
             .replace(/{{nextCalibrationDue}}/g, calItemDueDate ? dayjs(calItemDueDate).format("DD-MM-YYYY") : "-")
-            
+
             .replace(/{{itemRangeSize}}/g, calRangeSize ? calRangeSize : "-")
             .replace(/{{itemRangeSizeUnit}}/g, calRangeSizeUnit ? calRangeSizeUnit : "")
             .replace(/{{identificationNo}}/g, calIMTENo ? calIMTENo : "-")
@@ -832,8 +828,8 @@ const itemCalController = {
             .replace(/{{logo}}/g, process.env.SERVER_PORT + '/logo/' + getCompDetailsById.companyLogo)
             .replace(/{{formatNo}}/g, formatNumber ? formatNumber : "-")
             .replace(/{{calibratedBy}}/g, calCalibratedBy ? calCalibratedBy : "-")
-            .replace(/{{calStatus}}/g, calStatus ? "<li> Acceptance Remarks : "+calStatus+"</li>" : "")
-            .replace(/{{calItemUncertainity}}/g, calItemUncertainity ? "<li>The Expanded uncertainty is ± "+calItemUncertainity+ " "+ calItemUncertainityUnit +" at 95.45% confidence level with coverage factor k=2.</li>" : "")
+            .replace(/{{calStatus}}/g, calStatus ? "<li> Acceptance Remarks : " + calStatus + "</li>" : "")
+            .replace(/{{calItemUncertainity}}/g, calItemUncertainity ? "<li>The Expanded uncertainty is ± " + calItemUncertainity + " " + calItemUncertainityUnit + " at 95.45% confidence level with coverage factor k=2.</li>" : "")
 
 
 
@@ -960,18 +956,22 @@ const itemCalController = {
         const calData = await itemCalModel.findById(id);
         const itemData = await itemAddModel.findById(calData.ItemCalId)
 
-        const { itemLastCalDate: itemCalDate, itemLastDueDate: itemDueDate, itemLastStatus: itemStatus, itemLastCertificateNo: itemCertificateNo } = itemData
-        const updateItemFields = { itemCalDate, itemDueDate, itemStatus, itemCertificateNo }
-        const updateResult = await itemAddModel.findOneAndUpdate(
-          { _id: calData.ItemCalId },
-          { $set: updateItemFields },
-          { new: true }
-        );
+        if (itemData) {
+          const { itemLastCalDate: itemCalDate, itemLastDueDate: itemDueDate, itemLastStatus: itemStatus, itemLastCertificateNo: itemCertificateNo } = itemData
+          const updateItemFields = { itemCalDate, itemDueDate, itemStatus, itemCertificateNo }
+          const updateResult = await itemAddModel.findOneAndUpdate(
+            { _id: calData.ItemCalId },
+            { $set: updateItemFields },
+            { new: true }
+          );
 
+
+        }
         const deletedItemCal = await itemCalModel.findOneAndRemove({ _id: id });
         const deleteHistoryCard = await itemHistory.findOneAndRemove({ itemCalId: id });
-        console.log(deletedItemCal)
-        console.log(deleteHistoryCard)
+
+
+
         if (!deletedItemCal && !deleteHistoryCard) {
           // If a vendor was not found, you can skip it or handle the error as needed.
           console.log(`ItemCal with ID ${id} not found.`);

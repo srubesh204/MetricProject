@@ -326,7 +326,7 @@ const Dc = () => {
                 );
                 console.log(response)
                 setDcData(initialDcData)
-                setErrorHandler({ status: 0, message: "Dc Created Successfully", code: "success" });
+                setErrorHandler({ status: 1, message: "Dc Created Successfully", code: "success" });
                 setSnackBarOpen(true)
                 itemFetch();
                 setDcData(initialDcData)

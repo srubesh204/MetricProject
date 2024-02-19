@@ -263,7 +263,7 @@ const CalDialog = () => {
                     calItemUncertainity: filter.length > 0 && filter[0] ? filter[0].uncertainty : "",
                     calItemSOPNo: filter.length > 0 && filter[0].SOPNo ? filter[0].SOPNo : "",
                     calStandardRef: filter.length > 0 && filter[0].standardRef ? filter[0].standardRef : "",
-                    calItemUncertainityUnit : filter.length > 0 && filter[0].uncertaintyUnit ? filter[0].uncertaintyUnit : "",
+                    calItemUncertainityUnit: filter.length > 0 && filter[0].uncertaintyUnit ? filter[0].uncertaintyUnit : "",
                     calOBType: selectedRows[0].itemOBType,
                     calcalibrationData:
 
@@ -710,7 +710,8 @@ const CalDialog = () => {
     const [confirmSubmit, setConfirmSubmit] = useState(false)
 
     const [snackBarOpen, setSnackBarOpen] = useState(false)
-    const [alertMessage, setAlertMessage] = useState("")
+
+    const [errorhandler, setErrorHandler] = useState({})
 
 
 
@@ -731,7 +732,7 @@ const CalDialog = () => {
         return Object.values(tempErrors).every(x => x === "")
     }
     console.log(errors)
-    const [errorhandler, setErrorHandler] = useState({})
+
     console.log(errorhandler)
 
     const [loading, setLoading] = useState(false)
@@ -743,7 +744,9 @@ const CalDialog = () => {
                 const response = await axios.post(
                     `${process.env.REACT_APP_PORT}/itemCal/createItemCal`, calibrationData
                 );
-                setAlertMessage(response.data.message)
+
+
+                setErrorHandler({ status: 1, message: response.data.message, code: "success" });
                 setSnackBarOpen(true)
                 setCalibrationData(initialCalData);
                 setTimeout(() => { setCalOpen(false); window.location.reload() }, 500)
@@ -770,10 +773,10 @@ const CalDialog = () => {
                 console.log(err.response.data.error)
                 setErrorHandler({ status: 0, message: "An error occurred", code: "error" });
             }
-
+            
             console.log(err);
 
-        }finally{
+        } finally {
             setLoading(false)
         }
     };
@@ -1090,7 +1093,7 @@ const CalDialog = () => {
                         <div className="d-flex justify-content-between mb-2">
 
                             <div> <FormControlLabel control={<Switch name='calReportAvailable' checked={calibrationData.calReportAvailable === "yes"} onChange={handleCalData} color='success' />} label="Report Upload" />
-                             <FormControlLabel control={<Switch name='lastResult' onChange={handleCalData} />} label="Last Result" />
+                                <FormControlLabel control={<Switch name='lastResult' onChange={handleCalData} />} label="Last Result" />
                                 <FormControlLabel control={<Switch name='beforeCalSwitch' onChange={handleCalData} />} label="Before Calibration" /></div>
                             <div><h5 className='text align-center'>Calibration Data</h5></div>
                             <div><TextField select inputProps={{ sx: { color: calibrationData.calStatus === "status" ? "" : calibrationData.calStatus === "accepted" ? "green" : "red", width: "100px" } }} name='calStatus' onChange={handleCalData} InputLabelProps={{ shrink: true }} label="Cal Status" size="small" value={calibrationData.calStatus}>
@@ -1674,25 +1677,25 @@ const CalDialog = () => {
                         onClose={() => setTimeout(() => {
                             setSnackBarOpen(false)
                         }, 3000)}>
-                        <Alert onClose={() => setSnackBarOpen(false)} variant='filled' severity="success" sx={{ width: '25%' }}>
-                            {alertMessage}
+                        <Alert onClose={() => setSnackBarOpen(false)} variant='filled' severity={errorhandler.code} fullWidth>
+                            {errorhandler.message}
                         </Alert>
                     </Snackbar>
                 </div>
             </DialogContent>
             <DialogActions className='d-flex justify-content-end'>
-                
+
                 <div >
                     <Button variant='contained' disabled={loading} color='error' className='me-3' onClick={() => { setCalOpen(false); window.location.reload() }}>Cancel</Button>
                     <Button variant='contained' disabled={loading} color='success' onClick={() => { setConfirmSubmit(true) }}>
-                        
+
                         {loading ? <CircularProgress
-                        sx={{
-                            color: "inherit",
-                        }}
-                        variant="indeterminate"
-                        size={20}
-                    />: "Submit"}</Button>
+                            sx={{
+                                color: "inherit",
+                            }}
+                            variant="indeterminate"
+                            size={20}
+                        /> : "Submit"}</Button>
                 </div>
             </DialogActions>
 

@@ -63,6 +63,23 @@ const ItemEdit = () => {
         DepartmentFetch()
     }, []);
 
+    const [itemStatus, setItemStatus] = useState([])
+    const itemStatusCheck = async () => {
+        try {
+            const response = await axios.get(
+                `${process.env.REACT_APP_PORT}/itemAdd/getItemTransactStatus/${id}`
+            );
+            setItemStatus(response.data.status);
+            console.log(response.data)
+        } catch (err) {
+            console.log(err);
+        }
+    };
+    //get Designations
+    useEffect(() => {
+        itemStatusCheck()
+    }, []);
+
 
     const [areas, setAreas] = useState([])
     const areaFetch = async () => {
@@ -898,7 +915,7 @@ const ItemEdit = () => {
                             <div className='col-9'>
                                 <TextField
                                     {...(errors.itemAddMasterName !== "" && { helperText: errors.itemAddMasterName, error: true })}
-                                    size='small' select variant='outlined' label="Item Name" name='itemAddMasterName' value={itemAddData.itemAddMasterName} fullWidth onChange={handleItemAddChange}>
+                                    size='small' select variant='outlined' label="Item Name" name='itemAddMasterName' disabled={itemStatus} value={itemAddData.itemAddMasterName} fullWidth onChange={handleItemAddChange}>
                                     <MenuItem value=""><em>Select</em></MenuItem>
                                     {itemMasterDataList.map((item, index) => (
                                         <MenuItem key={index} value={item.itemDescription}>{item.itemDescription}</MenuItem>
@@ -916,11 +933,12 @@ const ItemEdit = () => {
                             <div className="col-4">
                                 <Autocomplete
                                     disablePortal
+                                    disabled={itemStatus}
                                     id="itemIMTENoId"
                                     value={itemAddData.itemIMTENo}
                                     options={imteList.map((item) => ({ label: item.itemIMTENo }))}
                                     size='small'
-                                    renderInput={(params) => <TextField name='itemIMTENo' onChange={handleItemAddChange}  {...params} label="IMTE No" />}
+                                    renderInput={(params) => <TextField name='itemIMTENo' disabled={itemStatus} onChange={handleItemAddChange}  {...params} label="IMTE No" />}
                                     getOptionDisabled={option => true}
                                     clearOnBlur={false}
                                 //getOptionDisabled={options => true}
@@ -952,7 +970,7 @@ const ItemEdit = () => {
                                 <Typography variant='h6' className='text-center'>Item General Details</Typography>
                                 <div className="row g-2 mb-2">
                                     <div className="col-lg-4">
-                                        <TextField size='small' select variant='outlined' onChange={handleItemAddChange} label="Item Type" name='itemType' fullWidth value={itemAddData.itemType}>
+                                        <TextField disabled size='small' select variant='outlined' onChange={handleItemAddChange} label="Item Type" name='itemType' fullWidth value={itemAddData.itemType}>
                                             <MenuItem value="attribute">Attribute</MenuItem>
                                             <MenuItem value="variable">Variable</MenuItem>
                                             <MenuItem value="referenceStandard">Reference Standard</MenuItem>
@@ -1307,7 +1325,7 @@ const ItemEdit = () => {
                                 <Typography variant='h6' className='text-center'>Enter Previous Calibration Data</Typography>
                                 <div className="row g-2 p-2">
                                     <TextField
-                                        size='small' select variant='outlined' label="Previous Calibration Data" id='itemPrevCalDataId' onChange={handleItemAddChange} name='itemPrevCalData' value={itemAddData.itemPrevCalData} fullWidth>
+                                        size='small' disabled={itemStatus} select variant='outlined' label="Previous Calibration Data" id='itemPrevCalDataId' onChange={handleItemAddChange} name='itemPrevCalData' value={itemAddData.itemPrevCalData} fullWidth>
                                         <MenuItem>Select Type</MenuItem>
                                         <MenuItem value="available">Available</MenuItem>
                                         <MenuItem value="notAvailable">Not Available</MenuItem>
@@ -1315,7 +1333,7 @@ const ItemEdit = () => {
                                     </TextField>
                                     <div className="col-md-6">
                                         <DatePicker
-                                            disabled={itemAddData.itemPrevCalData !== "available"}
+                                            disabled={itemAddData.itemPrevCalData !== "available" || itemStatus}
                                             fullWidth
                                             id="itemCalDateId"
                                             name="itemCalDate"
@@ -1333,7 +1351,7 @@ const ItemEdit = () => {
                                     </div>
                                     <div className="col-md-6">
                                         <DatePicker
-                                            disabled={itemAddData.itemPrevCalData !== "available"}
+                                            disabled={itemAddData.itemPrevCalData !== "available" || itemStatus}
                                             fullWidth
                                             id="itemDueDateId"
                                             name="itemDueDate"
@@ -1351,7 +1369,7 @@ const ItemEdit = () => {
                                         )}
                                     </div>
                                     <div className="col-lg-12 d-flex justify-content-between">
-                                        <TextField disabled={itemAddData.itemPrevCalData !== "available"}
+                                        <TextField disabled={itemAddData.itemPrevCalData !== "available" || itemStatus}
                                             size='small'
                                             fullWidth
                                             variant='outlined'
@@ -1369,7 +1387,7 @@ const ItemEdit = () => {
                                         </TextField>
                                         {itemAddData.isItemMaster === "1" &&
                                             <React.Fragment>
-                                                <TextField disabled={itemAddData.itemPrevCalData !== "available"}
+                                                <TextField disabled={itemAddData.itemPrevCalData !== "available" || itemStatus}
                                                     className='ms-2'
                                                     fullWidth
                                                     label="Uncertainity"
@@ -1381,7 +1399,7 @@ const ItemEdit = () => {
                                                     value={itemAddData.itemUncertainity}
                                                 />
 
-                                                <TextField disabled={itemAddData.itemPrevCalData !== "available"}
+                                                <TextField disabled={itemAddData.itemPrevCalData !== "available" || itemStatus}
                                                     select
                                                     size='small'
                                                     variant='outlined'
@@ -1402,9 +1420,9 @@ const ItemEdit = () => {
 
 
                                     <div className="col-md-12 d-flex justify-content-between">
-                                        <TextField disabled={itemAddData.itemPrevCalData !== "available"} size='small' fullWidth variant='outlined' onChange={handleItemAddChange} value={itemAddData.itemCertificateNo} label="Certificate No" name='itemCertificateNo'></TextField>
+                                        <TextField disabled={itemAddData.itemPrevCalData !== "available" || itemStatus} size='small' fullWidth variant='outlined' onChange={handleItemAddChange} value={itemAddData.itemCertificateNo} label="Certificate No" name='itemCertificateNo'></TextField>
 
-                                        <Button component="label" disabled={itemAddData.itemPrevCalData !== "available"} className='ms-2' value={itemAddData.itemCertificateName} variant="contained" fullWidth >
+                                        <Button component="label" disabled={itemAddData.itemPrevCalData !== "available" || itemStatus} className='ms-2' value={itemAddData.itemCertificateName} variant="contained" fullWidth >
 
                                             Certificate Upload
                                             <VisuallyHiddenInput type="file" onChange={handleCertificateUpload} />

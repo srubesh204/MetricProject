@@ -24,5 +24,5 @@ router.get("/uploadItemAddExcelData", itemAddController.uploadItemAddExcelData)
 router.post("/getItemAddByPlant", itemAddController.getItemAddByPlant)
 router.put("/updateItemStatus", itemAddController.updateItemStatus)
 router.post("/uploadItemAddInExcel", upload, itemAddController.uploadItemAddInExcel)
-router.get("/getItemTransactStatus", upload, itemAddController.getItemTransactStatus)
+router.get("/getItemTransactStatus/:id", upload, itemAddController.getItemTransactStatus)
 module.exports = router;

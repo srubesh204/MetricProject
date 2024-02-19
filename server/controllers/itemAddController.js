@@ -3,7 +3,8 @@ const dayjs = require('dayjs')
 const excelToJson = require('convert-excel-to-json');
 const itemHistory = require("../models/itemHistory");
 const itemCalModel = require("../models/itemCalModel");
-const itemDcModel = require("../models/itemDcModel")
+const itemDcModel = require("../models/itemDcModel");
+const itemGRNModel = require("../models/itemGRNModel");
 
 const itemAddController = {
   getAllItemAdds: async (req, res) => {
@@ -20,16 +21,16 @@ const itemAddController = {
   },
 
   getItemByPlant: async (req, res) => {
-    const {allowedPlants} = req.body
+    const { allowedPlants } = req.body
     try {
       const itemAddResult = await itemAddModel.aggregate([
         {
           $match: {
             "itemPlant": { $in: allowedPlants ? allowedPlants : [] } // Specify the values to match
           }
-        }, {$sort : {itemAddMasterName : 1, itemIMTENo: 1}}
+        }, { $sort: { itemAddMasterName: 1, itemIMTENo: 1 } }
       ])
-     
+
       res.status(202).json({ result: itemAddResult, status: 1 });
       //res.status(200).json(employees);
 
@@ -541,10 +542,10 @@ const itemAddController = {
           otherFile,
 
         };
-        
+
         const updateItemHistory = await itemHistory.findOneAndUpdate(
           { itemId: updateItemAdd._id },
-          {$set: historyRecord},
+          { $set: historyRecord },
 
         );
         console.log(updateItemHistory)
@@ -612,16 +613,16 @@ const itemAddController = {
 
   updateItemStatus: async (req, res) => {
     try {
-      const {itemIds, itemStatus, itemStatusReason} = req.body; // Assuming desId is part of the URL parameter
+      const { itemIds, itemStatus, itemStatusReason } = req.body; // Assuming desId is part of the URL parameter
       // if (isNaN(desId)) {
       // Find the designation by desId and update it
       console.log(req.body)
       const changeStatus = [];
-      if(itemIds.length > 0){
-        for(const itemId of itemIds){
+      if (itemIds.length > 0) {
+        for (const itemId of itemIds) {
           const updateItemAdd = await itemAddModel.findOneAndUpdate(
-            { _id : itemId },
-            {$set : {itemStatus, itemStatusReason}},
+            { _id: itemId },
+            { $set: { itemStatus, itemStatusReason } },
             { new: true }
           );
           changeStatus.push(updateItemAdd)
@@ -947,12 +948,25 @@ const itemAddController = {
     }
   },
   getItemTransactStatus: async (req, res) => {
-    try{
-      const itemId = req.params.id
-      console.log(req.query)
-      res.status(202).json({message: "Success"})
-    }catch(err){
+    try {
+      const itemId = req.params.id;
+      
+      
+      // Check if the _id exists in itemDcModel
+      const itemInDc = await itemDcModel.findOne({ 'dcPartyItems._id': itemId });
+      const itemInGrn = await itemGRNModel.findOne({ 'grnItemId': itemId });
+      const itemInCal = await itemCalModel.findOne({ 'ItemCalId': itemId });
+      
+      if (itemInDc || itemInGrn || itemInCal) {
+        console.log('The _id is used in itemDcModel');
+        res.status(202).json({ status: true, message: "Item already used" })
+      }else{
+        res.status(202).json({ status: false, message: "Item not used yet" })
+      }
+      
+    } catch (err) {
       console.log(err)
+
     }
 
   }
