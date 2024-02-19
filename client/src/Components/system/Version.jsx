@@ -72,7 +72,7 @@ const Version = () => {
                     <th>Version</th>
                   
                       <td>
-                        {versionDatas?.[0]?.versionRelDate}
+                        {versionDatas?.[0]?.versionNo}
                         {/* <input type="text" className='form-control form-control-sm' id="versionNoId" name="versionNo" onChange={handleInputChange} value={versionDatas?.[0]?.versionNo} /> */}
                       </td>
                   

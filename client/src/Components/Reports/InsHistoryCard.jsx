@@ -297,12 +297,12 @@ function InsHistoryCard() {
                 )
             ),
         },
-   
+
 
         { field: 'itemCalDate', headerName: 'Calibration Date', width: 150, align: "center", valueGetter: (params) => dayjs(params.row.itemCalDate).format('DD-MM-YYYY') },
         { field: 'itemDueDate', headerName: 'Calibration Due', width: 150, align: "center", valueGetter: (params) => dayjs(params.row.itemDueDate).format('DD-MM-YYYY') },
         { field: 'itemCalStatus', headerName: 'Calibration Status', width: 150, align: "center", },
-      
+
         { field: 'itemCertificateNo', headerName: 'Certificate No', width: 180, align: "center" },
         {
             field: 'observedSize', headerName: "Observed Size", width: 180, align: "center",
@@ -318,7 +318,7 @@ function InsHistoryCard() {
             ),
         },
         { field: 'itemCalibratedAt', headerName: 'Calibrated At', width: 150, align: "center" },
-    ...(selectedRow[0]?.itemCalibrationSource !== 'outsource' ?   [{
+        ...(selectedRow[0]?.itemCalibrationSource !== 'outsource' ? [{
             field: 'itemCalibratedBy',
             headerName: 'Calibrated By',
             width: 150,
@@ -529,12 +529,23 @@ function InsHistoryCard() {
                                                 InputLabelProps={{ shrink: true }}
                                             ></TextField>
                                         </div>
+                                        {selectedRow[0]?.itemType === "variable" && <div className="col-md-3">
+                                            <TextField
+                                                label="Least count"
+                                                value={selectedRow[0]?.itemLC}
+                                                size="small"
+                                                name="itemLC"
+                                                InputProps={{ readOnly: true }}
+                                                InputLabelProps={{ shrink: true }}
+                                            ></TextField>
+                                        </div>}
+
+                                    </div>
+                                    <div className="row g-2 ">
                                         <div className="col-md-3">
                                             <TextField label="Calibration Source"
                                                 value={selectedRow[0]?.itemCalibrationSource} size="small" name="itemCalibrationSource" InputProps={{ readOnly: true }} InputLabelProps={{ shrink: true }}></TextField>
                                         </div>
-                                    </div>
-                                    <div className="row g-2 ">
                                         <div className="col-md-3">
                                             <TextField label="Location"
                                                 value={selectedRow[0]?.itemCurrentLocation} size="small" name="itemCurrentLocation" InputProps={{ readOnly: true }} InputLabelProps={{ shrink: true }}></TextField>
