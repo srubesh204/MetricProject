@@ -61,6 +61,7 @@ const itemGRNSchema = new mongoose.Schema({
   grnItemRangeSize: String,
   grnItemRangeSizeUnit: String,
   grnItemMFRNo: String,
+  grnItemSAPNo: String,
   grnItemLC: String,
   grnItemLCUnit: String,
   grnItemMake: String,

@@ -30,7 +30,7 @@ const VendorUpload = () => {
     useEffect(() => {
         vendorFetchData();
     }, []);
-    
+
     console.log(vendorDataList)
     const vendorListColumns = [
 
@@ -122,36 +122,30 @@ const VendorUpload = () => {
 
     const handleFilterChange = (e) => {
         const { name, value } = e.target;
-        
+
         if (name === "vendorType") {
             if (value === "all") {
                 setFilteredData(vendorDataList)
             } else {
                 const vendorType = vendorDataList.filter((item) => (item[value] === "1"))
                 setFilteredData(vendorType)
-                
+            }
+            if (name === "vendorPlant") {
+                const vendorPlant = vendorDataList.filter((item) => (item.vendorPlant.includes(value)))
+                setFilteredData(vendorPlant);
             }
         }
-        if (name === "vendorPlant") {
-            const vendorPlant = vendorDataList.filter((item) => (item.vendorPlant === value))
-            setFilteredData(vendorPlant);
-        }  
     }
-    
     return (
         <div style={{ fontSize: "smaller", padding: "3px", margin: "5px", my: "5px" }}>
-
-
             <Paper sx={{
                 p: 4,
                 display: 'flex',
                 flexDirection: 'column',
                 mb: 1,
-
             }} elevation={12}
             >
                 <div className='row g-2'>
-
                     <div className='col-4'>
                         <TextField label="Plant Wise"
                             id="vendorPlantId"
@@ -160,14 +154,12 @@ const VendorUpload = () => {
                             fullWidth
                             onChange={handleFilterChange}
                             size="small"
-                            name="vendorPlantt" >
-
+                            name="vendorPlant">
                             <MenuItem value="all">All</MenuItem>
                             {loggedEmp.plantDetails.map((item, index) => (
                                 <MenuItem key={index} value={item.plantName}>{item.plantName}</MenuItem>
                             ))}
                         </TextField>
-
                     </div>
                     <div className='col-4 me-2'>
                         <TextField label="Vendor Type"
@@ -177,14 +169,12 @@ const VendorUpload = () => {
                             onChange={handleFilterChange}
                             size="small"
                             sx={{ width: "101%" }}
-
                             name="vendorType" >
                             <MenuItem value="all">All</MenuItem>
                             <MenuItem value="oem">OEM</MenuItem>
                             <MenuItem value="customer">Customer</MenuItem>
                             <MenuItem value="supplier">Supplier</MenuItem>
                             <MenuItem value="subContractor">SubContractor</MenuItem>
-
                         </TextField>
 
                     </div>
