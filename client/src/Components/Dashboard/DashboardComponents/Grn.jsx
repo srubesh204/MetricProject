@@ -14,7 +14,7 @@ import styled from '@emotion/styled';
 
 const Grn = () => {
     const grnDatas = useContext(HomeContent)
-    const { grnOpen, setGrnOpen, selectedRows, lastGrnNo, dcPartyDetails, vendors, isOnSiteGRN } = grnDatas
+    const { grnOpen, setGrnOpen, selectedRows, lastGrnNo, dcPartyDetails, vendors, isOnSiteGRN, loggedEmp } = grnDatas
 
     
 
@@ -30,33 +30,7 @@ const Grn = () => {
         width: 1,
     });
 
-    const settingDcData = () => {
-        if (selectedRows.length > 0 && lastGrnNo && dcPartyDetails) {
-            console.log(dcPartyDetails)
-            setGrnData((prev) => (
-                {
-                    ...prev,
-                    grnPlant: selectedRows[0].itemPlant,
-                    grnDepartment: selectedRows[0].itemDepartment,
-                    grnNo: lastGrnNo,
-                    grnPartyName: dcPartyDetails.fullName,
-                    grnPartyAddress: dcPartyDetails.address,
-                    grnPartyCode: dcPartyDetails.vendorCode,
-                    grnPartyId: dcPartyDetails._id,
-                    grnItemId: selectedRows[0].item_id,
-                    grnItemAddMasterName: selectedRows[0].itemAddMasterName,
-                    grnItemIMTENo: selectedRows[0].itemIMTENo,
-                    isOnSiteGRN: dcPartyDetails.length === 0 ? "yes" : "no"
-                    //grnPartyItems: selectedRows
-                }
-
-            ))
-        }
-
-    };
-    useEffect(() => {
-        settingDcData()
-    }, [selectedRows, dcPartyDetails, lastGrnNo, isOnSiteGRN])
+   
 
 
 
@@ -124,6 +98,7 @@ const Grn = () => {
         grnItemCertificate: "",
         grnUncertainity: "",
         grnItemCalStatus: "",
+        grnCreatedBy: ""
     }
 
 
@@ -159,7 +134,7 @@ const Grn = () => {
         grnItemCalibratedAt: "",
         grnItemOBType: "",
         grnItemStatus: "",
-        grnAssingStatus: "",
+        grnAssingStatus: "active",
         grnAcCriteria: [
             {
                 grnParameter: "",
@@ -186,13 +161,40 @@ const Grn = () => {
         grnItemCertificate: "",
         grnUncertainity: "",
         grnItemCalStatus: "",
+        grnCreatedBy: ""
 
     })
     console.log(grnData)
 
 
+    const settingDcData = () => {
+        if (selectedRows.length > 0 && lastGrnNo && dcPartyDetails) {
+            console.log(dcPartyDetails)
+            setGrnData((prev) => (
+                {
+                    ...prev,
+                    grnPlant: selectedRows[0].itemPlant,
+                    grnDepartment: selectedRows[0].itemDepartment,
+                    grnNo: lastGrnNo,
+                    grnPartyName: dcPartyDetails.fullName,
+                    grnPartyAddress: dcPartyDetails.address,
+                    grnPartyCode: dcPartyDetails.vendorCode,
+                    grnPartyId: dcPartyDetails._id,
+                    grnItemId: selectedRows[0].item_id,
+                    grnItemAddMasterName: selectedRows[0].itemAddMasterName,
+                    grnItemIMTENo: selectedRows[0].itemIMTENo,
+                    isOnSiteGRN: dcPartyDetails.length === 0 ? "yes" : "no",
+                    grnCreatedBy: loggedEmp.firstName + " "+ loggedEmp.lastName 
+                    //grnPartyItems: selectedRows
+                }
 
+            ))
+        }
 
+    };
+    useEffect(() => {
+        settingDcData()
+    }, [selectedRows, dcPartyDetails, lastGrnNo, isOnSiteGRN])
 
 
 
@@ -1165,7 +1167,7 @@ const Grn = () => {
                                                 value={grnData.grnAssingStatus}
                                                 onChange={handleGrnItemChange}
                                                 select
-                                                label="Changes Status"
+                                                label="Select Status"
                                                 name='grnAssingStatus'
                                             >
                                                 <MenuItem value="all">All</MenuItem>
@@ -1629,7 +1631,7 @@ const Grn = () => {
 
 
                                                 <div className='col-4 me-2'>
-                                                    <TextField size='small' inputProps={{ sx: { color: grnData.grnItemCalStatus === "status" ? "" : grnData.grnItemCalStatus === "accepted" ? "green" : "red" } }} fullWidth variant='outlined' id="grnItemCalStatusId" select label="Calibration Status" name='grnItemCalStatus' value={grnData.grnItemCalStatus}>
+                                                    <TextField size='small' inputProps={{ sx: { color: grnData.grnItemCalStatus === "status" ? "" : grnData.grnItemCalStatus === "accepted" ? "green" : "red" } }} fullWidth variant='outlined' id="grnItemCalStatusId" select label="Calibration Status" name='grnItemCalStatus' value={grnData.grnItemCalStatus} onChange={handleGrnItemChange}>
                                                         <MenuItem value="status">Status</MenuItem>
                                                         <MenuItem value="accepted">Accepted</MenuItem>
                                                         <MenuItem value="rejected">Rejected</MenuItem>
@@ -1697,7 +1699,7 @@ const Grn = () => {
 
                 </div>
             </DialogContent>
-            <DialogActions className='d-flex justify-content-between'>
+            <DialogActions className='d-flex justify-content-end'>
 
                 <div>
                     <Button variant='contained' color='error' className='me-3' onClick={() => { setGrnOpen(false); setGrnData([]); setGrnData(initialGrnData); window.location.reload() }}>Cancel</Button>

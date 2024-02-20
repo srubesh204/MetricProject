@@ -1,4 +1,4 @@
-import { Alert, Autocomplete, Badge, Button, Chip, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, FormControl, FormControlLabel, Grid, InputLabel, List, ListSubheader, MenuItem, Paper, Select, Snackbar, Stack, Switch, TextField, ToggleButton, ToggleButtonGroup, Typography } from '@mui/material';
+import { Alert, Autocomplete, Badge, Button, Chip, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, FormControl, FormControlLabel, Grid, InputLabel, List, ListSubheader, MenuItem, Paper, Select, Snackbar, Stack, Switch, TextField, ToggleButton, ToggleButtonGroup, Typography, responsiveFontSizes } from '@mui/material';
 import Box from '@mui/material/Box';
 import { Link } from 'react-router-dom'
 import { DataGrid, GridToolbar, GridToolbarQuickFilter } from '@mui/x-data-grid';
@@ -166,10 +166,11 @@ const Home = () => {
       const response = await axios.post(
         `${process.env.REACT_APP_PORT}/itemGRN/getAllItemGRN`, { allowedPlants: allowedPlants }
       );
-      const NextGrnNo = await axios.post(
-        `${process.env.REACT_APP_PORT}/itemGRN/getAllItemGRN`, { allowedPlants: allowedPlants }
+      const NextGrnNo = await axios.get(
+        `${process.env.REACT_APP_PORT}/itemGRN/getNextGRNNo`
       );
       setGrnList(response.data.result);
+      setLastGrnNo(NextGrnNo.data.result)
     } catch (err) {
       console.log(err);
     }
@@ -304,6 +305,7 @@ const Home = () => {
       const response = await axios.post(
         `${process.env.REACT_APP_PORT}/itemAdd/getItemByPlant`, { allowedPlants: allowedPlants }
       );
+      console.log(response.data.result)
       let allItems = []
       if (employeeRole.employee === "admin") {
 
@@ -2021,7 +2023,7 @@ const Home = () => {
                   <Dc /> 
                 </HomeContent.Provider>
                 <HomeContent.Provider
-                  value={{ grnOpen, setGrnOpen, selectedRows, lastGrnNo, dcPartyDetails, vendors, isOnSiteGRN }}
+                  value={{ grnOpen, setGrnOpen, selectedRows, lastGrnNo, dcPartyDetails, vendors, isOnSiteGRN, loggedEmp }}
                 >
                   <Grn />
                 </HomeContent.Provider>

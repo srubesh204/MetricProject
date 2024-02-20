@@ -1615,7 +1615,7 @@ const GrnEdit = () => {
 
 
                                                 <div className='col-4 me-2'>
-                                                    <TextField size='small' inputProps={{ sx: { color: grnEditData.grnItemCalStatus === "status" ? "" : grnEditData.grnItemCalStatus === "accepted" ? "green" : "red" } }} fullWidth variant='outlined' id="grnItemCalStatusId" select label="Calibration Status" name='grnItemCalStatus' value={grnEditData.grnItemCalStatus}>
+                                                    <TextField size='small' onChange={handleEditGrnItemChange} inputProps={{ sx: { color: grnEditData.grnItemCalStatus === "status" ? "" : grnEditData.grnItemCalStatus === "accepted" ? "green" : "red" } }} fullWidth variant='outlined' id="grnItemCalStatusId" select label="Calibration Status" name='grnItemCalStatus' value={grnEditData.grnItemCalStatus}>
                                                         <MenuItem value="status">Status</MenuItem>
                                                         <MenuItem value="accepted">Accepted</MenuItem>
                                                         <MenuItem value="rejected">Rejected</MenuItem>

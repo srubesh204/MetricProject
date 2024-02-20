@@ -239,13 +239,13 @@ const itemDcController = {
         }))).filter(item => item !== null);
         console.log(dcItemsData.length)
         // Check if any item with dcStatus !== "0" in prevItemsData is not present in dcItemsData
-        const hasDifferentStatus = prevItemsData.some(prevItem => dcItemsData.find(dcItem => dcItem._id.toString() === prevItem._id.toString()));
+        const hasDifferentStatus = prevItemsData.some(prevItem => !dcItemsData.find(dcItem => dcItem._id.toString() === prevItem._id.toString()));
         // If any item with dcStatus !== "0" is found in prevItemsData that is not present in dcItemsData, return false
-        return hasDifferentStatus;
+        return !hasDifferentStatus;
       };
-
-      console.log(!await dcDeleteStatus())
-      if (await dcDeleteStatus()) {
+      const status = await dcDeleteStatus()
+      console.log(status)
+      if (status) {
 
         const prevUpdatePromises = prevPartyItems.map(async (item) => {
 
@@ -267,7 +267,7 @@ const itemDcController = {
             { $set: updateItemFields },
             { new: true }
           );
-          console.log(updateResult)
+          
           return updateResult;
         });
         const prevUpdatedValues = await Promise.all(prevUpdatePromises);
@@ -280,7 +280,7 @@ const itemDcController = {
         const formatNo = await formatNoModel.findById("formatNo");
 
         const formatNumber = `${formatNo.fDc ? (formatNo.fDc.frNo + " " + formatNo.fDc.amNo + " " + formatNo.fDc.amDate) : ""}`
-        console.log(formatNumber)
+       
 
         const itemDcUpdate = new itemDcModel(updateItemDcFields);
 
@@ -329,7 +329,7 @@ const itemDcController = {
               { $set: updateItemFields },
               { new: true }
             );
-            console.log(updateResult)
+           
             return updateResult;
           });
           const updatedItems = await Promise.all(updatePromises);
@@ -380,7 +380,7 @@ const itemDcController = {
 
           // Set the modified HTML content
           const cssPath = path.resolve(__dirname, '../templates/bootstrap.min.css');
-          console.log(modifiedHTML)
+          
           await page.setContent(modifiedHTML, { waitUntil: 'networkidle0' });
 
           await page.addStyleTag({ path: cssPath });

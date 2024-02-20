@@ -153,17 +153,7 @@ const CalList = () => {
         companyFetch();
     }, []);
 
-    const handleCompany = (e) => {
-        const { name, value } = e.target;
-        if (value === "all") {
-            setCompanyName(itemAddList)
-        } else {
-            if (name === "companyName") {
-                const companyName = itemAddList.filter((item) => item.companyName === value)
-                setFilterAddress(companyName)
-            }
-        }
-    }
+    
 
 
 
@@ -286,7 +276,7 @@ const CalList = () => {
     console.log(selectedCalRow)
 
     const calListColumns = [
-        { field: 'id', headerName: 'Entry. No', width: 60, renderCell: (params) => params.api.getAllRowIds().indexOf(params.id) + 1, headerAlign: "center", align: "center", },
+        { field: 'id', headerName: 'Entry. No', width: 60, renderCell: (params) => params.api.getAllRowIds().length - params.api.getAllRowIds().indexOf(params.id), headerAlign: "center", align: "center", },
         ...(employeeRole && employeeRole.employee !== "viewer" ? [{ field: 'editButton', headerAlign: "center", align: "center", headerName: 'Edit', width: 60, renderCell: (params) => <EditRounded color='warning' onClick={() => setCalEditData(params)} /> }] : []),
         { field: 'calItemEntryDate', headerName: 'Entry Date', width: 100, valueGetter: (params) => dayjs(params.row.calItemEntryDate).format('DD-MM-YYYY'), headerAlign: "center", align: "center", },
         { field: 'calIMTENo', headerName: 'Item IMTENo', width: 180, headerAlign: "center", align: "center", },
