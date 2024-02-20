@@ -29,8 +29,8 @@ const PlantActual = () => {
     console.log(itemDataList)
 
     const itemListColumns = [
-        { field: 'id', headerName: 'Sr. No', width: 70, renderCell: (params) => params.api.getAllRowIds().indexOf(params.id) + 1, headerAlign: "center", align: "center", },
-        { field: 'itemAddMasterName', headerName: 'Item Description', width: 180, headerAlign: "center", align: "center", },
+        { field: 'id', headerName: 'Sr. No', width: 100, renderCell: (params) => params.api.getAllRowIds().indexOf(params.id) + 1, headerAlign: "center", align: "center", },
+        { field: 'itemAddMasterName', headerName: 'Item Description', width: 200, headerAlign: "left", align: "left", },
         {
             field: 'itemIMTENo',
             headerName: 'Item IMTENo',
@@ -39,7 +39,7 @@ const PlantActual = () => {
         },
         {
             field: 'itemDueDate',
-            headerName: 'Plant',
+            headerName: 'Plan',
             width: 150,
             headerAlign: "center", align: "center", valueGetter: (params) => dayjs(params.row.itemDueDate).format('DD-MM-YYYY')
         },
@@ -49,7 +49,6 @@ const PlantActual = () => {
             width: 150,
             headerAlign: "center", align: "center", valueGetter: (params) => dayjs(params.row.itemCalDate).format('DD-MM-YYYY')
         },
-
         // {
         //     field: 'Last cal Due Date',
         //     headerName: 'Last cal Due Date',
