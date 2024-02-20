@@ -461,7 +461,6 @@ const MeasurementUncertainty = () => {
         setUncertainityData(prev => ({ ...prev, uncTypeBResult: [...prev.uncTypeBResult, ...modifiedData] }));
         setSelectedValues([]);
     }
-
     console.log(masterDetails)
     const handlePlantChange = (e) => {
         const { name, value } = e.target;

@@ -135,12 +135,9 @@ const VendorUpload = () => {
         if (name === "vendorPlant") {
             const vendorPlant = vendorDataList.filter((item) => (item.vendorPlant === value))
             setFilteredData(vendorPlant);
-        }
-       
+        }  
     }
     
-
-
     return (
         <div style={{ fontSize: "smaller", padding: "3px", margin: "5px", my: "5px" }}>
 

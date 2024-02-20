@@ -77,8 +77,6 @@ const PlantActual = () => {
       
     })
 
-
-
     const itemListColumns = [
         { field: 'id', headerName: 'Sr. No', width: 100, renderCell: (params) => params.api.getAllRowIds().indexOf(params.id) + 1, headerAlign: "center", align: "center", },
         { field: 'itemAddMasterName', headerName: 'Item Description', width: 200, headerAlign: "left", align: "left", },
@@ -86,7 +84,7 @@ const PlantActual = () => {
             field: 'itemIMTENo',
             headerName: 'Item IMTENo',
             width: 210,
-            headerAlign: "center", align: "center",
+            headerAlign: "left", align: "left",
         },
         {
             field: 'itemDueDate',
@@ -119,7 +117,6 @@ const PlantActual = () => {
         //     },
         // },
     ]
-
     const [departments, setDepartments] = useState([])
     const DepartmentFetch = async () => {
         try {
