@@ -140,9 +140,9 @@ const Home = () => {
   const dcListFetchData = async () => {
     try {
       const response = await axios.post(
-        `${process.env.REACT_APP_PORT}/itemDc/getAllItemDc`, {allowedPlants : allowedPlants}
+        `${process.env.REACT_APP_PORT}/itemDc/getAllItemDc`, { allowedPlants: allowedPlants }
       );
-      
+
       const dcNos = response.data.result.map(dc => dc.dcId).filter(Boolean)
       const sortedDc = dcNos.sort((a, b) => a - b);
       console.log(sortedDc)
@@ -744,7 +744,7 @@ const Home = () => {
   })
 
 
-  const calStatusColor = ['#FF4545','#FFBB28','#00C49F', '#FF8042', "#ACA8C8", "#0088FE"];
+  const calStatusColor = ['#FF4545', '#FFBB28', '#00C49F', '#FF8042', "#ACA8C8", "#0088FE"];
   const itemStatusColor = ["#595959", "orange", "#FF8042", "#0088FE", "#FF4545"];
   const itemLocationColor = ["#984EA3", "violet", "orange", "#00C49F", "#0088FE"];
 
@@ -1251,15 +1251,15 @@ const Home = () => {
 
   const getMailPlant = async () => {
     console.log(mailIds)
-    if(selectedRows.length > 0){
+    if (selectedRows.length > 0) {
       try {
         const response = await axios.post(
-          `${process.env.REACT_APP_PORT}/employee/getMailIdsByPlant`, { allowedPlants : [selectedRows[0].itemPlant]}
+          `${process.env.REACT_APP_PORT}/employee/getMailIdsByPlant`, { allowedPlants: [selectedRows[0].itemPlant] }
         );
         console.log(response.data.result)
         setMailIds(response.data.result)
-  
-  
+
+
       } catch (err) {
         console.log(err);
       }
@@ -1914,7 +1914,7 @@ const Home = () => {
           </div>
           <div className="col-md-4">
             <Paper className='col' elevation={12} sx={{ p: 2, height: "100%" }}>
-              <div style={{ width: "100%", height: "400px" , overflow: "auto"}}>
+              <div style={{ width: "100%", height: 280, overflow: "auto" }}>
                 <table className='m-0 table table-bordered table-sm text-center align-middle table-hover'>
                   {selectedLoc === "Departments" &&
                     <tbody>
@@ -2005,15 +2005,18 @@ const Home = () => {
                   <Button component={Link} to="/insHisCard" size='small' >
                     History Card
                   </Button>
+
+
                 </div>
-
-
-
-                <div className='col d-flex justify-content-end  height: "20%", width: "50%"' >
-                  <p style={{ color: '#3498db', fontSize: '18px', fontWeight: 'bold', align: "right" }}>
+                <div className='col text-end'>
+                  <p style={{ color: '#3498db', fontSize: '18px', fontWeight: 'bold' }}>
                     Welcome {loggedEmp.firstName}
                   </p>
                 </div>
+
+
+
+                
               </div>
 
             </Paper>
