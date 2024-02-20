@@ -247,156 +247,156 @@ const itemDcController = {
       console.log(status)
       if (status) {
 
-        // const prevUpdatePromises = prevPartyItems.map(async (item) => {
+        const prevUpdatePromises = prevPartyItems.map(async (item) => {
 
-        //   const itemData = await itemAddModel.findById(item._id)
+          const itemData = await itemAddModel.findById(item._id)
 
 
-        //   const { itemIMTENo, itemLastLocation } = itemData
-        //   const updateItemFields = {
-        //     itemIMTENo,
-        //     itemCurrentLocation: itemLastLocation,
-        //     itemLocation: "department",
-        //     dcId: "",
-        //     dcStatus: "0",
-        //     dcCreatedOn: "",
-        //     dcNo: ""
-        //   }
-        //   const updateResult = await itemAddModel.findOneAndUpdate(
-        //     { _id: item._id },
-        //     { $set: updateItemFields },
-        //     { new: true }
-        //   );
+          const { itemIMTENo, itemLastLocation } = itemData
+          const updateItemFields = {
+            itemIMTENo,
+            itemCurrentLocation: itemLastLocation,
+            itemLocation: "department",
+            dcId: "",
+            dcStatus: "0",
+            dcCreatedOn: "",
+            dcNo: ""
+          }
+          const updateResult = await itemAddModel.findOneAndUpdate(
+            { _id: item._id },
+            { $set: updateItemFields },
+            { new: true }
+          );
           
-        //   return updateResult;
-        // });
-        // const prevUpdatedValues = await Promise.all(prevUpdatePromises);
-        // //
-        // const getCompDetailsById = await compDetailsSchema.findById("companyData");
-        // const getPlantAddress = await plantSchema.findOne(
-        //   { plantName: dcPlant } // To return the updated document
-        // );
+          return updateResult;
+        });
+        const prevUpdatedValues = await Promise.all(prevUpdatePromises);
+        //
+        const getCompDetailsById = await compDetailsSchema.findById("companyData");
+        const getPlantAddress = await plantSchema.findOne(
+          { plantName: dcPlant } // To return the updated document
+        );
 
-        // const formatNo = await formatNoModel.findById("formatNo");
+        const formatNo = await formatNoModel.findById("formatNo");
 
-        // const formatNumber = `${formatNo.fDc ? (formatNo.fDc.frNo + " " + formatNo.fDc.amNo + " " + formatNo.fDc.amDate) : ""}`
+        const formatNumber = `${formatNo.fDc ? (formatNo.fDc.frNo + " " + formatNo.fDc.amNo + " " + formatNo.fDc.amDate) : ""}`
        
 
-        // const itemDcUpdate = new itemDcModel(updateItemDcFields);
+        const itemDcUpdate = new itemDcModel(updateItemDcFields);
 
 
-        // const validationError = itemDcUpdate.validateSync();
-        // if (validationError) {
-        //   // Handle validation errors
-        //   const validationErrors = {};
+        const validationError = itemDcUpdate.validateSync();
+        if (validationError) {
+          // Handle validation errors
+          const validationErrors = {};
 
-        //   if (validationError.errors) {
-        //     // Convert Mongoose validation error details to a more user-friendly format
-        //     for (const key in validationError.errors) {
-        //       validationErrors[key] = validationError.errors[key].message;
-        //     }
-        //   }
+          if (validationError.errors) {
+            // Convert Mongoose validation error details to a more user-friendly format
+            for (const key in validationError.errors) {
+              validationErrors[key] = validationError.errors[key].message;
+            }
+          }
 
-        //   return res.status(400).json({
-        //     errors: validationErrors
-        //   });
-        // }
+          return res.status(400).json({
+            errors: validationErrors
+          });
+        }
 
-        // // Find the designation by desId and update it
-        // const updateItemDc = await itemDcModel.findOneAndUpdate(
-        //   { _id: itemDcId },
-        //   updateItemDcFields,
-        //   { new: true } // To return the updated document
-        // );
+        // Find the designation by desId and update it
+        const updateItemDc = await itemDcModel.findOneAndUpdate(
+          { _id: itemDcId },
+          updateItemDcFields,
+          { new: true } // To return the updated document
+        );
 
-        // if (Object.keys(updateItemDc).length !== 0) {
-        //   const updatePromises = dcPartyItems.map(async (item) => {
+        if (Object.keys(updateItemDc).length !== 0) {
+          const updatePromises = dcPartyItems.map(async (item) => {
 
-        //     const itemData = await itemAddModel.findById(item._id)
-        //     const { itemIMTENo, itemCurrentLocation: itemLastLocation } = itemData
-        //     const updateItemFields = {
-        //       itemIMTENo,
-        //       itemCurrentLocation: dcPartyName,
-        //       itemLastLocation,
-        //       itemLocation: dcPartyType,
-        //       dcId: updateItemDc._id,
-        //       dcStatus: "1",
-        //       dcCreatedOn: dcDate,
-        //       dcNo: updateItemDc.dcNo
-        //     }
-        //     const updateResult = await itemAddModel.findOneAndUpdate(
-        //       { _id: item._id },
-        //       { $set: updateItemFields },
-        //       { new: true }
-        //     );
+            const itemData = await itemAddModel.findById(item._id)
+            const { itemIMTENo, itemCurrentLocation: itemLastLocation } = itemData
+            const updateItemFields = {
+              itemIMTENo,
+              itemCurrentLocation: dcPartyName,
+              itemLastLocation,
+              itemLocation: dcPartyType,
+              dcId: updateItemDc._id,
+              dcStatus: "1",
+              dcCreatedOn: dcDate,
+              dcNo: updateItemDc.dcNo
+            }
+            const updateResult = await itemAddModel.findOneAndUpdate(
+              { _id: item._id },
+              { $set: updateItemFields },
+              { new: true }
+            );
            
-        //     return updateResult;
-        //   });
-        //   const updatedItems = await Promise.all(updatePromises);
+            return updateResult;
+          });
+          const updatedItems = await Promise.all(updatePromises);
 
 
-        //   const itemsData = dcPartyItems.map((item, index) => {
-        //     let tableRow = `
-        //         <tr>
-        //             <td style="padding: 0.50rem; vertical-align: top; border: 1px solid #6c757d ;" class="text-center align-middle">${index + 1}</td>
-        //             <td style="padding: 0.50rem; vertical-align: top; border: 1px solid #6c757d ;" class="align-middle">Item Name: ${item.itemItemMasterName ? item.itemItemMasterName : "-"} IMTE No: ${item.itemIMTENo ? item.itemIMTENo : "-"} SAP No: ${item.itemSAPNo ? item.itemSAPNo : "-"} <br>
-        //             Range/Size: ${item.itemRangeSize ? item.itemRangeSize : "" + ' ' + item.itemRangeSizeUnit ? item.itemRangeSizeUnit : ""} L.C.: ${(item.itemLC ? item.itemLC : "") + '' + (item.itemLCUnit ? item.itemLCUnit : '')}<br>
-        //             Make: ${item.itemMake ? item.itemMake : "-"} Sr.No: ${item.itemMFRNo ? item.itemMFRNo : "-"} Cal. Frequency: ${item.itemCalFreInMonths ? item.itemCalFreInMonths : "-"} months</td>
-        //             <td style="padding: 0.50rem; vertical-align: top; border: 1px solid #6c757d ;" class="text-center align-middle">${item.dcItemRemarks}</td>
-        //         </tr>
-        //     `;
+          const itemsData = dcPartyItems.map((item, index) => {
+            let tableRow = `
+                <tr>
+                    <td style="padding: 0.50rem; vertical-align: top; border: 1px solid #6c757d ;" class="text-center align-middle">${index + 1}</td>
+                    <td style="padding: 0.50rem; vertical-align: top; border: 1px solid #6c757d ;" class="align-middle">Item Name: ${item.itemItemMasterName ? item.itemItemMasterName : "-"} IMTE No: ${item.itemIMTENo ? item.itemIMTENo : "-"} SAP No: ${item.itemSAPNo ? item.itemSAPNo : "-"} <br>
+                    Range/Size: ${item.itemRangeSize ? item.itemRangeSize : "" + ' ' + item.itemRangeSizeUnit ? item.itemRangeSizeUnit : ""} L.C.: ${(item.itemLC ? item.itemLC : "") + '' + (item.itemLCUnit ? item.itemLCUnit : '')}<br>
+                    Make: ${item.itemMake ? item.itemMake : "-"} Sr.No: ${item.itemMFRNo ? item.itemMFRNo : "-"} Cal. Frequency: ${item.itemCalFreInMonths ? item.itemCalFreInMonths : "-"} months</td>
+                    <td style="padding: 0.50rem; vertical-align: top; border: 1px solid #6c757d ;" class="text-center align-middle">${item.dcItemRemarks}</td>
+                </tr>
+            `;
 
-        //     return tableRow;
-        //   });
-
-
-        //   // Example usage:
-
-        //   const browser = await puppeteer.launch();
-        //   const page = await browser.newPage();
-
-        //   // Read the HTML template file
-        //   const filePath = path.resolve(__dirname, '../../server/templates/dcTemplate.html');
-        //   const htmlTemplate = fs.readFileSync(filePath, 'utf8');
-
-        //   // Replace placeholders with actual data
-        //   const modifiedHTML = htmlTemplate
-
-        //     .replace(/{{dcPartyItems}}/g, itemsData.join(""))
-        //     .replace(/{{CompanyName}}/g, getCompDetailsById.companyName)
-        //     .replace(/{{Plant}}/g, getPlantAddress.plantName)
-        //     .replace(/{{PlantAddress}}/g, getPlantAddress.plantAddress)
-        //     .replace(/{{dcPartyName}}/g, dcPartyName)
-        //     .replace(/{{dcPartyAddress}}/g, dcPartyAddress)
-        //     .replace(/{{dcNo}}/g, updateItemDc.dcNo)
-        //     .replace(/{{dcDate}}/g, dcDate)
-        //     .replace(/{{dcCR}}/g, dcCommonRemarks)
-        //     .replace(/{{dcCReason}}/, dcReason)
-        //     .replace(/{{logo}}/g, process.env.SERVER_PORT + '/logo/' + getCompDetailsById.companyLogo)
-        //     .replace(/{{formatNo}}/g, formatNumber)
+            return tableRow;
+          });
 
 
-        //   // Add more replace statements for additional placeholders as needed
+          // Example usage:
 
-        //   // Set the modified HTML content
-        //   const cssPath = path.resolve(__dirname, '../templates/bootstrap.min.css');
+          const browser = await puppeteer.launch();
+          const page = await browser.newPage();
+
+          // Read the HTML template file
+          const filePath = path.resolve(__dirname, '../../server/templates/dcTemplate.html');
+          const htmlTemplate = fs.readFileSync(filePath, 'utf8');
+
+          // Replace placeholders with actual data
+          const modifiedHTML = htmlTemplate
+
+            .replace(/{{dcPartyItems}}/g, itemsData.join(""))
+            .replace(/{{CompanyName}}/g, getCompDetailsById.companyName)
+            .replace(/{{Plant}}/g, getPlantAddress.plantName)
+            .replace(/{{PlantAddress}}/g, getPlantAddress.plantAddress)
+            .replace(/{{dcPartyName}}/g, dcPartyName)
+            .replace(/{{dcPartyAddress}}/g, dcPartyAddress)
+            .replace(/{{dcNo}}/g, updateItemDc.dcNo)
+            .replace(/{{dcDate}}/g, dcDate)
+            .replace(/{{dcCR}}/g, dcCommonRemarks)
+            .replace(/{{dcCReason}}/, dcReason)
+            .replace(/{{logo}}/g, process.env.SERVER_PORT + '/logo/' + getCompDetailsById.companyLogo)
+            .replace(/{{formatNo}}/g, formatNumber)
+
+
+          // Add more replace statements for additional placeholders as needed
+
+          // Set the modified HTML content
+          const cssPath = path.resolve(__dirname, '../templates/bootstrap.min.css');
           
-        //   await page.setContent(modifiedHTML, { waitUntil: 'networkidle0' });
+          await page.setContent(modifiedHTML, { waitUntil: 'networkidle0' });
 
-        //   await page.addStyleTag({ path: cssPath });
+          await page.addStyleTag({ path: cssPath });
 
-        //   // Generate PDF
-        //   await page.pdf({ path: `./storage/dcCertificate/${updateItemDc.dcNo}.pdf`, format: 'A4' });
+          // Generate PDF
+          await page.pdf({ path: `./storage/dcCertificate/${updateItemDc.dcNo}.pdf`, format: 'A4' });
 
-        //   await browser.close();
+          await browser.close();
 
-        //   console.log('PDF created successfully');
-        // }
+          console.log('PDF created successfully');
+        }
 
-        // if (!updateItemDc) {
-        //   return res.status(404).json({ error: 'Item Dc not found' });
-        // }
-        // console.log("Item Dc Updated Successfully")
+        if (!updateItemDc) {
+          return res.status(404).json({ error: 'Item Dc not found' });
+        }
+        console.log("Item Dc Updated Successfully")
         res.status(200).json({ result: "updateItemDc", message: "Item Dc Updated Successfully" });
       } else {
         res.status(500).json({ error: 'Item cannot be deleted, used in GRN' });
