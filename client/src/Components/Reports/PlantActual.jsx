@@ -138,7 +138,8 @@ const PlantActual = () => {
     useEffect(() => {
         DepartmentFetch()
     }, []);
-
+    const [plantDepartments, setPlantDepartments] = useState([]);
+    const [selectedPlantDatas, setSelectedPlantDatas] = useState([])
     const handleFilterChangeItemList = (e) => {
         const { name, value } = e.target;
         console.log(e);
@@ -146,16 +147,28 @@ const PlantActual = () => {
             setFilteredData(itemDataList)
         }else{
         if (name === "itemPlant") {
-            const itemPlant = itemDataList.filter((item) => (item.itemPlant === value))
-            setFilteredData(itemPlant);
+            const dep = loggedEmp.plantDetails.filter(plant => plant.plantName === value);
+            const plantDatas = itemDataList.filter(item => item.itemPlant === value)
+            console.log(itemDataList)
+            setSelectedPlantDatas(plantDatas)
+            console.log(plantDatas)
+            const nameList = [...new Set(plantDatas.map(item => item.itemDepartment))]
+            console.log(dep)
+            setPlantDepartments(nameList)
+
+            // const itemPlant = itemDataList.filter((item) => (item.itemPlant === value))
+             setFilteredData(plantDatas);
         }
         if (name === "itemDepartment") {
-            const itemDepartment = itemDataList.filter((item) => (item.itemDepartment === value))
-            setFilteredData(itemDepartment);
+            const filterList = selectedPlantDatas.filter(item => item.itemDepartment === value)
+            // const itemDepartment = itemDataList.filter((item) => (item.itemDepartment === value))
+            setFilteredData(filterList);
         }
         setDateData((prev) => ({ ...prev, [name]: value }));
     }
     };
+
+
 
     // const [plantDatas, setPlantDatas] = useState([])
     // const [departmentDatas, setDepartmentDatas] = useState([])
@@ -297,8 +310,8 @@ const PlantActual = () => {
                                     size="small"
                                     name="itemDepartment" >
                                     <MenuItem value="all">All</MenuItem>
-                                    {departments.map((item, index) => (
-                                        <MenuItem key={index} value={item.department}>{item.department}</MenuItem>
+                                    {plantDepartments.map((item, index) => (
+                                        <MenuItem key={index} value={item}>{item}</MenuItem>
                                     ))}
                                 </TextField>
                             </div>

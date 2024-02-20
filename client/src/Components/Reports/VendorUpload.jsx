@@ -7,9 +7,12 @@ import { Box, Container, Grid, Paper, Typography } from "@mui/material";
 import { TextField, MenuItem, Button } from '@mui/material';
 import FileOpenIcon from '@mui/icons-material/FileOpen';
 import { Link } from "react-router-dom";
+import { useEmployee } from '../../App';
 import dayjs from 'dayjs';
 
 const VendorUpload = () => {
+    const empRole = useEmployee()
+    const { loggedEmp, employeeRole } = empRole
 
     const [vendorDataList, setVendorDataList] = useState([])
     const vendorFetchData = async () => {
@@ -27,7 +30,8 @@ const VendorUpload = () => {
     useEffect(() => {
         vendorFetchData();
     }, []);
-
+    
+    console.log(vendorDataList)
     const vendorListColumns = [
 
         { field: 'id', headerName: 'Sr. No', width: 70, renderCell: (params) => params.api.getAllRowIds().indexOf(params.id) + 1, headerAlign: "center", align: "center", },
@@ -44,7 +48,7 @@ const VendorUpload = () => {
             headerName: 'CertificateValidity',
             //   description: 'This column has a value getter and is not sortable.',
             width: 150,
-            headerAlign: "center", align: "center", renderCell : (params) => params.row.certificateValidity ? dayjs(params.row.certificateValidity).format("DD-MM-YYYY") : "",
+            headerAlign: "center", align: "center", renderCell: (params) => params.row.certificateValidity ? dayjs(params.row.certificateValidity).format("DD-MM-YYYY") : "",
         },
         {
             field: 'Vendor Certificate View',
@@ -52,16 +56,16 @@ const VendorUpload = () => {
             width: 180,
             align: 'center',
             renderCell: (params) => (
-              params.row.certificate ? (
-                <IconButton size="small" component={Link} target="_blank" to={`${process.env.REACT_APP_PORT}/vendorCertificates/${params.row.certificate}`}>
-                  <FileOpenIcon />
-                </IconButton>
-              ) : (
-                // Render something else when the file is not uploaded
-                <span></span>
-              )
+                params.row.certificate ? (
+                    <IconButton size="small" component={Link} target="_blank" to={`${process.env.REACT_APP_PORT}/vendorCertificates/${params.row.certificate}`}>
+                        <FileOpenIcon />
+                    </IconButton>
+                ) : (
+                    // Render something else when the file is not uploaded
+                    <span></span>
+                )
             ),
-          }
+        }
         // {
         //     field: 'Vendor Certificate View', headerName: 'Vendor Certificate View', width: 180, align: "center", renderCell: (params) =>
         //         <IconButton size="small" component={Link} target="_blank" to={`${process.env.REACT_APP_PORT}/vendorCertificates/${params.row.certificate}`} ><FileOpenIcon /></IconButton>
@@ -118,15 +122,23 @@ const VendorUpload = () => {
 
     const handleFilterChange = (e) => {
         const { name, value } = e.target;
+        
         if (name === "vendorType") {
             if (value === "all") {
                 setFilteredData(vendorDataList)
             } else {
                 const vendorType = vendorDataList.filter((item) => (item[value] === "1"))
                 setFilteredData(vendorType)
+                
             }
         }
+        if (name === "vendorPlant") {
+            const vendorPlant = vendorDataList.filter((item) => (item.vendorPlant === value))
+            setFilteredData(vendorPlant);
+        }
+       
     }
+    
 
 
     return (
@@ -143,12 +155,29 @@ const VendorUpload = () => {
             >
                 <div className='row g-2'>
 
+                    <div className='col-4'>
+                        <TextField label="Plant Wise"
+                            id="vendorPlantId"
+                            select
+                            defaultValue="all"
+                            fullWidth
+                            onChange={handleFilterChange}
+                            size="small"
+                            name="vendorPlantt" >
+
+                            <MenuItem value="all">All</MenuItem>
+                            {loggedEmp.plantDetails.map((item, index) => (
+                                <MenuItem key={index} value={item.plantName}>{item.plantName}</MenuItem>
+                            ))}
+                        </TextField>
+
+                    </div>
                     <div className='col-4 me-2'>
                         <TextField label="Vendor Type"
                             id="vendorTypeId"
                             select
                             defaultValue=""
-                          onChange={handleFilterChange}
+                            onChange={handleFilterChange}
                             size="small"
                             sx={{ width: "101%" }}
 
