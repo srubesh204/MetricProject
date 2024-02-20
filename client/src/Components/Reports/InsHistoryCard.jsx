@@ -208,9 +208,6 @@ function InsHistoryCard() {
             }
 
         }
-
-
-
     }
     // const searchFilter = () => {
     //     if (itemFilters.itemPlant && itemFilters.itemDepartment && itemFilters.itemName && itemFilters.itemIMTENo) {

@@ -151,8 +151,7 @@ const PlantActual = () => {
             console.log(plantDatas)
             const nameList = [...new Set(plantDatas.map(item => item.itemDepartment))]
             console.log(dep)
-            setPlantDepartments(nameList)
-
+            setPlantDepartments(dep[0].departments)
             // const itemPlant = itemDataList.filter((item) => (item.itemPlant === value))
              setFilteredData(plantDatas);
         }
@@ -164,6 +163,7 @@ const PlantActual = () => {
         setDateData((prev) => ({ ...prev, [name]: value }));
     }
     };
+    
 
 
 
