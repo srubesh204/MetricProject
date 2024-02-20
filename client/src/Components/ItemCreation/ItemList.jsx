@@ -1456,8 +1456,6 @@ const ItemList = () => {
                                     </Button>
                                 </DialogActions>
                             </Dialog>
-
-
                         </div>
                         <div className='row'>
                             <div className=' col d-flex mb-2'>
