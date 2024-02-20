@@ -84,6 +84,7 @@ const CalDialog = () => {
         calRangeSizeUnit: "",
         calItemMFRNo: "",
         calLC: "",
+        calLCUnit: "",
         calItemMake: "",
         calItemTemperature: "20±2°c",
         calItemHumidity: "30+75%",
@@ -130,6 +131,7 @@ const CalDialog = () => {
         calRangeSizeUnit: "",
         calItemMFRNo: "",
         calLC: "",
+        calLCUnit: "",
         calItemMake: "",
         calItemTemperature: "20±2°C",
         calItemHumidity: "30% to 75%",
@@ -258,6 +260,7 @@ const CalDialog = () => {
                     calRangeSizeUnit: selectedRows[0].itemRangeSizeUnit,
                     calItemMFRNo: selectedRows[0].itemMFRNo,
                     calLC: selectedRows[0].itemLC,
+                    calLCUnit: selectedRows[0].itemLCUnit,
                     calItemMake: selectedRows[0].itemMake,
                     calItemFreInMonths: selectedRows[0].itemCalFreInMonths,
                     calItemUncertainity: filter.length > 0 && filter[0] ? filter[0].uncertainty : "",
@@ -773,7 +776,7 @@ const CalDialog = () => {
                 console.log(err.response.data.error)
                 setErrorHandler({ status: 0, message: "An error occurred", code: "error" });
             }
-            
+
             console.log(err);
 
         } finally {

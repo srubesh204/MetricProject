@@ -47,6 +47,19 @@ app.use(cors());
 app.use(bodyParser.json({ limit: '100mb' }));
 app.use(bodyParser.urlencoded({ limit: '20mb', extended: true }));
 
+
+// app.post('/login', async (req, res) => {
+//   const { username, password, company } = req.body;
+
+//   // Validate the username and password
+//   // ...
+
+//   // If the user is valid, connect to the company's database
+//   db.connectDatabase(company);
+
+//   // rest of your code...
+// });
+
 app.use('/department', departmentRoute);
 app.use('/designation', designationRoute);
 app.use('/employee', employeeRoute);

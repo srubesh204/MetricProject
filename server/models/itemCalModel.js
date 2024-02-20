@@ -21,6 +21,7 @@ const itemCal = new mongoose.Schema({
   calRangeSizeUnit: String,
   calItemMFRNo: String,
   calLC: String,
+  calLCUnit: String,
   calItemMake: String,
   calItemTemperature: String,
   calItemHumidity: String,

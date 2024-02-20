@@ -33,6 +33,7 @@ const itemCalController = {
         calRangeSizeUnit,
         calItemMFRNo,
         calLC,
+        calLCUnit,
         calItemMake,
         calItemTemperature,
         calItemHumidity,
@@ -69,6 +70,7 @@ const itemCalController = {
         calRangeSizeUnit,
         calItemMFRNo,
         calLC,
+        calLCUnit,
         calItemMake,
         calItemTemperature,
         calItemHumidity,
@@ -104,7 +106,7 @@ const itemCalController = {
       );
       const formatNo = await formatNoModel.findById("formatNo");
       const formatNumber = `${formatNo.fCalDueDate ? (formatNo.fCalDueDate.frNo + " " + formatNo.fCalDueDate.amNo + " " + formatNo.fCalDueDate.amDate) : ""}`
-     
+
       const newItem = new itemCalModel(newItemFields);
 
 
@@ -213,7 +215,8 @@ const itemCalController = {
           });
 
 
-          let calibrationTypeData = ``
+          let calibrationTypeData = ``;
+          let itemlC = ``
           if (calItemType === "referenceStandard") {
             let refCalData = `
             <tr>
@@ -290,6 +293,10 @@ const itemCalController = {
 
 
           if (calItemType === "variable") {
+            itemlC = `<tr>
+            <td width=50%><span class="fw-semibold">Least Count</span></td>
+            <td>: ${createdItem.calLC ? createdItem.calLC : "-"} ${createdItem.calLCUnit ? createdItem.calLCUnit : ""}</td>
+        </tr>`
             let variableCalData = `
             <tr>
               <th colspan="5">Calibration results</th>
@@ -361,7 +368,7 @@ const itemCalController = {
             .replace(/{{calibratedBy}}/g, calCalibratedBy ? calCalibratedBy : "")
             .replace(/{{calStatus}}/g, calStatus ? "<li> Acceptance Remarks : " + calStatus + "</li>" : "")
             .replace(/{{calItemUncertainity}}/g, calItemUncertainity ? "<li>The Expanded uncertainty is ± " + calItemUncertainity + " " + calItemUncertainityUnit + " at 95.45% confidence level with coverage factor k=2.</li>" : "")
-
+            .replace(/{{itemLC}}/g, itemlC)
 
 
 
@@ -496,6 +503,7 @@ const itemCalController = {
         calRangeSizeUnit,
         calItemMFRNo,
         calLC,
+        calLCUnit,
         calItemMake,
         calItemTemperature,
         calItemHumidity,
@@ -532,6 +540,7 @@ const itemCalController = {
         calRangeSizeUnit,
         calItemMFRNo,
         calLC,
+        calLCUnit,
         calItemMake,
         calItemTemperature,
         calItemHumidity,
@@ -684,6 +693,7 @@ const itemCalController = {
 
 
           let calibrationTypeData = ``
+          let itemlC = ``
           if (calItemType === "referenceStandard") {
             let refCalData = `
             <tr>
@@ -760,6 +770,10 @@ const itemCalController = {
 
 
           if (calItemType === "variable") {
+            itemlC = `<tr>
+            <td width=50%><span class="fw-semibold">Least Count</span></td>
+            <td>: ${updateItemCal.calLC ? updateItemCal.calLC : "-"} ${updateItemCal.calLCUnit ? updateItemCal.calLCUnit : ""}</td>
+        </tr>`
             let variableCalData = `
             <tr>
               <th colspan="5">Calibration results</th>
@@ -798,7 +812,7 @@ const itemCalController = {
           // Replace placeholders with actual data
           const modifiedHTML = htmlTemplate
             .replace(/{{ItemName}}/g, calItemName ? calItemName : "-")
-            .replace(/{{CertificateNo}}/g, calCertificateNo ? calCertificateNo : "-")
+            .replace(/{{CertificateNo}}/g, updateItemCal.calCertificateNo ? updateItemCal.calCertificateNo : "-")
             .replace(/{{dateOfIssue}}/g, calItemEntryDate ? dayjs(calItemEntryDate).format("DD-MM-YYYY") : "-")
             .replace(/{{dateOfCalibration}}/g, calItemCalDate ? dayjs(calItemCalDate).format("DD-MM-YYYY") : "-")
             .replace(/{{nextCalibrationDue}}/g, calItemDueDate ? dayjs(calItemDueDate).format("DD-MM-YYYY") : "-")
@@ -830,7 +844,7 @@ const itemCalController = {
             .replace(/{{calibratedBy}}/g, calCalibratedBy ? calCalibratedBy : "-")
             .replace(/{{calStatus}}/g, calStatus ? "<li> Acceptance Remarks : " + calStatus + "</li>" : "")
             .replace(/{{calItemUncertainity}}/g, calItemUncertainity ? "<li>The Expanded uncertainty is ± " + calItemUncertainity + " " + calItemUncertainityUnit + " at 95.45% confidence level with coverage factor k=2.</li>" : "")
-
+            .replace(/{{itemLC}}/g, itemlC)
 
 
 
@@ -846,7 +860,7 @@ const itemCalController = {
           await page.addStyleTag({ path: cssPath });
 
           // Generate PDF
-          await page.pdf({ path: `./storage/calCertificates/${calCertificateNo}.pdf`, format: 'A4' });
+          await page.pdf({ path: `./storage/calCertificates/${updateItemCal.calCertificateNo}.pdf`, format: 'A4' });
 
           await browser.close();
 
