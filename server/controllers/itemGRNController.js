@@ -196,14 +196,14 @@ const itemGRNController = {
       if (Object.keys(result).length !== 0) {
 
         let itemCondition = ""
-        if (grnItemStatus === "Calibrated") {
-          if (grnItemCalStatus === "rejected") {
+        if (result.grnItemStatus === "Calibrated") {
+          if (result.grnItemCalStatus === "rejected") {
             itemCondition = "rejection"
           } else {
             itemCondition = "active"
           }
         } else {
-          itemCondition = grnAssingStatus
+          itemCondition = result.grnAssingStatus
         }
 
 
@@ -237,7 +237,7 @@ const itemGRNController = {
           itemCalAlertDays,
           itemCalibrationSource,
           itemCalibrationDoneAt,
-          itemCalibratedAt,
+          
           itemOBType,
           itemUncertainity,
           itemUncertainityUnit,
@@ -597,11 +597,16 @@ const itemGRNController = {
       if (Object.keys(updateItemGRN).length !== 0) {
 
         let itemCondition = ""
-        if (grnItemCalStatus === "rejected") {
-          itemCondition = "rejection"
+        if (updateItemGRN.grnItemStatus === "Calibrated") {
+          if (updateItemGRN.grnItemCalStatus === "rejected") {
+            itemCondition = "rejection"
+          } else {
+            itemCondition = "active"
+          }
         } else {
-          itemCondition = "active"
+          itemCondition = updateItemGRN.grnAssingStatus
         }
+
 
         const itemData = await itemAddModel.findById(grnItemId)
         const {
