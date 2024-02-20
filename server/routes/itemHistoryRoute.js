@@ -6,6 +6,7 @@ const multer = require('multer');
 
  
 router.get("/getAllItemHistory", itemHistoryController.getAllItemHistory)
+router.get("/getHistoryByIMTENo/:imte", itemHistoryController.getHistoryByIMTENo)
 
 module.exports = router
 

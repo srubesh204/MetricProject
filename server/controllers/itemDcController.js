@@ -12,13 +12,48 @@ const itemGRNModel = require("../models/itemGRNModel");
 const itemDcController = {
   getAllItemDc: async (req, res) => {
     try {
-      const itemDcResult = await itemDcModel.find();
+      // const itemDcResult = await itemDcModel.find();
+      const itemDcResult = await itemDcModel.aggregate([
+        {
+          $match: {
+            "dcPlant": { $in: allowedPlants ? allowedPlants : [] } // Specify the values to match
+          }
+        }, { $sort: { dcNo: -1 } }
+      ])
       res.status(202).json({ result: itemDcResult, status: 1 });
       //res.status(200).json(employees);
     } catch (err) {
       console.error(err);
       res.status(500).send('Error on Item Dc');
     }
+  },
+
+  getNextDcNo: async (req, res) => {
+    try {
+      const currentYear = new Date().getFullYear();
+      let counter = await DcNoCounter.findById('dcNoCounter');
+      const prefix = await formatNoModel.findById('formatNo');
+
+      if (!counter) {
+        // If the counter document doesn't exist, create it in memory
+        counter = { _id: 'dcNoCounter', seq: 1, year: currentYear };
+      } else if (counter.year !== currentYear) {
+        // If the year has changed, reset the counter and update the year in memory
+        counter.seq = 1;
+        counter.year = currentYear;
+      } else {
+        // Otherwise, increment the counter in memory
+        counter.seq++;
+      }
+
+      const nextDcNo = `${prefix && prefix.fCommonPrefix ? prefix.fCommonPrefix : ""}DC${currentYear}-${String(counter.seq).padStart(2, '0')}`;
+
+      res.status(202).json({ result: itemDcResult, status: 1 });
+    } catch (err) {
+      console.error(err);
+      res.status(500).send('Error on Item Dc Get');
+    }
+
   },
   createItemDc: async (req, res) => {
 
@@ -77,7 +112,7 @@ const itemDcController = {
           errors: validationErrors
         });
       }
-     
+
 
 
 
@@ -86,7 +121,7 @@ const itemDcController = {
 
 
       if (Object.keys(result).length !== 0) {
-        
+
         const updatePromises = dcPartyItems.map(async (item) => {
 
           const itemData = await itemAddModel.findById(item._id)
@@ -108,7 +143,7 @@ const itemDcController = {
             { $set: updateItemFields },
             { new: true }
           );
-          
+
           return updateResult;
         });
         const updatedItems = await Promise.all(updatePromises);
@@ -161,7 +196,7 @@ const itemDcController = {
 
         // Set the modified HTML content
 
-        
+
         const cssPath = path.resolve(__dirname, '../templates/bootstrap.min.css');
 
         await page.setContent(modifiedHTML, { waitUntil: 'networkidle0' });
@@ -215,7 +250,7 @@ const itemDcController = {
       const dcDeleteStatus = async () => {
         // Fetch item data from itemAddModel for items with dcStatus !== "0" in prevPartyItems
         const prevItemsData = (await Promise.all(prevPartyItems.map(async (prevItem) => {
-          return await itemAddModel.findOne({ _id: prevItem._id, dcStatus : {$ne : "1"} });
+          return await itemAddModel.findOne({ _id: prevItem._id, dcStatus: { $ne: "1" } });
         }))).filter(item => item !== null);
         console.log(prevItemsData.length)
         // Fetch item data from itemAddModel for items in dcPartyItems
@@ -225,14 +260,14 @@ const itemDcController = {
         console.log(dcItemsData.length)
         // Check if any item with dcStatus !== "0" in prevItemsData is not present in dcItemsData
         const hasDifferentStatus = prevItemsData.some(prevItem => dcItemsData.find(dcItem => dcItem._id.toString() === prevItem._id.toString()));
-      
+
         // If any item with dcStatus !== "0" is found in prevItemsData that is not present in dcItemsData, return false
         return hasDifferentStatus;
       };
-        
+
       console.log(!await dcDeleteStatus())
       if (await dcDeleteStatus()) {
-        
+
         const prevUpdatePromises = prevPartyItems.filter(item => item.dcStatus === "1").map(async (item) => {
 
           const itemData = await itemAddModel.findById(item._id)
@@ -357,7 +392,7 @@ const itemDcController = {
             .replace(/{{dcPartyAddress}}/g, dcPartyAddress)
             .replace(/{{dcNo}}/g, updateItemDc.dcNo)
             .replace(/{{dcDate}}/g, dcDate)
-           .replace(/{{dcCR}}/g, dcCommonRemarks)
+            .replace(/{{dcCR}}/g, dcCommonRemarks)
             .replace(/{{dcCReason}}/, dcReason)
             .replace(/{{logo}}/g, process.env.SERVER_PORT + '/logo/' + getCompDetailsById.companyLogo)
             .replace(/{{formatNo}}/g, formatNumber)
@@ -366,11 +401,11 @@ const itemDcController = {
           // Add more replace statements for additional placeholders as needed
 
           // Set the modified HTML content
-       const cssPath = path.resolve(__dirname, '../templates/bootstrap.min.css');
+          const cssPath = path.resolve(__dirname, '../templates/bootstrap.min.css');
           console.log(modifiedHTML)
           await page.setContent(modifiedHTML, { waitUntil: 'networkidle0' });
 
-        await page.addStyleTag({ path: cssPath });
+          await page.addStyleTag({ path: cssPath });
 
           // Generate PDF
           await page.pdf({ path: `./storage/dcCertificate/${updateItemDc.dcNo}.pdf`, format: 'A4' });

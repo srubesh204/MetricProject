@@ -140,10 +140,9 @@ const Home = () => {
   const dcListFetchData = async () => {
     try {
       const response = await axios.get(
-        `${process.env.REACT_APP_PORT}/itemDc/getAllItemDc`
-
+        `${process.env.REACT_APP_PORT}/itemDc/getAllItemDc`, {allowedPlants : allowedPlants}
       );
-      const plantDc = response.data.result.filter(dc => (employeeRole.loggedEmp.plantDetails.map(plant => plant.plantName).includes(dc.dcPlant)))
+      
       const dcNos = response.data.result.map(dc => dc.dcId).filter(Boolean)
       const sortedDc = dcNos.sort((a, b) => a - b);
       console.log(sortedDc)
@@ -154,8 +153,8 @@ const Home = () => {
       }
 
       console.log(dcNos[dcNos.length - 1])
-      setDcList(plantDc);
-      setFilteredData(plantDc);
+      setDcList(response.data.result);
+      setFilteredData(response.data.result);
 
 
     } catch (err) {

@@ -113,7 +113,7 @@ const DcList = () => {
     const dcListFetchData = async () => {
         try {
             const response = await axios.get(
-                `${process.env.REACT_APP_PORT}/itemDc/getAllItemDc`
+                `${process.env.REACT_APP_PORT}/itemDc/getAllItemDc`,  { allowedPlants: allowedPlants }
 
             );
             const plantDc = response.data.result.filter(dc => (loggedEmp.plantDetails.map(plant => plant.plantName).includes(dc.dcPlant)))
