@@ -153,17 +153,7 @@ const CalList = () => {
         companyFetch();
     }, []);
 
-    const handleCompany = (e) => {
-        const { name, value } = e.target;
-        if (value === "all") {
-            setCompanyName(itemAddList)
-        } else {
-            if (name === "companyName") {
-                const companyName = itemAddList.filter((item) => item.companyName === value)
-                setFilterAddress(companyName)
-            }
-        }
-    }
+    
 
 
 

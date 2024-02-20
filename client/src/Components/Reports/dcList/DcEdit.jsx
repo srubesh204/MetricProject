@@ -628,6 +628,7 @@ const DcEdit = () => {
                                             <TextField label="Dc No"
                                                 id="dcNoId"
                                                 defaultValue=""
+                                                disabled
                                                 value={dcEditData.dcNo}
                                                 onChange={handleDcChange}
                                                 size="small"
