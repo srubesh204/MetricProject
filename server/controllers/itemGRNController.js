@@ -44,6 +44,7 @@ const itemGRNController = {
         grnItemIMTENo,
         grnItemRangeSize,
         grnItemRangeSizeUnit,
+        grnItemSAPNo,
         grnItemMFRNo,
         grnItemLC,
         grnItemLCUnit,
@@ -91,6 +92,7 @@ const itemGRNController = {
         grnItemAddMasterName,
         grnItemType,
         grnItemIMTENo,
+        grnItemSAPNo,
         grnItemRangeSize,
         grnItemRangeSizeUnit,
         grnItemMFRNo,
@@ -320,7 +322,7 @@ const itemGRNController = {
         let tableRow = `
         <tr>
             <td style="padding: 0.50rem; vertical-align: top; border: 1px solid #6c757d ;" class="text-center align-middle">1</td>
-            <td style="padding: 0.50rem; vertical-align: top; border: 1px solid #6c757d ;" class="align-middle">Item Name: ${result.grnItemAddMasterName ? result.grnItemAddMasterName : "-"} IMTE No: ${result.grnItemIMTENo ? result.grnItemIMTENo : "-"}<br>
+            <td style="padding: 0.50rem; vertical-align: top; border: 1px solid #6c757d ;" class="align-middle">Item Name: ${result.grnItemAddMasterName ? result.grnItemAddMasterName : "-"} IMTE No: ${result.grnItemIMTENo ? result.grnItemIMTENo : "-"} SAP No: ${result.grnItemSAPNo ? result.grnItemSAPNo : "-"}<br>
             Range/Size: ${result.grnItemRangeSize ? result.grnItemRangeSize : "" + ' ' + result.grnItemRangeSizeUnit ? result.grnItemRangeSizeUnit : ""} L.C.: ${(result.grnItemLC ? result.grnItemLC : "") + '' + (result.grnItemLCUnit ? result.grnItemLCUnit : '')}<br>
             Make: ${result.grnItemMake ? result.grnItemMake : "-"} Sr.No: ${result.grnItemMFRNo ? result.grnItemMFRNo : "-"} Cal. Frequency: ${result.grnItemCalFreInMonths ? result.grnItemCalFreInMonths : "-"} months</td>
             <td style="padding: 0.50rem; vertical-align: top; border: 1px solid #6c757d ;" class="text-center align-middle">${result.grnItemDcNo ? result.grnItemDcNo : "-"}</td>
@@ -423,6 +425,7 @@ const itemGRNController = {
         grnItemAddMasterName,
         grnItemType,
         grnItemIMTENo,
+        grnItemSAPNo,
         grnItemRangeSize,
         grnItemRangeSizeUnit,
         grnItemMFRNo,
@@ -473,6 +476,7 @@ const itemGRNController = {
         grnItemAddMasterName,
         grnItemType,
         grnItemIMTENo,
+        grnItemSAPNo,
         grnItemRangeSize,
         grnItemRangeSizeUnit,
         grnItemMFRNo,
@@ -706,7 +710,7 @@ const itemGRNController = {
         let tableRow = `
         <tr>
             <td style="padding: 0.50rem; vertical-align: top; border: 1px solid #6c757d ;" class="text-center align-middle">1</td>
-            <td style="padding: 0.50rem; vertical-align: top; border: 1px solid #6c757d ;" class="align-middle">Item Name: ${grnItemAddMasterName ? grnItemAddMasterName : "-"} IMTE No: ${grnItemIMTENo ? grnItemIMTENo : "-"}<br>
+            <td style="padding: 0.50rem; vertical-align: top; border: 1px solid #6c757d ;" class="align-middle">Item Name: ${grnItemAddMasterName ? grnItemAddMasterName : "-"} IMTE No: ${grnItemIMTENo ? grnItemIMTENo : "-"} SAP No:${grnItemSAPNo ? grnItemSAPNo: "-"} <br>
             Range/Size: ${grnItemRangeSize ? grnItemRangeSize : "" + ' ' + grnItemRangeSizeUnit ? grnItemRangeSizeUnit : ""} L.C.: ${(grnItemLC ? grnItemLC : "") + '' + (grnItemLCUnit ? grnItemLCUnit : '')}<br>
             Make: ${grnItemMake ? grnItemMake : "-"} Sr.No: ${grnItemMFRNo ? grnItemMFRNo : "-"} Cal. Frequency: ${grnItemCalFreInMonths ? grnItemCalFreInMonths : "-"} months</td>
             <td style="padding: 0.50rem; vertical-align: top; border: 1px solid #6c757d ;" class="text-center align-middle">${updateItemGRN.grnItemDcNo}</td>

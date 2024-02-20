@@ -154,7 +154,7 @@ const itemDcController = {
           let tableRow = `
               <tr>
                   <td style="padding: 0.50rem; vertical-align: top; border: 1px solid #6c757d ;" class="text-center align-middle">${index + 1}</td>
-                  <td style="padding: 0.50rem; vertical-align: top; border: 1px solid #6c757d ;" class="align-middle">Item Name: ${item.itemAddMasterName ? item.itemAddMasterName : "-"} IMTE No: ${item.itemIMTENo ? item.itemIMTENo : "-"}<br>
+                  <td style="padding: 0.50rem; vertical-align: top; border: 1px solid #6c757d ;" class="align-middle">Item Name: ${item.itemAddMasterName ? item.itemAddMasterName : "-"} IMTE No: ${item.itemIMTENo ? item.itemIMTENo : "-"} SAP No: ${item.itemSAPNo ? item.itemSAPNo : "-"}<br>
                   Range/Size: ${(item.itemRangeSize && item.itemRangeSize !== "undefined" ? item.itemRangeSize : "-") + " " + (item.itemRangeSizeUnit && item.itemRangeSizeUnit !== "undefined" ? item.itemRangeSizeUnit : "")} L.C.: ${(item.itemLC ? item.itemLC : "") + ' ' + (item.itemLCUnit ? item.itemLCUnit : '')}<br>
                   Make: ${item.itemMake ? item.itemMake : "-"} Sr.No: ${item.itemMFRNo ? item.itemMFRNo : "-"} Cal. Frequency: ${item.itemCalFreInMonths ? item.itemCalFreInMonths : "-"} months</td>
                   <td style="padding: 0.50rem; vertical-align: top; border: 1px solid #6c757d ;" class="text-center align-middle">${item.dcItemRemarks}</td>
@@ -360,7 +360,7 @@ const itemDcController = {
             let tableRow = `
                 <tr>
                     <td style="padding: 0.50rem; vertical-align: top; border: 1px solid #6c757d ;" class="text-center align-middle">${index + 1}</td>
-                    <td style="padding: 0.50rem; vertical-align: top; border: 1px solid #6c757d ;" class="align-middle">Item Name: ${item.itemItemMasterName ? item.itemItemMasterName : "-"} IMTE No: ${item.itemIMTENo ? item.itemIMTENo : "-"}<br>
+                    <td style="padding: 0.50rem; vertical-align: top; border: 1px solid #6c757d ;" class="align-middle">Item Name: ${item.itemItemMasterName ? item.itemItemMasterName : "-"} IMTE No: ${item.itemIMTENo ? item.itemIMTENo : "-"} SAP No: ${item.itemSAPNo ? item.itemSAPNo : "-"} <br>
                     Range/Size: ${item.itemRangeSize ? item.itemRangeSize : "" + ' ' + item.itemRangeSizeUnit ? item.itemRangeSizeUnit : ""} L.C.: ${(item.itemLC ? item.itemLC : "") + '' + (item.itemLCUnit ? item.itemLCUnit : '')}<br>
                     Make: ${item.itemMake ? item.itemMake : "-"} Sr.No: ${item.itemMFRNo ? item.itemMFRNo : "-"} Cal. Frequency: ${item.itemCalFreInMonths ? item.itemCalFreInMonths : "-"} months</td>
                     <td style="padding: 0.50rem; vertical-align: top; border: 1px solid #6c757d ;" class="text-center align-middle">${item.dcItemRemarks}</td>

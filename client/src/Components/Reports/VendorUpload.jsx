@@ -30,7 +30,7 @@ const VendorUpload = () => {
     useEffect(() => {
         vendorFetchData();
     }, []);
-    
+
     console.log(vendorDataList)
     const vendorListColumns = [
 
@@ -122,19 +122,19 @@ const VendorUpload = () => {
 
     const handleFilterChange = (e) => {
         const { name, value } = e.target;
-        
+
         if (name === "vendorType") {
             if (value === "all") {
                 setFilteredData(vendorDataList)
             } else {
                 const vendorType = vendorDataList.filter((item) => (item[value] === "1"))
-                setFilteredData(vendorType)   
+                setFilteredData(vendorType)
             }
             if (name === "vendorPlant") {
                 const vendorPlant = vendorDataList.filter((item) => (item.vendorPlant.includes(value)))
                 setFilteredData(vendorPlant);
-         }  
-          }
+            }
+        }
     }
     return (
         <div style={{ fontSize: "smaller", padding: "3px", margin: "5px", my: "5px" }}>

@@ -19,7 +19,7 @@ const PlantActual = () => {
     const itemFetchData = async () => {
         try {
             const response = await axios.get(
-                `${process.env.REACT_APP_PORT}/itemAdd/getAllItemAdds`
+                `${process.env.REACT_APP_PORT}/itemAdd/getItemByPlant`
             );
             setItemDataList(response.data.result);
             setFilteredData(response.data.result)
