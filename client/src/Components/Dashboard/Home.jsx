@@ -145,6 +145,7 @@ const Home = () => {
       const dcNextNumber = await axios.get(
         `${process.env.REACT_APP_PORT}/itemDc/getNextDcNo`
       );
+      console.log(dcNextNumber.data.result)
       setLastNo(dcNextNumber.data.result)
       setDcList(response.data.result);
       setFilteredData(response.data.result);
