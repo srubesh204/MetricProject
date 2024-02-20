@@ -1631,7 +1631,7 @@ const Grn = () => {
 
 
                                                 <div className='col-4 me-2'>
-                                                    <TextField size='small' inputProps={{ sx: { color: grnData.grnItemCalStatus === "status" ? "" : grnData.grnItemCalStatus === "accepted" ? "green" : "red" } }} fullWidth variant='outlined' id="grnItemCalStatusId" select label="Calibration Status" name='grnItemCalStatus' value={grnData.grnItemCalStatus}>
+                                                    <TextField size='small' inputProps={{ sx: { color: grnData.grnItemCalStatus === "status" ? "" : grnData.grnItemCalStatus === "accepted" ? "green" : "red" } }} fullWidth variant='outlined' id="grnItemCalStatusId" select label="Calibration Status" name='grnItemCalStatus' value={grnData.grnItemCalStatus} onChange={handleGrnItemChange}>
                                                         <MenuItem value="status">Status</MenuItem>
                                                         <MenuItem value="accepted">Accepted</MenuItem>
                                                         <MenuItem value="rejected">Rejected</MenuItem>
@@ -1699,7 +1699,7 @@ const Grn = () => {
 
                 </div>
             </DialogContent>
-            <DialogActions className='d-flex justify-content-between'>
+            <DialogActions className='d-flex justify-content-end'>
 
                 <div>
                     <Button variant='contained' color='error' className='me-3' onClick={() => { setGrnOpen(false); setGrnData([]); setGrnData(initialGrnData); window.location.reload() }}>Cancel</Button>
