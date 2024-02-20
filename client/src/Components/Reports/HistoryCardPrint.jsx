@@ -140,18 +140,18 @@ const HistoryCardPrint = () => {
                                     {/* <tr style={{ fontWeight: "bold" }}>Department :    &nbsp;&nbsp;&nbsp;{selectedRow?.itemDepartment || '-'}</tr> */}
                                 </td>
                                 <td style={{ width: "30%", padding: "0px", textAlign: "center" }}>
-                                    {selectedRow.length > 0 && selectedRow.itemType === "variable" && <td style={{ fontWeight: "bold", fontSize: "12px" }}>Permissible Error</td>}
-                                    {selectedRow.length > 0 && selectedRow.itemType === "attribute" && <td style={{ fontWeight: "bold", fontSize: "12px" }}>Permissible Size</td>}
-                                    {selectedRow.length > 0 && selectedRow.itemType === "referenceStandard" && <td style={{ fontWeight: "bold", fontSize: "12px" }}>Permissible Size</td>}
+                                    {selectedRow && selectedRow.itemType === "variable" && <td style={{ fontWeight: "bold", fontSize: "12px" }}>Permissible Error</td>}
+                                    {selectedRow && selectedRow.itemType === "attribute" && <td style={{ fontWeight: "bold", fontSize: "12px" }}>Permissible Size</td>}
+                                    {selectedRow && selectedRow.itemType === "referenceStandard" && <td style={{ fontWeight: "bold", fontSize: "12px" }}>Permissible Size</td>}
 
-                                    {selectedRow.length > 0 && selectedRow.itemType === "attribute" && <table style={{ width: "100%", margin: 0, borderCollapse: "collapse" }}>
+                                    {selectedRow && selectedRow.itemType === "attribute" && <table style={{ width: "100%", margin: 0, borderCollapse: "collapse" }}>
 
                                         <tr style={{ borderTop: "0.5px solid black" }}>
                                             <td style={{ width: "33%", borderRight: "0.5px solid black", fontWeight: "bold" }}>Parameter</td>
                                             <td style={{ width: "33%", borderRight: "0.5px solid black", fontWeight: "bold" }}>Min / Max</td>
                                             <td style={{ width: "34%", fontWeight: "bold" }}>Wear Limit</td>
                                         </tr>
-                                        {selectedRow.length > 0 &&
+                                        {selectedRow &&
                                             selectedRow.acceptanceCriteria.map((item, index) => (
                                                 <tr key={index} style={{ borderTop: "0.5px solid black" }}>
                                                     <td style={{ width: "33%", borderRight: "0.5px solid black" }}>{item.acParameter || '-'}</td>
@@ -160,14 +160,14 @@ const HistoryCardPrint = () => {
                                                 </tr>
                                             ))}
                                     </table>}
-                                    {selectedRow.length > 0 && selectedRow.itemType === "variable" && <table style={{ width: "100%", margin: 0, borderCollapse: "collapse" }}>
+                                    {selectedRow && selectedRow.itemType === "variable" && <table style={{ width: "100%", margin: 0, borderCollapse: "collapse" }}>
 
                                         <tr style={{ borderTop: "0.5px solid black" }}>
                                             <td style={{ width: "33%", borderRight: "0.5px solid black", fontWeight: "bold" }}>Parameter</td>
                                             <td style={{ width: "33%", borderRight: "0.5px solid black", fontWeight: "bold" }}>Min / Max</td>
                                             {/* <td style={{ width: "34%", fontWeight: "bold" }}>Wear Limit</td> */}
                                         </tr>
-                                        {selectedRow.length > 0 &&
+                                        {selectedRow &&
                                             selectedRow.acceptanceCriteria.map((item, index) => (
                                                 <tr key={index} style={{ borderTop: "0.5px solid black" }}>
                                                     <td style={{ width: "33%", borderRight: "0.5px solid black" }}>{item.acParameter || '-'}</td>
@@ -176,14 +176,14 @@ const HistoryCardPrint = () => {
                                                 </tr>
                                             ))}
                                     </table>}
-                                    {selectedRow.length > 0 && selectedRow.itemType === "referenceStandard" && <table style={{ width: "100%", margin: 0, borderCollapse: "collapse" }}>
+                                    {selectedRow && selectedRow.itemType === "referenceStandard" && <table style={{ width: "100%", margin: 0, borderCollapse: "collapse" }}>
 
                                         <tr style={{ borderTop: "0.5px solid black" }}>
                                             <td style={{ width: "33%", borderRight: "0.5px solid black", fontWeight: "bold" }}>Parameter</td>
                                             <td style={{ width: "33%", borderRight: "0.5px solid black", fontWeight: "bold" }}>Min / Max</td>
                                             {/* <td style={{ width: "34%", fontWeight: "bold" }}>Wear Limit</td> */}
                                         </tr>
-                                        {selectedRow.length > 0 &&
+                                        {selectedRow &&
                                             selectedRow.acceptanceCriteria.map((item, index) => (
                                                 <tr key={index} style={{ borderTop: "0.5px solid black" }}>
                                                     <td style={{ width: "33%", borderRight: "0.5px solid black" }}>{item.acParameter || '-'}</td>
