@@ -3,7 +3,7 @@ const dayjs = require('dayjs')
 const excelToJson = require('convert-excel-to-json');
 const itemHistory = require("../models/itemHistory");
 const itemCalModel = require("../models/itemCalModel");
-const {itemDcModel} = require("../models/itemDcModel");
+const { itemDcModel } = require("../models/itemDcModel");
 const itemGRNModel = require("../models/itemGRNModel");
 
 const itemAddController = {
@@ -950,26 +950,92 @@ const itemAddController = {
   getItemTransactStatus: async (req, res) => {
     try {
       const itemId = req.params.id;
-      
-      
+
+
       // Check if the _id exists in itemDcModel
       const itemInDc = await itemDcModel.findOne({ 'dcPartyItems._id': itemId });
       const itemInGrn = await itemGRNModel.findOne({ 'grnItemId': itemId });
       const itemInCal = await itemCalModel.findOne({ 'ItemCalId': itemId });
-      
+
       if (itemInDc || itemInGrn || itemInCal) {
         console.log('The _id is used in itemDcModel');
         res.status(202).json({ status: true, message: "Item already used" })
-      }else{
+      } else {
         res.status(202).json({ status: false, message: "Item not used yet" })
       }
-      
+
     } catch (err) {
       console.log(err)
 
     }
 
+  },
+  getItemByDepartment: async (req, res) => {
+    try {
+      const department = req.params.id;
+
+
+      // Check if the _id exists in itemDcModel
+      const result = await itemAddModel.aggregate([
+        { $match: { itemDepartment: department } },
+        { $group: { _id: "$itemAddMasterName" } },
+        { $sort: { _id: 1 } },
+        { $project: { _id: 0, itemAddMasterName: "$_id" } }
+      ]);
+      
+      
+
+      res.status(202).json({ status: true, message: "ItemGet Successfull", result: result })
+
+
+
+
+    } catch (err) {
+      console.log(err)
+      res.status(500).json({ error: 'Internal Server Error on ItemDepartment get' });
+    }
+
+  },
+  getItemByItemAddMasterName: async (req, res) => {
+    try {
+      const name = req.params.id;
+
+
+      // Check if the _id exists in itemDcModel
+      const result = await itemAddModel.aggregate([
+        { $match: { itemAddMasterName: name } },
+        { $group: { _id: "$itemIMTENo" } },
+        { $sort: { _id: 1 } },
+        { $project: { _id: 0, itemIMTENo: "$_id" } }
+      ]);
+      
+      
+
+      res.status(202).json({ status: true, message: "ItemGet Successfull", result: result })
+
+
+
+
+    } catch (err) {
+      console.log(err)
+      res.status(500).json({ error: 'Internal Server Error on ItemName get' });
+    }
+
+  },
+  getItemByIMTENO: async (req, res) => {
+    try {
+      const imte = req.params.id;
+      // Check if the _id exists in itemDcModel
+      const result = await itemAddModel.findOne({itemIMTENo: imte})
+      res.status(202).json({ status: true, message: "ItemGet Successfull", result: result })
+
+    } catch (err) {
+      console.log(err)
+      res.status(500).json({ error: 'Internal Server Error on ItemName get' });
+    }
+
   }
+
 
 
 

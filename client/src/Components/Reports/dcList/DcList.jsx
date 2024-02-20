@@ -587,7 +587,7 @@ const DcList = () => {
                                     </TextField>
 
                                 </div>
-                                <div className='col '>
+                                <div className='col me-2'>
                                     <TextField label="Primary Location "
                                         id="dcDepartmentId"
                                         select
@@ -610,7 +610,7 @@ const DcList = () => {
                                         defaultValue=""
                                         onChange={handleFilterChange}
                                         size="small"
-                                        sx={{ width: "101%" }}
+                                        fullWidth
                                         name="vendorType" >
                                         <MenuItem value=""><em>--Select--</em></MenuItem>
                                         <MenuItem value="oem">OEM</MenuItem>

@@ -109,10 +109,10 @@ function InsHistoryCard() {
 
 
 
-    
+
     const [itemList, setItemList] = useState([]);
     const [selectedPlantDatas, setSelectedPlantDatas] = useState([])
-    const [selectedDepartmentData, setSelectedDepartmentData] = useState([])
+   
     const [itemListDistNames, setItemListDistNames] = useState([])
     const [itemIMTEs, setItemIMTEs] = useState([])
     const [selectedMasterData, setSelectedMasterData] = useState([])
@@ -173,39 +173,76 @@ function InsHistoryCard() {
         if (name === "itemPlant") {
 
             const dep = loggedEmp.plantDetails.filter(plant => plant.plantName === value);
-            const plantDatas = itemList.filter(item => item.itemPlant === value)
-            console.log(itemList)
-            setSelectedPlantDatas(plantDatas)
-            console.log(plantDatas)
-            const nameList = [...new Set(plantDatas.map(item => item.itemDepartment))]
-            
-           
+            if (value === "Select") {
+                setSelectedPlantDatas([])
+            } else {
+                setSelectedPlantDatas(dep.length > 0 ? dep[0].departments : [])
+            }
+
+
             setItemFilters(prev => ({ ...prev, itemDepartment: "Select", itemName: "Select", itemIMTENo: "Select" }))
         }
         if (name === "itemDepartment") {
-            const filterList = selectedPlantDatas.filter(item => item.itemDepartment === value)
-            const nameList = [...new Set(filterList.map(item => item.itemAddMasterName))].sort()
-            setItemListDistNames(nameList)
+            console.log(value)
+            const itemDepWise = async () => {
+                try {
+                    const response = await axios.get(
+                        `${process.env.REACT_APP_PORT}/itemAdd/getItemByDepartment/${value}`
+                    );
+                    setItemListDistNames(response.data.result)
+                    console.log(response.data.result)
+                } catch (error) {
+                    console.error('Error fetching data:', error);
+                }
+            };
+            itemDepWise()
+            // const filterList = selectedPlantDatas.filter(item => item.itemDepartment === value)
+            // const nameList = [...new Set(filterList.map(item => item.itemAddMasterName))].sort()
+            // setItemListDistNames(nameList)
 
-            setItemFilters(prev => ({ ...prev, itemName: "Select", itemIMTENo: "Select" }))
-            setSelectedDepartmentData(filterList)
+            // setItemFilters(prev => ({ ...prev, itemName: "Select", itemIMTENo: "Select" }))
+            // setSelectedDepartmentData(filterList)
         }
         if (name === "itemName") {
-            console.log(value)
-            const filterList = selectedDepartmentData.filter(item => item.itemAddMasterName === value)
-            setItemIMTEs(filterList)
-            setItemFilters(prev => ({ ...prev, itemIMTENo: "Select" }))
-        } if (name === "itemIMTENo") {
-            const imteNo = selectedDepartmentData.filter(item => item.itemIMTENo === value)
-            if (imteNo.length > 0) {
-                setSelectedRow(imteNo)
-                const data = itemHistoryData.filter(item => item.itemIMTENo === value)
-                console.log(data)
-                setFilteredData(data)
+            const itemNameWise = async () => {
+                try {
+                    const response = await axios.get(
+                        `${process.env.REACT_APP_PORT}/itemAdd/getItemByItemAddMasterName/${value}`
+                    );
+                    setItemIMTEs(response.data.result)
+                    setItemFilters(prev => ({ ...prev, itemIMTENo: "Select" }))
+                    console.log(response.data.result)
+                } catch (error) {
+                    console.error('Error fetching data:', error);
+                }
+            };
+            itemNameWise()
 
-                const master = masters.filter(mas => mas.itemDescription === imteNo[0].itemAddMasterName)
-                setSelectedMasterData(master[0])
-            }
+
+        } if (name === "itemIMTENo") {
+           
+            const itemIMTEWise = async () => {
+                
+                try {
+                    const encodedValue = encodeURIComponent(value);
+                    const imteNo = await axios.get(
+                        `${process.env.REACT_APP_PORT}/itemAdd/getItemByIMTENO/${encodedValue}`
+                    );
+                    if (imteNo.data.result) {
+                        setSelectedRow(imteNo.data.result)
+                        const data = itemHistoryData.filter(item => item.itemIMTENo === imteNo.data.result.itemIMTENo)
+                        console.log(data)
+                        setFilteredData(data)
+                        const master = masters.filter(mas => mas.itemDescription === imteNo.data.result.itemAddMasterName)
+                        setSelectedMasterData(master[0])
+                    }
+                    console.log(imteNo.data.result)
+                } catch (error) {
+                    console.error('Error fetching data:', error);
+                }
+            };
+            itemIMTEWise()
+            
 
         }
     }
@@ -315,7 +352,7 @@ function InsHistoryCard() {
             ),
         },
         { field: 'itemCalibratedAt', headerName: 'Calibrated At', width: 150, align: "center" },
-        ...(selectedRow[0]?.itemCalibrationSource !== 'outsource' ? [{
+        ...(selectedRow?.itemCalibrationSource !== 'outsource' ? [{
             field: 'itemCalibratedBy',
             headerName: 'Calibrated By',
             width: 150,
@@ -365,12 +402,12 @@ function InsHistoryCard() {
                                 <div className="col-md-7 ">
                                     <div className="row g-2">
                                         <TextField label="Plant Wise"
-                                            className="me-2  col"
+                                            className="me-2 col"
                                             id="itemPlantId"
                                             select
                                             value={itemFilters.itemPlant}
                                             fullWidth
-                                            disabled={loggedEmp.plantDetails.length === 1}_
+                                            disabled={loggedEmp.plantDetails.length === 1} _
                                             onChange={handleFilters}
                                             size="small"
                                             name="itemPlant" >
@@ -379,25 +416,25 @@ function InsHistoryCard() {
                                                 <MenuItem key={index} value={item.plantName}>{item.plantName}</MenuItem>
                                             ))}
                                         </TextField>
-                                        <TextField label="Primary Location "
+                                        <TextField label="Primary Location"
                                             id="itemDepartmentId"
-                                            className="me-2  col"
+                                            className="me-2 col"
                                             select
                                             value={itemFilters.itemDepartment}
                                             fullWidth
                                             disabled={loggedEmp.plantDetails.length === 1 && loggedEmp.plantDetails[0].departments.length === 1}
                                             onChange={handleFilters}
                                             size="small"
-                                            name="itemDepartment" >
+                                            name="itemDepartment">
                                             <MenuItem value="Select">Select</MenuItem>
-                                            {loggedEmp.plantDetails && loggedEmp.plantDetails[0].departments.map((item, index) => (
+                                            {selectedPlantDatas.map((item, index) => (
                                                 <MenuItem key={index} value={item}>{item}</MenuItem>
                                             ))}
                                         </TextField>
-                                        <TextField className="me-2   col" label="Instrument Name" size="small" onChange={handleFilters} id="itemNameId" select name="itemName" value={itemFilters.itemName} fullWidth >
+                                        <TextField className="me-2 col" label="Instrument Name" size="small" onChange={handleFilters} id="itemNameId" select name="itemName" value={itemFilters.itemName} fullWidth >
                                             <MenuItem value="Select">Select</MenuItem >
                                             {itemListDistNames.map((item) => (
-                                                <MenuItem value={item}>{item}</MenuItem >
+                                                <MenuItem value={item.itemAddMasterName}>{item.itemAddMasterName}</MenuItem >
                                             ))}
 
                                         </TextField>
@@ -411,7 +448,7 @@ function InsHistoryCard() {
                                             name="itemIMTENo"
                                             value={itemFilters.itemIMTENo}
                                             fullWidth
-                                            className="col"
+                                            className="col me-2"
                                         >
                                             <MenuItem value="Select">Select</MenuItem>
                                             {itemIMTEs.map((item, index) => (
@@ -479,19 +516,19 @@ function InsHistoryCard() {
                             </div>
                             <div className="row g-2">
                                 <div className=" col d-flex justify-content-start">
-                                    {selectedRow[0]?.itemIMTENo && <div>
+                                    {selectedRow?.itemIMTENo && <div>
                                         <div><Button size="small" variant="contained" onClick={() => setPrintState(true)} startIcon={<PrintRounded />}>
                                             Print
                                         </Button></div>
                                     </div>}
                                 </div>
                                 <div className="col d-flex justify-content-end">
-                                    <div className="me-2"><Button component={Link} to={`${process.env.REACT_APP_PORT}/additionalCertificates/${selectedRow.length > 0 ? selectedRow[0].rdName : ""}`} target="_blank" variant="contained" color="info" size="small">R&R</Button></div>
+                                    <div className="me-2"><Button component={Link} to={`${process.env.REACT_APP_PORT}/additionalCertificates/${selectedRow ? selectedRow?.rdName : ""}`} target="_blank" variant="contained" color="info" size="small">R&R</Button></div>
                                     <div className="me-2">
-                                        <Button component={Link} to={`${process.env.REACT_APP_PORT}/additionalCertificates/${selectedRow.length > 0 ? selectedRow[0].msaName : ""}`} target="_blank" variant="contained" color="info" size="small">MSA</Button>
+                                        <Button component={Link} to={`${process.env.REACT_APP_PORT}/additionalCertificates/${selectedRow ? selectedRow?.msaName : ""}`} target="_blank" variant="contained" color="info" size="small">MSA</Button>
                                     </div>
                                     <div className="me-2">
-                                        <Button component={Link} to={`${process.env.REACT_APP_PORT}/additionalCertificates/${selectedRow.length > 0 ? selectedRow[0].otherFile : ""}`} target="_blank" variant="contained" color="info" size="small">Drawing</Button>
+                                        <Button component={Link} to={`${process.env.REACT_APP_PORT}/additionalCertificates/${selectedRow? selectedRow?.otherFile : ""}`} target="_blank" variant="contained" color="info" size="small">Drawing</Button>
                                     </div>
                                     <div className="me-2"><Button component={Link} to={`${process.env.REACT_APP_PORT}/workInstructions/${selectedMasterData ? selectedMasterData.workInsName : ""}`} target="_blank" variant="contained" color="info" size="small">View Instructions</Button></div>
                                     {/* <div className="me-2"><Button variant="contained" color="info" size="small">View Drawing</Button></div>
@@ -512,16 +549,16 @@ function InsHistoryCard() {
                                     <div className="row g-2 mb-2">
                                         <div className="col-md-3">
                                             <TextField label="Serial No."
-                                                value={selectedRow[0]?.itemMFRNo} size="small" name="itemMFRNo" InputProps={{ readOnly: true }} InputLabelProps={{ shrink: true }}></TextField>
+                                                value={selectedRow?.itemMFRNo} size="small" name="itemMFRNo" InputProps={{ readOnly: true }} InputLabelProps={{ shrink: true }}></TextField>
                                         </div>
                                         <div className="col-md-3">
                                             <TextField label="Model No."
-                                                value={selectedRow[0]?.itemModelNo} size="small" name="itemModelNo" InputProps={{ readOnly: true }} InputLabelProps={{ shrink: true }}></TextField>
+                                                value={selectedRow?.itemModelNo} size="small" name="itemModelNo" InputProps={{ readOnly: true }} InputLabelProps={{ shrink: true }}></TextField>
                                         </div>
                                         <div className="col-md-3">
                                             <TextField
                                                 label="Range / Size"
-                                                value={`${selectedRow[0]?.itemRangeSize || ''} ${selectedRow[0]?.itemRangeSizeUnit || ''}`}
+                                                value={`${selectedRow?.itemRangeSize || ''} ${selectedRow?.itemRangeSizeUnit || ''}`}
                                                 size="small"
                                                 name="itemRangeSize"
                                                 InputProps={{ readOnly: true }}
@@ -531,7 +568,7 @@ function InsHistoryCard() {
                                         {selectedRow[0]?.itemType === "variable" && <div className="col-md-3">
                                             <TextField
                                                 label="Least count"
-                                                value={selectedRow[0]?.itemLC}
+                                                value={selectedRow?.itemLC}
                                                 size="small"
                                                 name="itemLC"
                                                 InputProps={{ readOnly: true }}
@@ -543,20 +580,20 @@ function InsHistoryCard() {
                                     <div className="row g-2 ">
                                         <div className="col-md-3">
                                             <TextField label="Calibration Source"
-                                                value={selectedRow[0]?.itemCalibrationSource} size="small" name="itemCalibrationSource" InputProps={{ readOnly: true }} InputLabelProps={{ shrink: true }}></TextField>
+                                                value={selectedRow?.itemCalibrationSource} size="small" name="itemCalibrationSource" InputProps={{ readOnly: true }} InputLabelProps={{ shrink: true }}></TextField>
                                         </div>
                                         <div className="col-md-3">
                                             <TextField label="Location"
-                                                value={selectedRow[0]?.itemCurrentLocation} size="small" name="itemCurrentLocation" InputProps={{ readOnly: true }} InputLabelProps={{ shrink: true }}></TextField>
+                                                value={selectedRow?.itemCurrentLocation} size="small" name="itemCurrentLocation" InputProps={{ readOnly: true }} InputLabelProps={{ shrink: true }}></TextField>
                                         </div>
                                         <div className="col-md-3">
                                             <TextField label="Frequency In Months"
-                                                value={selectedRow[0]?.itemCalFreInMonths} size="small" name="itemCalFreInMonths" InputProps={{ readOnly: true }} InputLabelProps={{ shrink: true }}></TextField>
+                                                value={selectedRow?.itemCalFreInMonths} size="small" name="itemCalFreInMonths" InputProps={{ readOnly: true }} InputLabelProps={{ shrink: true }}></TextField>
                                         </div>
                                         <div className="col-md-3">
                                             <TextField
                                                 label="Make"
-                                                value={selectedRow[0]?.itemMake}
+                                                value={selectedRow?.itemMake}
                                                 size="small"
                                                 name="itemMake"
                                                 InputProps={{ readOnly: true }}
@@ -576,7 +613,7 @@ function InsHistoryCard() {
                                     }}
                                     elevation={12}>
                                     <div className="col ">
-                                        {selectedRow.length > 0 && selectedRow[0].itemType === "variable" && <table className="table table-sm table-bordered text-center align-middle" style={{ fontSize: "small" }}>
+                                        {selectedRow && selectedRow.itemType === "variable" && <table className="table table-sm table-bordered text-center align-middle" style={{ fontSize: "small" }}>
                                             <thead>
                                                 <tr >
                                                     <th>Parameter</th>
@@ -587,7 +624,7 @@ function InsHistoryCard() {
                                             </thead>
                                             <tbody>
                                                 {
-                                                    selectedRow.length > 0 && selectedRow[0].acceptanceCriteria.map(item => (
+                                                    selectedRow && selectedRow.acceptanceCriteria.map(item => (
                                                         <tr>
                                                             <td>{item.acParameter || '-'}</td>
                                                             <td>{item.acMinPSError || '-'}</td>
@@ -599,7 +636,7 @@ function InsHistoryCard() {
 
                                             </tbody>
                                         </table>}
-                                        {selectedRow.length > 0 && selectedRow[0].itemType === "attribute" && <table className="table table-sm table-bordered text-center align-middle" style={{ fontSize: "small" }}>
+                                        {selectedRow && selectedRow.itemType === "attribute" && <table className="table table-sm table-bordered text-center align-middle" style={{ fontSize: "small" }}>
                                             <thead>
                                                 <tr >
                                                     <th>Parameter</th>
@@ -610,7 +647,7 @@ function InsHistoryCard() {
                                             </thead>
                                             <tbody>
                                                 {
-                                                    selectedRow.length > 0 && selectedRow[0].acceptanceCriteria.map(item => (
+                                                    selectedRow && selectedRow?.acceptanceCriteria.map(item => (
                                                         <tr>
                                                             <td>{item.acParameter || '-'}</td>
                                                             <td>{item.acMinPS || '-'}</td>
@@ -622,7 +659,7 @@ function InsHistoryCard() {
 
                                             </tbody>
                                         </table>}
-                                        {selectedRow.length > 0 && selectedRow[0].itemType === "referenceStandard" && <table className="table table-sm table-bordered text-center align-middle" style={{ fontSize: "small" }}>
+                                        {selectedRow && selectedRow.itemType === "referenceStandard" && <table className="table table-sm table-bordered text-center align-middle" style={{ fontSize: "small" }}>
                                             <thead>
                                                 <tr >
                                                     <th>Parameter</th>
@@ -633,7 +670,7 @@ function InsHistoryCard() {
                                             </thead>
                                             <tbody>
                                                 {
-                                                    selectedRow.length > 0 && selectedRow[0].acceptanceCriteria.map(item => (
+                                                    selectedRow && selectedRow.acceptanceCriteria.map(item => (
                                                         <tr>
                                                             <td>{item.acParameter || '-'}</td>
                                                             <td>{item.acMinPS || '-'}</td>

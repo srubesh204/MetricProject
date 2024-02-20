@@ -84,13 +84,13 @@ const HistoryCardPrint = () => {
                             {index !== row.acceptanceCriteria.length - 1 && <br />} {/* Add <br /> after each item except the last one */}
                         </React.Fragment>)}
                     </td>
-                    <td style={{ width: "9%", borderRight: "0.5px solid black", borderTop: "0.5px solid black" }}>{selectedRow && selectedRow[0]?.itemCalibratedAt || '-'}</td>
-                    {selectedRow[0].itemCalibrationSource !== "outsource" && selectedRow[0].itemCalibrationSource !== "" && (
+                    <td style={{ width: "9%", borderRight: "0.5px solid black", borderTop: "0.5px solid black" }}>{selectedRow && selectedRow?.itemCalibratedAt || '-'}</td>
+                    {selectedRow.itemCalibrationSource !== "outsource" && selectedRow.itemCalibrationSource !== "" && (
                         <td style={{ width: "9%", borderRight: "0.5px solid black", borderTop: "0.5px solid black" }}>
                             {row.itemCalibratedBy ? row.itemCalibratedBy : '-'}
                         </td>
                     )}
-                    {selectedRow[0].itemCalibrationSource !== "outsource" && selectedRow[0].itemCalibrationSource !== "" && (
+                    {selectedRow.itemCalibrationSource !== "outsource" && selectedRow.itemCalibrationSource !== "" && (
                         <td style={{ width: "9%", borderRight: "0.5px solid black", borderTop: "0.5px solid black" }}>
                             {row.itemCalApprovedBy ? row.itemCalApprovedBy : '-'}
                         </td>
@@ -110,7 +110,7 @@ const HistoryCardPrint = () => {
             </tr>
         );
     };
-    console.log(selectedRow[0]?.itemType)
+    console.log(selectedRow?.itemType)
     return (
         <div style={{ display: 'none', width: "100%", height: "100%" }}>
             <div style={{ width: "100%", height: "100%" }} ref={componentRef} >
@@ -129,22 +129,22 @@ const HistoryCardPrint = () => {
                         <tbody>
                             <tr style={{ width: "100", fontSize: "12px" }}>
                                 <td style={{ width: "30%", padding: "5px", margin: 0, borderRight: "0.5px solid black" }}>
-                                    <tr style={{ fontWeight: "" }}>Gauge Number :    &nbsp;&nbsp;&nbsp;{selectedRow[0]?.itemIMTENo || '-'}</tr>
-                                    <tr style={{ fontWeight: "" }}>Gauge Serial No :    &nbsp;&nbsp;&nbsp;{selectedRow[0]?.itemMFRNo || '-'}</tr>
-                                    <tr style={{ fontWeight: "" }}>Calibration Source :    &nbsp;&nbsp;&nbsp;{selectedRow[0]?.itemCalibrationSource || '-'}</tr>
+                                    <tr style={{ fontWeight: "" }}>Gauge Number :    &nbsp;&nbsp;&nbsp;{selectedRow?.itemIMTENo || '-'}</tr>
+                                    <tr style={{ fontWeight: "" }}>Gauge Serial No :    &nbsp;&nbsp;&nbsp;{selectedRow?.itemMFRNo || '-'}</tr>
+                                    <tr style={{ fontWeight: "" }}>Calibration Source :    &nbsp;&nbsp;&nbsp;{selectedRow?.itemCalibrationSource || '-'}</tr>
                                 </td>
                                 <td style={{ width: "40%", padding: "5px", margin: 0, borderRight: "0.5px solid black" }}>
-                                    <tr style={{ fontWeight: "" }}>Instrument / Gauge Name :    &nbsp;&nbsp;&nbsp;{selectedRow[0]?.itemAddMasterName || '-'}</tr>
-                                    <tr style={{ fontWeight: "" }}>Range / Size :    &nbsp;&nbsp;&nbsp;{selectedRow[0]?.itemRangeSize || '-'} {selectedRow[0]?.itemRangeSizeUnit}, {selectedRow[0]?.itemType === "variable" && ( <span>LeastCount: &nbsp;{selectedRow[0]?.itemLC || "-"}</span>)}</tr>
-                                    <tr style={{ fontWeight: "" }}>Frequency Months of Calibration :    &nbsp;&nbsp;&nbsp;{selectedRow[0]?.itemCalFreInMonths}</tr>
-                                    {/* <tr style={{ fontWeight: "bold" }}>Department :    &nbsp;&nbsp;&nbsp;{selectedRow[0]?.itemDepartment || '-'}</tr> */}
+                                    <tr style={{ fontWeight: "" }}>Instrument / Gauge Name :    &nbsp;&nbsp;&nbsp;{selectedRow?.itemAddMasterName || '-'}</tr>
+                                    <tr style={{ fontWeight: "" }}>Range / Size :    &nbsp;&nbsp;&nbsp;{selectedRow?.itemRangeSize || '-'} {selectedRow?.itemRangeSizeUnit}, {selectedRow?.itemType === "variable" && ( <span>LeastCount: &nbsp;{selectedRow?.itemLC || "-"}</span>)}</tr>
+                                    <tr style={{ fontWeight: "" }}>Frequency Months of Calibration :    &nbsp;&nbsp;&nbsp;{selectedRow?.itemCalFreInMonths}</tr>
+                                    {/* <tr style={{ fontWeight: "bold" }}>Department :    &nbsp;&nbsp;&nbsp;{selectedRow?.itemDepartment || '-'}</tr> */}
                                 </td>
                                 <td style={{ width: "30%", padding: "0px", textAlign: "center" }}>
-                                    {selectedRow.length > 0 && selectedRow[0].itemType === "variable" && <td style={{ fontWeight: "bold", fontSize: "12px" }}>Permissible Error</td>}
-                                    {selectedRow.length > 0 && selectedRow[0].itemType === "attribute" && <td style={{ fontWeight: "bold", fontSize: "12px" }}>Permissible Size</td>}
-                                    {selectedRow.length > 0 && selectedRow[0].itemType === "referenceStandard" && <td style={{ fontWeight: "bold", fontSize: "12px" }}>Permissible Size</td>}
+                                    {selectedRow.length > 0 && selectedRow.itemType === "variable" && <td style={{ fontWeight: "bold", fontSize: "12px" }}>Permissible Error</td>}
+                                    {selectedRow.length > 0 && selectedRow.itemType === "attribute" && <td style={{ fontWeight: "bold", fontSize: "12px" }}>Permissible Size</td>}
+                                    {selectedRow.length > 0 && selectedRow.itemType === "referenceStandard" && <td style={{ fontWeight: "bold", fontSize: "12px" }}>Permissible Size</td>}
 
-                                    {selectedRow.length > 0 && selectedRow[0].itemType === "attribute" && <table style={{ width: "100%", margin: 0, borderCollapse: "collapse" }}>
+                                    {selectedRow.length > 0 && selectedRow.itemType === "attribute" && <table style={{ width: "100%", margin: 0, borderCollapse: "collapse" }}>
 
                                         <tr style={{ borderTop: "0.5px solid black" }}>
                                             <td style={{ width: "33%", borderRight: "0.5px solid black", fontWeight: "bold" }}>Parameter</td>
@@ -152,7 +152,7 @@ const HistoryCardPrint = () => {
                                             <td style={{ width: "34%", fontWeight: "bold" }}>Wear Limit</td>
                                         </tr>
                                         {selectedRow.length > 0 &&
-                                            selectedRow[0].acceptanceCriteria.map((item, index) => (
+                                            selectedRow.acceptanceCriteria.map((item, index) => (
                                                 <tr key={index} style={{ borderTop: "0.5px solid black" }}>
                                                     <td style={{ width: "33%", borderRight: "0.5px solid black" }}>{item.acParameter || '-'}</td>
                                                     <td style={{ width: "33%", borderRight: "0.5px solid black" }}>{item.acMinPS || '-'}/{item.acMaxPS || '-'}</td>
@@ -160,7 +160,7 @@ const HistoryCardPrint = () => {
                                                 </tr>
                                             ))}
                                     </table>}
-                                    {selectedRow.length > 0 && selectedRow[0].itemType === "variable" && <table style={{ width: "100%", margin: 0, borderCollapse: "collapse" }}>
+                                    {selectedRow.length > 0 && selectedRow.itemType === "variable" && <table style={{ width: "100%", margin: 0, borderCollapse: "collapse" }}>
 
                                         <tr style={{ borderTop: "0.5px solid black" }}>
                                             <td style={{ width: "33%", borderRight: "0.5px solid black", fontWeight: "bold" }}>Parameter</td>
@@ -168,7 +168,7 @@ const HistoryCardPrint = () => {
                                             {/* <td style={{ width: "34%", fontWeight: "bold" }}>Wear Limit</td> */}
                                         </tr>
                                         {selectedRow.length > 0 &&
-                                            selectedRow[0].acceptanceCriteria.map((item, index) => (
+                                            selectedRow.acceptanceCriteria.map((item, index) => (
                                                 <tr key={index} style={{ borderTop: "0.5px solid black" }}>
                                                     <td style={{ width: "33%", borderRight: "0.5px solid black" }}>{item.acParameter || '-'}</td>
                                                     <td style={{ width: "33%", borderRight: "0.5px solid black" }}>{item.acMinPSError || '-'}/{item.acMaxPSError || '-'}</td>
@@ -176,7 +176,7 @@ const HistoryCardPrint = () => {
                                                 </tr>
                                             ))}
                                     </table>}
-                                    {selectedRow.length > 0 && selectedRow[0].itemType === "referenceStandard" && <table style={{ width: "100%", margin: 0, borderCollapse: "collapse" }}>
+                                    {selectedRow.length > 0 && selectedRow.itemType === "referenceStandard" && <table style={{ width: "100%", margin: 0, borderCollapse: "collapse" }}>
 
                                         <tr style={{ borderTop: "0.5px solid black" }}>
                                             <td style={{ width: "33%", borderRight: "0.5px solid black", fontWeight: "bold" }}>Parameter</td>
@@ -184,7 +184,7 @@ const HistoryCardPrint = () => {
                                             {/* <td style={{ width: "34%", fontWeight: "bold" }}>Wear Limit</td> */}
                                         </tr>
                                         {selectedRow.length > 0 &&
-                                            selectedRow[0].acceptanceCriteria.map((item, index) => (
+                                            selectedRow.acceptanceCriteria.map((item, index) => (
                                                 <tr key={index} style={{ borderTop: "0.5px solid black" }}>
                                                     <td style={{ width: "33%", borderRight: "0.5px solid black" }}>{item.acParameter || '-'}</td>
                                                     <td style={{ width: "33%", borderRight: "0.5px solid black" }}>{item.acMinPS || '-'}/{item.acMaxPS || '-'}</td>
@@ -221,19 +221,19 @@ const HistoryCardPrint = () => {
                                     Certificate No
                                 </td>
                                 <td style={{ width: "9%", borderRight: "0.5px solid black", margin: 0, fontWeight: "bold" }}>
-                                    {selectedRow[0]?.itemType === 'variable' ? 'Observed Error' : 'Observed Size'}
+                                    {selectedRow?.itemType === 'variable' ? 'Observed Error' : 'Observed Size'}
                                 </td>
                                 <td style={{ width: "9%", borderRight: "0.5px solid black", margin: 0, fontWeight: "bold" }}>
                                     Calibration At
                                 </td>
 
-                                {selectedRow[0]?.itemCalibrationSource !== "outsource" && selectedRow[0]?.itemCalibrationSource !== "" && (
+                                {selectedRow?.itemCalibrationSource !== "outsource" && selectedRow?.itemCalibrationSource !== "" && (
                                     <td style={{ width: "9%", borderRight: "0.5px solid black", margin: 0, fontWeight: "bold" }}>
                                         Calibrated By
                                     </td>
                                 )}
 
-                                {selectedRow[0]?.itemCalibrationSource !== "outsource" && selectedRow[0]?.itemCalibrationSource !== "" && (
+                                {selectedRow?.itemCalibrationSource !== "outsource" && selectedRow?.itemCalibrationSource !== "" && (
                                     <td style={{ width: "9%", borderRight: "0.5px solid black", margin: 0, fontWeight: "bold" }}>
                                         Approved By
                                     </td>
