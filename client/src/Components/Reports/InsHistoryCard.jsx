@@ -109,7 +109,7 @@ function InsHistoryCard() {
 
 
 
-    const [plantDepartments, setPlantDepartments] = useState([]);
+    
     const [itemList, setItemList] = useState([]);
     const [selectedPlantDatas, setSelectedPlantDatas] = useState([])
     const [selectedDepartmentData, setSelectedDepartmentData] = useState([])
@@ -135,8 +135,8 @@ function InsHistoryCard() {
 
     console.log(itemList)
     const [itemFilters, setItemFilters] = useState({
-        itemPlant: "Select",
-        itemDepartment: "Select",
+        itemPlant: loggedEmp.plantDetails.length === 1 ? loggedEmp.plantDetails[0].plantName : "Select",
+        itemDepartment: loggedEmp.plantDetails.length === 1 && loggedEmp.plantDetails[0].departments.length === 1 ? loggedEmp.plantDetails[0].departments[0] : "Select",
         itemName: "Select",
         itemIMTENo: "Select"
     })
@@ -178,8 +178,8 @@ function InsHistoryCard() {
             setSelectedPlantDatas(plantDatas)
             console.log(plantDatas)
             const nameList = [...new Set(plantDatas.map(item => item.itemDepartment))]
-            console.log(dep)
-            setPlantDepartments(nameList)
+            
+           
             setItemFilters(prev => ({ ...prev, itemDepartment: "Select", itemName: "Select", itemIMTENo: "Select" }))
         }
         if (name === "itemDepartment") {
@@ -373,6 +373,7 @@ function InsHistoryCard() {
                                             select
                                             value={itemFilters.itemPlant}
                                             fullWidth
+                                            disabled={loggedEmp.plantDetails.length === 1}_
                                             onChange={handleFilters}
                                             size="small"
                                             name="itemPlant" >
@@ -387,11 +388,12 @@ function InsHistoryCard() {
                                             select
                                             value={itemFilters.itemDepartment}
                                             fullWidth
+                                            disabled={loggedEmp.plantDetails.length === 1 && loggedEmp.plantDetails[0].departments.length === 1}
                                             onChange={handleFilters}
                                             size="small"
                                             name="itemDepartment" >
                                             <MenuItem value="Select">Select</MenuItem>
-                                            {plantDepartments.map((item, index) => (
+                                            {loggedEmp.plantDetails && loggedEmp.plantDetails[0].departments.map((item, index) => (
                                                 <MenuItem key={index} value={item}>{item}</MenuItem>
                                             ))}
                                         </TextField>

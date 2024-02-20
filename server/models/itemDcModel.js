@@ -56,6 +56,10 @@ const itemDcSchema = new mongoose.Schema({
   dcPartyItems: {
     type: [],
     required: [true, "Item Required"]
+  },
+  dcCreatedBy : {
+    type: String,
+    required: [true, "DC Created By Required"]
   }
 });
 
@@ -86,4 +90,7 @@ itemDcSchema.pre('save', async function(next) {
 });
 
 itemDcSchema.plugin(uniqueValidator);
-module.exports = mongoose.model('itemDc', itemDcSchema);
+module.exports = {
+  itemDcModel: mongoose.model('itemDc', itemDcSchema),
+  DcNoCounter: DcNoCounter
+};

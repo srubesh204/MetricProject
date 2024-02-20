@@ -112,8 +112,8 @@ const DcList = () => {
     const [dcDataDcList, setDcDataDcList] = useState([])
     const dcListFetchData = async () => {
         try {
-            const response = await axios.get(
-                `${process.env.REACT_APP_PORT}/itemDc/getAllItemDc`
+            const response = await axios.post(
+                `${process.env.REACT_APP_PORT}/itemDc/getAllItemDc`, { allowedPlants: allowedPlants }
 
             );
             const plantDc = response.data.result.filter(dc => (loggedEmp.plantDetails.map(plant => plant.plantName).includes(dc.dcPlant)))
@@ -293,9 +293,11 @@ const DcList = () => {
 
             ),
         },
-        { field: 'dcNo', headerName: 'Dc No', headerAlign: "center", align: "center", width: 100 },
+        { field: 'dcNo', headerName: 'Dc No', headerAlign: "center", align: "center", width: 150 },
         { field: 'dcDate', headerName: 'Dc Date', headerAlign: "center", align: "center", width: 200, renderCell: (params) => dayjs(params.row.dcDate).format("DD-MM-YYYY") },
         { field: 'dcPartyName', headerName: 'Dc PartyName', headerAlign: "center", align: "center", width: 300 },
+        { field: 'dcCreatedBy', headerName: 'DC Created By', headerAlign: "center", align: "center", width: 300 },
+
         { field: 'printButton', headerName: 'Print', headerAlign: "center", align: "center", width: 100, renderCell: (params) => <Button component={Link} to={`${process.env.REACT_APP_PORT}/dcCertificate/${params.row.dcNo}.pdf`} target='_blank'><PrintRounded color='success' /></Button> }
     ]
 

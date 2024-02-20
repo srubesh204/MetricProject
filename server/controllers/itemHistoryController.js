@@ -16,6 +16,17 @@ const itemHistoryController = {
       res.status(500).send('Error on ItemHistory');
     }
   },
+  getHistoryByIMTENo: async (req, res) => {
+    const {imte} = req.params
+    try{
+      const itemHistoryData = await itemHistory.find({itemIMTENo : imte})
+      res.status(202).json({ result: itemHistoryData, status: 1 });
+    }catch (err) {
+      console.error(err);
+      res.status(500).send('Error on ItemHistoryById');
+    }
+  },
+  
 
 }
 

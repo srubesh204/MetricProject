@@ -40,7 +40,8 @@ const DcEdit = () => {
         dcCommonRemarks: "",
         dcPartyItems: [],
         dcPlant: "",
-        dcDepartment: ""
+        dcDepartment: "",
+        dcCreatedBy: ""
 
     }
 
@@ -56,7 +57,8 @@ const DcEdit = () => {
         dcCommonRemarks: "",
         dcPartyItems: [],
         dcPlant: "",
-        dcDepartment: ""
+        dcDepartment: "",
+        dcCreatedBy: ""
 
     })
     console.log(dcEditData)
@@ -80,7 +82,8 @@ const DcEdit = () => {
                 dcCommonRemarks: selectedRows.dcCommonRemarks,
                 dcPartyItems: selectedRows.dcPartyItems,
                 dcPlant: selectedRows.dcPlant,
-                dcDepartment: selectedRows.dcDepartment
+                dcDepartment: selectedRows.dcDepartment,
+                dcCreatedBy: selectedRows.dcCreatedBy
 
             }));
             const plantItems = itemPlantList.filter(item => item.itemPlant === selectedRows.dcPlant)
@@ -94,12 +97,7 @@ const DcEdit = () => {
 
     console.log(dcEditData)
 
-    // useEffect(() => {
-    //     const plantItems = itemPlantList.filter(item => item.itemPlant === selectedRows.dcPlant);
-    //     const distinctItemNames = [...new Set(plantItems.map(item => item.itemAddMasterName))];
-    //     setItemNameList(distinctItemNames);
-    //     console.log(distinctItemNames);
-    // }, [selectedRows.dcPlant, itemPlantList]);
+
 
     useEffect(() => {
         settingDcData();

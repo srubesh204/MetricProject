@@ -139,23 +139,15 @@ const Home = () => {
   const [lastNo, setLastNo] = useState("")
   const dcListFetchData = async () => {
     try {
-      const response = await axios.get(
-        `${process.env.REACT_APP_PORT}/itemDc/getAllItemDc`
-
+      const response = await axios.post(
+        `${process.env.REACT_APP_PORT}/itemDc/getAllItemDc`, { allowedPlants: allowedPlants }
       );
-      const plantDc = response.data.result.filter(dc => (employeeRole.loggedEmp.plantDetails.map(plant => plant.plantName).includes(dc.dcPlant)))
-      const dcNos = response.data.result.map(dc => dc.dcId).filter(Boolean)
-      const sortedDc = dcNos.sort((a, b) => a - b);
-      console.log(sortedDc)
-      if (dcNos.length === 0) {
-        setLastNo("DC-" + (dayjs().year() + "-" + 1))
-      } else {
-        setLastNo("DC-" + (dayjs().year() + "-" + ((dcNos[dcNos.length - 1]) + 1)))
-      }
-
-      console.log(dcNos[dcNos.length - 1])
-      setDcList(plantDc);
-      setFilteredData(plantDc);
+      const dcNextNumber = await axios.get(
+        `${process.env.REACT_APP_PORT}/itemDc/getNextDcNo`
+      );
+      setLastNo(dcNextNumber.data.result)
+      setDcList(response.data.result);
+      setFilteredData(response.data.result);
 
 
     } catch (err) {
@@ -745,7 +737,7 @@ const Home = () => {
   })
 
 
-  const calStatusColor = ['#FF4545','#FFBB28','#00C49F', '#FF8042', "#ACA8C8", "#0088FE"];
+  const calStatusColor = ['#FF4545', '#FFBB28', '#00C49F', '#FF8042', "#ACA8C8", "#0088FE"];
   const itemStatusColor = ["#595959", "orange", "#FF8042", "#0088FE", "#FF4545"];
   const itemLocationColor = ["#984EA3", "violet", "orange", "#00C49F", "#0088FE"];
 
@@ -1252,15 +1244,15 @@ const Home = () => {
 
   const getMailPlant = async () => {
     console.log(mailIds)
-    if(selectedRows.length > 0){
+    if (selectedRows.length > 0) {
       try {
         const response = await axios.post(
-          `${process.env.REACT_APP_PORT}/employee/getMailIdsByPlant`, { allowedPlants : [selectedRows[0].itemPlant]}
+          `${process.env.REACT_APP_PORT}/employee/getMailIdsByPlant`, { allowedPlants: [selectedRows[0].itemPlant] }
         );
         console.log(response.data.result)
         setMailIds(response.data.result)
-  
-  
+
+
       } catch (err) {
         console.log(err);
       }
@@ -1915,7 +1907,7 @@ const Home = () => {
           </div>
           <div className="col-md-4">
             <Paper className='col' elevation={12} sx={{ p: 2, height: "100%" }}>
-              <div style={{ width: "100%", height: "80%" }}>
+              <div style={{ width: "100%", height: 290, overflow: "auto" }}>
                 <table className='m-0 table table-bordered table-sm text-center align-middle table-hover'>
                   {selectedLoc === "Departments" &&
                     <tbody>
@@ -2006,15 +1998,18 @@ const Home = () => {
                   <Button component={Link} to="/insHisCard" size='small' >
                     History Card
                   </Button>
+
+
                 </div>
-
-
-
-                <div className='col d-flex justify-content-end  height: "20%", width: "50%"' >
-                  <p style={{ color: '#3498db', fontSize: '18px', fontWeight: 'bold', align: "right" }}>
+                <div className='col text-end'>
+                  <p style={{ color: '#3498db', fontSize: '18px', fontWeight: 'bold' }}>
                     Welcome {loggedEmp.firstName}
                   </p>
                 </div>
+
+
+
+
               </div>
 
             </Paper>
@@ -2028,9 +2023,9 @@ const Home = () => {
                 </HomeContent.Provider>
 
                 <HomeContent.Provider
-                  value={{ dcOpen, setDcOpen, selectedRows, itemFetch, defaultDep, lastNo, vendors }}
+                  value={{ dcOpen, setDcOpen, selectedRows, itemFetch, defaultDep, lastNo, vendors, loggedEmp }}
                 >
-                  <Dc />
+                  <Dc /> 
                 </HomeContent.Provider>
                 <HomeContent.Provider
                   value={{ grnOpen, setGrnOpen, selectedRows, lastGrnNo, dcPartyDetails, vendors, isOnSiteGRN }}
