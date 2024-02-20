@@ -170,7 +170,7 @@ const Dashboard = () => {
       // { name: "Cal Due Report", file: <CalDueReport />, icon: <img src={`${process.env.REACT_APP_PORT}/icon/list-text.png`} alt="Cal Due Report Icon" style={{ width: '20px', height: '20px' }} /> },
       { name: "Measurement Uncertainty",file: <MeasurementUncertainty />,icon: <img src={`${process.env.REACT_APP_PORT}/icon/list-text.png`} alt="Measurement Uncertainty" style={{ width: '20px', height: '20px' }} />  },
       { name: "Vendor Details",file: <VendorUpload />,icon: <img src={`${process.env.REACT_APP_PORT}/icon/list-text.png`} alt="Vendor Details Icon" style={{ width: '20px', height: '20px' }} />  },
-      { name: "Plan VS Actual",file: <PlantActual />,icon: <img src={`${process.env.REACT_APP_PORT}/icon/list-text.png`} alt="Plan VS Actual Icon" style={{ width: '20px', height: '20px' }} />  },
+      { name: "Plan vs Actual",file: <PlantActual />,icon: <img src={`${process.env.REACT_APP_PORT}/icon/list-text.png`} alt="Plan vs Actual Icon" style={{ width: '20px', height: '20px' }} />  },
     
       // { name: "Management Chart" },
     ]

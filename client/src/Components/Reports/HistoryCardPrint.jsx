@@ -115,8 +115,8 @@ const HistoryCardPrint = () => {
         <div style={{ display: 'none', width: "100%", height: "100%" }}>
             <div style={{ width: "100%", height: "100%" }} ref={componentRef} >
                 <div style={{ padding: "10px", textAlign: "center", textDecoration: "underline" }}>INSTRUMENTS/GAUGE HISTORY CARD</div>
-                <div style={{ textAlign: 'left',display: 'flex', flexDirection: 'column' }}>
-                <td style={{ padding: "2px", textAlign: "right" }}><img src={`${process.env.REACT_APP_PORT}/logo/${companyList[0]?.companyLogo}`} width="90px" height="90px" /></td>
+                <div style={{ textAlign: 'left', display: 'flex', flexDirection: 'column' }}>
+                    <td style={{ padding: "2px", textAlign: "right" }}><img src={`${process.env.REACT_APP_PORT}/logo/${companyList[0]?.companyLogo}`} width="90px" height="90px" /></td>
                 </div>
                 <div style={{ textAlign: 'left', borderBottom: '0.5px solid black', display: 'flex', flexDirection: 'column' }}>
                     <td style={{ padding: "2px", textAlign: "left" }}>{companyList[0]?.companyName}</td>
@@ -135,15 +135,15 @@ const HistoryCardPrint = () => {
                                 </td>
                                 <td style={{ width: "40%", padding: "5px", margin: 0, borderRight: "0.5px solid black" }}>
                                     <tr style={{ fontWeight: "" }}>Instrument / Gauge Name :    &nbsp;&nbsp;&nbsp;{selectedRow[0]?.itemAddMasterName || '-'}</tr>
-                                    <tr style={{ fontWeight: "" }}>Range / Size :    &nbsp;&nbsp;&nbsp;{selectedRow[0]?.itemRangeSize || '-'} {selectedRow[0]?.itemRangeSizeUnit},  &nbsp;&nbsp;  LeastCount: &nbsp;{selectedRow[0]?.itemLC ||"-"}</tr>
+                                    <tr style={{ fontWeight: "" }}>Range / Size :    &nbsp;&nbsp;&nbsp;{selectedRow[0]?.itemRangeSize || '-'} {selectedRow[0]?.itemRangeSizeUnit}, {selectedRow[0]?.itemType === "variable" && ( <span>LeastCount: &nbsp;{selectedRow[0]?.itemLC || "-"}</span>)}</tr>
                                     <tr style={{ fontWeight: "" }}>Frequency Months of Calibration :    &nbsp;&nbsp;&nbsp;{selectedRow[0]?.itemCalFreInMonths}</tr>
                                     {/* <tr style={{ fontWeight: "bold" }}>Department :    &nbsp;&nbsp;&nbsp;{selectedRow[0]?.itemDepartment || '-'}</tr> */}
                                 </td>
                                 <td style={{ width: "30%", padding: "0px", textAlign: "center" }}>
-                                {selectedRow.length > 0 && selectedRow[0].itemType === "variable" &&  <td style={{ fontWeight: "bold", fontSize: "12px" }}>Permissible Error</td>}
-                                {selectedRow.length > 0 && selectedRow[0].itemType === "attribute" &&  <td style={{ fontWeight: "bold", fontSize: "12px" }}>Permissible Size</td>}
-                                {selectedRow.length > 0 && selectedRow[0].itemType === "referenceStandard" &&  <td style={{ fontWeight: "bold", fontSize: "12px" }}>Permissible Size</td>}
-                                
+                                    {selectedRow.length > 0 && selectedRow[0].itemType === "variable" && <td style={{ fontWeight: "bold", fontSize: "12px" }}>Permissible Error</td>}
+                                    {selectedRow.length > 0 && selectedRow[0].itemType === "attribute" && <td style={{ fontWeight: "bold", fontSize: "12px" }}>Permissible Size</td>}
+                                    {selectedRow.length > 0 && selectedRow[0].itemType === "referenceStandard" && <td style={{ fontWeight: "bold", fontSize: "12px" }}>Permissible Size</td>}
+
                                     {selectedRow.length > 0 && selectedRow[0].itemType === "attribute" && <table style={{ width: "100%", margin: 0, borderCollapse: "collapse" }}>
 
                                         <tr style={{ borderTop: "0.5px solid black" }}>
