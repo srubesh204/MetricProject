@@ -16,11 +16,7 @@ const Grn = () => {
     const grnDatas = useContext(HomeContent)
     const { grnOpen, setGrnOpen, selectedRows, lastGrnNo, dcPartyDetails, vendors, isOnSiteGRN } = grnDatas
 
-
-
-
-
-    console.log(dcPartyDetails.fullName)
+    
 
     const VisuallyHiddenInput = styled('input')({
         clip: 'rect(0 0 0 0)',

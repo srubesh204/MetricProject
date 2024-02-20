@@ -121,7 +121,7 @@ const TestHome = () => {
   const dcListFetchData = async () => {
     try {
       const response = await axios.post(
-        `${process.env.REACT_APP_PORT}/itemDc/getAllItemDc`, {allowedPlants : allowedPlants}
+        `${process.env.REACT_APP_PORT}/itemDc/getAllItemDc` , {allowedPlants : allowedPlants}
 
       );
       const plantDc = response.data.result.filter(dc => (employeeRole.loggedEmp.plantDetails.map(plant => plant.plantName).includes(dc.dcPlant)))
@@ -151,8 +151,8 @@ const TestHome = () => {
   const [grnList, setGrnList] = useState({})
   const grnFetchData = async () => {
     try {
-      const response = await axios.get(
-        `${process.env.REACT_APP_PORT}/itemGRN/getAllItemGRN`
+      const response = await axios.post(
+        `${process.env.REACT_APP_PORT}/itemGRN/getAllItemGRN`, { allowedPlants: allowedPlants }
       );
       setGrnList(response.data.result);
       const grnNumbers = response.data.result.map(item => (item.grnId)).filter(Boolean).sort();

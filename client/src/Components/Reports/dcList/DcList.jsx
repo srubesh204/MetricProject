@@ -107,21 +107,17 @@ const DcList = () => {
         formatFetchData();
     }, []);
 
-    const [lastNo, setLastNo] = useState("1")
+    
 
     const [dcDataDcList, setDcDataDcList] = useState([])
     const dcListFetchData = async () => {
         try {
             const response = await axios.post(
                 `${process.env.REACT_APP_PORT}/itemDc/getAllItemDc`, { allowedPlants: allowedPlants }
-
             );
-            const plantDc = response.data.result.filter(dc => (loggedEmp.plantDetails.map(plant => plant.plantName).includes(dc.dcPlant)))
-            const dcNos = response.data.result.map(dc => dc.dcId).filter(Boolean).sort()
-            setLastNo((dayjs().year() + "-" + ((dcNos[dcNos.length - 1]) + 1)))
-            console.log(dcNos[dcNos.length - 1])
-            setDcDataDcList(plantDc);
-            setFilteredData(plantDc);
+            
+            setDcDataDcList(response.data.result);
+            setFilteredData(response.data.result); 
 
 
         } catch (err) {
@@ -410,30 +406,36 @@ const DcList = () => {
 
     const handleFilterChange = (e) => {
         const { name, value } = e.target;
-        if (name === "vendorType") {
-            if (value === "all") {
-                setVendorTypeList(vendorFullList)
-            } else {
-                const vendorType = vendorDataList.filter((item) => (item[value] === "1"))
-                setVendorTypeList(vendorType)
+        setDateData((prev) => ({ ...prev, [name]: value }))
+        if(value === "all"){
+            setFilteredData(dcDataDcList)
+        }else{
+            if (name === "vendorType") {
+                if (value === "all") {
+                    setVendorTypeList(vendorFullList)
+                } else {
+                    const vendorType = vendorDataList.filter((item) => (item[value] === "1"))
+                    setVendorTypeList(vendorType)
+                }
+            }
+            if (name === "partyName") {
+                const partyName = dcDataDcList.filter((item) => (item.dcPartyName === value))
+                setFilteredData(partyName)
+                console.log(value)
+            }
+            if (name === "dcPlant") {
+                const dcPlant = dcDataDcList.filter((item) => (item.dcPlant === value))
+                setFilteredData(dcPlant);
+            }
+            if (name === "dcDepartment") {
+                // const itemDepartment = dcDataDcList.filter((item) => (item.itemDepartment && item.itemDepartment.includes(value)));
+                const dcDepartment = dcDataDcList.filter((dc) => (dc.dcDepartment.includes(value)))
+    
+                setFilteredData(dcDepartment);
             }
         }
-        if (name === "partyName") {
-            const partyName = dcDataDcList.filter((item) => (item.dcPartyName === value))
-            setFilteredData(partyName)
-            console.log(value)
-        }
-        if (name === "dcPlant") {
-            const dcPlant = dcDataDcList.filter((item) => (item.dcPlant === value))
-            setFilteredData(dcPlant);
-        }
-        if (name === "dcDepartment") {
-            // const itemDepartment = dcDataDcList.filter((item) => (item.itemDepartment && item.itemDepartment.includes(value)));
-            const dcDepartment = dcDataDcList.filter((dc) => (dc.dcDepartment.includes(value)))
-
-            setFilteredData(dcDepartment);
-        }
-        setDateData((prev) => ({ ...prev, [name]: value }))
+       
+       
 
 
 
@@ -865,11 +867,11 @@ const DcList = () => {
                             >
                                 <DcEdit />
                             </DcListContent.Provider>
-                            <DcListContent.Provider
+                            {/* <DcListContent.Provider
                                 value={{ dcOpen, setDcOpen, selectedRows, dcListFetchData, printState, setPrintState, itemPlantList, dcDataDcList, ItemFetch, lastNo }}
                             >
                                 <DcAdd />
-                            </DcListContent.Provider>
+                            </DcListContent.Provider> */}
 
 
 

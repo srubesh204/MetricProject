@@ -135,4 +135,8 @@ itemGRNSchema.pre('save', async function(next) {
 
 
 itemGRNSchema.plugin(uniqueValidator);
-module.exports = mongoose.model('itemGRN', itemGRNSchema);
+
+module.exports = {
+  itemGRNModel: mongoose.model('itemGRN', itemGRNSchema),
+  GrnNoCounter: GrnNoCounter
+};

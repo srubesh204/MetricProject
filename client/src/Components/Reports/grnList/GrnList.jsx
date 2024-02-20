@@ -130,8 +130,8 @@ const GrnList = () => {
     })
     const grnListFetchData = async () => {
         try {
-            const response = await axios.get(
-                `${process.env.REACT_APP_PORT}/itemGRN/getAllItemGRN`
+            const response = await axios.post(
+                `${process.env.REACT_APP_PORT}/itemGRN/getAllItemGRN`, { allowedPlants: allowedPlants }
             );
             console.log(response.data)
             setGrnDataList(response.data.result);
@@ -153,26 +153,19 @@ const GrnList = () => {
     const [lastNo, setLastNo] = useState("1")
 
     const [grnDataDcList, setGrnDataDcList] = useState([])
-    const dcListFetchData = async () => {
+    const GrnListFetchData = async () => {
         try {
-            const response = await axios.get(
-                `${process.env.REACT_APP_PORT}/itemGRN/getAllItemGRN`
-
+            const response = await axios.post(
+                `${process.env.REACT_APP_PORT}/itemGRN/getAllItemGRN`, { allowedPlants: allowedPlants }
             );
-            const plantGRN = response.data.result.filter(dc => (loggedEmp.plantDetails.map(plant => plant.plantName).includes(dc.grnPlant)))
-            const grnNos = response.data.result.map(dc => dc.grnId).filter(Boolean).sort()
-            setLastNo((dayjs().year() + "-" + ((grnNos[grnNos.length - 1]) + 1)))
-            console.log(grnNos[grnNos.length - 1])
-            setGrnDataDcList(plantGRN);
-            setFilteredData(plantGRN);
-
-
+            setGrnDataDcList(response.data.result);
+            setFilteredData(response.data.result);
         } catch (err) {
             console.log(err);
         }
     };
     useEffect(() => {
-        dcListFetchData();
+        GrnListFetchData();
     }, []);
 
     const [companyList, setCompanyList] = useState([])
@@ -624,11 +617,11 @@ const GrnList = () => {
                                 >
                                     <GrnEdit />
                                 </GrnListContent.Provider>
-                                <GrnListContent.Provider
+                                {/* <GrnListContent.Provider
                                     value={{ grnOpen, setGrnOpen, selectedRows, grnListFetchData, itemPlantList, grnDataDcList, lastNo }}
                                 >
                                     <GrnAdd />
-                                </GrnListContent.Provider>
+                                </GrnListContent.Provider> */}
                                 <GrnListContent.Provider
                                     value={{ grnPrintOpen, setGrnPrintOpen, selectedRows, formatNoData, printState, setPrintState, companyList, plantList }}
                                 >

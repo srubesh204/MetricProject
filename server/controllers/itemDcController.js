@@ -63,28 +63,7 @@ const itemDcController = {
       const itemDcResult = new itemDcModel({ dcPartyName, dcPartyId, dcPartyType, dcPartyCode, dcPartyAddress, dcDate, dcReason, dcCommonRemarks, dcMasterName, dcPartyItems, dcPlant, dcDepartment, dcCreatedBy });
 
 
-      // const validationError = itemDcResult.validateSync();
-
-      // if (validationError) {
-      //   // Handle validation errors
-      //   const validationErrors = {};
-
-      //   if (validationError.errors) {
-      //     // Convert Mongoose validation error details to a more user-friendly format
-      //     for (const key in validationError.errors) {
-      //       validationErrors[key] = validationError.errors[key].message;
-      //     }
-      //   }
-      //   console.log(validationErrors)
-      //   return res.status(400).json({
-      //     errors: validationErrors
-      //   });
-      // }
-      // console.log("success")
-
-
-
-      // const result = await itemDcResult.save();
+      
 
       const getCompDetailsById = await compDetailsSchema.findById("companyData");
       const getPlantAddress = await plantSchema.findOne(
