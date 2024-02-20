@@ -1914,7 +1914,7 @@ const Home = () => {
           </div>
           <div className="col-md-4">
             <Paper className='col' elevation={12} sx={{ p: 2, height: "100%" }}>
-              <div style={{ width: "100%", height: 280, overflow: "auto" }}>
+              <div style={{ width: "100%", height: 290, overflow: "auto" }}>
                 <table className='m-0 table table-bordered table-sm text-center align-middle table-hover'>
                   {selectedLoc === "Departments" &&
                     <tbody>
