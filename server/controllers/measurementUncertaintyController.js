@@ -89,9 +89,7 @@ const measurementUncertaintyController = {
         uncPreparedBy
       });
 
-      const getCompDetailsById = await compDetailsSchema.findOne(
-        { compId: 1 } // To return the updated document
-      );
+      const getCompDetailsById = await compDetailsSchema.findById("companyData");
 
       const validationError = measurementUncertaintyResult.validateSync();
       if (validationError) {

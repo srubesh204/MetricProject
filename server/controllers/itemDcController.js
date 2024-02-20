@@ -1,5 +1,5 @@
 const itemAddModel = require("../models/itemAddModel");
-const { itemDcModel } = require("../models/itemDcModel")
+const { itemDcModel, DcNoCounter } = require("../models/itemDcModel")
 const { compDetailsSchema } = require("../models/compDetailsModel");
 const { plantSchema } = require("../models/compDetailsModel");
 const dayjs = require('dayjs')
@@ -49,7 +49,7 @@ const itemDcController = {
 
       const nextDcNo = `${prefix && prefix.fCommonPrefix ? prefix.fCommonPrefix : ""}DC${currentYear}-${String(counter.seq).padStart(2, '0')}`;
 
-      res.status(202).json({ result: itemDcResult, status: 1 });
+      res.status(202).json({ result: nextDcNo, status: 1 });
     } catch (err) {
       console.error(err);
       res.status(500).send('Error on Item Dc Get');
@@ -59,8 +59,8 @@ const itemDcController = {
   createItemDc: async (req, res) => {
 
     try {
-      const { dcPartyName, dcPartyId, dcPartyType, dcPartyCode, dcPartyAddress, dcDate, dcReason, dcCommonRemarks, dcMasterName, dcPartyItems, dcPlant, dcDepartment } = req.body;
-      const itemDcResult = new itemDcModel({ dcPartyName, dcPartyId, dcPartyType, dcPartyCode, dcPartyAddress, dcDate, dcReason, dcCommonRemarks, dcMasterName, dcPartyItems, dcPlant, dcDepartment });
+      const { dcPartyName, dcPartyId, dcPartyType, dcPartyCode, dcPartyAddress, dcDate, dcReason, dcCommonRemarks, dcMasterName, dcPartyItems, dcPlant, dcDepartment, dcCreatedBy } = req.body;
+      const itemDcResult = new itemDcModel({ dcPartyName, dcPartyId, dcPartyType, dcPartyCode, dcPartyAddress, dcDate, dcReason, dcCommonRemarks, dcMasterName, dcPartyItems, dcPlant, dcDepartment, dcCreatedBy });
 
 
       // const validationError = itemDcResult.validateSync();
@@ -238,8 +238,8 @@ const itemDcController = {
       // }
 
       // Create an object with the fields you want to update
-      const { dcPartyName, dcPartyId, dcPartyType, dcPartyCode, dcPartyAddress, dcDate, dcReason, dcCommonRemarks, dcMasterName, dcPartyItems, dcPlant, dcDepartment } = req.body;
-      const updateItemDcFields = { dcPartyName, dcPartyId, dcPartyType, dcPartyCode, dcPartyAddress, dcDate, dcReason, dcCommonRemarks, dcMasterName, dcPartyItems, dcPlant, dcDepartment };
+      const { dcPartyName, dcPartyId, dcPartyType, dcPartyCode, dcPartyAddress, dcDate, dcReason, dcCommonRemarks, dcMasterName, dcPartyItems, dcPlant, dcDepartment, dcCreatedBy } = req.body;
+      const updateItemDcFields = { dcPartyName, dcPartyId, dcPartyType, dcPartyCode, dcPartyAddress, dcDate, dcReason, dcCommonRemarks, dcMasterName, dcPartyItems, dcPlant, dcDepartment, dcCreatedBy };
 
 
 

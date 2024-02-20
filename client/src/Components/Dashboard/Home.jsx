@@ -142,17 +142,10 @@ const Home = () => {
       const response = await axios.post(
         `${process.env.REACT_APP_PORT}/itemDc/getAllItemDc`, { allowedPlants: allowedPlants }
       );
-
-      const dcNos = response.data.result.map(dc => dc.dcId).filter(Boolean)
-      const sortedDc = dcNos.sort((a, b) => a - b);
-      console.log(sortedDc)
-      if (dcNos.length === 0) {
-        setLastNo("DC-" + (dayjs().year() + "-" + 1))
-      } else {
-        setLastNo("DC-" + (dayjs().year() + "-" + ((dcNos[dcNos.length - 1]) + 1)))
-      }
-
-      console.log(dcNos[dcNos.length - 1])
+      const dcNextNumber = await axios.get(
+        `${process.env.REACT_APP_PORT}/itemDc/getNextDcNo`
+      );
+      setLastNo(dcNextNumber.data.result)
       setDcList(response.data.result);
       setFilteredData(response.data.result);
 
@@ -2016,7 +2009,7 @@ const Home = () => {
 
 
 
-                
+
               </div>
 
             </Paper>
@@ -2030,9 +2023,9 @@ const Home = () => {
                 </HomeContent.Provider>
 
                 <HomeContent.Provider
-                  value={{ dcOpen, setDcOpen, selectedRows, itemFetch, defaultDep, lastNo, vendors }}
+                  value={{ dcOpen, setDcOpen, selectedRows, itemFetch, defaultDep, lastNo, vendors, loggedEmp }}
                 >
-                  <Dc />
+                  <Dc /> 
                 </HomeContent.Provider>
                 <HomeContent.Provider
                   value={{ grnOpen, setGrnOpen, selectedRows, lastGrnNo, dcPartyDetails, vendors, isOnSiteGRN }}

@@ -56,6 +56,10 @@ const itemDcSchema = new mongoose.Schema({
   dcPartyItems: {
     type: [],
     required: [true, "Item Required"]
+  },
+  dcCreatedBy : {
+    type: String,
+    required: [true, "DC Created By Required"]
   }
 });
 

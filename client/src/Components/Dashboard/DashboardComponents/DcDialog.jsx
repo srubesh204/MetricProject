@@ -13,10 +13,10 @@ import { Add, Close, Delete } from '@mui/icons-material';
 const Dc = () => {
 
     const dcDatas = useContext(HomeContent)
-    const { dcOpen, setDcOpen, selectedRows, itemFetch, defaultDep, lastNo, vendors, allowedPlants } = dcDatas
+    const { dcOpen, setDcOpen, selectedRows, itemFetch, lastNo, vendors, loggedEmp } = dcDatas
 
 
-    console.log(selectedRows)
+    console.log(loggedEmp)
 
     const initialDcData = {
         dcPartyId: "",
@@ -28,8 +28,8 @@ const Dc = () => {
         dcDate: dayjs().format("YYYY-MM-DD"),
         dcReason: "",
         dcCommonRemarks: "",
-        dcPartyItems: []
-
+        dcPartyItems: [],
+        dcCreatedBy: loggedEmp.firstName + " " + loggedEmp.lastName
     }
 
     const [dcData, setDcData] = useState({
@@ -42,9 +42,8 @@ const Dc = () => {
         dcDate: dayjs().format("YYYY-MM-DD"),
         dcReason: "",
         dcCommonRemarks: "",
-        dcPartyItems: []
-
-
+        dcPartyItems: [],
+        dcCreatedBy: loggedEmp.firstName + " " + loggedEmp.lastName
     })
     console.log(dcData)
 
@@ -53,13 +52,7 @@ const Dc = () => {
 
 
 
-    const handleDcChanges = (event) => {
-        const { name, value } = event.target;
-
-        if (name === 'dcNo') {
-            // Handle changes if needed
-        }
-    };
+   
 
 
     const settingDcData = () => {
@@ -75,7 +68,8 @@ const Dc = () => {
                         dcItemRemarks: "",
                        
                     })),
-                    dcNo: lastNo
+                    dcNo: lastNo,
+                    dcCreatedBy: loggedEmp.firstName + " " + loggedEmp.lastName
                 }
 
             ))
@@ -176,39 +170,39 @@ const Dc = () => {
 
 
 
-    const [dcList, setDcList] = useState([])
+   
 
 
-    const dcFetchData = async () => {
-        try {
-            const response = await axios.post(
-                `${process.env.REACT_APP_PORT}/itemDc/getAllItemDc`,{allowedPlants : allowedPlants}
-            );
-            setDcList(response.data.result);
-            console.log(response.data.result)
+    // const dcFetchData = async () => {
+    //     try {
+    //         const response = await axios.post(
+    //             `${process.env.REACT_APP_PORT}/itemDc/getAllItemDc`,{allowedPlants : allowedPlants}
+    //         );
+    //         setDcList(response.data.result);
+    //         console.log(response.data.result)
 
-            const dcNumbers = response.data.result.map(item => (item.dcId)).filter(Boolean).sort();
-            console.log(dcNumbers)
-            if (dcNumbers.length > 0) {
-                const lastNumber = dcNumbers[dcNumbers.length - 1] + 1
-                console.log(lastNumber)
+    //         const dcNumbers = response.data.result.map(item => (item.dcId)).filter(Boolean).sort();
+    //         console.log(dcNumbers)
+    //         if (dcNumbers.length > 0) {
+    //             const lastNumber = dcNumbers[dcNumbers.length - 1] + 1
+    //             console.log(lastNumber)
 
-                setDcData(prev => ({ ...prev, dcNo: dayjs().year() + "-" + lastNumber }))
-            } else {
-                console.log("No number")
-                setDcData(prev => ({ ...prev, dcNo: dayjs().year() + "-" + 1 }))
-            }
-
-
-        } catch (err) {
-            console.log(err);
-        }
-    };
-    useEffect(() => {
-        dcFetchData();
+    //             setDcData(prev => ({ ...prev, dcNo: dayjs().year() + "-" + lastNumber }))
+    //         } else {
+    //             console.log("No number")
+    //             setDcData(prev => ({ ...prev, dcNo: dayjs().year() + "-" + 1 }))
+    //         }
 
 
-    }, []);
+    //     } catch (err) {
+    //         console.log(err);
+    //     }
+    // };
+    // useEffect(() => {
+    //     dcFetchData();
+
+
+    // }, []);
 
 
 
