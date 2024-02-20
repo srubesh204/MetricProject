@@ -134,7 +134,7 @@ const Grn = () => {
         grnItemCalibratedAt: "",
         grnItemOBType: "",
         grnItemStatus: "",
-        grnAssingStatus: "",
+        grnAssingStatus: "active",
         grnAcCriteria: [
             {
                 grnParameter: "",
@@ -1167,7 +1167,7 @@ const Grn = () => {
                                                 value={grnData.grnAssingStatus}
                                                 onChange={handleGrnItemChange}
                                                 select
-                                                label="Changes Status"
+                                                label="Select Status"
                                                 name='grnAssingStatus'
                                             >
                                                 <MenuItem value="all">All</MenuItem>

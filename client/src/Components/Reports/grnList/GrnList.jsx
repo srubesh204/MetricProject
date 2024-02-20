@@ -170,7 +170,7 @@ const GrnList = () => {
     //
 
     const Columns = [
-        { field: 'id', headerName: 'Sr. No', width: 100, renderCell: (params) => params.api.getAllRowIds().indexOf(params.id) + 1, headerAlign: "center", align: "center", },
+        { field: 'id', headerName: 'Sr. No', width: 100, renderCell: (params) => params.api.getAllRowIds().length - params.api.getAllRowIds().indexOf(params.id), headerAlign: "center", align: "center", },
         ...(employeeRole && employeeRole.employee !== "viewer" ? [{ field: 'button', headerName: 'Edit', headerAlign: "center", align: "center", width: 90, renderCell: (params) => <Button onClick={() => { setSelectedRows(params.row); setGrnEditOpen(true) }}><Edit color='success' /></Button> }] : []),
         { field: 'grnNo', headerName: 'Grn No', width: 150, headerAlign: "center", align: "center", },
         { field: 'grnItemIMTENo', headerName: 'IMTENo', width: 150, headerAlign: "center", align: "center" },

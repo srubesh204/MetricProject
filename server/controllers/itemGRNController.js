@@ -560,7 +560,7 @@ const itemGRNController = {
 
       const formatNo = await formatNoModel.findById("formatNo");
 
-      const formatNumber = `${formatNo.fGrn ? (formatNo.fGrn.frNo + " " + formatNo.fGrn.amNo + " " + formatNo.fGrn.amDate) : ""}`
+      const formatNumber = `${formatNo && formatNo.fGrn ? (formatNo.fGrn.frNo + " " + formatNo.fGrn.amNo + " " + formatNo.fGrn.amDate) : ""}`
       console.log(formatNumber)
 
 
