@@ -553,14 +553,12 @@ const itemGRNController = {
       };
 
 
-      const getCompDetailsById = await compDetailsSchema.findOne(
-        { compId: 1 } // To return the updated document
-      );
+      const getCompDetailsById = await compDetailsSchema.findById("companyData");
       const getPlantAddress = await plantSchema.findOne(
         { plantName: grnPlant } // To return the updated document
       );
 
-      const formatNo = await formatNoModel.findOne({ formatId: 1 });
+      const formatNo = await formatNoModel.findById("formatNo");
 
       const formatNumber = `${formatNo.fGrn ? (formatNo.fGrn.frNo + " " + formatNo.fGrn.amNo + " " + formatNo.fGrn.amDate) : ""}`
       console.log(formatNumber)
