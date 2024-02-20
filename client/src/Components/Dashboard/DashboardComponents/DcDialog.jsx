@@ -162,47 +162,7 @@ const Dc = () => {
 
 
 
-    // const [dcPartyItem, setDcPartyItem] = useState([])
 
-
-
-
-
-
-
-   
-
-
-    // const dcFetchData = async () => {
-    //     try {
-    //         const response = await axios.post(
-    //             `${process.env.REACT_APP_PORT}/itemDc/getAllItemDc`,{allowedPlants : allowedPlants}
-    //         );
-    //         setDcList(response.data.result);
-    //         console.log(response.data.result)
-
-    //         const dcNumbers = response.data.result.map(item => (item.dcId)).filter(Boolean).sort();
-    //         console.log(dcNumbers)
-    //         if (dcNumbers.length > 0) {
-    //             const lastNumber = dcNumbers[dcNumbers.length - 1] + 1
-    //             console.log(lastNumber)
-
-    //             setDcData(prev => ({ ...prev, dcNo: dayjs().year() + "-" + lastNumber }))
-    //         } else {
-    //             console.log("No number")
-    //             setDcData(prev => ({ ...prev, dcNo: dayjs().year() + "-" + 1 }))
-    //         }
-
-
-    //     } catch (err) {
-    //         console.log(err);
-    //     }
-    // };
-    // useEffect(() => {
-    //     dcFetchData();
-
-
-    // }, []);
 
 
 
@@ -342,7 +302,7 @@ const Dc = () => {
                 // Handle other errors
                 console.log(err);
                 const errorData500 = err.response.data.error;
-                const errorMessages500 = Object.values(errorData500).join(', ');
+                const errorMessages500 = Object.values(errorData500);
                 console.log(errorMessages500)
                 setErrorHandler({ status: 0, message: errorMessages500, code: "error" });
             } else {

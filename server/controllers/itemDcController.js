@@ -261,7 +261,6 @@ const itemDcController = {
         console.log(dcItemsData.length)
         // Check if any item with dcStatus !== "0" in prevItemsData is not present in dcItemsData
         const hasDifferentStatus = prevItemsData.some(prevItem => dcItemsData.find(dcItem => dcItem._id.toString() === prevItem._id.toString()));
-
         // If any item with dcStatus !== "0" is found in prevItemsData that is not present in dcItemsData, return false
         return hasDifferentStatus;
       };
@@ -269,7 +268,7 @@ const itemDcController = {
       console.log(!await dcDeleteStatus())
       if (await dcDeleteStatus()) {
 
-        const prevUpdatePromises = prevPartyItems.filter(item => item.dcStatus === "1").map(async (item) => {
+        const prevUpdatePromises = prevPartyItems.map(async (item) => {
 
           const itemData = await itemAddModel.findById(item._id)
 
@@ -332,7 +331,7 @@ const itemDcController = {
         );
 
         if (Object.keys(updateItemDc).length !== 0) {
-          const updatePromises = dcPartyItems.filter(item => item.dcStatus === "1").map(async (item) => {
+          const updatePromises = dcPartyItems.map(async (item) => {
 
             const itemData = await itemAddModel.findById(item._id)
             const { itemIMTENo, itemCurrentLocation: itemLastLocation } = itemData
@@ -344,7 +343,7 @@ const itemDcController = {
               dcId: updateItemDc._id,
               dcStatus: "1",
               dcCreatedOn: dcDate,
-              dcNo: dcNo
+              dcNo: updateItemDc.dcNo
             }
             const updateResult = await itemAddModel.findOneAndUpdate(
               { _id: item._id },
@@ -386,7 +385,6 @@ const itemDcController = {
 
             .replace(/{{dcPartyItems}}/g, itemsData.join(""))
             .replace(/{{CompanyName}}/g, getCompDetailsById.companyName)
-
             .replace(/{{Plant}}/g, getPlantAddress.plantName)
             .replace(/{{PlantAddress}}/g, getPlantAddress.plantAddress)
             .replace(/{{dcPartyName}}/g, dcPartyName)
