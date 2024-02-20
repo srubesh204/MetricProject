@@ -561,14 +561,12 @@ const Vendor = () => {
             } catch (error) {
                 console.error('Error uploading the file:', error);
             }
-
         }
     };
 
     const handleDrop = (event) => {
         event.preventDefault();
         const droppedFile = event.dataTransfer.files[0];
-
         if (droppedFile) {
             const fileURL = URL.createObjectURL(droppedFile);
             setVendorData((prev) => ({ ...prev, certificate: droppedFile.name }));
@@ -579,7 +577,6 @@ const Vendor = () => {
     const handleFileUpload = async () => {
         const formData = new FormData();
         formData.append('file', iframeURL.file);
-
         try {
             axios.post(`${process.env.REACT_APP_PORT}/upload/VendorCertificateUpload`, formData, {
                 onUploadProgress: (progressEvent) => {

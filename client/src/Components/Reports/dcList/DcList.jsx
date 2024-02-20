@@ -291,10 +291,9 @@ const DcList = () => {
         },
         { field: 'dcNo', headerName: 'Dc No', headerAlign: "center", align: "center", width: 150 },
         { field: 'dcDate', headerName: 'Dc Date', headerAlign: "center", align: "center", width: 200, renderCell: (params) => dayjs(params.row.dcDate).format("DD-MM-YYYY") },
-        { field: 'dcPartyName', headerName: 'Dc PartyName', headerAlign: "center", align: "center", width: 300 },
-        { field: 'dcCreatedBy', headerName: 'DC Created By', headerAlign: "center", align: "center", width: 300 },
-
-        { field: 'printButton', headerName: 'Print', headerAlign: "center", align: "center", width: 100, renderCell: (params) => <Button component={Link} to={`${process.env.REACT_APP_PORT}/dcCertificate/${params.row.dcNo}.pdf`} target='_blank'><PrintRounded color='success' /></Button> }
+        { field: 'dcPartyName', headerName: 'Dc PartyName', headerAlign: "center", align: "center", width: 200},
+        { field: 'dcCreatedBy', headerName: 'DC Created By', headerAlign: "center", align: "center", width: 200},
+        { field: 'printButton', headerName: 'Print', headerAlign: "center", align: "center", width: 90, renderCell: (params) => <Button component={Link} to={`${process.env.REACT_APP_PORT}/dcCertificate/${params.row.dcNo}.pdf`} target='_blank'><PrintRounded color='success' /></Button> }
     ]
 
 

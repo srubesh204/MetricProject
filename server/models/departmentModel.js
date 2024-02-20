@@ -10,6 +10,7 @@ const departmentSchema = new mongoose.Schema({
    
   },
   departmentStatus:String,
+  departmentPlant: [],
   defaultdep: String
 });
 departmentSchema.plugin(uniqueValidator);
