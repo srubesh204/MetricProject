@@ -12,19 +12,18 @@ import { DataGrid, GridToolbar, GridToolbarQuickFilter } from '@mui/x-data-grid'
 const PlantActual = () => {
 
     const empRole = useEmployee()
-    const { loggedEmp, employeeRole } = empRole
+    const { loggedEmp, allowedPlants ,employeeRole} = empRole
     const [filteredData, setFilteredData] = useState([])
     const [itemDataList, setItemDataList] = useState([])
 
     const itemFetchData = async () => {
         try {
-            const response = await axios.get(
-                `${process.env.REACT_APP_PORT}/itemAdd/getItemByPlant`
+            const response = await axios.post(
+                `${process.env.REACT_APP_PORT}/itemAdd/getItemByPlant`,{ allowedPlants: allowedPlants }
             );
+            console.log(response.data.result)
             setItemDataList(response.data.result);
             setFilteredData(response.data.result)
-
-
         } catch (err) {
             console.log(err);
         }
@@ -34,21 +33,18 @@ const PlantActual = () => {
     }, []);
     console.log(itemDataList)
 
+
    
     // const itemFetch = async () => {
     //     try {
     //         const response = await axios.post(
-    //             `${process.env.REACT_APP_PORT}/itemAdd/getItemByPlant`, 
+    //             `${process.env.REACT_APP_PORT}/itemAdd/getItemByPlant`,{ allowedPlants: allowedPlants }
     //         );
     //         console.log(response.data.result)
-
     //         const departmentItems = response.data.result.filter(item => employeeRole.loggedEmp.plantDetails.some(plant => plant.departments.includes(item.itemDepartment)))
     //         console.log(departmentItems)
-
     //         const filterNames = [ "itemDepartment", "itemPlant"]
-
     //         let updatedFilterNames = {};
-
     //         filterNames.forEach((element, index) => {
     //             const data = departmentItems.map(item => item[element]);
     //             filterNames[index] = [...new Set(data)];

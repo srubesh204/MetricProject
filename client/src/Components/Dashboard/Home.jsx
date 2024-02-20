@@ -163,21 +163,13 @@ const Home = () => {
   const [grnList, setGrnList] = useState({})
   const grnFetchData = async () => {
     try {
-      const response = await axios.get(
-        `${process.env.REACT_APP_PORT}/itemGRN/getAllItemGRN`
+      const response = await axios.post(
+        `${process.env.REACT_APP_PORT}/itemGRN/getAllItemGRN`, { allowedPlants: allowedPlants }
+      );
+      const NextGrnNo = await axios.post(
+        `${process.env.REACT_APP_PORT}/itemGRN/getAllItemGRN`, { allowedPlants: allowedPlants }
       );
       setGrnList(response.data.result);
-      const grnNumbers = response.data.result.map(item => (item.grnId)).filter(Boolean).sort();
-      if (grnNumbers.length > 0) {
-        const lastNumber = grnNumbers[grnNumbers.length - 1] + 1
-        console.log(lastNumber)
-
-        setLastGrnNo("GRN-" + dayjs().year() + "-" + lastNumber)
-      } else {
-        setLastGrnNo("GRN-" + dayjs().year() + "-" + 1)
-      }
-
-
     } catch (err) {
       console.log(err);
     }

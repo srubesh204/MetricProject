@@ -1,4 +1,4 @@
-const itemGRNModel = require("../models/itemGRNModel")
+const {itemGRNModel, GrnNoCounter} = require("../models/itemGRNModel")
 const itemAddModel = require('../models/itemAddModel');
 const itemHistory = require("../models/itemHistory");
 const { compDetailsSchema } = require("../models/compDetailsModel");
@@ -12,15 +12,50 @@ const mongoose = require('mongoose');
 
 
 const itemGRNController = {
+  
   getAllItemGRN: async (req, res) => {
     try {
-      const itemGRNResult = await itemGRNModel.find();
+      
+      const itemGRNResult = await itemGRNModel.aggregate([
+        {
+          $match: {
+            "grnPlant": { $in: allowedPlants ? allowedPlants : [] } // Specify the values to match
+          }
+        }, { $sort: { grnNo: -1 } }
+      ])
       res.status(202).json({ result: itemGRNResult, status: 1 });
-      //res.status(200).json(employees);
+     
     } catch (err) {
       console.error(err);
       res.status(500).send('Error on Item GRN');
     }
+  },
+  getNextGRNNo: async (req, res) => {
+    try {
+      const currentYear = new Date().getFullYear();
+      let counter = await GrnNoCounter.findById('GrnNoCounter');
+      const prefix = await formatNoModel.findById('formatNo');
+
+      if (!counter) {
+        // If the counter document doesn't exist, create it in memory
+        counter = { _id: 'GrnNoCounter', seq: 1, year: currentYear };
+      } else if (counter.year !== currentYear) {
+        // If the year has changed, reset the counter and update the year in memory
+        counter.seq = 1;
+        counter.year = currentYear;
+      } else {
+        // Otherwise, increment the counter in memory
+        counter.seq++;
+      }
+
+      const nextGrnNo = `${prefix && prefix.fCommonPrefix ? prefix.fCommonPrefix : ""}GRN${currentYear}-${String(counter.seq).padStart(2, '0')}`;
+
+      res.status(202).json({ result: nextGrnNo, status: 1 });
+    } catch (err) {
+      console.error(err);
+      res.status(500).send('Error on Item Grn Next No Get', err);
+    }
+
   },
   createItemGRN: async (req, res) => {
 
