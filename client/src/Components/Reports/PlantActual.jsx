@@ -39,16 +39,17 @@ const PlantActual = () => {
         },
         {
             field: 'itemDueDate',
-            headerName: 'Item Cal Date',
+            headerName: 'Plant',
             width: 150,
             headerAlign: "center", align: "center", valueGetter: (params) => dayjs(params.row.itemDueDate).format('DD-MM-YYYY')
         },
         {
-            field: 'itemLastDueDate',
-            headerName: ' Item Last cal Due Date',
+            field: 'itemCalDate',
+            headerName: 'Actual',
             width: 150,
-            headerAlign: "center", align: "center", valueGetter: (params) => dayjs(params.row.itemLastDueDate).format('DD-MM-YYYY')
-        }
+            headerAlign: "center", align: "center", valueGetter: (params) => dayjs(params.row.itemCalDate).format('DD-MM-YYYY')
+        },
+
         // {
         //     field: 'Last cal Due Date',
         //     headerName: 'Last cal Due Date',
@@ -88,11 +89,11 @@ const PlantActual = () => {
     // }, [dateData.fromDate, dateData.toDate])
 
     useEffect(() => {
-     
-          const filteredItems = itemDataList.filter((item) => dayjs(item.itemDueDate).isBetween(dayjs(dateData.fromDate), dayjs(dateData.toDate), 'day', '[]'))
-          console.log(filteredItems)
-          setFilteredData(filteredItems)
-        }, [dateData.fromDate, dateData.toDate])
+
+        const filteredItems = itemDataList.filter((item) => dayjs(item.itemDueDate).isBetween(dayjs(dateData.fromDate), dayjs(dateData.toDate), 'day', '[]'))
+        console.log(filteredItems)
+        setFilteredData(filteredItems)
+    }, [dateData.fromDate, dateData.toDate])
 
     const handleItemChange = (e) => {
         const { name, value } = e.target;
