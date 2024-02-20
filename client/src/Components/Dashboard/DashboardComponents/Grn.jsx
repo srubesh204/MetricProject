@@ -14,7 +14,7 @@ import styled from '@emotion/styled';
 
 const Grn = () => {
     const grnDatas = useContext(HomeContent)
-    const { grnOpen, setGrnOpen, selectedRows, lastGrnNo, dcPartyDetails, vendors, isOnSiteGRN } = grnDatas
+    const { grnOpen, setGrnOpen, selectedRows, lastGrnNo, dcPartyDetails, vendors, isOnSiteGRN, loggedEmp } = grnDatas
 
     
 
@@ -30,33 +30,7 @@ const Grn = () => {
         width: 1,
     });
 
-    const settingDcData = () => {
-        if (selectedRows.length > 0 && lastGrnNo && dcPartyDetails) {
-            console.log(dcPartyDetails)
-            setGrnData((prev) => (
-                {
-                    ...prev,
-                    grnPlant: selectedRows[0].itemPlant,
-                    grnDepartment: selectedRows[0].itemDepartment,
-                    grnNo: lastGrnNo,
-                    grnPartyName: dcPartyDetails.fullName,
-                    grnPartyAddress: dcPartyDetails.address,
-                    grnPartyCode: dcPartyDetails.vendorCode,
-                    grnPartyId: dcPartyDetails._id,
-                    grnItemId: selectedRows[0].item_id,
-                    grnItemAddMasterName: selectedRows[0].itemAddMasterName,
-                    grnItemIMTENo: selectedRows[0].itemIMTENo,
-                    isOnSiteGRN: dcPartyDetails.length === 0 ? "yes" : "no"
-                    //grnPartyItems: selectedRows
-                }
-
-            ))
-        }
-
-    };
-    useEffect(() => {
-        settingDcData()
-    }, [selectedRows, dcPartyDetails, lastGrnNo, isOnSiteGRN])
+   
 
 
 
@@ -124,6 +98,7 @@ const Grn = () => {
         grnItemCertificate: "",
         grnUncertainity: "",
         grnItemCalStatus: "",
+        grnCreatedBy: ""
     }
 
 
@@ -186,13 +161,40 @@ const Grn = () => {
         grnItemCertificate: "",
         grnUncertainity: "",
         grnItemCalStatus: "",
+        grnCreatedBy: ""
 
     })
     console.log(grnData)
 
 
+    const settingDcData = () => {
+        if (selectedRows.length > 0 && lastGrnNo && dcPartyDetails) {
+            console.log(dcPartyDetails)
+            setGrnData((prev) => (
+                {
+                    ...prev,
+                    grnPlant: selectedRows[0].itemPlant,
+                    grnDepartment: selectedRows[0].itemDepartment,
+                    grnNo: lastGrnNo,
+                    grnPartyName: dcPartyDetails.fullName,
+                    grnPartyAddress: dcPartyDetails.address,
+                    grnPartyCode: dcPartyDetails.vendorCode,
+                    grnPartyId: dcPartyDetails._id,
+                    grnItemId: selectedRows[0].item_id,
+                    grnItemAddMasterName: selectedRows[0].itemAddMasterName,
+                    grnItemIMTENo: selectedRows[0].itemIMTENo,
+                    isOnSiteGRN: dcPartyDetails.length === 0 ? "yes" : "no",
+                    grnCreatedBy: loggedEmp.firstName + " "+ loggedEmp.lastName 
+                    //grnPartyItems: selectedRows
+                }
 
+            ))
+        }
 
+    };
+    useEffect(() => {
+        settingDcData()
+    }, [selectedRows, dcPartyDetails, lastGrnNo, isOnSiteGRN])
 
 
 

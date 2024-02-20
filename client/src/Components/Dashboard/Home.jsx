@@ -166,10 +166,11 @@ const Home = () => {
       const response = await axios.post(
         `${process.env.REACT_APP_PORT}/itemGRN/getAllItemGRN`, { allowedPlants: allowedPlants }
       );
-      const NextGrnNo = await axios.post(
-        `${process.env.REACT_APP_PORT}/itemGRN/getAllItemGRN`, { allowedPlants: allowedPlants }
+      const NextGrnNo = await axios.get(
+        `${process.env.REACT_APP_PORT}/itemGRN/getNextGRNNo`
       );
       setGrnList(response.data.result);
+      setLastGrnNo(NextGrnNo.data.result)
     } catch (err) {
       console.log(err);
     }
@@ -2021,7 +2022,7 @@ const Home = () => {
                   <Dc /> 
                 </HomeContent.Provider>
                 <HomeContent.Provider
-                  value={{ grnOpen, setGrnOpen, selectedRows, lastGrnNo, dcPartyDetails, vendors, isOnSiteGRN }}
+                  value={{ grnOpen, setGrnOpen, selectedRows, lastGrnNo, dcPartyDetails, vendors, isOnSiteGRN, loggedEmp }}
                 >
                   <Grn />
                 </HomeContent.Provider>

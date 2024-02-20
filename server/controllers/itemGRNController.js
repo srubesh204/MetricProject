@@ -1,4 +1,4 @@
-const {itemGRNModel, GrnNoCounter} = require("../models/itemGRNModel")
+const { itemGRNModel, GrnNoCounter } = require("../models/itemGRNModel")
 const itemAddModel = require('../models/itemAddModel');
 const itemHistory = require("../models/itemHistory");
 const { compDetailsSchema } = require("../models/compDetailsModel");
@@ -12,10 +12,10 @@ const mongoose = require('mongoose');
 
 
 const itemGRNController = {
-  
+
   getAllItemGRN: async (req, res) => {
     try {
-      
+      const { allowedPlants } = req.body
       const itemGRNResult = await itemGRNModel.aggregate([
         {
           $match: {
@@ -24,7 +24,7 @@ const itemGRNController = {
         }, { $sort: { grnNo: -1 } }
       ])
       res.status(202).json({ result: itemGRNResult, status: 1 });
-     
+
     } catch (err) {
       console.error(err);
       res.status(500).send('Error on Item GRN');
@@ -68,7 +68,7 @@ const itemGRNController = {
         grnPartyName,
         grnPartyCode,
         grnPartyAddress,
-       
+
         grnDate,
         grnCommonRemarks,
         grnPlant,
@@ -107,7 +107,8 @@ const itemGRNController = {
         grnItemCertificate,
         grnUncertainity,
         grnItemCalStatus,
-        isOnSiteGRN
+        isOnSiteGRN,
+        grnCreatedBy
       } = req.body;
 
 
@@ -118,7 +119,7 @@ const itemGRNController = {
         grnPartyName,
         grnPartyCode,
         grnPartyAddress,
-        
+
         grnDate,
         grnCommonRemarks,
         grnPlant,
@@ -157,7 +158,8 @@ const itemGRNController = {
         grnItemCertificate,
         grnUncertainity,
         grnItemCalStatus,
-        isOnSiteGRN
+        isOnSiteGRN,
+        grnCreatedBy
       });
 
       const getCompDetailsById = await compDetailsSchema.findById("companyData");
@@ -194,12 +196,17 @@ const itemGRNController = {
       if (Object.keys(result).length !== 0) {
 
         let itemCondition = ""
-        if (grnItemCalStatus === "rejected") {
-          itemCondition = "rejection"
+        if (grnItemStatus === "Calibrated") {
+          if (grnItemCalStatus === "rejected") {
+            itemCondition = "rejection"
+          } else {
+            itemCondition = "active"
+          }
         } else {
-          itemCondition = "active"
+          itemCondition = grnAssingStatus
         }
- 
+
+
         const itemData = await itemAddModel.findById(grnItemId)
         const {
           _id,
@@ -387,7 +394,7 @@ const itemGRNController = {
           .replace(/{{dcPartyAddress}}/g, result.grnPartyAddress ? result.grnPartyAddress : "")
           .replace(/{{dcNo}}/g, result.grnNo ? result.grnNo : "")
           .replace(/{{partyDcNo}}/g, result.grnItemDcNo ? result.grnItemDcNo : "")
-          .replace(/{{partyRefNo}}/g, result.$setgrnPartyRefNo ? result.$setgrnPartyRefNo : "")
+          .replace(/{{partyRefNo}}/g, result.grnPartyRefNo ? result.grnPartyRefNo : "")
           .replace(/{{partyRefDate}}/g, result.grnPartyRefDate ? dayjs(result.grnPartyRefDate).format('DD-MM-YYYY') : "")
           .replace(/{{dcDate}}/g, result.grnDate ? dayjs(result.grnDate).format('DD-MM-YYYY') : "")
           .replace(/{{dcCR}}/g, result.grnCommonRemarks ? result.grnCommonRemarks : "")
@@ -401,7 +408,7 @@ const itemGRNController = {
 
         console.log(modifiedHTML)
         const cssPath = path.resolve(__dirname, '../templates/bootstrap.min.css');
-        
+
         await page.setContent(modifiedHTML, { waitUntil: 'domcontentloaded' });
         await page.addStyleTag({ path: cssPath });
 
@@ -489,7 +496,8 @@ const itemGRNController = {
         grnItemCertificate,
         grnUncertainity,
         grnItemCalStatus,
-        isOnSiteGRN
+        isOnSiteGRN,
+        grnCreatedBy
       } = req.body;
 
       // Create an object with the fields you want to update
@@ -540,7 +548,8 @@ const itemGRNController = {
         grnItemCertificate,
         grnUncertainity,
         grnItemCalStatus,
-        isOnSiteGRN
+        isOnSiteGRN,
+        grnCreatedBy
       };
 
 
@@ -745,7 +754,7 @@ const itemGRNController = {
         let tableRow = `
         <tr>
             <td style="padding: 0.50rem; vertical-align: top; border: 1px solid #6c757d ;" class="text-center align-middle">1</td>
-            <td style="padding: 0.50rem; vertical-align: top; border: 1px solid #6c757d ;" class="align-middle">Item Name: ${grnItemAddMasterName ? grnItemAddMasterName : "-"} IMTE No: ${grnItemIMTENo ? grnItemIMTENo : "-"} SAP No:${grnItemSAPNo ? grnItemSAPNo: "-"} <br>
+            <td style="padding: 0.50rem; vertical-align: top; border: 1px solid #6c757d ;" class="align-middle">Item Name: ${grnItemAddMasterName ? grnItemAddMasterName : "-"} IMTE No: ${grnItemIMTENo ? grnItemIMTENo : "-"} SAP No:${grnItemSAPNo ? grnItemSAPNo : "-"} <br>
             Range/Size: ${grnItemRangeSize ? grnItemRangeSize : "" + ' ' + grnItemRangeSizeUnit ? grnItemRangeSizeUnit : ""} L.C.: ${(grnItemLC ? grnItemLC : "") + '' + (grnItemLCUnit ? grnItemLCUnit : '')}<br>
             Make: ${grnItemMake ? grnItemMake : "-"} Sr.No: ${grnItemMFRNo ? grnItemMFRNo : "-"} Cal. Frequency: ${grnItemCalFreInMonths ? grnItemCalFreInMonths : "-"} months</td>
             <td style="padding: 0.50rem; vertical-align: top; border: 1px solid #6c757d ;" class="text-center align-middle">${updateItemGRN.grnItemDcNo}</td>
@@ -789,7 +798,7 @@ const itemGRNController = {
 
         console.log(modifiedHTML)
         const cssPath = path.resolve(__dirname, '../templates/bootstrap.min.css');
-        
+
         await page.setContent(modifiedHTML, { waitUntil: 'domcontentloaded' });
         await page.addStyleTag({ path: cssPath });
         // Generate PDF

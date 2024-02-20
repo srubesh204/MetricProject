@@ -36,7 +36,7 @@ const GrnList = () => {
     const [printState, setPrintState] = useState(false)
     const [selectedRows, setSelectedRows] = useState([]);
     const [grnEditOpen, setGrnEditOpen] = useState(false);
-    const [grnOpen, setGrnOpen] = useState(false);
+    //const [grnOpen, setGrnOpen] = useState(false);
     const [grnPrintOpen, setGrnPrintOpen] = useState(false);
 
 
@@ -44,7 +44,6 @@ const GrnList = () => {
         if (reason === 'clickaway') {
             return;
         }
-
         setSnackBarOpen(false);
     }
 
@@ -61,7 +60,6 @@ const GrnList = () => {
         grnPlant: "",
         grnDepartment: "",
         grnPartyItems: []
-
     }
 
     const [grnStateId, setGrnStateId] = useState(null)
@@ -77,10 +75,6 @@ const GrnList = () => {
         grnPlant: "",
         grnDepartment: "",
         grnPartyItems: []
-
-
-
-
     })
 
     const [departments, setDepartments] = useState([])
@@ -106,7 +100,7 @@ const GrnList = () => {
     const formatFetchData = async () => {
         try {
             const response = await axios.get(
-                `${process.env.REACT_APP_PORT}/formatNo/getFormatNoById/1`
+                `${process.env.REACT_APP_PORT}/formatNo/getFormatNoById/formatNo`
             );
             const format = response.data.result
             console.log(format)
@@ -150,23 +144,8 @@ const GrnList = () => {
     }, [dateData.fromDate, dateData.toDate])
 
 
-    const [lastNo, setLastNo] = useState("1")
+   
 
-    const [grnDataDcList, setGrnDataDcList] = useState([])
-    const GrnListFetchData = async () => {
-        try {
-            const response = await axios.post(
-                `${process.env.REACT_APP_PORT}/itemGRN/getAllItemGRN`, { allowedPlants: allowedPlants }
-            );
-            setGrnDataDcList(response.data.result);
-            setFilteredData(response.data.result);
-        } catch (err) {
-            console.log(err);
-        }
-    };
-    useEffect(() => {
-        GrnListFetchData();
-    }, []);
 
     const [companyList, setCompanyList] = useState([])
 
@@ -202,9 +181,9 @@ const GrnList = () => {
     ]
 
 
-    const [grnDataListSelectedRowIds, setgrnDataListSelectedRowIds] = useState([])
+   
 
-    console.log(setGrnPrintOpen)
+
 
 
     const [itemPlantList, setItemPlantList] = useState([])
@@ -613,7 +592,7 @@ const GrnList = () => {
                                 </div>
 
                                 <GrnListContent.Provider
-                                    value={{ grnEditOpen, setGrnEditOpen, selectedRows, grnListFetchData, itemPlantList, grnDataDcList, allowedPlants }}
+                                    value={{ grnEditOpen, setGrnEditOpen, selectedRows, grnListFetchData, itemPlantList, allowedPlants }}
                                 >
                                     <GrnEdit />
                                 </GrnListContent.Provider>
@@ -622,12 +601,12 @@ const GrnList = () => {
                                 >
                                     <GrnAdd />
                                 </GrnListContent.Provider> */}
-                                <GrnListContent.Provider
+                                {/* <GrnListContent.Provider
                                     value={{ grnPrintOpen, setGrnPrintOpen, selectedRows, formatNoData, printState, setPrintState, companyList, plantList }}
                                 >
                                     {selectedRows.length !== 0 &&
                                         <GrnPrint />}
-                                </GrnListContent.Provider>
+                                </GrnListContent.Provider> */}
                             </div>
                         </Paper>
 
