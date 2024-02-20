@@ -177,7 +177,7 @@ export const MeasurementUncertaintyList = () => {
                     >
                         <div className='row g-2 mb-2'>
                             <h6 className="text-center">Meausrement Uncertainty List</h6>
-                            {/* <div className='col'>
+                            <div className='col'>
                                 <TextField label="Plant Wise"
                                     id="uncPlantId"
                                     select
@@ -193,10 +193,10 @@ export const MeasurementUncertaintyList = () => {
                                     ))}
                                 </TextField>
 
-                            </div> */}
+                            </div>
 
 
-                            <div className='col-3'>
+                            <div className='col'>
                                 <DatePicker
                                     fullWidth
                                     id="fromDateId"
@@ -212,7 +212,7 @@ export const MeasurementUncertaintyList = () => {
                                 />
 
                             </div>
-                            <div className='col-3'>
+                            <div className='col'>
                                 <DatePicker
                                     fullWidth
                                     id="toDateId"

@@ -461,7 +461,6 @@ const MeasurementUncertainty = () => {
         setUncertainityData(prev => ({ ...prev, uncTypeBResult: [...prev.uncTypeBResult, ...modifiedData] }));
         setSelectedValues([]);
     }
-
     console.log(masterDetails)
     const handlePlantChange = (e) => {
         const { name, value } = e.target;
@@ -541,9 +540,9 @@ const MeasurementUncertainty = () => {
     }, []);
 
     const sortedFilterNameList = itemNameList && itemNameList.itemAddMasterName
-    ? [...itemNameList.itemAddMasterName].sort()
-    : [];
-  
+        ? [...itemNameList.itemAddMasterName].sort()
+        : [];
+
     // const sortedFilterNameList = itemNameList.itemAddMasterName.sort();
 
 
@@ -719,6 +718,23 @@ const MeasurementUncertainty = () => {
                     >
                         <div className='row g-2'>
                             <h6 className="col-12 text-center">DUC Details</h6>
+                            <div className='col'>
+                                <TextField label="Plant Wise"
+                                    id="uncPlantId"
+                                    select
+                                    fullWidth
+                                    value={uncertainityData.uncPlant}
+                                    onChange={handleUncertaintyChange}
+                                    size="small"
+                                    name="uncPlant" >
+
+                                    <MenuItem value="all">All</MenuItem>
+                                    {loggedEmp.plantDetails.map((item, index) => (
+                                        <MenuItem key={index} value={item.plantName}>{item.plantName}</MenuItem>
+                                    ))}
+                                </TextField>
+                            </div>
+
                             <div className="col">
                                 <TextField size='small' fullWidth variant='outlined' {...(errors.uncItemName !== "" && { helperText: errors.uncItemName, error: true })} onChange={handleUncertaintyChange} value={uncertainityData.uncItemName} label="DUC Name" name='uncItemName' id='uncItemNameId'>
                                     {itemNameList.map((item, index) => (
@@ -1122,12 +1138,12 @@ const MeasurementUncertainty = () => {
                         <div className=' col d-flex justify-content-end' >
 
                             <div className='me-2'>
-                                <CustomisedButton  size="small" onClick={() => setOpenModalUNC(true)}> Add Uncertainty</CustomisedButton>
+                                <CustomisedButton size="small" onClick={() => setOpenModalUNC(true)}> Add Uncertainty</CustomisedButton>
                             </div>
                             {/* <div className='' >
                                 <CustomisedButton variant='contained' type='button' size='small' color='error' >List</CustomisedButton>
                             </div> */}
-                            <Button component={Link}  to={`/measurementUncertaintyList/`} >
+                            <Button component={Link} to={`/measurementUncertaintyList/`} >
                                 Uncertainty List
                             </Button>
                         </div>
