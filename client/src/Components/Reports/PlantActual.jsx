@@ -5,11 +5,17 @@ import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { Box, Container, Grid, Paper, Typography } from "@mui/material";
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { TextField, MenuItem, Button } from '@mui/material';
+import { useEmployee } from '../../App';
 import { DataGrid, GridToolbar, GridToolbarQuickFilter } from '@mui/x-data-grid';
 
 const PlantActual = () => {
 
+    const empRole = useEmployee()
+    const { loggedEmp, employeeRole } = empRole
+    const [filteredData, setFilteredData] = useState([])
     const [itemDataList, setItemDataList] = useState([])
+
     const itemFetchData = async () => {
         try {
             const response = await axios.get(
@@ -27,6 +33,51 @@ const PlantActual = () => {
         itemFetchData();
     }, []);
     console.log(itemDataList)
+
+   
+    // const itemFetch = async () => {
+    //     try {
+    //         const response = await axios.post(
+    //             `${process.env.REACT_APP_PORT}/itemAdd/getItemByPlant`, 
+    //         );
+    //         console.log(response.data.result)
+
+    //         const departmentItems = response.data.result.filter(item => employeeRole.loggedEmp.plantDetails.some(plant => plant.departments.includes(item.itemDepartment)))
+    //         console.log(departmentItems)
+
+    //         const filterNames = [ "itemDepartment", "itemPlant"]
+
+    //         let updatedFilterNames = {};
+
+    //         filterNames.forEach((element, index) => {
+    //             const data = departmentItems.map(item => item[element]);
+    //             filterNames[index] = [...new Set(data)];
+    //             // Update the object with a dynamic key based on the 'element'
+    //             updatedFilterNames[element] = filterNames[index];
+    //         });
+    //         console.log(updatedFilterNames)
+    //         // Update state outside the loop with the updated object
+    //         setFilterNameList(prev => ({ ...prev, ...updatedFilterNames }));
+    //         setItemDataList(departmentItems);
+    //         setFilteredData(departmentItems);
+
+         
+
+    //     } catch (err) {
+    //         console.log(err);
+    //     }
+    // };
+    // useEffect(() => {
+    //     itemFetch();
+    // }, []);
+
+    const [FilterNameList, setFilterNameList] = useState({
+        itemDepartment: [],
+        itemPlant: [],
+      
+    })
+
+
 
     const itemListColumns = [
         { field: 'id', headerName: 'Sr. No', width: 100, renderCell: (params) => params.api.getAllRowIds().indexOf(params.id) + 1, headerAlign: "center", align: "center", },
@@ -69,24 +120,128 @@ const PlantActual = () => {
         // },
     ]
 
+    const [departments, setDepartments] = useState([])
+    const DepartmentFetch = async () => {
+        try {
+            const response = await axios.get(
+                `${process.env.REACT_APP_PORT}/department/getAllDepartments`
+            );
+            const defaultDepartment = response.data.result.filter((dep) => dep.defaultdep === "yes")
+            setDepartments(defaultDepartment);
+
+            console.log(response.data)
+        } catch (err) {
+            console.log(err);
+        }
+    };
+    //get Designations
+    useEffect(() => {
+        DepartmentFetch()
+    }, []);
+
+    const handleFilterChangeItemList = (e) => {
+        const { name, value } = e.target;
+        console.log(e);
+        if (value === "all") {
+            setFilteredData(itemDataList)
+        }else{
+        if (name === "itemPlant") {
+            const itemPlant = itemDataList.filter((item) => (item.itemPlant === value))
+            setFilteredData(itemPlant);
+        }
+        if (name === "itemDepartment") {
+            const itemDepartment = itemDataList.filter((item) => (item.itemDepartment === value))
+            setFilteredData(itemDepartment);
+        }
+        setDateData((prev) => ({ ...prev, [name]: value }));
+    }
+    };
+
+    // const [plantDatas, setPlantDatas] = useState([])
+    // const [departmentDatas, setDepartmentDatas] = useState([])
+    // const handleFilterChangeItemList = (e) => {
+
+    //     const { name, value } = e.target;
+    //     console.log(e);
+    //     if (name === "itemPlant") {
+    //         const itemPlant = itemDataList.filter((item) => (item.itemPlant === value))
+    //         if (value === "all") {
+    //             setFilteredData(itemDataList)
+    //             const filterNames = [ "itemAddMasterName", "itemDepartment", "itemCalibrationSource", "itemCurrentLocation"]
+    //             let updatedFilterNames = {};
+    //             filterNames.forEach((element, index) => {
+    //                 const data = itemDataList.map(item => item[element]);
+    //                 filterNames[index] = [...new Set(data)];
+    //                 // Update the object with a dynamic key based on the 'element'
+    //                 updatedFilterNames[element] = filterNames[index];
+    //             });
+    //             console.log(updatedFilterNames)
+    //             // Update state outside the loop with the updated object
+    //             setFilterNameList(prev => ({ ...prev, ...updatedFilterNames }));
+    //         } else {
+    //             setFilteredData(itemPlant)
+    //             const filterNames = [ "itemAddMasterName", "itemDepartment", "itemCalibrationSource", "itemCurrentLocation"]
+    //             let updatedFilterNames = {};
+
+    //             filterNames.forEach((element, index) => {
+    //                 const data = itemPlant.map(item => item[element]);
+    //                 filterNames[index] = [...new Set(data)];
+    //                 // Update the object with a dynamic key based on the 'element'
+    //                 updatedFilterNames[element] = filterNames[index];
+    //             });
+    //             console.log(updatedFilterNames)
+    //             // Update state outside the loop with the updated object
+    //             setFilterNameList(prev => ({ ...prev, ...updatedFilterNames }));
+               
+    //             setPlantDatas(itemPlant)
+    //         }
+    //     }
+    //     if (name === "currentLocation") {
+    //         const currentLocation = plantDatas.filter((item) => (item.itemDepartment === value))
+    //         if (value === "all") {
+    //             setFilteredData(plantDatas)
+    //             const filterNames = ["itemAddMasterName", "itemCalibrationSource", "itemCurrentLocation"]
+    //             let updatedFilterNames = {};
+    //             filterNames.forEach((element, index) => {
+    //                 const data = plantDatas.map(item => item[element]);
+    //                 filterNames[index] = [...new Set(data)];
+    //                 // Update the object with a dynamic key based on the 'element'
+    //                 updatedFilterNames[element] = filterNames[index];
+    //             });
+    //             console.log(updatedFilterNames)
+    //             // Update state outside the loop with the updated object
+    //             setFilterNameList(prev => ({ ...prev, ...updatedFilterNames }));
+    //             setFilteredData(plantDatas)
+               
+    //         } else {
+    //             setFilteredData(currentLocation)
+    //             const filterNames = ["itemAddMasterName", "itemCalibrationSource", "itemCurrentLocation"]
+    //             let updatedFilterNames = {};
+    //             filterNames.forEach((element, index) => {
+    //                 const data = currentLocation.map(item => item[element]);
+    //                 filterNames[index] = [...new Set(data)];
+    //                 // Update the object with a dynamic key based on the 'element'
+    //                 updatedFilterNames[element] = filterNames[index];
+    //             });
+    //             console.log(updatedFilterNames)
+    //             // Update state outside the loop with the updated object
+    //             setFilterNameList(prev => ({ ...prev, ...updatedFilterNames }));
+    //             setFilteredData(currentLocation)
+               
+    //             setDepartmentDatas(currentLocation)
+    //         }
+    //     }
+    // };
 
 
 
 
 
-
-    const [filteredData, setFilteredData] = useState([])
     const oneMonthBefore = dayjs().subtract(dayjs().date() - 1, 'day')
     const [dateData, setDateData] = useState({
         fromDate: oneMonthBefore.format('YYYY-MM-DD'),
         toDate: dayjs().format('YYYY-MM-DD')
     })
-    // useEffect(() => {
-    //     const filteredItems = itemDataList.filter((item) => dayjs(item.itemDueDate).isSameOrAfter(dateData.fromDate) && dayjs(item.uncDate).isSameOrBefore(dateData.toDate))
-    //     console.log(filteredItems)
-    //     setFilteredData(filteredItems)
-    // }, [dateData.fromDate, dateData.toDate])
-
     useEffect(() => {
 
         const filteredItems = itemDataList.filter((item) => dayjs(item.itemDueDate).isBetween(dayjs(dateData.fromDate), dayjs(dateData.toDate), 'day', '[]'))
@@ -115,7 +270,39 @@ const PlantActual = () => {
                     }} elevation={12}
                     >
                         <div className='row g-2 mt-2'>
-                            <div className='col-3'>
+                            <div className='col'>
+                                <TextField label="Plant Wise"
+                                    id="itemPlantId"
+                                    select
+                                    defaultValue="all"
+                                    fullWidth
+                                    onChange={handleFilterChangeItemList}
+                                    size="small"
+                                    name="itemPlant" >
+
+                                    <MenuItem value="all">All</MenuItem>
+                                    {loggedEmp.plantDetails.map((item, index) => (
+                                        <MenuItem key={index} value={item.plantName}>{item.plantName}</MenuItem>
+                                    ))}
+                                </TextField>
+
+                            </div>
+                            <div className='col '>
+                                <TextField label="Primary Location "
+                                    id="itemDepartmentId"
+                                    select
+                                    defaultValue="all"
+                                    fullWidth
+                                    onChange={handleFilterChangeItemList}
+                                    size="small"
+                                    name="itemDepartment" >
+                                    <MenuItem value="all">All</MenuItem>
+                                    {departments.map((item, index) => (
+                                        <MenuItem key={index} value={item.department}>{item.department}</MenuItem>
+                                    ))}
+                                </TextField>
+                            </div>
+                            <div className='col'>
                                 <DatePicker
                                     fullWidth
                                     id="fromDateId"
@@ -130,7 +317,7 @@ const PlantActual = () => {
                                         setDateData((prev) => ({ ...prev, fromDate: dayjs(newValue).format('YYYY-MM-DD') }))}
                                 />
                             </div>
-                            <div className='col-3'>
+                            <div className='col'>
                                 <DatePicker
                                     fullWidth
                                     id="toDateId"
@@ -144,8 +331,6 @@ const PlantActual = () => {
                                         setDateData((prev) => ({ ...prev, toDate: dayjs(newValue).format('YYYY-MM-DD') }))}
                                 />
                             </div>
-
-
                             <div style={{ height: 480, width: '100%', marginTop: "0.5rem" }}>
                                 <DataGrid disableDensitySelector
                                     rows={filteredData}
