@@ -10,9 +10,14 @@ import {
   DialogActions,
   DialogContent,
   DialogContentText,
+  Select,
   DialogTitle,
   TextField,
+  InputLabel,
+  FormHelperText,
+  OutlinedInput,
   MenuItem,
+  ListItemText,
   Alert,
   Snackbar,
   FormControl,
@@ -26,12 +31,26 @@ import { DataGrid, GridToolbar } from '@mui/x-data-grid';
 import { CloudDownload, CloudUpload, Delete, Check, Clear } from '@mui/icons-material';
 import { useParams } from 'react-router-dom';
 import styled from "@emotion/styled";
+import { useEmployee } from "../../App";
 import { Link } from 'react-router-dom';
 
 
 
 export const Department = () => {
 
+  const emp = useEmployee();
+  const { employee, loggedEmp, allowedPlants } = emp;
+
+  const ITEM_HEIGHT = 48;
+  const ITEM_PADDING_TOP = 8;
+  const MenuProps = {
+    PaperProps: {
+      style: {
+        maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
+        width: 250,
+      },
+    },
+  };
 
   const VisuallyHiddenInput = styled('input')({
     clip: 'rect(0 0 0 0)',
@@ -231,12 +250,14 @@ export const Department = () => {
   const emptyDepartmentData = {
     department: "",
     departmentStatus: "active",
-    defaultdep: "no"
+    defaultdep: "no",
+    departmentPlant: []
   }
   const [departmentData, setDepartmentData] = useState({
     department: "",
     departmentStatus: "active",
-    defaultdep: "no"
+    defaultdep: "no",
+    departmentPlant: []
   });
   console.log(departmentData)
 
@@ -262,6 +283,7 @@ export const Department = () => {
     { field: 'id', headerName: 'Sr.No', width: 90, renderCell: (params) => params.api.getAllRowIds().indexOf(params.id) + 1, headerAlign: "center", align: "center" },
 
     { field: 'department', headerName: 'Department', headerAlign: "center", align: "center", width: "200" },
+    { field: 'departmentPlant', headerName: 'Department Plant', headerAlign: "center", align: "center", width: "200" },
     { field: 'departmentStatus', headerName: 'Status', headerAlign: "center", align: "center", width: "200" },
     {
       field: 'defaultdep', headerName: 'Default', width: "300", headerAlign: "center", align: "center",
@@ -1051,7 +1073,7 @@ export const Department = () => {
                 <Typography variant="h5" component="h5" className="text-center">Department</Typography>
                 <div className="row g-2" >
 
-                  <div className="col-md-5">
+                  <div className="col-md-3">
 
 
 
@@ -1068,7 +1090,34 @@ export const Department = () => {
                           name="department" {...params} label="Department" />} />
 
                   </div>
-                  <div className="col-md-4">
+                  <div className='col-md-3'>
+                    <FormControl size='small' component="div" fullWidth >
+                      <InputLabel id="departmentPlantId">Select Plant</InputLabel>
+                      <Select
+                        labelId="departmentPlantId"
+                        multiple
+                        name="departmentPlant"
+                        value={departmentData.departmentPlant || []} // Ensure it's an array
+                        onChange={handleDepChange}
+                        input={<OutlinedInput fullWidth label="Select Plant" />}
+                        renderValue={(selected) => selected.join(', ')}
+                        MenuProps={MenuProps}
+                        fullWidth
+                      >
+                        {loggedEmp.plantDetails && loggedEmp.plantDetails.map((plant, index) => (
+                          <MenuItem key={index} value={plant.plantName}>
+                            <Checkbox checked={departmentData.departmentPlant && departmentData.departmentPlant.indexOf(plant.plantName) > -1} />
+                            <ListItemText primary={plant.plantName} />
+                          </MenuItem>
+                        ))}
+                      </Select>
+                      <FormHelperText id="departmentPlantId">{errors.departmentPlant}</FormHelperText>
+                    </FormControl>
+
+                  </div>
+
+
+                  <div className="col-md-3">
 
                     <TextField label="Status"
                       id="departmentStatusId"

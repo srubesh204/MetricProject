@@ -21,9 +21,9 @@ const PlantActual = () => {
             const response = await axios.post(
                 `${process.env.REACT_APP_PORT}/itemAdd/getItemByPlant`,{ allowedPlants: allowedPlants }
             );
-            console.log(response.data.result)
             setItemDataList(response.data.result);
             setFilteredData(response.data.result)
+
         } catch (err) {
             console.log(err);
         }
