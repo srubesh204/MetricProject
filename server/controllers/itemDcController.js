@@ -1,5 +1,5 @@
 const itemAddModel = require("../models/itemAddModel");
-const itemDcModel = require("../models/itemDcModel")
+const { itemDcModel } = require("../models/itemDcModel")
 const { compDetailsSchema } = require("../models/compDetailsModel");
 const { plantSchema } = require("../models/compDetailsModel");
 const dayjs = require('dayjs')
@@ -12,6 +12,7 @@ const itemGRNModel = require("../models/itemGRNModel");
 const itemDcController = {
   getAllItemDc: async (req, res) => {
     try {
+      const {allowedPlants} = req.body
       // const itemDcResult = await itemDcModel.find();
       const itemDcResult = await itemDcModel.aggregate([
         {

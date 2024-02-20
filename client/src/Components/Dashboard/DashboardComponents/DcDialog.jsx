@@ -13,7 +13,7 @@ import { Add, Close, Delete } from '@mui/icons-material';
 const Dc = () => {
 
     const dcDatas = useContext(HomeContent)
-    const { dcOpen, setDcOpen, selectedRows, itemFetch, defaultDep, lastNo, vendors } = dcDatas
+    const { dcOpen, setDcOpen, selectedRows, itemFetch, defaultDep, lastNo, vendors, allowedPlants } = dcDatas
 
 
     console.log(selectedRows)
@@ -181,8 +181,8 @@ const Dc = () => {
 
     const dcFetchData = async () => {
         try {
-            const response = await axios.get(
-                `${process.env.REACT_APP_PORT}/itemDc/getAllItemDc`
+            const response = await axios.post(
+                `${process.env.REACT_APP_PORT}/itemDc/getAllItemDc`,{allowedPlants : allowedPlants}
             );
             setDcList(response.data.result);
             console.log(response.data.result)

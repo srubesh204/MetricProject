@@ -120,8 +120,8 @@ const TestHome = () => {
   const [lastNo, setLastNo] = useState("")
   const dcListFetchData = async () => {
     try {
-      const response = await axios.get(
-        `${process.env.REACT_APP_PORT}/itemDc/getAllItemDc`
+      const response = await axios.post(
+        `${process.env.REACT_APP_PORT}/itemDc/getAllItemDc`, {allowedPlants : allowedPlants}
 
       );
       const plantDc = response.data.result.filter(dc => (employeeRole.loggedEmp.plantDetails.map(plant => plant.plantName).includes(dc.dcPlant)))

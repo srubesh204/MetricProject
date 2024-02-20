@@ -139,7 +139,7 @@ const Home = () => {
   const [lastNo, setLastNo] = useState("")
   const dcListFetchData = async () => {
     try {
-      const response = await axios.get(
+      const response = await axios.post(
         `${process.env.REACT_APP_PORT}/itemDc/getAllItemDc`, {allowedPlants : allowedPlants}
       );
       
@@ -1914,7 +1914,7 @@ const Home = () => {
           </div>
           <div className="col-md-4">
             <Paper className='col' elevation={12} sx={{ p: 2, height: "100%" }}>
-              <div style={{ width: "100%", height: "80%" }}>
+              <div style={{ width: "100%", height: "400px" , overflow: "auto"}}>
                 <table className='m-0 table table-bordered table-sm text-center align-middle table-hover'>
                   {selectedLoc === "Departments" &&
                     <tbody>

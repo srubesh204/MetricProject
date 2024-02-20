@@ -86,4 +86,7 @@ itemDcSchema.pre('save', async function(next) {
 });
 
 itemDcSchema.plugin(uniqueValidator);
-module.exports = mongoose.model('itemDc', itemDcSchema);
+module.exports = {
+  itemDcModel: mongoose.model('itemDc', itemDcSchema),
+  DcNoCounter: DcNoCounter
+};
