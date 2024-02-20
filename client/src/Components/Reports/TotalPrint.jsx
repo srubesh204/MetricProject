@@ -6,8 +6,6 @@ const TotalPrint = () => {
 
     const totalPrintData = useContext(TotalListContent)
     const { totalPrintOpen, setTotalPrintOpen, filteredItemListData, formatNoData, itemList, partDataList, companyList, plantList } = totalPrintData
-
-
     const componentRef = useRef();
 
     const handlePrint = useReactToPrint({
@@ -49,10 +47,8 @@ const TotalPrint = () => {
         // Call the handlePrint function when needed
         handlePrint();
     }
-
     console.log(companyList)
     console.log(formatNoData)
-
     const renderTableRows = () => {
         return filteredItemListData.map((row, index) => (
             <tr key={index.toString()} className={index % 25 === 0 ? "print-page-break" : ""}>
