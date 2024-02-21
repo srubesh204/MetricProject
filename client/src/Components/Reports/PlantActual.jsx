@@ -248,18 +248,27 @@ const PlantActual = () => {
         fromDate: oneMonthBefore.format('YYYY-MM-DD'),
         toDate: dayjs().format('YYYY-MM-DD')
     })
-    useEffect(() => {
+    // useEffect(() => {
 
-        const filteredItems = itemDataList.filter((item) => dayjs(item.itemDueDate).isBetween(dayjs(dateData.fromDate), dayjs(dateData.toDate), 'day', '[]'))
+    //     const filteredItems = itemDataList.filter((item) => dayjs(item.itemDueDate).isBetween(dayjs(dateData.fromDate), dayjs(dateData.toDate), 'day', '[]'))
+    //     console.log(filteredItems)
+    //     setFilteredData(filteredItems)
+    // }, [dateData.fromDate, dateData.toDate])
+
+    useEffect(() => {
+        const filteredItems = itemDataList.filter((item) => dayjs(item.itemDueDate).isSameOrAfter(dateData.fromDate) && dayjs(item.itemDueDate).isSameOrBefore(dateData.toDate))
         console.log(filteredItems)
         setFilteredData(filteredItems)
     }, [dateData.fromDate, dateData.toDate])
 
-    const handleItemChange = (e) => {
-        const { name, value } = e.target;
-        setDateData((prev) => ({ ...prev, [name]: value }));
 
-    };
+
+
+    // const handleItemChange = (e) => {
+    //     const { name, value } = e.target;
+    //     setDateData((prev) => ({ ...prev, [name]: value }));
+
+    // };
 
 
     return (

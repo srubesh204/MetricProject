@@ -734,7 +734,7 @@ const DcList = () => {
                     >
 
                         <div className='row'>
-                            <Box sx={{ height: 310, width: '100%', my: 2 }}>
+                            <Box sx={{ height: 250, width: '100%', my: 2 }}>
                                 <DataGrid disableDensitySelector
                                     disableColumnFilter
                                     rows={dcListDataList}
