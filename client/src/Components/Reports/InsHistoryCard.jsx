@@ -37,6 +37,25 @@ function InsHistoryCard() {
 
     const [historyCardPrintOpen, setHistoryCardPrintOpen] = useState(false);
     const [formatNoData, setFormatNoData] = useState([])
+
+    const [approvedByList, setApprovedByList] = useState([])
+
+    const adminAndPlantAdmin = async () => {
+        try {
+            const response = await axios.post(
+                `${process.env.REACT_APP_PORT}/employee/getPlantAdminAndAdminByPlant`, {allowedPlants: allowedPlants}
+            );
+            setApprovedByList(response.data.result)
+            console.log(response.data.result)
+        } catch (err) {
+            console.log(err);
+        }
+    };
+    useEffect(() => {
+        adminAndPlantAdmin();
+    }, []);
+
+
     const formatFetchData = async () => {
         try {
             const response = await axios.get(
@@ -349,11 +368,7 @@ function InsHistoryCard() {
             width: 150,
             align: "center",
             renderCell: (params) => (
-                params.row &&
-                    params.row.itemCalibrationSource !== 'outsource' &&
-                    params.row.itemCalibratedBy
-                    ? params.row.itemCalibratedBy
-                    : params.row.itemCalibrationSource !== "" ? "" : null
+                params.row.itemCalibratedBy ? params.row.itemCalibratedBy : ""
             )
         },
         {
@@ -361,13 +376,12 @@ function InsHistoryCard() {
             headerName: 'Approved By',
             width: 150,
             align: "center",
-            renderCell: (params) => (
-                params.row &&
-                    params.row.itemCalibrationSource !== 'outsource' &&
-                    params.row.itemCalApprovedBy
-                    ? params.row.itemCalApprovedBy
-                    : params.row.itemCalibrationSource !== "" ? "" : null
-            )
+            renderCell: (params) => {
+                const adminName = approvedByList.filter(emp => emp._id === params.row.itemCalApprovedBy)
+                console.log(adminName)
+                return(
+                 adminName.length > 0 ? adminName[0].firstName + " " + adminName[0].lastName : ""
+            )}
         }] : []),
 
     ];
@@ -759,7 +773,8 @@ function InsHistoryCard() {
                     selectedInstrumentName: calDetails.calInsName,
                     selectedIMTENo: calDetails.calInsIMTENo,
                     distItemName,
-                    companyList,
+                    approvedByList,
+                    companyList, 
                     plantList,
                     formatNoData,
                     selectedIMTEs: filteredData,
