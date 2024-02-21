@@ -181,7 +181,7 @@ const DcList = () => {
             console.log(response.data)
 
             setVendorFullList(response.data.result);
-            setVendorTypeList(response.data.result)
+            
             setVendorDataList(response.data.result);
 
             // setFilteredData(response.data.result);
@@ -409,12 +409,15 @@ const DcList = () => {
         if (value === "all") {
             setFilteredData(dcDataDcList)
         } else {
-            if (name === "vendorType") {
+            if (name === "dcPartyType") {
                 if (value === "all") {
-                    setVendorTypeList(vendorFullList)
+                    setFilteredData(dcDataDcList)
                 } else {
-                    const vendorType = vendorDataList.filter((item) => (item[value] === "1"))
-                    setVendorTypeList(vendorType)
+                    const vendorType = dcDataDcList.filter((item) => (item[name] === value))
+                    const partyName =[...new Set(vendorType.map(dc => dc.dcPartyName))] 
+                    setVendorTypeList(partyName)
+                    setFilteredData(vendorType)
+
                 }
             }
             if (name === "partyName") {
@@ -604,14 +607,14 @@ const DcList = () => {
                                 </div>
                                 <div className='col me-2'>
                                     <TextField label="Vendor Type"
-                                        id="vendorTypeId"
+                                        id="dcPartyTypeId"
                                         select
-                                        defaultValue=""
+                                        defaultValue="all"
                                         onChange={handleFilterChange}
                                         size="small"
                                         fullWidth
-                                        name="vendorType" >
-                                        <MenuItem value=""><em>--Select--</em></MenuItem>
+                                        name="dcPartyType" >
+                                        <MenuItem value="all">All</MenuItem>
                                         <MenuItem value="oem">OEM</MenuItem>
                                         <MenuItem value="customer">Customer</MenuItem>
                                         <MenuItem value="supplier">Supplier</MenuItem>
@@ -620,11 +623,11 @@ const DcList = () => {
 
                                 </div>
                                 <div className='col me-2'>
-                                    <TextField fullWidth label="Party Name" className="col" select size="small" onChange={handleFilterChange} id="partyNameId" name="partyName" defaultValue="" >
+                                    <TextField fullWidth label="Party Name" className="col" select size="small" onChange={handleFilterChange} id="partyNameId" name="partyName" defaultValue="all" >
 
                                         <MenuItem value="all">All</MenuItem>
                                         {vendorTypeList.map((item, index) => (
-                                            <MenuItem key={index} value={item.fullName}>{item.fullName}</MenuItem>
+                                            <MenuItem key={index} value={item}>{item}</MenuItem>
                                         ))}
 
 
