@@ -7,7 +7,7 @@ const puppeteer = require('puppeteer');
 const fs = require('fs');
 const path = require('path');
 const formatNoModel = require("../models/formatNoModel");
-const itemGRNModel = require("../models/itemGRNModel");
+const {itemGRNModel} = require("../models/itemGRNModel");
 
 const itemDcController = {
   getAllItemDc: async (req, res) => {

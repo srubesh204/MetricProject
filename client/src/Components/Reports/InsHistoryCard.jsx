@@ -112,9 +112,9 @@ function InsHistoryCard() {
 
     const [itemList, setItemList] = useState([]);
     const [selectedPlantDatas, setSelectedPlantDatas] = useState([])
-   
+
     const [itemListDistNames, setItemListDistNames] = useState([])
-    const [itemIMTEs, setItemIMTEs] = useState([])
+    const [itemIMTEs, setItemIMTEs] = useState([{ itemIMTENo: "Select" }])
     const [selectedMasterData, setSelectedMasterData] = useState([])
 
     const itemFetch = async () => {
@@ -141,22 +141,7 @@ function InsHistoryCard() {
         itemIMTENo: "Select"
     })
 
-    const MainFilter = (newValue, extraName) => {
 
-        console.log(newValue, extraName)
-        setItemFilters(prev => ({ ...prev, [extraName]: newValue }))
-        if (newValue === "All") {
-
-
-
-        }
-        else {
-
-            if (extraName === "itemIMTENo") {
-
-            }
-        }
-    }
 
 
 
@@ -169,7 +154,8 @@ function InsHistoryCard() {
 
     const handleFilters = (e) => {
         const { name, value } = e.target;
-        setItemFilters(prev => ({ ...prev, [name]: value }))
+        console.log(name, value)
+
         if (name === "itemPlant") {
 
             const dep = loggedEmp.plantDetails.filter(plant => plant.plantName === value);
@@ -220,9 +206,9 @@ function InsHistoryCard() {
 
 
         } if (name === "itemIMTENo") {
-           
+
             const itemIMTEWise = async () => {
-                
+
                 try {
                     const encodedValue = encodeURIComponent(value);
                     const imteNo = await axios.get(
@@ -242,30 +228,25 @@ function InsHistoryCard() {
                 }
             };
             itemIMTEWise()
-            
+
 
         }
+        setItemFilters(prev => ({ ...prev, [name]: value }))
     }
+
     // const searchFilter = () => {
     //     if (itemFilters.itemPlant && itemFilters.itemDepartment && itemFilters.itemName && itemFilters.itemIMTENo) {
-    //         const filteredItems = itemList.filter((item) => (item.itemPlant)(item.itemDepartment) (item.itemName)(item.itemIMTENo))
-    //         console.log(filteredItems)
-    //         setFilteredData(filteredItems)
-    //     }
-    // }
-    const searchFilter = () => {
-        if (itemFilters.itemPlant && itemFilters.itemDepartment && itemFilters.itemName && itemFilters.itemIMTENo) {
-            const filteredItems = itemList.filter((item) => (
-                item.itemPlant === itemFilters.itemPlant &&
-                item.itemDepartment === itemFilters.itemDepartment &&
-                item.itemName === itemFilters.itemName &&
-                item.itemIMTENo === itemFilters.itemIMTENo
-            ));
+    //         const filteredItems = itemList.filter((item) => (
+    //             item.itemPlant === itemFilters.itemPlant &&
+    //             item.itemDepartment === itemFilters.itemDepartment &&
+    //             item.itemName === itemFilters.itemName &&
+    //             item.itemIMTENo === itemFilters.itemIMTENo
+    //         ));
 
-            console.log(filteredItems);
-            setFilteredData(filteredItems);
-        }
-    };
+    //         console.log(filteredItems);
+    //         setFilteredData(filteredItems);
+    //     }
+    // };
 
 
     // console.log(selectedMasterData)
@@ -399,47 +380,56 @@ function InsHistoryCard() {
                             elevation={12}
                         >
                             <div className="row mb-2">
-                                <div className="col-md-7 ">
+                                <div className="col-md-8">
                                     <div className="row g-2">
-                                        <TextField label="Plant Wise"
-                                            className="me-2 col"
-                                            id="itemPlantId"
-                                            select
-                                            value={itemFilters.itemPlant}
-                                            fullWidth
-                                            disabled={loggedEmp.plantDetails.length === 1} _
-                                            onChange={handleFilters}
-                                            size="small"
-                                            name="itemPlant" >
-                                            <MenuItem value="Select">Select</MenuItem>
-                                            {loggedEmp.plantDetails.map((item, index) => (
-                                                <MenuItem key={index} value={item.plantName}>{item.plantName}</MenuItem>
-                                            ))}
-                                        </TextField>
-                                        <TextField label="Primary Location"
-                                            id="itemDepartmentId"
-                                            className="me-2 col"
-                                            select
-                                            value={itemFilters.itemDepartment}
-                                            fullWidth
-                                            disabled={loggedEmp.plantDetails.length === 1 && loggedEmp.plantDetails[0].departments.length === 1}
-                                            onChange={handleFilters}
-                                            size="small"
-                                            name="itemDepartment">
-                                            <MenuItem value="Select">Select</MenuItem>
-                                            {selectedPlantDatas.map((item, index) => (
-                                                <MenuItem key={index} value={item}>{item}</MenuItem>
-                                            ))}
-                                        </TextField>
-                                        <TextField className="me-2 col" label="Instrument Name" size="small" onChange={handleFilters} id="itemNameId" select name="itemName" value={itemFilters.itemName} fullWidth >
-                                            <MenuItem value="Select">Select</MenuItem >
-                                            {itemListDistNames.map((item) => (
-                                                <MenuItem value={item.itemAddMasterName}>{item.itemAddMasterName}</MenuItem >
-                                            ))}
+                                        <div className="col">
+                                            <TextField label="Plant Wise"
 
-                                        </TextField>
+                                                id="itemPlantId"
+                                                select
+                                                value={itemFilters.itemPlant}
+                                                fullWidth
+                                                //disabled={loggedEmp.plantDetails.length === 1} _
+                                                onChange={handleFilters}
+                                                size="small"
+                                                name="itemPlant" >
+                                                <MenuItem value="Select">Select</MenuItem>
+                                                {loggedEmp.plantDetails.map((item, index) => (
+                                                    <MenuItem key={index} value={item.plantName}>{item.plantName}</MenuItem>
+                                                ))}
+                                            </TextField>
+                                        </div>
 
-                                        <TextField
+                                        <div className="col">
+                                            <TextField label="Primary Location"
+                                                id="itemDepartmentId"
+
+                                                select
+                                                value={itemFilters.itemDepartment}
+                                                fullWidth
+                                                //disabled={loggedEmp.plantDetails.length === 1 && loggedEmp.plantDetails[0].departments.length === 1}
+                                                onChange={handleFilters}
+                                                size="small"
+                                                name="itemDepartment">
+                                                <MenuItem value="Select">Select</MenuItem>
+                                                {selectedPlantDatas.map((item, index) => (
+                                                    <MenuItem key={index} value={item}>{item}</MenuItem>
+                                                ))}
+                                            </TextField>
+                                        </div>
+
+                                        <div className="col">
+                                            <TextField label="Instrument Name" size="small" onChange={handleFilters} id="itemNameId" select name="itemName" value={itemFilters.itemName} fullWidth >
+                                                <MenuItem value="Select">Select</MenuItem >
+                                                {itemListDistNames.map((item) => (
+                                                    <MenuItem value={item.itemAddMasterName}>{item.itemAddMasterName}</MenuItem >
+                                                ))}
+
+                                            </TextField>
+                                        </div>
+
+
+                                        {/* <TextField
                                             label="IMTE No"
                                             size="small"
                                             select
@@ -448,7 +438,7 @@ function InsHistoryCard() {
                                             name="itemIMTENo"
                                             value={itemFilters.itemIMTENo}
                                             fullWidth
-                                            className="col me-2"
+                                            className=" me-2"
                                         >
                                             <MenuItem value="Select">Select</MenuItem>
                                             {itemIMTEs.map((item, index) => (
@@ -456,12 +446,12 @@ function InsHistoryCard() {
                                                     {item.itemIMTENo}
                                                 </MenuItem>
                                             ))}
-                                        </TextField>
+                                        </TextField> */}
 
                                         {/* <Autocomplete
                                             disablePortal
                                             id="combo-box-demo"
-                                            className="col mt-2 "
+                                            className=" mt-2 "
                                             options={itemIMTEs}
                                             size='small'
                                             fullWidth
@@ -471,46 +461,57 @@ function InsHistoryCard() {
                                             getOptionLabel={(item) => item.itemIMTENo}
                                             renderInput={(params) => <TextField {...params} label="IMTE No" />}
                                         /> */}
-                                        {/* <Autocomplete
-                                            disablePortal
-                                            id="itemIMTENo"
-                                            className="col mt-2"
-                                            options={itemIMTEs}
-                                            size='small'
-                                            fullWidth
-                                            value={itemFilters.itemIMTENo}
-                                            onInputChange={(newValue) => handleFilters({ target: { name: "itemIMTENo", value: newValue } })}
-                                            name="itemIMTENo"
-                                            getOptionLabel={(item) => item.itemIMTENo}
-                                            renderInput={(params) => <TextField {...params} label="IMTE No" />}
-                                        /> */}
-                                        <Button type="button" className="col" onClick={() => searchFilter()} >search</Button>
+                                        <div className="col">
+                                            <Autocomplete
+                                                disablePortal
+                                                id="itemIMTENo"
+
+                                                options={itemIMTEs}
+                                                size='small'
+                                                fullWidth
+                                                //value={itemFilters.itemIMTENo}
+                                                onInputChange={(e, newValue) => handleFilters({ target: { name: "itemIMTENo", value: newValue } })}
+                                                name="itemIMTENo"
+                                                getOptionLabel={(item) => item ? item.itemIMTENo : ""}
+                                                renderInput={(params) => <TextField {...params} label="IMTE No" />}
+                                            />
+                                        </div>
+
+                                        {/* <Button type="button" className="col" onClick={() => searchFilter()} >search</Button> */}
                                     </div>
+                                </div>
+                                <div className="col">
+
                                 </div>
                                 <div className="col-md-3">
                                     <div className="row g-2">
-                                        <DatePicker
-                                            id="fromDateId"
-                                            name="fromDate"
-                                            label="From Date"
-                                            className="col me-2"
-                                            fullWidth
-                                            slotProps={{ textField: { size: 'small' } }}
-                                            format="DD-MM-YYYY"
-                                            value={fromDate}
-                                            onChange={(date) => setFromDate(date)}
-                                        />
-                                        <DatePicker
-                                            id="toDateId"
-                                            name="toDate"
-                                            className="col"
-                                            fullWidth
-                                            label="To Date"
-                                            slotProps={{ textField: { size: 'small' } }}
-                                            format="DD-MM-YYYY"
-                                            value={toDate}
-                                            onChange={(date) => setToDate(date)}
-                                        />
+                                        <div className="col">
+                                            <DatePicker
+                                                id="fromDateId"
+                                                name="fromDate"
+                                                label="From Date"
+                                                className="col me-2"
+                                                fullWidth
+                                                slotProps={{ textField: { size: 'small', fullWidth: true } }}
+                                                format="DD-MM-YYYY"
+                                                value={fromDate}
+                                                onChange={(date) => setFromDate(date)}
+                                            />
+                                        </div>
+                                        <div className="col">
+                                            <DatePicker
+                                                id="toDateId"
+                                                name="toDate"
+                                                className="col"
+                                                fullWidth
+                                                label="To Date"
+                                                slotProps={{ textField: { size: 'small', fullWidth: true } }}
+                                                format="DD-MM-YYYY"
+                                                value={toDate}
+                                                onChange={(date) => setToDate(date)}
+                                            />
+                                        </div>
+
                                     </div>
                                 </div>
                             </div>
@@ -528,7 +529,7 @@ function InsHistoryCard() {
                                         <Button component={Link} to={`${process.env.REACT_APP_PORT}/additionalCertificates/${selectedRow ? selectedRow?.msaName : ""}`} target="_blank" variant="contained" color="info" size="small">MSA</Button>
                                     </div>
                                     <div className="me-2">
-                                        <Button component={Link} to={`${process.env.REACT_APP_PORT}/additionalCertificates/${selectedRow? selectedRow?.otherFile : ""}`} target="_blank" variant="contained" color="info" size="small">Drawing</Button>
+                                        <Button component={Link} to={`${process.env.REACT_APP_PORT}/additionalCertificates/${selectedRow ? selectedRow?.otherFile : ""}`} target="_blank" variant="contained" color="info" size="small">Drawing</Button>
                                     </div>
                                     <div className="me-2"><Button component={Link} to={`${process.env.REACT_APP_PORT}/workInstructions/${selectedMasterData ? selectedMasterData.workInsName : ""}`} target="_blank" variant="contained" color="info" size="small">View Instructions</Button></div>
                                     {/* <div className="me-2"><Button variant="contained" color="info" size="small">View Drawing</Button></div>
@@ -604,7 +605,7 @@ function InsHistoryCard() {
                                 </Paper>
                             </div>
                             <div className="col-4">
-                                <Paper
+                                {selectedRow && selectedRow.acceptanceCriteria && selectedRow.acceptanceCriteria.length > 0 && <Paper
                                     sx={{
                                         p: 1,
                                         display: 'flex',
@@ -683,7 +684,7 @@ function InsHistoryCard() {
                                             </tbody>
                                         </table>}
                                     </div>
-                                </Paper>
+                                </Paper>}
                             </div>
                         </div>
                         <Paper
