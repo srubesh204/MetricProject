@@ -152,15 +152,15 @@ const Dashboard = () => {
 
     ].filter(Boolean),
     Reports: [
-      { name: "DC List", file: <DcList />, icon: <img src={`${process.env.REACT_APP_PORT}/icon/list-text.png`} alt="DC List Icon" style={{ width: '20px', height: '20px' }} /> },
-      { name: "GRN List", file: <GrnList />, icon: <img src={`${process.env.REACT_APP_PORT}/icon/list-text.png`} alt="GRN List Icon" style={{ width: '20px', height: '20px' }} /> },
-      { name: "Cal Data", file: <CalList />, icon: <img src={`${process.env.REACT_APP_PORT}/icon/list-text.png`} alt="Cal Data Icon" style={{ width: '20px', height: '20px' }} /> },
-      { name: "History Card", file: <InsHistoryCard />, icon: <img src={`${process.env.REACT_APP_PORT}/icon/list-text.png`} alt="History Card Icon" style={{ width: '20px', height: '20px' }} /> },
-      { name: "Total List", file: <TotalList />, icon: <img src={`${process.env.REACT_APP_PORT}/icon/list-text.png`} alt="Total List Icon" style={{ width: '20px', height: '20px' }} /> },
+      { name: "DC List", file: <DcList />, icon: <FormatListBulleted /> },
+      { name: "GRN List", file: <GrnList />, icon: <FormatListBulleted /> },
+      { name: "Cal Data", file: <CalList />, icon: <FormatListBulleted /> },
+      { name: "History Card", file: <InsHistoryCard />, icon: <FormatListBulleted /> },
+      { name: "Total List", file: <TotalList />, icon: <FormatListBulleted /> },
       // { name: "Cal Due Report", file: <CalDueReport />, icon: <img src={`${process.env.REACT_APP_PORT}/icon/list-text.png`} alt="Cal Due Report Icon" style={{ width: '20px', height: '20px' }} /> },
-      { name: "Measurement Uncertainty List",file: <MeasurementUncertaintyList />,icon: <img src={`${process.env.REACT_APP_PORT}/icon/list-text.png`} alt="Measurement Uncertainty List" style={{ width: '20px', height: '20px' }} />  },
-      { name: "Vendor Details",file: <VendorUpload />,icon: <img src={`${process.env.REACT_APP_PORT}/icon/list-text.png`} alt="Vendor Details Icon" style={{ width: '20px', height: '20px' }} />  },
-      { name: "Plan vs Actual",file: <PlantActual />,icon: <img src={`${process.env.REACT_APP_PORT}/icon/list-text.png`} alt="Plan vs Actual Icon" style={{ width: '20px', height: '20px' }} />  },
+      { name: "Measurement Uncertainty List",file: <MeasurementUncertaintyList />, icon: <FormatListBulleted />  },
+      { name: "Vendor Details",file: <VendorUpload />,icon: <FormatListBulleted />  },
+      { name: "Plan vs Actual",file: <PlantActual />,icon: <FormatListBulleted />  },
     
       // { name: "Management Chart" },
     ]

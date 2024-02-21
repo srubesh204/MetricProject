@@ -99,7 +99,7 @@ const ItemEdit = () => {
     }, []);
 
     const [isItemMasterList, setIsItemMasterList] = useState([])
-
+    const [selectedPlantList, setSelectedPlantList] = useState([])
 
     const getItemMaster = async () => {
         try {
@@ -509,6 +509,19 @@ const ItemEdit = () => {
     useEffect(() => {
         getItemDataById();
     }, [])
+
+
+    useEffect(()=> {
+        const itemPlantFilter = isItemMasterList.filter(item => item.itemPlant === itemAddData.itemPlant)
+        setSelectedPlantList(itemPlantFilter)
+        const vendorPlantFilter = vendorList.filter(ven => ven.vendorPlant.includes(itemAddData.itemPlant))
+        const oem = vendorPlantFilter.filter((item) => item.oem === "1")
+        const supplier = vendorPlantFilter.filter((item) => item.supplier === "1")
+        setSupplierList(supplier)
+        setOEMList(oem)
+    }, [itemAddData.itemPlant])
+
+
     const handleItemAddChange = (e) => {
 
         const { name, value, checked } = e.target;
