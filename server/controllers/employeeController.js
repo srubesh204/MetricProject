@@ -286,6 +286,26 @@ const employeeController = {
     } catch (err) {
       console.log(err)
     }
+  },
+  getPlantAdminAndAdminByPlant: async (req, res) => {
+    try {
+      const { allowedPlants } = req.body
+      console.log(allowedPlants)
+
+      const adminsSuperAdmins = await employeeModel.aggregate([
+        {
+          $match: {
+            "plantDetails.plantName": { $in: allowedPlants ? allowedPlants : [] }, empRole: {$in : ["admin", "plantAdmin"]}
+          }
+        },
+        {
+          $project: {  firstName: 1, _id: 1, lastName: 1 }  // Only return the mailId field
+        }
+      ])
+      res.status(202).json({ result: adminsSuperAdmins, status: 1, message: "adminGet Successfully" })
+    } catch (err) {
+      console.log(err)
+    }
   }
 
 

@@ -12,5 +12,6 @@ router.post("/createDepartment", departmentController.createDepartment)
 router.put("/updateDepartment/:id", departmentController.updateDepartment)
 router.delete("/deleteDepartment", departmentController.deleteDepartment)
 router.post("/uploadDepartmentInExcel", upload, departmentController.uploadDepartmentInExcel)
+router.post("/getDepartmentByPlant", departmentController.getDepartmentByPlant)
 
 module.exports = router;

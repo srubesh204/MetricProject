@@ -199,6 +199,23 @@ const departmentController = {
       console.error('Error uploading Excel data:', error);
       res.status(500).json({ error: 'Internal Server Error' });
     }
+  },
+  getDepartmentByPlant: async (req, res) => {
+    try {
+      const { allowedPlants } = req.body
+      console.log(allowedPlants)
+
+      const departmentByPlant = await departmentModel.aggregate([
+        {
+          $match: {
+            "departmentPlant": { $in: allowedPlants ? allowedPlants : [] }
+          }
+        },
+      ])
+      res.status(202).json({ result: departmentByPlant, status: 1, message: "Department Get Successfully" })
+    } catch (err) {
+      console.log(err)
+    }
   }
 
 }
