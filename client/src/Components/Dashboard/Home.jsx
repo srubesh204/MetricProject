@@ -1529,7 +1529,14 @@ const Home = () => {
   console.log(itemStatus)
 
   useEffect(()=> {
-    // if()
+    if(plantDeps.itemPlant === "All"){
+      setSelectedPlantDepartment(plantWiseDepartments)
+    }else{
+      const dep = plantWiseDepartments.filter(deps => deps.departmentPlant.includes(plantDeps.itemPlant))
+      setSelectedPlantDepartment(dep)
+    }
+
+    
   }, [plantDeps.itemPlant])
 
 
@@ -1792,7 +1799,7 @@ const Home = () => {
                     <Select id="grouped-select" label="Select Department" onChange={DepartmentChange}>
                       <MenuItem >Select Department</MenuItem>
                       <ListSubheader color='primary' sx={{ fontSize: "12px" }}>Primary Department</ListSubheader>
-                      {plantWiseDepartments.length > 0 && plantWiseDepartments
+                      {selectedPlantDepartment.length > 0 && selectedPlantDepartment
                         .filter(item => item.defaultdep === "yes")
                         .map((item, index) => (
                           <MenuItem sx={{ marginLeft: "20px" }} key={index} value={item.department}>
@@ -1801,7 +1808,7 @@ const Home = () => {
                         ))}
 
                       <ListSubheader color='primary' sx={{ fontSize: "12px" }}>Other Department</ListSubheader>
-                      {plantWiseDepartments.length > 0 && plantWiseDepartments
+                      {selectedPlantDepartment.length > 0 && selectedPlantDepartment
                         .filter(item => item.defaultdep !== "yes")
                         .map((item, index) => (
                           <MenuItem sx={{ marginLeft: "20px" }} key={index} value={item.department}>
