@@ -1,4 +1,4 @@
-import React, { useContext, useRef } from 'react';
+import React, { useContext, useRef, useEffect } from 'react';
 import { TotalListContent } from './TotalList';
 import dayjs from 'dayjs';
 import { useReactToPrint } from 'react-to-print';
@@ -8,6 +8,11 @@ const TotalPrint = () => {
     const { totalPrintOpen, setTotalPrintOpen, filteredItemListData, formatNoData, itemList, partDataList, companyList, plantList } = totalPrintData
     const componentRef = useRef();
 
+    useEffect(() => {
+        console.log('Format No Data:', formatNoData.fTotalList?.frNo);
+    }, [formatNoData]);
+
+    console.log(formatNoData)
     const handlePrint = useReactToPrint({
         content: () => componentRef.current,
         pageStyle: `
@@ -72,7 +77,8 @@ const TotalPrint = () => {
     const Footer = (data) => {
         return (
             <tr className="footer">
-                <div style={{ position: 'absolute', fontSize: '8px' }}>Format Number: {formatNoData && formatNoData.fTotalList?.frNo}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;     Amendment No.: {formatNoData && formatNoData.fTotalList?.amNo}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;     Amendment Date.: {formatNoData && formatNoData.fTotalList?.amDate}</div>
+                {/* <div style={{ position: 'absolute', fontSize: '8px' }}>Format Number: {formatNoData && formatNoData.fTotalList?.frNo}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;     Amendment No.: {formatNoData && formatNoData.fTotalList?.amNo}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;     Amendment Date.: {formatNoData && formatNoData.fTotalList?.amDate}</div> */}
+                <div style={{ position: 'absolute', fontSize: '8px' }}>Format Number: {formatNoData && formatNoData.fTotalList?.frNo}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;     Rev. No.: {formatNoData && formatNoData.fTotalList?.amNo}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;     Rev. Date.: {formatNoData && formatNoData.fTotalList?.amDate}</div>
             </tr>
         );
     };
@@ -110,7 +116,7 @@ const TotalPrint = () => {
                             <tbody>{renderTableRows()}</tbody>
                         </table>
 
-                        <tfoot>{Footer()}</tfoot>
+                        <tfoot> {Footer({ value: formatNoData })}</tfoot>
                         {/* </div> */}
                     </div>
                 </div>

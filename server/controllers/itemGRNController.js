@@ -169,7 +169,7 @@ const itemGRNController = {
 
       const formatNo = await formatNoModel.findById("formatNo");
 
-      const formatNumber = `${formatNo && formatNo.fGrn ? (formatNo.fGrn.frNo + " " + formatNo.fGrn.amNo + " " + formatNo.fGrn.amDate) : ""}`
+      const formatNumber = `${formatNo && formatNo.fGrn ? ("Format Number : " + formatNo.fGrn.frNo + " " + "Rev.No : " + formatNo.fGrn.amNo +" " + "Rev.Date :  " + formatNo.fGrn.amDate) : ""}`
       console.log(formatNumber)
 
       const validationError = itemGRNResult.validateSync();
@@ -560,7 +560,7 @@ const itemGRNController = {
 
       const formatNo = await formatNoModel.findById("formatNo");
 
-      const formatNumber = `${formatNo && formatNo.fGrn ? (formatNo.fGrn.frNo + " " + formatNo.fGrn.amNo + " " + formatNo.fGrn.amDate) : ""}`
+      const formatNumber = `${formatNo && formatNo.fGrn ? ("Format Number : " +formatNo.fGrn.frNo +"  "+ "Rev.No : " + formatNo.fGrn.amNo +"  " + " Rev.Date : " + formatNo.fGrn.amDate) : ""}`
       console.log(formatNumber)
 
 
