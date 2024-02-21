@@ -466,9 +466,15 @@ const Employee = () => {
         setEmployeeData((prev) => ({ ...prev, [name]: value }));
 
     };
+    const [plantDepartments, setPlantDepartments] = useState([])
 
     const handlePlantChange = (e) => {
         const { name, value } = e.target;
+        if(name === "plantName"){
+            const plantDepartments = defaultDepartments.filter(dep=> dep.departmentPlant.includes(value))
+            console.log(plantDepartments)
+            setPlantDepartments(plantDepartments)
+        }
         setEmpPlantDetails((prev) => ({ ...prev, [name]: value }));
     };
 
@@ -485,7 +491,7 @@ const Employee = () => {
     const validateFunction = () => {
         let tempErrors = {};
         tempErrors.employeeCode = employeeData.employeeCode ? "" : "EmpCode is Required"
-        tempErrors.title = employeeData.title ? "" : "* Title"
+        tempErrors.title = employeeData.title ? "" : "Title is required"
         tempErrors.firstName = employeeData.firstName ? "" : "First Name is Required"
         tempErrors.lastName = employeeData.lastName ? "" : "Last Name is Required"
         tempErrors.address = employeeData.address ? "" : "Address is Required"
@@ -1128,7 +1134,7 @@ const Employee = () => {
                                                         MenuProps={MenuProps}
                                                         fullWidth
                                                     >
-                                                        {defaultDepartments.map((dep, index) => (
+                                                        {plantDepartments.map((dep, index) => (
                                                             <MenuItem key={index} value={dep.department}>
                                                                 <Checkbox checked={empPlantDetails.departments.indexOf(dep.department) > -1} />
                                                                 <ListItemText primary={dep.department} />
