@@ -107,7 +107,7 @@ const DcList = () => {
         formatFetchData();
     }, []);
 
-    
+
 
     const [dcDataDcList, setDcDataDcList] = useState([])
     const dcListFetchData = async () => {
@@ -115,9 +115,9 @@ const DcList = () => {
             const response = await axios.post(
                 `${process.env.REACT_APP_PORT}/itemDc/getAllItemDc`, { allowedPlants: allowedPlants }
             );
-            
+
             setDcDataDcList(response.data.result);
-            setFilteredData(response.data.result); 
+            setFilteredData(response.data.result);
 
 
         } catch (err) {
@@ -272,8 +272,8 @@ const DcList = () => {
     const Columns = [
 
         { field: 'id', headerName: 'Sr. No', headerAlign: "center", align: "center", width: 70, renderCell: (params) => params.api.getAllRowIds().length - params.api.getAllRowIds().indexOf(params.id) },
-         ...(empRole && empRole.employee !== 'viewer'
-             ? [{ field: 'editButton', headerAlign: "center", align: "center", headerName: 'Edit', width: 100, renderCell: (params) => <Button onClick={() => { setSelectedRows(params.row); setDcEditOpen(true) }}><Edit color='success' /></Button> }] : []),
+        ...(empRole && empRole.employee !== 'viewer'
+            ? [{ field: 'editButton', headerAlign: "center", align: "center", headerName: 'Edit', width: 100, renderCell: (params) => <Button onClick={() => { setSelectedRows(params.row); setDcEditOpen(true) }}><Edit color='success' /></Button> }] : []),
         {
             field: 'viewButton',
             headerAlign: "center",
@@ -291,8 +291,8 @@ const DcList = () => {
         },
         { field: 'dcNo', headerName: 'Dc No', headerAlign: "center", align: "center", width: 150 },
         { field: 'dcDate', headerName: 'Dc Date', headerAlign: "center", align: "center", width: 200, renderCell: (params) => dayjs(params.row.dcDate).format("DD-MM-YYYY") },
-        { field: 'dcPartyName', headerName: 'Dc PartyName', headerAlign: "center", align: "center", width: 200},
-        { field: 'dcCreatedBy', headerName: 'DC Created By', headerAlign: "center", align: "center", width: 200},
+        { field: 'dcPartyName', headerName: 'Dc PartyName', headerAlign: "center", align: "center", width: 200 },
+        { field: 'dcCreatedBy', headerName: 'DC Created By', headerAlign: "center", align: "center", width: 200 },
         { field: 'printButton', headerName: 'Print', headerAlign: "center", align: "center", width: 90, renderCell: (params) => <Button component={Link} to={`${process.env.REACT_APP_PORT}/dcCertificate/${params.row.dcNo}.pdf`} target='_blank'><PrintRounded color='success' /></Button> }
     ]
 
@@ -406,9 +406,9 @@ const DcList = () => {
     const handleFilterChange = (e) => {
         const { name, value } = e.target;
         setDateData((prev) => ({ ...prev, [name]: value }))
-        if(value === "all"){
+        if (value === "all") {
             setFilteredData(dcDataDcList)
-        }else{
+        } else {
             if (name === "vendorType") {
                 if (value === "all") {
                     setVendorTypeList(vendorFullList)
@@ -429,12 +429,12 @@ const DcList = () => {
             if (name === "dcDepartment") {
                 // const itemDepartment = dcDataDcList.filter((item) => (item.itemDepartment && item.itemDepartment.includes(value)));
                 const dcDepartment = dcDataDcList.filter((dc) => (dc.dcDepartment.includes(value)))
-    
+
                 setFilteredData(dcDepartment);
             }
         }
-       
-       
+
+
 
 
 
@@ -787,13 +787,15 @@ const DcList = () => {
                                             </Button>
                                         </div>
                                         <div>
-                                            <Button component={Link} to="/insHisCard"  size='small' >
+                                            <Button component={Link} to="/insHisCard" size='small' >
                                                 History  Card
                                             </Button>
                                         </div>
-                                        {/* <div >
-                                            <Button component={Link} to="/" size='small' variant='contained' startIcon={<ArrowBack />} endIcon={<House />} color='secondary'>Home</Button>
-                                        </div> */}
+                                        <div>
+                                            <Button component={Link} to="/grnList" size='small' >
+                                                GRN List
+                                            </Button>
+                                        </div>
                                     </div>
 
 

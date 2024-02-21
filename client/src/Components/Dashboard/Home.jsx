@@ -428,8 +428,6 @@ const Home = () => {
 
   const itemLocationFun = () => {
 
-
-
     setFilteredData(plantWiseList)
     setPieDataFilter(plantWiseList)
 
