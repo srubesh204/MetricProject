@@ -40,7 +40,7 @@ function InsHistoryCard() {
     const formatFetchData = async () => {
         try {
             const response = await axios.get(
-                `${process.env.REACT_APP_PORT}/formatNo/getFormatNoById/1`
+                `${process.env.REACT_APP_PORT}/formatNo/getFormatNoById/formatNo`
             );
             const format = response.data.result
             console.log(format)
@@ -57,7 +57,7 @@ function InsHistoryCard() {
     const companyFetch = async () => {
         try {
             const response = await axios.get(
-                `${process.env.REACT_APP_PORT}/compDetails/getAllCompDetails`
+                `${process.env.REACT_APP_PORT}/compDetails/getCompDetailsById/companyData`
             );
             setCompanyList(response.data.result);
             //setFilterCompany(response.data.result);
@@ -112,9 +112,9 @@ function InsHistoryCard() {
 
     const [itemList, setItemList] = useState([]);
     const [selectedPlantDatas, setSelectedPlantDatas] = useState([])
-   
+
     const [itemListDistNames, setItemListDistNames] = useState([])
-    const [itemIMTEs, setItemIMTEs] = useState([])
+    const [itemIMTEs, setItemIMTEs] = useState([{ itemIMTENo: "Select" }])
     const [selectedMasterData, setSelectedMasterData] = useState([])
 
     const itemFetch = async () => {
@@ -135,28 +135,13 @@ function InsHistoryCard() {
 
     console.log(itemList)
     const [itemFilters, setItemFilters] = useState({
-        itemPlant: loggedEmp.plantDetails.length === 1 ? loggedEmp.plantDetails[0].plantName : "Select",
-        itemDepartment: loggedEmp.plantDetails.length === 1 && loggedEmp.plantDetails[0].departments.length === 1 ? loggedEmp.plantDetails[0].departments[0] : "Select",
+        itemPlant: "Select",
+        itemDepartment: "Select",
         itemName: "Select",
         itemIMTENo: "Select"
     })
 
-    const MainFilter = (newValue, extraName) => {
 
-        console.log(newValue, extraName)
-        setItemFilters(prev => ({ ...prev, [extraName]: newValue }))
-        if (newValue === "All") {
-
-
-
-        }
-        else {
-
-            if (extraName === "itemIMTENo") {
-
-            }
-        }
-    }
 
 
 
@@ -169,48 +154,58 @@ function InsHistoryCard() {
 
     const handleFilters = (e) => {
         const { name, value } = e.target;
-        setItemFilters(prev => ({ ...prev, [name]: value }))
+        console.log(name, value)
+
         if (name === "itemPlant") {
 
             const dep = loggedEmp.plantDetails.filter(plant => plant.plantName === value);
             if (value === "Select") {
                 setSelectedPlantDatas([])
+
             } else {
                 setSelectedPlantDatas(dep.length > 0 ? dep[0].departments : [])
             }
-
+            setSelectedRow([])
+            setFilteredData([])
 
             setItemFilters(prev => ({ ...prev, itemDepartment: "Select", itemName: "Select", itemIMTENo: "Select" }))
         }
         if (name === "itemDepartment") {
             console.log(value)
             const itemDepWise = async () => {
+
                 try {
-                    const response = await axios.get(
-                        `${process.env.REACT_APP_PORT}/itemAdd/getItemByDepartment/${value}`
+                    const response = await axios.post(
+                        `${process.env.REACT_APP_PORT}/itemAdd/getItemByDepartment`, { itemPlant: itemFilters.itemPlant, itemDepartment: value }
                     );
                     setItemListDistNames(response.data.result)
+                    setSelectedRow([])
+                    setFilteredData([])
                     console.log(response.data.result)
                 } catch (error) {
                     console.error('Error fetching data:', error);
                 }
             };
             itemDepWise()
-            // const filterList = selectedPlantDatas.filter(item => item.itemDepartment === value)
-            // const nameList = [...new Set(filterList.map(item => item.itemAddMasterName))].sort()
-            // setItemListDistNames(nameList)
+            setItemFilters(prev => ({ ...prev, itemName: "Select", itemIMTENo: "Select" }))
 
-            // setItemFilters(prev => ({ ...prev, itemName: "Select", itemIMTENo: "Select" }))
-            // setSelectedDepartmentData(filterList)
         }
         if (name === "itemName") {
             const itemNameWise = async () => {
                 try {
-                    const response = await axios.get(
-                        `${process.env.REACT_APP_PORT}/itemAdd/getItemByItemAddMasterName/${value}`
+                    const response = await axios.post(
+                        `${process.env.REACT_APP_PORT}/itemAdd/getItemByItemAddMasterName`,
+                        {
+                            itemPlant: itemFilters.itemPlant,
+                            itemDepartment: itemFilters.itemDepartment,
+                            itemName: value
+                        }
                     );
-                    setItemIMTEs(response.data.result)
+
+                    setItemIMTEs(response.data.result.map(item => item.itemIMTENo))
                     setItemFilters(prev => ({ ...prev, itemIMTENo: "Select" }))
+                    setSelectedRow([])
+                    setFilteredData([])
                     console.log(response.data.result)
                 } catch (error) {
                     console.error('Error fetching data:', error);
@@ -220,9 +215,9 @@ function InsHistoryCard() {
 
 
         } if (name === "itemIMTENo") {
-           
+
             const itemIMTEWise = async () => {
-                
+
                 try {
                     const encodedValue = encodeURIComponent(value);
                     const imteNo = await axios.get(
@@ -242,30 +237,25 @@ function InsHistoryCard() {
                 }
             };
             itemIMTEWise()
-            
+
 
         }
+        setItemFilters(prev => ({ ...prev, [name]: value }))
     }
+
     // const searchFilter = () => {
     //     if (itemFilters.itemPlant && itemFilters.itemDepartment && itemFilters.itemName && itemFilters.itemIMTENo) {
-    //         const filteredItems = itemList.filter((item) => (item.itemPlant)(item.itemDepartment) (item.itemName)(item.itemIMTENo))
-    //         console.log(filteredItems)
-    //         setFilteredData(filteredItems)
-    //     }
-    // }
-    const searchFilter = () => {
-        if (itemFilters.itemPlant && itemFilters.itemDepartment && itemFilters.itemName && itemFilters.itemIMTENo) {
-            const filteredItems = itemList.filter((item) => (
-                item.itemPlant === itemFilters.itemPlant &&
-                item.itemDepartment === itemFilters.itemDepartment &&
-                item.itemName === itemFilters.itemName &&
-                item.itemIMTENo === itemFilters.itemIMTENo
-            ));
+    //         const filteredItems = itemList.filter((item) => (
+    //             item.itemPlant === itemFilters.itemPlant &&
+    //             item.itemDepartment === itemFilters.itemDepartment &&
+    //             item.itemName === itemFilters.itemName &&
+    //             item.itemIMTENo === itemFilters.itemIMTENo
+    //         ));
 
-            console.log(filteredItems);
-            setFilteredData(filteredItems);
-        }
-    };
+    //         console.log(filteredItems);
+    //         setFilteredData(filteredItems);
+    //     }
+    // };
 
 
     // console.log(selectedMasterData)
@@ -312,8 +302,9 @@ function InsHistoryCard() {
         {
             field: 'certificateView',
             headerName: 'Certificate',
-            width: 200,
+            width: 100,
             align: 'center',
+            headerAlign: 'center',
             renderCell: (params) => (
                 params.row.itemCalibrationSource === 'inhouse' && params.row.itemCertificateNo ? (
                     <IconButton size="small" component={Link} target="_blank" to={`${process.env.REACT_APP_PORT}/calCertificates/${params.row.itemCertificateNo}.pdf`}>
@@ -333,13 +324,13 @@ function InsHistoryCard() {
         },
 
 
-        { field: 'itemCalDate', headerName: 'Calibration Date', width: 150, align: "center", valueGetter: (params) => dayjs(params.row.itemCalDate).format('DD-MM-YYYY') },
-        { field: 'itemDueDate', headerName: 'Calibration Due', width: 150, align: "center", valueGetter: (params) => dayjs(params.row.itemDueDate).format('DD-MM-YYYY') },
+        { field: 'itemCalDate', headerName: 'Calibration Date', width: 150, align: "center", headerAlign: 'center', valueGetter: (params) => dayjs(params.row.itemCalDate).format('DD-MM-YYYY') },
+        { field: 'itemDueDate', headerName: 'Calibration Due', width: 150, align: "center", headerAlign: 'center', valueGetter: (params) => dayjs(params.row.itemDueDate).format('DD-MM-YYYY') },
         { field: 'itemCalStatus', headerName: 'Calibration Status', width: 150, align: "center", },
 
-        { field: 'itemCertificateNo', headerName: 'Certificate No', width: 180, align: "center" },
+        { field: 'itemCertificateNo', headerName: 'Certificate No', width: 180, align: "center", headerAlign: 'center',},
         {
-            field: 'observedSize', headerName: "Observed Size", width: 180, align: "center",
+            field: 'observedSize', headerName: "Observed Size", width: 200, align: "center", headerAlign: 'center',
             renderCell: (params) => (
 
                 <div>
@@ -399,47 +390,56 @@ function InsHistoryCard() {
                             elevation={12}
                         >
                             <div className="row mb-2">
-                                <div className="col-md-7 ">
+                                <div className="col-md-8">
                                     <div className="row g-2">
-                                        <TextField label="Plant Wise"
-                                            className="me-2 col"
-                                            id="itemPlantId"
-                                            select
-                                            value={itemFilters.itemPlant}
-                                            fullWidth
-                                            disabled={loggedEmp.plantDetails.length === 1} _
-                                            onChange={handleFilters}
-                                            size="small"
-                                            name="itemPlant" >
-                                            <MenuItem value="Select">Select</MenuItem>
-                                            {loggedEmp.plantDetails.map((item, index) => (
-                                                <MenuItem key={index} value={item.plantName}>{item.plantName}</MenuItem>
-                                            ))}
-                                        </TextField>
-                                        <TextField label="Primary Location"
-                                            id="itemDepartmentId"
-                                            className="me-2 col"
-                                            select
-                                            value={itemFilters.itemDepartment}
-                                            fullWidth
-                                            disabled={loggedEmp.plantDetails.length === 1 && loggedEmp.plantDetails[0].departments.length === 1}
-                                            onChange={handleFilters}
-                                            size="small"
-                                            name="itemDepartment">
-                                            <MenuItem value="Select">Select</MenuItem>
-                                            {selectedPlantDatas.map((item, index) => (
-                                                <MenuItem key={index} value={item}>{item}</MenuItem>
-                                            ))}
-                                        </TextField>
-                                        <TextField className="me-2 col" label="Instrument Name" size="small" onChange={handleFilters} id="itemNameId" select name="itemName" value={itemFilters.itemName} fullWidth >
-                                            <MenuItem value="Select">Select</MenuItem >
-                                            {itemListDistNames.map((item) => (
-                                                <MenuItem value={item.itemAddMasterName}>{item.itemAddMasterName}</MenuItem >
-                                            ))}
+                                        <div className="col">
+                                            <TextField label="Plant Wise"
 
-                                        </TextField>
+                                                id="itemPlantId"
+                                                select
+                                                value={itemFilters.itemPlant}
+                                                fullWidth
+                                                //disabled={loggedEmp.plantDetails.length === 1} _
+                                                onChange={handleFilters}
+                                                size="small"
+                                                name="itemPlant" >
+                                                <MenuItem value="Select">Select</MenuItem>
+                                                {loggedEmp.plantDetails.map((item, index) => (
+                                                    <MenuItem key={index} value={item.plantName}>{item.plantName}</MenuItem>
+                                                ))}
+                                            </TextField>
+                                        </div>
 
-                                        <TextField
+                                        <div className="col">
+                                            <TextField label="Primary Location"
+                                                id="itemDepartmentId"
+
+                                                select
+                                                value={itemFilters.itemDepartment}
+                                                fullWidth
+                                                //disabled={loggedEmp.plantDetails.length === 1 && loggedEmp.plantDetails[0].departments.length === 1}
+                                                onChange={handleFilters}
+                                                size="small"
+                                                name="itemDepartment">
+                                                <MenuItem value="Select">Select</MenuItem>
+                                                {selectedPlantDatas.map((item, index) => (
+                                                    <MenuItem key={index} value={item}>{item}</MenuItem>
+                                                ))}
+                                            </TextField>
+                                        </div>
+
+                                        <div className="col">
+                                            <TextField label="Instrument Name" size="small" onChange={handleFilters} id="itemNameId" select name="itemName" value={itemFilters.itemName} fullWidth >
+                                                <MenuItem value="Select">Select</MenuItem >
+                                                {itemListDistNames.map((item) => (
+                                                    <MenuItem value={item.itemAddMasterName}>{item.itemAddMasterName}</MenuItem >
+                                                ))}
+
+                                            </TextField>
+                                        </div>
+
+
+                                        {/* <TextField
                                             label="IMTE No"
                                             size="small"
                                             select
@@ -448,7 +448,7 @@ function InsHistoryCard() {
                                             name="itemIMTENo"
                                             value={itemFilters.itemIMTENo}
                                             fullWidth
-                                            className="col me-2"
+                                            className=" me-2"
                                         >
                                             <MenuItem value="Select">Select</MenuItem>
                                             {itemIMTEs.map((item, index) => (
@@ -456,12 +456,12 @@ function InsHistoryCard() {
                                                     {item.itemIMTENo}
                                                 </MenuItem>
                                             ))}
-                                        </TextField>
+                                        </TextField> */}
 
                                         {/* <Autocomplete
                                             disablePortal
                                             id="combo-box-demo"
-                                            className="col mt-2 "
+                                            className=" mt-2 "
                                             options={itemIMTEs}
                                             size='small'
                                             fullWidth
@@ -471,46 +471,55 @@ function InsHistoryCard() {
                                             getOptionLabel={(item) => item.itemIMTENo}
                                             renderInput={(params) => <TextField {...params} label="IMTE No" />}
                                         /> */}
-                                        {/* <Autocomplete
-                                            disablePortal
-                                            id="itemIMTENo"
-                                            className="col mt-2"
-                                            options={itemIMTEs}
-                                            size='small'
-                                            fullWidth
-                                            value={itemFilters.itemIMTENo}
-                                            onInputChange={(newValue) => handleFilters({ target: { name: "itemIMTENo", value: newValue } })}
-                                            name="itemIMTENo"
-                                            getOptionLabel={(item) => item.itemIMTENo}
-                                            renderInput={(params) => <TextField {...params} label="IMTE No" />}
-                                        /> */}
-                                        <Button type="button" className="col" onClick={() => searchFilter()} >search</Button>
+                                        <div className="col">
+                                            <Autocomplete
+                                                disablePortal
+                                                id="itemIMTENo"
+                                                options={itemIMTEs}
+                                                size='small'
+                                                fullWidth
+                                                value={itemFilters.itemIMTENo}
+                                                onInputChange={(e, newValue) => handleFilters({ target: { name: "itemIMTENo", value: newValue } })}
+                                                name="itemIMTENo"
+                                                renderInput={(params) => <TextField {...params} label="IMTE No" />}
+                                            />
+                                        </div>
+
+                                        {/* <Button type="button" className="col" onClick={() => searchFilter()} >search</Button> */}
                                     </div>
+                                </div>
+                                <div className="col">
+
                                 </div>
                                 <div className="col-md-3">
                                     <div className="row g-2">
-                                        <DatePicker
-                                            id="fromDateId"
-                                            name="fromDate"
-                                            label="From Date"
-                                            className="col me-2"
-                                            fullWidth
-                                            slotProps={{ textField: { size: 'small' } }}
-                                            format="DD-MM-YYYY"
-                                            value={fromDate}
-                                            onChange={(date) => setFromDate(date)}
-                                        />
-                                        <DatePicker
-                                            id="toDateId"
-                                            name="toDate"
-                                            className="col"
-                                            fullWidth
-                                            label="To Date"
-                                            slotProps={{ textField: { size: 'small' } }}
-                                            format="DD-MM-YYYY"
-                                            value={toDate}
-                                            onChange={(date) => setToDate(date)}
-                                        />
+                                        <div className="col">
+                                            <DatePicker
+                                                id="fromDateId"
+                                                name="fromDate"
+                                                label="From Date"
+                                                className="col me-2"
+                                                fullWidth
+                                                slotProps={{ textField: { size: 'small', fullWidth: true } }}
+                                                format="DD-MM-YYYY"
+                                                value={fromDate}
+                                                onChange={(date) => setFromDate(date)}
+                                            />
+                                        </div>
+                                        <div className="col">
+                                            <DatePicker
+                                                id="toDateId"
+                                                name="toDate"
+                                                className="col"
+                                                fullWidth
+                                                label="To Date"
+                                                slotProps={{ textField: { size: 'small', fullWidth: true } }}
+                                                format="DD-MM-YYYY"
+                                                value={toDate}
+                                                onChange={(date) => setToDate(date)}
+                                            />
+                                        </div>
+
                                     </div>
                                 </div>
                             </div>
@@ -528,7 +537,7 @@ function InsHistoryCard() {
                                         <Button component={Link} to={`${process.env.REACT_APP_PORT}/additionalCertificates/${selectedRow ? selectedRow?.msaName : ""}`} target="_blank" variant="contained" color="info" size="small">MSA</Button>
                                     </div>
                                     <div className="me-2">
-                                        <Button component={Link} to={`${process.env.REACT_APP_PORT}/additionalCertificates/${selectedRow? selectedRow?.otherFile : ""}`} target="_blank" variant="contained" color="info" size="small">Drawing</Button>
+                                        <Button component={Link} to={`${process.env.REACT_APP_PORT}/additionalCertificates/${selectedRow ? selectedRow?.otherFile : ""}`} target="_blank" variant="contained" color="info" size="small">Drawing</Button>
                                     </div>
                                     <div className="me-2"><Button component={Link} to={`${process.env.REACT_APP_PORT}/workInstructions/${selectedMasterData ? selectedMasterData.workInsName : ""}`} target="_blank" variant="contained" color="info" size="small">View Instructions</Button></div>
                                     {/* <div className="me-2"><Button variant="contained" color="info" size="small">View Drawing</Button></div>
@@ -549,16 +558,16 @@ function InsHistoryCard() {
                                     <div className="row g-2 mb-2">
                                         <div className="col-md-3">
                                             <TextField label="Serial No."
-                                                value={selectedRow?.itemMFRNo} size="small" name="itemMFRNo" InputProps={{ readOnly: true }} InputLabelProps={{ shrink: true }}></TextField>
+                                                value={selectedRow?.itemMFRNo || "-"} size="small" name="itemMFRNo" InputProps={{ readOnly: true }} InputLabelProps={{ shrink: true }}></TextField>
                                         </div>
                                         <div className="col-md-3">
                                             <TextField label="Model No."
-                                                value={selectedRow?.itemModelNo} size="small" name="itemModelNo" InputProps={{ readOnly: true }} InputLabelProps={{ shrink: true }}></TextField>
+                                                value={selectedRow?.itemModelNo || "-"} size="small" name="itemModelNo" InputProps={{ readOnly: true }} InputLabelProps={{ shrink: true }}></TextField>
                                         </div>
                                         <div className="col-md-3">
                                             <TextField
                                                 label="Range / Size"
-                                                value={`${selectedRow?.itemRangeSize || ''} ${selectedRow?.itemRangeSizeUnit || ''}`}
+                                                value={`${selectedRow?.itemRangeSize || '-'} ${selectedRow?.itemRangeSizeUnit || ''}`}
                                                 size="small"
                                                 name="itemRangeSize"
                                                 InputProps={{ readOnly: true }}
@@ -568,7 +577,7 @@ function InsHistoryCard() {
                                         {selectedRow[0]?.itemType === "variable" && <div className="col-md-3">
                                             <TextField
                                                 label="Least count"
-                                                value={selectedRow?.itemLC}
+                                                value={selectedRow?.itemLC || "-"}
                                                 size="small"
                                                 name="itemLC"
                                                 InputProps={{ readOnly: true }}
@@ -580,20 +589,20 @@ function InsHistoryCard() {
                                     <div className="row g-2 ">
                                         <div className="col-md-3">
                                             <TextField label="Calibration Source"
-                                                value={selectedRow?.itemCalibrationSource} size="small" name="itemCalibrationSource" InputProps={{ readOnly: true }} InputLabelProps={{ shrink: true }}></TextField>
+                                                value={selectedRow?.itemCalibrationSource || "-"} size="small" name="itemCalibrationSource" InputProps={{ readOnly: true }} InputLabelProps={{ shrink: true }}></TextField>
                                         </div>
                                         <div className="col-md-3">
                                             <TextField label="Location"
-                                                value={selectedRow?.itemCurrentLocation} size="small" name="itemCurrentLocation" InputProps={{ readOnly: true }} InputLabelProps={{ shrink: true }}></TextField>
+                                                value={selectedRow?.itemCurrentLocation || "-"} size="small" name="itemCurrentLocation" InputProps={{ readOnly: true }} InputLabelProps={{ shrink: true }}></TextField>
                                         </div>
                                         <div className="col-md-3">
                                             <TextField label="Frequency In Months"
-                                                value={selectedRow?.itemCalFreInMonths} size="small" name="itemCalFreInMonths" InputProps={{ readOnly: true }} InputLabelProps={{ shrink: true }}></TextField>
+                                                value={selectedRow?.itemCalFreInMonths || "-"} size="small" name="itemCalFreInMonths" InputProps={{ readOnly: true }} InputLabelProps={{ shrink: true }}></TextField>
                                         </div>
                                         <div className="col-md-3">
                                             <TextField
                                                 label="Make"
-                                                value={selectedRow?.itemMake}
+                                                value={selectedRow?.itemMake || "-"}
                                                 size="small"
                                                 name="itemMake"
                                                 InputProps={{ readOnly: true }}
@@ -604,7 +613,7 @@ function InsHistoryCard() {
                                 </Paper>
                             </div>
                             <div className="col-4">
-                                <Paper
+                                {selectedRow && selectedRow.acceptanceCriteria && selectedRow.acceptanceCriteria.length > 0 && <Paper
                                     sx={{
                                         p: 1,
                                         display: 'flex',
@@ -683,7 +692,7 @@ function InsHistoryCard() {
                                             </tbody>
                                         </table>}
                                     </div>
-                                </Paper>
+                                </Paper>}
                             </div>
                         </div>
                         <Paper

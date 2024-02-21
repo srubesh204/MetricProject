@@ -2,9 +2,9 @@ const itemAddModel = require("../models/itemAddModel")
 const dayjs = require('dayjs')
 const excelToJson = require('convert-excel-to-json');
 const itemHistory = require("../models/itemHistory");
-const itemCalModel = require("../models/itemCalModel");
+const itemCalModel = require("../models/itemCalModel")
 const { itemDcModel } = require("../models/itemDcModel");
-const itemGRNModel = require("../models/itemGRNModel");
+const {itemGRNModel} = require("../models/itemGRNModel");
 
 const itemAddController = {
   getAllItemAdds: async (req, res) => {
@@ -972,18 +972,18 @@ const itemAddController = {
   },
   getItemByDepartment: async (req, res) => {
     try {
-      const department = req.params.id;
-
-
+     
+      const {itemPlant, itemDepartment} = req.body
+      console.log(req.body)
       // Check if the _id exists in itemDcModel
       const result = await itemAddModel.aggregate([
-        { $match: { itemDepartment: department } },
+        { $match: { itemPlant: itemPlant, itemDepartment: itemDepartment } },
         { $group: { _id: "$itemAddMasterName" } },
         { $sort: { _id: 1 } },
         { $project: { _id: 0, itemAddMasterName: "$_id" } }
       ]);
       
-      
+      //console.log(result)
 
       res.status(202).json({ status: true, message: "ItemGet Successfull", result: result })
 
@@ -998,18 +998,18 @@ const itemAddController = {
   },
   getItemByItemAddMasterName: async (req, res) => {
     try {
-      const name = req.params.id;
-
+      
+      const {itemPlant, itemDepartment, itemName} = req.body
 
       // Check if the _id exists in itemDcModel
       const result = await itemAddModel.aggregate([
-        { $match: { itemAddMasterName: name } },
+        { $match: { itemPlant: itemPlant, itemDepartment: itemDepartment, itemAddMasterName: itemName } },
         { $group: { _id: "$itemIMTENo" } },
         { $sort: { _id: 1 } },
         { $project: { _id: 0, itemIMTENo: "$_id" } }
       ]);
       
-      
+      console.log(result)
 
       res.status(202).json({ status: true, message: "ItemGet Successfull", result: result })
 
