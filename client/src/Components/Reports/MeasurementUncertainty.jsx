@@ -1110,7 +1110,7 @@ const MeasurementUncertainty = () => {
                         }}
                         elevation={12}
                     >
-                        <div className='row g-2'>
+                        <div className='row g-2 '>
                             <table class='table table-borderless align-middle'>
                                 <tbody>
                                     <tr>
@@ -1126,56 +1126,61 @@ const MeasurementUncertainty = () => {
                                 </tbody>
                             </table>
                         </div>
-                    </Paper>
 
-                    <div className='row'>
-                        <div className='col'>
-                            <Button component={Link} to={`/home`} variant="contained" size='small' color="warning">
-                                <ArrowBackIcon /> Dash board
-                            </Button>
-                            <Button component={Link} to="/" size='small' >Home</Button>
-                        </div>
-                        <div className=' col d-flex justify-content-end' >
-
-                            <div className='me-2'>
-                                <CustomisedButton size="small" onClick={() => setOpenModalUNC(true)}> Add Uncertainty</CustomisedButton>
+                        <div className='row g-2'>
+                            <div className='col'>
+                                <Button component={Link} to={`/home`} variant="contained" size='small' color="warning">
+                                    <ArrowBackIcon /> Dash board
+                                </Button>
+                                <Button component={Link} to="/" size='small' >Home</Button>
                             </div>
-                            {/* <div className='' >
+                            <div className=' col d-flex justify-content-end' >
+
+                                <div className='me-2'>
+                                    <CustomisedButton size="small" onClick={() => setOpenModalUNC(true)}> Add Uncertainty</CustomisedButton>
+                                </div>
+                                {/* <div className='' >
                                 <CustomisedButton variant='contained' type='button' size='small' color='error' >List</CustomisedButton>
                             </div> */}
-                            <Button component={Link} to={`/measurementUncertaintyList/`} >
-                                Uncertainty List
-                            </Button>
+                                <Button component={Link} to={`/measurementUncertaintyList/`} >
+                                    Uncertainty List
+                                </Button>
+                            </div>
                         </div>
-                        <Dialog
-                            open={openModalUNC}
-                            onClose={() => setOpenModalUNC(false)}
-                            aria-labelledby="alert-dialog-title"
-                            aria-describedby="alert-dialog-description"
-                        >
-                            <DialogTitle id="alert-dialog-title">
-                                {"Uncertainty create confirmation?"}
-                            </DialogTitle>
-                            <DialogContent>
-                                <DialogContentText id="alert-dialog-description">
-                                    Are you sure to add the Uncertainty
-                                </DialogContentText>
-                            </DialogContent>
-                            <DialogActions>
-                                <CustomisedButton onClick={() => setOpenModalUNC(false)}>Cancel</CustomisedButton>
-                                <CustomisedButton onClick={(e) => { uncertaintySubmit(e); setOpenModalUNC(false); }} autoFocus>
-                                    Add
-                                </CustomisedButton>
-                            </DialogActions>
-                        </Dialog>
-                        <Snackbar variant="contained" anchorOrigin={{ vertical: "top", horizontal: "right" }} open={snackBarOpen} autoHideDuration={6000} onClose={handleSnackClose}>
-                            <Alert variant="filled" onClose={handleSnackClose} severity={errorhandler.code} sx={{ width: '25%' }}>
-                                {errorhandler.message}
-                            </Alert>
-                        </Snackbar>
 
 
-                    </div>
+                    </Paper>
+
+
+                    <Dialog
+                        open={openModalUNC}
+                        onClose={() => setOpenModalUNC(false)}
+                        aria-labelledby="alert-dialog-title"
+                        aria-describedby="alert-dialog-description"
+                    >
+                        <DialogTitle id="alert-dialog-title">
+                            {"Uncertainty create confirmation?"}
+                        </DialogTitle>
+                        <DialogContent>
+                            <DialogContentText id="alert-dialog-description">
+                                Are you sure to add the Uncertainty
+                            </DialogContentText>
+                        </DialogContent>
+                        <DialogActions>
+                            <CustomisedButton onClick={() => setOpenModalUNC(false)}>Cancel</CustomisedButton>
+                            <CustomisedButton onClick={(e) => { uncertaintySubmit(e); setOpenModalUNC(false); }} autoFocus>
+                                Add
+                            </CustomisedButton>
+                        </DialogActions>
+                    </Dialog>
+                    <Snackbar variant="contained" anchorOrigin={{ vertical: "top", horizontal: "right" }} open={snackBarOpen} autoHideDuration={6000} onClose={handleSnackClose}>
+                        <Alert variant="filled" onClose={handleSnackClose} severity={errorhandler.code} sx={{ width: '25%' }}>
+                            {errorhandler.message}
+                        </Alert>
+                    </Snackbar>
+
+
+
 
                 </LocalizationProvider>
             </form>
