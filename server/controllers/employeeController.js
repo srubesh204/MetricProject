@@ -295,7 +295,7 @@ const employeeController = {
       const adminsSuperAdmins = await employeeModel.aggregate([
         {
           $match: {
-            "plantDetails.plantName": { $in: allowedPlants ? allowedPlants : [] }, empRole: {$in : ["admin", "superAdmin"]}
+            "plantDetails.plantName": { $in: allowedPlants ? allowedPlants : [] }, empRole: {$in : ["admin", "plantAdmin"]}
           }
         },
         {
