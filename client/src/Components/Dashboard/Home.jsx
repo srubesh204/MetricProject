@@ -241,16 +241,15 @@ const Home = () => {
       const Departments = await axios.get(
         `${process.env.REACT_APP_PORT}/department/getAllDepartments`
       );
+
+      const plantDepartments = await axios.post(
+        `${process.env.REACT_APP_PORT}/department/getDepartmentByPlant`, { allowedPlants: allowedPlants }
+      );
       console.log(Departments)
       const defaultDepartment = Departments.data.result.filter((dep) => dep.defaultdep === "yes");
       const otherDepartment = Departments.data.result.filter((dep) => dep.defaultdep !== "yes")
-
-
       setAllDepartments([...defaultDepartment, ...otherDepartment])
       setDefaultDep(defaultDepartment)
-
-
-
     } catch (err) {
       console.log(err);
     }
