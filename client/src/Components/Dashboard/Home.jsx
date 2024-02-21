@@ -1526,6 +1526,10 @@ const Home = () => {
 
   console.log(itemStatus)
 
+  useEffect(()=> {
+    
+  }, [plantDeps])
+
 
 
 

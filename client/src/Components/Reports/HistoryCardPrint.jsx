@@ -10,7 +10,7 @@ const HistoryCardPrint = () => {
     const { selectedInstrumentName, selectedIMTENo, selectedRow } = useContext(HistoryCardContent)
 
     const historyCardPrintData = useContext(HistoryCardContent)
-    const { historyCardPrintOpen, setHistoryCardPrintOpen, selectedRows, formatNoData, selectedIMTEs, printState, setPrintState, companyList, plantList, } = historyCardPrintData
+    const { historyCardPrintOpen, setHistoryCardPrintOpen, selectedRows, formatNoData, selectedIMTEs, printState, setPrintState, companyList, plantList, approvedByList } = historyCardPrintData
 
     useEffect(() => {
         console.log('Format No Data:', formatNoData.fHistoryCard?.frNo);
@@ -67,6 +67,8 @@ const HistoryCardPrint = () => {
         }
         return selectedIMTEs.map((row, index) => {
             console.log(selectedIMTEs)
+            const adminName = approvedByList.filter(emp => emp._id === row.itemCalApprovedBy)
+            console.log(adminName)
             return (
 
                 <tr key={index} style={{ textAlign: "center", borderCollapse: "collapse", fontSize: "9px" }}>
@@ -90,7 +92,7 @@ const HistoryCardPrint = () => {
                     )}
                     {selectedRow.itemCalibrationSource !== "outsource" && selectedRow.itemCalibrationSource !== "" && (
                         <td style={{ width: "9%", borderRight: "0.5px solid black", borderTop: "0.5px solid black" }}>
-                            {row.itemCalApprovedBy ? row.itemCalApprovedBy : '-'}
+                            {adminName.length > 0 ? adminName[0].firstName + " " + adminName[0].lastName : ""}
                         </td>
                     )}
                 </tr>
@@ -143,8 +145,8 @@ const HistoryCardPrint = () => {
                                 </td>
                                 <td style={{ width: "30%", padding: "0px", textAlign: "center" }}>
                                     {selectedRow && selectedRow.itemType === "variable" && <td colSpan="2" style={{ fontWeight: "bold", fontSize: "12px", paddingLeft: "7rem" }}>Permissible Error ({selectedRow && selectedRow.acceptanceCriteria && selectedRow.acceptanceCriteria.length > 0 && selectedRow.acceptanceCriteria[0].acNominalSizeUnit})</td>}
-                                    {selectedRow && selectedRow.itemType === "attribute" && <td style={{ fontWeight: "bold", fontSize: "12px", textAlign: "center", paddingLeft: "7rem" }}>Permissible Size ({selectedRow && selectedRow.acceptanceCriteria && selectedRow.acceptanceCriteria.length > 0  && selectedRow.acceptanceCriteria[0].acNominalSizeUnit})</td>}
-                                    {selectedRow && selectedRow.itemType === "referenceStandard" && <td style={{ fontWeight: "bold", fontSize: "12px", textAlign: "center", paddingLeft: "7rem" }}>Permissible Size ({selectedRow && selectedRow.acceptanceCriteria && selectedRow.acceptanceCriteria.length > 0  && selectedRow.acceptanceCriteria[0].acNominalSizeUnit})</td>}
+                                    {selectedRow && selectedRow.itemType === "attribute" && <td style={{ fontWeight: "bold", fontSize: "12px", textAlign: "center", paddingLeft: "7rem" }}>Permissible Size ({selectedRow && selectedRow.acceptanceCriteria && selectedRow.acceptanceCriteria.length > 0 && selectedRow.acceptanceCriteria[0].acNominalSizeUnit})</td>}
+                                    {selectedRow && selectedRow.itemType === "referenceStandard" && <td style={{ fontWeight: "bold", fontSize: "12px", textAlign: "center", paddingLeft: "7rem" }}>Permissible Size ({selectedRow && selectedRow.acceptanceCriteria && selectedRow.acceptanceCriteria.length > 0 && selectedRow.acceptanceCriteria[0].acNominalSizeUnit})</td>}
 
                                     {selectedRow && selectedRow.itemType === "attribute" && <table style={{ width: "100%", margin: 0, borderCollapse: "collapse" }}>
 

@@ -15,5 +15,6 @@ router.delete("/deleteEmployee", employeeController.deleteEmployee)
 router.post("/uploadEmployeeInExcel", upload, employeeController.uploadEmployeeInExcel)
 router.post("/getMailIdsByPlant", employeeController.getMailIdsByPlant) 
 router.put("/updateEmployeePlantDetails", employeeController.updateEmployeePlantDetails)
+router.post("/getPlantAdminAndAdminByPlant", employeeController.getPlantAdminAndAdminByPlant)
 
 module.exports = router;
