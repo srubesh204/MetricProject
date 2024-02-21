@@ -168,7 +168,7 @@ const ItemAdd = () => {
     const [itemMasterListByName, setItemMasterListByName] = useState([])
     const [selectedPlantList, setSelectedPlantList] = useState([])
 
-   // const acceptanceCriteria = [...];
+    // const acceptanceCriteria = [...];
 
     const getDistinctItemName = async () => {
         try {
@@ -497,7 +497,7 @@ const ItemAdd = () => {
         getPartList();
     }, []);
 
-    useEffect(()=> {
+    useEffect(() => {
         const filteredPart = partData.filter(part => part.partPlant === itemAddData.itemPlant)
         setPlantWisePart(filteredPart)
     }, [itemAddData.itemPlant])
@@ -1748,6 +1748,29 @@ const ItemAdd = () => {
                                         )) : <tr></tr>}
                                     </tbody>
                                 </table>
+                                
+                                <div className="d-flex justify-content-center">
+                                    <div className='col'>
+                                        <Button
+                                            className='col '
+                                            onClick={() => setAddOpenData(true)}
+                                        >
+                                            Additional Information
+                                        </Button>
+                                    </div>
+
+                                    <div className="d-flex justify-content-end">
+                                        <Button onClick={() => setOpen(true)} className='me-3' type="button">
+                                            Item Create
+                                        </Button>
+                                        <Button component={RouterLink} to={`/itemList/`} >
+                                            Back To List
+                                        </Button>
+                                    </div>
+
+
+                                </div>
+
                             </Paper>}
 
                             <Dialog fullWidth={true} keepMounted maxWidth="xl" open={addOpenData} sx={{ color: "#f1f4f4" }}
@@ -2029,33 +2052,13 @@ const ItemAdd = () => {
                             </Dialog>
 
 
-                            <div className="d-flex justify-content-center">
-                                <div className='col'>
-                                    <Button
-                                        className='col '
-                                        onClick={() => setAddOpenData(true)}
-                                    >
-                                        Additional Information
-                                    </Button>
-                                </div>
-
-                                <div className="d-flex justify-content-end">
-                                    <Button  onClick={() => setOpen(true)} className='me-3' type="button">
-                                        Item Create
-                                    </Button>
-                                    <Button component={RouterLink} to={`/itemList/`} >
-                                        Back To List
-                                    </Button>
-                                </div>
-                               
-
-                            </div>
 
 
 
 
 
-                            
+
+
 
 
 

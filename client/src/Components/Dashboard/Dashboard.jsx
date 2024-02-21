@@ -158,7 +158,7 @@ const Dashboard = () => {
       { name: "History Card", file: <InsHistoryCard />, icon: <FormatListBulleted /> },
       { name: "Total List", file: <TotalList />, icon: <FormatListBulleted /> },
       // { name: "Cal Due Report", file: <CalDueReport />, icon: <img src={`${process.env.REACT_APP_PORT}/icon/list-text.png`} alt="Cal Due Report Icon" style={{ width: '20px', height: '20px' }} /> },
-      { name: "Measurement Uncertainty List",file: <MeasurementUncertaintyList />, icon: <FormatListBulleted />  },
+      { name: "Uncertainty List",file: <MeasurementUncertaintyList />, icon: <FormatListBulleted />  },
       { name: "Vendor Details",file: <VendorUpload />,icon: <FormatListBulleted />  },
       { name: "Plan vs Actual",file: <PlantActual />,icon: <FormatListBulleted />  },
     
