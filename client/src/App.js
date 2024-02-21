@@ -252,7 +252,7 @@ function App() {
           <Route path="/accessDenied" element={<AccessDenied />} />
         </Routes>
       </EmployeeProvider>
-      <Copyright sx={{position: "fixed", bottom: 10, left: 10, pt: 4 }} />
+      <Copyright sx={{position: "fixed", bottom: 0, left: 0 }} />
     </div>
   );
 }
