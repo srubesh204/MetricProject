@@ -99,7 +99,7 @@ const ItemEdit = () => {
     }, []);
 
     const [isItemMasterList, setIsItemMasterList] = useState([])
-
+    const [selectedPlantList, setSelectedPlantList] = useState([])
 
     const getItemMaster = async () => {
         try {
@@ -509,6 +509,19 @@ const ItemEdit = () => {
     useEffect(() => {
         getItemDataById();
     }, [])
+
+
+    useEffect(()=> {
+        const itemPlantFilter = isItemMasterList.filter(item => item.itemPlant === itemAddData.itemPlant)
+        setSelectedPlantList(itemPlantFilter)
+        const vendorPlantFilter = vendorList.filter(ven => ven.vendorPlant.includes(itemAddData.itemPlant))
+        const oem = vendorPlantFilter.filter((item) => item.oem === "1")
+        const supplier = vendorPlantFilter.filter((item) => item.supplier === "1")
+        setSupplierList(supplier)
+        setOEMList(oem)
+    }, [itemAddData.itemPlant])
+
+
     const handleItemAddChange = (e) => {
 
         const { name, value, checked } = e.target;
@@ -1150,7 +1163,7 @@ const ItemEdit = () => {
                                                 MenuProps={MenuProps}
                                                 fullWidth
                                             >
-                                                {isItemMasterList.map((name, index) => (
+                                                {selectedPlantList.map((name, index) => (
                                                     <MenuItem style={{ padding: 0 }} key={index} value={name.itemIMTENo}>
                                                         <Checkbox checked={itemAddData.itemItemMasterIMTENo.indexOf(name.itemIMTENo) > -1} />
                                                         <ListItemText primary={name.itemAddMasterName + " - " + name.itemIMTENo} />
