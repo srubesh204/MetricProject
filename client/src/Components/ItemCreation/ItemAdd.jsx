@@ -136,7 +136,6 @@ const ItemAdd = () => {
         try {
             const response = await axios.get(
                 `${process.env.REACT_APP_PORT}/itemMaster/getAllItemMasters`
-
             );
 
             console.log(response.data)
@@ -167,6 +166,7 @@ const ItemAdd = () => {
 
 
     const [itemMasterListByName, setItemMasterListByName] = useState([])
+    const [selectedPlantList, setSelectedPlantList] = useState([])
 
     // const acceptanceCriteria = [...];
 
@@ -178,17 +178,16 @@ const ItemAdd = () => {
             console.log(response.data)
             const isItemMaster = response.data.result.filter(item => item.isItemMaster === "1")
             setItemMasterListByName(isItemMaster);
+            
         } catch (err) {
             console.log(err);
         }
     };
     useEffect(() => {
         getDistinctItemName();
-
     }, []);
 
-
-
+    
 
 
     //
@@ -218,8 +217,7 @@ const ItemAdd = () => {
             console.log(customerList)
             setVendorList(vendorList);
             setCustomerList(customerList);
-            setOEMList(OEMList);
-            setSupplierList(SupplierList)
+            
             setSuppOEM(suppOEM)
 
 
@@ -238,14 +236,9 @@ const ItemAdd = () => {
 
     //
 
-    const [selectedValues, setSelectedValues] = useState([]);
+    
 
-    const handleSelectChange = (e, index) => {
-        const selectedOptions = Array.from(e.target.selectedOptions, (option) => option.value);
-
-        setSelectedValues(selectedOptions);
-    };
-
+    
 
 
     const [itemAddData, setItemAddData] = useState({
@@ -334,6 +327,15 @@ const ItemAdd = () => {
         width: 1,
     });
 
+    useEffect(()=> {
+        const itemPlantFilter = itemMasterListByName.filter(item => item.itemPlant === itemAddData.itemPlant)
+        setSelectedPlantList(itemPlantFilter)
+        const vendorPlantFilter = vendorList.filter(ven => ven.vendorPlant.includes(itemAddData.itemPlant))
+        const oem = vendorPlantFilter.filter((item) => item.oem === "1")
+        const supplier = vendorPlantFilter.filter((item) => item.supplier === "1")
+        setSupplierList(supplier)
+        setOEMList(oem)
+    }, [itemAddData.itemPlant])
 
 
     const handleKeyDown = (e) => {
@@ -1052,7 +1054,7 @@ const ItemAdd = () => {
                                                     renderValue={(selected) => selected.join(", ")} MenuProps={MenuProps}
                                                     fullWidth
                                                 >
-                                                    {itemMasterListByName.map((name, index) => (
+                                                    {selectedPlantList.map((name, index) => (
                                                         <MenuItem style={{ padding: 0 }} key={index} value={name.itemIMTENo}>
                                                             <Checkbox checked={itemAddData.itemItemMasterIMTENo.indexOf(name.itemIMTENo) > -1} />
                                                             <ListItemText primary={name.itemAddMasterName + " - " + name.itemIMTENo} />
