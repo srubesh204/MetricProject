@@ -83,6 +83,13 @@ const Vendor = () => {
                 const vendorType = vendorDataList.filter((item) => (item.subContractor === "1"))
                 setFilteredData(vendorType)
             }
+            if (name === "vendorPlant") {
+                const vendorPlant = vendorDataList.filter((item) => (item.vendorPlant.includes(value)))
+                // const vendorPlant = vendorDataList.filter((item) => (
+                //     item.vendorPlant && item.vendorPlant.find(plant => plant.plantName && plant.plantName.includes(value))
+                // ));
+                setFilteredData(vendorPlant);
+            }
 
 
 
@@ -188,7 +195,7 @@ const Vendor = () => {
 
     }, [vendorData.state]);
 
-  
+
 
 
 
@@ -541,7 +548,7 @@ const Vendor = () => {
             console.log("working")
             setVendorData((prev) => ({ ...prev, certificate: selectedFile.name }));
             const fileURL = URL.createObjectURL(selectedFile);
-          
+
             setIframeURL({ fileURL: fileURL, fileName: selectedFile.name, file: selectedFile });
 
             const formData = new FormData();
@@ -1230,24 +1237,55 @@ const Vendor = () => {
                         >
 
                             {/* <h4 className='text-center'>Vendor List</h4> */}
-                            <div className="d-flex justify-content-between">
+                            <div className="d-flex ">
 
-                                <div className="col-3 mb-2">
-                                    <select className="form-select form-select-sm" id="vendorTypeId" name="vendorType" aria-label="Floating label select example" onChange={handleFilterChange} >
+                                <div className="col-3  me-2">
+                                    {/* <select className="form-select form-select-sm" id="vendorTypeId" name="vendorType" aria-label="Floating label select example" onChange={handleFilterChange} >
                                         <option value="all">All</option>
                                         <option value="oem">OEM</option>
                                         <option value="customer">Customer</option>
                                         <option value="supplier">Supplier</option>
                                         <option value="subContractor">SubContractor</option>
-                                    </select>
+                                    </select> */}
+                                    <TextField label="Vendor Type"
+                                        id="vendorTypeId"
+                                        select
+                                        defaultValue=""
+                                        onChange={handleFilterChange}
+                                        size="small"
+                                        fullWidth
+                                        name="vendorType" >
+                                        <MenuItem value="all">All</MenuItem>
+                                        <MenuItem value="oem">OEM</MenuItem>
+                                        <MenuItem value="customer">Customer</MenuItem>
+                                        <MenuItem value="supplier">Supplier</MenuItem>
+                                        <MenuItem value="subContractor">SubContractor</MenuItem>
+                                    </TextField>
 
+                                </div>
+                                <div className='col-3'>
+                                    <TextField label="Plant Wise"
+                                        id="vendorPlantId"
+                                        select
+                                        defaultValue="all"
+                                        fullWidth
+                                        //value={filterAllNames.departmentFilter}
+                                        onChange={handleFilterChange}
+                                        size="small"
+                                        name="vendorPlant" >
+
+                                        <MenuItem value="all">All</MenuItem>
+                                        {loggedEmp.plantDetails.map((item, index) => (
+                                            <MenuItem key={index} value={item.plantName}>{item.plantName}</MenuItem>
+                                        ))}
+                                    </TextField>
                                 </div>
 
                             </div>
 
                             <div style={{ height: 400, width: '100%', marginTop: "0.5rem" }}>
                                 <DataGrid disableDensitySelector
-                                 disableColumnFilter
+                                    disableColumnFilter
                                     rows={filteredData}
                                     columns={vendorListColumns}
                                     getRowId={(row) => row._id}
