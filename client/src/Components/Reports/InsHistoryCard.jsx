@@ -40,7 +40,7 @@ function InsHistoryCard() {
     const formatFetchData = async () => {
         try {
             const response = await axios.get(
-                `${process.env.REACT_APP_PORT}/formatNo/getFormatNoById/1`
+                `${process.env.REACT_APP_PORT}/formatNo/getFormatNoById/formatNo`
             );
             const format = response.data.result
             console.log(format)
@@ -57,7 +57,7 @@ function InsHistoryCard() {
     const companyFetch = async () => {
         try {
             const response = await axios.get(
-                `${process.env.REACT_APP_PORT}/compDetails/getAllCompDetails`
+                `${process.env.REACT_APP_PORT}/compDetails/getCompDetailsById/companyData`
             );
             setCompanyList(response.data.result);
             //setFilterCompany(response.data.result);
@@ -302,8 +302,9 @@ function InsHistoryCard() {
         {
             field: 'certificateView',
             headerName: 'Certificate',
-            width: 200,
+            width: 100,
             align: 'center',
+            headerAlign: 'center',
             renderCell: (params) => (
                 params.row.itemCalibrationSource === 'inhouse' && params.row.itemCertificateNo ? (
                     <IconButton size="small" component={Link} target="_blank" to={`${process.env.REACT_APP_PORT}/calCertificates/${params.row.itemCertificateNo}.pdf`}>
@@ -323,13 +324,13 @@ function InsHistoryCard() {
         },
 
 
-        { field: 'itemCalDate', headerName: 'Calibration Date', width: 150, align: "center", valueGetter: (params) => dayjs(params.row.itemCalDate).format('DD-MM-YYYY') },
-        { field: 'itemDueDate', headerName: 'Calibration Due', width: 150, align: "center", valueGetter: (params) => dayjs(params.row.itemDueDate).format('DD-MM-YYYY') },
+        { field: 'itemCalDate', headerName: 'Calibration Date', width: 150, align: "center", headerAlign: 'center', valueGetter: (params) => dayjs(params.row.itemCalDate).format('DD-MM-YYYY') },
+        { field: 'itemDueDate', headerName: 'Calibration Due', width: 150, align: "center", headerAlign: 'center', valueGetter: (params) => dayjs(params.row.itemDueDate).format('DD-MM-YYYY') },
         { field: 'itemCalStatus', headerName: 'Calibration Status', width: 150, align: "center", },
 
-        { field: 'itemCertificateNo', headerName: 'Certificate No', width: 180, align: "center" },
+        { field: 'itemCertificateNo', headerName: 'Certificate No', width: 180, align: "center", headerAlign: 'center',},
         {
-            field: 'observedSize', headerName: "Observed Size", width: 180, align: "center",
+            field: 'observedSize', headerName: "Observed Size", width: 200, align: "center", headerAlign: 'center',
             renderCell: (params) => (
 
                 <div>

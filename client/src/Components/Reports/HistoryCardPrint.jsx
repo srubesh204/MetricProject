@@ -12,8 +12,6 @@ const HistoryCardPrint = () => {
     const historyCardPrintData = useContext(HistoryCardContent)
     const { historyCardPrintOpen, setHistoryCardPrintOpen, selectedRows, formatNoData, selectedIMTEs, printState, setPrintState, companyList, plantList, } = historyCardPrintData
 
-    const selectedRowsArray = Array.isArray(selectedRows) ? selectedRows : [selectedRows];
-
     useEffect(() => {
         console.log('Format No Data:', formatNoData.fHistoryCard?.frNo);
     }, [formatNoData]);
@@ -104,7 +102,7 @@ const HistoryCardPrint = () => {
             <tr className="footer">
                 <td style={{ height: '80px', fontSize: '12px' }}>
                     <div style={{ display: 'flex', flexDirection: 'row', height: '10px' }}>
-                        <div style={{ position: 'absolute', fontSize: '8px' }}>Format Number: {formatNoData && formatNoData.fHistoryCard?.frNo}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;     Amendment No.: {formatNoData && formatNoData.fHistoryCard?.amNo}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;     Amendment Date.: {formatNoData && formatNoData.fHistoryCard?.amDate}</div>
+                        <div style={{ position: 'absolute', fontSize: '8px' }}>Format Number: {formatNoData && formatNoData.fHistoryCard?.frNo}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;     Rev. No.: {formatNoData && formatNoData.fHistoryCard?.amNo}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;     Rev. Date.: {formatNoData && formatNoData.fHistoryCard?.amDate}</div>
                     </div>
                 </td>
             </tr>
@@ -115,15 +113,19 @@ const HistoryCardPrint = () => {
         <div style={{ display: 'none', width: "100%", height: "100%" }}>
             <div style={{ width: "100%", height: "100%" }} ref={componentRef} >
                 <div style={{ padding: "10px", textAlign: "center", textDecoration: "underline" }}>INSTRUMENTS/GAUGE HISTORY CARD</div>
-                <div style={{ textAlign: 'left', display: 'flex', flexDirection: 'column' }}>
-                    <td style={{ padding: "2px", textAlign: "right" }}><img src={`${process.env.REACT_APP_PORT}/logo/${companyList[0]?.companyLogo}`} width="90px" height="90px" /></td>
+                <div className='d-flex justify-content-between'>
+
+                    <div style={{ textAlign: 'left', borderBottom: '0.5px solid black', display: 'flex', flexDirection: 'column' }}>
+                        <td style={{ padding: "2px", textAlign: "left" }}>{companyList?.companyName}</td>
+                        {/* <td>{selectedRows.dcPartyAddress}</td> */}
+                        <td style={{ padding: "2px", textAlign: "left" }}>{plantList[0]?.plantName}</td>
+                        <td style={{ padding: "2px", textAlign: "left" }}>{plantList[0]?.plantAddress}</td>
+                    </div>
+                    <div style={{ textAlign: 'left', display: 'flex', flexDirection: 'column' }}>
+                        <td style={{ padding: "2px", textAlign: "right" }}><img src={`${process.env.REACT_APP_PORT}/logo/${companyList?.companyLogo}`} width="70px" height="70px" /></td>
+                    </div>
                 </div>
-                <div style={{ textAlign: 'left', borderBottom: '0.5px solid black', display: 'flex', flexDirection: 'column' }}>
-                    <td style={{ padding: "2px", textAlign: "left" }}>{companyList[0]?.companyName}</td>
-                    {/* <td>{selectedRows.dcPartyAddress}</td> */}
-                    <td style={{ padding: "2px", textAlign: "left" }}>{plantList[0]?.plantName}</td>
-                    <td style={{ padding: "2px", textAlign: "left" }}>{plantList[0]?.plantAddress}</td>
-                </div>
+
                 <div style={{ border: "1px solid black" }}>
                     <table style={{ width: "100%", borderCollapse: "collapse" }}>
                         <tbody>
@@ -135,14 +137,14 @@ const HistoryCardPrint = () => {
                                 </td>
                                 <td style={{ width: "40%", padding: "5px", margin: 0, borderRight: "0.5px solid black" }}>
                                     <tr style={{ fontWeight: "" }}>Instrument / Gauge Name :    &nbsp;&nbsp;&nbsp;{selectedRow?.itemAddMasterName || '-'}</tr>
-                                    <tr style={{ fontWeight: "" }}>Range / Size :    &nbsp;&nbsp;&nbsp;{selectedRow?.itemRangeSize || '-'} {selectedRow?.itemRangeSizeUnit}, {selectedRow?.itemType === "variable" && ( <span>LeastCount: &nbsp;{selectedRow?.itemLC || "-"}</span>)}</tr>
+                                    <tr style={{ fontWeight: "" }}>Range / Size :    &nbsp;&nbsp;&nbsp;{selectedRow?.itemRangeSize || '-'} {selectedRow?.itemRangeSizeUnit}, {selectedRow?.itemType === "variable" && (<span>LeastCount: &nbsp;{selectedRow?.itemLC || "-"} {selectedRow?.itemLCUnit}</span>)}</tr>
                                     <tr style={{ fontWeight: "" }}>Frequency Months of Calibration :    &nbsp;&nbsp;&nbsp;{selectedRow?.itemCalFreInMonths}</tr>
                                     {/* <tr style={{ fontWeight: "bold" }}>Department :    &nbsp;&nbsp;&nbsp;{selectedRow?.itemDepartment || '-'}</tr> */}
                                 </td>
                                 <td style={{ width: "30%", padding: "0px", textAlign: "center" }}>
-                                    {selectedRow && selectedRow.itemType === "variable" && <td style={{ fontWeight: "bold", fontSize: "12px" }}>Permissible Error</td>}
-                                    {selectedRow && selectedRow.itemType === "attribute" && <td style={{ fontWeight: "bold", fontSize: "12px" }}>Permissible Size</td>}
-                                    {selectedRow && selectedRow.itemType === "referenceStandard" && <td style={{ fontWeight: "bold", fontSize: "12px" }}>Permissible Size</td>}
+                                    {selectedRow && selectedRow.itemType === "variable" && <td colSpan="2" style={{ fontWeight: "bold", fontSize: "12px", paddingLeft: "7rem" }}>Permissible Error ({selectedRow && selectedRow.acceptanceCriteria && selectedRow.acceptanceCriteria.length > 0 && selectedRow.acceptanceCriteria[0].acNominalSizeUnit})</td>}
+                                    {selectedRow && selectedRow.itemType === "attribute" && <td style={{ fontWeight: "bold", fontSize: "12px", textAlign: "center", paddingLeft: "7rem" }}>Permissible Size ({selectedRow && selectedRow.acceptanceCriteria && selectedRow.acceptanceCriteria.length > 0  && selectedRow.acceptanceCriteria[0].acNominalSizeUnit})</td>}
+                                    {selectedRow && selectedRow.itemType === "referenceStandard" && <td style={{ fontWeight: "bold", fontSize: "12px", textAlign: "center", paddingLeft: "7rem" }}>Permissible Size ({selectedRow && selectedRow.acceptanceCriteria && selectedRow.acceptanceCriteria.length > 0  && selectedRow.acceptanceCriteria[0].acNominalSizeUnit})</td>}
 
                                     {selectedRow && selectedRow.itemType === "attribute" && <table style={{ width: "100%", margin: 0, borderCollapse: "collapse" }}>
 
@@ -164,7 +166,7 @@ const HistoryCardPrint = () => {
 
                                         <tr style={{ borderTop: "0.5px solid black" }}>
                                             <td style={{ width: "33%", borderRight: "0.5px solid black", fontWeight: "bold" }}>Parameter</td>
-                                            <td style={{ width: "33%", borderRight: "0.5px solid black", fontWeight: "bold" }}>Min / Max</td>
+                                            <td style={{ width: "33%", borderRight: "0.5px solid black", fontWeight: "bold" }}>Min / Max </td>
                                             {/* <td style={{ width: "34%", fontWeight: "bold" }}>Wear Limit</td> */}
                                         </tr>
                                         {selectedRow &&
