@@ -29,10 +29,9 @@ const Home = () => {
 
   const employeeRole = useEmployee();
 
-  const { loggedEmp, allowedPlants, Copyright } = employeeRole
+  const { loggedEmp, allowedPlants } = employeeRole
 
 
-  const loggedInEmpId = sessionStorage.getItem('empId')
 
   const [itemDistinctNames, setItemDistinctNames] = useState([])
   const [itemDistinctIMTEs, setItemDistinctIMTEs] = useState([])
@@ -233,8 +232,11 @@ const Home = () => {
   console.log(activeEmps)
   //
   const [defaultDep, setDefaultDep] = useState([])
+  
 
-
+  const [plantDepartments, setPlantDepartments] = useState([])
+  const [plantWiseDepartments, setPlantWiseDepartments] = useState([])
+  const [selectedPlantDepartment, setSelectedPlantDepartment] = useState([])
 
   const getAllDepartments = async () => {
     try {
@@ -245,6 +247,7 @@ const Home = () => {
       const plantDepartments = await axios.post(
         `${process.env.REACT_APP_PORT}/department/getDepartmentByPlant`, { allowedPlants: allowedPlants }
       );
+      setPlantWiseDepartments(plantDepartments.data.result)
       console.log(Departments)
       const defaultDepartment = Departments.data.result.filter((dep) => dep.defaultdep === "yes");
       const otherDepartment = Departments.data.result.filter((dep) => dep.defaultdep !== "yes")
@@ -482,7 +485,7 @@ const Home = () => {
   }
 
 
-  const [plantDepartments, setPlantDepartments] = useState([])
+ 
 
   useEffect(() => {
     console.log(employeeRole)
@@ -1526,8 +1529,8 @@ const Home = () => {
   console.log(itemStatus)
 
   useEffect(()=> {
-    
-  }, [plantDeps])
+    // if()
+  }, [plantDeps.itemPlant])
 
 
 
@@ -1789,7 +1792,7 @@ const Home = () => {
                     <Select id="grouped-select" label="Select Department" onChange={DepartmentChange}>
                       <MenuItem >Select Department</MenuItem>
                       <ListSubheader color='primary' sx={{ fontSize: "12px" }}>Primary Department</ListSubheader>
-                      {allDepartments
+                      {plantWiseDepartments.length > 0 && plantWiseDepartments
                         .filter(item => item.defaultdep === "yes")
                         .map((item, index) => (
                           <MenuItem sx={{ marginLeft: "20px" }} key={index} value={item.department}>
@@ -1798,7 +1801,7 @@ const Home = () => {
                         ))}
 
                       <ListSubheader color='primary' sx={{ fontSize: "12px" }}>Other Department</ListSubheader>
-                      {allDepartments
+                      {plantWiseDepartments.length > 0 && plantWiseDepartments
                         .filter(item => item.defaultdep !== "yes")
                         .map((item, index) => (
                           <MenuItem sx={{ marginLeft: "20px" }} key={index} value={item.department}>
