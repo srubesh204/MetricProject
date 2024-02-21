@@ -144,7 +144,7 @@ const GrnList = () => {
     }, [dateData.fromDate, dateData.toDate])
 
 
-   
+
 
 
     const [companyList, setCompanyList] = useState([])
@@ -181,7 +181,7 @@ const GrnList = () => {
     ]
 
 
-   
+
 
 
 
@@ -544,6 +544,12 @@ const GrnList = () => {
                                                     History  Card
                                                 </Button>
                                             </div>
+                                            <div>
+                                                <Button component={Link} to="/dcList" size='small' >
+                                                    DC List
+                                                </Button>
+                                            </div>
+
                                             {/* <div >
                                                 <Button component={Link} to="/" size='small' variant='contained' startIcon={<ArrowBack />} endIcon={<House />} color='secondary'>Home</Button>
                                             </div> */}
