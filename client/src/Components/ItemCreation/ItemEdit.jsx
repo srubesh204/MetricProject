@@ -1163,7 +1163,7 @@ const ItemEdit = () => {
                                                 MenuProps={MenuProps}
                                                 fullWidth
                                             >
-                                                {isItemMasterList.map((name, index) => (
+                                                {selectedPlantList.map((name, index) => (
                                                     <MenuItem style={{ padding: 0 }} key={index} value={name.itemIMTENo}>
                                                         <Checkbox checked={itemAddData.itemItemMasterIMTENo.indexOf(name.itemIMTENo) > -1} />
                                                         <ListItemText primary={name.itemAddMasterName + " - " + name.itemIMTENo} />

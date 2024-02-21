@@ -123,7 +123,7 @@ const defaultTheme = createTheme();
 const Dashboard = () => {
 
   const empRole = useEmployee()
-  const {Copyright} = empRole
+  const { Copyright } = empRole
   const [fileName, setFileName] = useState({
     name: "Dashboard",
     file: "",
@@ -132,22 +132,22 @@ const Dashboard = () => {
 
   const MenuItems = {
     databaseMaster: [
-      { name: "Department", file: <Department />, icon: <img src={`${process.env.REACT_APP_PORT}/icon/department.png`} alt="Department Icon" style={{ width: '20px', height: '20px' }} /> },
-      { name: "Designation", file: <Designation />, icon: <img src={`${process.env.REACT_APP_PORT}/icon/list-text.png`} alt="Designation Icon" style={{ width: '20px', height: '20px' }} /> },
-      { name: "Employee", file: <Employee />, icon: <img src={`${process.env.REACT_APP_PORT}/icon/list-text.png`} alt="Employee Icon" style={{ width: '20px', height: '20px' }} /> },
-      { name: "Vendor", file: <Vendor />, icon: <img src={`${process.env.REACT_APP_PORT}/icon/list-text.png`} alt="Vendor Icon" style={{ width: '20px', height: '20px' }} /> },
-      { name: "Unit", file: <UnitDataBase />, icon: <img src={`${process.env.REACT_APP_PORT}/icon/list-text.png`} alt="Unit Icon" style={{ width: '20px', height: '20px' }} /> },
-      { name: "Part", file: <PartDataBase />, icon: <img src={`${process.env.REACT_APP_PORT}/icon/list-text.png`} alt="Part Icon" style={{ width: '20px', height: '20px' }} /> },
-      { name: "Item Master", file: <ItemMaster />, icon: <img src={`${process.env.REACT_APP_PORT}/icon/list-text.png`} alt="Item Master Icon" style={{ width: '20px', height: '20px' }} /> },
+      { name: "Department", file: <Department />, icon: <FormatListBulleted />  },
+      { name: "Designation", file: <Designation />, icon: <FormatListBulleted />  },
+      { name: "Employee", file: <Employee />, icon: <FormatListBulleted />  },
+      { name: "Vendor", file: <Vendor />, icon: <FormatListBulleted />  },
+      { name: "Unit", file: <UnitDataBase />, icon: <FormatListBulleted />  },
+      { name: "Part", file: <PartDataBase />, icon: <FormatListBulleted />  },
+      { name: "Item Master", file: <ItemMaster />, icon: <FormatListBulleted />  },
     ],
     system: [
-      { name: "Version", file: <Version />, icon: <img src={`${process.env.REACT_APP_PORT}/icon/list-text.png`} alt="Version Icon" style={{ width: '20px', height: '20px' }} /> },
+      { name: "Version", file: <Version />, icon: <FormatListBulleted />  },
       // { name: "Backup", file: <BackUp />, icon: <img src={`${process.env.REACT_APP_PORT}/icon/list-text.png`} alt="Backup Icon" style={{ width: '20px', height: '20px' }} /> },
       // { name: "Alerts Configuration", file: <AlertConfig />, icon: <img src={`${process.env.REACT_APP_PORT}/icon/list-text.png`} alt="Alerts Configuration Icon" style={{ width: '20px', height: '20px' }} /> },
-      { name: "Mail Configuration", file: <MailConfig />, icon: <img src={`${process.env.REACT_APP_PORT}/icon/list-text.png`} alt="Mail Configuration Icon" style={{ width: '20px', height: '20px' }} /> },
-      { name: "Format Number", file: <FormatNumber />, icon: <img src={`${process.env.REACT_APP_PORT}/icon/list-text.png`} alt="Format Number Icon" style={{ width: '20px', height: '20px' }} /> },
-      empRole.employee=== "superAdmin" && { name: "Company Details", file: <CompanyDetails />, icon: <img src={`${process.env.REACT_APP_PORT}/icon/list-text.png`} alt="Company Details Icon" style={{ width: '20px', height: '20px' }} /> },
-      
+      { name: "Mail Configuration", file: <MailConfig />, icon: <FormatListBulleted />  },
+      { name: "Format Number", file: <FormatNumber />, icon: <FormatListBulleted />  },
+      empRole.employee === "superAdmin" && { name: "Company Details", file: <CompanyDetails />, icon: <FormatListBulleted /> },
+
       // { name: "Label Print", file: "", icon: <img src={`${process.env.REACT_APP_PORT}/icon/list-text.png`} alt="Label Print Icon" style={{ width: '20px', height: '20px' }} /> },
 
     ].filter(Boolean),
@@ -158,16 +158,16 @@ const Dashboard = () => {
       { name: "History Card", file: <InsHistoryCard />, icon: <FormatListBulleted /> },
       { name: "Total List", file: <TotalList />, icon: <FormatListBulleted /> },
       // { name: "Cal Due Report", file: <CalDueReport />, icon: <img src={`${process.env.REACT_APP_PORT}/icon/list-text.png`} alt="Cal Due Report Icon" style={{ width: '20px', height: '20px' }} /> },
-      { name: "Uncertainty List",file: <MeasurementUncertaintyList />, icon: <FormatListBulleted />  },
-      { name: "Vendor Details",file: <VendorUpload />,icon: <FormatListBulleted />  },
-      { name: "Plan vs Actual",file: <PlantActual />,icon: <FormatListBulleted />  },
-    
+      { name: "Uncertainty List", file: <MeasurementUncertaintyList />, icon: <FormatListBulleted /> },
+      { name: "Vendor Details", file: <VendorUpload />, icon: <FormatListBulleted /> },
+      { name: "Plan vs Actual", file: <PlantActual />, icon: <FormatListBulleted /> },
+
       // { name: "Management Chart" },
     ]
 
   }
 
-console.log(MenuItems.system)
+  console.log(MenuItems.system)
 
   console.log(fileName)
 
@@ -355,11 +355,11 @@ console.log(MenuItems.system)
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'space-between',
-                width:"100%"
+                width: "100%"
               }}
             >
-              
-              <img src='/CalSmartLogo.png'  style={{marginLeft: "24px", width: 201, height: 52, objectFit: "contain"}} /> 
+
+              <img src='/CalSmartLogo.png' style={{ marginLeft: "24px", width: 201, height: 52, objectFit: "contain" }} />
               <IconButton onClick={toggleDrawer}>
                 <ChevronLeftIcon />
               </IconButton>
@@ -417,7 +417,7 @@ console.log(MenuItems.system)
 
                       <ListItemButton sx={{ pl: 4 }} onClick={() => handleAdminList("system")}>
                         <ListItemIcon>
-                       <img src={`${process.env.REACT_APP_PORT}/icon/system.png`} alt="systemIcon" style={{ width: '24px', height: '24px' }} />
+                          <img src={`${process.env.REACT_APP_PORT}/icon/system.png`} alt="systemIcon" style={{ width: '24px', height: '24px' }} />
                         </ListItemIcon>
                         <ListItemText primary="System" />
                         {adminListNames["system"].status ? <ExpandLess /> : <ExpandMore />}
@@ -447,43 +447,43 @@ console.log(MenuItems.system)
                     </List>
                   </Collapse>
                 </React.Fragment>}
-                          {empRole && empRole.employee !== "viewer" &&
+              {empRole && empRole.employee !== "viewer" &&
                 <React.Fragment>
-              <ListItemButton onClick={handleItemOpen}>
-                <ListItemIcon>
-                <img src={`${process.env.REACT_APP_PORT}/icon/measurement.png`} alt="systemIcon" style={{ width: '24px', height: '24px' }} />
-                </ListItemIcon>
-                <ListItemText primary="Item Creation" />
-                {itemOpen ? <ExpandLess /> : <ExpandMore />}
-              </ListItemButton>
-              <Collapse in={itemOpen} timeout="auto" unmountOnExit>
-                <List component="div" disablePadding >
-                
-                  <ListItemButton sx={{ pl: 4 }} to="/itemlist">
+                  <ListItemButton onClick={handleItemOpen}>
                     <ListItemIcon>
-                    <FormatListBulleted />
+                      <img src={`${process.env.REACT_APP_PORT}/icon/measurement.png`} alt="systemIcon" style={{ width: '24px', height: '24px' }} />
                     </ListItemIcon>
-                    <ListItemText primary="Item List" />
-
+                    <ListItemText primary="Item Creation" />
+                    {itemOpen ? <ExpandLess /> : <ExpandMore />}
                   </ListItemButton>
-                  {empRole && (empRole.employee === "superAdmin" || empRole.employee === "admin" || empRole.employee === "plantAdmin" || empRole.employee === "creator") &&
-                    <ListItemButton sx={{ pl: 4 }} to="/itemAdd" >
-                      <ListItemIcon>
-                      <FormatListBulleted />
-                      </ListItemIcon>
-                      <ListItemText primary="Item Add" />
+                  <Collapse in={itemOpen} timeout="auto" unmountOnExit>
+                    <List component="div" disablePadding >
 
-                    </ListItemButton>}
+                      <ListItemButton sx={{ pl: 4 }} to="/itemlist">
+                        <ListItemIcon>
+                          <FormatListBulleted />
+                        </ListItemIcon>
+                        <ListItemText primary="Item List" />
+
+                      </ListItemButton>
+                      {empRole && (empRole.employee === "superAdmin" || empRole.employee === "admin" || empRole.employee === "plantAdmin" || empRole.employee === "creator") &&
+                        <ListItemButton sx={{ pl: 4 }} to="/itemAdd" >
+                          <ListItemIcon>
+                            <FormatListBulleted />
+                          </ListItemIcon>
+                          <ListItemText primary="Item Add" />
+
+                        </ListItemButton>}
 
 
-                </List>
+                    </List>
 
-              </Collapse>
-              </React.Fragment>
-}
+                  </Collapse>
+                </React.Fragment>
+              }
               <ListItemButton onClick={() => handleAdminList("report")}>
                 <ListItemIcon>
-                 <img src={`${process.env.REACT_APP_PORT}/icon/seo-report.png`} alt="systemIcon" style={{ width: '24px', height: '24px' }} />
+                  <img src={`${process.env.REACT_APP_PORT}/icon/seo-report.png`} alt="systemIcon" style={{ width: '24px', height: '24px' }} />
                 </ListItemIcon>
                 <ListItemText primary="Reports" />
                 {adminListNames["report"].status ? <ExpandLess /> : <ExpandMore />}
@@ -537,13 +537,13 @@ console.log(MenuItems.system)
                 </List>
               </Collapse> */}
 
-             {/* {SecondaryListItems()} */}
+              {/* {SecondaryListItems()} */}
             </List>
           </Drawer>
           <Box
             component="main"
             style={{ flexGrow: 1, height: "100%", width: "75%" }}
-          
+
           >
             <Toolbar />
 
@@ -555,7 +555,7 @@ console.log(MenuItems.system)
 
 
         </Box>
-        
+
       </ThemeProvider>
 
     </div>
