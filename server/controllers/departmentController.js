@@ -203,7 +203,7 @@ const departmentController = {
   getDepartmentByPlant: async (req, res) => {
     try {
       const { allowedPlants } = req.body
-      console.log(allowedPlants)
+      console.log(allowedPlants, "depPlant")
 
       const departmentByPlant = await departmentModel.aggregate([
         {
@@ -212,6 +212,7 @@ const departmentController = {
           }
         },
       ])
+      console.log(departmentByPlant)
       res.status(202).json({ result: departmentByPlant, status: 1, message: "Department Get Successfully" })
     } catch (err) {
       console.log(err)

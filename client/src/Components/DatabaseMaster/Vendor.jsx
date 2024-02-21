@@ -241,9 +241,9 @@ const Vendor = () => {
     const [vendorDataList, setVendorDataList] = useState([])
     const vendorFetchData = async () => {
         try {
-            const response = await axios.get(
-                `${process.env.REACT_APP_PORT}/vendor/getAllVendors`,
-            );
+            const response = await axios.post(
+                `${process.env.REACT_APP_PORT}/vendor/getVendorByPlants`, {allowedPlants: allowedPlants}
+              );
             setVendorDataList(response.data.result);
             setFilteredData(response.data.result);
         } catch (err) {
