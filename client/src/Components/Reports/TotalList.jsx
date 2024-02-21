@@ -408,8 +408,8 @@ const TotalList = () => {
           itemAddMasterName: "all"
         }))
         setPlantDatas(plantWise)
-        const partCustomers = partDataList.filter(part => plantWise.some(item => item.itemPartName.includes(part.partNo)))
-        const customerData = partDataList.filter(part => part.customer === value)
+        const partCustomers = [...new Set(partDataList.filter(part => plantWise.some(item => item.itemPartName.includes(part.partNo))))]
+        const customerData = [...new Set(partDataList.filter(part => part.customer === value))]
         setPartCutomerNames(partCustomers)
         setCustomerParts(customerData)
       }
