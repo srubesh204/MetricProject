@@ -626,7 +626,7 @@ function InsHistoryCard() {
                                     </div>
                                 </Paper>
                             </div>
-                            <div className="col-4">
+                            <div className="col-4 " style={{ maxHeight: "170px", overflow: "auto", height: "60%", minHeight: "170px" }}>
                                 {selectedRow && selectedRow.acceptanceCriteria && selectedRow.acceptanceCriteria.length > 0 && <Paper
                                     sx={{
                                         p: 1,
@@ -683,7 +683,7 @@ function InsHistoryCard() {
                                             </tbody>
                                         </table>}
                                         {selectedRow && selectedRow.itemType === "referenceStandard" && <table className="table table-sm table-bordered text-center align-middle" style={{ fontSize: "small" }}>
-                                            <thead>
+                                            <thead>                                                         
                                                 <tr >
                                                     <th>Parameter</th>
                                                     <th>Min</th>

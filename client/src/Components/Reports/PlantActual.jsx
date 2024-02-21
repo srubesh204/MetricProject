@@ -157,10 +157,10 @@ const PlantActual = () => {
             setFilteredData(filterList);
         }
         setDateData((prev) => ({ ...prev, [name]: value }));
+        // setDateData((prev) => ({ ...prev, fromDate: "" ,toDate: ""}))
     }
     };
     
-
 
 
     // const [plantDatas, setPlantDatas] = useState([])
@@ -294,7 +294,6 @@ const PlantActual = () => {
                                     onChange={handleFilterChangeItemList}
                                     size="small"
                                     name="itemPlant" >
-
                                     <MenuItem value="all">All</MenuItem>
                                     {loggedEmp.plantDetails.map((item, index) => (
                                         <MenuItem key={index} value={item.plantName}>{item.plantName}</MenuItem>
@@ -324,10 +323,10 @@ const PlantActual = () => {
                                     name="fromDate"
                                     size="small"
                                     label="From Date"
-                                    sx={{ width: "100%" }}
+                                  
                                     slotProps={{ textField: { size: 'small' } }}
                                     format="DD-MM-YYYY"
-                                    value={dayjs(dateData.fromDate)}
+                                   // value={dayjs(dateData.fromDate)}
                                     onChange={(newValue) =>
                                         setDateData((prev) => ({ ...prev, fromDate: dayjs(newValue).format('YYYY-MM-DD') }))}
                                 />
@@ -338,10 +337,9 @@ const PlantActual = () => {
                                     id="toDateId"
                                     name="toDate"
                                     label="To Date"
-                                    sx={{ width: "100%" }}
                                     slotProps={{ textField: { size: 'small' } }}
                                     format="DD-MM-YYYY"
-                                    value={dayjs(dateData.toDate)}
+                                    //value={dayjs(dateData.toDate)}
                                     onChange={(newValue) =>
                                         setDateData((prev) => ({ ...prev, toDate: dayjs(newValue).format('YYYY-MM-DD') }))}
                                 />

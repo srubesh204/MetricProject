@@ -228,16 +228,7 @@ const Vendor = () => {
         })
     };
 
-
-
     console.log(vendorData)
-
-
-
-
-
-
-
     const [vendorDataList, setVendorDataList] = useState([])
     const vendorFetchData = async () => {
         try {
@@ -1036,7 +1027,6 @@ const Vendor = () => {
                                             </div>
                                             {vendorData.certificate &&
                                                 <div className='d-flex ' style={{ width: "60%", height: '100%', border: '2px dashed #ccc' }}>
-
                                                     {/*<Chip label={vendorData.certificate} component="a" href={`${process.env.REACT_APP_PORT}/vendorCertificates/${vendorData.certificate}`} target="_blank" clickable={true} />*/}
                                                     {vendorData.certificate !== "" && (
                                                         <a
@@ -1049,9 +1039,7 @@ const Vendor = () => {
                                                         </a>
                                                     )}
                                                     <HighlightOffRounded type="button" onClick={() => RemoveFile()} />
-
                                                 </div>}
-
                                         </div>
                                         {vendorData.certificate &&
                                             <Chip
