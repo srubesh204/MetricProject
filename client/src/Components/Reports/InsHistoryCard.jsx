@@ -135,8 +135,8 @@ function InsHistoryCard() {
 
     console.log(itemList)
     const [itemFilters, setItemFilters] = useState({
-        itemPlant: loggedEmp.plantDetails.length === 1 ? loggedEmp.plantDetails[0].plantName : "Select",
-        itemDepartment: loggedEmp.plantDetails.length === 1 && loggedEmp.plantDetails[0].departments.length === 1 ? loggedEmp.plantDetails[0].departments[0] : "Select",
+        itemPlant: "Select",
+        itemDepartment: "Select",
         itemName: "Select",
         itemIMTENo: "Select"
     })
@@ -171,9 +171,10 @@ function InsHistoryCard() {
         if (name === "itemDepartment") {
             console.log(value)
             const itemDepWise = async () => {
+
                 try {
-                    const response = await axios.get(
-                        `${process.env.REACT_APP_PORT}/itemAdd/getItemByDepartment/${value}`
+                    const response = await axios.post(
+                        `${process.env.REACT_APP_PORT}/itemAdd/getItemByDepartment`, { itemPlant: itemFilters.itemPlant, itemDepartment: value }
                     );
                     setItemListDistNames(response.data.result)
                     console.log(response.data.result)
@@ -192,8 +193,13 @@ function InsHistoryCard() {
         if (name === "itemName") {
             const itemNameWise = async () => {
                 try {
-                    const response = await axios.get(
-                        `${process.env.REACT_APP_PORT}/itemAdd/getItemByItemAddMasterName/${value}`
+                    const response = await axios.post(
+                        `${process.env.REACT_APP_PORT}/itemAdd/getItemByItemAddMasterName`,
+                        {
+                            itemPlant: itemFilters.itemPlant,
+                            itemDepartment: itemFilters.itemDepartment,
+                            itemName: value
+                        }
                     );
                     setItemIMTEs(response.data.result)
                     setItemFilters(prev => ({ ...prev, itemIMTENo: "Select" }))
