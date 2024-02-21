@@ -359,7 +359,7 @@ const Dashboard = () => {
               }}
             >
 
-              <img src='/CalSmartLogo.png' style={{ marginLeft: "24px", width: 201, height: 52, objectFit: "contain" }} />
+              <img src='/CMSDeskLogo.png' style={{ marginLeft: "24px", width: 201, height: 52, objectFit: "contain" }} />
               <IconButton onClick={toggleDrawer}>
                 <ChevronLeftIcon />
               </IconButton>

@@ -382,7 +382,7 @@ const TotalList = () => {
         // Update state outside the loop with the updated object
         setFilterNameList(prev => ({ ...prev, ...updatedFilterNames }));
         const partCustomers = partDataList.filter(part => itemList.some(item => item.itemPartName.includes(part.partNo)))
-        const customerData = partDataList.filter(part => part.customer === value)
+        const customerData = [...new Set(partDataList.filter(part => part.customer === value))]
         setPartCutomerNames(partCustomers)
         setCustomerParts(customerData)
       } else {
