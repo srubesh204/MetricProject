@@ -42,7 +42,7 @@ import DcList from '../Reports/dcList/DcList';
 import GrnList from '../Reports/grnList/GrnList';
 import CalList from '../Reports/CalItems/CalList';
 import { FormatListBulleted, Logout } from '@mui/icons-material';
-import { Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Tooltip } from '@mui/material';
+import { Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Link, Tooltip } from '@mui/material';
 import dashboard from '../assets/dashboard.png'
 import admin from '../assets/admin.png'
 import secretary from '../assets/secretary.gif'
@@ -65,18 +65,7 @@ import VendorUpload from '../Reports/VendorUpload';
 import PlantActual from '../Reports/PlantActual';
 //
 
-// function Copyright(props) {
-//   return (
-//     <Typography variant="body2" color="text.secondary" align="center" {...props}>
-//       {'Copyright © '}
-//       <Link color="inherit" href="https://mui.com/">
-//         Your Website
-//       </Link>{' '}
-//       {new Date().getFullYear()}
-//       {'.'}
-//     </Typography>
-//   );
-// }
+
 
 const drawerWidth = 300;
 
@@ -133,7 +122,7 @@ const defaultTheme = createTheme();
 const Dashboard = () => {
 
   const empRole = useEmployee()
-
+  const {Copyright} = empRole
   const [fileName, setFileName] = useState({
     name: "Dashboard",
     file: "",
@@ -369,7 +358,7 @@ console.log(MenuItems.system)
               }}
             >
               
-              <img src='/CalSmartLogo.png'  style={{marginLeft: "24px", width: 201, height: 52, objectFit: "contain"}} /> 
+              <img src='/CalSmartLogo.png'  style={{marginLeft: "24px", width: 201, height: 60, objectFit: "contain"}} /> 
               <IconButton onClick={toggleDrawer}>
                 <ChevronLeftIcon />
               </IconButton>
@@ -565,6 +554,7 @@ console.log(MenuItems.system)
 
 
         </Box>
+        
       </ThemeProvider>
 
     </div>

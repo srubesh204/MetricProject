@@ -1,6 +1,6 @@
 
 import './App.css';
-import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate, useLocation, Link } from 'react-router-dom';
 import { Department, Designation } from './Components/DatabaseMaster/DesDep';
 import Employee from './Components/DatabaseMaster/Employee';
 
@@ -41,7 +41,7 @@ import axios from 'axios';
 import RubeshTest from './Components/Test/RubeshTest';
 import DcPrint from './Components/Reports/dcList/DcPrint';
 import TotalList from './Components/Reports/TotalList';
-import { Backdrop, CircularProgress } from '@mui/material';
+import { Backdrop, CircularProgress, Typography } from '@mui/material';
 import CalDueReport from './Components/Reports/CalDueReport';
 import InsHistoryCard from './Components/Reports/InsHistoryCard';
 import CalDuePrint from './Components/Reports/CalDuePrint';
@@ -164,6 +164,19 @@ function App() {
   const [isEmployeeLoaded, setIsEmployeeLoaded] = useState(false);
   const [allowedPlants, setAllowedPlants] = useState([])
 
+  const Copyright = (props) => {
+    return (
+      <Typography variant="body2" color="text.secondary" align="center" {...props}>
+        {'Copyright © '}
+        <Link color="inherit" to="https://metric.co.in/" target='_blank'>
+          Metric Measurement Industrial pvt ltd
+        </Link>{' '}
+        {new Date().getFullYear()}
+        {'.'}
+      </Typography>
+    );
+  }
+
   useEffect(() => {
     const fetchEmployeeData = async () => {
       try {
@@ -203,9 +216,9 @@ function App() {
 
   console.log(loggedEmp)
 
-  return (
+  return ( 
     <div className="App">
-      <EmployeeProvider employee={{ employee, loggedEmp, allowedPlants }}>
+      <EmployeeProvider employee={{ employee, loggedEmp, allowedPlants, Copyright }}>
         <Routes>
           <Route
             path="/"
@@ -239,6 +252,7 @@ function App() {
           <Route path="/accessDenied" element={<AccessDenied />} />
         </Routes>
       </EmployeeProvider>
+      <Copyright sx={{position: "fixed", bottom: 10, left: 10, pt: 4 }} />
     </div>
   );
 }

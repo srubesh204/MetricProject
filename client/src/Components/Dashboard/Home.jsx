@@ -29,7 +29,7 @@ const Home = () => {
 
   const employeeRole = useEmployee();
 
-  const { loggedEmp, allowedPlants } = employeeRole
+  const { loggedEmp, allowedPlants, Copyright } = employeeRole
 
 
   const loggedInEmpId = sessionStorage.getItem('empId')
@@ -2062,7 +2062,7 @@ const Home = () => {
 
 
 
-
+        
 
       </LocalizationProvider>
 
