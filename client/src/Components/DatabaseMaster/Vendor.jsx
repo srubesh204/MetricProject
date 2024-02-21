@@ -91,8 +91,6 @@ const Vendor = () => {
                 setFilteredData(vendorPlant);
             }
 
-
-
         }
 
 

@@ -169,7 +169,7 @@ function App() {
       <Typography variant="body2" color="text.secondary" align="center" {...props}>
         {'Copyright © '}
         <Link color="inherit" to="https://metric.co.in/" target='_blank'>
-          Metric Measurement Industrial pvt ltd
+          Metric Industrial Metrology Private Limited
         </Link>{' '}
         {new Date().getFullYear()}
         {'.'}
