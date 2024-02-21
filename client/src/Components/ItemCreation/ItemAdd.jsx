@@ -1111,7 +1111,7 @@ const ItemAdd = () => {
 
                                 {itemAddData.itemCalibrationSource === "oem" &&
                                     <div className='row g-2'>
-                                        <h6 className='text-center'>Enter oem Details</h6>
+                                        <h6 className='text-center'>Enter OEM Details</h6>
                                         <div className="col-md">
                                             <FormControl size='small' component="div" fullWidth>
                                                 <InputLabel id="itemOEMId">Select OEM</InputLabel>
