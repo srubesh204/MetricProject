@@ -161,10 +161,12 @@ function InsHistoryCard() {
             const dep = loggedEmp.plantDetails.filter(plant => plant.plantName === value);
             if (value === "Select") {
                 setSelectedPlantDatas([])
+
             } else {
                 setSelectedPlantDatas(dep.length > 0 ? dep[0].departments : [])
             }
-
+            setSelectedRow([])
+            setFilteredData([])
 
             setItemFilters(prev => ({ ...prev, itemDepartment: "Select", itemName: "Select", itemIMTENo: "Select" }))
         }
@@ -177,18 +179,16 @@ function InsHistoryCard() {
                         `${process.env.REACT_APP_PORT}/itemAdd/getItemByDepartment`, { itemPlant: itemFilters.itemPlant, itemDepartment: value }
                     );
                     setItemListDistNames(response.data.result)
+                    setSelectedRow([])
+                    setFilteredData([])
                     console.log(response.data.result)
                 } catch (error) {
                     console.error('Error fetching data:', error);
                 }
             };
             itemDepWise()
-            // const filterList = selectedPlantDatas.filter(item => item.itemDepartment === value)
-            // const nameList = [...new Set(filterList.map(item => item.itemAddMasterName))].sort()
-            // setItemListDistNames(nameList)
+            setItemFilters(prev => ({ ...prev, itemName: "Select", itemIMTENo: "Select" }))
 
-            // setItemFilters(prev => ({ ...prev, itemName: "Select", itemIMTENo: "Select" }))
-            // setSelectedDepartmentData(filterList)
         }
         if (name === "itemName") {
             const itemNameWise = async () => {
@@ -201,8 +201,11 @@ function InsHistoryCard() {
                             itemName: value
                         }
                     );
-                    setItemIMTEs(response.data.result)
+
+                    setItemIMTEs(response.data.result.map(item => item.itemIMTENo))
                     setItemFilters(prev => ({ ...prev, itemIMTENo: "Select" }))
+                    setSelectedRow([])
+                    setFilteredData([])
                     console.log(response.data.result)
                 } catch (error) {
                     console.error('Error fetching data:', error);
@@ -471,14 +474,12 @@ function InsHistoryCard() {
                                             <Autocomplete
                                                 disablePortal
                                                 id="itemIMTENo"
-
                                                 options={itemIMTEs}
                                                 size='small'
                                                 fullWidth
-                                                //value={itemFilters.itemIMTENo}
+                                                value={itemFilters.itemIMTENo}
                                                 onInputChange={(e, newValue) => handleFilters({ target: { name: "itemIMTENo", value: newValue } })}
                                                 name="itemIMTENo"
-                                                getOptionLabel={(item) => item ? item.itemIMTENo : ""}
                                                 renderInput={(params) => <TextField {...params} label="IMTE No" />}
                                             />
                                         </div>
@@ -556,16 +557,16 @@ function InsHistoryCard() {
                                     <div className="row g-2 mb-2">
                                         <div className="col-md-3">
                                             <TextField label="Serial No."
-                                                value={selectedRow?.itemMFRNo} size="small" name="itemMFRNo" InputProps={{ readOnly: true }} InputLabelProps={{ shrink: true }}></TextField>
+                                                value={selectedRow?.itemMFRNo || "-"} size="small" name="itemMFRNo" InputProps={{ readOnly: true }} InputLabelProps={{ shrink: true }}></TextField>
                                         </div>
                                         <div className="col-md-3">
                                             <TextField label="Model No."
-                                                value={selectedRow?.itemModelNo} size="small" name="itemModelNo" InputProps={{ readOnly: true }} InputLabelProps={{ shrink: true }}></TextField>
+                                                value={selectedRow?.itemModelNo || "-"} size="small" name="itemModelNo" InputProps={{ readOnly: true }} InputLabelProps={{ shrink: true }}></TextField>
                                         </div>
                                         <div className="col-md-3">
                                             <TextField
                                                 label="Range / Size"
-                                                value={`${selectedRow?.itemRangeSize || ''} ${selectedRow?.itemRangeSizeUnit || ''}`}
+                                                value={`${selectedRow?.itemRangeSize || '-'} ${selectedRow?.itemRangeSizeUnit || ''}`}
                                                 size="small"
                                                 name="itemRangeSize"
                                                 InputProps={{ readOnly: true }}
@@ -575,7 +576,7 @@ function InsHistoryCard() {
                                         {selectedRow[0]?.itemType === "variable" && <div className="col-md-3">
                                             <TextField
                                                 label="Least count"
-                                                value={selectedRow?.itemLC}
+                                                value={selectedRow?.itemLC || "-"}
                                                 size="small"
                                                 name="itemLC"
                                                 InputProps={{ readOnly: true }}
@@ -587,20 +588,20 @@ function InsHistoryCard() {
                                     <div className="row g-2 ">
                                         <div className="col-md-3">
                                             <TextField label="Calibration Source"
-                                                value={selectedRow?.itemCalibrationSource} size="small" name="itemCalibrationSource" InputProps={{ readOnly: true }} InputLabelProps={{ shrink: true }}></TextField>
+                                                value={selectedRow?.itemCalibrationSource || "-"} size="small" name="itemCalibrationSource" InputProps={{ readOnly: true }} InputLabelProps={{ shrink: true }}></TextField>
                                         </div>
                                         <div className="col-md-3">
                                             <TextField label="Location"
-                                                value={selectedRow?.itemCurrentLocation} size="small" name="itemCurrentLocation" InputProps={{ readOnly: true }} InputLabelProps={{ shrink: true }}></TextField>
+                                                value={selectedRow?.itemCurrentLocation || "-"} size="small" name="itemCurrentLocation" InputProps={{ readOnly: true }} InputLabelProps={{ shrink: true }}></TextField>
                                         </div>
                                         <div className="col-md-3">
                                             <TextField label="Frequency In Months"
-                                                value={selectedRow?.itemCalFreInMonths} size="small" name="itemCalFreInMonths" InputProps={{ readOnly: true }} InputLabelProps={{ shrink: true }}></TextField>
+                                                value={selectedRow?.itemCalFreInMonths || "-"} size="small" name="itemCalFreInMonths" InputProps={{ readOnly: true }} InputLabelProps={{ shrink: true }}></TextField>
                                         </div>
                                         <div className="col-md-3">
                                             <TextField
                                                 label="Make"
-                                                value={selectedRow?.itemMake}
+                                                value={selectedRow?.itemMake || "-"}
                                                 size="small"
                                                 name="itemMake"
                                                 InputProps={{ readOnly: true }}
