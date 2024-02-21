@@ -205,15 +205,14 @@ const departmentController = {
       const { allowedPlants } = req.body
       console.log(allowedPlants)
 
-      const adminsSuperAdmins = await departmentModel.aggregate([
+      const departmentByPlant = await departmentModel.aggregate([
         {
           $match: {
-            "plantDetails.plantName": { $in: allowedPlants ? allowedPlants : [] }
+            "departmentPlant": { $in: allowedPlants ? allowedPlants : [] }
           }
         },
-        
       ])
-      res.status(202).json({ result: adminsSuperAdmins, status: 1, message: "adminGet Successfully" })
+      res.status(202).json({ result: departmentByPlant, status: 1, message: "Department Get Successfully" })
     } catch (err) {
       console.log(err)
     }
