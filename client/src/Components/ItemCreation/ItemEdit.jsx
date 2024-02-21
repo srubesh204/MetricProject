@@ -221,12 +221,12 @@ const ItemEdit = () => {
     //Vendor
     const [vendorList, setVendorList] = useState([])
     const [customerList, setCustomerList] = useState([]);
-    const [oemList, setoemList] = useState([]);
+    const [OEMList, setOEMList] = useState([]);
     const [supplierList, setSupplierList] = useState([])
     const [suppOEM, setSuppOEM] = useState([]);
 
 
-    console.log(oemList)
+    console.log(OEMList)
 
 
     const vendorListFetch = async () => {
@@ -236,14 +236,14 @@ const ItemEdit = () => {
             );
             const vendorList = response.data.result
             const customerList = vendorList.filter((item) => item.customer === "1" || item.supplier === "1");
-            const oemList = vendorList.filter((item) => item.oem === "1");
+            const OEMList = vendorList.filter((item) => item.oem === "1");
             const SupplierList = vendorList.filter((item) => item.supplier === "1");
             const suppOEM = vendorList.filter((item) => item.supplier === "1" || item.oem === "1");
 
             console.log(customerList)
             setVendorList(vendorList);
             setCustomerList(customerList);
-            setoemList(oemList);
+            setOEMList(OEMList);
             setSupplierList(SupplierList)
             setSuppOEM(suppOEM)
             console.log(SupplierList)
@@ -1226,7 +1226,7 @@ const ItemEdit = () => {
 
                                                 fullWidth
                                             >
-                                                {oemList.map((name, index) => (
+                                                {OEMList.map((name, index) => (
                                                     <MenuItem key={index} value={name.aliasName}>
                                                         <Checkbox checked={itemAddData.itemOEM.indexOf(name.aliasName) > -1} />
                                                         <ListItemText primary={name.aliasName} />
@@ -1299,7 +1299,7 @@ const ItemEdit = () => {
 
                                     {/* {
                                         itemAddData.itemOEM.map((itemOem, index) => {
-                                            const selectedOem = oemList.find(sup => sup._id === itemOem);
+                                            const selectedOem = OEMList.find(sup => sup._id === itemOem);
                                             return (
                                                 <tr key={index}>
                                                     <td>{index + 1}</td>
