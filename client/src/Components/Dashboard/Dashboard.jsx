@@ -63,6 +63,7 @@ import CalDueReport from '../Reports/CalDueReport';
 import MeasurementUncertainty from '../Reports/MeasurementUncertainty';
 import VendorUpload from '../Reports/VendorUpload';
 import PlantActual from '../Reports/PlantActual';
+import { MeasurementUncertaintyList } from '../Reports/MeasurementUncertaintyList';
 //
 
 
@@ -157,7 +158,7 @@ const Dashboard = () => {
       { name: "History Card", file: <InsHistoryCard />, icon: <img src={`${process.env.REACT_APP_PORT}/icon/list-text.png`} alt="History Card Icon" style={{ width: '20px', height: '20px' }} /> },
       { name: "Total List", file: <TotalList />, icon: <img src={`${process.env.REACT_APP_PORT}/icon/list-text.png`} alt="Total List Icon" style={{ width: '20px', height: '20px' }} /> },
       // { name: "Cal Due Report", file: <CalDueReport />, icon: <img src={`${process.env.REACT_APP_PORT}/icon/list-text.png`} alt="Cal Due Report Icon" style={{ width: '20px', height: '20px' }} /> },
-      { name: "Measurement Uncertainty",file: <MeasurementUncertainty />,icon: <img src={`${process.env.REACT_APP_PORT}/icon/list-text.png`} alt="Measurement Uncertainty" style={{ width: '20px', height: '20px' }} />  },
+      { name: "Measurement Uncertainty List",file: <MeasurementUncertaintyList />,icon: <img src={`${process.env.REACT_APP_PORT}/icon/list-text.png`} alt="Measurement Uncertainty List" style={{ width: '20px', height: '20px' }} />  },
       { name: "Vendor Details",file: <VendorUpload />,icon: <img src={`${process.env.REACT_APP_PORT}/icon/list-text.png`} alt="Vendor Details Icon" style={{ width: '20px', height: '20px' }} />  },
       { name: "Plan vs Actual",file: <PlantActual />,icon: <img src={`${process.env.REACT_APP_PORT}/icon/list-text.png`} alt="Plan vs Actual Icon" style={{ width: '20px', height: '20px' }} />  },
     
