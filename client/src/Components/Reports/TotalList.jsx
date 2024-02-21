@@ -930,21 +930,37 @@ const TotalList = () => {
 
 
 
+  // const [formatNoData, setFormatNoData] = useState([])
+  // const formatFetchData = async () => {
+  //   try {
+  //     const response = await axios.get(
+  //       `${process.env.REACT_APP_PORT}/formatNo/getFormatNoById/1`
+  //     );
+  //     const format = response.data.result
+  //     console.table(format)
+  //     setFormatNoData(format)
+  //   } catch (err) {
+  //     console.log(err);
+  //   }
+  // };
+  // useEffect(() => {
+  //   formatFetchData();
+  // }, []);
   const [formatNoData, setFormatNoData] = useState([])
   const formatFetchData = async () => {
-    try {
-      const response = await axios.get(
-        `${process.env.REACT_APP_PORT}/formatNo/getFormatNoById/1`
-      );
-      const format = response.data.result
-      console.table(format)
-      setFormatNoData(format)
-    } catch (err) {
-      console.log(err);
-    }
+      try {
+          const response = await axios.get(
+              `${process.env.REACT_APP_PORT}/formatNo/getFormatNoById/formatNo`
+          );
+          const format = response.data.result
+          console.log(format)
+          setFormatNoData(format)
+      } catch (err) {
+          console.log(err);
+      }
   };
   useEffect(() => {
-    formatFetchData();
+      formatFetchData();
   }, []);
 
 

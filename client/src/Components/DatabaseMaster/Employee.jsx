@@ -17,7 +17,7 @@ import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
 import Autocomplete from '@mui/material/Autocomplete';
 import { Box, Grid, Paper, IconButton, ButtonGroup, Container } from '@mui/material';
 import dayjs from 'dayjs';
-import { Add, ArrowBack,Error, HomeMax, House, Mail, MailLock,  } from '@mui/icons-material';
+import { Add, ArrowBack, Error, HomeMax, House, Mail, MailLock, } from '@mui/icons-material';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { Link as RouterLink } from 'react-router-dom';
 import { Link } from 'react-router-dom';
@@ -31,6 +31,7 @@ import { useEmployee } from '../../App';
 const Employee = () => {
 
     const employeeRole = useEmployee()
+    const { loggedEmp, allowedPlants } = employeeRole
 
     const ITEM_HEIGHT = 48;
     const ITEM_PADDING_TOP = 8;
@@ -205,7 +206,7 @@ const Employee = () => {
         } else {
             if (name === "departmentFilter") {
                 const departmentFilter = employeeList.filter((emp) => (
-                    emp.plantDetails.find(plant => plant.departments.includes(value))
+                    emp.plantDetails.find(plant => plant.plantName.includes(value))
                 ));
                 setFilteredData(departmentFilter)
                 setFilterAllNames(prev => ({
@@ -1360,7 +1361,25 @@ const Employee = () => {
                                         }
                                     </TextField> */}
 
-                                    <TextField
+                                    <TextField label="Plant Wise"
+                                        id="departmentFilterId"
+                                        select
+                                        defaultValue="all"
+                                        fullWidth
+                                        value={filterAllNames.departmentFilter}
+                                        onChange={handleFilterChange}
+                                        size="small"
+                                        name="departmentFilter" >
+
+                                        <MenuItem value="all">All</MenuItem>
+                                        {loggedEmp.plantDetails.map((item, index) => (
+                                            <MenuItem key={index} value={item.plantName}>{item.plantName}</MenuItem>
+                                        ))}
+                                    </TextField>
+
+
+
+                                    {/* <TextField
                                         fullWidth
                                         label="Department Filter"
                                         value={filterAllNames.departmentFilter}
@@ -1378,7 +1397,7 @@ const Employee = () => {
                                             </MenuItem>
                                         ))}
 
-                                    </TextField>
+                                    </TextField> */}
                                 </Grid>
 
 
@@ -1399,7 +1418,7 @@ const Employee = () => {
                                         getRowId={(row) => row._id}
                                         disableDensitySelector
                                         disableColumnFilter
-                                        
+
                                         initialState={{
                                             pagination: {
                                                 paginationModel: { page: 0, pageSize: 5 },
@@ -1471,7 +1490,7 @@ const Employee = () => {
 
 
                             </div>
-                            
+
                         </Paper>
                     </Grid>
 

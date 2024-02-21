@@ -72,7 +72,7 @@ const itemDcController = {
 
       const formatNo = await formatNoModel.findById("formatNo");
 
-      const formatNumber = `${formatNo && formatNo.fDc ? (formatNo.fDc.frNo + " " + formatNo.fDc.amNo + " " + formatNo.fDc.amDate) : ""}`
+      const formatNumber = `${formatNo && formatNo.fDc ? ("Format Number : " +formatNo.fDc.frNo + "Rev.No : " + formatNo.fDc.amNo + "Rev.Date : " + formatNo.fDc.amDate) : ""}`
       console.log(getCompDetailsById)
 
       const validationError = itemDcResult.validateSync();
@@ -279,7 +279,7 @@ const itemDcController = {
 
         const formatNo = await formatNoModel.findById("formatNo");
 
-        const formatNumber = `${formatNo.fDc ? (formatNo.fDc.frNo + " " + formatNo.fDc.amNo + " " + formatNo.fDc.amDate) : ""}`
+        const formatNumber = `${formatNo.fDc ? ("Format Number : " +formatNo.fDc.frNo + " Rev.No : " + formatNo.fDc.amNo + " Rev.Date : " + formatNo.fDc.amDate) : ""}`
        
 
         const itemDcUpdate = new itemDcModel(updateItemDcFields);
@@ -374,6 +374,8 @@ const itemDcController = {
             .replace(/{{dcCReason}}/, dcReason)
             .replace(/{{logo}}/g, process.env.SERVER_PORT + '/logo/' + getCompDetailsById.companyLogo)
             .replace(/{{formatNo}}/g, formatNumber)
+
+
 
 
           // Add more replace statements for additional placeholders as needed
