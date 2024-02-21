@@ -1529,7 +1529,14 @@ const Home = () => {
   console.log(itemStatus)
 
   useEffect(()=> {
-    // if()
+    if(plantDeps.itemPlant === "All"){
+      setSelectedPlantDepartment(plantWiseDepartments)
+    }else{
+      const dep = plantWiseDepartments.filter(deps => deps.departmentPlant.includes(plantDeps.itemPlant))
+      setSelectedPlantDepartment(dep)
+    }
+
+    
   }, [plantDeps.itemPlant])
 
 
