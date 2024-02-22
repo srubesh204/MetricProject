@@ -317,8 +317,20 @@ const TotalList = () => {
         console.log(updatedFilterNames)
         // Update state outside the loop with the updated object
         setFilterNameList(prev => ({ ...prev, ...updatedFilterNames }));
-        const partCustomers = partDataList.filter(part => itemList.some(item => item.itemPartName.includes(part.partNo))).map(item=> item.customer)
-        const customerData = [...new Set(partCustomers)]
+        setFilterAllNames(prev => ({
+          ...prev,
+          imteNo: "all",
+          plantWise: value,
+          itemType: "all",
+          currentLocation: "all",
+          itemAddMasterName: "all",
+          customerWise: "all",
+          partName: "all"
+        }))
+        const partCustomers = partDataList.filter(part => itemList.some(item => item.itemPartName.includes(part.partNo)))
+        console.log(partCustomers)
+        const customerData = [...new Set(partCustomers.map(item=> item.customer))]
+        console.log(customerData)
         setPartCutomerNames(partCustomers)
         setCustomerParts(customerData)
       } else {
@@ -344,8 +356,10 @@ const TotalList = () => {
           itemAddMasterName: "all"
         }))
         setPlantDatas(plantWise)
-        const partCustomers = partDataList.filter(part => itemList.some(item => item.itemPartName.includes(part.partNo))).map(item=> item.customer)
-        const customerData = [...new Set(partCustomers)]
+        const partCustomers = partDataList.filter(part => plantWise.some(item => item.itemPartName.includes(part.partNo)))
+        console.log(partCustomers)
+        const customerData = [...new Set(partCustomers.map(item=> item.customer))]
+        console.log(customerData)
         setPartCutomerNames(partCustomers)
         setCustomerParts(customerData)
       }
@@ -511,6 +525,7 @@ const TotalList = () => {
     }
     if (name === "customerWise") {
       const customerData = partDataList.filter(part => part.customer === value)
+      console.log(customerData)
 
       //  const customerData =["All",...new Set(customers.map(part => part.customer))]
       const customers = plantDatas.filter(item => customerData.some(cus => item.itemPartName.includes(cus.partNo)))
@@ -518,8 +533,8 @@ const TotalList = () => {
       console.log(customers)
       if (value === " all") {
         setFilteredItemListData(plantDatas)
-        setCustomerParts(customerData)
-        setFilterAllNames(prev => ({
+        setPartCutomerNames(customerData)
+        setFilterAllNames(prev => ({ 
           ...prev,
           imteNo: "all",
           itemType: "all",
@@ -535,7 +550,7 @@ const TotalList = () => {
 
       } else {
         setFilteredItemListData(customers)
-        setCustomerParts(customerData)
+        setPartCutomerNames(customerData)
         setFilterAllNames(prev => ({
           ...prev,
           imteNo: "all",
@@ -1059,12 +1074,12 @@ const TotalList = () => {
                     select
                     defaultValue="all"
                     fullWidth
-                    // value={filterAllNames.customerWise}
+                    value={filterAllNames.customerWise}
                     size="small"
                     onChange={handleFilterChangeItemList}
                     name="customerWise" >
                     <MenuItem value="all">All</MenuItem>
-                    {partCutomerNames.map((item, index) => (
+                    {customerParts.map((item, index) => (
                       <MenuItem key={index} value={item}>{item}</MenuItem>
                     ))}
                   </TextField>

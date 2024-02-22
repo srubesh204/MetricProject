@@ -734,7 +734,7 @@ const Home = () => {
 
 
   const calStatusColor = ['#FF4545', '#FFBB28', '#00C49F', '#FF8042', "#ACA8C8", "#0088FE"];
-  const itemStatusColor = ["#595959", "orange", "#FF8042", "#0088FE", "#FF4545"];
+  const itemStatusColor = ["#00C49F", "orange", "#FF8042", "#0088FE", "#FF4545"];
   const itemLocationColor = ["#984EA3", "violet", "orange", "#00C49F", "#0088FE"];
 
   const [calStatusFitleredData, setCalStatusFitleredData] = useState([])
@@ -961,9 +961,9 @@ const Home = () => {
       <table className='table table-borderless table-sm' style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
         <tbody>
           <tr height="50px">
-            <td style={{ padding: "2px" }} onClick={() => { itemStatusLegend("Total Items") }}><div style={{ width: '25px', height: '25px', backgroundColor: "#00C49F", marginRight: '10px', textAlign: "center", display: "flex", justifyContent: "center", alignItems: "center", cursor: "pointer" }}></div></td>
+            <td style={{ padding: "2px" }} onClick={() => { itemStatusLegend("Total Items") }}><div style={{ width: '25px', height: '25px', backgroundColor: "#595959", marginRight: '10px', textAlign: "center", display: "flex", justifyContent: "center", alignItems: "center", cursor: "pointer" }}></div></td>
             <td style={{ padding: "2px" }}>{itemWithLabel && itemWithLabel.label}</td>
-            <td style={{ padding: "2px", fontWeight: "bolder", color: "#00C49F" }} className='ms-2 ps-3'>{itemWithLabel && itemWithLabel.value}</td>
+            <td style={{ padding: "2px", fontWeight: "bolder", color: "#595959" }} className='ms-2 ps-3'>{itemWithLabel && itemWithLabel.value}</td>
           </tr>
           {payload.map((entry, index) => (
             <tr key={index} height={entry.value === "Total Items" ? "50px" : ""}>
