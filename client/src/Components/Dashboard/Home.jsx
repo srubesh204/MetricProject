@@ -232,7 +232,7 @@ const Home = () => {
   console.log(activeEmps)
   //
   const [defaultDep, setDefaultDep] = useState([])
-  
+
 
   const [plantDepartments, setPlantDepartments] = useState([])
   const [plantWiseDepartments, setPlantWiseDepartments] = useState([])
@@ -247,6 +247,7 @@ const Home = () => {
       const plantDepartments = await axios.post(
         `${process.env.REACT_APP_PORT}/department/getDepartmentByPlant`, { allowedPlants: allowedPlants }
       );
+      console.log(plantDepartments)
       setPlantWiseDepartments(plantDepartments.data.result)
       console.log(Departments)
       const defaultDepartment = Departments.data.result.filter((dep) => dep.defaultdep === "yes");
@@ -485,7 +486,7 @@ const Home = () => {
   }
 
 
- 
+
 
   useEffect(() => {
     console.log(employeeRole)
@@ -1526,18 +1527,19 @@ const Home = () => {
   }, []);
 
 
-  console.log(itemStatus)
+  console.log(plantWiseDepartments)
 
-  useEffect(()=> {
-    if(plantDeps.itemPlant === "All"){
+  useEffect(() => {
+    console.log(plantDeps.itemPlant)
+    if (plantDeps.itemPlant === "All") {
       setSelectedPlantDepartment(plantWiseDepartments)
-    }else{
+    } else {
       const dep = plantWiseDepartments.filter(deps => deps.departmentPlant.includes(plantDeps.itemPlant))
       setSelectedPlantDepartment(dep)
     }
 
-    
-  }, [plantDeps.itemPlant])
+
+  }, [plantDeps.itemPlant, plantWiseDepartments])
 
 
 
@@ -2031,7 +2033,7 @@ const Home = () => {
                 <HomeContent.Provider
                   value={{ dcOpen, setDcOpen, selectedRows, itemFetch, defaultDep, lastNo, vendors, loggedEmp }}
                 >
-                  <Dc /> 
+                  <Dc />
                 </HomeContent.Provider>
                 <HomeContent.Provider
                   value={{ grnOpen, setGrnOpen, selectedRows, lastGrnNo, dcPartyDetails, vendors, isOnSiteGRN, loggedEmp }}
@@ -2071,7 +2073,7 @@ const Home = () => {
 
 
 
-        
+
 
       </LocalizationProvider>
 
