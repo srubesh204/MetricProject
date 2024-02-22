@@ -335,7 +335,7 @@ const ItemAdd = () => {
         const supplier = vendorPlantFilter.filter((item) => item.supplier === "1")
         setSupplierList(supplier)
         setOEMList(oem)
-    }, [itemAddData.itemPlant])
+    }, [itemAddData.itemPlant, itemMasterListByName, vendorList])
 
 
     const handleKeyDown = (e) => {

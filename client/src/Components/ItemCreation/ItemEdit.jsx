@@ -519,7 +519,7 @@ const ItemEdit = () => {
         const supplier = vendorPlantFilter.filter((item) => item.supplier === "1")
         setSupplierList(supplier)
         setOEMList(oem)
-    }, [itemAddData.itemPlant])
+    }, [itemAddData.itemPlant, isItemMasterList, vendorList])
 
 
     const handleItemAddChange = (e) => {
