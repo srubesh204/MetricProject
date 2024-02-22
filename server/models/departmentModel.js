@@ -6,11 +6,13 @@ const departmentSchema = new mongoose.Schema({
   department: {
     type: String,
     unique: [true, "Department should be Unique"],
-    required: [true, "Department is Required"]
-   
+    required: [true, "Department is Required"]  
   },
   departmentStatus:String,
-  departmentPlant: [],
+  departmentPlant: {
+    type: [],
+    required: [true, "Plant required"]
+  },
   defaultdep: String
 });
 departmentSchema.plugin(uniqueValidator);
