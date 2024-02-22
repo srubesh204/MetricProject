@@ -274,14 +274,14 @@ export const MeasurementUncertaintyList = () => {
                         </div>
                         <div className='row g-2'>
                             <div className='col me-2'>
-                                <Button component={Link} to={`/home`} variant="contained" size='small' color="warning">
+                                <Button component={Link} to="/home" variant="contained" size='small' color="warning">
                                     <ArrowBackIcon /> Dash board
                                 </Button>
                                 <Button component={Link} to="/" size='small' >Home</Button>
                             </div>
 
                             <div className=' col d-flex justify-content-end'>
-                                <Button component={Link} to={`/measurementUncertainty/`} >
+                                <Button component={Link} to="/measurementUncertainty" >
                                     Uncertainty ADD
                                 </Button>
                             </div>

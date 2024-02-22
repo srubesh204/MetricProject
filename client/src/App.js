@@ -70,16 +70,16 @@ export const EmployeeProvider = ({ children, employee }) => {
 
 const roleAccessRules = {
   
-  admin: ['/home', "/desdep", "/general", "/vendor", "/itemMaster", "/itemadd", "/itemEdit/:id", "/itemList", "/grnList", "/calList", "/onSiteList", '/roles', "/employee", '/test', '/rubyTest', '/dcPrint', "/insHisCard"],
-  plantAdmin: ['/home', "/desdep", "/general", "/vendor", "/itemMaster", "/itemadd", "/itemEdit/:id", "/itemList", "/grnList", "/calList", "/onSiteList", '/roles', "/employee", '/rubyTest', '/dcPrint', '/dcList', "/insHisCard"],
-  creator: ['/home', '/itemList', '/itemadd', '/itemEdit/:id', "/grnList", "/calList", "/onSiteList", '/dcPrint', "/insHisCard"],
-  viewer: ['/home', '/dcPrint', "/insHisCard"],
+  admin: ['/home', "/desdep", "/general", "/vendor", "/itemMaster", "/itemadd", "/itemEdit/:id", "/itemList", "/grnList", "/calList", "/onSiteList", '/roles', "/employee", '/test', '/rubyTest', '/dcPrint', '/dcList', "/insHisCard", '/measurementUncertainty', '/measurementUncertaintyList'],
+  plantAdmin: ['/home', "/desdep", "/general", "/vendor", "/itemMaster", "/itemadd", "/itemEdit/:id", "/itemList", "/grnList", "/calList", "/onSiteList", '/roles', "/employee", '/rubyTest', '/dcPrint', '/dcList', "/insHisCard", "/measurementUncertainty", '/measurementUncertaintyList' ],
+  creator: ['/home', '/itemList', '/itemadd', '/itemEdit/:id', "/grnList", "/calList", "/onSiteList", '/dcPrint', "/insHisCard", '/dcList', '/measurementUncertainty', '/measurementUncertaintyList'],
+  viewer: ['/home', '/dcPrint', "/grnList", '/itemList', "/insHisCard", '/measurementUncertaintyList'],
 };
 
 // Function to generate routes based on user role and access rules
 const generateRoutes = (employee) => {
 
-  
+  console.log(employee)
   const allowedRoutes = roleAccessRules[employee] || []; // Get allowed routes for the userRole
 
   const routes = [
@@ -130,7 +130,7 @@ const generateRoutes = (employee) => {
     .map(({ path, element }) => (
       <Route key={path} path={path} element={element} />
     ));
-
+    console.log(generatedRoutes)
   return generatedRoutes;
 };
 
@@ -145,7 +145,7 @@ const PrivateRoute = ({ element: Element, employee }) => {
   }
 
   const routes = generateRoutes(employee);
-
+  console.log(routes)
   return (
     <Routes>
 

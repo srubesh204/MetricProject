@@ -528,7 +528,7 @@ const MeasurementUncertainty = () => {
             const response = await axios.post(
                 `${process.env.REACT_APP_PORT}/itemAdd/getItemByPlant`, { allowedPlants: allowedPlants }
             );
-            const notAttribute = response.data.result.filter(item => item.itemType !== "attribute")
+            const notAttribute = response.data.result.filter(item => item.itemType !== "attribute" && item.isItemMaster === "1")
             setItemNameList(notAttribute);
             console.log(response.data)
         } catch (err) {
@@ -539,9 +539,7 @@ const MeasurementUncertainty = () => {
         itemNameFetch()
     }, []);
 
-    const sortedFilterNameList = itemNameList && itemNameList.itemAddMasterName
-        ? [...itemNameList.itemAddMasterName].sort()
-        : [];
+   
 
     // const sortedFilterNameList = itemNameList.itemAddMasterName.sort();
 
