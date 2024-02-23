@@ -4,7 +4,7 @@
   "description": "NodeJS App",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon index.js"  
+    "start": "nodemon index.js"
   },
   "keywords": [
     "metric",
@@ -20,6 +20,7 @@
     "dayjs": "^1.11.10",
     "dotenv": "^16.3.2",
     "express": "^4.18.2",
+    "express-session": "^1.18.0",
     "fs": "^0.0.1-security",
     "googleapis": "^131.0.0",
     "mongoose": "^7.6.2",
