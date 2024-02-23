@@ -97,4 +97,8 @@ itemCal.pre('save', async function(next) {
 
 
 itemCal.plugin(uniqueValidator);
-module.exports = mongoose.model('itemCal', itemCal);
+
+module.exports = {
+  itemCalModel : mongoose.model('itemCal', itemCal),
+  CalNoCounter : CalNoCounter
+};
