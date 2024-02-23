@@ -1,5 +1,5 @@
 const itemAddModel = require("../models/itemAddModel");
-const itemCalModel = require("../models/itemCalModel")
+const {itemCalModel, CalNoCounter} = require("../models/itemCalModel")
 const itemHistory = require("../models/itemHistory")
 const dayjs = require('dayjs')
 const { compDetailsSchema } = require("../models/compDetailsModel");
