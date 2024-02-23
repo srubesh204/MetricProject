@@ -105,7 +105,7 @@ const itemCalController = {
         { _id: calApprovedBy } // To return the updated document
       );
       const formatNo = await formatNoModel.findById("formatNo");
-      const formatNumber = `${formatNo.fCalDueDate ? (formatNo.fCalDueDate.frNo + " " + formatNo.fCalDueDate.amNo + " " + formatNo.fCalDueDate.amDate) : ""}`
+      const formatNumber = `${formatNo.fCertificate ? ("Format Number : " +formatNo.fCertificate.frNo +"  "+ "Rev.No :  " + formatNo.fCertificate.amNo +"  "+ "Rev.Date :  " + formatNo.fCertificate.amDate) : ""}`
 
       const newItem = new itemCalModel(newItemFields);
 
@@ -579,7 +579,7 @@ const itemCalController = {
 
       const formatNo = await formatNoModel.findById("formatNo");
 
-      const formatNumber = `${formatNo.fCalDueDate ? (formatNo.fCalDueDate.frNo + " " + formatNo.fCalDueDate.amNo + " " + formatNo.fCalDueDate.amDate) : ""}`
+      const formatNumber = `${formatNo.fCertificate ? ("Format Number : " + formatNo.fCertificate.frNo+ "  " +  "Rev.No : " + formatNo.fCertificate.amNo+ "  " +  "Rev.Date : " + formatNo.fCertificate.amDate) : ""}`
       console.log(formatNumber)
 
       // Find the designation by desId and update it

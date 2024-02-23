@@ -471,8 +471,8 @@ const Employee = () => {
 
     const handlePlantChange = (e) => {
         const { name, value } = e.target;
-        if(name === "plantName"){
-            const plantDepartments = defaultDepartments.filter(dep=> dep.departmentPlant.includes(value))
+        if (name === "plantName") {
+            const plantDepartments = defaultDepartments.filter(dep => dep.departmentPlant.includes(value))
             console.log(plantDepartments)
             setPlantDepartments(plantDepartments)
         }
@@ -551,7 +551,9 @@ const Employee = () => {
                 setEmpDataId(null)
                 setErrors({})
             } else {
-                console.log("error")
+                console.log("Error")
+                setSnackBarOpen(true)
+                setErrorHandler({ status: 0, message: "Fill the required fields", code: "error" })
             }
 
         } catch (err) {

@@ -12,7 +12,7 @@ import axios from 'axios'
 import dayjs from 'dayjs';
 
 
-const MailSender = ({ mailOpen, setMailOpen, selectedRows }) => {
+const MailSender = ({ mailOpen, setMailOpen, selectedRows,setSnackBarOpen,setErrorHandler }) => {
 
     const {loggedEmp} = useEmployee()
 
@@ -196,8 +196,9 @@ const MailSender = ({ mailOpen, setMailOpen, selectedRows }) => {
         } finally {
             setLoading(false)
             //setMailDetails(initialMailDetails)
+            setSnackBarOpen(true)
            
-           // setErrorHandler({ status: "1", message: "Mail sent successfully", code: "success" })
+            setErrorHandler({ status: "1", message: "Mail sent successfully", code: "success" })
             //setMailOpen(false)
         }
 

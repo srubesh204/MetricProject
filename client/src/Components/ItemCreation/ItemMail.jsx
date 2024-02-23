@@ -14,7 +14,7 @@ const ItemMail = () => {
 
 
     const mailDatas = useContext(ItemListContent)
-    const { mailOpen, setMailOpen, itemListSelectedRowIds, mailIds } = mailDatas
+    const { mailOpen, setMailOpen, itemListSelectedRowIds, mailIds,setErrorHandler, setSnackBarOpen } = mailDatas
 
 
     const initialMailDetails = {
@@ -56,6 +56,8 @@ const ItemMail = () => {
             console.error(err)
         } finally {
             setLoading(false)
+            setSnackBarOpen(true)
+            setErrorHandler({ status: "1", message: "Mail sent successfully", code: "success" })
             setMailDetails(initialMailDetails)
             setTimeout(()=> setMailOpen(false), 1000)
         }

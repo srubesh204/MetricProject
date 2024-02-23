@@ -207,7 +207,6 @@ function InsHistoryCard() {
             };
             itemDepWise()
             setItemFilters(prev => ({ ...prev, itemName: "Select", itemIMTENo: "Select" }))
-
         }
         if (name === "itemName") {
             const itemNameWise = async () => {
@@ -220,7 +219,6 @@ function InsHistoryCard() {
                             itemName: value
                         }
                     );
-
                     setItemIMTEs(response.data.result.map(item => item.itemIMTENo))
                     setItemFilters(prev => ({ ...prev, itemIMTENo: "Select" }))
                     setSelectedRow([])

@@ -298,6 +298,7 @@ const ItemMaster = () => {
             } else {
                 console.log("error")
                 setErrorHandler({ status: 0, message: "Fill the required fields", code: "error" })
+                setSnackBarOpen(true)
             }
         } catch (err) {
             setSnackBarOpen(true)

@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { useState } from 'react'
 import axios from 'axios'
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
@@ -7,6 +7,8 @@ import TextField from '@mui/material/TextField';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
 import Link from '@mui/material/Link';
+import Alert from '@mui/material/Alert';
+import Snackbar from '@mui/material/Snackbar';
 import Paper from '@mui/material/Paper';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
@@ -27,30 +29,54 @@ export default function Login(props) {
     employeeCode: "",
     password: ""
   })
+  const [snackBarOpen, setSnackBarOpen] = useState(false)
+  const [errorhandler, setErrorHandler] = useState({})
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setLoginData((prev) => ({ ...prev, [name]: value }))
   }
 
+  const [errors, setErrors] = useState({})
+  const validateFunction = () => {
+    let tempErrors = {};
+    tempErrors.employeeCode = loginData.employeeCode ? "" : "Employee Code  is Required"
+    tempErrors.password = loginData.password ? "" : "Passwird is Required"
+
+
+    setErrors({ ...tempErrors })
+
+    return Object.values(tempErrors).every(x => x === "")
+  }
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post(
-        `${process.env.REACT_APP_PORT}/login`, loginData
-      );
+      if (validateFunction()) {
+        const response = await axios.post(
+          `${process.env.REACT_APP_PORT}/login`, loginData
+        );
 
-      sessionStorage.setItem('employee', response.data.employee.empRole);
-      sessionStorage.setItem('empId', response.data.employee._id);
-      sessionStorage.setItem('loggedIn', true);
-      console.log(response)
-      if (props.onLoginSuccess) {
-        props.onLoginSuccess();
+        sessionStorage.setItem('employee', response.data.employee.empRole);
+        sessionStorage.setItem('empId', response.data.employee._id);
+        sessionStorage.setItem('loggedIn', true);
+        console.log(response)
+        if (props.onLoginSuccess) {
+          props.onLoginSuccess();
+        }
+        navigate("/")
+      } else {
+
+        console.log("Error")
+        setSnackBarOpen(true)
+        setErrorHandler({ status: 0, message: "Fill the required fields", code: "error" })
       }
-      navigate("/")
+
     } catch (err) {
       console.log(err)
+      setSnackBarOpen(true)
+      setErrorHandler({ status: 0, message: err.response.data.message, code: "error" })
     }
     console.log(loginData)
   };
@@ -93,6 +119,7 @@ export default function Login(props) {
               <TextField
                 margin="normal"
                 required
+                {...(errors.employeeCode !== "" && { helperText: errors.employeeCode, error: true })}
                 fullWidth
                 id="employeeCodeId"
                 label="Employee Code"
@@ -107,6 +134,7 @@ export default function Login(props) {
                 name="password"
                 label="Password"
                 type="password"
+                {...(errors.password !== "" && { helperText: errors.password, error: true })}
                 id="passwordId"
                 onChange={handleChange}
               />
@@ -119,6 +147,11 @@ export default function Login(props) {
               >
                 Sign In
               </Button>
+              <Snackbar anchorOrigin={{ vertical: "top", horizontal: "right" }} open={snackBarOpen} autoHideDuration={6000} onClose={() => setSnackBarOpen(false)}>
+                <Alert onClose={() => setSnackBarOpen(false)} severity={errorhandler.code} variant='filled' sx={{ width: '100%' }}>
+                  {errorhandler.message}
+                </Alert>
+              </Snackbar>
 
             </Box>
           </Box>

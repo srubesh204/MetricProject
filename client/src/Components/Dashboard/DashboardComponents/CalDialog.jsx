@@ -754,6 +754,13 @@ const CalDialog = () => {
                 setCalibrationData(initialCalData);
                 setTimeout(() => { setCalOpen(false); window.location.reload() }, 500)
             }
+            else {
+                
+                console.log("Error")
+                setSnackBarOpen(true)
+                setErrorHandler({ status: 0, message: "Fill the required fields", code: "error" })
+            }
+
         } catch (err) {
             setSnackBarOpen(true)
 

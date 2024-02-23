@@ -323,14 +323,20 @@ const GrnList = () => {
 
     const handleFilterChange = (e) => {
         const { name, value } = e.target;
+        setDateData((prev) => ({ ...prev, [name]: value }))
+        if (value === "all") {
+            setFilteredData(grnDataList)
+        } else{
+
         if (name === "vendorType") {
             if (value === "all") {
                 setVendorTypeList(vendorFullList)
             } else {
-                const vendorType = setVendorFullList.filter((item) => (item[value] === "1"))
+                const vendorType = vendorFullList.filter((item) => (item[value] === "1"))
                 setVendorTypeList(vendorType)
             }
         }
+        
         if (name === "partyName") {
             const partyName = grnDataList.filter((item) => (item.grnPartyName === value))
             setFilteredData(partyName)
@@ -341,12 +347,12 @@ const GrnList = () => {
             setFilteredData(grnPlant);
         }
         if (name === "grnDepartment") {
-            const dcDepartment = grnDataList.filter((item) => (item.itemDepartment && item.itemDepartment.includes(value)));
+            const dcDepartment = grnDataList.filter((item) => (item.grnItemDepartment && item.grnItemDepartment.includes(value)));
 
 
             setFilteredData(dcDepartment);
         }
-        setDateData((prev) => ({ ...prev, [name]: value }))
+    }
 
 
 
@@ -393,14 +399,14 @@ const GrnList = () => {
                                 </div>
                                 <div className='col '>
                                     <TextField label="Primary Location "
-                                        id="dcDepartmentId"
+                                        id="grnDepartmentId"
                                         select
                                         defaultValue="all"
                                         // value={filterAllNames.currentLocation}
                                         fullWidth
                                         onChange={handleFilterChange}
                                         size="small"
-                                        name="dcDepartment" >
+                                        name="grnDepartment" >
                                         <MenuItem value="all">All</MenuItem>
                                         {departments.map((item, index) => (
                                             <MenuItem key={index} value={item.department}>{item.department}</MenuItem>

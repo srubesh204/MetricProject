@@ -924,8 +924,6 @@ const MeasurementUncertainty = () => {
                                     </tr>
                                 </tbody>
                             </table>
-
-
                         </div>
                     </Paper>
                     <Paper
@@ -1172,7 +1170,7 @@ const MeasurementUncertainty = () => {
                         </DialogActions>
                     </Dialog>
                     <Snackbar variant="contained" anchorOrigin={{ vertical: "top", horizontal: "right" }} open={snackBarOpen} autoHideDuration={6000} onClose={handleSnackClose}>
-                        <Alert variant="filled" onClose={handleSnackClose} severity={errorhandler.code} sx={{ width: '25%' }}>
+                        <Alert variant="filled" onClose={handleSnackClose} severity={errorhandler.code} sx={{ width: '100%' }}>
                             {errorhandler.message}
                         </Alert>
                     </Snackbar>

@@ -808,9 +808,12 @@ const Grn = () => {
                 setGrnData(initialGrnData)
                 setTimeout(() => { setGrnOpen(false); window.location.reload() }, 500)
             } else {
-                console.log(errors)
-                setErrorHandler({ status: 0, message: Object.values(errors).join(', '), code: "error" });
+                // console.log(errors)
+                // setErrorHandler({ status: 0, message: Object.values(errors).join(', '), code: "error" });
+                // setSnackBarOpen(true)
+                console.log("Error")
                 setSnackBarOpen(true)
+                setErrorHandler({ status: 0, message: "Fill the required fields", code: "error" })
             }
         } catch (err) {
             console.log(err)

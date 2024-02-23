@@ -286,7 +286,10 @@ const Dc = () => {
                 setDcData(initialDcData)
                 setTimeout(() => { setDcOpen(false); window.location.reload() }, 500)
             } else {
-                setErrorHandler({ status: 0, message: errors, code: "error" });
+                // setErrorHandler({ status: 0, message: errors, code: "error" });
+                console.log("Error")
+                setSnackBarOpen(true)
+                setErrorHandler({ status: 0, message: "Fill the required fields", code: "error" })
             }
         } catch (err) {
             setSnackBarOpen(true)

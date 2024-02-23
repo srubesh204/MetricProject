@@ -12,14 +12,14 @@ import { DataGrid, GridToolbar, GridToolbarQuickFilter } from '@mui/x-data-grid'
 const PlantActual = () => {
 
     const empRole = useEmployee()
-    const { loggedEmp, allowedPlants ,employeeRole} = empRole
+    const { loggedEmp, allowedPlants, employeeRole } = empRole
     const [filteredData, setFilteredData] = useState([])
     const [itemDataList, setItemDataList] = useState([])
 
     const itemFetchData = async () => {
         try {
             const response = await axios.post(
-                `${process.env.REACT_APP_PORT}/itemAdd/getItemByPlant`,{ allowedPlants: allowedPlants }
+                `${process.env.REACT_APP_PORT}/itemAdd/getItemByPlant`, { allowedPlants: allowedPlants }
             );
             setItemDataList(response.data.result);
             setFilteredData(response.data.result)
@@ -34,7 +34,7 @@ const PlantActual = () => {
     console.log(itemDataList)
 
 
-   
+
     // const itemFetch = async () => {
     //     try {
     //         const response = await axios.post(
@@ -57,7 +57,7 @@ const PlantActual = () => {
     //         setItemDataList(departmentItems);
     //         setFilteredData(departmentItems);
 
-         
+
 
     //     } catch (err) {
     //         console.log(err);
@@ -70,7 +70,7 @@ const PlantActual = () => {
     const [FilterNameList, setFilterNameList] = useState({
         itemDepartment: [],
         itemPlant: [],
-      
+
     })
 
     const itemListColumns = [
@@ -138,29 +138,29 @@ const PlantActual = () => {
         console.log(e);
         if (value === "all") {
             setFilteredData(itemDataList)
-        }else{
-        if (name === "itemPlant") {
-            const dep = loggedEmp.plantDetails.filter(plant => plant.plantName === value);
-            const plantDatas = itemDataList.filter(item => item.itemPlant === value)
-            console.log(itemDataList)
-            setSelectedPlantDatas(plantDatas)
-            console.log(plantDatas)
-            const nameList = [...new Set(plantDatas.map(item => item.itemDepartment))]
-            console.log(dep)
-            setPlantDepartments(dep[0].departments)
-            // const itemPlant = itemDataList.filter((item) => (item.itemPlant === value))
-             setFilteredData(plantDatas);
+        } else {
+            if (name === "itemPlant") {
+                const dep = loggedEmp.plantDetails.filter(plant => plant.plantName === value);
+                const plantDatas = itemDataList.filter(item => item.itemPlant === value)
+                console.log(itemDataList)
+                setSelectedPlantDatas(plantDatas)
+                console.log(plantDatas)
+                const nameList = [...new Set(plantDatas.map(item => item.itemDepartment))]
+                console.log(dep)
+                setPlantDepartments(dep[0].departments)
+                // const itemPlant = itemDataList.filter((item) => (item.itemPlant === value))
+                setFilteredData(plantDatas);
+            }
+            if (name === "itemDepartment") {
+                const filterList = selectedPlantDatas.filter(item => item.itemDepartment === value)
+                // const itemDepartment = itemDataList.filter((item) => (item.itemDepartment === value))
+                setFilteredData(filterList);
+            }
+            setDateData((prev) => ({ ...prev, [name]: value }));
+
         }
-        if (name === "itemDepartment") {
-            const filterList = selectedPlantDatas.filter(item => item.itemDepartment === value)
-            // const itemDepartment = itemDataList.filter((item) => (item.itemDepartment === value))
-            setFilteredData(filterList);
-        }
-        setDateData((prev) => ({ ...prev, [name]: value }));
-        // setDateData((prev) => ({ ...prev, fromDate: "" ,toDate: ""}))
-    }
     };
-    
+
 
 
     // const [plantDatas, setPlantDatas] = useState([])
@@ -198,7 +198,7 @@ const PlantActual = () => {
     //             console.log(updatedFilterNames)
     //             // Update state outside the loop with the updated object
     //             setFilterNameList(prev => ({ ...prev, ...updatedFilterNames }));
-               
+
     //             setPlantDatas(itemPlant)
     //         }
     //     }
@@ -218,7 +218,7 @@ const PlantActual = () => {
     //             // Update state outside the loop with the updated object
     //             setFilterNameList(prev => ({ ...prev, ...updatedFilterNames }));
     //             setFilteredData(plantDatas)
-               
+
     //         } else {
     //             setFilteredData(currentLocation)
     //             const filterNames = ["itemAddMasterName", "itemCalibrationSource", "itemCurrentLocation"]
@@ -233,7 +233,7 @@ const PlantActual = () => {
     //             // Update state outside the loop with the updated object
     //             setFilterNameList(prev => ({ ...prev, ...updatedFilterNames }));
     //             setFilteredData(currentLocation)
-               
+
     //             setDepartmentDatas(currentLocation)
     //         }
     //     }
@@ -254,6 +254,13 @@ const PlantActual = () => {
     //     console.log(filteredItems)
     //     setFilteredData(filteredItems)
     // }, [dateData.fromDate, dateData.toDate])
+
+    // useEffect(() => {
+    //     const filteredItems = itemDataList.filter((item) => dayjs(item.itemDueDate).isSameOrAfter(dateData.fromDate) && dayjs(item.itemDueDate).isSameOrBefore(dateData.toDate))
+    //     console.log(filteredItems)
+    //     setFilteredData(filteredItems)
+    // }, [dateData.fromDate, dateData.toDate])
+
 
     useEffect(() => {
         const filteredItems = itemDataList.filter((item) => dayjs(item.itemDueDate).isSameOrAfter(dateData.fromDate) && dayjs(item.itemDueDate).isSameOrBefore(dateData.toDate))
@@ -323,10 +330,10 @@ const PlantActual = () => {
                                     name="fromDate"
                                     size="small"
                                     label="From Date"
-                                  
+                                    sx={{ width: "100%" }}
                                     slotProps={{ textField: { size: 'small' } }}
                                     format="DD-MM-YYYY"
-                                   // value={dayjs(dateData.fromDate)}
+                                    value={dayjs(dateData.fromDate)}
                                     onChange={(newValue) =>
                                         setDateData((prev) => ({ ...prev, fromDate: dayjs(newValue).format('YYYY-MM-DD') }))}
                                 />
@@ -337,12 +344,11 @@ const PlantActual = () => {
                                     id="toDateId"
                                     name="toDate"
                                     label="To Date"
+                                    sx={{ width: "100%" }}
                                     slotProps={{ textField: { size: 'small' } }}
-                                    format="DD-MM-YYYY"
-                                    //value={dayjs(dateData.toDate)}
+                                    format="DD-MM-YYYY" value={dayjs(dateData.toDate)}
                                     onChange={(newValue) =>
-                                        setDateData((prev) => ({ ...prev, toDate: dayjs(newValue).format('YYYY-MM-DD') }))}
-                                />
+                                        setDateData((prev) => ({ ...prev, toDate: dayjs(newValue).format('YYYY-MM-DD') }))} />
                             </div>
                             <div style={{ height: 480, width: '100%', marginTop: "0.5rem" }}>
                                 <DataGrid disableDensitySelector

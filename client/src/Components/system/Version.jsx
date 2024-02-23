@@ -64,7 +64,7 @@ const Version = () => {
                   <tr>
                     <th>Name</th>
                       <td>
-                        CalSoft
+                        CMS Desk
                         {/* <input type="text" className='form-control form-control-sm' id="certificatePrefixId" name="certificatePrefix" value="CalSoft" /> */}
                       </td>
                   </tr>

@@ -122,15 +122,16 @@ const ItemList = () => {
     useEffect(() => {
         empFetchData();
     }, []);
-
     const mailCheck = () => {
         const singlePlant = itemListSelectedRowIds.every((item, index, array) => item.itemPlant === array[0].itemPlant);
 
         if (singlePlant && itemListSelectedRowIds.length > 0) {
             setMailOpen(true)
+           
 
         } else {
             setStatusCheckMsg("Select one plant only for sending mails")
+           
         }
 
 
@@ -1045,7 +1046,9 @@ const ItemList = () => {
     const itemListMailData = {
         mailOpen,
         setMailOpen,
-        selectedRows: selectedItemList
+        selectedRows: selectedItemList,
+        setSnackBarOpen,
+        setErrorHandler,
     }
 
 
@@ -1608,7 +1611,7 @@ const ItemList = () => {
             </form>
                 : <Backdrop
 
-                    open={true}
+                    open={false}
 
                 >
                     <CircularProgress color="success" />

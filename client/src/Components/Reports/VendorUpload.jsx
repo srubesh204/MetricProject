@@ -120,22 +120,66 @@ const VendorUpload = () => {
     //   }
     const [filteredData, setFilteredData] = useState([])
 
+    // const handleFilterChange = (e) => {
+    //     const { name, value } = e.target;
+
+    //     if (name === "vendorType") {
+    //         if (value === "all") {
+    //             setFilteredData(vendorDataList)
+    //         } else {
+    //             const vendorType = vendorDataList.filter((item) => (item[value] === "1"))
+    //             setFilteredData(vendorType)
+    //         }
+    //         // if (name === "vendorPlant") {
+    //         //     const vendorPlant = vendorDataList.filter((item) => (item.vendorPlant.includes(value)))
+    //         //     setFilteredData(vendorPlant);
+    //         // }
+    //         if (name === "vendorPlant") {
+    //             const vendorPlant = vendorDataList.filter((item) => (item.vendorPlant && item.vendorPlant.includes(value)));
+
+
+    //             setFilteredData(vendorPlant);
+    //         }
+
+    //     }
+    // }
+
     const handleFilterChange = (e) => {
         const { name, value } = e.target;
-
-        if (name === "vendorType") {
-            if (value === "all") {
-                setFilteredData(vendorDataList)
-            } else {
-                const vendorType = vendorDataList.filter((item) => (item[value] === "1"))
+        if (value === "all") {
+            setFilteredData(vendorDataList)
+        } else {
+            if (value === "oem") {
+                const vendorType = vendorDataList.filter((item) => (item.oem === "1"))
+                setFilteredData(vendorType)
+            }
+            if (value === "customer") {
+                const vendorType = vendorDataList.filter((item) => (item.customer === "1"))
+                setFilteredData(vendorType)
+            }
+            if (value === "supplier") {
+                const vendorType = vendorDataList.filter((item) => (item.supplier === "1"))
+                setFilteredData(vendorType)
+            }
+            if (value === "subContractor") {
+                const vendorType = vendorDataList.filter((item) => (item.subContractor === "1"))
                 setFilteredData(vendorType)
             }
             if (name === "vendorPlant") {
                 const vendorPlant = vendorDataList.filter((item) => (item.vendorPlant.includes(value)))
                 setFilteredData(vendorPlant);
             }
+
         }
-    }
+
+
+    };
+
+
+
+
+
+
     return (
         <div style={{ fontSize: "smaller", padding: "3px", margin: "5px", my: "5px" }}>
             <Paper sx={{

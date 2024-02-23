@@ -317,6 +317,7 @@ export const Department = () => {
   const departmentValidateFunction = () => {
     let departtempErrors = { ...errors };
     departtempErrors.department = departmentData.department ? "" : "Department is Required";
+    departtempErrors.departmentPlant = departmentData.departmentPlant.length > 0 ? "" : "Department Plant is Required";
 
     setErrors({ ...departtempErrors });
 
@@ -362,6 +363,9 @@ export const Department = () => {
         setErrorHandler({ status: response.data.status, message: response.data.message, code: "success" })
         console.log("Department create Successfully");
       } else {
+        // setErrorHandler({ status: 0, message: "Fill the required fields", code: "error" })
+        console.log("Error")
+        setSnackBarOpen(true)
         setErrorHandler({ status: 0, message: "Fill the required fields", code: "error" })
       }
     } catch (err) {
@@ -1091,7 +1095,7 @@ export const Department = () => {
 
                   </div>
                   <div className='col-md-3'>
-                    <FormControl size='small' component="div" fullWidth >
+                    <FormControl size='small' component="div" fullWidth  {...(errors.departmentPlant !== "" && { error: true })} >
                       <InputLabel id="departmentPlantId">Select Plant</InputLabel>
                       <Select
                         labelId="departmentPlantId"
@@ -2043,6 +2047,11 @@ export const Designation = () => {
         console.log("designation Created Successfully")
         setDesignationData(initialDesignationData);
       }
+      else {
+        console.log("Error")
+        setSnackBarOpen(true)
+        setErrorHandler({ status: 0, message: "Fill the required fields", code: "error" })
+    }
 
     } catch (err) {
       setSnackBarOpen(true)

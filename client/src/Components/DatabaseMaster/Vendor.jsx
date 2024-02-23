@@ -292,7 +292,9 @@ const Vendor = () => {
                 console.log("Vendor Create successfully");
                 setErrorHandler({ status: response.data.status, message: response.data.message, code: "success" })
 
-            } else {
+            }else {
+                console.log("Error")
+                setSnackBarOpen(true)
                 setErrorHandler({ status: 0, message: "Fill the required fields", code: "error" })
             }
         } catch (err) {

@@ -178,7 +178,7 @@ const ItemAdd = () => {
             console.log(response.data)
             const isItemMaster = response.data.result.filter(item => item.isItemMaster === "1")
             setItemMasterListByName(isItemMaster);
-            
+
         } catch (err) {
             console.log(err);
         }
@@ -187,7 +187,7 @@ const ItemAdd = () => {
         getDistinctItemName();
     }, []);
 
-    
+
 
 
     //
@@ -217,7 +217,7 @@ const ItemAdd = () => {
             console.log(customerList)
             setVendorList(vendorList);
             setCustomerList(customerList);
-            
+
             setSuppOEM(suppOEM)
 
 
@@ -236,9 +236,9 @@ const ItemAdd = () => {
 
     //
 
-    
 
-    
+
+
 
 
     const [itemAddData, setItemAddData] = useState({
@@ -327,7 +327,7 @@ const ItemAdd = () => {
         width: 1,
     });
 
-    useEffect(()=> {
+    useEffect(() => {
         const itemPlantFilter = itemMasterListByName.filter(item => item.itemPlant === itemAddData.itemPlant)
         setSelectedPlantList(itemPlantFilter)
         const vendorPlantFilter = vendorList.filter(ven => ven.vendorPlant.includes(itemAddData.itemPlant))
@@ -630,7 +630,9 @@ const ItemAdd = () => {
                     navigate('/itemList');
                 }, 2000);
             } else {
+                console.log("error")
                 setErrorHandler({ status: 0, message: "Fill the required fields", code: "error" })
+                setSnackBarOpen(true)
             }
 
         } catch (err) {
@@ -1748,7 +1750,7 @@ const ItemAdd = () => {
                                         )) : <tr></tr>}
                                     </tbody>
                                 </table>
-                                
+
                                 <div className="d-flex justify-content-center">
                                     <div className='col'>
                                         <Button

@@ -350,11 +350,12 @@ const CalList = () => {
                 setFilteredCalData(selectedItem)
             }
             if (name === "itemPlant") {
-                const itemPlant = calListDataList.filter((item) => (item.itemPlant && item.itemPlant.includes(value)));
+                // const itemPlant = calListDataList.filter((item) => (item.itemPlant && item.itemPlant.includes(value)));
+                const itemPlant = calListDataList.filter((item) => item.calPlant === value)
                 setFilteredCalData(itemPlant);
             }
             if (name === "itemDepartment") {
-                const itemDepartment = calListDataList.filter((item) => (item.itemDepartment && item.itemDepartment.includes(value)));
+                const itemDepartment = calListDataList.filter((item) => (item.calDepartment && item.calDepartment.includes(value)));
                 setFilteredCalData(itemDepartment);
             }
            

@@ -27,15 +27,11 @@ const createTransporter = async () => {
         },
     });
 };
-
 const mailController = {
     mailSender: async (req, res) => {
         try {
             const mailDetails = await mailData();
             const { to, subject, mailBody, departmentCc, vendorCc, bcc , selectedItems, employee } = req.body;
-
-        
-       
             const compDetails = await compDetailsSchema.findById("companyData");
             console.log(compDetails)
             const plantDetails = await plantSchema.find({plantName: selectedItems[0].itemPlant})
