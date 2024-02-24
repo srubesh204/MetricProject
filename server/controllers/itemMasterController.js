@@ -15,8 +15,8 @@ const itemMasterController = {
   createItemMaster: async (req, res) => {
 
     try {
-      const { itemType, itemDescription, itemPrefix, itemFqInMonths, calAlertInDay, SOPNo, uncertainty, uncertaintyUnit, standardRef, itemMasterImage, workInsName, status, calibrationPoints } = req.body;
-      const itemMasterResult = new itemMasterModel({ itemType, itemDescription, itemPrefix, itemFqInMonths, calAlertInDay, SOPNo, uncertainty, uncertaintyUnit, standardRef, itemMasterImage, workInsName, status, calibrationPoints });
+      const { itemType, itemDescription, itemPrefix, itemFqInMonths, calAlertInDay, SOPNo, uncertainty, uncertaintyUnit, standardRef, itemMasterImage, workInsName, status, calibrationPoints,itemFrequencyType } = req.body;
+      const itemMasterResult = new itemMasterModel({ itemType, itemDescription, itemPrefix, itemFqInMonths, calAlertInDay, SOPNo, uncertainty, uncertaintyUnit, standardRef, itemMasterImage, workInsName, status, calibrationPoints,itemFrequencyType});
       const validationError = itemMasterResult.validateSync();
 
       if (validationError) {
@@ -59,7 +59,7 @@ const itemMasterController = {
       // }
 
       // Create an object with the fields you want to update
-      const { itemType, itemDescription, itemPrefix, itemFqInMonths, calAlertInDay, SOPNo, uncertainty, uncertaintyUnit, standardRef, itemMasterImage, workInsName, status, calibrationPoints } = req.body;
+      const { itemType, itemDescription, itemPrefix, itemFqInMonths, calAlertInDay, SOPNo, uncertainty, uncertaintyUnit, standardRef, itemMasterImage, workInsName, status, calibrationPoints,itemFrequencyType } = req.body;
 
       const updateImFields = {
         itemType,
@@ -74,7 +74,8 @@ const itemMasterController = {
         itemMasterImage,      
         workInsName,
         status,
-        calibrationPoints
+        calibrationPoints,
+        itemFrequencyType
 
 
         // Add more fields as needed

@@ -40,6 +40,7 @@ const itemAddSchema = new mongoose.Schema({
   itemArea: String,
   itemPlaceOfUsage: String,
   itemCalFreInMonths: String,
+  itemCalFrequencyType: String,
   itemCalAlertDays: String,
   itemCalibrationSource: String,
   itemCalibrationDoneAt: String,

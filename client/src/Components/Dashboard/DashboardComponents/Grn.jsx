@@ -1267,7 +1267,7 @@ const Grn = () => {
                                                             color="success"
                                                             label={grnData.grnItemCertificate}
                                                             onClick={() => {
-                                                                const fileUrl = `${process.env.REACT_APP_PORT}/grnCertificates/${grnData.grnItemCertificate}`;
+                                                                const fileUrl = `${process.env.REACT_APP_PORT}/itemCertificates/${grnData.grnItemCertificate}`;
                                                                 window.open(fileUrl, '_blank'); // Opens the file in a new tab/window
                                                             }}
                                                             onDelete={() => setGrnData((prev) => ({ ...prev, grnItemCertificate: "" }))}

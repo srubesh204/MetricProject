@@ -187,11 +187,10 @@ const Home = () => {
         `${process.env.REACT_APP_PORT}/itemCal/getAllItemCals`
 
       );
-      const calNos = response.data.result.map(cal => cal.calId).filter(Boolean).sort()
-      console.log(calNos)
-      setCalLastNo("Cal " + (dayjs().year() + "-" + (calNos.length > 0 ? (calNos[calNos.length - 1]) + 1 : 1)))
-
-
+      const calNextNumber = await axios.get(
+        `${process.env.REACT_APP_PORT}/itemCal/getNextCalNo`
+      );     
+      setCalLastNo(calNextNumber.data.result)
 
     } catch (err) {
       console.log(err);

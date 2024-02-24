@@ -22,6 +22,39 @@ const itemCalController = {
       res.status(500).send('Error on ItemCal');
     }
   },
+
+
+  getNextCalNo: async (req, res) => {
+    try {
+      const currentYear = new Date().getFullYear();
+      let counter = await CalNoCounter.findById('CalNoCounter');
+      const prefix = await formatNoModel.findById('formatNo');
+
+      if (!counter) {
+        // If the counter document doesn't exist, create it in memory
+        counter = { _id: 'CalNoCounter', seq: 1, year: currentYear };
+      } else if (counter.year !== currentYear) {
+        // If the year has changed, reset the counter and update the year in memory
+        counter.seq = 1;
+        counter.year = currentYear;
+      } else {
+        // Otherwise, increment the counter in memory
+        counter.seq++;
+      }
+
+      const nextCalNo = `${prefix && prefix.fCommonPrefix ? prefix.fCommonPrefix : ""}CAL${currentYear}-${String(counter.seq).padStart(2, '0')}`;
+
+      res.status(202).json({ result: nextCalNo, status: 1 });
+    } catch (err) {
+      console.error(err);
+      res.status(500).send('Error on Item Cal Get');
+    }
+
+  },
+
+
+
+
   createItemCal: async (req, res) => {
     try {
       const {
@@ -199,7 +232,7 @@ const itemCalController = {
 
 
 
-        if (calReportAvailable === "no") {
+        if (createdItem.calReportAvailable === "no") {
           const masterTable = calMasterUsed.map((item, index) => {
             let tableRow = `
                   <tr>
@@ -392,7 +425,7 @@ const itemCalController = {
         }
 
         let obSize = [];
-        if (calReportAvailable === "no") {
+        if (createdItem.calReportAvailable === "no") {
           if (calcalibrationData.length > 0) {
             if (calItemType === "variable") {
               obSize = calcalibrationData.map(item => {

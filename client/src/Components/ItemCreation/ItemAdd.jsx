@@ -263,6 +263,7 @@ const ItemAdd = () => {
         itemCurrentLocation: "",
         itemArea: "N/A",
         itemPlaceOfUsage: "",
+        itemCalFrequencyType: "",
         itemCalFreInMonths: "",
         itemCalAlertDays: "",
         itemCalibrationSource: "",
@@ -458,7 +459,7 @@ const ItemAdd = () => {
         const master = itemMasterDataList.filter(mas => mas.itemDescription === itemAddData.itemAddMasterName)
         console.log(master)
         if (master.length > 0) {
-            const { _id, itemType, itemDescription, itemPrefix, itemFqInMonths, calAlertInDay, wiNo, uncertainity, standardRef, itemImageName, status, itemMasterImage, workInsName, calibrationPoints } = master[0]
+            const { _id, itemType, itemDescription, itemFrequencyType, itemPrefix, itemFqInMonths, calAlertInDay, wiNo, uncertainity, standardRef, itemImageName, status, itemMasterImage, workInsName, calibrationPoints } = master[0]
             setItemAddData((prev) => ({
                 ...prev,
                 itemType: itemType,
@@ -466,7 +467,7 @@ const ItemAdd = () => {
                 itemImage: itemMasterImage,
                 itemCalFreInMonths: itemFqInMonths,
                 itemCalAlertDays: calAlertInDay,
-
+                itemCalFrequencyType: itemFrequencyType
             }))
             setCalibrationPointsData(calibrationPoints)
         }
@@ -783,15 +784,26 @@ const ItemAdd = () => {
 
     useEffect(() => {
         calculateResultDate(itemAddData.itemCalDate, itemAddData.itemCalFreInMonths);
-    }, [itemAddData.itemCalDate, itemAddData.itemCalFreInMonths]);
+    }, [itemAddData.itemCalDate, itemAddData.itemCalFreInMonths, itemAddData.itemCalFrequencyType]);
     const calculateResultDate = (itemCalDate, itemCalFreInMonths) => {
         const parsedDate = dayjs(itemCalDate);
-        if (parsedDate.isValid() && !isNaN(parseInt(itemCalFreInMonths))) {
-            const calculatedDate = parsedDate.add(parseInt(itemCalFreInMonths, 10), 'month').subtract(1, 'day');
-            setItemAddData((prev) => ({
-                ...prev,
-                itemDueDate: calculatedDate.format('YYYY-MM-DD'),
-            }));
+        if (itemAddData.itemCalFrequencyType === "months") {
+            if (parsedDate.isValid() && !isNaN(parseInt(itemCalFreInMonths))) {
+                const calculatedDate = parsedDate.add(parseInt(itemCalFreInMonths, 10), 'month').subtract(1, 'day');
+                setItemAddData((prev) => ({
+                    ...prev,
+                    itemDueDate: calculatedDate.format('YYYY-MM-DD'),
+                }));
+            }
+        }
+        if(itemAddData.itemCalFrequencyType === "days"){
+            if (parsedDate.isValid() && !isNaN(parseInt(itemCalFreInMonths))) {
+                const calculatedDate = parsedDate.add(parseInt(itemCalFreInMonths, 10), 'day').subtract(1, 'day');
+                setItemAddData((prev) => ({
+                    ...prev,
+                    itemDueDate: calculatedDate.format('YYYY-MM-DD'),
+                }));
+            }
         }
 
     };

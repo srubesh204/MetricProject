@@ -508,7 +508,7 @@ const GrnEdit = () => {
             const formData = new FormData();
             formData.append('file', selectedFile);
             try {
-                axios.post(`${process.env.REACT_APP_PORT}/upload/grnItemCertificateUp`, formData)
+                axios.post(`${process.env.REACT_APP_PORT}/upload/itemCertificates`, formData)
                     .then(response => {
                         // setCertMessage("Certificate Uploaded Successfully")
                         console.log("Certificate Uploaded Successfully")
@@ -1247,7 +1247,7 @@ const GrnEdit = () => {
                                                             color="success"
                                                             label={grnEditData.grnItemCertificate}
                                                             onClick={() => {
-                                                                const fileUrl = `${process.env.REACT_APP_PORT}/grnCertificates/${grnEditData.grnItemCertificate}`;
+                                                                const fileUrl = `${process.env.REACT_APP_PORT}/itemCertificates/${grnEditData.grnItemCertificate}`;
                                                                 window.open(fileUrl, '_blank'); // Opens the file in a new tab/window
                                                             }}
                                                             onDelete={() => setGrnEditData((prev) => ({ ...prev, grnItemCertificate: "" }))}
