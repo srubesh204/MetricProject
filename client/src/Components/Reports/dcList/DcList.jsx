@@ -162,7 +162,7 @@ const DcList = () => {
         dcDepartment: ""
 
     })
-    console.log(dcData)
+  
 
 
 
@@ -443,7 +443,7 @@ const DcList = () => {
 
 
     };
-    console.log(dcDataDcList)
+ 
 
     {/* const handleFilterChange = (e) => {
         const { name, value } = e.target;
@@ -528,7 +528,7 @@ const DcList = () => {
         },
         { field: 'dcItemRemarks', headerName: 'Remarks', headerAlign: "center", align: "center", width: 200 },
     ]
-    console.log(dcDataDcList)
+   
 
 
     const sampleData = {
@@ -544,7 +544,7 @@ const DcList = () => {
 
 
 
-    console.log(selectedRows)
+   
 
 
 

@@ -220,7 +220,8 @@ const itemMasterController = {
           G: 'uncertainty',
           H: 'uncertaintyUnit',
           I: 'standardRef',
-          J: 'status'
+          J: 'status',
+          K: 'itemMasterPlant'
         
         
           

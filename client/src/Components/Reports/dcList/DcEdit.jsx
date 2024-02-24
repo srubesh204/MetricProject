@@ -61,7 +61,7 @@ const DcEdit = () => {
         dcCreatedBy: ""
 
     })
-    console.log(dcEditData)
+
 
     const [selectedPlantItems, setSelectedPlantItems] = useState([])
 
@@ -95,7 +95,7 @@ const DcEdit = () => {
         }
     };
 
-    console.log(dcEditData)
+
 
 
 
@@ -408,7 +408,7 @@ const DcEdit = () => {
         })
     }, [dcEditData.dcPartyItems])
 
-    console.log(selectedPlantItems)
+  
 
     const nonSelectedItem = () => {
         if (dcEditData.dcPartyItems.length > 0) {
