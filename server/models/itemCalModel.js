@@ -41,8 +41,10 @@ const itemCal = new mongoose.Schema({
     default: 'yes',
     required: [true, "Report status required"]
   },
+  
   calItemCalDate: String,
   calItemDueDate: String,
+  calItemFrequencyType: String,
   calItemEntryDate: String,
   calCalibratedBy: String,
   calCalibratedById: String,

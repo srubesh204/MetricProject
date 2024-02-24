@@ -1,5 +1,6 @@
 const { default: puppeteer } = require("puppeteer");
 const { compDetailsSchema } = require("../models/compDetailsModel");
+const formatNoModel = require("../models/formatNoModel");
 const measurementUncertaintyModel = require("../models/measurementUncertaintyModel")
 const excelToJson = require('convert-excel-to-json');
 const path = require("path");
@@ -90,6 +91,9 @@ const measurementUncertaintyController = {
       });
 
       const getCompDetailsById = await compDetailsSchema.findById("companyData");
+
+      const formatNo = await formatNoModel.findById("formatNo");
+      const formatNumber = `${formatNo.fUncDate ? ("Format Number : " +formatNo.fUncDate.frNo   +"  "+  "Rev.No :  " + formatNo.fUncDate.amNo  +"  "+  "Rev.Date :  " +   formatNo.fUncDate.amDate) : ""}`
 
       const validationError = measurementUncertaintyResult.validateSync();
       if (validationError) {
@@ -193,6 +197,7 @@ const measurementUncertaintyController = {
         .replace(/{{uncUncertainity}}/g, uncUncertainity ? uncUncertainity : "-")
         .replace(/{{uncPreparedBy}}/g, uncPreparedBy ? uncPreparedBy : "-")
         .replace(/{{companyLogo}}/g, process.env.SERVER_PORT + '/logo/' + getCompDetailsById.companyLogo)
+        .replace(/{{formatNo}}/g, formatNumber ? formatNumber : "-")
 
 
 

@@ -167,7 +167,7 @@ const CalEditModel = () => {
                 calItemUncertainity: filter.length > 0 && filter[0] ? filter[0].uncertainty : "",
                 calItemSOPNo: filter.length > 0 && filter[0].SOPNo ? filter[0].SOPNo : "",
                 calStandardRef: filter.length > 0 && filter[0].standardRef ? filter[0].standardRef : "",
-                calItemUncertainityUnit : filter.length > 0 && filter[0].uncertaintyUnit ? filter[0].uncertaintyUnit : "",
+                calItemUncertainityUnit: filter.length > 0 && filter[0].uncertaintyUnit ? filter[0].uncertaintyUnit : "",
                 calOBType: selectedCalRow.calOBType,
                 calCertificateNo: selectedCalRow.calCertificateNo,
                 calItemCalDate: selectedCalRow.calItemCalDate,
@@ -794,7 +794,7 @@ const CalEditModel = () => {
                                         variant="outlined"
                                     />
                                 </div>
-                                {calibrationData.calItemType === "variable" &&  <div className="col-md-3">
+                                {calibrationData.calItemType === "variable" && <div className="col-md-3">
                                     <TextField
                                         InputProps={{
                                             readOnly: true,
@@ -928,14 +928,15 @@ const CalEditModel = () => {
                                 />
                             </div>
                             <div className="col-md-6">
+                                <DatePicker format="DD-MM-YYYY" slotProps={{ textField: { size: 'small', fullWidth: true } }} value={dayjs(calibrationData.calItemEntryDate)} label="Cal Entry Date" onChange={(newValue) => setCalibrationData((prev) => ({ ...prev, calItemEntryDate: newValue.format('YYYY-MM-DD') }))} />
+                            </div>
+                            <div className="col-md-6">
                                 <DatePicker format="DD-MM-YYYY" slotProps={{ textField: { size: 'small', fullWidth: true } }} value={dayjs(calibrationData.calItemCalDate)} label="Cal Date" onChange={(newValue) => setCalibrationData((prev) => ({ ...prev, calItemCalDate: newValue.format('YYYY-MM-DD') }))} />
                             </div>
                             <div className="col-md-6">
                                 <DatePicker format="DD-MM-YYYY" slotProps={{ textField: { size: 'small', fullWidth: true } }} value={dayjs(calibrationData.calItemDueDate)} label="Due Date" onChange={(newValue) => setCalibrationData((prev) => ({ ...prev, calItemDueDate: newValue.format('YYYY-MM-DD') }))} />
                             </div>
-                            <div className="col-md-6">
-                                <DatePicker format="DD-MM-YYYY" slotProps={{ textField: { size: 'small', fullWidth: true } }} value={dayjs(calibrationData.calItemEntryDate)} label="Cal Entry Date" onChange={(newValue) => setCalibrationData((prev) => ({ ...prev, calItemEntryDate: newValue.format('YYYY-MM-DD') }))} />
-                            </div>
+
                             <div className="col-md-6">
                                 <TextField
                                     id="calCalibratedById"

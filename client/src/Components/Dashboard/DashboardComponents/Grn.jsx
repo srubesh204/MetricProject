@@ -65,6 +65,7 @@ const Grn = () => {
         grnItemArea: "",
         grnItemPlaceOfUsage: "",
         grnItemCalFreInMonths: "",
+        grnItemCalFrequencyType: "",
         grnItemCalAlertDays: "",
         grnItemCalibrationSource: "",
         grnItemCalibrationDoneAt: "",
@@ -128,6 +129,7 @@ const Grn = () => {
         grnItemArea: "",
         grnItemPlaceOfUsage: "",
         grnItemCalFreInMonths: "",
+        grnItemCalFrequencyType: "",
         grnItemCalAlertDays: "",
         grnItemCalibrationSource: "",
         grnItemCalibrationDoneAt: "",
@@ -329,6 +331,7 @@ const Grn = () => {
                     grnItemArea: selectedRows[0].itemArea,
                     grnItemPlaceOfUsage: selectedRows[0].itemPlaceOfUsage,
                     grnItemCalFreInMonths: selectedRows[0].itemCalFreInMonths,
+                    grnItemCalFrequencyType: selectedRows[0].itemCalFrequencyType,
                     grnItemCalAlertDays: selectedRows[0].itemCalAlertDays,
                     grnItemCalibrationSource: selectedRows[0].itemCalibrationSource,
                     grnItemCalibrationDoneAt: selectedRows[0].itemCalibrationDoneAt,
@@ -381,6 +384,7 @@ const Grn = () => {
                     grnItemArea: selectedRows[0].itemArea,
                     grnItemPlaceOfUsage: selectedRows[0].itemPlaceOfUsage,
                     grnItemCalFreInMonths: selectedRows[0].itemCalFreInMonths,
+                    grnItemCalFrequencyType: selectedRows[0].itemCalFrequencyType,
                     grnItemCalAlertDays: selectedRows[0].itemCalAlertDays,
                     grnItemCalibrationSource: selectedRows[0].itemCalibrationSource,
                     grnItemCalibrationDoneAt: selectedRows[0].itemCalibrationDoneAt,
@@ -744,12 +748,10 @@ const Grn = () => {
 
     useEffect(() => {
         calculateResultDate(grnData.grnItemCalDate, grnData.grnItemCalFreInMonths);
-    }, [grnData.grnItemCalDate, grnData.grnItemCalFreInMonths]);
-
-
-
+    }, [grnData.grnItemCalDate, grnData.grnItemCalFreInMonths, grnData.grnItemCalFrequencyType]);
     const calculateResultDate = (itemCalDate, itemCalFreInMonths) => {
         const parsedDate = dayjs(itemCalDate);
+        if (grnData.grnItemCalFrequencyType === "months") {
         if (parsedDate.isValid() && !isNaN(parseInt(itemCalFreInMonths))) {
             const calculatedDate = parsedDate.add(parseInt(itemCalFreInMonths, 10), 'month').subtract(1, 'day');
             console.log(calculatedDate)
@@ -758,6 +760,20 @@ const Grn = () => {
                 grnItemDueDate: calculatedDate.format('YYYY-MM-DD'),
             }));
         }
+    }
+    if (grnData.grnItemCalFrequencyType === "days") {
+        if (parsedDate.isValid() && !isNaN(parseInt(itemCalFreInMonths))) {
+            const calculatedDate = parsedDate.add(parseInt(itemCalFreInMonths, 10), 'day').subtract(1, 'day');
+            console.log(calculatedDate)
+            setGrnData((prev) => ({
+                ...prev,
+                grnItemDueDate: calculatedDate.format('YYYY-MM-DD'),
+            }));
+        }
+    }
+    
+
+
     };
 
 
@@ -808,9 +824,12 @@ const Grn = () => {
                 setGrnData(initialGrnData)
                 setTimeout(() => { setGrnOpen(false); window.location.reload() }, 500)
             } else {
-                console.log(errors)
-                setErrorHandler({ status: 0, message: Object.values(errors).join(', '), code: "error" });
+                // console.log(errors)
+                // setErrorHandler({ status: 0, message: Object.values(errors).join(', '), code: "error" });
+                // setSnackBarOpen(true)
+                console.log("Error")
                 setSnackBarOpen(true)
+                setErrorHandler({ status: 0, message: "Fill the required fields", code: "error" })
             }
         } catch (err) {
             console.log(err)
@@ -1264,7 +1283,7 @@ const Grn = () => {
                                                             color="success"
                                                             label={grnData.grnItemCertificate}
                                                             onClick={() => {
-                                                                const fileUrl = `${process.env.REACT_APP_PORT}/grnCertificates/${grnData.grnItemCertificate}`;
+                                                                const fileUrl = `${process.env.REACT_APP_PORT}/itemCertificates/${grnData.grnItemCertificate}`;
                                                                 window.open(fileUrl, '_blank'); // Opens the file in a new tab/window
                                                             }}
                                                             onDelete={() => setGrnData((prev) => ({ ...prev, grnItemCertificate: "" }))}

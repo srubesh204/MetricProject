@@ -140,7 +140,7 @@ const HistoryCardPrint = () => {
                                 <td style={{ width: "40%", padding: "5px", margin: 0, borderRight: "0.5px solid black" }}>
                                     <tr style={{ fontWeight: "" }}>Instrument / Gauge Name :    &nbsp;&nbsp;&nbsp;{selectedRow?.itemAddMasterName || '-'}</tr>
                                     <tr style={{ fontWeight: "" }}>Range / Size :    &nbsp;&nbsp;&nbsp;{selectedRow?.itemRangeSize || '-'} {selectedRow?.itemRangeSizeUnit}, {selectedRow?.itemType === "variable" && (<span>LeastCount: &nbsp;{selectedRow?.itemLC || "-"} {selectedRow?.itemLCUnit}</span>)}</tr>
-                                    <tr style={{ fontWeight: "" }}>Frequency Months of Calibration :    &nbsp;&nbsp;&nbsp;{selectedRow?.itemCalFreInMonths}</tr>
+                                    <tr style={{ fontWeight: "" }}>Frequency Months of Calibration :    &nbsp;&nbsp;&nbsp; {selectedRow?.itemCalFreInMonths || '-'} {selectedRow?.itemCalFrequencyType}  </tr>
                                     {/* <tr style={{ fontWeight: "bold" }}>Department :    &nbsp;&nbsp;&nbsp;{selectedRow?.itemDepartment || '-'}</tr> */}
                                 </td>
                                 <td style={{ width: "30%", padding: "0px", textAlign: "center" }}>

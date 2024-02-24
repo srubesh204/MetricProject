@@ -145,7 +145,7 @@ const TotalList = () => {
       const customersData = ["All", ...new Set(partDatas.map(part => part.customer))]
       setPartCutomerNames(customersData)
       console.log(customersData)
- 
+
 
       // const partCustomers = partDataList.filter(part => itemList.some(item => item.itemPartName.includes(part._id)))
       // console.log(partCustomers)
@@ -226,7 +226,17 @@ const TotalList = () => {
     { field: 'itemMake', headerName: 'Make', width: 90, headerAlign: "center", align: "center", },
     { field: 'itemCalDate', headerName: 'Cal Date', width: 100, headerAlign: "center", align: "center", valueGetter: (params) => dayjs(params.row.itemCalDate).format('DD-MM-YYYY') },
     { field: 'itemDueDate', headerName: 'Due Date', width: 110, headerAlign: "center", align: "center", valueGetter: (params) => dayjs(params.row.itemDueDate).format('DD-MM-YYYY') },
-    { field: 'itemCalFreInMonths', headerName: 'Frequency', type: "number", width: 80, headerAlign: "center", align: "center" },
+     { field: 'itemCalFreInMonths', headerName: 'Frequency', type: "number", width: 80, headerAlign: "center", align: "center" },
+    // {
+    //   field: 'Frequency',
+    //   headerName: 'Frequency',
+    //   headerAlign: "center", align: "center",
+    //   description: 'This column has a value getter and is not sortable.',
+    //   sortable: false,
+    //   width: 130,
+    //   valueGetter: (params) =>
+    //     `${params.row.itemCalFreInMonths || ''} ${params.row.itemCalFrequencyType || ''}`,
+    // },
     { field: 'itemCalibrationSource', headerName: 'Cal Source', headerAlign: "center", align: "center", },
     { field: 'itemCalibratedAt', headerName: 'Calibrated At ', width: 110, headerAlign: "center", align: "center", },
     { field: 'itemCurrentLocation', headerName: 'Current location', width: 120, headerAlign: "center", align: "center", },
@@ -300,7 +310,7 @@ const TotalList = () => {
   const handleFilterChangeItemList = (e) => {
     const { name, value } = e.target;
     console.log(e)
-   
+
 
     if (name === "plantWise") {
       const plantWise = itemList.filter((item) => (item.itemPlant === value))
@@ -329,7 +339,7 @@ const TotalList = () => {
         }))
         const partCustomers = partDataList.filter(part => itemList.some(item => item.itemPartName.includes(part.partNo)))
         console.log(partCustomers)
-        const customerData = [...new Set(partCustomers.map(item=> item.customer))]
+        const customerData = [...new Set(partCustomers.map(item => item.customer))]
         console.log(customerData)
         setPartCutomerNames(partCustomers)
         setCustomerParts(customerData)
@@ -358,7 +368,7 @@ const TotalList = () => {
         setPlantDatas(plantWise)
         const partCustomers = partDataList.filter(part => plantWise.some(item => item.itemPartName.includes(part.partNo)))
         console.log(partCustomers)
-        const customerData = [...new Set(partCustomers.map(item=> item.customer))]
+        const customerData = [...new Set(partCustomers.map(item => item.customer))]
         console.log(customerData)
         setPartCutomerNames(partCustomers)
         setCustomerParts(customerData)
@@ -534,7 +544,7 @@ const TotalList = () => {
       if (value === " all") {
         setFilteredItemListData(plantDatas)
         setPartCutomerNames(customerData)
-        setFilterAllNames(prev => ({ 
+        setFilterAllNames(prev => ({
           ...prev,
           imteNo: "all",
           itemType: "all",
@@ -899,19 +909,19 @@ const TotalList = () => {
   // }, []);
   const [formatNoData, setFormatNoData] = useState([])
   const formatFetchData = async () => {
-      try {
-          const response = await axios.get(
-              `${process.env.REACT_APP_PORT}/formatNo/getFormatNoById/formatNo`
-          );
-          const format = response.data.result
-          console.log(format)
-          setFormatNoData(format)
-      } catch (err) {
-          console.log(err);
-      }
+    try {
+      const response = await axios.get(
+        `${process.env.REACT_APP_PORT}/formatNo/getFormatNoById/formatNo`
+      );
+      const format = response.data.result
+      console.log(format)
+      setFormatNoData(format)
+    } catch (err) {
+      console.log(err);
+    }
   };
   useEffect(() => {
-      formatFetchData();
+    formatFetchData();
   }, []);
 
 
@@ -921,7 +931,9 @@ const TotalList = () => {
   const TotalListChildData = {
     mailOpen,
     setMailOpen,
-    selectedRows: selectedItemList
+    selectedRows: selectedItemList,
+    setSnackBarOpen,
+    setErrorHandler
 
   }
 
@@ -1337,8 +1349,13 @@ const TotalList = () => {
                     </div> */}
 
               </div>
-              <Snackbar anchorOrigin={{ vertical: "top", horizontal: "right" }} open={snackBarOpen} autoHideDuration={6000} onClose={handleSnackClose}>
+              {/* <Snackbar anchorOrigin={{ vertical: "top", horizontal: "right" }} open={snackBarOpen} autoHideDuration={6000} onClose={handleSnackClose}>
                 <Alert onClose={handleSnackClose} severity={errorhandler.code} sx={{ width: '25%' }}>
+                  {errorhandler.message}
+                </Alert>
+              </Snackbar> */}
+              <Snackbar anchorOrigin={{ vertical: "top", horizontal: "right" }} open={snackBarOpen} autoHideDuration={6000} onClose={handleSnackClose}>
+                <Alert onClose={handleSnackClose} severity={errorhandler.code} variant='filled'>
                   {errorhandler.message}
                 </Alert>
               </Snackbar>

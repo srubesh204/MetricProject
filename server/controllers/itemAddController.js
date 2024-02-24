@@ -2,7 +2,7 @@ const itemAddModel = require("../models/itemAddModel")
 const dayjs = require('dayjs')
 const excelToJson = require('convert-excel-to-json');
 const itemHistory = require("../models/itemHistory");
-const itemCalModel = require("../models/itemCalModel")
+const {itemCalModel, CalNoCounter} = require("../models/itemCalModel")
 const { itemDcModel } = require("../models/itemDcModel");
 const {itemGRNModel} = require("../models/itemGRNModel");
 
@@ -67,6 +67,8 @@ const itemAddController = {
         itemArea,
         itemPlaceOfUsage,
         itemCalFreInMonths,
+        itemCalFrequencyType,
+        itemMasterPlant,
         itemCalAlertDays,
         itemCalibrationSource,
         itemCalibrationDoneAt,
@@ -145,10 +147,12 @@ const itemAddController = {
         itemArea,
         itemPlaceOfUsage,
         itemCalFreInMonths,
+        itemCalFrequencyType,
         itemCalAlertDays,
         itemCalibrationSource,
         itemCalibrationDoneAt,
         itemItemMasterName,
+        itemMasterPlant,
         itemItemMasterIMTENo,
         itemSupplier,
         itemOEM,
@@ -324,12 +328,13 @@ const itemAddController = {
         itemStatus,
         itemReceiptDate,
         itemDepartment,
+        itemMasterPlant,
         itemPlant,
-
         itemLastLocation,
         itemArea,
         itemPlaceOfUsage,
         itemCalFreInMonths,
+        itemCalFrequencyType,
         itemCalAlertDays,
         itemCalibrationSource,
         itemCalibrationDoneAt,
@@ -397,11 +402,12 @@ const itemAddController = {
         itemReceiptDate,
         itemDepartment,
         itemPlant,
-
+        itemMasterPlant,
         itemLastLocation,
         itemArea,
         itemPlaceOfUsage,
         itemCalFreInMonths,
+        itemCalFrequencyType,
         itemCalAlertDays,
         itemCalibrationSource,
         itemCalibrationDoneAt,

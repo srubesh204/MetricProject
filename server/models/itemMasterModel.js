@@ -20,6 +20,8 @@ const itemMasterSchema = new mongoose.Schema({
   itemMasterImage : String,
   workInsName : String,
   status : String,
+  itemFrequencyType: String,
+  itemMasterPlant: String,
   calibrationPoints : []
 
   

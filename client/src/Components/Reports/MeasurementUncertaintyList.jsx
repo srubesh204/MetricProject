@@ -159,8 +159,6 @@ export const MeasurementUncertaintyList = () => {
 
 
         setDateData((prev) => ({ ...prev, [name]: value }));
-
-
     }
 
 

@@ -7,6 +7,7 @@ router.post("/createItemCal", itemCalController.createItemCal)
 router.put("/updateItemCal/:id", itemCalController.updateItemCal)
 router.delete("/deleteItemCal", itemCalController.deleteItemCal)
 router.get("/getAllDistinctCalNames", itemCalController.getAllDistinctCalNames)
+router.get("/getNextCalNo", itemCalController.getNextCalNo)
 
  
 module.exports = router;

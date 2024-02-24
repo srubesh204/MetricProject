@@ -185,6 +185,8 @@ export const UnitDataBase = ({ style }) => {
                 unitFetchData();
                 setUnitData(initialUnitData);
             } else {
+                console.log("Error")
+                setUnitSnackBar(true)
                 setErrorHandler({ status: 0, message: "Fill the required fields", code: "error" })
             }
         } catch (err) {
@@ -780,16 +782,23 @@ export const PartDataBase = ({ style }) => {
     const partSubmit = async (e) => {
         e.preventDefault();
         try {
-            if (validateFunction()) { }
-            const response = await axios.post(
-                `${process.env.REACT_APP_PORT}/part/createPart`, partData
-            );
-            {/*console.log(response.data.message)*/ }
-            console.log(response)
-            setPartSnackBar(true)
-            setErrorHandler({ status: response.data.status, message: response.data.message, code: "success" })
-            partFetchData();
-            setPartData(initialPartData);
+            if (validateFunction()) {
+                const response = await axios.post(
+                    `${process.env.REACT_APP_PORT}/part/createPart`, partData
+                );
+                {/*console.log(response.data.message)*/ }
+                console.log(response)
+                setPartSnackBar(true)
+                setErrorHandler({ status: response.data.status, message: response.data.message, code: "success" })
+                partFetchData();
+                setPartData(initialPartData);
+            } else {
+                console.log("Error")
+                setPartSnackBar(true)
+                setErrorHandler({ status: 0, message: "Fill the required fields", code: "error" })
+            }
+
+
         } catch (err) {
             setPartSnackBar(true)
 
@@ -1079,7 +1088,7 @@ export const PartDataBase = ({ style }) => {
                                                 {...(errors.operationNo !== "" && { helperText: errors.operationNo, error: true })}
                                                 id="operationNoId"
                                                 placeholder="operationNo"
-                                                InputLabelProps={{shrink: true}}
+                                                InputLabelProps={{ shrink: true }}
                                                 size="small"
                                                 onChange={handlePartDataBaseChange}
                                                 value={partData.operationNo}

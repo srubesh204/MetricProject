@@ -9,7 +9,7 @@ import FileDownloadIcon from '@mui/icons-material/FileDownload';
 import UploadFileIcon from '@mui/icons-material/UploadFile';
 import Alert from '@mui/material/Alert';
 import Snackbar from '@mui/material/Snackbar';
-import { TextField, MenuItem, FormControl, Fab,Typography, Badge, LinearProgress } from '@mui/material';
+import { TextField, MenuItem, FormControl, Fab, Typography, Badge, LinearProgress, Radio, RadioGroup, FormControlLabel } from '@mui/material';
 import { Box, Grid, ButtonGroup, Paper, Container, Chip } from '@mui/material';
 import { Add, Remove, HighlightOffRounded } from '@mui/icons-material';
 import { Done } from '@mui/icons-material';
@@ -22,7 +22,7 @@ import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 
 import { ArrowBack, Error, HomeMax, House, Mail, MailLock, } from '@mui/icons-material';
 import { Link as RouterLink } from 'react-router-dom';
-
+import { useEmployee } from '../../App';
 import DialogTitle from '@mui/material/DialogTitle';
 import { DataGrid, GridToolbar } from '@mui/x-data-grid';
 import Autocomplete from '@mui/material/Autocomplete';
@@ -33,6 +33,9 @@ import Autocomplete from '@mui/material/Autocomplete';
 
 const ItemMaster = () => {
     const fileInputRef = useRef(null);
+
+    const empRole = useEmployee()
+    const { loggedEmp, allowedPlants, employeeRole } = empRole
 
     const [snackBarOpen, setSnackBarOpen] = useState(false)
     const handleSnackClose = (event, reason) => {
@@ -68,7 +71,7 @@ const ItemMaster = () => {
 
     })
 
-   
+
     const handleFilterChange = (e) => {
         const { name, value } = e.target;
         if (value === "all") {
@@ -121,6 +124,8 @@ const ItemMaster = () => {
         itemMasterImage: "",
         workInsName: "",
         status: "Active",
+        itemFrequencyType: "months",
+        itemMasterPlant: "",
         calibrationPoints: [],
 
 
@@ -140,6 +145,8 @@ const ItemMaster = () => {
 
         workInsName: "",
         status: "Active",
+        itemFrequencyType: "months",
+        itemMasterPlant: "",
         calibrationPoints: [],
 
     })
@@ -260,13 +267,13 @@ const ItemMaster = () => {
         let tempErrors = {};
         tempErrors.itemType = itemMasterData.itemType ? "" : "Item Type is Required"
         tempErrors.itemDescription = itemMasterData.itemType ? "" : "Item Description is Required"
-        
-        
+
+
         tempErrors.itemFqInMonths = itemMasterData.itemFqInMonths ? "" : "Items Fq In Months is Required"
-        
-        
+
+
         tempErrors.calAlertInDay = itemMasterData.calAlertInDay ? "" : "Cal Alert In Days is Required"
-        
+
 
 
 
@@ -298,6 +305,7 @@ const ItemMaster = () => {
             } else {
                 console.log("error")
                 setErrorHandler({ status: 0, message: "Fill the required fields", code: "error" })
+                setSnackBarOpen(true)
             }
         } catch (err) {
             setSnackBarOpen(true)
@@ -445,6 +453,8 @@ const ItemMaster = () => {
             itemMasterImage: params.row.itemMasterImage ? params.row.itemMasterImage : "",
             workInsName: params.row.workInsName ? params.row.workInsName : "",
             status: params.row.status ? params.row.status : "",
+            itemFrequencyType: params.row.itemFrequencyType ? params.row.itemFrequencyType : "",
+            itemMasterPlant: params.row.itemMasterPlant ? params.row.itemMasterPlant : "",
             calibrationPoints: params.row.calibrationPoints ? params.row.calibrationPoints : [],
 
         }))
@@ -664,6 +674,39 @@ const ItemMaster = () => {
                             elevation={12}
                         >
                             <div className='row mb-2 g-2'>
+                                <div className='col'>
+                                    <TextField label="Plant"
+                                        id="itemMasterPlantId"
+                                        select
+                                        defaultValue="all"
+                                        value={itemMasterData.itemMasterPlant}
+                                        fullWidth
+
+                                        onChange={handleItemMasterBaseChange}
+                                        size="small"
+                                        name="itemMasterPlant" >
+                                        <MenuItem value="all">All</MenuItem>
+                                        {loggedEmp.plantDetails.map((item, index) => (
+                                            <MenuItem key={index} value={item.plantName}>{item.plantName}</MenuItem>
+                                        ))}
+                                    </TextField>
+
+
+
+                                    {/* <TextField label="Plant Wise"
+                                        id="itemMasterPlantId"
+                                        select
+                                        fullWidth
+                                        value={itemMasterData.itemMasterPlant}
+                                        onChange={handleItemMasterBaseChange}
+                                        size="small"
+                                        name="itemMasterPlant" >
+                                        <MenuItem value="all">All</MenuItem>
+                                        {loggedEmp.plantDetails.map((item, index) => (
+                                            <MenuItem key={index} value={item.plantName}>{item.plantName}</MenuItem>
+                                        ))}
+                                    </TextField> */}
+                                </div>
 
                                 <div className='col' >
                                     <TextField fullWidth label="Item Type"  {...(errors.itemType !== "" && { helperText: errors.itemType, error: true })} value={itemMasterData.itemType} onChange={handleItemMasterBaseChange} className="form-select" select size="small" id="itemTypeId" name="itemType" defaultValue="" >
@@ -705,7 +748,7 @@ const ItemMaster = () => {
                                 </div>
 
                                 <div className="form-floating col">
-                                    <TextField label="Imte Prefix "   
+                                    <TextField label="Imte Prefix "
                                         id="itemPrefix"
                                         defaultValue=""
                                         sx={{ width: "100%" }}
@@ -737,7 +780,7 @@ const ItemMaster = () => {
                                     <div className='row mb-2 g-2'>
                                         <div className="form-floating col-md-6">
 
-                                            <TextField label="SOP No "  
+                                            <TextField label="SOP No "
                                                 id="SOPNoId"
                                                 defaultValue=""
                                                 sx={{ width: "100%" }}
@@ -747,29 +790,29 @@ const ItemMaster = () => {
                                                 onChange={handleItemMasterBaseChange}
                                                 name="SOPNo" />
                                         </div>
-                                        <div className="col">
-                                            <TextField label="Item Fq In Months "   {...(errors.itemFqInMonths !== "" && { helperText: errors.itemFqInMonths, error: true })}
-                                                id="itemFqInMonthsId"
+                                        <div className="form-floating col">
+                                            <TextField label="StandardRef "
+                                                id="standardRefId"
                                                 defaultValue=""
                                                 sx={{ width: "100%" }}
                                                 size="small"
                                                 fullWidth
-                                                type='number'
-                                                value={itemMasterData.itemFqInMonths}
+                                                value={itemMasterData.standardRef}
                                                 onChange={handleItemMasterBaseChange}
-                                                name="itemFqInMonths" />
+                                                name="standardRef" />
+
                                         </div>
+
 
                                     </div>
                                     <div className='row mb-2 g-2'>
                                         <div className="input-group col row g-2 m-0 d-flex">
 
                                             <div className='col'>
-                                                <TextField  
+                                                <TextField
                                                     label="Uncertainty "
                                                     id="uncertaintyId"
                                                     defaultValue=""
-
                                                     size="small"
                                                     fullWidth
                                                     type='number'
@@ -800,35 +843,7 @@ const ItemMaster = () => {
 
 
                                         </div>
-                                        <div className="form-floating col">
 
-                                            <TextField label="Cal Alert In Day "   
-                                                id="calAlertInDayId"
-                                                defaultValue=""
-                                                sx={{ width: "100%" }}
-                                                size="small"
-                                                fullWidth
-                                                type='number'
-                                                value={itemMasterData.calAlertInDay}
-                                                onChange={handleItemMasterBaseChange}
-                                                name="calAlertInDay" />
-
-                                        </div>
-                                    </div>
-                                    <div className='row g-2 mb-2 '>
-
-                                        <div className="form-floating col">
-                                            <TextField label="StandardRef "  
-                                                id="standardRefId"
-                                                defaultValue=""
-                                                sx={{ width: "100%" }}
-                                                size="small"
-                                                fullWidth
-                                                value={itemMasterData.standardRef}
-                                                onChange={handleItemMasterBaseChange}
-                                                name="standardRef" />
-
-                                        </div>
                                         <div className=" col">
 
                                             <TextField fullWidth label="Status" {...(errors.status !== "" && { helperText: errors.status, error: true })} value={itemMasterData.status} onChange={handleItemMasterBaseChange} className="form-select" select size="small" id="statusId" name="status" defaultValue="" >
@@ -840,6 +855,50 @@ const ItemMaster = () => {
 
                                             </TextField>
                                         </div>
+                                    </div>
+                                    <div className='row g-2 mb-2 '>
+                                        <div className="col">
+                                            <TextField label="Cal Frequency "   {...(errors.itemFqInMonths !== "" && { helperText: errors.itemFqInMonths, error: true })}
+                                                id="itemFqInMonthsId"
+                                                defaultValue=""
+                                                sx={{ width: "100%" }}
+                                                size="small"
+                                                fullWidth
+                                                type='number'
+                                                value={itemMasterData.itemFqInMonths}
+                                                onChange={handleItemMasterBaseChange}
+                                                name="itemFqInMonths" />
+                                        </div>
+                                        <div className='col-md-5'>
+                                            <RadioGroup
+                                                className="d-flex justify-content-center"
+                                                row
+                                                name='itemFrequencyType'
+                                                onChange={handleItemMasterBaseChange}
+
+                                                checked={itemMasterData.itemFrequencyType}
+                                            >
+                                                <FormControlLabel value="days" checked={itemMasterData.itemFrequencyType === "days"} control={<Radio />} label="Days" />
+                                                <FormControlLabel value="months" checked={itemMasterData.itemFrequencyType === "months"} control={<Radio />} label="Months" />
+                                            </RadioGroup>
+                                        </div>
+                                        <div className="form-floating col">
+
+                                            <TextField label="Cal Alert In Day "
+                                                id="calAlertInDayId"
+                                                defaultValue=""
+                                                sx={{ width: "100%" }}
+                                                size="small"
+                                                fullWidth
+                                                type='number'
+                                                value={itemMasterData.calAlertInDay}
+                                                onChange={handleItemMasterBaseChange}
+                                                name="calAlertInDay" />
+
+                                        </div>
+
+
+
 
                                     </div>
                                     <div className="">
@@ -899,7 +958,7 @@ const ItemMaster = () => {
                                         {/* Your other content or styling for the square box */}
                                     </label>
                                 </div>}
-                                
+
                                 {itemMasterData.itemMasterImage && <div style={{ margin: 0 }}>
                                     <div className='d-flex justify-content-center' style={{ width: "100%", height: "100%" }}>
                                         <Badge type="button" badgeContent={"X"} onClick={() => setItemMasterData((prev) => ({ ...prev, itemMasterImage: "" }))} style={{ width: "100%", height: "100%" }} color="error"><img src={`${process.env.REACT_APP_PORT}/itemMasterImages/${itemMasterData.itemMasterImage}`} alt={`${itemMasterData.itemMasterImage} Image`} style={{ width: "100%", height: "100%", margin: "auto", display: "block", background: "inherit", backgroundSize: "cover" }}></img></Badge>
