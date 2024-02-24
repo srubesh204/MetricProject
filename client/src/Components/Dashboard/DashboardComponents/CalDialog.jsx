@@ -98,6 +98,7 @@ const CalDialog = () => {
         calCertificateNo: calibrationDatas.length + 1,
         calItemCalDate: dayjs().format('YYYY-MM-DD'),
         calItemDueDate: "",
+        calItemFrequencyType: "",
         calItemEntryDate: dayjs().format('YYYY-MM-DD'),
         calCalibratedBy: loggedEmp.firstName + " " + loggedEmp.lastName,
         calApprovedBy: "",
@@ -145,6 +146,7 @@ const CalDialog = () => {
         calCertificateNo: "",
         calItemCalDate: dayjs().format('YYYY-MM-DD'),
         calItemDueDate: "",
+        calItemFrequencyType: "",
         calItemEntryDate: dayjs().format('YYYY-MM-DD'),
         calCalibratedBy: loggedEmp.firstName || "" + " " + loggedEmp.lastName || "",
         calApprovedBy: "",
@@ -263,10 +265,12 @@ const CalDialog = () => {
                     calLCUnit: selectedRows[0].itemLCUnit,
                     calItemMake: selectedRows[0].itemMake,
                     calItemFreInMonths: selectedRows[0].itemCalFreInMonths,
+
                     calItemUncertainity: filter.length > 0 && filter[0] ? filter[0].uncertainty : "",
                     calItemSOPNo: filter.length > 0 && filter[0].SOPNo ? filter[0].SOPNo : "",
                     calStandardRef: filter.length > 0 && filter[0].standardRef ? filter[0].standardRef : "",
                     calItemUncertainityUnit: filter.length > 0 && filter[0].uncertaintyUnit ? filter[0].uncertaintyUnit : "",
+                    calItemFrequencyType: filter.length > 0 && filter[0].itemFrequencyType ? filter[0].itemFrequencyType : "",
                     calOBType: selectedRows[0].itemOBType,
                     calcalibrationData:
 
@@ -639,19 +643,28 @@ const CalDialog = () => {
 
     useEffect(() => {
         calculateResultDate(calibrationData.calItemCalDate, calibrationData.calItemFreInMonths);
-    }, [calibrationData.calItemCalDate, calibrationData.calItemFreInMonths]);
-
-
-
+    }, [calibrationData.calItemCalDate, calibrationData.calItemFreInMonths, calibrationData.calItemFrequencyType]);
     const calculateResultDate = (itemCalDate, itemCalFreInMonths) => {
         const parsedDate = dayjs(itemCalDate);
-        if (parsedDate.isValid() && !isNaN(parseInt(itemCalFreInMonths))) {
-            const calculatedDate = parsedDate.add(parseInt(itemCalFreInMonths, 10), 'month').subtract(1, 'day');
-            setCalibrationData((prev) => ({
-                ...prev,
-                calItemDueDate: calculatedDate.format('YYYY-MM-DD'),
-            }));
+        if (calibrationData.calItemFrequencyType === "months") {
+            if (parsedDate.isValid() && !isNaN(parseInt(itemCalFreInMonths))) {
+                const calculatedDate = parsedDate.add(parseInt(itemCalFreInMonths, 10), 'month').subtract(1, 'day');
+                setCalibrationData((prev) => ({
+                    ...prev,
+                    calItemDueDate: calculatedDate.format('YYYY-MM-DD'),
+                }));
+            }
         }
+        if (calibrationData.calItemFrequencyType === "days") {
+            if (parsedDate.isValid() && !isNaN(parseInt(itemCalFreInMonths))) {
+                const calculatedDate = parsedDate.add(parseInt(itemCalFreInMonths, 10), 'day').subtract(1, 'day');
+                setCalibrationData((prev) => ({
+                    ...prev,
+                    calItemDueDate: calculatedDate.format('YYYY-MM-DD'),
+                }));
+            }
+        }
+
     };
 
     const [selectedEmp, setSelectedEmp] = useState([])

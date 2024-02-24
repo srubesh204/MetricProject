@@ -80,6 +80,7 @@ const itemCalController = {
 
         calItemCalDate,
         calItemDueDate,
+        calItemFrequencyType,
         calItemEntryDate,
         calCalibratedBy,
         calCalibratedById,
@@ -118,6 +119,7 @@ const itemCalController = {
         calItemCalDate,
         calItemDueDate,
         calItemEntryDate,
+        calItemFrequencyType,
         calCalibratedBy,
         calCalibratedById,
         calApprovedBy,
@@ -550,6 +552,7 @@ const itemCalController = {
 
         calItemCalDate,
         calItemDueDate,
+        calItemFrequencyType,
         calItemEntryDate,
         calCalibratedBy,
         calCalibratedById,
@@ -587,6 +590,7 @@ const itemCalController = {
 
         calItemCalDate,
         calItemDueDate,
+        calItemFrequencyType,
         calItemEntryDate,
         calCalibratedBy,
         calCalibratedById,

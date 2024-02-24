@@ -67,9 +67,11 @@ const TotalPrint = () => {
                 <td style={{ width: '5%', border: '0.5px solid black', fontSize: '10px', textAlign: 'center' }}> {row.itemMake || '-'}</td>
                 <td style={{ width: '6%', border: '0.5px solid black', fontSize: '10px', textAlign: 'center' }}>{dayjs(row.itemCalDate).format('DD-MM-YYYY')} </td>
                 <td style={{ width: '6%', border: '0.5px solid black', fontSize: '10px', textAlign: 'center' }}>{dayjs(row.itemDueDate).format('DD-MM-YYYY')} </td>
-                <td style={{ width: '5%', border: '0.5px solid black', fontSize: '10px', textAlign: 'center' }}> {row.itemCalFreInMonths || '-'}</td>
+                <td style={{ width: '7%', border: '0.5px solid black', fontSize: '10px', textAlign: 'center' }}>{row.itemCalFreInMonths !== '' ? row.itemCalFreInMonths + ' ' + row.itemCalFrequencyType : '-'}   </td>
                 <td style={{ width: '10%', border: '0.5px solid black', fontSize: '10px', textAlign: 'center' }}>{row.itemDepartment || '-'}</td>
-                <td style={{ width: '20%', border: '0.5px solid black', fontSize: '10px', textAlign: 'center' }}> {row.itemCalibrationSource === 'outsource' ? (row.itemCalibratedAt ? row.itemCalibratedAt : 'outsource') : row.itemCalibrationSource || '-'}</td>
+                <td style={{ width: '18%', border: '0.5px solid black', fontSize: '10px', textAlign: 'center' }}> {row.itemCalibrationSource === 'outsource' ? (row.itemCalibratedAt ? row.itemCalibratedAt : 'outsource') : row.itemCalibrationSource || '-'}</td>
+                <td style={{ width: '10%', border: '0.5px solid black', fontSize: '10px', textAlign: 'center' }}>{row.itemPartName || '-'}</td>
+
             </tr>
         ));
     };
@@ -88,7 +90,7 @@ const TotalPrint = () => {
             {filteredItemListData.length > 0 && (
                 <div style={{ display: 'none', width: "100%" }}>
                     <div ref={componentRef}>
-                        <div style={{ padding: "10px", textAlign: "center", textDecoration: "underline" }}> Master List of /Instrument Gauge List</div>
+                        <div style={{ padding: "10px", textAlign: "center", textDecoration: "underline" }}> Master List of Gauges / Instruments List</div>
                         {/* <div style={{ border: '0.5px solid black' }}> */}
                         <div style={{ textAlign: 'center', borderBottom: '0.5px solid black', display: 'flex', flexDirection: 'column' }}>
                             <td style={{ padding: "0px", textAlign: "right" }}><img src={`${process.env.REACT_APP_PORT}/logo/${companyList[0].companyLogo}`} width="90px" height="90px" /></td>
@@ -111,6 +113,7 @@ const TotalPrint = () => {
                                     <th style={{ width: '5%', border: '0.5px solid black', fontSize: '10px', textAlign: 'center' }}>Frequency</th>
                                     <th style={{ width: '8%', border: '0.5px solid black', fontSize: '10px', textAlign: 'center' }}>Current location</th>
                                     <th style={{ width: '18%', border: '0.5px solid black', fontSize: '10px', textAlign: 'center' }}>Callbration Source</th>
+                                    <th style={{ width: '18%', border: '0.5px solid black', fontSize: '10px', textAlign: 'center' }}>Part No</th>
                                 </tr>
                             </thead>
                             <tbody>{renderTableRows()}</tbody>

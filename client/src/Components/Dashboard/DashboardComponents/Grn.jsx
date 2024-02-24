@@ -65,6 +65,7 @@ const Grn = () => {
         grnItemArea: "",
         grnItemPlaceOfUsage: "",
         grnItemCalFreInMonths: "",
+        grnItemCalFrequencyType: "",
         grnItemCalAlertDays: "",
         grnItemCalibrationSource: "",
         grnItemCalibrationDoneAt: "",
@@ -128,6 +129,7 @@ const Grn = () => {
         grnItemArea: "",
         grnItemPlaceOfUsage: "",
         grnItemCalFreInMonths: "",
+        grnItemCalFrequencyType: "",
         grnItemCalAlertDays: "",
         grnItemCalibrationSource: "",
         grnItemCalibrationDoneAt: "",
@@ -745,9 +747,6 @@ const Grn = () => {
     useEffect(() => {
         calculateResultDate(grnData.grnItemCalDate, grnData.grnItemCalFreInMonths);
     }, [grnData.grnItemCalDate, grnData.grnItemCalFreInMonths]);
-
-
-
     const calculateResultDate = (itemCalDate, itemCalFreInMonths) => {
         const parsedDate = dayjs(itemCalDate);
         if (parsedDate.isValid() && !isNaN(parseInt(itemCalFreInMonths))) {

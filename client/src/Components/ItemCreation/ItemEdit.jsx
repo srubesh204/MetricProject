@@ -282,6 +282,7 @@ const ItemEdit = () => {
         itemArea: "N/A",
         itemPlaceOfUsage: "",
         itemCalFreInMonths: "",
+        itemCalFrequencyType: "",
         itemCalAlertDays: "",
         itemCalibrationSource: "",
         itemCalibrationDoneAt: "",
@@ -355,6 +356,7 @@ const ItemEdit = () => {
         itemArea: "N/A",
         itemPlaceOfUsage: "",
         itemCalFreInMonths: "",
+        itemCalFrequencyType: "",
         itemCalAlertDays: "",
         itemCalibrationSource: "",
         itemCalibrationDoneAt: "",
@@ -439,6 +441,7 @@ const ItemEdit = () => {
                 itemArea: itemData.itemArea,
                 itemPlaceOfUsage: itemData.itemPlaceOfUsage,
                 itemCalFreInMonths: itemData.itemCalFreInMonths,
+                itemCalFrequencyType: itemData.itemCalFrequencyType,
                 itemCalAlertDays: itemData.itemCalAlertDays,
                 itemCalibrationSource: itemData.itemCalibrationSource,
                 itemCalibrationDoneAt: itemData.itemCalibrationDoneAt,
@@ -634,13 +637,14 @@ const ItemEdit = () => {
         const master = itemMasterDataList.filter(mas => mas.itemDescription === itemAddData.itemAddMasterName)
         console.log(master)
         if (master.length > 0) {
-            const { _id, itemType, itemDescription, itemPrefix, itemFqInMonths, calAlertInDay, wiNo, uncertainity, standardRef, itemImageName, status, itemMasterImage, workInsName, calibrationPoints } = master[0]
+            const { _id, itemType, itemDescription, itemPrefix, itemFrequencyType, itemFqInMonths, calAlertInDay, wiNo, uncertainity, standardRef, itemImageName, status, itemMasterImage, workInsName, calibrationPoints } = master[0]
             setItemAddData((prev) => ({
                 ...prev,
                 itemType: itemType,
                 //itemIMTENo: itemPrefix,
                 itemImage: itemMasterImage,
                 itemCalFreInMonths: itemFqInMonths,
+                itemCalFrequencyType: itemFrequencyType,
                 itemCalAlertDays: calAlertInDay,
 
             }))
@@ -877,9 +881,13 @@ const ItemEdit = () => {
         setItemAddData((prev) => ({ ...prev, itemCertificateName: "" }));
         setUploadMessage(null)
     }
+    useEffect(() => {
+        calculateResultDate(itemAddData.itemCalDate, itemAddData.itemCalFreInMonths);
+    }, [itemAddData.itemCalDate, itemAddData.itemCalFreInMonths, itemAddData.itemCalFrequencyType]);
     const calculateResultDate = (newValue) => {
         const itemCalDate = dayjs(newValue).format('YYYY-MM-DD')
         const parsedDate = dayjs(itemCalDate);
+        if (itemAddData.itemCalFrequencyType === "months"){
         if (parsedDate.isValid() && !isNaN(parseInt(itemAddData.itemCalFreInMonths))) {
             const calculatedDate = parsedDate.add(parseInt(itemAddData.itemCalFreInMonths, 10), 'month').subtract(1, 'day');
             setItemAddData((prev) => ({
@@ -888,6 +896,16 @@ const ItemEdit = () => {
                 itemDueDate: calculatedDate.format('YYYY-MM-DD'),
             }));
         }
+    }
+    if(itemAddData.itemCalFrequencyType === "days"){
+        const calculatedDate = parsedDate.add(parseInt(itemAddData.itemCalFreInMonths, 10), 'day').subtract(1, 'day');
+        setItemAddData((prev) => ({
+            ...prev,
+            itemCalData: itemCalDate,
+            itemDueDate: calculatedDate.format('YYYY-MM-DD'),
+        }));
+    }
+    
     };
     const [department, setDepartment] = useState([])
     const DepFetch = async () => {
