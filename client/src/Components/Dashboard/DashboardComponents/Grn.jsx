@@ -331,6 +331,7 @@ const Grn = () => {
                     grnItemArea: selectedRows[0].itemArea,
                     grnItemPlaceOfUsage: selectedRows[0].itemPlaceOfUsage,
                     grnItemCalFreInMonths: selectedRows[0].itemCalFreInMonths,
+                    grnItemCalFrequencyType: selectedRows[0].itemCalFrequencyType,
                     grnItemCalAlertDays: selectedRows[0].itemCalAlertDays,
                     grnItemCalibrationSource: selectedRows[0].itemCalibrationSource,
                     grnItemCalibrationDoneAt: selectedRows[0].itemCalibrationDoneAt,
@@ -383,6 +384,7 @@ const Grn = () => {
                     grnItemArea: selectedRows[0].itemArea,
                     grnItemPlaceOfUsage: selectedRows[0].itemPlaceOfUsage,
                     grnItemCalFreInMonths: selectedRows[0].itemCalFreInMonths,
+                    grnItemCalFrequencyType: selectedRows[0].itemCalFrequencyType,
                     grnItemCalAlertDays: selectedRows[0].itemCalAlertDays,
                     grnItemCalibrationSource: selectedRows[0].itemCalibrationSource,
                     grnItemCalibrationDoneAt: selectedRows[0].itemCalibrationDoneAt,
@@ -746,9 +748,10 @@ const Grn = () => {
 
     useEffect(() => {
         calculateResultDate(grnData.grnItemCalDate, grnData.grnItemCalFreInMonths);
-    }, [grnData.grnItemCalDate, grnData.grnItemCalFreInMonths]);
+    }, [grnData.grnItemCalDate, grnData.grnItemCalFreInMonths, grnData.grnItemCalFrequencyType]);
     const calculateResultDate = (itemCalDate, itemCalFreInMonths) => {
         const parsedDate = dayjs(itemCalDate);
+        if (grnData.grnItemCalFrequencyType === "months") {
         if (parsedDate.isValid() && !isNaN(parseInt(itemCalFreInMonths))) {
             const calculatedDate = parsedDate.add(parseInt(itemCalFreInMonths, 10), 'month').subtract(1, 'day');
             console.log(calculatedDate)
@@ -757,6 +760,20 @@ const Grn = () => {
                 grnItemDueDate: calculatedDate.format('YYYY-MM-DD'),
             }));
         }
+    }
+    if (grnData.grnItemCalFrequencyType === "days") {
+        if (parsedDate.isValid() && !isNaN(parseInt(itemCalFreInMonths))) {
+            const calculatedDate = parsedDate.add(parseInt(itemCalFreInMonths, 10), 'day').subtract(1, 'day');
+            console.log(calculatedDate)
+            setGrnData((prev) => ({
+                ...prev,
+                grnItemDueDate: calculatedDate.format('YYYY-MM-DD'),
+            }));
+        }
+    }
+    
+
+
     };
 
 

@@ -127,11 +127,11 @@ const ItemList = () => {
 
         if (singlePlant && itemListSelectedRowIds.length > 0) {
             setMailOpen(true)
-           
+
 
         } else {
             setStatusCheckMsg("Select one plant only for sending mails")
-           
+
         }
 
 
@@ -1470,9 +1470,9 @@ const ItemList = () => {
 
                                     {/* <Route path="/insHisCard" component={InsHistoryCard} />  */}
 
-                        
-                                        <Button component={Link} to="/"  size='small'>Home</Button>
-                                    
+
+                                    <Button component={Link} to="/" size='small'>Home</Button>
+
                                     <Button component={Link} to="/insHisCard" className='me-2' size='small' >
                                         History  Card
                                     </Button>

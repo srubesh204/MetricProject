@@ -119,23 +119,7 @@ const ItemEdit = () => {
 
 
 
-    const [itemMasterDataList, setItemMasterDataList] = useState([])
-    const itemMasterFetchData = async () => {
-        try {
-            const response = await axios.get(
-                `${process.env.REACT_APP_PORT}/itemMaster/getAllItemMasters`
-            );
-            console.log(response.data)
 
-            setItemMasterDataList(response.data.result);
-
-        } catch (err) {
-            console.log(err);
-        }
-    };
-    useEffect(() => {
-        itemMasterFetchData();
-    }, []);
 
     const [certMessage, setCertMessage] = useState(null)
 
@@ -483,7 +467,30 @@ const ItemEdit = () => {
         }
     };
     console.log(itemAddData)
+
+
+
     //
+
+    const [itemMasterDataList, setItemMasterDataList] = useState([])
+    const itemMasterFetchData = async () => {
+        try {
+            const response = await axios.post(
+                `${process.env.REACT_APP_PORT}/itemMaster/getMasterByPlant`, { allowedPlants: [itemAddData.itemPlant] }
+            );
+            console.log(response.data)
+
+            setItemMasterDataList(response.data.result);
+
+        } catch (err) {
+            console.log(err);
+        }
+    };
+    useEffect(() => {
+        itemMasterFetchData();
+    }, [itemAddData.itemPlant]);
+
+
 
     const handleKeyDown = (e) => {
         const { name, value } = e.target;
@@ -514,7 +521,7 @@ const ItemEdit = () => {
     }, [])
 
 
-    useEffect(()=> {
+    useEffect(() => {
         const itemPlantFilter = isItemMasterList.filter(item => item.itemPlant === itemAddData.itemPlant)
         setSelectedPlantList(itemPlantFilter)
         const vendorPlantFilter = vendorList.filter(ven => ven.vendorPlant.includes(itemAddData.itemPlant))
@@ -678,7 +685,7 @@ const ItemEdit = () => {
         getPartList();
     }, []);
 
-    useEffect(()=> {
+    useEffect(() => {
         const filteredPart = partData.filter(part => part.partPlant === itemAddData.itemPlant)
         setPlantWisePart(filteredPart)
     }, [itemAddData.itemPlant])
@@ -887,25 +894,25 @@ const ItemEdit = () => {
     const calculateResultDate = (newValue) => {
         const itemCalDate = dayjs(newValue).format('YYYY-MM-DD')
         const parsedDate = dayjs(itemCalDate);
-        if (itemAddData.itemCalFrequencyType === "months"){
-        if (parsedDate.isValid() && !isNaN(parseInt(itemAddData.itemCalFreInMonths))) {
-            const calculatedDate = parsedDate.add(parseInt(itemAddData.itemCalFreInMonths, 10), 'month').subtract(1, 'day');
+        if (itemAddData.itemCalFrequencyType === "months") {
+            if (parsedDate.isValid() && !isNaN(parseInt(itemAddData.itemCalFreInMonths))) {
+                const calculatedDate = parsedDate.add(parseInt(itemAddData.itemCalFreInMonths, 10), 'month').subtract(1, 'day');
+                setItemAddData((prev) => ({
+                    ...prev,
+                    itemCalData: itemCalDate,
+                    itemDueDate: calculatedDate.format('YYYY-MM-DD'),
+                }));
+            }
+        }
+        if (itemAddData.itemCalFrequencyType === "days") {
+            const calculatedDate = parsedDate.add(parseInt(itemAddData.itemCalFreInMonths, 10), 'day').subtract(1, 'day');
             setItemAddData((prev) => ({
                 ...prev,
                 itemCalData: itemCalDate,
                 itemDueDate: calculatedDate.format('YYYY-MM-DD'),
             }));
         }
-    }
-    if(itemAddData.itemCalFrequencyType === "days"){
-        const calculatedDate = parsedDate.add(parseInt(itemAddData.itemCalFreInMonths, 10), 'day').subtract(1, 'day');
-        setItemAddData((prev) => ({
-            ...prev,
-            itemCalData: itemCalDate,
-            itemDueDate: calculatedDate.format('YYYY-MM-DD'),
-        }));
-    }
-    
+
     };
     const [department, setDepartment] = useState([])
     const DepFetch = async () => {
@@ -943,6 +950,16 @@ const ItemEdit = () => {
                     <Paper className='row' elevation={12} sx={{ p: 1.5, mb: 2, mx: 0 }}>
                         <div className="col-lg-5 row g-2">
 
+                            <div className="col">
+                                <TextField
+
+                                    value={itemAddData.itemPlant} onChange={handleItemAddChange} size='small' select fullWidth variant='outlined' label="Select Plant" name='itemPlant' id='itemPlantId'>
+                                    <MenuItem value="">Select Plant</MenuItem>
+                                    {loggedEmp.plantDetails.map((plant, index) => (
+                                        <MenuItem key={index} value={plant.plantName}>{plant.plantName}</MenuItem>
+                                    ))}
+                                </TextField>
+                            </div>
                             <div className='col-9'>
                                 <TextField
                                     {...(errors.itemAddMasterName !== "" && { helperText: errors.itemAddMasterName, error: true })}
@@ -1076,24 +1093,15 @@ const ItemEdit = () => {
                                     Select Location
                                 </Typography>
                                 <div className="row g-2 mt-0 mb-2">
-                                    <div className="col-md-4">
-                                        <TextField
 
-                                            value={itemAddData.itemPlant} onChange={handleItemAddChange} size='small' select fullWidth variant='outlined' label="Select Plant" name='itemPlant' id='itemPlantId'>
-                                            <MenuItem value="">Select Plant</MenuItem>
-                                            {loggedEmp.plantDetails.map((plant, index) => (
-                                                <MenuItem key={index} value={plant.plantName}>{plant.plantName}</MenuItem>
-                                            ))}
-                                        </TextField>
-                                    </div>
-                                    <div className="col-md-4">
+                                    <div className="col-md-6">
                                         <TextField value={itemAddData.itemDepartment} onChange={handleItemAddChange} size='small' select fullWidth variant='outlined' label="Primary Location" name='itemDepartment' id='itemDepartmentId'>
                                             {plantDepartments && plantDepartments.map((item, index) => (
                                                 <MenuItem key={index} value={item}>{item}</MenuItem>
                                             ))}
                                         </TextField>
                                     </div>
-                                    <div className="col-md-4">
+                                    <div className="col-md-6">
                                         <TextField value={itemAddData.itemPlaceOfUsage} onChange={handleItemAddChange} size='small' select fullWidth variant='outlined' label="Secondary Location" name='itemPlaceOfUsage' id='itemPlaceOfUsageId'>
                                             {department.map((item, index) => (
                                                 <MenuItem key={index} value={item.department}>{item.department}</MenuItem>
@@ -1126,13 +1134,28 @@ const ItemEdit = () => {
                         <Paper className='col-lg ' elevation={12} sx={{ p: 2 }}>
                             <Typography variant='h6' className='text-center'>Calibration</Typography>
                             <div className="row g-2 mb-2">
-                                <div className='col-lg-6'>
-                                    <TextField value={itemAddData.itemCalFreInMonths} onChange={handleItemAddChange} size='small' fullWidth variant='outlined' label="Cal Frequency in months" id='itemCalFreInMonthsId' name='itemCalFreInMonths' type='number'>
+                                <div className='col-lg-3'>
+                                    <TextField value={itemAddData.itemCalFreInMonths} onChange={handleItemAddChange} size='small' fullWidth variant='outlined' label="Cal Frequency" id='itemCalFreInMonthsId' name='itemCalFreInMonths' type='number'>
 
                                     </TextField>
                                 </div>
                                 <div className='col-lg-6'>
-                                    <TextField size='small' value={itemAddData.itemCalAlertDays} onChange={handleItemAddChange} fullWidth variant='outlined' label="Cal Alert Days" id='itemCalAlertDaysId' name='itemCalAlertDays' type='number'>
+                                    <RadioGroup
+                                        className="d-flex justify-content-center"
+                                        row
+                                        name='itemCalFrequencyType'
+                                        onChange={handleItemAddChange}
+
+                                        checked={itemAddData.itemCalFrequencyType}
+                                    >
+                                        <FormControlLabel value="days" checked={itemAddData.itemCalFrequencyType === "days"} control={<Radio />} label="Days" />
+                                        <FormControlLabel value="months" checked={itemAddData.itemCalFrequencyType === "months"} control={<Radio />} label="Months" />
+                                    </RadioGroup>
+                                </div>
+
+
+                                <div className='col-lg-3'>
+                                    <TextField size='small' value={itemAddData.itemCalAlertDays} onChange={handleItemAddChange} fullWidth variant='outlined' label="Alert Days" id='itemCalAlertDaysId' name='itemCalAlertDays' type='number'>
 
                                     </TextField>
                                 </div>
@@ -1969,11 +1992,11 @@ const ItemEdit = () => {
                                 </Button>
                             </div>
                             <div className="d-flex justify-content-end">
-                                <Button  onClick={() => { setOpen(true) }} className='me-3' type="button"  >
-                                     Update
+                                <Button onClick={() => { setOpen(true) }} className='me-3' type="button"  >
+                                    Update
                                 </Button>
-                                <Button  component={RouterLink} to={`/itemList/`}  onClick={() => setItemAddData(initialItemAddData)} type="reset">
-                                     Back To List
+                                <Button component={RouterLink} to={`/itemList/`} onClick={() => setItemAddData(initialItemAddData)} type="reset">
+                                    Back To List
                                 </Button>
                             </div>
                         </div>

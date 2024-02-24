@@ -129,34 +129,7 @@ const ItemAdd = () => {
     console.log({ Department: departments, Area: areas, placeOfUsage: placeOfUsages })
 
     //item master list
-    const [itemMasterDataList, setItemMasterDataList] = useState([]);
-    const [distinctNamesArray, setDistinctNamesArray] = useState([]);
 
-    const itemMasterFetchData = async () => {
-        try {
-            const response = await axios.get(
-                `${process.env.REACT_APP_PORT}/itemMaster/getAllItemMasters`
-            );
-
-            console.log(response.data)
-            const masterItems = response.data.result.filter((item) => item.isItemMaster === "1")
-            setItemMasterDataList(response.data.result);
-            const distinctNamesSet = new Set(response.data.result.map(item => item.itemDescription));
-
-            // Convert the Set back to an array
-            const distinctNamesArray = [...distinctNamesSet];
-
-            // Sort the array
-            distinctNamesArray.sort();
-            console.log(distinctNamesArray)
-            setDistinctNamesArray(distinctNamesArray)
-        } catch (err) {
-            console.log(err);
-        }
-    };
-    useEffect(() => {
-        itemMasterFetchData();
-    }, []);
 
 
 
@@ -327,6 +300,36 @@ const ItemAdd = () => {
         whiteSpace: 'nowrap',
         width: 1,
     });
+
+
+    const [itemMasterDataList, setItemMasterDataList] = useState([]);
+    const [distinctNamesArray, setDistinctNamesArray] = useState([]);
+
+    const itemMasterFetchData = async () => {
+        try {
+            const response = await axios.post(
+                `${process.env.REACT_APP_PORT}/itemMaster/getMasterByPlant`, { allowedPlants: [itemAddData.itemPlant] }
+            );
+
+            console.log(response.data.result)
+            const masterItems = response.data.result.filter((item) => item.isItemMaster === "1")
+            setItemMasterDataList(response.data.result);
+            const distinctNamesSet = new Set(response.data.result.map(item => item.itemDescription));
+
+            // Convert the Set back to an array
+            const distinctNamesArray = [...distinctNamesSet];
+
+            // Sort the array
+            distinctNamesArray.sort();
+            console.log(distinctNamesArray)
+            setDistinctNamesArray(distinctNamesArray)
+        } catch (err) {
+            console.log(err);
+        }
+    };
+    useEffect(() => {
+        itemMasterFetchData();
+    }, [itemAddData.itemPlant]);
 
     useEffect(() => {
         const itemPlantFilter = itemMasterListByName.filter(item => item.itemPlant === itemAddData.itemPlant)
@@ -796,7 +799,7 @@ const ItemAdd = () => {
                 }));
             }
         }
-        if(itemAddData.itemCalFrequencyType === "days"){
+        if (itemAddData.itemCalFrequencyType === "days") {
             if (parsedDate.isValid() && !isNaN(parseInt(itemCalFreInMonths))) {
                 const calculatedDate = parsedDate.add(parseInt(itemCalFreInMonths, 10), 'day').subtract(1, 'day');
                 setItemAddData((prev) => ({
@@ -815,6 +818,28 @@ const ItemAdd = () => {
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                     <Paper className='row' elevation={12} sx={{ p: 1.5, mb: 2, mx: 0 }}>
                         <div className="col-lg-5 row g-2">
+                            <div className="col">
+                                <TextField
+                                    {...(errors.itemDepartment !== "" && { helperText: errors.itemDepartment, error: true })}
+                                    value={employeeRole.loggedEmp.plantDetails.length === 1 ? employeeRole.loggedEmp.plantDetails[0].plantName : itemAddData.itemPlant}
+                                    onChange={handleItemAddChange}
+                                    size='small'
+                                    select
+                                    fullWidth
+                                    variant='outlined'
+                                    label="Select Plant"
+                                    name='itemPlant'
+                                    id='itemPlantId'
+                                    disabled={employeeRole.loggedEmp.plantDetails.length === 1}  // Disable TextField if there's only one option
+                                >
+                                    <MenuItem value="">Select</MenuItem>
+                                    {employeeRole.loggedEmp.plantDetails.map((plant, index) => (
+                                        <MenuItem key={index} value={plant.plantName}>
+                                            {plant.plantName}
+                                        </MenuItem>
+                                    ))}
+                                </TextField>
+                            </div>
                             <div className='col-9'>
                                 <TextField
                                     {...(errors.itemAddMasterName !== "" && { helperText: errors.itemAddMasterName, error: true })}
@@ -865,7 +890,7 @@ const ItemAdd = () => {
 
                     </Paper>
 
-                    {itemAddData.itemAddMasterName !== "" && <React.Fragment>
+                    {(itemAddData.itemAddMasterName !== "" && itemAddData.itemPlant !== "") && <React.Fragment>
                         <div className="row ">
                             <div className="col">
                                 <Paper className='mb-2 row-md-6' elevation={12} sx={{ p: 2 }}>
@@ -963,28 +988,7 @@ const ItemAdd = () => {
                                         Select Location
                                     </Typography>
                                     <div className="row g-2 mb-2">
-                                        <div className="col-md-4">
-                                            <TextField
-                                                {...(errors.itemDepartment !== "" && { helperText: errors.itemDepartment, error: true })}
-                                                value={employeeRole.loggedEmp.plantDetails.length === 1 ? employeeRole.loggedEmp.plantDetails[0].plantName : itemAddData.itemPlant}
-                                                onChange={handleItemAddChange}
-                                                size='small'
-                                                select
-                                                fullWidth
-                                                variant='outlined'
-                                                label="Select Plant"
-                                                name='itemPlant'
-                                                id='itemPlantId'
-                                                disabled={employeeRole.loggedEmp.plantDetails.length === 1}  // Disable TextField if there's only one option
-                                            >
-                                                {employeeRole.loggedEmp.plantDetails.map((plant, index) => (
-                                                    <MenuItem key={index} value={plant.plantName}>
-                                                        {plant.plantName}
-                                                    </MenuItem>
-                                                ))}
-                                            </TextField>
-                                        </div>
-                                        <div className="col-md-4">
+                                        <div className="col-md-6">
 
                                             <TextField
                                                 {...(errors.itemDepartment !== "" && { helperText: errors.itemDepartment, error: true })}
@@ -994,7 +998,7 @@ const ItemAdd = () => {
                                                 ))}
                                             </TextField>
                                         </div>
-                                        <div className="col-md-4">
+                                        <div className="col-md-6">
                                             <TextField value={itemAddData.itemPlaceOfUsage} onChange={handleItemAddChange} size='small' select fullWidth variant='outlined' label="secondary Location" name='itemPlaceOfUsage' id='itemPlaceOfUsageId'>
                                                 {department.map((item, index) => (
                                                     <MenuItem key={index} value={item.department}>{item.department}</MenuItem>
@@ -1008,7 +1012,7 @@ const ItemAdd = () => {
                             <Paper className='col-lg ' elevation={12} sx={{ p: 2 }}>
                                 <Typography variant='h6' className='text-center'>Calibration</Typography>
                                 <div className="row g-2 mb-2">
-                                    <div className='col-lg-6'>
+                                    <div className='col-lg-3'>
                                         <TextField
                                             {...(errors.itemCalFreInMonths !== "" && { helperText: errors.itemCalFreInMonths, error: true })}
                                             value={itemAddData.itemCalFreInMonths} onChange={handleItemAddChange} size='small' fullWidth variant='outlined' label="Cal Frequency in months" id='itemCalFreInMonthsId' name='itemCalFreInMonths' type='number'>
@@ -1016,9 +1020,22 @@ const ItemAdd = () => {
                                         </TextField>
                                     </div>
                                     <div className='col-lg-6'>
+                                        <RadioGroup
+                                            className="d-flex justify-content-center"
+                                            row
+                                            name='itemCalFrequencyType'
+                                            onChange={handleItemAddChange}
+
+                                            checked={itemAddData.itemCalFrequencyType}
+                                        >
+                                            <FormControlLabel value="days" checked={itemAddData.itemCalFrequencyType === "days"} control={<Radio />} label="Days" />
+                                            <FormControlLabel value="months" checked={itemAddData.itemCalFrequencyType === "months"} control={<Radio />} label="Months" />
+                                        </RadioGroup>
+                                    </div>
+                                    <div className='col-lg-3'>
                                         <TextField
                                             {...(errors.itemCalAlertDays !== "" && { helperText: errors.itemCalAlertDays, error: true })}
-                                            size='small' value={itemAddData.itemCalAlertDays} onChange={handleItemAddChange} fullWidth variant='outlined' label="Cal Alert Days" id='itemCalAlertDaysId' name='itemCalAlertDays' type='number'>
+                                            size='small' value={itemAddData.itemCalAlertDays} onChange={handleItemAddChange} fullWidth variant='outlined' label="Alert in Days" id='itemCalAlertDaysId' name='itemCalAlertDays' type='number'>
 
                                         </TextField>
                                     </div>

@@ -12,11 +12,34 @@ const itemMasterController = {
       res.status(500).send('Error on Item Master');
     }
   },
+
+
+  getMasterByPlant: async (req, res) => {
+    const { allowedPlants } = req.body
+    try {
+      const itemPlantResult = await itemMasterModel.aggregate([
+        {
+          $match: {
+            "itemMasterPlant": { $in: allowedPlants ? allowedPlants : [] } // Specify the values to match
+          }
+        }, { $sort: { itemDescription: 1, } }
+      ])
+
+      res.status(202).json({ result: itemPlantResult, status: 1 });
+      //res.status(200).json(employees);
+
+    } catch (err) {
+      console.error(err);
+      res.status(500).send('Error on ItemMasterByPlant');
+    }
+  },
+
+
   createItemMaster: async (req, res) => {
 
     try {
-      const { itemType, itemDescription, itemPrefix, itemFqInMonths, calAlertInDay, SOPNo, uncertainty, uncertaintyUnit, standardRef, itemMasterImage, workInsName, status, calibrationPoints,itemFrequencyType } = req.body;
-      const itemMasterResult = new itemMasterModel({ itemType, itemDescription, itemPrefix, itemFqInMonths, calAlertInDay, SOPNo, uncertainty, uncertaintyUnit, standardRef, itemMasterImage, workInsName, status, calibrationPoints,itemFrequencyType});
+      const { itemType, itemDescription, itemPrefix, itemFqInMonths, calAlertInDay, SOPNo, uncertainty, uncertaintyUnit, standardRef, itemMasterImage, workInsName, status, calibrationPoints,itemFrequencyType ,itemMasterPlant } = req.body;
+      const itemMasterResult = new itemMasterModel({ itemType, itemDescription, itemPrefix, itemFqInMonths, calAlertInDay, SOPNo, uncertainty, uncertaintyUnit, standardRef, itemMasterImage, workInsName, status, calibrationPoints,itemFrequencyType,itemMasterPlant});
       const validationError = itemMasterResult.validateSync();
 
       if (validationError) {
@@ -59,7 +82,7 @@ const itemMasterController = {
       // }
 
       // Create an object with the fields you want to update
-      const { itemType, itemDescription, itemPrefix, itemFqInMonths, calAlertInDay, SOPNo, uncertainty, uncertaintyUnit, standardRef, itemMasterImage, workInsName, status, calibrationPoints,itemFrequencyType } = req.body;
+      const { itemType, itemDescription, itemPrefix, itemFqInMonths, calAlertInDay, SOPNo, uncertainty, uncertaintyUnit, standardRef, itemMasterImage, workInsName, status, calibrationPoints,itemFrequencyType,itemMasterPlant} = req.body;
 
       const updateImFields = {
         itemType,
@@ -75,7 +98,8 @@ const itemMasterController = {
         workInsName,
         status,
         calibrationPoints,
-        itemFrequencyType
+        itemFrequencyType,
+        itemMasterPlant
 
 
         // Add more fields as needed

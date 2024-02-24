@@ -21,6 +21,7 @@ const itemMasterSchema = new mongoose.Schema({
   workInsName : String,
   status : String,
   itemFrequencyType: String,
+  itemMasterPlant: String,
   calibrationPoints : []
 
   
