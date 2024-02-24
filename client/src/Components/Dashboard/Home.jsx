@@ -1298,13 +1298,8 @@ const Home = () => {
           console.log(...vendorDetails)
           setDcPartyDetails(...vendorDetails)
         }
-
       }
-
     }
-
-
-    // dcPartyId
   }, [selectedRows])
 
 
@@ -1334,153 +1329,167 @@ const Home = () => {
   const [StatusCheckMsg, setStatusCheckMsg] = useState("")
 
 
-
+  console.log()
 
   const dcCheck = () => {
-
-
-    const defaultDepartmentCheck = selectedRows.every(item =>
-      defaultDep.some(dep => item.itemCurrentLocation === dep.department)
-    );
-    const activeItemsCheck = selectedRows.every(item => item.itemStatus !== "missing" || item.itemStatus !== "spare")
-
-    const singlePlant = selectedRows.every((item, index, array) => item.itemPlant === array[0].itemPlant);
-
-    console.log(defaultDepartmentCheck);
-    if (defaultDepartmentCheck && singlePlant && selectedRows.length > 0 && activeItemsCheck) {
-      setStatusCheckMsg("");
-      setDcOpen(true);
+    if (plantDeps.itemPlant && plantDeps.itemPlant !== "All" && plantDeps.itemPlant !== "") {
+      const defaultDepartmentCheck = selectedRows.every(item =>
+        defaultDep.some(dep => item.itemCurrentLocation === dep.department)
+      );
+      const activeItemsCheck = selectedRows.every(item => item.itemStatus !== "missing" || item.itemStatus !== "spare")
+      const singlePlant = selectedRows.every((item, index, array) => item.itemPlant === array[0].itemPlant);
+      console.log(defaultDepartmentCheck);
+      if (defaultDepartmentCheck && singlePlant && selectedRows.length > 0 && activeItemsCheck) {
+        setStatusCheckMsg("");
+        setDcOpen(true);
+      } else {
+        if (!singlePlant) {
+          setStatusCheckMsg("Multiple plants not allowed")
+        }
+        if (!defaultDepartmentCheck) {
+          setStatusCheckMsg("Selected item are not in primary location, To create a DC move the item to the primary location");
+        }
+        if (!activeItemsCheck) {
+          setStatusCheckMsg("Check item status")
+        }
+        if (!selectedRows.length > 0) {
+          setStatusCheckMsg("Please select any one item")
+        }
+        setDcOpen(false);
+      }
     } else {
-      if (!singlePlant) {
-        setStatusCheckMsg("Multiple plants not allowed")
-      }
-
-      if (!defaultDepartmentCheck) {
-        setStatusCheckMsg("Selected item are not in primary location, To create a DC move the item to the primary location");
-      }
-
-      if (!activeItemsCheck) {
-        setStatusCheckMsg("Check item status")
-      }
-
-      if (!selectedRows.length > 0) {
-        setStatusCheckMsg("Please select any one item")
-      }
-
-      setDcOpen(false);
+      setStatusCheckMsg("Select plant first")
     }
   };
 
 
   const grnCheck = () => {
-    setIsOnSiteGRN("no")
-    const grnBoolean = selectedRows.every(item => item.dcStatus === "1")
-    const itemStatus = selectedRows.every(item => item.itemStatus !== "missing" && item.itemStatus !== "spare")
 
-    console.log(grnCheck && selectedRows.length === 1)
-    if (grnBoolean && itemStatus && selectedRows.length === 1) {
-      setStatusCheckMsg("");
-      setGrnOpen(true);
-    } else {
-      if (selectedRows.length > 1) {
-        setStatusCheckMsg("Multiple selection not allowed")
-      } else if (selectedRows.length === 0) {
-        setStatusCheckMsg("Please select any one item")
+    if (plantDeps.itemPlant && plantDeps.itemPlant !== "All" && plantDeps.itemPlant !== "") {
+      setIsOnSiteGRN("no")
+      const grnBoolean = selectedRows.every(item => item.dcStatus === "1")
+      const itemStatus = selectedRows.every(item => item.itemStatus !== "missing" && item.itemStatus !== "spare")
+
+      console.log(grnCheck && selectedRows.length === 1)
+      if (grnBoolean && itemStatus && selectedRows.length === 1) {
+        setStatusCheckMsg("");
+        setGrnOpen(true);
       } else {
-        setStatusCheckMsg("Please ensure the item is created in the DC before proceeding")
+        if (selectedRows.length > 1) {
+          setStatusCheckMsg("Multiple selection not allowed")
+        } else if (selectedRows.length === 0) {
+          setStatusCheckMsg("Please select any one item")
+        } else {
+          setStatusCheckMsg("Please ensure the item is created in the DC before proceeding")
+        }
       }
-
-
-
+    } else {
+      setStatusCheckMsg("Select plant first")
     }
   }
 
   const [isOnSiteGRN, setIsOnSiteGRN] = useState("no")
   const onSiteCheck = () => {
-    setIsOnSiteGRN("yes")
-    const onSiteCheck = selectedRows.every(item => (item.itemCalibrationSource === "outsource" || item.itemCalibrationSource === "OEM"))
-    const notInSite = selectedRows.every(item => item.itemCalibrationDoneAt === "Site")
-    const nonDcItems = selectedRows.every(item => item.dcStatus !== "1")
-    console.log(onSiteCheck)
-    if (onSiteCheck && notInSite && selectedRows.length === 1 && nonDcItems) {
 
-      console.log("onsite")
-      setStatusCheckMsg("");
-      setGrnOpen(true);
+    if (plantDeps.itemPlant && plantDeps.itemPlant !== "All" && plantDeps.itemPlant !== "") {
+      setIsOnSiteGRN("yes")
+      const onSiteCheck = selectedRows.every(item => (item.itemCalibrationSource === "outsource" || item.itemCalibrationSource === "OEM"))
+      const notInSite = selectedRows.every(item => item.itemCalibrationDoneAt === "Site")
+      const nonDcItems = selectedRows.every(item => item.dcStatus !== "1")
+      console.log(onSiteCheck)
+      if (onSiteCheck && notInSite && selectedRows.length === 1 && nonDcItems) {
+
+        console.log("onsite")
+        setStatusCheckMsg("");
+        setGrnOpen(true);
+      } else {
+        if (!notInSite) {
+          setStatusCheckMsg("Select a item to be calibrated at Site")
+        }
+        if (!onSiteCheck) {
+          setStatusCheckMsg("Only OEM or Supplier are allowed for Onsite GRN")
+        }
+        if (selectedRows.length !== 1) {
+          setStatusCheckMsg("Please select only one item, multiple selections are not allowed")
+        }
+
+        if (!nonDcItems) {
+          setStatusCheckMsg("Onsite GRN not allowed, Select GRN")
+        }
+
+      }
     } else {
-      if (!notInSite) {
-        setStatusCheckMsg("Select a item to be calibrated at Site")
-      }
-      if (!onSiteCheck) {
-        setStatusCheckMsg("Only OEM or Supplier are allowed for Onsite GRN")
-      }
-      if (selectedRows.length !== 1) {
-        setStatusCheckMsg("Please select only one item, multiple selections are not allowed")
-      }
-
-      if (!nonDcItems) {
-        setStatusCheckMsg("Onsite GRN not allowed, Select GRN")
-      }
-
+      setStatusCheckMsg("Select plant first")
     }
   }
 
   const calCheck = () => {
-    const defaultDepartmentCheck = selectedRows.every(item =>
-      defaultDep.some(dep => item.itemCurrentLocation === dep.department)
-    );
+    if (plantDeps.itemPlant && plantDeps.itemPlant !== "All" && plantDeps.itemPlant !== "") {
+      const defaultDepartmentCheck = selectedRows.every(item =>
+        defaultDep.some(dep => item.itemCurrentLocation === dep.department)
+      );
 
-    if (selectedRows.length === 1 && selectedRows[0].itemCalibrationSource === "inhouse") {
+      if (selectedRows.length === 1 && selectedRows[0].itemCalibrationSource === "inhouse") {
 
-      if (selectedRows[0].itemCalibrationDoneAt === "Lab") {
+        if (selectedRows[0].itemCalibrationDoneAt === "Lab") {
 
-        if (defaultDepartmentCheck) {
-          setCalOpen(true);
+          if (defaultDepartmentCheck) {
+            setCalOpen(true);
+            console.log("working")
+          } else {
+            setStatusCheckMsg("Move the item to the primary location then try again!")
+            console.log(StatusCheckMsg)
+          }
+        } else if (selectedRows.length > 0 && selectedRows[0].itemCalibrationDoneAt === "Site") {
           console.log("working")
-        } else {
-          setStatusCheckMsg("Move the item to the primary location then try again!")
-          console.log(StatusCheckMsg)
+          setCalOpen(true)
         }
-      } else if (selectedRows.length > 0 && selectedRows[0].itemCalibrationDoneAt === "Site") {
-        console.log("working")
-        setCalOpen(true)
+
+
+      } else {
+        if (selectedRows.length !== 1) {
+          setStatusCheckMsg("Multiple selection not allowed for Calibration")
+        }
+        if (selectedRows.length === 0) {
+          setStatusCheckMsg("Please select any one item")
+        }
+        if (selectedRows.length > 0 && selectedRows[0].itemCalibrationSource !== "inhouse") {
+          setStatusCheckMsg("Item must be a Inhouse Calibration")
+        }
       }
-
-
     } else {
-      if (selectedRows.length !== 1) {
-        setStatusCheckMsg("Multiple selection not allowed for Calibration")
-      }
-      if (selectedRows.length === 0) {
-        setStatusCheckMsg("Please select any one item")
-      }
-      if (selectedRows.length > 0 && selectedRows[0].itemCalibrationSource !== "inhouse") {
-        setStatusCheckMsg("Item must be a Inhouse Calibration")
-      }
+      setStatusCheckMsg("Select plant first")
     }
   }
 
   const departmentChangeCheck = (e) => {
-    const department = selectedRows.every(item => item.itemCurrentLocation !== DepUpdateData.itemCurrentLocation);
-    const departmentDced = selectedRows.every(item => item.dcStatus === "0" || item.dcStatus === undefined || item.dcStatus === "");
+    if (plantDeps.itemPlant && plantDeps.itemPlant !== "All" && plantDeps.itemPlant !== "") {
+      const department = selectedRows.every(item => item.itemCurrentLocation !== DepUpdateData.itemCurrentLocation);
+      const departmentDced = selectedRows.every(item => item.dcStatus === "0" || item.dcStatus === undefined || item.dcStatus === "");
 
-    if (department && departmentDced) {
-      updateItemData(e);
+      if (department && departmentDced) {
+        updateItemData(e);
+      } else {
+        setStatusCheckMsg("Selected Items are already in the same location or already DC created");
+      }
     } else {
-      setStatusCheckMsg("Selected Items are already in the same location or already DC created");
+      setStatusCheckMsg("Select plant first")
     }
   };
 
   const mailCheck = () => {
-    const singlePlant = selectedRows.every((item, index, array) => item.itemPlant === array[0].itemPlant);
+    if (plantDeps.itemPlant && plantDeps.itemPlant !== "All" && plantDeps.itemPlant !== "") {
+      const singlePlant = selectedRows.every((item, index, array) => item.itemPlant === array[0].itemPlant);
 
-    if (singlePlant && selectedRows.length > 0) {
-      setMailOpen(true)
+      if (singlePlant && selectedRows.length > 0) {
+        setMailOpen(true)
 
+      } else {
+        setStatusCheckMsg("Select any one plant to send mails")
+      }
     } else {
-      setStatusCheckMsg("Select any one plant to send mails")
+      setStatusCheckMsg("Select plant first")
     }
-
 
   }
 
