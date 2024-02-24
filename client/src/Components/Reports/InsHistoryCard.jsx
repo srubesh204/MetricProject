@@ -115,7 +115,7 @@ function InsHistoryCard() {
     const [masters, setMasters] = useState([])
     const masterFetch = async () => {
         try {
-            const response = await axios.get(`${process.env.REACT_APP_PORT}/itemMaster/getAllItemMasters`);
+            const response = await axios.post(`${process.env.REACT_APP_PORT}/itemMaster/getMasterByPlant`, { allowedPlants: allowedPlants });
             console.log(response.data.result)
             setMasters(response.data.result);
         } catch (error) {

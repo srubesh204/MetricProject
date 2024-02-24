@@ -441,7 +441,7 @@ const DcEdit = () => {
     const itemMasterFetchData = async () => {
         try {
             const response = await axios.get(
-                `${process.env.REACT_APP_PORT}/itemMaster/getAllItemMasters`
+                `${process.env.REACT_APP_PORT}/itemMaster/getMasterByPlant`, { allowedPlants: allowedPlants }
 
             );
 
