@@ -823,7 +823,7 @@ const ItemAdd = () => {
             );
             console.log(response.data.result)
             setCompanyData(response.data.result);
-           
+
         } catch (err) {
             console.log(err);
         }
@@ -832,7 +832,7 @@ const ItemAdd = () => {
         companyFetchData();
     }, []);
 
-    
+
 
 
 
@@ -901,12 +901,11 @@ const ItemAdd = () => {
                                     control={<Checkbox name='isItemMaster' onChange={handleItemAddChange} />}
                                     label="Use as Master"
                                 />
-                                
                             </div>
                             <div className='col-1' >
-                            <Button component={Link} to="/" size='small' className=''>Home</Button>
+                                <Button style={{margin: "13% 0" }} component={Link} to="/" size='small' className=''>Home</Button>
                             </div>
-                           
+
                         </div>
                         <div className="col-lg-3 " >
                             <Typography variant='h3' style={{ height: "100%", margin: "13% 0" }} className='text-center'>Item Add</Typography>
@@ -916,11 +915,11 @@ const ItemAdd = () => {
 
 
                         <div className="col-lg-4  d-flex justify-content-end">
-                      
-                        {companyData.gaugeSpacePage === "yes" &&
-                          <div className='me-2'>
-                                <Button variant='contained'>Gauge spec </Button>
-                            </div>}
+
+                            {companyData.gaugeSpacePage === "yes" &&
+                                <div className='me-2'>
+                                    <Button variant='contained'>Gauge spec </Button>
+                                </div>}
                             {itemAddData.itemImage && <Card elevation={12} sx={{ width: "110px", height: "110px" }}>
 
                                 <img src={`${process.env.REACT_APP_PORT}/itemMasterImages/${itemAddData.itemImage}`} style={{ width: "100%", height: "100%" }} />

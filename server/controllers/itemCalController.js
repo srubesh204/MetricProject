@@ -845,7 +845,7 @@ const itemCalController = {
           // Read the HTML template file
           const filePath = path.resolve(__dirname, '../../server/templates/calTemplate.html');
           const htmlTemplate = fs.readFileSync(filePath, 'utf8');
-
+ 
           // Replace placeholders with actual data
           const modifiedHTML = htmlTemplate
             .replace(/{{ItemName}}/g, calItemName ? calItemName : "-")

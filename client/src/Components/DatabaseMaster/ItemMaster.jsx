@@ -24,7 +24,7 @@ import { ArrowBack, Error, HomeMax, House, Mail, MailLock, } from '@mui/icons-ma
 import { Link as RouterLink } from 'react-router-dom';
 import { useEmployee } from '../../App';
 import DialogTitle from '@mui/material/DialogTitle';
-import { DataGrid, GridToolbar } from '@mui/x-data-grid';
+import { DataGrid, GridToolbar, GridToolbarQuickFilter } from '@mui/x-data-grid';
 import Autocomplete from '@mui/material/Autocomplete';
 
 
@@ -1201,6 +1201,8 @@ const ItemMaster = () => {
                                                 toolbar: () => (
                                                     <div className='d-flex justify-content-between align-items-center'>
                                                         <GridToolbar />
+                                                        <GridToolbarQuickFilter />
+
 
 
                                                         <div className="col me-2 mt-2">

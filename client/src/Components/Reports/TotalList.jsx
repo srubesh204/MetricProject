@@ -226,17 +226,17 @@ const TotalList = () => {
     { field: 'itemMake', headerName: 'Make', width: 90, headerAlign: "center", align: "center", },
     { field: 'itemCalDate', headerName: 'Cal Date', width: 100, headerAlign: "center", align: "center", valueGetter: (params) => dayjs(params.row.itemCalDate).format('DD-MM-YYYY') },
     { field: 'itemDueDate', headerName: 'Due Date', width: 110, headerAlign: "center", align: "center", valueGetter: (params) => dayjs(params.row.itemDueDate).format('DD-MM-YYYY') },
-     { field: 'itemCalFreInMonths', headerName: 'Frequency', type: "number", width: 80, headerAlign: "center", align: "center" },
-    // {
-    //   field: 'Frequency',
-    //   headerName: 'Frequency',
-    //   headerAlign: "center", align: "center",
-    //   description: 'This column has a value getter and is not sortable.',
-    //   sortable: false,
-    //   width: 130,
-    //   valueGetter: (params) =>
-    //     `${params.row.itemCalFreInMonths || ''} ${params.row.itemCalFrequencyType || ''}`,
-    // },
+    //  { field: 'itemCalFreInMonths', headerName: 'Frequency', type: "number", width: 80, headerAlign: "center", align: "center" },
+    {
+      field: 'Frequency',
+      headerName: 'Frequency',
+      headerAlign: "center", align: "center",
+      description: 'This column has a value getter and is not sortable.',
+      sortable: false,
+      width: 130,
+      valueGetter: (params) =>
+        `${params.row.itemCalFreInMonths || ''} ${params.row.itemCalFrequencyType || ''}`,
+    },
     { field: 'itemCalibrationSource', headerName: 'Cal Source', headerAlign: "center", align: "center", },
     { field: 'itemCalibratedAt', headerName: 'Calibrated At ', width: 110, headerAlign: "center", align: "center", },
     { field: 'itemCurrentLocation', headerName: 'Current location', width: 120, headerAlign: "center", align: "center", },

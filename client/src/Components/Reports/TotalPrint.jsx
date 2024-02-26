@@ -69,8 +69,8 @@ const TotalPrint = () => {
                 <td style={{ width: '6%', border: '0.5px solid black', fontSize: '10px', textAlign: 'center' }}>{dayjs(row.itemDueDate).format('DD-MM-YYYY')} </td>
                 <td style={{ width: '7%', border: '0.5px solid black', fontSize: '10px', textAlign: 'center' }}>{row.itemCalFreInMonths !== '' ? row.itemCalFreInMonths + ' ' + row.itemCalFrequencyType : '-'}   </td>
                 <td style={{ width: '10%', border: '0.5px solid black', fontSize: '10px', textAlign: 'center' }}>{row.itemDepartment || '-'}</td>
-                <td style={{ width: '18%', border: '0.5px solid black', fontSize: '10px', textAlign: 'center' }}> {row.itemCalibrationSource === 'outsource' ? (row.itemCalibratedAt ? row.itemCalibratedAt : 'outsource') : row.itemCalibrationSource || '-'}</td>
-                <td style={{ width: '10%', border: '0.5px solid black', fontSize: '10px', textAlign: 'center' }}>{row.itemPartName || '-'}</td>
+                <td style={{ width: '15%', border: '0.5px solid black', fontSize: '10px', textAlign: 'center' }}> {row.itemCalibrationSource === 'outsource' ? (row.itemCalibratedAt ? row.itemCalibratedAt : 'outsource') : row.itemCalibrationSource || '-'}</td>
+                <td style={{ width: '13%', border: '0.5px solid black', fontSize: '10px', textAlign: 'center' }}>{row.itemPartName || '-'}</td>
 
             </tr>
         ));
@@ -112,8 +112,8 @@ const TotalPrint = () => {
                                     <th style={{ width: '7%', border: '0.5px solid black', fontSize: '10px', textAlign: 'center' }}>Due Date</th>
                                     <th style={{ width: '5%', border: '0.5px solid black', fontSize: '10px', textAlign: 'center' }}>Frequency</th>
                                     <th style={{ width: '8%', border: '0.5px solid black', fontSize: '10px', textAlign: 'center' }}>Current location</th>
-                                    <th style={{ width: '18%', border: '0.5px solid black', fontSize: '10px', textAlign: 'center' }}>Callbration Source</th>
-                                    <th style={{ width: '18%', border: '0.5px solid black', fontSize: '10px', textAlign: 'center' }}>Part No</th>
+                                    <th style={{ width: '15%', border: '0.5px solid black', fontSize: '10px', textAlign: 'center' }}>Callbration Source</th>
+                                    <th style={{ width: '13%', border: '0.5px solid black', fontSize: '10px', textAlign: 'center' }}>Part No</th>
                                 </tr>
                             </thead>
                             <tbody>{renderTableRows()}</tbody>
