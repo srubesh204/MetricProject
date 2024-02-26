@@ -716,7 +716,7 @@ const MeasurementUncertainty = () => {
                     >
                         <div className='row g-2'>
                             <h6 className="col-12 text-center">DUC Details</h6>
-                            <div className='col-1'>
+                            <div className='col'>
                                 <TextField label="Plant Wise"
                                     id="uncPlantId"
                                     select
@@ -740,7 +740,7 @@ const MeasurementUncertainty = () => {
                                     ))}
                                 </TextField>
                             </div>
-                            <div className="col d-flex ">
+                            <div className="col-md-3 d-flex ">
                                 <TextField size='small' fullWidth type='number' variant='outlined' label="Range/Size(L)" onChange={handleUncertaintyChange} value={uncertainityData.uncRangeSize} name='uncRangeSize' id='uncRangeSizeId'>
                                 </TextField>
                                 <TextField select style={{ width: "50%" }} size='small' fullWidth variant='outlined' label="Unit" onChange={handleUncertaintyChange} value={uncertainityData.uncRangeSizeUnit} name='uncRangeSizeUnit' id='uncRangeSizeUnitId'>
@@ -754,7 +754,7 @@ const MeasurementUncertainty = () => {
                                 </TextField>
                             </div>
                             <div className="col">
-                                <TextField size='small' select fullWidth variant='outlined' label="Material " value={uncertainityData.uncMaterial} name='uncMaterial' onChange={handleUncertaintyChange} id='uncMaterialId'>
+                                <TextField size='small' select fullWidth variant='outlined' label="Material" value={uncertainityData.uncMaterial} name='uncMaterial' onChange={handleUncertaintyChange} id='uncMaterialId'>
                                     {materialCte.map((item, index) => (
                                         <MenuItem key={index} value={item.material_cte}>{item.material_name}</MenuItem>
                                     ))}
