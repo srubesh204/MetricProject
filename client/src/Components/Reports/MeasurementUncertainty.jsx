@@ -716,7 +716,7 @@ const MeasurementUncertainty = () => {
                     >
                         <div className='row g-2'>
                             <h6 className="col-12 text-center">DUC Details</h6>
-                            <div className='col'>
+                            <div className='col-1'>
                                 <TextField label="Plant Wise"
                                     id="uncPlantId"
                                     select
