@@ -333,7 +333,7 @@ const MeasurementUncertainty = () => {
                     }
                     break;
                 case "11":
-                    estimatesXi = uncertainityData.uncLC ? (Number(uncertainityData.uncLC) / 2).toFixed(4) : "";
+                    estimatesXi = uncertainityData.uncLC ? (Number(uncertainityData.uncLC) / 10).toFixed(4) : "";
                     factor = Number(item.factor);
                     if (estimatesXi) {
                         if (item.factor_root === "sqrt") {
