@@ -717,6 +717,16 @@ const MeasurementUncertainty = () => {
     }
 
 
+    const handleSelectAll = () => {
+        // If all items are already selected, clear the selection
+        if (selectedValues.length === typeBEval.length) {
+            setSelectedValues([]);
+        } else {
+            // Otherwise, select all items
+            setSelectedValues(typeBEval);
+        }
+    };
+
 
     return (
         <div style={{ fontSize: "smaller", padding: "10px" }}>
@@ -1028,9 +1038,16 @@ const MeasurementUncertainty = () => {
                                         renderValue={(selected) => ""}
                                         fullWidth
                                     >
+                                        <MenuItem key="selectAll" onClick={handleSelectAll}>
+                                            <Checkbox
+                                                checked={selectedValues.length === typeBEval.length}
+                                                indeterminate={selectedValues.length > 0 && selectedValues.length < typeBEval.length}
+                                            />
+                                            <ListItemText primary="Select All" />
+                                        </MenuItem>
                                         {uncertainityData.uncRangeSizeUnit === "min" ?
 
-                                            typeBEval.filter(item => !["13", "14", "15", "16", "17"].includes(item.uncertainity_typeb_eval_id))
+                                            typeBEval.filter(item => !["12", "13", "14", "15", "16"].includes(item.uncertainity_typeb_eval_id))
                                                 .filter(item => {
                                                     if (uncertainityData.uncMasterDetails.length === 1) {
                                                         return !["2", "3", "5", "6", "8", "9"].includes(item.uncertainity_typeb_eval_id);
