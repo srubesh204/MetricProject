@@ -1333,7 +1333,7 @@ const CalDialog = () => {
                                         <tbody>
                                             <tr>
                                                 <th rowSpan={2}>Parameter</th>
-                                                <th rowSpan={2}>Nominal Size </th>
+                                                <th rowSpan={2}>Nominal Size ({(calibrationData && calibrationData.calcalibrationData.length > 0) ? calibrationData.calcalibrationData[0].calNominalSizeUnit : ""}) </th>
                                                 <th rowSpan={2}>Unit</th>
                                                 <th colSpan={2}>Permissible Error ({(calibrationData && calibrationData.calcalibrationData.length > 0) ? calibrationData.calcalibrationData[0].calNominalSizeUnit : ""})</th>
                                                 <th rowSpan={2}>Observer Error ({(calibrationData && calibrationData.calcalibrationData.length > 0) ? calibrationData.calcalibrationData[0].calNominalSizeUnit : ""})</th>
@@ -1383,7 +1383,7 @@ const CalDialog = () => {
                                             <tr>
 
                                                 <th width="20%" rowSpan={2}>Parameter</th>
-                                                <th width="10%" rowSpan={2}>Range/Size</th>
+                                                <th width="10%" rowSpan={2}>Range/Size ({(calibrationData && calibrationData.calcalibrationData.length > 0) ? calibrationData.calcalibrationData[0].calNominalSizeUnit : ""})</th>
                                                 <th width="5%" rowSpan={2}>Unit</th>
                                                 <th colSpan={2}>Permissible Size ({(calibrationData && calibrationData.calcalibrationData.length > 0) ? calibrationData.calcalibrationData[0].calNominalSizeUnit : ""})</th>
                                                 {calibrationData.calBeforeData === "yes" && <th width="10%" rowSpan={2}>Before Calibration</th>}

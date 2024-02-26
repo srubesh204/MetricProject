@@ -259,7 +259,7 @@ const itemCalController = {
             </tr>
             <tr>
               <th rowspan="2">Parameter</th>
-              <th rowspan="2">Nominal Size</th>
+              <th rowspan="2">Nominal Size (${(calcalibrationData.length > 0) ? calcalibrationData[0].calNominalSizeUnit : ""})</th>
               <th >Permissible Size (${(calcalibrationData.length > 0) ? calcalibrationData[0].calNominalSizeUnit : ""})</th>
               <th rowspan="2">Observed Size (${(calcalibrationData.length > 0) ? calcalibrationData[0].calNominalSizeUnit : ""})</th>
               <th rowspan="2">Cal Status</th>
@@ -296,7 +296,7 @@ const itemCalController = {
                     </tr>
                     <tr>
                       <th rowspan="2">Parameter</th>
-                      <th rowspan="2">Nominal Size</th>
+                      <th rowspan="2">Nominal Size (${(calcalibrationData.length > 0) ? calcalibrationData[0].calNominalSizeUnit : ""})</th>
                       <th colspan="2">Permissible Size (${(calcalibrationData.length > 0) ? calcalibrationData[0].calNominalSizeUnit : ""})</th>
                       <th rowspan="2"> Observed Size (${(calcalibrationData.length > 0) ? calcalibrationData[0].calNominalSizeUnit : ""})</th>
                       <th rowspan="2">Cal Status</th>
@@ -338,7 +338,7 @@ const itemCalController = {
             </tr>
             <tr>
               <th >Parameter</th>
-              <th >Nominal Size</th>
+              <th >Nominal Size (${(calcalibrationData.length > 0) ? calcalibrationData[0].calNominalSizeUnit : ""})</th>
               <th >Permissible Error (${(calcalibrationData.length > 0) ? calcalibrationData[0].calNominalSizeUnit : ""})</th>
               <th >Observed Error (${(calcalibrationData.length > 0) ? calcalibrationData[0].calNominalSizeUnit : ""})</th>
               <th>Cal Status</th>
@@ -738,7 +738,7 @@ const itemCalController = {
             </tr>
             <tr>
               <th rowspan="2">Parameter</th>
-              <th rowspan="2">Nominal Size</th>
+              <th rowspan="2">Nominal Size (${(calcalibrationData.length > 0) ? calcalibrationData[0].calNominalSizeUnit : ""})</th>
               <th >Permissible Size (${(calcalibrationData.length > 0) ? calcalibrationData[0].calNominalSizeUnit : ""})</th>
               <th rowspan="2">Observed Size (${(calcalibrationData.length > 0) ? calcalibrationData[0].calNominalSizeUnit : ""})</th>
               <th rowspan="2">Cal Status</th>
@@ -776,7 +776,7 @@ const itemCalController = {
                     </tr>
                     <tr>
                       <th rowspan="2">Parameter</th>
-                      <th rowspan="2">Nominal Size</th>
+                      <th rowspan="2">Nominal Size (${(calcalibrationData.length > 0) ? calcalibrationData[0].calNominalSizeUnit : ""})</th>
                       <th colspan="2">Permissible Size (${(calcalibrationData.length > 0) ? calcalibrationData[0].calNominalSizeUnit : ""})</th>
                       <th rowspan="2"> Observed Size (${(calcalibrationData.length > 0) ? calcalibrationData[0].calNominalSizeUnit : ""})</th>
                       <th rowspan="2">Cal Status</th>
@@ -817,7 +817,7 @@ const itemCalController = {
             </tr>
             <tr>
               <th >Parameter</th>
-              <th >Nominal Size</th>
+              <th >Nominal Size (${(calcalibrationData.length > 0) ? calcalibrationData[0].calNominalSizeUnit : ""})</th>
               <th >Permissible Error (${(calcalibrationData.length > 0) ? calcalibrationData[0].calNominalSizeUnit : ""})</th>
               <th >Observed Error (${(calcalibrationData.length > 0) ? calcalibrationData[0].calNominalSizeUnit : ""})</th>
               <th>Cal Status</th>

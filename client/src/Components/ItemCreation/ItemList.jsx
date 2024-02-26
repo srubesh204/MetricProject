@@ -1591,16 +1591,16 @@ const ItemList = () => {
                                 </div>
 
 
-                                {companyData.stickerPrintPage === "yes" && <div className='me-2 '>
-                                    <Button size='small' > Label Print</Button>
-                                </div>}
 
-                                {companyData.stickerPrintPage === "yes" && <div className='me-2'>
-                                    <Button size='small' > Label Print Barcode</Button>
-
-                                </div>}
                                 <div className='col d-flex justify-content-end'>
+                                    {companyData.stickerPrintPage === "yes" && <div className='me-2 '>
+                                        <Button size='small' > Label Print</Button>
+                                    </div>}
 
+                                    {companyData.stickerPrintPage === "yes" && <div className='me-2'>
+                                        <Button size='small' > Label Print Barcode</Button>
+
+                                    </div>}
                                     <Button size='small' component={Link} to={`/itemAdd`} variant="contained" color="warning">
                                         <AddIcon /> Add Item
                                     </Button>
