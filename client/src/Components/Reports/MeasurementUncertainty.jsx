@@ -539,7 +539,7 @@ const MeasurementUncertainty = () => {
         itemNameFetch()
     }, []);
 
-   
+
 
     // const sortedFilterNameList = itemNameList.itemAddMasterName.sort();
 
@@ -1015,7 +1015,17 @@ const MeasurementUncertainty = () => {
                                     >
                                         {uncertainityData.uncRangeSizeUnit === "min" ?
 
-                                            typeBEval.filter(item => !["13", "14", "15", "16", "17"].includes(item.uncertainity_typeb_eval_id)).map((unc, index) => (
+                                            typeBEval.filter(item => !["13", "14", "15", "16", "17"].includes(item.uncertainity_typeb_eval_id))
+                                            .filter(item => {
+                                                if (uncertainityData.uncMasterDetails.length === 1) {
+                                                    return !["2","3","5","6","8","9"].includes(item.uncertainity_typeb_eval_id);
+                                                } else if (uncertainityData.uncMasterDetails.length === 2) {
+                                                    return !["3","6","9"].includes(item.uncertainity_typeb_eval_id);
+                                                } else {
+                                                    return true
+                                                }
+                                            })
+                                            .map((unc, index) => (
                                                 <MenuItem key={index} value={unc} disabled={uncertainityData.uncTypeBResult.find(value => value.typeBId === unc.uncertainity_typeb_eval_id)}>
                                                     <Checkbox checked={selectedValues.find(value => value.uncertainity_typeb_eval_id === unc.uncertainity_typeb_eval_id)} />
                                                     <ListItemText primary={unc.uncertainity_component} />
@@ -1024,13 +1034,20 @@ const MeasurementUncertainty = () => {
 
                                             :
 
-                                            typeBEval.map((unc, index) => (
+                                            typeBEval.filter(item => {
+                                                if (uncertainityData.uncMasterDetails.length === 1) {
+                                                    return !["2","3","5","6","8","9"].includes(item.uncertainity_typeb_eval_id);
+                                                } else if (uncertainityData.uncMasterDetails.length === 2) {
+                                                    return !["3","6","9"].includes(item.uncertainity_typeb_eval_id);
+                                                } else {
+                                                    return true
+                                                }
+                                            }).map((unc, index) => (
                                                 <MenuItem key={index} value={unc} disabled={uncertainityData.uncTypeBResult.find(value => value.typeBId === unc.uncertainity_typeb_eval_id)}>
                                                     <Checkbox checked={selectedValues.find(value => value.uncertainity_typeb_eval_id === unc.uncertainity_typeb_eval_id)} />
                                                     <ListItemText primary={unc.uncertainity_component} />
                                                 </MenuItem>
                                             ))
-
                                         }
 
 
