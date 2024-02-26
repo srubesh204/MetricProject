@@ -332,7 +332,22 @@ const MeasurementUncertainty = () => {
                         uncContribution = (stdUnc * sensitivityCoefficient).toFixed(4)
                     }
                     break;
-                case "13":
+                case "11":
+                    estimatesXi = uncertainityData.uncLC ? (Number(uncertainityData.uncLC) / 2).toFixed(4) : "";
+                    factor = Number(item.factor);
+                    if (estimatesXi) {
+                        if (item.factor_root === "sqrt") {
+                            stdUnc = (estimatesXi / Math.sqrt(factor)).toFixed(4)
+                        } else {
+                            stdUnc = (estimatesXi / factor).toFixed(4)
+                        }
+                    }
+                    if (stdUnc) {
+                        sensitivityCoefficient = Number(item.sensitivity_coefficient)
+                        uncContribution = (stdUnc * sensitivityCoefficient).toFixed(4)
+                    }
+                    break;
+                case "12":
                     const diffTemp = Math.abs(parseFloat(uncertainityData.uncRefTemp) - parseFloat(uncertainityData.uncMeanTemp)).toFixed(4)
                     factor = Number(item.factor);
                     estimatesXi = diffTemp ? diffTemp : "";
@@ -349,7 +364,7 @@ const MeasurementUncertainty = () => {
                         uncContribution = (stdUnc * sensitivityCoefficient).toFixed(4)
                     }
                     break;
-                case "14":
+                case "13":
                     const twentyPerdiffTemp = (Math.abs(parseFloat(uncertainityData.uncRefTemp) - parseFloat(uncertainityData.uncMeanTemp)) * 0.2).toFixed(4)
                     factor = Number(item.factor);
                     estimatesXi = twentyPerdiffTemp ? twentyPerdiffTemp : "";
@@ -367,7 +382,7 @@ const MeasurementUncertainty = () => {
                         uncContribution = (stdUnc * sensitivityCoefficient).toFixed(4)
                     }
                     break;
-                case "15":
+                case "14":
                     const tenPerTCMaster = (parseFloat(uncertainityData.uncTEMaster) * 0.1).toFixed(4)
                     factor = Number(item.factor);
                     estimatesXi = tenPerTCMaster ? tenPerTCMaster : "";
@@ -384,7 +399,7 @@ const MeasurementUncertainty = () => {
                         uncContribution = (stdUnc * sensitivityCoefficient).toFixed(4)
                     }
                     break;
-                case "16":
+                case "15":
                     const tenPerTCDUC = (parseFloat(uncertainityData.uncTEDUC) * 0.1).toFixed(4)
                     factor = Number(item.factor);
                     estimatesXi = tenPerTCDUC ? tenPerTCDUC : "";
@@ -401,7 +416,7 @@ const MeasurementUncertainty = () => {
                         uncContribution = (stdUnc * sensitivityCoefficient).toFixed(4)
                     }
                     break;
-                case "17":
+                case "16":
                     factor = Number(item.factor);
                     estimatesXi = uncertainityData.uncTI ? uncertainityData.uncTI : "";
                     if (estimatesXi) {
@@ -417,7 +432,7 @@ const MeasurementUncertainty = () => {
                         uncContribution = (stdUnc * sensitivityCoefficient).toFixed(4)
                     }
                     break;
-                case "18":
+                case "17":
                     factor = uncertainityData.uncN ? Number(uncertainityData.uncN) : ""
                     estimatesXi = uncertainityData.uncStdDeviation ? Number(uncertainityData.uncStdDeviation).toFixed(4) : "";
                     if (estimatesXi) {
@@ -1016,29 +1031,29 @@ const MeasurementUncertainty = () => {
                                         {uncertainityData.uncRangeSizeUnit === "min" ?
 
                                             typeBEval.filter(item => !["13", "14", "15", "16", "17"].includes(item.uncertainity_typeb_eval_id))
-                                            .filter(item => {
-                                                if (uncertainityData.uncMasterDetails.length === 1) {
-                                                    return !["2","3","5","6","8","9"].includes(item.uncertainity_typeb_eval_id);
-                                                } else if (uncertainityData.uncMasterDetails.length === 2) {
-                                                    return !["3","6","9"].includes(item.uncertainity_typeb_eval_id);
-                                                } else {
-                                                    return true
-                                                }
-                                            })
-                                            .map((unc, index) => (
-                                                <MenuItem key={index} value={unc} disabled={uncertainityData.uncTypeBResult.find(value => value.typeBId === unc.uncertainity_typeb_eval_id)}>
-                                                    <Checkbox checked={selectedValues.find(value => value.uncertainity_typeb_eval_id === unc.uncertainity_typeb_eval_id)} />
-                                                    <ListItemText primary={unc.uncertainity_component} />
-                                                </MenuItem>
-                                            ))
+                                                .filter(item => {
+                                                    if (uncertainityData.uncMasterDetails.length === 1) {
+                                                        return !["2", "3", "5", "6", "8", "9"].includes(item.uncertainity_typeb_eval_id);
+                                                    } else if (uncertainityData.uncMasterDetails.length === 2) {
+                                                        return !["3", "6", "9"].includes(item.uncertainity_typeb_eval_id);
+                                                    } else {
+                                                        return true
+                                                    }
+                                                })
+                                                .map((unc, index) => (
+                                                    <MenuItem key={index} value={unc} disabled={uncertainityData.uncTypeBResult.find(value => value.typeBId === unc.uncertainity_typeb_eval_id)}>
+                                                        <Checkbox checked={selectedValues.find(value => value.uncertainity_typeb_eval_id === unc.uncertainity_typeb_eval_id)} />
+                                                        <ListItemText primary={unc.uncertainity_component} />
+                                                    </MenuItem>
+                                                ))
 
                                             :
 
                                             typeBEval.filter(item => {
                                                 if (uncertainityData.uncMasterDetails.length === 1) {
-                                                    return !["2","3","5","6","8","9"].includes(item.uncertainity_typeb_eval_id);
+                                                    return !["2", "3", "5", "6", "8", "9"].includes(item.uncertainity_typeb_eval_id);
                                                 } else if (uncertainityData.uncMasterDetails.length === 2) {
-                                                    return !["3","6","9"].includes(item.uncertainity_typeb_eval_id);
+                                                    return !["3", "6", "9"].includes(item.uncertainity_typeb_eval_id);
                                                 } else {
                                                     return true
                                                 }
