@@ -688,7 +688,7 @@ const MeasurementUncertainty = () => {
             const calculate = uncertainityData.uncTypeBResult.map(item => {
                 const sqrtFun = item.uncContribution * item.uncContribution
                 definedValue += sqrtFun
-                if (item.typeBId === "18") {
+                if (item.typeBId === "17") {
                     lastDOF = item.degOfFreedom
                     lastUncComb = item.uncContribution
                 }
@@ -717,7 +717,7 @@ const MeasurementUncertainty = () => {
     }
 
 
-   
+
 
     return (
         <div style={{ fontSize: "smaller", padding: "10px" }}>
@@ -1029,7 +1029,7 @@ const MeasurementUncertainty = () => {
                                         renderValue={(selected) => ""}
                                         fullWidth
                                     >
-                                        
+
                                         {uncertainityData.uncRangeSizeUnit === "min" ?
 
                                             typeBEval.filter(item => !["12", "13", "14", "15", "16"].includes(item.uncertainity_typeb_eval_id))
