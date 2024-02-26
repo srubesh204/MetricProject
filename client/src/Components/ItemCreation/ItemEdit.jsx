@@ -640,11 +640,13 @@ const ItemEdit = () => {
     console.log(dueDate)
     console.log(itemAddData)
     const [calibrationPointsData, setCalibrationPointsData] = useState([])
+    console.log(calibrationPointsData)
     const itemMasterById = () => {
         const master = itemMasterDataList.filter(mas => mas.itemDescription === itemAddData.itemAddMasterName)
         console.log(master)
         if (master.length > 0) {
             const { _id, itemType, itemDescription, itemPrefix, itemFrequencyType, itemFqInMonths, calAlertInDay, wiNo, uncertainity, standardRef, itemImageName, status, itemMasterImage, workInsName, calibrationPoints } = master[0]
+            console.log(calibrationPoints)
             setItemAddData((prev) => ({
                 ...prev,
                 itemType: itemType,
@@ -659,10 +661,10 @@ const ItemEdit = () => {
         }
     };
     useEffect(() => {
-        if (itemAddData.itemAddMasterName) {
+        // if (itemAddData.itemAddMasterName) {
             itemMasterById();
-        }
-    }, [itemAddData.itemAddMasterName]);
+        // }
+    }, [itemAddData.itemAddMasterName, itemMasterDataList]);
     const [partData, setPartData] = useState([])
     const [plantWisePart, setPlantWisePart] = useState([])
 
@@ -1038,7 +1040,7 @@ const ItemEdit = () => {
                                 </div>
                                 <div className="row g-2">
                                     <div className="col-lg-12">
-                                        <TextField size='small' variant='outlined' label="MFR.Si.No." onChange={handleItemAddChange} name='itemMFRNo' value={itemAddData.itemMFRNo} id='itemMFRNoId' fullWidth />
+                                        <TextField size='small' variant='outlined' label="MFR.Sr.No." onChange={handleItemAddChange} name='itemMFRNo' value={itemAddData.itemMFRNo} id='itemMFRNoId' fullWidth />
                                     </div>
                                     <div className='col-md-12 d-flex justify-content-between'>
                                         {itemAddData.itemType === "variable" && <TextField size='small' variant='outlined' name='itemLC' onChange={handleItemAddChange} id="itemLCId" value={itemAddData.itemLC} label="Least Count" fullWidth />}

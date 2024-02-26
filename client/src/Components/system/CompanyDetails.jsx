@@ -559,9 +559,9 @@ const CompanyDetails = () => {
                                       
 
                                         
-                                            <FormControlLabel  disabled={!isEditable} control={<Switch name='gaugeSpacePage' checked={companyData.gaugeSpacePage === "yes"} onChange={handleCompanyChange} />} label="Gauge Space" />
+                                            <FormControlLabel  disabled={!isEditable} control={<Switch name='gaugeSpacePage' checked={companyData.gaugeSpacePage === "yes"} onChange={handleCompanyChange} />} label="Gauge Spec" />
                                         
-                                            <FormControlLabel  disabled={!isEditable} control={<Switch name='stickerPrintPage' checked={companyData.stickerPrintPage === "yes"} onChange={handleCompanyChange} />} label="Sticker Print" />
+                                            <FormControlLabel  disabled={!isEditable} control={<Switch name='stickerPrintPage' checked={companyData.stickerPrintPage === "yes"} onChange={handleCompanyChange} />} label="Label Print" />
                                         </div>
 
                                     </div>

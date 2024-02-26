@@ -1582,11 +1582,11 @@ const ItemList = () => {
 
 
                                {companyData.stickerPrintPage === "yes" && <div className='me-2 '>
-                                    <Button size='small' > Sticker Print</Button>
+                                    <Button size='small' > Label Print</Button>
                                 </div>}
                             
                                {companyData.stickerPrintPage ==="yes" && <div className='me-2'>
-                                    <Button size='small' > Sticker Print Barcode</Button>
+                                    <Button size='small' > Label Print Barcode</Button>
 
                                 </div>}
                                 <div className='col d-flex justify-content-end'>
