@@ -3,7 +3,7 @@ const { uncTypeBModel, clccf } = require("../models/uncTypeBModel")
 const uncTypeBController = {
   getAllUncTypeB: async (req, res) => {
     try {
-      const uncTypeBResult = await uncTypeBModel.find();
+      const uncTypeBResult = await uncTypeBModel.find({}).sort({ uncertainity_typeb_eval_id: 1 });
       res.status(202).json({ result: uncTypeBResult, status: 1 });
       //res.status(200).json(employees);
     } catch (err) {

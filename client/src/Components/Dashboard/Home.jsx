@@ -1,4 +1,4 @@
-import { Alert, Autocomplete, Badge, Button, Chip, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, FormControl, FormControlLabel, Grid, InputLabel, List, ListSubheader, MenuItem, Paper, Select, Snackbar, Stack, Switch, TextField, ToggleButton, ToggleButtonGroup, Typography, responsiveFontSizes } from '@mui/material';
+import { Alert, Autocomplete, Backdrop, Badge, Button, Chip, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, FormControl, FormControlLabel, Grid, InputLabel, List, ListSubheader, MenuItem, Paper, Select, Snackbar, Stack, Switch, TextField, ToggleButton, ToggleButtonGroup, Typography, responsiveFontSizes } from '@mui/material';
 import Box from '@mui/material/Box';
 import { Link } from 'react-router-dom'
 import { DataGrid, GridToolbar, GridToolbarQuickFilter } from '@mui/x-data-grid';
@@ -300,9 +300,11 @@ const Home = () => {
   console.log(employeeRole)
 
   const [activeItems, setActiveItems] = useState([])
+  const [loader, setLoader] = useState(false)
 
   const itemFetch = async () => {
     try {
+      setLoader(true)
       console.log(employeeRole)
       const response = await axios.post(
         `${process.env.REACT_APP_PORT}/itemAdd/getItemByPlant`, { allowedPlants: allowedPlants }
@@ -361,7 +363,7 @@ const Home = () => {
       const spareItems = allItems.filter((item) => item.itemStatus === "spare");
       const breakDownItems = allItems.filter((item) => item.itemStatus === "breakdown");
       const missingItems = allItems.filter((item) => item.itemStatus === "missing");
-      const rejectionItems = allItems.filter((item) => item.itemStatus === "rejection");
+      const rejectionItems = allItems.filter((item) => item.itemStatus === "rejection"); 
 
       setActiveItems(activeItems)
 
@@ -421,9 +423,11 @@ const Home = () => {
         { value: oemLength.length, label: "OEM" }
       ]);
 
-
+      
     } catch (err) {
       console.log(err);
+    }finally{
+      setLoader(false)
     }
   };
 
@@ -1554,8 +1558,18 @@ const Home = () => {
 
   return (
     <div style={{ backgroundColor: "#f1f4f4", margin: 0, padding: 0 }}>
-      <LocalizationProvider dateAdapter={AdapterDayjs}>
+      
+     {loader &&  <Backdrop
+      style={{ zIndex: 1000 }}
+      open={loader}
+    >
+      <div class="spinner-border text-light" role="status">
+        <span class="visually-hidden">Loading...</span>
+      </div>
+    </Backdrop> }
 
+     
+      <LocalizationProvider dateAdapter={AdapterDayjs}>
 
         <div className="row gx-3 mx-3 my-2" >
           <div className="col-md-4">
@@ -2084,8 +2098,9 @@ const Home = () => {
 
 
       </LocalizationProvider>
+      </div>
 
-    </div>
+    
 
 
 
