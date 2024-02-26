@@ -15,7 +15,7 @@ const uncMaterialCteController = {
       getMaterialCteAndTypeB: async (req, res) => {
         try {
           const uncMaterialCteResult = await uncMaterialCteModel.find();
-          const uncTypeBResult = await uncTypeBModel.find();
+          const uncTypeBResult = await uncTypeBModel.find().sort({ uncertainity_typeb_eval_id: 1 });
           const clccfResult = await clccf.find();
       
           res.status(202).json({
