@@ -1051,6 +1051,23 @@ const ItemList = () => {
         setErrorHandler,
     }
 
+    const [companyData, setCompanyData] = useState([])
+    const companyFetchData = async () => {
+        try {
+            const response = await axios.get(
+                `${process.env.REACT_APP_PORT}/compDetails/getCompDetailsById/companyData`
+            );
+            console.log(response.data.result)
+            setCompanyData(response.data.result);
+
+        } catch (err) {
+            console.log(err);
+        }
+    };
+    useEffect(() => {
+        companyFetchData();
+    }, []);
+
 
     return (
         <div style={{ margin: "2rem" }}>
@@ -1564,12 +1581,14 @@ const ItemList = () => {
                                 </div>
 
 
-                                {/* <div className='me-2 col-1 px-1'>
-                                    <button type="button" className='btn btn-secondary btn-sm' >Sticker Print</button>
-                                </div>
-                                <div className='me-2 col-2'>
-                                    <button type="button" className='btn btn-secondary btn-sm' >Sticker Print Barcode</button>
-                                </div> */}
+                               {companyData.stickerPrintPage === "yes" && <div className='me-2 '>
+                                    <Button size='small' > Sticker Print</Button>
+                                </div>}
+                            
+                               {companyData.stickerPrintPage ==="yes" && <div className='me-2'>
+                                    <Button size='small' > Sticker Print Barcode</Button>
+
+                                </div>}
                                 <div className='col d-flex justify-content-end'>
 
                                     <Button size='small' component={Link} to={`/itemAdd`} variant="contained" color="warning">

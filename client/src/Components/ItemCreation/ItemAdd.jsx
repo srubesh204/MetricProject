@@ -785,6 +785,8 @@ const ItemAdd = () => {
 
 
 
+
+
     useEffect(() => {
         calculateResultDate(itemAddData.itemCalDate, itemAddData.itemCalFreInMonths);
     }, [itemAddData.itemCalDate, itemAddData.itemCalFreInMonths, itemAddData.itemCalFrequencyType]);
@@ -810,6 +812,31 @@ const ItemAdd = () => {
         }
 
     };
+
+
+    const [companyData, setCompanyData] = useState([])
+    const companyFetchData = async () => {
+        try {
+            const response = await axios.get(
+                `${process.env.REACT_APP_PORT}/compDetails/getCompDetailsById/companyData`
+            );
+            console.log(response.data.result)
+            setCompanyData(response.data.result);
+           
+        } catch (err) {
+            console.log(err);
+        }
+    };
+    useEffect(() => {
+        companyFetchData();
+    }, []);
+
+    
+
+
+
+
+
 
     console.log(availabelDeps)
     return (
@@ -879,7 +906,15 @@ const ItemAdd = () => {
                             <Typography variant='h3' style={{ height: "100%", margin: "13% 0" }} className='text-center'>Item Add</Typography>
                         </div>
 
-                        <div className="col-lg-4 d-flex justify-content-end">
+
+
+
+                        <div className="col-lg-4  d-flex justify-content-end">
+                      
+                        {companyData.gaugeSpacePage === "yes" &&
+                          <div className='me-2'>
+                                <Button variant='contained'>Gauge space </Button>
+                            </div>}
                             {itemAddData.itemImage && <Card elevation={12} sx={{ width: "110px", height: "110px" }}>
 
                                 <img src={`${process.env.REACT_APP_PORT}/itemMasterImages/${itemAddData.itemImage}`} style={{ width: "100%", height: "100%" }} />

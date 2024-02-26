@@ -244,9 +244,7 @@ const Vendor = () => {
     useEffect(() => {
         vendorFetchData();
     }, []);
-
-
-    console.log(vendorDataList)
+ 
 
 
     //validate function 

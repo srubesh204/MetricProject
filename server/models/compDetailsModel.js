@@ -9,7 +9,22 @@ const compDetailsSchema = new mongoose.Schema({
   companyName: String,
   companyAddress: String,
   companyLogo: String,
-  companyImage: String
+  companyImage: String,
+  uncertaintyPage:{
+    type: String,
+    default : "no"
+  },
+  gaugeSpacePage:{
+    type: String,
+    default: "no"
+
+  },
+  stickerPrintPage:{
+    type: String,
+    default: "no"
+  }
+
+
 
 });
 

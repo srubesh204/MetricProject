@@ -28,7 +28,11 @@ const compDetailsController = {
         companyAddress: req.body.companyAddress, 
         companyPlants: req.body.companyPlants, 
         companyLogo: req.body.companyLogo, 
-        companyImage: req.body.companyImage,// Example: updating the 'name' field
+        companyImage: req.body.companyImage,
+        uncertaintyPage: req.body.uncertaintyPage,
+        gaugeSpacePage: req.body.gaugeSpacePage,
+        stickerPrintPage: req.body.stickerPrintPage,
+        // Example: updating the 'name' field
         // Add more fields as needed
       };
 
