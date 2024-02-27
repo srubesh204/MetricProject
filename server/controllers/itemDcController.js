@@ -369,7 +369,7 @@ const itemDcController = {
             .replace(/{{dcPartyName}}/g, dcPartyName)
             .replace(/{{dcPartyAddress}}/g, dcPartyAddress)
             .replace(/{{dcNo}}/g, updateItemDc.dcNo)
-            .replace(/{{dcDate}}/g, dcDate)
+            .replace(/{{dcDate}}/g, dayjs(dcDate).format("DD-MM-YYYY"))
             .replace(/{{dcCR}}/g, dcCommonRemarks)
             .replace(/{{dcCReason}}/, dcReason)
             .replace(/{{logo}}/g, process.env.SERVER_PORT + '/logo/' + getCompDetailsById.companyLogo)
