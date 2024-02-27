@@ -38,7 +38,7 @@ const itemGRNSchema = new mongoose.Schema({
   grnNo: {
     type: String,
     unique: [true, "GRN Number should be unique"],
-    
+
   },
   grnDate: {
     type: String,
@@ -106,11 +106,15 @@ const itemGRNSchema = new mongoose.Schema({
   grnItemCertificate: String,
   grnUncertainity: String,
   grnItemCalStatus: String,
-  grnCreatedBy: String
+  grnCreatedBy: String,
+  grnItemSOPNo: String,
+  grnItemStandardRef: String,
+  grnItemMasterUncertainty: String,
+  grnItemMasterUncertaintyUnit: String
 
 });
 
-itemGRNSchema.pre('save', async function(next) {
+itemGRNSchema.pre('save', async function (next) {
   const currentYear = new Date().getFullYear();
   const counter = await GrnNoCounter.findById('GrnNoCounter');
   const prefix = await formatNoModel.findById('formatNo')
@@ -129,7 +133,7 @@ itemGRNSchema.pre('save', async function(next) {
     // Otherwise, increment the counter
     counter.seq++;
     await counter.save();
-    
+
     this.grnNo = `${prefix && prefix.fCommonPrefix ? prefix.fCommonPrefix : ""}GRN${currentYear}-${String(counter.seq).padStart(2, '0')}`;
     console.log()
   }
