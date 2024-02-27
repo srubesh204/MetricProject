@@ -304,7 +304,7 @@ const Home = () => {
 
   const itemFetch = async () => {
     try {
-      setLoader(true)
+      
       console.log(employeeRole)
       const response = await axios.post(
         `${process.env.REACT_APP_PORT}/itemAdd/getItemByPlant`, { allowedPlants: allowedPlants }
@@ -426,8 +426,6 @@ const Home = () => {
       
     } catch (err) {
       console.log(err);
-    }finally{
-      setLoader(false)
     }
   };
 
