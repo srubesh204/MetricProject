@@ -1,0 +1,33 @@
+
+    SIZE 40 mm, 15 mm
+    GAP 3 mm, 0 mm
+    SPEED 3
+    DENSITY 14
+    SET RIBBON ON
+    DIRECTION 0,0
+    REFERENCE 0,0
+    OFFSET 0 mm
+    SET PEEL OFF
+    SET CUTTER OFF
+    SET PARTIAL_CUTTER OFF
+    SET TEAR ON
+    CLS
+    TEXT 974,115,"0",180,8,5,"Metric"
+    TEXT 690,115,"0",180,8,5,"Metric"
+    TEXT 460,115,"0",180,8,5,"Metric"
+    TEXT 180,115,"0",180,8,5,"Metric"
+    CODEPAGE 1252
+    TEXT 1044,92,"0",180,5,5,"ID No : MP/DI/110"
+    TEXT 777,92,"0",180,5,5,"ID No : MP/DI/148"
+    TEXT 510,92,"0",180,5,5,"ID No : MP/DI/157"
+    TEXT 243,92,"0",180,5,5,"ID No : MP/DI/94"
+    TEXT 1044,69,"0",180,6,5,"Cal Date : 22-Mar-23"
+    TEXT 777,69,"0",180,6,5,"Cal Date : 22-Mar-23"
+    TEXT 510,69,"0",180,6,5,"Cal Date : 22-Mar-23"
+    TEXT 243,69,"0",180,6,5,"Cal Date : 22-Mar-23"
+    TEXT 1044,45,"0",180,6,5,"Next Due : 21-Mar-24"
+    TEXT 777,45,"0",180,6,5,"Next Due : 21-Mar-24"
+    TEXT 510,45,"0",180,6,5,"Next Due : 21-Mar-24"
+    TEXT 243,45,"0",180,6,5,"Next Due : 21-Mar-24"
+    PRINT 1,1
+  

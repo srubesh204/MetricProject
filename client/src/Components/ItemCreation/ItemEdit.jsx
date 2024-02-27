@@ -318,7 +318,7 @@ const ItemEdit = () => {
 
 
     const [itemAddData, setItemAddData] = useState({
-
+        itemMasterRef: "",
         selectedItemMaster: [],
         isItemMaster: "",
         itemAddMasterName: "",
@@ -390,6 +390,11 @@ const ItemEdit = () => {
         rdName: "",
         msaName: "",
         otherFile: "",
+
+        itemSOPNo: "",
+        itemStandardRef: "",
+        itemMasterUncertainty: "",
+        itemMasterUncertaintyUnit: ""
     })
 
 
@@ -402,60 +407,65 @@ const ItemEdit = () => {
             console.log(itemData)
             setItemAddData((prev) => ({
                 ...prev,
+                itemMasterRef: itemData.itemMasterRef ? itemData.itemMasterRef : "",
+                selectedItemMaster: itemData.selectedItemMaster ? itemData.selectedItemMaster : [],
+                itemAddMasterName: itemData.itemAddMasterName ? itemData.itemAddMasterName : "",
+                itemIMTENo: itemData.itemIMTENo ? itemData.itemIMTENo : "",
+                itemSAPNo: itemData.itemSAPNo ? itemData.itemSAPNo : "",
+                isItemMaster: itemData.isItemMaster ? itemData.isItemMaster : "",
+                itemImage: itemData.itemImage ? itemData.itemImage : "",
+                itemPlant: itemData.itemPlant ? itemData.itemPlant : "",
+                itemType: itemData.itemType ? itemData.itemType : "",
+                itemRangeSize: itemData.itemRangeSize ? itemData.itemRangeSize : "",
+                itemRangeSizeUnit: itemData.itemRangeSizeUnit ? itemData.itemRangeSizeUnit : "",
+                itemMFRNo: itemData.itemMFRNo ? itemData.itemMFRNo : "",
+                itemLC: itemData.itemLC ? itemData.itemLC : "",
+                itemLCUnit: itemData.itemLCUnit ? itemData.itemLCUnit : "",
+                itemMake: itemData.itemMake ? itemData.itemMake : "",
+                itemModelNo: itemData.itemModelNo ? itemData.itemModelNo : "",
+                itemStatus: itemData.itemStatus ? itemData.itemStatus : "",
+                itemReceiptDate: itemData.itemReceiptDate ? itemData.itemReceiptDate : "",
+                itemDepartment: itemData.itemDepartment ? itemData.itemDepartment : "",
 
-                selectedItemMaster: itemData.selectedItemMaster,
-                itemAddMasterName: itemData.itemAddMasterName,
-                itemIMTENo: itemData.itemIMTENo,
-                itemSAPNo: itemData.itemSAPNo,
-                isItemMaster: itemData.isItemMaster,
-                itemImage: itemData.itemImage,
-                itemPlant: itemData.itemPlant,
-                itemType: itemData.itemType,
-                itemRangeSize: itemData.itemRangeSize,
-                itemRangeSizeUnit: itemData.itemRangeSizeUnit,
-                itemMFRNo: itemData.itemMFRNo,
-                itemLC: itemData.itemLC,
-                itemLCUnit: itemData.itemLCUnit,
-                itemMake: itemData.itemMake,
-                itemModelNo: itemData.itemModelNo,
-                itemStatus: itemData.itemStatus,
-                itemReceiptDate: itemData.itemReceiptDate,
-                itemDepartment: itemData.itemDepartment,
+                itemArea: itemData.itemArea ? itemData.itemArea : "",
+                itemPlaceOfUsage: itemData.itemPlaceOfUsage ? itemData.itemPlaceOfUsage : "",
+                itemCalFreInMonths: itemData.itemCalFreInMonths ? itemData.itemCalFreInMonths : "",
+                itemCalFrequencyType: itemData.itemCalFrequencyType ? itemData.itemCalFrequencyType : "",
+                itemCalAlertDays: itemData.itemCalAlertDays ? itemData.itemCalAlertDays : "",
+                itemCalibrationSource: itemData.itemCalibrationSource ? itemData.itemCalibrationSource : "",
+                itemCalibrationDoneAt: itemData.itemCalibrationDoneAt ? itemData.itemCalibrationDoneAt : "",
+                itemItemMasterName: itemData.itemItemMasterName ? itemData.itemItemMasterName : "",
+                itemItemMasterIMTENo: itemData.itemItemMasterIMTENo ? itemData.itemItemMasterIMTENo : [],
+                itemSupplier: itemData.itemSupplier ? itemData.itemSupplier : [],
+                itemOEM: itemData.itemOEM ? itemData.itemOEM : [],
+                itemCalDate: itemData.itemCalDate ? itemData.itemCalDate : "",
+                itemDueDate: itemData.itemDueDate ? itemData.itemDueDate : "",
+                itemCalibratedAt: itemData.itemCalibratedAt ? itemData.itemCalibratedAt : "",
+                itemCertificateName: itemData.itemCertificateName ? itemData.itemCertificateName : "",
+                itemPartName: itemData.itemPartName ? itemData.itemPartName : [],
+                itemOBType: itemData.itemOBType ? itemData.itemOBType : "",
+                acceptanceCriteria: itemData.acceptanceCriteria ? itemData.acceptanceCriteria : [],
+                itemUncertainity: itemData.itemUncertainity ? itemData.itemUncertainity : "",
+                itemPrevCalData: itemData.itemPrevCalData ? itemData.itemPrevCalData : "",
+                itemUncertainityUnit: itemData.itemUncertainityUnit ? itemData.itemUncertainityUnit : "",
+                itemCertificateNo: itemData.itemCertificateNo ? itemData.itemCertificateNo : "",
+                calibrationCost: itemData.calibrationCost ? itemData.calibrationCost : "",
+                gaugeUsage: itemData.gaugeUsage ? itemData.gaugeUsage : "",
+                lifealertDays: itemData.lifealertDays ? itemData.lifealertDays : "",
+                purchaseRefNo: itemData.purchaseRefNo ? itemData.purchaseRefNo : "",
+                purchaseDate: itemData.purchaseDate ? itemData.purchaseDate : "",
+                purchaseCost: itemData.purchaseCost ? itemData.purchaseCost : "",
+                specialRemark: itemData.specialRemark ? itemData.specialRemark : "",
+                drawingIssueNo: itemData.drawingIssueNo ? itemData.drawingIssueNo : "",
+                drawingNo: itemData.drawingNo ? itemData.drawingNo : "",
+                rdName: itemData.rdName ? itemData.rdName : "",
+                msaName: itemData.msaName ? itemData.msaName : "",
+                otherFile: itemData.otherFile ? itemData.otherFile : "",
 
-                itemArea: itemData.itemArea,
-                itemPlaceOfUsage: itemData.itemPlaceOfUsage,
-                itemCalFreInMonths: itemData.itemCalFreInMonths,
-                itemCalFrequencyType: itemData.itemCalFrequencyType,
-                itemCalAlertDays: itemData.itemCalAlertDays,
-                itemCalibrationSource: itemData.itemCalibrationSource,
-                itemCalibrationDoneAt: itemData.itemCalibrationDoneAt,
-                itemItemMasterName: itemData.itemItemMasterName,
-                itemItemMasterIMTENo: itemData.itemItemMasterIMTENo,
-                itemSupplier: itemData.itemSupplier,
-                itemOEM: itemData.itemOEM,
-                itemCalDate: itemData.itemCalDate,
-                itemDueDate: itemData.itemDueDate,
-                itemCalibratedAt: itemData.itemCalibratedAt,
-                itemCertificateName: itemData.itemCertificateName,
-                itemPartName: itemData.itemPartName,
-                itemOBType: itemData.itemOBType,
-                acceptanceCriteria: itemData.acceptanceCriteria,
-                itemUncertainity: itemData.itemUncertainity,
-                itemPrevCalData: itemData.itemPrevCalData,
-                itemUncertainityUnit: itemData.itemUncertainityUnit,
-                itemCertificateNo: itemData.itemCertificateNo,
-                calibrationCost: itemData.calibrationCost,
-                gaugeUsage: itemData.gaugeUsage,
-                lifealertDays: itemData.lifealertDays,
-                purchaseRefNo: itemData.purchaseRefNo,
-                purchaseDate: itemData.purchaseDate,
-                purchaseCost: itemData.purchaseCost,
-                specialRemark: itemData.specialRemark,
-                drawingIssueNo: itemData.drawingIssueNo,
-                drawingNo: itemData.drawingNo,
-                rdName: itemData.rdName,
-                msaName: itemData.msaName,
-                otherFile: itemData.otherFile,
+                itemSOPNo: itemData.itemSOPNo ? itemData.itemSOPNo : "",
+                itemStandardRef: itemData.itemStandardRef ? itemData.itemStandardRef : "",
+                itemMasterUncertainty: itemData.itemMasterUncertainty ? itemData.itemMasterUncertainty : "",
+                itemMasterUncertaintyUnit: itemData.itemMasterUncertaintyUnit ? itemData.itemMasterUncertaintyUnit : ""
 
 
                 // itemCreatedBy: itemData.itemCreatedBy
@@ -535,6 +545,32 @@ const ItemEdit = () => {
     const handleItemAddChange = (e) => {
 
         const { name, value, checked } = e.target;
+        if (name === "itemAddMasterName") {
+            const itemMasterById = () => {
+                const master = itemMasterDataList.filter(mas => mas.itemMasterId === itemAddData.itemMasterRef)
+                console.log(master)
+                if (master.length > 0) {
+                    const { _id, itemType, itemDescription, itemFrequencyType, itemPrefix, itemFqInMonths, calAlertInDay, SOPNo, uncertainity, uncertaintyUnit, standardRef, itemMasterImage, calibrationPoints } = master[0]
+                    console.log(calibrationPoints)
+                    setItemAddData((prev) => ({
+                        ...prev,
+                        itemType: itemType,
+                        itemAddMasterName: itemDescription,
+                        itemImage: itemMasterImage,
+                        itemCalFreInMonths: itemFqInMonths,
+                        itemCalFrequencyType: itemFrequencyType,
+                        itemCalAlertDays: calAlertInDay,
+                        itemSOPNo: SOPNo,
+                        itemStandardRef: standardRef,
+                        itemMasterUncertainty: uncertainity,
+                        itemMasterUncertaintyUnit: uncertaintyUnit
+
+                    }))
+                    setCalibrationPointsData(calibrationPoints)
+                }
+            };
+            itemMasterById()
+        }
         if (name === "itemRangeSizeUnit") {
             setItemAddData((prev) => ({ ...prev, [name]: value, acceptanceCriteria: [{ acAccuracyUnit: value, acRangeSizeUnit: value }] }))
         }
@@ -641,6 +677,7 @@ const ItemEdit = () => {
     console.log(itemAddData)
     const [calibrationPointsData, setCalibrationPointsData] = useState([])
     console.log(calibrationPointsData)
+
     const itemMasterById = () => {
         const master = itemMasterDataList.filter(mas => mas.itemDescription === itemAddData.itemAddMasterName)
         console.log(master)
@@ -660,11 +697,15 @@ const ItemEdit = () => {
             setCalibrationPointsData(calibrationPoints)
         }
     };
-    useEffect(() => {
-        // if (itemAddData.itemAddMasterName) {
-            itemMasterById();
-        // }
-    }, [itemAddData.itemAddMasterName, itemMasterDataList]);
+
+
+    // useEffect(() => {
+    //     // if (itemAddData.itemAddMasterName) {
+    //         itemMasterById();
+    //     // }
+    // }, [itemAddData.itemAddMasterName, itemMasterDataList]);
+
+
     const [partData, setPartData] = useState([])
     const [plantWisePart, setPlantWisePart] = useState([])
 
@@ -965,10 +1006,10 @@ const ItemEdit = () => {
                             <div className='col-9'>
                                 <TextField
                                     {...(errors.itemAddMasterName !== "" && { helperText: errors.itemAddMasterName, error: true })}
-                                    size='small' select variant='outlined' label="Item Name" name='itemAddMasterName' disabled={itemStatus} value={itemAddData.itemAddMasterName} fullWidth onChange={handleItemAddChange}>
+                                    size='small' select variant='outlined' label="Item Name" name='itemMasterRef' disabled={itemStatus} value={itemAddData.itemMasterRef} fullWidth onChange={handleItemAddChange}>
                                     <MenuItem value=""><em>Select</em></MenuItem>
                                     {itemMasterDataList.map((item, index) => (
-                                        <MenuItem key={index} value={item.itemDescription}>{item.itemDescription}</MenuItem>
+                                        <MenuItem key={index} value={item.itemMasterId}>{item.itemDescription}</MenuItem>
                                     ))}
                                 </TextField>
                             </div>

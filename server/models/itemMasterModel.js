@@ -3,7 +3,6 @@ const uniqueValidator = require('mongoose-unique-validator');
 const mongooseSequence = require('mongoose-sequence')(mongoose);
 
 const itemMasterSchema = new mongoose.Schema({
- 
   itemType: String,
   itemDescription : {
     type: String,
@@ -23,9 +22,8 @@ const itemMasterSchema = new mongoose.Schema({
   itemFrequencyType: String,
   itemMasterPlant: String,
   calibrationPoints : []
-
-  
 });
+
 itemMasterSchema.plugin(uniqueValidator);
-itemMasterSchema.plugin(mongooseSequence, { inc_field: 'itemMasterId', prefix : 'SBC' });
+itemMasterSchema.plugin(mongooseSequence, { inc_field: 'itemMasterId'});
 module.exports = mongoose.model('itemMaster', itemMasterSchema);

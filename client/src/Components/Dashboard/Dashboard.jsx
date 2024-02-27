@@ -145,7 +145,7 @@ const Dashboard = () => {
     }, []);
 
   const [fileName, setFileName] = useState({
-    name: "Dashboard",
+    name: "Home",
     file: "",
   });
   console.log(empRole)
