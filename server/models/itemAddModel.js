@@ -128,6 +128,7 @@ const itemAddSchema = new mongoose.Schema({
   itemSOPNo: String,
   itemStandardRef: String,
   
+  plantAccess: [],
   
 
 });
