@@ -19,7 +19,7 @@ const ItemAdd = () => {
     // Units Data
 
     const employeeRole = useEmployee();
-    const { allowedPlants,loggedEmp } = employeeRole
+    const { allowedPlants, loggedEmp } = employeeRole
 
     const [addOpenData, setAddOpenData] = useState(false)
     const [masterSharingData, setMasterSharingData] = useState(false)
@@ -364,6 +364,9 @@ const ItemAdd = () => {
 
         if (name === "itemRangeSizeUnit") {
             setItemAddData((prev) => ({ ...prev, [name]: value, acceptanceCriteria: [{ acAccuracyUnit: value, acRangeSizeUnit: value }] }))
+        }
+        if(name === "itemPlant"){
+            setItemAddData((prev) =>({...prev,[name]: value,plantAccess: [value]}))
         }
 
         if (name === "itemDepartment") {
@@ -906,9 +909,9 @@ const ItemAdd = () => {
                                     label="Use as Master"
                                 />
                             </div>
-                            <div className='col-1' >
-                                <Button style={{ margin: "13% 0" }} component={Link} to="/" size='small' className=''>Home</Button>
-                            </div>
+                           
+                          
+                           
 
                         </div>
                         <div className="col-lg-3 " >
@@ -929,6 +932,9 @@ const ItemAdd = () => {
                                 <img src={`${process.env.REACT_APP_PORT}/itemMasterImages/${itemAddData.itemImage}`} style={{ width: "100%", height: "100%" }} />
 
                             </Card>}
+                        </div>
+                        <div>
+                        <Button component={Link} to="/" size='small' className=''>Home</Button>
                         </div>
 
 
@@ -1110,16 +1116,11 @@ const ItemAdd = () => {
                                     <div className='row g-2'>
                                         <h6 className='text-center m-0'>Enter Master Details</h6>
 
-
-
-
-
                                         <div className="col-md-12">
                                             <FormControl size='small' component="div" fullWidth>
                                                 <InputLabel id="itemItemMasterIMTENoId">Select IMTENo.</InputLabel>
                                                 <Select
                                                     labelId="itemItemMasterIMTENoId"
-
                                                     multiple
                                                     name="itemItemMasterIMTENo"
                                                     value={itemAddData.itemItemMasterIMTENo}
@@ -1380,34 +1381,34 @@ const ItemAdd = () => {
                                                     <MenuItem key={index} value={item.fullName}>{item.aliasName}</MenuItem>
                                                 ))}
                                             </TextField>
-                                           
-                                                <React.Fragment>
-                                                    <TextField disabled={itemAddData.itemPrevCalData !== "available"}
-                                                        className='ms-2'
-                                                        fullWidth
-                                                        label="Uncertainity"
-                                                        variant='outlined'
-                                                        size='small'
-                                                        onChange={handleItemAddChange}
-                                                        name='itemUncertainity'
-                                                        value={itemAddData.itemUncertainity}
-                                                    />
-                                                    <TextField disabled={itemAddData.itemPrevCalData !== "available"}
-                                                        select
-                                                        size='small'
-                                                        variant='outlined'
-                                                        label="Unit"
-                                                        name='itemUncertainityUnit'
-                                                        onChange={handleItemAddChange}
-                                                        style={{ width: "60%" }}
-                                                        value={itemAddData.itemUncertainityUnit}
-                                                    >
-                                                        <MenuItem value=""><em>None</em></MenuItem>
-                                                        {units.map((unit, index) => (
-                                                            <MenuItem key={index} value={unit.unitName}>{unit.unitName}</MenuItem>
-                                                        ))}
-                                                    </TextField>
-                                                </React.Fragment>
+
+                                            <React.Fragment>
+                                                <TextField disabled={itemAddData.itemPrevCalData !== "available"}
+                                                    className='ms-2'
+                                                    fullWidth
+                                                    label="Uncertainity"
+                                                    variant='outlined'
+                                                    size='small'
+                                                    onChange={handleItemAddChange}
+                                                    name='itemUncertainity'
+                                                    value={itemAddData.itemUncertainity}
+                                                />
+                                                <TextField disabled={itemAddData.itemPrevCalData !== "available"}
+                                                    select
+                                                    size='small'
+                                                    variant='outlined'
+                                                    label="Unit"
+                                                    name='itemUncertainityUnit'
+                                                    onChange={handleItemAddChange}
+                                                    style={{ width: "60%" }}
+                                                    value={itemAddData.itemUncertainityUnit}
+                                                >
+                                                    <MenuItem value=""><em>None</em></MenuItem>
+                                                    {units.map((unit, index) => (
+                                                        <MenuItem key={index} value={unit.unitName}>{unit.unitName}</MenuItem>
+                                                    ))}
+                                                </TextField>
+                                            </React.Fragment>
                                         </div>
 
 
@@ -1824,15 +1825,42 @@ const ItemAdd = () => {
                                     </tbody>
                                 </table>
 
-                                <div className="d-flex justify-content-center">
-                                    <div className='col  me-2'>
-                                        <Button onClick={() => setAddOpenData(true)} >  Additional Information </Button>
+                                <div className="d-flex ">
+                                    <div className='col-4  me-2'>
 
-                                      {(itemAddData.itemAddMasterName !== "" && itemAddData.itemPlant !== ""  && itemAddData.isItemMaster === "1") &&   <Button className='col' onClick={() => setMasterSharingData(true)} >Master Sharing </Button>}
+
+                                        {(itemAddData.itemAddMasterName !== "" && itemAddData.itemPlant !== "" && itemAddData.isItemMaster === "1") &&
+
+
+                                            <FormControl size='small' component="div" fullWidth  {...(errors.departmentPlant !== "" && { error: true })} >
+                                                <InputLabel id="plantAccessId">Plant Access</InputLabel>
+                                                <Select
+                                                    labelId="plantAccessId"
+                                                    multiple
+                                                    name="plantAccess"
+                                                    value={itemAddData.plantAccess || []} // Ensure it's an array
+                                                    onChange={handleItemAddChange}
+                                                    input={<OutlinedInput fullWidth label="Plant Access" />}
+                                                    renderValue={(selected) => selected.join(', ')}
+                                                    MenuProps={MenuProps}
+                                                    fullWidth
+                                                >
+                                                    {loggedEmp.plantDetails && loggedEmp.plantDetails.map((plant, index) => (
+                                                        <MenuItem disabled={plant.plantName === itemAddData.itemPlant} key={index} value={plant.plantName}>
+                                                            <Checkbox checked={itemAddData.plantAccess && itemAddData.plantAccess.indexOf(plant.plantName) > -1} />
+                                                            <ListItemText primary={plant.plantName} />
+                                                        </MenuItem>
+                                                    ))}
+                                                </Select>
+                                                <FormHelperText id="plantAccessId">{errors.plantAccess}</FormHelperText>
+                                            </FormControl>
+
+                                        }
                                     </div>
 
 
-                                    <div className="d-flex justify-content-end">
+                                    <div className=" col d-flex justify-content-end">
+                                        <Button onClick={() => setAddOpenData(true)} >  Additional Information </Button>
                                         <Button onClick={() => setOpen(true)} className='me-3' type="button">
                                             Item Create
                                         </Button>
@@ -2130,7 +2158,7 @@ const ItemAdd = () => {
 
 
                             <Dialog fullWidth={true} keepMounted maxWidth="xl" open={masterSharingData}
-                             sx={{ color: "#f1f4f4" }}
+                                sx={{ color: "#f1f4f4" }}
                                 onClose={(e, reason) => {
                                     console.log(reason)
                                     if (reason !== 'backdropClick' && reason !== 'escapeKeyDown') {
@@ -2153,31 +2181,7 @@ const ItemAdd = () => {
 
                                 <DialogContent >
                                     <div className='row g-2' >
-                                        <div className='col-md-5'>
-                                            <FormControl size='small' component="div" fullWidth  {...(errors.departmentPlant !== "" && { error: true })} >
-                                                <InputLabel id="plantAccessId">Plant Access</InputLabel>
-                                                <Select
-                                                    labelId="plantAccessId"
-                                                    multiple
-                                                    name="plantAccess"
-                                                     value={itemAddData.plantAccess|| []} // Ensure it's an array
-                                                    onChange={handleItemAddChange}
-                                                    input={<OutlinedInput fullWidth label="Plant Access" />}
-                                                    renderValue={(selected) => selected.join(', ')}
-                                                    MenuProps={MenuProps}
-                                                    fullWidth
-                                                >
-                                                    {loggedEmp.plantDetails && loggedEmp.plantDetails.map((plant, index) => (
-                                                        <MenuItem key={index} value={plant.plantName}>
-                                                            <Checkbox checked={itemAddData.plantAccess && itemAddData.plantAccess.indexOf(plant.plantName) > -1} />
-                                                            <ListItemText primary={plant.plantName} />
-                                                        </MenuItem>
-                                                    ))}
-                                                </Select>
-                                                <FormHelperText id="plantAccessId">{errors.plantAccess}</FormHelperText>
-                                            </FormControl>
 
-                                        </div>
 
 
                                     </div>

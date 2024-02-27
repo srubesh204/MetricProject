@@ -439,7 +439,7 @@ const ItemEdit = () => {
                 itemCalibrationDoneAt: itemData.itemCalibrationDoneAt ? itemData.itemCalibrationDoneAt : "",
                 itemItemMasterName: itemData.itemItemMasterName ? itemData.itemItemMasterName : "",
                 itemItemMasterIMTENo: itemData.itemItemMasterIMTENo ? itemData.itemItemMasterIMTENo : [],
-                plantAccess: itemData.plantAccess ? itemData.plantAccess: [],
+                plantAccess: itemData.plantAccess ? itemData.plantAccess : [],
                 itemSupplier: itemData.itemSupplier ? itemData.itemSupplier : [],
                 itemOEM: itemData.itemOEM ? itemData.itemOEM : [],
                 itemCalDate: itemData.itemCalDate ? itemData.itemCalDate : "",
@@ -2030,93 +2030,40 @@ const ItemEdit = () => {
                             </DialogContent>
                         </Dialog>
 
+                        <div className="d-flex ">
+                            <div className='col-4 '>
+                                <FormControl size='small' component="div" fullWidth  {...(errors.departmentPlant !== "" && { error: true })} >
+                                    <InputLabel id="plantAccessId">Plant Access</InputLabel>
+                                    <Select
+                                        labelId="plantAccessId"
+                                        multiple
+                                        name="plantAccess"
+                                        value={itemAddData.plantAccess || []} // Ensure it's an array
+                                        onChange={handleItemAddChange}
+                                        input={<OutlinedInput fullWidth label="Plant Access" />}
+                                        renderValue={(selected) => selected.join(', ')}
+                                        MenuProps={MenuProps}
+                                        fullWidth
+                                    >
+                                        {loggedEmp.plantDetails && loggedEmp.plantDetails.map((plant, index) => (
+                                            <MenuItem disabled={plant.plantName === itemAddData.itemPlant} key={index} value={plant.plantName}>
+                                                <Checkbox checked={itemAddData.plantAccess && itemAddData.plantAccess.indexOf(plant.plantName) > -1} />
+                                                <ListItemText primary={plant.plantName} />
+                                            </MenuItem>
+                                        ))}
+                                    </Select>
+                                    <FormHelperText id="plantAccessId">{errors.plantAccess}</FormHelperText>
+                                </FormControl>
 
 
-
-                        <Dialog fullWidth={true} keepMounted maxWidth="xl" open={masterSharingData}
-                            sx={{ color: "#f1f4f4" }}
-                            onClose={(e, reason) => {
-                                console.log(reason)
-                                if (reason !== 'backdropClick' && reason !== 'escapeKeyDown') {
-                                    setMasterSharingData(false)
-                                }
-                            }}>
-                            <DialogTitle align='center' >Master Sharing</DialogTitle>
-                            <IconButton
-                                aria-label="close"
-                                onClick={() => setMasterSharingData(false)}
-                                sx={{
-                                    position: 'absolute',
-                                    right: 2,
-                                    top: 5,
-                                    color: (theme) => theme.palette.grey[500],
-                                }}
-                            >
-                                <Close />
-                            </IconButton>
-
-                            <DialogContent >
-                                <div className='row g-2' >
-                                    <div className='col-md-5'>
-                                        <FormControl size='small' component="div" fullWidth  {...(errors.departmentPlant !== "" && { error: true })} >
-                                            <InputLabel id="plantAccessId">Plant Access</InputLabel>
-                                            <Select
-                                                labelId="plantAccessId"
-                                                multiple
-                                                name="plantAccess"
-                                                value={itemAddData.plantAccess || []} // Ensure it's an array
-                                                onChange={handleItemAddChange}
-                                                input={<OutlinedInput fullWidth label="Plant Access" />}
-                                                renderValue={(selected) => selected.join(', ')}
-                                                MenuProps={MenuProps}
-                                                fullWidth
-                                            >
-                                                {loggedEmp.plantDetails && loggedEmp.plantDetails.map((plant, index) => (
-                                                    <MenuItem key={index} value={plant.plantName}>
-                                                        <Checkbox checked={itemAddData.plantAccess && itemAddData.plantAccess.indexOf(plant.plantName) > -1} />
-                                                        <ListItemText primary={plant.plantName} />
-                                                    </MenuItem>
-                                                ))}
-                                            </Select>
-                                            <FormHelperText id="plantAccessId">{errors.plantAccess}</FormHelperText>
-                                        </FormControl>
-
-                                    </div>
-
-
-                                </div>
-
-
-                            </DialogContent>
-                        </Dialog>
-
-
-
-
-
-
-
-
-
-
-
-                        <div className="d-flex justify-content-center">
-                            <div className='col '>
+                            </div>
+                            <div className=" col d-flex justify-content-end">
                                 <Button
                                     className='me-2'
                                     onClick={() => setAddOpenData(true)}
                                 >
                                     Additional Information
                                 </Button>
-
-                                <Button
-                                    className=''
-                                    onClick={() => setMasterSharingData(true)}
-                                >
-                                    Master Sharing
-                                </Button>
-                            </div>
-                            <div className="d-flex justify-content-end">
                                 <Button onClick={() => { setOpen(true) }} className='me-3' type="button"  >
                                     Update
                                 </Button>
