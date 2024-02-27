@@ -757,7 +757,7 @@ const Dc = () => {
                                                         <td>{item.itemAddMasterName}</td>
                                                         <td>{item.itemRangeSize + item.itemRangeSizeUnit}</td>
                                                         <td>{item.itemMake}</td>
-                                                        <td>{item.itemCalFreInMonths}</td>
+                                                        <td>{item.itemCalFreInMonths + " " + item.itemCalFrequencyType}</td>
                                                      <td><select className='form-select form-select-sm' disabled={dcData.dcReason === "" || dcData.dcReason=== ""}  value={item.dcItemRemarks || ""} name="dcItemRemarks" onChange={(e) => handlePartyItemData(e, index)}>
                                                             <option value="">Select</option>
                                                             <option value="Calibration">Calibration</option>

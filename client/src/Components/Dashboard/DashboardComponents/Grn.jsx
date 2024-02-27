@@ -16,7 +16,7 @@ const Grn = () => {
     const grnDatas = useContext(HomeContent)
     const { grnOpen, setGrnOpen, selectedRows, lastGrnNo, dcPartyDetails, vendors, isOnSiteGRN, loggedEmp } = grnDatas
 
-    
+
 
     const VisuallyHiddenInput = styled('input')({
         clip: 'rect(0 0 0 0)',
@@ -30,7 +30,7 @@ const Grn = () => {
         width: 1,
     });
 
-   
+
 
 
 
@@ -163,7 +163,11 @@ const Grn = () => {
         grnItemCertificate: "",
         grnUncertainity: "",
         grnItemCalStatus: "",
-        grnCreatedBy: ""
+        grnCreatedBy: "",
+        grnItemSOPNo: "",
+        grnItemStandardRef: "",
+        grnItemMasterUncertainty: "",
+        grnItemMasterUncertaintyUnit: ""
 
     })
     console.log(grnData)
@@ -175,18 +179,23 @@ const Grn = () => {
             setGrnData((prev) => (
                 {
                     ...prev,
-                    grnPlant: selectedRows[0].itemPlant,
-                    grnDepartment: selectedRows[0].itemDepartment,
+                    grnPlant: selectedRows[0].itemPlant ? selectedRows[0].itemPlant : "",
+                    grnDepartment: selectedRows[0].itemDepartment ? selectedRows[0].itemDepartment : "",
                     grnNo: lastGrnNo,
-                    grnPartyName: dcPartyDetails.fullName,
-                    grnPartyAddress: dcPartyDetails.address,
-                    grnPartyCode: dcPartyDetails.vendorCode,
-                    grnPartyId: dcPartyDetails._id,
-                    grnItemId: selectedRows[0].item_id,
-                    grnItemAddMasterName: selectedRows[0].itemAddMasterName,
-                    grnItemIMTENo: selectedRows[0].itemIMTENo,
+                    grnPartyName: dcPartyDetails.fullName ? dcPartyDetails.fullName : "",
+                    grnPartyAddress: dcPartyDetails.address ? dcPartyDetails.address : "",
+                    grnPartyCode: dcPartyDetails.vendorCode ? dcPartyDetails.vendorCode : "",
+                    grnPartyId: dcPartyDetails._id ? dcPartyDetails._id : "",
+                    grnItemId: selectedRows[0]._id ? selectedRows[0]._id : "",
+                    grnItemAddMasterName: selectedRows[0].itemAddMasterName ? selectedRows[0].itemAddMasterName : "",
+                    grnItemIMTENo: selectedRows[0].itemIMTENo ? selectedRows[0].itemIMTENo : "",
+                    grnItemCalFrequencyType: selectedRows[0].itemCalFrequencyType ? selectedRows[0].itemCalFrequencyType : "",
                     isOnSiteGRN: dcPartyDetails.length === 0 ? "yes" : "no",
-                    grnCreatedBy: loggedEmp.firstName + " "+ loggedEmp.lastName 
+                    grnCreatedBy: loggedEmp.firstName + " " + loggedEmp.lastName,
+                    grnItemSOPNo: selectedRows[0].itemSOPNo ? selectedRows[0].itemSOPNo : "",
+                    grnItemStandardRef: selectedRows[0].itemStandardRef ? selectedRows[0].itemStandardRef : "",
+                    grnItemMasterUncertainty: selectedRows[0].itemMasterUncertainty ? selectedRows[0].itemMasterUncertainty : "",
+                    grnItemMasterUncertaintyUnit: selectedRows[0].itemMasterUncertaintyUnit ? selectedRows[0].itemMasterUncertaintyUnit : ""
                     //grnPartyItems: selectedRows
                 }
 
@@ -752,26 +761,26 @@ const Grn = () => {
     const calculateResultDate = (itemCalDate, itemCalFreInMonths) => {
         const parsedDate = dayjs(itemCalDate);
         if (grnData.grnItemCalFrequencyType === "months") {
-        if (parsedDate.isValid() && !isNaN(parseInt(itemCalFreInMonths))) {
-            const calculatedDate = parsedDate.add(parseInt(itemCalFreInMonths, 10), 'month').subtract(1, 'day');
-            console.log(calculatedDate)
-            setGrnData((prev) => ({
-                ...prev,
-                grnItemDueDate: calculatedDate.format('YYYY-MM-DD'),
-            }));
+            if (parsedDate.isValid() && !isNaN(parseInt(itemCalFreInMonths))) {
+                const calculatedDate = parsedDate.add(parseInt(itemCalFreInMonths, 10), 'month').subtract(1, 'day');
+                console.log(calculatedDate)
+                setGrnData((prev) => ({
+                    ...prev,
+                    grnItemDueDate: calculatedDate.format('YYYY-MM-DD'),
+                }));
+            }
         }
-    }
-    if (grnData.grnItemCalFrequencyType === "days") {
-        if (parsedDate.isValid() && !isNaN(parseInt(itemCalFreInMonths))) {
-            const calculatedDate = parsedDate.add(parseInt(itemCalFreInMonths, 10), 'day').subtract(1, 'day');
-            console.log(calculatedDate)
-            setGrnData((prev) => ({
-                ...prev,
-                grnItemDueDate: calculatedDate.format('YYYY-MM-DD'),
-            }));
+        if (grnData.grnItemCalFrequencyType === "days") {
+            if (parsedDate.isValid() && !isNaN(parseInt(itemCalFreInMonths))) {
+                const calculatedDate = parsedDate.add(parseInt(itemCalFreInMonths, 10), 'day').subtract(1, 'day');
+                console.log(calculatedDate)
+                setGrnData((prev) => ({
+                    ...prev,
+                    grnItemDueDate: calculatedDate.format('YYYY-MM-DD'),
+                }));
+            }
         }
-    }
-    
+
 
 
     };

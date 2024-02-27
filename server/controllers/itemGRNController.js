@@ -109,7 +109,11 @@ const itemGRNController = {
         grnUncertainity,
         grnItemCalStatus,
         isOnSiteGRN,
-        grnCreatedBy
+        grnCreatedBy,
+        grnItemSOPNo,
+        grnItemStandardRef,
+        grnItemMasterUncertainty,
+        grnItemMasterUncertaintyUnit
       } = req.body;
 
 
@@ -161,7 +165,11 @@ const itemGRNController = {
         grnUncertainity,
         grnItemCalStatus,
         isOnSiteGRN,
-        grnCreatedBy
+        grnCreatedBy,
+        grnItemSOPNo,
+        grnItemStandardRef,
+        grnItemMasterUncertainty,
+        grnItemMasterUncertaintyUnit
       });
 
       const getCompDetailsById = await compDetailsSchema.findById("companyData");
@@ -171,7 +179,7 @@ const itemGRNController = {
 
       const formatNo = await formatNoModel.findById("formatNo");
 
-      const formatNumber = `${formatNo && formatNo.fGrn ? ("Format Number : " + formatNo.fGrn.frNo + " " + "Rev.No : " + formatNo.fGrn.amNo +" " + "Rev.Date :  " + formatNo.fGrn.amDate) : ""}`
+      const formatNumber = `${formatNo && formatNo.fGrn ? ("Format Number : " + formatNo.fGrn.frNo + " " + "Rev.No : " + formatNo.fGrn.amNo + " " + "Rev.Date :  " + formatNo.fGrn.amDate) : ""}`
       console.log(formatNumber)
 
       const validationError = itemGRNResult.validateSync();
@@ -239,7 +247,7 @@ const itemGRNController = {
           itemCalAlertDays,
           itemCalibrationSource,
           itemCalibrationDoneAt,
-          
+
           itemOBType,
           itemUncertainity,
           itemUncertainityUnit,
@@ -368,7 +376,7 @@ const itemGRNController = {
             <td style="padding: 0.50rem; vertical-align: top; border: 1px solid #6c757d ;" class="text-center align-middle">1</td>
             <td style="padding: 0.50rem; vertical-align: top; border: 1px solid #6c757d ;" class="align-middle">Item Name: ${result.grnItemAddMasterName ? result.grnItemAddMasterName : "-"} IMTE No: ${result.grnItemIMTENo ? result.grnItemIMTENo : "-"} SAP No: ${result.grnItemSAPNo ? result.grnItemSAPNo : "-"}<br>
             Range/Size: ${result.grnItemRangeSize ? result.grnItemRangeSize : "" + ' ' + result.grnItemRangeSizeUnit ? result.grnItemRangeSizeUnit : ""} L.C.: ${(result.grnItemLC ? result.grnItemLC : "") + '' + (result.grnItemLCUnit ? result.grnItemLCUnit : '')}<br>
-            Make: ${result.grnItemMake ? result.grnItemMake : "-"} Sr.No: ${result.grnItemMFRNo ? result.grnItemMFRNo : "-"} Cal. Frequency: ${result.grnItemCalFreInMonths ? result.grnItemCalFreInMonths : "-"} months</td>
+            Make: ${result.grnItemMake ? result.grnItemMake : "-"} Sr.No: ${result.grnItemMFRNo ? result.grnItemMFRNo : "-"} Cal. Frequency: ${result.grnItemCalFreInMonths ? result.grnItemCalFreInMonths : "-"} ${result.grnItemCalFrequencyType ? result.grnItemCalFrequencyType : ""}</td>
             <td style="padding: 0.50rem; vertical-align: top; border: 1px solid #6c757d ;" class="text-center align-middle">${result.grnItemDcNo ? result.grnItemDcNo : "-"}</td>
             <td style="padding: 0.50rem; vertical-align: top; border: 1px solid #6c757d ;" class="text-center align-middle">${result.grnItemStatus ? result.grnItemStatus : "-"}</td>
         </tr>
@@ -500,7 +508,11 @@ const itemGRNController = {
         grnUncertainity,
         grnItemCalStatus,
         isOnSiteGRN,
-        grnCreatedBy
+        grnCreatedBy,
+        grnItemSOPNo,
+        grnItemStandardRef,
+        grnItemMasterUncertainty,
+        grnItemMasterUncertaintyUnit
       } = req.body;
 
       // Create an object with the fields you want to update
@@ -553,7 +565,11 @@ const itemGRNController = {
         grnUncertainity,
         grnItemCalStatus,
         isOnSiteGRN,
-        grnCreatedBy
+        grnCreatedBy,
+        grnItemSOPNo,
+        grnItemStandardRef,
+        grnItemMasterUncertainty,
+        grnItemMasterUncertaintyUnit
       };
 
 
@@ -564,7 +580,7 @@ const itemGRNController = {
 
       const formatNo = await formatNoModel.findById("formatNo");
 
-      const formatNumber = `${formatNo && formatNo.fGrn ? ("Format Number : " +formatNo.fGrn.frNo +"  "+ "Rev.No : " + formatNo.fGrn.amNo +"  " + " Rev.Date : " + formatNo.fGrn.amDate) : ""}`
+      const formatNumber = `${formatNo && formatNo.fGrn ? ("Format Number : " + formatNo.fGrn.frNo + "  " + "Rev.No : " + formatNo.fGrn.amNo + "  " + " Rev.Date : " + formatNo.fGrn.amDate) : ""}`
       console.log(formatNumber)
 
 

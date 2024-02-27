@@ -175,7 +175,10 @@ const GrnEdit = () => {
         grnItemCertificate: "",
         grnUncertainity: "",
         grnItemCalStatus: "",
-
+        grnItemSOPNo: "",
+        grnItemStandardRef: "",
+        grnItemMasterUncertainty: "",
+        grnItemMasterUncertaintyUnit: ""
     })
 
     const [selectedPlantItems, setSelectedPlantItems] = useState([])
@@ -231,7 +234,11 @@ const GrnEdit = () => {
                 grnItemCertificate: selectedRows.grnItemCertificate,
                 grnUncertainity: selectedRows.grnUncertainity,
                 grnItemCalStatus: selectedRows.grnItemCalStatus,
-                isOnSiteGRN: selectedRows.isOnSiteGRN
+                isOnSiteGRN: selectedRows.isOnSiteGRN,
+                grnItemSOPNo: selectedRows.grnItemSOPNo,
+                grnItemStandardRef: selectedRows.grnItemStandardRef,
+                grnItemMasterUncertainty: selectedRows.grnItemMasterUncertainty,
+                grnItemMasterUncertaintyUnit: selectedRows.grnItemMasterUncertaintyUnit
             }));
             const plantItems = itemPlantList.filter(item => item.itemPlant === selectedRows.grnPlant)
             setSelectedPlantItems(plantItems)
