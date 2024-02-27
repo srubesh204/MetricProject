@@ -326,7 +326,17 @@ const ItemList = () => {
         { field: 'itemMake', headerName: 'Make', width: 90, headerAlign: "center", align: "center", },
         { field: 'itemCalDate', headerName: 'Cal Date', width: 100, headerAlign: "center", align: "center", valueGetter: (params) => dayjs(params.row.itemCalDate).format('DD-MM-YYYY') },
         { field: 'itemDueDate', headerName: 'Due Date', width: 110, headerAlign: "center", align: "center", valueGetter: (params) => dayjs(params.row.itemDueDate).format('DD-MM-YYYY') },
-        { field: 'itemCalFreInMonths', headerName: 'Frequency', type: "number", width: 80, headerAlign: "center", align: "center" },
+        // { field: 'itemCalFreInMonths', headerName: 'Frequency', type: "number", width: 80, headerAlign: "center", align: "center" },
+        {
+            field: 'Frequency',
+            headerName: 'Frequency',
+            headerAlign: "center", align: "center",
+            description: 'This column has a value getter and is not sortable.',
+            sortable: false,
+            width: 130,
+            valueGetter: (params) =>
+                `${params.row.itemCalFreInMonths || ''} ${params.row.itemCalFrequencyType || ''}`,
+        },
         { field: 'itemCalibrationSource', headerName: 'Cal Source', width: 120, headerAlign: "center", align: "center", },
         { field: 'itemCalibratedAt', headerName: 'Cal Done At ', width: 100, headerAlign: "center", align: "center" },
         { field: 'itemCurrentLocation', headerName: 'Current Location', width: 120, headerAlign: "center", align: "center", },
@@ -1051,6 +1061,23 @@ const ItemList = () => {
         setErrorHandler,
     }
 
+    const [companyData, setCompanyData] = useState([])
+    const companyFetchData = async () => {
+        try {
+            const response = await axios.get(
+                `${process.env.REACT_APP_PORT}/compDetails/getCompDetailsById/companyData`
+            );
+            console.log(response.data.result)
+            setCompanyData(response.data.result);
+
+        } catch (err) {
+            console.log(err);
+        }
+    };
+    useEffect(() => {
+        companyFetchData();
+    }, []);
+
 
     return (
         <div style={{ margin: "2rem" }}>
@@ -1564,14 +1591,16 @@ const ItemList = () => {
                                 </div>
 
 
-                                {/* <div className='me-2 col-1 px-1'>
-                                    <button type="button" className='btn btn-secondary btn-sm' >Sticker Print</button>
-                                </div>
-                                <div className='me-2 col-2'>
-                                    <button type="button" className='btn btn-secondary btn-sm' >Sticker Print Barcode</button>
-                                </div> */}
-                                <div className='col d-flex justify-content-end'>
 
+                                <div className='col d-flex justify-content-end'>
+                                    {companyData.stickerPrintPage === "yes" && <div className='me-2 '>
+                                        <Button size='small' > Label Print</Button>
+                                    </div>}
+
+                                    {companyData.stickerPrintPage === "yes" && <div className='me-2'>
+                                        <Button size='small' > Label Print Barcode</Button>
+
+                                    </div>}
                                     <Button size='small' component={Link} to={`/itemAdd`} variant="contained" color="warning">
                                         <AddIcon /> Add Item
                                     </Button>

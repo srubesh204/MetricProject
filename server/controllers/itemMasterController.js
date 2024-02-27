@@ -215,13 +215,14 @@ const itemMasterController = {
           B: 'itemDescription',
           C: 'itemPrefix',
           D: 'itemFqInMonths',
-          E: 'calAlertInDay',
-          F: 'SOPNo',
-          G: 'uncertainty',
-          H: 'uncertaintyUnit',
-          I: 'standardRef',
-          J: 'status',
-          K: 'itemMasterPlant'
+          E: 'itemFrequencyType',
+          F: 'calAlertInDay',
+          G: 'SOPNo',
+          H: 'uncertainty',
+          I: 'uncertaintyUnit',
+          J: 'standardRef',
+          K: 'status',
+          L: 'itemMasterPlant'
         
         
           

@@ -8,9 +8,10 @@ import dayjs from 'dayjs';
 import { Delete, Done } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
 import { Link as RouterLink } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { Add, Remove, HighlightOffRounded, UploadFile, Close, CloudUpload } from '@mui/icons-material';
-import { Link } from '@mui/material';
+
 import { useEmployee } from '../../App';
 
 const ItemAdd = () => {
@@ -785,6 +786,8 @@ const ItemAdd = () => {
 
 
 
+
+
     useEffect(() => {
         calculateResultDate(itemAddData.itemCalDate, itemAddData.itemCalFreInMonths);
     }, [itemAddData.itemCalDate, itemAddData.itemCalFreInMonths, itemAddData.itemCalFrequencyType]);
@@ -810,6 +813,31 @@ const ItemAdd = () => {
         }
 
     };
+
+
+    const [companyData, setCompanyData] = useState([])
+    const companyFetchData = async () => {
+        try {
+            const response = await axios.get(
+                `${process.env.REACT_APP_PORT}/compDetails/getCompDetailsById/companyData`
+            );
+            console.log(response.data.result)
+            setCompanyData(response.data.result);
+
+        } catch (err) {
+            console.log(err);
+        }
+    };
+    useEffect(() => {
+        companyFetchData();
+    }, []);
+
+
+
+
+
+
+
 
     console.log(availabelDeps)
     return (
@@ -874,12 +902,24 @@ const ItemAdd = () => {
                                     label="Use as Master"
                                 />
                             </div>
+                            <div className='col-1' >
+                                <Button style={{margin: "13% 0" }} component={Link} to="/" size='small' className=''>Home</Button>
+                            </div>
+
                         </div>
                         <div className="col-lg-3 " >
                             <Typography variant='h3' style={{ height: "100%", margin: "13% 0" }} className='text-center'>Item Add</Typography>
                         </div>
 
-                        <div className="col-lg-4 d-flex justify-content-end">
+
+
+
+                        <div className="col-lg-4  d-flex justify-content-end">
+
+                            {companyData.gaugeSpacePage === "yes" &&
+                                <div className='me-2'>
+                                    <Button variant='contained'>Gauge spec </Button>
+                                </div>}
                             {itemAddData.itemImage && <Card elevation={12} sx={{ width: "110px", height: "110px" }}>
 
                                 <img src={`${process.env.REACT_APP_PORT}/itemMasterImages/${itemAddData.itemImage}`} style={{ width: "100%", height: "100%" }} />
@@ -925,7 +965,7 @@ const ItemAdd = () => {
                                     </div>
                                     <div className="row g-2">
                                         <div className={itemAddData.itemType === "variable" ? "col-md-5" : "col-md-12"}>
-                                            <TextField size='small' variant='outlined' label="MFR.Si.No." onChange={handleItemAddChange} name='itemMFRNo' id='itemMFRNoId' fullWidth />
+                                            <TextField size='small' variant='outlined' label="MFR.Sr.No." onChange={handleItemAddChange} name='itemMFRNo' id='itemMFRNoId' fullWidth />
                                         </div>
                                         <div className={itemAddData.itemType === "variable" ? "col-md-7 d-flex justify-content-between" : "col-md-3 d-flex justify-content-between"}>
                                             {itemAddData.itemType === "variable" && <TextField size='small' variant='outlined' name='itemLC' onChange={handleItemAddChange} id="itemLCId" label="Least Count" fullWidth />}

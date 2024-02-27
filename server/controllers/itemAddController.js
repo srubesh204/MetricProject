@@ -2,9 +2,9 @@ const itemAddModel = require("../models/itemAddModel")
 const dayjs = require('dayjs')
 const excelToJson = require('convert-excel-to-json');
 const itemHistory = require("../models/itemHistory");
-const {itemCalModel, CalNoCounter} = require("../models/itemCalModel")
+const { itemCalModel, CalNoCounter } = require("../models/itemCalModel")
 const { itemDcModel } = require("../models/itemDcModel");
-const {itemGRNModel} = require("../models/itemGRNModel");
+const { itemGRNModel } = require("../models/itemGRNModel");
 
 const itemAddController = {
   getAllItemAdds: async (req, res) => {
@@ -880,24 +880,24 @@ const itemAddController = {
           O: 'itemDepartment',
           P: 'itemCurrentLocation',
           Q: 'itemLocation',
-          R: 'itemLastLocation',
-          S: 'isItemMaster',
-          T: 'itemPlaceOfUsage',
-          U: 'itemCalFreInMonths',
+          R: 'isItemMaster',
+          S: 'itemPlaceOfUsage',
+          T: 'itemCalFreInMonths',
+          U: 'itemCalFrequencyType',
           V: 'itemCalAlertDays',
           W: 'itemCalibrationSource',
-          X: 'itemSupplier',
-          Y: 'itemPartName',
-          Z: 'itemCalDate',
-          AA: 'itemDueDate',
-          AB: 'itemCalibratedAt',
-          AC: 'itemCertificateNo',
-          AD: 'itemCalibrationDoneAt',
-          AE: 'itemUncertainity',
-          AF: 'itemUncertainityUnit',
-          AG: 'itemPlant',
-          AH: 'itemPrevCalData',
-          AI: 'itemItemMasterIMTENo',
+          X: 'itemCalibrationDoneAt',
+          Y: 'itemSupplier',
+          Z: 'itemItemMasterIMTENo',
+          AA: 'itemPrevCalData',
+          AB: 'itemCalDate',
+          AC: 'itemDueDate',
+          AD: 'itemCalibratedAt',
+          AE: 'itemCertificateNo',
+          AF: 'itemUncertainity',
+          AG: 'itemUncertainityUnit',
+          AH: 'itemPartName',
+          AI: 'itemPlant',
         }
       });
       console.log(jsonData)
@@ -978,8 +978,8 @@ const itemAddController = {
   },
   getItemByDepartment: async (req, res) => {
     try {
-     
-      const {itemPlant, itemDepartment} = req.body
+
+      const { itemPlant, itemDepartment } = req.body
       console.log(req.body)
       // Check if the _id exists in itemDcModel
       const result = await itemAddModel.aggregate([
@@ -988,7 +988,7 @@ const itemAddController = {
         { $sort: { _id: 1 } },
         { $project: { _id: 0, itemAddMasterName: "$_id" } }
       ]);
-      
+
       //console.log(result)
 
       res.status(202).json({ status: true, message: "ItemGet Successfull", result: result })
@@ -1004,8 +1004,8 @@ const itemAddController = {
   },
   getItemByItemAddMasterName: async (req, res) => {
     try {
-      
-      const {itemPlant, itemDepartment, itemName} = req.body
+
+      const { itemPlant, itemDepartment, itemName } = req.body
 
       // Check if the _id exists in itemDcModel
       const result = await itemAddModel.aggregate([
@@ -1014,7 +1014,7 @@ const itemAddController = {
         { $sort: { _id: 1 } },
         { $project: { _id: 0, itemIMTENo: "$_id" } }
       ]);
-      
+
       console.log(result)
 
       res.status(202).json({ status: true, message: "ItemGet Successfull", result: result })
@@ -1032,7 +1032,7 @@ const itemAddController = {
     try {
       const imte = req.params.id;
       // Check if the _id exists in itemDcModel
-      const result = await itemAddModel.findOne({itemIMTENo: imte})
+      const result = await itemAddModel.findOne({ itemIMTENo: imte })
       res.status(202).json({ status: true, message: "ItemGet Successfull", result: result })
 
     } catch (err) {

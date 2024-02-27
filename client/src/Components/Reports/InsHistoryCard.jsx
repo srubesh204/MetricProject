@@ -608,8 +608,8 @@ function InsHistoryCard() {
                                                 value={selectedRow?.itemCurrentLocation || "-"} size="small" name="itemCurrentLocation" InputProps={{ readOnly: true }} InputLabelProps={{ shrink: true }}></TextField>
                                         </div>
                                         <div className="col-md-3">
-                                            <TextField label="Frequency In Months"
-                                                value={selectedRow?.itemCalFreInMonths || "-"} size="small" name="itemCalFreInMonths" InputProps={{ readOnly: true }} InputLabelProps={{ shrink: true }}></TextField>
+                                            <TextField label="Cal Frequency"
+                                                    value={`${selectedRow?.itemCalFreInMonths || '-'} ${selectedRow?.itemCalFrequencyType || ''}`} size="small" name="itemCalFreInMonths" InputProps={{ readOnly: true }} InputLabelProps={{ shrink: true }}></TextField>
                                         </div>
                                         <div className="col-md-3">
                                             <TextField

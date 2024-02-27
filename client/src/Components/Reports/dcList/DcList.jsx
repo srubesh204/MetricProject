@@ -367,7 +367,7 @@ const DcList = () => {
     const companyFetch = async () => {
         try {
             const response = await axios.get(
-                `${process.env.REACT_APP_PORT}/compDetails/getAllCompDetails`
+                `${process.env.REACT_APP_PORT}/compDetails/getCompDetailsById/companyData`
             );
             setCompanyList(response.data.result);
             //setFilterCompany(response.data.result);

@@ -1,5 +1,5 @@
 import React, { createContext, useEffect, useState, useContext, useRef } from 'react'
-import { Card, CardContent, CardActions, Button, Container, Grid, Paper, TextField, Typography, Fab, CardMedia, InputLabel, Input, FormControl, FormHelperText, FormGroup, FormLabel, MenuItem, Select, Menu, FormControlLabel, Radio, RadioGroup, TableContainer, Table, TableHead, TableRow, TableCell, TableBody, IconButton, OutlinedInput, Box, Chip, Snackbar, Alert, Dialog, DialogTitle, DialogContent, DialogActions, DialogContentText, Checkbox, ListItemText, Autocomplete, Badge } from '@mui/material'
+import { Card, CardContent, CardActions, Button, Container,Switch, Grid, Paper, TextField, Typography, Fab, CardMedia, InputLabel, Input, FormControl, FormHelperText, FormGroup, FormLabel, MenuItem, Select, Menu, FormControlLabel, Radio, RadioGroup, TableContainer, Table, TableHead, TableRow, TableCell, TableBody, IconButton, OutlinedInput, Box, Chip, Snackbar, Alert, Dialog, DialogTitle, DialogContent, DialogActions, DialogContentText, Checkbox, ListItemText, Autocomplete, Badge } from '@mui/material'
 import { Add, Close, CloudUpload, Delete, Done, Edit, Receipt, Remove } from '@mui/icons-material';
 import axios from 'axios'
 import { styled } from '@mui/material/styles';
@@ -86,7 +86,13 @@ const CompanyDetails = () => {
                 companyAddress: details.companyAddress,
                 companyPlants: details.companyPlants,
                 companyLogo: details.companyLogo,
-                companyImage: details.companyImage
+                companyImage: details.companyImage,
+                uncertaintyPage: details.uncertaintyPage,
+                gaugeSpacePage: details.gaugeSpacePage,
+                stickerPrintPage: details.stickerPrintPage
+
+
+
             }));
         } catch (err) {
             console.log(err);
@@ -101,7 +107,11 @@ const CompanyDetails = () => {
         companyName: "",
         companyAddress: "",
         companyLogo: "",
-        companyImage: ""
+        companyImage: "",
+        uncertaintyPage: "",
+        gaugeSpacePage: "",
+        stickerPrintPage: ""
+
     }
     const [isEditable, setIsEditable] = useState(false)
     const [companyData, setCompanyData] = useState({
@@ -109,7 +119,10 @@ const CompanyDetails = () => {
         companyName: "",
         companyAddress: "",
         companyLogo: "",
-        companyImage: ""
+        companyImage: "",
+        uncertaintyPage: "",
+        gaugeSpacePage: "",
+        stickerPrintPage: ""
 
     })
 
@@ -436,11 +449,21 @@ const CompanyDetails = () => {
 
     const handleCompanyChange = (e) => {
         const { name, checked, value, type } = e.target;
+        setCompanyData((prev) => ({ ...prev, [name]: updatedValue }));
         let updatedValue = value;
         if (type === "checkbox") {
             updatedValue = checked ? "1" : "0";
         }
-        setCompanyData((prev) => ({ ...prev, [name]: updatedValue }));
+        if (name === "uncertaintyPage") {
+            setCompanyData((prev) => ({ ...prev, uncertaintyPage: checked ? "yes" : "no" }))
+        }
+        if (name === "gaugeSpacePage") {
+            setCompanyData((prev) => ({ ...prev, gaugeSpacePage: checked ? "yes" : "no" }))
+        }
+        if (name === "stickerPrintPage") {
+            setCompanyData((prev) => ({ ...prev, stickerPrintPage: checked ? "yes" : "no" }))
+        }
+       
     };
 
 
@@ -531,7 +554,16 @@ const CompanyDetails = () => {
 
 
                                         </div>
-                                       
+                                        <div>
+                                            <FormControlLabel  disabled={!isEditable} control={<Switch name='uncertaintyPage' checked={companyData.uncertaintyPage === "yes"} onChange={handleCompanyChange} />} label="Uncertainty" />
+                                      
+
+                                        
+                                            <FormControlLabel  disabled={!isEditable} control={<Switch name='gaugeSpacePage' checked={companyData.gaugeSpacePage === "yes"} onChange={handleCompanyChange} />} label="Gauge Spec" />
+                                        
+                                            <FormControlLabel  disabled={!isEditable} control={<Switch name='stickerPrintPage' checked={companyData.stickerPrintPage === "yes"} onChange={handleCompanyChange} />} label="Label Print" />
+                                        </div>
+
                                     </div>
 
                                 </div>

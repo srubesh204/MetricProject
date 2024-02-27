@@ -1,5 +1,6 @@
-import * as React from 'react';
+import React, { useEffect} from 'react'
 import { styled, createTheme, ThemeProvider } from '@mui/material/styles';
+import axios from 'axios';
 import { useState } from 'react';
 import CssBaseline from '@mui/material/CssBaseline';
 import MuiDrawer from '@mui/material/Drawer';
@@ -64,6 +65,7 @@ import MeasurementUncertainty from '../Reports/MeasurementUncertainty';
 import VendorUpload from '../Reports/VendorUpload';
 import PlantActual from '../Reports/PlantActual';
 import { MeasurementUncertaintyList } from '../Reports/MeasurementUncertaintyList';
+import Permissions from '../system/Permissions';
 //
 
 
@@ -124,6 +126,24 @@ const Dashboard = () => {
 
   const empRole = useEmployee()
   const { Copyright } = empRole
+
+ const [companyData, setCompanyData] = useState([])
+    const companyFetchData = async () => {
+        try {
+            const response = await axios.get(
+                `${process.env.REACT_APP_PORT}/compDetails/getCompDetailsById/companyData`
+            );
+            console.log(response.data.result)
+            setCompanyData(response.data.result);
+           
+        } catch (err) {
+            console.log(err);
+        }
+    };
+    useEffect(() => {
+        companyFetchData();
+    }, []);
+
   const [fileName, setFileName] = useState({
     name: "Dashboard",
     file: "",
@@ -147,6 +167,8 @@ const Dashboard = () => {
       { name: "Mail Configuration", file: <MailConfig />, icon: <FormatListBulleted />  },
       { name: "Format Number", file: <FormatNumber />, icon: <FormatListBulleted />  },
       empRole.employee === "superAdmin" && { name: "Company Details", file: <CompanyDetails />, icon: <FormatListBulleted /> },
+      // { name: "Permissions", file: <Permissions />, icon: <FormatListBulleted />  },
+
 
       // { name: "Label Print", file: "", icon: <img src={`${process.env.REACT_APP_PORT}/icon/list-text.png`} alt="Label Print Icon" style={{ width: '20px', height: '20px' }} /> },
 
@@ -158,13 +180,12 @@ const Dashboard = () => {
       { name: "History Card", file: <InsHistoryCard />, icon: <FormatListBulleted /> },
       { name: "Total List", file: <TotalList />, icon: <FormatListBulleted /> },
       // { name: "Cal Due Report", file: <CalDueReport />, icon: <img src={`${process.env.REACT_APP_PORT}/icon/list-text.png`} alt="Cal Due Report Icon" style={{ width: '20px', height: '20px' }} /> },
-      { name: "Uncertainty List", file: <MeasurementUncertaintyList />, icon: <FormatListBulleted /> },
+      companyData.uncertaintyPage === "yes" && { name: "Uncertainty List", file: <MeasurementUncertaintyList />, icon: <FormatListBulleted /> },
       { name: "Vendor Details", file: <VendorUpload />, icon: <FormatListBulleted /> },
       { name: "Plan vs Actual", file: <PlantActual />, icon: <FormatListBulleted /> },
 
       // { name: "Management Chart" },
-    ]
-
+    ].filter(Boolean)
   }
 
   console.log(MenuItems.system)
