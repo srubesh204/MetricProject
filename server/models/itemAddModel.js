@@ -94,6 +94,9 @@ const itemAddSchema = new mongoose.Schema({
     }
   ],
   itemUncertainity: String,
+  itemUncertainityUnit: String,
+  prevItemUncertainity: String,
+  prevItemUncertainityUnit: String,
   createdAt: {
     type: String,
     default: () => dayjs().format("YYYY-MM-DD"),
@@ -124,8 +127,7 @@ const itemAddSchema = new mongoose.Schema({
 
   itemSOPNo: String,
   itemStandardRef: String,
-  itemMasterUncertainty: String,
-  itemMasterUncertaintyUnit: String
+  
   
 
 });

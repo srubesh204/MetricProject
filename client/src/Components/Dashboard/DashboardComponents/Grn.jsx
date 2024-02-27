@@ -166,8 +166,8 @@ const Grn = () => {
         grnCreatedBy: "",
         grnItemSOPNo: "",
         grnItemStandardRef: "",
-        grnItemMasterUncertainty: "",
-        grnItemMasterUncertaintyUnit: ""
+       
+      
 
     })
     console.log(grnData)
@@ -194,8 +194,7 @@ const Grn = () => {
                     grnCreatedBy: loggedEmp.firstName + " " + loggedEmp.lastName,
                     grnItemSOPNo: selectedRows[0].itemSOPNo ? selectedRows[0].itemSOPNo : "",
                     grnItemStandardRef: selectedRows[0].itemStandardRef ? selectedRows[0].itemStandardRef : "",
-                    grnItemMasterUncertainty: selectedRows[0].itemMasterUncertainty ? selectedRows[0].itemMasterUncertainty : "",
-                    grnItemMasterUncertaintyUnit: selectedRows[0].itemMasterUncertaintyUnit ? selectedRows[0].itemMasterUncertaintyUnit : ""
+                    
                     //grnPartyItems: selectedRows
                 }
 

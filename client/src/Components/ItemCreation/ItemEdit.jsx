@@ -393,8 +393,7 @@ const ItemEdit = () => {
 
         itemSOPNo: "",
         itemStandardRef: "",
-        itemMasterUncertainty: "",
-        itemMasterUncertaintyUnit: ""
+
     })
 
 
@@ -464,8 +463,7 @@ const ItemEdit = () => {
 
                 itemSOPNo: itemData.itemSOPNo ? itemData.itemSOPNo : "",
                 itemStandardRef: itemData.itemStandardRef ? itemData.itemStandardRef : "",
-                itemMasterUncertainty: itemData.itemMasterUncertainty ? itemData.itemMasterUncertainty : "",
-                itemMasterUncertaintyUnit: itemData.itemMasterUncertaintyUnit ? itemData.itemMasterUncertaintyUnit : ""
+
 
 
                 // itemCreatedBy: itemData.itemCreatedBy
@@ -545,7 +543,7 @@ const ItemEdit = () => {
     const handleItemAddChange = (e) => {
 
         const { name, value, checked } = e.target;
-        if (name === "itemAddMasterName") {
+        if (name === "itemMasterRef") {
             const itemMasterById = () => {
                 const master = itemMasterDataList.filter(mas => mas.itemMasterId === itemAddData.itemMasterRef)
                 console.log(master)
@@ -562,8 +560,8 @@ const ItemEdit = () => {
                         itemCalAlertDays: calAlertInDay,
                         itemSOPNo: SOPNo,
                         itemStandardRef: standardRef,
-                        itemMasterUncertainty: uncertainity,
-                        itemMasterUncertaintyUnit: uncertaintyUnit
+                        itemUncertainity: uncertainity,
+                        itemUncertainityUnit: uncertaintyUnit,
 
                     }))
                     setCalibrationPointsData(calibrationPoints)

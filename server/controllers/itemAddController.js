@@ -115,8 +115,7 @@ const itemAddController = {
         otherFile,
         itemSOPNo,
         itemStandardRef,
-        itemMasterUncertainty,
-        itemMasterUncertaintyUnit
+        
 
         // Assuming createdAt is part of the request body
       } = req.body;
@@ -199,8 +198,7 @@ const itemAddController = {
         otherFile,
         itemSOPNo,
         itemStandardRef,
-        itemMasterUncertainty,
-        itemMasterUncertaintyUnit
+        
 
       };
 
@@ -289,8 +287,7 @@ const itemAddController = {
         otherFile,
         itemSOPNo,
         itemStandardRef,
-        itemMasterUncertainty,
-        itemMasterUncertaintyUnit
+       
 
       });
       await historyRecord.save();
@@ -394,8 +391,7 @@ const itemAddController = {
         otherFile,
         itemSOPNo,
         itemStandardRef,
-        itemMasterUncertainty,
-        itemMasterUncertaintyUnit
+        
       } = req.body;
       // Create an object with the fields you want to update
       const updateItemFields = {
@@ -471,8 +467,7 @@ const itemAddController = {
         otherFile,
         itemSOPNo,
         itemStandardRef,
-        itemMasterUncertainty,
-        itemMasterUncertaintyUnit
+        
       };
 
       // Find the designation by desId and update it
@@ -568,9 +563,6 @@ const itemAddController = {
           otherFile,
           itemSOPNo,
           itemStandardRef,
-          itemMasterUncertainty,
-          itemMasterUncertaintyUnit
-
         };
 
         const updateItemHistory = await itemHistory.findOneAndUpdate(
