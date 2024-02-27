@@ -72,52 +72,42 @@ const ItemMaster = () => {
 
     })
 
+    console.log(filterAllName)
 
-    const handleFilterChange = (e) => {
-        const { name, value } = e.target;
-        if (value === "all") {
-            setFilteredData(itemMasterDataList)
-        } else {
-            if (name === "itemTypeSort") {
-                const itemTypeSort = itemMasterDataList.filter((item) => (item.itemType === value))
-                setFilteredData(itemTypeSort)
-                setFilterAllName(prev => ({
-                    ...prev,
-                    itemTypeSort: value,
-                    itemDescriptionSort: "all",
-                    masterPlant: "all"
-                }))
-            }
-            if (name === "itemDescriptionSort") {
-                const itemDescriptionSort = itemMasterDataList.filter((item) => (item.itemDescription === value))
-                setFilteredData(itemDescriptionSort)
-                setFilterAllName(prev => ({
-                    ...prev,
-                    itemTypeSort: "all",
-                    itemDescriptionSort: value,
-                    masterPlant: "all"
-                }))
-                console.log(value)
-            }
-            if (name === "masterPlant") {
-                const masterPlant = itemMasterDataList.filter((item) => (item.itemMasterPlant === value))
-                setFilteredData(masterPlant)
-                setFilterAllName(prev => ({
-                    ...prev,
-                    itemTypeSort: "all",
-                    itemDescriptionSort: "all",
-                    masterPlant: value
-                }))
-                console.log(value)
-            }
+
+
+    // const handleFilterChange = (e) => {
+    //     const { name, value } = e.target;
+
+    //     if (value === "all") {
+    //         setFilteredData(itemMasterDataList)
+    //     } else {
+    //         if (name === "itemTypeSort") {
+    //             const itemTypeSort = itemMasterDataList.filter((item) => (item.itemType === value))
+    //             setFilteredData(itemTypeSort)
+    //         }
+    //         if (name === "itemDescriptionSort") {
+    //             const itemDescriptionSort = itemMasterDataList.filter((item) => (item.itemDescription === value))
+    //             setFilteredData(itemDescriptionSort)
+    //         }
+    //         if (name === "masterPlant") {
+    //             const masterPlant = itemMasterDataList.filter((item) => (item.itemMasterPlant === value))
+    //             setFilteredData(masterPlant)
+    //         }
+
+    //         // if (name === "vendorPlant") {
+    //         //     const vendorPlant = vendorDataList.filter((item) => (item.vendorPlant.includes(value)))
+    //         //     setFilteredData(vendorPlant);
+    //         // }
+
+    //     }
+
+
+    // };
 
 
 
 
-        }
-
-
-    };
 
     const [openModal, setOpenModal] = useState(false);
     const [deleteModal, setDeleteModal] = useState(false);
@@ -166,6 +156,110 @@ const ItemMaster = () => {
     })
 
     console.log(itemMasterData)
+
+
+    const handleFilterChange = (e) => {
+        const { name, value } = e.target;
+        setFilterAllName((prev) => ({ ...prev, [name]: value }));
+        if (value === "all") {
+            setFilteredData(itemMasterDataList)
+        } else {
+            if (name === "itemTypeSort") {
+                const itemTypeSort = itemMasterDataList.filter((item) => (item.itemType === value))
+                if (value === "all") {
+                    setFilteredData(itemMasterDataList)
+                    setFilterAllName(prev => ({
+                        ...prev,
+                        itemTypeSort: value,
+                        itemDescriptionSort: "all",
+                        masterPlant: "all"
+                    }))
+
+                } else {
+                    setFilteredData(itemTypeSort)
+                    setFilterAllName(prev => ({
+                        ...prev,
+                        itemTypeSort: value,
+                        itemDescriptionSort: "all",
+                        masterPlant: "all"
+                    }))
+                }
+            }
+            if (name === "itemDescriptionSort") {
+                const itemDescriptionSort = itemMasterDataList.filter((item) => (item.itemDescription === value))
+                if (value === "all") {
+                    setFilteredData(itemDescriptionSort)
+                    setFilterAllName(prev => ({
+                        ...prev,
+                        itemDescriptionSort: value,
+                        masterPlant: "all"
+                    }))
+                    console.log(value)
+                } else {
+                    setFilteredData(itemDescriptionSort)
+                    setFilterAllName(prev => ({
+                        ...prev,
+                        itemDescriptionSort: value,
+                        masterPlant: "all"
+                    }))
+                    console.log(value)
+                }
+            }
+            if (name === "masterPlant") {
+                        const masterPlant = itemMasterDataList.filter((item) => item.itemMasterPlant === value);
+                      setFilteredData(masterPlant);
+                      setFilterAllName((prev) => ({
+                        ...prev,
+                        masterPlant: value,
+                      }));
+                    }
+                  }
+        
+    };
+
+
+    // const handleFilterChange = (e) => {
+    //     const { name, value } = e.target;
+      
+    //     setItemMasterData((prev) => ({ ...prev, [name]: value }));
+      
+    //     if (value === "all") {
+    //       setFilteredData(itemMasterDataList);
+    //     } else {
+    //       if (name === "itemTypeSort") {
+    //         const itemTypeSort = itemMasterDataList.filter((item) => item.itemType === value);
+    //         setFilteredData(itemTypeSort);
+    //         setFilterAllName((prev) => ({
+    //           ...prev,
+    //           itemTypeSort: value,
+    //           itemDescriptionSort: "all",
+    //           masterPlant: "all",
+    //         }));
+    //       }
+      
+    //       if (name === "itemDescriptionSort") {
+    //         const itemDescriptionSort = itemMasterDataList.filter((item) => item.itemDescription === value);
+    //         setFilteredData(itemDescriptionSort);
+    //         setFilterAllName((prev) => ({
+    //           ...prev,
+    //           itemDescriptionSort: value,
+    //           masterPlant: "all",
+    //         }));
+    //       }
+      
+    //       if (name === "masterPlant") {
+    //         const masterPlant = itemMasterDataList.filter((item) => item.itemMasterPlant === value);
+    //         setFilteredData(masterPlant);
+    //         setFilterAllName((prev) => ({
+    //           ...prev,
+    //           masterPlant: value,
+    //         }));
+    //       }
+    //     }
+    //   };
+
+
+
 
     const addCalibrationPointRow = () => {
         setItemMasterData((prevItemMasterData) => ({
@@ -219,7 +313,7 @@ const ItemMaster = () => {
             );
 
 
-            const filterNames = ["itemType", "itemDescription","itemMasterPlant"]
+            const filterNames = ["itemType", "itemDescription", "itemMasterPlant"]
 
             let updatedFilterNames = {};
 
@@ -239,7 +333,7 @@ const ItemMaster = () => {
             console.log(response.data)
             setItemMasterDataList(response.data.result);
             setFilteredData(response.data.result);
-            
+
         } catch (err) {
             console.log(err);
         }
@@ -1148,7 +1242,6 @@ const ItemMaster = () => {
                             <div>
                                 {/* <h3 className='text-center'>Item List</h3> */}
                                 <div className='row mb-2 g-2'>
-
                                     {/* <div className="col-3 ">
                                         <TextField fullWidth label="Item Type Sort" onChange={handleFilterChange} value={filterAllName.itemTypeSort} className="form-select" select size="small" id="itemTypeSortId" name="itemTypeSort" defaultValue="" >
 
@@ -1201,12 +1294,12 @@ const ItemMaster = () => {
                                                 toolbar: () => (
                                                     <div className='d-flex justify-content-between align-items-center'>
                                                         <GridToolbar />
-                                                        <GridToolbarQuickFilter />
+                                                        {/* <GridToolbarQuickFilter /> */}
 
 
 
                                                         <div className="col me-2 mt-2">
-                                                            <TextField fullWidth label="Item Type Sort" onChange={handleFilterChange} value={filterAllName.itemTypeSort} className="form-select" select size="small" id="itemTypeSortId" name="itemTypeSort" defaultValue="" >
+                                                            <TextField fullWidth label="Item Type Sort" onChange={handleFilterChange} value={filterAllName.itemTypeSort} className="form-select" select size="small" id="itemTypeSortId" name="itemTypeSort" defaultValue="all" >
 
                                                                 <MenuItem value="all">All</MenuItem >
                                                                 <MenuItem value="attribute">Attribute</MenuItem >
@@ -1217,7 +1310,7 @@ const ItemMaster = () => {
 
                                                         </div>
                                                         <div className=" col me-2 mt-2">
-                                                            <TextField fullWidth label="Item Description Sort" onChange={handleFilterChange} value={filterAllName.itemDescriptionSort} className="form-select" select size="small" id="itemDescriptionSortId" name="itemDescriptionSort" defaultValue="all" >
+                                                            <TextField fullWidth label="Item Description Sort" defaultValue="all" onChange={handleFilterChange} value={filterAllName.itemDescriptionSort} className="form-select" select size="small" id="itemDescriptionSortId" name="itemDescriptionSort">
 
                                                                 <MenuItem value="all">All</MenuItem>
                                                                 {FilterNameList.itemDescription.map((item, index) => (
@@ -1227,12 +1320,12 @@ const ItemMaster = () => {
                                                             </TextField>
                                                         </div>
                                                         <div className='col me-2 mt-2'>
-                                                            <TextField label="Master Plant "
+                                                            <TextField label="Master Plant"
                                                                 id="masterPlantId"
                                                                 select
                                                                 defaultValue="all"
-                                                                fullWidth
                                                                 value={filterAllName.masterPlant}
+                                                                fullWidth
                                                                 onChange={handleFilterChange}
                                                                 size="small"
                                                                 name="masterPlant" >
@@ -1243,6 +1336,8 @@ const ItemMaster = () => {
                                                             </TextField>
 
                                                         </div>
+
+
                                                         <div className=' me-2 mt-2'>
                                                             {itemMasteSelectedRowIds.length !== 0 && <Button variant='contained' size='small' type='button' color='error' onClick={() => setDeleteModal(true)}>Delete </Button>}
                                                         </div>

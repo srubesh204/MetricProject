@@ -903,7 +903,7 @@ const ItemAdd = () => {
                                 />
                             </div>
                             <div className='col-1' >
-                                <Button style={{margin: "13% 0" }} component={Link} to="/" size='small' className=''>Home</Button>
+                                <Button style={{ margin: "13% 0" }} component={Link} to="/" size='small' className=''>Home</Button>
                             </div>
 
                         </div>
@@ -1866,62 +1866,64 @@ const ItemAdd = () => {
                                 </IconButton>
 
                                 <DialogContent >
-                                    <div className='row g-2 mb-2'>
-                                        <div className='col'>
-                                            <TextField label="Calibration Cost"
-                                                id="calibrationCostId"
-                                                defaultValue=""
-                                                value={itemAddData.calibrationCost}
-                                                onChange={handleItemAddChange}
-                                                size="small"
-                                                fullWidth
-                                                name="calibrationCost" />
+                                    <div className='row'>
+                                        <div className='col d-flex '>
+                                            <div className='row g-2 mb-2'>
+                                                <div className='col'>
+                                                    <TextField label="Calibration Cost"
+                                                        id="calibrationCostId"
+                                                        defaultValue=""
+                                                        value={itemAddData.calibrationCost}
+                                                        onChange={handleItemAddChange}
+                                                        size="small"
+                                                        fullWidth
+                                                        name="calibrationCost" />
 
-                                        </div>
-                                        <div className='col'>
-                                            <TextField label="Gauge life in days"
-                                                id="gaugeUsageId"
-                                                defaultValue=""
-                                                size="small"
-                                                fullWidth
-                                                value={itemAddData.gaugeUsage}
-                                                onChange={handleItemAddChange}
-                                                name="gaugeUsage" />
+                                                </div>
+                                                <div className='col'>
+                                                    <TextField label="Gauge life in days"
+                                                        id="gaugeUsageId"
+                                                        defaultValue=""
+                                                        size="small"
+                                                        fullWidth
+                                                        value={itemAddData.gaugeUsage}
+                                                        onChange={handleItemAddChange}
+                                                        name="gaugeUsage" />
 
-                                        </div>
-                                        <div className='col'>
+                                                </div>
+                                                <div className='col'>
 
-                                            <TextField label="Gauge life alert in days"
-                                                id="lifealertDaysId"
-                                                defaultValue=""
-                                                size="small"
-                                                value={itemAddData.lifealertDays}
-                                                onChange={handleItemAddChange}
-                                                fullWidth
-                                                name="lifealertDays" />
-                                        </div>
-                                    </div>
-                                    <div className='row g-2 mb-2'>
-                                        <div className='col'>
-                                            <TextField label="Purchase Ref.No"
-                                                id="purchaseRefNoId"
-                                                defaultValue=""
-                                                value={itemAddData.purchaseRefNo}
-                                                onChange={handleItemAddChange}
-                                                size="small"
-                                                fullWidth
-                                                name="purchaseRefNo" />
-                                        </div>
-                                        <div className='col' style={{ width: "200%" }}>
-                                            <TextField label="Purchase Date"
-                                                id="purchaseDateId"
-                                                defaultValue=""
-                                                value={itemAddData.purchaseDate}
-                                                onChange={handleItemAddChange}
-                                                size="small"
-                                                fullWidth
-                                                name="purchaseDate" />
-                                            {/* <DatePicker
+                                                    <TextField label="Gauge life alert in days"
+                                                        id="lifealertDaysId"
+                                                        defaultValue=""
+                                                        size="small"
+                                                        value={itemAddData.lifealertDays}
+                                                        onChange={handleItemAddChange}
+                                                        fullWidth
+                                                        name="lifealertDays" />
+                                                </div>
+                                            </div>
+                                            <div className='row g-2 mb-2'>
+                                                <div className='col'>
+                                                    <TextField label="Purchase Ref.No"
+                                                        id="purchaseRefNoId"
+                                                        defaultValue=""
+                                                        value={itemAddData.purchaseRefNo}
+                                                        onChange={handleItemAddChange}
+                                                        size="small"
+                                                        fullWidth
+                                                        name="purchaseRefNo" />
+                                                </div>
+                                                <div className='col' style={{ width: "200%" }}>
+                                                    <TextField label="Purchase Date"
+                                                        id="purchaseDateId"
+                                                        defaultValue=""
+                                                        value={itemAddData.purchaseDate}
+                                                        onChange={handleItemAddChange}
+                                                        size="small"
+                                                        fullWidth
+                                                        name="purchaseDate" />
+                                                    {/* <DatePicker
                                                 fullWidth
                                                 id="purchaseDateId"
                                                 name="purchaseDate"
@@ -1933,50 +1935,82 @@ const ItemAdd = () => {
                                                 slotProps={{ textField: { size: 'small' } }}
                                                 className="h-100"
                                             format="DD-MM-YYYY" />*/}
-                                        </div>
-                                        <div className='col'>
-                                            <TextField label="Purchase Cost"
-                                                id="purchaseCostId"
-                                                defaultValue=""
-                                                size="small"
-                                                fullWidth
-                                                value={itemAddData.purchaseCost}
-                                                onChange={handleItemAddChange}
-                                                name="purchaseCost" />
+                                                </div>
+                                                <div className='col'>
+                                                    <TextField label="Purchase Cost"
+                                                        id="purchaseCostId"
+                                                        defaultValue=""
+                                                        size="small"
+                                                        fullWidth
+                                                        value={itemAddData.purchaseCost}
+                                                        onChange={handleItemAddChange}
+                                                        name="purchaseCost" />
+                                                </div>
+
+                                            </div>
+                                            <div className='row g-2 mb-2'>
+                                                <div className='col'>
+                                                    <TextField label="Special Remark"
+                                                        id="specialRemarkId"
+                                                        defaultValue=""
+                                                        size="small"
+                                                        value={itemAddData.specialRemark}
+                                                        onChange={handleItemAddChange}
+                                                        fullWidth
+                                                        name="specialRemark" />
+                                                </div>
+                                                <div className='col'>
+                                                    <TextField label="Drawing Issue No"
+                                                        id="drawingIssueNoId"
+                                                        defaultValue=""
+                                                        size="small"
+                                                        value={itemAddData.drawingIssueNo}
+                                                        onChange={handleItemAddChange}
+                                                        fullWidth
+                                                        name="drawingIssueNo" />
+                                                </div>
+                                                <div className='col'>
+                                                    <TextField label="Drawing No"
+                                                        id="drawingNoId"
+                                                        defaultValue=""
+                                                        size="small"
+                                                        onChange={handleItemAddChange}
+                                                        value={itemAddData.drawingNo}
+                                                        fullWidth
+                                                        name="drawingNo" />
+                                                </div>
+                                            </div>
+
+
+
+
+
                                         </div>
 
-                                    </div>
-                                    <div className='row g-2 mb-2'>
-                                        <div className='col'>
-                                            <TextField label="Special Remark"
-                                                id="specialRemarkId"
-                                                defaultValue=""
-                                                size="small"
-                                                value={itemAddData.specialRemark}
-                                                onChange={handleItemAddChange}
-                                                fullWidth
-                                                name="specialRemark" />
+                                        <div className='col d-flex justify-content-end mb-2 '>
+                                            <div className='col me-2'>
+                                                <TextField label="Drawing No"
+                                                    id="drawingNoId"
+                                                    defaultValue=""
+                                                    size="small"
+                                                    onChange={handleItemAddChange}
+                                                    value={itemAddData.drawingNo}
+                                                    fullWidth
+                                                    name="drawingNo" />
+                                            </div>
+                                            <div className='col'>
+                                                <TextField label="Drawing No"
+                                                    id="drawingNoId"
+                                                    defaultValue=""
+                                                    size="small"
+                                                    onChange={handleItemAddChange}
+                                                    value={itemAddData.drawingNo}
+                                                    fullWidth
+                                                    name="drawingNo" />
+                                            </div>
+
                                         </div>
-                                        <div className='col'>
-                                            <TextField label="Drawing Issue No"
-                                                id="drawingIssueNoId"
-                                                defaultValue=""
-                                                size="small"
-                                                value={itemAddData.drawingIssueNo}
-                                                onChange={handleItemAddChange}
-                                                fullWidth
-                                                name="drawingIssueNo" />
-                                        </div>
-                                        <div className='col'>
-                                            <TextField label="Drawing No"
-                                                id="drawingNoId"
-                                                defaultValue=""
-                                                size="small"
-                                                onChange={handleItemAddChange}
-                                                value={itemAddData.drawingNo}
-                                                fullWidth
-                                                name="drawingNo" />
-                                        </div>
+
                                     </div>
                                     <div className='row g-2'>
 
@@ -2054,71 +2088,11 @@ const ItemAdd = () => {
 
                                             </tbody>
                                         </table>
-
-
-
-                                        {/* <div className='col-md-6 d-flex' >
-                                            {itemAddData.rdName === "" ?
-                                                <Button helperText="Hello" className='me-2' size='small' component="label" fullWidth variant="contained" startIcon={<CloudUpload />} >
-                                                    R&R Upload
-                                                    <VisuallyHiddenInput type="file" onChange={handleAdditionalCertificate} />
-                                                </Button>
-                                                : <div className='row  justify-content-center '>
-                                                    {(itemAddData.rdName !== "" && itemAddData.rdName !== undefined) &&
-                                                        <Chip
-                                                            className='mt-2'
-                                                            icon={<Done />}
-                                                            color="success"
-                                                            label={itemAddData.rdName}
-                                                            onClick={() => {
-                                                                const fileUrl = `${process.env.REACT_APP_PORT}/additionalCertificates/${itemAddData.rdName}`;
-                                                                window.open(fileUrl, '_blank'); // Opens the file in a new tab/window
-                                                            }}
-                                                            onDelete={() => setItemAddData((prev) => ({ ...prev, rdName: "" }))}
-                                                        />}
-                                                </div>}
-                                                
-                                            {itemAddData.msaName === "" ?
-                                                <Button helperText="Hello" className='me-2' component="label" size='small' fullWidth variant="contained" startIcon={<CloudUpload />} >
-                                                    MSA Upload
-                                                    <VisuallyHiddenInput type="file" onChange={handleMSACertificate} />
-                                                </Button>
-                                                : <div className='d-flex justify-content-center '>
-                                                    {(itemAddData.msaName !== "" && itemAddData.msaName !== undefined) &&
-                                                        <Chip
-                                                            className='mt-2'
-                                                            icon={<Done />}
-                                                            color="success"
-                                                            label={itemAddData.msaName}
-                                                            onClick={() => {
-                                                                const fileUrl = `${process.env.REACT_APP_PORT}/msaCertificates/${itemAddData.msaName}`;
-                                                                window.open(fileUrl, '_blank'); // Opens the file in a new tab/window
-                                                            }}
-                                                            onDelete={() => setItemAddData((prev) => ({ ...prev, msaName: "" }))}
-                                                        />}
-                                                </div>}
-
-                                            {itemAddData.otherFile === "" ?
-                                            <Button helperText="Hello" component="label" size='small' fullWidth variant="contained" startIcon={<CloudUpload />} >
-                                              Drawing Upload
-                                                <VisuallyHiddenInput type="file" onChange={handleOtherFilesCertificate} />
-                                            </Button>
-                                           : <div className='d-flex justify-content-center '>
-                                                {(itemAddData.otherFile !== "" && itemAddData.otherFile !== undefined) &&
-                                                    <Chip
-                                                        className='mt-2'
-                                                        icon={<Done />}
-                                                        color="success"
-                                                        label={itemAddData.otherFile}
-                                                        onClick={() => {
-                                                            const fileUrl = `${process.env.REACT_APP_PORT}/otherFilesCertificates/${itemAddData.otherFile}`;
-                                                            window.open(fileUrl, '_blank'); // Opens the file in a new tab/window
-                                                        }}
-                                                        onDelete={() => setItemAddData((prev) => ({ ...prev, otherFile: "" }))}
-                                                    />}
-                                            </div>}
-                                        </div> */}
                                     </div>
+
+
+
+
                                 </DialogContent>
                             </Dialog>
 
