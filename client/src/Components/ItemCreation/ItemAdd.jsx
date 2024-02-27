@@ -219,6 +219,7 @@ const ItemAdd = () => {
 
         selectedItemMaster: [],
         isItemMaster: "0",
+        itemMasterRef: "",
         itemAddMasterName: "",
         itemIMTENo: "",
         itemSAPNo: "",
@@ -288,6 +289,11 @@ const ItemAdd = () => {
         rdName: "",
         msaName: "",
         otherFile: "",
+
+        itemSOPNo: "",
+        itemStandardRef: "",
+        itemMasterUncertainty: "",
+        itemMasterUncertaintyUnit: ""
     })
     //upload Button
     const VisuallyHiddenInput = styled('input')({
@@ -357,6 +363,8 @@ const ItemAdd = () => {
 
     const handleItemAddChange = (e) => {
         const { name, value, checked } = e.target;
+        console.log(name)
+        setItemAddData((prev) => ({ ...prev, [name]: value }));
 
         if (name === "itemRangeSizeUnit") {
             setItemAddData((prev) => ({ ...prev, [name]: value, acceptanceCriteria: [{ acAccuracyUnit: value, acRangeSizeUnit: value }] }))
@@ -403,7 +411,7 @@ const ItemAdd = () => {
             setItemAddData((prev) => ({ ...prev, itemOEM: typeof value === 'string' ? value.split(',') : value }));
         }
 
-        setItemAddData((prev) => ({ ...prev, [name]: value }));
+
 
         if (name === "isItemMaster") {
             setItemAddData((prev) => ({
@@ -447,39 +455,37 @@ const ItemAdd = () => {
         dueDate = new Date(currentYear, currentMonth + calibrationFrequencyMonths + 1, 0);
     }
     console.log(dueDate)
-
-
-
-
-
-
-
-
+    console.log(itemAddData)
 
 
     const [calibrationPointsData, setCalibrationPointsData] = useState([])
     const itemMasterById = () => {
 
-        const master = itemMasterDataList.filter(mas => mas.itemDescription === itemAddData.itemAddMasterName)
+        const master = itemMasterDataList.filter(mas => mas.itemMasterId === itemAddData.itemMasterRef)
         console.log(master)
         if (master.length > 0) {
-            const { _id, itemType, itemDescription, itemFrequencyType, itemPrefix, itemFqInMonths, calAlertInDay, wiNo, uncertainity, standardRef, itemImageName, status, itemMasterImage, workInsName, calibrationPoints } = master[0]
+            const { _id, itemType, itemDescription, itemFrequencyType, itemPrefix, itemFqInMonths, calAlertInDay, SOPNo, uncertainity, uncertaintyUnit, standardRef, itemMasterImage, calibrationPoints } = master[0]
             setItemAddData((prev) => ({
                 ...prev,
                 itemType: itemType,
                 itemIMTENo: itemPrefix,
+                itemAddMasterName: itemDescription,
                 itemImage: itemMasterImage,
                 itemCalFreInMonths: itemFqInMonths,
                 itemCalAlertDays: calAlertInDay,
-                itemCalFrequencyType: itemFrequencyType
+                itemCalFrequencyType: itemFrequencyType,
+                itemSOPNo: SOPNo,
+                itemStandardRef: standardRef,
+                itemMasterUncertainty: uncertainity,
+                itemMasterUncertaintyUnit: uncertaintyUnit
             }))
             setCalibrationPointsData(calibrationPoints)
         }
     };
 
     useEffect(() => {
-        itemMasterById(itemAddData.itemAddMasterName);
-    }, [itemAddData.itemAddMasterName]);
+        itemMasterById(itemAddData.itemMasterRef);
+    }, [itemAddData.itemMasterRef, itemMasterDataList]);
 
     const [plantWisePart, setPlantWisePart] = useState([])
 
@@ -871,10 +877,10 @@ const ItemAdd = () => {
                             <div className='col-9'>
                                 <TextField
                                     {...(errors.itemAddMasterName !== "" && { helperText: errors.itemAddMasterName, error: true })}
-                                    size='small' select variant='outlined' label="Item Name" name='itemAddMasterName' value={itemAddData.itemAddMasterName} fullWidth onChange={handleItemAddChange}>
+                                    size='small' select variant='outlined' label="Item Name" name='itemMasterRef' value={itemAddData.itemMasterRef} fullWidth onChange={handleItemAddChange}>
                                     <MenuItem value=""><em>Select</em></MenuItem>
                                     {itemMasterDataList.map((item, index) => (
-                                        <MenuItem key={index} value={item.itemDescription}>{item.itemDescription}</MenuItem>
+                                        <MenuItem key={index} value={item.itemMasterId}>{item.itemDescription}</MenuItem>
                                     ))}
                                 </TextField>
                             </div>
@@ -903,7 +909,7 @@ const ItemAdd = () => {
                                 />
                             </div>
                             <div className='col-1' >
-                                <Button style={{margin: "13% 0" }} component={Link} to="/" size='small' className=''>Home</Button>
+                                <Button style={{ margin: "13% 0" }} component={Link} to="/" size='small' className=''>Home</Button>
                             </div>
 
                         </div>

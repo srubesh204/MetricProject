@@ -121,6 +121,11 @@ const itemAddSchema = new mongoose.Schema({
   rdName: String,
   msaName: String,
   otherFile: String,
+
+  itemSOPNo: String,
+  itemStandardRef: String,
+  itemMasterUncertainty: String,
+  itemMasterUncertaintyUnit: String
   
 
 });

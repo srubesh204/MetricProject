@@ -113,6 +113,10 @@ const itemAddController = {
         rdName,
         msaName,
         otherFile,
+        itemSOPNo,
+        itemStandardRef,
+        itemMasterUncertainty,
+        itemMasterUncertaintyUnit
 
         // Assuming createdAt is part of the request body
       } = req.body;
@@ -193,6 +197,10 @@ const itemAddController = {
         rdName,
         msaName,
         otherFile,
+        itemSOPNo,
+        itemStandardRef,
+        itemMasterUncertainty,
+        itemMasterUncertaintyUnit
 
       };
 
@@ -279,6 +287,10 @@ const itemAddController = {
         rdName,
         msaName,
         otherFile,
+        itemSOPNo,
+        itemStandardRef,
+        itemMasterUncertainty,
+        itemMasterUncertaintyUnit
 
       });
       await historyRecord.save();
@@ -380,6 +392,10 @@ const itemAddController = {
         rdName,
         msaName,
         otherFile,
+        itemSOPNo,
+        itemStandardRef,
+        itemMasterUncertainty,
+        itemMasterUncertaintyUnit
       } = req.body;
       // Create an object with the fields you want to update
       const updateItemFields = {
@@ -453,6 +469,10 @@ const itemAddController = {
         rdName,
         msaName,
         otherFile,
+        itemSOPNo,
+        itemStandardRef,
+        itemMasterUncertainty,
+        itemMasterUncertaintyUnit
       };
 
       // Find the designation by desId and update it
@@ -546,6 +566,10 @@ const itemAddController = {
           rdName,
           msaName,
           otherFile,
+          itemSOPNo,
+          itemStandardRef,
+          itemMasterUncertainty,
+          itemMasterUncertaintyUnit
 
         };
 
