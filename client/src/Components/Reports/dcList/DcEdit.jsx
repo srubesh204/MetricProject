@@ -86,9 +86,9 @@ const DcEdit = () => {
                 dcCreatedBy: selectedRows.dcCreatedBy
 
             }));
-            const plantItems = itemPlantList.filter(item => item.itemPlant === selectedRows.dcPlant)
-            setSelectedPlantItems(plantItems)
-            const distinctItemNames = [... new Set(plantItems.map(item => item.itemAddMasterName))]
+            
+            setSelectedPlantItems(itemPlantList)
+            const distinctItemNames = [... new Set(itemPlantList.map(item => item.itemAddMasterName))]
             setItemNameList(distinctItemNames)
             console.log(distinctItemNames)
 
