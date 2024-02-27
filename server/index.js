@@ -33,8 +33,15 @@ const itemHistoryRoute = require("./routes/itemHistoryRoute")
 const measurementUncertaintyRoute = require("./routes/measurementUncertaintyRoute");
 const uncMaterialCteRoute = require('./routes/uncMaterialCteRoute')
 const uncTypeBRoute = require('./routes/uncTypeBRoute')
+const pdfmake = require('pdfmake');
+//const pdfFonts = require('./vfs_fonts');
 
+const pdfPrinter = require('pdf-to-printer');
+const PDFDocument = require('pdfkit');
 const fs = require('fs');
+const childProcess = require('child_process');
+
+//const printer = require('node-printer');
 
 
 db.connectDatabase();
@@ -47,18 +54,6 @@ app.use(cors());
 app.use(bodyParser.json({ limit: '100mb' }));
 app.use(bodyParser.urlencoded({ limit: '20mb', extended: true }));
 
-
-// app.post('/login', async (req, res) => {
-//   const { username, password, company } = req.body;
-
-//   // Validate the username and password
-//   // ...
-
-//   // If the user is valid, connect to the company's database
-//   db.connectDatabase(company);
-
-//   // rest of your code...
-// });
 
 app.use('/department', departmentRoute);
 app.use('/designation', designationRoute);
@@ -101,9 +96,62 @@ app.use('/measurementUncertainty', measurementUncertaintyRoute)
 app.use('/unc', measurementUncertaintyRoute)
 app.use('/unc', uncMaterialCteRoute)
 app.use('/unc', uncTypeBRoute)
- 
+
 //
 app.post('/login', employeeController.employeeLoginCheck)
+
+
+app.get('/print', (req, res) => {
+  // Your JSON data
+  const data = [
+    { id: 'MP/DI/110', calDate: '22-Mar-23', nextDue: '21-Mar-24' },
+    { id: 'MP/DI/148', calDate: '22-Mar-23', nextDue: '21-Mar-24' },
+    // Add more objects as needed
+  ];
+
+  // Convert dimensions from mm to points (1 inch = 25.4 mm = 72 points)
+  const labelWidth = 40 / 25.4 * 72;
+  const labelHeight = 15 / 25.4 * 72;
+
+  // Create a new PDF document
+  const doc = new PDFDocument({ autoFirstPage: false });
+
+  // For each item in the data array
+  data.forEach((item, index) => {
+    // Add a new page for each item
+    doc.addPage({
+      size: [labelWidth, labelHeight],
+      margins: { top: 0, bottom: 0, left: 0, right: 0 }
+    });
+
+    // Write the item's details
+    doc.fontSize(8).text(`ID No : ${item.id}`, 0, 0);
+    doc.fontSize(8).text(`Cal Date : ${item.calDate}`, 0, 5);
+    doc.fontSize(8).text(`Next Due : ${item.nextDue}`, 0, 10);
+  });
+
+  // Pipe its output somewhere, like to a file or HTTP response
+  // This is required before ending the document
+  const writeStream = fs.createWriteStream('output.pdf');
+  doc.pipe(writeStream);
+
+  // Finalize the PDF file
+  doc.end();
+
+  writeStream.on('finish', () => {
+    // Print the PDF
+    pdfPrinter
+      .print('output.pdf', { printerName: 'TSC TE210' })
+      .then(() => {
+        console.log('File printed successfully.');
+        res.send('File printed successfully.');
+      })
+      .catch((err) => {
+        console.error('Error printing file:', err);
+        res.status(500).send('Error printing file.');
+      });
+  });
+});
 
 app.listen(process.env.SERVER_PORT_NO || 3003, () => {
   console.log(`Server is running on port ${process.env.SERVER_PORT_NO}`);
