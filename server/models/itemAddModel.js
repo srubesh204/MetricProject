@@ -125,7 +125,8 @@ const itemAddSchema = new mongoose.Schema({
   itemSOPNo: String,
   itemStandardRef: String,
   itemMasterUncertainty: String,
-  itemMasterUncertaintyUnit: String
+  itemMasterUncertaintyUnit: String ,
+  plantAccess: [],
   
 
 });

@@ -19,9 +19,12 @@ const ItemAdd = () => {
     // Units Data
 
     const employeeRole = useEmployee();
-    const { allowedPlants } = employeeRole
+    const { allowedPlants,loggedEmp } = employeeRole
 
     const [addOpenData, setAddOpenData] = useState(false)
+    const [masterSharingData, setMasterSharingData] = useState(false)
+
+
     const [units, setUnits] = useState([]);
     const UnitFetch = async () => {
         try {
@@ -219,7 +222,6 @@ const ItemAdd = () => {
 
         selectedItemMaster: [],
         isItemMaster: "0",
-        itemMasterRef: "",
         itemAddMasterName: "",
         itemIMTENo: "",
         itemSAPNo: "",
@@ -252,6 +254,7 @@ const ItemAdd = () => {
         itemDueDate: "",
         itemCalibratedAt: "",
         itemCertificateName: "",
+        plantAccess: [],
         itemCertificateNo: "",
         itemPartName: [],
         itemOBType: "average",
@@ -289,11 +292,6 @@ const ItemAdd = () => {
         rdName: "",
         msaName: "",
         otherFile: "",
-
-        itemSOPNo: "",
-        itemStandardRef: "",
-        itemMasterUncertainty: "",
-        itemMasterUncertaintyUnit: ""
     })
     //upload Button
     const VisuallyHiddenInput = styled('input')({
@@ -363,8 +361,6 @@ const ItemAdd = () => {
 
     const handleItemAddChange = (e) => {
         const { name, value, checked } = e.target;
-        console.log(name)
-        setItemAddData((prev) => ({ ...prev, [name]: value }));
 
         if (name === "itemRangeSizeUnit") {
             setItemAddData((prev) => ({ ...prev, [name]: value, acceptanceCriteria: [{ acAccuracyUnit: value, acRangeSizeUnit: value }] }))
@@ -411,7 +407,7 @@ const ItemAdd = () => {
             setItemAddData((prev) => ({ ...prev, itemOEM: typeof value === 'string' ? value.split(',') : value }));
         }
 
-
+        setItemAddData((prev) => ({ ...prev, [name]: value }));
 
         if (name === "isItemMaster") {
             setItemAddData((prev) => ({
@@ -455,37 +451,39 @@ const ItemAdd = () => {
         dueDate = new Date(currentYear, currentMonth + calibrationFrequencyMonths + 1, 0);
     }
     console.log(dueDate)
-    console.log(itemAddData)
+
+
+
+
+
+
+
+
 
 
     const [calibrationPointsData, setCalibrationPointsData] = useState([])
     const itemMasterById = () => {
 
-        const master = itemMasterDataList.filter(mas => mas.itemMasterId === itemAddData.itemMasterRef)
+        const master = itemMasterDataList.filter(mas => mas.itemDescription === itemAddData.itemAddMasterName)
         console.log(master)
         if (master.length > 0) {
-            const { _id, itemType, itemDescription, itemFrequencyType, itemPrefix, itemFqInMonths, calAlertInDay, SOPNo, uncertainity, uncertaintyUnit, standardRef, itemMasterImage, calibrationPoints } = master[0]
+            const { _id, itemType, itemDescription, itemFrequencyType, itemPrefix, itemFqInMonths, calAlertInDay, wiNo, uncertainity, standardRef, itemImageName, status, itemMasterImage, workInsName, calibrationPoints } = master[0]
             setItemAddData((prev) => ({
                 ...prev,
                 itemType: itemType,
                 itemIMTENo: itemPrefix,
-                itemAddMasterName: itemDescription,
                 itemImage: itemMasterImage,
                 itemCalFreInMonths: itemFqInMonths,
                 itemCalAlertDays: calAlertInDay,
-                itemCalFrequencyType: itemFrequencyType,
-                itemSOPNo: SOPNo,
-                itemStandardRef: standardRef,
-                itemMasterUncertainty: uncertainity,
-                itemMasterUncertaintyUnit: uncertaintyUnit
+                itemCalFrequencyType: itemFrequencyType
             }))
             setCalibrationPointsData(calibrationPoints)
         }
     };
 
     useEffect(() => {
-        itemMasterById(itemAddData.itemMasterRef);
-    }, [itemAddData.itemMasterRef, itemMasterDataList]);
+        itemMasterById(itemAddData.itemAddMasterName);
+    }, [itemAddData.itemAddMasterName]);
 
     const [plantWisePart, setPlantWisePart] = useState([])
 
@@ -877,10 +875,10 @@ const ItemAdd = () => {
                             <div className='col-9'>
                                 <TextField
                                     {...(errors.itemAddMasterName !== "" && { helperText: errors.itemAddMasterName, error: true })}
-                                    size='small' select variant='outlined' label="Item Name" name='itemMasterRef' value={itemAddData.itemMasterRef} fullWidth onChange={handleItemAddChange}>
+                                    size='small' select variant='outlined' label="Item Name" name='itemAddMasterName' value={itemAddData.itemAddMasterName} fullWidth onChange={handleItemAddChange}>
                                     <MenuItem value=""><em>Select</em></MenuItem>
                                     {itemMasterDataList.map((item, index) => (
-                                        <MenuItem key={index} value={item.itemMasterId}>{item.itemDescription}</MenuItem>
+                                        <MenuItem key={index} value={item.itemDescription}>{item.itemDescription}</MenuItem>
                                     ))}
                                 </TextField>
                             </div>
@@ -1382,7 +1380,7 @@ const ItemAdd = () => {
                                                     <MenuItem key={index} value={item.fullName}>{item.aliasName}</MenuItem>
                                                 ))}
                                             </TextField>
-                                            {itemAddData.isItemMaster === "1" &&
+                                           
                                                 <React.Fragment>
                                                     <TextField disabled={itemAddData.itemPrevCalData !== "available"}
                                                         className='ms-2'
@@ -1409,7 +1407,7 @@ const ItemAdd = () => {
                                                             <MenuItem key={index} value={unit.unitName}>{unit.unitName}</MenuItem>
                                                         ))}
                                                     </TextField>
-                                                </React.Fragment>}
+                                                </React.Fragment>
                                         </div>
 
 
@@ -1827,14 +1825,12 @@ const ItemAdd = () => {
                                 </table>
 
                                 <div className="d-flex justify-content-center">
-                                    <div className='col'>
-                                        <Button
-                                            className='col '
-                                            onClick={() => setAddOpenData(true)}
-                                        >
-                                            Additional Information
-                                        </Button>
+                                    <div className='col  me-2'>
+                                        <Button onClick={() => setAddOpenData(true)} >  Additional Information </Button>
+
+                                      {(itemAddData.itemAddMasterName !== "" && itemAddData.itemPlant !== ""  && itemAddData.isItemMaster === "1") &&   <Button className='col' onClick={() => setMasterSharingData(true)} >Master Sharing </Button>}
                                     </div>
+
 
                                     <div className="d-flex justify-content-end">
                                         <Button onClick={() => setOpen(true)} className='me-3' type="button">
@@ -1872,64 +1868,63 @@ const ItemAdd = () => {
                                 </IconButton>
 
                                 <DialogContent >
-                                    <div className='row'>
-                                        <div className='col d-flex '>
-                                            <div className='row g-2 mb-2'>
-                                                <div className='col'>
-                                                    <TextField label="Calibration Cost"
-                                                        id="calibrationCostId"
-                                                        defaultValue=""
-                                                        value={itemAddData.calibrationCost}
-                                                        onChange={handleItemAddChange}
-                                                        size="small"
-                                                        fullWidth
-                                                        name="calibrationCost" />
 
-                                                </div>
-                                                <div className='col'>
-                                                    <TextField label="Gauge life in days"
-                                                        id="gaugeUsageId"
-                                                        defaultValue=""
-                                                        size="small"
-                                                        fullWidth
-                                                        value={itemAddData.gaugeUsage}
-                                                        onChange={handleItemAddChange}
-                                                        name="gaugeUsage" />
+                                    <div className='row g-2 mb-2'>
+                                        <div className='col'>
+                                            <TextField label="Calibration Cost"
+                                                id="calibrationCostId"
+                                                defaultValue=""
+                                                value={itemAddData.calibrationCost}
+                                                onChange={handleItemAddChange}
+                                                size="small"
+                                                fullWidth
+                                                name="calibrationCost" />
 
-                                                </div>
-                                                <div className='col'>
+                                        </div>
+                                        <div className='col'>
+                                            <TextField label="Gauge life in days"
+                                                id="gaugeUsageId"
+                                                defaultValue=""
+                                                size="small"
+                                                fullWidth
+                                                value={itemAddData.gaugeUsage}
+                                                onChange={handleItemAddChange}
+                                                name="gaugeUsage" />
 
-                                                    <TextField label="Gauge life alert in days"
-                                                        id="lifealertDaysId"
-                                                        defaultValue=""
-                                                        size="small"
-                                                        value={itemAddData.lifealertDays}
-                                                        onChange={handleItemAddChange}
-                                                        fullWidth
-                                                        name="lifealertDays" />
-                                                </div>
-                                            </div>
-                                            <div className='row g-2 mb-2'>
-                                                <div className='col'>
-                                                    <TextField label="Purchase Ref.No"
-                                                        id="purchaseRefNoId"
-                                                        defaultValue=""
-                                                        value={itemAddData.purchaseRefNo}
-                                                        onChange={handleItemAddChange}
-                                                        size="small"
-                                                        fullWidth
-                                                        name="purchaseRefNo" />
-                                                </div>
-                                                <div className='col' style={{ width: "200%" }}>
-                                                    <TextField label="Purchase Date"
-                                                        id="purchaseDateId"
-                                                        defaultValue=""
-                                                        value={itemAddData.purchaseDate}
-                                                        onChange={handleItemAddChange}
-                                                        size="small"
-                                                        fullWidth
-                                                        name="purchaseDate" />
-                                                    {/* <DatePicker
+                                        </div>
+                                        <div className='col'>
+
+                                            <TextField label="Gauge life alert in days"
+                                                id="lifealertDaysId"
+                                                defaultValue=""
+                                                size="small"
+                                                value={itemAddData.lifealertDays}
+                                                onChange={handleItemAddChange}
+                                                fullWidth
+                                                name="lifealertDays" />
+                                        </div>
+                                    </div>
+                                    <div className='row g-2 mb-2'>
+                                        <div className='col'>
+                                            <TextField label="Purchase Ref.No"
+                                                id="purchaseRefNoId"
+                                                defaultValue=""
+                                                value={itemAddData.purchaseRefNo}
+                                                onChange={handleItemAddChange}
+                                                size="small"
+                                                fullWidth
+                                                name="purchaseRefNo" />
+                                        </div>
+                                        <div className='col' style={{ width: "200%" }}>
+                                            <TextField label="Purchase Date"
+                                                id="purchaseDateId"
+                                                defaultValue=""
+                                                value={itemAddData.purchaseDate}
+                                                onChange={handleItemAddChange}
+                                                size="small"
+                                                fullWidth
+                                                name="purchaseDate" />
+                                            {/* <DatePicker
                                                 fullWidth
                                                 id="purchaseDateId"
                                                 name="purchaseDate"
@@ -1941,82 +1936,50 @@ const ItemAdd = () => {
                                                 slotProps={{ textField: { size: 'small' } }}
                                                 className="h-100"
                                             format="DD-MM-YYYY" />*/}
-                                                </div>
-                                                <div className='col'>
-                                                    <TextField label="Purchase Cost"
-                                                        id="purchaseCostId"
-                                                        defaultValue=""
-                                                        size="small"
-                                                        fullWidth
-                                                        value={itemAddData.purchaseCost}
-                                                        onChange={handleItemAddChange}
-                                                        name="purchaseCost" />
-                                                </div>
-
-                                            </div>
-                                            <div className='row g-2 mb-2'>
-                                                <div className='col'>
-                                                    <TextField label="Special Remark"
-                                                        id="specialRemarkId"
-                                                        defaultValue=""
-                                                        size="small"
-                                                        value={itemAddData.specialRemark}
-                                                        onChange={handleItemAddChange}
-                                                        fullWidth
-                                                        name="specialRemark" />
-                                                </div>
-                                                <div className='col'>
-                                                    <TextField label="Drawing Issue No"
-                                                        id="drawingIssueNoId"
-                                                        defaultValue=""
-                                                        size="small"
-                                                        value={itemAddData.drawingIssueNo}
-                                                        onChange={handleItemAddChange}
-                                                        fullWidth
-                                                        name="drawingIssueNo" />
-                                                </div>
-                                                <div className='col'>
-                                                    <TextField label="Drawing No"
-                                                        id="drawingNoId"
-                                                        defaultValue=""
-                                                        size="small"
-                                                        onChange={handleItemAddChange}
-                                                        value={itemAddData.drawingNo}
-                                                        fullWidth
-                                                        name="drawingNo" />
-                                                </div>
-                                            </div>
-
-
-
-
-
+                                        </div>
+                                        <div className='col'>
+                                            <TextField label="Purchase Cost"
+                                                id="purchaseCostId"
+                                                defaultValue=""
+                                                size="small"
+                                                fullWidth
+                                                value={itemAddData.purchaseCost}
+                                                onChange={handleItemAddChange}
+                                                name="purchaseCost" />
                                         </div>
 
-                                        <div className='col d-flex justify-content-end mb-2 '>
-                                            <div className='col me-2'>
-                                                <TextField label="Drawing No"
-                                                    id="drawingNoId"
-                                                    defaultValue=""
-                                                    size="small"
-                                                    onChange={handleItemAddChange}
-                                                    value={itemAddData.drawingNo}
-                                                    fullWidth
-                                                    name="drawingNo" />
-                                            </div>
-                                            <div className='col'>
-                                                <TextField label="Drawing No"
-                                                    id="drawingNoId"
-                                                    defaultValue=""
-                                                    size="small"
-                                                    onChange={handleItemAddChange}
-                                                    value={itemAddData.drawingNo}
-                                                    fullWidth
-                                                    name="drawingNo" />
-                                            </div>
-
+                                    </div>
+                                    <div className='row g-2 mb-2'>
+                                        <div className='col'>
+                                            <TextField label="Special Remark"
+                                                id="specialRemarkId"
+                                                defaultValue=""
+                                                size="small"
+                                                value={itemAddData.specialRemark}
+                                                onChange={handleItemAddChange}
+                                                fullWidth
+                                                name="specialRemark" />
                                         </div>
-
+                                        <div className='col'>
+                                            <TextField label="Drawing Issue No"
+                                                id="drawingIssueNoId"
+                                                defaultValue=""
+                                                size="small"
+                                                value={itemAddData.drawingIssueNo}
+                                                onChange={handleItemAddChange}
+                                                fullWidth
+                                                name="drawingIssueNo" />
+                                        </div>
+                                        <div className='col'>
+                                            <TextField label="Drawing No"
+                                                id="drawingNoId"
+                                                defaultValue=""
+                                                size="small"
+                                                onChange={handleItemAddChange}
+                                                value={itemAddData.drawingNo}
+                                                fullWidth
+                                                name="drawingNo" />
+                                        </div>
                                     </div>
                                     <div className='row g-2'>
 
@@ -2094,13 +2057,156 @@ const ItemAdd = () => {
 
                                             </tbody>
                                         </table>
+
+
+
+                                        {/* <div className='col-md-6 d-flex' >
+                                            {itemAddData.rdName === "" ?
+                                                <Button helperText="Hello" className='me-2' size='small' component="label" fullWidth variant="contained" startIcon={<CloudUpload />} >
+                                                    R&R Upload
+                                                    <VisuallyHiddenInput type="file" onChange={handleAdditionalCertificate} />
+                                                </Button>
+                                                : <div className='row  justify-content-center '>
+                                                    {(itemAddData.rdName !== "" && itemAddData.rdName !== undefined) &&
+                                                        <Chip
+                                                            className='mt-2'
+                                                            icon={<Done />}
+                                                            color="success"
+                                                            label={itemAddData.rdName}
+                                                            onClick={() => {
+                                                                const fileUrl = `${process.env.REACT_APP_PORT}/additionalCertificates/${itemAddData.rdName}`;
+                                                                window.open(fileUrl, '_blank'); // Opens the file in a new tab/window
+                                                            }}
+                                                            onDelete={() => setItemAddData((prev) => ({ ...prev, rdName: "" }))}
+                                                        />}
+                                                </div>}
+                                                
+                                            {itemAddData.msaName === "" ?
+                                                <Button helperText="Hello" className='me-2' component="label" size='small' fullWidth variant="contained" startIcon={<CloudUpload />} >
+                                                    MSA Upload
+                                                    <VisuallyHiddenInput type="file" onChange={handleMSACertificate} />
+                                                </Button>
+                                                : <div className='d-flex justify-content-center '>
+                                                    {(itemAddData.msaName !== "" && itemAddData.msaName !== undefined) &&
+                                                        <Chip
+                                                            className='mt-2'
+                                                            icon={<Done />}
+                                                            color="success"
+                                                            label={itemAddData.msaName}
+                                                            onClick={() => {
+                                                                const fileUrl = `${process.env.REACT_APP_PORT}/msaCertificates/${itemAddData.msaName}`;
+                                                                window.open(fileUrl, '_blank'); // Opens the file in a new tab/window
+                                                            }}
+                                                            onDelete={() => setItemAddData((prev) => ({ ...prev, msaName: "" }))}
+                                                        />}
+                                                </div>}
+
+                                            {itemAddData.otherFile === "" ?
+                                            <Button helperText="Hello" component="label" size='small' fullWidth variant="contained" startIcon={<CloudUpload />} >
+                                              Drawing Upload
+                                                <VisuallyHiddenInput type="file" onChange={handleOtherFilesCertificate} />
+                                            </Button>
+                                           : <div className='d-flex justify-content-center '>
+                                                {(itemAddData.otherFile !== "" && itemAddData.otherFile !== undefined) &&
+                                                    <Chip
+                                                        className='mt-2'
+                                                        icon={<Done />}
+                                                        color="success"
+                                                        label={itemAddData.otherFile}
+                                                        onClick={() => {
+                                                            const fileUrl = `${process.env.REACT_APP_PORT}/otherFilesCertificates/${itemAddData.otherFile}`;
+                                                            window.open(fileUrl, '_blank'); // Opens the file in a new tab/window
+                                                        }}
+                                                        onDelete={() => setItemAddData((prev) => ({ ...prev, otherFile: "" }))}
+                                                    />}
+                                            </div>}
+                                        </div> */}
                                     </div>
+                                </DialogContent>
+                            </Dialog>
 
 
+
+
+
+                            <Dialog fullWidth={true} keepMounted maxWidth="xl" open={masterSharingData}
+                             sx={{ color: "#f1f4f4" }}
+                                onClose={(e, reason) => {
+                                    console.log(reason)
+                                    if (reason !== 'backdropClick' && reason !== 'escapeKeyDown') {
+                                        setMasterSharingData(false)
+                                    }
+                                }}>
+                                <DialogTitle align='center' >Master Sharing</DialogTitle>
+                                <IconButton
+                                    aria-label="close"
+                                    onClick={() => setMasterSharingData(false)}
+                                    sx={{
+                                        position: 'absolute',
+                                        right: 2,
+                                        top: 5,
+                                        color: (theme) => theme.palette.grey[500],
+                                    }}
+                                >
+                                    <Close />
+                                </IconButton>
+
+                                <DialogContent >
+                                    <div className='row g-2' >
+                                        <div className='col-md-5'>
+                                            <FormControl size='small' component="div" fullWidth  {...(errors.departmentPlant !== "" && { error: true })} >
+                                                <InputLabel id="plantAccessId">Plant Access</InputLabel>
+                                                <Select
+                                                    labelId="plantAccessId"
+                                                    multiple
+                                                    name="plantAccess"
+                                                     value={itemAddData.plantAccess|| []} // Ensure it's an array
+                                                    onChange={handleItemAddChange}
+                                                    input={<OutlinedInput fullWidth label="Plant Access" />}
+                                                    renderValue={(selected) => selected.join(', ')}
+                                                    MenuProps={MenuProps}
+                                                    fullWidth
+                                                >
+                                                    {loggedEmp.plantDetails && loggedEmp.plantDetails.map((plant, index) => (
+                                                        <MenuItem key={index} value={plant.plantName}>
+                                                            <Checkbox checked={itemAddData.plantAccess && itemAddData.plantAccess.indexOf(plant.plantName) > -1} />
+                                                            <ListItemText primary={plant.plantName} />
+                                                        </MenuItem>
+                                                    ))}
+                                                </Select>
+                                                <FormHelperText id="plantAccessId">{errors.plantAccess}</FormHelperText>
+                                            </FormControl>
+
+                                        </div>
+
+
+                                    </div>
 
 
                                 </DialogContent>
                             </Dialog>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
