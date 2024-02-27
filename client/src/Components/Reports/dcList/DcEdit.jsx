@@ -802,7 +802,7 @@ const DcEdit = () => {
                                                     <td>{item.itemAddMasterName}</td>
                                                     <td>{item.itemRangeSize}</td>
                                                     <td>{item.itemMake}</td>
-                                                    <td>{item.itemCalFreInMonths}</td>
+                                                    <td>{item.itemCalFreInMonths + " " + item.itemCalFrequencyType}</td>
                                                     <td> <select className="form-select form-select-sm" id="dcItemRemarksId" name="dcItemRemarks" value={item.dcItemRemarks} onChange={(e) => remarksChange(e, index)} aria-label="Floating label select example">
                                                         <option value="">Select</option>
                                                         <option value="Calibration">Calibration</option>
