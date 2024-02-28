@@ -100,8 +100,8 @@ const itemGRNController = {
         grnItemStatus,
         grnAssingStatus,
         grnAcCriteria,
-        grnItemUncertainity,
-        grnItemUncertainityUnit,
+        grnItemUncertainty,
+        grnItemUncertaintyUnit,
         grnItemCalDate,
         grnItemDueDate,
         grnItemCertificateStatus,
@@ -113,7 +113,7 @@ const itemGRNController = {
         grnCreatedBy,
         grnItemSOPNo,
         grnItemStandardRef,
-      
+
       } = req.body;
 
 
@@ -156,8 +156,8 @@ const itemGRNController = {
         grnItemStatus,
         grnAssingStatus,
         grnAcCriteria,
-        grnItemUncertainity,
-        grnItemUncertainityUnit,
+        grnItemUncertainty,
+        grnItemUncertaintyUnit,
         grnItemCalDate,
         grnItemDueDate,
         grnItemCertificateStatus,
@@ -169,7 +169,7 @@ const itemGRNController = {
         grnCreatedBy,
         grnItemSOPNo,
         grnItemStandardRef,
-        
+
       });
 
       const getCompDetailsById = await compDetailsSchema.findById("companyData");
@@ -249,8 +249,9 @@ const itemGRNController = {
           itemCalibrationDoneAt,
 
           itemOBType,
-          itemUncertainity,
-          itemUncertainityUnit,
+          itemUncertainty,
+          itemUncertaintyUnit,
+          
           itemPrevCalData,
           itemCertificateNo: itemLastCertificateNo,
         } = itemData
@@ -280,6 +281,10 @@ const itemGRNController = {
           dcNo: "",
           dcId: "",
           dcCreatedOn: "",
+          itemUncertainty: result.grnItemUncertainty,
+          itemUncertaintyUnit: result.grnItemUncertaintyUnit,
+          prevItemUncertainty: itemUncertainty,
+          prevItemUncertaintyUnit: itemUncertaintyUnit,
           itemCertificateNo: result.grnItemCertificateNo,
           itemLastCertificateNo,
 
@@ -357,12 +362,13 @@ const itemGRNController = {
           itemCalibrationSource,
           itemCalStatus: result.grnItemCalStatus,
           itemCalibrationDoneAt,
-          itemUncertainityUnit,
+          itemUncertaintyUnit,
           itemPrevCalData,
           itemCalibratedAt: result.grnPartyName,
           itemCertificateName: result.grnItemCertificate,
           itemOBType,
-          itemUncertainity,
+          itemUncertainty: result.grnItemUncertainty,
+          itemUncertaintyUnit: result.grnItemUncertaintyUnit,
           itemLastCertificateNo,
           itemCertificateNo: result.grnItemCertificateNo,
           acceptanceCriteria: obSize
@@ -499,8 +505,8 @@ const itemGRNController = {
         grnItemStatus,
         grnAssingStatus,
         grnAcCriteria,
-        grnItemUncertainity,
-        grnItemUncertainityUnit,
+        grnItemUncertainty,
+        grnItemUncertaintyUnit,
         grnItemCalDate,
         grnItemDueDate,
         grnItemCertificateStatus,
@@ -512,7 +518,7 @@ const itemGRNController = {
         grnCreatedBy,
         grnItemSOPNo,
         grnItemStandardRef,
-        
+
       } = req.body;
 
       // Create an object with the fields you want to update
@@ -556,8 +562,8 @@ const itemGRNController = {
         grnItemStatus,
         grnAssingStatus,
         grnAcCriteria,
-        grnItemUncertainity,
-        grnItemUncertainityUnit,
+        grnItemUncertainty,
+        grnItemUncertaintyUnit,
         grnItemCalDate,
         grnItemDueDate,
         grnItemCertificateStatus,
@@ -569,10 +575,10 @@ const itemGRNController = {
         grnCreatedBy,
         grnItemSOPNo,
         grnItemStandardRef,
-        
+
       };
 
-console.log(updateItemGRNFields)
+      console.log(updateItemGRNFields)
       const getCompDetailsById = await compDetailsSchema.findById("companyData");
       const getPlantAddress = await plantSchema.findOne(
         { plantName: grnPlant } // To return the updated document
@@ -660,8 +666,8 @@ console.log(updateItemGRNFields)
           itemCertificateName,
           itemCertificateNo,
           itemOBType,
-          itemUncertainity,
-          itemUncertainityUnit,
+          itemUncertainty,
+          itemUncertaintyUnit,
           itemPrevCalData,
         } = itemData
 
@@ -678,7 +684,10 @@ console.log(updateItemGRNFields)
           itemDueDate: grnItemStatus === "Calibrated" ? grnItemDueDate : itemLastDueDate,
           itemStatus: itemCondition,
           itemLastStatus: itemStatus,
-
+          itemUncertainty: updateItemGRN.grnItemUncertainty,
+          itemUncertaintyUnit: updateItemGRN.grnItemUncertaintyUnit,
+          prevItemUncertainty: itemUncertainty,
+          prevItemUncertaintyUnit: itemUncertaintyUnit,
           grnId: updateItemGRN._id,
           grnStatus: "1",
           grnCreatedOn: grnDate,
@@ -758,13 +767,14 @@ console.log(updateItemGRNFields)
           itemCalAlertDays,
           itemCalibrationSource,
           itemCalibrationDoneAt,
-          itemUncertainityUnit,
+          itemUncertainty: updateItemGRN.grnItemUncertainty,
+          itemUncertaintyUnit: updateItemGRN.grnItemUncertaintyUnit,
           itemPrevCalData,
           itemCalibratedAt,
           itemCertificateName: grnItemCertificate,
           itemCertificateNo,
           itemOBType,
-          itemUncertainity
+          itemUncertainty
         };
         const itemHistoryData = await itemHistory.findOneAndUpdate(
           { itemGrnId: itemGRNId },
@@ -875,6 +885,8 @@ console.log(updateItemGRNFields)
             itemLastPlace,
             itemCertificateNo: itemLastCertificateNo,
             itemLastCertificateNo: itemCertificateNo,
+            prevItemUncertainty: itemUncertainty,
+            prevItemUncertaintyUnit: itemUncertaintyUnit,
             itemStatus,
             itemLastStatus,
           } = itemData
@@ -890,6 +902,8 @@ console.log(updateItemGRNFields)
             itemDueDate: itemLastDueDate,
             itemStatus: itemLastStatus,
             itemLastStatus: itemStatus,
+            itemUncertainty,
+            itemUncertaintyUnit,
             grnId: "",
             grnStatus: "0",
             grnCreatedOn: "",

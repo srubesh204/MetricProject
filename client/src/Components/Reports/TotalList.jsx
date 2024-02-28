@@ -265,7 +265,7 @@ const TotalList = () => {
     { field: 'itemPrevCalData', headerName: 'ItemPrevCalDate ', width: 90, headerAlign: "center", align: "center", },
     { field: 'itemCertificateName', headerName: 'ItemCertificateName ', width: 90, headerAlign: "center", align: "center", },
     { field: 'itemCertificateNo', headerName: 'ItemCertificateNo ', width: 90, headerAlign: "center", align: "center", },
-    { field: 'itemUncertainity', headerName: 'ItemUncertainity ', width: 90, headerAlign: "center", align: "center", },
+    { field: 'itemUncertainty', headerName: 'ItemUncertainity ', width: 90, headerAlign: "center", align: "center", },
     { field: 'itemPartName', headerName: 'ItemPartName ', width: 90, headerAlign: "center", align: "center", },
     { field: 'itemOBType', headerName: 'ItemOBType ', width: 90, headerAlign: "center", align: "center", },
     { field: 'calibrationCost', headerName: 'CalibrationCost ', width: 90, headerAlign: "center", align: "center", valueGetter: (params) => params.row.calibrationCost || "-" },
