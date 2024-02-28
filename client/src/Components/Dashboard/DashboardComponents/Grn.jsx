@@ -1299,8 +1299,9 @@ const Grn = () => {
                                                         select
                                                         size='small'
                                                         variant='outlined'
+                                                        id='grnItemUncertaintyUnitId'
                                                         label="Unit"
-                                                        name='grnItemUncertainityUnit'
+                                                        name='grnItemUncertaintyUnit'
                                                         onChange={handleGrnItemChange}
                                                         style={{ width: "60%" }}
                                                         value={grnData.grnItemUncertaintyUnit}

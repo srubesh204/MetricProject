@@ -1478,7 +1478,7 @@ const ItemEdit = () => {
                                                 <MenuItem key={index} value={item.fullName}>{item.fullName}</MenuItem>
                                             ))}
                                         </TextField>
-                                        {itemAddData.isItemMaster === "1" &&
+                                      
                                             <React.Fragment>
                                                 <TextField disabled={itemAddData.itemPrevCalData !== "available" || itemStatus}
                                                     className='ms-2'
@@ -1507,7 +1507,7 @@ const ItemEdit = () => {
                                                         <MenuItem key={index} value={unit.unitName}>{unit.unitName}</MenuItem>
                                                     ))}
                                                 </TextField>
-                                            </React.Fragment>}
+                                            </React.Fragment>
                                     </div>
 
 

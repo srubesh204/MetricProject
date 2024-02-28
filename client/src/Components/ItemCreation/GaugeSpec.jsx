@@ -42,7 +42,7 @@ const GaugeSpec = () => {
 
             <DialogContent sx={{ width: "100%" }}>
                 <div>
-                    gdffgy
+                    
 
                 </div>
             </DialogContent>
