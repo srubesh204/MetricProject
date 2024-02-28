@@ -549,7 +549,7 @@ const ItemEdit = () => {
         const { name, value, checked } = e.target;
         if (name === "itemMasterRef") {
             const itemMasterById = () => {
-                const master = itemMasterDataList.filter(mas => mas.itemMasterId === itemAddData.itemMasterRef)
+                const master = itemMasterDataList.filter(mas => mas.itemMasterId == itemAddData.itemMasterRef)
                 console.log(master)
                 if (master.length > 0) {
                     const { _id, itemType, itemDescription, itemFrequencyType, itemPrefix, itemFqInMonths, calAlertInDay, SOPNo, uncertainity, uncertaintyUnit, standardRef, itemMasterImage, calibrationPoints } = master[0]
@@ -681,31 +681,22 @@ const ItemEdit = () => {
     console.log(calibrationPointsData)
 
     const itemMasterById = () => {
-        const master = itemMasterDataList.filter(mas => mas.itemDescription === itemAddData.itemAddMasterName)
+        console.log(itemMasterDataList)
+        const master = itemMasterDataList.filter(mas => mas.itemMasterId == itemAddData.itemMasterRef)
         console.log(master)
         if (master.length > 0) {
-            const { _id, itemType, itemDescription, itemPrefix, itemFrequencyType, itemFqInMonths, calAlertInDay, wiNo, uncertainity, standardRef, itemImageName, status, itemMasterImage, workInsName, calibrationPoints } = master[0]
-            console.log(calibrationPoints)
-            setItemAddData((prev) => ({
-                ...prev,
-                itemType: itemType,
-                //itemIMTENo: itemPrefix,
-                itemImage: itemMasterImage,
-                itemCalFreInMonths: itemFqInMonths,
-                itemCalFrequencyType: itemFrequencyType,
-                itemCalAlertDays: calAlertInDay,
-
-            }))
+            const { calibrationPoints } = master[0]
+            
             setCalibrationPointsData(calibrationPoints)
         }
     };
 
 
-    // useEffect(() => {
-    //     // if (itemAddData.itemAddMasterName) {
-    //         itemMasterById();
-    //     // }
-    // }, [itemAddData.itemAddMasterName, itemMasterDataList]);
+    useEffect(() => {
+        // if (itemAddData.itemAddMasterName) {
+            itemMasterById();
+        // }
+    }, [itemAddData.itemMasterRef, itemMasterDataList]);
 
 
     const [partData, setPartData] = useState([])
