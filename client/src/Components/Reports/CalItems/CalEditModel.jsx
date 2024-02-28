@@ -7,6 +7,7 @@ import isSameOrBefore from 'dayjs/plugin/isSameOrBefore'
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { CalData } from './CalList'
+import { useEmployee } from '../../../App';
 import { Add, Close, CloudUpload, Delete, Done, ErrorOutline } from '@mui/icons-material';
 
 
@@ -14,12 +15,14 @@ dayjs.extend(isSameOrBefore)
 dayjs.extend(isSameOrAfter)
 
 const CalEditModel = () => {
-
+   
+   
 
     const calData = useContext(CalData)
     const [lastResultData, setLastResultData] = useState([])
     const { calEditOpen, setCalEditOpen, selectedCalRow, itemMasters, activeEmps, calListFetchData, employeeRole, masters } = calData
     const [calibrationDatas, setCalibrationDatas] = useState([])
+    const { allowedPlants } = useEmployee()
 
     const VisuallyHiddenInput = styled('input')({
         clip: 'rect(0 0 0 0)',
@@ -216,7 +219,7 @@ const CalEditModel = () => {
     const getAllCalibrationData = async () => {
         try {
             const response = await axios.get(
-                `${process.env.REACT_APP_PORT}/itemCal/getAllItemCals`
+                `${process.env.REACT_APP_PORT}/itemCal/getAllItemCals`,{allowedPlants: allowedPlants}
             );
             console.log(response.data.result)
             const imteNoData = response.data.result.filter((item) => item.calIMTENo === calibrationData.calIMTENo)

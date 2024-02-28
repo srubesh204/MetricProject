@@ -179,8 +179,8 @@ const TestHome = () => {
   const [calLastNo, setCalLastNo] = useState("")
   const calFetch = async () => {
     try {
-      const response = await axios.get(
-        `${process.env.REACT_APP_PORT}/itemCal/getAllItemCals`
+      const response = await axios.post(
+        `${process.env.REACT_APP_PORT}/itemCal/getAllItemCals`,{allowedPlants : allowedPlants}
 
       );
       const calNos = response.data.result.map(cal => cal.calId).filter(Boolean).sort()
