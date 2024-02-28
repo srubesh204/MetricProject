@@ -30,7 +30,22 @@ const Grn = () => {
         width: 1,
     });
 
-
+    const [units, setUnits] = useState([]);
+    const UnitFetch = async () => {
+        try {
+            const response = await axios.get(
+                `${process.env.REACT_APP_PORT}/unit/getAllUnits`
+            );
+            setUnits(response.data.result);
+            console.log(response.data)
+        } catch (err) {
+            console.log(err);
+        }
+    };
+    //get Designations
+    useEffect(() => {
+        UnitFetch()
+    }, []);
 
 
 
@@ -97,7 +112,7 @@ const Grn = () => {
         grnItemCertificateStatus: "",
         grnItemCertificateNo: "",
         grnItemCertificate: "",
-        grnUncertainity: "",
+
         grnItemCalStatus: "",
         grnCreatedBy: ""
     }
@@ -156,18 +171,19 @@ const Grn = () => {
             },
         ],
         grnItemUncertainty: "",
+        grnItemUncertaintyUnit: "",
         grnItemCalDate: dayjs().format("YYYY-MM-DD"),
         grnItemDueDate: "",
         grnItemCertificateStatus: "",
         grnItemCertificateNo: "",
         grnItemCertificate: "",
-        grnUncertainity: "",
+
         grnItemCalStatus: "",
         grnCreatedBy: "",
         grnItemSOPNo: "",
         grnItemStandardRef: "",
-       
-      
+
+
 
     })
     console.log(grnData)
@@ -194,7 +210,7 @@ const Grn = () => {
                     grnCreatedBy: loggedEmp.firstName + " " + loggedEmp.lastName,
                     grnItemSOPNo: selectedRows[0].itemSOPNo ? selectedRows[0].itemSOPNo : "",
                     grnItemStandardRef: selectedRows[0].itemStandardRef ? selectedRows[0].itemStandardRef : "",
-                    
+
                     //grnPartyItems: selectedRows
                 }
 
@@ -363,13 +379,14 @@ const Grn = () => {
                             rowStatus: ""
                         }
                     )),
-                    grnItemUncertainty: selectedRows[0].itemUncertainty,
+                    grnItemUncertainty: "",
+                    grnItemUncertaintyUnit: "",
                     grnItemCalDate: dayjs().format("YYYY-MM-DD"),
                     grnItemDueDate: "",
                     grnItemCertificateStatus: "",
                     grnItemCertificateNo: "",
                     grnItemCertificate: "",
-                    grnUncertainity: "",
+
                     grnItemCalStatus: ""
                 }))
             } else {
@@ -416,13 +433,14 @@ const Grn = () => {
                             rowStatus: ""
                         }
                     )),
-                    grnItemUncertainty: selectedRows[0].itemUncertainty,
+                    grnItemUncertainty: "",
+                    grnItemUncertaintyUnit: "",
                     grnItemCalDate: "",
                     grnItemDueDate: "",
                     grnItemCertificateStatus: "",
                     grnItemCertificateNo: "",
                     grnItemCertificate: "",
-                    grnUncertainity: "",
+
                     grnItemCalStatus: ""
                 }))
             }

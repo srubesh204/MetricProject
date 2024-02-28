@@ -107,7 +107,7 @@ const itemGRNController = {
         grnItemCertificateStatus,
         grnItemCertificateNo,
         grnItemCertificate,
-        grnUncertainity,
+       
         grnItemCalStatus,
         isOnSiteGRN,
         grnCreatedBy,
@@ -163,7 +163,7 @@ const itemGRNController = {
         grnItemCertificateStatus,
         grnItemCertificateNo,
         grnItemCertificate,
-        grnUncertainity,
+       
         grnItemCalStatus,
         isOnSiteGRN,
         grnCreatedBy,
@@ -465,7 +465,6 @@ const itemGRNController = {
       //   return res.status(400).json({ error: 'Invalid desId value' });
       // }
       const {
-
         grnPartyRefNo,
         grnPartyId,
         grnPartyRefDate,
@@ -512,7 +511,7 @@ const itemGRNController = {
         grnItemCertificateStatus,
         grnItemCertificateNo,
         grnItemCertificate,
-        grnUncertainity,
+       
         grnItemCalStatus,
         isOnSiteGRN,
         grnCreatedBy,
@@ -569,7 +568,7 @@ const itemGRNController = {
         grnItemCertificateStatus,
         grnItemCertificateNo,
         grnItemCertificate,
-        grnUncertainity,
+       
         grnItemCalStatus,
         isOnSiteGRN,
         grnCreatedBy,

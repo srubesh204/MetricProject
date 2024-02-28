@@ -105,7 +105,7 @@ const itemGRNSchema = new mongoose.Schema({
   grnItemCertificateStatus: String,
   grnItemCertificateNo: String,
   grnItemCertificate: String,
-  grnUncertainity: String,
+  
   grnItemCalStatus: String,
   grnCreatedBy: String,
   grnItemSOPNo: String,
