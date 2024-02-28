@@ -1413,7 +1413,7 @@ const [loader, setLoader] = useState(false)
       const defaultDepartmentCheck = selectedRows.every(item =>
         defaultDep.some(dep => item.itemCurrentLocation === dep.department)
       );
-      const activeItemsCheck = selectedRows.every(item => item.itemStatus !== "missing" || item.itemStatus !== "spare")
+      const activeItemsCheck = selectedRows.every(item => item.itemStatus !== "missing" && item.itemStatus !== "spare")
       const singlePlant = selectedRows.every((item, index, array) => item.itemPlant === array[0].itemPlant);
       console.log(defaultDepartmentCheck);
       if (defaultDepartmentCheck && singlePlant && selectedRows.length > 0 && activeItemsCheck) {

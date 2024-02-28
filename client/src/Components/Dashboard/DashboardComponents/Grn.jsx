@@ -1277,9 +1277,7 @@ const Grn = () => {
                                                 </div>
                                                 <div className='col-md-2'>
                                                     <TextField fullWidth label="Uncertainity" id='grnUncertainityId' variant='outlined' size='small' onChange={handleGrnItemChange} name='grnUncertainity' />
-
                                                 </div>
-
                                                 <div className='col-md-2 d-flex justify-content-center ' >
 
 

@@ -1,7 +1,7 @@
 import { Card, CardContent, CardActions, Button, Container, Grid, Paper, TextField, Typography, CardMedia, InputLabel, Input, FormControl, FormHelperText, FormGroup, FormLabel, MenuItem, Select, Menu, FormControlLabel, Radio, RadioGroup, TableContainer, Table, TableHead, TableRow, TableCell, TableBody, IconButton, OutlinedInput, Box, Chip, Snackbar, Alert, Dialog, DialogTitle, DialogContent, DialogActions, DialogContentText, Checkbox, ListItemText, Autocomplete } from '@mui/material'
 import axios from 'axios';
 import { styled } from '@mui/material/styles';
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, createContext } from 'react'
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import dayjs from 'dayjs';
@@ -10,9 +10,12 @@ import { useNavigate } from 'react-router-dom';
 import { Link as RouterLink } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import GaugeSpec from './GaugeSpec';
+
 import { Add, Remove, HighlightOffRounded, UploadFile, Close, CloudUpload } from '@mui/icons-material';
 
 import { useEmployee } from '../../App';
+export const ItemAddContent = createContext(null);
 
 const ItemAdd = () => {
 
@@ -22,6 +25,7 @@ const ItemAdd = () => {
     const { allowedPlants, loggedEmp } = employeeRole
 
     const [addOpenData, setAddOpenData] = useState(false)
+    const [gaugeSecOpen, setGaugeSpecOpen] = useState(false)
     const [masterSharingData, setMasterSharingData] = useState(false)
 
 
@@ -364,7 +368,7 @@ const ItemAdd = () => {
     const [availabelDeps, setAvailableDeps] = useState([])
 
 
-    const   handleItemAddChange = (e) => {
+    const handleItemAddChange = (e) => {
         const { name, value, checked } = e.target;
 
         if (name === "itemRangeSizeUnit") {
@@ -935,7 +939,10 @@ const ItemAdd = () => {
 
                             {companyData.gaugeSpacePage === "yes" &&
                                 <div className='me-2'>
-                                    <Button variant='contained'>Gauge spec </Button>
+                                    {/* <Button variant='contained'>Gauge spec </Button> */}
+                                    <Button component={Link} onClick={() => { setGaugeSpecOpen(true) }} type='button' variant="contained" >
+                                    Gauge spec
+                                    </Button>
                                 </div>}
                             {itemAddData.itemImage && <Card elevation={12} sx={{ width: "110px", height: "110px" }}>
 
@@ -2130,7 +2137,12 @@ const ItemAdd = () => {
                     </React.Fragment>}
 
 
+                    <ItemAddContent.Provider
+                        value={{ gaugeSecOpen, setGaugeSpecOpen }}
+                    >
 
+                        <GaugeSpec />
+                    </ItemAddContent.Provider>
 
 
 
