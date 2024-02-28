@@ -97,8 +97,8 @@ const itemGRNSchema = new mongoose.Schema({
       rowStatus: String
     },
   ],
-  grnItemUncertainity: String,
-  grnItemUncertainityUnit: String,
+  grnItemUncertainty: String,
+  grnItemUncertaintyUnit: String,
   grnItemCalFrequencyType: String,
   grnItemCalDate: String,
   grnItemDueDate: String,

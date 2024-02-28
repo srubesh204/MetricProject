@@ -300,8 +300,8 @@ const ItemEdit = () => {
                 acMaxPSError: "",
             }
         ],
-        itemUncertainity: "",
-        itemUncertainityUnit: "",
+        itemUncertainty: "",
+        itemUncertaintyUnit: "",
         createdBy: "",
         updatedBy: "",
         calibrationCost: "",
@@ -374,8 +374,8 @@ const ItemEdit = () => {
                 acMaxPSError: "",
             }
         ],
-        itemUncertainity: "",
-        itemUncertainityUnit: "",
+        itemUncertainty: "",
+        itemUncertaintyUnit: "",
         itemPrevCalData: "",
         itemPlant: "",
         itemCreatedBy: loggedEmp._id,
@@ -448,9 +448,9 @@ const ItemEdit = () => {
                 itemPartName: itemData.itemPartName ? itemData.itemPartName : [],
                 itemOBType: itemData.itemOBType ? itemData.itemOBType : "",
                 acceptanceCriteria: itemData.acceptanceCriteria ? itemData.acceptanceCriteria : [],
-                itemUncertainity: itemData.itemUncertainity ? itemData.itemUncertainity : "",
+                itemUncertainty: itemData.itemUncertainty ? itemData.itemUncertainty : "",
                 itemPrevCalData: itemData.itemPrevCalData ? itemData.itemPrevCalData : "",
-                itemUncertainityUnit: itemData.itemUncertainityUnit ? itemData.itemUncertainityUnit : "",
+                itemUncertaintyUnit: itemData.itemUncertaintyUnit ? itemData.itemUncertaintyUnit : "",
                 itemCertificateNo: itemData.itemCertificateNo ? itemData.itemCertificateNo : "",
                 calibrationCost: itemData.calibrationCost ? itemData.calibrationCost : "",
                 gaugeUsage: itemData.gaugeUsage ? itemData.gaugeUsage : "",
@@ -564,8 +564,8 @@ const ItemEdit = () => {
                         itemCalAlertDays: calAlertInDay,
                         itemSOPNo: SOPNo,
                         itemStandardRef: standardRef,
-                        itemUncertainity: uncertainity,
-                        itemUncertainityUnit: uncertaintyUnit,
+                        itemUncertainty: uncertainity,
+                        itemUncertaintyUnit: uncertaintyUnit,
 
                     }))
                     setCalibrationPointsData(calibrationPoints)
@@ -1488,8 +1488,8 @@ const ItemEdit = () => {
                                                     size='small'
                                                     onChange={handleItemAddChange}
                                                     id='itemUncertainityId'
-                                                    name='itemUncertainity'
-                                                    value={itemAddData.itemUncertainity}
+                                                    name='itemUncertainty'
+                                                    value={itemAddData.itemUncertainty}
                                                 />
 
                                                 <TextField disabled={itemAddData.itemPrevCalData !== "available" || itemStatus}
@@ -1497,10 +1497,10 @@ const ItemEdit = () => {
                                                     size='small'
                                                     variant='outlined'
                                                     label="Unit"
-                                                    name='itemUncertainityUnit'
+                                                    name='itemUncertaintyUnit'
                                                     onChange={handleItemAddChange}
                                                     style={{ width: "60%" }}
-                                                    value={itemAddData.itemUncertainityUnit}
+                                                    value={itemAddData.itemUncertaintyUnit}
                                                 >
                                                     <MenuItem value=""><em>None</em></MenuItem>
                                                     {units.map((unit, index) => (

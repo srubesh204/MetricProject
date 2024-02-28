@@ -95,7 +95,7 @@
 //                 rowStatus: ""
 //             },
 //         ],
-//         grnItemUncertainity: "",
+//         grnItemUncertainty: "",
 //         grnItemCalDate: dayjs().format("YYYY-MM-DD"),
 //         grnItemDueDate: "",
 //         grnItemCertificateStatus: "",
@@ -161,7 +161,7 @@
 //                 rowStatus: ""
 //             },
 //         ],
-//         grnItemUncertainity: "",
+//         grnItemUncertainty: "",
 //         grnItemCalDate: dayjs().format("YYYY-MM-DD"),
 //         grnItemDueDate: "",
 //         grnItemCertificateStatus: "",
@@ -407,7 +407,7 @@
 //                         grnItemMake: fetchedData[0].itemMake,
 
 //                         grnItemCalFreInMonths: fetchedData[0].itemCalFreInMonths,
-//                         grnItemUncertainity: fetchedData[0].uncertainty,
+//                         grnItemUncertainty: fetchedData[0].uncertainty,
 //                         grnItemCalibratedAt: fetchedData[0].itemCalibratedAt,
 //                         grnItemSOPNo: fetchedData[0].SOPNo,
 //                         grnStandardRef: fetchedData[0].standardRef,
@@ -458,7 +458,7 @@
 //                     grnItemLC: fetchedData[0].itemLC,
 //                     grnItemMake: fetchedData[0].itemMake,
 //                     grnItemCalFreInMonths: fetchedData[0].itemCalFreInMonths,
-//                     grnItemUncertainity: fetchedData[0].uncertainty,
+//                     grnItemUncertainty: fetchedData[0].uncertainty,
 //                     grnItemCalibratedAt: fetchedData[0].itemCalibratedAt,
 //                     grnItemSOPNo: fetchedData[0].SOPNo,
 //                     grnStandardRef: fetchedData[0].standardRef,

@@ -274,8 +274,8 @@ const ItemAdd = () => {
                 acMaxPSError: "",
             }
         ],
-        itemUncertainity: "",
-        itemUncertainityUnit: "",
+        itemUncertainty: "",
+        itemUncertaintyUnit: "",
         itemPrevCalData: "",
         itemPlant: employeeRole.loggedEmp.plantDetails.length === 1 ? employeeRole.loggedEmp.plantDetails[0].plantName : "",
         itemCreatedBy: employeeRole && employeeRole.loggedEmp._id,
@@ -487,8 +487,8 @@ const ItemAdd = () => {
                 itemCalAlertDays: calAlertInDay,
                 itemSOPNo: SOPNo,
                 itemStandardRef: standardRef,
-                itemUncertainity: uncertainity,
-                itemUncertainityUnit: uncertaintyUnit,
+                itemUncertainty: uncertainity,
+                itemUncertaintyUnit: uncertaintyUnit,
             }))
             setCalibrationPointsData(calibrationPoints)
         }
@@ -1400,18 +1400,18 @@ const ItemAdd = () => {
                                                     variant='outlined'
                                                     size='small'
                                                     onChange={handleItemAddChange}
-                                                    name='itemUncertainity'
-                                                    value={itemAddData.itemUncertainity}
+                                                    name='itemUncertainty'
+                                                    value={itemAddData.itemUncertainty}
                                                 />
                                                 <TextField disabled={itemAddData.itemPrevCalData !== "available"}
                                                     select
                                                     size='small'
                                                     variant='outlined'
                                                     label="Unit"
-                                                    name='itemUncertainityUnit'
+                                                    name='itemUncertaintyUnit'
                                                     onChange={handleItemAddChange}
                                                     style={{ width: "60%" }}
-                                                    value={itemAddData.itemUncertainityUnit}
+                                                    value={itemAddData.itemUncertaintyUnit}
                                                 >
                                                     <MenuItem value=""><em>None</em></MenuItem>
                                                     {units.map((unit, index) => (

@@ -95,7 +95,7 @@ const GrnEdit = () => {
                 rowStatus: ""
             },
         ],
-        grnItemUncertainity: "",
+        grnItemUncertainty: "",
         grnItemCalDate: dayjs().format("YYYY-MM-DD"),
         grnItemDueDate: "",
         grnItemCertificateStatus: "",
@@ -167,7 +167,7 @@ const GrnEdit = () => {
                 rowStatus: ""
             },
         ],
-        grnItemUncertainity: "",
+        grnItemUncertainty: "",
         grnItemCalDate: dayjs().format("YYYY-MM-DD"),
         grnItemDueDate: "",
         grnItemCertificateStatus: "",
@@ -226,7 +226,7 @@ const GrnEdit = () => {
                 grnItemCalibratedAt: selectedRows.grnItemCalibratedAt,
                 grnItemOBType: selectedRows.grnItemOBType,
                 grnAcCriteria: selectedRows.grnAcCriteria,
-                grnItemUncertainity: selectedRows.grnItemUncertainity,
+                grnItemUncertainty: selectedRows.grnItemUncertainty,
                 grnItemCalDate: selectedRows.grnItemCalDate,
                 grnItemDueDate: selectedRows.grnItemDueDate,
                 grnItemCertificateStatus: selectedRows.grnItemCertificateStatus,
@@ -386,7 +386,7 @@ const GrnEdit = () => {
                             rowStatus: item.rowStatus
                         }
                     )),
-                    grnItemUncertainity: selectedRows.grnItemUncertainity,
+                    grnItemUncertainty: selectedRows.grnItemUncertainty,
                     grnItemCalDate: selectedRows.grnItemCalDate,
                     grnItemDueDate: selectedRows.grnItemDueDate,
                     grnItemCertificateStatus: selectedRows.grnItemCertificateStatus,
@@ -440,7 +440,7 @@ const GrnEdit = () => {
                             rowStatus: item.rowStatus
                         }
                     )),
-                    grnItemUncertainity: selectedRows.grnItemUncertainity,
+                    grnItemUncertainty: selectedRows.grnItemUncertainty,
                     grnItemCalDate: selectedRows.grnItemCalDate,
                     grnItemDueDate: selectedRows.grnItemDueDate,
                     grnItemCertificateStatus: selectedRows.grnItemCertificateStatus,

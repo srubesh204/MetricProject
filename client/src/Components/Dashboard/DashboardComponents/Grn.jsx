@@ -91,7 +91,7 @@ const Grn = () => {
                 rowStatus: ""
             },
         ],
-        grnItemUncertainity: "",
+        grnItemUncertainty: "",
         grnItemCalDate: dayjs().format("YYYY-MM-DD"),
         grnItemDueDate: "",
         grnItemCertificateStatus: "",
@@ -155,7 +155,7 @@ const Grn = () => {
                 rowStatus: ""
             },
         ],
-        grnItemUncertainity: "",
+        grnItemUncertainty: "",
         grnItemCalDate: dayjs().format("YYYY-MM-DD"),
         grnItemDueDate: "",
         grnItemCertificateStatus: "",
@@ -363,7 +363,7 @@ const Grn = () => {
                             rowStatus: ""
                         }
                     )),
-                    grnItemUncertainity: selectedRows[0].itemUncertainity,
+                    grnItemUncertainty: selectedRows[0].itemUncertainty,
                     grnItemCalDate: dayjs().format("YYYY-MM-DD"),
                     grnItemDueDate: "",
                     grnItemCertificateStatus: "",
@@ -416,7 +416,7 @@ const Grn = () => {
                             rowStatus: ""
                         }
                     )),
-                    grnItemUncertainity: selectedRows[0].itemUncertainity,
+                    grnItemUncertainty: selectedRows[0].itemUncertainty,
                     grnItemCalDate: "",
                     grnItemDueDate: "",
                     grnItemCertificateStatus: "",

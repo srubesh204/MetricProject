@@ -61,8 +61,8 @@ const testController = {
               AB: 'itemCalibratedAt',
               AC: 'itemCertificateNo',
               AD: 'itemCertificateName',
-              AE: 'itemUncertainity',
-              AF: 'itemUncertainityUnit',
+              AE: 'itemUncertainty',
+              AF: 'itemUncertaintyUnit',
               AG: 'itemPlant'
     
     

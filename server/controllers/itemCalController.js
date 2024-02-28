@@ -203,8 +203,8 @@ const itemCalController = {
           itemCertificateName,
 
           itemOBType,
-          itemUncertainity,
-          itemUncertainityUnit,
+          itemUncertainty,
+          itemUncertaintyUnit,
           itemPrevCalData,
           itemCreatedBy,
           itemLastModifiedBy
@@ -486,8 +486,8 @@ const itemCalController = {
           itemCalibratedBy: calCalibratedBy,
           itemCalApprovedBy: calApprovedBy,
           itemOBType,
-          itemUncertainity,
-          itemUncertainityUnit,
+          itemUncertainty,
+          itemUncertaintyUnit,
           itemPrevCalData,
           acceptanceCriteria: obSize,
           itemCreatedBy,
@@ -685,8 +685,8 @@ const itemCalController = {
           itemCertificateName,
 
           itemOBType,
-          itemUncertainity,
-          itemUncertainityUnit,
+          itemUncertainty,
+          itemUncertaintyUnit,
           itemPrevCalData,
           itemCreatedBy,
           itemLastModifiedBy
@@ -959,8 +959,8 @@ const itemCalController = {
           itemCalibratedBy: calCalibratedBy,
           itemCalApprovedBy: calApprovedBy,
           itemOBType,
-          itemUncertainity,
-          itemUncertainityUnit,
+          itemUncertainty,
+          itemUncertaintyUnit,
           itemPrevCalData,
           acceptanceCriteria: obSize,
           itemCreatedBy,
