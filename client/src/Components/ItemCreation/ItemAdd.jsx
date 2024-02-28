@@ -219,7 +219,7 @@ const ItemAdd = () => {
 
 
     const [itemAddData, setItemAddData] = useState({
-
+        itemMasterRef: "",
         selectedItemMaster: [],
         isItemMaster: "0",
         itemAddMasterName: "",
@@ -370,8 +370,8 @@ const ItemAdd = () => {
         if (name === "itemRangeSizeUnit") {
             setItemAddData((prev) => ({ ...prev, [name]: value, acceptanceCriteria: [{ acAccuracyUnit: value, acRangeSizeUnit: value }] }))
         }
-        if(name === "itemPlant"){
-            setItemAddData((prev) =>({...prev,[name]: value,plantAccess: [value]}))
+        if (name === "itemPlant") {
+            setItemAddData((prev) => ({ ...prev, [name]: value, plantAccess: [value] }))
         }
 
         if (name === "itemDepartment") {
@@ -472,18 +472,19 @@ const ItemAdd = () => {
     const [calibrationPointsData, setCalibrationPointsData] = useState([])
     const itemMasterById = () => {
 
-        const master = itemMasterDataList.filter(mas => mas.itemDescription === itemAddData.itemAddMasterName)
+        const master = itemMasterDataList.filter(mas => mas.itemMasterId == itemAddData.itemMasterRef)
         console.log(master)
         if (master.length > 0) {
-            const { _id, itemType, itemDescription, SOPNo,itemFrequencyType, uncertaintyUnit,itemPrefix, itemFqInMonths, calAlertInDay, wiNo, uncertainity, standardRef, itemImageName, status, itemMasterImage, workInsName, calibrationPoints } = master[0]
+            const { _id, itemType, itemDescription, itemFrequencyType, itemFqInMonths, calAlertInDay, SOPNo, uncertainity, uncertaintyUnit, standardRef, itemMasterImage, calibrationPoints } = master[0]
+            console.log(calibrationPoints)
             setItemAddData((prev) => ({
                 ...prev,
                 itemType: itemType,
-                itemIMTENo: itemPrefix,
+                itemAddMasterName: itemDescription,
                 itemImage: itemMasterImage,
                 itemCalFreInMonths: itemFqInMonths,
-                itemCalAlertDays: calAlertInDay,
                 itemCalFrequencyType: itemFrequencyType,
+                itemCalAlertDays: calAlertInDay,
                 itemSOPNo: SOPNo,
                 itemStandardRef: standardRef,
                 itemUncertainity: uncertainity,
@@ -494,8 +495,8 @@ const ItemAdd = () => {
     };
 
     useEffect(() => {
-        itemMasterById(itemAddData.itemAddMasterName);
-    }, [itemAddData.itemAddMasterName]);
+        itemMasterById(itemAddData.itemMasterRef);
+    }, [itemAddData.itemMasterRef, itemMasterDataList]);
 
     const [plantWisePart, setPlantWisePart] = useState([])
 
@@ -887,10 +888,10 @@ const ItemAdd = () => {
                             <div className='col-9'>
                                 <TextField
                                     {...(errors.itemAddMasterName !== "" && { helperText: errors.itemAddMasterName, error: true })}
-                                    size='small' select variant='outlined' label="Item Name" name='itemAddMasterName' value={itemAddData.itemAddMasterName} fullWidth onChange={handleItemAddChange}>
+                                    size='small' select variant='outlined' label="Item Name" name='itemMasterRef' value={itemAddData.itemMasterRef} fullWidth onChange={handleItemAddChange}>
                                     <MenuItem value=""><em>Select</em></MenuItem>
                                     {itemMasterDataList.map((item, index) => (
-                                        <MenuItem key={index} value={item.itemDescription}>{item.itemDescription}</MenuItem>
+                                        <MenuItem key={index} value={item.itemMasterId}>{item.itemDescription}</MenuItem>
                                     ))}
                                 </TextField>
                             </div>
@@ -918,9 +919,9 @@ const ItemAdd = () => {
                                     label="Use as Master"
                                 />
                             </div>
-                           
-                          
-                           
+
+
+
 
                         </div>
                         <div className="col-lg-3 " >
@@ -930,7 +931,7 @@ const ItemAdd = () => {
 
 
 
-                        <div className="col-lg-4  d-flex justify-content-end">
+                        <div className="col-lg-4 d-flex justify-content-end">
 
                             {companyData.gaugeSpacePage === "yes" &&
                                 <div className='me-2'>
@@ -942,8 +943,8 @@ const ItemAdd = () => {
 
                             </Card>}
                         </div>
-                        <div>
-                        <Button component={Link} to="/" size='small' className=''>Home</Button>
+                        <div className='m-0 p-0'>
+                            <Button component={Link} to="/" size='small' >Home</Button>
                         </div>
 
 
