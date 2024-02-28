@@ -179,6 +179,7 @@ const CalDialog = () => {
                     ...prev,
                     calPlant: selectedRows[0].itemPlant,
                     calDepartment: departments,
+                    calItemFrequencyType: selectedRows[0].itemCalFrequencyType,
                     calCertificateNo: calLastNo,
                 }
 

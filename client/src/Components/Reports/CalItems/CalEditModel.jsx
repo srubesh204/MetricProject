@@ -53,6 +53,7 @@ const CalEditModel = () => {
         calItemMake: "",
         calItemTemperature: "",
         calItemHumidity: "",
+        calItemFrequencyType: "",
         calItemUncertainity: "",
         calItemUncertainityUnit: "",
         calItemSOPNo: "",
@@ -107,6 +108,7 @@ const CalEditModel = () => {
         calItemHumidity: "",
         calItemUncertainity: "",
         calItemUncertainityUnit: "",
+        calItemFrequencyType: "",
         calItemSOPNo: "",
         calStandardRef: "",
         calOBType: "",
@@ -163,6 +165,7 @@ const CalEditModel = () => {
                 calLCUnit: selectedCalRow.calLCUnit,
                 calItemMake: selectedCalRow.calItemMake,
                 calItemTemperature: selectedCalRow.calItemTemperature,
+                calItemFrequencyType: selectedCalRow.calItemFrequencyType,
                 calItemHumidity: selectedCalRow.calItemHumidity,
                 calItemUncertainity: filter.length > 0 && filter[0] ? filter[0].uncertainty : "",
                 calItemSOPNo: filter.length > 0 && filter[0].SOPNo ? filter[0].SOPNo : "",
@@ -577,13 +580,27 @@ const CalEditModel = () => {
 
     const calculateResultDate = (itemCalDate, itemCalFreInMonths) => {
         const parsedDate = dayjs(itemCalDate);
-        if (parsedDate.isValid() && !isNaN(parseInt(itemCalFreInMonths))) {
-            const calculatedDate = parsedDate.add(parseInt(itemCalFreInMonths, 10), 'month').subtract(1, 'day');
-            setCalibrationData((prev) => ({
-                ...prev,
-                calItemDueDate: calculatedDate.format('YYYY-MM-DD'),
-            }));
+        if (calibrationData.calItemFrequencyType === "months") {
+            if (parsedDate.isValid() && !isNaN(parseInt(itemCalFreInMonths))) {
+                const calculatedDate = parsedDate.add(parseInt(itemCalFreInMonths, 10), 'month').subtract(1, 'day');
+                setCalibrationData((prev) => ({
+                    ...prev,
+                    calItemDueDate: calculatedDate.format('YYYY-MM-DD'),
+                }));
+            }
+        } else {
+            if (calibrationData.calItemFrequencyType === "days") {
+                if (parsedDate.isValid() && !isNaN(parseInt(itemCalFreInMonths))) {
+                    const calculatedDate = parsedDate.add(parseInt(itemCalFreInMonths, 10), 'day').subtract(1, 'day');
+                    setCalibrationData((prev) => ({
+                        ...prev,
+                        calItemDueDate: calculatedDate.format('YYYY-MM-DD'),
+                    }));
+                }
+            }
+
         }
+
     };
 
     const [filterAdmins, setFilterAdmins] = useState([])

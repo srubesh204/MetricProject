@@ -101,6 +101,7 @@ const itemGRNController = {
         grnAssingStatus,
         grnAcCriteria,
         grnItemUncertainity,
+        grnItemUncertainityUnit,
         grnItemCalDate,
         grnItemDueDate,
         grnItemCertificateStatus,
@@ -112,8 +113,7 @@ const itemGRNController = {
         grnCreatedBy,
         grnItemSOPNo,
         grnItemStandardRef,
-        grnItemMasterUncertainty,
-        grnItemMasterUncertaintyUnit
+      
       } = req.body;
 
 
@@ -157,6 +157,7 @@ const itemGRNController = {
         grnAssingStatus,
         grnAcCriteria,
         grnItemUncertainity,
+        grnItemUncertainityUnit,
         grnItemCalDate,
         grnItemDueDate,
         grnItemCertificateStatus,
@@ -168,8 +169,7 @@ const itemGRNController = {
         grnCreatedBy,
         grnItemSOPNo,
         grnItemStandardRef,
-        grnItemMasterUncertainty,
-        grnItemMasterUncertaintyUnit
+        
       });
 
       const getCompDetailsById = await compDetailsSchema.findById("companyData");
@@ -500,6 +500,7 @@ const itemGRNController = {
         grnAssingStatus,
         grnAcCriteria,
         grnItemUncertainity,
+        grnItemUncertainityUnit,
         grnItemCalDate,
         grnItemDueDate,
         grnItemCertificateStatus,
@@ -511,8 +512,7 @@ const itemGRNController = {
         grnCreatedBy,
         grnItemSOPNo,
         grnItemStandardRef,
-        grnItemMasterUncertainty,
-        grnItemMasterUncertaintyUnit
+        
       } = req.body;
 
       // Create an object with the fields you want to update
@@ -557,6 +557,7 @@ const itemGRNController = {
         grnAssingStatus,
         grnAcCriteria,
         grnItemUncertainity,
+        grnItemUncertainityUnit,
         grnItemCalDate,
         grnItemDueDate,
         grnItemCertificateStatus,
@@ -568,8 +569,7 @@ const itemGRNController = {
         grnCreatedBy,
         grnItemSOPNo,
         grnItemStandardRef,
-        grnItemMasterUncertainty,
-        grnItemMasterUncertaintyUnit
+        
       };
 
 

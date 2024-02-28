@@ -177,8 +177,7 @@ const GrnEdit = () => {
         grnItemCalStatus: "",
         grnItemSOPNo: "",
         grnItemStandardRef: "",
-        grnItemMasterUncertainty: "",
-        grnItemMasterUncertaintyUnit: ""
+       
     })
 
     const [selectedPlantItems, setSelectedPlantItems] = useState([])
@@ -220,6 +219,7 @@ const GrnEdit = () => {
                 grnItemArea: selectedRows.grnItemArea,
                 grnItemPlaceOfUsage: selectedRows.grnItemPlaceOfUsage,
                 grnItemCalFreInMonths: selectedRows.grnItemCalFreInMonths,
+                grnItemCalFrequencyType: selectedRows.grnItemCalFrequencyType,
                 grnItemCalAlertDays: selectedRows.grnItemCalAlertDays,
                 grnItemCalibrationSource: selectedRows.grnItemCalibrationSource,
                 grnItemCalibrationDoneAt: selectedRows.grnItemCalibrationDoneAt,
@@ -237,8 +237,7 @@ const GrnEdit = () => {
                 isOnSiteGRN: selectedRows.isOnSiteGRN,
                 grnItemSOPNo: selectedRows.grnItemSOPNo,
                 grnItemStandardRef: selectedRows.grnItemStandardRef,
-                grnItemMasterUncertainty: selectedRows.grnItemMasterUncertainty,
-                grnItemMasterUncertaintyUnit: selectedRows.grnItemMasterUncertaintyUnit
+               
             }));
             const plantItems = itemPlantList.filter(item => item.itemPlant === selectedRows.grnPlant)
             setSelectedPlantItems(plantItems)
@@ -364,6 +363,7 @@ const GrnEdit = () => {
 
 
                     grnItemCalFreInMonths: selectedRows.grnItemCalFreInMonths,
+                    grnItemCalFrequencyType: selectedRows.grnItemCalFrequencyType,
                     grnItemCalAlertDays: selectedRows.grnItemCalAlertDays,
                     grnItemCalibrationSource: selectedRows.grnItemCalibrationSource,
                     grnItemCalibrationDoneAt: selectedRows.grnItemCalibrationDoneAt,
@@ -416,6 +416,7 @@ const GrnEdit = () => {
 
 
                     grnItemCalFreInMonths: selectedRows.grnItemCalFreInMonths,
+                    grnItemCalFrequencyType: selectedRows.grnItemCalFrequencyType,
                     grnItemCalAlertDays: selectedRows.grnItemCalAlertDays,
                     grnItemCalibrationSource: selectedRows.grnItemCalibrationSource,
                     grnItemCalibrationDoneAt: selectedRows.grnItemCalibrationDoneAt,
@@ -462,8 +463,13 @@ const GrnEdit = () => {
 
     }
 
+    useEffect(() => {
+        calculateResultDate(grnEditData.grnItemCalDate, grnEditData.grnItemCalFreInMonths);
+    }, [grnEditData.grnItemCalDate, grnEditData.grnItemCalFreInMonths]);
+
     const calculateResultDate = (itemCalDate, itemCalFreInMonths) => {
         const parsedDate = dayjs(itemCalDate);
+        if (grnEditData.grnItemCalFrequencyType === "months") {
         if (parsedDate.isValid() && !isNaN(parseInt(itemCalFreInMonths))) {
             const calculatedDate = parsedDate.add(parseInt(itemCalFreInMonths, 10), 'month').subtract(1, 'day');
             console.log(calculatedDate)
@@ -472,12 +478,24 @@ const GrnEdit = () => {
                 grnItemDueDate: calculatedDate.format('YYYY-MM-DD'),
             }));
         }
+    }else{
+        if (grnEditData.grnItemCalFrequencyType === "days") {
+            if (parsedDate.isValid() && !isNaN(parseInt(itemCalFreInMonths))) {
+                const calculatedDate = parsedDate.add(parseInt(itemCalFreInMonths, 10), 'day').subtract(1, 'day');
+                console.log(calculatedDate)
+                setGrnEditData((prev) => ({
+                    ...prev,
+                    grnItemDueDate: calculatedDate.format('YYYY-MM-DD'),
+                }));
+            }
+
+        }
+
+    }
     };
 
 
-    useEffect(() => {
-        calculateResultDate(grnEditData.grnItemCalDate, grnEditData.grnItemCalFreInMonths);
-    }, [grnEditData.grnItemCalDate, grnEditData.grnItemCalFreInMonths]);
+    
 
     useEffect(() => {
         if (grnEditData.grnAcCriteria !== undefined) {
