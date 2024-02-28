@@ -583,6 +583,9 @@ const ItemEdit = () => {
                 itemCurrentLocation: value, // Ensure 'value' is correct here
             }));
         }
+        if(name === "itemPlant"){
+            setItemAddData((prev) =>({...prev,[name]: value,plantAccess: [value]}))
+        }
         if (name === "itemItemMasterIMTENo") {
             const updatedSelection = isItemMasterList.filter(item => value.some(selectedItem => selectedItem.itemIMTENo === item.itemIMTENo));
             setItemAddData((prev) => ({ ...prev, itemItemMasterIMTENo: updatedSelection }));

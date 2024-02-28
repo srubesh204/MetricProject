@@ -364,7 +364,7 @@ const ItemAdd = () => {
     const [availabelDeps, setAvailableDeps] = useState([])
 
 
-    const handleItemAddChange = (e) => {
+    const   handleItemAddChange = (e) => {
         const { name, value, checked } = e.target;
 
         if (name === "itemRangeSizeUnit") {
