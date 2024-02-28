@@ -13,10 +13,19 @@ const employeeModel = require("../models/employeeModel")
 const itemCalController = {
   getAllItemCals: async (req, res) => {
     try {
-      const getAllItemCals = await itemCalModel.find();
-      res.status(202).json({ result: getAllItemCals, status: 1 });
-      //res.status(200).json(employees);
 
+      const {allowedPlants} = req.body
+      const itemCalResult = await itemCalModel.aggregate([
+        {
+          $match: {
+            "calPlant": { $in: allowedPlants ? allowedPlants : [] } // Specify the values to match
+          }
+        }, { $sort: { calCertificateNo: -1 } }
+      ])
+      res.status(202).json({ result: itemCalResult, status: 1 });
+      // const getAllItemCals = await itemCalModel.find();
+      // res.status(202).json({ result: getAllItemCals, status: 1 });
+      //res.status(200).json(employees);
     } catch (err) {
       console.error(err);
       res.status(500).send('Error on ItemCal');

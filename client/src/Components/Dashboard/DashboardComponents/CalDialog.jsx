@@ -8,6 +8,7 @@ import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { HomeContent } from '../Home';
 import { Add, Close, CloudUpload, Delete, Done, ErrorOutline } from '@mui/icons-material';
+
 import { useEmployee } from '../../../App';
 dayjs.extend(isSameOrBefore)
 dayjs.extend(isSameOrAfter)
@@ -16,7 +17,7 @@ const CalDialog = () => {
 
 
     const calData = useContext(HomeContent)
-    const { loggedEmp } = useEmployee()
+    const { loggedEmp,allowedPlants } = useEmployee()
     const [lastResultData, setLastResultData] = useState([])
     const { calOpen, setCalOpen, selectedRows, itemMasters, activeEmps, masters, itemList, calLastNo } = calData
     const [calibrationDatas, setCalibrationDatas] = useState([])
@@ -37,9 +38,9 @@ const CalDialog = () => {
 
     const getAllCalibrationData = async () => {
         try {
-            const response = await axios.get(
-                `${process.env.REACT_APP_PORT}/itemCal/getAllItemCals`
-            );
+            const response = await axios.post(
+                `${process.env.REACT_APP_PORT}/itemCal/getAllItemCals`, {allowedPlants: allowedPlants}
+              );
             console.log(response.data.result)
             try {
                 const imteNoData = response.data.result.filter((item) => item.calIMTENo === selectedRows[0].itemIMTENo)

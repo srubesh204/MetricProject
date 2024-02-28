@@ -213,8 +213,8 @@ const CalList = () => {
     })
     const calListFetchData = async () => {
         try {
-            const response = await axios.get(
-                `${process.env.REACT_APP_PORT}/itemCal/getAllItemCals`
+            const response = await axios.post(
+                `${process.env.REACT_APP_PORT}/itemCal/getAllItemCals`,{allowedPlants: allowedPlants}
             );
 
             setCalListDataList(response.data.result);
@@ -235,8 +235,8 @@ const CalList = () => {
     const [calDataDcList, setCalDataDcList] = useState([])
     const dcListFetchData = async () => {
         try {
-            const response = await axios.get(
-                `${process.env.REACT_APP_PORT}/itemCal/getAllItemCals`
+            const response = await axios.post(
+                `${process.env.REACT_APP_PORT}/itemCal/getAllItemCals`,{allowedPlants: allowedPlants}
 
             );
             const plantCal = response.data.result.filter(cal => (loggedEmp.plantDetails.map(plant => plant.plantName).includes(cal.calPlant)))

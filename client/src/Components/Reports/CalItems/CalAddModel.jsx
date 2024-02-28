@@ -21,6 +21,7 @@ const CalAddModel = () => {
     const { calAddOpen, setCalAddOpen, itemMasters, activeEmps, calListFetchData, itemAddList, setItemAddList,calDataDcList ,lastNo, masters } = calData
 
     const employeeRole = useEmployee()
+    const { loggedEmp,allowedPlants } = useEmployee()
     const [calibrationDatas, setCalibrationDatas] = useState([])
 
     const [selectedIMTE, setSelectedIMTE] = useState([]);
@@ -139,8 +140,8 @@ const CalAddModel = () => {
 
     const getAllCalibrationData = async () => {
         try {
-            const response = await axios.get(
-                `${process.env.REACT_APP_PORT}/itemCal/getAllItemCals`
+            const response = await axios.post(
+                `${process.env.REACT_APP_PORT}/itemCal/getAllItemCals`,{allowedPlants: allowedPlants}
             );
             console.log(response.data.result)
             const imteNoData = response.data.result.filter((item) => item.calIMTENo === calibrationData.calIMTENo)
@@ -170,8 +171,8 @@ const CalAddModel = () => {
 
     const dcFetchData = async () => {
         try {
-            const response = await axios.get(
-                `${process.env.REACT_APP_PORT}/itemCal/getAllItemCals`
+            const response = await axios.post(
+                `${process.env.REACT_APP_PORT}/itemCal/getAllItemCals`,{allowedPlants: allowedPlants}
             );
             setCalibrationDatas(response.data.result);
             console.log(response.data.result)
