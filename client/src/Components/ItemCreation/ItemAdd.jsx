@@ -258,22 +258,7 @@ const ItemAdd = () => {
         itemCertificateNo: "",
         itemPartName: [],
         itemOBType: "average",
-        acceptanceCriteria: [
-            {
-                acParameter: "",
-                acNominalSize: "",
-                acNominalSizeUnit: "",
-                acMinPS: "",
-                acMaxPS: "",
-                acWearLimitPS: "",
-                acMinOB: "",
-                acMaxOB: "",
-                acAverageOB: "",
-                acOBError: "",
-                acMinPSError: "",
-                acMaxPSError: "",
-            }
-        ],
+        acceptanceCriteria: [],
         itemUncertainty: "",
         itemUncertaintyUnit: "",
         itemPrevCalData: "",
@@ -971,7 +956,7 @@ const ItemAdd = () => {
                                             <TextField size='small' variant='outlined' label="Range/Size" onChange={handleItemAddChange} name='itemRangeSize' id='itemRangeSizeId' fullWidth />
                                             <TextField label="Unit" size='small' select onChange={(e) => {
                                                 handleItemAddChange(e);
-                                            }} name='itemRangeSizeUnit' id='itemRangeSizeUnitId' defaultValue="none" style={{ width: "40%" }} >
+                                            }} name='itemRangeSizeUnit' id='itemRangeSizeUnitId' defaultValue="none" style={{ width: "50%" }} >
                                                 <MenuItem value='none'><em>None</em></MenuItem>
                                                 {units.map((unit, index) => (
                                                     <MenuItem key={index} value={unit.unitName}>{unit.unitName}</MenuItem>

@@ -46,6 +46,7 @@ const CalDialog = () => {
                 console.log(imteNoData)
                 setCalibrationDatas(response.data.result)
                 const maxDateObject = imteNoData.reduce((prev, current) => {
+                    console.log(prev, current)
                     const prevDate = dayjs(prev.calItemEntryDate);
                     const currentDate = dayjs(current.calItemEntryDate);
                     return currentDate.isAfter(prevDate) ? current : prev;
@@ -196,34 +197,7 @@ const CalDialog = () => {
     const [dcList, setDcList] = useState([])
 
 
-    const dcFetchData = async () => {
-        try {
-            const response = await axios.get(
-                `${process.env.REACT_APP_PORT}/itemCal/getAllItemCals`
-            );
-            setDcList(response.data.result);
-            console.log(response.data.result)
-
-            const dcNumbers = response.data.result.map(item => (item.calId)).filter(Boolean).sort();
-            if (dcNumbers.length > 0) {
-                const lastNumber = dcNumbers[dcNumbers.length - 1] + 1
-                console.log(lastNumber)
-
-                setCalibrationData(prev => ({ ...prev, calCertificateNo: "Cal " + dayjs().year() + "-" + lastNumber }))
-            } else {
-                setCalibrationData(prev => ({ ...prev, calCertificateNo: "Cal " + dayjs().year() + "-" + 1 }))
-            }
-
-
-        } catch (err) {
-            console.log(err);
-        }
-    };
-    useEffect(() => {
-        dcFetchData();
-
-
-    }, []);
+    
 
 
 

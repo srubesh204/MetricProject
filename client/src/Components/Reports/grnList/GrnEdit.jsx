@@ -35,6 +35,24 @@ const GrnEdit = () => {
         whiteSpace: 'nowrap',
         width: 1,
     });
+
+    const [units, setUnits] = useState([]);
+    const UnitFetch = async () => {
+        try {
+            const response = await axios.get(
+                `${process.env.REACT_APP_PORT}/unit/getAllUnits`
+            );
+            setUnits(response.data.result);
+            console.log(response.data)
+        } catch (err) {
+            console.log(err);
+        }
+    };
+    //get Designations
+    useEffect(() => {
+        UnitFetch()
+    }, []);
+
     const [itemNameList, setItemNameList] = useState(itemPlantList)
     console.log(id)
     const [selectedExtraMaster, setSelectedExtraMaster] = useState([])
@@ -96,12 +114,13 @@ const GrnEdit = () => {
             },
         ],
         grnItemUncertainty: "",
+        grnItemUncertaintyUnit: "",
         grnItemCalDate: dayjs().format("YYYY-MM-DD"),
         grnItemDueDate: "",
         grnItemCertificateStatus: "",
         grnItemCertificateNo: "",
         grnItemCertificate: "",
-        grnUncertainity: "",
+
         grnItemCalStatus: "",
 
 
@@ -122,7 +141,7 @@ const GrnEdit = () => {
         grnDueDate: "",
         grnCertificateStatus: "",
         grnCertificateNo: "",
-        grnUncertainity: "",
+
         grnPlant: "",
         grnDepartment: "",
 
@@ -168,16 +187,17 @@ const GrnEdit = () => {
             },
         ],
         grnItemUncertainty: "",
+        grnItemUncertaintyUnit: "",
         grnItemCalDate: dayjs().format("YYYY-MM-DD"),
         grnItemDueDate: "",
         grnItemCertificateStatus: "",
         grnItemCertificateNo: "",
         grnItemCertificate: "",
-        grnUncertainity: "",
+
         grnItemCalStatus: "",
         grnItemSOPNo: "",
         grnItemStandardRef: "",
-       
+
     })
 
     const [selectedPlantItems, setSelectedPlantItems] = useState([])
@@ -199,7 +219,7 @@ const GrnEdit = () => {
                 grnDueDate: selectedRows.grnDueDate,
                 grnCertificateStatus: selectedRows.grnCertificateStatus,
                 grnCertificateNo: selectedRows.grnCertificateNo,
-                grnUncertainity: selectedRows.grnUncertainity,
+
                 grnPlant: selectedRows.grnPlant,
                 grnItemId: selectedRows.grnItemId,
                 grnItemAddMasterName: selectedRows.grnItemAddMasterName,
@@ -227,17 +247,18 @@ const GrnEdit = () => {
                 grnItemOBType: selectedRows.grnItemOBType,
                 grnAcCriteria: selectedRows.grnAcCriteria,
                 grnItemUncertainty: selectedRows.grnItemUncertainty,
+                grnItemUncertaintyUnit: selectedRows.grnItemUncertaintyUnit,
                 grnItemCalDate: selectedRows.grnItemCalDate,
                 grnItemDueDate: selectedRows.grnItemDueDate,
                 grnItemCertificateStatus: selectedRows.grnItemCertificateStatus,
                 grnItemCertificateNo: selectedRows.grnItemCertificateNo,
                 grnItemCertificate: selectedRows.grnItemCertificate,
-                grnUncertainity: selectedRows.grnUncertainity,
+
                 grnItemCalStatus: selectedRows.grnItemCalStatus,
                 isOnSiteGRN: selectedRows.isOnSiteGRN,
                 grnItemSOPNo: selectedRows.grnItemSOPNo,
                 grnItemStandardRef: selectedRows.grnItemStandardRef,
-               
+
             }));
             const plantItems = itemPlantList.filter(item => item.itemPlant === selectedRows.grnPlant)
             setSelectedPlantItems(plantItems)
@@ -387,12 +408,13 @@ const GrnEdit = () => {
                         }
                     )),
                     grnItemUncertainty: selectedRows.grnItemUncertainty,
+                    grnItemUncertaintyUnit: selectedRows.grnItemUncertaintyUnit,
                     grnItemCalDate: selectedRows.grnItemCalDate,
                     grnItemDueDate: selectedRows.grnItemDueDate,
                     grnItemCertificateStatus: selectedRows.grnItemCertificateStatus,
                     grnItemCertificateNo: selectedRows.grnItemCertificateNo,
                     grnItemCertificate: selectedRows.grnItemCertificate,
-                    grnUncertainity: selectedRows.grnUncertainity,
+
                     grnItemCalStatus: selectedRows.grnItemCalStatus
                 }))
             } else {
@@ -441,12 +463,13 @@ const GrnEdit = () => {
                         }
                     )),
                     grnItemUncertainty: selectedRows.grnItemUncertainty,
+                    grnItemUncertaintyUnit: selectedRows.grnItemUncertaintyUnit,
                     grnItemCalDate: selectedRows.grnItemCalDate,
                     grnItemDueDate: selectedRows.grnItemDueDate,
                     grnItemCertificateStatus: selectedRows.grnItemCertificateStatus,
                     grnItemCertificateNo: selectedRows.grnItemCertificateNo,
                     grnItemCertificate: selectedRows.grnItemCertificate,
-                    grnUncertainity: selectedRows.grnUncertainity,
+
                     grnItemCalStatus: selectedRows.grnItemCalStatus
                 }))
             }
@@ -470,32 +493,32 @@ const GrnEdit = () => {
     const calculateResultDate = (itemCalDate, itemCalFreInMonths) => {
         const parsedDate = dayjs(itemCalDate);
         if (grnEditData.grnItemCalFrequencyType === "months") {
-        if (parsedDate.isValid() && !isNaN(parseInt(itemCalFreInMonths))) {
-            const calculatedDate = parsedDate.add(parseInt(itemCalFreInMonths, 10), 'month').subtract(1, 'day');
-            console.log(calculatedDate)
-            setGrnEditData((prev) => ({
-                ...prev,
-                grnItemDueDate: calculatedDate.format('YYYY-MM-DD'),
-            }));
-        }
-    }else{
-        if (grnEditData.grnItemCalFrequencyType === "days") {
             if (parsedDate.isValid() && !isNaN(parseInt(itemCalFreInMonths))) {
-                const calculatedDate = parsedDate.add(parseInt(itemCalFreInMonths, 10), 'day').subtract(1, 'day');
+                const calculatedDate = parsedDate.add(parseInt(itemCalFreInMonths, 10), 'month').subtract(1, 'day');
                 console.log(calculatedDate)
                 setGrnEditData((prev) => ({
                     ...prev,
                     grnItemDueDate: calculatedDate.format('YYYY-MM-DD'),
                 }));
             }
+        } else {
+            if (grnEditData.grnItemCalFrequencyType === "days") {
+                if (parsedDate.isValid() && !isNaN(parseInt(itemCalFreInMonths))) {
+                    const calculatedDate = parsedDate.add(parseInt(itemCalFreInMonths, 10), 'day').subtract(1, 'day');
+                    console.log(calculatedDate)
+                    setGrnEditData((prev) => ({
+                        ...prev,
+                        grnItemDueDate: calculatedDate.format('YYYY-MM-DD'),
+                    }));
+                }
+
+            }
 
         }
-
-    }
     };
 
 
-    
+
 
     useEffect(() => {
         if (grnEditData.grnAcCriteria !== undefined) {
@@ -1258,9 +1281,23 @@ const GrnEdit = () => {
                                                         name="grnItemCertificateNo" />
 
                                                 </div>
-                                                <div className='col-md-2'>
-                                                    <TextField fullWidth label="Uncertainity" id='grnUncertainityId' value={grnEditData.grnUncertainity} variant='outlined' size='small' onChange={handleEditGrnItemChange} name='grnUncertainity' />
-
+                                                <div className='col-md-2 d-flex'>
+                                                    <TextField fullWidth label="Uncertainity" id='grnItemUncertaintyId' variant='outlined' size='small'  value={grnEditData.grnItemUncertainty} onChange={handleEditGrnItemChange} name='grnItemUncertainty' />
+                                                    <TextField
+                                                        select
+                                                        size='small'
+                                                        variant='outlined'
+                                                        label="Unit"
+                                                        name='grnItemUncertaintyUnit'
+                                                        onChange={handleEditGrnItemChange}
+                                                        style={{ width: "60%" }}
+                                                        value={grnEditData.grnItemUncertaintyUnit}
+                                                    >
+                                                        <MenuItem value="">None</MenuItem>
+                                                        {units.map((unit, index) => (
+                                                            <MenuItem key={index} value={unit.unitName}>{unit.unitName}</MenuItem>
+                                                        ))}
+                                                    </TextField>
                                                 </div>
 
                                                 <div className='col-md-2' >

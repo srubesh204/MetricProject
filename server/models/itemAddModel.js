@@ -74,25 +74,7 @@ const itemAddSchema = new mongoose.Schema({
   grnNo: String,
   grnStatus: String,
   grnCreatedOn: String,
-  acceptanceCriteria: [
-    {
-      acParameter: String,
-      acNominalSize: String,
-      acNominalSizeUnit: String,
-      acMinPS: String,
-      acMaxPS: String,
-      acWearLimitPS: {
-        type: String,
-        
-      },
-      acMinOB: String,
-      acMaxOB: String,
-      acAverageOB: String,
-      acOBError: String,
-      acMinPSError: String,
-      acMaxPSError: String,
-    }
-  ],
+  acceptanceCriteria: [],
   itemUncertainty: String,
   itemUncertaintyUnit: String,
   prevItemUncertainty: String,
