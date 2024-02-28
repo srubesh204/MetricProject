@@ -1293,8 +1293,23 @@ const Grn = () => {
                                                         name="grnItemCertificateNo" />
 
                                                 </div>
-                                                <div className='col-md-2'>
-                                                    <TextField fullWidth label="Uncertainity" id='grnUncertainityId' variant='outlined' size='small' onChange={handleGrnItemChange} name='grnUncertainity' />
+                                                <div className='col-md-2 d-flex'>
+                                                    <TextField fullWidth label="Uncertainity" id='grnItemUncertainityId' variant='outlined' size='small' onChange={handleGrnItemChange} name='grnItemUncertainty' />
+                                                    <TextField
+                                                        select
+                                                        size='small'
+                                                        variant='outlined'
+                                                        label="Unit"
+                                                        name='grnItemUncertainityUnit'
+                                                        onChange={handleGrnItemChange}
+                                                        style={{ width: "60%" }}
+                                                        value={grnData.grnItemUncertaintyUnit}
+                                                    >
+                                                        <MenuItem value="">None</MenuItem>
+                                                        {units.map((unit, index) => (
+                                                            <MenuItem key={index} value={unit.unitName}>{unit.unitName}</MenuItem>
+                                                        ))}
+                                                    </TextField>
                                                 </div>
                                                 <div className='col-md-2 d-flex justify-content-center ' >
 
