@@ -1632,16 +1632,6 @@ const [loader, setLoader] = useState(false)
   return (
     <div style={{ backgroundColor: "#f1f4f4", margin: 0, padding: 0 }}>
       
-     {loader &&  <Backdrop
-      style={{ zIndex: 1000 }}
-      open={loader}
-    >
-      <div class="spinner-border text-light" role="status">
-        <span class="visually-hidden">Loading...</span>
-      </div>
-    </Backdrop> }
-
-     
       <LocalizationProvider dateAdapter={AdapterDayjs}>
 
         <div className="row gx-3 mx-3 my-2" >

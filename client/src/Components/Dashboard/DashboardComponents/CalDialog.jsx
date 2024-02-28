@@ -193,15 +193,6 @@ const CalDialog = () => {
         settingCalData()
     }, [selectedRows])
 
-
-
-    const [dcList, setDcList] = useState([])
-
-
-    
-
-
-
     useEffect(() => {
         console.log("cal")
         if (selectedRows.length > 0 && selectedRows[0].itemItemMasterIMTENo && selectedRows[0].itemItemMasterIMTENo.length > 0) {
