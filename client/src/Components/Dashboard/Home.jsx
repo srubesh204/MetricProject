@@ -235,7 +235,7 @@ const Home = () => {
       console.log(dcNextNumber.data.result)
       setLastNo(dcNextNumber.data.result)
       setDcList(response.data.result);
-      setFilteredData(response.data.result);
+      
 
 
     } catch (err) {
@@ -431,7 +431,7 @@ const Home = () => {
 
       setItemList(allItems);
       setPieDataFilter(allItems)
-      setFilteredData(allItems)
+      
 
 
       //
@@ -513,7 +513,7 @@ const Home = () => {
         { value: oemLength.length, label: "OEM" }
       ]);
 
-
+      setFilteredData(allItems)
     } catch (err) {
       console.log(err);
     } finally {
@@ -524,8 +524,8 @@ const Home = () => {
 
   const itemLocationFun = () => {
 
-    setFilteredData(plantWiseList)
-    setPieDataFilter(plantWiseList)
+    
+   
 
     const activeItems = plantWiseList.filter((item) => item.itemStatus === "active");
     const spareItems = plantWiseList.filter((item) => item.itemStatus === "spare");
@@ -576,6 +576,8 @@ const Home = () => {
       { value: missingItems.length, label: 'Missing' },
       { value: rejectionItems.length, label: 'Rejection' }
     ])
+    setPieDataFilter(plantWiseList)
+    setFilteredData(plantWiseList)
   }
 
 
@@ -638,9 +640,7 @@ const Home = () => {
 
         const plantData = itemList.filter(plant => plant.itemPlant === value)
 
-        setPlantWiseList(plantData)
-        setFilteredData(plantData)
-        setPieDataFilter(plantData)
+        
 
         const activeItems = plantData.filter((item) => item.itemStatus === "active");
         const spareItems = plantData.filter((item) => item.itemStatus === "spare");
@@ -692,7 +692,9 @@ const Home = () => {
           { value: rejectionItems.length, label: 'Rejection' }
         ])
 
-
+        setPlantWiseList(plantData)
+        setFilteredData(plantData)
+        setPieDataFilter(plantData)
       }
     }
     if (name === "itemDepartment") {
@@ -1113,8 +1115,7 @@ const Home = () => {
     setSelectedFilterValue(value)
     console.log(name, value)
     const filter = plantWiseList.filter((item) => item[name] === value)
-    setFilteredData(filter)
-    setPieDataFilter(filter)
+    
 
     const activeItems = filter.filter((item) => item.itemStatus === "active");
     const spareItems = filter.filter((item) => item.itemStatus === "spare");
@@ -1165,6 +1166,8 @@ const Home = () => {
       { value: missingItems.length, label: 'Missing' },
       { value: rejectionItems.length, label: 'Rejection' }
     ])
+    setFilteredData(filter)
+    setPieDataFilter(filter)
   }
 
   const customerFilter = (name, value) => {
@@ -1175,8 +1178,7 @@ const Home = () => {
     });
 
     console.log(filter)
-    setFilteredData(filter)
-    setPieDataFilter(filter)
+   
 
     const activeItems = filter.filter((item) => item.itemStatus === "active");
     const spareItems = filter.filter((item) => item.itemStatus === "spare");
@@ -1225,6 +1227,8 @@ const Home = () => {
       { id: 4, value: missingItems.length, label: 'Missing' },
       { id: 5, value: rejectionItems.length, label: 'Rejection' }
     ])
+    setFilteredData(filter)
+    setPieDataFilter(filter)
   }
 
   const [filterNames, setFilterNames] = useState({
