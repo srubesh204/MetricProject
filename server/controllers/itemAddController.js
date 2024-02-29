@@ -918,6 +918,7 @@ const itemAddController = {
           AG: 'itemUncertaintyUnit',
           AH: 'itemPartName',
           AI: 'itemPlant',
+          AJ: 'plantAccess'
         }
       });
       console.log(jsonData)
@@ -930,7 +931,7 @@ const itemAddController = {
         item.itemStatus = item.itemStatus ? (item.itemStatus).toLowerCase() : "active"
         item.itemItemMasterIMTENo = item.itemItemMasterIMTENo ? item.itemItemMasterIMTENo.split(",") : []
         item.itemPartName = item.itemPartName ? item.itemPartName.split(",") : []
-
+        item.plantAccess = item.plantAccess ? item.plantAccess.split(",") : []
         return item;
       });
 
@@ -1053,6 +1054,23 @@ const itemAddController = {
       const imte = req.params.id;
       // Check if the _id exists in itemDcModel
       const result = await itemAddModel.findOne({ itemIMTENo: imte })
+      res.status(202).json({ status: true, message: "ItemGet Successfull", result: result })
+
+    } catch (err) {
+      console.log(err)
+      res.status(500).json({ error: 'Internal Server Error on ItemName get' });
+    }
+
+  },
+  getIsItemMasterByPlantAccess: async (req, res) => {
+    try {
+      const {allowedPlants} = req.body;
+      // Check if the _id exists in itemDcModel
+      const result = await itemAddModel.aggregate([
+        { $match: { plantAccess: { $in: allowedPlants ? allowedPlants : [] }, isItemMaster: "1"} },
+        { $sort: { _id: 1 } },
+       
+      ]);
       res.status(202).json({ status: true, message: "ItemGet Successfull", result: result })
 
     } catch (err) {

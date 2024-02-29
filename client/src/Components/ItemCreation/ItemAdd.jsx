@@ -147,26 +147,27 @@ const ItemAdd = () => {
 
 
     const [itemMasterListByName, setItemMasterListByName] = useState([])
-    const [selectedPlantList, setSelectedPlantList] = useState([])
+   
 
-    // const acceptanceCriteria = [...];
 
-    const getDistinctItemName = async () => {
+    const getIsItemMaster = async () => {
         try {
             const response = await axios.post(
-                `${process.env.REACT_APP_PORT}/itemAdd/getItemByPlant`, { allowedPlants: allowedPlants }
+                `${process.env.REACT_APP_PORT}/itemAdd/getIsItemMasterByPlantAccess`, { allowedPlants: allowedPlants }
             );
-            console.log(response.data)
-            const isItemMaster = response.data.result.filter(item => item.isItemMaster === "1")
-            setItemMasterListByName(isItemMaster);
+            setItemMasterListByName(response.data.result)
 
         } catch (err) {
             console.log(err);
         }
     };
     useEffect(() => {
-        getDistinctItemName();
+        getIsItemMaster();
     }, []);
+
+    // const acceptanceCriteria = [...];
+
+    
 
 
 
@@ -331,8 +332,8 @@ const ItemAdd = () => {
     }, [itemAddData.itemPlant]);
 
     useEffect(() => {
-        const itemPlantFilter = itemMasterListByName.filter(item => item.itemPlant === itemAddData.itemPlant)
-        setSelectedPlantList(itemPlantFilter)
+        
+      
         const vendorPlantFilter = vendorList.filter(ven => ven.vendorPlant.includes(itemAddData.itemPlant))
         const oem = vendorPlantFilter.filter((item) => item.oem === "1")
         const supplier = vendorPlantFilter.filter((item) => item.supplier === "1")
@@ -1132,7 +1133,7 @@ const ItemAdd = () => {
                                                     renderValue={(selected) => selected.join(", ")} MenuProps={MenuProps}
                                                     fullWidth
                                                 >
-                                                    {selectedPlantList.map((name, index) => (
+                                                    {itemMasterListByName.map((name, index) => (
                                                         <MenuItem style={{ padding: 0 }} key={index} value={name.itemIMTENo}>
                                                             <Checkbox checked={itemAddData.itemItemMasterIMTENo.indexOf(name.itemIMTENo) > -1} />
                                                             <ListItemText primary={name.itemAddMasterName + " - " + name.itemIMTENo} />

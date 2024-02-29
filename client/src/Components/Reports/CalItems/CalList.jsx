@@ -72,10 +72,12 @@ const CalList = () => {
             const response = await axios.post(
                 `${process.env.REACT_APP_PORT}/itemAdd/getItemByPlant`, { allowedPlants: allowedPlants }
             );
-
-            const masterItems = response.data.result.filter((item) => item.isItemMaster === "1")
+            const masters = await axios.post(
+                `${process.env.REACT_APP_PORT}/itemAdd/getIsItemMasterByPlantAccess`, { allowedPlants: allowedPlants }
+            );
+            setItemMasters(masters.data.result)
             setItemAddList(response.data.result);
-            setItemMasters(masterItems)
+
 
         } catch (err) {
             console.log(err);
@@ -153,7 +155,7 @@ const CalList = () => {
         companyFetch();
     }, []);
 
-    
+
 
 
 
@@ -214,7 +216,7 @@ const CalList = () => {
     const calListFetchData = async () => {
         try {
             const response = await axios.post(
-                `${process.env.REACT_APP_PORT}/itemCal/getAllItemCals`,{allowedPlants: allowedPlants}
+                `${process.env.REACT_APP_PORT}/itemCal/getAllItemCals`, { allowedPlants: allowedPlants }
             );
 
             setCalListDataList(response.data.result);
@@ -236,7 +238,7 @@ const CalList = () => {
     const dcListFetchData = async () => {
         try {
             const response = await axios.post(
-                `${process.env.REACT_APP_PORT}/itemCal/getAllItemCals`,{allowedPlants: allowedPlants}
+                `${process.env.REACT_APP_PORT}/itemCal/getAllItemCals`, { allowedPlants: allowedPlants }
 
             );
             const plantCal = response.data.result.filter(cal => (loggedEmp.plantDetails.map(plant => plant.plantName).includes(cal.calPlant)))
@@ -358,7 +360,7 @@ const CalList = () => {
                 const itemDepartment = calListDataList.filter((item) => (item.calDepartment && item.calDepartment.includes(value)));
                 setFilteredCalData(itemDepartment);
             }
-           
+
 
             setDateData((prev) => ({ ...prev, [name]: value }))
         }
@@ -512,7 +514,7 @@ const CalList = () => {
                                             <TextField {...params} label="Item IMTE No" name="itemIMTENo" />
                                         )}
                                     /> */}
-                                    
+
                                 </div>
                             </div>
                             <div className=' col d-flex justify-content-end'>

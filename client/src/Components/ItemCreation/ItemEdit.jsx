@@ -100,21 +100,21 @@ const ItemEdit = () => {
     }, []);
 
     const [isItemMasterList, setIsItemMasterList] = useState([])
-    const [selectedPlantList, setSelectedPlantList] = useState([])
+    
 
-    const getItemMaster = async () => {
+    const getIsItemMaster = async () => {
         try {
             const response = await axios.post(
-                `${process.env.REACT_APP_PORT}/itemAdd/getItemByPlant`, { allowedPlants: allowedPlants }
+                `${process.env.REACT_APP_PORT}/itemAdd/getIsItemMasterByPlantAccess`, { allowedPlants: allowedPlants }
             );
-            const isItemMaster = response.data.result.filter(item => item.isItemMaster === "1")
-            setIsItemMasterList(isItemMaster);
+            setIsItemMasterList(response.data.result)
+
         } catch (err) {
             console.log(err);
         }
     };
     useEffect(() => {
-        getItemMaster();
+        getIsItemMaster();
     }, []);
 
 
@@ -534,8 +534,7 @@ const ItemEdit = () => {
 
 
     useEffect(() => {
-        const itemPlantFilter = isItemMasterList.filter(item => item.itemPlant === itemAddData.itemPlant)
-        setSelectedPlantList(itemPlantFilter)
+       
         const vendorPlantFilter = vendorList.filter(ven => ven.vendorPlant.includes(itemAddData.itemPlant))
         const oem = vendorPlantFilter.filter((item) => item.oem === "1")
         const supplier = vendorPlantFilter.filter((item) => item.supplier === "1")
@@ -1243,7 +1242,7 @@ const ItemEdit = () => {
                                                 MenuProps={MenuProps}
                                                 fullWidth
                                             >
-                                                {selectedPlantList.map((name, index) => (
+                                                {isItemMasterList.map((name, index) => (
                                                     <MenuItem style={{ padding: 0 }} key={index} value={name.itemIMTENo}>
                                                         <Checkbox checked={itemAddData.itemItemMasterIMTENo.indexOf(name.itemIMTENo) > -1} />
                                                         <ListItemText primary={name.itemAddMasterName + " - " + name.itemIMTENo} />
@@ -1478,8 +1477,7 @@ const ItemEdit = () => {
                                                 <MenuItem key={index} value={item.fullName}>{item.fullName}</MenuItem>
                                             ))}
                                         </TextField>
-                                        {itemAddData.isItemMaster === "1" &&
-                                            <React.Fragment>
+                                        
                                                 <TextField disabled={itemAddData.itemPrevCalData !== "available" || itemStatus}
                                                     className='ms-2'
                                                     fullWidth
@@ -1507,7 +1505,7 @@ const ItemEdit = () => {
                                                         <MenuItem key={index} value={unit.unitName}>{unit.unitName}</MenuItem>
                                                     ))}
                                                 </TextField>
-                                            </React.Fragment>}
+                                           
                                     </div>
 
 
@@ -1541,20 +1539,7 @@ const ItemEdit = () => {
                                 </div>
 
                             </Paper >
-                            {/* <Button component="label" disabled={itemAddData.itemPrevCalData !== "available"} className='ms-2' value={itemAddData.itemCertificateName} variant="contained" fullWidth >
-
-                                Certificate Upload
-                                <VisuallyHiddenInput type="file" onChange={handleCertificateUpload} />
-
-                            </Button> */}
-
-                            {/* {itemAddData.itemCertificateName &&
-                                        <div className="col-md-4 d-flex justify-content-between">
-                                            <Chip label={itemAddData.itemCertificateName} size='small' component="a" href={`${process.env.REACT_APP_PORT}/workInstructions/${itemAddData.itemCertificateName}`} target="_blank" clickable={true} color="primary" />
-                                            <HighlightOffRounded type="button" onClick={() => handleRemoveFile()} />
-                                            {uploadMessage &&
-                                                <Chip label={uploadMessage} size='small' color="success" icon={<Done />} />}
-                                        </div>} */}
+                          
 
 
                             {(itemAddData.isItemMaster !== "1" && itemAddData.itemType !== "referenceStandard") && <Paper className='row-6-lg' elevation={12} sx={{ p: 2, mt: 2, height: "inherit" }} >
