@@ -547,8 +547,9 @@ const ItemEdit = () => {
 
         const { name, value, checked } = e.target;
         if (name === "itemMasterRef") {
+            console.log(value)
             const itemMasterById = () => {
-                const master = itemMasterDataList.filter(mas => mas.itemMasterId == itemAddData.itemMasterRef)
+                const master = itemMasterDataList.filter(mas => mas.itemMasterId == value)
                 console.log(master)
                 if (master.length > 0) {
                     const { _id, itemType, itemDescription, itemFrequencyType, itemPrefix, itemFqInMonths, calAlertInDay, SOPNo, uncertainity, uncertaintyUnit, standardRef, itemMasterImage, calibrationPoints } = master[0]
@@ -688,7 +689,6 @@ const ItemEdit = () => {
         console.log(master)
         if (master.length > 0) {
             const { calibrationPoints } = master[0]
-            
             setCalibrationPointsData(calibrationPoints)
         }
     };
