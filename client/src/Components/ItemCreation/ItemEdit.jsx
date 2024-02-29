@@ -955,7 +955,7 @@ const ItemEdit = () => {
     const [department, setDepartment] = useState([])
     const DepFetch = async () => {
         try {
-            const response = await axios.get(
+            const response = await axios.post(
                 `${process.env.REACT_APP_PORT}/department/getDepartmentByPlant`, { allowedPlants: allowedPlants }
             );
             // const defaultDepartment = response.data.result.filter((dep) => dep.defaultdep === "yes")
@@ -970,6 +970,7 @@ const ItemEdit = () => {
     useEffect(() => {
         DepFetch()
     }, []);
+
     const [plantDepartments, setPlantDepartments] = useState([])
     useEffect(() => {
         const filteredPlants = loggedEmp.plantDetails.filter(plant => plant.plantName === itemAddData.itemPlant);
