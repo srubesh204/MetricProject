@@ -53,10 +53,10 @@ const ItemAdd = () => {
     const DepartmentFetch = async () => {
         try {
             const response = await axios.get(
-                `${process.env.REACT_APP_PORT}/department/getAllDepartments`
+                `${process.env.REACT_APP_PORT}/department/getDepartmentByPlant`, { allowedPlants: allowedPlants }
             );
-            const defaultDepartment = response.data.result.filter((dep) => dep.defaultdep === "yes")
-            setDepartments(defaultDepartment);
+           
+            setDepartments(response.data.result);
 
             console.log(response.data)
         } catch (err) {
@@ -68,7 +68,7 @@ const ItemAdd = () => {
         DepartmentFetch()
     }, []);
 
-    const [filteredData, setFilteredData] = useState([])
+    
 
 
 
