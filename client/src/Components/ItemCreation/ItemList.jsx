@@ -914,6 +914,7 @@ const ItemList = () => {
                 setErrorHandler({ status: 0, message: "An error occurred", code: "error" });
             }
             console.log(err);
+            itemFetch()
         }
     };
 

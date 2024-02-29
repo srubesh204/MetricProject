@@ -111,7 +111,7 @@ const ItemAdd = () => {
     const DepFetch = async () => {
         try {
             const response = await axios.get(
-                `${process.env.REACT_APP_PORT}/department/getAllDepartments`
+                `${process.env.REACT_APP_PORT}/department/getDepartmentByPlant`, { allowedPlants: allowedPlants }
             );
             // const defaultDepartment = response.data.result.filter((dep) => dep.defaultdep === "yes")
             setDepartment(response.data.result);

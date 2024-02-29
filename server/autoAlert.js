@@ -2,57 +2,83 @@ const cron = require('node-cron');
 const nodemailer = require('nodemailer');
 const mailConfigModel = require('./models/mailConfigModel');
 const itemAddModel = require('./models/itemAddModel') // Assuming you have a function to find expiring items
+const employeeModel = require("./models/employeeModel")
 const dayjs = require('dayjs')
 
 // Schedule cron job to run every morning at 9:00 AM
-cron.schedule('* * * * *', async () => {
+cron.schedule('0 * * * *', async () => {
     try {
         // Add logic to check for expiring items here
-        const sevenDaysAgo = dayjs().add(7, 'day');
-        const itemPlants = await itemAddModel.aggregate([{
-            $match: {
-              "itemPlant": { $in: allowedPlants ? allowedPlants : [] } // Specify the values to match
-            }
-          }, { $sort: { itemAddMasterName: 1, itemIMTENo: 1 } }
-        ]);
-            
+        const sevenDaysAgo = dayjs().add(7, 'day').format('YYYY-MM-DD');
+        const today = dayjs().format("YYYY-MM-DD")
+        // Retrieve distinct plants from the database
+        const plants = await itemAddModel.distinct("itemPlant");
 
-        // Find items where itemDueDate is between the current date and 7 days ago
-        const expiringItems = await itemAddModel.find({
-            itemDueDate: {
-                $gte: dayjs().format('YYYY-MM-DD'), // Greater than or equal to 7 days ago
-                $lte: sevenDaysAgo.format('YYYY-MM-DD') // Less than or equal to current date
-            }
-        });
-        console.log(expiringItems)
-        // Implement this function to filter expiring items
-
-        // If there are expiring items, send email notifications
-        if (expiringItems.length > 0) {
-            // Fetch mail details from database
-            const mailDetails = await mailConfigModel.findById("mailData");
-            if (!mailDetails) {
-                console.error("Mail details not found!");
-                return;
-            }
-
-            // Initialize Nodemailer transporter
-            const transporter = nodemailer.createTransport({
-                host: mailDetails.outMailServer,
-                port: mailDetails.portNumber,
-                secure: true,
-                auth: {
-                    user: mailDetails.mailId,
-                    pass: mailDetails.mailPassword,
-                },
+        // Iterate over each plant
+        for (const plant of plants) {
+            // Retrieve items for the current plant that are expiring in 7 days, expiring today, and already expired
+            const expiringIn7DaysItems = await itemAddModel.find({
+                itemDueDate: { $gt: today, $lte: sevenDaysAgo },
+                itemPlant: plant
             });
 
-            // Construct email options
-            const mailOptions = {
-                from: mailDetails.mailId,
-                to: 'rbmkrishh@gmail.com', // Add recipient email address
-                subject: 'Instrument Expiry Alert',
-                html: `
+            const expiringTodayItems = await itemAddModel.find({
+                itemDueDate: today,
+                itemPlant: plant
+            });
+
+            const expiredItems = await itemAddModel.find({
+                itemDueDate: { $lt: today },
+                itemPlant: plant
+            });
+
+            // Send emails for each category of items to the respective plant
+            await sendEmailNotifications(plant, expiringIn7DaysItems, 'Expiring in 7 Days');
+            await sendEmailNotifications(plant, expiringTodayItems, 'Expiring Today');
+            await sendEmailNotifications(plant, expiredItems, 'Expired');
+
+            console.log(`Email notifications sent successfully for ${plant}`);
+        }
+    } catch (error) {
+        console.error('Error sending email notifications:', error);
+    }
+});
+
+// Function to generate HTML list of expiring items
+
+async function sendEmailNotifications(plant, items, subject) {
+    if (items.length === 0) return; // No items for this category
+
+    try {
+        // Fetch mail details from database
+
+        const empEmails = await employeeModel.distinct("email", {
+            "plantDetails.plantName": plant
+        });
+        const mailDetails = await mailConfigModel.findById("mailData");
+        if (!mailDetails) {
+            console.error("Mail details not found!");
+            return;
+        }
+
+        // Initialize Nodemailer transporter
+        const transporter = nodemailer.createTransport({
+            host: mailDetails.outMailServer,
+            port: mailDetails.portNumber,
+            secure: true,
+            auth: {
+                user: mailDetails.mailId,
+                pass: mailDetails.mailPassword,
+            },
+        });
+
+        // Construct email options
+        const mailOptions = {
+            from: mailDetails.mailId,
+            to: plant.contactEmail, // Use plant-specific contact email
+            subject: `${plant} - ${subject} Instrument Alert`,
+            html: 
+            `
                 <!DOCTYPE html>
                 <html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:o="urn:schemas-microsoft-com:office:office">
                 <head>
@@ -76,9 +102,9 @@ cron.schedule('* * * * *', async () => {
                 </style>
     
                 <body style="margin:0;padding:0;">
-                <p>Dear Sir/Madam,</p>
+                <p>Dear User,</p>
     
-                <p>This is to inform you that the following instruments are expiring in 7 days:<p>
+                <p>This is to inform you about the following instruments at ${plant} are ${subject}:</p>
                     
                     <table role="presentation" style="width:100%; border-collapse:collapse; border: 1px solid black; border-spacing:0; background:#ffffff;">
                         <tbody>
@@ -93,35 +119,32 @@ cron.schedule('* * * * *', async () => {
                                 <th style="border: 1px solid #dddddd; text-align: center; padding: 8px; background-color: #f2f2f2;">Cal Source</th>
                                 <th style="border: 1px solid #dddddd; text-align: center; padding: 8px; background-color: #f2f2f2;">Supplier</th>
                             </tr>
-                            ${generateItemsList(expiringItems)}
+                            ${generateItemsList(items)}
                             
                         </tbody>
                     </table>
     
                    
-                  
+                    <p>Thanks with Regards<br>
+                    ${employee && employee.firstName ? employee.firstName : ""} ${employee && employee.lastName ? employee.lastName : ""} - ${employee && employee.designation ? employee.designation : ""}<br>
+                    ${compDetails && compDetails.companyName}<br>
+                    ${plantDetails.length > 0 && plantDetails[0].plantName ? plantDetails[0].plantName : ""} - ${plantDetails.length > 0 && plantDetails[0].plantAddress ? plantDetails[0].plantAddress : ""}</p>
+                    <br>
                    
-                    <p style="font-weight: 700">This is system generated email. Do not reply to this email.</p>  
-            <code>The information in this message and any files transmitted with it are confidential and may be legally privileged. 
-            It is intended solely for the addressee. Access to this message by anyone else is unauthorized. 
-            If you are not the intended recipient, you are notified that any disclosure, copying, or distribution of the message, or any action or omission taken by you in reliance on it, is strictly prohibited and may be unlawful. 
-            Please contact the sender immediately if you have received this message in error and promptly destroy the original communication.</code>
+                    ${systemGeneratedText}
                     
                 </body>
-                </html>`
-                
-            };
+                </html>`,
+        };
 
-            // Send email notifications
-            await transporter.sendMail(mailOptions);
-            console.log('Email notifications sent successfully');
-        }
+        // Send email notification for this plant and category
+        await transporter.sendMail(mailOptions);
+        console.log(`Email notification sent successfully for ${subject} items at ${plant}`);
     } catch (error) {
-        console.error('Error sending email notifications:', error);
+        console.error(`Error sending email notification for ${subject} items at ${plant}:`, error);
     }
-});
+}
 
-// Function to generate HTML list of expiring items
 function generateItemsList(expiringItems) {
     return expiringItems.map((item, index) => `
     <tr>
@@ -138,4 +161,4 @@ function generateItemsList(expiringItems) {
 `).join('');
 }
 
-module.exports = cron; // Export the cron job for use in other files
+//module.exports = cron; // Export the cron job for use in other files
