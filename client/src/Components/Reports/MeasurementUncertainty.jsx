@@ -544,10 +544,7 @@ const MeasurementUncertainty = () => {
                         const response = await axios.post(
                             `${process.env.REACT_APP_PORT}/itemAdd/getIsItemMasterByPlantAccess`, { allowedPlants: [value] }
                         );
-                        console.log(response.data.result)
-                        
-                        setSelectedPlant(filter)
-            
+                        setSelectedPlant(response.data.result)
                     } catch (err) {
                         console.log(err);
                     }
