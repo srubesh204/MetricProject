@@ -100,20 +100,20 @@ const itemGRNController = {
         grnItemStatus,
         grnAssingStatus,
         grnAcCriteria,
-        grnItemUncertainity,
+        grnItemUncertainty,
+        grnItemUncertaintyUnit,
         grnItemCalDate,
         grnItemDueDate,
         grnItemCertificateStatus,
         grnItemCertificateNo,
         grnItemCertificate,
-        grnUncertainity,
+       
         grnItemCalStatus,
         isOnSiteGRN,
         grnCreatedBy,
         grnItemSOPNo,
         grnItemStandardRef,
-        grnItemMasterUncertainty,
-        grnItemMasterUncertaintyUnit
+
       } = req.body;
 
 
@@ -156,20 +156,20 @@ const itemGRNController = {
         grnItemStatus,
         grnAssingStatus,
         grnAcCriteria,
-        grnItemUncertainity,
+        grnItemUncertainty,
+        grnItemUncertaintyUnit,
         grnItemCalDate,
         grnItemDueDate,
         grnItemCertificateStatus,
         grnItemCertificateNo,
         grnItemCertificate,
-        grnUncertainity,
+       
         grnItemCalStatus,
         isOnSiteGRN,
         grnCreatedBy,
         grnItemSOPNo,
         grnItemStandardRef,
-        grnItemMasterUncertainty,
-        grnItemMasterUncertaintyUnit
+
       });
 
       const getCompDetailsById = await compDetailsSchema.findById("companyData");
@@ -249,8 +249,9 @@ const itemGRNController = {
           itemCalibrationDoneAt,
 
           itemOBType,
-          itemUncertainity,
-          itemUncertainityUnit,
+          itemUncertainty,
+          itemUncertaintyUnit,
+          
           itemPrevCalData,
           itemCertificateNo: itemLastCertificateNo,
         } = itemData
@@ -280,6 +281,10 @@ const itemGRNController = {
           dcNo: "",
           dcId: "",
           dcCreatedOn: "",
+          itemUncertainty: result.grnItemUncertainty,
+          itemUncertaintyUnit: result.grnItemUncertaintyUnit,
+          prevItemUncertainty: itemUncertainty,
+          prevItemUncertaintyUnit: itemUncertaintyUnit,
           itemCertificateNo: result.grnItemCertificateNo,
           itemLastCertificateNo,
 
@@ -357,12 +362,13 @@ const itemGRNController = {
           itemCalibrationSource,
           itemCalStatus: result.grnItemCalStatus,
           itemCalibrationDoneAt,
-          itemUncertainityUnit,
+          itemUncertaintyUnit,
           itemPrevCalData,
           itemCalibratedAt: result.grnPartyName,
           itemCertificateName: result.grnItemCertificate,
           itemOBType,
-          itemUncertainity,
+          itemUncertainty: result.grnItemUncertainty,
+          itemUncertaintyUnit: result.grnItemUncertaintyUnit,
           itemLastCertificateNo,
           itemCertificateNo: result.grnItemCertificateNo,
           acceptanceCriteria: obSize
@@ -459,7 +465,6 @@ const itemGRNController = {
       //   return res.status(400).json({ error: 'Invalid desId value' });
       // }
       const {
-
         grnPartyRefNo,
         grnPartyId,
         grnPartyRefDate,
@@ -499,20 +504,20 @@ const itemGRNController = {
         grnItemStatus,
         grnAssingStatus,
         grnAcCriteria,
-        grnItemUncertainity,
+        grnItemUncertainty,
+        grnItemUncertaintyUnit,
         grnItemCalDate,
         grnItemDueDate,
         grnItemCertificateStatus,
         grnItemCertificateNo,
         grnItemCertificate,
-        grnUncertainity,
+       
         grnItemCalStatus,
         isOnSiteGRN,
         grnCreatedBy,
         grnItemSOPNo,
         grnItemStandardRef,
-        grnItemMasterUncertainty,
-        grnItemMasterUncertaintyUnit
+
       } = req.body;
 
       // Create an object with the fields you want to update
@@ -556,23 +561,23 @@ const itemGRNController = {
         grnItemStatus,
         grnAssingStatus,
         grnAcCriteria,
-        grnItemUncertainity,
+        grnItemUncertainty,
+        grnItemUncertaintyUnit,
         grnItemCalDate,
         grnItemDueDate,
         grnItemCertificateStatus,
         grnItemCertificateNo,
         grnItemCertificate,
-        grnUncertainity,
+       
         grnItemCalStatus,
         isOnSiteGRN,
         grnCreatedBy,
         grnItemSOPNo,
         grnItemStandardRef,
-        grnItemMasterUncertainty,
-        grnItemMasterUncertaintyUnit
+
       };
 
-
+      console.log(updateItemGRNFields)
       const getCompDetailsById = await compDetailsSchema.findById("companyData");
       const getPlantAddress = await plantSchema.findOne(
         { plantName: grnPlant } // To return the updated document
@@ -660,8 +665,8 @@ const itemGRNController = {
           itemCertificateName,
           itemCertificateNo,
           itemOBType,
-          itemUncertainity,
-          itemUncertainityUnit,
+          itemUncertainty,
+          itemUncertaintyUnit,
           itemPrevCalData,
         } = itemData
 
@@ -678,7 +683,10 @@ const itemGRNController = {
           itemDueDate: grnItemStatus === "Calibrated" ? grnItemDueDate : itemLastDueDate,
           itemStatus: itemCondition,
           itemLastStatus: itemStatus,
-
+          itemUncertainty: updateItemGRN.grnItemUncertainty,
+          itemUncertaintyUnit: updateItemGRN.grnItemUncertaintyUnit,
+          prevItemUncertainty: itemUncertainty,
+          prevItemUncertaintyUnit: itemUncertaintyUnit,
           grnId: updateItemGRN._id,
           grnStatus: "1",
           grnCreatedOn: grnDate,
@@ -758,13 +766,14 @@ const itemGRNController = {
           itemCalAlertDays,
           itemCalibrationSource,
           itemCalibrationDoneAt,
-          itemUncertainityUnit,
+          itemUncertainty: updateItemGRN.grnItemUncertainty,
+          itemUncertaintyUnit: updateItemGRN.grnItemUncertaintyUnit,
           itemPrevCalData,
           itemCalibratedAt,
           itemCertificateName: grnItemCertificate,
           itemCertificateNo,
           itemOBType,
-          itemUncertainity
+          itemUncertainty
         };
         const itemHistoryData = await itemHistory.findOneAndUpdate(
           { itemGrnId: itemGRNId },
@@ -779,7 +788,7 @@ const itemGRNController = {
             <td style="padding: 0.50rem; vertical-align: top; border: 1px solid #6c757d ;" class="text-center align-middle">1</td>
             <td style="padding: 0.50rem; vertical-align: top; border: 1px solid #6c757d ;" class="align-middle">Item Name: ${grnItemAddMasterName ? grnItemAddMasterName : "-"} IMTE No: ${grnItemIMTENo ? grnItemIMTENo : "-"} SAP No:${grnItemSAPNo ? grnItemSAPNo : "-"} <br>
             Range/Size: ${grnItemRangeSize ? grnItemRangeSize : "" + ' ' + grnItemRangeSizeUnit ? grnItemRangeSizeUnit : ""} L.C.: ${(grnItemLC ? grnItemLC : "") + '' + (grnItemLCUnit ? grnItemLCUnit : '')}<br>
-            Make: ${grnItemMake ? grnItemMake : "-"} Sr.No: ${grnItemMFRNo ? grnItemMFRNo : "-"} Cal. Frequency: ${grnItemCalFreInMonths ? grnItemCalFreInMonths : "" + ' ' + grnItemCalFrequencyType ? grnItemCalFrequencyType : ""}</td>
+            Make: ${grnItemMake ? grnItemMake : "-"} Sr.No: ${grnItemMFRNo ? grnItemMFRNo : "-"} Cal. Frequency:  ${grnItemCalFreInMonths ? grnItemCalFreInMonths : "-"} ${grnItemCalFrequencyType ? grnItemCalFrequencyType : ""}</td>
             <td style="padding: 0.50rem; vertical-align: top; border: 1px solid #6c757d ;" class="text-center align-middle">${updateItemGRN.grnItemDcNo}</td>
             <td style="padding: 0.50rem; vertical-align: top; border: 1px solid #6c757d ;" class="text-center align-middle">${grnItemStatus}</td>
         </tr>
@@ -875,6 +884,8 @@ const itemGRNController = {
             itemLastPlace,
             itemCertificateNo: itemLastCertificateNo,
             itemLastCertificateNo: itemCertificateNo,
+            prevItemUncertainty: itemUncertainty,
+            prevItemUncertaintyUnit: itemUncertaintyUnit,
             itemStatus,
             itemLastStatus,
           } = itemData
@@ -890,6 +901,8 @@ const itemGRNController = {
             itemDueDate: itemLastDueDate,
             itemStatus: itemLastStatus,
             itemLastStatus: itemStatus,
+            itemUncertainty,
+            itemUncertaintyUnit,
             grnId: "",
             grnStatus: "0",
             grnCreatedOn: "",

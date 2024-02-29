@@ -163,7 +163,7 @@ const Dashboard = () => {
     system: [
       { name: "Version", file: <Version />, icon: <FormatListBulleted />  },
       // { name: "Backup", file: <BackUp />, icon: <img src={`${process.env.REACT_APP_PORT}/icon/list-text.png`} alt="Backup Icon" style={{ width: '20px', height: '20px' }} /> },
-      // { name: "Alerts Configuration", file: <AlertConfig />, icon: <img src={`${process.env.REACT_APP_PORT}/icon/list-text.png`} alt="Alerts Configuration Icon" style={{ width: '20px', height: '20px' }} /> },
+      { name: "Alerts Configuration", file: <AlertConfig />,icon: <FormatListBulleted />  },
       { name: "Mail Configuration", file: <MailConfig />, icon: <FormatListBulleted />  },
       { name: "Format Number", file: <FormatNumber />, icon: <FormatListBulleted />  },
       empRole.employee === "superAdmin" && { name: "Company Details", file: <CompanyDetails />, icon: <FormatListBulleted /> },

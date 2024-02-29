@@ -39,8 +39,8 @@ const testSchema = new mongoose.Schema({
   itemItemMasterIMTENo: [],
   itemSupplier: [],
   itemOEM: [],
-  itemUncertainity: String,
-  itemUncertainityUnit: String,
+  itemUncertainty: String,
+  itemUncertaintyUnit: String,
   itemPrevCalData: String,
   itemCalDate: String,
   itemDueDate: String,
@@ -76,7 +76,7 @@ const testSchema = new mongoose.Schema({
       acMaxPSError: String,
     }
   ],
-  itemUncertainity: String,
+  itemUncertainty: String,
   createdAt: {
     type: String,
     default: () => dayjs().format("YYYY-MM-DD"),

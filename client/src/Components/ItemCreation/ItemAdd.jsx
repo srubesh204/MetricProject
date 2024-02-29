@@ -1,7 +1,7 @@
 import { Card, CardContent, CardActions, Button, Container, Grid, Paper, TextField, Typography, CardMedia, InputLabel, Input, FormControl, FormHelperText, FormGroup, FormLabel, MenuItem, Select, Menu, FormControlLabel, Radio, RadioGroup, TableContainer, Table, TableHead, TableRow, TableCell, TableBody, IconButton, OutlinedInput, Box, Chip, Snackbar, Alert, Dialog, DialogTitle, DialogContent, DialogActions, DialogContentText, Checkbox, ListItemText, Autocomplete } from '@mui/material'
 import axios from 'axios';
 import { styled } from '@mui/material/styles';
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, createContext } from 'react'
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import dayjs from 'dayjs';
@@ -10,18 +10,22 @@ import { useNavigate } from 'react-router-dom';
 import { Link as RouterLink } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import GaugeSpec from './GaugeSpec';
+
 import { Add, Remove, HighlightOffRounded, UploadFile, Close, CloudUpload } from '@mui/icons-material';
 
 import { useEmployee } from '../../App';
+export const ItemAddContent = createContext(null);
 
 const ItemAdd = () => {
 
     // Units Data
 
     const employeeRole = useEmployee();
-    const { allowedPlants,loggedEmp } = employeeRole
+    const { allowedPlants, loggedEmp } = employeeRole
 
     const [addOpenData, setAddOpenData] = useState(false)
+    const [gaugeSecOpen, setGaugeSpecOpen] = useState(false)
     const [masterSharingData, setMasterSharingData] = useState(false)
 
 
@@ -143,26 +147,27 @@ const ItemAdd = () => {
 
 
     const [itemMasterListByName, setItemMasterListByName] = useState([])
-    const [selectedPlantList, setSelectedPlantList] = useState([])
+   
 
-    // const acceptanceCriteria = [...];
 
-    const getDistinctItemName = async () => {
+    const getIsItemMaster = async () => {
         try {
             const response = await axios.post(
-                `${process.env.REACT_APP_PORT}/itemAdd/getItemByPlant`, { allowedPlants: allowedPlants }
+                `${process.env.REACT_APP_PORT}/itemAdd/getIsItemMasterByPlantAccess`, { allowedPlants: allowedPlants }
             );
-            console.log(response.data)
-            const isItemMaster = response.data.result.filter(item => item.isItemMaster === "1")
-            setItemMasterListByName(isItemMaster);
+            setItemMasterListByName(response.data.result)
 
         } catch (err) {
             console.log(err);
         }
     };
     useEffect(() => {
-        getDistinctItemName();
+        getIsItemMaster();
     }, []);
+
+    // const acceptanceCriteria = [...];
+
+    
 
 
 
@@ -219,7 +224,7 @@ const ItemAdd = () => {
 
 
     const [itemAddData, setItemAddData] = useState({
-
+        itemMasterRef: "",
         selectedItemMaster: [],
         isItemMaster: "0",
         itemAddMasterName: "",
@@ -258,24 +263,9 @@ const ItemAdd = () => {
         itemCertificateNo: "",
         itemPartName: [],
         itemOBType: "average",
-        acceptanceCriteria: [
-            {
-                acParameter: "",
-                acNominalSize: "",
-                acNominalSizeUnit: "",
-                acMinPS: "",
-                acMaxPS: "",
-                acWearLimitPS: "",
-                acMinOB: "",
-                acMaxOB: "",
-                acAverageOB: "",
-                acOBError: "",
-                acMinPSError: "",
-                acMaxPSError: "",
-            }
-        ],
-        itemUncertainity: "",
-        itemUncertainityUnit: "",
+        acceptanceCriteria: [],
+        itemUncertainty: "",
+        itemUncertaintyUnit: "",
         itemPrevCalData: "",
         itemPlant: employeeRole.loggedEmp.plantDetails.length === 1 ? employeeRole.loggedEmp.plantDetails[0].plantName : "",
         itemCreatedBy: employeeRole && employeeRole.loggedEmp._id,
@@ -292,6 +282,11 @@ const ItemAdd = () => {
         rdName: "",
         msaName: "",
         otherFile: "",
+
+        itemSOPNo: "",
+        itemStandardRef: "",
+
+
     })
     //upload Button
     const VisuallyHiddenInput = styled('input')({
@@ -337,8 +332,8 @@ const ItemAdd = () => {
     }, [itemAddData.itemPlant]);
 
     useEffect(() => {
-        const itemPlantFilter = itemMasterListByName.filter(item => item.itemPlant === itemAddData.itemPlant)
-        setSelectedPlantList(itemPlantFilter)
+        
+      
         const vendorPlantFilter = vendorList.filter(ven => ven.vendorPlant.includes(itemAddData.itemPlant))
         const oem = vendorPlantFilter.filter((item) => item.oem === "1")
         const supplier = vendorPlantFilter.filter((item) => item.supplier === "1")
@@ -364,6 +359,9 @@ const ItemAdd = () => {
 
         if (name === "itemRangeSizeUnit") {
             setItemAddData((prev) => ({ ...prev, [name]: value, acceptanceCriteria: [{ acAccuracyUnit: value, acRangeSizeUnit: value }] }))
+        }
+        if (name === "itemPlant") {
+            setItemAddData((prev) => ({ ...prev, [name]: value, plantAccess: [value] }))
         }
 
         if (name === "itemDepartment") {
@@ -464,26 +462,31 @@ const ItemAdd = () => {
     const [calibrationPointsData, setCalibrationPointsData] = useState([])
     const itemMasterById = () => {
 
-        const master = itemMasterDataList.filter(mas => mas.itemDescription === itemAddData.itemAddMasterName)
+        const master = itemMasterDataList.filter(mas => mas.itemMasterId == itemAddData.itemMasterRef)
         console.log(master)
         if (master.length > 0) {
-            const { _id, itemType, itemDescription, itemFrequencyType, itemPrefix, itemFqInMonths, calAlertInDay, wiNo, uncertainity, standardRef, itemImageName, status, itemMasterImage, workInsName, calibrationPoints } = master[0]
+            const { _id, itemType, itemDescription, itemFrequencyType, itemFqInMonths, calAlertInDay, SOPNo, uncertainity, uncertaintyUnit, standardRef, itemMasterImage, calibrationPoints } = master[0]
+            console.log(calibrationPoints)
             setItemAddData((prev) => ({
                 ...prev,
                 itemType: itemType,
-                itemIMTENo: itemPrefix,
+                itemAddMasterName: itemDescription,
                 itemImage: itemMasterImage,
                 itemCalFreInMonths: itemFqInMonths,
+                itemCalFrequencyType: itemFrequencyType,
                 itemCalAlertDays: calAlertInDay,
-                itemCalFrequencyType: itemFrequencyType
+                itemSOPNo: SOPNo,
+                itemStandardRef: standardRef,
+                itemUncertainty: uncertainity,
+                itemUncertaintyUnit: uncertaintyUnit,
             }))
             setCalibrationPointsData(calibrationPoints)
         }
     };
 
     useEffect(() => {
-        itemMasterById(itemAddData.itemAddMasterName);
-    }, [itemAddData.itemAddMasterName]);
+        itemMasterById(itemAddData.itemMasterRef);
+    }, [itemAddData.itemMasterRef, itemMasterDataList]);
 
     const [plantWisePart, setPlantWisePart] = useState([])
 
@@ -875,10 +878,10 @@ const ItemAdd = () => {
                             <div className='col-9'>
                                 <TextField
                                     {...(errors.itemAddMasterName !== "" && { helperText: errors.itemAddMasterName, error: true })}
-                                    size='small' select variant='outlined' label="Item Name" name='itemAddMasterName' value={itemAddData.itemAddMasterName} fullWidth onChange={handleItemAddChange}>
+                                    size='small' select variant='outlined' label="Item Name" name='itemMasterRef' value={itemAddData.itemMasterRef} fullWidth onChange={handleItemAddChange}>
                                     <MenuItem value=""><em>Select</em></MenuItem>
                                     {itemMasterDataList.map((item, index) => (
-                                        <MenuItem key={index} value={item.itemDescription}>{item.itemDescription}</MenuItem>
+                                        <MenuItem key={index} value={item.itemMasterId}>{item.itemDescription}</MenuItem>
                                     ))}
                                 </TextField>
                             </div>
@@ -906,9 +909,9 @@ const ItemAdd = () => {
                                     label="Use as Master"
                                 />
                             </div>
-                            <div className='col-1' >
-                                <Button style={{ margin: "13% 0" }} component={Link} to="/" size='small' className=''>Home</Button>
-                            </div>
+
+
+
 
                         </div>
                         <div className="col-lg-3 " >
@@ -918,17 +921,23 @@ const ItemAdd = () => {
 
 
 
-                        <div className="col-lg-4  d-flex justify-content-end">
+                        <div className="col-lg-4 d-flex justify-content-end">
 
                             {companyData.gaugeSpacePage === "yes" &&
                                 <div className='me-2'>
-                                    <Button variant='contained'>Gauge spec </Button>
+                                    {/* <Button variant='contained'>Gauge spec </Button> */}
+                                    <Button component={Link} onClick={() => { setGaugeSpecOpen(true) }} type='button' variant="contained" >
+                                    Gauge spec
+                                    </Button>
                                 </div>}
                             {itemAddData.itemImage && <Card elevation={12} sx={{ width: "110px", height: "110px" }}>
 
                                 <img src={`${process.env.REACT_APP_PORT}/itemMasterImages/${itemAddData.itemImage}`} style={{ width: "100%", height: "100%" }} />
 
                             </Card>}
+                        </div>
+                        <div className='m-0 p-0'>
+                            <Button component={Link} to="/" size='small' >Home</Button>
                         </div>
 
 
@@ -955,7 +964,7 @@ const ItemAdd = () => {
                                             <TextField size='small' variant='outlined' label="Range/Size" onChange={handleItemAddChange} name='itemRangeSize' id='itemRangeSizeId' fullWidth />
                                             <TextField label="Unit" size='small' select onChange={(e) => {
                                                 handleItemAddChange(e);
-                                            }} name='itemRangeSizeUnit' id='itemRangeSizeUnitId' defaultValue="none" style={{ width: "40%" }} >
+                                            }} name='itemRangeSizeUnit' id='itemRangeSizeUnitId' defaultValue="none" style={{ width: "50%" }} >
                                                 <MenuItem value='none'><em>None</em></MenuItem>
                                                 {units.map((unit, index) => (
                                                     <MenuItem key={index} value={unit.unitName}>{unit.unitName}</MenuItem>
@@ -1110,16 +1119,11 @@ const ItemAdd = () => {
                                     <div className='row g-2'>
                                         <h6 className='text-center m-0'>Enter Master Details</h6>
 
-
-
-
-
                                         <div className="col-md-12">
                                             <FormControl size='small' component="div" fullWidth>
                                                 <InputLabel id="itemItemMasterIMTENoId">Select IMTENo.</InputLabel>
                                                 <Select
                                                     labelId="itemItemMasterIMTENoId"
-
                                                     multiple
                                                     name="itemItemMasterIMTENo"
                                                     value={itemAddData.itemItemMasterIMTENo}
@@ -1129,7 +1133,7 @@ const ItemAdd = () => {
                                                     renderValue={(selected) => selected.join(", ")} MenuProps={MenuProps}
                                                     fullWidth
                                                 >
-                                                    {selectedPlantList.map((name, index) => (
+                                                    {itemMasterListByName.map((name, index) => (
                                                         <MenuItem style={{ padding: 0 }} key={index} value={name.itemIMTENo}>
                                                             <Checkbox checked={itemAddData.itemItemMasterIMTENo.indexOf(name.itemIMTENo) > -1} />
                                                             <ListItemText primary={name.itemAddMasterName + " - " + name.itemIMTENo} />
@@ -1380,34 +1384,34 @@ const ItemAdd = () => {
                                                     <MenuItem key={index} value={item.fullName}>{item.aliasName}</MenuItem>
                                                 ))}
                                             </TextField>
-                                           
-                                                <React.Fragment>
-                                                    <TextField disabled={itemAddData.itemPrevCalData !== "available"}
-                                                        className='ms-2'
-                                                        fullWidth
-                                                        label="Uncertainity"
-                                                        variant='outlined'
-                                                        size='small'
-                                                        onChange={handleItemAddChange}
-                                                        name='itemUncertainity'
-                                                        value={itemAddData.itemUncertainity}
-                                                    />
-                                                    <TextField disabled={itemAddData.itemPrevCalData !== "available"}
-                                                        select
-                                                        size='small'
-                                                        variant='outlined'
-                                                        label="Unit"
-                                                        name='itemUncertainityUnit'
-                                                        onChange={handleItemAddChange}
-                                                        style={{ width: "60%" }}
-                                                        value={itemAddData.itemUncertainityUnit}
-                                                    >
-                                                        <MenuItem value=""><em>None</em></MenuItem>
-                                                        {units.map((unit, index) => (
-                                                            <MenuItem key={index} value={unit.unitName}>{unit.unitName}</MenuItem>
-                                                        ))}
-                                                    </TextField>
-                                                </React.Fragment>
+
+                                            <React.Fragment>
+                                                <TextField disabled={itemAddData.itemPrevCalData !== "available"}
+                                                    className='ms-2'
+                                                    fullWidth
+                                                    label="Uncertainity"
+                                                    variant='outlined'
+                                                    size='small'
+                                                    onChange={handleItemAddChange}
+                                                    name='itemUncertainty'
+                                                    value={itemAddData.itemUncertainty}
+                                                />
+                                                <TextField disabled={itemAddData.itemPrevCalData !== "available"}
+                                                    select
+                                                    size='small'
+                                                    variant='outlined'
+                                                    label="Unit"
+                                                    name='itemUncertaintyUnit'
+                                                    onChange={handleItemAddChange}
+                                                    style={{ width: "60%" }}
+                                                    value={itemAddData.itemUncertaintyUnit}
+                                                >
+                                                    <MenuItem value=""><em>None</em></MenuItem>
+                                                    {units.map((unit, index) => (
+                                                        <MenuItem key={index} value={unit.unitName}>{unit.unitName}</MenuItem>
+                                                    ))}
+                                                </TextField>
+                                            </React.Fragment>
                                         </div>
 
 
@@ -1682,157 +1686,44 @@ const ItemAdd = () => {
 
                                         </tbody>}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-                                    <tbody>
-                                        <tr>
-                                            {/* <th>Parameter</th>
-                                     <th>Nominal Size</th>
-                                        <th>Unit</th>
-                                        {itemAddData.itemType === "attribute" && <th colspan="3">Permissible Size</th>}
-                                        {/*{itemAddData.itemType === "attribute" && <th>Min</th>}
-                                        {itemAddData.itemType === "attribute" && <th>Max</th>}
-                                                {itemAddData.itemType === "attribute" && <th>WearLimit</th>}*/}
-                                            {/*{itemAddData.itemType === "attribute" && <th>Unit</th>}*/}
-                                            {/* {itemAddData.itemType === "attribute" && <th width="20%" colspan="2" className='text-center'>Observed size
-                                            <RadioGroup
-                                                className='d-flex justify-content-around'
-                                                row
-                                                name="itemOBType"
-                                                onChange={handleItemAddChange}
-                                                aria-labelledby="demo-row-radio-buttons-group-label"
-
-                                            >
-                                                <FormControlLabel value="minmax" checked={itemAddData.itemOBType === "minmax"} control={<Radio />} label="Min/Max" />
-
-                                                <FormControlLabel value="average" checked={itemAddData.itemOBType === "average"} control={<Radio />} label="Average" />
-                                            </RadioGroup></th>}*/}
-
-
-                                            {/*{itemAddData.itemType === "variable" && <th colSpan={2}>Permissible Error </th>}
-
-
-                                        {itemAddData.itemType === "variable" && <th>Observed Error</th>}*/}
-
-
-
-
-                                            {/* {itemAddData.itemType === "referenceStandard" && <th colspan="2">Permissible Size</th>}
-
-
-
-                                        {itemAddData.itemType === "referenceStandard" && <th width="20%" colspan="2" className='text-center'>Observed size
-                                            <RadioGroup
-                                                className='d-flex justify-content-around'
-                                                row
-                                                name="itemOBType"
-                                                onChange={handleItemAddChange}
-                                                aria-labelledby="demo-row-radio-buttons-group-label"
-
-                                            >
-                                                <FormControlLabel value="minmax" checked={itemAddData.itemOBType === "minmax"} control={<Radio />} label="Min/Max" />
-
-                                                <FormControlLabel value="average" checked={itemAddData.itemOBType === "average"} control={<Radio />} label="Average" />
-                                    </RadioGroup></th>} */}
-                                            {/*<th>Delete</th>*/}
-                                        </tr>
-
-                                        {itemAddData.acceptanceCriteria ? itemAddData.acceptanceCriteria.map((item, index) => (
-                                            <tr key={index}>
-                                                {/*<td><select className='form-select form-select-sm' id="acParameterId" name="acParameter" value={item.acParameter} onChange={(e) => changeACValue(index, e.target.name, e.target.value)}>
-                                                <option value="">-Select-</option>
-                                                {calibrationPointsData.map((item) => (
-                                                    <option>{item.calibrationPoint}</option>
-                                                ))}
-                                            </select></td>
-                                            <td><input type="text" className='form-control form-control-sm' id="acNominalSizeId" name="acNominalSize" value={item.acNominalSize} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} /></td>
-
-
-                                            <td> <select className="form-select form-select-sm" id="acNominalSizeUnitId" name="acNominalSizeUnit" value={item.acNominalSizeUnit} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} >
-                                                <option value="">-Select-</option>
-                                                {units.map((item, index) => (
-                                                    <option key={index} value={item.unitName}>{item.unitName}</option>
-                                                ))}
-
-
-
-                                            </select></td>
-                                            {itemAddData.itemType === "attribute" && <td><input type="text" className="form-control form-control-sm" id="acMinPSId" name="acMinPS" placeholder='min' value={item.acMinPS} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} /></td>}
-
-                                            {itemAddData.itemType === "attribute" && <td><input type="text" className='form-control form-control-sm' id="acMaxPSId" name="acMaxPS" placeholder='max' value={item.acMaxPS} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} /></td>}
-
-
-                                            {itemAddData.itemType === "attribute" && <td><input type="text" className="form-control form-control-sm" id="acWearLimitPSId" name="acWearLimitPS" placeholder='wearLimit' value={item.acWearLimitPS} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} /></td>}
-
-                                            {(itemAddData.itemType === "attribute" && itemAddData.itemOBType === "minmax") &&
-                                                <React.Fragment>
-                                                    <td><input type="text" className="form-control form-control-sm" id="acMinOBId" name="acMinOB" placeholder='min' value={item.acMinOB} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} /></td>
-                                                    <td><input type="text" className='form-control form-control-sm' id="acMaxOBId" name="acMaxOB" placeholder='max' value={item.acMaxOB} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} /></td>
-                                                </React.Fragment>
-                                            }
-                                            {(itemAddData.itemType === "attribute" && itemAddData.itemOBType === "average") &&
-                                                <React.Fragment>
-                                                    <td colSpan={2}><input type="text" className="form-control form-control-sm" id="acAverageOBId" name="acAverageOB" placeholder='Average' value={item.acAverageOB} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} /></td>
-                                                </React.Fragment>
-                                            }*/}
-
-
-                                                {/*  {itemAddData.itemType === "variable" && <td><input type="text" className="form-control form-control-sm" id="acMinPSErrorId" name="acMinPSError" value={item.acMinPSError} placeholder='Min' onChange={(e) => changeACValue(index, e.target.name, e.target.value)} /></td>}
-                                            {itemAddData.itemType === "variable" && <td><input type="text" className="form-control form-control-sm" id="acMaxPSErrorId" name="acMaxPSError" value={item.acMaxPSError} placeholder='Max' onChange={(e) => changeACValue(index, e.target.name, e.target.value)} /></td>}
-                                            {/* {itemAddData.itemType === "variable" && <td><input type="text" className="form-control form-control-sm" id="acMinPSErrorId" name="acMinPSError" value={item.acMinPSError} placeholder='Max' onChange={(e) => changeACValue(index, e.target.name, e.target.value)} /></td>}*/}
-
-
-                                                {/*  {itemAddData.itemType === "variable" && <td><input type="text" className="form-control form-control-sm" id="acOBErrorId" name="acOBError" value={item.acOBError} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} /></td>}*/}
-
-
-
-                                                {/*} {itemAddData.itemType === "referenceStandard" && <td><input type="text" className="form-control form-control-sm" id="acMinPSId" name="acMinPS" placeholder='min' value={item.acMinPS} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} /></td>}
-
-                                            {itemAddData.itemType === "referenceStandard" && <td><input type="text" className='form-control form-control-sm' id="acMaxPSId" name="acMaxPS" placeholder='max' value={item.acMaxPS} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} /></td>}
-
-                                            {(itemAddData.itemType === "referenceStandard" && itemAddData.itemOBType === "minmax") &&
-                                                <React.Fragment>
-                                                    <td><input type="text" className="form-control form-control-sm" id="acMinOBId" name="acMinOB" placeholder='min' value={item.acMinOB} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} /></td>
-                                                    <td><input type="text" className='form-control form-control-sm' id="acMaxOBId" name="acMaxOB" placeholder='max' value={item.acMaxOB} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} /></td>
-                                                </React.Fragment>
-                                            }
-                                            {(itemAddData.itemType === "referenceStandard" && itemAddData.itemOBType === "average") &&
-                                                <React.Fragment>
-                                                    <td colSpan={2}><input type="text" className="form-control form-control-sm" id="acAverageOBId" name="acAverageOB" placeholder='Average' value={item.acAverageOB} onChange={(e) => changeACValue(index, e.target.name, e.target.value)} /></td>
-                                                </React.Fragment>
-                                            }*/}
-
-
-
-                                                {/*  <td><Button color='error' onClick={deleteAC}><Delete /></Button></td>*/}
-
-                                            </tr>
-                                        )) : <tr></tr>}
-                                    </tbody>
                                 </table>
 
-                                <div className="d-flex justify-content-center">
-                                    <div className='col  me-2'>
-                                        <Button onClick={() => setAddOpenData(true)} >  Additional Information </Button>
+                                <div className="d-flex ">
+                                    <div className='col-4  me-2'>
 
-                                      {(itemAddData.itemAddMasterName !== "" && itemAddData.itemPlant !== ""  && itemAddData.isItemMaster === "1") &&   <Button className='col' onClick={() => setMasterSharingData(true)} >Master Sharing </Button>}
+
+                                        {(itemAddData.itemAddMasterName !== "" && itemAddData.itemPlant !== "" && itemAddData.isItemMaster === "1") &&
+
+
+                                            <FormControl size='small' component="div" fullWidth  {...(errors.departmentPlant !== "" && { error: true })} >
+                                                <InputLabel id="plantAccessId">Plant Access</InputLabel>
+                                                <Select
+                                                    labelId="plantAccessId"
+                                                    multiple
+                                                    name="plantAccess"
+                                                    value={itemAddData.plantAccess || []} // Ensure it's an array
+                                                    onChange={handleItemAddChange}
+                                                    input={<OutlinedInput fullWidth label="Plant Access" />}
+                                                    renderValue={(selected) => selected.join(', ')}
+                                                    MenuProps={MenuProps}
+                                                    fullWidth
+                                                >
+                                                    {loggedEmp.plantDetails && loggedEmp.plantDetails.map((plant, index) => (
+                                                        <MenuItem disabled={plant.plantName === itemAddData.itemPlant} key={index} value={plant.plantName}>
+                                                            <Checkbox checked={itemAddData.plantAccess && itemAddData.plantAccess.indexOf(plant.plantName) > -1} />
+                                                            <ListItemText primary={plant.plantName} />
+                                                        </MenuItem>
+                                                    ))}
+                                                </Select>
+                                                <FormHelperText id="plantAccessId">{errors.plantAccess}</FormHelperText>
+                                            </FormControl>
+
+                                        }
                                     </div>
 
 
-                                    <div className="d-flex justify-content-end">
+                                    <div className=" col d-flex justify-content-end">
+                                        <Button onClick={() => setAddOpenData(true)} >  Additional Information </Button>
                                         <Button onClick={() => setOpen(true)} className='me-3' type="button">
                                             Item Create
                                         </Button>
@@ -2130,7 +2021,7 @@ const ItemAdd = () => {
 
 
                             <Dialog fullWidth={true} keepMounted maxWidth="xl" open={masterSharingData}
-                             sx={{ color: "#f1f4f4" }}
+                                sx={{ color: "#f1f4f4" }}
                                 onClose={(e, reason) => {
                                     console.log(reason)
                                     if (reason !== 'backdropClick' && reason !== 'escapeKeyDown') {
@@ -2153,31 +2044,7 @@ const ItemAdd = () => {
 
                                 <DialogContent >
                                     <div className='row g-2' >
-                                        <div className='col-md-5'>
-                                            <FormControl size='small' component="div" fullWidth  {...(errors.departmentPlant !== "" && { error: true })} >
-                                                <InputLabel id="plantAccessId">Plant Access</InputLabel>
-                                                <Select
-                                                    labelId="plantAccessId"
-                                                    multiple
-                                                    name="plantAccess"
-                                                     value={itemAddData.plantAccess|| []} // Ensure it's an array
-                                                    onChange={handleItemAddChange}
-                                                    input={<OutlinedInput fullWidth label="Plant Access" />}
-                                                    renderValue={(selected) => selected.join(', ')}
-                                                    MenuProps={MenuProps}
-                                                    fullWidth
-                                                >
-                                                    {loggedEmp.plantDetails && loggedEmp.plantDetails.map((plant, index) => (
-                                                        <MenuItem key={index} value={plant.plantName}>
-                                                            <Checkbox checked={itemAddData.plantAccess && itemAddData.plantAccess.indexOf(plant.plantName) > -1} />
-                                                            <ListItemText primary={plant.plantName} />
-                                                        </MenuItem>
-                                                    ))}
-                                                </Select>
-                                                <FormHelperText id="plantAccessId">{errors.plantAccess}</FormHelperText>
-                                            </FormControl>
 
-                                        </div>
 
 
                                     </div>
@@ -2256,7 +2123,12 @@ const ItemAdd = () => {
                     </React.Fragment>}
 
 
+                    <ItemAddContent.Provider
+                        value={{ gaugeSecOpen, setGaugeSpecOpen }}
+                    >
 
+                        <GaugeSpec />
+                    </ItemAddContent.Provider>
 
 
 

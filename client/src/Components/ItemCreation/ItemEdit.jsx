@@ -100,21 +100,21 @@ const ItemEdit = () => {
     }, []);
 
     const [isItemMasterList, setIsItemMasterList] = useState([])
-    const [selectedPlantList, setSelectedPlantList] = useState([])
+    
 
-    const getItemMaster = async () => {
+    const getIsItemMaster = async () => {
         try {
             const response = await axios.post(
-                `${process.env.REACT_APP_PORT}/itemAdd/getItemByPlant`, { allowedPlants: allowedPlants }
+                `${process.env.REACT_APP_PORT}/itemAdd/getIsItemMasterByPlantAccess`, { allowedPlants: allowedPlants }
             );
-            const isItemMaster = response.data.result.filter(item => item.isItemMaster === "1")
-            setIsItemMasterList(isItemMaster);
+            setIsItemMasterList(response.data.result)
+
         } catch (err) {
             console.log(err);
         }
     };
     useEffect(() => {
-        getItemMaster();
+        getIsItemMaster();
     }, []);
 
 
@@ -300,8 +300,8 @@ const ItemEdit = () => {
                 acMaxPSError: "",
             }
         ],
-        itemUncertainity: "",
-        itemUncertainityUnit: "",
+        itemUncertainty: "",
+        itemUncertaintyUnit: "",
         createdBy: "",
         updatedBy: "",
         calibrationCost: "",
@@ -374,8 +374,8 @@ const ItemEdit = () => {
                 acMaxPSError: "",
             }
         ],
-        itemUncertainity: "",
-        itemUncertainityUnit: "",
+        itemUncertainty: "",
+        itemUncertaintyUnit: "",
         itemPrevCalData: "",
         itemPlant: "",
         itemCreatedBy: loggedEmp._id,
@@ -396,8 +396,7 @@ const ItemEdit = () => {
 
         itemSOPNo: "",
         itemStandardRef: "",
-        itemMasterUncertainty: "",
-        itemMasterUncertaintyUnit: ""
+
     })
 
 
@@ -439,7 +438,7 @@ const ItemEdit = () => {
                 itemCalibrationDoneAt: itemData.itemCalibrationDoneAt ? itemData.itemCalibrationDoneAt : "",
                 itemItemMasterName: itemData.itemItemMasterName ? itemData.itemItemMasterName : "",
                 itemItemMasterIMTENo: itemData.itemItemMasterIMTENo ? itemData.itemItemMasterIMTENo : [],
-                plantAccess: itemData.plantAccess ? itemData.plantAccess: [],
+                plantAccess: itemData.plantAccess ? itemData.plantAccess : [],
                 itemSupplier: itemData.itemSupplier ? itemData.itemSupplier : [],
                 itemOEM: itemData.itemOEM ? itemData.itemOEM : [],
                 itemCalDate: itemData.itemCalDate ? itemData.itemCalDate : "",
@@ -449,9 +448,9 @@ const ItemEdit = () => {
                 itemPartName: itemData.itemPartName ? itemData.itemPartName : [],
                 itemOBType: itemData.itemOBType ? itemData.itemOBType : "",
                 acceptanceCriteria: itemData.acceptanceCriteria ? itemData.acceptanceCriteria : [],
-                itemUncertainity: itemData.itemUncertainity ? itemData.itemUncertainity : "",
+                itemUncertainty: itemData.itemUncertainty ? itemData.itemUncertainty : "",
                 itemPrevCalData: itemData.itemPrevCalData ? itemData.itemPrevCalData : "",
-                itemUncertainityUnit: itemData.itemUncertainityUnit ? itemData.itemUncertainityUnit : "",
+                itemUncertaintyUnit: itemData.itemUncertaintyUnit ? itemData.itemUncertaintyUnit : "",
                 itemCertificateNo: itemData.itemCertificateNo ? itemData.itemCertificateNo : "",
                 calibrationCost: itemData.calibrationCost ? itemData.calibrationCost : "",
                 gaugeUsage: itemData.gaugeUsage ? itemData.gaugeUsage : "",
@@ -468,8 +467,7 @@ const ItemEdit = () => {
 
                 itemSOPNo: itemData.itemSOPNo ? itemData.itemSOPNo : "",
                 itemStandardRef: itemData.itemStandardRef ? itemData.itemStandardRef : "",
-                itemMasterUncertainty: itemData.itemMasterUncertainty ? itemData.itemMasterUncertainty : "",
-                itemMasterUncertaintyUnit: itemData.itemMasterUncertaintyUnit ? itemData.itemMasterUncertaintyUnit : ""
+
 
 
                 // itemCreatedBy: itemData.itemCreatedBy
@@ -536,8 +534,7 @@ const ItemEdit = () => {
 
 
     useEffect(() => {
-        const itemPlantFilter = isItemMasterList.filter(item => item.itemPlant === itemAddData.itemPlant)
-        setSelectedPlantList(itemPlantFilter)
+       
         const vendorPlantFilter = vendorList.filter(ven => ven.vendorPlant.includes(itemAddData.itemPlant))
         const oem = vendorPlantFilter.filter((item) => item.oem === "1")
         const supplier = vendorPlantFilter.filter((item) => item.supplier === "1")
@@ -549,9 +546,9 @@ const ItemEdit = () => {
     const handleItemAddChange = (e) => {
 
         const { name, value, checked } = e.target;
-        if (name === "itemAddMasterName") {
+        if (name === "itemMasterRef") {
             const itemMasterById = () => {
-                const master = itemMasterDataList.filter(mas => mas.itemMasterId === itemAddData.itemMasterRef)
+                const master = itemMasterDataList.filter(mas => mas.itemMasterId == itemAddData.itemMasterRef)
                 console.log(master)
                 if (master.length > 0) {
                     const { _id, itemType, itemDescription, itemFrequencyType, itemPrefix, itemFqInMonths, calAlertInDay, SOPNo, uncertainity, uncertaintyUnit, standardRef, itemMasterImage, calibrationPoints } = master[0]
@@ -566,8 +563,8 @@ const ItemEdit = () => {
                         itemCalAlertDays: calAlertInDay,
                         itemSOPNo: SOPNo,
                         itemStandardRef: standardRef,
-                        itemMasterUncertainty: uncertainity,
-                        itemMasterUncertaintyUnit: uncertaintyUnit
+                        itemUncertainty: uncertainity,
+                        itemUncertaintyUnit: uncertaintyUnit,
 
                     }))
                     setCalibrationPointsData(calibrationPoints)
@@ -584,6 +581,9 @@ const ItemEdit = () => {
                 [name]: value,
                 itemCurrentLocation: value, // Ensure 'value' is correct here
             }));
+        }
+        if(name === "itemPlant"){
+            setItemAddData((prev) =>({...prev,[name]: value,plantAccess: [value]}))
         }
         if (name === "itemItemMasterIMTENo") {
             const updatedSelection = isItemMasterList.filter(item => value.some(selectedItem => selectedItem.itemIMTENo === item.itemIMTENo));
@@ -683,31 +683,22 @@ const ItemEdit = () => {
     console.log(calibrationPointsData)
 
     const itemMasterById = () => {
-        const master = itemMasterDataList.filter(mas => mas.itemDescription === itemAddData.itemAddMasterName)
+        console.log(itemMasterDataList)
+        const master = itemMasterDataList.filter(mas => mas.itemMasterId == itemAddData.itemMasterRef)
         console.log(master)
         if (master.length > 0) {
-            const { _id, itemType, itemDescription, itemPrefix, itemFrequencyType, itemFqInMonths, calAlertInDay, wiNo, uncertainity, standardRef, itemImageName, status, itemMasterImage, workInsName, calibrationPoints } = master[0]
-            console.log(calibrationPoints)
-            setItemAddData((prev) => ({
-                ...prev,
-                itemType: itemType,
-                //itemIMTENo: itemPrefix,
-                itemImage: itemMasterImage,
-                itemCalFreInMonths: itemFqInMonths,
-                itemCalFrequencyType: itemFrequencyType,
-                itemCalAlertDays: calAlertInDay,
-
-            }))
+            const { calibrationPoints } = master[0]
+            
             setCalibrationPointsData(calibrationPoints)
         }
     };
 
 
-    // useEffect(() => {
-    //     // if (itemAddData.itemAddMasterName) {
-    //         itemMasterById();
-    //     // }
-    // }, [itemAddData.itemAddMasterName, itemMasterDataList]);
+    useEffect(() => {
+        // if (itemAddData.itemAddMasterName) {
+            itemMasterById();
+        // }
+    }, [itemAddData.itemMasterRef, itemMasterDataList]);
 
 
     const [partData, setPartData] = useState([])
@@ -1251,7 +1242,7 @@ const ItemEdit = () => {
                                                 MenuProps={MenuProps}
                                                 fullWidth
                                             >
-                                                {selectedPlantList.map((name, index) => (
+                                                {isItemMasterList.map((name, index) => (
                                                     <MenuItem style={{ padding: 0 }} key={index} value={name.itemIMTENo}>
                                                         <Checkbox checked={itemAddData.itemItemMasterIMTENo.indexOf(name.itemIMTENo) > -1} />
                                                         <ListItemText primary={name.itemAddMasterName + " - " + name.itemIMTENo} />
@@ -1486,8 +1477,7 @@ const ItemEdit = () => {
                                                 <MenuItem key={index} value={item.fullName}>{item.fullName}</MenuItem>
                                             ))}
                                         </TextField>
-                                        {itemAddData.isItemMaster === "1" &&
-                                            <React.Fragment>
+                                        
                                                 <TextField disabled={itemAddData.itemPrevCalData !== "available" || itemStatus}
                                                     className='ms-2'
                                                     fullWidth
@@ -1496,8 +1486,8 @@ const ItemEdit = () => {
                                                     size='small'
                                                     onChange={handleItemAddChange}
                                                     id='itemUncertainityId'
-                                                    name='itemUncertainity'
-                                                    value={itemAddData.itemUncertainity}
+                                                    name='itemUncertainty'
+                                                    value={itemAddData.itemUncertainty}
                                                 />
 
                                                 <TextField disabled={itemAddData.itemPrevCalData !== "available" || itemStatus}
@@ -1505,17 +1495,17 @@ const ItemEdit = () => {
                                                     size='small'
                                                     variant='outlined'
                                                     label="Unit"
-                                                    name='itemUncertainityUnit'
+                                                    name='itemUncertaintyUnit'
                                                     onChange={handleItemAddChange}
                                                     style={{ width: "60%" }}
-                                                    value={itemAddData.itemUncertainityUnit}
+                                                    value={itemAddData.itemUncertaintyUnit}
                                                 >
                                                     <MenuItem value=""><em>None</em></MenuItem>
                                                     {units.map((unit, index) => (
                                                         <MenuItem key={index} value={unit.unitName}>{unit.unitName}</MenuItem>
                                                     ))}
                                                 </TextField>
-                                            </React.Fragment>}
+                                           
                                     </div>
 
 
@@ -1549,20 +1539,7 @@ const ItemEdit = () => {
                                 </div>
 
                             </Paper >
-                            {/* <Button component="label" disabled={itemAddData.itemPrevCalData !== "available"} className='ms-2' value={itemAddData.itemCertificateName} variant="contained" fullWidth >
-
-                                Certificate Upload
-                                <VisuallyHiddenInput type="file" onChange={handleCertificateUpload} />
-
-                            </Button> */}
-
-                            {/* {itemAddData.itemCertificateName &&
-                                        <div className="col-md-4 d-flex justify-content-between">
-                                            <Chip label={itemAddData.itemCertificateName} size='small' component="a" href={`${process.env.REACT_APP_PORT}/workInstructions/${itemAddData.itemCertificateName}`} target="_blank" clickable={true} color="primary" />
-                                            <HighlightOffRounded type="button" onClick={() => handleRemoveFile()} />
-                                            {uploadMessage &&
-                                                <Chip label={uploadMessage} size='small' color="success" icon={<Done />} />}
-                                        </div>} */}
+                          
 
 
                             {(itemAddData.isItemMaster !== "1" && itemAddData.itemType !== "referenceStandard") && <Paper className='row-6-lg' elevation={12} sx={{ p: 2, mt: 2, height: "inherit" }} >
@@ -2030,93 +2007,40 @@ const ItemEdit = () => {
                             </DialogContent>
                         </Dialog>
 
+                        <div className="d-flex ">
+                            <div className='col-4 '>
+                                <FormControl size='small' component="div" fullWidth  {...(errors.departmentPlant !== "" && { error: true })} >
+                                    <InputLabel id="plantAccessId">Plant Access</InputLabel>
+                                    <Select
+                                        labelId="plantAccessId"
+                                        multiple
+                                        name="plantAccess"
+                                        value={itemAddData.plantAccess || []} // Ensure it's an array
+                                        onChange={handleItemAddChange}
+                                        input={<OutlinedInput fullWidth label="Plant Access" />}
+                                        renderValue={(selected) => selected.join(', ')}
+                                        MenuProps={MenuProps}
+                                        fullWidth
+                                    >
+                                        {loggedEmp.plantDetails && loggedEmp.plantDetails.map((plant, index) => (
+                                            <MenuItem disabled={plant.plantName === itemAddData.itemPlant} key={index} value={plant.plantName}>
+                                                <Checkbox checked={itemAddData.plantAccess && itemAddData.plantAccess.indexOf(plant.plantName) > -1} />
+                                                <ListItemText primary={plant.plantName} />
+                                            </MenuItem>
+                                        ))}
+                                    </Select>
+                                    <FormHelperText id="plantAccessId">{errors.plantAccess}</FormHelperText>
+                                </FormControl>
 
 
-
-                        <Dialog fullWidth={true} keepMounted maxWidth="xl" open={masterSharingData}
-                            sx={{ color: "#f1f4f4" }}
-                            onClose={(e, reason) => {
-                                console.log(reason)
-                                if (reason !== 'backdropClick' && reason !== 'escapeKeyDown') {
-                                    setMasterSharingData(false)
-                                }
-                            }}>
-                            <DialogTitle align='center' >Master Sharing</DialogTitle>
-                            <IconButton
-                                aria-label="close"
-                                onClick={() => setMasterSharingData(false)}
-                                sx={{
-                                    position: 'absolute',
-                                    right: 2,
-                                    top: 5,
-                                    color: (theme) => theme.palette.grey[500],
-                                }}
-                            >
-                                <Close />
-                            </IconButton>
-
-                            <DialogContent >
-                                <div className='row g-2' >
-                                    <div className='col-md-5'>
-                                        <FormControl size='small' component="div" fullWidth  {...(errors.departmentPlant !== "" && { error: true })} >
-                                            <InputLabel id="plantAccessId">Plant Access</InputLabel>
-                                            <Select
-                                                labelId="plantAccessId"
-                                                multiple
-                                                name="plantAccess"
-                                                value={itemAddData.plantAccess || []} // Ensure it's an array
-                                                onChange={handleItemAddChange}
-                                                input={<OutlinedInput fullWidth label="Plant Access" />}
-                                                renderValue={(selected) => selected.join(', ')}
-                                                MenuProps={MenuProps}
-                                                fullWidth
-                                            >
-                                                {loggedEmp.plantDetails && loggedEmp.plantDetails.map((plant, index) => (
-                                                    <MenuItem key={index} value={plant.plantName}>
-                                                        <Checkbox checked={itemAddData.plantAccess && itemAddData.plantAccess.indexOf(plant.plantName) > -1} />
-                                                        <ListItemText primary={plant.plantName} />
-                                                    </MenuItem>
-                                                ))}
-                                            </Select>
-                                            <FormHelperText id="plantAccessId">{errors.plantAccess}</FormHelperText>
-                                        </FormControl>
-
-                                    </div>
-
-
-                                </div>
-
-
-                            </DialogContent>
-                        </Dialog>
-
-
-
-
-
-
-
-
-
-
-
-                        <div className="d-flex justify-content-center">
-                            <div className='col '>
+                            </div>
+                            <div className=" col d-flex justify-content-end">
                                 <Button
                                     className='me-2'
                                     onClick={() => setAddOpenData(true)}
                                 >
                                     Additional Information
                                 </Button>
-
-                                <Button
-                                    className=''
-                                    onClick={() => setMasterSharingData(true)}
-                                >
-                                    Master Sharing
-                                </Button>
-                            </div>
-                            <div className="d-flex justify-content-end">
                                 <Button onClick={() => { setOpen(true) }} className='me-3' type="button"  >
                                     Update
                                 </Button>

@@ -97,20 +97,20 @@ const itemGRNSchema = new mongoose.Schema({
       rowStatus: String
     },
   ],
-  grnItemUncertainity: String,
+  grnItemUncertainty: String,
+  grnItemUncertaintyUnit: String,
   grnItemCalFrequencyType: String,
   grnItemCalDate: String,
   grnItemDueDate: String,
   grnItemCertificateStatus: String,
   grnItemCertificateNo: String,
   grnItemCertificate: String,
-  grnUncertainity: String,
+  
   grnItemCalStatus: String,
   grnCreatedBy: String,
   grnItemSOPNo: String,
   grnItemStandardRef: String,
-  grnItemMasterUncertainty: String,
-  grnItemMasterUncertaintyUnit: String
+  
 
 });
 

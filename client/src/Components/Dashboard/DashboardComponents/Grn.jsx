@@ -30,7 +30,22 @@ const Grn = () => {
         width: 1,
     });
 
-
+    const [units, setUnits] = useState([]);
+    const UnitFetch = async () => {
+        try {
+            const response = await axios.get(
+                `${process.env.REACT_APP_PORT}/unit/getAllUnits`
+            );
+            setUnits(response.data.result);
+            console.log(response.data)
+        } catch (err) {
+            console.log(err);
+        }
+    };
+    //get Designations
+    useEffect(() => {
+        UnitFetch()
+    }, []);
 
 
 
@@ -91,13 +106,13 @@ const Grn = () => {
                 rowStatus: ""
             },
         ],
-        grnItemUncertainity: "",
+        grnItemUncertainty: "",
         grnItemCalDate: dayjs().format("YYYY-MM-DD"),
         grnItemDueDate: "",
         grnItemCertificateStatus: "",
         grnItemCertificateNo: "",
         grnItemCertificate: "",
-        grnUncertainity: "",
+
         grnItemCalStatus: "",
         grnCreatedBy: ""
     }
@@ -155,19 +170,20 @@ const Grn = () => {
                 rowStatus: ""
             },
         ],
-        grnItemUncertainity: "",
+        grnItemUncertainty: "",
+        grnItemUncertaintyUnit: "",
         grnItemCalDate: dayjs().format("YYYY-MM-DD"),
         grnItemDueDate: "",
         grnItemCertificateStatus: "",
         grnItemCertificateNo: "",
         grnItemCertificate: "",
-        grnUncertainity: "",
+
         grnItemCalStatus: "",
         grnCreatedBy: "",
         grnItemSOPNo: "",
         grnItemStandardRef: "",
-        grnItemMasterUncertainty: "",
-        grnItemMasterUncertaintyUnit: ""
+
+
 
     })
     console.log(grnData)
@@ -194,8 +210,7 @@ const Grn = () => {
                     grnCreatedBy: loggedEmp.firstName + " " + loggedEmp.lastName,
                     grnItemSOPNo: selectedRows[0].itemSOPNo ? selectedRows[0].itemSOPNo : "",
                     grnItemStandardRef: selectedRows[0].itemStandardRef ? selectedRows[0].itemStandardRef : "",
-                    grnItemMasterUncertainty: selectedRows[0].itemMasterUncertainty ? selectedRows[0].itemMasterUncertainty : "",
-                    grnItemMasterUncertaintyUnit: selectedRows[0].itemMasterUncertaintyUnit ? selectedRows[0].itemMasterUncertaintyUnit : ""
+
                     //grnPartyItems: selectedRows
                 }
 
@@ -364,13 +379,14 @@ const Grn = () => {
                             rowStatus: ""
                         }
                     )),
-                    grnItemUncertainity: selectedRows[0].itemUncertainity,
+                    grnItemUncertainty: "",
+                    grnItemUncertaintyUnit: "",
                     grnItemCalDate: dayjs().format("YYYY-MM-DD"),
                     grnItemDueDate: "",
                     grnItemCertificateStatus: "",
                     grnItemCertificateNo: "",
                     grnItemCertificate: "",
-                    grnUncertainity: "",
+
                     grnItemCalStatus: ""
                 }))
             } else {
@@ -417,13 +433,14 @@ const Grn = () => {
                             rowStatus: ""
                         }
                     )),
-                    grnItemUncertainity: selectedRows[0].itemUncertainity,
+                    grnItemUncertainty: "",
+                    grnItemUncertaintyUnit: "",
                     grnItemCalDate: "",
                     grnItemDueDate: "",
                     grnItemCertificateStatus: "",
                     grnItemCertificateNo: "",
                     grnItemCertificate: "",
-                    grnUncertainity: "",
+
                     grnItemCalStatus: ""
                 }))
             }
@@ -1276,11 +1293,25 @@ const Grn = () => {
                                                         name="grnItemCertificateNo" />
 
                                                 </div>
-                                                <div className='col-md-2'>
-                                                    <TextField fullWidth label="Uncertainity" id='grnUncertainityId' variant='outlined' size='small' onChange={handleGrnItemChange} name='grnUncertainity' />
-
+                                                <div className='col-md-2 d-flex'>
+                                                    <TextField fullWidth label="Uncertainity" id='grnItemUncertainityId' variant='outlined' size='small' onChange={handleGrnItemChange} name='grnItemUncertainty' />
+                                                    <TextField
+                                                        select
+                                                        size='small'
+                                                        variant='outlined'
+                                                        id='grnItemUncertaintyUnitId'
+                                                        label="Unit"
+                                                        name='grnItemUncertaintyUnit'
+                                                        onChange={handleGrnItemChange}
+                                                        style={{ width: "60%" }}
+                                                        value={grnData.grnItemUncertaintyUnit}
+                                                    >
+                                                        <MenuItem value="">None</MenuItem>
+                                                        {units.map((unit, index) => (
+                                                            <MenuItem key={index} value={unit.unitName}>{unit.unitName}</MenuItem>
+                                                        ))}
+                                                    </TextField>
                                                 </div>
-
                                                 <div className='col-md-2 d-flex justify-content-center ' >
 
 

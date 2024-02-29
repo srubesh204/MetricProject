@@ -50,6 +50,7 @@ import MeasurementUncertainty from './Components/Reports/MeasurementUncertainty'
 import MeasurementUncertaintyEdit from './Components/Reports/MeasurementUncertaintyEdit';
 import TestHome from './Components/Dashboard/TestHome';
 import { MeasurementUncertaintyList } from './Components/Reports/MeasurementUncertaintyList';
+import GaugeSpec from './Components/ItemCreation/GaugeSpec';
 
 export const empRole = createContext(null);
 
@@ -111,6 +112,7 @@ const generateRoutes = (employee) => {
     { path: "/measurementUncertaintyEdit", element: <MeasurementUncertaintyEdit /> },
     { path: "/testHome", element: <TestHome />},
     { path: "/measurementUncertaintyList", element: <MeasurementUncertaintyList /> },
+    { path: "/gaugeSpec", element: <GaugeSpec /> },
 
 
 

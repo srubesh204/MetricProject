@@ -8,6 +8,7 @@ import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { HomeContent } from '../Home';
 import { Add, Close, CloudUpload, Delete, Done, ErrorOutline } from '@mui/icons-material';
+
 import { useEmployee } from '../../../App';
 dayjs.extend(isSameOrBefore)
 dayjs.extend(isSameOrAfter)
@@ -16,7 +17,7 @@ const CalDialog = () => {
 
 
     const calData = useContext(HomeContent)
-    const { loggedEmp } = useEmployee()
+    const { loggedEmp,allowedPlants } = useEmployee()
     const [lastResultData, setLastResultData] = useState([])
     const { calOpen, setCalOpen, selectedRows, itemMasters, activeEmps, masters, itemList, calLastNo } = calData
     const [calibrationDatas, setCalibrationDatas] = useState([])
@@ -37,15 +38,16 @@ const CalDialog = () => {
 
     const getAllCalibrationData = async () => {
         try {
-            const response = await axios.get(
-                `${process.env.REACT_APP_PORT}/itemCal/getAllItemCals`
-            );
+            const response = await axios.post(
+                `${process.env.REACT_APP_PORT}/itemCal/getAllItemCals`, {allowedPlants: allowedPlants}
+              );
             console.log(response.data.result)
             try {
                 const imteNoData = response.data.result.filter((item) => item.calIMTENo === selectedRows[0].itemIMTENo)
                 console.log(imteNoData)
                 setCalibrationDatas(response.data.result)
                 const maxDateObject = imteNoData.reduce((prev, current) => {
+                    console.log(prev, current)
                     const prevDate = dayjs(prev.calItemEntryDate);
                     const currentDate = dayjs(current.calItemEntryDate);
                     return currentDate.isAfter(prevDate) ? current : prev;
@@ -179,6 +181,7 @@ const CalDialog = () => {
                     ...prev,
                     calPlant: selectedRows[0].itemPlant,
                     calDepartment: departments,
+                    calItemFrequencyType: selectedRows[0].itemCalFrequencyType,
                     calCertificateNo: calLastNo,
                 }
 
@@ -189,42 +192,6 @@ const CalDialog = () => {
     useEffect(() => {
         settingCalData()
     }, [selectedRows])
-
-
-
-    const [dcList, setDcList] = useState([])
-
-
-    const dcFetchData = async () => {
-        try {
-            const response = await axios.get(
-                `${process.env.REACT_APP_PORT}/itemCal/getAllItemCals`
-            );
-            setDcList(response.data.result);
-            console.log(response.data.result)
-
-            const dcNumbers = response.data.result.map(item => (item.calId)).filter(Boolean).sort();
-            if (dcNumbers.length > 0) {
-                const lastNumber = dcNumbers[dcNumbers.length - 1] + 1
-                console.log(lastNumber)
-
-                setCalibrationData(prev => ({ ...prev, calCertificateNo: "Cal " + dayjs().year() + "-" + lastNumber }))
-            } else {
-                setCalibrationData(prev => ({ ...prev, calCertificateNo: "Cal " + dayjs().year() + "-" + 1 }))
-            }
-
-
-        } catch (err) {
-            console.log(err);
-        }
-    };
-    useEffect(() => {
-        dcFetchData();
-
-
-    }, []);
-
-
 
     useEffect(() => {
         console.log("cal")
@@ -1064,13 +1031,13 @@ const CalDialog = () => {
                                 />
                             </div>
                             <div className="col-md-6">
-                                <DatePicker format="DD-MM-YYYY" slotProps={{ textField: { size: 'small' } }} value={dayjs(calibrationData.calItemEntryDate)} label="Cal Entry Date" onChange={(newValue) => setCalibrationData((prev) => ({ ...prev, calItemEntryDate: newValue.format('YYYY-MM-DD') }))} />
+                                <DatePicker format="DD-MM-YYYY" slotProps={{ textField: { size: 'small', fullWidth: true } }}   value={dayjs(calibrationData.calItemEntryDate)} label="Cal Entry Date" onChange={(newValue) => setCalibrationData((prev) => ({ ...prev, calItemEntryDate: newValue.format('YYYY-MM-DD') }))} />
                             </div>
                             <div className="col-md-6">
-                                <DatePicker format="DD-MM-YYYY" slotProps={{ textField: { size: 'small' } }} value={dayjs(calibrationData.calItemCalDate)} label="Cal Date" onChange={(newValue) => setCalibrationData((prev) => ({ ...prev, calItemCalDate: newValue.format('YYYY-MM-DD') }))} />
+                                <DatePicker format="DD-MM-YYYY" slotProps={{ textField: { size: 'small', fullWidth: true } }}  value={dayjs(calibrationData.calItemCalDate)} label="Cal Date" onChange={(newValue) => setCalibrationData((prev) => ({ ...prev, calItemCalDate: newValue.format('YYYY-MM-DD') }))} />
                             </div>
                             <div className="col-md-6">
-                                <DatePicker format="DD-MM-YYYY" slotProps={{ textField: { size: 'small' } }} value={dayjs(calibrationData.calItemDueDate)} label="Due Date" onChange={(newValue) => setCalibrationData((prev) => ({ ...prev, calItemDueDate: newValue.format('YYYY-MM-DD') }))} />
+                                <DatePicker format="DD-MM-YYYY" slotProps={{ textField: { size: 'small', fullWidth: true } }}   value={dayjs(calibrationData.calItemDueDate)} label="Due Date" onChange={(newValue) => setCalibrationData((prev) => ({ ...prev, calItemDueDate: newValue.format('YYYY-MM-DD') }))} />
                             </div>
 
                             <div className="col-md-6">
@@ -1625,7 +1592,7 @@ const CalDialog = () => {
                         <div className="row mb-2">
 
                             <div className='col-md'> <h5 className='text-start'>Master Used</h5></div>
-                            <div className='col-md-4 d-flex justify-content-center'>
+                            <div className='col-md-5 d-flex justify-content-center'>
                                 <TextField className='me-2' select size='small' fullWidth label="Select Master" onChange={(e) => setSelectedExtraMaster(e.target.value)}>
                                     {nonSelectedMaster.length === 0 ? (
                                         <MenuItem value="" disabled>
@@ -1633,8 +1600,8 @@ const CalDialog = () => {
                                         </MenuItem>
                                     ) : (
                                         nonSelectedMaster.map((item, index) => (
-                                            <MenuItem sx={{ color: item.itemDueDate < dayjs().format('YYYY-MM-DD') ? "red" : "" }} disabled={item.itemDueDate < dayjs().format('YYYY-MM-DD')} key={index} value={item}>
-                                                {item.itemIMTENo} - {item.itemAddMasterName}
+                                            <MenuItem sx={{ backgroundColor: item.itemDueDate < dayjs().format('YYYY-MM-DD') ? "red" : "", color: item.itemDueDate < dayjs().format('YYYY-MM-DD') ? "white" : "" }} disabled={item.itemDueDate < dayjs().format('YYYY-MM-DD')} key={index} value={item}>
+                                                {item.itemIMTENo} - {item.itemAddMasterName} {item.itemDueDate < dayjs().format('YYYY-MM-DD') && "(Expired)"}
                                             </MenuItem>
                                         ))
                                     )}

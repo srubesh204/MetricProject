@@ -48,8 +48,8 @@ const itemAddSchema = new mongoose.Schema({
   itemItemMasterIMTENo: [],
   itemSupplier: [],
   itemOEM: [],
-  itemUncertainity: String,
-  itemUncertainityUnit: String,
+  itemUncertainty: String,
+  itemUncertaintyUnit: String,
   itemPrevCalData: String,
   itemCalDate: String,
   itemLastCalDate: String,
@@ -74,26 +74,11 @@ const itemAddSchema = new mongoose.Schema({
   grnNo: String,
   grnStatus: String,
   grnCreatedOn: String,
-  acceptanceCriteria: [
-    {
-      acParameter: String,
-      acNominalSize: String,
-      acNominalSizeUnit: String,
-      acMinPS: String,
-      acMaxPS: String,
-      acWearLimitPS: {
-        type: String,
-        
-      },
-      acMinOB: String,
-      acMaxOB: String,
-      acAverageOB: String,
-      acOBError: String,
-      acMinPSError: String,
-      acMaxPSError: String,
-    }
-  ],
-  itemUncertainity: String,
+  acceptanceCriteria: [],
+  itemUncertainty: String,
+  itemUncertaintyUnit: String,
+  prevItemUncertainty: String,
+  prevItemUncertaintyUnit: String,
   createdAt: {
     type: String,
     default: () => dayjs().format("YYYY-MM-DD"),
@@ -124,8 +109,7 @@ const itemAddSchema = new mongoose.Schema({
 
   itemSOPNo: String,
   itemStandardRef: String,
-  itemMasterUncertainty: String,
-  itemMasterUncertaintyUnit: String ,
+  
   plantAccess: [],
   
 

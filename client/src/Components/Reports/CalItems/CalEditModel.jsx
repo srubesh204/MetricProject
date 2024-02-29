@@ -7,6 +7,7 @@ import isSameOrBefore from 'dayjs/plugin/isSameOrBefore'
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { CalData } from './CalList'
+import { useEmployee } from '../../../App';
 import { Add, Close, CloudUpload, Delete, Done, ErrorOutline } from '@mui/icons-material';
 
 
@@ -14,12 +15,14 @@ dayjs.extend(isSameOrBefore)
 dayjs.extend(isSameOrAfter)
 
 const CalEditModel = () => {
-
+   
+   
 
     const calData = useContext(CalData)
     const [lastResultData, setLastResultData] = useState([])
     const { calEditOpen, setCalEditOpen, selectedCalRow, itemMasters, activeEmps, calListFetchData, employeeRole, masters } = calData
     const [calibrationDatas, setCalibrationDatas] = useState([])
+    const { allowedPlants } = useEmployee()
 
     const VisuallyHiddenInput = styled('input')({
         clip: 'rect(0 0 0 0)',
@@ -53,6 +56,7 @@ const CalEditModel = () => {
         calItemMake: "",
         calItemTemperature: "",
         calItemHumidity: "",
+        calItemFrequencyType: "",
         calItemUncertainity: "",
         calItemUncertainityUnit: "",
         calItemSOPNo: "",
@@ -107,6 +111,7 @@ const CalEditModel = () => {
         calItemHumidity: "",
         calItemUncertainity: "",
         calItemUncertainityUnit: "",
+        calItemFrequencyType: "",
         calItemSOPNo: "",
         calStandardRef: "",
         calOBType: "",
@@ -163,6 +168,7 @@ const CalEditModel = () => {
                 calLCUnit: selectedCalRow.calLCUnit,
                 calItemMake: selectedCalRow.calItemMake,
                 calItemTemperature: selectedCalRow.calItemTemperature,
+                calItemFrequencyType: selectedCalRow.calItemFrequencyType,
                 calItemHumidity: selectedCalRow.calItemHumidity,
                 calItemUncertainity: filter.length > 0 && filter[0] ? filter[0].uncertainty : "",
                 calItemSOPNo: filter.length > 0 && filter[0].SOPNo ? filter[0].SOPNo : "",
@@ -213,7 +219,7 @@ const CalEditModel = () => {
     const getAllCalibrationData = async () => {
         try {
             const response = await axios.get(
-                `${process.env.REACT_APP_PORT}/itemCal/getAllItemCals`
+                `${process.env.REACT_APP_PORT}/itemCal/getAllItemCals`,{allowedPlants: allowedPlants}
             );
             console.log(response.data.result)
             const imteNoData = response.data.result.filter((item) => item.calIMTENo === calibrationData.calIMTENo)
@@ -577,13 +583,27 @@ const CalEditModel = () => {
 
     const calculateResultDate = (itemCalDate, itemCalFreInMonths) => {
         const parsedDate = dayjs(itemCalDate);
-        if (parsedDate.isValid() && !isNaN(parseInt(itemCalFreInMonths))) {
-            const calculatedDate = parsedDate.add(parseInt(itemCalFreInMonths, 10), 'month').subtract(1, 'day');
-            setCalibrationData((prev) => ({
-                ...prev,
-                calItemDueDate: calculatedDate.format('YYYY-MM-DD'),
-            }));
+        if (calibrationData.calItemFrequencyType === "months") {
+            if (parsedDate.isValid() && !isNaN(parseInt(itemCalFreInMonths))) {
+                const calculatedDate = parsedDate.add(parseInt(itemCalFreInMonths, 10), 'month').subtract(1, 'day');
+                setCalibrationData((prev) => ({
+                    ...prev,
+                    calItemDueDate: calculatedDate.format('YYYY-MM-DD'),
+                }));
+            }
+        } else {
+            if (calibrationData.calItemFrequencyType === "days") {
+                if (parsedDate.isValid() && !isNaN(parseInt(itemCalFreInMonths))) {
+                    const calculatedDate = parsedDate.add(parseInt(itemCalFreInMonths, 10), 'day').subtract(1, 'day');
+                    setCalibrationData((prev) => ({
+                        ...prev,
+                        calItemDueDate: calculatedDate.format('YYYY-MM-DD'),
+                    }));
+                }
+            }
+
         }
+
     };
 
     const [filterAdmins, setFilterAdmins] = useState([])
@@ -1518,8 +1538,8 @@ const CalEditModel = () => {
                                         </MenuItem>
                                     ) : (
                                         nonSelectedMaster.map((item, index) => (
-                                            <MenuItem sx={{ color: item.itemDueDate < dayjs().format('YYYY-MM-DD') ? "red" : "" }} disabled={item.itemDueDate < dayjs().format('YYYY-MM-DD')} key={index} value={item}>
-                                                {item.itemIMTENo} - {item.itemAddMasterName}
+                                            <MenuItem sx={{ backgroundColor: item.itemDueDate < dayjs().format('YYYY-MM-DD') ? "red" : "", color: item.itemDueDate < dayjs().format('YYYY-MM-DD') ? "white" : "" }} disabled={item.itemDueDate < dayjs().format('YYYY-MM-DD')} key={index} value={item}>
+                                                {item.itemIMTENo} - {item.itemAddMasterName} {item.itemDueDate < dayjs().format('YYYY-MM-DD') && "(Expired)"}
                                             </MenuItem>
                                         ))
                                     )}
