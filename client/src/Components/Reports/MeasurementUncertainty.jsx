@@ -539,29 +539,29 @@ const MeasurementUncertainty = () => {
             if (value === "all") {
                 setSelectedPlant(itemNameList)
             } else {
-                const filter = itemNameList.filter(item => item.itemPlant === value)
-                setSelectedPlant(filter)
+                const getIsItemMaster = async () => {
+                    try {
+                        const response = await axios.post(
+                            `${process.env.REACT_APP_PORT}/itemAdd/getIsItemMasterByPlantAccess`, { allowedPlants: [value] }
+                        );
+                        console.log(response.data.result)
+                        
+                        setSelectedPlant(filter)
+            
+                    } catch (err) {
+                        console.log(err);
+                    }
+                };
+                getIsItemMaster()
+               
             }
 
         }
     }
     const [selectedPlant, setSelectedPlant] = useState([])
     const [itemNameList, setItemNameList] = useState([])
-    const getIsItemMaster = async () => {
-        try {
-            const response = await axios.post(
-                `${process.env.REACT_APP_PORT}/itemAdd/getIsItemMasterByPlantAccess`, { allowedPlants: allowedPlants }
-            );
-            setItemNameList(response.data.result)
-            setSelectedPlant(response.data.result)
-
-        } catch (err) {
-            console.log(err);
-        }
-    };
-    useEffect(() => {
-        getIsItemMaster();
-    }, []);
+    
+  
 
 
 
