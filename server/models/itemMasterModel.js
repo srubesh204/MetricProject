@@ -6,7 +6,7 @@ const itemMasterSchema = new mongoose.Schema({
   itemType: String,
   itemDescription : {
     type: String,
-  unique: [true, "ItemDescription Name should be Unique"],
+  
   required: [true, "Item Description is Required"]
   },
   itemPrefix : String,
