@@ -23,7 +23,7 @@ const itemMasterController = {
           $match: {
             "itemMasterPlant": { $in: allowedPlants ? allowedPlants : [] } // Specify the values to match
           }
-        }, { $sort: { itemDescription: 1, } }
+        }, { $sort: { itemDescription: 1 } }
       ])
 
       res.status(202).json({ result: itemPlantResult, status: 1 });
