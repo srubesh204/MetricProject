@@ -1592,7 +1592,7 @@ const CalDialog = () => {
                         <div className="row mb-2">
 
                             <div className='col-md'> <h5 className='text-start'>Master Used</h5></div>
-                            <div className='col-md-4 d-flex justify-content-center'>
+                            <div className='col-md-5 d-flex justify-content-center'>
                                 <TextField className='me-2' select size='small' fullWidth label="Select Master" onChange={(e) => setSelectedExtraMaster(e.target.value)}>
                                     {nonSelectedMaster.length === 0 ? (
                                         <MenuItem value="" disabled>
@@ -1600,8 +1600,8 @@ const CalDialog = () => {
                                         </MenuItem>
                                     ) : (
                                         nonSelectedMaster.map((item, index) => (
-                                            <MenuItem sx={{ color: item.itemDueDate < dayjs().format('YYYY-MM-DD') ? "red" : "" }} disabled={item.itemDueDate < dayjs().format('YYYY-MM-DD')} key={index} value={item}>
-                                                {item.itemIMTENo} - {item.itemAddMasterName}
+                                            <MenuItem sx={{ backgroundColor: item.itemDueDate < dayjs().format('YYYY-MM-DD') ? "red" : "", color: item.itemDueDate < dayjs().format('YYYY-MM-DD') ? "white" : "" }} disabled={item.itemDueDate < dayjs().format('YYYY-MM-DD')} key={index} value={item}>
+                                                {item.itemIMTENo} - {item.itemAddMasterName} {item.itemDueDate < dayjs().format('YYYY-MM-DD') && "(Expired)"}
                                             </MenuItem>
                                         ))
                                     )}

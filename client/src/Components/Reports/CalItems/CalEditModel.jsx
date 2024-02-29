@@ -1538,8 +1538,8 @@ const CalEditModel = () => {
                                         </MenuItem>
                                     ) : (
                                         nonSelectedMaster.map((item, index) => (
-                                            <MenuItem sx={{ color: item.itemDueDate < dayjs().format('YYYY-MM-DD') ? "red" : "" }} disabled={item.itemDueDate < dayjs().format('YYYY-MM-DD')} key={index} value={item}>
-                                                {item.itemIMTENo} - {item.itemAddMasterName}
+                                            <MenuItem sx={{ backgroundColor: item.itemDueDate < dayjs().format('YYYY-MM-DD') ? "red" : "", color: item.itemDueDate < dayjs().format('YYYY-MM-DD') ? "white" : "" }} disabled={item.itemDueDate < dayjs().format('YYYY-MM-DD')} key={index} value={item}>
+                                                {item.itemIMTENo} - {item.itemAddMasterName} {item.itemDueDate < dayjs().format('YYYY-MM-DD') && "(Expired)"}
                                             </MenuItem>
                                         ))
                                     )}

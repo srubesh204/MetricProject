@@ -33,11 +33,7 @@ const itemHistoryRoute = require("./routes/itemHistoryRoute")
 const measurementUncertaintyRoute = require("./routes/measurementUncertaintyRoute");
 const uncMaterialCteRoute = require('./routes/uncMaterialCteRoute')
 const uncTypeBRoute = require('./routes/uncTypeBRoute')
-// const pdfmake = require('pdfmake');
-//const pdfFonts = require('./vfs_fonts');
 
-// const pdfPrinter = require('pdf-to-printer');
-// const PDFDocument = require('pdfkit');
 const fs = require('fs');
 const childProcess = require('child_process');
 
@@ -46,7 +42,7 @@ const childProcess = require('child_process');
 
 db.connectDatabase();
 //
-
+const cronJob = require('./autoAlert');
 //assinging the package 
 
 const app = express();

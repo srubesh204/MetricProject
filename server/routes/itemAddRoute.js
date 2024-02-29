@@ -28,5 +28,7 @@ router.get("/getItemTransactStatus/:id", upload, itemAddController.getItemTransa
 router.post("/getItemByDepartment", itemAddController.getItemByDepartment)
 router.post("/getItemByItemAddMasterName", itemAddController.getItemByItemAddMasterName)
 router.get("/getItemByIMTENO/:id", itemAddController.getItemByIMTENO)
+router.post("/getIsItemMasterByPlantAccess", itemAddController.getIsItemMasterByPlantAccess)
+
 
 module.exports = router;

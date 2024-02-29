@@ -28,7 +28,7 @@ dayjs.extend(isSameOrAfter)
 const Home = () => {
 
   const employeeRole = useEmployee();
-  
+
   const StyledGridOverlay = styled('div')(({ theme }) => ({
     display: 'flex',
     flexDirection: 'column',
@@ -114,6 +114,23 @@ const Home = () => {
 
 
   const [itemMasters, setItemMasters] = useState([])
+
+  const getIsItemMaster = async () => {
+    try {
+      const response = await axios.post(
+        `${process.env.REACT_APP_PORT}/itemAdd/getIsItemMasterByPlantAccess`, { allowedPlants: allowedPlants }
+      );
+      setItemMasters(response.data.result)
+
+    } catch (err) {
+      console.log(err);
+    }
+  };
+  useEffect(() => {
+    getIsItemMaster();
+  }, []);
+
+
   const [itemListOptions, setItemListOptions] = useState([])
   const [filteredData, setFilteredData] = useState([])
   const [itemLocationData, setItemLocationData] = useState([])
@@ -255,11 +272,11 @@ const Home = () => {
   const calFetch = async () => {
     try {
       const response = await axios.post(
-        `${process.env.REACT_APP_PORT}/itemCal/getAllItemCals`, {allowedPlants: allowedPlants}
+        `${process.env.REACT_APP_PORT}/itemCal/getAllItemCals`, { allowedPlants: allowedPlants }
       );
       const calNextNumber = await axios.get(
         `${process.env.REACT_APP_PORT}/itemCal/getNextCalNo`
-      );     
+      );
       setCalLastNo(calNextNumber.data.result)
 
     } catch (err) {
@@ -370,14 +387,14 @@ const Home = () => {
   console.log(employeeRole)
 
   const [activeItems, setActiveItems] = useState([])
- 
-const [loader, setLoader] = useState(false)
-  
+
+  const [loader, setLoader] = useState(false)
+
 
   const itemFetch = async () => {
     setLoader(true)
     try {
-      
+
       console.log(employeeRole)
       const response = await axios.post(
         `${process.env.REACT_APP_PORT}/itemAdd/getItemByPlant`, { allowedPlants: allowedPlants }
@@ -427,8 +444,8 @@ const [loader, setLoader] = useState(false)
       setPlantWiseList(sortedPlantWiseList)
       //
 
-      const masterItems = allItems.filter((item) => item.isItemMaster === "1")
-      setItemMasters(masterItems)
+
+
       setItemListOptions([{ itemIMTENo: "All" }, ...allItems])
 
       console.log(itemList)
@@ -436,7 +453,7 @@ const [loader, setLoader] = useState(false)
       const spareItems = allItems.filter((item) => item.itemStatus === "spare");
       const breakDownItems = allItems.filter((item) => item.itemStatus === "breakdown");
       const missingItems = allItems.filter((item) => item.itemStatus === "missing");
-      const rejectionItems = allItems.filter((item) => item.itemStatus === "rejection"); 
+      const rejectionItems = allItems.filter((item) => item.itemStatus === "rejection");
 
       setActiveItems(activeItems)
 
@@ -496,10 +513,10 @@ const [loader, setLoader] = useState(false)
         { value: oemLength.length, label: "OEM" }
       ]);
 
-      
+
     } catch (err) {
       console.log(err);
-    }finally{
+    } finally {
       setLoader(false)
     }
   };
@@ -1627,11 +1644,11 @@ const [loader, setLoader] = useState(false)
   }, [plantDeps.itemPlant, plantWiseDepartments])
 
 
-  
+
 
   return (
     <div style={{ backgroundColor: "#f1f4f4", margin: 0, padding: 0 }}>
-      
+
       <LocalizationProvider dateAdapter={AdapterDayjs}>
 
         <div className="row gx-3 mx-3 my-2" >
@@ -1962,7 +1979,7 @@ const [loader, setLoader] = useState(false)
                       </div>
                     ),
                   }}
-                  
+
                   slotProps={{
                     loading: true,
                     toolbar: {
@@ -2165,9 +2182,9 @@ const [loader, setLoader] = useState(false)
 
 
       </LocalizationProvider>
-      </div>
+    </div>
 
-    
+
 
 
 

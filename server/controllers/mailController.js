@@ -50,7 +50,7 @@ const mailController = {
             Please contact the sender immediately if you have received this message in error and promptly destroy the original communication.</code>
             `;
         
-            const quotedText = systemGeneratedText.split('\n').map(line => `> ${line}`).join('\n');
+           
     
             const itemsRows = selectedItems.map((item, index) => `
             <tr>
@@ -97,7 +97,7 @@ const mailController = {
                 <body style="margin:0;padding:0;">
                 <p>Dear Sir/Madam,</p>
     
-                <p>               ${mailBody ? mailBody : "-"}</p>
+                <p>${mailBody ? mailBody : "-"}</p>
                     
                     <table role="presentation" style="width:100%; border-collapse:collapse; border: 1px solid black; border-spacing:0; background:#ffffff;">
                         <tbody>
