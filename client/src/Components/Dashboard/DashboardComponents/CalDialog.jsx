@@ -17,7 +17,7 @@ const CalDialog = () => {
 
 
     const calData = useContext(HomeContent)
-    const { loggedEmp,allowedPlants } = useEmployee()
+    const { loggedEmp, allowedPlants } = useEmployee()
     const [lastResultData, setLastResultData] = useState([])
     const { calOpen, setCalOpen, selectedRows, itemMasters, activeEmps, masters, itemList, calLastNo } = calData
     const [calibrationDatas, setCalibrationDatas] = useState([])
@@ -39,8 +39,8 @@ const CalDialog = () => {
     const getAllCalibrationData = async () => {
         try {
             const response = await axios.post(
-                `${process.env.REACT_APP_PORT}/itemCal/getAllItemCals`, {allowedPlants: allowedPlants}
-              );
+                `${process.env.REACT_APP_PORT}/itemCal/getAllItemCals`, { allowedPlants: allowedPlants }
+            );
             console.log(response.data.result)
             try {
                 const imteNoData = response.data.result.filter((item) => item.calIMTENo === selectedRows[0].itemIMTENo)
@@ -1031,13 +1031,13 @@ const CalDialog = () => {
                                 />
                             </div>
                             <div className="col-md-6">
-                                <DatePicker format="DD-MM-YYYY" slotProps={{ textField: { size: 'small', fullWidth: true } }}   value={dayjs(calibrationData.calItemEntryDate)} label="Cal Entry Date" onChange={(newValue) => setCalibrationData((prev) => ({ ...prev, calItemEntryDate: newValue.format('YYYY-MM-DD') }))} />
+                                <DatePicker format="DD-MM-YYYY" slotProps={{ textField: { size: 'small', fullWidth: true } }} value={dayjs(calibrationData.calItemEntryDate)} label="Cal Entry Date" onChange={(newValue) => setCalibrationData((prev) => ({ ...prev, calItemEntryDate: newValue.format('YYYY-MM-DD') }))} />
                             </div>
                             <div className="col-md-6">
-                                <DatePicker format="DD-MM-YYYY" slotProps={{ textField: { size: 'small', fullWidth: true } }}  value={dayjs(calibrationData.calItemCalDate)} label="Cal Date" onChange={(newValue) => setCalibrationData((prev) => ({ ...prev, calItemCalDate: newValue.format('YYYY-MM-DD') }))} />
+                                <DatePicker format="DD-MM-YYYY" slotProps={{ textField: { size: 'small', fullWidth: true } }} value={dayjs(calibrationData.calItemCalDate)} label="Cal Date" onChange={(newValue) => setCalibrationData((prev) => ({ ...prev, calItemCalDate: newValue.format('YYYY-MM-DD') }))} />
                             </div>
                             <div className="col-md-6">
-                                <DatePicker format="DD-MM-YYYY" slotProps={{ textField: { size: 'small', fullWidth: true } }}   value={dayjs(calibrationData.calItemDueDate)} label="Due Date" onChange={(newValue) => setCalibrationData((prev) => ({ ...prev, calItemDueDate: newValue.format('YYYY-MM-DD') }))} />
+                                <DatePicker format="DD-MM-YYYY" slotProps={{ textField: { size: 'small', fullWidth: true } }} value={dayjs(calibrationData.calItemDueDate)} label="Due Date" onChange={(newValue) => setCalibrationData((prev) => ({ ...prev, calItemDueDate: newValue.format('YYYY-MM-DD') }))} />
                             </div>
 
                             <div className="col-md-6">
@@ -1124,7 +1124,7 @@ const CalDialog = () => {
                                         <tbody>
                                             <tr>
                                                 <th width="20%" rowSpan={2}>Parameter</th>
-                                                <th width="10%" rowSpan={2}>Range/Size ({(calibrationData && calibrationData.calcalibrationData.length > 0) ? calibrationData.calcalibrationData[0].calNominalSizeUnit : ""}) </th>
+                                                <th width="10%" rowSpan={2}>Nominal/Ref. Size ({(calibrationData && calibrationData.calcalibrationData.length > 0) ? calibrationData.calcalibrationData[0].calNominalSizeUnit : ""}) </th>
                                                 <th width="10%" rowSpan={2}>Unit</th>
                                                 <th colSpan={3} width="30%">Permissible Size  <span>({(calibrationData && calibrationData.calcalibrationData.length > 0) ? calibrationData.calcalibrationData[0].calNominalSizeUnit : ""}) </span> </th>
                                                 {calibrationData.calBeforeData === "yes" && <th width="5%" rowSpan={2}>Before Calibration</th>}
@@ -1300,9 +1300,10 @@ const CalDialog = () => {
                                         <tbody>
                                             <tr>
                                                 <th rowSpan={2}>Parameter</th>
-                                                <th rowSpan={2}>Nominal Size ({(calibrationData && calibrationData.calcalibrationData.length > 0) ? calibrationData.calcalibrationData[0].calNominalSizeUnit : ""}) </th>
+                                                <th rowSpan={2}>Nominal/Ref. Size ({(calibrationData && calibrationData.calcalibrationData.length > 0) ? calibrationData.calcalibrationData[0].calNominalSizeUnit : ""}) </th>
                                                 <th rowSpan={2}>Unit</th>
                                                 <th colSpan={2}>Permissible Error ({(calibrationData && calibrationData.calcalibrationData.length > 0) ? calibrationData.calcalibrationData[0].calNominalSizeUnit : ""})</th>
+                                                {calibrationData.calBeforeData === "yes" && <th width="10%" rowSpan={2}>Before Calibration</th>}
                                                 <th rowSpan={2}>Observer Error ({(calibrationData && calibrationData.calcalibrationData.length > 0) ? calibrationData.calcalibrationData[0].calNominalSizeUnit : ""})</th>
                                                 <th rowSpan={2}>Status</th>
                                             </tr>
@@ -1327,6 +1328,7 @@ const CalDialog = () => {
                                                         <td>{item.calNominalSizeUnit}</td>
                                                         <td>{item.calMinPSError}</td>
                                                         <td>{item.calMaxPSError}</td>
+                                                        {calibrationData.calBeforeData === "yes" && <td><input className='form-control form-control-sm' onChange={(e) => changecalDataValue(index, e.target.name, e.target.value)} name='calBeforeCalibration' /></td>}
                                                         <td><input className='form-control form-control-sm' name='calOBError' style={{ color: averageColor, fontWeight: "bold" }} onChange={(e) => changecalDataValue(index, e.target.name, e.target.value)} /></td>
                                                         <td width="15%">
                                                             <select className='form-select form-select-sm' name="rowStatus" value={item.rowStatus} onChange={(e) => changecalDataValue(index, e.target.name, e.target.value)}>
@@ -1350,11 +1352,11 @@ const CalDialog = () => {
                                             <tr>
 
                                                 <th width="20%" rowSpan={2}>Parameter</th>
-                                                <th width="10%" rowSpan={2}>Range/Size ({(calibrationData && calibrationData.calcalibrationData.length > 0) ? calibrationData.calcalibrationData[0].calNominalSizeUnit : ""})</th>
+                                                <th width="10%" rowSpan={2}>Nominal/Ref. Size ({(calibrationData && calibrationData.calcalibrationData.length > 0) ? calibrationData.calcalibrationData[0].calNominalSizeUnit : ""})</th>
                                                 <th width="5%" rowSpan={2}>Unit</th>
-                                                <th colSpan={2}>Permissible Size ({(calibrationData && calibrationData.calcalibrationData.length > 0) ? calibrationData.calcalibrationData[0].calNominalSizeUnit : ""})</th>
+                                                <th colSpan={2}>Permissible Size/Error ({(calibrationData && calibrationData.calcalibrationData.length > 0) ? calibrationData.calcalibrationData[0].calNominalSizeUnit : ""})</th>
                                                 {calibrationData.calBeforeData === "yes" && <th width="10%" rowSpan={2}>Before Calibration</th>}
-                                                <th width="20%" colSpan={calibrationData.calOBType === "average" ? 1 : 2}>Observed Size ({(calibrationData && calibrationData.calcalibrationData.length > 0) ? calibrationData.calcalibrationData[0].calNominalSizeUnit : ""})</th>
+                                                <th width="20%" colSpan={calibrationData.calOBType === "average" ? 1 : 2}>Observed Size/Error ({(calibrationData && calibrationData.calcalibrationData.length > 0) ? calibrationData.calcalibrationData[0].calNominalSizeUnit : ""})</th>
                                                 <th width="10%" rowSpan={2}>Status</th>
                                             </tr>
                                             <tr>
@@ -1494,8 +1496,8 @@ const CalDialog = () => {
                                                     <th colSpan={4}>Previous Result</th>
                                                 </tr>
                                                 <tr>
-                                                    <th colSpan={2}>Permissible Size</th>
-                                                    <th colSpan={2} >Observed Size</th>
+                                                    <th colSpan={2}>Permissible Error</th>
+                                                    <th colSpan={2} >Observed Error</th>
                                                 </tr>
                                                 <tr>
                                                     <th>Min</th>
