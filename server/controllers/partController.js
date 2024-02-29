@@ -1,3 +1,4 @@
+const itemAddModel = require("../models/itemAddModel");
 const partModel = require("../models/partModel")
 const excelToJson = require('convert-excel-to-json');
 
@@ -14,7 +15,7 @@ const partController = {
   },
 
   getPartsByPlant: async (req, res) => {
-    const { allowedPlants }= req.body
+    const { allowedPlants } = req.body
     try {
       const partByPlant = await partModel.aggregate([
         {
@@ -26,7 +27,7 @@ const partController = {
       res.status(202).json({ result: partByPlant, status: 1 });
       //res.status(200).json(employees);
     } catch (err) {
-      console.error(err); 
+      console.error(err);
       res.status(500).send('Error on Part Get Data By Plant');
     }
   },
@@ -141,20 +142,29 @@ const partController = {
 
       for (const partId of partIds) {
         // Find and remove each vendor by _id
-        const deletedPart = await partModel.findOneAndRemove({ _id: partId });
-        console.log(deletedPart)
-        if (!deletedPart) {
-          // If a vendor was not found, you can skip it or handle the error as needed.
-          console.log(`Part with ID ${partId} not found.`);
-          res.status(500).json({ message: `Part with ID not found.` });
+        const partData = await partModel.findById(partId)
+        const itemAddData = await itemAddModel.findOne({ itemPartName: { $in: [partData.partNo] } });
 
+        if (itemAddData) {
+          res.status(500).json({ error: `Part already used cannot be deleted.` });
         } else {
-          console.log(`Part with ID ${partId} deleted successfully.`);
-          deleteResults.push(deletedPart);
+          const deletedPart = await partModel.findOneAndRemove({ _id: partId });
+          console.log(deletedPart)
+          if (!deletedPart) {
+            // If a vendor was not found, you can skip it or handle the error as needed.
+            console.log(`Part with ID ${partId} not found.`);
+            res.status(500).json({ error: `Part with ID not found.` });
+
+          } else {
+            console.log(`Part with ID ${partId} deleted successfully.`);
+            deleteResults.push(deletedPart);
+          }
+          return res.status(202).json({ message: 'Part deleted successfully', results: `${deleteResults.length} Part Deleted Successfull ` });
         }
+
+        
       }
 
-      return res.status(202).json({ message: 'Part deleted successfully', results: `${deleteResults.length} Part Deleted Successfull ` });
     } catch (error) {
       console.error(error);
       res.status(500).send('Internal Server Error');
