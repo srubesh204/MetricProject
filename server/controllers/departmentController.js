@@ -125,7 +125,9 @@ const departmentController = {
         const itemAddData = await itemAddModel.findOne({
           $or: [
             { itemDepartment: itemDepartmentData.department },
-            { itemCurrentLocation: itemDepartmentData.department }
+            { itemCurrentLocation: itemDepartmentData.department },
+            { itemLastLocation : itemDepartmentData.department },
+            { itemPlaceOfUsage: itemDepartmentData.department }
           ]
         });
         if (itemAddData) {
