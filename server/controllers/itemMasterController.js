@@ -1,3 +1,4 @@
+const itemAddModel = require("../models/itemAddModel");
 const itemMasterModel = require("../models/itemMasterModel")
 const excelToJson = require('convert-excel-to-json');
 
@@ -38,8 +39,8 @@ const itemMasterController = {
   createItemMaster: async (req, res) => {
 
     try {
-      const { itemType, itemDescription, itemPrefix, itemFqInMonths, calAlertInDay, SOPNo, uncertainty, uncertaintyUnit, standardRef, itemMasterImage, workInsName, status, calibrationPoints,itemFrequencyType ,itemMasterPlant } = req.body;
-      const itemMasterResult = new itemMasterModel({ itemType, itemDescription, itemPrefix, itemFqInMonths, calAlertInDay, SOPNo, uncertainty, uncertaintyUnit, standardRef, itemMasterImage, workInsName, status, calibrationPoints,itemFrequencyType,itemMasterPlant});
+      const { itemType, itemDescription, itemPrefix, itemFqInMonths, calAlertInDay, SOPNo, uncertainty, uncertaintyUnit, standardRef, itemMasterImage, workInsName, status, calibrationPoints, itemFrequencyType, itemMasterPlant } = req.body;
+      const itemMasterResult = new itemMasterModel({ itemType, itemDescription, itemPrefix, itemFqInMonths, calAlertInDay, SOPNo, uncertainty, uncertaintyUnit, standardRef, itemMasterImage, workInsName, status, calibrationPoints, itemFrequencyType, itemMasterPlant });
       const validationError = itemMasterResult.validateSync();
 
       if (validationError) {
@@ -82,7 +83,7 @@ const itemMasterController = {
       // }
 
       // Create an object with the fields you want to update
-      const { itemType, itemDescription, itemPrefix, itemFqInMonths, calAlertInDay, SOPNo, uncertainty, uncertaintyUnit, standardRef, itemMasterImage, workInsName, status, calibrationPoints,itemFrequencyType,itemMasterPlant} = req.body;
+      const { itemType, itemDescription, itemPrefix, itemFqInMonths, calAlertInDay, SOPNo, uncertainty, uncertaintyUnit, standardRef, itemMasterImage, workInsName, status, calibrationPoints, itemFrequencyType, itemMasterPlant } = req.body;
 
       const updateImFields = {
         itemType,
@@ -94,7 +95,7 @@ const itemMasterController = {
         uncertainty,
         uncertaintyUnit,
         standardRef,
-        itemMasterImage,      
+        itemMasterImage,
         workInsName,
         status,
         calibrationPoints,
@@ -155,25 +156,30 @@ const itemMasterController = {
       const { itemMasterIds } = req.body; // Assuming an array of vendor IDs is sent in the request body
       console.log(req.body)
 
-      
+
       const deleteResults = [];
 
       for (const itemMasterId of itemMasterIds) {
-        // Find and remove each vendor by _id
-        const deletedItemMaster = await itemMasterModel.findOneAndRemove({ _id: itemMasterId });
-        console.log(deletedItemMaster)
-        if (!deletedItemMaster) {
-          // If a vendor was not found, you can skip it or handle the error as needed.
-          console.log(`ItemMaster with ID ${itemMasterId} not found.`);
-          res.status(500).json({ message: `ItemMaster with ID not found.` });
-
+        const itemMasterData = await itemMasterModel.findById(itemMasterId)
+        const itemAddData = await itemAddModel.findOne({ itemMasterRef: itemMasterData.itemMasterId });
+        if (itemAddData) {
+          res.status(500).json({ error: `ItemMaster already used cannot be deleted.` });
         } else {
-          console.log(`ItemMaster with ID ${itemMasterId} deleted successfully.`);
-          deleteResults.push(deletedItemMaster);
+          const deletedItemMaster = await itemMasterModel.findOneAndRemove({ _id: itemMasterId });
+          console.log(deletedItemMaster)
+          if (!deletedItemMaster) {
+            // If a vendor was not found, you can skip it or handle the error as needed.
+            console.log(`ItemMaster with ID ${itemMasterId} not found.`);
+            res.status(500).json({ error: `ItemMaster with ID not found.` });
+
+          } else {
+            console.log(`ItemMaster with ID ${itemMasterId} deleted successfully.`);
+            deleteResults.push(deletedItemMaster);
+          }
+          return res.status(202).json({ message: 'ItemMaster deleted successfully', results: `${deleteResults.length} ItemMaster Deleted Successfull ` })
         }
       }
-
-      return res.status(202).json({ message: 'ItemMaster deleted successfully', results: `${deleteResults.length} ItemMaster Deleted Successfull ` });
+      ;
     } catch (error) {
       console.error(error);
       res.status(500).send('Internal Server Error');
@@ -225,9 +231,9 @@ const itemMasterController = {
           J: 'standardRef',
           K: 'status',
           L: 'itemMasterPlant'
-        
-        
-          
+
+
+
 
 
 

@@ -489,8 +489,6 @@ const ItemMaster = () => {
                     itemMasterIds: itemMasteSelectedRowIds
                 }
             }
-
-
             );
             itemMasterFetchData();
             setItemMasterData(initialItemMasterData);
