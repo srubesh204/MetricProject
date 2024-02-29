@@ -583,8 +583,8 @@ const ItemEdit = () => {
                 itemCurrentLocation: value, // Ensure 'value' is correct here
             }));
         }
-        if(name === "itemPlant"){
-            setItemAddData((prev) =>({...prev,[name]: value,plantAccess: [value]}))
+        if (name === "itemPlant") {
+            setItemAddData((prev) => ({ ...prev, [name]: value, plantAccess: [value] }))
         }
         if (name === "itemItemMasterIMTENo") {
             const updatedSelection = isItemMasterList.filter(item => value.some(selectedItem => selectedItem.itemIMTENo === item.itemIMTENo));
@@ -696,7 +696,7 @@ const ItemEdit = () => {
 
     useEffect(() => {
         // if (itemAddData.itemAddMasterName) {
-            itemMasterById();
+        itemMasterById();
         // }
     }, [itemAddData.itemMasterRef, itemMasterDataList]);
 
@@ -1793,6 +1793,52 @@ const ItemEdit = () => {
 
                                 </tbody>
                             </table>
+
+                            <div className="d-flex ">
+                                {(itemAddData.itemAddMasterName !== "" && itemAddData.itemPlant !== "" && itemAddData.isItemMaster === "1") &&
+                                    <div className='col-4 '>
+                                        <FormControl size='small' component="div" fullWidth  {...(errors.departmentPlant !== "" && { error: true })} >
+                                            <InputLabel id="plantAccessId">Plant Access</InputLabel>
+                                            <Select
+                                                labelId="plantAccessId"
+                                                multiple
+                                                name="plantAccess"
+                                                value={itemAddData.plantAccess || []} // Ensure it's an array
+                                                onChange={handleItemAddChange}
+                                                input={<OutlinedInput fullWidth label="Plant Access" />}
+                                                renderValue={(selected) => selected.join(', ')}
+                                                MenuProps={MenuProps}
+                                                fullWidth
+                                            >
+                                                {loggedEmp.plantDetails && loggedEmp.plantDetails.map((plant, index) => (
+                                                    <MenuItem disabled={plant.plantName === itemAddData.itemPlant} key={index} value={plant.plantName}>
+                                                        <Checkbox checked={itemAddData.plantAccess && itemAddData.plantAccess.indexOf(plant.plantName) > -1} />
+                                                        <ListItemText primary={plant.plantName} />
+                                                    </MenuItem>
+                                                ))}
+                                            </Select>
+                                            <FormHelperText id="plantAccessId">{errors.plantAccess}</FormHelperText>
+                                        </FormControl>
+
+
+                                    </div>}
+                                <div className=" col d-flex justify-content-end">
+                                    <Button
+                                        className='me-2'
+                                        onClick={() => setAddOpenData(true)}
+                                    >
+                                        Additional Information
+                                    </Button>
+                                    <Button onClick={() => { setOpen(true) }} className='me-3' type="button"  >
+                                        Update
+                                    </Button>
+                                    <Button component={RouterLink} to={`/itemList/`} onClick={() => setItemAddData(initialItemAddData)} type="reset">
+                                        Back To List
+                                    </Button>
+                                </div>
+                            </div>
+
+
                         </Paper>}
 
 
@@ -2007,48 +2053,7 @@ const ItemEdit = () => {
                             </DialogContent>
                         </Dialog>
 
-                        <div className="d-flex ">
-                            <div className='col-4 '>
-                                <FormControl size='small' component="div" fullWidth  {...(errors.departmentPlant !== "" && { error: true })} >
-                                    <InputLabel id="plantAccessId">Plant Access</InputLabel>
-                                    <Select
-                                        labelId="plantAccessId"
-                                        multiple
-                                        name="plantAccess"
-                                        value={itemAddData.plantAccess || []} // Ensure it's an array
-                                        onChange={handleItemAddChange}
-                                        input={<OutlinedInput fullWidth label="Plant Access" />}
-                                        renderValue={(selected) => selected.join(', ')}
-                                        MenuProps={MenuProps}
-                                        fullWidth
-                                    >
-                                        {loggedEmp.plantDetails && loggedEmp.plantDetails.map((plant, index) => (
-                                            <MenuItem disabled={plant.plantName === itemAddData.itemPlant} key={index} value={plant.plantName}>
-                                                <Checkbox checked={itemAddData.plantAccess && itemAddData.plantAccess.indexOf(plant.plantName) > -1} />
-                                                <ListItemText primary={plant.plantName} />
-                                            </MenuItem>
-                                        ))}
-                                    </Select>
-                                    <FormHelperText id="plantAccessId">{errors.plantAccess}</FormHelperText>
-                                </FormControl>
 
-
-                            </div>
-                            <div className=" col d-flex justify-content-end">
-                                <Button
-                                    className='me-2'
-                                    onClick={() => setAddOpenData(true)}
-                                >
-                                    Additional Information
-                                </Button>
-                                <Button onClick={() => { setOpen(true) }} className='me-3' type="button"  >
-                                    Update
-                                </Button>
-                                <Button component={RouterLink} to={`/itemList/`} onClick={() => setItemAddData(initialItemAddData)} type="reset">
-                                    Back To List
-                                </Button>
-                            </div>
-                        </div>
                         <Snackbar anchorOrigin={{ vertical: "top", horizontal: "right" }} open={snackBarOpen} autoHideDuration={6000} onClose={handleSnackClose}>
                             <Alert variant="filled" onClose={handleSnackClose} severity={errorhandler.code} sx={{ width: '25%' }}>
                                 {errorhandler.message}
