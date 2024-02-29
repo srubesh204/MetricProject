@@ -1182,9 +1182,9 @@ const ItemAdd = () => {
                                                     fullWidth
                                                 >
                                                     {OEMList.map((name, index) => (
-                                                        <MenuItem key={index} value={name.aliasName}>
-                                                            <Checkbox checked={itemAddData.itemOEM.indexOf(name.aliasName) > -1} />
-                                                            <ListItemText primary={name.aliasName} />
+                                                        <MenuItem key={index} value={name.fullName}>
+                                                            <Checkbox checked={itemAddData.itemOEM.indexOf(name.fullName) > -1} />
+                                                            <ListItemText primary={name.fullName} />
                                                         </MenuItem>
                                                     ))}
                                                     {/* {OEMList.map((name, index) => (

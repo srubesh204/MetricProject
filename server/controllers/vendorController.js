@@ -1,4 +1,8 @@
+const itemAddModel = require("../models/itemAddModel");
+const partModel = require("../models/partModel");
 const vendorModel = require("../models/vendorModel")
+const { itemDcModel } = require("../models/itemDcModel")
+const { itemGRNModel} = require("../models/itemGRNModel")
 const excelToJson = require('convert-excel-to-json');
 
 const vendorController = {
@@ -152,26 +156,42 @@ const vendorController = {
   deleteVendor: async (req, res) => {
     try {
 
-      const { vendorIds } = req.body; // Assuming an array of vendor IDs is sent in the request body
+      const { vendorIds } = req.body;
       console.log(req.body)
       const deleteResults = [];
 
       for (const vendorId of vendorIds) {
-        // Find and remove each vendor by _id
-        const deletedVendor = await vendorModel.findOneAndRemove({ _id: vendorId });
-        console.log(deletedVendor)
-        if (!deletedVendor) {
-          // If a vendor was not found, you can skip it or handle the error as needed.
-          console.log(`Vendor with ID ${vendorId} not found.`);
-          res.status(500).json({ message: `Vendor with ID not found.` });
+        const vendorData = await vendorModel.findById(vendorId)
+        const itemAddData = await itemAddModel.findOne({
+          $or: [
+            { itemSupplier: { $in: [vendorData.fullName] } },
+            { itemOEM: { $in: [vendorData.fullName] } },
+          ]
+        });
+        const itemPartData = await partModel.findOne({ customer: vendorData.fullName })
+        const dcData = await itemDcModel.findOne({dcPartyId: vendorData._id})
+        const grnData = await itemGRNModel.findOne({grnPartyId: vendorData._id})
 
+        if (itemAddData || itemPartData || dcData || grnData) {
+          res.status(500).json({ error: `Vendor already used cannot be deleted.` });
         } else {
-          console.log(`Vendor with ID ${vendorId} deleted successfully.`);
-          deleteResults.push(deletedVendor);
+          const deletedVendor = await vendorModel.findOneAndRemove({ _id: vendorId });
+          console.log(deletedVendor)
+          if (!deletedVendor) {
+            // If a vendor was not found, you can skip it or handle the error as needed.
+            console.log(`Vendor with ID ${vendorId} not found.`);
+            res.status(500).json({ message: `Vendor with ID not found.` });
+
+          } else {
+            console.log(`Vendor with ID ${vendorId} deleted successfully.`);
+            deleteResults.push(deletedVendor);
+          }
         }
+
+        return res.status(202).json({ message: 'Vendors deleted successfully', results: `${deleteResults.length} Vendors Deleted Successfull ` });
       }
 
-      return res.status(202).json({ message: 'Vendors deleted successfully', results: `${deleteResults.length} Vendors Deleted Successfull ` });
+
     } catch (error) {
       console.error(error);
       res.status(500).send('Internal Server Error');
