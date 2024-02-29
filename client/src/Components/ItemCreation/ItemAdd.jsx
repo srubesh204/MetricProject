@@ -46,36 +46,6 @@ const ItemAdd = () => {
         UnitFetch()
     }, []);
 
-
-
-
-    const [departments, setDepartments] = useState([])
-    const DepartmentFetch = async () => {
-        try {
-            const response = await axios.get(
-                `${process.env.REACT_APP_PORT}/department/getDepartmentByPlant`, { allowedPlants: allowedPlants }
-            );
-           
-            setDepartments(response.data.result);
-
-            console.log(response.data)
-        } catch (err) {
-            console.log(err);
-        }
-    };
-    //get Designations
-    useEffect(() => {
-        DepartmentFetch()
-    }, []);
-
-    
-
-
-
-
-
-
-
     const [areas, setAreas] = useState([])
     const areaFetch = async () => {
         try {
@@ -134,7 +104,7 @@ const ItemAdd = () => {
         placeOfUsageFetch()
     }, []);
 
-    console.log({ Department: departments, Area: areas, placeOfUsage: placeOfUsages })
+    
 
     //item master list
 
