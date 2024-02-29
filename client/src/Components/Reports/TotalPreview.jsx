@@ -4,9 +4,9 @@ import dayjs from 'dayjs';
 import { useReactToPrint } from 'react-to-print';
 
 const TotalPreview = () => {
-const totalPreviewData = useContext(TotalListContent)
-const { totalPreviewOpen, setTotalPreviewOpen, filteredItemListData, formatNoData, itemList, partDataList, companyList, plantList } = totalPreviewData
-const componentRef = useRef();
+  const totalPreviewData = useContext(TotalListContent)
+  const { totalPreviewOpen, setTotalPreviewOpen, filteredItemListData, formatNoData, itemList, partDataList, companyList, plantList } = totalPreviewData
+  const componentRef = useRef();
 
 
 
@@ -598,12 +598,12 @@ const componentRef = useRef();
 
   useEffect(() => {
     console.log('Format No Data:', formatNoData.fTotalList?.frNo);
-}, [formatNoData]);
+  }, [formatNoData]);
 
 
 
-const handlePrint = useReactToPrint({
-  content: () => componentRef.current,
+  const handlePrint = useReactToPrint({
+    content: () => componentRef.current,
 
     page: {
       size: 'landscape',
@@ -613,6 +613,7 @@ const handlePrint = useReactToPrint({
       '@media print': {
         '@page': {
           size: 'landscape',
+          margin: '1cm'
         },
       },
     },
@@ -655,68 +656,68 @@ const handlePrint = useReactToPrint({
         },
       },
     },
- 
-       onAfterPrint: () => setTotalPreviewOpen(false)
-    });
 
-    if (totalPreviewOpen) {
-      handlePrint();
+    onAfterPrint: () => setTotalPreviewOpen(false)
+  });
+
+  if (totalPreviewOpen) {
+    handlePrint();
   }
 
-    const styles={
-      page: {
-        size: 'landscape',
-        margin: '1cm'
-        
-      },
-      landscapeOrientation: {
-        '@media print': {
-          '@page': {
-            size: 'landscape',
-          },
-        },
-      },
-      pageHeader: {
-        height: '198px',
-        position: 'fixed',
-        top: '0mm',
-        width: '100%',
-  
-      },
-      pageHeaderSpace: {
-        height: '198px',
-      },
-      pageFooter: {
-  
-        position: 'fixed',
-        bottom: '0',
-        width: '100%',
-  
-      },
-      pageFooterSpace: {
-        height: '115px',
-      },
-      page: {
-        pageBreakAfter: 'always',
-      },
-      pageMargin: {
-        margin: '1cm',
-      },
-      printMedia: {
-        '@media print': {
-          thead: {
-            display: 'table-header-group',
-          },
-          tfoot: {
-            display: 'table-footer-group',
-          },
-          body: {
-            margin: '0',
-          },
-        },
-      },
+  const styles = {
+    page: {
+      size: 'landscape',
+      margin: '1cm'
 
-    } 
+    },
+    landscapeOrientation: {
+      '@media print': {
+        '@page': {
+          size: 'landscape',
+          margin: '1cm'
+        },
+      },
+    },
+    pageHeader: {
+      height: '100%',
+      position: 'fixed',
+      top: '0mm',
+      width: '100%',
+    },
+    pageHeaderSpace: {
+      height: '198px',
+    },
+    pageFooter: {
+
+      position: 'fixed',
+      bottom: '0',
+      width: '100%',
+
+    },
+    pageFooterSpace: {
+      height: '115px',
+    },
+    page: {
+      pageBreakAfter: 'always',
+    },
+    pageMargin: {
+      margin: '1cm',
+    },
+    printMedia: {
+      '@media print': {
+        thead: {
+          display: 'table-header-group',
+        },
+        tfoot: {
+          display: 'table-footer-group',
+        },
+        body: {
+          margin: '0',
+        },
+      },
+    },
+
+  }
   //   const pageFooter = (data) => {
   //     return (
   //         <tr className="footer">
@@ -728,26 +729,28 @@ const handlePrint = useReactToPrint({
 
 
   return (
-    <div style={{ display: 'none',fontSize: "10px",...styles.page, ...styles.landscapeOrientation }}>
-     <div ref={componentRef}>
+    <div style={{ display: 'none', fontSize: "10px", border: "1px solid black",  ...styles.page, ...styles.landscapeOrientation }}>
+      <div ref={componentRef}>
 
-    
-      <div style={styles.pageHeader} >
-        <h6 className="text-center text-decoration-underline">Master List of Gauges / Instruments List</h6>
-      
-      </div>
-      
-      <table className="table table-sm table-borderless m-0 p-0">
+
+        <div style={styles.pageHeader} >
+          {/* <h6 className="text-center text-decoration-underline">Master List of Gauges / Instruments List</h6> */}
+          <div style={{ padding: "15px", textAlign: "center", textDecoration: "underline" }}> Master List of Gauges / Instruments List</div>
+
+        </div>
+
+        <table className="table table-sm table-borderless m-0 p-0">
           <tbody>
             <tr>
               <td >
-                <table className="table table-borderless table-sm" style={{ height: '50%', }} >
+              {/* style={{ height: '100%', }} */}
+                <table className="table table-borderless table-sm"  style={{ padding: "50px",  height: '100%'}} >
                   <tbody>
                     <tr>
                       <td className="text-start">{companyList.companyName}</td>
                     </tr>
                     <tr>
-                    <td className="text-start">{companyList.companyAddress}</td>
+                      <td className="text-start">{companyList.companyAddress} vallam </td>
                       {/* <td className="text-">{plantList[0]?.plantName}- {plantList[0]?.plantAddress} </td> */}
                       {/* <td className="text-start"></td> */}
                     </tr>
@@ -755,14 +758,14 @@ const handlePrint = useReactToPrint({
                 </table>
               </td>
               <td width="20%" className="text-end">
-              <img src={`${process.env.REACT_APP_PORT}/logo/${companyList.companyLogo}`} width="90px" height="90px" />
+                <img src={`${process.env.REACT_APP_PORT}/logo/${companyList.companyLogo}`} width="90px" height="90px" />
               </td>
             </tr>
 
             <tr style={{ padding: 0, margin: 0 }}>
 
               <td colSpan="2" style={{ padding: 0, margin: 0 }}>
-                <table style={{ width: '100%', height: '100%', margin: 0, padding: 0 }} className="table table-sm table-bordered text-center">
+                <table style={{ width: '100%', height: '100%', margin: 0, padding: 0 ,border: "1px solid black"}}   className="table table-sm table-bordered text-center">
                   <tbody>
                     <tr style={{ margin: 0, padding: 0 }}>
                       <th style={{ width: '2%', }} >Sr No</th>
@@ -773,31 +776,31 @@ const handlePrint = useReactToPrint({
                       <th style={{ width: '5%', }}>Make</th>
                       <th style={{ width: '9%', }}>Cal Date</th>
                       <th style={{ width: '9%', }}>Due Date</th>
-                      <th style={{ width: '5%', }}>Frequency</th>
+                      <th style={{ width: '6%', }}>Frequency</th>
                       <th style={{ width: '8%', }}>Current location</th>
-                      <th style={{ width: '10%', }}>Callibration Source</th>
+                      <th style={{ width: '7%', }}>Callibration Source</th>
                       <th style={{ width: '5%', }}>itemMFRNo</th>
                       <th style={{ width: '10%', }}>Part No</th>
 
                     </tr>
                     {filteredItemListData.map((item, index) => (
-                    <tr style={{ margin: 0, padding: 0 }} key={index}>
-                      <td style={{ width: '2%', }} >{index + 1}</td>
-                      <td style={{ width: '12%', }} >{item.itemIMTENo}</td>
-                      <td style={{ width: '15%', }} >{item.itemAddMasterName}</td>
-                      <td style={{ width: '5%', }} >{item.itemRangeSize}</td>
-                      <td style={{ width: '5%', }} >{item.itemLC}</td>
-                      <td style={{ width: '5%', }} >{item.itemMake}</td>
-                      <td style={{ width: '9%', }}>{item.itemCalDate}</td>
-                      <td style={{ width: '9%', }}>{item.itemDueDate}</td>
-                      <td style={{ width: '5%', }}>{item.itemCalFreInMonths+" "+ item.itemCalFrequencyType}</td>
-                      <td style={{ width: '8%', }}>{item.itemCurrentLocation}</td>
-                      <td style={{ width: '10%', }}>{item.itemCalibrationSource}</td>
-                      <td style={{ width: '5%', }}>{item.itemMFRNo}</td>
-                      <td style={{ width: '10%', }}>{item.itemPartName}</td>
+                      <tr style={{ margin: 0, padding: 0 }} key={index}>
+                        <td style={{ width: '2%', }} >{index + 1}</td>
+                        <td style={{ width: '12%', }} >{item.itemIMTENo}</td>
+                        <td style={{ width: '15%', }} >{item.itemAddMasterName}</td>
+                        <td style={{ width: '5%', }} >{item.itemRangeSize}</td>
+                        <td style={{ width: '5%', }} >{item.itemLC}</td>
+                        <td style={{ width: '5%', }} >{item.itemMake}</td>
+                        <td style={{ width: '9%', }}>{item.itemCalDate}</td>
+                        <td style={{ width: '9%', }}>{item.itemDueDate}</td>
+                        <td style={{ width: '6%', }}>{item.itemCalFreInMonths + " " + item.itemCalFrequencyType}</td>
+                        <td style={{ width: '8%', }}>{item.itemCurrentLocation}</td>
+                        <td style={{ width: '7%', }}>{item.itemCalibrationSource}</td>
+                        <td style={{ width: '5%', }}>{item.itemMFRNo}</td>
+                        <td style={{ width: '10%', }}>{item.itemPartName}</td>
 
-                    </tr>
-                     ))}
+                      </tr>
+                    ))}
 
                   </tbody>
                 </table>
@@ -805,11 +808,11 @@ const handlePrint = useReactToPrint({
             </tr>
           </tbody>
         </table>
-      <div style={styles.pageFooter}>
-      {/* <tfoot> {pageFooter({ value: formatNoData })}</tfoot> */}
+        <div style={styles.pageFooter}>
+          {/* <tfoot> {pageFooter({ value: formatNoData })}</tfoot> */}
 
-        <div style={{ fontSize: 'xx-small', margin: 0, padding: 0 }}   >{formatNoData.fTotalList ? ("Format Number : " +formatNoData.fTotalList.frNo +" " + " Rev.No : " + formatNoData.fTotalList.amNo +" " + " Rev.Date : " + formatNoData.fTotalList.amDate) : ""}</div>
-      </div>
+          <div style={{ fontSize: 'xx-small', margin: 0, padding: 0 }}   >{formatNoData.fTotalList ? ("Format Number : " + formatNoData.fTotalList.frNo + " " + " Rev.No : " + formatNoData.fTotalList.amNo + " " + " Rev.Date : " + formatNoData.fTotalList.amDate) : ""}</div>
+        </div>
       </div>
 
 

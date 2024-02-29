@@ -307,8 +307,8 @@ const ItemMaster = () => {
 
     const itemMasterFetchData = async () => {
         try {
-            const response = await axios.get(
-                `${process.env.REACT_APP_PORT}/itemMaster/getAllItemMasters`
+            const response = await axios.post(
+                `${process.env.REACT_APP_PORT}/itemMaster/getMasterByPlant`,{allowedPlants: allowedPlants}
             );
             const filterNames = ["itemType", "itemDescription", "itemMasterPlant"]
 
