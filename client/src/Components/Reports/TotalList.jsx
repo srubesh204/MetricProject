@@ -17,7 +17,7 @@ import Snackbar from '@mui/material/Snackbar';
 import isSameOrAfter from 'dayjs/plugin/isSameOrAfter'
 import isSameOrBefore from 'dayjs/plugin/isSameOrBefore'
 import { useEmployee } from '../../App';
-import TotalPrint from './TotalPrint';
+import TotalPreview from './TotalPreview';
 import MailSender from '../mailComponent/MailSender';
 import CalDuePrint from './CalDuePrint';
 dayjs.extend(isSameOrBefore)
@@ -26,7 +26,7 @@ export const TotalListContent = createContext(null);
 const TotalList = () => {
 
 
-  const [totalPrintOpen, setTotalPrintOpen] = useState(false);
+  const [totalPreviewOpen, setTotalPreviewOpen] = useState(false);
   const [calDuePrint, setCalDuePrint] = useState(false);
   const [loaded, setLoaded] = useState(false);
 
@@ -162,8 +162,11 @@ const TotalList = () => {
   const companyFetch = async () => {
     try {
       const response = await axios.get(
-        `${process.env.REACT_APP_PORT}/compDetails/getAllCompDetails`
-      );
+        `${process.env.REACT_APP_PORT}/compDetails/getCompDetailsById/companyData`
+    );
+  //   const formatNo = await axios.get(
+  //     `${process.env.REACT_APP_PORT}/formatNo/getFormatNoById/formatNo`
+  // );
       setCompanyList(response.data.result);
       //setFilterCompany(response.data.result);
 
@@ -176,6 +179,10 @@ const TotalList = () => {
   useEffect(() => {
     companyFetch();
   }, []);
+
+  console.log(companyList)
+
+
   const [plantList, setPlantList] = useState([])
 
   const Fetch = async () => {
@@ -923,6 +930,7 @@ const TotalList = () => {
   useEffect(() => {
     formatFetchData();
   }, []);
+  console.log(formatNoData)
 
 
 
@@ -1336,7 +1344,7 @@ const TotalList = () => {
                   </Button>
                 </div>
                 <div>
-                  <Button className='me-2' size='small' onClick={() => { setTotalPrintOpen(true) }}>Print</Button>
+                  <Button  size='small' onClick={() => { setTotalPreviewOpen(true) }}>Print</Button>
                 </div>
 
                 {/* <div className='col'>
@@ -1364,9 +1372,9 @@ const TotalList = () => {
         </LocalizationProvider>
       </form>
       <TotalListContent.Provider
-        value={{ totalPrintOpen, setTotalPrintOpen, itemList, filteredItemListData, partDataList, formatNoData, companyList, plantList }}
+        value={{ totalPreviewOpen, setTotalPreviewOpen, filteredItemListData, formatNoData, itemList, partDataList, companyList, plantList }}
       >
-        <TotalPrint />
+        <TotalPreview />
       </TotalListContent.Provider>
       {selectedItemList.length > 0 &&
         <MailSender {...TotalListChildData} />}

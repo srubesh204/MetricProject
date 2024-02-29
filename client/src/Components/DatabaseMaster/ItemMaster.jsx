@@ -157,17 +157,53 @@ const ItemMaster = () => {
 
     console.log(itemMasterData)
 
-
+    const [plantDatas, setPlantDatas] = useState([])
+    const [departmentDatas, setDepartmentDatas] = useState([])
     const handleFilterChange = (e) => {
         const { name, value } = e.target;
         setFilterAllName((prev) => ({ ...prev, [name]: value }));
         if (value === "all") {
             setFilteredData(itemMasterDataList)
         } else {
+
+            if (name === "masterPlant") {
+                const masterPlant = itemMasterDataList.filter((item) => item.itemMasterPlant === value);
+                setFilteredData(masterPlant);
+                const filterNames = ["itemType", "itemDescription", ]
+
+            let updatedFilterNames = {};
+
+            filterNames.forEach((element, index) => {
+                const data = itemMasterDataList.map(item => item[element]);
+                filterNames[index] = [...new Set(data)];
+
+                // Update the object with a dynamic key based on the 'element'
+                updatedFilterNames[element] = filterNames[index];
+                console.log(updatedFilterNames)
+            });
+            setFilterNameList(prev => ({ ...prev, ...updatedFilterNames }));
+                setFilterAllName((prev) => ({
+                    ...prev,
+                    masterPlant: value,
+                }))
+                setPlantDatas(masterPlant)
+            }
             if (name === "itemTypeSort") {
-                const itemTypeSort = itemMasterDataList.filter((item) => (item.itemType === value))
+                const itemTypeSort = plantDatas.filter((item) => (item.itemType === value))
                 if (value === "all") {
-                    setFilteredData(itemMasterDataList)
+                    const filterNames = [ "itemDescription", ]
+                let updatedFilterNames = {};
+                filterNames.forEach((element, index) => {
+                    const data = plantDatas.map(item => item[element]);
+                    filterNames[index] = [...new Set(data)];
+                    // Update the object with a dynamic key based on the 'element'
+                    updatedFilterNames[element] = filterNames[index];
+                });
+                console.log(updatedFilterNames)
+                // Update state outside the loop with the updated object
+                setFilterNameList(prev => ({ ...prev, ...updatedFilterNames }));
+
+                    setFilteredData(plantDatas)
                     setFilterAllName(prev => ({
                         ...prev,
                         itemTypeSort: value,
@@ -183,12 +219,13 @@ const ItemMaster = () => {
                         itemDescriptionSort: "all",
                         masterPlant: "all"
                     }))
+                    setDepartmentDatas(itemTypeSort)
                 }
             }
             if (name === "itemDescriptionSort") {
-                const itemDescriptionSort = itemMasterDataList.filter((item) => (item.itemDescription === value))
+                const itemDescriptionSort = departmentDatas.filter((item) => (item.itemDescription === value))
                 if (value === "all") {
-                    setFilteredData(itemDescriptionSort)
+                    setFilteredData(departmentDatas)
                     setFilterAllName(prev => ({
                         ...prev,
                         itemDescriptionSort: value,
@@ -205,24 +242,18 @@ const ItemMaster = () => {
                     console.log(value)
                 }
             }
-            if (name === "masterPlant") {
-                        const masterPlant = itemMasterDataList.filter((item) => item.itemMasterPlant === value);
-                      setFilteredData(masterPlant);
-                      setFilterAllName((prev) => ({
-                        ...prev,
-                        masterPlant: value,
-                      }));
-                    }
-                  }
-        
+
+
+        }
+
     };
 
 
     // const handleFilterChange = (e) => {
     //     const { name, value } = e.target;
-      
+
     //     setItemMasterData((prev) => ({ ...prev, [name]: value }));
-      
+
     //     if (value === "all") {
     //       setFilteredData(itemMasterDataList);
     //     } else {
@@ -236,7 +267,7 @@ const ItemMaster = () => {
     //           masterPlant: "all",
     //         }));
     //       }
-      
+
     //       if (name === "itemDescriptionSort") {
     //         const itemDescriptionSort = itemMasterDataList.filter((item) => item.itemDescription === value);
     //         setFilteredData(itemDescriptionSort);
@@ -246,7 +277,7 @@ const ItemMaster = () => {
     //           masterPlant: "all",
     //         }));
     //       }
-      
+
     //       if (name === "masterPlant") {
     //         const masterPlant = itemMasterDataList.filter((item) => item.itemMasterPlant === value);
     //         setFilteredData(masterPlant);
@@ -350,13 +381,14 @@ const ItemMaster = () => {
         { field: 'id', headerName: 'Sr. No', width: 70, renderCell: (params) => params.api.getAllRowIds().indexOf(params.id) + 1, headerAlign: "center", align: "center", },
         { field: 'itemType', headerName: 'Item Type', width: 70, headerAlign: "center", align: "center" },
         { field: 'itemDescription', headerName: 'Item Description', width: 150, headerAlign: "center", align: "center" },
-        { field: 'itemPrefix', headerName: 'Item Prefix', width: 150, headerAlign: "center", align: "center" },
+        { field: 'itemPrefix', headerName: 'Item Prefix', width: 130, headerAlign: "center", align: "center" },
         { field: 'itemFqInMonths', headerName: 'Item Fq In Months', width: 90, headerAlign: "center", align: "center" },
         { field: 'calAlertInDay', headerName: 'Cal Alert In Day', width: 90, headerAlign: "center", align: "center" },
         { field: 'SOPNo', headerName: 'SOP No', width: 90, headerAlign: "center", align: "center" },
         { field: 'uncertainty', headerName: 'Uncertainty', width: 90, headerAlign: "center", align: "center" },
         { field: 'standardRef', headerName: 'Standard Ref', type: "number", width: 90, headerAlign: "center", align: "center" },
         { field: 'status', headerName: 'Status', width: 90, headerAlign: "center", align: "center" },
+        { field: 'itemMasterPlant', headerName: 'ItemMasterPlant', width: 100, headerAlign: "center", align: "center" },
 
         {/* {
             field: 'delete',
@@ -1297,7 +1329,23 @@ const ItemMaster = () => {
                                                         {/* <GridToolbarQuickFilter /> */}
 
 
+                                                        <div className='col me-2 mt-2'>
+                                                            <TextField label="Master Plant"
+                                                                id="masterPlantId"
+                                                                select
+                                                                defaultValue="all"
+                                                                value={filterAllName.masterPlant}
+                                                                fullWidth
+                                                                onChange={handleFilterChange}
+                                                                size="small"
+                                                                name="masterPlant" >
+                                                                <MenuItem value="all">All</MenuItem>
+                                                                {loggedEmp.plantDetails.map((item, index) => (
+                                                                    <MenuItem key={index} value={item.plantName}>{item.plantName}</MenuItem>
+                                                                ))}
+                                                            </TextField>
 
+                                                        </div>
                                                         <div className="col me-2 mt-2">
                                                             <TextField fullWidth label="Item Type Sort" onChange={handleFilterChange} value={filterAllName.itemTypeSort} className="form-select" select size="small" id="itemTypeSortId" name="itemTypeSort" defaultValue="all" >
 
@@ -1319,23 +1367,7 @@ const ItemMaster = () => {
 
                                                             </TextField>
                                                         </div>
-                                                        <div className='col me-2 mt-2'>
-                                                            <TextField label="Master Plant"
-                                                                id="masterPlantId"
-                                                                select
-                                                                defaultValue="all"
-                                                                value={filterAllName.masterPlant}
-                                                                fullWidth
-                                                                onChange={handleFilterChange}
-                                                                size="small"
-                                                                name="masterPlant" >
-                                                                <MenuItem value="all">All</MenuItem>
-                                                                {loggedEmp.plantDetails.map((item, index) => (
-                                                                    <MenuItem key={index} value={item.plantName}>{item.plantName}</MenuItem>
-                                                                ))}
-                                                            </TextField>
 
-                                                        </div>
 
 
                                                         <div className=' me-2 mt-2'>
