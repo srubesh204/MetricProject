@@ -154,6 +154,8 @@ const itemMasterController = {
 
       const { itemMasterIds } = req.body; // Assuming an array of vendor IDs is sent in the request body
       console.log(req.body)
+
+      
       const deleteResults = [];
 
       for (const itemMasterId of itemMasterIds) {
