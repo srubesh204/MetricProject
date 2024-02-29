@@ -1,5 +1,6 @@
 const departmentModel = require("../models/departmentModel")
 const excelToJson = require('convert-excel-to-json');
+const itemAddModel = require("../models/itemAddModel");
 
 const departmentController = {
   getAllDepartment: async (req, res) => {
@@ -15,15 +16,15 @@ const departmentController = {
   createDepartment: async (req, res) => {
 
     try {
-      const { department, departmentStatus, defaultdep,departmentPlant } = req.body;
-      const departmentResult = new departmentModel({ department, departmentStatus, defaultdep,departmentPlant });
+      const { department, departmentStatus, defaultdep, departmentPlant } = req.body;
+      const departmentResult = new departmentModel({ department, departmentStatus, defaultdep, departmentPlant });
       const validationError = departmentResult.validateSync();
 
       if (validationError) {
         // Handle validation errors
         const validationErrors = {};
 
-        
+
         if (validationError.errors) {
           // Convert Mongoose validation error details to a more user-friendly format
           for (const key in validationError.errors) {
@@ -120,20 +121,34 @@ const departmentController = {
 
       for (const departmentId of departmentIds) {
         // Find and remove each vendor by _id
-        const deletedDepartment = await departmentModel.findOneAndRemove({ _id: departmentId });
-        console.log(deletedDepartment)
-        if (!deletedDepartment) {
-          // If a vendor was not found, you can skip it or handle the error as needed.
-          console.log(`Department with ID ${departmentId} not found.`);
-          res.status(500).json({ message: `Department with ID not found.` });
-
+        const itemDepartmentData = await departmentModel.findById(departmentId)
+        const itemAddData = await itemAddModel.findOne({
+          $or: [
+            { itemDepartment: itemDepartmentData.department },
+            { itemCurrentLocation: itemDepartmentData.department },
+            { itemLastLocation : itemDepartmentData.department },
+            { itemPlaceOfUsage: itemDepartmentData.department }
+          ]
+        });
+        if (itemAddData) {
+          res.status(500).json({ error: `Department already used cannot be deleted.` });
         } else {
-          console.log(`Department with ID ${departmentId} deleted successfully.`);
-          deleteResults.push(deletedDepartment);
-        }
-      }
+          const deletedDepartment = await departmentModel.findOneAndRemove({ _id: departmentId });
+          console.log(deletedDepartment)
+          if (!deletedDepartment) {
+            // If a vendor was not found, you can skip it or handle the error as needed.
+            console.log(`Department with ID ${departmentId} not found.`);
+            res.status(500).json({ message: `Department with ID not found.` });
 
-      return res.status(202).json({ message: 'Department deleted successfully', results: `${deleteResults.length} Department Deleted Successfull ` });
+          } else {
+            console.log(`Department with ID ${departmentId} deleted successfully.`);
+            deleteResults.push(deletedDepartment);
+          }
+          return res.status(202).json({ message: 'Department deleted successfully', results: `${deleteResults.length} Department Deleted Successfull ` });
+        }
+
+        
+      }
     } catch (error) {
       console.error(error);
       res.status(500).send('Internal Server Error');
@@ -164,9 +179,9 @@ const departmentController = {
         console.log("hi")
         return res.status(400).json({ error: 'No file uploaded' });
       }
-      
+
       const excelData = req.file.buffer; // Access the file buffer
-  
+
       // Convert Excel data to JSON
       const jsonData = excelToJson({
         source: excelData,
@@ -175,10 +190,10 @@ const departmentController = {
           B: 'departmentStatus',
           C: 'defaultdep',
           D: 'departmentPlant'
-      }
+        }
       });
       console.log(jsonData)
-  
+
       const uploadPromises = jsonData.Sheet1.map(async (item) => {
         try {
           // Create an instance of departmentModel and save it to the database
@@ -187,13 +202,13 @@ const departmentController = {
           return savedDepartment;
 
         } catch (error) {
-          console.error('Error saving department:', error);   
+          console.error('Error saving department:', error);
         }
       });
-  
+
       // Execute all upload promises
       const uploadedDepartments = await Promise.all(uploadPromises);
-  
+
       res.status(200).json({ uploadedDepartments, message: 'Uploaded successfully' });
     } catch (error) {
       console.error('Error uploading Excel data:', error);

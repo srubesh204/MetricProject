@@ -14,7 +14,8 @@ const vendorSchema = new mongoose.Schema({
   },
   fullName: {
     type: String,
-    required: [true, "FullName is required"]
+    required: [true, "FullName is required"],
+    unique: [true, "Vendor fullName should be unique"]
   },
   dor: String,
   address: String,

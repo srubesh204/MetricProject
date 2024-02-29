@@ -120,20 +120,7 @@ const ItemAdd = () => {
    
 
 
-    const getIsItemMaster = async () => {
-        try {
-            const response = await axios.post(
-                `${process.env.REACT_APP_PORT}/itemAdd/getIsItemMasterByPlantAccess`, { allowedPlants: allowedPlants }
-            );
-            setItemMasterListByName(response.data.result)
-
-        } catch (err) {
-            console.log(err);
-        }
-    };
-    useEffect(() => {
-        getIsItemMaster();
-    }, []);
+    
 
     // const acceptanceCriteria = [...];
 
@@ -320,6 +307,8 @@ const ItemAdd = () => {
         setItemAddData((prev) => ({ ...prev, [name]: formattedValue }));
 
     };
+
+    
 
     const [availabelDeps, setAvailableDeps] = useState([])
 
@@ -810,7 +799,20 @@ const ItemAdd = () => {
     }, []);
 
 
+    const getIsItemMaster = async () => {
+        try {
+            const response = await axios.post(
+                `${process.env.REACT_APP_PORT}/itemAdd/getIsItemMasterByPlantAccess`, { allowedPlants: [itemAddData.itemPlant] }
+            );
+            setItemMasterListByName(response.data.result)
 
+        } catch (err) {
+            console.log(err);
+        }
+    };
+    useEffect(() => {
+        getIsItemMaster();
+    }, [itemAddData.itemPlant]);
 
 
 
@@ -1180,9 +1182,9 @@ const ItemAdd = () => {
                                                     fullWidth
                                                 >
                                                     {OEMList.map((name, index) => (
-                                                        <MenuItem key={index} value={name.aliasName}>
-                                                            <Checkbox checked={itemAddData.itemOEM.indexOf(name.aliasName) > -1} />
-                                                            <ListItemText primary={name.aliasName} />
+                                                        <MenuItem key={index} value={name.fullName}>
+                                                            <Checkbox checked={itemAddData.itemOEM.indexOf(name.fullName) > -1} />
+                                                            <ListItemText primary={name.fullName} />
                                                         </MenuItem>
                                                     ))}
                                                     {/* {OEMList.map((name, index) => (
