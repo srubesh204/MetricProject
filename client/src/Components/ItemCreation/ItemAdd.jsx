@@ -308,20 +308,7 @@ const ItemAdd = () => {
 
     };
 
-    const getIsItemMaster = async () => {
-        try {
-            const response = await axios.post(
-                `${process.env.REACT_APP_PORT}/itemAdd/getIsItemMasterByPlantAccess`, { allowedPlants: itemAddData.itemPlant }
-            );
-            setItemMasterListByName(response.data.result)
-
-        } catch (err) {
-            console.log(err);
-        }
-    };
-    useEffect(() => {
-        getIsItemMaster();
-    }, [itemAddData.itemPlant]);
+    
 
     const [availabelDeps, setAvailableDeps] = useState([])
 
@@ -812,7 +799,20 @@ const ItemAdd = () => {
     }, []);
 
 
+    const getIsItemMaster = async () => {
+        try {
+            const response = await axios.post(
+                `${process.env.REACT_APP_PORT}/itemAdd/getIsItemMasterByPlantAccess`, { allowedPlants: [itemAddData.itemPlant] }
+            );
+            setItemMasterListByName(response.data.result)
 
+        } catch (err) {
+            console.log(err);
+        }
+    };
+    useEffect(() => {
+        getIsItemMaster();
+    }, [itemAddData.itemPlant]);
 
 
 
