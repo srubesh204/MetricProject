@@ -741,7 +741,7 @@ const handlePrint = useReactToPrint({
           <tbody>
             <tr>
               <td >
-                <table className="table table-borderless table-sm" style={{ height: '100%', }} >
+                <table className="table table-borderless table-sm" style={{ height: '50%', }} >
                   <tbody>
                     <tr>
                       <td className="text-start">{companyList.companyName}</td>
@@ -766,32 +766,34 @@ const handlePrint = useReactToPrint({
                   <tbody>
                     <tr style={{ margin: 0, padding: 0 }}>
                       <th style={{ width: '2%', }} >Sr No</th>
-                      <th style={{ width: '13%', }}>IMTE No</th>
+                      <th style={{ width: '12%', }}>IMTE No</th>
                       <th style={{ width: '15%', }}>Description</th>
                       <th style={{ width: '5%', }}>Range/Size</th>
-                      <th style={{ width: '7%', }}>ItemLC</th>
+                      <th style={{ width: '5%', }}>ItemLC</th>
                       <th style={{ width: '5%', }}>Make</th>
                       <th style={{ width: '9%', }}>Cal Date</th>
                       <th style={{ width: '9%', }}>Due Date</th>
                       <th style={{ width: '5%', }}>Frequency</th>
                       <th style={{ width: '8%', }}>Current location</th>
-                      <th style={{ width: '12%', }}>Callibration Source</th>
+                      <th style={{ width: '10%', }}>Callibration Source</th>
+                      <th style={{ width: '5%', }}>itemMFRNo</th>
                       <th style={{ width: '10%', }}>Part No</th>
 
                     </tr>
                     {filteredItemListData.map((item, index) => (
                     <tr style={{ margin: 0, padding: 0 }} key={index}>
                       <td style={{ width: '2%', }} >{index + 1}</td>
-                      <td style={{ width: '13%', }} >{item.itemIMTENo}</td>
+                      <td style={{ width: '12%', }} >{item.itemIMTENo}</td>
                       <td style={{ width: '15%', }} >{item.itemAddMasterName}</td>
                       <td style={{ width: '5%', }} >{item.itemRangeSize}</td>
-                      <td style={{ width: '7%', }} >{item.itemLC}</td>
+                      <td style={{ width: '5%', }} >{item.itemLC}</td>
                       <td style={{ width: '5%', }} >{item.itemMake}</td>
                       <td style={{ width: '9%', }}>{item.itemCalDate}</td>
                       <td style={{ width: '9%', }}>{item.itemDueDate}</td>
-                      <td style={{ width: '5%', }}>{item.itemCalFreInMonths}</td>
+                      <td style={{ width: '5%', }}>{item.itemCalFreInMonths+" "+ item.itemCalFrequencyType}</td>
                       <td style={{ width: '8%', }}>{item.itemCurrentLocation}</td>
-                      <td style={{ width: '12%', }}>{item.itemCalibrationSource}</td>
+                      <td style={{ width: '10%', }}>{item.itemCalibrationSource}</td>
+                      <td style={{ width: '5%', }}>{item.itemMFRNo}</td>
                       <td style={{ width: '10%', }}>{item.itemPartName}</td>
 
                     </tr>
