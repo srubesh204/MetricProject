@@ -600,20 +600,22 @@ const TotalPreview = () => {
     console.log('Format No Data:', formatNoData.fTotalList?.frNo);
   }, [formatNoData]);
 
-
-
   const handlePrint = useReactToPrint({
     content: () => componentRef.current,
 
+  
     page: {
       size: 'landscape',
-      margin: '1cm'
+      margin: '1cm',
+      fontSize: '10px',
+      border: '1px solid black',
     },
     landscapeOrientation: {
       '@media print': {
         '@page': {
           size: 'landscape',
-          margin: '1cm'
+          margin: '1cm',
+          border: '1px solid black',
         },
       },
     },
@@ -667,14 +669,16 @@ const TotalPreview = () => {
   const styles = {
     page: {
       size: 'landscape',
-      margin: '1cm'
-
+      margin: '1cm',
+      border: '1px solid black',
     },
     landscapeOrientation: {
       '@media print': {
         '@page': {
           size: 'landscape',
-          margin: '1cm'
+          margin: '1cm',
+          border: '1px solid black',
+         
         },
       },
     },
@@ -697,8 +701,10 @@ const TotalPreview = () => {
     pageFooterSpace: {
       height: '115px',
     },
+    
     page: {
       pageBreakAfter: 'always',
+      margin: '1cm'
     },
     pageMargin: {
       margin: '1cm',
@@ -727,32 +733,28 @@ const TotalPreview = () => {
   //     );
   // };
 
-
   return (
-    <div style={{ display: 'none', fontSize: "10px", border: "1px solid black",  ...styles.page, ...styles.landscapeOrientation }}>
+    <div style={{ display: 'none', fontSize: "10px",border: '0.5px solid black',borderBottom: '0.5px solid black',  margin: '1cm', padding: '30px',  ...styles.page, ...styles.landscapeOrientation }}>
+       <div style={{ border: '0.5px solid black',borderBottom: '0.5px solid black' }}>
       <div ref={componentRef}>
-
-
         <div style={styles.pageHeader} >
           {/* <h6 className="text-center text-decoration-underline">Master List of Gauges / Instruments List</h6> */}
-          <div style={{ padding: "15px", textAlign: "center", textDecoration: "underline" }}> Master List of Gauges / Instruments List</div>
-
+          <div style={{ padding: "30px", textAlign: "center", textDecoration: "underline" }}> Master List of Gauges /Instruments</div>
         </div>
-
         <table className="table table-sm table-borderless m-0 p-0">
           <tbody>
             <tr>
               <td >
-              {/* style={{ height: '100%', }} */}
-                <table className="table table-borderless table-sm"  style={{ padding: "50px",  height: '100%'}} >
+                {/* style={{ height: '100%', }} */}
+                <table className="table table-borderless table-sm" style={{ padding: "30px", height: '100%',   }} >
                   <tbody>
                     <tr>
-                      <td className="text-start">{companyList.companyName}</td>
+                    {filteredItemListData.itemPlant || " " && <td className="text-start mb-5">{companyList.companyName}</td>}
                     </tr>
                     <tr>
-                      <td className="text-start">{companyList.companyAddress} vallam </td>
-                      {/* <td className="text-">{plantList[0]?.plantName}- {plantList[0]?.plantAddress} </td> */}
-                      {/* <td className="text-start"></td> */}
+                       {/* <td className="text-start">{companyList.companyAddress}  </td>   */}
+                      <td className="text-">{filteredItemListData[0]?.itemPlant}  </td>
+                       {/* {plantList[0]?.plantAddress} */}
                     </tr>
                   </tbody>
                 </table>
@@ -761,47 +763,42 @@ const TotalPreview = () => {
                 <img src={`${process.env.REACT_APP_PORT}/logo/${companyList.companyLogo}`} width="90px" height="90px" />
               </td>
             </tr>
-
             <tr style={{ padding: 0, margin: 0 }}>
-
               <td colSpan="2" style={{ padding: 0, margin: 0 }}>
-                <table style={{ width: '100%', height: '100%', margin: 0, padding: 0 ,border: "1px solid black"}}   className="table table-sm table-bordered text-center">
+                <table style={{ width: '100%', height: '100%', margin: 0, padding: 0, border: "1px solid black" }} className="table table-sm table-bordered text-center">
                   <tbody>
                     <tr style={{ margin: 0, padding: 0 }}>
-                      <th style={{ width: '2%', }} >Sr No</th>
-                      <th style={{ width: '12%', }}>IMTE No</th>
-                      <th style={{ width: '15%', }}>Description</th>
-                      <th style={{ width: '5%', }}>Range/Size</th>
-                      <th style={{ width: '5%', }}>ItemLC</th>
-                      <th style={{ width: '5%', }}>Make</th>
-                      <th style={{ width: '9%', }}>Cal Date</th>
-                      <th style={{ width: '9%', }}>Due Date</th>
-                      <th style={{ width: '6%', }}>Frequency</th>
-                      <th style={{ width: '8%', }}>Current location</th>
-                      <th style={{ width: '7%', }}>Callibration Source</th>
-                      <th style={{ width: '5%', }}>itemMFRNo</th>
-                      <th style={{ width: '10%', }}>Part No</th>
-
+                      <th style={{ width: '3%', border: '0.5px solid black', fontSize: '10px', }} >Sr No</th>
+                      <th style={{ width: '10%', border: '0.5px solid black', fontSize: '10px', }}>IMTE No</th>
+                      <th style={{ width: '10%', border: '0.5px solid black', fontSize: '10px', }}>Description</th>
+                      <th style={{ width: '9%', border: '0.5px solid black', fontSize: '10px', }}>Range/Size</th>
+                      <th style={{ width: '4%', border: '0.5px solid black', fontSize: '10px', }}>ItemLC</th>
+                      <th style={{ width: '4%', border: '0.5px solid black', fontSize: '10px', }}>Make</th>
+                      <th style={{ width: '5%', border: '0.5px solid black', fontSize: '10px', }}>Cal Date</th>
+                      <th style={{ width: '5%', border: '0.5px solid black', fontSize: '10px', }}>Due Date</th>
+                      <th style={{ width: '4%', border: '0.5px solid black', fontSize: '10px', }}>Frequency</th>
+                      <th style={{ width: '15%', border: '0.5px solid black', fontSize: '10px', }}>Current location</th>
+                      <th style={{ width: '4%', border: '0.5px solid black', fontSize: '10px', }}>Callibration Source</th>
+                      <th style={{ width: '5%', border: '0.5px solid black', fontSize: '10px', }}>itemMFRNo</th>
+                      <th style={{ width: '8%', border: '0.5px solid black', fontSize: '10px', }}>Part No</th>
                     </tr>
                     {filteredItemListData.map((item, index) => (
                       <tr style={{ margin: 0, padding: 0 }} key={index}>
-                        <td style={{ width: '2%', }} >{index + 1}</td>
-                        <td style={{ width: '12%', }} >{item.itemIMTENo}</td>
-                        <td style={{ width: '15%', }} >{item.itemAddMasterName}</td>
-                        <td style={{ width: '5%', }} >{item.itemRangeSize}</td>
-                        <td style={{ width: '5%', }} >{item.itemLC}</td>
-                        <td style={{ width: '5%', }} >{item.itemMake}</td>
-                        <td style={{ width: '9%', }}>{item.itemCalDate}</td>
-                        <td style={{ width: '9%', }}>{item.itemDueDate}</td>
-                        <td style={{ width: '6%', }}>{item.itemCalFreInMonths + " " + item.itemCalFrequencyType}</td>
-                        <td style={{ width: '8%', }}>{item.itemCurrentLocation}</td>
-                        <td style={{ width: '7%', }}>{item.itemCalibrationSource}</td>
-                        <td style={{ width: '5%', }}>{item.itemMFRNo}</td>
-                        <td style={{ width: '10%', }}>{item.itemPartName}</td>
-
+                        <td style={{ width: '3%', border: '0.5px solid black', fontSize: '10px', }} >{index + 1}</td>
+                        <td style={{ width: '10%', border: '0.5px solid black', fontSize: '10px', }} >{item.itemIMTENo}</td>
+                        <td style={{ width: '10%', border: '0.5px solid black', fontSize: '10px', }} >{item.itemAddMasterName}</td>
+                        <td style={{ width: '9%', border: '0.5px solid black', fontSize: '10px', }} >{item.itemRangeSize + " " + item.itemRangeSizeUnit}</td>
+                        <td style={{ width: '4%', border: '0.5px solid black', fontSize: '10px', }} >{item.itemLC || " -"}</td>
+                        <td style={{ width: '4%', border: '0.5px solid black', fontSize: '10px', }} >{item.itemMake || " -"}</td>
+                        <td style={{ width: '5%', border: '0.5px solid black', fontSize: '10px', }}>{item.itemCalDate}</td>
+                        <td style={{ width: '5%', border: '0.5px solid black', fontSize: '10px', }}>{item.itemDueDate}</td>
+                        <td style={{ width: '4%', border: '0.5px solid black', fontSize: '10px', }}>{item.itemCalFreInMonths + " " + item.itemCalFrequencyType}</td>
+                        <td style={{ width: '15%', border: '0.5px solid black', fontSize: '10px', }}>{item.itemCurrentLocation}</td>
+                        <td style={{ width: '4%', border: '0.5px solid black', fontSize: '10px', }}>{item.itemCalibrationSource}</td>
+                        <td style={{ width: '5%', border: '0.5px solid black', fontSize: '10px', }}>{item.itemMFRNo || " -"}</td>
+                        <td style={{ width: '8%', border: '0.5px solid black', fontSize: '10px', }}>{item.itemPartName}</td>
                       </tr>
                     ))}
-
                   </tbody>
                 </table>
               </td>
@@ -818,7 +815,7 @@ const TotalPreview = () => {
 
 
 
-
+      </div>
     </div>
 
 

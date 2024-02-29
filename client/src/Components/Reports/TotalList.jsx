@@ -86,14 +86,10 @@ const TotalList = () => {
         `${process.env.REACT_APP_PORT}/itemAdd/getItemByPlant`, { allowedPlants: allowedPlants }
       );
       console.log(response.data.result)
-
       const departmentItems = response.data.result.filter(item => employeeRole.loggedEmp.plantDetails.some(plant => plant.departments.includes(item.itemDepartment)))
       console.log(departmentItems)
-
       const filterNames = ["itemIMTENo", "itemType", " itemAddMasterName", "itemDepartment", "itemPlant", "itemCalibrationSource", "itemCurrentLocation"]
-
       let updatedFilterNames = {};
-
       filterNames.forEach((element, index) => {
         const data = departmentItems.map(item => item[element]);
         filterNames[index] = [...new Set(data)];
@@ -723,7 +719,6 @@ const TotalList = () => {
         (endDate === "" || itemDueDate <= new Date(endDate))
       );
     });
-
     console.log(filteredData);
   };
 

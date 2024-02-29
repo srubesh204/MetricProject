@@ -12,6 +12,9 @@ const TotalPrint = () => {
         console.log('Format No Data:', formatNoData.fTotalList?.frNo);
     }, [formatNoData]);
 
+
+
+    
     console.log(formatNoData)
     const handlePrint = useReactToPrint({
         content: () => componentRef.current,

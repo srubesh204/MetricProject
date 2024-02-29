@@ -264,8 +264,8 @@ export const Department = () => {
   //get Departments
   const depFetchData = async () => {
     try {
-      const response = await axios.get(
-        `${process.env.REACT_APP_PORT}/department/getAllDepartments`
+      const response = await axios.post(
+        `${process.env.REACT_APP_PORT}/department/getDepartmentByPlant`,{allowedPlants: allowedPlants}
       );
       setDepartmentList(response.data.result);
     } catch (err) {
