@@ -14,7 +14,7 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
-import { DataGrid, GridToolbar } from '@mui/x-data-grid';
+import { DataGrid, GridToolbar,GridToolbarQuickFilter } from '@mui/x-data-grid';
 import Autocomplete from '@mui/material/Autocomplete';
 import { useEmployee } from '../../App';
 import dayjs from 'dayjs';
@@ -499,6 +499,7 @@ export const UnitDataBase = ({ style }) => {
                                                     <div className='d-flex justify-content-between align-items-center'>
                                                         <GridToolbar />
                                                         <div>
+                                                        <GridToolbarQuickFilter className='me-2'/>
                                                             {unitSelectedRowIds.length !== 0 && <Button variant='contained' size="small" type='button' color='error' onClick={() => setDeleteModal(true)}>Delete </Button>}
                                                         </div>
 
@@ -1266,6 +1267,7 @@ export const PartDataBase = ({ style }) => {
                                                         <div className='d-flex justify-content-end'>
 
                                                             <div>
+                                                            <GridToolbarQuickFilter className="me-2" />
                                                                 {partSelectedRowIds.length !== 0 && <Button variant='contained' type='button' size='small' color='error' onClick={() => setDeleteModal(true)}>Delete </Button>}
                                                             </div>
                                                         </div>

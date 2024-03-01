@@ -816,7 +816,7 @@ const ItemMaster = () => {
                                 </div>
 
                                 <div className='col' >
-                                    <TextField fullWidth label="Item Type"  {...(errors.itemType !== "" && { helperText: errors.itemType, error: true })} value={itemMasterData.itemType} onChange={handleItemMasterBaseChange} className="form-select" select size="small" id="itemTypeId" name="itemType" defaultValue="" >
+                                    <TextField fullWidth label="Item Type"  {...(errors.itemType !== "" && { helperText: errors.itemType, error: true })} value={itemMasterData.itemType} onChange={handleItemMasterBaseChange}  select size="small" id="itemTypeId" name="itemType" defaultValue="" >
 
                                         <MenuItem value="all">All</MenuItem >
                                         <MenuItem value="attribute">Attribute</MenuItem >
@@ -934,7 +934,7 @@ const ItemMaster = () => {
 
                                             <div className='col'>
                                                 <TextField label="Unit"
-                                                    value={itemMasterData.uncertaintyUnit} onChange={handleItemMasterBaseChange} className="form-select" select size="small" id="uncertaintyUnitId" name="uncertaintyUnit" defaultValue="" >
+                                                    value={itemMasterData.uncertaintyUnit} onChange={handleItemMasterBaseChange}  select size="small" id="uncertaintyUnitId" name="uncertaintyUnit" defaultValue="" >
                                                     {unitDataList.map((item, index) => (
                                                         <MenuItem key={index} value={item.unitName}>{item.unitName}</MenuItem>
                                                     ))}
@@ -953,7 +953,7 @@ const ItemMaster = () => {
 
                                         <div className=" col">
 
-                                            <TextField fullWidth label="Status" {...(errors.status !== "" && { helperText: errors.status, error: true })} value={itemMasterData.status} onChange={handleItemMasterBaseChange} className="form-select" select size="small" id="statusId" name="status" defaultValue="" >
+                                            <TextField fullWidth label="Status" {...(errors.status !== "" && { helperText: errors.status, error: true })} value={itemMasterData.status} onChange={handleItemMasterBaseChange} select size="small" id="statusId" name="status" defaultValue="" >
 
 
                                                 <MenuItem value="Active">Active</MenuItem >
@@ -1291,7 +1291,7 @@ const ItemMaster = () => {
                                                 toolbar: () => (
                                                     <div className='d-flex justify-content-between align-items-center'>
                                                         <GridToolbar />
-                                                        {/* <GridToolbarQuickFilter /> */}
+                                                        <GridToolbarQuickFilter />
 
 
                                                         <div className='col me-2 mt-2'>
@@ -1312,7 +1312,7 @@ const ItemMaster = () => {
 
                                                         </div>
                                                         <div className="col me-2 mt-2">
-                                                            <TextField fullWidth label="Item Type Sort" onChange={handleFilterChange} value={filterAllName.itemTypeSort} className="form-select" select size="small" id="itemTypeSortId" name="itemTypeSort" defaultValue="all" >
+                                                            <TextField fullWidth label="Item Type Sort" onChange={handleFilterChange} value={filterAllName.itemTypeSort}  select size="small" id="itemTypeSortId" name="itemTypeSort" defaultValue="all" >
                                                                 <MenuItem value="all">All</MenuItem >
                                                                 <MenuItem value="attribute">Attribute</MenuItem >
                                                                 <MenuItem value="variable">Variable</MenuItem >
@@ -1320,7 +1320,7 @@ const ItemMaster = () => {
                                                             </TextField>
                                                         </div>
                                                         <div className=" col me-2 mt-2">
-                                                            <TextField fullWidth label="Item Description Sort" defaultValue="all" onChange={handleFilterChange} value={filterAllName.itemDescriptionSort} className="form-select" select size="small" id="itemDescriptionSortId" name="itemDescriptionSort">
+                                                            <TextField fullWidth label="Item Description Sort" defaultValue="all" onChange={handleFilterChange} value={filterAllName.itemDescriptionSort}  select size="small" id="itemDescriptionSortId" name="itemDescriptionSort">
                                                                 <MenuItem value="all">All</MenuItem>
                                                                 {plantDatas.map((item, index) => (
                                                                     <MenuItem key={index} value={item.itemMasterId}>{item.itemDescription}</MenuItem>

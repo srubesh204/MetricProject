@@ -4,7 +4,7 @@ import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { TextField, MenuItem, Button, Box } from '@mui/material';
-import { DataGrid, GridToolbar } from '@mui/x-data-grid';
+import { DataGrid, GridToolbar,GridToolbarQuickFilter } from '@mui/x-data-grid';
 import { Paper } from '@mui/material';
 import { Edit, PrintRounded } from '@mui/icons-material';
 import AddIcon from '@mui/icons-material/Add';
@@ -495,6 +495,7 @@ const GrnList = () => {
                                                 <div className='d-flex justify-content-between align-items-center'>
                                                     <GridToolbar />
                                                     <div className='mt-2'>
+                                                    <GridToolbarQuickFilter />
                                                         {itemListSelectedRowIds.length !== 0 && <Button variant='contained' type='button' size='small' color='error' onClick={() => setDeleteModalItem(true)}> Delete </Button>}
 
 

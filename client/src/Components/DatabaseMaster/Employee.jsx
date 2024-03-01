@@ -21,7 +21,7 @@ import { Add, ArrowBack, Error, HomeMax, House, Mail, MailLock, } from '@mui/ico
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { Link as RouterLink } from 'react-router-dom';
 import { Link } from 'react-router-dom';
-import { DataGrid, GridToolbar } from '@mui/x-data-grid';
+import { DataGrid, GridToolbar,GridToolbarQuickFilter } from '@mui/x-data-grid';
 import { CheckBox, Delete, Edit, OtherHouses, Visibility, VisibilityOff } from '@mui/icons-material';
 import { CloudDownload, CloudUpload, } from '@mui/icons-material';
 import styled from "@emotion/styled";
@@ -771,7 +771,7 @@ const Employee = () => {
 
         console.log(allNonArrayValuesAreNonEmptyStrings && allArrayValuesHaveLengthGreaterThanZero);
 
-        if (allNonArrayValuesAreNonEmptyStrings && allArrayValuesHaveLengthGreaterThanZero) {
+        if (allNonArrayValuesAreNonEmptyStrings || allArrayValuesHaveLengthGreaterThanZero) {
             setEmployeeData((prev) => ({ ...prev, plantDetails: [...prev.plantDetails, empPlantDetails] }))
             setEmpPlantDetails(initialEmpPlantDetails)
             setEmpPlantId(null);
@@ -1445,6 +1445,7 @@ const Employee = () => {
                                                 <div className='d-flex justify-content-between align-items-center'>
                                                     <GridToolbar />
                                                     <div>
+                                                    <GridToolbarQuickFilter className="me-2" />
                                                         {employeeSelectedRowIds.length !== 0 && <Button variant='contained' size='small' component="button" fullWidth type='button' color='error' onClick={() => handleDeleteOpen(true)}>Delete  Employee</Button>}
                                                     </div>
 

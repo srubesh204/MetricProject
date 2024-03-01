@@ -27,7 +27,7 @@ import {
   Paper,
   Typography
 } from "@mui/material";
-import { DataGrid, GridToolbar } from '@mui/x-data-grid';
+import { DataGrid, GridToolbar, GridToolbarQuickFilter } from '@mui/x-data-grid';
 import { CloudDownload, CloudUpload, Delete, Check, Clear } from '@mui/icons-material';
 import { useParams } from 'react-router-dom';
 import styled from "@emotion/styled";
@@ -1287,9 +1287,12 @@ export const Department = () => {
                         toolbar: () => (
                           <div className='d-flex justify-content-between align-items-center'>
                             <GridToolbar />
+                           
                             <div>
-                              {selectedRowIds.length !== 0 && <Button variant='contained' size="small" type='button' color='error' onClick={() => setDeleteDepModal(true)}>Delete </Button>}
+                            <GridToolbarQuickFilter className="me-2" />
+                              {selectedRowIds.length !== 0 && <Button variant='contained'  size="small" type='button' color='error' onClick={() => setDeleteDepModal(true)}>Delete </Button>}
                             </div>
+                           
 
                           </div>
                         ),
@@ -2483,6 +2486,7 @@ export const Designation = () => {
                       <div className='d-flex justify-content-between align-items-center'>
                         <GridToolbar />
                         <div>
+                        {/* <GridToolbarQuickFilter className="me-2" /> */}
                           {designationselectedRowIds.length !== 0 && <Button variant='contained' size="small" type='button' color='error' onClick={() => setDeleteModal(true)}>Delete </Button>}
                         </div>
 

@@ -10,7 +10,7 @@ import AddRoundedIcon from '@mui/icons-material/AddRounded';
 
 import { Container, Paper } from '@mui/material';
 import { Box } from '@mui/material';
-import { DataGrid, GridToolbar } from '@mui/x-data-grid';
+import { DataGrid, GridToolbar,GridToolbarQuickFilter } from '@mui/x-data-grid';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
@@ -1292,6 +1292,7 @@ const Vendor = () => {
                                             <div className='d-flex justify-content-between align-items-center'>
                                                 <GridToolbar />
                                                 <div>
+                                                <GridToolbarQuickFilter className='me-2'/>
                                                     {selectedRowIds.length !== 0 && <Button variant='contained' type='button' size='small' color='error' onClick={() => setDeleteModalVendor(true)}>Delete Vendors</Button>}
                                                 </div>
 

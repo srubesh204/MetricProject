@@ -147,7 +147,7 @@ const TotalPreview = () => {
       
        <div style={{ border: '0.5px solid black',borderBottom: '0.5px solid black' }}>
       <div ref={componentRef}>
-        <div style={styles.pageHeader} >
+        <div className='pageHeader' >
           {/* <h6 className="text-center text-decoration-underline">Master List of Gauges / Instruments List</h6> */}
           <div style={{ padding: "30px", textAlign: "center", textDecoration: "underline" }}> Master List of Gauges /Instruments</div>
         </div>
@@ -156,7 +156,7 @@ const TotalPreview = () => {
             <tr>
               <td >
                 {/* style={{ height: '100%', }} */}
-                <table className="table table-borderless table-sm" style={{ padding: "30px", height: '100%',   }} >
+                <table className="table table-borderless table-sm" style={{height: '100%'}} >
                   <tbody>
                     <tr>
                     {filteredItemListData.itemPlant || " " && <td className="text-start mb-5">{companyList.companyName}</td>}
@@ -216,7 +216,7 @@ const TotalPreview = () => {
           </tbody>
         </table>
         <div style={styles.pageFooter}>
-          {/* <tfoot> {pageFooter({ value: formatNoData })}</tfoot> */}
+         
 
           <div style={{ fontSize: 'xx-small', margin: 0, padding: 0 }}   >{formatNoData.fTotalList ? ("Format Number : " + formatNoData.fTotalList.frNo + " " + " Rev.No : " + formatNoData.fTotalList.amNo + " " + " Rev.Date : " + formatNoData.fTotalList.amDate) : ""}</div>
         </div>
