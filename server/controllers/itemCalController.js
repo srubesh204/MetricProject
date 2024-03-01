@@ -145,9 +145,15 @@ const itemCalController = {
       const getPlantAddress = await plantSchema.findOne(
         { plantName: calPlant } // To return the updated document
       );
-      const approvedByData = await employeeModel.findOne(
-        { _id: calApprovedBy } // To return the updated document
-      );
+
+
+      let approvedByData = "";
+      if(calApprovedBy) {
+        approvedByData = await employeeModel.findOne(
+          { _id: calApprovedBy } 
+        );
+      }
+      
       const formatNo = await formatNoModel.findById("formatNo");
       const formatNumber = `${formatNo.fCertificate ? ("Format Number : " +formatNo.fCertificate.frNo +"  "+ "Rev.No :  " + formatNo.fCertificate.amNo +"  "+ "Rev.Date :  " + formatNo.fCertificate.amDate) : ""}`
 

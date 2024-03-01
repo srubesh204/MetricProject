@@ -15,7 +15,7 @@ const formatNoController = {
 
     try {
       const { fDc, fGrn, fCertificate, fHistoryCard, fTotalList, fUncDate, fCommonPrefix } = req.body;
-      const formatNoResult = new formatNoModel({ fDc, fGrn, fCertificate, fHistoryCard, fTotalList, fUncDate, fCommonPrefix });
+      const formatNoResult = new formatNoModel({ fDc, fGrn, fCertificate, fHistoryCard, fTotalList, fUncDate, fCommonPrefix, approvedByAccess });
       const validationError = formatNoResult.validateSync();
 
       if (validationError) {
@@ -53,27 +53,19 @@ const formatNoController = {
 
   updateFormatNo: async (req, res) => {
     try {
-      const formatNoId = req.params.id; // Assuming desId is part of the URL parameter
-      // if (isNaN(desId)) {
-      //   return res.status(400).json({ error: 'Invalid desId value' });
-      // }
-
-      // Create an object with the fields you want to update
+      const formatNoId = req.params.id;
       const updateFormatNoFields = {
+        fDc,
+        fGrn,
+        fCertificate,
+        fHistoryCard,
+        fTotalList,
+        fUncDate,
+        fCommonPrefix,
+        approvedByAccess
+      } = req.body;
 
-        fDc: req.body.fDc, 
-        fGrn: req.body.fGrn, 
-        fCertificate: req.body.fCertificate, 
-        fHistoryCard: req.body.fHistoryCard, 
-        fTotalList: req.body.fTotalList, 
-        fUncDate: req.body.fUncDate, 
-        fCommonPrefix: req.body.fCommonPrefix
-
-      };
-
-      // Find the designation by desId and update it
       const formatNoUpdate = new formatNoModel(updateFormatNoFields);
-
       const validationError = formatNoUpdate.validateSync();
       if (validationError) {
         // Handle validation errors
@@ -91,16 +83,16 @@ const formatNoController = {
         });
       }
 
-      // Find the designation by desId and update it
       const updateFormatNo = await formatNoModel.findOneAndUpdate(
         { _id: formatNoId },
         updateFormatNoFields,
-        { new: true, upsert: true } // To return the updated document
+        { new: true, upsert: true }
       );
 
       if (!updateFormatNo) {
         return res.status(404).json({ error: 'Format No not found' });
       }
+      
       console.log("Format No Updated Successfully")
       res.status(200).json({ result: updateFormatNo, message: "Format No Updated Successfully" });
     } catch (error) {
