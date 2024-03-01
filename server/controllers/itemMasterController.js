@@ -152,34 +152,39 @@ const itemMasterController = {
   },
   deleteItemMaster: async (req, res) => {
     try {
-
-      const { itemMasterIds } = req.body; // Assuming an array of vendor IDs is sent in the request body
-      console.log(req.body)
-
+      const { itemMasterIds } = req.body;
+      console.log(req.body);
 
       const deleteResults = [];
 
       for (const itemMasterId of itemMasterIds) {
-        const itemMasterData = await itemMasterModel.findById(itemMasterId)
+        const itemMasterData = await itemMasterModel.findById(itemMasterId);
         const itemAddData = await itemAddModel.findOne({ itemMasterRef: itemMasterData.itemMasterId });
+
         if (itemAddData) {
-          res.status(500).json({ error: `ItemMaster already used cannot be deleted.` });
+          // If the item is already used, push the error message to deleteResults.
+          deleteResults.push({ error: `ItemMaster with ID ${itemMasterId} already used and cannot be deleted.` });
         } else {
           const deletedItemMaster = await itemMasterModel.findOneAndRemove({ _id: itemMasterId });
-          console.log(deletedItemMaster)
           if (!deletedItemMaster) {
-            // If a vendor was not found, you can skip it or handle the error as needed.
-            console.log(`ItemMaster with ID ${itemMasterId} not found.`);
-            res.status(500).json({ error: `ItemMaster with ID not found.` });
-
+            // If the item is not found, push the error message to deleteResults.
+            deleteResults.push({ error: `ItemMaster with ID ${itemMasterId} not found.` });
           } else {
-            console.log(`ItemMaster with ID ${itemMasterId} deleted successfully.`);
-            deleteResults.push(deletedItemMaster);
+            // If the item is successfully deleted, push it to deleteResults.
+            deleteResults.push({ success: `ItemMaster with ID ${itemMasterId} deleted successfully.` });
           }
-          return res.status(202).json({ message: 'ItemMaster deleted successfully', results: `${deleteResults.length} ItemMaster Deleted Successfull ` })
         }
       }
-      ;
+
+      // Check if there are any errors in deleteResults
+      const errors = deleteResults.filter(result => result.error);
+      if (errors.length > 0) {
+        // If there are errors, send a 500 status with the error message.
+        res.status(500).json({ error: errors[0].error });
+      } else {
+        // If there are no errors, send a 202 status with the success message and results.
+        res.status(202).json({ message: 'ItemMaster deletion process completed.', results: deleteResults });
+      }
     } catch (error) {
       console.error(error);
       res.status(500).send('Internal Server Error');
