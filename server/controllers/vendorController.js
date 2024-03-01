@@ -186,9 +186,10 @@ const vendorController = {
             console.log(`Vendor with ID ${vendorId} deleted successfully.`);
             deleteResults.push(deletedVendor);
           }
+          return res.status(202).json({ message: 'Vendors deleted successfully', results: `${deleteResults.length} Vendors Deleted Successfull ` });
+
         }
 
-        return res.status(202).json({ message: 'Vendors deleted successfully', results: `${deleteResults.length} Vendors Deleted Successfull ` });
       }
 
 

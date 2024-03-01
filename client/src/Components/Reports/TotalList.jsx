@@ -1309,27 +1309,13 @@ const TotalList = () => {
             </div>
             <div className='row'>
 
-              {/* <div className=' col d-flex justify-content-end'>
-                {employeeRole.employee !== "viewer" && <React.Fragment>
-                  <div className='me-2'>
-
-                  </div>
-                </React.Fragment>
-                }
-              </div> */}
+             
 
             </div>
             <div className='row'>
               <div className='col d-flex '>
                 {employeeRole.employee !== "viewer" && <React.Fragment>
-                  {/* <div className='me-2' >
-                    <label className='itemlistloade'>
-                      <input className="form-control itemlistdownload" type="file" id="upload" />Upload</label>
-                  </div>
-                  <div className='me-2'>
-                    <label className='itemlistloade'>
-                      <input className="form-control itemlistdownload" type="file" id="download" />Download </label>
-                  </div> */}
+                  
                 </React.Fragment>}
                 <div className='me-2'>
                   <Button component={Link} to={`/home`} variant="contained" size='small' color="warning">
