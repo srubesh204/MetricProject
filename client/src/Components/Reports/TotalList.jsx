@@ -673,9 +673,9 @@ const TotalList = () => {
         }))
       }
     }
-    setDateData((prev) => ({ ...prev,fromDate: "",toDate: "" }))
-    setFilterType((prev) => ({ ...prev,filterType: ""  }))
-    
+    setDateData((prev) => ({ ...prev, fromDate: "", toDate: "" }))
+    setFilterType((prev) => ({ ...prev, filterType: "" }))
+
 
 
   };
@@ -1285,7 +1285,16 @@ const TotalList = () => {
 
 
                           <div className='d-flex justify-content-end mt-2'>
-                            <TextField label="Filter Type "
+
+                            <TextField  label="Filter Type " defaultValue={"Select"}   size="small"  className='me-1'    sx={{ width: '40%' }}   onChange={handleChange} id="filterTypeId" select   name="filterType"   value={filterType} fullWidth >
+                            <MenuItem value="Select">Select</MenuItem>
+                              <MenuItem value="itemCalDate">Cal </MenuItem>
+                              <MenuItem value="itemDueDate">Due </MenuItem>
+
+                            </TextField>
+
+
+                            {/* <TextField label="Filter Type "
                               id="filterTypeId"
                               select
                               className='me-1'
@@ -1294,12 +1303,12 @@ const TotalList = () => {
                               value={filterType}
                               onChange={handleChange}
                               size="small"
-                              defaultValue={"select"}
+                              // defaultValue={"select"}
                               name="filterType" >
-                               <MenuItem value="select">Select</MenuItem>
+                              <MenuItem value="select">Select</MenuItem>
                               <MenuItem value="itemCalDate">Cal </MenuItem>
                               <MenuItem value="itemDueDate">Due </MenuItem>
-                            </TextField>
+                            </TextField> */}
 
                             <DatePicker
                               // fullWidth
