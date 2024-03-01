@@ -79,7 +79,7 @@ const TotalList = () => {
     fromDate: "",
     toDate: ""
   })
- 
+
 
 
   const itemFetch = async () => {
@@ -673,6 +673,11 @@ const TotalList = () => {
         }))
       }
     }
+    setDateData((prev) => ({ ...prev,fromDate: "",toDate: "" }))
+    setFilterType((prev) => ({ ...prev,filterType: ""  }))
+    
+
+
   };
   // if (name === "supplierWise") {
   //   if (value) {
@@ -760,7 +765,7 @@ const TotalList = () => {
 
 
   const [filterType, setFilterType] = useState("");
- 
+
 
   const handleChange = (e) => {
     const { value } = e.target;
@@ -824,7 +829,7 @@ const TotalList = () => {
   };
   console.log(filteredData);
 
- 
+
 
 
   const handleDueChange = (e) => {
@@ -944,7 +949,7 @@ const TotalList = () => {
     formatFetchData();
   }, []);
   console.log(formatNoData)
-  
+
 
 
 
@@ -970,7 +975,7 @@ const TotalList = () => {
 
   }
 
-  
+
 
 
 
@@ -1284,24 +1289,26 @@ const TotalList = () => {
                               id="filterTypeId"
                               select
                               className='me-1'
-                              sx={{width:'40%'}}
+                              sx={{ width: '40%' }}
                               fullWidth
                               value={filterType}
                               onChange={handleChange}
                               size="small"
+                              defaultValue={"select"}
                               name="filterType" >
+                               <MenuItem value="select">Select</MenuItem>
                               <MenuItem value="itemCalDate">Cal </MenuItem>
                               <MenuItem value="itemDueDate">Due </MenuItem>
                             </TextField>
 
-                             <DatePicker
+                            <DatePicker
                               // fullWidth
                               className='me-1'
                               id="fromDateId"
                               name="fromDate"
                               size="small"
                               variant="standard"
-                              sx={{width:'50%'}}
+                              sx={{ width: '50%' }}
                               label="From Date"
                               slotProps={{ textField: { size: 'small', fullWidth: true } }}
                               format="DD-MM-YYYY"
@@ -1317,7 +1324,7 @@ const TotalList = () => {
                               id="toDateId"
                               name="toDate"
                               size="small"
-                              sx={{width:'50%'}}
+                              sx={{ width: '50%' }}
                               variant="standard"
                               label="To Date"
                               slotProps={{ textField: { size: 'small', fullWidth: true } }}
