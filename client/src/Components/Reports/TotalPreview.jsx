@@ -88,43 +88,47 @@ const TotalPreview = () => {
       <div style={{ border: '0.5px solid black', borderBottom: '0.5px solid black' }}>
         <div ref={componentRef}>
           <div className='pageHeader'>
-            <table className='table table-borderless text-center align-middle'> 
+            <table className='table table-sm table-borderless text-center align-middle mb-0 pb-0'>
               <tbody>
                 <tr>
-                  <td width="20%" style={{fontSize: "12px", textAlign: "start"}}>{companyList.companyName}<br />{filteredItemListData[0]?.itemPlant}
+                  <td width="20%" style={{ fontSize: "12px", textAlign: "start" }}>{companyList.companyName}<br />{filteredItemListData[0]?.itemPlant}
                   </td>
-                  <td className='text-center' style={{textDecoration: "underline"}}>Master List of Gauges /Instruments</td>
-                  <td width="10%" className='text-end'> 
+                  <td className='text-center' style={{ textDecoration: "underline" }}>Master List of Gauges /Instruments</td>
+                  <td width="10%" className='text-end'>
                     <img src={`${process.env.REACT_APP_PORT}/logo/${companyList.companyLogo}`} width="90px" height="90px" />
                   </td>
-                </tr>   
+                </tr>
+              </tbody>
+            </table>
+            <table style={{marginBottom: 0, paddingBottom: 0}} className='table table-bordered table-sm p-0 m-0'>
+              <tbody>
+                <tr style={{ margin: 0, padding: 0 }}>
+                  <th style={{ width: '3%', border: '0.5px solid black', fontSize: '10px', }} >SrNo</th>
+                  <th style={{ width: '10%', border: '0.5px solid black', fontSize: '10px', }}>IMTE No</th>
+                  <th style={{ width: '10%', border: '0.5px solid black', fontSize: '10px', }}>Description</th>
+                  <th style={{ width: '9%', border: '0.5px solid black', fontSize: '10px', }}>Range/Size</th>
+                  <th style={{ width: '4%', border: '0.5px solid black', fontSize: '10px', }}>ItemLC</th>
+                  <th style={{ width: '4%', border: '0.5px solid black', fontSize: '10px', }}>Make</th>
+                  <th style={{ width: '7%', border: '0.5px solid black', fontSize: '10px', }}>Cal Date</th>
+                  <th style={{ width: '7%', border: '0.5px solid black', fontSize: '10px', }}>Due Date</th>
+                  <th style={{ width: '4%', border: '0.5px solid black', fontSize: '10px', }}>Frequency</th>
+                  <th style={{ width: '15%', border: '0.5px solid black', fontSize: '10px', }}>Current location</th>
+                  <th style={{ width: '4%', border: '0.5px solid black', fontSize: '10px', }}>Callibration Source</th>
+                  <th style={{ width: '5%', border: '0.5px solid black', fontSize: '10px', }}>itemMFRNo</th>
+                  <th style={{ width: '8%', border: '0.5px solid black', fontSize: '10px', }}>Part No</th>
+                </tr>
               </tbody>
             </table>
           </div>
           <table className="table table-sm table-borderless m-0 p-0 align-middle text-center">
             <thead>
               <tr>
-                <td> 
+                <td>
                   <div class="pageHeaderSpace"></div>
                 </td>
               </tr>
             </thead>
             <tbody>
-              <tr style={{ margin: 0, padding: 0 }}>
-                <th style={{ width: '3%', border: '0.5px solid black', fontSize: '10px', }} >SrNo</th>
-                <th style={{ width: '10%', border: '0.5px solid black', fontSize: '10px', }}>IMTE No</th>
-                <th style={{ width: '10%', border: '0.5px solid black', fontSize: '10px', }}>Description</th>
-                <th style={{ width: '9%', border: '0.5px solid black', fontSize: '10px', }}>Range/Size</th>
-                <th style={{ width: '4%', border: '0.5px solid black', fontSize: '10px', }}>ItemLC</th>
-                <th style={{ width: '4%', border: '0.5px solid black', fontSize: '10px', }}>Make</th>
-                <th style={{ width: '5%', border: '0.5px solid black', fontSize: '10px', }}>Cal Date</th>
-                <th style={{ width: '5%', border: '0.5px solid black', fontSize: '10px', }}>Due Date</th>
-                <th style={{ width: '4%', border: '0.5px solid black', fontSize: '10px', }}>Frequency</th>
-                <th style={{ width: '15%', border: '0.5px solid black', fontSize: '10px', }}>Current location</th>
-                <th style={{ width: '4%', border: '0.5px solid black', fontSize: '10px', }}>Callibration Source</th>
-                <th style={{ width: '5%', border: '0.5px solid black', fontSize: '10px', }}>itemMFRNo</th>
-                <th style={{ width: '8%', border: '0.5px solid black', fontSize: '10px', }}>Part No</th>
-              </tr>
               {filteredItemListData.map((item, index) => (
                 <tr style={{ margin: 0, padding: 0 }} key={index}>
                   <td style={{ width: '3%', border: '0.5px solid black', fontSize: '10px', }} >{index + 1}</td>
@@ -149,9 +153,9 @@ const TotalPreview = () => {
                   <div class="pageFooterSpace"></div>
                 </td>
               </tr>
-            </tfoot> 
+            </tfoot>
           </table>
-          <div class="pageFooter" style={{fontSize: "8px"}}> 
+          <div class="pageFooter" style={{ fontSize: "8px" }}>
             {formatNoData.fTotalList ? ("Format Number : " + formatNoData.fTotalList.frNo + " " + " Rev.No : " + formatNoData.fTotalList.amNo + " " + " Rev.Date : " + formatNoData.fTotalList.amDate) : ""}
           </div>
         </div>
