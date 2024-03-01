@@ -1,5 +1,5 @@
 import React, { createContext, useEffect, useState, useContext } from 'react'
-import { Card, CardContent, CardActions, Button, Container, Grid, Paper, TextField, Typography, CardMedia, InputLabel, Input, FormControl, FormHelperText, FormGroup, FormLabel, MenuItem, Select, Menu, FormControlLabel, Radio, RadioGroup, TableContainer, Table, TableHead, TableRow, TableCell, TableBody, IconButton, OutlinedInput, Box, Chip, Snackbar, Alert, Dialog, DialogTitle, DialogContent, DialogActions, DialogContentText, Checkbox, ListItemText, Autocomplete } from '@mui/material'
+import { Card, CardContent, CardActions, Button, Container, Grid, Paper, TextField, Typography, CardMedia, InputLabel, Input, FormControl, FormHelperText, FormGroup, FormLabel, MenuItem, Select, Menu, FormControlLabel, Radio, RadioGroup, TableContainer, Table, TableHead, TableRow, TableCell, TableBody, IconButton, OutlinedInput, Box, Chip, Snackbar, Alert, Dialog, DialogTitle, DialogContent, DialogActions, DialogContentText, Checkbox, ListItemText, Autocomplete, Switch } from '@mui/material'
 import { Add, Close, CloudUpload, Delete, Done, Edit, Receipt } from '@mui/icons-material';
 import axios from 'axios'
 
@@ -51,14 +51,16 @@ const FormatNumber = () => {
             amDate: "",
         },
         fCommonPrefix: "",
+        approvedByAccess: "no"
 
     });
 
     const handleFormatChange = (e) => {
-        const { name, value } = e.target;
+        const { name, value, checked } = e.target;
         setFormatData((prev) => ({ ...prev, [name]: value }));
-
-
+        if(name === "approvedByAccess"){
+            setFormatData((prev) => ({ ...prev, approvedByAccess: checked ? "yes" : "no" }))
+        }
     }
 
     const handleInputChange = (e, sub) => {
@@ -124,6 +126,7 @@ const FormatNumber = () => {
 
                     },
                     fCommonPrefix: format.fCommonPrefix,
+                    approvedByAccess: format.approvedByAccess
 
                 }));
             }
@@ -305,9 +308,9 @@ const FormatNumber = () => {
 
                         <div className="row">
 
-                            <div className="col-md">
+                            <div className="col-md-4">
 
-                                <table className=' table table-sm table table-bordered table-responsive text-center align-middle border border-black' disabled={!isEditable} >
+                                <table className=' table table-sm table table-borderless table-responsive text-center align-middle' disabled={!isEditable} >
                                     <tbody>
 
                                         <tr>
@@ -325,15 +328,16 @@ const FormatNumber = () => {
 
 
                             </div>
-                            {isEditable && <div className='col-md d-flex justify-content-end'>
+                            <div className="col">
+                                <FormControlLabel disabled={!isEditable} control={<Switch name='approvedByAccess' checked={formatData.approvedByAccess === "yes"} onChange={handleFormatChange} />} label="Approval required for calibrations" />
+                            </div>
+                            {isEditable && <div className='col-md-3 d-flex justify-content-end'>
                                 <div className='me-2 '>
                                     <Button size='small' variant='contained' onClick={() => setOpenModal(true)} >Modify</Button>
                                 </div>
                                 <div>
                                     <Button size='small' color='error' variant='contained' onClick={() => { setIsEditable(false); formatFetchData(); }} >Cancel</Button>
                                 </div>
-
-
                             </div>}
 
                             <Dialog
