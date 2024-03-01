@@ -103,19 +103,19 @@ const TotalPreview = () => {
             <table style={{marginBottom: 0, paddingBottom: 0}} className='table table-bordered table-sm p-0 m-0'>
               <tbody>
                 <tr style={{ margin: 0, padding: 0 }}>
-                  <th style={{ width: '3%', border: '0.5px solid black', fontSize: '10px', }} >SrNo</th>
-                  <th style={{ width: '10%', border: '0.5px solid black', fontSize: '10px', }}>IMTE No</th>
-                  <th style={{ width: '10%', border: '0.5px solid black', fontSize: '10px', }}>Description</th>
-                  <th style={{ width: '9%', border: '0.5px solid black', fontSize: '10px', }}>Range/Size</th>
-                  <th style={{ width: '4%', border: '0.5px solid black', fontSize: '10px', }}>ItemLC</th>
-                  <th style={{ width: '4%', border: '0.5px solid black', fontSize: '10px', }}>Make</th>
-                  <th style={{ width: '7%', border: '0.5px solid black', fontSize: '10px', }}>Cal Date</th>
-                  <th style={{ width: '7%', border: '0.5px solid black', fontSize: '10px', }}>Due Date</th>
-                  <th style={{ width: '4%', border: '0.5px solid black', fontSize: '10px', }}>Frequency</th>
-                  <th style={{ width: '15%', border: '0.5px solid black', fontSize: '10px', }}>Current location</th>
-                  <th style={{ width: '4%', border: '0.5px solid black', fontSize: '10px', }}>Callibration Source</th>
-                  <th style={{ width: '5%', border: '0.5px solid black', fontSize: '10px', }}>itemMFRNo</th>
-                  <th style={{ width: '8%', border: '0.5px solid black', fontSize: '10px', }}>Part No</th>
+                  <th>SrNo</th>
+                  <th>IMTE No</th>
+                  <th>Description</th>
+                  <th>Range/Size</th>
+                  <th>ItemLC</th>
+                  <th>Make</th>
+                  <th>Cal Date</th>
+                  <th>Due Date</th>
+                  <th>Frequency</th>
+                  <th>Current location</th>
+                  <th>Callibration Source</th>
+                  <th>itemMFRNo</th>
+                  <th>Part No</th>
                 </tr>
               </tbody>
             </table>
@@ -125,7 +125,7 @@ const TotalPreview = () => {
               <tr>
                 <td>
                   <div class="pageHeaderSpace"></div>
-                </td>
+                </td> 
               </tr>
             </thead>
             <tbody>
