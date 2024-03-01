@@ -20,7 +20,7 @@ const CalEditModel = () => {
 
     const calData = useContext(CalData)
     const [lastResultData, setLastResultData] = useState([])
-    const { calEditOpen, setCalEditOpen, selectedCalRow, itemMasters, activeEmps, calListFetchData, employeeRole, masters } = calData
+    const { loggedEmp ,calEditOpen, setCalEditOpen, selectedCalRow, itemMasters, activeEmps, calListFetchData, employeeRole, masters, formatNoData } = calData
     const [calibrationDatas, setCalibrationDatas] = useState([])
     const { allowedPlants } = useEmployee()
 
@@ -715,7 +715,17 @@ const CalEditModel = () => {
     };
 
 
-
+    const CalApproveStatus = () => {
+        if(formatNoData){
+            if(formatNoData.approvedByAccess === "yes" && (loggedEmp.empRole === "creator" || loggedEmp.empRole === "viewer")){
+                return false
+            }else{
+                return true
+            }
+        }else{
+            return false
+        }
+    }
 
 
 
@@ -972,7 +982,7 @@ const CalEditModel = () => {
 
 
                             </div>
-                            <div className="col-md-6">
+                            {CalApproveStatus() && <div className="col-md-6">
                                 <TextField
 
                                     id="calApprovedById"
@@ -989,7 +999,7 @@ const CalEditModel = () => {
                                         <MenuItem key={index} value={emp._id}>{emp.firstName ? emp.firstName : "" + " " + emp.lastName ? emp.lastName : ""}</MenuItem>
                                     ))}
                                 </TextField>
-                            </div>
+                            </div>}
                         </div>
                     </Paper>
 
