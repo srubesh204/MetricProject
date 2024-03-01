@@ -26,54 +26,7 @@ const TotalPreview = () => {
       size: landscape;
       margin: 1cm;
     },
-    landscapeOrientation: {
-      '@media print': {
-        '@page': {
-          size: 'landscape',
-          margin: '1cm',
-          border: '1px solid black',
-        },
-      },
-    },
-    pageHeader: {
-      height: '198px',
-      position: 'fixed',
-      top: '0mm',
-      width: '100%',
-
-    },
-    pageHeaderSpace: {
-      height: '198px',
-    },
-    pageFooter: {
-
-      position: 'fixed',
-      bottom: '0',
-      width: '100%',
-
-    },
-    pageFooterSpace: {
-      height: '115px',
-    },
-    page: {
-      pageBreakAfter: 'always',
-    },
-    pageMargin: {
-      margin: '1cm',
-    },
-    printMedia: {
-      '@media print': {
-        thead: {
-          display: 'table-header-group',
-        },
-        tfoot: {
-          display: 'table-footer-group',
-        },
-        body: {
-          margin: '0',
-        },
-      },
-    }`,
+    `,
 
     onAfterPrint: () => setTotalPreviewOpen(false)
   });
@@ -100,54 +53,50 @@ const TotalPreview = () => {
                 </tr>
               </tbody>
             </table>
-            <table style={{marginBottom: 0, paddingBottom: 0}} className='table table-bordered table-sm p-0 m-0'>
-              <tbody>
-                <tr style={{ margin: 0, padding: 0 }}>
-                  <th>SrNo</th>
-                  <th>IMTE No</th>
-                  <th>Description</th>
-                  <th>Range/Size</th>
-                  <th>ItemLC</th>
-                  <th>Make</th>
-                  <th>Cal Date</th>
-                  <th>Due Date</th>
-                  <th>Frequency</th>
-                  <th>Current location</th>
-                  <th>Callibration Source</th>
-                  <th>itemMFRNo</th>
-                  <th>Part No</th>
-                </tr>
-              </tbody>
-            </table>
           </div>
-          <table className="table table-sm table-borderless m-0 p-0 align-middle text-center">
+          <table  className="table table-sm table-bordered border border-secondary m-0 p-0 align-middle text-center">
             <thead>
               <tr>
                 <td>
                   <div class="pageHeaderSpace"></div>
-                </td> 
+                </td>
               </tr>
             </thead>
             <tbody>
+              <tr style={{fontSize: '10px'}}>
+                <th style={{ width: "3%" }}>SrNo</th>
+                <th >IMTE No</th>
+                <th>Description</th>
+                <th style={{ width: "70px" }}>Range/Size</th>
+                <th>LC</th>
+                <th>Make</th>
+                <th style={{ width: "65px" }}>Cal Date</th>
+                <th style={{ width: "65px" }}>Due Date</th>
+                <th style={{ width: "65px" }}>Frequency</th>
+                <th>Current Location</th>
+                <th style={{ width: "60px" }}>CalSource</th>
+                <th>MFRNo</th>
+                <th>Part No</th>
+              </tr>
               {filteredItemListData.map((item, index) => (
-                <tr style={{ margin: 0, padding: 0 }} key={index}>
-                  <td style={{ width: '3%', border: '0.5px solid black', fontSize: '10px', }} >{index + 1}</td>
-                  <td style={{ width: '10%', border: '0.5px solid black', fontSize: '10px', }} >{item.itemIMTENo ? item.itemIMTENo : "-"}</td>
-                  <td style={{ width: '10%', border: '0.5px solid black', fontSize: '10px', }} >{item.itemAddMasterName ? item.itemAddMasterName : "-"}</td>
-                  <td style={{ width: '9%', border: '0.5px solid black', fontSize: '10px', }} >{(item.itemRangeSize ? item.itemRangeSize : "-") + " " + (item.itemRangeSizeUnit ? item.itemRangeSizeUnit : "")}</td>
-                  <td style={{ width: '4%', border: '0.5px solid black', fontSize: '10px', }} >{item.itemLC ? item.itemLC : "-"}</td>
-                  <td style={{ width: '4%', border: '0.5px solid black', fontSize: '10px', }} >{item.itemMake ? item.itemMake : "-"}</td>
-                  <td style={{ width: '7%', border: '0.5px solid black', fontSize: '10px', }}>{item.itemCalDate ? dayjs(item.itemCalDate).format("DD-MM-YYYY") : "-"}</td>
-                  <td style={{ width: '7%', border: '0.5px solid black', fontSize: '10px', }}>{item.itemDueDate ? dayjs(item.itemDueDate).format("DD-MM-YYYY") : "-"}</td>
-                  <td style={{ width: '4%', border: '0.5px solid black', fontSize: '10px', }}>{(item.itemCalFreInMonths ? item.itemCalFreInMonths : "-") + " " + (item.itemCalFreInMonths ? item.itemCalFreInMonths : "")}</td>
-                  <td style={{ width: '15%', border: '0.5px solid black', fontSize: '10px', }}>{item.itemCurrentLocation ? item.itemCurrentLocation : "-"}</td>
-                  <td style={{ width: '4%', border: '0.5px solid black', fontSize: '10px', }}>{item.itemCalibrationSource ? item.itemCalibrationSource : "-"}</td>
-                  <td style={{ width: '5%', border: '0.5px solid black', fontSize: '10px', }}>{item.itemMFRNo ? item.itemMFRNo : "-"}</td>
-                  <td style={{ width: '8%', border: '0.5px solid black', fontSize: '10px', }}>{item.itemPartName ? item.itemPartName : "-"}</td>
+                <tr style={{ margin: 0, padding: 0, fontSize: '10px' }} key={index}>
+                  <td style={{ width: "3%" }}>{index + 1}</td>
+                  <td>{item.itemIMTENo ? item.itemIMTENo : "-"}</td>
+                  <td>{item.itemAddMasterName ? item.itemAddMasterName : "-"}</td>
+                  <td style={{ width: "70px" }}>{(item.itemRangeSize ? item.itemRangeSize : "-") + " " + (item.itemRangeSizeUnit ? item.itemRangeSizeUnit : "")}</td>
+                  <td>{item.itemLC ? item.itemLC : "-"}</td>
+                  <td>{item.itemMake ? item.itemMake : "-"}</td>
+                  <td style={{ width: "65px" }}>{item.itemCalDate ? dayjs(item.itemCalDate).format("DD-MM-YYYY") : "-"}</td>
+                  <td style={{ width: "65px" }}>{item.itemDueDate ? dayjs(item.itemDueDate).format("DD-MM-YYYY") : "-"}</td>
+                  <td style={{ width: "65px" }}>{(item.itemCalFreInMonths ? item.itemCalFreInMonths : "-") + " " + (item.itemCalFrequencyType ? item.itemCalFrequencyType : "")}</td>
+                  <td>{item.itemCurrentLocation ? item.itemCurrentLocation : "-"}</td>
+                  <td style={{ width: "60px" }}>{item.itemCalibrationSource ? item.itemCalibrationSource : "-"}</td>
+                  <td>{item.itemMFRNo ? item.itemMFRNo : "-"}</td>
+                  <td>{item.itemPartName ? item.itemPartName : "-"}</td>
                 </tr>
               ))}
             </tbody>
-            <tfoot>
+            <tfoot style={{ border: "1px solid white" }}>
               <tr>
                 <td>
                   <div class="pageFooterSpace"></div>

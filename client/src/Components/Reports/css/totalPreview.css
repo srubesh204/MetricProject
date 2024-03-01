@@ -11,10 +11,11 @@
     position: fixed;
     top: 0mm;
     width: 100%;
+    
   }
   
   .pageHeaderSpace {
-    height: 130px;
+    height: 90px;
   }
   
   .pageFooter {
