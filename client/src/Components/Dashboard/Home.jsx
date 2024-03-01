@@ -189,6 +189,21 @@ const Home = () => {
     partFetchData();
   }, []);
 
+  const [formatData, setFormatData] = useState([])
+  const formatNoData = async () => {
+    try {
+      const response = await axios.get(
+        `${process.env.REACT_APP_PORT}/formatNo/getFormatNoById/formatNo`,
+      );
+      setFormatData(response.data.result);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+  useEffect(() => {
+    formatNoData();
+  }, []);
+
 
   const [masters, setMasters] = useState([]);
 
@@ -2135,7 +2150,7 @@ const Home = () => {
               <React.Fragment>
 
                 <HomeContent.Provider
-                  value={{ calOpen, setCalOpen, selectedRows, itemMasters, activeEmps: activeEmps.allEmps, masters, itemList, calLastNo }}
+                  value={{ calOpen, setCalOpen, selectedRows, itemMasters, activeEmps: activeEmps.allEmps, masters, itemList, calLastNo, formatData }}
                 >
                   <CalDialog />
                 </HomeContent.Provider>

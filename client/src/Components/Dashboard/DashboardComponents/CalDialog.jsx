@@ -19,7 +19,7 @@ const CalDialog = () => {
     const calData = useContext(HomeContent)
     const { loggedEmp, allowedPlants } = useEmployee()
     const [lastResultData, setLastResultData] = useState([])
-    const { calOpen, setCalOpen, selectedRows, itemMasters, activeEmps, masters, itemList, calLastNo } = calData
+    const { calOpen, setCalOpen, selectedRows, itemMasters, activeEmps, masters, itemList, calLastNo, formatData } = calData
     const [calibrationDatas, setCalibrationDatas] = useState([])
 
 
@@ -288,7 +288,7 @@ const CalDialog = () => {
     console.log(calibrationData)
     useEffect(() => {
         nonSelectedMasterFun()
-    }, [calibrationData.calMasterUsed])
+    }, [calibrationData.calMasterUsed, itemMasters])
 
     console.log(calibrationData)
 
@@ -708,7 +708,7 @@ const CalDialog = () => {
         tempErrors.calItemHumidity = calibrationData.calItemHumidity ? "" : "Humidity is Required"
         // tempErrors.calCertificateNo = calibrationData.calCertificateNo ? "" : "Certificate No. is Required"
         tempErrors.calCalibratedBy = calibrationData.calCalibratedBy ? "" : "Calibrated By is Required"
-        tempErrors.calApprovedBy = calibrationData.calApprovedBy ? "" : "Approved By is Required"
+        
 
         setErrors({ ...tempErrors })
 
@@ -800,7 +800,17 @@ const CalDialog = () => {
         }
     };
 
-
+    const CalApproveStatus = () => {
+        if(formatData){
+            if(formatData.approvedByAccess === "yes" && (loggedEmp.empRole === "creator" || loggedEmp.empRole === "viewer")){
+                return false
+            }else{
+                return true
+            }
+        }else{
+            return false
+        }
+    }
 
 
 
@@ -1058,9 +1068,9 @@ const CalDialog = () => {
 
 
                             </div>
-                            <div className="col-md-6">
+                            {CalApproveStatus() && <div className="col-md-6">
                                 <TextField
-                                    {...(errors.calApprovedBy !== "" && { helperText: errors.calApprovedBy, error: true })}
+                                    
 
                                     id="calApprovedById"
                                     size='small'
@@ -1076,7 +1086,7 @@ const CalDialog = () => {
                                         <MenuItem key={index} value={emp._id}>{(emp.firstName || "") + " " + (emp.lastName || "")}</MenuItem>
                                     ))}
                                 </TextField>
-                            </div>
+                            </div>}
                         </div>
                     </Paper>
 
@@ -1628,15 +1638,15 @@ const CalDialog = () => {
 
                                 {calibrationData.calMasterUsed.map((item, index) => (
                                     <tr key={index}>
-                                        <td>{index + 1}</td>
+                                        <td>{index + 1}</td> 
                                         <td>{item.itemIMTENo}</td>
                                         <td>{item.itemAddMasterName}</td>
                                         <td>{item.itemRangeSize}</td>
                                         <td>{item.itemCertificateNo}</td>
                                         <td>{dayjs(item.itemCalDate).format("DD-MM-YYYY")}</td>
-                                        <td>{dayjs(item.itemDueDate).format("DD-MM-YYYY")}</td>
+                                        <td style={{ backgroundColor: item.itemDueDate < dayjs().format('YYYY-MM-DD') ? "red" : "", color: item.itemDueDate < dayjs().format('YYYY-MM-DD') ? "white" : "" }}>{dayjs(item.itemDueDate).format("DD-MM-YYYY")}</td>
                                         <td>{item.itemCalibratedAt}</td>
-                                        <td width="5%"><Delete color='error' onClick={(index) => deleteAC(index)} /></td>
+                                        <td width="5%"><Delete color='error' onClick={() => deleteAC(index)} /></td>
                                     </tr>
                                 ))}
                             </tbody>

@@ -54,7 +54,7 @@ const TotalPreview = () => {
               </tbody>
             </table>
           </div>
-          <table  className="table table-sm table-bordered border border-secondary m-0 p-0 align-middle text-center">
+          <table className="table table-sm table-bordered border border-secondary m-0 p-0 align-middle text-center">
             <thead>
               <tr>
                 <td>
