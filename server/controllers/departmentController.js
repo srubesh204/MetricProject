@@ -121,7 +121,7 @@ const departmentController = {
 
       for (const departmentId of departmentIds) {
         // Find and remove each vendor by _id
-        const itemDepartmentData = await departmentModel.find({_id : departmentId})
+        const itemDepartmentData = await departmentModel.findOne({_id : departmentId})
         console.log(itemDepartmentData)
         const itemAddData = await itemAddModel.findOne({
           $or: [
