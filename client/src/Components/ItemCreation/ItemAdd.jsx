@@ -104,7 +104,7 @@ const ItemAdd = () => {
         placeOfUsageFetch()
     }, []);
 
-    
+
 
     //item master list
 
@@ -117,14 +117,14 @@ const ItemAdd = () => {
 
 
     const [itemMasterListByName, setItemMasterListByName] = useState([])
-   
 
 
-    
+
+
 
     // const acceptanceCriteria = [...];
 
-    
+
 
 
 
@@ -289,8 +289,8 @@ const ItemAdd = () => {
     }, [itemAddData.itemPlant]);
 
     useEffect(() => {
-        
-      
+
+
         const vendorPlantFilter = vendorList.filter(ven => ven.vendorPlant.includes(itemAddData.itemPlant))
         const oem = vendorPlantFilter.filter((item) => item.oem === "1")
         const supplier = vendorPlantFilter.filter((item) => item.supplier === "1")
@@ -308,7 +308,7 @@ const ItemAdd = () => {
 
     };
 
-    
+
 
     const [availabelDeps, setAvailableDeps] = useState([])
 
@@ -899,7 +899,7 @@ const ItemAdd = () => {
                                 <div className='me-2'>
                                     {/* <Button variant='contained'>Gauge spec </Button> */}
                                     <Button component={Link} onClick={() => { setGaugeSpecOpen(true) }} type='button' variant="contained" >
-                                    Gauge spec
+                                        Gauge spec
                                     </Button>
                                 </div>}
                             {itemAddData.itemImage && <Card elevation={12} sx={{ width: "110px", height: "110px" }}>
@@ -1696,11 +1696,12 @@ const ItemAdd = () => {
 
                                     <div className=" col d-flex justify-content-end">
                                         <Button onClick={() => setAddOpenData(true)} >  Additional Information </Button>
-                                        <Button onClick={() => setOpen(true)} className='me-3' type="button">
-                                            Item Create
-                                        </Button>
-                                        <Button component={RouterLink} to={`/itemList/`} >
+
+                                        <Button className='me-2' component={RouterLink} to={`/itemList/`} >
                                             Back To List
+                                        </Button>
+                                        <Button variant="contained" onClick={() => setOpen(true)}  type="button">
+                                            Item Create
                                         </Button>
                                     </div>
 
