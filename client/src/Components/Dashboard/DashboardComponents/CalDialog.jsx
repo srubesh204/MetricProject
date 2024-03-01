@@ -1060,8 +1060,6 @@ const CalDialog = () => {
                             </div>
                             <div className="col-md-6">
                                 <TextField
-                                    {...(errors.calApprovedBy !== "" && { helperText: errors.calApprovedBy, error: true })}
-
                                     id="calApprovedById"
                                     size='small'
                                     label="Approved By"

@@ -65,34 +65,38 @@ const TotalPreview = () => {
             <tbody>
               <tr style={{fontSize: '10px'}}>
                 <th style={{ width: "3%" }}>SrNo</th>
-                <th >IMTE No</th>
+                <th style={{ width: "3%" }} >IMTE No</th>
                 <th>Description</th>
                 <th style={{ width: "70px" }}>Range/Size</th>
                 <th>LC</th>
                 <th>Make</th>
+                <th>MFRNo</th>
+                <th style={{ width: "60px" }}>CalSource</th>
+                <th style={{ width: "65px" }}>Cal Frequency</th>
+                <th style={{ width: "10%" }}>Current Location</th>
+               
+               
+                <th>Part No</th>
                 <th style={{ width: "65px" }}>Cal Date</th>
                 <th style={{ width: "65px" }}>Due Date</th>
-                <th style={{ width: "65px" }}>Frequency</th>
-                <th>Current Location</th>
-                <th style={{ width: "60px" }}>CalSource</th>
-                <th>MFRNo</th>
-                <th>Part No</th>
               </tr>
               {filteredItemListData.map((item, index) => (
                 <tr style={{ margin: 0, padding: 0, fontSize: '10px' }} key={index}>
                   <td style={{ width: "3%" }}>{index + 1}</td>
-                  <td>{item.itemIMTENo ? item.itemIMTENo : "-"}</td>
+                  <td style={{ width: "3%" }}>{item.itemIMTENo ? item.itemIMTENo : "-"}</td>
                   <td>{item.itemAddMasterName ? item.itemAddMasterName : "-"}</td>
                   <td style={{ width: "70px" }}>{(item.itemRangeSize ? item.itemRangeSize : "-") + " " + (item.itemRangeSizeUnit ? item.itemRangeSizeUnit : "")}</td>
-                  <td>{item.itemLC ? item.itemLC : "-"}</td>
+                  <td>{(item.itemLC ? item.itemLC : "-") + " " + (item.itemLCUnit ? item.itemLCUnit : "")}</td>
+
+
                   <td>{item.itemMake ? item.itemMake : "-"}</td>
+                  <td>{item.itemMFRNo ? item.itemMFRNo : "-"}</td>
+                  <td style={{ width: "60px" }}>{item.itemCalibrationSource ? item.itemCalibrationSource : "-"}</td>
+                  <td style={{ width: "65px" }}>{(item.itemCalFreInMonths ? item.itemCalFreInMonths : "-") + " " + (item.itemCalFrequencyType ? item.itemCalFrequencyType : "")}</td>
+                  <td style={{ width: "10%" }} >{item.itemCurrentLocation ? item.itemCurrentLocation : "-"}</td>
+                  <td>{item.itemPartName ? item.itemPartName : "-"}</td>
                   <td style={{ width: "65px" }}>{item.itemCalDate ? dayjs(item.itemCalDate).format("DD-MM-YYYY") : "-"}</td>
                   <td style={{ width: "65px" }}>{item.itemDueDate ? dayjs(item.itemDueDate).format("DD-MM-YYYY") : "-"}</td>
-                  <td style={{ width: "65px" }}>{(item.itemCalFreInMonths ? item.itemCalFreInMonths : "-") + " " + (item.itemCalFrequencyType ? item.itemCalFrequencyType : "")}</td>
-                  <td>{item.itemCurrentLocation ? item.itemCurrentLocation : "-"}</td>
-                  <td style={{ width: "60px" }}>{item.itemCalibrationSource ? item.itemCalibrationSource : "-"}</td>
-                  <td>{item.itemMFRNo ? item.itemMFRNo : "-"}</td>
-                  <td>{item.itemPartName ? item.itemPartName : "-"}</td>
                 </tr>
               ))}
             </tbody>
