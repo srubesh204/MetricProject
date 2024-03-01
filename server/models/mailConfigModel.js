@@ -10,7 +10,11 @@ const mailConfigSchema = new mongoose.Schema({
   inMailServer : String,
   outMailServer : String,
   mailSubjects: [],
-  mailBodies: []
+  mailBodies: [],
+  autoAlert: {
+    type : String,
+    default: "no"
+  }
 
    
 });

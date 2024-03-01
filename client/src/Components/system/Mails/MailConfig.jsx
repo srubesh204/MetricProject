@@ -41,6 +41,7 @@ const MailConfig = () => {
         outMailServer: "",
         mailSubjects: [],
         mailBodies: [],
+        autoAlert: "no"
 
 
     })
@@ -69,7 +70,8 @@ const MailConfig = () => {
                 inMailServer: mail.inMailServer,
                 outMailServer: mail.outMailServer,
                 mailSubjects: mail.mailSubjects,
-                mailBodies: mail.mailBodies
+                mailBodies: mail.mailBodies,
+                autoAlert: mail.autoAlert
 
             }));
         } catch (err) {
@@ -83,8 +85,11 @@ const MailConfig = () => {
 
 
     const handleMailChange = (e) => {
-        const { name, value } = e.target;
+        const { name, value, checked } = e.target;
         setMailData((prev) => ({ ...prev, [name]: value }));
+        if (name === "autoAlert") {
+            setMailData((prev) => ({ ...prev, autoAlert: checked ? "yes" : "no" }))
+        }
 
 
     }
@@ -206,7 +211,9 @@ const MailConfig = () => {
                             <h6 className='text-center mb-2'>Mail Details</h6>
 
                             <div className='row'>
-                                <div className='col d-flex justify-content-end'>
+                                <div className='col d-flex justify-content-between'>
+                                <FormControlLabel  disabled={!isEditable} control={<Switch name='autoAlert' color='success' checked={mailData.autoAlert === "yes"} onChange={handleMailChange} />} label="Auto Alerts" />
+
                                     <Button onClick={() => setIsEditable(true)}><Edit color='success' /></Button>
                                 </div>
                             </div>
