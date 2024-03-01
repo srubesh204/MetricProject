@@ -92,7 +92,7 @@ const PlantActual = () => {
             field: 'itemCalDate',
             headerName: 'Actual',
             width: 150,
-            headerAlign: "center", align: "center", valueGetter: (params) => dayjs(params.row.itemCalDate).format('DD-MM-YYYY')
+            headerAlign: "center", align: "center", valueGetter: (params) => ""
         },
         // {
         //     field: 'Last cal Due Date',
