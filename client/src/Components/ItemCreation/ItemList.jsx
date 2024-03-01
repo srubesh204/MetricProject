@@ -1173,9 +1173,12 @@ const ItemList = () => {
                                         onChange={handleFilterChangeItemList}
                                         name="plantWise" >
                                         <MenuItem value="all">All</MenuItem>
-                                        {FilterNameList.itemPlant.map((item, index) => (
+                                        {/* {FilterNameList.itemPlant.map((item, index) => (
                                             <MenuItem key={index} value={item}>{item}</MenuItem>
-                                        ))}
+                                        ))} */}
+                                        {loggedEmp.plantDetails.map((item, index) => (
+                                        <MenuItem key={index} value={item.plantName}>{item.plantName}</MenuItem>
+                                    ))}
                                     </TextField>
                                 </div>
                                 <div className="col  ">

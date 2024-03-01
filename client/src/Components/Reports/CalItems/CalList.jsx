@@ -4,7 +4,7 @@ import { TextField, MenuItem, styled, Button, ButtonGroup, Chip, FormControl, Ou
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { DataGrid, GridToolbar } from '@mui/x-data-grid';
+import { DataGrid, GridToolbar,GridToolbarQuickFilter} from '@mui/x-data-grid';
 import dayjs from 'dayjs';
 import { Container, Paper } from '@mui/material';
 import { Add, Remove, HighlightOffRounded } from '@mui/icons-material';
@@ -380,14 +380,24 @@ const CalList = () => {
     const [snackBarOpen, setSnackBarOpen] = useState(false)
     const [errorhandler, setErrorHandler] = useState({});
     const [deleteModalItem, setDeleteModalItem] = useState(false);
-    const deleteCal = async () => {
+
+    const deleteCal = async (id) => {
+
         try {
             const response = await axios.delete(
-                `${process.env.REACT_APP_PORT}/itemCal/deleteItemCal`, { data: { itemCalIds: calListSelectedRowIds } }
+                `${process.env.REACT_APP_PORT}/itemCal/deleteItemCal`, {
+                data: {
+                    itemCalIds: calListSelectedRowIds
+                }
+            }
             );
-            console.log(response.data.result)
-            calListFetchData()
-            console.log("Cal Items Deleted Successfully")
+
+          
+            setSnackBarOpen(true)
+            setErrorHandler({ status: response.data.status, message: response.data.message, code: "success" })
+         
+
+             calListFetchData()
         } catch (err) {
 
             setSnackBarOpen(true)
@@ -400,8 +410,9 @@ const CalList = () => {
                 setErrorHandler({ status: 0, message: errorMessages400, code: "error" });
             } else if (err.response && err.response.status === 500) {
                 // Handle other errors
+                console.log(err.response)
                 const errorData500 = err.response.data.error;
-                const errorMessages500 = Object.values(errorData500).join(', ');
+                const errorMessages500 = Object.values(errorData500);
                 console.log(errorMessages500)
                 setErrorHandler({ status: 0, message: errorMessages500, code: "error" });
             } else {
@@ -411,6 +422,45 @@ const CalList = () => {
             console.log(err);
         }
     };
+
+
+
+
+
+
+
+
+    // const deleteCal = async () => {
+    //     try {
+    //         const response = await axios.delete(
+    //             `${process.env.REACT_APP_PORT}/itemCal/deleteItemCal`, { data: { itemCalIds: calListSelectedRowIds } }
+    //         );
+    //         console.log(response.data.result)
+    //         calListFetchData()
+    //         console.log("Cal Items Deleted Successfully")
+    //     } catch (err) {
+
+    //         setSnackBarOpen(true)
+
+    //         if (err.response && err.response.status === 400) {
+    //             // Handle validation errors
+    //             const errorData400 = err.response.data.errors;
+    //             const errorMessages400 = Object.values(errorData400).join(', ');
+    //             console.log(errorMessages400)
+    //             setErrorHandler({ status: 0, message: errorMessages400, code: "error" });
+    //         } else if (err.response && err.response.status === 500) {
+    //             // Handle other errors
+    //             const errorData500 = err.response.data.error;
+    //             const errorMessages500 = Object.values(errorData500).join(', ');
+    //             console.log(errorMessages500)
+    //             setErrorHandler({ status: 0, message: errorMessages500, code: "error" });
+    //         } else {
+    //             console.log(err.response.data.error)
+    //             setErrorHandler({ status: 0, message: "An error occurred", code: "error" });
+    //         }
+    //         console.log(err);
+    //     }
+    // };
     console.log(calListSelectedRowIds)
 
     const [formatNoData, setFormatNoData] = useState([])
@@ -587,6 +637,7 @@ const CalList = () => {
                                             <div className='d-flex justify-content-between align-items-center'>
                                                 <GridToolbar />
                                                 <div className='mt-2'>
+                                                <GridToolbarQuickFilter />
                                                     {calListSelectedRowIds.length !== 0 && <Button variant='contained' type='button' size='small' color='error' onClick={() => setDeleteModalItem(true)}> Delete </Button>}
 
 
@@ -662,10 +713,6 @@ const CalList = () => {
                             {errorhandler.message}
                         </Alert>
                     </Snackbar>
-
-
-
-
                     {/* {employeeRole && employeeRole.employee !== "viewer" &&
                         <CalData.Provider
                             value={{ employeeRole, calAddOpen, setCalAddOpen, itemMasters, activeEmps, itemAddList, setItemAddList, calDataDcList, lastNo, masters }}

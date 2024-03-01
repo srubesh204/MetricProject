@@ -216,7 +216,7 @@ const TotalPreview = () => {
           </tbody>
         </table>
         <div style={styles.pageFooter}>
-          {/* <tfoot> {pageFooter({ value: formatNoData })}</tfoot> */}
+         
 
           <div style={{ fontSize: 'xx-small', margin: 0, padding: 0 }}   >{formatNoData.fTotalList ? ("Format Number : " + formatNoData.fTotalList.frNo + " " + " Rev.No : " + formatNoData.fTotalList.amNo + " " + " Rev.Date : " + formatNoData.fTotalList.amDate) : ""}</div>
         </div>
