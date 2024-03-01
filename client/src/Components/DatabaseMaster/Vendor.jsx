@@ -398,11 +398,10 @@ const Vendor = () => {
                 setErrorHandler({ status: 0, message: errorMessages400, code: "error" });
             } else if (err.response && err.response.status === 500) {
                 // Handle other errors
-                console.log(err);
+                console.log(err)
                 const errorData500 = err.response.data.error;
-                const errorMessages500 = Object.values(errorData500).join(', ');
-                console.log(errorMessages500)
-                setErrorHandler({ status: 0, message: errorMessages500, code: "error" });
+                
+                setErrorHandler({ status: 0, message: errorData500, code: "error" });
             } else {
                 console.log(err);
                 console.log(err.response.data.error)
