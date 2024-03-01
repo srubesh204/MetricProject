@@ -1830,12 +1830,15 @@ const ItemEdit = () => {
                                     >
                                         Additional Information
                                     </Button>
-                                    <Button onClick={() => { setOpen(true) }} className='me-3' type="button"  >
-                                        Update
-                                    </Button>
-                                    <Button component={RouterLink} to={`/itemList/`} onClick={() => setItemAddData(initialItemAddData)} type="reset">
+                                  
+                                    <Button className='me-2'  component={RouterLink} to={`/itemList/`} onClick={() => setItemAddData(initialItemAddData)} type="reset">
                                         Back To List
                                     </Button>
+                                    <Button variant="contained" onClick={() => { setOpen(true) }}   type="button"  >
+                                        Update
+                                    </Button>
+
+
                                 </div>
                             </div>
 

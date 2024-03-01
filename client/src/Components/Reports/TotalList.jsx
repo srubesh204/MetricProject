@@ -32,7 +32,7 @@ const TotalList = () => {
 
 
   const employeeRole = useEmployee()
-  const { allowedPlants } = employeeRole
+  const { allowedPlants,loggedEmp } = employeeRole
 
   console.log(dayjs("2023-11-17").isSameOrBefore("2023-11-21"))
   const [itemList, setItemList] = useState([]);
@@ -159,10 +159,10 @@ const TotalList = () => {
     try {
       const response = await axios.get(
         `${process.env.REACT_APP_PORT}/compDetails/getCompDetailsById/companyData`
-    );
-  //   const formatNo = await axios.get(
-  //     `${process.env.REACT_APP_PORT}/formatNo/getFormatNoById/formatNo`
-  // );
+      );
+      //   const formatNo = await axios.get(
+      //     `${process.env.REACT_APP_PORT}/formatNo/getFormatNoById/formatNo`
+      // );
       setCompanyList(response.data.result);
       //setFilterCompany(response.data.result);
 
@@ -977,8 +977,11 @@ const TotalList = () => {
                   onChange={handleFilterChangeItemList}
                   name="plantWise" >
                   <MenuItem value="all">All</MenuItem>
-                  {FilterNameList.itemPlant.map((item, index) => (
+                  {/* {FilterNameList.itemPlant.map((item, index) => (
                     <MenuItem key={index} value={item}>{item}</MenuItem>
+                  ))} */}
+                  {loggedEmp.plantDetails.map((item, index) => (
+                    <MenuItem key={index} value={item.plantName}>{item.plantName}</MenuItem>
                   ))}
                 </TextField>
               </div>
@@ -1339,7 +1342,7 @@ const TotalList = () => {
                   </Button>
                 </div>
                 <div>
-                  <Button  size='small' onClick={() => { setTotalPreviewOpen(true) }}>Print</Button>
+                  <Button size='small' onClick={() => { setTotalPreviewOpen(true) }}>Print</Button>
                 </div>
 
                 {/* <div className='col'>
