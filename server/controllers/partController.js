@@ -166,7 +166,7 @@ const partController = {
         res.status(500).json({ error: errors[0].error });
       } else {
         // If there are no errors, send a 202 status with the success message and results.
-        return res.status(202).json({ message: 'Part deleted successfully', results: `${deleteResults.length} Part Deleted Successfull` });
+        res.status(202).json({ message: 'Part deleted successfully', results: `${deleteResults.length} Part Deleted Successfull` });
       }
       
     } catch (error) {
