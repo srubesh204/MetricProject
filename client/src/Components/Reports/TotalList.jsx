@@ -32,7 +32,7 @@ const TotalList = () => {
 
 
   const employeeRole = useEmployee()
-  const { allowedPlants,loggedEmp } = employeeRole
+  const { allowedPlants, loggedEmp } = employeeRole
 
   console.log(dayjs("2023-11-17").isSameOrBefore("2023-11-21"))
   const [itemList, setItemList] = useState([]);
@@ -79,6 +79,8 @@ const TotalList = () => {
     fromDate: "",
     toDate: ""
   })
+ 
+
 
   const itemFetch = async () => {
     try {
@@ -757,6 +759,15 @@ const TotalList = () => {
 
 
 
+  const [filterType, setFilterType] = useState("");
+
+  const handleChange = (e) => {
+    const { value } = e.target;
+    setFilterType(value);
+    // Other logic...
+  };
+
+
 
   const [dueDate, setDueDate] = useState("")
   const [startDate, setStartDate] = useState(null);
@@ -766,6 +777,9 @@ const TotalList = () => {
     startDate: "",
     endDate: ""
   })
+
+  // const [filterType, setFilterType] = useState("")
+  // 
 
   const DatefilterFunction = () => {
 
@@ -807,6 +821,8 @@ const TotalList = () => {
     }
   };
   console.log(filteredData);
+
+ 
 
 
   const handleDueChange = (e) => {
@@ -926,6 +942,7 @@ const TotalList = () => {
     formatFetchData();
   }, []);
   console.log(formatNoData)
+  
 
 
 
@@ -950,6 +967,11 @@ const TotalList = () => {
 
 
   }
+
+  
+
+
+
 
   return (
     <div style={{ margin: "2rem" }}>
@@ -1253,8 +1275,23 @@ const TotalList = () => {
                         <GridToolbar />
                         <div className='d-flex'>
 
+
+
                           <div className='d-flex justify-content-end mt-2'>
-                            <DatePicker
+                            <TextField label="Filter Type "
+                              id="filterTypeId"
+                              select
+                              className=''
+                              fullWidth
+                              value={filterType}
+                              onChange={handleChange}
+                              size="small"
+                              name="filterType" >
+                              <MenuItem value="itemCalDate">Cal Date</MenuItem>
+                              <MenuItem value="itemDueDate">Due Date</MenuItem>
+                            </TextField>
+
+                             <DatePicker
                               // fullWidth
                               className='me-2'
                               id="fromDateId"
@@ -1270,7 +1307,6 @@ const TotalList = () => {
                               }
                               style={{ width: '150px' }} // Adjust the width according to your preference
                             />
-
                             <DatePicker
                               // fullWidth
                               className='me-2'
@@ -1309,13 +1345,13 @@ const TotalList = () => {
             </div>
             <div className='row'>
 
-             
+
 
             </div>
             <div className='row'>
               <div className='col d-flex '>
                 {employeeRole.employee !== "viewer" && <React.Fragment>
-                  
+
                 </React.Fragment>}
                 <div className='me-2'>
                   <Button component={Link} to={`/home`} variant="contained" size='small' color="warning">
