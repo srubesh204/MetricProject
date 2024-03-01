@@ -163,7 +163,7 @@ const itemMasterController = {
 
         if (itemAddData) {
           // If the item is already used, push the error message to deleteResults.
-          deleteResults.push({ error: `ItemMaster with ID ${itemMasterId} already used and cannot be deleted.` });
+          deleteResults.push({ error: `ItemMaster already used and cannot be deleted.` });
         } else {
           const deletedItemMaster = await itemMasterModel.findOneAndRemove({ _id: itemMasterId });
           if (!deletedItemMaster) {
@@ -183,7 +183,7 @@ const itemMasterController = {
         res.status(500).json({ error: errors[0].error });
       } else {
         // If there are no errors, send a 202 status with the success message and results.
-        res.status(202).json({ message: 'ItemMaster deletion process completed.', results: deleteResults });
+        res.status(202).json({ message: 'ItemMasters deleted successfully.', results: deleteResults });
       }
     } catch (error) {
       console.error(error);

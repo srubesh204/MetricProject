@@ -146,7 +146,7 @@ const partController = {
         const itemAddData = await itemAddModel.findOne({ itemPartName: { $in: [partData.partNo] } });
 
         if (itemAddData) {
-          res.status(500).json({ error: `Part already used cannot be deleted.` });
+          deleteResults.push({ error: `Part already used and cannot be deleted.` });
         } else {
           const deletedPart = await partModel.findOneAndRemove({ _id: partId });
           console.log(deletedPart)
@@ -154,17 +154,21 @@ const partController = {
             // If a vendor was not found, you can skip it or handle the error as needed.
             console.log(`Part with ID ${partId} not found.`);
             res.status(500).json({ error: `Part with ID not found.` });
-
           } else {
             console.log(`Part with ID ${partId} deleted successfully.`);
             deleteResults.push(deletedPart);
           }
-          return res.status(202).json({ message: 'Part deleted successfully', results: `${deleteResults.length} Part Deleted Successfull ` });
         }
-
-        
       }
-
+      const errors = deleteResults.filter(result => result.error);
+      if (errors.length > 0) {
+        // If there are errors, send a 500 status with the error message.
+        res.status(500).json({ error: errors[0].error });
+      } else {
+        // If there are no errors, send a 202 status with the success message and results.
+        return res.status(202).json({ message: 'Part deleted successfully', results: `${deleteResults.length} Part Deleted Successfull` });
+      }
+      
     } catch (error) {
       console.error(error);
       res.status(500).send('Internal Server Error');
