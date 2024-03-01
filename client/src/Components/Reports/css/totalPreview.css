@@ -1,0 +1,62 @@
+/* styles.css */
+
+.page {
+    size: landscape;
+    margin: 1cm;
+    border: 1px solid black;
+  }
+  
+  @media print {
+    .landscapeOrientation {
+      @page {
+        size: landscape;
+        margin: 1cm;
+        border: 1px solid black;
+      }
+    }
+  }
+  
+  .pageHeader {
+    height: 100%;
+    position: fixed;
+    top: 0mm;
+    width: 100%;
+  }
+  
+  .pageHeaderSpace {
+    height: 198px;
+  }
+  
+  .pageFooter {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+  }
+  
+  .pageFooterSpace {
+    height: 115px;
+  }
+  
+  .pageBreak {
+    page-break-after: always;
+    margin: 1cm;
+  }
+  
+  .pageMargin {
+    margin: 1cm;
+  }
+  
+  @media print {
+    thead {
+      display: table-header-group;
+    }
+    
+    tfoot {
+      display: table-footer-group;
+    }
+    
+    body {
+      margin: 0;
+    }
+  }
+  
