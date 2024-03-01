@@ -764,7 +764,7 @@ const TotalList = () => {
 
 
 
-  const [filterType, setFilterType] = useState("");
+  const [filterType, setFilterType] = useState("Select");
 
 
   const handleChange = (e) => {
@@ -1286,11 +1286,22 @@ const TotalList = () => {
 
                           <div className='d-flex justify-content-end mt-2'>
 
-                            <TextField  label="Filter Type " defaultValue={"Select"}   size="small"  className='me-1'    sx={{ width: '40%' }}   onChange={handleChange} id="filterTypeId" select   name="filterType"   value={filterType} fullWidth >
-                            <MenuItem value="Select">Select</MenuItem>
+                            <TextField
+                              label="Filter Type"
+                               // Set the default value here
+                              size="small"
+                              className='me-1'
+                              sx={{ width: '30%' }}
+                              onChange={handleChange}
+                              id="filterTypeId"
+                              select
+                              name="filterType"
+                              value={filterType}
+                              fullWidth
+                            >
+                              <MenuItem value="Select">Select</MenuItem>
                               <MenuItem value="itemCalDate">Cal </MenuItem>
                               <MenuItem value="itemDueDate">Due </MenuItem>
-
                             </TextField>
 
 
