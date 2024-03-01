@@ -6,16 +6,6 @@
     border: 1px solid black;
   }
   
-  @media print {
-    .landscapeOrientation {
-      @page {
-        size: landscape;
-        margin: 1cm;
-        border: 1px solid black;
-      }
-    }
-  }
-  
   .pageHeader {
     height: 100%;
     position: fixed;
@@ -24,7 +14,7 @@
   }
   
   .pageHeaderSpace {
-    height: 198px;
+    height: 100px;
   }
   
   .pageFooter {
@@ -34,7 +24,7 @@
   }
   
   .pageFooterSpace {
-    height: 115px;
+    height: 25px;
   }
   
   .pageBreak {
@@ -43,7 +33,7 @@
   }
   
   .pageMargin {
-    margin: 1cm;
+    margin: 1cm; 
   }
   
   @media print {

@@ -20,7 +20,7 @@ const TotalPrint = () => {
         content: () => componentRef.current,
         pageStyle: `
           @page {
-            size: landscape;
+            size:  A4landscape;
             margin: 1cm;
           }
           table {
