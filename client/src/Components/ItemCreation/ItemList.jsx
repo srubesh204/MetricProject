@@ -52,7 +52,7 @@ const ItemList = () => {
     const [itemList, setItemList] = useState([]);
     const [filteredItemListData, setFilteredItemListData] = useState([])
 
-
+    console.log(allowedPlants)
 
     const itemFetch = async () => {
         try {

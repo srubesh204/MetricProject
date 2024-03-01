@@ -771,7 +771,7 @@ const Employee = () => {
 
         console.log(allNonArrayValuesAreNonEmptyStrings && allArrayValuesHaveLengthGreaterThanZero);
 
-        if (allNonArrayValuesAreNonEmptyStrings && allArrayValuesHaveLengthGreaterThanZero) {
+        if (allNonArrayValuesAreNonEmptyStrings || allArrayValuesHaveLengthGreaterThanZero) {
             setEmployeeData((prev) => ({ ...prev, plantDetails: [...prev.plantDetails, empPlantDetails] }))
             setEmpPlantDetails(initialEmpPlantDetails)
             setEmpPlantId(null);
