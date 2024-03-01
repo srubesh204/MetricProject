@@ -6,38 +6,49 @@ const employeeModel = require("./models/employeeModel")
 const dayjs = require('dayjs')
 
 // Schedule cron job to run every morning at 9:00 AM
-cron.schedule('0 * * * *', async () => {
+cron.schedule('0 10 * * *', async () => {
     try {
         // Add logic to check for expiring items here
-        const sevenDaysAgo = dayjs().add(7, 'day').format('YYYY-MM-DD');
-        const today = dayjs().format("YYYY-MM-DD")
-        // Retrieve distinct plants from the database
-        const plants = await itemAddModel.distinct("itemPlant");
+        const mailDetails = await mailConfigModel.findById("mailData");
 
-        // Iterate over each plant
-        for (const plant of plants) {
-            // Retrieve items for the current plant that are expiring in 7 days, expiring today, and already expired
-            const expiringIn7DaysItems = await itemAddModel.find({
-                itemDueDate: { $gt: today, $lte: sevenDaysAgo },
-                itemPlant: plant
-            });
+        if (mailDetails && mailDetails.autoAlert === "yes") {
 
-            const expiringTodayItems = await itemAddModel.find({
-                itemDueDate: today,
-                itemPlant: plant
-            });
+            const today = dayjs().format("YYYY-MM-DD")
+            // Retrieve distinct plants from the database
+            const plants = await itemAddModel.distinct("itemPlant");
+            console.log(plants)
 
-            const expiredItems = await itemAddModel.find({
-                itemDueDate: { $lt: today },
-                itemPlant: plant
-            });
+            // Iterate over each plant
+            for (const plant of plants) {
+                // Retrieve items for the current plant that are expiring in 7 days, expiring today, and already expired
+                const sevenDaysAgo = dayjs().add(7, 'day').format('YYYY-MM-DD');
+                const expiringIn7DaysItems = await itemAddModel.find({
+                    itemDueDate: { $gt: dayjs().format("YYYY-MM-DD"), $lte: sevenDaysAgo },
+                    itemPlant: plant
+                });
 
-            // Send emails for each category of items to the respective plant
-            await sendEmailNotifications(plant, expiringIn7DaysItems, 'Expiring in 7 Days');
-            await sendEmailNotifications(plant, expiringTodayItems, 'Expiring Today');
-            await sendEmailNotifications(plant, expiredItems, 'Expired');
+                const expiringTodayItems = await itemAddModel.find({
+                    itemDueDate: today,
+                    itemPlant: plant
+                });
 
-            console.log(`Email notifications sent successfully for ${plant}`);
+                const expiredItems = await itemAddModel.find({
+                    itemDueDate: { $lt: today },
+                    itemPlant: plant
+                });
+                console.log(expiringIn7DaysItems.length)
+                console.log(expiringTodayItems.length)
+                console.log(expiredItems.length)
+
+                // Send emails for each category of items to the respective plant
+                await sendEmailNotifications(plant, expiringIn7DaysItems, 'Expiring in 7 Days');
+                await sendEmailNotifications(plant, expiringTodayItems, 'Expiring Today');
+                await sendEmailNotifications(plant, expiredItems, 'Expired');
+
+                console.log(`Email notifications sent successfully for ${plant}`);
+            }
+        } else {
+            console.log("Auto alerts are currently disabled.")
         }
     } catch (error) {
         console.error('Error sending email notifications:', error);
@@ -52,9 +63,10 @@ async function sendEmailNotifications(plant, items, subject) {
     try {
         // Fetch mail details from database
 
-        const empEmails = await employeeModel.distinct("email", {
+        const empEmails = await employeeModel.distinct("mailId", {
             "plantDetails.plantName": plant
         });
+        console.log(empEmails)
         const mailDetails = await mailConfigModel.findById("mailData");
         if (!mailDetails) {
             console.error("Mail details not found!");
@@ -75,10 +87,10 @@ async function sendEmailNotifications(plant, items, subject) {
         // Construct email options
         const mailOptions = {
             from: mailDetails.mailId,
-            to: plant.contactEmail, // Use plant-specific contact email
-            subject: `${plant} - ${subject} Instrument Alert`,
-            html: 
-            `
+            to: empEmails, // Use plant-specific contact email
+            subject: `${plant} - ${subject} Alert`,
+            html:
+                `
                 <!DOCTYPE html>
                 <html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:o="urn:schemas-microsoft-com:office:office">
                 <head>
@@ -123,26 +135,28 @@ async function sendEmailNotifications(plant, items, subject) {
                             
                         </tbody>
                     </table>
+                    
+                <p style="font-weight:700"> This is system auto generated email. Do not reply to this email.</p>
+                <code>The information in this message and any files transmitted with it are confidential and may be legally privileged.
+                It is intended solely for the addressee. Access to this message by anyone else is unauthorized.
+                If you are not the intended recipient, you are notified that any disclosure, copying, or distribution of the message, or any action or omission taken by you in reliance on it, is strictly prohibited and may be unlawful.
+                Please contact the sender immediately if you have received this message in error and promptly destroy the original communication.</code>
+        
     
                    
-                    <p>Thanks with Regards<br>
-                    ${employee && employee.firstName ? employee.firstName : ""} ${employee && employee.lastName ? employee.lastName : ""} - ${employee && employee.designation ? employee.designation : ""}<br>
-                    ${compDetails && compDetails.companyName}<br>
-                    ${plantDetails.length > 0 && plantDetails[0].plantName ? plantDetails[0].plantName : ""} - ${plantDetails.length > 0 && plantDetails[0].plantAddress ? plantDetails[0].plantAddress : ""}</p>
-                    <br>
+                    
                    
-                    ${systemGeneratedText}
                     
                 </body>
                 </html>`,
         };
 
-        // Send email notification for this plant and category
-        await transporter.sendMail(mailOptions);
-        console.log(`Email notification sent successfully for ${subject} items at ${plant}`);
-    } catch (error) {
-        console.error(`Error sending email notification for ${subject} items at ${plant}:`, error);
-    }
+    // Send email notification for this plant and category
+    await transporter.sendMail(mailOptions);
+    console.log(`Email notification sent successfully for ${subject} items at ${plant}`);
+} catch (error) {
+    console.error(`Error sending email notification for ${subject} items at ${plant}:`, error);
+}
 }
 
 function generateItemsList(expiringItems) {
@@ -161,4 +175,4 @@ function generateItemsList(expiringItems) {
 `).join('');
 }
 
-//module.exports = cron; // Export the cron job for use in other files
+module.exports = cron; // Export the cron job for use in other files
