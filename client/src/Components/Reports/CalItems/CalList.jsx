@@ -4,7 +4,7 @@ import { TextField, MenuItem, styled, Button, ButtonGroup, Chip, FormControl, Ou
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { DataGrid, GridToolbar,GridToolbarQuickFilter} from '@mui/x-data-grid';
+import { DataGrid, GridToolbar, GridToolbarQuickFilter } from '@mui/x-data-grid';
 import dayjs from 'dayjs';
 import { Container, Paper } from '@mui/material';
 import { Add, Remove, HighlightOffRounded } from '@mui/icons-material';
@@ -66,6 +66,8 @@ const CalList = () => {
     useEffect(() => {
         MasterFetch();
     }, []);
+
+    
 
     const itemMasterFetchData = async () => {
         try {
@@ -392,12 +394,12 @@ const CalList = () => {
             }
             );
 
-          
+
             setSnackBarOpen(true)
             setErrorHandler({ status: response.data.status, message: response.data.message, code: "success" })
-         
 
-             calListFetchData()
+
+            calListFetchData()
         } catch (err) {
 
             setSnackBarOpen(true)
@@ -467,7 +469,7 @@ const CalList = () => {
     const formatFetchData = async () => {
         try {
             const response = await axios.get(
-                `${process.env.REACT_APP_PORT}/formatNo/getFormatNoById/1`
+                `${process.env.REACT_APP_PORT}/formatNo/getFormatNoById/formatNo`
             );
             const format = response.data.result
             console.log(format)
@@ -637,7 +639,7 @@ const CalList = () => {
                                             <div className='d-flex justify-content-between align-items-center'>
                                                 <GridToolbar />
                                                 <div className='mt-2'>
-                                                <GridToolbarQuickFilter />
+                                                    <GridToolbarQuickFilter />
                                                     {calListSelectedRowIds.length !== 0 && <Button variant='contained' type='button' size='small' color='error' onClick={() => setDeleteModalItem(true)}> Delete </Button>}
 
 
@@ -722,7 +724,7 @@ const CalList = () => {
 
                     {employeeRole && employeeRole.employee !== "viewer" &&
                         <CalData.Provider
-                            value={{ employeeRole, calEditOpen, setCalEditOpen, selectedCalRow, itemMasters, activeEmps, itemAddList, setItemAddList, calListFetchData, masters }}
+                            value={{ loggedEmp, employeeRole, calEditOpen, setCalEditOpen, selectedCalRow, itemMasters, activeEmps, itemAddList, setItemAddList, formatNoData, calListFetchData, masters }}
                         >
                             {selectedCalRow.length !== 0 && <CalEditModel />}
                         </CalData.Provider>}

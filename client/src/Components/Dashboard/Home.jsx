@@ -1542,7 +1542,7 @@ const Home = () => {
         defaultDep.some(dep => item.itemCurrentLocation === dep.department)
       );
 
-      if (selectedRows.length === 1 && selectedRows[0].itemCalibrationSource === "inhouse") {
+      if (selectedRows.length === 1 && selectedRows[0].itemCalibrationSource === "inhouse" && selectedRows[0].itemStatus === "active") {
 
         if (selectedRows[0].itemCalibrationDoneAt === "Lab") {
 
@@ -1568,6 +1568,9 @@ const Home = () => {
         }
         if (selectedRows.length > 0 && selectedRows[0].itemCalibrationSource !== "inhouse") {
           setStatusCheckMsg("Item must be a Inhouse Calibration")
+        }
+        if (selectedRows[0].itemStatus !== "active") {
+          setStatusCheckMsg("Item must be Active")
         }
       }
     } else {
