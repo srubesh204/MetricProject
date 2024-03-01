@@ -131,23 +131,27 @@ const departmentController = {
           ]
         });
         if (itemAddData) {
-          res.status(500).json({ error: `Department already used cannot be deleted.` });
+          deleteResults.push({ error: `Department already used and cannot be deleted.` });
         } else {
           const deletedDepartment = await departmentModel.findOneAndRemove({ _id: departmentId });
           console.log(deletedDepartment)
           if (!deletedDepartment) {
             // If a vendor was not found, you can skip it or handle the error as needed.
             console.log(`Department with ID ${departmentId} not found.`);
-            res.status(500).json({ message: `Department with ID not found.` });
-
+            deleteResults.push({ error: `Department with ID ${departmentId} not found.`});
           } else {
             console.log(`Department with ID ${departmentId} deleted successfully.`);
-            deleteResults.push(deletedDepartment);
+            deleteResults.push({ success: `Department with ID ${departmentId} deleted successfully.` });
           }
-          return res.status(202).json({ message: 'Department deleted successfully', results: `${deleteResults.length} Department Deleted Successfull ` });
-        }
-
-        
+        }       
+      }
+      const errors = deleteResults.filter(result => result.error);
+      if (errors.length > 0) {
+        // If there are errors, send a 500 status with the error message.
+        res.status(500).json({ error: errors[0].error });
+      } else {
+        // If there are no errors, send a 202 status with the success message and results.
+        res.status(202).json({ message: 'Department deleted successfully.', results: deleteResults });
       }
     } catch (error) {
       console.error(error);
