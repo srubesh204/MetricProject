@@ -173,26 +173,29 @@ const vendorController = {
         const grnData = await itemGRNModel.findOne({grnPartyId: vendorData._id})
 
         if (itemAddData || itemPartData || dcData || grnData) {
-          res.status(500).json({ error: `Vendor already used cannot be deleted.` });
+          deleteResults.push({ error: `Vendor already used and cannot be deleted.` });
         } else {
           const deletedVendor = await vendorModel.findOneAndRemove({ _id: vendorId });
           console.log(deletedVendor)
           if (!deletedVendor) {
             // If a vendor was not found, you can skip it or handle the error as needed.
             console.log(`Vendor with ID ${vendorId} not found.`);
-            res.status(500).json({ message: `Vendor with ID not found.` });
+            deleteResults.push({ error: `Vendor with ID ${vendorId} not found.` });
 
           } else {
             console.log(`Vendor with ID ${vendorId} deleted successfully.`);
-            deleteResults.push(deletedVendor);
+            deleteResults.push({ success: `Vendor deleted successfully.` });
           }
-          return res.status(202).json({ message: 'Vendors deleted successfully', results: `${deleteResults.length} Vendors Deleted Successfull ` });
-
         }
-
       }
-
-
+      const errors = deleteResults.filter(result => result.error);
+      if (errors.length > 0) {
+        // If there are errors, send a 500 status with the error message.
+        res.status(500).json({ error: errors[0].error });
+      } else {
+        // If there are no errors, send a 202 status with the success message and results.
+        res.status(202).json({ message: 'Vendor deleted successfully.', results: deleteResults });
+      }
     } catch (error) {
       console.error(error);
       res.status(500).send('Internal Server Error');

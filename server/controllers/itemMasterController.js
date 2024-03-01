@@ -175,7 +175,6 @@ const itemMasterController = {
           }
         }
       }
-
       // Check if there are any errors in deleteResults
       const errors = deleteResults.filter(result => result.error);
       if (errors.length > 0) {
