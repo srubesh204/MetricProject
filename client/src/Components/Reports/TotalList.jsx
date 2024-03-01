@@ -79,7 +79,7 @@ const TotalList = () => {
     fromDate: "",
     toDate: ""
   })
- 
+
 
 
   const itemFetch = async () => {
@@ -122,7 +122,7 @@ const TotalList = () => {
 
   const dateFilter = () => {
     if (dateData.fromDate && dateData.toDate) {
-      const filteredItems = itemList.filter((item) => dayjs(item.itemDueDate).isBetween(dayjs(dateData.fromDate), dayjs(dateData.toDate), 'day', '[]'))
+      const filteredItems = itemList.filter((item) => dayjs(item[filterType]).isBetween(dayjs(dateData.fromDate), dayjs(dateData.toDate), 'day', '[]'))
       console.log(filteredItems)
       setFilteredItemListData(filteredItems)
     }
@@ -673,6 +673,11 @@ const TotalList = () => {
         }))
       }
     }
+    setDateData((prev) => ({ ...prev,fromDate: "",toDate: "" }))
+    setFilterType((prev) => ({ ...prev,filterType: ""  }))
+    
+
+
   };
   // if (name === "supplierWise") {
   //   if (value) {
@@ -761,11 +766,13 @@ const TotalList = () => {
 
   const [filterType, setFilterType] = useState("");
 
+
   const handleChange = (e) => {
     const { value } = e.target;
     setFilterType(value);
     // Other logic...
   };
+  console.log(filterType)
 
 
 
@@ -822,7 +829,7 @@ const TotalList = () => {
   };
   console.log(filteredData);
 
- 
+
 
 
   const handleDueChange = (e) => {
@@ -942,7 +949,7 @@ const TotalList = () => {
     formatFetchData();
   }, []);
   console.log(formatNoData)
-  
+
 
 
 
@@ -968,7 +975,7 @@ const TotalList = () => {
 
   }
 
-  
+
 
 
 
@@ -1281,23 +1288,27 @@ const TotalList = () => {
                             <TextField label="Filter Type "
                               id="filterTypeId"
                               select
-                              className=''
+                              className='me-1'
+                              sx={{ width: '40%' }}
                               fullWidth
                               value={filterType}
                               onChange={handleChange}
                               size="small"
+                              defaultValue={"select"}
                               name="filterType" >
-                              <MenuItem value="itemCalDate">Cal Date</MenuItem>
-                              <MenuItem value="itemDueDate">Due Date</MenuItem>
+                               <MenuItem value="select">Select</MenuItem>
+                              <MenuItem value="itemCalDate">Cal </MenuItem>
+                              <MenuItem value="itemDueDate">Due </MenuItem>
                             </TextField>
 
-                             <DatePicker
+                            <DatePicker
                               // fullWidth
-                              className='me-2'
+                              className='me-1'
                               id="fromDateId"
                               name="fromDate"
                               size="small"
                               variant="standard"
+                              sx={{ width: '50%' }}
                               label="From Date"
                               slotProps={{ textField: { size: 'small', fullWidth: true } }}
                               format="DD-MM-YYYY"
@@ -1309,10 +1320,11 @@ const TotalList = () => {
                             />
                             <DatePicker
                               // fullWidth
-                              className='me-2'
+                              className='me-1'
                               id="toDateId"
                               name="toDate"
                               size="small"
+                              sx={{ width: '50%' }}
                               variant="standard"
                               label="To Date"
                               slotProps={{ textField: { size: 'small', fullWidth: true } }}
@@ -1320,10 +1332,8 @@ const TotalList = () => {
                               onChange={(newValue) =>
                                 setDateData((prev) => ({ ...prev, toDate: dayjs(newValue).format('YYYY-MM-DD') }))}
                             />
-                            <div className='me-2'><Button onClick={() => dateFilter()} >Filter</Button></div>
-
+                            <div className='me-1'><Button onClick={() => dateFilter()} >Filter</Button></div>
                           </div>
-
                           <div className='mt-2'><GridToolbarQuickFilter /></div>
 
 
