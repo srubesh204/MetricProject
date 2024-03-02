@@ -107,7 +107,7 @@ const itemGRNController = {
         grnItemCertificateStatus,
         grnItemCertificateNo,
         grnItemCertificate,
-       
+
         grnItemCalStatus,
         isOnSiteGRN,
         grnCreatedBy,
@@ -163,7 +163,7 @@ const itemGRNController = {
         grnItemCertificateStatus,
         grnItemCertificateNo,
         grnItemCertificate,
-       
+
         grnItemCalStatus,
         isOnSiteGRN,
         grnCreatedBy,
@@ -251,7 +251,7 @@ const itemGRNController = {
           itemOBType,
           itemUncertainty,
           itemUncertaintyUnit,
-          
+
           itemPrevCalData,
           itemCertificateNo: itemLastCertificateNo,
         } = itemData
@@ -320,62 +320,65 @@ const itemGRNController = {
 
 
 
+        if (result.grnItemStatus === "Calibrated") {
 
-        const historyRecord = new itemHistory({
-          itemIMTENo,
-          itemGrnId: result._id,
-          itemCurrentLocation: itemDepartment,
-          itemLastLocation,
-          itemLocation: "department",
-          itemLastCalDate: result.grnItemStatus === "Calibrated" ? itemLastCalDate : itemCalDate,
-          itemLastDueDate: result.grnItemStatus === "Calibrated" ? itemLastDueDate : itemDueDate,
-          itemCalDate: result.grnItemStatus === "Calibrated" ? result.grnItemCalDate : itemLastCalDate,
-          itemDueDate: result.grnItemStatus === "Calibrated" ? result.grnItemDueDate : itemLastDueDate,
-          grnId: result._id,
-          grnStatus: "1",
-          grnCreatedOn: result.grnDate,
-          grnNo: result.grnNo,
-          lastDcId,
-          lastDcStatus,
-          lastDcCreatedOn,
-          lastDcNo,
-          dcStatus: "0",
-          dcNo: "",
-          dcId: "",
-          dcCreatedOn: "",
-          itemId: _id,
-          itemCalId: "",
-          itemAddMasterName,
-          itemPlant,
-          itemType,
-          itemRangeSize,
-          itemRangeSizeUnit,
-          itemLC,
-          itemLCUnit,
-          itemModelNo,
-          itemStatus: itemCondition,
-          itemLastStatus: itemStatus,
-          itemReceiptDate,
-          itemDepartment,
-          itemCalFreInMonths,
-          itemCalAlertDays,
-          itemCalibrationSource,
-          itemCalStatus: result.grnItemCalStatus,
-          itemCalibrationDoneAt,
-          itemUncertaintyUnit,
-          itemPrevCalData,
-          itemCalibratedAt: result.grnPartyName,
-          itemCertificateName: result.grnItemCertificate,
-          itemOBType,
-          itemUncertainty: result.grnItemUncertainty,
-          itemUncertaintyUnit: result.grnItemUncertaintyUnit,
-          itemLastCertificateNo,
-          itemCertificateNo: result.grnItemCertificateNo,
-          acceptanceCriteria: obSize
-        });
-        const itemHistoryData = await historyRecord.save();
 
-        console.log(itemHistoryData, "Historysaved")
+          const historyRecord = new itemHistory({
+            itemIMTENo,
+            itemGrnId: result._id,
+            itemCurrentLocation: itemDepartment,
+            itemLastLocation,
+            itemLocation: "department",
+            itemLastCalDate: result.grnItemStatus === "Calibrated" ? itemLastCalDate : itemCalDate,
+            itemLastDueDate: result.grnItemStatus === "Calibrated" ? itemLastDueDate : itemDueDate,
+            itemCalDate: result.grnItemStatus === "Calibrated" ? result.grnItemCalDate : itemLastCalDate,
+            itemDueDate: result.grnItemStatus === "Calibrated" ? result.grnItemDueDate : itemLastDueDate,
+            grnId: result._id,
+            grnStatus: "1",
+            grnCreatedOn: result.grnDate,
+            grnNo: result.grnNo,
+            lastDcId,
+            lastDcStatus,
+            lastDcCreatedOn,
+            lastDcNo,
+            dcStatus: "0",
+            dcNo: "",
+            dcId: "",
+            dcCreatedOn: "",
+            itemId: _id,
+            itemCalId: "",
+            itemAddMasterName,
+            itemPlant,
+            itemType,
+            itemRangeSize,
+            itemRangeSizeUnit,
+            itemLC,
+            itemLCUnit,
+            itemModelNo,
+            itemStatus: itemCondition,
+            itemLastStatus: itemStatus,
+            itemReceiptDate,
+            itemDepartment,
+            itemCalFreInMonths,
+            itemCalAlertDays,
+            itemCalibrationSource,
+            itemCalStatus: result.grnItemCalStatus,
+            itemCalibrationDoneAt,
+            itemUncertaintyUnit,
+            itemPrevCalData,
+            itemCalibratedAt: result.grnPartyName,
+            itemCertificateName: result.grnItemCertificate,
+            itemOBType,
+            itemUncertainty: result.grnItemUncertainty,
+            itemUncertaintyUnit: result.grnItemUncertaintyUnit,
+            itemLastCertificateNo,
+            itemCertificateNo: result.grnItemCertificateNo,
+            acceptanceCriteria: obSize
+          });
+          const itemHistoryData = await historyRecord.save();
+
+          console.log(itemHistoryData, "Historysaved")
+        }
 
         let tableRow = `
         <tr>
@@ -511,7 +514,7 @@ const itemGRNController = {
         grnItemCertificateStatus,
         grnItemCertificateNo,
         grnItemCertificate,
-       
+
         grnItemCalStatus,
         isOnSiteGRN,
         grnCreatedBy,
@@ -568,7 +571,7 @@ const itemGRNController = {
         grnItemCertificateStatus,
         grnItemCertificateNo,
         grnItemCertificate,
-       
+
         grnItemCalStatus,
         isOnSiteGRN,
         grnCreatedBy,
@@ -725,63 +728,64 @@ const itemGRNController = {
           }
         }
 
+        if (result.grnItemStatus === "Calibrated") {
+          const historyRecord = {
+            itemIMTENo,
+            itemGrnId: updateItemGRN._id,
+            itemCurrentLocation: itemDepartment,
+            itemLastLocation,
+            itemLocation: "department",
+            itemLastCalDate,
+            itemLastDueDate,
+            itemCalDate: grnItemCalDate,
+            itemDueDate: grnItemDueDate,
+            grnId: updateItemGRN._id,
+            grnStatus: "1",
+            grnCreatedOn: grnDate,
+            grnNo: grnNo,
+            lastDcId,
+            lastDcStatus,
+            lastDcCreatedOn,
+            lastDcNo,
+            dcStatus: "0",
+            dcNo: "",
+            dcId: "",
+            dcCreatedOn: "",
+            itemId: _id,
+            itemCalId: "",
+            itemAddMasterName,
+            itemPlant,
+            itemType,
+            itemRangeSize,
+            itemRangeSizeUnit,
+            itemLC,
+            itemLCUnit,
+            itemModelNo,
+            itemStatus: itemCondition,
+            itemLastStatus: itemStatus,
+            itemReceiptDate,
+            itemDepartment,
+            itemCalFreInMonths,
+            itemCalAlertDays,
+            itemCalibrationSource,
+            itemCalibrationDoneAt,
+            itemUncertainty: updateItemGRN.grnItemUncertainty,
+            itemUncertaintyUnit: updateItemGRN.grnItemUncertaintyUnit,
+            itemPrevCalData,
+            itemCalibratedAt,
+            itemCertificateName: grnItemCertificate,
+            itemCertificateNo,
+            itemOBType,
+            itemUncertainty
+          };
+          const itemHistoryData = await itemHistory.findOneAndUpdate(
+            { itemGrnId: itemGRNId },
+            { $set: historyRecord },
+            { new: true, upsert: true }
+          );
 
-        const historyRecord = {
-          itemIMTENo,
-          itemGrnId: updateItemGRN._id,
-          itemCurrentLocation: itemDepartment,
-          itemLastLocation,
-          itemLocation: "department",
-          itemLastCalDate,
-          itemLastDueDate,
-          itemCalDate: grnItemCalDate,
-          itemDueDate: grnItemDueDate,
-          grnId: updateItemGRN._id,
-          grnStatus: "1",
-          grnCreatedOn: grnDate,
-          grnNo: grnNo,
-          lastDcId,
-          lastDcStatus,
-          lastDcCreatedOn,
-          lastDcNo,
-          dcStatus: "0",
-          dcNo: "",
-          dcId: "",
-          dcCreatedOn: "",
-          itemId: _id,
-          itemCalId: "",
-          itemAddMasterName,
-          itemPlant,
-          itemType,
-          itemRangeSize,
-          itemRangeSizeUnit,
-          itemLC,
-          itemLCUnit,
-          itemModelNo,
-          itemStatus: itemCondition,
-          itemLastStatus: itemStatus,
-          itemReceiptDate,
-          itemDepartment,
-          itemCalFreInMonths,
-          itemCalAlertDays,
-          itemCalibrationSource,
-          itemCalibrationDoneAt,
-          itemUncertainty: updateItemGRN.grnItemUncertainty,
-          itemUncertaintyUnit: updateItemGRN.grnItemUncertaintyUnit,
-          itemPrevCalData,
-          itemCalibratedAt,
-          itemCertificateName: grnItemCertificate,
-          itemCertificateNo,
-          itemOBType,
-          itemUncertainty
-        };
-        const itemHistoryData = await itemHistory.findOneAndUpdate(
-          { itemGrnId: itemGRNId },
-          { $set: historyRecord },
-          { new: true }
-        );
-
-        console.log(itemHistoryData, "History Updated")
+          console.log(itemHistoryData, "History Updated")
+        }
 
         let tableRow = `
         <tr>
