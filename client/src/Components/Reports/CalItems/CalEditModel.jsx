@@ -299,7 +299,7 @@ const CalEditModel = () => {
                                 if (isAverageInRange) {
                                     status = "ok"
                                 } else {
-                                    status = "notOk"
+                                    status = "not ok"
                                 }
                             }
 
@@ -333,9 +333,9 @@ const CalEditModel = () => {
                             if (item.calMaxOB === "" && item.calMinOB === "") {
                                 status = "";
                             } else if (item.calMaxOB === "") {
-                                status = (isMinInRange) ? "ok" : "notOk";
+                                status = (isMinInRange) ? "ok" : "not ok";
                             } else {
-                                status = (isMinInRange && isMaxInRange) ? "ok" : "notOk";
+                                status = (isMinInRange && isMaxInRange) ? "ok" : "not ok";
                             }
 
                             return {
@@ -376,7 +376,7 @@ const CalEditModel = () => {
                                         if (isAverageInRange) {
                                             status = "ok"
                                         } else {
-                                            status = "notOk"
+                                            status = "not ok"
                                         }
                                     }
                                 }
@@ -391,7 +391,7 @@ const CalEditModel = () => {
                                         if (isAverageInRange) {
                                             status = "ok"
                                         } else {
-                                            status = "notOk"
+                                            status = "not ok"
                                         }
                                     }
 
@@ -412,7 +412,7 @@ const CalEditModel = () => {
                                     if (isAverageInRange) {
                                         status = "ok"
                                     } else {
-                                        status = "notOk"
+                                        status = "not ok"
                                     }
                                 }
 
@@ -455,7 +455,7 @@ const CalEditModel = () => {
                                     if (isMinInRange && isMaxInRange) {
                                         status = "ok"
                                     } else {
-                                        status = "notOk"
+                                        status = "not ok"
                                     }
 
                                 }
@@ -471,7 +471,7 @@ const CalEditModel = () => {
                                     if (isMinInRange && isMaxInRange) {
                                         status = "ok"
                                     } else {
-                                        status = "notOk"
+                                        status = "not ok"
                                     }
 
                                 }
@@ -497,9 +497,9 @@ const CalEditModel = () => {
                                 if (item.calMaxOB === "" && item.calMinOB === "") {
                                     status = "";
                                 } else if (item.calMaxOB === "") {
-                                    status = (isMinInRange) ? "ok" : "notOk";
+                                    status = (isMinInRange) ? "ok" : "not ok";
                                 } else {
-                                    status = (isMinInRange && isMaxInRange) ? "ok" : "notOk";
+                                    status = (isMinInRange && isMaxInRange) ? "ok" : "not ok";
                                 }
                                 return {
                                     ...item,
@@ -538,7 +538,7 @@ const CalEditModel = () => {
                                 if (isAverageInRange) {
                                     status = "ok"
                                 } else {
-                                    status = "notOk"
+                                    status = "not ok"
                                 }
                             }
                             return {
@@ -560,7 +560,7 @@ const CalEditModel = () => {
     };
 
     useEffect(() => {
-        const ifRejected = calibrationData.calcalibrationData.some((item) => item.rowStatus === "notOk")
+        const ifRejected = calibrationData.calcalibrationData.some((item) => item.rowStatus === "not ok")
         const isEmpty = calibrationData.calcalibrationData.some((item) => item.rowStatus === "")
         if (ifRejected) {
             setCalibrationData((prev) => ({ ...prev, calStatus: "rejected" }))
@@ -1074,7 +1074,7 @@ const CalEditModel = () => {
                                                 let color = ""
                                                 if (item.rowStatus === "ok") {
                                                     color = "green"
-                                                } else if (item.rowStatus === "notOk") {
+                                                } else if (item.rowStatus === "not ok") {
                                                     color = "red"
                                                 } else if (item.rowStatus === "conditionallyOk") {
                                                     color = "orange"
@@ -1221,7 +1221,7 @@ const CalEditModel = () => {
                                                             <select className='form-select form-select-sm' name="rowStatus" value={item.rowStatus} onChange={(e) => changecalDataValue(index, e.target.name, e.target.value)}>
                                                                 <option value="">Status</option>
                                                                 <option value="ok">Ok</option>
-                                                                <option value="notOk">Not Ok</option>
+                                                                <option value="not ok">Not Ok</option>
                                                                 <option value="conditionallyOk">Conditionally Ok</option>
                                                             </select>
                                                         </td>
@@ -1270,7 +1270,7 @@ const CalEditModel = () => {
                                                             <select className='form-select form-select-sm' name="rowStatus" value={item.rowStatus} onChange={(e) => changecalDataValue(index, e.target.name, e.target.value)}>
                                                                 <option value="">Status</option>
                                                                 <option value="ok">Ok</option>
-                                                                <option value="notOk">Not Ok</option>
+                                                                <option value="not ok">Not Ok</option>
                                                                 <option value="conditionallyOk">Conditionally Ok</option>
                                                             </select>
                                                         </td>
@@ -1374,7 +1374,7 @@ const CalEditModel = () => {
                                                             <select className='form-select form-select-sm' name="rowStatus" value={item.rowStatus} onChange={(e) => changecalDataValue(index, e.target.name, e.target.value)}>
                                                                 <option value="">Status</option>
                                                                 <option value="ok">Ok</option>
-                                                                <option value="notOk">Not Ok</option>
+                                                                <option value="not ok">Not Ok</option>
                                                                 <option value="conditionallyOk">Conditionally Ok</option>
                                                             </select>
                                                         </td>

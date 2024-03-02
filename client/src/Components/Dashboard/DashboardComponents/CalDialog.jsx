@@ -329,7 +329,7 @@ const CalDialog = () => {
                                 if (isAverageInRange) {
                                     status = "ok"
                                 } else {
-                                    status = "notOk"
+                                    status = "not ok"
                                 }
                             }
 
@@ -363,9 +363,9 @@ const CalDialog = () => {
                             if (item.calMaxOB === "" && item.calMinOB === "") {
                                 status = "";
                             } else if (item.calMaxOB === "") {
-                                status = (isMinInRange) ? "ok" : "notOk";
+                                status = (isMinInRange) ? "ok" : "not ok";
                             } else {
-                                status = (isMinInRange && isMaxInRange) ? "ok" : "notOk";
+                                status = (isMinInRange && isMaxInRange) ? "ok" : "not ok";
                             }
 
                             return {
@@ -407,7 +407,7 @@ const CalDialog = () => {
                                         if (isAverageInRange) {
                                             status = "ok"
                                         } else {
-                                            status = "notOk"
+                                            status = "not ok"
                                         }
                                     }
                                 }
@@ -422,7 +422,7 @@ const CalDialog = () => {
                                         if (isAverageInRange) {
                                             status = "ok"
                                         } else {
-                                            status = "notOk"
+                                            status = "not ok"
                                         }
                                     }
 
@@ -443,7 +443,7 @@ const CalDialog = () => {
                                     if (isAverageInRange) {
                                         status = "ok"
                                     } else {
-                                        status = "notOk"
+                                        status = "not ok"
                                     }
                                 }
 
@@ -488,7 +488,7 @@ const CalDialog = () => {
                                     if (isMinInRange && isMaxInRange) {
                                         status = "ok"
                                     } else {
-                                        status = "notOk"
+                                        status = "not ok"
                                     }
 
                                 }
@@ -504,7 +504,7 @@ const CalDialog = () => {
                                     if (isMinInRange && isMaxInRange) {
                                         status = "ok"
                                     } else {
-                                        status = "notOk"
+                                        status = "not ok"
                                     }
 
                                 }
@@ -531,9 +531,9 @@ const CalDialog = () => {
                                 if (item.calMaxOB === "" && item.calMinOB === "") {
                                     status = "";
                                 } else if (item.calMaxOB === "") {
-                                    status = (isMinInRange) ? "ok" : "notOk";
+                                    status = (isMinInRange) ? "ok" : "not ok";
                                 } else {
-                                    status = (isMinInRange && isMaxInRange) ? "ok" : "notOk";
+                                    status = (isMinInRange && isMaxInRange) ? "ok" : "not ok";
                                 }
                                 return {
                                     ...item,
@@ -572,7 +572,7 @@ const CalDialog = () => {
                                 if (isAverageInRange) {
                                     status = "ok"
                                 } else {
-                                    status = "notOk"
+                                    status = "not ok"
                                 }
                             }
                             return {
@@ -594,7 +594,7 @@ const CalDialog = () => {
     };
 
     useEffect(() => {
-        const ifRejected = calibrationData.calcalibrationData.length > 0 && calibrationData.calcalibrationData.some((item) => item.rowStatus === "notOk")
+        const ifRejected = calibrationData.calcalibrationData.length > 0 && calibrationData.calcalibrationData.some((item) => item.rowStatus === "not ok")
         const isEmpty = calibrationData.calcalibrationData.length > 0 && calibrationData.calcalibrationData.some((item) => item.rowStatus === "")
         if (ifRejected) {
             setCalibrationData((prev) => ({ ...prev, calStatus: "rejected" }))
@@ -1297,7 +1297,7 @@ const CalDialog = () => {
                                                             <select className='form-select form-select-sm' name="rowStatus" value={item.rowStatus} onChange={(e) => changecalDataValue(index, e.target.name, e.target.value)}>
                                                                 <option value="">Status</option>
                                                                 <option value="ok">Ok</option>
-                                                                <option value="notOk">Not Ok</option>
+                                                                <option value="not ok">Not Ok</option>
                                                                 <option value="conditionallyOk">Conditionally Ok</option>
                                                             </select>
                                                         </td>
@@ -1346,7 +1346,7 @@ const CalDialog = () => {
                                                             <select className='form-select form-select-sm' name="rowStatus" value={item.rowStatus} onChange={(e) => changecalDataValue(index, e.target.name, e.target.value)}>
                                                                 <option value="">Status</option>
                                                                 <option value="ok">Ok</option>
-                                                                <option value="notOk">Not Ok</option>
+                                                                <option value="not ok">Not Ok</option>
                                                                 <option value="conditionallyOk">Conditionally Ok</option>
                                                             </select>
                                                         </td>
@@ -1440,7 +1440,7 @@ const CalDialog = () => {
                                                             <select className='form-select form-select-sm' name="rowStatus" value={item.rowStatus} onChange={(e) => changecalDataValue(index, e.target.name, e.target.value)}>
                                                                 <option value="">Status</option>
                                                                 <option value="ok">Ok</option>
-                                                                <option value="notOk">Not Ok</option>
+                                                                <option value="not ok">Not Ok</option>
                                                                 <option value="conditionallyOk">Conditionally Ok</option>
                                                             </select>
                                                         </td>
