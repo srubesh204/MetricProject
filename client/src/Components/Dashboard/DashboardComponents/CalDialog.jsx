@@ -806,8 +806,10 @@ const CalDialog = () => {
         if(formatData){
             if(formatData.approvedByAccess === "yes" && (loggedEmp.empRole === "creator" || loggedEmp.empRole === "viewer")){
                 return false
-            }else{
+            }else if(formatData.approvedByAccess !== "yes"){
                 return true
+            }else{
+                return false
             }
         }else{
             return false
