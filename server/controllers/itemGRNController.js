@@ -728,7 +728,7 @@ const itemGRNController = {
           }
         }
 
-        if (result.grnItemStatus === "Calibrated") {
+        if (updateItemGRN.grnItemStatus === "Calibrated") {
           const historyRecord = {
             itemIMTENo,
             itemGrnId: updateItemGRN._id,
