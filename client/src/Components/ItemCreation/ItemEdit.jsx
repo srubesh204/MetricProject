@@ -1824,7 +1824,7 @@ const ItemEdit = () => {
 
 
                                     </div>}
-                                <div className=" col d-flex justify-content-end">
+                                <div className="col d-flex justify-content-end">
                                     <Button
                                         className='me-2'
                                         onClick={() => setAddOpenData(true)}
