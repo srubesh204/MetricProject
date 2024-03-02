@@ -14,9 +14,7 @@ const TotalPreview = () => {
 
 
 
-  useEffect(() => {
-    console.log('Format No Data:', formatNoData.fTotalList?.frNo);
-  }, [formatNoData]);
+ 
 
   const handlePrint = useReactToPrint({
     content: () => componentRef.current,
@@ -109,7 +107,7 @@ const TotalPreview = () => {
             </tfoot>
           </table>
           <div class="pageFooter" style={{ fontSize: "8px" }}>
-            {formatNoData.fTotalList ? ("Format Number : " + formatNoData.fTotalList.frNo + " " + " Rev.No : " + formatNoData.fTotalList.amNo + " " + " Rev.Date : " + formatNoData.fTotalList.amDate) : ""}
+            {formatNoData && formatNoData.fTotalList ? ("Format Number : " + formatNoData.fTotalList.frNo ? formatNoData.fTotalList.frNo: "" + " " + " Rev.No : " + formatNoData.fTotalList.amNo ? formatNoData.fTotalList.amNo : "" + " " + " Rev.Date : " + formatNoData.fTotalList.amDate ? formatNoData.fTotalList.amDate : "") : ""}
           </div>
         </div>
 
