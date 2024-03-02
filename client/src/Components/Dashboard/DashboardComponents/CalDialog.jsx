@@ -193,7 +193,7 @@ const CalDialog = () => {
         settingCalData()
     }, [selectedRows])
     
-    console.log(selectedRows[0].itemItemMasterIMTENo)
+    
 
     useEffect(() => {
         console.log("cal")

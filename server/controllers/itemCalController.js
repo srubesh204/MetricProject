@@ -1,5 +1,5 @@
 const itemAddModel = require("../models/itemAddModel");
-const {itemCalModel, CalNoCounter} = require("../models/itemCalModel")
+const { itemCalModel, CalNoCounter } = require("../models/itemCalModel")
 const itemHistory = require("../models/itemHistory")
 const dayjs = require('dayjs')
 const { compDetailsSchema } = require("../models/compDetailsModel");
@@ -14,7 +14,7 @@ const itemCalController = {
   getAllItemCals: async (req, res) => {
     try {
 
-      const {allowedPlants} = req.body
+      const { allowedPlants } = req.body
       const itemCalResult = await itemCalModel.aggregate([
         {
           $match: {
@@ -148,14 +148,14 @@ const itemCalController = {
 
 
       let approvedByData = "";
-      if(calApprovedBy) {
+      if (calApprovedBy) {
         approvedByData = await employeeModel.findOne(
-          { _id: calApprovedBy } 
+          { _id: calApprovedBy }
         );
       }
-      
+
       const formatNo = await formatNoModel.findById("formatNo");
-      const formatNumber = `${formatNo.fCertificate ? ("Format Number : " +formatNo.fCertificate.frNo +"  "+ "Rev.No :  " + formatNo.fCertificate.amNo +"  "+ "Rev.Date :  " + formatNo.fCertificate.amDate) : ""}`
+      const formatNumber = `${formatNo.fCertificate ? ("Format Number : " + formatNo.fCertificate.frNo + "  " + "Rev.No :  " + formatNo.fCertificate.amNo + "  " + "Rev.Date :  " + formatNo.fCertificate.amDate) : ""}`
 
       const newItem = new itemCalModel(newItemFields);
 
@@ -624,14 +624,16 @@ const itemCalController = {
       const getPlantAddress = await plantSchema.findOne(
         { plantName: calPlant } // To return the updated document
       );
-
-      const approvedByData = await employeeModel.findOne(
-        { _id: calApprovedBy } // To return the updated document
-      );
+      let approvedByData;
+      // Check if calApprovedBy has a value
+      if (calApprovedBy) {
+        approvedByData = await employeeModel.findOne({ _id: calApprovedBy });
+        // Process the approvedByData here
+      }
 
       const formatNo = await formatNoModel.findById("formatNo");
 
-      const formatNumber = `${formatNo.fCertificate ? ("Format Number : " + formatNo.fCertificate.frNo+ "  " +  "Rev.No : " + formatNo.fCertificate.amNo+ "  " +  "Rev.Date : " + formatNo.fCertificate.amDate) : ""}`
+      const formatNumber = `${formatNo.fCertificate ? ("Format Number : " + formatNo.fCertificate.frNo + "  " + "Rev.No : " + formatNo.fCertificate.amNo + "  " + "Rev.Date : " + formatNo.fCertificate.amDate) : ""}`
       console.log(formatNumber)
 
       // Find the designation by desId and update it
@@ -860,7 +862,7 @@ const itemCalController = {
           // Read the HTML template file
           const filePath = path.resolve(__dirname, '../../server/templates/calTemplate.html');
           const htmlTemplate = fs.readFileSync(filePath, 'utf8');
- 
+
           // Replace placeholders with actual data
           const modifiedHTML = htmlTemplate
             .replace(/{{ItemName}}/g, calItemName ? calItemName : "-")

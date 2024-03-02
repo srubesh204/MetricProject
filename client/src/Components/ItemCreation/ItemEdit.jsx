@@ -1805,7 +1805,7 @@ const ItemEdit = () => {
                                                 labelId="plantAccessId"
                                                 multiple
                                                 name="plantAccess"
-                                                value={itemAddData.plantAccess || []} // Ensure it's an array
+                                                value={itemAddData.plantAccess} // Ensure it's an array
                                                 onChange={handleItemAddChange}
                                                 input={<OutlinedInput fullWidth label="Plant Access" />}
                                                 renderValue={(selected) => selected.join(', ')}
@@ -1813,7 +1813,7 @@ const ItemEdit = () => {
                                                 fullWidth
                                             >
                                                 {loggedEmp.plantDetails && loggedEmp.plantDetails.map((plant, index) => (
-                                                    <MenuItem disabled={plant.plantName === itemAddData.itemPlant} key={index} value={plant.plantName}>
+                                                    <MenuItem key={index} value={plant.plantName}>
                                                         <Checkbox checked={itemAddData.plantAccess && itemAddData.plantAccess.indexOf(plant.plantName) > -1} />
                                                         <ListItemText primary={plant.plantName} />
                                                     </MenuItem>
