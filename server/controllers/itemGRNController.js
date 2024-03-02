@@ -269,6 +269,8 @@ const itemGRNController = {
           itemLastStatus: itemStatus,
           itemCalDate: result.grnItemStatus === "Calibrated" ? result.grnItemCalDate : itemLastCalDate,
           itemDueDate: result.grnItemStatus === "Calibrated" ? result.grnItemDueDate : itemLastDueDate,
+          itemCalibratedAt: result.grnPartyName,
+          itemCertificateNo: result.grnItemCertificateNo,
           grnId: result._id,
           grnStatus: "1",
           grnCreatedOn: result.grnDate,
@@ -287,7 +289,6 @@ const itemGRNController = {
           prevItemUncertaintyUnit: itemUncertaintyUnit,
           itemCertificateNo: result.grnItemCertificateNo,
           itemLastCertificateNo,
-
         }
         const updateResult = await itemAddModel.findOneAndUpdate(
           { _id: grnItemId },
@@ -684,6 +685,8 @@ const itemGRNController = {
           itemLastDueDate: grnItemStatus === "Calibrated" ? itemLastDueDate : itemDueDate,
           itemCalDate: grnItemStatus === "Calibrated" ? grnItemCalDate : itemLastCalDate,
           itemDueDate: grnItemStatus === "Calibrated" ? grnItemDueDate : itemLastDueDate,
+          itemCalibratedAt: updateItemGRN.grnPartyName,
+          itemCertificateNo: updateItemGRN.grnItemCertificateNo,
           itemStatus: itemCondition,
           itemLastStatus: itemStatus,
           itemUncertainty: updateItemGRN.grnItemUncertainty,
