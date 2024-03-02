@@ -436,10 +436,10 @@ const itemDcController = {
               if (!itemData) {
                 throw new Error(`Item Data not found for item with ID: ${item._id}`);
               }
-              const { itemIMTENo, itemCurrentLocation, itemLastLocation } = itemData;
+              const { itemIMTENo, itemCurrentLocation, itemLastLocation, itemDepartment } = itemData;
               const updateItemFields = {
                 itemIMTENo,
-                itemCurrentLocation: itemLastLocation,
+                itemCurrentLocation: itemDepartment,
                 itemLastLocation: itemCurrentLocation,
                 itemLocation: "department",
                 dcId: "",

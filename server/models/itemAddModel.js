@@ -56,6 +56,8 @@ const itemAddSchema = new mongoose.Schema({
   itemDueDate: String,
   itemLastDueDate: String,
   itemCalibratedAt: String,
+  prevItemCalibratedAt: String,
+ 
   itemCertificateName: String,
   itemLastCertificateName: String,
   itemCertificateNo: String,

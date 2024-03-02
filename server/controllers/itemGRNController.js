@@ -247,7 +247,8 @@ const itemGRNController = {
           itemCalAlertDays,
           itemCalibrationSource,
           itemCalibrationDoneAt,
-
+          itemCalibratedAt,
+          itemCertificateNo,
           itemOBType,
           itemUncertainty,
           itemUncertaintyUnit,
@@ -271,6 +272,8 @@ const itemGRNController = {
           itemDueDate: result.grnItemStatus === "Calibrated" ? result.grnItemDueDate : itemLastDueDate,
           itemCalibratedAt: result.grnPartyName,
           itemCertificateNo: result.grnItemCertificateNo,
+          prevItemCalibratedAt: itemCalibratedAt,
+          
           grnId: result._id,
           grnStatus: "1",
           grnCreatedOn: result.grnDate,
@@ -687,6 +690,8 @@ const itemGRNController = {
           itemDueDate: grnItemStatus === "Calibrated" ? grnItemDueDate : itemLastDueDate,
           itemCalibratedAt: updateItemGRN.grnPartyName,
           itemCertificateNo: updateItemGRN.grnItemCertificateNo,
+          prevItemCalibratedAt: itemCalibratedAt,
+          
           itemStatus: itemCondition,
           itemLastStatus: itemStatus,
           itemUncertainty: updateItemGRN.grnItemUncertainty,
@@ -894,7 +899,10 @@ const itemGRNController = {
             prevItemUncertainty: itemUncertainty,
             prevItemUncertaintyUnit: itemUncertaintyUnit,
             itemStatus,
+            prevItemCalibratedAt: itemCalibratedAt,
+           
             itemLastStatus,
+
           } = itemData
 
           const updateItemFields = {
@@ -906,6 +914,7 @@ const itemGRNController = {
             itemLastLocation: grnItem.isOnSiteGRN === "yes" ? "" : itemCurrentLocation,
             itemCalDate: itemLastCalDate,
             itemDueDate: itemLastDueDate,
+            itemCalibratedAt,
             itemStatus: itemLastStatus,
             itemLastStatus: itemStatus,
             itemUncertainty,
