@@ -84,7 +84,7 @@ const HistoryCardPrint = () => {
                             {index !== row.acceptanceCriteria.length - 1 && <br />} {/* Add <br /> after each item except the last one */}
                         </React.Fragment>)}
                     </td>
-                    <td style={{ width: "9%", borderRight: "0.5px solid black", borderTop: "0.5px solid black" }}>{selectedRow && selectedRow?.itemCalibratedAt || '-'}</td>
+                    <td style={{ width: "9%", borderRight: "0.5px solid black", borderTop: "0.5px solid black" }}>{row.itemCalibratedAt || '-'}</td>
                     {selectedRow.itemCalibrationSource !== "outsource" && selectedRow.itemCalibrationSource !== "" && (
                         <td style={{ width: "9%", borderRight: "0.5px solid black", borderTop: "0.5px solid black" }}>
                             {row.itemCalibratedBy ? row.itemCalibratedBy : '-'}

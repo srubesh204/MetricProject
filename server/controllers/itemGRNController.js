@@ -425,7 +425,7 @@ const itemGRNController = {
         console.log(modifiedHTML)
         const cssPath = path.resolve(__dirname, '../templates/bootstrap.min.css');
 
-        await page.setContent(modifiedHTML, { waitUntil: 'domcontentloaded' });
+        await page.setContent(modifiedHTML, { waitUntil: 'networkidle0' });
         await page.addStyleTag({ path: cssPath });
 
         // Generate PDF
@@ -831,7 +831,7 @@ const itemGRNController = {
         console.log(modifiedHTML)
         const cssPath = path.resolve(__dirname, '../templates/bootstrap.min.css');
 
-        await page.setContent(modifiedHTML, { waitUntil: 'domcontentloaded' });
+        await page.setContent(modifiedHTML, { waitUntil: 'networkidle0' });
         await page.addStyleTag({ path: cssPath });
         // Generate PDF
         await page.pdf({ path: `./storage/grnCertificates/${grnNo}.pdf`, format: 'A4' });
