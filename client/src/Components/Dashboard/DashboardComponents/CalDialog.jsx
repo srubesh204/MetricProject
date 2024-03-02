@@ -192,6 +192,8 @@ const CalDialog = () => {
     useEffect(() => {
         settingCalData()
     }, [selectedRows])
+    
+    console.log(selectedRows[0].itemItemMasterIMTENo)
 
     useEffect(() => {
         console.log("cal")
@@ -201,11 +203,11 @@ const CalDialog = () => {
             setCalibrationData(prev => ({ ...prev, calMasterUsed: masterData }))
         }
 
-    }, [selectedRows])
+    }, [selectedRows, itemList])
 
 
 
-
+    
 
 
     const [refMaster, setRefMaster] = useState({})
