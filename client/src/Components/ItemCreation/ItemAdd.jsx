@@ -424,12 +424,13 @@ const ItemAdd = () => {
         const master = itemMasterDataList.filter(mas => mas.itemMasterId == itemAddData.itemMasterRef)
         console.log(master)
         if (master.length > 0) {
-            const { _id, itemType, itemDescription, itemFrequencyType, itemFqInMonths, calAlertInDay, SOPNo, uncertainity, uncertaintyUnit, standardRef, itemMasterImage, calibrationPoints } = master[0]
+            const { _id, itemType, itemDescription, itemPrefix, itemFrequencyType, itemFqInMonths, calAlertInDay, SOPNo, uncertainity, uncertaintyUnit, standardRef, itemMasterImage, calibrationPoints } = master[0]
             console.log(calibrationPoints)
             setItemAddData((prev) => ({
                 ...prev,
                 itemType: itemType,
                 itemAddMasterName: itemDescription,
+                itemIMTENo: itemPrefix,
                 itemImage: itemMasterImage,
                 itemCalFreInMonths: itemFqInMonths,
                 itemCalFrequencyType: itemFrequencyType,

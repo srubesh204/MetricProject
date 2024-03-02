@@ -558,6 +558,7 @@ const ItemEdit = () => {
                         ...prev,
                         itemType: itemType,
                         itemAddMasterName: itemDescription,
+                        itemIMTENo: itemPrefix,
                         itemImage: itemMasterImage,
                         itemCalFreInMonths: itemFqInMonths,
                         itemCalFrequencyType: itemFrequencyType,

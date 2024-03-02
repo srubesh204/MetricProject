@@ -913,7 +913,7 @@ const ItemMaster = () => {
 
                                     </div>
                                     <div className='row mb-2 g-2'>
-                                        <div className="input-group col row g-2 m-0 d-flex">
+                                        
 
                                             <div className='col'>
                                                 <TextField
@@ -934,7 +934,7 @@ const ItemMaster = () => {
 
                                             <div className='col'>
                                                 <TextField label="Unit"
-                                                    value={itemMasterData.uncertaintyUnit} onChange={handleItemMasterBaseChange}  select size="small" id="uncertaintyUnitId" name="uncertaintyUnit" defaultValue="" >
+                                                    value={itemMasterData.uncertaintyUnit} onChange={handleItemMasterBaseChange} fullWidth  select size="small" id="uncertaintyUnitId" name="uncertaintyUnit" defaultValue="" >
                                                     {unitDataList.map((item, index) => (
                                                         <MenuItem key={index} value={item.unitName}>{item.unitName}</MenuItem>
                                                     ))}
@@ -949,9 +949,9 @@ const ItemMaster = () => {
                                             {/* {(Object.keys(errors).length !== 0 && (errors.uncertainty !== "" || errors.uncertaintyUnit !== "")) && <div style={{ color: "red", fontSize: "small", marginLeft: "10px" }}>Uncertainity is Required</div>} */}
 
 
-                                        </div>
+                                        
 
-                                        <div className=" col">
+                                        <div className="col-md-6">
 
                                             <TextField fullWidth label="Status" {...(errors.status !== "" && { helperText: errors.status, error: true })} value={itemMasterData.status} onChange={handleItemMasterBaseChange} select size="small" id="statusId" name="status" defaultValue="" >
 
