@@ -6,7 +6,7 @@ const employeeModel = require("./models/employeeModel")
 const dayjs = require('dayjs')
 
 // Schedule cron job to run every morning at 9:00 AM
-cron.schedule('35 17 * * *', async () => {
+cron.schedule('1 10 * * *', async () => {
     try {
         // Add logic to check for expiring items here
         const mailDetails = await mailConfigModel.findById("mailData");

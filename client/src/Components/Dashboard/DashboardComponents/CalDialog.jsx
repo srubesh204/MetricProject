@@ -198,7 +198,7 @@ const CalDialog = () => {
     useEffect(() => {
         console.log("cal")
         if (selectedRows.length > 0 && selectedRows[0].itemItemMasterIMTENo && selectedRows[0].itemItemMasterIMTENo.length > 0) {
-            const masterData = itemList.filter(item => selectedRows[0].itemItemMasterIMTENo.map(mas => mas).includes(item.itemIMTENo))
+            const masterData = itemMasters.filter(item => selectedRows[0].itemItemMasterIMTENo.map(mas => mas).includes(item.itemIMTENo))
             console.log(masterData)
             setCalibrationData(prev => ({ ...prev, calMasterUsed: masterData }))
         }
