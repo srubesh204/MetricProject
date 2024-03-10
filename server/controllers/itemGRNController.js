@@ -718,15 +718,15 @@ const itemGRNController = {
         );
 
         let obSize = [];
-        if (grnAcCriteria.length > 0) {
-          if (grnItemType === "variable") {
-            obSize = grnAcCriteria.map(item => {
+        if (updateItemGRN.grnAcCriteria.length > 0) {
+          if (updateItemGRN.grnItemType === "variable") {
+            obSize = updateItemGRN.grnAcCriteria.map(item => {
               return item.grnParameter + ":" + item.grnOBError
             })
           } else {
-            obSize = grnAcCriteria.map(item => {
+            obSize = updateItemGRN.grnAcCriteria.map(item => {
 
-              if (grnItemOBType === "minmax") {
+              if (updateItemGRN.grnItemOBType === "minmax") {
                 return item.grnParameter + " : " + item.grnMinOB + "/" + item.grnMaxOB
               } else {
                 return item.grnParameter + " : " + item.grnAverageOB
@@ -784,7 +784,8 @@ const itemGRNController = {
             itemCertificateName: grnItemCertificate,
             itemCertificateNo,
             itemOBType,
-            itemUncertainty
+            itemUncertainty,
+            acceptanceCriteria: obSize
           };
           const itemHistoryData = await itemHistory.findOneAndUpdate(
             { itemGrnId: itemGRNId },

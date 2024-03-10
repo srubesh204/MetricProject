@@ -714,16 +714,16 @@ const Grn = () => {
 
         if (grnData.grnItemType === "variable") {
 
-            if (name === "grnAverageOB") {
+            if (name === "grnOBError") {
                 setGrnData(prev => {
                     const updatedData = prev.grnAcCriteria.map((item, idx) => {
                         if (idx === index) {
                             let status = ""
 
-                            const isAverageInRange = parseFloat(item.grnAverageOB) >= parseFloat(item.grnMinPSError) &&
-                                parseFloat(item.grnAverageOB) <= parseFloat(item.grnMaxPSError);
+                            const isAverageInRange = parseFloat(item.grnOBError) >= parseFloat(item.grnMinPSError) &&
+                                parseFloat(item.grnOBError) <= parseFloat(item.grnMaxPSError);
 
-                            if (item.grnAverageOB === "") {
+                            if (item.grnOBError === "") {
                                 status = ""
                             } else {
                                 if (isAverageInRange) {
@@ -1552,7 +1552,7 @@ const Grn = () => {
                                                             {grnData.grnAcCriteria.map((item, index) => {
 
                                                                 let averageColor = "";
-                                                                if (parseFloat(item.grnAverageOB) >= parseFloat(item.grnMinPSError) && parseFloat(item.grnAverageOB) <= parseFloat(item.grnMaxPSError)) {
+                                                                if (parseFloat(item.grnOBError) >= parseFloat(item.grnMinPSError) && parseFloat(item.grnOBError) <= parseFloat(item.grnMaxPSError)) {
                                                                     averageColor = "green";
                                                                 } else {
                                                                     averageColor = "red"
@@ -1566,7 +1566,7 @@ const Grn = () => {
                                                                         <td>{item.grnNominalSizeUnit}</td>
                                                                         <td>{item.grnMinPSError}</td>
                                                                         <td>{item.grnMaxPSError}</td>
-                                                                        <td><input className='form-control form-control-sm' name='grnAverageOB' style={{ color: averageColor, fontWeight: "bold" }} onChange={(e) => changeGrnData(index, e.target.name, e.target.value)} /></td>
+                                                                        <td><input className='form-control form-control-sm' name='grnOBError' style={{ color: averageColor, fontWeight: "bold" }} onChange={(e) => changeGrnData(index, e.target.name, e.target.value)} /></td>
                                                                         <td width="15%">
                                                                             <select className='form-select form-select-sm' name="rowStatus" value={item.rowStatus} onChange={(e) => changeGrnData(index, e.target.name, e.target.value)}>
                                                                                 <option value="">Status</option>

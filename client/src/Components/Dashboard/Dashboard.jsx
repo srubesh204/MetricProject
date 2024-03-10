@@ -182,7 +182,7 @@ const Dashboard = () => {
       // { name: "Cal Due Report", file: <CalDueReport />, icon: <img src={`${process.env.REACT_APP_PORT}/icon/list-text.png`} alt="Cal Due Report Icon" style={{ width: '20px', height: '20px' }} /> },
       companyData.uncertaintyPage === "yes" && { name: "Uncertainty List", file: <MeasurementUncertaintyList />, icon: <FormatListBulleted /> },
       { name: "Vendor Details", file: <VendorUpload />, icon: <FormatListBulleted /> },
-      { name: "Plan vs Actual", file: <PlantActual />, icon: <FormatListBulleted /> },
+      { name: "Plan", file: <PlantActual />, icon: <FormatListBulleted /> },
 
       // { name: "Management Chart" },
     ].filter(Boolean)
