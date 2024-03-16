@@ -921,7 +921,8 @@ const itemAddController = {
           AJ: 'plantAccess'
         }
       });
-      console.log(jsonData)
+      
+     
 
       const modifiedData = jsonData.Sheet1.map(item => {
         item.itemCalDate = dayjs(item.itemCalDate).format("YYYY-MM-DD")
@@ -942,7 +943,7 @@ const itemAddController = {
           // Create an instance of designationModel and save it to the database
           const newItemAdd = new itemAddModel(item); // Assuming 'item' conforms to your ItemAddModel schema
           const savedItemAdd = await newItemAdd.save();
-          console.log(savedItemAdd)
+         
 
           const data = {
             itemCalDate: savedItemAdd.itemCalDate ? dayjs(savedItemAdd.itemCalDate).format("YYYY-MM-DD") : "",
@@ -953,7 +954,7 @@ const itemAddController = {
             itemId: savedItemAdd._id
 
           }
-          console.log(data)
+       
           const historyObj = new itemHistory(data);
           const savedHistoryCard = await historyObj.save();
 

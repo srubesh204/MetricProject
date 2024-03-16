@@ -1535,6 +1535,7 @@ const ItemList = () => {
                                                     <MenuItem value="breakdown">Breakdown</MenuItem>
                                                     <MenuItem value="missing">Missing</MenuItem>
                                                     <MenuItem value="rejection">Rejection</MenuItem>
+                                                    <MenuItem value="scrap">Scrap</MenuItem>
 
                                                 </TextField>
 

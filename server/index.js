@@ -4,7 +4,7 @@ const mongoose = require("mongoose");
 const cors = require('cors');
 const bodyParser = require('body-parser');
 const db = require('./connectionString')
-
+require('dotenv').config({ path: './.env' });
 const departmentRoute = require("./routes/departmentRoute")
 const designationRoute = require("./routes/designationRoute")
 const employeeRoute = require("./routes/employeeRoute")

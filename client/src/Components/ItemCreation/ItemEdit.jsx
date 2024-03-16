@@ -1110,6 +1110,7 @@ const ItemEdit = () => {
                                                 <MenuItem value="breakdown">Breakdown</MenuItem>
                                                 <MenuItem value="missing">Missing</MenuItem>
                                                 <MenuItem value="rejection">Rejection</MenuItem>
+                                                <MenuItem value="scrap">Scrap</MenuItem>
                                             </TextField>
                                         </div>
                                         <div className="col-lg">
