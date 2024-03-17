@@ -15,12 +15,12 @@ dayjs.extend(isSameOrBefore)
 dayjs.extend(isSameOrAfter)
 
 const CalEditModel = () => {
-   
-   
+
+
 
     const calData = useContext(CalData)
     const [lastResultData, setLastResultData] = useState([])
-    const { loggedEmp ,calEditOpen, setCalEditOpen, selectedCalRow, itemMasters, activeEmps, calListFetchData, employeeRole, masters, formatNoData } = calData
+    const { loggedEmp, calEditOpen, setCalEditOpen, selectedCalRow, itemMasters, activeEmps, calListFetchData, employeeRole, masters, formatNoData } = calData
     const [calibrationDatas, setCalibrationDatas] = useState([])
     const { allowedPlants } = useEmployee()
 
@@ -170,10 +170,10 @@ const CalEditModel = () => {
                 calItemTemperature: selectedCalRow.calItemTemperature,
                 calItemFrequencyType: selectedCalRow.calItemFrequencyType,
                 calItemHumidity: selectedCalRow.calItemHumidity,
-                calItemUncertainity: filter.length > 0 && filter[0] ? filter[0].uncertainty : "",
-                calItemSOPNo: filter.length > 0 && filter[0].SOPNo ? filter[0].SOPNo : "",
-                calStandardRef: filter.length > 0 && filter[0].standardRef ? filter[0].standardRef : "",
-                calItemUncertainityUnit: filter.length > 0 && filter[0].uncertaintyUnit ? filter[0].uncertaintyUnit : "",
+                calItemUncertainity: selectedCalRow.calItemUncertainity,
+                calItemSOPNo: selectedCalRow.calItemSOPNo,
+                calStandardRef: selectedCalRow.calStandardRef,
+                calItemUncertainityUnit: selectedCalRow.calItemUncertainityUnit,
                 calOBType: selectedCalRow.calOBType,
                 calCertificateNo: selectedCalRow.calCertificateNo,
                 calItemCalDate: selectedCalRow.calItemCalDate,
@@ -219,7 +219,7 @@ const CalEditModel = () => {
     const getAllCalibrationData = async () => {
         try {
             const response = await axios.get(
-                `${process.env.REACT_APP_PORT}/itemCal/getAllItemCals`,{allowedPlants: allowedPlants}
+                `${process.env.REACT_APP_PORT}/itemCal/getAllItemCals`, { allowedPlants: allowedPlants }
             );
             console.log(response.data.result)
             const imteNoData = response.data.result.filter((item) => item.calIMTENo === calibrationData.calIMTENo)
@@ -716,16 +716,20 @@ const CalEditModel = () => {
 
 
     const CalApproveStatus = () => {
-        if(formatNoData){
-            if(formatNoData.approvedByAccess === "yes" && (loggedEmp.empRole === "creator" || loggedEmp.empRole === "viewer")){
+        if (formatNoData) {
+            if (formatNoData.approvedByAccess === "yes" && (loggedEmp.empRole === "creator" || loggedEmp.empRole === "viewer")) {
                 return false
-            }else{
+            } else {
                 return true
             }
-        }else{
+        } else {
             return false
         }
     }
+
+    useEffect(() => {
+        setCalibrationData(prev => ({ ...prev, calStatus: calibrationData.calReportAvailable === "yes" ? "accepted" : "status" }))
+    }, [calibrationData.calReportAvailable])
 
 
 

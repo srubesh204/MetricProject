@@ -483,9 +483,8 @@ const MeasurementUncertainty = () => {
         const { name, value } = e.target;
         setMasterDetails((prev) => ({ ...prev, [name]: value }));
         if (name === "masterIMTENo") {
-            console.log(value)
-            const filterList = itemNameList.filter(item => item.itemIMTENo === value)
-
+            const filterList = selectedPlant.filter(item => item.itemIMTENo === value)
+            console.log(filterList)
             setMasterDetails(prev => ({
                 ...prev,
                 masterIMTENo: filterList[0].itemIMTENo,
@@ -493,8 +492,8 @@ const MeasurementUncertainty = () => {
                 rangeSize: filterList[0].itemRangeSize,
                 lC: filterList[0].itemLC,
             }))
-
         }
+        
         if (name === "material_id") {
             console.log(value)
             const materialData = materialCte.filter(item => item.cte_id === value)
