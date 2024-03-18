@@ -250,7 +250,7 @@ const Home = () => {
       console.log(dcNextNumber.data.result)
       setLastNo(dcNextNumber.data.result)
       setDcList(response.data.result);
-      
+
 
 
     } catch (err) {
@@ -446,7 +446,7 @@ const Home = () => {
 
       setItemList(allItems);
       setPieDataFilter(allItems)
-      
+
 
 
       //
@@ -469,6 +469,7 @@ const Home = () => {
       const breakDownItems = allItems.filter((item) => item.itemStatus === "breakdown");
       const missingItems = allItems.filter((item) => item.itemStatus === "missing");
       const rejectionItems = allItems.filter((item) => item.itemStatus === "rejection");
+      const scrapItems = allItems.filter((item) => item.itemStatus === "scrap");
 
       setActiveItems(activeItems)
 
@@ -508,6 +509,7 @@ const Home = () => {
         updateIfExists('Breakdown', breakDownItems.length);
         updateIfExists('Missing', missingItems.length);
         updateIfExists('Rejection', rejectionItems.length);
+        updateIfExists('Scrap', scrapItems.length);
 
         return updatedStatus;
       });
@@ -539,14 +541,15 @@ const Home = () => {
 
   const itemLocationFun = () => {
 
-    
-   
+
+
 
     const activeItems = plantWiseList.filter((item) => item.itemStatus === "active");
     const spareItems = plantWiseList.filter((item) => item.itemStatus === "spare");
     const breakDownItems = plantWiseList.filter((item) => item.itemStatus === "breakdown");
     const missingItems = plantWiseList.filter((item) => item.itemStatus === "missing");
     const rejectionItems = plantWiseList.filter((item) => item.itemStatus === "rejection");
+    const scrapItems = plantWiseList.filter((item) => item.itemStatus === "scrap");
 
     setActiveItems(activeItems)
 
@@ -589,7 +592,8 @@ const Home = () => {
       { value: spareItems.length, label: 'Spare' },
       { value: breakDownItems.length, label: 'Breakdown' },
       { value: missingItems.length, label: 'Missing' },
-      { value: rejectionItems.length, label: 'Rejection' }
+      { value: rejectionItems.length, label: 'Rejection' },
+      { value: scrapItems.length, label: 'Scrap' }
     ])
     setPieDataFilter(plantWiseList)
     setFilteredData(plantWiseList)
@@ -655,13 +659,15 @@ const Home = () => {
 
         const plantData = itemList.filter(plant => plant.itemPlant === value)
 
-        
+
 
         const activeItems = plantData.filter((item) => item.itemStatus === "active");
         const spareItems = plantData.filter((item) => item.itemStatus === "spare");
         const breakDownItems = plantData.filter((item) => item.itemStatus === "breakdown");
         const missingItems = plantData.filter((item) => item.itemStatus === "missing");
         const rejectionItems = plantData.filter((item) => item.itemStatus === "rejection");
+        const scrapItems = plantData.filter((item) => item.itemStatus === "scrap");
+
 
         setActiveItems(activeItems)
 
@@ -704,7 +710,8 @@ const Home = () => {
           { value: spareItems.length, label: 'Spare' },
           { value: breakDownItems.length, label: 'Breakdown' },
           { value: missingItems.length, label: 'Missing' },
-          { value: rejectionItems.length, label: 'Rejection' }
+          { value: rejectionItems.length, label: 'Rejection' },
+          { value: scrapItems.length, label: 'Scrap' }
         ])
 
         setPlantWiseList(plantData)
@@ -844,7 +851,7 @@ const Home = () => {
 
 
   const calStatusColor = ['#FF4545', '#FFBB28', '#00C49F', '#FF8042', "#ACA8C8", "#0088FE"];
-  const itemStatusColor = ["#00C49F", "orange", "#FF8042", "#0088FE", "#FF4545"];
+  const itemStatusColor = ["#00C49F", "orange", "#FF8042", "#0088FE", "#FF4545", "#71797E"];
   const itemLocationColor = ["#984EA3", "violet", "orange", "#00C49F", "#0088FE"];
 
   const [calStatusFitleredData, setCalStatusFitleredData] = useState([])
@@ -924,6 +931,7 @@ const Home = () => {
     const breakDownItems = pieDataFilter.filter((item) => item.itemStatus === "breakdown");
     const missingItems = pieDataFilter.filter((item) => item.itemStatus === "missing");
     const rejectionItems = pieDataFilter.filter((item) => item.itemStatus === "rejection");
+    const scrapItems = pieDataFilter.filter((item) => item.itemStatus === "scrap");
 
     switch (name) {
 
@@ -944,6 +952,9 @@ const Home = () => {
         break;
       case "Rejection":
         setFilteredData(rejectionItems);
+        break;
+      case "Scrap":
+        setFilteredData(scrapItems);
         break;
       default:
         setFilteredData(itemList)
@@ -1130,13 +1141,14 @@ const Home = () => {
     setSelectedFilterValue(value)
     console.log(name, value)
     const filter = plantWiseList.filter((item) => item[name] === value)
-    
+
 
     const activeItems = filter.filter((item) => item.itemStatus === "active");
     const spareItems = filter.filter((item) => item.itemStatus === "spare");
     const breakDownItems = filter.filter((item) => item.itemStatus === "breakdown");
     const missingItems = filter.filter((item) => item.itemStatus === "missing");
     const rejectionItems = filter.filter((item) => item.itemStatus === "rejection");
+    const scrapItems = filter.filter((item) => item.itemStatus === "scrap");
 
     setActiveItems(activeItems)
 
@@ -1179,7 +1191,8 @@ const Home = () => {
       { value: spareItems.length, label: 'Spare' },
       { value: breakDownItems.length, label: 'Breakdown' },
       { value: missingItems.length, label: 'Missing' },
-      { value: rejectionItems.length, label: 'Rejection' }
+      { value: rejectionItems.length, label: 'Rejection' },
+      { value: scrapItems.length, label: 'Scrap' }
     ])
     setFilteredData(filter)
     setPieDataFilter(filter)
@@ -1193,13 +1206,14 @@ const Home = () => {
     });
 
     console.log(filter)
-   
+
 
     const activeItems = filter.filter((item) => item.itemStatus === "active");
     const spareItems = filter.filter((item) => item.itemStatus === "spare");
     const breakDownItems = filter.filter((item) => item.itemStatus === "breakdown");
     const missingItems = filter.filter((item) => item.itemStatus === "missing");
     const rejectionItems = filter.filter((item) => item.itemStatus === "rejection");
+    const scrapItems = filter.filter((item) => item.itemStatus === "scrap");
 
     setActiveItems(activeItems)
 
@@ -1240,7 +1254,8 @@ const Home = () => {
       { id: 2, value: spareItems.length, label: 'Spare' },
       { id: 3, value: breakDownItems.length, label: 'Breakdown' },
       { id: 4, value: missingItems.length, label: 'Missing' },
-      { id: 5, value: rejectionItems.length, label: 'Rejection' }
+      { id: 5, value: rejectionItems.length, label: 'Rejection' },
+      { id: 6, value: scrapItems.length, label: 'Scrap' }
     ])
     setFilteredData(filter)
     setPieDataFilter(filter)

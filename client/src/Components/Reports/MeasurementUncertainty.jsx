@@ -477,13 +477,14 @@ const MeasurementUncertainty = () => {
         setSelectedValues([]);
     }
     console.log(masterDetails)
+
+
     const handlePlantChange = (e) => {
         const { name, value } = e.target;
         setMasterDetails((prev) => ({ ...prev, [name]: value }));
         if (name === "masterIMTENo") {
-            console.log(value)
-            const filterList = itemNameList.filter(item => item.itemIMTENo === value)
-
+            const filterList = selectedPlant.filter(item => item.itemIMTENo === value)
+            console.log(filterList)
             setMasterDetails(prev => ({
                 ...prev,
                 masterIMTENo: filterList[0].itemIMTENo,
@@ -491,8 +492,8 @@ const MeasurementUncertainty = () => {
                 rangeSize: filterList[0].itemRangeSize,
                 lC: filterList[0].itemLC,
             }))
-
         }
+        
         if (name === "material_id") {
             console.log(value)
             const materialData = materialCte.filter(item => item.cte_id === value)
@@ -536,6 +537,7 @@ const MeasurementUncertainty = () => {
             setUncertainityData(prev => ({ ...prev, uncTEDUC: value }))
         }
         if (name === "uncPlant") {
+            setUncertainityData(prev => ({ ...prev, [name]: value }))
             if (value === "all") {
                 setSelectedPlant(itemNameList)
             } else {
@@ -546,13 +548,11 @@ const MeasurementUncertainty = () => {
                         );
                         console.log(response.data.result)
                         setSelectedPlant(response.data.result)
-                        
-            
                     } catch (err) {
                         console.log(err);
                     }
                 };
-                getIsItemMaster()
+                getIsItemMaster();
             }
 
         }
@@ -562,7 +562,7 @@ const MeasurementUncertainty = () => {
     const getIsItemMaster = async () => {
         try {
             const response = await axios.post(
-                `${process.env.REACT_APP_PORT}/itemAdd/getIsItemMasterByPlantAccess`, { allowedPlants: allowedPlants }
+                `${process.env.REACT_APP_PORT}/itemMaster/getMasterByPlant`, {allowedPlants: [uncertainityData.uncPlant]}
             );
             console.log(response.data.result)
             setItemNameList(response.data.result)
@@ -574,13 +574,13 @@ const MeasurementUncertainty = () => {
     };
     useEffect(() => {
         getIsItemMaster();
-    }, []);
+    }, [uncertainityData.uncPlant]);
 
 
 
     // const sortedFilterNameList = itemNameList.itemAddMasterName.sort();
 
-
+    console.log(uncertainityData)
     const navigate = useNavigate();
 
     const [errors, setErrors] = useState({})
@@ -772,9 +772,9 @@ const MeasurementUncertainty = () => {
                             </div>
 
                             <div className="col">
-                                <TextField size='small' fullWidth variant='outlined' {...(errors.uncItemName !== "" && { helperText: errors.uncItemName, error: true })} onChange={handleUncertaintyChange} value={uncertainityData.uncItemName} label="DUC Name" name='uncItemName' id='uncItemNameId'>
+                                <TextField size='small' select fullWidth variant='outlined' {...(errors.uncItemName !== "" && { helperText: errors.uncItemName, error: true })} onChange={handleUncertaintyChange} value={uncertainityData.uncItemName} label="DUC Name" name='uncItemName' id='uncItemNameId'>
                                     {itemNameList.map((item, index) => (
-                                        <MenuItem key={index} value={item.itemAddMasterName}>{item.itemAddMasterName}</MenuItem>
+                                        <MenuItem key={index} value={item.itemDescription}>{item.itemDescription}</MenuItem>
                                     ))}
                                 </TextField>
                             </div>

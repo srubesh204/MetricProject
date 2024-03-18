@@ -7,7 +7,11 @@
   },
   "scripts": {
     "start:server": "cd server && npm start",
+<<<<<<< HEAD
     "start:client": "npx serve -s ./client/build",
+=======
+    "start:client": "serve -s ./client/build",
+>>>>>>> 3531e9db538a9d9949b05d4bc1b0b48e4eee6583
     "start": "concurrently \"npm run start:server\" \"npm run start:client\""
   }
 }

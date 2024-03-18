@@ -665,7 +665,8 @@ const CalDialog = () => {
             setLastResultShow(checked)
         }
         if (name === "calReportAvailable") {
-            setCalibrationData((prev) => ({ ...prev, calReportAvailable: checked ? "yes" : "no" }))
+            setCalibrationData((prev) => ({ ...prev, calReportAvailable: checked ? "yes" : "no"}))
+            
         }
 
     }
@@ -814,7 +815,9 @@ const CalDialog = () => {
         }
     }
 
-
+    useEffect(()=> {
+    setCalibrationData(prev => ({...prev, calStatus: calibrationData.calReportAvailable === "yes" ? "accepted" : "status"}))
+    }, [calibrationData.calReportAvailable])
 
 
 

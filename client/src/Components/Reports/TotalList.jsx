@@ -1397,21 +1397,13 @@ const TotalList = () => {
                   <Button size='small' onClick={() => { setTotalPreviewOpen(true) }}>Print</Button>
                 </div>
 
-                {/* <div className='col'>
-                  <Button variant="contained" size='small' color="success" onClick={() => { setCalDuePrint(true) }}>CalDueReport Print</Button>
-                </div> */}
-
-
-                {/* <div >
-                      <Button component={Link} to="/" size='small' variant='contained' startIcon={<ArrowBack />} endIcon={<House />} color='secondary'>Home</Button>
-                    </div> */}
+                {selectedItemList.length > 0 && <div>
+                  <Button size='small'>Label Print</Button>
+                </div>}
+               
 
               </div>
-              {/* <Snackbar anchorOrigin={{ vertical: "top", horizontal: "right" }} open={snackBarOpen} autoHideDuration={6000} onClose={handleSnackClose}>
-                <Alert onClose={handleSnackClose} severity={errorhandler.code} sx={{ width: '25%' }}>
-                  {errorhandler.message}
-                </Alert>
-              </Snackbar> */}
+              
               <Snackbar anchorOrigin={{ vertical: "top", horizontal: "right" }} open={snackBarOpen} autoHideDuration={6000} onClose={handleSnackClose}>
                 <Alert onClose={handleSnackClose} severity={errorhandler.code} variant='filled'>
                   {errorhandler.message}
