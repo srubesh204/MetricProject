@@ -3,15 +3,14 @@
     "bootstrap": "^5.3.2",
     "concurrently": "^8.2.2",
     "dotenv": "^16.4.5",
-    "react-google-charts": "^4.0.1"
+    "fs-extra": "^11.2.0",
+    "react-dropzone": "^14.2.3",
+    "react-google-charts": "^4.0.1",
+    "react-loader-spinner": "^6.1.6"
   },
   "scripts": {
     "start:server": "cd server && npm start",
-<<<<<<< HEAD
-    "start:client": "npx serve -s ./client/build",
-=======
     "start:client": "serve -s ./client/build",
->>>>>>> 3531e9db538a9d9949b05d4bc1b0b48e4eee6583
     "start": "concurrently \"npm run start:server\" \"npm run start:client\""
   }
 }

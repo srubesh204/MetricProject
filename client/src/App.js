@@ -52,6 +52,7 @@ import TestHome from './Components/Dashboard/TestHome';
 import { MeasurementUncertaintyList } from './Components/Reports/MeasurementUncertaintyList';
 import GaugeSpec from './Components/ItemCreation/GaugeSpec';
 import TotalPreview from './Components/Reports/TotalPreview';
+import BackUp from './Components/system/BackUp';
 
 export const empRole = createContext(null);
 
@@ -71,9 +72,9 @@ export const EmployeeProvider = ({ children, employee }) => {
 };
 
 const roleAccessRules = {
-  
+
   admin: ['/home', "/desdep", "/general", "/vendor", "/itemMaster", "/itemadd", "/itemEdit/:id", "/itemList", "/grnList", "/calList", "/onSiteList", '/roles', "/employee", '/test', '/rubyTest', '/dcPrint', '/dcList', "/insHisCard", '/measurementUncertainty', '/measurementUncertaintyList'],
-  plantAdmin: ['/home', "/desdep", "/general", "/vendor", "/itemMaster", "/itemadd", "/itemEdit/:id", "/itemList", "/grnList", "/calList", "/onSiteList", '/roles', "/employee", '/rubyTest', '/dcPrint', '/dcList', "/insHisCard", "/measurementUncertainty", '/measurementUncertaintyList' ],
+  plantAdmin: ['/home', "/desdep", "/general", "/vendor", "/itemMaster", "/itemadd", "/itemEdit/:id", "/itemList", "/grnList", "/calList", "/onSiteList", '/roles', "/employee", '/rubyTest', '/dcPrint', '/dcList', "/insHisCard", "/measurementUncertainty", '/measurementUncertaintyList'],
   creator: ['/home', '/itemList', '/itemadd', '/itemEdit/:id', "/grnList", "/calList", "/onSiteList", '/dcPrint', "/insHisCard", '/dcList', '/measurementUncertainty', '/measurementUncertaintyList'],
   viewer: ['/home', '/dcPrint', "/grnList", '/itemList', "/insHisCard", '/measurementUncertaintyList'],
 };
@@ -111,10 +112,11 @@ const generateRoutes = (employee) => {
     { path: "/calDuePrint", element: <CalDuePrint /> },
     { path: "/measurementUncertainty", element: <MeasurementUncertainty /> },
     { path: "/measurementUncertaintyEdit", element: <MeasurementUncertaintyEdit /> },
-    { path: "/testHome", element: <TestHome />},
+    { path: "/testHome", element: <TestHome /> },
     { path: "/measurementUncertaintyList", element: <MeasurementUncertaintyList /> },
     { path: "/gaugeSpec", element: <GaugeSpec /> },
     { path: "/totalPreview", element: <TotalPreview /> },
+    { path: "/backup", element: <BackUp /> }
 
 
 
@@ -134,7 +136,7 @@ const generateRoutes = (employee) => {
     .map(({ path, element }) => (
       <Route key={path} path={path} element={element} />
     ));
-    console.log(generatedRoutes)
+  console.log(generatedRoutes)
   return generatedRoutes;
 };
 
@@ -220,7 +222,7 @@ function App() {
 
   console.log(loggedEmp)
 
-  return ( 
+  return (
     <div className="App">
       <EmployeeProvider employee={{ employee, loggedEmp, allowedPlants, Copyright }}>
         <Routes>
@@ -256,7 +258,7 @@ function App() {
           <Route path="/accessDenied" element={<AccessDenied />} />
         </Routes>
       </EmployeeProvider>
-      <Copyright sx={{position: "fixed", bottom: 0, left: 0, mt: 3 }} />
+      <Copyright sx={{ position: "fixed", bottom: 0, left: 0, mt: 3 }} />
     </div>
   );
 }

@@ -12,6 +12,7 @@ import Typography from '@mui/material/Typography';
 import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
 import Badge from '@mui/material/Badge';
+import BackupIcon from '@mui/icons-material/Backup';
 
 import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
@@ -162,7 +163,6 @@ const Dashboard = () => {
     ],
     system: [
       { name: "Version", file: <Version />, icon: <FormatListBulleted />  },
-      // { name: "Backup", file: <BackUp />, icon: <img src={`${process.env.REACT_APP_PORT}/icon/list-text.png`} alt="Backup Icon" style={{ width: '20px', height: '20px' }} /> },
       // { name: "Alerts Configuration", file: <AlertConfig />,icon: <FormatListBulleted />  },
       { name: "Mail Configuration", file: <MailConfig />, icon: <FormatListBulleted />  },
       { name: "Format Number", file: <FormatNumber />, icon: <FormatListBulleted />  },
@@ -185,7 +185,9 @@ const Dashboard = () => {
       { name: "Plan", file: <PlantActual />, icon: <FormatListBulleted /> },
 
       // { name: "Management Chart" },
-    ].filter(Boolean)
+    ].filter(Boolean),
+    BackUp: []
+   
   }
 
   console.log(MenuItems.system)
@@ -193,6 +195,7 @@ const Dashboard = () => {
   console.log(fileName)
 
   const onFileChange = (item) => {
+    console.log(item.file)
     setFileName({
       name: item.name,
       file: item.file,
@@ -206,6 +209,7 @@ const Dashboard = () => {
     databaseMaster: { name: "databaseMaster", status: false },
     system: { name: "system", status: false },
     report: { name: "report", status: false },
+    backup: {name: "backup", status : false}
     // Add other drawer names with initial status here
   });
 
@@ -529,13 +533,13 @@ const Dashboard = () => {
               </Collapse>
 
 
-              {/* <ListItemButton onClick={handleToolOpen}>
+              <ListItemButton onClick={() => onFileChange({name: "Backup" , file: <BackUp />})}>
                 <ListItemIcon>
-                <img src={`${process.env.REACT_APP_PORT}/icon/settings.png`} alt="systemIcon" style={{ width: '24px', height: '24px' }} />
+                  <BackupIcon/>
                 </ListItemIcon>
-                <ListItemText primary="Tools" />
-                {toolOpen ? <ExpandLess /> : <ExpandMore />}
-              </ListItemButton> */}
+                <ListItemText primary="Backup" />
+               
+              </ListItemButton>
 
 
               {/* <Collapse in={toolOpen} timeout="auto" unmountOnExit>

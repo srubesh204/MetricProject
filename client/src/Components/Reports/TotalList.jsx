@@ -281,7 +281,7 @@ const TotalList = () => {
     { field: 'specialRemark', headerName: 'SpecialRemark', width: 90, headerAlign: "center", align: "center", valueGetter: (params) => params.row.specialRemark || "-" },
     { field: 'drawingIssueNo', headerName: 'DrawingIssueNo', width: 90, headerAlign: "center", align: "center", valueGetter: (params) => params.row.drawingIssueNo || "-" },
     { field: 'drawingNo', headerName: 'DrawingNo', width: 90, headerAlign: "center", align: "center", valueGetter: (params) => params.row.drawingNo || "-" },
-    // { field: 'rdName', headerName: 'rdName', width: 90, headerAlign: "center", align: "center", },
+    { field: 'itemStatusReason', headerName: 'Remarks', width: 200, headerAlign: "center", align: "center" },
     // { field: 'itemItemMasterName', headerName: 'ItemItemMasterName ', width: 90, headerAlign: "center", align: "center", },
 
 
@@ -1192,6 +1192,7 @@ const TotalList = () => {
                     <MenuItem value="breakdown">Breakdown</MenuItem>
                     <MenuItem value="missing">Missing</MenuItem>
                     <MenuItem value="rejection">Rejection</MenuItem>
+                    <MenuItem value="scrap">Scrap</MenuItem>
                   </TextField>
                 </div>
                 <div className="col me-2 ">

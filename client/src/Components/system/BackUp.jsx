@@ -1,26 +1,104 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { Container, Box, Alert, Button, Dialog, DialogActions, DialogContent, InputLabel, DialogContentText, FormControl, Select, DialogTitle, OutlinedInput, FormControlLabel, IconButton, MenuItem, Paper, Checkbox, ListItemText, Snackbar, Switch, TextField, Chip } from '@mui/material';
-import { Add, Close, CloudUpload, Delete, Done, Edit, Receipt } from '@mui/icons-material';
+import { Add, Close, CloudUpload, Delete, Done, Edit, PlayArrow, Receipt } from '@mui/icons-material';
 import styled from '@emotion/styled';
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import Card from '@mui/material/Card';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import axios from 'axios';
+import Backdrop from '@mui/material/Backdrop';
+import CircularProgress from '@mui/material/CircularProgress';
 
 const BackUp = () => {
+    const [isEditable, setIsEditable] = useState(false)
+    const [backUpPath, setBackUpPath] = useState("")
+    const [errorHandler, setErrorHandler] = useState({})
+    const [mailSnackBar, setMailSnackBar] = useState(false)
+    const [loaderStatus, setLoaderStatus] = useState(false)
 
-    {/* const VisuallyHiddenInput = styled('input')({
-        clip: 'rect(0 0 0 0)',
-        clipPath: 'inset(50%)',
-        height: 1,
-        overflow: 'hidden',
-        position: 'absolute',
-        bottom: 0,
-        left: 0,
-        whiteSpace: 'nowrap',
-        width: 1,
-    });*/}
+
+    const handleSnackClose = (event, reason) => {
+        console.log(reason)
+        if (reason === 'clickaway') {
+            return;
+        }
+
+        setMailSnackBar(false);
+    }
+
+
+    const backUpFetch = async () => {
+        setLoaderStatus(true)
+        try {
+            const res = await axios.get(`${process.env.REACT_APP_PORT}/backup/getBackUpById/backId`)
+            setBackUpPath(res.data.result.path)
+            setLoaderStatus(false)
+        } catch (err) {
+            console.log(err)
+            setLoaderStatus(false)
+        }
+    };
+    useEffect(() => {
+        backUpFetch();
+    }, []);
+
+    console.log(backUpPath)
+    const updateBackUp = async () => {
+        setLoaderStatus(true)
+        try {
+            const updateData = await axios.put(`${process.env.REACT_APP_PORT}/backup/updateBackUp/backId`, { path: backUpPath })
+            backUpFetch();
+            setIsEditable(false)
+            setLoaderStatus(false)
+            setMailSnackBar(true)
+            setErrorHandler({ status: 1, message: "Path saved successfully", code: "success" })
+        } catch (err) {
+            console.log(err)
+            setLoaderStatus(false)
+            setMailSnackBar(true)
+            setErrorHandler({ status: 0, message: "Error updating data", code: "success" })
+        }
+    }
+
+
+    const startBackup = async () => {
+        setLoaderStatus(true)
+        try {
+            const res = await axios.post(`${process.env.REACT_APP_PORT}/backup/backUpDb`, { backUpPath })
+            console.log("success")
+            setLoaderStatus(false)
+            setMailSnackBar(true)
+            setErrorHandler({ status: 1, message: "Data backuped successfully", code: "success" })
+        } catch (err) {
+            console.log(err)
+            setLoaderStatus(false)
+        }
+    };
+
+    const restoreBackUp = async () => {
+        setLoaderStatus(true)
+        try {
+            const res = await axios.post(`${process.env.REACT_APP_PORT}/backup/restore`, { backUpPath })
+            console.log("success")
+            setLoaderStatus(false)
+            setMailSnackBar(true)
+            setErrorHandler({ status: 1, message: "Data restored successfully", code: "success" })
+            window.location.reload()
+        } catch (err) {
+            console.log(err)
+            setLoaderStatus(false)
+        }
+    };
+
     return (
         <div>
+            <Backdrop
+                sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+                open={loaderStatus}
+                onClick={() => setLoaderStatus(false)}
+            >
+                <CircularProgress color="inherit" />
+            </Backdrop>
 
             <LocalizationProvider dateAdapter={AdapterDayjs}>
                 <Container maxWidth="lg" sx={{ mt: 4 }}>
@@ -39,74 +117,51 @@ const BackUp = () => {
                             elevation={12}
                         >
 
-                          
-                            <div className=' col d-flex justify-content-end mb-2 mt-2'>
-                                <div className=''>
-                                    <Button helperText="Hello" component="label" fullWidth variant="contained" startIcon={<CloudUpload />} >
-                                        Browse
-
-                                    </Button>
-                                </div>
-
+                            <div className='backupHead'>
+                                Database Backup
+                                <span onClick={() => setIsEditable(!isEditable)}><Edit /></span>
                             </div>
+
 
                             <div className='row g-2 mb-2 '>
                                 <div className='col'>
                                     <TextField label="Data Base Path"
                                         id="dbPathId"
-                                        defaultValue=""
+                                        value={backUpPath}
+                                        disabled={!isEditable}
+                                        onChange={(e) => setBackUpPath(e.target.value)}
+                                        placeholder='C:/ProgramFiles/Program/.....'
                                         size="small"
-                                        sx={{ width: "100%" }}
+                                        fullWidth
                                         name="dbPath" />
                                 </div>
 
                             </div>
 
 
-                            <div className='row g-2  mb-2'>
-                                <div className="col">
-                                    <DatePicker
-                                        fullWidth
-                                        id="dateId"
-                                        name="date"
-                                        label="Date"
 
-                                        slotProps={{ textField: { size: 'small', fullWidth: true } }}
-                                        format="DD-MM-YYYY"
 
-                                    />
+                            <div className=' col d-flex justify-content-end buttonDiv'>
+                                <div className='me-2 restore'>
+                                    <Button size='small' value={backUpPath}  variant='contained' onClick={() => restoreBackUp()}>Restore</Button>
                                 </div>
-                                <div className="col">
-                                    <TextField label="Time"
-                                        id="timeId"
-                                        defaultValue=""
-                                        size="small"
-                                        sx={{ width: "100%" }}
-                                        name="time" />
-                                </div>
-
-                            </div>
-                            <div className='row mb-2 '>
-                                <div>
-                                    <TextField label="Start Backup"
-                                        id="startBackupId"
-                                        defaultValue=""
-                                        size="small"
-                                        sx={{ width: "100%" }}
-                                        name="startBackup" />
-                                </div>
-
-                            </div>
-                            <div className=' col d-flex justify-content-end'>
                                 <div className='me-2 '>
-                                    <Button size='small ' color='error' sx={{ minWidth: "130px" }} variant='contained'>Close</Button>
+                                    <Button size='small' value={backUpPath} disabled={!isEditable} variant='contained' onClick={() => updateBackUp()}>Save Path</Button>
                                 </div>
+                                {backUpPath && <div>
+                                    <Button size='small' color='success' variant='contained' onClick={() => startBackup()}>Start Backup<PlayArrow /></Button>
+                                </div>}
                             </div>
                         </Paper>
 
 
 
                     </form>
+                    <Snackbar anchorOrigin={{ vertical: "top", horizontal: "right" }} open={mailSnackBar} autoHideDuration={6000} onClose={handleSnackClose}>
+                        <Alert variant="filled" onClose={handleSnackClose} severity={errorHandler.code} fullWidth>
+                            {errorHandler.message}
+                        </Alert>
+                    </Snackbar>
                 </Container>
             </LocalizationProvider>
 

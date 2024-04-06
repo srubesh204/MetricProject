@@ -640,6 +640,7 @@ const Home = () => {
 
   const LocationEmpFilter = (e) => {
     const { name, value } = e.target;
+    setSelectedLoc("")
     setPlantDeps(prev => ({ ...prev, [name]: value }))
     if (name === "itemPlant") {
       if (value === "All") {
@@ -753,6 +754,13 @@ const Home = () => {
       align: "left"
     },
     {
+      field: 'itemRangeSize',
+      headerName: 'Range/Size',
+      width: 180,
+      // editable: true,
+      align: "left"
+    },
+    {
       field: 'itemCalDate',
       headerName: 'Cal Date',
       width: 100, valueGetter: (params) => dayjs(params.row.itemCalDate).format('DD-MM-YYYY')
@@ -782,6 +790,16 @@ const Home = () => {
       width: 100,
       align: "left"
     },
+
+    {
+      field: 'Frequency',
+      headerName: 'Frequency',
+      headerAlign: "center",
+      sortable: false,
+      width: 130,
+      valueGetter: (params) =>
+        `${params.row.itemCalFreInMonths || ''} ${params.row.itemCalFrequencyType || ''}`,
+    },
     {
       field: 'itemSupplier',
       headerName: 'Supplier',
@@ -807,6 +825,7 @@ const Home = () => {
       width: 100,
       align: "center"
     },
+
   ];
 
 
