@@ -78,7 +78,7 @@ const BackUp = () => {
     const restoreBackUp = async () => {
         setLoaderStatus(true)
         try {
-            const res = await axios.post(`${process.env.REACT_APP_PORT}/backup/restore`, { backUpPath })
+            const res = await axios.post(`${process.env.REACT_APP_PORT}/backup/restoreDB`, { backUpPath })
             console.log("success")
             setLoaderStatus(false)
             setMailSnackBar(true)
