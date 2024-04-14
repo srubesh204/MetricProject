@@ -10,7 +10,7 @@
   },
   "scripts": {
     "start:server": "cd server && npm start",
-    "start:client": "serve -s ./client/build",
+    "start:client": "serve -s -l 3009 ./client/build",
     "start": "concurrently \"npm run start:server\" \"npm run start:client\""
   }
 }
