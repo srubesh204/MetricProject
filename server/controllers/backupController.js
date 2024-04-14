@@ -65,34 +65,7 @@ const backupController = {
       res.status(500).json({ error: error, status: 0 });
     }
   },
-  deleteBackUp: async (req, res) => {
-    try {
-
-      const { backUpIds } = req.body; // Assuming an array of vendor IDs is sent in the request body
-      console.log(req.body)
-      const deleteResults = [];
-
-      for (const backUpId of backUpIds) {
-        // Find and remove each vendor by _id
-        const deletedBackUp = await backupModel.findOneAndRemove({ _id: backUpId });
-        console.log(deletedBackUp)
-        if (!deletedBackUp) {
-          // If a vendor was not found, you can skip it or handle the error as needed.
-          console.log(`Back Up with ID ${backUpId} not found.`);
-          res.status(500).json({ message: `Back Up not found.` });
-
-        } else {
-          console.log(`Back Up with ID ${backUpId} deleted successfully.`);
-          deleteResults.push(deletedBackUp);
-        }
-      }
-
-      return res.status(202).json({ message: 'Back Up deleted successfully', results: `${deleteResults.length} Back Up Deleted Successfull ` });
-    } catch (error) {
-      console.error(error);
-      res.status(500).send('Internal Server Error');
-    }
-  },
+ 
   getBackUpById: async (req, res) => {
     try {
       const backUpId = req.params.id; // Assuming desId is part of the URL parameter

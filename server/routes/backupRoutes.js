@@ -6,7 +6,6 @@ router.post("/backUpDb", backupController.backUpDb)
 router.get("/getBackUpById/:id", backupController.getBackUpById )
 router.post("/restoreDB", backupController.restoreDB)
 router.put("/updateBackUp/:id", backupController.updateBackUp)
-router.delete("/deleteBackUp", backupController.deleteBackUp)
 
  
 module.exports = router;
