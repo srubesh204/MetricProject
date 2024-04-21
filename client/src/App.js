@@ -39,7 +39,7 @@ import { createContext, useContext, useEffect, useState } from 'react';
 import AccessDenied from './Components/ErrorComponents/AccessDenied';
 import axios from 'axios';
 import RubeshTest from './Components/Test/RubeshTest';
-import DcPrint from './Components/Reports/dcList/DcPrint';
+
 import TotalList from './Components/Reports/TotalList';
 import { Backdrop, CircularProgress, Typography } from '@mui/material';
 import CalDueReport from './Components/Reports/CalDueReport';
@@ -99,7 +99,6 @@ const generateRoutes = (employee) => {
     { path: "/status", element: <Status /> },
     { path: "/grn", element: <Grn /> },
     { path: "/dcList", element: <DcList /> },
-    { path: "/dcPrint", element: <DcPrint /> },
     { path: "/grnList", element: <GrnList /> },
     { path: "/calList", element: <CalList /> },
     { path: "/onSiteGrn", element: <OnSiteGrn /> },
