@@ -640,12 +640,22 @@ const ItemAdd = () => {
         const selectedFile = event.target.files[0];
         console.log(selectedFile)
         if (selectedFile) {
-            console.log("working")
+            
 
             const formData = new FormData();
+            if(itemAddData.itemCertificateNo){
+                formData.append("calCertificateNo", itemAddData.itemCertificateNo)
+            }
+            
             formData.append('file', selectedFile);
             try {
-                axios.post(`${process.env.REACT_APP_PORT}/upload/itemCertificates`, formData)
+                let url = ""
+                if(itemAddData.itemCalibrationSource === "inhouse"){
+                    url = "itemCertificatesIH"
+                }else{
+                    url = "itemCertificates"
+                }
+                axios.post(`${process.env.REACT_APP_PORT}/upload/${url}`, formData)
                     .then(response => {
                         setUploadMessage(response.data.message)
                         console.log(response.data);
@@ -694,6 +704,7 @@ const ItemAdd = () => {
             formData.append('file', selectedFile);
             formData.append('msaName', itemAddData.itemIMTENo + "MSA");// Append rdName to the formData
             try {
+                
                 axios.post(`${process.env.REACT_APP_PORT}/upload/msaCertificates`, formData)
                     .then(response => {
                         setItemAddData((prev) => ({ ...prev, msaName: response.data.name }));

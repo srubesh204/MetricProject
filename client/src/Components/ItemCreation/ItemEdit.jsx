@@ -895,9 +895,18 @@ const ItemEdit = () => {
             console.log("working")
 
             const formData = new FormData();
+            if(itemAddData.itemCertificateNo){
+                formData.append("calCertificateNo", itemAddData.itemCertificateNo)
+            }
             formData.append('file', selectedFile);
             try {
-                axios.post(`${process.env.REACT_APP_PORT}/upload/itemCertificates`, formData)
+                let url = ""
+                if(itemAddData.itemCalibrationSource === "inhouse"){
+                    url = "itemCertificatesIH"
+                }else{
+                    url = "itemCertificates"
+                }
+                axios.post(`${process.env.REACT_APP_PORT}/upload/${url}`, formData)
                     .then(response => {
                         setUploadMessage(response.data.message)
                         console.log(response.data);

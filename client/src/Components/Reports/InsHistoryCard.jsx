@@ -382,7 +382,7 @@ function InsHistoryCard() {
             align: 'center',
             headerAlign: 'center',
             renderCell: (params) => (
-                params.row.itemCalibratedAt === 'inhouse' && params.row.itemCertificateNo ? (
+                params.row.itemCalibrationSource === 'inhouse' && params.row.itemCertificateNo ? (
                     <IconButton size="small" component={Link} target="_blank" to={`${process.env.REACT_APP_PORT}/calCertificates/${params.row.itemCertificateNo}.pdf`}>
                         <FileCopy />
                     </IconButton>
