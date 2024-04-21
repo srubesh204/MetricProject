@@ -82,7 +82,7 @@ const roleAccessRules = {
 // Function to generate routes based on user role and access rules
 const generateRoutes = (employee) => {
 
-  console.log(employee)
+ 
   const allowedRoutes = roleAccessRules[employee] || []; // Get allowed routes for the userRole
 
   const routes = [
@@ -135,7 +135,7 @@ const generateRoutes = (employee) => {
     .map(({ path, element }) => (
       <Route key={path} path={path} element={element} />
     ));
-  console.log(generatedRoutes)
+ 
   return generatedRoutes;
 };
 
@@ -150,7 +150,7 @@ const PrivateRoute = ({ element: Element, employee }) => {
   }
 
   const routes = generateRoutes(employee);
-  console.log(routes)
+  
   return (
     <Routes>
 
@@ -188,10 +188,10 @@ function App() {
         const response = await axios.get(
           `${process.env.REACT_APP_PORT}/employee/getEmployeeById/${empId}`
         );
-        console.log(response.data.result)
+        
         setLoggedEmp(response.data.result);
         const plantDetails = response.data.result.plantDetails.map(plant => plant.plantName)
-        console.log(response.data.result)
+        
         setAllowedPlants(plantDetails)
         setIsEmployeeLoaded(true); // Set the flag to indicate employee data is loaded
       } catch (err) {
@@ -219,7 +219,7 @@ function App() {
     setEmpId(sessionStorage.getItem('empId'));
   };
 
-  console.log(loggedEmp)
+ 
 
   return (
     <div className="App">

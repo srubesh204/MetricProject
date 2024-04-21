@@ -134,7 +134,7 @@ const Dashboard = () => {
             const response = await axios.get(
                 `${process.env.REACT_APP_PORT}/compDetails/getCompDetailsById/companyData`
             );
-            console.log(response.data.result)
+            
             setCompanyData(response.data.result);
            
         } catch (err) {
@@ -149,7 +149,7 @@ const Dashboard = () => {
     name: "Home",
     file: "",
   });
-  console.log(empRole)
+ 
 
   const MenuItems = {
     databaseMaster: [
@@ -190,12 +190,12 @@ const Dashboard = () => {
    
   }
 
-  console.log(MenuItems.system)
 
-  console.log(fileName)
+
+ 
 
   const onFileChange = (item) => {
-    console.log(item.file)
+   
     setFileName({
       name: item.name,
       file: item.file,
@@ -259,9 +259,9 @@ const Dashboard = () => {
     setToolOpen(!toolOpen);
   };
 
-  console.log(fileName)
+ 
   const [logOutDialog, setLogOutDialog] = useState(false)
-  console.log(logOutDialog)
+ 
 
   const openWinApps = (name) => {
     if (name === "Calculator") {
@@ -424,7 +424,7 @@ const Dashboard = () => {
 
                         <List component="div" disablePadding>
                           {MenuItems.databaseMaster.map((item, index) => {
-                            console.log(item)
+                           
                             return (
                               <ListItemButton key={index} sx={{ pl: 6 }} onClick={() => onFileChange(item)}>
                                 <ListItemIcon>
@@ -451,7 +451,7 @@ const Dashboard = () => {
 
                         <List component="div" disablePadding>
                           {MenuItems.system.map((item, index) => {
-                            console.log(item)
+                            
                             return (
                               <ListItemButton key={index} sx={{ pl: 6 }} onClick={() => onFileChange(item)}>
                                 <ListItemIcon>
@@ -517,7 +517,7 @@ const Dashboard = () => {
 
                 <List component="div" disablePadding>
                   {MenuItems.Reports.map((item, index) => {
-                    console.log(item)
+                   
                     return (
                       <ListItemButton key={index} sx={{ pl: 4 }} onClick={() => onFileChange(item)}>
                         <ListItemIcon>

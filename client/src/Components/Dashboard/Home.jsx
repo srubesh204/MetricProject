@@ -123,7 +123,7 @@ const Home = () => {
       setItemMasters(response.data.result)
 
     } catch (err) {
-      console.log(err);
+     
     }
   };
   useEffect(() => {
@@ -139,7 +139,7 @@ const Home = () => {
   const fifteenDaysAgo = currentDate.add(15, 'day');
   const thirtyDaysAgo = currentDate.add(30, 'day');
 
-  console.log(filteredData)
+
 
 
   //Vendor Type state
@@ -182,7 +182,7 @@ const Home = () => {
 
 
     } catch (err) {
-      console.log(err);
+     
     }
   };
   useEffect(() => {
@@ -197,7 +197,7 @@ const Home = () => {
       );
       setFormatData(response.data.result);
     } catch (err) {
-      console.log(err);
+     
     }
   };
   useEffect(() => {
@@ -217,7 +217,7 @@ const Home = () => {
       setMasters(response.data.result)
 
     } catch (err) {
-      console.log(err);
+     
     }
   };
   useEffect(() => {
