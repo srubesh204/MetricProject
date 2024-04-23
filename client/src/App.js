@@ -39,7 +39,7 @@ import { createContext, useContext, useEffect, useState } from 'react';
 import AccessDenied from './Components/ErrorComponents/AccessDenied';
 import axios from 'axios';
 import RubeshTest from './Components/Test/RubeshTest';
-import DcPrint from './Components/Reports/dcList/DcPrint';
+
 import TotalList from './Components/Reports/TotalList';
 import { Backdrop, CircularProgress, Typography } from '@mui/material';
 import CalDueReport from './Components/Reports/CalDueReport';
@@ -82,7 +82,7 @@ const roleAccessRules = {
 // Function to generate routes based on user role and access rules
 const generateRoutes = (employee) => {
 
-  console.log(employee)
+ 
   const allowedRoutes = roleAccessRules[employee] || []; // Get allowed routes for the userRole
 
   const routes = [
@@ -99,7 +99,6 @@ const generateRoutes = (employee) => {
     { path: "/status", element: <Status /> },
     { path: "/grn", element: <Grn /> },
     { path: "/dcList", element: <DcList /> },
-    { path: "/dcPrint", element: <DcPrint /> },
     { path: "/grnList", element: <GrnList /> },
     { path: "/calList", element: <CalList /> },
     { path: "/onSiteGrn", element: <OnSiteGrn /> },
@@ -136,7 +135,7 @@ const generateRoutes = (employee) => {
     .map(({ path, element }) => (
       <Route key={path} path={path} element={element} />
     ));
-  console.log(generatedRoutes)
+ 
   return generatedRoutes;
 };
 
@@ -151,7 +150,7 @@ const PrivateRoute = ({ element: Element, employee }) => {
   }
 
   const routes = generateRoutes(employee);
-  console.log(routes)
+  
   return (
     <Routes>
 
@@ -189,10 +188,10 @@ function App() {
         const response = await axios.get(
           `${process.env.REACT_APP_PORT}/employee/getEmployeeById/${empId}`
         );
-        console.log(response.data.result)
+        
         setLoggedEmp(response.data.result);
         const plantDetails = response.data.result.plantDetails.map(plant => plant.plantName)
-        console.log(response.data.result)
+        
         setAllowedPlants(plantDetails)
         setIsEmployeeLoaded(true); // Set the flag to indicate employee data is loaded
       } catch (err) {
@@ -220,7 +219,7 @@ function App() {
     setEmpId(sessionStorage.getItem('empId'));
   };
 
-  console.log(loggedEmp)
+ 
 
   return (
     <div className="App">

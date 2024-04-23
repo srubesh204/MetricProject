@@ -162,6 +162,18 @@ router.post('/itemCertificates', itemCertificateFolder.single('file'), (req, res
   res.status(200).json({ message: 'Item Certificate uploaded successfully', name: req.file.filename });
 });
 
+router.post('/itemCertificatesIH', calCertificateFolder.single('file'), (req, res) => {
+  const { calCertificateNo } = req.body;
+  if (!req.file) {
+    // No file was provided in the request
+    return res.status(400).json({ error: 'No file selected for upload' });
+  }
+  fs.renameSync(req.file.path, req.file.path.replace(req.file.originalname,
+    req.body.calCertificateNo + path.extname(req.file.originalname)));
+  // File was provided, proceed with processing
+  res.status(200).json({ message: 'Item Certificate uploaded successfully', name: calCertificateNo ? calCertificateNo : req.file.filename });
+});
+
 router.post('/calReportUpload', calCertificateFolder.single('file'), (req, res) => {
   const { calCertificateNo } = req.body;
   if (!req.file) {
@@ -172,10 +184,10 @@ router.post('/calReportUpload', calCertificateFolder.single('file'), (req, res) 
 
   fs.renameSync(req.file.path, req.file.path.replace(req.file.originalname,
     req.body.calCertificateNo + path.extname(req.file.originalname)));
-  console.log(req.file)
+  
   console.log("Report Uploaded Successfully")
   // File was provided, proceed with processing
-  res.status(200).json({ message: 'Calibration Report uploaded successfully', name: `${req.body.calCertificateNo}.pdf` });
+  res.status(200).json({ message: 'Calibration Report uploaded successfully', name: `${calCertificateNo}.pdf` });
 });
 
 router.post('/additionalCertificates', additionalCertificateFolder.single('file'), (req, res) => {

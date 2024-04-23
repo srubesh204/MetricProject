@@ -6,7 +6,7 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { TextField, MenuItem, Button, Box } from '@mui/material';
 import { DataGrid, GridToolbar,GridToolbarQuickFilter } from '@mui/x-data-grid';
 import { Paper } from '@mui/material';
-import { Edit, PrintRounded } from '@mui/icons-material';
+import { Edit, PrintRounded, Send } from '@mui/icons-material';
 import AddIcon from '@mui/icons-material/Add';
 import GrnEdit from './GrnEdit';
 import Dialog from '@mui/material/Dialog';
@@ -27,6 +27,7 @@ import Alert from '@mui/material/Alert';
 import dayjs from 'dayjs';
 import { useEmployee } from '../../../App';
 import GrnPrint from './GrnPrint';
+import MailWithAtt from '../../mailComponent/MailWithAtt';
 export const GrnListContent = createContext(null);
 
 const GrnList = () => {
@@ -359,6 +360,39 @@ const GrnList = () => {
 
     };
 
+    const [mailOpen, setMailOpen] = useState(false)
+    const [mailData, setMailData] = useState([])
+
+    const SendMail = () => {
+        
+        const data = filteredData.filter(item => itemListSelectedRowIds.includes(item._id))
+
+        const plantCheck = data.every(item => item.grnPlant === data[0].grnPlant)
+        if(plantCheck){
+            const urls = data.map(item => ({
+                itemPlant: item.grnPlant,
+                fileName: item.grnNo,
+                filePath: `${process.env.REACT_APP_PORT}/grnCertificates/${item.grnNo}.pdf`
+            }))
+            setMailData(urls)
+            setMailOpen(true)
+            setSnackBarOpen(false)
+        }else{
+            setSnackBarOpen(true)
+            setErrorHandler({ status: 0, message: "Multiple plants not allowed", code: "error" })
+        }
+        
+    }
+
+
+    const TotalListChildData = {
+        mailOpen,
+        setMailOpen,
+        selectedRows: mailData,
+        setSnackBarOpen,
+        setErrorHandler
+    }
+
 
 
 
@@ -495,6 +529,7 @@ const GrnList = () => {
                                                 <div className='d-flex justify-content-between align-items-center'>
                                                     <GridToolbar />
                                                     <div className='mt-2'>
+                                                    {itemListSelectedRowIds.length !== 0 && <Button className='me-2' endIcon={<Send />} onClick={() => SendMail()}>Send Mail </Button>}
                                                     <GridToolbarQuickFilter />
                                                         {itemListSelectedRowIds.length !== 0 && <Button variant='contained' type='button' size='small' color='error' onClick={() => setDeleteModalItem(true)}> Delete </Button>}
 
@@ -597,7 +632,7 @@ const GrnList = () => {
                                     </Dialog>
 
                                     <Snackbar anchorOrigin={{ vertical: "top", horizontal: "right" }} open={snackBarOpen} autoHideDuration={6000} onClose={handleSnackClose}>
-                                        <Alert onClose={handleSnackClose} severity={errorhandler.code} sx={{ width: '100%' }}>
+                                        <Alert onClose={handleSnackClose} severity={errorhandler.code} variant='filled' sx={{ width: '100%' }}>
                                             {errorhandler.message}
                                         </Alert>
                                     </Snackbar>
@@ -609,17 +644,7 @@ const GrnList = () => {
                                 >
                                     <GrnEdit />
                                 </GrnListContent.Provider>
-                                {/* <GrnListContent.Provider
-                                    value={{ grnOpen, setGrnOpen, selectedRows, grnListFetchData, itemPlantList, grnDataDcList, lastNo }}
-                                >
-                                    <GrnAdd />
-                                </GrnListContent.Provider> */}
-                                {/* <GrnListContent.Provider
-                                    value={{ grnPrintOpen, setGrnPrintOpen, selectedRows, formatNoData, printState, setPrintState, companyList, plantList }}
-                                >
-                                    {selectedRows.length !== 0 &&
-                                        <GrnPrint />}
-                                </GrnListContent.Provider> */}
+                                <MailWithAtt {...TotalListChildData} />
                             </div>
                         </Paper>
 

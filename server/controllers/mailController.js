@@ -4,6 +4,7 @@ const nodemailer = require("nodemailer");
 const { compDetailsSchema, plantSchema } = require("../models/compDetailsModel");
 const mailConfigModel = require("../models/mailConfigModel");
 require('dotenv').config();
+const multer = require('multer');
 //const transporter = require('../models/mailConfig');
 
 const mailData = async () => {
@@ -27,6 +28,20 @@ const createTransporter = async () => {
         },
     });
 };
+
+
+
+// Define the maximum file size (in bytes)
+const MAX_FILE_SIZE_BYTES = 10 * 1024 * 1024; // 5 MB as an example
+
+// Configure multer with memory storage and maximum file size limit
+const memoryStorage = multer.memoryStorage();
+const upload = multer({
+    storage: memoryStorage,
+    limits: { fileSize: MAX_FILE_SIZE_BYTES } // Maximum file size limit
+}).any();
+
+
 const mailController = {
     mailSender: async (req, res) => {
         try {
@@ -157,7 +172,116 @@ const mailController = {
         }
        
     },
+    MailWithAttachment: async (req, res) => {
+        try {
+            // Handle file uploads using multer
+            upload(req, res, async (err) => {
+                if (err) {
+                    console.error('Error uploading files:', err);
+                    return res.status(400).json({ error: 'Error uploading files' });
+                }
 
+                const mailDetails = await mailData();
+                const { to, subject, mailBody, departmentCc, vendorCc, bcc, employee, fileUrls } = req.body;
+                const urls = JSON.parse(fileUrls)
+                const empObj = JSON.parse(employee)
+                const compDetails = await compDetailsSchema.findById("companyData");
+                const plantDetails = await plantSchema.find({ plantName: urls[0].itemPlant });
+                const ccs = [...new Set([...vendorCc, ...departmentCc])];
+
+                const systemGeneratedText = `
+                <p style="font-weight: 700">This is system generated email. Do not reply to this email.</p>  
+                <code>The information in this message and any files transmitted with it are confidential and may be legally privileged. 
+                It is intended solely for the addressee. Access to this message by anyone else is unauthorized. 
+                If you are not the intended recipient, you are notified that any disclosure, copying, or distribution of the message, or any action or omission taken by you in reliance on it, is strictly prohibited and may be unlawful. 
+                Please contact the sender immediately if you have received this message in error and promptly destroy the original communication.</code>
+                `;
+
+                const mailOptions = {
+                    from: mailDetails.mailId,
+                    to: to,
+                    subject: subject,
+                    html:  `
+                    <!DOCTYPE html>
+                    <html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:o="urn:schemas-microsoft-com:office:office">
+                    <head>
+                        <!-- ... (your existing head content) ... -->
+                    </head>
+                    <style>
+                        table {
+                            border-collapse: collapse;
+                            width: 100%;
+                        }
+        
+                        th, td {
+                            border: 1px solid #dddddd;
+                            text-align: center;
+                            padding: 8px;
+                        }
+        
+                        th {
+                            background-color: #f2f2f2;
+                        }
+                    </style>
+        
+                    <body style="margin:0;padding:0;">
+                    <p>Dear Sir/Madam,</p>
+        
+                    <p>${mailBody ? mailBody : "-"}</p>
+                        
+                        
+        
+                       
+                        <p>Thanks with Regards<br>
+                        ${empObj && empObj.firstName ? empObj.firstName : ""} ${empObj && empObj.lastName ? empObj.lastName : ""} - ${empObj && empObj.designation ? empObj.designation : ""}<br>
+                        ${compDetails && compDetails.companyName}<br>
+                        ${plantDetails.length > 0 && plantDetails[0].plantName ? plantDetails[0].plantName : ""} - ${plantDetails.length > 0 && plantDetails[0].plantAddress ? plantDetails[0].plantAddress : ""}</p>
+                        <br>
+                       
+                        ${systemGeneratedText}
+                        
+                    </body>
+                    </html>`,
+                    cc: ccs,
+                    bcc: bcc,
+                    attachments: [] // Initialize attachments array
+                };
+
+                console.log(mailOptions)
+                // Add attachments to mailOptions if files were uploaded
+                if (req.files && req.files.length > 0) {
+                    req.files.forEach((file) => {
+                        mailOptions.attachments.push({ filename: file.originalname, content: file.buffer });
+                    });
+                }
+                if (urls && urls.length > 0) {
+                    urls.forEach((file) => {
+                        mailOptions.attachments.push({ filename: `${file.fileName}.pdf`, path: file.filePath });
+                    });
+                }
+
+                // Send email with attachments
+                const transporter = await createTransporter();
+                if (!transporter) {
+                    console.error("Transporter not available.");
+                    return res.status(500).json({ error: 'Error sending email' });
+                }
+
+                transporter.sendMail(mailOptions, (error, info) => {
+                    if (error) {
+                        console.error('Error sending email:', error);
+                        res.status(500).send('Error sending email');
+                    } else {
+                        console.log('Email sent:', info.response);
+                        res.status(200).send('Email sent successfully');
+                    }
+                });
+            });
+        } catch (err) {
+            console.error('Error sending email with attachments:', err);
+            res.status(500).json({ error: 'Error sending email with attachments' });
+        }
+    }
 
 
 

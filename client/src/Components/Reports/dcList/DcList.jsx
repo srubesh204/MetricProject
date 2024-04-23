@@ -4,9 +4,9 @@ import { TextField, MenuItem, styled, Button, ButtonGroup, Chip, FormControl, Ou
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { DataGrid, GridToolbar,GridToolbarQuickFilter } from '@mui/x-data-grid';
+import { DataGrid, GridToolbar, GridToolbarQuickFilter } from '@mui/x-data-grid';
 import { Container, Paper } from '@mui/material';
-import { Edit, FilterAlt, Pages, PictureAsPdf, Print, PrintRounded } from '@mui/icons-material';
+import { Edit, FilterAlt, Pages, PictureAsPdf, Print, PrintRounded, Send } from '@mui/icons-material';
 import AddIcon from '@mui/icons-material/Add';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
@@ -22,12 +22,8 @@ import { ArrowBack, Error, HomeMax, House, Mail, MailLock, } from '@mui/icons-ma
 import { Link } from 'react-router-dom';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import DcEdit from './DcEdit';
-import DcAdd from './DcAdd';
 import { useEmployee } from '../../../App';
-import DcPrint from './DcPrint';
-import { useReactToPrint } from 'react-to-print';
-import html2pdf from 'html2pdf.js';
-
+import MailWithAtt from '../../mailComponent/MailWithAtt';
 export const DcListContent = createContext(null);
 
 const DcList = () => {
@@ -162,7 +158,7 @@ const DcList = () => {
         dcDepartment: ""
 
     })
-  
+
 
 
 
@@ -181,7 +177,7 @@ const DcList = () => {
             console.log(response.data)
 
             setVendorFullList(response.data.result);
-            
+
             setVendorDataList(response.data.result);
 
             // setFilteredData(response.data.result);
@@ -414,7 +410,7 @@ const DcList = () => {
                     setFilteredData(dcDataDcList)
                 } else {
                     const vendorType = dcDataDcList.filter((item) => (item[name] === value))
-                    const partyName =[...new Set(vendorType.map(dc => dc.dcPartyName))] 
+                    const partyName = [...new Set(vendorType.map(dc => dc.dcPartyName))]
                     setVendorTypeList(partyName)
                     setFilteredData(vendorType)
 
@@ -443,7 +439,7 @@ const DcList = () => {
 
 
     };
- 
+
 
     {/* const handleFilterChange = (e) => {
         const { name, value } = e.target;
@@ -528,7 +524,7 @@ const DcList = () => {
         },
         { field: 'dcItemRemarks', headerName: 'Remarks', headerAlign: "center", align: "center", width: 200 },
     ]
-   
+
 
 
     const sampleData = {
@@ -538,13 +534,41 @@ const DcList = () => {
     };
 
 
+    const [mailOpen, setMailOpen] = useState(false)
+    const [mailData, setMailData] = useState([])
+
+    const SendMail = () => {
+        
+        const data = filteredData.filter(item => itemListSelectedRowIds.includes(item._id))
+
+        const plantCheck = data.every(item => item.dcPlant === data[0].dcPlant)
+        if(plantCheck){
+            const urls = data.map(item => ({
+                itemPlant: item.dcPlant,
+                fileName: item.dcNo,
+                filePath: `${process.env.REACT_APP_PORT}/dcCertificate/${item.dcNo}.pdf`
+            }))
+            setMailData(urls)
+            setMailOpen(true)
+            setSnackBarOpen(false)
+        }else{
+            setSnackBarOpen(true)
+            setErrorHandler({ status: 0, message: "Multiple plants not allowed", code: "error" })
+        }
+        
+    }
+
+
+    const TotalListChildData = {
+        mailOpen,
+        setMailOpen,
+        selectedRows: mailData,
+        setSnackBarOpen,
+        setErrorHandler
+    }
 
 
 
-
-
-
-   
 
 
 
@@ -703,10 +727,13 @@ const DcList = () => {
                                     slots={{
                                         toolbar: () => (
                                             <div className='d-flex justify-content-between align-items-center'>
+
                                                 <GridToolbar />
-                                                <div className='mt-2'>
-                                                <GridToolbarQuickFilter />
-                                                    {itemListSelectedRowIds.length !== 0 && <Button variant='contained' type='button' size='small' color='error' onClick={() => setDeleteModalItem(true)}> Delete </Button>}
+
+                                                <div className='mt-1'>
+                                                    {itemListSelectedRowIds.length !== 0 && <Button className='me-2' endIcon={<Send />} onClick={() => SendMail()}>Send Mail </Button>}
+                                                    <GridToolbarQuickFilter />
+                                                    {itemListSelectedRowIds.length !== 0 && <Button className='ms-2' variant='contained' type='button' size='small' color='error' onClick={() => setDeleteModalItem(true)}> Delete </Button>}
                                                 </div>
 
                                             </div>
@@ -765,8 +792,8 @@ const DcList = () => {
                                     slots={{
                                         toolbar: GridToolbar,
                                     }}
-                                 
-                                   
+
+
 
                                     density="compact"
                                     //disableColumnMenu={true}
@@ -835,7 +862,7 @@ const DcList = () => {
                                     </DialogTitle>
                                     <DialogContent>
                                         <DialogContentText id="alert-dialog-description">
-                                            Are you sure to delete the ItemAdd
+                                            Are you sure to delete the selected DC
                                         </DialogContentText>
                                     </DialogContent>
                                     <DialogActions>
@@ -847,25 +874,7 @@ const DcList = () => {
                                 </Dialog>
 
 
-                                <Dialog
-                                    open={printModel}
-                                    onClose={() => setPrintModel(false)}
-                                    aria-labelledby="alert-dialog-title"
-                                    aria-describedby="alert-dialog-description"
-                                >
-                                    <DialogTitle id="alert-dialog-title">
-                                        {" ItemAdd delete confirmation?"}
-                                    </DialogTitle>
-                                    <DialogContent>
-                                        <DcPrint data={{ selectedRows }} />
-                                    </DialogContent>
-                                    <DialogActions>
-                                        <Button onClick={() => setPrintModel(false)}>Cancel</Button>
-                                        <Button onClick={() => { deleteDcData(); setDeleteModalItem(false); }} autoFocus>
-                                            Print
-                                        </Button>
-                                    </DialogActions>
-                                </Dialog>
+
 
                             </div>
 
@@ -874,11 +883,7 @@ const DcList = () => {
                             >
                                 <DcEdit />
                             </DcListContent.Provider>
-                            {/* <DcListContent.Provider
-                                value={{ dcOpen, setDcOpen, selectedRows, dcListFetchData, printState, setPrintState, itemPlantList, dcDataDcList, ItemFetch, lastNo }}
-                            >
-                                <DcAdd />
-                            </DcListContent.Provider> */}
+                            <MailWithAtt {...TotalListChildData} />
 
 
 

@@ -7,7 +7,7 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DataGrid, GridToolbar, GridToolbarQuickFilter } from '@mui/x-data-grid';
 import dayjs from 'dayjs';
 import { Container, Paper } from '@mui/material';
-import { Add, Remove, HighlightOffRounded } from '@mui/icons-material';
+import { Add, Remove, HighlightOffRounded, Send } from '@mui/icons-material';
 import { ArrowBack, Error, HomeMax, House, Mail, MailLock, } from '@mui/icons-material';
 import { Link } from "react-router-dom";
 import Autocomplete from '@mui/material/Autocomplete';
@@ -27,6 +27,7 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import { useEmployee } from '../../../App';
+import MailWithAtt from '../../mailComponent/MailWithAtt';
 export const CalData = createContext(null);
 dayjs.extend(isSameOrBefore)
 dayjs.extend(isSameOrAfter)
@@ -67,7 +68,7 @@ const CalList = () => {
         MasterFetch();
     }, []);
 
-    
+
 
     const itemMasterFetchData = async () => {
         try {
@@ -483,6 +484,40 @@ const CalList = () => {
     }, []);
 
 
+    const [mailOpen, setMailOpen] = useState(false)
+    const [mailData, setMailData] = useState([])
+
+    const SendMail = () => {
+
+        const data = filteredCalData.filter(item => calListSelectedRowIds.includes(item._id))
+
+        const plantCheck = data.every(item => item.calPlant === data[0].calPlant)
+        if (plantCheck) {
+            const urls = data.map(item => ({
+                itemPlant: item.calPlant,
+                fileName: item.calCertificateNo,
+                filePath: `${process.env.REACT_APP_PORT}/calCertificates/${item.calCertificateNo}.pdf`
+            }))
+            setMailData(urls)
+            setMailOpen(true)
+            setSnackBarOpen(false)
+        } else {
+            setSnackBarOpen(true)
+            setErrorHandler({ status: 0, message: "Multiple plants not allowed", code: "error" })
+        }
+
+    }
+
+
+    const TotalListChildData = {
+        mailOpen,
+        setMailOpen,
+        selectedRows: mailData,
+        setSnackBarOpen,
+        setErrorHandler
+    }
+
+
     return (
         <div>
 
@@ -639,6 +674,8 @@ const CalList = () => {
                                             <div className='d-flex justify-content-between align-items-center'>
                                                 <GridToolbar />
                                                 <div className='mt-2'>
+                                                    {calListSelectedRowIds.length > 0 && <Button className='me-2' endIcon={<Send />} onClick={() => SendMail()}>Send Mail </Button>}
+
                                                     <GridToolbarQuickFilter />
                                                     {calListSelectedRowIds.length !== 0 && <Button variant='contained' type='button' size='small' color='error' onClick={() => setDeleteModalItem(true)}> Delete </Button>}
 
@@ -734,7 +771,7 @@ const CalList = () => {
                         {selectedRows && <CalPrint />}
                     </CalData.Provider>
 
-
+                    <MailWithAtt {...TotalListChildData} />
 
 
 

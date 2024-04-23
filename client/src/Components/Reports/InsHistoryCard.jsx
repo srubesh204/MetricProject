@@ -11,7 +11,7 @@ import { useEmployee } from "../../App";
 import { ArrowBack, Error, HomeMax, House, Mail, MailLock, } from '@mui/icons-material';
 import { Link as RouterLink } from 'react-router-dom';
 import Autocomplete from '@mui/material/Autocomplete';
-
+import jsPDF from "jspdf";
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 
 import HistoryCardPrint from './HistoryCardPrint';
@@ -163,6 +163,65 @@ function InsHistoryCard() {
 
 
 
+    const generatePDF = () => {
+        const doc = new jsPDF({
+          orientation: "l",
+          unit: "pt",
+          format: [842, 595],
+        });
+        let dataToExport = filteredData.length> 0 ? filteredData : []
+    
+      const tableData = dataToExport.map((item, index) => {
+        const paidAmount = item.paymentDetails
+          ? `INR ${item.paymentDetails.paidAmount}`
+          : "";
+        const paymentDetails = item.paymentDetails
+          ? `Total MRP: INR ${item.paymentDetails.totalMrp}\nCoupon Discount: INR ${item.paymentDetails.couponDiscount}\nTotal Discount: INR ${item.paymentDetails.totalDiscount}\nPaid Amount: INR ${item.paymentDetails.paidAmount}`
+          : "";
+            return [
+              index + 1,
+              item.billingDetails.name,
+              item.billingDetails.email,
+              item.items.courses.map((v) => `• ${v.title}`).join("\n"),
+              paidAmount,
+              paymentDetails,
+              new Date(item.createdAt).toLocaleDateString(),
+              item.status,
+            ];
+          });
+    
+        doc.autoTable({
+          head: [
+            [
+              "S.No",
+              "Name",
+              "Email",
+              "Title",
+              "Paid Amount",
+              "Payment Details",
+              "Last Date",
+              "Status",
+            ],
+          ],
+          body: tableData,
+          columnStyles: {
+            0: { cellWidth: 35 },
+            1: { cellWidth: 100 },
+            2: { cellWidth: 125 },
+            3: { cellWidth: 140 },
+            4: { cellWidth: 80 },
+            5: { cellWidth: 150 },
+            6: { cellWidth: 80 },
+            7: { cellWidth: 60 },
+          },
+          styles: {
+            overflow: "linebreak",
+            columnStyles: { 5: { lineHeight: 1.5 } }, // Handle line breaks
+          },
+        });
+    
+        doc.save("course_purchase_list.pdf");
+      };
 
 
 
@@ -323,7 +382,7 @@ function InsHistoryCard() {
             align: 'center',
             headerAlign: 'center',
             renderCell: (params) => (
-                params.row.itemCalibratedAt === 'inhouse' && params.row.itemCertificateNo ? (
+                params.row.itemCalibrationSource === 'inhouse' && params.row.itemCertificateNo ? (
                     <IconButton size="small" component={Link} target="_blank" to={`${process.env.REACT_APP_PORT}/calCertificates/${params.row.itemCertificateNo}.pdf`}>
                         <FileCopy />
                     </IconButton>
