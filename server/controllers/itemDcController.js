@@ -185,7 +185,7 @@ const itemDcController = {
         await page.addStyleTag({ path: cssPath });
 
         // Generate PDF
-        await page.pdf({ path: `./storage/dcCertificate/${result.dcNo}.pdf`, format: 'A4' });
+        await page.pdf({ path: `./storage/certificates/${result.dcNo}.pdf`, format: 'A4' });
 
         await browser.close();
 
@@ -388,7 +388,7 @@ const itemDcController = {
           await page.addStyleTag({ path: cssPath });
 
           // Generate PDF
-          await page.pdf({ path: `./storage/dcCertificate/${updateItemDc.dcNo}.pdf`, format: 'A4' });
+          await page.pdf({ path: `./storage/certificates/${updateItemDc.dcNo}.pdf`, format: 'A4' });
 
           await browser.close();
 

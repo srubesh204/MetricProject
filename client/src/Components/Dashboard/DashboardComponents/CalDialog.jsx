@@ -41,13 +41,13 @@ const CalDialog = () => {
             const response = await axios.post(
                 `${process.env.REACT_APP_PORT}/itemCal/getAllItemCals`, { allowedPlants: allowedPlants }
             );
-            console.log(response.data.result)
+           
             try {
                 const imteNoData = response.data.result.filter((item) => item.calIMTENo === selectedRows[0].itemIMTENo)
-                console.log(imteNoData)
+               
                 setCalibrationDatas(response.data.result)
                 const maxDateObject = imteNoData.reduce((prev, current) => {
-                    console.log(prev, current)
+                    
                     const prevDate = dayjs(prev.calItemEntryDate);
                     const currentDate = dayjs(current.calItemEntryDate);
                     return currentDate.isAfter(prevDate) ? current : prev;
@@ -57,7 +57,7 @@ const CalDialog = () => {
                 setLastResultData("")
             }
             const lastOneResult = Math.max(...response.data.result.map((item) => item.calCertificateNo))
-            console.log(lastOneResult)
+          
 
         } catch (err) {
             console.log(err);
@@ -75,7 +75,7 @@ const CalDialog = () => {
     const [selectedExtraMaster, setSelectedExtraMaster] = useState([])
 
 
-    console.log(selectedRows[0])
+    
 
     const [initialCalData, setInitialCalData] = useState({
         ItemCalId: "",
@@ -196,10 +196,10 @@ const CalDialog = () => {
     
 
     useEffect(() => {
-        console.log("cal")
+        
         if (selectedRows.length > 0 && selectedRows[0].itemItemMasterIMTENo && selectedRows[0].itemItemMasterIMTENo.length > 0) {
             const masterData = itemMasters.filter(item => selectedRows[0].itemItemMasterIMTENo.map(mas => mas).includes(item.itemIMTENo))
-            console.log(masterData)
+       
             setCalibrationData(prev => ({ ...prev, calMasterUsed: masterData }))
         }
 
@@ -213,11 +213,10 @@ const CalDialog = () => {
     const [refMaster, setRefMaster] = useState({})
     const setCalData = () => {
 
-        console.log("hi")
+    
         if (selectedRows.length === 1) {
             const filter = masters.filter(mas => mas.itemDescription === selectedRows[0].itemAddMasterName)
 
-            console.log(filter)
             setRefMaster(filter.length > 0 ? filter[0] : [])
 
             setCalibrationData((prev) => (
@@ -281,18 +280,18 @@ const CalDialog = () => {
                 !calibrationData.calMasterUsed.some(cal => cal._id === item._id)
             );
 
-            console.log(remainingMasters)
+      
             setNonSelectedMaster(remainingMasters)
         }
 
     }
 
-    console.log(calibrationData)
+  
     useEffect(() => {
         nonSelectedMasterFun()
     }, [calibrationData.calMasterUsed, itemMasters])
 
-    console.log(calibrationData)
+   
 
 
 
@@ -390,7 +389,7 @@ const CalDialog = () => {
         // attribute rowstatus  
         if (calibrationData.calItemType === "attribute") {
             if (name === "calAverageOB") {
-                console.log("calAverage")
+               
                 setCalibrationData(prev => {
                     const updatedData = prev.calcalibrationData.map((item, idx) => {
                         if (idx === index) {
@@ -468,7 +467,7 @@ const CalDialog = () => {
 
             if (name === "calMinOB" || name === "calMaxOB") {
                 setCalibrationData(prev => {
-                    console.log("Im MIN/MAX")
+                  
                     const updatedData = prev.calcalibrationData.map((item, idx) => {
                         if (idx === index) {
 
@@ -477,7 +476,7 @@ const CalDialog = () => {
 
                                 if (item.calWearLimitPS <= item.calMinPS) {
 
-                                    console.log("work")
+                                    
                                     const isMinInRange = parseFloat(item.calMinOB) >= parseFloat(item.calWearLimitPS) &&
                                         parseFloat(item.calMinOB) <= parseFloat(item.calMaxPS);
                                     const isMaxInRange = parseFloat(item.calMaxOB) >= parseFloat(item.calWearLimitPS) &&
@@ -512,14 +511,14 @@ const CalDialog = () => {
                                     parseFloat(item.calMinOB) <= parseFloat(item.calMaxPS);
                                 const isMaxInRange = parseFloat(item.calMaxOB) >= parseFloat(item.calMinPS) &&
                                     parseFloat(item.calMaxOB) <= parseFloat(item.calMaxPS);
-                                console.log(status)
+                              
                                 return {
                                     ...item,
                                     rowStatus: status,
                                 };
 
                             } else {
-                                console.log("no Wearlimit")
+                              
                                 const isMinInRange = parseFloat(item.calMinOB) >= parseFloat(item.calMinPS) &&
                                     parseFloat(item.calMinOB) <= parseFloat(item.calMaxPS);
                                 const isMaxInRange = parseFloat(item.calMaxOB) >= parseFloat(item.calMinPS) &&
@@ -641,12 +640,11 @@ const CalDialog = () => {
     useEffect(() => {
 
         if (selectedRows.length > 0) {
-            console.log("working")
-            console.log(selectedRows[0].itemPlant)
+           
             const plantEmps = activeEmps.filter(emp => emp.plantDetails.some(plant => plant.plantName === selectedRows[0].itemPlant))
-            console.log(plantEmps)
+           
             const admins = plantEmps.filter(emp => emp.empRole === "plantAdmin" || emp.empRole === "admin")
-            console.log(admins)
+          
             setSelectedEmp(admins)
         }
 
@@ -657,7 +655,6 @@ const CalDialog = () => {
     const handleCalData = (e) => {
         const { name, value, checked } = e.target;
         setCalibrationData((prev) => ({ ...prev, [name]: value }))
-        console.log(name)
         if (name === "beforeCalSwitch") {
             setCalibrationData((prev) => ({ ...prev, calBeforeData: checked ? "yes" : "no" }))
         }
@@ -670,7 +667,6 @@ const CalDialog = () => {
         }
 
     }
-    console.log(lastResultShow)
 
 
     const addACValue = () => {
@@ -717,9 +713,7 @@ const CalDialog = () => {
 
         return Object.values(tempErrors).every(x => x === "")
     }
-    console.log(errors)
-
-    console.log(errorhandler)
+   
 
     const [loading, setLoading] = useState(false)
 
@@ -739,7 +733,7 @@ const CalDialog = () => {
             }
             else {
 
-                console.log("Error")
+               
                 setSnackBarOpen(true)
                 setErrorHandler({ status: 0, message: "Fill the required fields", code: "error" })
             }
@@ -749,21 +743,20 @@ const CalDialog = () => {
 
             if (err.response && err.response.status === 400) {
                 // Handle validation errors
-                console.log(err);
+              
                 const errorData400 = err.response.data.errors;
                 const errorMessages400 = Object.values(errorData400).join(', ');
-                console.log(errorMessages400)
+              
                 setErrorHandler({ status: 0, message: errorMessages400, code: "error" });
             } else if (err.response && err.response.status === 500) {
                 // Handle other errors
-                console.log(err);
+                
                 const errorData500 = err.response.data.error;
                 const errorMessages500 = Object.values(errorData500).join(', ');
-                console.log(errorMessages500)
+               
                 setErrorHandler({ status: 0, message: errorMessages500, code: "error" });
             } else {
-                console.log(err);
-                console.log(err.response.data.error)
+               
                 setErrorHandler({ status: 0, message: "An error occurred", code: "error" });
             }
 
@@ -779,18 +772,15 @@ const CalDialog = () => {
     const handleCalReportUpload = (event) => {
         const selectedFile = event.target.files[0];
         if (selectedFile) {
-            console.log("working");
             const formData = new FormData();
             formData.append('file', selectedFile);
             formData.append('calCertificateNo', calibrationData.calCertificateNo); // Assuming calibrationData is defined
 
-            console.log("FormData content:", formData); // Optional: Log the FormData content to verify
 
             try {
                 axios.post(`${process.env.REACT_APP_PORT}/upload/calReportUpload`, formData)
                     .then(response => {
                         setCertMessage("Calibration Report Uploaded Successfully");
-                        console.log("Certificate Uploaded Successfully");
                         setCalibrationData((prev) => ({ ...prev, calReportName: response.data.name }));
                     })
                     .catch(error => {
@@ -825,7 +815,7 @@ const CalDialog = () => {
     return (
         <Dialog fullWidth={true} keepMounted maxWidth="xl" open={calOpen} sx={{ color: "#f1f4f4" }}
             onClose={(e, reason) => {
-                console.log(reason)
+              
                 if (reason !== 'backdropClick' && reason !== 'escapeKeyDown') {
                     setCalOpen(false)
                 }
@@ -1124,7 +1114,7 @@ const CalDialog = () => {
                                     color="success"
                                     label={calibrationData.calReportName}
                                     onClick={() => {
-                                        const fileUrl = `${process.env.REACT_APP_PORT}/calCertificates/${calibrationData.calReportName}`;
+                                        const fileUrl = `${process.env.REACT_APP_PORT}/certificates/${calibrationData.calReportName}`;
                                         window.open(fileUrl, '_blank'); // Opens the file in a new tab/window
                                     }}
                                     onDelete={() => setCalibrationData((prev) => ({ ...prev, calReportName: "" }))}
@@ -1661,7 +1651,7 @@ const CalDialog = () => {
                     <Dialog
                         open={confirmSubmit}
                         onClose={(e, reason) => {
-                            console.log(reason)
+                         
                             if (reason !== 'backdropClick' && reason !== 'escapeKeyDown') {
                                 setConfirmSubmit(false)
                             }

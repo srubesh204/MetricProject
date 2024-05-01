@@ -16,7 +16,7 @@ const Dc = () => {
     const { dcOpen, setDcOpen, selectedRows, itemFetch, lastNo, vendors, loggedEmp } = dcDatas
 
 
-    console.log(loggedEmp)
+ 
 
     const initialDcData = {
         dcPartyId: "",
@@ -45,7 +45,7 @@ const Dc = () => {
         dcPartyItems: [],
         dcCreatedBy: loggedEmp.firstName + " " + loggedEmp.lastName
     })
-    console.log(dcData)
+
 
 
 
@@ -142,7 +142,7 @@ const Dc = () => {
         {
             field: 'dcItemRemarks', headerName: 'Remarks', width: 250,
             renderCell: (params) => {
-                console.log(params)
+               
                 const rowIndex = params.rowIndex;
 
                 return (
@@ -188,7 +188,7 @@ const Dc = () => {
             const response = await axios.get(
                 `${process.env.REACT_APP_PORT}/vendor/getVendorById/${id}`
             );
-            console.log(response)
+          
             setDcData((prev) => ({
                 ...prev,
                 dcPartyName: response.data.result.fullName,
@@ -210,7 +210,7 @@ const Dc = () => {
             const response = await axios.get(
                 `${process.env.REACT_APP_PORT}/itemAdd/getAllDistinctItemName`
             );
-            console.log(response.data)
+            
             setItemMasterDistNames(response.data.result);
 
         } catch (err) {
@@ -228,7 +228,7 @@ const Dc = () => {
             const response = await axios.get(
                 `${process.env.REACT_APP_PORT}/itemAdd/getItemAddByIMTESort`
             );
-            console.log(response.data)
+          
             setImteList(response.data.result)
 
 
@@ -263,22 +263,22 @@ const Dc = () => {
 
         return Object.values(tempErrors).every(x => x === "")
     }
-    console.log(errors)
+   
     const [errorhandler, setErrorHandler] = useState({})
-    console.log(errorhandler)
+  
 
     const [loader, setLoader] = useState(false)
 
     const submitDC = async () => {
         setLoader(true)
         try {
-            console.log("working")
+           
             if (validateFunction()) {
-                console.log("success")
+             
                 const response = await axios.post(
                     `${process.env.REACT_APP_PORT}/itemDc/createItemDc`, dcData
                 );
-                console.log(response)
+               
                 setDcData(initialDcData)
                 setErrorHandler({ status: 1, message: "Dc Created Successfully", code: "success" });
                 setSnackBarOpen(true)
@@ -287,7 +287,7 @@ const Dc = () => {
                 setTimeout(() => { setDcOpen(false); window.location.reload() }, 500)
             } else {
                 // setErrorHandler({ status: 0, message: errors, code: "error" });
-                console.log("Error")
+                
                 setSnackBarOpen(true)
                 setErrorHandler({ status: 0, message: "Fill the required fields", code: "error" })
             }
@@ -296,25 +296,24 @@ const Dc = () => {
 
             if (err.response && err.response.status === 400) {
                 // Handle validation errors
-                console.log(err);
+                
                 const errorData400 = err.response.data.errors;
                 const errorMessages400 = Object.values(errorData400).join(', ');
-                console.log(errorMessages400)
+            
                 setErrorHandler({ status: 0, message: errorMessages400, code: "error" });
             } else if (err.response && err.response.status === 500) {
                 // Handle other errors
-                console.log(err);
+                
                 const errorData500 = err.response.data.error;
                 const errorMessages500 = Object.values(errorData500);
-                console.log(errorMessages500)
+                
                 setErrorHandler({ status: 0, message: errorMessages500, code: "error" });
             } else {
-                console.log(err);
-                console.log(err.response.data.error)
+                
                 setErrorHandler({ status: 0, message: "An error occurred", code: "error" });
             }
 
-            console.log(err);
+          
 
         } finally {
             setLoader(false)
@@ -346,7 +345,7 @@ const Dc = () => {
             const response = await axios.post(
                 `${process.env.REACT_APP_PORT}/itemAdd/getItemAddByName`, { itemItemMasterName: value }
             );
-            console.log(response.data)
+           
             setAllItemImtes(response.data.result)
             const filteredImtes = response.data.result.filter((imtes) => !dcData.dcPartyItems.some(dcImte => imtes._id === dcImte._id))
             const dcStatusFilter = filteredImtes.filter((item) => item.dcStatus !== "1")
@@ -409,16 +408,15 @@ const Dc = () => {
 
     const handlePartyItemData = (e, index) => {
         const { name, value } = e.target;
-        console.log(index)
+       
         // Create a copy of the dcPartyItems array
         const updatedPartyItems = [...dcData.dcPartyItems];
-        console.log(updatedPartyItems)
+        
         // Update the specific object at the given index
         updatedPartyItems[index] = {
             ...updatedPartyItems[index],
             dcItemRemarks: value // Update the specific key with the new value
         };
-        console.log(updatedPartyItems[index])
 
         // Update dcPartyItems in the state
         setDcData(prev => ({
@@ -429,7 +427,6 @@ const Dc = () => {
 
 
 
-    console.log(dcData)
 
 
 
@@ -443,7 +440,7 @@ const Dc = () => {
     return (
         <Dialog fullWidth={true} keepMounted maxWidth="xl" open={dcOpen} sx={{ color: "#f1f4f4" }}
             onClose={(e, reason) => {
-                console.log(reason)
+                
                 if (reason !== 'backdropClick' && reason !== 'escapeKeyDown') {
                     setDcOpen(false)
                 }
@@ -777,7 +774,8 @@ const Dc = () => {
                             <Dialog
                                 open={confirmSubmit}
                                 onClose={(e, reason) => {
-                                    console.log(reason)
+                                    
+
                                     if (reason !== 'backdropClick' && reason !== 'escapeKeyDown') {
                                         setConfirmSubmit(false)
                                     }

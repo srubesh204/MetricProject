@@ -17,14 +17,7 @@ const HomeMail = () => {
 
     const mailDatas = useContext(HomeContent)
     const { mailOpen, setMailOpen, selectedRows, mailIds, setErrorHandler, setSnackBarOpen, vendors, mailList, bccMails, emp } = mailDatas
-
-
-    console.log(vendors)
     const bccMailsOnly = bccMails ? bccMails.map(emp => emp.mailId) : []
-    console.log(bccMailsOnly)
-
-
-
 
     useEffect(() => {
         setMailDetails(prev => ({ ...prev, to: emp.mailId, bcc: bccMailsOnly, employee: { ...emp } }))
@@ -82,11 +75,8 @@ const HomeMail = () => {
 
     const handleMailChange = (e) => {
         const { name, value } = e.target;
-        console.log(name, value)
+     
 
-        if (name === "vendorCc") {
-            console.log(value)
-        }
         if (name === "cc") {
             setMailDetails((prev) => ({ ...prev, [name]: typeof value === 'string' ? value.split(',') : value }));
         } else {
@@ -95,7 +85,6 @@ const HomeMail = () => {
 
     }
 
-    console.log(mailDetails)
     const [loading, setLoading] = useState(false);
 
     const handleSubmit = async (e) => {
@@ -103,7 +92,7 @@ const HomeMail = () => {
         try {
             setLoading(true)
             const response = await axios.post(`${process.env.REACT_APP_PORT}/mail/sendMail`, mailDetails)
-            console.log(response)
+            
         } catch (err) {
             console.error(err)
         } finally {
@@ -123,7 +112,7 @@ const HomeMail = () => {
         <Dialog
             open={mailOpen}
             onClose={(e, reason) => {
-                console.log(reason)
+               
                 if (reason !== 'backdropClick' && reason !== 'escapeKeyDown') {
                     setMailOpen(false)
                 }
@@ -239,7 +228,7 @@ const HomeMail = () => {
                                 renderValue={(selected) => (
                                     <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
                                         {selected.map((value) => {
-                                            console.log(selected)
+                                          
                                             return (
                                                 <Chip key={value} size='small' label={value} />
                                             )

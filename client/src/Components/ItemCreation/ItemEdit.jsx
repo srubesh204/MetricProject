@@ -892,20 +892,16 @@ const ItemEdit = () => {
         const selectedFile = event.target.files[0];
         console.log(selectedFile)
         if (selectedFile) {
-            console.log("working")
+            
 
             const formData = new FormData();
             if(itemAddData.itemCertificateNo){
                 formData.append("calCertificateNo", itemAddData.itemCertificateNo)
             }
+            
             formData.append('file', selectedFile);
             try {
-                let url = ""
-                if(itemAddData.itemCalibrationSource === "inhouse"){
-                    url = "itemCertificatesIH"
-                }else{
-                    url = "itemCertificates"
-                }
+                let url = "itemCertificatesIH"
                 axios.post(`${process.env.REACT_APP_PORT}/upload/${url}`, formData)
                     .then(response => {
                         setUploadMessage(response.data.message)
@@ -1250,7 +1246,7 @@ const ItemEdit = () => {
                                                 onChange={handleItemAddChange}
                                                 input={<OutlinedInput fullWidth label="Select IMTE No" />}
 
-                                                renderValue={(selected) => selected.join(", ")}
+                                                renderValue={(selected) => ""}
                                                 MenuProps={MenuProps}
                                                 fullWidth
                                             >
@@ -1282,7 +1278,7 @@ const ItemEdit = () => {
                                                 onChange={handleItemAddChange}
                                                 input={<OutlinedInput fullWidth label="Select Supplier" />}
                                                 // renderValue={(selected) => selected.join(', ')}
-                                                renderValue={(selected) => selected.map(item => item).join(", ")}
+                                                renderValue={(selected) => ""}
                                                 MenuProps={MenuProps}
 
                                                 fullWidth
@@ -1325,7 +1321,7 @@ const ItemEdit = () => {
                                                 onChange={handleItemAddChange}
                                                 input={<OutlinedInput fullWidth label="Select Supplier" />}
                                                 // renderValue={(selected) => selected.join(', ')}
-                                                renderValue={(selected) => selected.map(item => item).join(", ")}
+                                                renderValue={(selected) => ""}
                                                 MenuProps={MenuProps}
 
                                                 fullWidth
@@ -1348,11 +1344,11 @@ const ItemEdit = () => {
 
                                 </div>}
 
-                            {itemAddData.itemCalibrationSource === "inhouse" && <table className='table table-sm table-bordered text-center mt-2'>
+                            {itemAddData.itemCalibrationSource === "inhouse" && <div className="listTable"> <table className='table table-sm table-bordered text-center mt-2'>
                                 <tbody>
                                     <tr>
-                                        <th style={{ width: "20%" }}>Si No</th>
-                                        <th style={{ width: "50%" }}>Master Name</th>
+                                        <th style={{ width: "10%" }}>Si No</th>
+                                        <th style={{ width: "60%" }}>Master Name</th>
                                         <th style={{ width: "30%" }}>Due</th>
                                     </tr>
                                     {
@@ -1370,12 +1366,12 @@ const ItemEdit = () => {
 
 
                                 </tbody>
-                            </table>}
-                            {itemAddData.itemCalibrationSource === "outsource" && <table className='table table-sm table-bordered text-center mt-2'>
+                            </table></div>}
+                            {itemAddData.itemCalibrationSource === "outsource" && <div className="listTable"> <table className='table table-sm table-bordered text-center mt-2'>
                                 <tbody>
                                     <tr>
-                                        <th style={{ width: "20%" }}>Si No</th>
-                                        <th style={{ width: "80%" }}>Supplier</th>
+                                        <th style={{ width: "10%" }}>Si No</th>
+                                        <th style={{ width: "90%" }}>Supplier</th>
                                     </tr>
 
                                     {itemAddData.itemSupplier.map((item, index) => (
@@ -1391,13 +1387,13 @@ const ItemEdit = () => {
 
 
                                 </tbody>
-                            </table>}
-                            {itemAddData.itemCalibrationSource === "oem" && <table className='table table-sm table-bordered text-center mt-2'>
+                            </table></div>}
+                            {itemAddData.itemCalibrationSource === "oem" && <div className="listTable"> <table className='table table-sm table-bordered text-center mt-2'>
 
                                 <tbody>
                                     <tr>
-                                        <th style={{ width: "20%" }}>Si No</th>
-                                        <th style={{ width: "80%" }}>OEM</th>
+                                        <th style={{ width: "10%" }}>Si No</th>
+                                        <th style={{ width: "90%" }}>OEM</th>
 
                                     </tr>
 
@@ -1421,7 +1417,7 @@ const ItemEdit = () => {
 
 
                                 </tbody>
-                            </table>}
+                            </table></div>}
 
                         </Paper>
                         <div className="col">
@@ -1539,7 +1535,7 @@ const ItemEdit = () => {
                                     {itemAddData.itemCertificateName &&
                                         <div className="col-md-7 d-flex justify-content-between">
 
-                                            <Chip label={itemAddData.itemCertificateName} size='small' component="a" href={`${process.env.REACT_APP_PORT}/itemCertificates/${itemAddData.itemCertificateName}`} target="_blank" clickable={true} color="primary" />
+                                            <Chip label={itemAddData.itemCertificateName} size='small' component="a" href={`${process.env.REACT_APP_PORT}/certificates/${itemAddData.itemCertificateName}`} target="_blank" clickable={true} color="primary" />
                                             <HighlightOffRounded type="button" onClick={() => handleRemoveFile()} />
 
                                             {uploadMessage &&
