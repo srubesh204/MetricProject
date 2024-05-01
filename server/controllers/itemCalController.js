@@ -434,7 +434,7 @@ const itemCalController = {
           await page.addStyleTag({ path: cssPath });
 
           // Generate PDF
-          await page.pdf({ path: `./storage/calCertificates/${createdItem.calCertificateNo}.pdf`, format: 'A4' });
+          await page.pdf({ path: `./storage/certificates/${createdItem.calCertificateNo}.pdf`, format: 'A4' });
 
           await browser.close();
 
@@ -914,7 +914,7 @@ const itemCalController = {
           await page.addStyleTag({ path: cssPath });
 
           // Generate PDF
-          await page.pdf({ path: `./storage/calCertificates/${updateItemCal.calCertificateNo}.pdf`, format: 'A4' });
+          await page.pdf({ path: `./storage/certificates/${updateItemCal.calCertificateNo}.pdf`, format: 'A4' });
 
           await browser.close();
 

@@ -43,36 +43,28 @@ const ItemImageStorage = multer.diskStorage({
   },
 });
 
-const calCertificateStorage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, 'storage/calCertificates'); // Specify the folder where images will be stored
-  },
-  filename: (req, file, cb) => {
-    // Use calCertificateNo from the request body to set the filename
-    console.log(req.body)
 
-    cb(null, file.originalname); // Set the filename
-  },
-});
 
 const VendorCertificateStorage = createAdditionalStorage('vendorCertificates');
+const CertificatesStorage  = createAdditionalStorage('certificates');
 const WorkInstructionStorage = createDiskStorage('workInstructions');
-const itemCertificateStorage = createDiskStorage('itemCertificates');
+// const itemCertificateStorage = createDiskStorage('itemCertificates');
 const additionalCertificateStorage = createAdditionalStorage('additionalCertificates');
 const logoStorage = createDiskStorage('logo');
-const grnItemCertificates = createDiskStorage('grnItemCertificates');
+// const grnItemCertificates = createDiskStorage('grnItemCertificates');
 
 
 
 
 const vendorCertificateUpload = multer({ storage: VendorCertificateStorage });
+const certificatesFolder  = multer({ storage: CertificatesStorage });
 const workInsUploadFolder = multer({ storage: WorkInstructionStorage });
-const itemCertificateFolder = multer({ storage: itemCertificateStorage });
-const calCertificateFolder = multer({ storage: calCertificateStorage });
+// const itemCertificateFolder = multer({ storage: itemCertificateStorage });
+// const calCertificateFolder = multer({ storage: calCertificateStorage });
 const additionalCertificateFolder = multer({ storage: additionalCertificateStorage });
 const logoFolder = multer({ storage: logoStorage });
 
-const grnItemCertificateFolder = multer({ storage: grnItemCertificates });
+// const grnItemCertificateFolder = multer({ storage: grnItemCertificates });
 const itemMasterImagesFolder = multer({ storage: ItemImageStorage });
 
 router.post('/itemMasterImage', itemMasterImagesFolder.single('image'), (req, res) => {
@@ -96,14 +88,14 @@ router.post('/VendorCertificateUpload', vendorCertificateUpload.single('file'), 
   res.status(200).json({ message: 'Vendor Certificate uploaded successfully', name: req.file.filename });
 });
 
-router.post('/grnItemCertificates', grnItemCertificateFolder.single('file'), (req, res) => {
+router.post('/grnItemCertificates', certificatesFolder.single('file'), (req, res) => {
   if (!req.file) {
     // No file was provided in the request
     return res.status(400).json({ error: 'No file selected for upload' });
   }
 
   // File was provided, proceed with processing
-  res.status(200).json({ message: 'Grn  Certificate uploaded successfully', name: req.file.filename });
+  res.status(200).json({ message: 'Grn Certificate uploaded successfully', name: req.file.filename });
 });
 
 router.post('/VendorCertificateUpload', vendorCertificateUpload.single('file'), (req, res) => {
@@ -152,7 +144,7 @@ router.post('/workInstructions', workInsUploadFolder.single('file'), (req, res) 
   res.status(200).json({ message: 'Work Instruction uploaded successfully', name: req.file.filename });
 });
 
-router.post('/itemCertificates', itemCertificateFolder.single('file'), (req, res) => {
+router.post('/itemCertificates', certificatesFolder.single('file'), (req, res) => {
   if (!req.file) {
     // No file was provided in the request
     return res.status(400).json({ error: 'No file selected for upload' });
@@ -162,7 +154,7 @@ router.post('/itemCertificates', itemCertificateFolder.single('file'), (req, res
   res.status(200).json({ message: 'Item Certificate uploaded successfully', name: req.file.filename });
 });
 
-router.post('/itemCertificatesIH', calCertificateFolder.single('file'), (req, res) => {
+router.post('/itemCertificatesIH', certificatesFolder.single('file'), (req, res) => {
   const { calCertificateNo } = req.body;
   if (!req.file) {
     // No file was provided in the request
@@ -171,23 +163,23 @@ router.post('/itemCertificatesIH', calCertificateFolder.single('file'), (req, re
   fs.renameSync(req.file.path, req.file.path.replace(req.file.originalname,
     req.body.calCertificateNo + path.extname(req.file.originalname)));
   // File was provided, proceed with processing
-  res.status(200).json({ message: 'Item Certificate uploaded successfully', name: calCertificateNo ? calCertificateNo : req.file.filename });
+  res.status(200).json({ message: 'Item Certificate uploaded successfully', name: calCertificateNo ? calCertificateNo+ path.extname(req.file.originalname) : req.file.filename });
 });
 
-router.post('/calReportUpload', calCertificateFolder.single('file'), (req, res) => {
+router.post('/calReportUpload', certificatesFolder.single('file'), (req, res) => {
   const { calCertificateNo } = req.body;
   if (!req.file) {
     // No file was provided in the request
     return res.status(400).json({ error: 'No file selected for upload' });
   }
-  console.log(req.file)
+
 
   fs.renameSync(req.file.path, req.file.path.replace(req.file.originalname,
     req.body.calCertificateNo + path.extname(req.file.originalname)));
   
   console.log("Report Uploaded Successfully")
   // File was provided, proceed with processing
-  res.status(200).json({ message: 'Calibration Report uploaded successfully', name: `${calCertificateNo}.pdf` });
+  res.status(200).json({ message: 'Calibration Report uploaded successfully', name: `${calCertificateNo + path.extname(req.file.originalname)}` });
 });
 
 router.post('/additionalCertificates', additionalCertificateFolder.single('file'), (req, res) => {

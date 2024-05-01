@@ -178,7 +178,7 @@ const GrnList = () => {
         { field: 'grnItemAddMasterName', headerName: 'Description', width: 150, headerAlign: "center", align: "center" },
         { field: 'grnDate', headerName: 'Grn Date', width: 150, headerAlign: "center", align: "center", renderCell: (params) => dayjs(params.row.grnDate).format("DD-MM-YYYY") },
         { field: 'grnPartyName', headerName: 'Party Name', width: 200, headerAlign: "center", align: "center", },
-        { field: 'printButton', headerName: 'Print', headerAlign: "center", align: "center", width: 100, renderCell: (params) => <Button component={Link} to={`${process.env.REACT_APP_PORT}/grnCertificates/${params.row.grnNo}.pdf`} target='_blank'><PrintRounded color='success' /></Button> }
+        { field: 'printButton', headerName: 'Print', headerAlign: "center", align: "center", width: 100, renderCell: (params) => <Button component={Link} to={`${process.env.REACT_APP_PORT}/certificates/${params.row.grnNo}.pdf`} target='_blank'><PrintRounded color='success' /></Button> }
     ]
 
 

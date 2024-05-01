@@ -215,3 +215,9 @@ td{
     border: 0px;
     padding: 5px 10px;
   }
+
+  .listTable{
+	max-height: 130px;
+	overflow: auto;
+	font-size: 14px;
+  }

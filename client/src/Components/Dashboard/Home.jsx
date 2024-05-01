@@ -247,7 +247,7 @@ const Home = () => {
       const dcNextNumber = await axios.get(
         `${process.env.REACT_APP_PORT}/itemDc/getNextDcNo`
       );
-      console.log(dcNextNumber.data.result)
+      
       setLastNo(dcNextNumber.data.result)
       setDcList(response.data.result);
 
@@ -322,7 +322,7 @@ const Home = () => {
       const plantemps = response.data.result.filter(emp => emp.plantDetails.find(empPlant => employeeRole.loggedEmp.plantDetails.map(plant => plant.plantName).includes(empPlant.plantName)))
       const adminsList = plantemps.filter(emp => emp.empRole === "admin" || emp.empRole === "plantAdmin")
       const uniqueList = [...new Set(adminsList)]
-      console.log(adminsList)
+      
       setBccMails(uniqueList)
       setActiveEmps((prev) => ({ ...prev, allEmps: response.data.result, admins: admins, plantAdmins: plantAdmins, creators: creators, viewers: viewers }))
 
@@ -330,7 +330,7 @@ const Home = () => {
       console.log(err);
     }
   };
-  console.log(activeEmps)
+
   //
   const [defaultDep, setDefaultDep] = useState([])
 
@@ -348,9 +348,9 @@ const Home = () => {
       const plantDepartments = await axios.post(
         `${process.env.REACT_APP_PORT}/department/getDepartmentByPlant`, { allowedPlants: allowedPlants }
       );
-      console.log(plantDepartments)
+     
       setPlantWiseDepartments(plantDepartments.data.result)
-      console.log(Departments)
+     
       const defaultDepartment = Departments.data.result.filter((dep) => dep.defaultdep === "yes");
       const otherDepartment = Departments.data.result.filter((dep) => dep.defaultdep !== "yes")
       setAllDepartments([...defaultDepartment, ...otherDepartment])
@@ -360,7 +360,7 @@ const Home = () => {
     }
   };
 
-  console.log(allDepartments)
+
 
   const [vendorMails, setVendorMails] = useState([])
 
@@ -369,13 +369,13 @@ const Home = () => {
       const response = await axios.post(
         `${process.env.REACT_APP_PORT}/vendor/getVendorByPlants`, { allowedPlants: allowedPlants }
       );
-      console.log(response.data.result)
+     
       const allPlantVendors = response.data.result
       const allPlantCustomers = response.data.result.filter((item) => item.customer === "1")
       const allPlantSubContractors = response.data.result.filter((item) => item.subContractor === "1")
       const allPlantSuppliers = response.data.result.filter((item) => item.supplier === "1")
       const allPlantOems = response.data.result.filter((item) => item.oem === "1")
-      console.log(allPlantVendors)
+   
       const contactDetails = [...new Set(response.data.result.flatMap(item => item.vendorContacts.map(contact => contact.mailId)))];
 
       setVendors(allPlantVendors)
@@ -398,8 +398,7 @@ const Home = () => {
     getVendorsByType();
   }, [])
 
-  console.log(customers)
-  console.log(employeeRole)
+  
 
   const [activeItems, setActiveItems] = useState([])
 
@@ -410,39 +409,39 @@ const Home = () => {
     setLoader(true)
     try {
 
-      console.log(employeeRole)
+  
       const response = await axios.post(
         `${process.env.REACT_APP_PORT}/itemAdd/getItemByPlant`, { allowedPlants: allowedPlants }
       );
-      console.log(response.data.result)
+    
       let allItems = []
       if (employeeRole.employee === "admin") {
 
         const departmentItems = response.data.result.filter(item => employeeRole.loggedEmp.plantDetails.some(plant => plant.departments.includes(item.itemDepartment)))
-        console.log(departmentItems)
+      
         allItems = departmentItems
-        console.log(allItems)
+        
       } else if (employeeRole.employee === "plantAdmin") {
 
         const departmentItems = response.data.result.filter(item => employeeRole.loggedEmp.plantDetails.some(plant => plant.departments.includes(item.itemDepartment)))
         allItems = departmentItems
-        console.log(allItems)
+        
       } else if (employeeRole.employee === "creator") {
 
         const departmentItems = response.data.result.filter(item => employeeRole.loggedEmp.plantDetails.some(plant => plant.departments.includes(item.itemDepartment)))
         allItems = departmentItems
-        console.log(allItems)
+       
       } else if (employeeRole.employee === "viewer") {
 
         const departmentItems = response.data.result.filter(item => employeeRole.loggedEmp.plantDetails.some(plant => plant.departments.includes(item.itemDepartment)))
         allItems = departmentItems
-        console.log(allItems)
+       
       } else {
         allItems = response.data.result
       }
 
       const itemPart = allItems.map(item => item.itemPartName)
-      console.log(itemPart)
+   
 
       setItemList(allItems);
       setPieDataFilter(allItems)
@@ -452,7 +451,7 @@ const Home = () => {
       //
       // Assuming plantWiseList is an array of objects
       const sortedPlantWiseList = allItems.slice().sort((a, b) => a.itemIMTENo.localeCompare(b.itemIMTENo));
-      console.log(sortedPlantWiseList)
+     
 
       // Now, sortedPlantWiseList is a new array with the objects sorted based on the itemIMTENo property
 
@@ -463,7 +462,7 @@ const Home = () => {
 
       setItemListOptions([{ itemIMTENo: "All" }, ...allItems])
 
-      console.log(itemList)
+  
       const activeItems = allItems.filter((item) => item.itemStatus === "active");
       const spareItems = allItems.filter((item) => item.itemStatus === "spare");
       const breakDownItems = allItems.filter((item) => item.itemStatus === "breakdown");
@@ -489,7 +488,7 @@ const Home = () => {
       const customersLength = allItems.filter((item) => item.itemLocation === "customer")
       const subContractorLength = allItems.filter((item) => item.itemLocation === "subContractor")
       const supplierLength = allItems.filter((item) => item.itemLocation === "supplier")
-      console.log(depLength)
+  
 
       setItemStatus((prev) => {
         const updatedStatus = [...prev];
@@ -603,12 +602,11 @@ const Home = () => {
 
 
   useEffect(() => {
-    console.log(employeeRole)
+   
     if (employeeRole.loggedEmp.plantDetails.length === 1) {
 
       const availableDeps = employeeRole.loggedEmp.plantDetails[0].departments.filter(dep => filteredData.map(item => item.itemDepartment === dep))
-      console.log(employeeRole.loggedEmp.plantDetails[0].departments)
-      console.log(availableDeps)
+    
 
       setPlantDepartments(availableDeps)
       setPlantDeps(prev => ({ ...prev, itemDepartment: availableDeps.length === 1 ? availableDeps[0] : "All" }))
@@ -617,10 +615,9 @@ const Home = () => {
       const filteredPlants = employeeRole.loggedEmp.plantDetails.filter(plant => plant.plantName === selectedPlantName);
 
       if (filteredPlants.length > 0) {
-        console.log(filteredPlants[0].departments)
+       
         const availableDeps = filteredPlants[0].departments.filter(dep => filteredData.find(item => item.itemDepartment === dep))
-        console.log(availableDeps)
-        console.log(filteredPlants[0].departments)
+       
         setPlantDeps(prev => ({ ...prev, itemDepartment: availableDeps.length === 1 ? availableDeps[0] : "All" }))
         setPlantDepartments(availableDeps)
       } else {
@@ -636,7 +633,7 @@ const Home = () => {
     itemPlant: employeeRole.loggedEmp.plantDetails.length === 1 ? employeeRole.loggedEmp.plantDetails[0].plantName : "All",
     itemDepartment: plantDepartments.length === 1 ? plantDepartments[0] : "All"
   })
-  console.log(plantDepartments)
+
 
   const LocationEmpFilter = (e) => {
     const { name, value } = e.target;
@@ -644,7 +641,7 @@ const Home = () => {
     setPlantDeps(prev => ({ ...prev, [name]: value }))
     if (name === "itemPlant") {
       if (value === "All") {
-        console.log(activeEmps.allEmps)
+        
         // Assuming activeEmps.allEmps and employeeRole.loggedEmp are arrays
         setPlantDeps(prev => ({ ...prev, itemDepartment: "All" }))
         itemFetch();
@@ -656,7 +653,7 @@ const Home = () => {
           emp.plant.some(plant => plant === value)
         );
 
-        console.log(value)
+     
 
         const plantData = itemList.filter(plant => plant.itemPlant === value)
 
@@ -733,7 +730,6 @@ const Home = () => {
   }
 
 
-  console.log(itemLocationData)
 
 
   const ItemListColumns = [
@@ -827,12 +823,6 @@ const Home = () => {
     },
 
   ];
-
-
-
-
-  console.log(itemStatus)
-
 
 
 
@@ -942,7 +932,7 @@ const Home = () => {
 
 
   const itemStatusLegend = (name) => {
-    console.log(name)
+   
 
 
     const activeItems = pieDataFilter.filter((item) => item.itemStatus === "active");
@@ -982,7 +972,7 @@ const Home = () => {
 
 
   }
-  console.log(calSourceCount)
+ 
   const [selectedLoc, setSelectedLoc] = useState("")
 
   const ItemLocationDisplay = (name) => {
@@ -991,7 +981,7 @@ const Home = () => {
     if (name === "Departments") {
       const depTable = allDepartments.map((dep) => {
         const filteredData = pieDataFilter.filter((item) => item.itemCurrentLocation === dep.department);
-        console.log(filteredData)
+       
 
         const quantity = filteredData.length;
         if (quantity !== 0) {
@@ -1005,7 +995,7 @@ const Home = () => {
     if (name === "Sub Contractors") {
       const subTable = subContractors.map((sub) => {
         const filteredByDcLocation = pieDataFilter.filter((item) => item.itemLocation === "subContractor");
-        console.log(filteredByDcLocation)
+      
         const filteredByOEM = filteredByDcLocation.filter((item) => item.itemCurrentLocation === sub.fullName);
 
         const quantity = filteredByOEM.length;
@@ -1035,13 +1025,13 @@ const Home = () => {
     }
 
     if (name === "Suppliers") {
-      console.log(suppliers)
+     
       const supTable = suppliers.map((sup) => {
         const filteredByDcLocation = pieDataFilter.filter((item) => item.itemLocation === "supplier");
         const filteredByOEM = filteredByDcLocation.filter((item) => item.itemCurrentLocation === sup.fullName);
 
         const quantity = filteredByOEM.length;
-        console.log(sup.fullName)
+     
 
         if (quantity !== 0) {
           return { supName: sup.fullName, quantity };
@@ -1073,7 +1063,7 @@ const Home = () => {
 
 
   const itemLocationLegend = ({ payload }) => {
-    console.log(payload)
+   
     return (
 
       <table className='table table-borderless' style={{ display: "flex", justifyContent: "center", alignItems: "center", padding: 0 }}>
@@ -1095,7 +1085,7 @@ const Home = () => {
 
   const itemStatusLegendContent = ({ payload }) => {
     const itemWithLabel = itemStatus.find(item => item.label === "Total Items");
-    console.log(itemWithLabel)
+
     return (
 
       <table className='table table-borderless table-sm' style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
@@ -1107,7 +1097,7 @@ const Home = () => {
           </tr>
           {payload.map((entry, index) => (
             <tr key={index} height={entry.value === "Total Items" ? "50px" : ""}>
-              <td style={{ padding: "2px" }} onClick={() => { itemStatusLegend(entry.value); console.log(entry) }}><div style={{ width: '25px', height: '25px', backgroundColor: entry.color, marginRight: '10px', textAlign: "center", display: "flex", justifyContent: "center", alignItems: "center", cursor: "pointer" }}></div></td>
+              <td style={{ padding: "2px" }} onClick={() =>  itemStatusLegend(entry.value) }><div style={{ width: '25px', height: '25px', backgroundColor: entry.color, marginRight: '10px', textAlign: "center", display: "flex", justifyContent: "center", alignItems: "center", cursor: "pointer" }}></div></td>
               <td style={{ padding: "2px" }}>{entry.value}</td>
               <td style={{ padding: "2px", fontWeight: "bolder", color: entry.color }} className='ms-2 ps-3'>{entry.payload.value}</td>
             </tr>
@@ -1118,7 +1108,7 @@ const Home = () => {
   };
 
   const calibrationStatusLegendContent = ({ payload }) => {
-    console.log(payload)
+
     return (
 
       <table className='table table-borderless table-sm' style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
@@ -1158,7 +1148,6 @@ const Home = () => {
   const handlePieData = (name, value) => {
     setSelectedFilterName(name)
     setSelectedFilterValue(value)
-    console.log(name, value)
     const filter = plantWiseList.filter((item) => item[name] === value)
 
 
@@ -1219,12 +1208,12 @@ const Home = () => {
 
   const customerFilter = (name, value) => {
 
-    console.log(name, value)
+   
     const filter = plantWiseList.filter(item => {
       return item.itemPartName.some(partNo => partDataList.some(part => part.partNo === partNo && part.customer === value));
     });
 
-    console.log(filter)
+  
 
 
     const activeItems = filter.filter((item) => item.itemStatus === "active");
@@ -1289,7 +1278,7 @@ const Home = () => {
 
   const MainFilter = (newValue, extraName) => {
     setSelectedLoc("")
-    console.log(newValue, extraName)
+  
     setFilterNames(prev => ({ ...prev, [extraName]: newValue }))
     if (newValue === "All") {
 
@@ -1327,8 +1316,7 @@ const Home = () => {
     setFilteredData(calSrcFilter)
   }
 
-  console.log(selectedFilterName)
-  console.log(selectedFilterValue)
+
 
   const [selectedRows, setSelectedRows] = useState([]);
   const [selectedGrnRows, setSelectedGrnRows] = useState([])
@@ -1345,7 +1333,7 @@ const Home = () => {
     const itemData = selectedRows.map((item) => item._id)
     setDepUpdateData({ itemIds: itemData, itemCurrentLocation: value })
   }
-  console.log(DepUpdateData)
+
   const updateItemData = async (e) => {
     e.preventDefault()
     try {
@@ -1368,16 +1356,13 @@ const Home = () => {
         // Handle validation errors
         const errorData400 = err.response.data.errors;
         const errorMessages400 = Object.values(errorData400).join(', ');
-        console.log(errorMessages400)
         setErrorHandler({ status: 0, message: errorMessages400, code: "error" });
       } else if (err.response && err.response.status === 500) {
         // Handle other errors
         const errorData500 = err.response.data.error;
         const errorMessages500 = Object.values(errorData500).join(', ');
-        console.log(errorMessages500)
         setErrorHandler({ status: 0, message: errorMessages500, code: "error" });
       } else {
-        console.log(err)
         setErrorHandler({ status: 0, message: "An error occurred", code: "error" });
       }
     }
@@ -1385,13 +1370,13 @@ const Home = () => {
   const [mailIds, setMailIds] = useState([])
 
   const getMailPlant = async () => {
-    console.log(mailIds)
+   
     if (selectedRows.length > 0) {
       try {
         const response = await axios.post(
           `${process.env.REACT_APP_PORT}/employee/getMailIdsByPlant`, { allowedPlants: [selectedRows[0].itemPlant] }
         );
-        console.log(response.data.result)
+        
         setMailIds(response.data.result)
 
 
@@ -1418,7 +1403,7 @@ const Home = () => {
       const response = await axios.get(
         `${process.env.REACT_APP_PORT}/mailConfig/getMailConfigById/mailData`
       );
-      console.log(response.data.result)
+     
       setMailList(response.data.result)
 
 
@@ -1437,12 +1422,12 @@ const Home = () => {
     setStatusCheckMsg("")
     if (selectedRows.length === 1) {
       if (selectedRows[0].dcStatus === "1") {
-        console.log("dcworking")
+     
         const vendorPartyDetail = dcList.filter(dc => dc._id === selectedRows[0].dcId)
-        console.log(vendorPartyDetail)
+       
         if (vendorPartyDetail.length > 0) {
           const vendorDetails = vendors.filter(ven => ven._id === vendorPartyDetail[0].dcPartyId)
-          console.log(...vendorDetails)
+          
           setDcPartyDetails(...vendorDetails)
         }
       }
@@ -1470,13 +1455,13 @@ const Home = () => {
   const [departmentStatus, setDepartmentStatus] = useState(false)
 
 
-  console.log(selectedRows)
+
 
 
   const [StatusCheckMsg, setStatusCheckMsg] = useState("")
 
 
-  console.log()
+
 
   const dcCheck = () => {
     if (plantDeps.itemPlant && plantDeps.itemPlant !== "All" && plantDeps.itemPlant !== "") {
@@ -1485,7 +1470,7 @@ const Home = () => {
       );
       const activeItemsCheck = selectedRows.every(item => item.itemStatus !== "missing" && item.itemStatus !== "spare")
       const singlePlant = selectedRows.every((item, index, array) => item.itemPlant === array[0].itemPlant);
-      console.log(defaultDepartmentCheck);
+     
       if (defaultDepartmentCheck && singlePlant && selectedRows.length > 0 && activeItemsCheck) {
         setStatusCheckMsg("");
         setDcOpen(true);
@@ -1517,7 +1502,7 @@ const Home = () => {
       const grnBoolean = selectedRows.every(item => item.dcStatus === "1")
       const itemStatus = selectedRows.every(item => item.itemStatus !== "missing" && item.itemStatus !== "spare")
 
-      console.log(grnCheck && selectedRows.length === 1)
+      
       if (grnBoolean && itemStatus && selectedRows.length === 1) {
         setStatusCheckMsg("");
         setGrnOpen(true);
@@ -1543,10 +1528,10 @@ const Home = () => {
       const onSiteCheck = selectedRows.every(item => (item.itemCalibrationSource === "outsource" || item.itemCalibrationSource === "OEM"))
       const notInSite = selectedRows.every(item => item.itemCalibrationDoneAt === "Site")
       const nonDcItems = selectedRows.every(item => item.dcStatus !== "1")
-      console.log(onSiteCheck)
+     
       if (onSiteCheck && notInSite && selectedRows.length === 1 && nonDcItems) {
 
-        console.log("onsite")
+      
         setStatusCheckMsg("");
         setGrnOpen(true);
       } else {
@@ -1582,13 +1567,13 @@ const Home = () => {
 
           if (defaultDepartmentCheck) {
             setCalOpen(true);
-            console.log("working")
+           
           } else {
             setStatusCheckMsg("Move the item to the primary location then try again!")
-            console.log(StatusCheckMsg)
+           
           }
         } else if (selectedRows.length > 0 && selectedRows[0].itemCalibrationDoneAt === "Site") {
-          console.log("working")
+          
           setCalOpen(true)
         }
 
@@ -1645,27 +1630,26 @@ const Home = () => {
 
   const [partCustomerList, setPartCustomerList] = useState([])
   useEffect(() => {
-    console.log(plantWiseList)
+    
     const distinctNames = plantWiseList.map(item => item.itemAddMasterName);
     const distinctImtes = plantWiseList.map(item => item.itemIMTENo);
     const partDetails = [...new Set(plantWiseList.flatMap(item => item.itemPartName))]
     const partDatas = partDataList.filter(part => partDetails.includes(part.partNo))
     const customersData = ["All", ...new Set(partDatas.map(part => part.customer))]
     setPartCustomerList(customersData)
-    console.log(customersData)
-    console.log(distinctNames)
+   
     distinctNames.sort()
     distinctImtes.sort()
 
     const names = [...new Set(distinctNames)]
     const imtes = ["All", ...new Set(distinctImtes)]
-    console.log(names)
+   
     setItemDistinctNames(names)
     setItemDistinctIMTEs(imtes)
 
   }, [plantWiseList])
 
-  console.log(selectedRows)
+ 
 
   const [itemMasterSort, setItemMasterSort] = useState([])
   const getDistinctItemName = async () => {
@@ -1673,7 +1657,7 @@ const Home = () => {
       const response = await axios.get(
         `${process.env.REACT_APP_PORT}/itemAdd/getItemAddByIMTESort`
       );
-      console.log(response.data)
+      
       setItemMasterSort(response.data.result);
 
     } catch (err) {
@@ -1685,10 +1669,10 @@ const Home = () => {
   }, []);
 
 
-  console.log(plantWiseDepartments)
+  
 
   useEffect(() => {
-    console.log(plantDeps.itemPlant)
+   
     if (plantDeps.itemPlant === "All") {
       setSelectedPlantDepartment(plantWiseDepartments)
     } else {
@@ -1716,8 +1700,8 @@ const Home = () => {
                 spacing={2}>
                 <TextField select onChange={(e) => LocationEmpFilter(e)} disabled={employeeRole.loggedEmp.plantDetails.length <= 1} value={plantDeps.itemPlant} fullWidth size='small' defaultValue="All" name='itemPlant' id='itemPlantId' label="Plant Location">
                   <MenuItem value="All">All</MenuItem>
-                  {employeeRole.loggedEmp.length !== 0 && employeeRole.loggedEmp.plantDetails.map(item => (
-                    <MenuItem value={item.plantName}>{item.plantName}</MenuItem>
+                  {employeeRole.loggedEmp.length !== 0 && employeeRole.loggedEmp.plantDetails.map((item, index) => (
+                    <MenuItem key={index} value={item.plantName}>{item.plantName}</MenuItem>
                   ))}
 
                 </TextField>
@@ -1823,7 +1807,7 @@ const Home = () => {
                     labelLine={false}
                   >
                     {calStatus.map((entry, index) => {
-                      console.log(entry)
+                      
                       return (
                         <Cell key={`cell-${index}`} fill={calStatusColor[index % calStatusColor.length]} />
                       )
@@ -1903,7 +1887,7 @@ const Home = () => {
                     layout='vertical'
                     iconSize={30}
                     content={itemStatusLegendContent}
-                    onClick={(e) => console.log(e)}
+                    
                   />
                 </PieChart>
 

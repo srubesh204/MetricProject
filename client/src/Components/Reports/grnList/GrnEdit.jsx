@@ -480,23 +480,21 @@ const GrnEdit = () => {
     const handleGrnCertificate = (event) => {
         const selectedFile = event.target.files[0];
         if (selectedFile) {
-            console.log("working")
-
-            const fileURL = URL.createObjectURL(selectedFile);
 
 
             const formData = new FormData();
+            if (grnEditData.grnItemCertificateNo) {
+                formData.append("calCertificateNo", grnEditData.grnItemCertificateNo)
+            }
             formData.append('file', selectedFile);
             try {
-                axios.post(`${process.env.REACT_APP_PORT}/upload/itemCertificates`, formData)
+                axios.post(`${process.env.REACT_APP_PORT}/upload/itemCertificatesIH`, formData)
                     .then(response => {
                         // setCertMessage("Certificate Uploaded Successfully")
-                        console.log("Certificate Uploaded Successfully")
                         setGrnEditData((prev) => ({ ...prev, grnItemCertificate: response.data.name }));
                     })
                     .catch(error => {
                         // setCertMessage("Error Uploading Certificate")
-                        console.log("Error")
                     });
             } catch (error) {
                 console.error('Error uploading the file:', error);
@@ -504,6 +502,8 @@ const GrnEdit = () => {
 
         }
     };
+
+   
 
 
     const changeGrnData = (index, name, value) => {
@@ -1242,7 +1242,7 @@ const GrnEdit = () => {
                                                             color="success"
                                                             label={grnEditData.grnItemCertificate}
                                                             onClick={() => {
-                                                                const fileUrl = `${process.env.REACT_APP_PORT}/itemCertificates/${grnEditData.grnItemCertificate}`;
+                                                                const fileUrl = `${process.env.REACT_APP_PORT}/certificates/${grnEditData.grnItemCertificate}`;
                                                                 window.open(fileUrl, '_blank'); // Opens the file in a new tab/window
                                                             }}
                                                             onDelete={() => setGrnEditData((prev) => ({ ...prev, grnItemCertificate: "" }))}

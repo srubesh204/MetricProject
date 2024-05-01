@@ -371,6 +371,7 @@ const itemGRNController = {
             itemUncertaintyUnit,
             itemPrevCalData,
             itemCalibratedAt: result.grnPartyName,
+            itemCertificateNo: result.grnItemCertificate,
             itemCertificateName: result.grnItemCertificate,
             itemOBType,
             itemUncertainty: result.grnItemUncertainty,
@@ -436,7 +437,7 @@ const itemGRNController = {
         await page.addStyleTag({ path: cssPath });
 
         // Generate PDF
-        await page.pdf({ path: `./storage/grnCertificates/${result.grnNo}.pdf`, format: 'A4' });
+        await page.pdf({ path: `./storage/certificates/${result.grnNo}.pdf`, format: 'A4' });
 
         await browser.close();
 
@@ -782,7 +783,7 @@ const itemGRNController = {
             itemPrevCalData,
             itemCalibratedAt,
             itemCertificateName: grnItemCertificate,
-            itemCertificateNo,
+            itemCertificateNo: updateItemGRN.grnItemCertificateNo,
             itemOBType,
             itemUncertainty,
             acceptanceCriteria: obSize
@@ -847,7 +848,7 @@ const itemGRNController = {
         await page.setContent(modifiedHTML, { waitUntil: 'networkidle0' });
         await page.addStyleTag({ path: cssPath });
         // Generate PDF
-        await page.pdf({ path: `./storage/grnCertificates/${grnNo}.pdf`, format: 'A4' });
+        await page.pdf({ path: `./storage/certificates/${grnNo}.pdf`, format: 'A4' });
 
         await browser.close();
         console.log(process.env.SERVER_PORT)

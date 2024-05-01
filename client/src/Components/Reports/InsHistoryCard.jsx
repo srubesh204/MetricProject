@@ -382,20 +382,9 @@ function InsHistoryCard() {
             align: 'center',
             headerAlign: 'center',
             renderCell: (params) => (
-                params.row.itemCalibrationSource === 'inhouse' && params.row.itemCertificateNo ? (
-                    <IconButton size="small" component={Link} target="_blank" to={`${process.env.REACT_APP_PORT}/calCertificates/${params.row.itemCertificateNo}.pdf`}>
+                    <IconButton size="small" component={Link} target="_blank" to={`${process.env.REACT_APP_PORT}/certificates/${params.row.itemCertificateNo}.pdf`}>
                         <FileCopy />
                     </IconButton>
-                ) : (
-                    params.row.itemCertificateName ? (
-                        <IconButton size="small" component={Link} target="_blank" to={`${process.env.REACT_APP_PORT}/itemCertificates/${params.row.itemCertificateName}`}>
-                            <FileOpen />
-                        </IconButton>
-                    ) : (
-                        // Render something else when there is no file uploaded
-                        <span></span>
-                    )
-                )
             ),
         },
 

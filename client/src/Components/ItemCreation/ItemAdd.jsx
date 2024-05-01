@@ -599,9 +599,7 @@ const ItemAdd = () => {
                 setSnackBarOpen(true)
                 console.log("Item Created Successfully")
                 setErrorHandler({ status: response.data.status, message: response.data.message, code: "success" })
-                setTimeout(() => {
-                    navigate('/itemList');
-                }, 2000);
+                navigate('/itemList');
             } else {
                 console.log("error")
                 setErrorHandler({ status: 0, message: "Fill the required fields", code: "error" })
@@ -640,21 +638,16 @@ const ItemAdd = () => {
         const selectedFile = event.target.files[0];
         console.log(selectedFile)
         if (selectedFile) {
-            
+
 
             const formData = new FormData();
-            if(itemAddData.itemCertificateNo){
+            if (itemAddData.itemCertificateNo) {
                 formData.append("calCertificateNo", itemAddData.itemCertificateNo)
             }
-            
+
             formData.append('file', selectedFile);
             try {
-                let url = ""
-                if(itemAddData.itemCalibrationSource === "inhouse"){
-                    url = "itemCertificatesIH"
-                }else{
-                    url = "itemCertificates"
-                }
+                let url = "itemCertificatesIH"
                 axios.post(`${process.env.REACT_APP_PORT}/upload/${url}`, formData)
                     .then(response => {
                         setUploadMessage(response.data.message)
@@ -704,7 +697,7 @@ const ItemAdd = () => {
             formData.append('file', selectedFile);
             formData.append('msaName', itemAddData.itemIMTENo + "MSA");// Append rdName to the formData
             try {
-                
+
                 axios.post(`${process.env.REACT_APP_PORT}/upload/msaCertificates`, formData)
                     .then(response => {
                         setItemAddData((prev) => ({ ...prev, msaName: response.data.name }));
@@ -1116,7 +1109,8 @@ const ItemAdd = () => {
                                                     onChange={handleItemAddChange}
                                                     input={<OutlinedInput fullWidth label="Select IMTE No" />}
                                                     // renderValue={(selected) => selected.map(item => item.itemIMTENo).join(", ")}
-                                                    renderValue={(selected) => selected.join(", ")} MenuProps={MenuProps}
+                                                    renderValue={(selected) => ""}
+                                                    MenuProps={MenuProps}
                                                     fullWidth
                                                 >
                                                     {itemMasterListByName.map((name, index) => (
@@ -1150,7 +1144,7 @@ const ItemAdd = () => {
                                                     onChange={handleItemAddChange}
                                                     input={<OutlinedInput fullWidth label="Select Supplier" />}
                                                     // renderValue={(selected) => selected.join(', ')}
-                                                    renderValue={(selected) => selected.map(item => item).join(", ")}
+                                                    renderValue={(selected) => ""}
                                                     MenuProps={MenuProps}
 
                                                     fullWidth
@@ -1190,7 +1184,7 @@ const ItemAdd = () => {
                                                     input={<OutlinedInput fullWidth label="Select Supplier" />}
                                                     // renderValue={(selected) => selected.join(', ')}
                                                     // renderValue={(selected) => selected.map(item => OEMList.find(oem => oem._id === item).aliasName).join(", ")}
-                                                    renderValue={(selected) => selected.map(item => item).join(", ")}
+                                                    renderValue={(selected) => ""}
                                                     MenuProps={MenuProps}
 
                                                     fullWidth
@@ -1218,11 +1212,11 @@ const ItemAdd = () => {
 
                                     </div>}
 
-                                {itemAddData.itemCalibrationSource === "inhouse" && <table className='table table-sm table-bordered text-center mt-2'>
+                                {itemAddData.itemCalibrationSource === "inhouse" && <div className="listTable"><table className=' table table-sm table-bordered text-center mt-2'>
                                     <tbody>
                                         <tr>
-                                            <th style={{ width: "20%" }}>Si No</th>
-                                            <th style={{ width: "50%" }}>Master Name</th>
+                                            <th style={{ width: "10%" }}>Si No</th>
+                                            <th style={{ width: "60%" }}>Master Name</th>
                                             <th style={{ width: "30%" }}>Due</th>
                                         </tr>
 
@@ -1254,12 +1248,12 @@ const ItemAdd = () => {
 
 
                                     </tbody>
-                                </table>}
-                                {itemAddData.itemCalibrationSource === "outsource" && <table className='table table-sm table-bordered text-center mt-2'>
+                                </table></div>}
+                                {itemAddData.itemCalibrationSource === "outsource" && <div className="listTable"> <table className='table table-sm table-bordered text-center mt-2'>
                                     <tbody>
                                         <tr>
-                                            <th style={{ width: "20%" }}>Si No</th>
-                                            <th style={{ width: "80%" }}>Supplier</th>
+                                            <th style={{ width: "10%" }}>Si No</th>
+                                            <th style={{ width: "90%" }}>Supplier</th>
                                         </tr>
                                         {/* {
                                             itemAddData.itemSupplier.map((itemSup, index) => {
@@ -1282,12 +1276,12 @@ const ItemAdd = () => {
 
 
                                     </tbody>
-                                </table>}
-                                {itemAddData.itemCalibrationSource === "oem" && <table className='table table-sm table-bordered text-center mt-2'>
+                                </table></div>}
+                                {itemAddData.itemCalibrationSource === "oem" && <div className="listTable"><table className='table table-sm table-bordered text-center mt-2'>
                                     <tbody>
                                         <tr>
-                                            <th style={{ width: "20%" }}>Si No</th>
-                                            <th style={{ width: "80%" }}>OEM</th>
+                                            <th style={{ width: "10%" }}>Si No</th>
+                                            <th style={{ width: "90%" }}>OEM</th>
 
                                         </tr>
 
@@ -1304,7 +1298,7 @@ const ItemAdd = () => {
 
                                     </tbody>
 
-                                </table>}
+                                </table></div>}
 
                             </Paper>
                             <div className="col">
@@ -1418,7 +1412,7 @@ const ItemAdd = () => {
                                         {itemAddData.itemCertificateName &&
                                             <div className="col-md-7 d-flex justify-content-between">
 
-                                                <Chip label={itemAddData.itemCertificateName} size='small' component="a" href={`${process.env.REACT_APP_PORT}/itemCertificates/${itemAddData.itemCertificateName}`} target="_blank" clickable={true} color="primary" />
+                                                <Chip label={itemAddData.itemCertificateName} size='small' component="a" href={`${process.env.REACT_APP_PORT}/certificates/${itemAddData.itemCertificateName}`} target="_blank" clickable={true} color="primary" />
                                                 <HighlightOffRounded type="button" onClick={() => handleRemoveFile()} />
 
                                                 {uploadMessage &&
@@ -1695,7 +1689,7 @@ const ItemAdd = () => {
                                                     fullWidth
                                                 >
                                                     {loggedEmp.plantDetails && loggedEmp.plantDetails.map((plant, index) => (
-                                                        <MenuItem  key={index} value={plant.plantName}>
+                                                        <MenuItem key={index} value={plant.plantName}>
                                                             <Checkbox checked={itemAddData.plantAccess && itemAddData.plantAccess.indexOf(plant.plantName) > -1} />
                                                             <ListItemText primary={plant.plantName} />
                                                         </MenuItem>
@@ -1714,7 +1708,7 @@ const ItemAdd = () => {
                                         <Button className='me-2' component={RouterLink} to={`/itemList/`} >
                                             Back To List
                                         </Button>
-                                        <Button variant="contained" onClick={() => setOpen(true)}  type="button">
+                                        <Button variant="contained" onClick={() => setOpen(true)} type="button">
                                             Item Create
                                         </Button>
                                     </div>

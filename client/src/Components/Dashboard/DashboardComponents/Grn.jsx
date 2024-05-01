@@ -37,7 +37,7 @@ const Grn = () => {
                 `${process.env.REACT_APP_PORT}/unit/getAllUnits`
             );
             setUnits(response.data.result);
-            console.log(response.data)
+            
         } catch (err) {
             console.log(err);
         }
@@ -186,12 +186,12 @@ const Grn = () => {
 
 
     })
-    console.log(grnData)
+    
 
 
     const settingDcData = () => {
         if (selectedRows.length > 0 && lastGrnNo && dcPartyDetails) {
-            console.log(dcPartyDetails)
+            
             setGrnData((prev) => (
                 {
                     ...prev,
@@ -228,7 +228,7 @@ const Grn = () => {
 
 
 
-    console.log(grnData)
+    
 
 
 
@@ -247,7 +247,7 @@ const Grn = () => {
             const response = await axios.get(
                 `${process.env.REACT_APP_PORT}/vendor/getVendorById/${value}`
             );
-            console.log(response)
+            
             setGrnData((prev) => ({
                 ...prev,
                 grnPartyName: response.data.result.fullName,
@@ -296,7 +296,7 @@ const Grn = () => {
             const response = await axios.get(
                 `${process.env.REACT_APP_PORT}/itemAdd/getDistinctItemName`
             );
-            console.log(response.data)
+          
             setItemMasterDistNames(response.data.result);
 
         } catch (err) {
@@ -314,7 +314,7 @@ const Grn = () => {
             const response = await axios.get(
                 `${process.env.REACT_APP_PORT}/itemAdd/getItemAddByIMTESort`
             );
-            console.log(response.data)
+            
             setImteList(response.data.result)
 
 
@@ -453,7 +453,7 @@ const Grn = () => {
 
     }
 
-    console.log(grnData)
+  
 
 
 
@@ -780,7 +780,7 @@ const Grn = () => {
         if (grnData.grnItemCalFrequencyType === "months") {
             if (parsedDate.isValid() && !isNaN(parseInt(itemCalFreInMonths))) {
                 const calculatedDate = parsedDate.add(parseInt(itemCalFreInMonths, 10), 'month').subtract(1, 'day');
-                console.log(calculatedDate)
+                
                 setGrnData((prev) => ({
                     ...prev,
                     grnItemDueDate: calculatedDate.format('YYYY-MM-DD'),
@@ -790,7 +790,7 @@ const Grn = () => {
         if (grnData.grnItemCalFrequencyType === "days") {
             if (parsedDate.isValid() && !isNaN(parseInt(itemCalFreInMonths))) {
                 const calculatedDate = parsedDate.add(parseInt(itemCalFreInMonths, 10), 'day').subtract(1, 'day');
-                console.log(calculatedDate)
+                
                 setGrnData((prev) => ({
                     ...prev,
                     grnItemDueDate: calculatedDate.format('YYYY-MM-DD'),
@@ -832,7 +832,6 @@ const Grn = () => {
         return Object.values(tempErrors).every(x => x === "")
     }
 
-    console.log(errors)
 
     const [isLoading, setIsLoading] = useState(false)
     const submitGrnForm = async () => {
@@ -844,44 +843,40 @@ const Grn = () => {
                     `${process.env.REACT_APP_PORT}/itemGRN/createItemGRN`, grnData
                 );
 
-                console.log(response.data.result)
+                
                 setErrorHandler({ status: 0, message: "GRN Created Successfully", code: "success" });
                 setSnackBarOpen(true)
                 setGrnData(initialGrnData)
                 setTimeout(() => { setGrnOpen(false); window.location.reload() }, 500)
             } else {
-                // console.log(errors)
-                // setErrorHandler({ status: 0, message: Object.values(errors).join(', '), code: "error" });
-                // setSnackBarOpen(true)
-                console.log("Error")
+              
+               
                 setSnackBarOpen(true)
                 setErrorHandler({ status: 0, message: "Fill the required fields", code: "error" })
             }
         } catch (err) {
-            console.log(err)
+            
             setSnackBarOpen(true)
 
             if (err.response && err.response.status === 400) {
                 // Handle validation errors
-                console.log(err);
+                
                 const errorData400 = err.response.data.errors;
                 const errorMessages400 = Object.values(errorData400).join(', ');
-                console.log(errorMessages400)
+                
                 setErrorHandler({ status: 0, message: errorMessages400, code: "error" });
             } else if (err.response && err.response.status === 500) {
                 // Handle other errors
-                console.log(err);
+                
                 const errorData500 = err.response.data.error;
                 const errorMessages500 = Object.values(errorData500).join(', ');
-                console.log(errorMessages500)
+                
                 setErrorHandler({ status: 0, message: errorMessages500, code: "error" });
             } else {
-                //console.log(err);
-                //console.log(err.response.data.error)
+                
                 setErrorHandler({ status: 0, message: "An error occurred", code: "error" });
             }
 
-            console.log(err);
 
         } finally {
             setIsLoading(false)
@@ -901,22 +896,25 @@ const Grn = () => {
     const handleGrnCertificate = (event) => {
         const selectedFile = event.target.files[0];
         if (selectedFile) {
-            console.log("working")
+           
             const formData = new FormData();
+            if (grnData.grnItemCertificateNo) {
+                formData.append("calCertificateNo", grnData.grnItemCertificateNo)
+            }
             formData.append('file', selectedFile);
             try {
-                axios.post(`${process.env.REACT_APP_PORT}/upload/itemCertificates`, formData)
+                axios.post(`${process.env.REACT_APP_PORT}/upload/itemCertificatesIH`, formData)
                     .then(response => {
                         setCertMessage("Certificate Uploaded Successfully")
-                        console.log("Certificate Uploaded Successfully")
+                        
                         setGrnData((prev) => ({ ...prev, grnItemCertificate: response.data.name }));
                     })
                     .catch(error => {
                         setCertMessage("Error Uploading Certificate")
-                        console.log(error)
+                      
                     });
             } catch (error) {
-                console.error('Error uploading the file:', error);
+              
             }
 
         }
@@ -931,7 +929,7 @@ const Grn = () => {
 
         <Dialog fullScreen keepMounted open={grnOpen} sx={{ color: "#f1f4f4" }}
             onClose={(e, reason) => {
-                console.log(reason)
+                
                 if (reason !== 'backdropClick' && reason !== 'escapeKeyDown') {
                     setGrnOpen(false)
                 }
@@ -1721,7 +1719,7 @@ const Grn = () => {
                         <Dialog
                             open={confirmSubmit}
                             onClose={(e, reason) => {
-                                console.log(reason)
+                                
                                 if (reason !== 'backdropClick' && reason !== 'escapeKeyDown') {
                                     setConfirmSubmit(false)
                                 }
@@ -1763,7 +1761,7 @@ const Grn = () => {
 
                 <div>
                     <Button variant='contained' color='error' className='me-3' onClick={() => { setGrnOpen(false); setGrnData([]); setGrnData(initialGrnData); window.location.reload() }}>Cancel</Button>
-                    <Button variant='contained' color='success' onClick={() => { setConfirmSubmit(true) }}>Submit {isLoading ? <CircularProgress sx={{ color: "inherit" }} variant="indeterminate" size={20} /> : ""}</Button>
+                    <Button variant='contained' color='success' onClick={() => { setConfirmSubmit(true) }}>Submit  {isLoading ? <CircularProgress sx={{ color: "inherit" }} variant="indeterminate" size={20} /> : ""} </Button>
                 </div>
             </DialogActions>
 
