@@ -12,6 +12,7 @@ import Dashboard from './Components/Dashboard/Dashboard';
 import Home from './Components/Dashboard/Home';
 import ItemAdd from './Components/ItemCreation/ItemAdd';
 import ItemEdit from './Components/ItemCreation/ItemEdit';
+import ItemCopy from './Components/ItemCreation/ItemCopy';
 import '@fontsource/roboto/300.css';
 import '@fontsource/roboto/400.css';
 import '@fontsource/roboto/500.css';
@@ -53,6 +54,9 @@ import { MeasurementUncertaintyList } from './Components/Reports/MeasurementUnce
 import GaugeSpec from './Components/ItemCreation/GaugeSpec';
 import TotalPreview from './Components/Reports/TotalPreview';
 import BackUp from './Components/system/BackUp';
+import HangingNoti from './Components/Notifications/HangingNoti';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 export const empRole = createContext(null);
 
@@ -82,7 +86,7 @@ const roleAccessRules = {
 // Function to generate routes based on user role and access rules
 const generateRoutes = (employee) => {
 
- 
+
   const allowedRoutes = roleAccessRules[employee] || []; // Get allowed routes for the userRole
 
   const routes = [
@@ -93,6 +97,7 @@ const generateRoutes = (employee) => {
     { path: "/itemMaster", element: <ItemMaster /> },
     { path: "/itemadd", element: <ItemAdd /> },
     { path: "/itemEdit/:id", element: <ItemEdit /> },
+    { path: "/itemCopy/:id", element: <ItemCopy /> },
     { path: "/itemList", element: <ItemList /> },
     { path: "/test", element: <FileViewer /> },
     { path: "/rubyTest", element: <RubeshTest /> },
@@ -135,7 +140,7 @@ const generateRoutes = (employee) => {
     .map(({ path, element }) => (
       <Route key={path} path={path} element={element} />
     ));
- 
+
   return generatedRoutes;
 };
 
@@ -150,7 +155,7 @@ const PrivateRoute = ({ element: Element, employee }) => {
   }
 
   const routes = generateRoutes(employee);
-  
+
   return (
     <Routes>
 
@@ -188,10 +193,10 @@ function App() {
         const response = await axios.get(
           `${process.env.REACT_APP_PORT}/employee/getEmployeeById/${empId}`
         );
-        
+
         setLoggedEmp(response.data.result);
         const plantDetails = response.data.result.plantDetails.map(plant => plant.plantName)
-        
+
         setAllowedPlants(plantDetails)
         setIsEmployeeLoaded(true); // Set the flag to indicate employee data is loaded
       } catch (err) {
@@ -219,7 +224,7 @@ function App() {
     setEmpId(sessionStorage.getItem('empId'));
   };
 
- 
+
 
   return (
     <div className="App">
@@ -238,6 +243,7 @@ function App() {
             element={
               isEmployeeLoaded ? (
                 <PrivateRoute employee={employee} />
+
               ) : (
                 <Backdrop
                   style={{ zIndex: 1000 }}
@@ -254,9 +260,12 @@ function App() {
             path="/login"
             element={<Login onLoginSuccess={handleLoginSuccess} />}
           />
+
           <Route path="/accessDenied" element={<AccessDenied />} />
         </Routes>
       </EmployeeProvider>
+      <HangingNoti />
+      <ToastContainer />
       <Copyright sx={{ position: "fixed", bottom: 0, left: 0, mt: 3 }} />
     </div>
   );

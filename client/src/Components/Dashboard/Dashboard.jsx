@@ -352,13 +352,13 @@ const Dashboard = () => {
                 sx={{ flexGrow: 0, textAlign: "end", pointerEvents: true }}>
                 Welcome {empRole.loggedEmp.firstName}
               </Typography>
-              <Tooltip title="Notifications">
+              {/* <Tooltip title="Notifications">
                 <IconButton color="inherit">
                   <Badge badgeContent={4} color="secondary">
                     <NotificationsIcon />
                   </Badge>
                 </IconButton>
-              </Tooltip>
+              </Tooltip> */}
 
 
               <Tooltip title="Logout">

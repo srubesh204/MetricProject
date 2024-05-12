@@ -3,7 +3,7 @@ import { TextField, MenuItem, Button, ButtonGroup, Backdrop, CircularProgress, L
 import { Box, Container, Grid, Paper, Typography } from "@mui/material";
 import { DataGrid, GridToolbar, GridToolbarQuickFilter } from '@mui/x-data-grid';
 import axios from 'axios';
-import { Edit, FilterAlt, PrintRounded } from '@mui/icons-material';
+import { ContentCopy, Edit, FilterAlt, PrintRounded } from '@mui/icons-material';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import dayjs from 'dayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
@@ -309,6 +309,18 @@ const ItemList = () => {
                 },
             ]
             : []),
+        {
+            field: 'copybtn',
+            headerName: 'Create Copy',
+            width: 95,
+            headerAlign: "center",
+            align: "center",
+            renderCell: (params) => (
+                <Button component={Link} to={`/itemCopy/${params.id}`}>
+                    <ContentCopy color='success' />
+                </Button>
+            ),
+        },
         { field: 'id', headerName: 'Sr. No', width: 60, renderCell: (params) => params.api.getAllRowIds().indexOf(params.id) + 1, headerAlign: "center", align: "center" },
         { field: 'itemIMTENo', headerName: 'IMTE No', width: 180, align: "left" },
         { field: 'itemAddMasterName', headerName: 'Description', width: 180, align: "left" },
@@ -1177,8 +1189,8 @@ const ItemList = () => {
                                             <MenuItem key={index} value={item}>{item}</MenuItem>
                                         ))} */}
                                         {loggedEmp.plantDetails.map((item, index) => (
-                                        <MenuItem key={index} value={item.plantName}>{item.plantName}</MenuItem>
-                                    ))}
+                                            <MenuItem key={index} value={item.plantName}>{item.plantName}</MenuItem>
+                                        ))}
                                     </TextField>
                                 </div>
                                 <div className="col  ">

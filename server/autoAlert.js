@@ -24,17 +24,19 @@ cron.schedule('1 10 * * *', async () => {
                 const sevenDaysAgo = dayjs().add(7, 'day').format('YYYY-MM-DD');
                 const expiringIn7DaysItems = await itemAddModel.find({
                     itemDueDate: { $gt: dayjs().format("YYYY-MM-DD"), $lte: sevenDaysAgo },
-                    itemPlant: plant
+                    itemPlant: plant, itemStatus: "active"
                 });
 
                 const expiringTodayItems = await itemAddModel.find({
                     itemDueDate: today,
-                    itemPlant: plant
+                    itemPlant: plant,
+                    itemStatus: "active"
                 });
 
                 const expiredItems = await itemAddModel.find({
                     itemDueDate: { $lt: today },
-                    itemPlant: plant
+                    itemPlant: plant,
+                    itemStatus: "active"
                 });
                 console.log(expiringIn7DaysItems.length)
                 console.log(expiringTodayItems.length)
