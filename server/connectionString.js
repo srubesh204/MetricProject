@@ -2,7 +2,7 @@
 const mongoose = require('mongoose');
 
 function connectDatabase() {
-  mongoose.connect('mongodb://localhost/Demo', {
+  mongoose.connect('mongodb://localhost/metric', {
     useNewUrlParser: true,
     useUnifiedTopology: true,
   });

@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react'
 import axios from 'axios';
 import { styled } from '@mui/material/styles';
 import Button from '@mui/material/Button';
-
+import { useSelector, useDispatch } from 'react-redux';
 import { AddToPhotos, CloudUpload, CloudDownload, DeleteOutlined, Delete, DomainVerification } from '@mui/icons-material';
 import Stack from '@mui/material/Stack';
 import FileDownloadIcon from '@mui/icons-material/FileDownload';
@@ -26,12 +26,16 @@ import { useEmployee } from '../../App';
 import DialogTitle from '@mui/material/DialogTitle';
 import { DataGrid, GridToolbar, GridToolbarQuickFilter } from '@mui/x-data-grid';
 import Autocomplete from '@mui/material/Autocomplete';
+import { createItemMaster, deleteItemMaster, fetchMasterByPlant, updateItemMasterApi, uploadItemMasterInExcel } from '../../redux/itemMasterSlice';
+import { itemMasterImage, workInstructions } from '../../redux/uploads';
+import { getAllUnits } from '../../redux/unitSlice';
 
 
 
 
 
 const ItemMaster = () => {
+    const dispatch = useDispatch();
     const fileInputRef = useRef(null);
 
     const empRole = useEmployee()
@@ -170,7 +174,7 @@ const ItemMaster = () => {
             if (name === "masterPlant") {
                 const masterPlant = itemMasterDataList.filter((item) => item.itemMasterPlant === value);
                 setFilteredData(masterPlant);
-               
+
                 setFilterAllName((prev) => ({
                     ...prev,
                     masterPlant: value,
@@ -181,7 +185,7 @@ const ItemMaster = () => {
             if (name === "itemTypeSort") {
                 const itemTypeSort = plantDatas.filter((item) => (item.itemType === value))
                 if (value === "all") {
-                    
+
                     setFilteredData(plantDatas)
                     setFilterAllName(prev => ({
                         ...prev,
@@ -194,10 +198,10 @@ const ItemMaster = () => {
                         ...prev,
                         itemTypeSort: value,
                     }))
-                    
+
                 }
             }
-            if (name === "itemDescriptionSort"){
+            if (name === "itemDescriptionSort") {
                 const itemDescriptionSort = plantDatas.filter((item) => (item.itemMasterId === value))
                 if (value === "all") {
                     setFilteredData(plantDatas)
@@ -305,36 +309,37 @@ const ItemMaster = () => {
 
     })
 
-    const itemMasterFetchData = async () => {
+    const itemMasterFetchData = () => {
         try {
-            const response = await axios.post(
-                `${process.env.REACT_APP_PORT}/itemMaster/getMasterByPlant`,{allowedPlants: allowedPlants}
-            );
-            const filterNames = ["itemType", "itemDescription", "itemMasterPlant"]
+            dispatch(fetchMasterByPlant({ allowedPlants }, (responseData) => {
+                if (responseData.status !== false) {
+                    const filterNames = ["itemType", "itemDescription", "itemMasterPlant"];
 
-            let updatedFilterNames = {};
+                    let updatedFilterNames = {};
 
-            filterNames.forEach((element, index) => {
-                const data = response.data.result.map(item => item[element]);
-                filterNames[index] = [...new Set(data)];
+                    filterNames.forEach((element, index) => {
+                        const items = responseData.result.map(item => item[element]); // Rename 'data' to 'items'
+                        filterNames[index] = [...new Set(items)];
 
-                // Update the object with a dynamic key based on the 'element'
-                updatedFilterNames[element] = filterNames[index];
-                console.log(updatedFilterNames)
-            });
+                        // Update the object with a dynamic key based on the 'element'
+                        updatedFilterNames[element] = filterNames[index];
+                        console.log(updatedFilterNames);
+                    });
 
+                    setFilterNameList(prev => ({ ...prev, ...updatedFilterNames }));
 
-            setFilterNameList(prev => ({ ...prev, ...updatedFilterNames }));
-
-
-            console.log(response.data)
-            setItemMasterDataList(response.data.result);
-            setFilteredData(response.data.result);
-
+                    console.log(responseData);
+                    setItemMasterDataList(responseData.result);
+                    setFilteredData(responseData.result);
+                } else {
+                    console.log(responseData.message);
+                }
+            }));
         } catch (err) {
-            console.log(err);
+            // Handle errors here
         }
     };
+
     useEffect(() => {
         itemMasterFetchData();
     }, []);
@@ -401,17 +406,19 @@ const ItemMaster = () => {
         e.preventDefault();
         try {
             if (validateFunction()) {
-                const response = await axios.post(
-                    `${process.env.REACT_APP_PORT}/itemMaster/createItemMaster`, itemMasterData
-                );
-                {/*console.log(response.data.message)*/ }
-                console.log(response.data.result)
-                itemMasterFetchData();
-                setSnackBarOpen(true)
-                setErrorHandler({ status: response.data.status, message: response.data.message, code: "success" })
-                setItemMasterData(initialItemMasterData);
+                // const response = await axios.post(
+                //     `${process.env.REACT_APP_PORT}/itemMaster/createItemMaster`, itemMasterData
+                // );
+                dispatch(createItemMaster(itemMasterData, (responseData) => {
+                    { /*console.log(response.data.message)*/ }
+                    itemMasterFetchData();
+                    setSnackBarOpen(true);
+                    setErrorHandler({ status: responseData.status, message: responseData.message, code: "success" });
+                    setItemMasterData(initialItemMasterData);
 
-            } else {
+                }))
+            }
+            else {
                 console.log("error")
                 setErrorHandler({ status: 0, message: "Fill the required fields", code: "error" })
                 setSnackBarOpen(true)
@@ -445,16 +452,25 @@ const ItemMaster = () => {
     };
 
     const updateItemMasterData = async () => {
+
         try {
-            const response = await axios.put(
-                `${process.env.REACT_APP_PORT}/itemMaster/updateItemMaster/${itemMasterStateId}`, itemMasterData
-            );
-            itemMasterFetchData();
-            setItemMasterStateId(null)
-            setItemMasterData(initialItemMasterData);
-            setSnackBarOpen(true)
-            setErrorHandler({ status: response.data.status, message: response.data.message, code: "success" })
-            console.log("ItemMaster Updated Successfully");
+            // const response = await axios.put(
+            //     `${process.env.REACT_APP_PORT}/itemMaster/updateItemMaster/${itemMasterStateId}`, itemMasterData
+            // );
+
+
+            dispatch(updateItemMasterApi(itemMasterStateId, itemMasterData, (responseData) => {
+
+
+                itemMasterFetchData();
+                setItemMasterStateId(null)
+                setItemMasterData(initialItemMasterData);
+                setSnackBarOpen(true)
+                setErrorHandler({ status: responseData.status, message: responseData.message, code: "success" })
+                console.log("ItemMaster Updated Successfully");
+            }))
+
+
         } catch (err) {
             setSnackBarOpen(true)
 
@@ -483,19 +499,24 @@ const ItemMaster = () => {
     };
     const deleteItemMasterData = async () => {
         try {
-            const response = await axios.delete(
-                `${process.env.REACT_APP_PORT}/ItemMaster/deleteItemMaster`, {
-                data: {
-                    itemMasterIds: itemMasteSelectedRowIds
-                }
-            }
-            );
-            itemMasterFetchData();
-            setItemMasterData(initialItemMasterData);
-            setItemMasterStateId(null);
-            setSnackBarOpen(true)
-            setErrorHandler({ status: response.data.status, message: response.data.message, code: "success" })
-            console.log("ItemMaster delete Successfully");
+            // const response = await axios.delete(
+            //     `${process.env.REACT_APP_PORT}/ItemMaster/deleteItemMaster`, {
+            //     data: {
+            //         itemMasterIds: itemMasteSelectedRowIds
+            //     }
+            // }
+            // );
+
+            dispatch(deleteItemMaster(itemMasteSelectedRowIds, (responseData) => {
+
+                itemMasterFetchData();
+                setItemMasterData(initialItemMasterData);
+                setItemMasterStateId(null);
+                setSnackBarOpen(true)
+                setErrorHandler({ status: responseData.status, message: responseData.message, code: "success" })
+                console.log("ItemMaster delete Successfully");
+            }))
+
         } catch (err) {
             setSnackBarOpen(true)
 
@@ -612,23 +633,28 @@ const ItemMaster = () => {
             const formData = new FormData();
             formData.append('image', selectedImage); // Append the selected image to the FormData
             try {
-                const response = await axios.post(`${process.env.REACT_APP_PORT}/upload/itemMasterImage`, formData, {
-                    headers: {
-                        'Content-Type': 'multipart/form-data',
-                    },
-                });
+                dispatch(itemMasterImage(formData, (responseData) => {
+                    if (responseData.status === 200) {
+                        // Image uploaded successfully
+                        setItemMasterData((prev) => ({ ...prev, itemMasterImage: responseData.name }));
+                        console.log('Image Uploaded Successfully');
 
-                if (response.status === 200) {
-                    // Image uploaded successfully
-                    setItemMasterData((prev) => ({ ...prev, itemMasterImage: response.data.name }));
-                    console.log('Image Uploaded Successfully');
+                        // If you want to access the saved file path sent by the server
+                        const filePath = responseData.filePath; // Assuming the server sends 'filePath' in the response
+                        // Use 'filePath' as needed in your application
+                    } else {
+                        console.log('Error Uploading Image');
+                    }
 
-                    // If you want to access the saved file path sent by the server
-                    const filePath = response.data.filePath; // Assuming the server sends 'filePath' in the response
-                    // Use 'filePath' as needed in your application
-                } else {
-                    console.log('Error Uploading Image');
-                }
+
+                }))
+                // const response = await axios.post(`${process.env.REACT_APP_PORT}/upload/itemMasterImage`, formData, {
+                //     headers: {
+                //         'Content-Type': 'multipart/form-data',
+                //     },
+                // });
+
+
             } catch (error) {
                 console.error('Error uploading the image:', error);
             }
@@ -641,12 +667,16 @@ const ItemMaster = () => {
 
     const unitFetchData = async () => {
         try {
-            const response = await axios.get(
-                `${process.env.REACT_APP_PORT}/unit/getAllUnits`
-            );
+            // const response = await axios.get(
+            //     `${process.env.REACT_APP_PORT}/unit/getAllUnits`
+            // );
+           
+             dispatch(getAllUnits(responsedata => {
+                console.log(responsedata.result)
+                setUnitDataList(responsedata.result);
+             }))
 
-            console.log(response.data.result)
-            setUnitDataList(response.data.result);
+          
         } catch (err) {
             console.log(err);
         }
@@ -675,17 +705,19 @@ const ItemMaster = () => {
             const formData = new FormData();
             formData.append('file', selectedFile);
             try {
-                axios.post(`${process.env.REACT_APP_PORT}/upload/workInstructions`, formData)
-                    .then(response => {
-                        setItemMasterData((prev) => ({ ...prev, workInsName: response.data.name }));
-                        setUploadMessage(response.data.message)
-                        console.log(response.data);
-                    })
-                    .catch(error => {
+                // axios.post(`${process.env.REACT_APP_PORT}/upload/workInstructions`, formData)
+                dispatch(workInstructions(formData, (responseData) => {
+                    if (responseData) {
+                        setItemMasterData((prev) => ({ ...prev, workInsName: responseData.name }));
+                        setUploadMessage(responseData.message)
+                        console.log(responseData);
+                    }
+                    else {
                         setUploadMessage("")
-                        console.error(error);
-                        // handle error here
-                    });
+                        console.error(errors);
+                    }
+                }))
+
             } catch (error) {
                 console.error('Error uploading the file:', error);
             }
@@ -726,15 +758,18 @@ const ItemMaster = () => {
 
             const formData = new FormData();
             formData.append('file', file);
+            console.log(formData)
+            // const response = await axios.post(`${process.env.REACT_APP_PORT}/itemMaster/uploadItemMasterInExcel`, formData, {
+            //     headers: {
+            //         'Content-Type': 'multipart/form-data',
+            //     },
+            // });
+            dispatch(uploadItemMasterInExcel(formData, (responseData) => {
+                itemMasterFetchData()
 
-            const response = await axios.post(`${process.env.REACT_APP_PORT}/itemMaster/uploadItemMasterInExcel`, formData, {
-                headers: {
-                    'Content-Type': 'multipart/form-data',
-                },
-            });
-            itemMasterFetchData()
+                setItemMasterExcelStatus(responseData.message || 'Excel file uploaded successfully');
+            }))
 
-            setItemMasterExcelStatus(response.data.message || 'Excel file uploaded successfully');
         } catch (error) {
             if (error.response) {
                 setItemMasterExcelStatus(`Error: ${error.response.data.error || 'Something went wrong'}`);
@@ -816,7 +851,7 @@ const ItemMaster = () => {
                                 </div>
 
                                 <div className='col' >
-                                    <TextField fullWidth label="Item Type"  {...(errors.itemType !== "" && { helperText: errors.itemType, error: true })} value={itemMasterData.itemType} onChange={handleItemMasterBaseChange}  select size="small" id="itemTypeId" name="itemType" defaultValue="" >
+                                    <TextField fullWidth label="Item Type"  {...(errors.itemType !== "" && { helperText: errors.itemType, error: true })} value={itemMasterData.itemType} onChange={handleItemMasterBaseChange} select size="small" id="itemTypeId" name="itemType" defaultValue="" >
 
                                         <MenuItem value="all">All</MenuItem >
                                         <MenuItem value="attribute">Attribute</MenuItem >
@@ -913,43 +948,43 @@ const ItemMaster = () => {
 
                                     </div>
                                     <div className='row mb-2 g-2'>
-                                        
-
-                                            <div className='col'>
-                                                <TextField
-                                                    label="Uncertainty "
-                                                    id="uncertaintyId"
-                                                    defaultValue=""
-                                                    size="small"
-                                                    fullWidth
-                                                    type='number'
-                                                    value={itemMasterData.uncertainty}
-                                                    onChange={handleItemMasterBaseChange}
-                                                    name="uncertainty"
-                                                />
-                                            </div>
-                                            {/* {...(errors.uncertainty !== "" && { error: true })} */}
-                                            {/* {...(errors.uncertaintyUnit !== "" && { error: true })}  */}
-                                            {/* {...(errors.calAlertInDay !== "" && { helperText: errors.calAlertInDay, error: true })} */}
-
-                                            <div className='col'>
-                                                <TextField label="Unit"
-                                                    value={itemMasterData.uncertaintyUnit} onChange={handleItemMasterBaseChange} fullWidth  select size="small" id="uncertaintyUnitId" name="uncertaintyUnit" defaultValue="" >
-                                                    {unitDataList.map((item, index) => (
-                                                        <MenuItem key={index} value={item.unitName}>{item.unitName}</MenuItem>
-                                                    ))}
 
 
-                                                    {/*<MenuItem value="Unit">Unit</MenuItem >
+                                        <div className='col'>
+                                            <TextField
+                                                label="Uncertainty "
+                                                id="uncertaintyId"
+                                                defaultValue=""
+                                                size="small"
+                                                fullWidth
+                                                type='number'
+                                                value={itemMasterData.uncertainty}
+                                                onChange={handleItemMasterBaseChange}
+                                                name="uncertainty"
+                                            />
+                                        </div>
+                                        {/* {...(errors.uncertainty !== "" && { error: true })} */}
+                                        {/* {...(errors.uncertaintyUnit !== "" && { error: true })}  */}
+                                        {/* {...(errors.calAlertInDay !== "" && { helperText: errors.calAlertInDay, error: true })} */}
+
+                                        <div className='col'>
+                                            <TextField label="Unit"
+                                                value={itemMasterData.uncertaintyUnit} onChange={handleItemMasterBaseChange} fullWidth select size="small" id="uncertaintyUnitId" name="uncertaintyUnit" defaultValue="" >
+                                                {unitDataList.map((item, index) => (
+                                                    <MenuItem key={index} value={item.unitName}>{item.unitName}</MenuItem>
+                                                ))}
+
+
+                                                {/*<MenuItem value="Unit">Unit</MenuItem >
                                                     <MenuItem value="Unit Name">Unit Name</MenuItem>*/}
 
-                                                </TextField>
-                                            </div>
+                                            </TextField>
+                                        </div>
 
-                                            {/* {(Object.keys(errors).length !== 0 && (errors.uncertainty !== "" || errors.uncertaintyUnit !== "")) && <div style={{ color: "red", fontSize: "small", marginLeft: "10px" }}>Uncertainity is Required</div>} */}
+                                        {/* {(Object.keys(errors).length !== 0 && (errors.uncertainty !== "" || errors.uncertaintyUnit !== "")) && <div style={{ color: "red", fontSize: "small", marginLeft: "10px" }}>Uncertainity is Required</div>} */}
 
 
-                                        
+
 
                                         <div className="col-md-6">
 
@@ -1312,7 +1347,7 @@ const ItemMaster = () => {
 
                                                         </div>
                                                         <div className="col me-2 mt-2">
-                                                            <TextField fullWidth label="Item Type Sort" onChange={handleFilterChange} value={filterAllName.itemTypeSort}  select size="small" id="itemTypeSortId" name="itemTypeSort" defaultValue="all" >
+                                                            <TextField fullWidth label="Item Type Sort" onChange={handleFilterChange} value={filterAllName.itemTypeSort} select size="small" id="itemTypeSortId" name="itemTypeSort" defaultValue="all" >
                                                                 <MenuItem value="all">All</MenuItem >
                                                                 <MenuItem value="attribute">Attribute</MenuItem >
                                                                 <MenuItem value="variable">Variable</MenuItem >
@@ -1320,7 +1355,7 @@ const ItemMaster = () => {
                                                             </TextField>
                                                         </div>
                                                         <div className=" col me-2 mt-2">
-                                                            <TextField fullWidth label="Item Description Sort" defaultValue="all" onChange={handleFilterChange} value={filterAllName.itemDescriptionSort}  select size="small" id="itemDescriptionSortId" name="itemDescriptionSort">
+                                                            <TextField fullWidth label="Item Description Sort" defaultValue="all" onChange={handleFilterChange} value={filterAllName.itemDescriptionSort} select size="small" id="itemDescriptionSortId" name="itemDescriptionSort">
                                                                 <MenuItem value="all">All</MenuItem>
                                                                 {plantDatas.map((item, index) => (
                                                                     <MenuItem key={index} value={item.itemMasterId}>{item.itemDescription}</MenuItem>

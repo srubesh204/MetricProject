@@ -4,14 +4,17 @@ import App from './App';
 import '../node_modules/bootstrap/dist/css/bootstrap.min.css'
 import '../node_modules/bootstrap/dist/js/bootstrap.bundle.js'
 import {BrowserRouter, BrowserRouter as Router } from 'react-router-dom';
-
+import { store } from './redux/store.js';
+import { Provider } from 'react-redux';
 
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
     <Router basename='/'>
+    <Provider store={store}>
     <App />
+    </Provider>
     </Router>
   </React.StrictMode>
 );
