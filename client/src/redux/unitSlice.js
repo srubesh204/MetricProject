@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import Helper from "../Helper/axiosHelper";
-
+import { setLoader } from "./loaderSlice";  
 
 const baseUrl = Helper.baseUrl();
 
@@ -15,9 +15,7 @@ export const unitMasterSlice = createSlice({
     name: "unitMaster",
     initialState,
     reducers: {
-        setLoader: (state, action) => {
-            state.loader = action.payload;
-        },
+       
         setItems: (state, action) => {
             state.items = action.payload;
         },
@@ -27,7 +25,7 @@ export const unitMasterSlice = createSlice({
     },
 });
 
-export const { setLoader, setItems, setError } = unitMasterSlice.actions;
+export const {  setItems, setError } = unitMasterSlice.actions;
 
 export default unitMasterSlice.reducer;
 

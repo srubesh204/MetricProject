@@ -57,7 +57,8 @@ import BackUp from './Components/system/BackUp';
 import HangingNoti from './Components/Notifications/HangingNoti';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-
+import SimpleBackdrop from './Utills/loader';
+import SnackbarComponent from './Utills/snackBar';
 export const empRole = createContext(null);
 
 
@@ -229,6 +230,8 @@ function App() {
   return (
     <div className="App">
       <EmployeeProvider employee={{ employee, loggedEmp, allowedPlants, Copyright }}>
+      <SimpleBackdrop />
+      <SnackbarComponent/>
         <Routes>
           <Route
             path="/"

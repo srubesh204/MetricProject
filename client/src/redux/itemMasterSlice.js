@@ -1,7 +1,7 @@
 // features/itemMaster/itemMasterSlice.js
 import { createSlice } from "@reduxjs/toolkit";
 import Helper from "../Helper/axiosHelper";
-
+import { setLoader } from "./loaderSlice"; 
 
 const baseUrl = Helper.baseUrl();
 
@@ -16,9 +16,7 @@ export const itemMasterSlice = createSlice({
   name: "itemMaster",
   initialState,
   reducers: {
-    setLoader: (state, action) => {
-      state.loader = action.payload;
-    },
+  
     setItems: (state, action) => {
       state.items = action.payload;
     },
@@ -28,7 +26,7 @@ export const itemMasterSlice = createSlice({
   },
 });
 
-export const { setLoader, setItems, setError } = itemMasterSlice.actions;
+export const {  setItems, setError } = itemMasterSlice.actions;
 
 export default itemMasterSlice.reducer;
 
@@ -125,5 +123,7 @@ export const uploadItemMasterInExcel = (formData, callback = () => {}) => async 
     callback({ status: false, message: err.message });
   } finally {
     dispatch(setLoader(false));
+    
+
   }
 };

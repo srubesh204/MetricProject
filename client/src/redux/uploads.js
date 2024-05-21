@@ -1,7 +1,7 @@
 // features/itemMaster/itemMasterSlice.js
 import { createSlice } from "@reduxjs/toolkit";
 import Helper from "../Helper/axiosHelper";
-
+import { setLoader } from "./loaderSlice"; 
 
 const baseUrl = Helper.baseUrl();
 
@@ -16,9 +16,7 @@ export const uploadsMasterSlice = createSlice({
   name: "uploads",
   initialState,
   reducers: {
-    setLoader: (state, action) => {
-      state.loader = action.payload;
-    },
+  
     setItems: (state, action) => {
       state.items = action.payload;
     },
@@ -28,7 +26,7 @@ export const uploadsMasterSlice = createSlice({
   },
 });
 
-export const { setLoader, setItems, setError } = uploadsMasterSlice.actions;
+export const {  setItems, setError } = uploadsMasterSlice.actions;
 
 export default uploadsMasterSlice.reducer;
 
@@ -52,7 +50,7 @@ export const itemMasterImage = (formData, callback = () => {}) => async (dispatc
   };
   export const workInstructions = (data, callback = () => {}) => async (dispatch) => {
     dispatch(setLoader(true));
-    console.log(data,"redux")
+    
     try {
       const response = await Helper.postData(`${baseUrl}/upload/workInstructions`, data,{
         headers: {

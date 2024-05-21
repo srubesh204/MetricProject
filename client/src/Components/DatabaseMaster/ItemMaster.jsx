@@ -8,7 +8,7 @@ import Stack from '@mui/material/Stack';
 import FileDownloadIcon from '@mui/icons-material/FileDownload';
 import UploadFileIcon from '@mui/icons-material/UploadFile';
 import Alert from '@mui/material/Alert';
-import Snackbar from '@mui/material/Snackbar';
+// import Snackbar from '@mui/material/Snackbar';
 import { TextField, MenuItem, FormControl, Fab, Typography, Badge, LinearProgress, Radio, RadioGroup, FormControlLabel } from '@mui/material';
 import { Box, Grid, ButtonGroup, Paper, Container, Chip } from '@mui/material';
 import { Add, Remove, HighlightOffRounded } from '@mui/icons-material';
@@ -19,7 +19,6 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import { Link } from "react-router-dom";
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-
 import { ArrowBack, Error, HomeMax, House, Mail, MailLock, } from '@mui/icons-material';
 import { Link as RouterLink } from 'react-router-dom';
 import { useEmployee } from '../../App';
@@ -29,6 +28,7 @@ import Autocomplete from '@mui/material/Autocomplete';
 import { createItemMaster, deleteItemMaster, fetchMasterByPlant, updateItemMasterApi, uploadItemMasterInExcel } from '../../redux/itemMasterSlice';
 import { itemMasterImage, workInstructions } from '../../redux/uploads';
 import { getAllUnits } from '../../redux/unitSlice';
+import { closeSnackbar, showSnackbar } from '../../redux/snackbarSlice';
 
 
 
@@ -41,13 +41,14 @@ const ItemMaster = () => {
     const empRole = useEmployee()
     const { loggedEmp, allowedPlants, employeeRole } = empRole
 
-    const [snackBarOpen, setSnackBarOpen] = useState(false)
+    // const [snackBarOpen, setSnackBarOpen] = useState(false)
     const handleSnackClose = (event, reason) => {
         if (reason === 'clickaway') {
             return;
         }
 
-        setSnackBarOpen(false);
+        // setSnackBarOpen(false);
+        dispatch(closeSnackbar());
     }
 
     const [errorhandler, setErrorHandler] = useState({})
@@ -412,7 +413,9 @@ const ItemMaster = () => {
                 dispatch(createItemMaster(itemMasterData, (responseData) => {
                     { /*console.log(response.data.message)*/ }
                     itemMasterFetchData();
-                    setSnackBarOpen(true);
+                    // setSnackBarOpen(true);
+                    dispatch(showSnackbar({ message: responseData.message, severity: 'success' }));
+
                     setErrorHandler({ status: responseData.status, message: responseData.message, code: "success" });
                     setItemMasterData(initialItemMasterData);
 
@@ -421,10 +424,12 @@ const ItemMaster = () => {
             else {
                 console.log("error")
                 setErrorHandler({ status: 0, message: "Fill the required fields", code: "error" })
-                setSnackBarOpen(true)
+                // setSnackBarOpen(true)
+                dispatch(showSnackbar({ message: "Fill the required fields", severity: 'error' }));
+             
             }
         } catch (err) {
-            setSnackBarOpen(true)
+            // setSnackBarOpen(true)
 
             if (err.response && err.response.status === 400) {
                 // Handle validation errors
@@ -433,17 +438,23 @@ const ItemMaster = () => {
                 const errorMessages400 = Object.values(errorData400).join(', ');
                 console.log(errorMessages400)
                 setErrorHandler({ status: 0, message: errorMessages400, code: "error" });
+            dispatch(showSnackbar({ message: errorMessages400, severity: 'error' }));
+
             } else if (err.response && err.response.status === 500) {
                 // Handle other errors
                 console.log(err);
                 const errorData500 = err.response.data.error;
                 const errorMessages500 = Object.values(errorData500).join(', ');
                 console.log(errorMessages500)
+                dispatch(showSnackbar({ message: errorMessages500, severity: 'error' }));
+
                 setErrorHandler({ status: 0, message: errorMessages500, code: "error" });
             } else {
                 console.log(err);
                 console.log(err.response.data.error)
                 setErrorHandler({ status: 0, message: "An error occurred", code: "error" });
+            dispatch(showSnackbar({ message: "An error occurred", severity: 'error' }));
+
             }
 
             console.log(err);
@@ -465,14 +476,16 @@ const ItemMaster = () => {
                 itemMasterFetchData();
                 setItemMasterStateId(null)
                 setItemMasterData(initialItemMasterData);
-                setSnackBarOpen(true)
+                // setSnackBarOpen(true)
+                dispatch(showSnackbar({ message: responseData.message, severity: "success"  }));
+
                 setErrorHandler({ status: responseData.status, message: responseData.message, code: "success" })
                 console.log("ItemMaster Updated Successfully");
             }))
 
 
         } catch (err) {
-            setSnackBarOpen(true)
+            // setSnackBarOpen(true)
 
             if (err.response && err.response.status === 400) {
                 // Handle validation errors
@@ -480,6 +493,8 @@ const ItemMaster = () => {
                 const errorData400 = err.response.data.errors;
                 const errorMessages400 = Object.values(errorData400).join(', ');
                 console.log(errorMessages400)
+            dispatch(showSnackbar({ message: errorMessages400, severity: 'error' }));
+                
                 setErrorHandler({ status: 0, message: errorMessages400, code: "error" });
             } else if (err.response && err.response.status === 500) {
                 // Handle other errors
@@ -487,11 +502,15 @@ const ItemMaster = () => {
                 const errorData500 = err.response.data.error;
                 const errorMessages500 = Object.values(errorData500);
                 console.log(errorMessages500)
+            dispatch(showSnackbar({ message: errorMessages500, severity: 'error' }));
+
                 setErrorHandler({ status: 0, message: errorMessages500, code: "error" });
             } else {
                 console.log(err);
                 console.log(err.response.data.error)
                 setErrorHandler({ status: 0, message: "An error occurred", code: "error" });
+            dispatch(showSnackbar({ message: "An error occurred", severity: 'error' }));
+
             }
 
             console.log(err);
@@ -512,13 +531,15 @@ const ItemMaster = () => {
                 itemMasterFetchData();
                 setItemMasterData(initialItemMasterData);
                 setItemMasterStateId(null);
-                setSnackBarOpen(true)
+                // setSnackBarOpen(true)
+            dispatch(showSnackbar({ message: responseData.message, severity: "success" }));
+
                 setErrorHandler({ status: responseData.status, message: responseData.message, code: "success" })
                 console.log("ItemMaster delete Successfully");
             }))
 
         } catch (err) {
-            setSnackBarOpen(true)
+            // setSnackBarOpen(true)
 
             if (err.response && err.response.status === 400) {
                 // Handle validation errors
@@ -526,6 +547,8 @@ const ItemMaster = () => {
                 const errorData400 = err.response.data.errors;
                 const errorMessages400 = Object.values(errorData400).join(', ');
                 console.log(errorMessages400)
+            dispatch(showSnackbar({ message: errorMessages400, severity: 'error' }));
+
                 setErrorHandler({ status: 0, message: errorMessages400, code: "error" });
             } else if (err.response && err.response.status === 500) {
                 // Handle other errors
@@ -533,11 +556,15 @@ const ItemMaster = () => {
                 const errorData500 = err.response.data.error;
                 const errorMessages500 = Object.values(errorData500);
                 console.log(errorMessages500)
+            dispatch(showSnackbar({ message: errorMessages500, severity: 'error' }));
+
                 setErrorHandler({ status: 0, message: errorMessages500, code: "error" });
             } else {
                 console.log(err);
                 console.log(err.response.data.error)
                 setErrorHandler({ status: 0, message: "An error occurred", code: "error" });
+            dispatch(showSnackbar({ message: "An error occurred", severity: 'error' }));
+
             }
 
             console.log(err);
@@ -1463,11 +1490,11 @@ const ItemMaster = () => {
 
 
                             </div>
-                            <Snackbar anchorOrigin={{ vertical: "top", horizontal: "right" }} open={snackBarOpen} autoHideDuration={6000} onClose={handleSnackClose}>
+                            {/* <Snackbar anchorOrigin={{ vertical: "top", horizontal: "right" }} open={snackBarOpen} autoHideDuration={6000} onClose={handleSnackClose}>
                                 <Alert variant="filled" onClose={handleSnackClose} severity={errorhandler.code} sx={{ width: '100%' }}>
                                     {errorhandler.message}
                                 </Alert>
-                            </Snackbar>
+                            </Snackbar> */}
                         </Paper>
                     </Container>
                 </form>
