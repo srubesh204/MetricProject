@@ -168,7 +168,7 @@ const itemDcController = {
           .replace(/{{dcDate}}/g, dayjs(dcDate).format("DD-MM-YYYY"))
           .replace(/{{dcCR}}/g, dcCommonRemarks)
           .replace(/{{dcCReason}}/, dcReason)
-          .replace(/{{logo}}/g, process.env.SERVER_PORT + '/logo/' + getCompDetailsById.companyLogo || "")
+          .replace(/{{logo}}/g, process.env.SERVER_PORT + '/logo/' + getCompDetailsById?.companyLogo || "")
           .replace(/{{formatNo}}/g, formatNumber)
 
 
@@ -372,7 +372,7 @@ const itemDcController = {
             .replace(/{{dcDate}}/g, dayjs(dcDate).format("DD-MM-YYYY"))
             .replace(/{{dcCR}}/g, dcCommonRemarks)
             .replace(/{{dcCReason}}/, dcReason)
-            .replace(/{{logo}}/g, process.env.SERVER_PORT + '/logo/' + getCompDetailsById.companyLogo)
+            .replace(/{{logo}}/g, process.env.SERVER_PORT + '/logo/' + getCompDetailsById?.companyLogo)
             .replace(/{{formatNo}}/g, formatNumber)
 
 

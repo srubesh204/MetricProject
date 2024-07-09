@@ -155,7 +155,7 @@ const itemCalController = {
       }
 
       const formatNo = await formatNoModel.findById("formatNo");
-      const formatNumber = `${formatNo.fCertificate ? ("Format Number : " + formatNo.fCertificate.frNo + "  " + "Rev.No :  " + formatNo.fCertificate.amNo + "  " + "Rev.Date :  " + formatNo.fCertificate.amDate) : ""}`
+      const formatNumber = `${formatNo?.fCertificate ? ("Format Number : " + formatNo?.fCertificate.frNo + "  " + "Rev.No :  " + formatNo?.fCertificate.amNo + "  " + "Rev.Date :  " + formatNo?.fCertificate.amDate) : ""}`
 
       const newItem = new itemCalModel(newItemFields);
 
@@ -413,7 +413,7 @@ const itemCalController = {
             .replace(/{{CompanyName}}/g, getCompDetailsById ? getCompDetailsById.companyName : "-")
             .replace(/{{Plant}}/g, getPlantAddress ? getPlantAddress.plantName : "-")
             .replace(/{{PlantAddress}}/g, getPlantAddress ? getPlantAddress.plantAddress : "-")
-            .replace(/{{logo}}/g, process.env.SERVER_PORT + '/logo/' + getCompDetailsById.companyLogo)
+            .replace(/{{logo}}/g, process.env.SERVER_PORT + '/logo/' + getCompDetailsById?.companyLogo)
             .replace(/{{formatNo}}/g, formatNumber ? formatNumber : "-")
             .replace(/{{calibratedBy}}/g, calCalibratedBy ? calCalibratedBy : "")
             .replace(/{{calStatus}}/g, calStatus ? "<li> Acceptance Remarks : " + calStatus + "</li>" : "")
@@ -633,7 +633,7 @@ const itemCalController = {
 
       const formatNo = await formatNoModel.findById("formatNo");
 
-      const formatNumber = `${formatNo.fCertificate ? ("Format Number : " + formatNo.fCertificate.frNo + "  " + "Rev.No : " + formatNo.fCertificate.amNo + "  " + "Rev.Date : " + formatNo.fCertificate.amDate) : ""}`
+      const formatNumber = `${formatNo.fCertificate ? ("Format Number : " + formatNo?.fCertificate?.frNo + "  " + "Rev.No : " + formatNo?.fCertificate?.amNo + "  " + "Rev.Date : " + formatNo?.fCertificate?.amDate) : ""}`
       console.log(formatNumber)
 
       // Find the designation by desId and update it
@@ -893,7 +893,7 @@ const itemCalController = {
             .replace(/{{CompanyName}}/g, getCompDetailsById ? getCompDetailsById.companyName : "-")
             .replace(/{{Plant}}/g, getPlantAddress ? getPlantAddress.plantName : "-")
             .replace(/{{PlantAddress}}/g, getPlantAddress ? getPlantAddress.plantAddress : "-")
-            .replace(/{{logo}}/g, process.env.SERVER_PORT + '/logo/' + getCompDetailsById.companyLogo)
+            .replace(/{{logo}}/g, process.env.SERVER_PORT + '/logo/' + getCompDetailsById?.companyLogo)
             .replace(/{{formatNo}}/g, formatNumber ? formatNumber : "-")
             .replace(/{{calibratedBy}}/g, calCalibratedBy ? calCalibratedBy : "-")
             .replace(/{{calStatus}}/g, calStatus ? "<li> Acceptance Remarks : " + calStatus + "</li>" : "")
